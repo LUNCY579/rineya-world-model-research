@@ -455,3 +455,10 @@ Times are local (CDT). Entries are append-only.
   - **Run:** the GPU job finished all stages in one turn; the analysis ran once (`PREREG_2_RESULTS.json` sha 3b42e0671d5a5fb1…).
   - **Reported:** REPORT §3b, registered wording and limits verbatim.
   - **Packaging:** per D-28, any packaging of this adapter stays unmerged and ledger-scoped.
+- **D-31 Private results repository (user request, about 19:00, 2026-10-08).**
+  - **Repo:** https://github.com/LUNCY579/rineya-world-model-research, created PRIVATE with `gh` as LUNCY579. Local clone: `WorldModel/rineya-world-model-research`, kept outside the experiment trees so running jobs are unaffected.
+  - **`rcwm/`:** a mirror of this bundle made by `tools/export_rcwm.py`, one process: code, docs, prereg/freeze records, DECISIONS, results, generations, logs, and the 3 T2 LoRA adapters (38.5 MB each, allow-listed; t2_s0 is PREREG-2's registered artifact). About 201 MB.
+  - **Excluded:** 49 large binaries (6.1 GB: captures, log-prob arrays, full weights including the 2.27 GB L8-15 build), listed with size and sha256 in `rcwm/EXCLUDED_LARGE_FILES.json`.
+  - **Pre-push scan:** no tokens, keys or the user's email in any pushed file.
+  - **Other folders:** `bwm/` is reserved for the peer, which was notified with a collision-free protocol (own clone, own folder, pull --rebase, ≤ 25 MB, no secrets).
+  - **Not a release.** Sync after updates: `python tools/export_rcwm.py`, then commit and push.
