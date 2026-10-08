@@ -1,0 +1,234 @@
+{
+ "selection": {
+  "FULL": {
+   "chosen": {
+    "head": "bits",
+    "encoding": "sym",
+    "hidden": 256,
+    "depth": 2,
+    "lr": 0.003
+   },
+   "grid": [
+    {
+     "head": "bits",
+     "encoding": "sym",
+     "hidden": 256,
+     "depth": 2,
+     "lr": 0.003,
+     "stage": "A",
+     "dev_exact": 0.7466517857142857,
+     "dev_loss": 0.17009341716766357,
+     "best_step": 700,
+     "steps_run": 2700,
+     "sec": 6.8,
+     "dev_regret_k4": 0.2705884873867035,
+     "dev_regret_k4_per_model": [
+      0.2705884873867035
+     ]
+    },
+    {
+     "head": "bits",
+     "encoding": "sym",
+     "hidden": 256,
+     "depth": 2,
+     "lr": 0.001,
+     "stage": "B",
+     "dev_exact": 0.7555803571428571,
+     "dev_loss": 0.16469939053058624,
+     "best_step": 2100,
+     "steps_run": 4100,
+     "sec": 8.4,
+     "dev_regret_k4": 0.27315667271614075,
+     "dev_regret_k4_per_model": [
+      0.27315667271614075
+     ]
+    },
+    {
+     "head": "bits",
+     "encoding": "sym",
+     "hidden": 512,
+     "depth": 2,
+     "lr": 0.003,
+     "stage": "B",
+     "dev_exact": 0.7433035714285714,
+     "dev_loss": 0.153765007853508,
+     "best_step": 300,
+     "steps_run": 2300,
+     "sec": 11.2,
+     "dev_regret_k4": 0.28968214988708496,
+     "dev_regret_k4_per_model": [
+      0.28968214988708496
+     ]
+    },
+    {
+     "head": "bits",
+     "encoding": "sym",
+     "hidden": 256,
+     "depth": 3,
+     "lr": 0.003,
+     "stage": "B",
+     "dev_exact": 0.7511160714285714,
+     "dev_loss": 0.2211771458387375,
+     "best_step": 1100,
+     "steps_run": 3100,
+     "sec": 10.0,
+     "dev_regret_k4": 0.28125566244125366,
+     "dev_regret_k4_per_model": [
+      0.28125566244125366
+     ]
+    }
+   ]
+  },
+  "N128": {
+   "chosen": {
+    "head": "bits",
+    "encoding": "sym",
+    "hidden": 512,
+    "depth": 2,
+    "lr": 0.003
+   },
+   "grid": [
+    {
+     "head": "bits",
+     "encoding": "sym",
+     "hidden": 256,
+     "depth": 2,
+     "lr": 0.003,
+     "stage": "A",
+     "dev_exact": 0.5014880952380952,
+     "dev_loss": 2.019777297973633,
+     "best_step": [
+      450,
+      525,
+      700
+     ],
+     "steps_run": [
+      825,
+      900,
+      1075
+     ],
+     "sec": 4.5,
+     "dev_regret_k4": 0.5910187164942423,
+     "dev_regret_k4_per_model": [
+      0.6284281611442566,
+      0.5986829996109009,
+      0.5459449887275696
+     ]
+    },
+    {
+     "head": "bits",
+     "encoding": "sym",
+     "hidden": 256,
+     "depth": 2,
+     "lr": 0.001,
+     "stage": "B",
+     "dev_exact": 0.5386904761904762,
+     "dev_loss": 1.5369422733783722,
+     "best_step": [
+      450,
+      900,
+      350
+     ],
+     "steps_run": [
+      825,
+      1275,
+      725
+     ],
+     "sec": 4.6,
+     "dev_regret_k4": 0.5836178064346313,
+     "dev_regret_k4_per_model": [
+      0.6362324953079224,
+      0.6009804010391235,
+      0.5136405229568481
+     ]
+    },
+    {
+     "head": "bits",
+     "encoding": "sym",
+     "hidden": 512,
+     "depth": 2,
+     "lr": 0.003,
+     "stage": "B",
+     "dev_exact": 0.5100446428571429,
+     "dev_loss": 3.999981770912806,
+     "best_step": [
+      25,
+      275,
+      225
+     ],
+     "steps_run": [
+      400,
+      650,
+      600
+     ],
+     "sec": 5.3,
+     "dev_regret_k4": 0.5831826527913412,
+     "dev_regret_k4_per_model": [
+      0.6304124593734741,
+      0.5195766687393188,
+      0.5995588302612305
+     ]
+    },
+    {
+     "head": "bits",
+     "encoding": "sym",
+     "hidden": 256,
+     "depth": 3,
+     "lr": 0.003,
+     "stage": "B",
+     "dev_exact": 0.43638392857142855,
+     "dev_loss": 4.604621251424153,
+     "best_step": [
+      900,
+      1525,
+      2000
+     ],
+     "steps_run": [
+      1275,
+      1900,
+      2000
+     ],
+     "sec": 12.0,
+     "dev_regret_k4": 0.62974747021993,
+     "dev_regret_k4_per_model": [
+      0.734144389629364,
+      0.567179262638092,
+      0.587918758392334
+     ]
+    }
+   ]
+  }
+ },
+ "crit": "regret",
+ "meta": {
+  "code_sha256": {
+   "scripts\\s_roll.py": "a9bb3dcef4b41a0183d46a62033035a93d1714f2ce25594db0504e4472e1e981",
+   "rcwmt\\__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "rcwmt\\bank.py": "b08b0229c566f9f5b50c7c0c5738f7fff90b768a827e7e32c9880ff69352592f",
+   "rcwmt\\capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+   "rcwmt\\controls.py": "08a9e4479fe621d5bb2d2a6e9d970eef122ae6850e7b894206b6a7c57002a702",
+   "rcwmt\\data.py": "f77270ee04d64985e5b6fa9a88f989a04b0b7ed8cc75f69a4984ca7e7593beb4",
+   "rcwmt\\decide.py": "148e98ab528dcd283f6896f07f01135ede658e124d09d08d293e7d3645463643",
+   "rcwmt\\decisions.py": "bd6a4531622d2479f1b7fe35fcb11338d831c1ab2e9402b515f9a35ef5237188",
+   "rcwmt\\env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+   "rcwmt\\fidelity.py": "da03bbca4962c05b13eb13dfa0414578344bbe2674015dc93070465ca4e1bb0e",
+   "rcwmt\\generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+   "rcwmt\\heads.py": "b3bbb95696fc40fa69cb1d3f60e2547f2fde8305862af2e5b934b073170d58b6",
+   "rcwmt\\lease_vendored.py": "d1576bb9296c6bd033dd677c0f8cbe18c9bc24939f75bba30d740429b2ec36c9",
+   "rcwmt\\offtask.py": "5fcc70500d21b9043ff93a054b53bdcf29fb2e052eeb722a99fb388fdd41ba0e",
+   "rcwmt\\prereg1.py": "1068d66dab6e1c87a255440eae376c1a884ac7dfc3cedac85478e30775cacd35",
+   "rcwmt\\pvr.py": "f7b1717fb276252900e75c3a6bf2f835d772498f9b75762aa82faea799e94b94",
+   "rcwmt\\runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca"
+  },
+  "gen_sha256": {
+   "chain_one": "c082a5324ae63f76b6550381a5368faf9ae8669f17c7da510ee5234bb44255ae",
+   "chain_m1": "7ebc82889e271ced7599af7ff0c2568aa795a9e76888101da8cf454824252f9a",
+   "e2e": "ad62383746252deddbd34ecee89e739054d3d7edf1fdcded6bf9616c5b5dc85f"
+  },
+  "bank_sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a",
+  "titan_rows_sha256": "0881c027d166f7cdd0286518aff20e5966f92120f4f3877cbca6855fbee2d9e1",
+  "torch": "2.6.0+cu124",
+  "numpy": "2.4.6"
+ },
+ "wall_sec": 63.0
+}

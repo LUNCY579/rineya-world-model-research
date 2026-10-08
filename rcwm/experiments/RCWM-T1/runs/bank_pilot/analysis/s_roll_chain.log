@@ -1,0 +1,38 @@
+2026-10-07 09:38:14 [pid 29464] skip select exact L (current)
+2026-10-07 09:38:14 [pid 29464] RUN --crit exact --family L --stage fit
+2026-10-07 09:38:14 [pid 29496] RUN --crit regret --family L --stage select
+2026-10-07 09:40:58 [pid 29496] END --crit regret --family L --stage select rc=0 (164s)
+2026-10-07 09:40:58 [pid 29496] RUN --crit regret --family L --stage fit
+2026-10-07 09:42:56 [pid 29464] END --crit exact --family L --stage fit rc=0 (282s)
+2026-10-07 09:42:56 [pid 29464] RUN --crit exact --family P --stage select
+2026-10-07 09:43:39 [pid 29464] END --crit exact --family P --stage select rc=0 (44s)
+2026-10-07 09:43:39 [pid 29464] RUN --crit exact --family P --stage fit
+2026-10-07 09:46:37 [pid 29464] END --crit exact --family P --stage fit rc=0 (178s)
+2026-10-07 09:46:37 [pid 29464] RUN --crit exact --family R --stage select
+2026-10-07 09:47:21 [pid 29496] END --crit regret --family L --stage fit rc=0 (383s)
+2026-10-07 09:47:21 [pid 29496] RUN --crit regret --family P --stage select
+2026-10-07 09:48:14 [pid 29464] END --crit exact --family R --stage select rc=0 (97s)
+2026-10-07 09:48:14 [pid 29464] RUN --crit exact --family R --stage fit
+2026-10-07 09:48:28 [pid 29496] END --crit regret --family P --stage select rc=0 (67s)
+2026-10-07 09:48:28 [pid 29496] RUN --crit regret --family P --stage fit
+2026-10-07 09:50:37 [pid 29464] END --crit exact --family R --stage fit rc=0 (142s)
+2026-10-07 09:50:37 [pid 29464] RUN s_roll_deep.py
+2026-10-07 09:50:40 [pid 29496] END --crit regret --family P --stage fit rc=0 (133s)
+2026-10-07 09:50:40 [pid 29496] RUN --crit regret --family R --stage select
+2026-10-07 09:53:33 [pid 29496] END --crit regret --family R --stage select rc=0 (172s)
+2026-10-07 09:53:33 [pid 29496] RUN --crit regret --family R --stage fit
+2026-10-07 09:56:17 [pid 29464] END s_roll_deep.py rc=0 (341s)
+2026-10-07 09:56:17 [pid 29464] chain finished; other outputs not yet current, report not rendered by this chain
+2026-10-07 09:56:19 [pid 29496] END --crit regret --family R --stage fit rc=0 (166s)
+2026-10-07 09:56:19 [pid 29496] RUN --report-only
+2026-10-07 09:56:54 [pid 57500] skip select regret L (current)
+2026-10-07 09:56:54 [pid 57500] skip fit regret L (current)
+2026-10-07 09:56:54 [pid 57500] skip select regret P (current)
+2026-10-07 09:56:54 [pid 57500] skip fit regret P (current)
+2026-10-07 09:56:54 [pid 57500] skip select regret R (current)
+2026-10-07 09:56:54 [pid 57500] skip fit regret R (current)
+2026-10-07 09:56:54 [pid 57500] RUN s_roll_long.py
+2026-10-07 10:02:12 [pid 29496] END --report-only rc=0 (353s)
+2026-10-07 10:02:12 [pid 29496] CHAIN COMPLETE: report rendered
+2026-10-07 10:07:15 [pid 57500] END s_roll_long.py rc=0 (621s)
+2026-10-07 10:08:01 [manual] chain pid 57500 stopped while waiting on runs/.thermal_pause (all compute stages done); report rendered manually via s_roll.report('')

@@ -1,0 +1,94 @@
+[00:13:26] gate: waiting for ['C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\t2\\t2_s0\\eval.json'] (poll 60s, max 14 h)
+[00:43:26] gate: still waiting (0.50 h)
+[01:13:26] gate: still waiting (1.00 h)
+[01:24:26] gate: present: ['C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\t2\\t2_s0\\eval.json'] (waited 71.0 min)
+[01:24:28] gate: present: ['C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\t2\\t2_s0\\eval.json'] (waited 0.0 min)
+[01:24:29] 640 chains, 248 off-task prompts; arms ['supa', 'loc8_15', 'sparse', 'up16_27']
+[01:24:29] pending: supa:offtask/offtask_gen/chain_one, loc8_15:offtask/offtask_gen/chain_one, sparse:offtask/offtask_gen/chain_one, up16_27:offtask/offtask_gen/chain_one
+[01:24:33] source hashes from the files (3.9s): cores differ in exactly block8..block27; run_patch recorded hashes: equal
+[turn] last turn was ours and the peer is waiting (bwm:bundleC); yielding
+  [gpu-lease] waiting: foreign python pid 861800 (2.38 GiB dedicated GPU memory)
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:localized token=3cb2f949
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:26,  3.57it/s]Loading weights:  54%|█████▍    | 168/310 [00:00<00:00, 563.45it/s]Loading weights:  86%|████████▌ | 266/310 [00:00<00:00, 620.11it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 534.66it/s]
+[05:54:59] loaded supa on cuda (a9952c55f5a1, 2s)
+[05:55:02] built supa: spliced nothing; differs from Supa in nothing; fingerprint a9952c55f5a1 (== expected a9952c55f5a1)
+[05:55:11] repro supa vs gen_base_supa.json: first 4/family 12/12 equal, whole first batches 48/48
+[05:55:11] supa: offtask ...
+[05:55:18] supa: offtask done in 7s
+[05:55:18] supa: offtask_gen ...
+[06:04:41] supa: offtask_gen done in 562s (248 generations, 0.441 gen/s)
+[06:04:41] supa: chain_one ...
+[thermal] watchdog pause flag set; waiting
+[08:26:43] gate: present: ['C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\t2\\t2_s0\\eval.json'] (waited 0.0 min)
+[08:26:44] gate: present: ['C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\t2\\t2_s0\\eval.json'] (waited 0.0 min)
+[08:26:45] 640 chains, 248 off-task prompts; arms ['supa', 'loc8_15', 'sparse', 'up16_27']
+[08:26:45] pending: supa:chain_one, loc8_15:offtask/offtask_gen/chain_one, sparse:offtask/offtask_gen/chain_one, up16_27:offtask/offtask_gen/chain_one
+[08:26:50] source hashes from the files (4.7s): cores differ in exactly block8..block27; run_patch recorded hashes: equal
+  [gpu-lease] reclaimed a stale lock from dead pid 803372; backed up to rineya-gpu-0.lock.stale-803372.bak
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:localized token=1e2cdb77
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   5%|▍         | 14/310 [00:00<00:02, 138.98it/s]Loading weights:  37%|███▋      | 115/310 [00:00<00:00, 649.16it/s]Loading weights:  70%|███████   | 218/310 [00:00<00:00, 818.11it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 815.62it/s]
+[08:26:58] loaded supa on cuda (a9952c55f5a1, 2s)
+[08:27:01] built supa: spliced nothing; differs from Supa in nothing; fingerprint a9952c55f5a1 (== expected a9952c55f5a1)
+[08:27:01] repro supa: reusing the recorded check (exact)
+[08:27:01] supa: chain_one ...
+[08:37:35] supa: chain_one done in 634s (2312 generations, 3.647 gen/s), 492/640 chains complete
+[08:37:38] built loc8_15: spliced [8, 9, 10, 11, 12, 13, 14, 15]; differs from Supa in block8..block15; fingerprint 749f209a1504
+[08:37:48] repro loc8_15 vs gen_HlowT_16.json: first 4/family 12/12 equal, whole first batches 48/48
+[08:37:48] loc8_15: offtask ...
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[08:37:57] loc8_15: offtask done in 9s
+[08:37:57] loc8_15: offtask_gen ...
+[08:38:28] loc8_15: offtask_gen done in 31s (248 generations, 8.078 gen/s)
+[08:38:28] loc8_15: chain_one ...
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[08:43:18] loc8_15: chain_one done in 290s (2384 generations, 8.222 gen/s), 520/640 chains complete
+[08:43:20] built sparse: spliced [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]; differs from Supa in block8..block27; fingerprint 818be9c6b6a3 (== expected 818be9c6b6a3)
+[08:43:28] repro sparse vs gen_base_sparse.json: first 4/family 12/12 equal, whole first batches 48/48
+[08:43:28] sparse: offtask ...
+[08:43:35] sparse: offtask done in 7s
+[08:43:35] sparse: offtask_gen ...
+[08:44:02] sparse: offtask_gen done in 27s (248 generations, 9.047 gen/s)
+[08:44:02] sparse: chain_one ...
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[08:48:16] sparse: chain_one done in 254s (2445 generations, 9.625 gen/s), 548/640 chains complete
+[08:48:18] built up16_27: spliced [8, 9, 10, 11, 12, 13, 14, 15]; differs from Supa in block16..block27; fingerprint d6e183df8a2e
+[08:48:29] repro up16_27 vs gen_HupT_16.json: first 4/family 12/12 equal, whole first batches 48/48
+[08:48:29] up16_27: offtask ...
+[08:48:36] up16_27: offtask done in 7s
+[08:48:36] up16_27: offtask_gen ...
+[08:49:01] up16_27: offtask_gen done in 25s (248 generations, 10.032 gen/s)
+[08:49:01] up16_27: chain_one ...
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[08:53:41] up16_27: chain_one done in 280s (2560 generations, 9.135 gen/s), 640/640 chains complete
+  [gpu-lease] released rineya-gpu-0.lock
+[08:53:41] wrote C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\runs\bank_pilot\localized\DONE.json
+[08:53:41] [localized] finished
+exit 0 

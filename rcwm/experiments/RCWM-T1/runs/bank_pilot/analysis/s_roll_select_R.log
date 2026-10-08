@@ -1,0 +1,28 @@
+[    0.0s] S-roll family R crit=exact stage=select; torch 2.6.0+cu124 threads=2 cuda_visible='' cuda_available=False smoke=False
+[    0.5s] verified 19200 gold one-step transitions against the FDS oracle; chained gold == bank k=1/2/4 gold and phi for every candidate
+[    0.5s] Titan's training rows: 384 rows (0881c027d166...), every reference == env.step and the FDS oracle; system prompts == env.SYSTEM_ONE
+[    0.8s] [R] transitions train raw 4512 dedup 4511 | dev 1056 | test 832 (26 parents) | TEST inputs seen in TRAIN 0.000 (0 parents) | Titan rows 128 {'conditional': 34, 'conditional|gt': 16, 'swap': 38, 'mix': 23, 'mix|wrap': 17, 'conditional|le': 18, 'add': 33, 'add|nowrap': 32, 'mix|nowrap': 6, 'add|wrap': 1} | degenerate TEST parents k1/2/4 [0, 0, 0]
+[    0.8s] [R] SANITY oracle one-step rollout: regret {1: 0.0, 2: 0.0, 4: 0.0} exact {1: 1.0, 2: 1.0, 4: 1.0}
+[    0.9s] [R] SANITY Titan regrets (parent-mean and last-parsed fill) vs PREREG_1_DRYRUN: max |diff| = 5.96e-08; chain_one k4 0.3856, last-parsed 0.3856
+[    0.9s] [R] Titan parse rate chain_one k1/2/4 {1: 1.0, 2: 1.0, 4: 1.0} | anatomy {}
+[    6.8s]   select[exact] R  FULL A {'head': 'cls97', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0009 best_step=[500]/[1700] (5.9s)
+[   15.7s]   select[exact] R  FULL A {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.1951 best_step=[1800]/[3000] (8.9s)
+[   18.5s]   select[exact] R  FULL A {'head': 'reg_abs', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0028 best_step=[300]/[1500] (2.8s)
+[   25.7s]   select[exact] R  FULL A {'head': 'reg_delta', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0729 best_step=[2900]/[4000] (7.3s)
+[   30.3s]   select[exact] R  FULL A {'head': 'gated_delta', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0701 best_step=[900]/[2100] (4.6s)
+[   36.6s]   select[exact] R  FULL A {'head': 'cls97', 'encoding': 'sym1h', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0133 best_step=[400]/[1600] (6.3s)
+[   47.3s]   select[exact] R  FULL A {'head': 'cls_res', 'encoding': 'sym1h', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0436 best_step=[1700]/[2900] (10.7s)
+[   55.5s]   select[exact] R  FULL B {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.001} dev_exact=0.1884 best_step=[1500]/[2700] (8.2s)
+[   76.2s]   select[exact] R  FULL B {'head': 'cls_res', 'encoding': 'sym', 'hidden': 512, 'depth': 2, 'lr': 0.003} dev_exact=0.1705 best_step=[1900]/[3100] (20.6s)
+[   85.7s]   select[exact] R  FULL B {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003} dev_exact=0.2907 best_step=[1100]/[2300] (9.5s)
+[   85.7s]   select[exact] R  FULL CHOSEN {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003} dev_exact=0.2907
+[   86.6s]   select[exact] R  N128 A {'head': 'cls97', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0000 best_step=[25]/[400] (0.9s)
+[   87.4s]   select[exact] R  N128 A {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0341 best_step=[25]/[400] (0.8s)
+[   89.0s]   select[exact] R  N128 A {'head': 'reg_abs', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0009 best_step=[650]/[1025] (1.6s)
+[   89.8s]   select[exact] R  N128 A {'head': 'reg_delta', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0019 best_step=[75]/[450] (0.8s)
+[   90.7s]   select[exact] R  N128 A {'head': 'gated_delta', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.0294 best_step=[150]/[525] (0.9s)
+[   91.7s]   select[exact] R  N128 B {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.001} dev_exact=0.0521 best_step=[25]/[400] (0.9s)
+[   93.5s]   select[exact] R  N128 B {'head': 'cls_res', 'encoding': 'sym', 'hidden': 512, 'depth': 2, 'lr': 0.003} dev_exact=0.0426 best_step=[25]/[400] (1.8s)
+[   94.8s]   select[exact] R  N128 B {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003} dev_exact=0.0426 best_step=[50]/[425] (1.3s)
+[   94.8s]   select[exact] R  N128 CHOSEN {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.001} dev_exact=0.0521
+[   94.8s] [R] selection written to s_roll_select_R.json (94s)

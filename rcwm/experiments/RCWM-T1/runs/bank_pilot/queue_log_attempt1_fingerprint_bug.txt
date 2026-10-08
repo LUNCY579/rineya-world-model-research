@@ -1,0 +1,31 @@
+=== 2026-10-05T23:19:41-05:00 start --arm sparse --parity --gen
+[sparse] items 19200, event rows 4800, encode 11.8s, tokens 3,209,907
+  [gpu-lease] waiting: foreign python pid 58296 (1.57 GiB) on the card
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:sparse token=f8bbaa75
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<03:32,  1.46it/s]Loading weights:   5%|4         | 15/310 [00:00<00:11, 24.67it/s]Loading weights:   9%|8         | 27/310 [00:00<00:06, 42.57it/s]Loading weights:  17%|#7        | 53/310 [00:01<00:02, 88.62it/s]Loading weights:  26%|##6       | 81/310 [00:01<00:01, 133.08it/s]Loading weights:  35%|###5      | 109/310 [00:01<00:01, 168.94it/s]Loading weights:  43%|####2     | 132/310 [00:01<00:01, 162.13it/s]Loading weights:  49%|####9     | 153/310 [00:01<00:01, 154.36it/s]Loading weights:  55%|#####5    | 172/310 [00:01<00:00, 148.00it/s]Loading weights:  61%|######    | 189/310 [00:01<00:00, 144.55it/s]Loading weights:  66%|######6   | 205/310 [00:01<00:00, 140.56it/s]Loading weights:  71%|#######   | 220/310 [00:02<00:00, 136.39it/s]Loading weights:  76%|#######5  | 235/310 [00:02<00:00, 133.07it/s]Loading weights:  80%|########  | 249/310 [00:02<00:00, 132.67it/s]Loading weights:  85%|########4 | 263/310 [00:02<00:00, 129.38it/s]Loading weights:  89%|########9 | 277/310 [00:02<00:00, 128.63it/s]Loading weights:  95%|#########4| 294/310 [00:02<00:00, 139.03it/s]Loading weights: 100%|##########| 310/310 [00:02<00:00, 117.40it/s]
+C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\native\cuda\IndexKernel.cu:94: block: [7,0,0], thread: [127,0,0] Assertion `-sizes[i] <= index && index < sizes[i] && "index out of bounds"` failed.
+  [gpu-lease] released rineya-gpu-0.lock
+Traceback (most recent call last):
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_arm.py", line 119, in <module>
+    main()
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_arm.py", line 63, in main
+    model, prov = runtime.load_arm(a.arm)
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\rcwmt\runtime.py", line 158, in load_arm
+    prov["param_fingerprint"] = param_fingerprint(m)
+                                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\utils\_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\rcwmt\runtime.py", line 170, in param_fingerprint
+    h.update(flat[idx].float().cpu().numpy().tobytes())
+             ^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA error: device-side assert triggered
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+=== 2026-10-05T23:30:56-05:00 exit 0 --arm sparse --parity --gen
+=== 2026-10-05T23:30:56-05:00 start --arm supa --parity --gen
+=== 2026-10-05T23:31:16-05:00 exit 0 --arm supa --parity --gen
+=== 2026-10-05T23:31:16-05:00 start --arm qwen3

@@ -1,0 +1,145 @@
+{
+  "DRAFT_NOT_A_VAULT_RECORD": "RCWM-T1 PREREG-L1 draft (D-26). Usable only after a PROMOTE verdict AND the operator's explicit go-ahead. Every '{{key}}' is filled mechanically from runs/l1_screen/L1_RESULTS.json; remove this key when used.",
+  "schema_version": "1.1",
+  "core_id": "rineya.core.titan-sparse-l815-experimental.v1.0.0-devfreeze.28L.supa17-titansparse-delta-blocks8-15",
+  "codename": "Titan-Sparse-L8-15",
+  "directory_name": "Rineya-Titan-Sparse-L815-Experimental-1.0.0-devfreeze",
+  "version": "1.0.0-devfreeze",
+  "kind": "block_localised_finetune_delta",
+  "status": "experimental_research_core_not_release_qualified",
+  "classification": "published_experimental_core_post_hoc_candidate_promoted_by_a_preregistered_screen",
+  "public_claim": "Supa 1.7 plus Titan-Sparse-Experimental's delta kept only in blocks 8-15 (41.3% of its energy), in FP32. The cut was chosen post hoc from exploratory RCWM-T1 data (R12, R14); the promotion was decided by PREREG-L1's rule, frozen before its instruments were read, on instruments that played no part in choosing the cut. Acquires {{summary.l8_15.acquisition}}/384 on SELECT-VIEWS-001 against Titan-Sparse's {{summary.sparse.acquisition}} (same run) with {{summary.l8_15.floors_cleared}}/3 families clearing their published floors; arithmetic {{summary.l8_15.arithmetic_permissive}}/150 permissive and {{summary.l8_15.arithmetic_strict}}/150 strict; {{summary.l8_15.retained}} of 47 source answers retained; first-token KL drift against Supa {{drift.drift_fresh.ratio_l8_15_over_sparse.kl_arm_supa.ratio}}x Titan-Sparse's on 456 fresh prompts. One training draw. Not release qualified.",
+  "provisional": true,
+  "operator_authorized_promotion": "{{true only with the operator's explicit go-ahead}}",
+  "created_at_utc": "{{promotion time}}",
+  "device": "cuda",
+  "sources_unmodified": true,
+
+  "source": {
+    "application_base": {
+      "path": "Rineya_Published_Cores/Rineya-Supa-1.7.0-devfreeze",
+      "codename": "Supa",
+      "weight_sha256": "962abc5bcd5a83e3b7693bd278ae9215b6d83389a847913da9330b34dd5dd24b",
+      "parameter_count": 596049920
+    },
+    "delta_donor": {
+      "path": "Rineya_Published_Cores/Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze",
+      "codename": "Titan-Sparse-Experimental",
+      "weight_sha256": "a28629c9d3454fbf2e884fd7ca442c1b406e7caf4b36d34b2c0614d0add31284",
+      "blocks_kept": [8, 15],
+      "note": "No new training. The delta is Titan-Sparse's (itself the top-25% magnitude prune of the RRP-015 control update, seed 17); this core changes only where it is kept."
+    }
+  },
+
+  "construction": {
+    "experiment": "RCWM-T1 PREREG-L1 (DECISIONS D-26)",
+    "prereg": "evidence/PREREG_L1.md",
+    "freeze_record": "evidence/PREREG_L1_FREEZE.json",
+    "prereg_frozen_before_any_l1_output": true,
+    "candidate_chosen_post_hoc": true,
+    "candidate_provenance": "RCWM-T1 R12 (patching, D-21) and R14 (D-23 localisation test) on the RCWM pilot bank and 248 off-task prompts; no decisive endpoint reads either (228 of the 248 enter only the anchors' C0 log-prob parity leg and a report-only bridge ratio)",
+    "formula": "theta_supa + 1[block in 8..15] * (theta_titan_sparse - theta_supa); the delta is exactly zero in the embeddings, the final norm and blocks 0-7 (verified element by element at build, gate B2)",
+    "delta_energy_share_kept": 0.41278747710862435,
+    "delta_norm_fraction_kept": 0.6424853905799137,
+    "model_calls_to_construct": 0,
+    "training_runs_to_construct": 0,
+    "reproducible_from": "Supa 962abc5b... + Titan-Sparse a28629c9... via RCWM-T1 scripts/l1_screen.py build",
+    "reproducibility_verified": "two independent derivations and a re-read of the written file agree byte for byte (B3); per-group FP32 hashes equal RCWM-T1 R14's measured loc8_15 arm (B4)"
+  },
+
+  "storage_format_deviation": {
+    "stored_dtype": "float32",
+    "family_convention": "every core in this vault except the Titan-Sparse lineage stores BF16",
+    "why": "Blocks 8-15 hold Titan-Sparse's FP32 tensors, whose identity is a magnitude-selected 0.056%-relative update; BF16 storage would erase much of it (measured for the parent: 28.49% of kept delta elements rounded to zero).",
+    "config_torch_dtype": "float32, so that torch_dtype='auto' cannot silently cast this core to BF16. The only sidecar that differs from Supa 1.7.0-devfreeze.",
+    "evidence_copy_note": "The measured arm (runs/l1_screen/arm-l8_15) kept Supa's byte-identical config.json (the programme's measured-arm convention). That arm and this core differ only in that file.",
+    "weight_bytes": 2384234968
+  },
+
+  "measured": {
+    "evidence_root": "RCWM-T1 runs/l1_screen (copied to evidence/)",
+    "raw_artifacts": "{supa,sparse,l8_15}/{acq.jsonl, ret.jsonl, lc.jsonl, drift_fresh_ids.json, drift_bridge_ids.json} + L1_RESULTS.json",
+    "evaluation_dtype": "float32",
+    "environment": {"torch": "{{run.torch}}", "transformers": "{{run.transformers}} (tokenizer and chat template only)", "forward": "the programme's DenseReference, vendored byte-exact from pilot commit 5b4c22d", "tf32": false},
+    "comparability": "C0 held: scorers reproduce every published per-row verdict on the decisive instruments; Supa and Titan-Sparse, re-measured in the same run, passed the anchor parity gate before L8-15 was loaded ({{parity_gate.legs}}); transformers 5.14.1, a named deviation from SPARSE-001's matched-environment stop rule",
+    "independent_training_draws": 1,
+
+    "acquisition": {
+      "instrument": "SELECT-VIEWS-001, selection-admissible (BUILD.json: ADMITTED_FOR_SELECTION)",
+      "n": 384, "correct": "{{summary.l8_15.acquisition}}",
+      "titan_sparse_same_run": "{{summary.sparse.acquisition}}", "supa_same_run": "{{summary.supa.acquisition}}",
+      "families_clearing_binding_floor": "{{summary.l8_15.floors_cleared}}/3",
+      "per_family_canonical_rate": "{{summary.l8_15.per_family.*.canonical_rate}}",
+      "binding_floors_published_before_any_model_call": {"ledger_replay": 0.2344, "prerequisite_plan": 0.0781, "register_machine": 0.0703},
+      "paired_vs_titan_sparse_per_family_c2": "{{decision.c2_by_family}}", "paired_vs_titan_sparse_aggregate_report_only": "{{contrasts.acquisition_l8_15_vs_sparse.total}}"
+    },
+    "arithmetic_panel": {
+      "permissive": {"this_core": "{{summary.l8_15.arithmetic_permissive}}", "titan_sparse": "{{summary.sparse.arithmetic_permissive}}", "supa": "{{summary.supa.arithmetic_permissive}}", "retained": "{{summary.l8_15.retained}}", "monitor_status": "{{summary.l8_15.legacy_monitor.permissive}}"},
+      "strict": {"this_core": "{{summary.l8_15.arithmetic_strict}}", "monitor_status": "{{summary.l8_15.legacy_monitor.strict}}"}
+    },
+    "off_task_drift": {
+      "instrument": "456 fresh preservation-slice prompts (57 reply classes x 8), disjoint in id, template family and text from R14's 248 and from every id and user text of the HSKILL-002 source pools; spent for confirmation by this use",
+      "kl_ratio_vs_titan_sparse": "{{drift.drift_fresh.ratio_l8_15_over_sparse.kl_arm_supa}}",
+      "bridge_228_report_only": "{{drift.drift_bridge.ratio_l8_15_over_sparse.kl_arm_supa}}"
+    },
+    "long_context": {
+      "instrument_status": "SPENT; barred TRAIN/SELECTION/CONFIRMATION; REPORT-ONLY, did NOT select this core",
+      "this_core": "{{summary.l8_15.long_context}}", "titan_sparse_same_run": "{{summary.sparse.long_context}}", "supa_same_run": "{{summary.supa.long_context}}",
+      "paired_vs_supa_same_run": "{{contrasts.long_context_vs_supa_same_run.l8_15}}"
+    },
+    "abstention": {
+      "literal_unknown_substring_64": "{{summary.l8_15.unknown_substring}}", "literal_unknown_exact_64": "{{summary.l8_15.unknown_literal}}",
+      "parent_confirmed_damage": "RCI-001 (spent 1/1): Titan-Sparse 25/128 vs Supa 40/128 literal UNKNOWN, p = 6.1e-5; not measured for this core",
+      "semantic_abstention_review": "NOT_PERFORMED"
+    },
+    "gates": {
+      "gate_v2": "{{summary.l8_15.gate_v2}}",
+      "legacy_per_class_retention_monitor": "{{summary.l8_15.legacy_monitor}}",
+      "preregistered_decision": "{{verdict}} (conditions {{decision.conditions}})"
+    }
+  },
+
+  "checks": {
+    "model_type": "qwen3", "architecture": "Qwen3ForCausalLM",
+    "num_hidden_layers": 28, "hidden_size": 1024, "vocab_size": 151936,
+    "tie_word_embeddings": true,
+    "weight_sha256": "6282b45676fab8b2446d4363373b94931aea16c346ba769c284b81fcb0f97fe3",
+    "weight_bytes": 2384234968,
+    "tensor_count": 310,
+    "parameter_count_serialized": 596049920,
+    "dtype_counts": {"F32": 310},
+    "tensor_names_identical_to_supa": true
+  },
+
+  "limitations": [
+    "ONE training draw; the delta direction is RRP-015's single seed. Splicing cannot manufacture replication.",
+    "The 8-15 cut was chosen post hoc from exploratory pilot data; only the promotion decision was preregistered.",
+    "Every decisive instrument is selection-grade; no confirmation of acquisition, retention, drift, long context or abstention exists.",
+    "The parent's literal-UNKNOWN abstention damage is confirmed (RCI-001); this core's is unmeasured beyond a report-only 64-row count.",
+    "Off-task drift (first-token KL) is a proxy for forgetting.",
+    "Long context and abstention are report-only on a SPENT suite.",
+    "Stored and evaluated FP32. Native BF16 serving is NOT qualified; a BF16 copy is a different model.",
+    "Semantic abstention review NOT_PERFORMED. Human data review of the training corpus NOT_PERFORMED."
+  ],
+
+  "claims": {
+    "quality_improvement_established": false,
+    "release_permitted": false,
+    "release_candidate": false,
+    "efficacy_claim": false,
+    "catastrophic_forgetting_absence_established": false,
+    "candidate_chosen_on_a_preregistered_rule": false,
+    "promoted_on_a_preregistered_rule": true,
+    "selection_instruments": ["SELECT-VIEWS-001", "150-row arithmetic panel and the 47 source answers", "456 fresh off-task prompts (L1)"],
+    "instruments_explicitly_not_used_for_selection": ["Long-Context Demonstration Suite 256", "literal UNKNOWN 64", "RCWM-T1 pilot bank", "R14's 248 off-task prompts"]
+  },
+
+  "distribution": {
+    "private_vault": "Luncy1978/rineya-published-cores",
+    "visibility": "private",
+    "public_release": false,
+    "note": "Only if the operator's authorization scope includes the private backup. Private storage is not a release and carries no quality claim."
+  },
+
+  "naming_note": "Codename assigned by the RCWM-T1 session for clarity, not by the operator. RENAME.json is the vault's supported mechanism if a different roster name is preferred."
+}

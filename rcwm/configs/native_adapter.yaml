@@ -1,0 +1,26 @@
+schema_version: '1.0'
+status: DEFERRED_UNTIL_G2_AND_G0_NATIVE_PASS
+route: native_typed_slots
+source_checkpoint_sha256: null
+source_tokenizer_sha256: null
+trainable_module_allowlist: []
+language_path_unchanged_required: true
+adapter_rank_candidates:
+- 4
+- 8
+- 16
+sequence_length_start: 512
+microbatch_start: 1
+precision: bf16_first_if_supported; quantization separate ablation
+checkpointing: qualify before use
+memory:
+  peak_gpu_allocated_admission_gib_proposed: 6.5
+  peak_reserved_memory_must_be_measured: true
+  host_ram_limit_gib: null
+  stop_on_uncontrolled_paging: true
+promotion_requirements:
+- native_capture_parity
+- old_behavior_noninferiority
+- new_skill_acquisition
+- total_cost_report
+side_effects_allowed: false

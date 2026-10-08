@@ -1,0 +1,117 @@
+{
+ "rate_gens_per_s": 2.7,
+ "stages": [
+  {
+   "stage": "A0",
+   "what": "anchor: pilot TEST ledger chain_one OFF+ON (reproduce T2 s0)",
+   "generations_max": 1664,
+   "forward_prompts": 0,
+   "chains": 208,
+   "projected_s": 616.3
+  },
+  {
+   "stage": "S1",
+   "what": "confirm2 ledger_replay chain_one OFF+ON",
+   "generations_max": 9600,
+   "forward_prompts": 0,
+   "chains": 1200,
+   "projected_s": 3555.6
+  },
+  {
+   "stage": "S2",
+   "what": "off-task first-token log-probs OFF+ON; 64-token greedy OFF+ON",
+   "generations_max": 496,
+   "forward_prompts": 496,
+   "chains": 0,
+   "projected_s": 303.7
+  },
+  {
+   "stage": "S3",
+   "what": "confirm2 register_machine chain_one OFF+ON",
+   "generations_max": 9600,
+   "forward_prompts": 0,
+   "chains": 1200,
+   "projected_s": 3555.6
+  },
+  {
+   "stage": "S4",
+   "what": "confirm2 prerequisite_plan chain_m1 OFF+ON",
+   "generations_max": 9600,
+   "forward_prompts": 0,
+   "chains": 1200,
+   "projected_s": 3555.6
+  },
+  {
+   "stage": "S5",
+   "what": "confirm2 ledger_replay chain_m1 OFF+ON",
+   "generations_max": 9600,
+   "forward_prompts": 0,
+   "chains": 1200,
+   "projected_s": 3555.6
+  },
+  {
+   "stage": "S6",
+   "what": "Supa off-task first-token log-probs + 64-token greedy (after unloading Sparse)",
+   "generations_max": 248,
+   "forward_prompts": 248,
+   "chains": 0,
+   "projected_s": 271.9
+  }
+ ],
+ "model_loads": 2,
+ "load_s_each": 120.0,
+ "total_generations_max": 40808,
+ "projected_total_h_single_pass": 4.32,
+ "cap_h": 4.5,
+ "stage_rule": "no stage starts within 0.5 h of the cap; a stage starts only if 1.25 x its estimate + the Supa reserve (1.25 x S6) fits; a resumed turn re-anchors",
+ "turns_at_planning_rate": [
+  {
+   "stages": [
+    "A0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S6"
+   ],
+   "projected_h": 3.33
+  },
+  {
+   "stages": [
+    "A0 (re-anchor)",
+    "S5"
+   ],
+   "projected_h": 1.19
+  }
+ ],
+ "projected_gpu_h_at_planning_rate_incl_reanchor_and_reloads": 4.52,
+ "t2_observed_chain_rate_gens_per_s": 6.57,
+ "turns_at_t2_observed_rate": [
+  {
+   "stages": [
+    "A0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "projected_h": 1.84
+  }
+ ],
+ "projected_gpu_h_at_t2_observed_rate": 1.84,
+ "checks": {
+  "bank_sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea",
+  "adapter_sha256_matches": true,
+  "adapter_config_sha256_matches": true,
+  "offtask_prompts_sha256_matches": true,
+  "anchor_reference_files_match": true,
+  "output_dir_exists": false,
+  "freeze_ok": false,
+  "freeze_blockers": [
+   "PREREG_2_FREEZE.json does not exist or is unreadable (PREREG-2 is a draft)"
+  ],
+  "torch_imported": false
+ }
+}

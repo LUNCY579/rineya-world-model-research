@@ -1,0 +1,50 @@
+== 1. stratum mix: pilot TEST chain transitions (all steps, oracle states) vs t2_eval
+   L add/posted       n= 177  share=0.213
+   L add/void         n=  21  share=0.025
+   L scale/posted     n= 249  share=0.299
+   L scale/void       n=  32  share=0.038
+   L transfer/posted  n= 317  share=0.381
+   L transfer/void    n=  36  share=0.043
+   P applicable       n= 478  share=0.533
+   P inapplicable     n= 418  share=0.467
+   R add/nowrap       n= 166  share=0.200
+   R add/wrap         n=  10  share=0.012
+   R conditional/gt   n=  88  share=0.106
+   R conditional/le   n=  92  share=0.111
+   R mix/nowrap       n=  47  share=0.056
+   R mix/wrap         n= 198  share=0.238
+   R swap             n= 231  share=0.278
+   tick chain: min 1 max 4 median 2
+   tick t2eval: min 1 max 99 median 50
+   ledger before-balance chain: min -1680 max 2702 frac |b|>99 0.038
+   ledger before-balance t2eval: min -98 max 96 frac |b|>99 0.000
+== 2. stored Titan-Sparse pilot chains: parse/cap instrument
+   chain_one: chains 640; lenient-parsable steps recorded as None (strict break): {}
+      L: answer tokens max 23 p99 22; >= old cap 64: 0
+      P: answer tokens max 3 p99 3; >= old cap 40: 0
+      R: answer tokens max 19 p99 18; >= old cap 64: 0
+   chain_m1: chains 640; lenient-parsable steps recorded as None (strict break): {}
+      L: answer tokens max 23 p99 23; >= old cap 64: 0
+      P: answer tokens max 3 p99 3; >= old cap 40: 0
+      R: answer tokens max 19 p99 18; >= old cap 64: 0
+== 3. baseline chain exact accuracy (TEST candidates) and parent-cluster bootstrap SE
+   chain_one L (n_par=26): k1 0.399±0.031  k2 0.202±0.026  k4 0.024±0.010
+   chain_one P (n_par=28): k1 0.210±0.039  k2 0.049±0.015  k4 0.000±0.000
+   chain_one R (n_par=26): k1 0.606±0.030  k2 0.361±0.034  k4 0.087±0.016
+   chain_m1 L (n_par=26): k1 0.389±0.029  k2 0.192±0.027  k4 0.024±0.012
+   chain_m1 P (n_par=28): k1 0.196±0.039  k2 0.036±0.012  k4 0.018±0.010
+   chain_m1 R (n_par=26): k1 0.611±0.028  k2 0.365±0.035  k4 0.087±0.016
+   G regret (decisions.g_only, k=4), parent bootstrap SE
+      L chain_one: nregret 0.507 SE 0.060 (n=26, nan=0)
+      L chain_m1: nregret 0.509 SE 0.055 (n=26, nan=0)
+C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\rcwmt\decisions.py:170: RuntimeWarning: Mean of empty slice
+  fill = np.nanmean(Uc, axis=1, keepdims=True)
+      P chain_one: nregret 0.879 SE 0.059 (n=28, nan=2)
+      P chain_m1: nregret 0.878 SE 0.052 (n=28, nan=2)
+      R chain_one: nregret 0.386 SE 0.019 (n=26, nan=0)
+      R chain_m1: nregret 0.392 SE 0.020 (n=26, nan=0)
+== 4. oracle-anchored pilot-TEST transitions per T2 stratum (unique payloads)
+   L|add/posted=175, L|add/void=21, L|scale/posted=249, L|scale/void=32, L|transfer/posted=317, L|transfer/void=36, P|applicable=234, P|inapplicable=160, R|add/nowrap=166, R|add/wrap=10, R|conditional/gt=88, R|conditional/le=92, R|mix/nowrap=47, R|mix/wrap=198, R|swap=231
+== 5. t2 train/eval stratum counts
+   train {('R', 'mix/nowrap'): 85, ('P', 'inapplicable'): 250, ('L', 'add/posted'): 125, ('P', 'applicable'): 250, ('R', 'mix/wrap'): 90, ('R', 'conditional/gt'): 75, ('L', 'transfer/posted'): 125, ('L', 'scale/posted'): 125, ('R', 'add/nowrap'): 65, ('L', 'scale/void'): 42, ('L', 'transfer/void'): 42, ('R', 'swap'): 50, ('R', 'conditional/le'): 75, ('R', 'add/wrap'): 60, ('L', 'add/void'): 42}
+   eval  {('P', 'inapplicable'): 40, ('L', 'transfer/posted'): 40, ('L', 'add/void'): 40, ('L', 'scale/void'): 40, ('L', 'transfer/void'): 40, ('R', 'conditional/le'): 40, ('R', 'add/nowrap'): 40, ('R', 'mix/nowrap'): 40, ('P', 'applicable'): 40, ('R', 'conditional/gt'): 40, ('R', 'swap'): 40, ('R', 'add/wrap'): 40, ('R', 'mix/wrap'): 40, ('L', 'add/posted'): 40, ('L', 'scale/posted'): 40}

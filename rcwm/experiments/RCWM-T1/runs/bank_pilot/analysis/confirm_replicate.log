@@ -1,0 +1,540 @@
+[    0.0s] ====================================================================================================
+[    0.0s] confirm_replicate start 2026-10-07 21:18:58 parts=ABC smoke=False; torch 2.6.0+cu124 threads=2 cuda_visible='' cuda_available=False device_count=0
+[    0.5s] verified 19200 gold one-step transitions against the FDS oracle; chained gold == bank k=1/2/4 gold and phi for every candidate
+[    1.0s] confirmation bank bank_confirm sha ok; 450 parents ({'L': 150, 'P': 150, 'R': 150} per family), 3600 decision candidates (twins excluded: 450); 14400 gold one-step transitions == FDS oracle; chained gold == candidate_table gold/phi; sparse generations complete (fingerprint 818be9c6b6a3...)
+[    1.0s]   [resources] inputs loaded: rss 0.50 GB, process CPU 0.1 min
+[    1.5s] SANITY Titan through g_only on confirmation: chain_one k4 {'L': 0.539, 'P': 0.8993, 'R': 0.356} (confirmatory L 0.539, R 0.356, P 0.899; 3-decimal match {'L': True, 'P': True, 'R': True}); max |per-parent diff| vs PREREG_1_RESULTS_PER_PARENT.npz over chain_one/chain_m1/e2e x k1/2/4 = 0.00e+00
+[    1.7s] SANITY oracle one-step model through the rollout -> phi -> g_only path (confirmation): regret max {'L': 0.0, 'P': 0.0, 'R': 0.0}, exact {'L': 1.0, 'P': 1.0, 'R': 1.0} -> PASS
+[    1.7s] SANITY oracle one-step model through the rollout -> phi -> g_only path (pilot TEST): regret max {'L': 0.0, 'P': 0.0, 'R': 0.0}, exact {'L': 1.0, 'P': 1.0, 'R': 1.0} -> PASS
+[    1.8s] SANITY Titan pilot-TEST regrets == s_roll.json per-parent (max |diff| 0.00e+00)
+[    2.3s] (A) pilot recomputation == s_roll.json Titan one-step tables: True (44 cells)
+[    2.3s] (B) pilot P anatomy: {"applicable_first_steps": 125, "right": 46, "wrong_total": 79, "wrong_unparseable": 2, "wrong_parsed": 77, "wrong_eq_state_plus_add": 50, "share_of_wrong_eq_state_plus_add": 0.6329113924050633, "share_of_wrong_eq_state_plus_add_ci95_parent_cluster": [0.4614864864864865, 0.7837837837837838], "unambiguous_carry_add_bit_already_set": 32, "unambiguous_carry_and_nothing_deleted_gold_is_unchanged_state": 29, "add_bit_clear_eq_sum_consistent_with_ignoring_delete": 18, "titan_right_where_state_plus_add_is_gold": [46, 53], "titan_right_where_state_plus_add_is_not_gold": [0, 72]}
+[    2.3s] (B) confirm P anatomy: {"applicable_first_steps": 748, "right": 385, "wrong_total": 363, "wrong_unparseable": 26, "wrong_parsed": 337, "wrong_eq_state_plus_add": 261, "share_of_wrong_eq_state_plus_add": 0.71900826446281, "share_of_wrong_eq_state_plus_add_ci95_parent_cluster": [0.6446895336112342, 0.7893402597402597], "unambiguous_carry_add_bit_already_set": 163, "unambiguous_carry_and_nothing_deleted_gold_is_unchanged_state": 121, "add_bit_clear_eq_sum_consistent_with_ignoring_delete": 98, "titan_right_where_state_plus_add_is_gold": [383, 415], "titan_right_where_state_plus_add_is_not_gold": [2, 333]}
+[    2.3s] Titan's training rows: 384 rows (0881c027d166...), every reference == env.step and the FDS oracle; system prompts == env.SYSTEM_ONE
+[    2.3s] [C exact L] pilot selection (s_roll_select_L.json): FULL {'head': 'cls_delta', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003} | N128 {'head': 'cls_delta', 'encoding': 'sym', 'hidden': 512, 'depth': 2, 'lr': 0.003}; TRAIN 4245 dedup, DEV 1312
+[   17.5s]   fit[exact] L FULL       seed17      n= 4245 dev_exact=0.7226 (pilot 0.7225609756097561) step=1100/2300 | conf k4 regret 0.318 (15.2s)
+[   32.1s]   fit[exact] L FULL       seed18      n= 4245 dev_exact=0.7218 (pilot 0.7217987804878049) step=1300/2500 | conf k4 regret 0.338 (14.5s)
+[   47.2s]   fit[exact] L FULL       seed19      n= 4245 dev_exact=0.7111 (pilot 0.7111280487804879) step=1400/2600 | conf k4 regret 0.302 (15.1s)
+[   65.6s]   fit[exact] L FULL       seed20      n= 4245 dev_exact=0.7210 (pilot 0.7210365853658537) step=1900/3100 | conf k4 regret 0.335 (18.5s)
+[   80.9s]   fit[exact] L FULL       seed21      n= 4245 dev_exact=0.7195 (pilot 0.7195121951219512) step=1400/2600 | conf k4 regret 0.320 (15.3s)
+[   81.0s] [C exact L] FULL       conf regret k1/2/4 = 0.129 / 0.184 / 0.323 | Titan chain_one - S-roll k4 = +0.216 [+0.156, +0.279] (pilot +0.199 [+0.051, +0.345]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[   81.0s]   [resources] C exact L FULL: rss 0.68 GB, process CPU 2.7 min
+[   82.3s]   fit[exact] L MATCHED128 r0_seed17   n=  128 dev_exact=0.1852 (pilot 0.18521341463414634) step=25/400 | conf k4 regret 0.749 (1.3s)
+[   83.5s]   fit[exact] L MATCHED128 r0_seed18   n=  128 dev_exact=0.1806 (pilot 0.18064024390243902) step=25/400 | conf k4 regret 0.729 (1.3s)
+[   84.9s]   fit[exact] L MATCHED128 r0_seed19   n=  128 dev_exact=0.1860 (pilot 0.18597560975609756) step=25/400 | conf k4 regret 0.731 (1.3s)
+[   86.1s]   fit[exact] L MATCHED128 r0_seed20   n=  128 dev_exact=0.1913 (pilot 0.1913109756097561) step=25/400 | conf k4 regret 0.743 (1.3s)
+[   87.4s]   fit[exact] L MATCHED128 r0_seed21   n=  128 dev_exact=0.1806 (pilot 0.18064024390243902) step=25/400 | conf k4 regret 0.733 (1.3s)
+[   88.8s]   fit[exact] L MATCHED128 r1_seed17   n=  128 dev_exact=0.1723 (pilot 0.1722560975609756) step=50/425 | conf k4 regret 0.707 (1.4s)
+[   90.2s]   fit[exact] L MATCHED128 r1_seed18   n=  128 dev_exact=0.1829 (pilot 0.18292682926829268) step=50/425 | conf k4 regret 0.713 (1.4s)
+[   91.7s]   fit[exact] L MATCHED128 r1_seed19   n=  128 dev_exact=0.1852 (pilot 0.18521341463414634) step=100/475 | conf k4 regret 0.688 (1.5s)
+[   93.0s]   fit[exact] L MATCHED128 r1_seed20   n=  128 dev_exact=0.1814 (pilot 0.18140243902439024) step=50/425 | conf k4 regret 0.706 (1.4s)
+[   94.4s]   fit[exact] L MATCHED128 r1_seed21   n=  128 dev_exact=0.1860 (pilot 0.18597560975609756) step=50/425 | conf k4 regret 0.714 (1.4s)
+[   95.8s]   fit[exact] L MATCHED128 r2_seed17   n=  128 dev_exact=0.1837 (pilot 0.1836890243902439) step=50/425 | conf k4 regret 0.764 (1.4s)
+[   97.5s]   fit[exact] L MATCHED128 r2_seed18   n=  128 dev_exact=0.1921 (pilot 0.19207317073170732) step=175/550 | conf k4 regret 0.752 (1.7s)
+[   99.0s]   fit[exact] L MATCHED128 r2_seed19   n=  128 dev_exact=0.1966 (pilot 0.19664634146341464) step=75/450 | conf k4 regret 0.740 (1.5s)
+[  100.4s]   fit[exact] L MATCHED128 r2_seed20   n=  128 dev_exact=0.1913 (pilot 0.1913109756097561) step=50/425 | conf k4 regret 0.722 (1.4s)
+[  101.9s]   fit[exact] L MATCHED128 r2_seed21   n=  128 dev_exact=0.1936 (pilot 0.19359756097560976) step=75/450 | conf k4 regret 0.736 (1.5s)
+[  103.3s]   fit[exact] L MATCHED128 r3_seed17   n=  128 dev_exact=0.2035 (pilot 0.2035060975609756) step=50/425 | conf k4 regret 0.659 (1.4s)
+[  104.9s]   fit[exact] L MATCHED128 r3_seed18   n=  128 dev_exact=0.2073 (pilot 0.2073170731707317) step=75/450 | conf k4 regret 0.652 (1.6s)
+[  106.2s]   fit[exact] L MATCHED128 r3_seed19   n=  128 dev_exact=0.1989 (pilot 0.1989329268292683) step=25/400 | conf k4 regret 0.660 (1.3s)
+[  107.6s]   fit[exact] L MATCHED128 r3_seed20   n=  128 dev_exact=0.2066 (pilot 0.20655487804878048) step=50/425 | conf k4 regret 0.643 (1.4s)
+[  110.0s]   fit[exact] L MATCHED128 r3_seed21   n=  128 dev_exact=0.2096 (pilot 0.20960365853658536) step=450/825 | conf k4 regret 0.651 (2.4s)
+[  111.4s]   fit[exact] L MATCHED128 r4_seed17   n=  128 dev_exact=0.1921 (pilot 0.19207317073170732) step=50/425 | conf k4 regret 0.680 (1.4s)
+[  112.8s]   fit[exact] L MATCHED128 r4_seed18   n=  128 dev_exact=0.1928 (pilot 0.19283536585365854) step=50/425 | conf k4 regret 0.693 (1.4s)
+[  114.2s]   fit[exact] L MATCHED128 r4_seed19   n=  128 dev_exact=0.1905 (pilot 0.19054878048780488) step=50/425 | conf k4 regret 0.689 (1.4s)
+[  115.5s]   fit[exact] L MATCHED128 r4_seed20   n=  128 dev_exact=0.1936 (pilot 0.19359756097560976) step=25/400 | conf k4 regret 0.708 (1.3s)
+[  116.9s]   fit[exact] L MATCHED128 r4_seed21   n=  128 dev_exact=0.1974 (pilot 0.19740853658536586) step=50/425 | conf k4 regret 0.687 (1.4s)
+[  117.0s] [C exact L] MATCHED128 conf regret k1/2/4 = 0.400 / 0.533 / 0.706 | Titan chain_one - S-roll k4 = -0.167 [-0.221, -0.111] (pilot -0.185 [-0.317, -0.051]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  117.0s]   [resources] C exact L MATCHED128: rss 0.68 GB, process CPU 3.9 min
+[  118.3s]   fit[exact] L TITANROWS  seed17      n=  128 dev_exact=0.1974 (pilot 0.19740853658536586) step=50/425 | conf k4 regret 0.645 (1.3s)
+[  119.6s]   fit[exact] L TITANROWS  seed18      n=  128 dev_exact=0.1997 (pilot 0.19969512195121952) step=50/425 | conf k4 regret 0.640 (1.3s)
+[  121.0s]   fit[exact] L TITANROWS  seed19      n=  128 dev_exact=0.2005 (pilot 0.20045731707317074) step=50/425 | conf k4 regret 0.639 (1.3s)
+[  122.3s]   fit[exact] L TITANROWS  seed20      n=  128 dev_exact=0.2005 (pilot 0.20045731707317074) step=50/425 | conf k4 regret 0.634 (1.3s)
+[  123.7s]   fit[exact] L TITANROWS  seed21      n=  128 dev_exact=0.1966 (pilot 0.19664634146341464) step=50/425 | conf k4 regret 0.656 (1.4s)
+[  123.7s] [C exact L] TITANROWS  conf regret k1/2/4 = 0.348 / 0.468 / 0.643 | Titan chain_one - S-roll k4 = -0.104 [-0.166, -0.039] (pilot -0.158 [-0.305, -0.008]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  123.7s]   [resources] C exact L TITANROWS: rss 0.68 GB, process CPU 4.1 min
+[  127.0s]   fit[exact] L N512       r0_seed17   n=  512 dev_exact=0.3559 (pilot 0.3559451219512195) step=200/950 | conf k4 regret 0.669 (3.2s)
+[  132.2s]   fit[exact] L N512       r1_seed18   n=  512 dev_exact=0.3438 (pilot 0.34375) step=850/1600 | conf k4 regret 0.549 (5.2s)
+[  136.8s]   fit[exact] L N512       r2_seed19   n=  512 dev_exact=0.3018 (pilot 0.3018292682926829) step=650/1400 | conf k4 regret 0.612 (4.6s)
+[  136.9s] [C exact L] N512       conf regret k1/2/4 = 0.306 / 0.421 / 0.610 | Titan chain_one - S-roll k4 = -0.071 [-0.131, -0.010] (pilot -0.093 [-0.213, +0.031]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  136.9s]   [resources] C exact L N512: rss 0.68 GB, process CPU 4.5 min
+[  155.3s]   fit[exact] L N2000      r0_seed17   n= 2000 dev_exact=0.5960 (pilot 0.5960365853658537) step=2700/3900 | conf k4 regret 0.434 (18.4s)
+[  165.9s]   fit[exact] L N2000      r1_seed18   n= 2000 dev_exact=0.6075 (pilot 0.6074695121951219) step=1100/2300 | conf k4 regret 0.439 (10.6s)
+[  176.5s]   fit[exact] L N2000      r2_seed19   n= 2000 dev_exact=0.5686 (pilot 0.5685975609756098) step=1100/2300 | conf k4 regret 0.447 (10.7s)
+[  176.6s] [C exact L] N2000      conf regret k1/2/4 = 0.177 / 0.259 / 0.440 | Titan chain_one - S-roll k4 = +0.099 [+0.036, +0.163] (pilot +0.116 [-0.029, +0.264]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  176.6s]   [resources] C exact L N2000: rss 0.68 GB, process CPU 5.8 min
+[  176.6s] [C exact L] done in 174s -> confirm_replicate_part_exact_L.json
+[  176.6s] [C exact P] pilot selection (s_roll_select_P.json): FULL {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.001} | N128 {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.001}; TRAIN 1986 dedup, DEV 896
+[  181.9s]   fit[exact] P FULL       seed17      n= 1986 dev_exact=0.7545 (pilot 0.7544642857142857) step=2600/3800 | conf k4 regret 0.326 (5.2s)
+[  185.4s]   fit[exact] P FULL       seed18      n= 1986 dev_exact=0.7746 (pilot 0.7745535714285714) step=1300/2500 | conf k4 regret 0.308 (3.5s)
+[  191.0s]   fit[exact] P FULL       seed19      n= 1986 dev_exact=0.7812 (pilot 0.78125) step=3300/4000 | conf k4 regret 0.311 (5.6s)
+[  194.4s]   fit[exact] P FULL       seed20      n= 1986 dev_exact=0.7656 (pilot 0.765625) step=1200/2400 | conf k4 regret 0.331 (3.4s)
+[  197.6s]   fit[exact] P FULL       seed21      n= 1986 dev_exact=0.7679 (pilot 0.7678571428571429) step=1100/2300 | conf k4 regret 0.322 (3.3s)
+[  197.7s] [C exact P] FULL       conf regret k1/2/4 = 0.247 / 0.259 / 0.320 | Titan chain_one - S-roll k4 = +0.579 [+0.532, +0.626] (pilot +0.626 [+0.491, +0.766]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  197.7s]   [resources] C exact P FULL: rss 0.68 GB, process CPU 6.5 min
+[  198.7s]   fit[exact] P MATCHED128 r0_seed17   n=  128 dev_exact=0.4955 (pilot 0.4955357142857143) step=450/825 | conf k4 regret 0.668 (1.1s)
+[  199.8s]   fit[exact] P MATCHED128 r0_seed18   n=  128 dev_exact=0.5112 (pilot 0.5111607142857143) step=425/800 | conf k4 regret 0.669 (1.0s)
+[  200.8s]   fit[exact] P MATCHED128 r0_seed19   n=  128 dev_exact=0.5402 (pilot 0.5401785714285714) step=450/825 | conf k4 regret 0.616 (1.0s)
+[  201.8s]   fit[exact] P MATCHED128 r0_seed20   n=  128 dev_exact=0.4900 (pilot 0.48995535714285715) step=375/750 | conf k4 regret 0.676 (1.0s)
+[  202.7s]   fit[exact] P MATCHED128 r0_seed21   n=  128 dev_exact=0.5201 (pilot 0.5200892857142857) step=300/675 | conf k4 regret 0.644 (0.9s)
+[  204.2s]   fit[exact] P MATCHED128 r1_seed17   n=  128 dev_exact=0.6283 (pilot 0.6283482142857143) step=900/1275 | conf k4 regret 0.606 (1.5s)
+[  205.8s]   fit[exact] P MATCHED128 r1_seed18   n=  128 dev_exact=0.6295 (pilot 0.6294642857142857) step=950/1325 | conf k4 regret 0.630 (1.6s)
+[  206.8s]   fit[exact] P MATCHED128 r1_seed19   n=  128 dev_exact=0.6283 (pilot 0.6283482142857143) step=375/750 | conf k4 regret 0.673 (1.0s)
+[  208.9s]   fit[exact] P MATCHED128 r1_seed20   n=  128 dev_exact=0.6384 (pilot 0.6383928571428571) step=1400/1775 | conf k4 regret 0.644 (2.1s)
+[  210.1s]   fit[exact] P MATCHED128 r1_seed21   n=  128 dev_exact=0.6261 (pilot 0.6261160714285714) step=625/1000 | conf k4 regret 0.651 (1.3s)
+[  211.1s]   fit[exact] P MATCHED128 r2_seed17   n=  128 dev_exact=0.4922 (pilot 0.4921875) step=350/725 | conf k4 regret 0.548 (0.9s)
+[  212.0s]   fit[exact] P MATCHED128 r2_seed18   n=  128 dev_exact=0.5513 (pilot 0.5513392857142857) step=325/700 | conf k4 regret 0.573 (0.9s)
+[  214.2s]   fit[exact] P MATCHED128 r2_seed19   n=  128 dev_exact=0.5201 (pilot 0.5200892857142857) step=1575/1950 | conf k4 regret 0.553 (2.2s)
+[  215.3s]   fit[exact] P MATCHED128 r2_seed20   n=  128 dev_exact=0.5234 (pilot 0.5234375) step=475/850 | conf k4 regret 0.550 (1.1s)
+[  217.3s]   fit[exact] P MATCHED128 r2_seed21   n=  128 dev_exact=0.5324 (pilot 0.5323660714285714) step=1350/1725 | conf k4 regret 0.520 (2.0s)
+[  218.3s]   fit[exact] P MATCHED128 r3_seed17   n=  128 dev_exact=0.5837 (pilot 0.5837053571428571) step=450/825 | conf k4 regret 0.553 (1.1s)
+[  219.2s]   fit[exact] P MATCHED128 r3_seed18   n=  128 dev_exact=0.6060 (pilot 0.6060267857142857) step=275/650 | conf k4 regret 0.566 (0.9s)
+[  221.0s]   fit[exact] P MATCHED128 r3_seed19   n=  128 dev_exact=0.6328 (pilot 0.6328125) step=1150/1525 | conf k4 regret 0.555 (1.8s)
+[  222.7s]   fit[exact] P MATCHED128 r3_seed20   n=  128 dev_exact=0.5938 (pilot 0.59375) step=1075/1450 | conf k4 regret 0.546 (1.7s)
+[  223.9s]   fit[exact] P MATCHED128 r3_seed21   n=  128 dev_exact=0.6261 (pilot 0.6261160714285714) step=550/925 | conf k4 regret 0.569 (1.2s)
+[  225.3s]   fit[exact] P MATCHED128 r4_seed17   n=  128 dev_exact=0.5770 (pilot 0.5770089285714286) step=650/1025 | conf k4 regret 0.541 (1.4s)
+[  226.7s]   fit[exact] P MATCHED128 r4_seed18   n=  128 dev_exact=0.5569 (pilot 0.5569196428571429) step=850/1225 | conf k4 regret 0.565 (1.5s)
+[  228.2s]   fit[exact] P MATCHED128 r4_seed19   n=  128 dev_exact=0.5781 (pilot 0.578125) step=850/1225 | conf k4 regret 0.567 (1.5s)
+[  230.1s]   fit[exact] P MATCHED128 r4_seed20   n=  128 dev_exact=0.5647 (pilot 0.5647321428571429) step=1225/1600 | conf k4 regret 0.578 (1.9s)
+[  231.3s]   fit[exact] P MATCHED128 r4_seed21   n=  128 dev_exact=0.5525 (pilot 0.5524553571428571) step=575/950 | conf k4 regret 0.571 (1.2s)
+[  231.4s] [C exact P] MATCHED128 conf regret k1/2/4 = 0.490 / 0.519 / 0.593 | Titan chain_one - S-roll k4 = +0.306 [+0.267, +0.345] (pilot +0.333 [+0.220, +0.450]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  231.4s]   [resources] C exact P MATCHED128: rss 0.69 GB, process CPU 7.7 min
+[  232.1s]   fit[exact] P TITANROWS  seed17      n=  128 dev_exact=0.1250 (pilot 0.125) step=150/525 | conf k4 regret 0.771 (0.7s)
+[  233.2s]   fit[exact] P TITANROWS  seed18      n=  128 dev_exact=0.1339 (pilot 0.13392857142857142) step=475/850 | conf k4 regret 0.732 (1.1s)
+[  234.2s]   fit[exact] P TITANROWS  seed19      n=  128 dev_exact=0.1306 (pilot 0.13058035714285715) step=375/750 | conf k4 regret 0.760 (1.0s)
+[  235.3s]   fit[exact] P TITANROWS  seed20      n=  128 dev_exact=0.1384 (pilot 0.13839285714285715) step=475/850 | conf k4 regret 0.749 (1.1s)
+[  236.4s]   fit[exact] P TITANROWS  seed21      n=  128 dev_exact=0.1317 (pilot 0.13169642857142858) step=525/900 | conf k4 regret 0.735 (1.1s)
+[  236.5s] [C exact P] TITANROWS  conf regret k1/2/4 = 0.724 / 0.698 / 0.749 | Titan chain_one - S-roll k4 = +0.150 [+0.103, +0.198] (pilot +0.127 [-0.025, +0.278]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  236.5s]   [resources] C exact P TITANROWS: rss 0.69 GB, process CPU 7.8 min
+[  239.1s]   fit[exact] P N512       r0_seed17   n=  512 dev_exact=0.7221 (pilot 0.7220982142857143) step=1100/1850 | conf k4 regret 0.399 (2.7s)
+[  240.5s]   fit[exact] P N512       r1_seed18   n=  512 dev_exact=0.7176 (pilot 0.7176339285714286) step=150/900 | conf k4 regret 0.375 (1.4s)
+[  242.3s]   fit[exact] P N512       r2_seed19   n=  512 dev_exact=0.7299 (pilot 0.7299107142857143) step=400/1150 | conf k4 regret 0.378 (1.7s)
+[  242.3s] [C exact P] N512       conf regret k1/2/4 = 0.296 / 0.314 / 0.384 | Titan chain_one - S-roll k4 = +0.515 [+0.469, +0.560] (pilot +0.599 [+0.481, +0.720]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  242.3s]   [resources] C exact P N512: rss 0.69 GB, process CPU 8.0 min
+[  242.3s] [C exact P] done in 66s -> confirm_replicate_part_exact_P.json
+[  242.4s] [C exact R] pilot selection (s_roll_select_R.json): FULL {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003} | N128 {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.001}; TRAIN 4511 dedup, DEV 1056
+[  248.8s]   fit[exact] R FULL       seed17      n= 4511 dev_exact=0.2907 (pilot 0.29071969696969696) step=1100/2300 | conf k4 regret 0.591 (6.4s)
+[  255.0s]   fit[exact] R FULL       seed18      n= 4511 dev_exact=0.3078 (pilot 0.3077651515151515) step=1000/2200 | conf k4 regret 0.589 (6.2s)
+[  261.9s]   fit[exact] R FULL       seed19      n= 4511 dev_exact=0.3362 (pilot 0.33617424242424243) step=1300/2500 | conf k4 regret 0.602 (7.0s)
+[  270.2s]   fit[exact] R FULL       seed20      n= 4511 dev_exact=0.3390 (pilot 0.3390151515151515) step=1800/3000 | conf k4 regret 0.572 (8.3s)
+[  277.1s]   fit[exact] R FULL       seed21      n= 4511 dev_exact=0.3201 (pilot 0.32007575757575757) step=1300/2500 | conf k4 regret 0.596 (6.9s)
+[  277.2s] [C exact R] FULL       conf regret k1/2/4 = 0.258 / 0.375 / 0.590 | Titan chain_one - S-roll k4 = -0.234 [-0.258, -0.209] (pilot -0.239 [-0.296, -0.182]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  277.2s]   [resources] C exact R FULL: rss 0.69 GB, process CPU 9.2 min
+[  278.0s]   fit[exact] R MATCHED128 r0_seed17   n=  128 dev_exact=0.0521 (pilot 0.052083333333333336) step=25/400 | conf k4 regret 0.959 (0.8s)
+[  278.7s]   fit[exact] R MATCHED128 r0_seed18   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.988 (0.8s)
+[  279.5s]   fit[exact] R MATCHED128 r0_seed19   n=  128 dev_exact=0.0568 (pilot 0.056818181818181816) step=25/400 | conf k4 regret 0.993 (0.8s)
+[  280.3s]   fit[exact] R MATCHED128 r0_seed20   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.995 (0.8s)
+[  281.0s]   fit[exact] R MATCHED128 r0_seed21   n=  128 dev_exact=0.0540 (pilot 0.05397727272727273) step=25/400 | conf k4 regret 0.973 (0.8s)
+[  281.8s]   fit[exact] R MATCHED128 r1_seed17   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.997 (0.7s)
+[  282.5s]   fit[exact] R MATCHED128 r1_seed18   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.984 (0.7s)
+[  283.3s]   fit[exact] R MATCHED128 r1_seed19   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.995 (0.8s)
+[  284.0s]   fit[exact] R MATCHED128 r1_seed20   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.989 (0.8s)
+[  284.8s]   fit[exact] R MATCHED128 r1_seed21   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.995 (0.7s)
+[  285.5s]   fit[exact] R MATCHED128 r2_seed17   n=  128 dev_exact=0.0473 (pilot 0.04734848484848485) step=25/400 | conf k4 regret 0.950 (0.7s)
+[  286.3s]   fit[exact] R MATCHED128 r2_seed18   n=  128 dev_exact=0.0540 (pilot 0.05397727272727273) step=25/400 | conf k4 regret 0.984 (0.8s)
+[  287.0s]   fit[exact] R MATCHED128 r2_seed19   n=  128 dev_exact=0.0511 (pilot 0.05113636363636364) step=25/400 | conf k4 regret 0.970 (0.8s)
+[  287.8s]   fit[exact] R MATCHED128 r2_seed20   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.982 (0.7s)
+[  288.5s]   fit[exact] R MATCHED128 r2_seed21   n=  128 dev_exact=0.0464 (pilot 0.04640151515151515) step=25/400 | conf k4 regret 0.946 (0.7s)
+[  289.3s]   fit[exact] R MATCHED128 r3_seed17   n=  128 dev_exact=0.0502 (pilot 0.050189393939393936) step=25/400 | conf k4 regret 0.958 (0.8s)
+[  290.0s]   fit[exact] R MATCHED128 r3_seed18   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.974 (0.8s)
+[  290.8s]   fit[exact] R MATCHED128 r3_seed19   n=  128 dev_exact=0.0578 (pilot 0.05776515151515151) step=25/400 | conf k4 regret 0.971 (0.8s)
+[  291.6s]   fit[exact] R MATCHED128 r3_seed20   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.990 (0.8s)
+[  292.3s]   fit[exact] R MATCHED128 r3_seed21   n=  128 dev_exact=0.0625 (pilot 0.0625) step=25/400 | conf k4 regret 0.962 (0.8s)
+[  293.2s]   fit[exact] R MATCHED128 r4_seed17   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.990 (0.9s)
+[  294.0s]   fit[exact] R MATCHED128 r4_seed18   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.985 (0.8s)
+[  294.8s]   fit[exact] R MATCHED128 r4_seed19   n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.989 (0.8s)
+[  295.5s]   fit[exact] R MATCHED128 r4_seed20   n=  128 dev_exact=0.0549 (pilot 0.054924242424242424) step=25/400 | conf k4 regret 0.985 (0.8s)
+[  296.3s]   fit[exact] R MATCHED128 r4_seed21   n=  128 dev_exact=0.0511 (pilot 0.05113636363636364) step=25/400 | conf k4 regret 0.986 (0.8s)
+[  296.4s] [C exact R] MATCHED128 conf regret k1/2/4 = 0.952 / 0.964 / 0.980 | Titan chain_one - S-roll k4 = -0.624 [-0.644, -0.602] (pilot -0.607 [-0.650, -0.565]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  296.4s]   [resources] C exact R MATCHED128: rss 0.63 GB, process CPU 9.8 min
+[  297.2s]   fit[exact] R TITANROWS  seed17      n=  128 dev_exact=0.0521 (pilot 0.052083333333333336) step=25/400 | conf k4 regret 0.961 (0.8s)
+[  298.0s]   fit[exact] R TITANROWS  seed18      n=  128 dev_exact=0.0549 (pilot 0.054924242424242424) step=25/400 | conf k4 regret 0.978 (0.8s)
+[  298.8s]   fit[exact] R TITANROWS  seed19      n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 0.998 (0.8s)
+[  299.6s]   fit[exact] R TITANROWS  seed20      n=  128 dev_exact=0.0559 (pilot 0.05587121212121212) step=25/400 | conf k4 regret 1.000 (0.8s)
+[  300.3s]   fit[exact] R TITANROWS  seed21      n=  128 dev_exact=0.0521 (pilot 0.052083333333333336) step=25/400 | conf k4 regret 0.970 (0.8s)
+[  300.4s] [C exact R] TITANROWS  conf regret k1/2/4 = 0.950 / 0.960 / 0.982 | Titan chain_one - S-roll k4 = -0.626 [-0.646, -0.604] (pilot -0.598 [-0.650, -0.549]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  300.4s]   [resources] C exact R TITANROWS: rss 0.63 GB, process CPU 10.0 min
+[  304.9s]   fit[exact] R N512       r0_seed17   n=  512 dev_exact=0.0597 (pilot 0.05965909090909091) step=800/1550 | conf k4 regret 0.731 (4.6s)
+[  307.7s]   fit[exact] R N512       r1_seed18   n=  512 dev_exact=0.0682 (pilot 0.06818181818181818) step=200/950 | conf k4 regret 0.723 (2.8s)
+[  310.9s]   fit[exact] R N512       r2_seed19   n=  512 dev_exact=0.0587 (pilot 0.058712121212121215) step=350/1100 | conf k4 regret 0.722 (3.2s)
+[  311.0s] [C exact R] N512       conf regret k1/2/4 = 0.380 / 0.513 / 0.725 | Titan chain_one - S-roll k4 = -0.369 [-0.392, -0.346] (pilot -0.387 [-0.442, -0.330]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  311.0s]   [resources] C exact R N512: rss 0.63 GB, process CPU 10.3 min
+[  315.8s]   fit[exact] R N2000      r0_seed17   n= 2000 dev_exact=0.1297 (pilot 0.12973484848484848) step=500/1700 | conf k4 regret 0.679 (4.7s)
+[  320.8s]   fit[exact] R N2000      r1_seed18   n= 2000 dev_exact=0.1581 (pilot 0.1581439393939394) step=600/1800 | conf k4 regret 0.666 (5.0s)
+[  325.9s]   fit[exact] R N2000      r2_seed19   n= 2000 dev_exact=0.1420 (pilot 0.14204545454545456) step=600/1800 | conf k4 regret 0.660 (5.1s)
+[  325.9s] [C exact R] N2000      conf regret k1/2/4 = 0.340 / 0.463 / 0.668 | Titan chain_one - S-roll k4 = -0.312 [-0.336, -0.288] (pilot -0.293 [-0.348, -0.237]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  325.9s]   [resources] C exact R N2000: rss 0.63 GB, process CPU 10.8 min
+[  325.9s] [C exact R] done in 84s -> confirm_replicate_part_exact_R.json
+[  326.0s] [C regret L] pilot selection (s_roll_select_regsel_L.json): FULL {'head': 'gated_delta', 'encoding': 'sym', 'hidden': 512, 'depth': 2, 'lr': 0.003} | N128 {'head': 'gated_delta', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003}; TRAIN 4245 dedup, DEV 1312
+[  351.7s]   fit[regret] L FULL       seed17      n= 4245 dev_exact=0.6273 (pilot 0.6272865853658537) step=7700/8000 | conf k4 regret 0.078 (25.7s)
+[  377.3s]   fit[regret] L FULL       seed18      n= 4245 dev_exact=0.6250 (pilot 0.625) step=7600/8000 | conf k4 regret 0.076 (25.6s)
+[  402.5s]   fit[regret] L FULL       seed19      n= 4245 dev_exact=0.6090 (pilot 0.6089939024390244) step=7700/8000 | conf k4 regret 0.073 (25.2s)
+[  427.8s]   fit[regret] L FULL       seed20      n= 4245 dev_exact=0.5938 (pilot 0.59375) step=7300/8000 | conf k4 regret 0.103 (25.3s)
+[  453.2s]   fit[regret] L FULL       seed21      n= 4245 dev_exact=0.6151 (pilot 0.6150914634146342) step=8000/8000 | conf k4 regret 0.079 (25.4s)
+[  453.2s] [C regret L] FULL       conf regret k1/2/4 = 0.024 / 0.042 / 0.082 | Titan chain_one - S-roll k4 = +0.457 [+0.404, +0.514] (pilot +0.456 [+0.332, +0.588]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  453.2s]   [resources] C regret L FULL: rss 0.65 GB, process CPU 15.0 min
+[  454.3s]   fit[regret] L MATCHED128 r0_seed17   n=  128 dev_exact=0.1280 (pilot 0.12804878048780488) step=150/525 | conf k4 regret 0.700 (1.1s)
+[  455.6s]   fit[regret] L MATCHED128 r0_seed18   n=  128 dev_exact=0.1326 (pilot 0.1326219512195122) step=300/675 | conf k4 regret 0.709 (1.3s)
+[  456.6s]   fit[regret] L MATCHED128 r0_seed19   n=  128 dev_exact=0.1280 (pilot 0.12804878048780488) step=100/475 | conf k4 regret 0.704 (1.0s)
+[  457.6s]   fit[regret] L MATCHED128 r0_seed20   n=  128 dev_exact=0.1349 (pilot 0.13490853658536586) step=100/475 | conf k4 regret 0.695 (1.0s)
+[  458.6s]   fit[regret] L MATCHED128 r0_seed21   n=  128 dev_exact=0.1441 (pilot 0.14405487804878048) step=100/475 | conf k4 regret 0.704 (1.0s)
+[  460.4s]   fit[regret] L MATCHED128 r1_seed17   n=  128 dev_exact=0.1159 (pilot 0.11585365853658537) step=575/950 | conf k4 regret 0.662 (1.8s)
+[  462.1s]   fit[regret] L MATCHED128 r1_seed18   n=  128 dev_exact=0.1288 (pilot 0.1288109756097561) step=525/900 | conf k4 regret 0.692 (1.7s)
+[  463.9s]   fit[regret] L MATCHED128 r1_seed19   n=  128 dev_exact=0.1265 (pilot 0.12652439024390244) step=525/900 | conf k4 regret 0.674 (1.7s)
+[  465.2s]   fit[regret] L MATCHED128 r1_seed20   n=  128 dev_exact=0.1174 (pilot 0.1173780487804878) step=300/675 | conf k4 regret 0.692 (1.3s)
+[  467.2s]   fit[regret] L MATCHED128 r1_seed21   n=  128 dev_exact=0.1242 (pilot 0.12423780487804878) step=700/1075 | conf k4 regret 0.694 (2.0s)
+[  468.5s]   fit[regret] L MATCHED128 r2_seed17   n=  128 dev_exact=0.1341 (pilot 0.13414634146341464) step=175/550 | conf k4 regret 0.666 (1.2s)
+[  469.7s]   fit[regret] L MATCHED128 r2_seed18   n=  128 dev_exact=0.1387 (pilot 0.13871951219512196) step=225/600 | conf k4 regret 0.678 (1.2s)
+[  470.8s]   fit[regret] L MATCHED128 r2_seed19   n=  128 dev_exact=0.1364 (pilot 0.1364329268292683) step=200/575 | conf k4 regret 0.664 (1.2s)
+[  472.1s]   fit[regret] L MATCHED128 r2_seed20   n=  128 dev_exact=0.1425 (pilot 0.14253048780487804) step=275/650 | conf k4 regret 0.677 (1.3s)
+[  473.4s]   fit[regret] L MATCHED128 r2_seed21   n=  128 dev_exact=0.1463 (pilot 0.14634146341463414) step=300/675 | conf k4 regret 0.675 (1.3s)
+[  474.3s]   fit[regret] L MATCHED128 r3_seed17   n=  128 dev_exact=0.1570 (pilot 0.15701219512195122) step=25/400 | conf k4 regret 0.662 (0.9s)
+[  475.7s]   fit[regret] L MATCHED128 r3_seed18   n=  128 dev_exact=0.1524 (pilot 0.1524390243902439) step=325/700 | conf k4 regret 0.657 (1.4s)
+[  476.8s]   fit[regret] L MATCHED128 r3_seed19   n=  128 dev_exact=0.1494 (pilot 0.14939024390243902) step=175/550 | conf k4 regret 0.658 (1.1s)
+[  477.6s]   fit[regret] L MATCHED128 r3_seed20   n=  128 dev_exact=0.1441 (pilot 0.14405487804878048) step=25/400 | conf k4 regret 0.667 (0.9s)
+[  478.5s]   fit[regret] L MATCHED128 r3_seed21   n=  128 dev_exact=0.1486 (pilot 0.1486280487804878) step=25/400 | conf k4 regret 0.673 (0.9s)
+[  480.1s]   fit[regret] L MATCHED128 r4_seed17   n=  128 dev_exact=0.1509 (pilot 0.15091463414634146) step=425/800 | conf k4 regret 0.696 (1.6s)
+[  481.3s]   fit[regret] L MATCHED128 r4_seed18   n=  128 dev_exact=0.1517 (pilot 0.15167682926829268) step=200/575 | conf k4 regret 0.717 (1.2s)
+[  482.7s]   fit[regret] L MATCHED128 r4_seed19   n=  128 dev_exact=0.1471 (pilot 0.14710365853658536) step=350/725 | conf k4 regret 0.709 (1.4s)
+[  483.8s]   fit[regret] L MATCHED128 r4_seed20   n=  128 dev_exact=0.1479 (pilot 0.14786585365853658) step=150/525 | conf k4 regret 0.714 (1.1s)
+[  484.9s]   fit[regret] L MATCHED128 r4_seed21   n=  128 dev_exact=0.1555 (pilot 0.15548780487804878) step=150/525 | conf k4 regret 0.686 (1.1s)
+[  485.0s] [C regret L] MATCHED128 conf regret k1/2/4 = 0.403 / 0.513 / 0.685 | Titan chain_one - S-roll k4 = -0.146 [-0.201, -0.089] (pilot -0.204 [-0.329, -0.075]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  485.0s]   [resources] C regret L MATCHED128: rss 0.63 GB, process CPU 16.1 min
+[  486.3s]   fit[regret] L TITANROWS  seed17      n=  128 dev_exact=0.1845 (pilot 0.18445121951219512) step=325/700 | conf k4 regret 0.696 (1.4s)
+[  488.0s]   fit[regret] L TITANROWS  seed18      n=  128 dev_exact=0.1883 (pilot 0.18826219512195122) step=475/850 | conf k4 regret 0.682 (1.7s)
+[  490.2s]   fit[regret] L TITANROWS  seed19      n=  128 dev_exact=0.1997 (pilot 0.19969512195121952) step=825/1200 | conf k4 regret 0.686 (2.2s)
+[  492.1s]   fit[regret] L TITANROWS  seed20      n=  128 dev_exact=0.1936 (pilot 0.19359756097560976) step=600/975 | conf k4 regret 0.689 (1.9s)
+[  493.1s]   fit[regret] L TITANROWS  seed21      n=  128 dev_exact=0.1867 (pilot 0.18673780487804878) step=125/500 | conf k4 regret 0.704 (1.0s)
+[  493.2s] [C regret L] TITANROWS  conf regret k1/2/4 = 0.392 / 0.529 / 0.691 | Titan chain_one - S-roll k4 = -0.152 [-0.218, -0.085] (pilot -0.199 [-0.371, -0.022]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  493.2s]   [resources] C regret L TITANROWS: rss 0.63 GB, process CPU 16.4 min
+[  500.5s]   fit[regret] L N512       r0_seed17   n=  512 dev_exact=0.1845 (pilot 0.18445121951219512) step=1500/2250 | conf k4 regret 0.499 (7.4s)
+[  505.4s]   fit[regret] L N512       r1_seed18   n=  512 dev_exact=0.2005 (pilot 0.20045731707317074) step=700/1450 | conf k4 regret 0.393 (4.8s)
+[  513.0s]   fit[regret] L N512       r2_seed19   n=  512 dev_exact=0.1814 (pilot 0.18140243902439024) step=1600/2350 | conf k4 regret 0.530 (7.6s)
+[  513.1s] [C regret L] N512       conf regret k1/2/4 = 0.244 / 0.337 / 0.474 | Titan chain_one - S-roll k4 = +0.065 [+0.012, +0.121] (pilot +0.053 [-0.076, +0.189]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  513.1s]   [resources] C regret L N512: rss 0.65 GB, process CPU 17.0 min
+[  538.2s]   fit[regret] L N2000      r0_seed17   n= 2000 dev_exact=0.4291 (pilot 0.4291158536585366) step=7700/8000 | conf k4 regret 0.152 (25.1s)
+[  563.4s]   fit[regret] L N2000      r1_seed18   n= 2000 dev_exact=0.4855 (pilot 0.48551829268292684) step=7400/8000 | conf k4 regret 0.147 (25.2s)
+[  588.9s]   fit[regret] L N2000      r2_seed19   n= 2000 dev_exact=0.4139 (pilot 0.4138719512195122) step=6500/8000 | conf k4 regret 0.171 (25.5s)
+[  588.9s] [C regret L] N2000      conf regret k1/2/4 = 0.056 / 0.093 / 0.157 | Titan chain_one - S-roll k4 = +0.382 [+0.326, +0.441] (pilot +0.373 [+0.244, +0.509]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  588.9s]   [resources] C regret L N2000: rss 0.65 GB, process CPU 19.5 min
+[  588.9s] [C regret L] done in 263s -> confirm_replicate_part_regret_L.json
+[  589.0s] [C regret P] pilot selection (s_roll_select_regsel_P.json): FULL {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} | N128 {'head': 'bits', 'encoding': 'sym', 'hidden': 512, 'depth': 2, 'lr': 0.003}; TRAIN 1986 dedup, DEV 896
+[  592.8s]   fit[regret] P FULL       seed17      n= 1986 dev_exact=0.7467 (pilot 0.7466517857142857) step=700/2700 | conf k4 regret 0.332 (3.7s)
+[  597.6s]   fit[regret] P FULL       seed18      n= 1986 dev_exact=0.7701 (pilot 0.7700892857142857) step=1500/3500 | conf k4 regret 0.309 (4.8s)
+[  603.2s]   fit[regret] P FULL       seed19      n= 1986 dev_exact=0.7768 (pilot 0.7767857142857143) step=2200/4200 | conf k4 regret 0.324 (5.7s)
+[  607.0s]   fit[regret] P FULL       seed20      n= 1986 dev_exact=0.7556 (pilot 0.7555803571428571) step=700/2700 | conf k4 regret 0.321 (3.7s)
+[  611.6s]   fit[regret] P FULL       seed21      n= 1986 dev_exact=0.7656 (pilot 0.765625) step=1400/3400 | conf k4 regret 0.318 (4.7s)
+[  611.7s] [C regret P] FULL       conf regret k1/2/4 = 0.249 / 0.260 / 0.321 | Titan chain_one - S-roll k4 = +0.579 [+0.530, +0.625] (pilot +0.627 [+0.491, +0.766]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  611.7s]   [resources] C regret P FULL: rss 0.63 GB, process CPU 20.3 min
+[  612.7s]   fit[regret] P MATCHED128 r0_seed17   n=  128 dev_exact=0.4944 (pilot 0.49441964285714285) step=25/400 | conf k4 regret 0.674 (1.0s)
+[  613.8s]   fit[regret] P MATCHED128 r0_seed18   n=  128 dev_exact=0.4989 (pilot 0.49888392857142855) step=25/400 | conf k4 regret 0.664 (1.0s)
+[  615.6s]   fit[regret] P MATCHED128 r0_seed19   n=  128 dev_exact=0.5234 (pilot 0.5234375) step=400/775 | conf k4 regret 0.628 (1.9s)
+[  620.0s]   fit[regret] P MATCHED128 r0_seed20   n=  128 dev_exact=0.5391 (pilot 0.5390625) step=2000/2000 | conf k4 regret 0.645 (4.3s)
+[  621.9s]   fit[regret] P MATCHED128 r0_seed21   n=  128 dev_exact=0.5134 (pilot 0.5133928571428571) step=450/825 | conf k4 regret 0.667 (1.9s)
+[  623.4s]   fit[regret] P MATCHED128 r1_seed17   n=  128 dev_exact=0.5614 (pilot 0.5613839285714286) step=275/650 | conf k4 regret 0.691 (1.5s)
+[  625.1s]   fit[regret] P MATCHED128 r1_seed18   n=  128 dev_exact=0.5714 (pilot 0.5714285714285714) step=350/725 | conf k4 regret 0.658 (1.7s)
+[  626.2s]   fit[regret] P MATCHED128 r1_seed19   n=  128 dev_exact=0.5301 (pilot 0.5301339285714286) step=25/400 | conf k4 regret 0.673 (1.0s)
+[  628.2s]   fit[regret] P MATCHED128 r1_seed20   n=  128 dev_exact=0.5926 (pilot 0.5926339285714286) step=525/900 | conf k4 regret 0.637 (2.1s)
+[  631.8s]   fit[regret] P MATCHED128 r1_seed21   n=  128 dev_exact=0.5547 (pilot 0.5546875) step=1250/1625 | conf k4 regret 0.659 (3.5s)
+[  633.4s]   fit[regret] P MATCHED128 r2_seed17   n=  128 dev_exact=0.4743 (pilot 0.47433035714285715) step=225/600 | conf k4 regret 0.590 (1.6s)
+[  637.3s]   fit[regret] P MATCHED128 r2_seed18   n=  128 dev_exact=0.5134 (pilot 0.5133928571428571) step=1400/1775 | conf k4 regret 0.578 (3.9s)
+[  641.6s]   fit[regret] P MATCHED128 r2_seed19   n=  128 dev_exact=0.4877 (pilot 0.4877232142857143) step=2000/2000 | conf k4 regret 0.568 (4.3s)
+[  643.4s]   fit[regret] P MATCHED128 r2_seed20   n=  128 dev_exact=0.4810 (pilot 0.4810267857142857) step=375/750 | conf k4 regret 0.571 (1.8s)
+[  647.8s]   fit[regret] P MATCHED128 r2_seed21   n=  128 dev_exact=0.4900 (pilot 0.48995535714285715) step=2000/2000 | conf k4 regret 0.579 (4.4s)
+[  649.8s]   fit[regret] P MATCHED128 r3_seed17   n=  128 dev_exact=0.5949 (pilot 0.5948660714285714) step=500/875 | conf k4 regret 0.567 (2.0s)
+[  651.6s]   fit[regret] P MATCHED128 r3_seed18   n=  128 dev_exact=0.6038 (pilot 0.6037946428571429) step=400/775 | conf k4 regret 0.577 (1.8s)
+[  653.1s]   fit[regret] P MATCHED128 r3_seed19   n=  128 dev_exact=0.5748 (pilot 0.5747767857142857) step=250/625 | conf k4 regret 0.558 (1.5s)
+[  655.2s]   fit[regret] P MATCHED128 r3_seed20   n=  128 dev_exact=0.6027 (pilot 0.6026785714285714) step=575/950 | conf k4 regret 0.534 (2.1s)
+[  657.3s]   fit[regret] P MATCHED128 r3_seed21   n=  128 dev_exact=0.6094 (pilot 0.609375) step=500/875 | conf k4 regret 0.576 (2.1s)
+[  658.3s]   fit[regret] P MATCHED128 r4_seed17   n=  128 dev_exact=0.5022 (pilot 0.5022321428571429) step=25/400 | conf k4 regret 0.606 (1.0s)
+[  662.3s]   fit[regret] P MATCHED128 r4_seed18   n=  128 dev_exact=0.5391 (pilot 0.5390625) step=1425/1800 | conf k4 regret 0.576 (4.0s)
+[  665.0s]   fit[regret] P MATCHED128 r4_seed19   n=  128 dev_exact=0.5145 (pilot 0.5145089285714286) step=875/1250 | conf k4 regret 0.603 (2.8s)
+[  666.6s]   fit[regret] P MATCHED128 r4_seed20   n=  128 dev_exact=0.5156 (pilot 0.515625) step=250/625 | conf k4 regret 0.586 (1.5s)
+[  668.7s]   fit[regret] P MATCHED128 r4_seed21   n=  128 dev_exact=0.5033 (pilot 0.5033482142857143) step=550/925 | conf k4 regret 0.623 (2.1s)
+[  668.7s] [C regret P] MATCHED128 conf regret k1/2/4 = 0.497 / 0.533 / 0.612 | Titan chain_one - S-roll k4 = +0.288 [+0.249, +0.326] (pilot +0.318 [+0.205, +0.431]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  668.7s]   [resources] C regret P MATCHED128: rss 0.65 GB, process CPU 22.2 min
+[  670.0s]   fit[regret] P TITANROWS  seed17      n=  128 dev_exact=0.1250 (pilot 0.125) step=150/525 | conf k4 regret 0.758 (1.3s)
+[  671.3s]   fit[regret] P TITANROWS  seed18      n=  128 dev_exact=0.1261 (pilot 0.12611607142857142) step=150/525 | conf k4 regret 0.739 (1.3s)
+[  672.3s]   fit[regret] P TITANROWS  seed19      n=  128 dev_exact=0.1138 (pilot 0.11383928571428571) step=25/400 | conf k4 regret 0.766 (1.0s)
+[  673.5s]   fit[regret] P TITANROWS  seed20      n=  128 dev_exact=0.1250 (pilot 0.125) step=75/450 | conf k4 regret 0.736 (1.1s)
+[  674.5s]   fit[regret] P TITANROWS  seed21      n=  128 dev_exact=0.1272 (pilot 0.12723214285714285) step=50/425 | conf k4 regret 0.737 (1.1s)
+[  674.6s] [C regret P] TITANROWS  conf regret k1/2/4 = 0.722 / 0.695 / 0.747 | Titan chain_one - S-roll k4 = +0.152 [+0.106, +0.199] (pilot +0.137 [-0.025, +0.300]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  674.6s]   [resources] C regret P TITANROWS: rss 0.65 GB, process CPU 22.4 min
+[  677.8s]   fit[regret] P N512       r0_seed17   n=  512 dev_exact=0.7165 (pilot 0.7165178571428571) step=1500/2250 | conf k4 regret 0.414 (3.2s)
+[  679.2s]   fit[regret] P N512       r1_seed18   n=  512 dev_exact=0.7109 (pilot 0.7109375) step=150/900 | conf k4 regret 0.369 (1.4s)
+[  681.9s]   fit[regret] P N512       r2_seed19   n=  512 dev_exact=0.7109 (pilot 0.7109375) step=1200/1950 | conf k4 regret 0.386 (2.7s)
+[  682.0s] [C regret P] N512       conf regret k1/2/4 = 0.300 / 0.316 / 0.390 | Titan chain_one - S-roll k4 = +0.510 [+0.464, +0.554] (pilot +0.599 [+0.477, +0.722]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  682.0s]   [resources] C regret P N512: rss 0.65 GB, process CPU 22.6 min
+[  682.0s] [C regret P] done in 93s -> confirm_replicate_part_regret_P.json
+[  682.0s] [C regret R] pilot selection (s_roll_select_regsel_R.json): FULL {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003} | N128 {'head': 'cls_res', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003}; TRAIN 4511 dedup, DEV 1056
+[  691.6s]   fit[regret] R FULL       seed17      n= 4511 dev_exact=0.2879 (pilot 0.2878787878787879) step=1400/3400 | conf k4 regret 0.577 (9.5s)
+[  701.9s]   fit[regret] R FULL       seed18      n= 4511 dev_exact=0.3049 (pilot 0.30492424242424243) step=1700/3700 | conf k4 regret 0.595 (10.3s)
+[  717.4s]   fit[regret] R FULL       seed19      n= 4511 dev_exact=0.3390 (pilot 0.3390151515151515) step=3600/5600 | conf k4 regret 0.594 (15.5s)
+[  727.7s]   fit[regret] R FULL       seed20      n= 4511 dev_exact=0.3371 (pilot 0.3371212121212121) step=1700/3700 | conf k4 regret 0.570 (10.3s)
+[  738.6s]   fit[regret] R FULL       seed21      n= 4511 dev_exact=0.3144 (pilot 0.3143939393939394) step=1900/3900 | conf k4 regret 0.600 (10.9s)
+[  738.7s] [C regret R] FULL       conf regret k1/2/4 = 0.260 / 0.372 / 0.587 | Titan chain_one - S-roll k4 = -0.231 [-0.256, -0.206] (pilot -0.235 [-0.284, -0.185]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  738.7s]   [resources] C regret R FULL: rss 0.63 GB, process CPU 24.5 min
+[  739.4s]   fit[regret] R MATCHED128 r0_seed17   n=  128 dev_exact=0.0341 (pilot 0.03409090909090909) step=25/400 | conf k4 regret 0.728 (0.7s)
+[  740.3s]   fit[regret] R MATCHED128 r0_seed18   n=  128 dev_exact=0.0369 (pilot 0.036931818181818184) step=75/450 | conf k4 regret 0.757 (0.8s)
+[  741.2s]   fit[regret] R MATCHED128 r0_seed19   n=  128 dev_exact=0.0360 (pilot 0.03598484848484849) step=125/500 | conf k4 regret 0.760 (0.9s)
+[  742.0s]   fit[regret] R MATCHED128 r0_seed20   n=  128 dev_exact=0.0341 (pilot 0.03409090909090909) step=50/425 | conf k4 regret 0.742 (0.8s)
+[  742.9s]   fit[regret] R MATCHED128 r0_seed21   n=  128 dev_exact=0.0379 (pilot 0.03787878787878788) step=150/525 | conf k4 regret 0.770 (0.9s)
+[  743.7s]   fit[regret] R MATCHED128 r1_seed17   n=  128 dev_exact=0.0511 (pilot 0.05113636363636364) step=75/450 | conf k4 regret 0.751 (0.8s)
+[  745.0s]   fit[regret] R MATCHED128 r1_seed18   n=  128 dev_exact=0.0492 (pilot 0.04924242424242424) step=375/750 | conf k4 regret 0.754 (1.3s)
+[  746.0s]   fit[regret] R MATCHED128 r1_seed19   n=  128 dev_exact=0.0483 (pilot 0.048295454545454544) step=175/550 | conf k4 regret 0.754 (1.0s)
+[  746.8s]   fit[regret] R MATCHED128 r1_seed20   n=  128 dev_exact=0.0473 (pilot 0.04734848484848485) step=50/425 | conf k4 regret 0.764 (0.8s)
+[  748.2s]   fit[regret] R MATCHED128 r1_seed21   n=  128 dev_exact=0.0473 (pilot 0.04734848484848485) step=425/800 | conf k4 regret 0.759 (1.4s)
+[  749.0s]   fit[regret] R MATCHED128 r2_seed17   n=  128 dev_exact=0.0331 (pilot 0.03314393939393939) step=50/425 | conf k4 regret 0.729 (0.8s)
+[  749.7s]   fit[regret] R MATCHED128 r2_seed18   n=  128 dev_exact=0.0388 (pilot 0.038825757575757576) step=25/400 | conf k4 regret 0.763 (0.8s)
+[  750.7s]   fit[regret] R MATCHED128 r2_seed19   n=  128 dev_exact=0.0331 (pilot 0.03314393939393939) step=150/525 | conf k4 regret 0.731 (0.9s)
+[  751.7s]   fit[regret] R MATCHED128 r2_seed20   n=  128 dev_exact=0.0322 (pilot 0.032196969696969696) step=175/550 | conf k4 regret 0.733 (1.0s)
+[  752.5s]   fit[regret] R MATCHED128 r2_seed21   n=  128 dev_exact=0.0379 (pilot 0.03787878787878788) step=75/450 | conf k4 regret 0.758 (0.8s)
+[  753.3s]   fit[regret] R MATCHED128 r3_seed17   n=  128 dev_exact=0.0398 (pilot 0.03977272727272727) step=50/425 | conf k4 regret 0.745 (0.8s)
+[  754.5s]   fit[regret] R MATCHED128 r3_seed18   n=  128 dev_exact=0.0473 (pilot 0.04734848484848485) step=275/650 | conf k4 regret 0.736 (1.1s)
+[  755.3s]   fit[regret] R MATCHED128 r3_seed19   n=  128 dev_exact=0.0445 (pilot 0.04450757575757576) step=50/425 | conf k4 regret 0.725 (0.8s)
+[  756.1s]   fit[regret] R MATCHED128 r3_seed20   n=  128 dev_exact=0.0455 (pilot 0.045454545454545456) step=75/450 | conf k4 regret 0.725 (0.8s)
+[  756.9s]   fit[regret] R MATCHED128 r3_seed21   n=  128 dev_exact=0.0445 (pilot 0.04450757575757576) step=75/450 | conf k4 regret 0.743 (0.8s)
+[  757.8s]   fit[regret] R MATCHED128 r4_seed17   n=  128 dev_exact=0.0360 (pilot 0.03598484848484849) step=75/450 | conf k4 regret 0.756 (0.8s)
+[  758.7s]   fit[regret] R MATCHED128 r4_seed18   n=  128 dev_exact=0.0379 (pilot 0.03787878787878788) step=50/425 | conf k4 regret 0.762 (0.9s)
+[  759.5s]   fit[regret] R MATCHED128 r4_seed19   n=  128 dev_exact=0.0341 (pilot 0.03409090909090909) step=50/425 | conf k4 regret 0.761 (0.8s)
+[  760.5s]   fit[regret] R MATCHED128 r4_seed20   n=  128 dev_exact=0.0379 (pilot 0.03787878787878788) step=175/550 | conf k4 regret 0.758 (1.0s)
+[  761.3s]   fit[regret] R MATCHED128 r4_seed21   n=  128 dev_exact=0.0341 (pilot 0.03409090909090909) step=50/425 | conf k4 regret 0.768 (0.8s)
+[  761.4s] [C regret R] MATCHED128 conf regret k1/2/4 = 0.415 / 0.543 / 0.749 | Titan chain_one - S-roll k4 = -0.393 [-0.415, -0.371] (pilot -0.391 [-0.438, -0.342]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  761.4s]   [resources] C regret R MATCHED128: rss 0.63 GB, process CPU 25.3 min
+[  762.2s]   fit[regret] R TITANROWS  seed17      n=  128 dev_exact=0.0388 (pilot 0.038825757575757576) step=75/450 | conf k4 regret 0.732 (0.9s)
+[  763.1s]   fit[regret] R TITANROWS  seed18      n=  128 dev_exact=0.0407 (pilot 0.04071969696969697) step=75/450 | conf k4 regret 0.754 (0.8s)
+[  763.9s]   fit[regret] R TITANROWS  seed19      n=  128 dev_exact=0.0417 (pilot 0.041666666666666664) step=50/425 | conf k4 regret 0.738 (0.8s)
+[  764.7s]   fit[regret] R TITANROWS  seed20      n=  128 dev_exact=0.0398 (pilot 0.03977272727272727) step=50/425 | conf k4 regret 0.755 (0.8s)
+[  766.0s]   fit[regret] R TITANROWS  seed21      n=  128 dev_exact=0.0388 (pilot 0.038825757575757576) step=400/775 | conf k4 regret 0.748 (1.3s)
+[  766.1s] [C regret R] TITANROWS  conf regret k1/2/4 = 0.423 / 0.553 / 0.745 | Titan chain_one - S-roll k4 = -0.389 [-0.416, -0.362] (pilot -0.394 [-0.457, -0.326]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  766.1s]   [resources] C regret R TITANROWS: rss 0.63 GB, process CPU 25.4 min
+[  770.6s]   fit[regret] R N512       r0_seed17   n=  512 dev_exact=0.0597 (pilot 0.05965909090909091) step=800/1550 | conf k4 regret 0.731 (4.5s)
+[  773.4s]   fit[regret] R N512       r1_seed18   n=  512 dev_exact=0.0682 (pilot 0.06818181818181818) step=200/950 | conf k4 regret 0.723 (2.8s)
+[  776.7s]   fit[regret] R N512       r2_seed19   n=  512 dev_exact=0.0587 (pilot 0.058712121212121215) step=350/1100 | conf k4 regret 0.722 (3.3s)
+[  776.7s] [C regret R] N512       conf regret k1/2/4 = 0.380 / 0.513 / 0.725 | Titan chain_one - S-roll k4 = -0.369 [-0.392, -0.346] (pilot -0.387 [-0.442, -0.330]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  776.7s]   [resources] C regret R N512: rss 0.63 GB, process CPU 25.8 min
+[  783.8s]   fit[regret] R N2000      r0_seed17   n= 2000 dev_exact=0.1326 (pilot 0.13257575757575757) step=500/2500 | conf k4 regret 0.668 (7.1s)
+[  791.4s]   fit[regret] R N2000      r1_seed18   n= 2000 dev_exact=0.1581 (pilot 0.1581439393939394) step=700/2700 | conf k4 regret 0.676 (7.6s)
+[  798.7s]   fit[regret] R N2000      r2_seed19   n= 2000 dev_exact=0.1383 (pilot 0.13825757575757575) step=600/2600 | conf k4 regret 0.671 (7.3s)
+[  798.8s] [C regret R] N2000      conf regret k1/2/4 = 0.341 / 0.469 / 0.671 | Titan chain_one - S-roll k4 = -0.315 [-0.338, -0.292] (pilot -0.287 [-0.348, -0.223]) | pilot models reproduced: fits True, pilot-TEST regret max|diff| 0.00e+00
+[  798.8s]   [resources] C regret R N2000: rss 0.63 GB, process CPU 26.5 min
+[  798.8s] [C regret R] done in 117s -> confirm_replicate_part_regret_R.json
+[  798.8s] (C) retrained S-roll models reproduce the pilot models: True 
+
+## (A) Titan one-step accuracy by operation (chain_one). Cells: acc (n) [conf 95% parent-cluster CI]; dominant error count/wrong
+
+### rule = input_correct (R8: input state correct)
+| Family | Stratum | pilot acc (n) | confirm acc (n) [95% CI] | pilot dominant error | confirm dominant error |
+|---|---|---|---|---|---|
+| L | add|posted | 0.529 (68) | 0.539 (356) [0.486, 0.592] | one_balance_wrong 27/32 | one_balance_wrong 149/164 |
+| L | add|void | 0.000 (10) | 0.061 (49) [0.000, 0.136] | void_event_applied_as_posted 6/10 | void_event_applied_as_posted 27/46 |
+| L | scale|posted | 0.640 (100) | 0.582 (622) [0.540, 0.622] | one_balance_wrong 36/36 | one_balance_wrong 258/260 |
+| L | scale|void | 0.071 (14) | 0.157 (83) [0.084, 0.235] | void_event_applied_as_posted 8/13 | void_event_applied_as_posted 38/70 |
+| L | transfer|posted | 0.315 (146) | 0.332 (802) [0.296, 0.366] | one_balance_wrong 64/100 | one_balance_wrong 333/536 |
+| L | transfer|void | 0.118 (17) | 0.080 (113) [0.035, 0.128] | two_balances_wrong 10/15 | two_balances_wrong 69/104 |
+| L | void|any | 0.073 (41) | 0.102 (245) [0.069, 0.139] | void_event_applied_as_posted 16/38 | void_event_applied_as_posted 89/220 |
+| L | ALL | 0.420 (355) | 0.417 (2025) [0.396, 0.437] | one_balance_wrong 138/206 | one_balance_wrong 797/1180 |
+| P | applicable | 0.319 (166) | 0.451 (1127) [0.413, 0.486] | eq_state_plus_add 64/113 | eq_state_plus_add 442/619 |
+| P | inapplicable | 0.009 (117) | 0.008 (598) [0.000, 0.020] | applied_anyway 89/116 | applied_anyway 461/593 |
+| P | ALL | 0.191 (283) | 0.297 (1725) [0.269, 0.324] | applied_anyway 89/229 | applied_anyway 461/1212 |
+| R | add | 0.842 (95) | 0.888 (500) [0.859, 0.916] | wrong_value 8/15 | wrong_value 44/56 |
+| R | add|nowrap | 0.920 (87) | 0.923 (481) [0.899, 0.945] | wrong_value 7/7 | wrong_value 34/37 |
+| R | add|wrap | 0.000 (8) | 0.000 (19) [0.000, 0.000] | missing_mod97 7/8 | wrong_value 10/19 |
+| R | conditional | 0.474 (95) | 0.465 (645) [0.425, 0.504] | wrong_branch 40/50 | wrong_branch 260/345 |
+| R | conditional|gt | 0.438 (48) | 0.474 (321) [0.420, 0.525] | wrong_branch 23/27 | wrong_branch 130/169 |
+| R | conditional|le | 0.511 (47) | 0.457 (324) [0.395, 0.516] | wrong_branch 17/23 | wrong_branch 130/176 |
+| R | mix | 0.008 (126) | 0.011 (699) [0.004, 0.020] | wrong_value 84/125 | wrong_value 516/691 |
+| R | mix|nowrap | 0.050 (20) | 0.021 (188) [0.005, 0.044] | wrong_value 18/19 | wrong_value 173/184 |
+| R | mix|wrap | 0.000 (106) | 0.008 (511) [0.002, 0.016] | wrong_value 66/106 | wrong_value 343/507 |
+| R | swap | 1.000 (133) | 0.998 (657) [0.995, 1.000] | — | swap_wrong 1/1 |
+| R | ALL | 0.577 (449) | 0.563 (2501) [0.544, 0.581] | wrong_value 101/190 | wrong_value 640/1093 |
+
+### rule = step1 (first step from gold s0)
+| Family | Stratum | pilot acc (n) | confirm acc (n) [95% CI] | pilot dominant error | confirm dominant error |
+|---|---|---|---|---|---|
+| L | add|posted | 0.568 (37) | 0.561 (212) [0.492, 0.632] | one_balance_wrong 14/16 | one_balance_wrong 84/93 |
+| L | add|void | 0.000 (4) | 0.097 (31) [0.000, 0.219] | void_event_applied_as_posted 3/4 | void_event_applied_as_posted 18/28 |
+| L | scale|posted | 0.554 (56) | 0.585 (376) [0.531, 0.637] | one_balance_wrong 25/25 | one_balance_wrong 156/156 |
+| L | scale|void | 0.125 (8) | 0.191 (47) [0.087, 0.311] | void_event_applied_as_posted 4/7 | void_event_applied_as_posted 22/38 |
+| L | transfer|posted | 0.305 (95) | 0.345 (467) [0.303, 0.389] | one_balance_wrong 39/66 | one_balance_wrong 193/306 |
+| L | transfer|void | 0.125 (8) | 0.090 (67) [0.029, 0.164] | two_balances_wrong 4/7 | two_balances_wrong 40/61 |
+| L | void|any | 0.100 (20) | 0.124 (145) [0.074, 0.175] | void_event_applied_as_posted 8/18 | void_event_applied_as_posted 51/127 |
+| L | ALL | 0.399 (208) | 0.432 (1200) [0.403, 0.460] | one_balance_wrong 83/125 | one_balance_wrong 467/682 |
+| P | applicable | 0.368 (125) | 0.515 (748) [0.462, 0.566] | eq_state_plus_add 50/79 | eq_state_plus_add 261/363 |
+| P | inapplicable | 0.010 (99) | 0.009 (452) [0.000, 0.023] | applied_anyway 78/98 | applied_anyway 351/448 |
+| P | ALL | 0.210 (224) | 0.324 (1200) [0.287, 0.360] | applied_anyway 78/177 | applied_anyway 351/811 |
+| R | add | 0.851 (47) | 0.882 (238) [0.843, 0.924] | missing_mod97 4/7 | wrong_value 22/28 |
+| R | add|nowrap | 0.952 (42) | 0.929 (226) [0.894, 0.960] | wrong_value 2/2 | wrong_value 16/16 |
+| R | add|wrap | 0.000 (5) | 0.000 (12) [0.000, 0.000] | missing_mod97 4/5 | wrong_value 6/12 |
+| R | conditional | 0.450 (40) | 0.464 (293) [0.411, 0.521] | wrong_branch 15/22 | wrong_branch 120/157 |
+| R | conditional|gt | 0.500 (16) | 0.531 (145) [0.452, 0.607] | wrong_branch 5/8 | wrong_branch 49/68 |
+| R | conditional|le | 0.417 (24) | 0.399 (148) [0.324, 0.474] | wrong_branch 10/14 | wrong_branch 71/89 |
+| R | mix | 0.019 (54) | 0.006 (326) [0.000, 0.016] | wrong_value 34/53 | wrong_value 253/324 |
+| R | mix|nowrap | 0.111 (9) | 0.010 (104) [0.000, 0.031] | wrong_value 7/8 | wrong_value 98/103 |
+| R | mix|wrap | 0.000 (45) | 0.005 (222) [0.000, 0.015] | wrong_value 27/45 | wrong_value 155/221 |
+| R | swap | 1.000 (67) | 0.997 (343) [0.991, 1.000] | — | swap_wrong 1/1 |
+| R | ALL | 0.606 (208) | 0.575 (1200) [0.547, 0.603] | wrong_value 44/82 | wrong_value 308/510 |
+
+## (B) P applicable first steps (gold s0 input), Titan chain_one
+| Quantity | pilot | confirm |
+|---|---|---|
+| applicable_first_steps | 125 | 748 |
+| right | 46 | 385 |
+| wrong_total | 79 | 363 |
+| wrong_unparseable | 2 | 26 |
+| wrong_parsed | 77 | 337 |
+| wrong_eq_state_plus_add | 50 | 261 |
+| share_of_wrong_eq_state_plus_add | 0.633 | 0.719 [+0.645, +0.789] |
+| unambiguous_carry_add_bit_already_set | 32 | 163 |
+| unambiguous_carry_and_nothing_deleted_gold_is_unchanged_state | 29 | 121 |
+| add_bit_clear_eq_sum_consistent_with_ignoring_delete | 18 | 98 |
+| titan_right_where_state_plus_add_is_gold | 46/53 | 383/415 |
+| titan_right_where_state_plus_add_is_not_gold | 0/72 | 2/333 |
+| applicable first-step accuracy (confirm re-weighted to pilot cell mix) | 0.368 | 0.515 (0.394) |
+| wrong type eq_state_plus_add | 50 | 261 |
+| wrong type other_wrong_integer | 27 | 72 |
+| wrong type unchanged_state | 0 | 4 |
+| wrong type unparseable | 2 | 26 |
+| cell add_bit_already_set|delete_clears_a_set_bit | n 14, right 0, wrong 14 (=s+add 3, unparsed 1) | n 54, right 0, wrong 54 (=s+add 42, unparsed 0) |
+| cell add_bit_already_set|delete_clears_nothing | n 38, right 0, wrong 38 (=s+add 29, unparsed 1) | n 159, right 0, wrong 159 (=s+add 121, unparsed 26) |
+| cell add_bit_clear|delete_clears_a_set_bit | n 20, right 0, wrong 20 (=s+add 18, unparsed 0) | n 120, right 2, wrong 118 (=s+add 98, unparsed 0) |
+| cell add_bit_clear|delete_clears_nothing | n 53, right 46, wrong 7 (=s+add 0, unparsed 0) | n 415, right 383, wrong 32 (=s+add 0, unparsed 0) |
+| P anatomy applicable_n | 125 | 748 |
+| P anatomy applicable_wrong | 79 | 363 |
+| P anatomy applicable_wrong_eq_s_or_add | 18 | 98 |
+| P anatomy applicable_wrong_eq_s_plus_add | 50 | 261 |
+| P anatomy applicable_wrong_unparsed | 2 | 26 |
+| P anatomy inapplicable_n | 99 | 452 |
+| P anatomy inapplicable_titan_eq_ignore_precondition | 34 | 206 |
+| P anatomy inapplicable_titan_eq_s_plus_add | 78 | 351 |
+| P anatomy inapplicable_where_ignoring_gives_gold_n | 44 | 133 |
+| P anatomy inapplicable_where_ignoring_gives_gold_titan_eq_s_plus_add | 30 | 97 |
+| P anatomy inapplicable_where_ignoring_gives_gold_titan_right | 0 | 0 |
+| L anatomy void_n | 20 | 145 |
+| L anatomy void_titan_eq_applied_as_posted | 9 | 61 |
+| L anatomy void_titan_right | 2 | 18 |
+
+## (C) S-roll vs Titan chain_one on the confirmation parents. Cells: S-roll regret; Titan - S-roll [95% CI] (negative = Titan better)
+
+### k = 1
+| Family | Titan chain_one pilot / confirm | S-roll arm | rule | pilot: S-roll; Titan - S-roll [CI] | confirm: S-roll; Titan - S-roll [CI] (n) |
+|---|---|---|---|---|---|
+| L | 0.357 / 0.305 | FULL | spec | 0.115; +0.242 [+0.125, +0.375] | 0.129; +0.175 [+0.131, +0.222] (150) |
+| L | 0.357 / 0.305 | MATCHED128 | spec | 0.355; +0.002 [-0.102, +0.109] | 0.400; -0.095 [-0.142, -0.047] (150) |
+| L | 0.357 / 0.305 | TITANROWS | spec | 0.316; +0.041 [-0.067, +0.148] | 0.348; -0.043 [-0.094, +0.008] (150) |
+| L | 0.357 / 0.305 | N512 | spec | 0.293; +0.065 [-0.057, +0.190] | 0.306; -0.001 [-0.050, +0.049] (150) |
+| L | 0.357 / 0.305 | N2000 | spec | 0.155; +0.202 [+0.085, +0.331] | 0.177; +0.128 [+0.078, +0.180] (150) |
+| L | 0.357 / 0.305 | FULL | DEV-regret | 0.016; +0.341 [+0.234, +0.465] | 0.024; +0.281 [+0.237, +0.327] (150) |
+| L | 0.357 / 0.305 | MATCHED128 | DEV-regret | 0.407; -0.050 [-0.151, +0.053] | 0.403; -0.098 [-0.143, -0.051] (150) |
+| L | 0.357 / 0.305 | TITANROWS | DEV-regret | 0.361; -0.004 [-0.129, +0.116] | 0.392; -0.087 [-0.140, -0.034] (150) |
+| L | 0.357 / 0.305 | N512 | DEV-regret | 0.195; +0.163 [+0.054, +0.283] | 0.244; +0.061 [+0.013, +0.110] (150) |
+| L | 0.357 / 0.305 | N2000 | DEV-regret | 0.053; +0.304 [+0.196, +0.430] | 0.056; +0.249 [+0.206, +0.296] (150) |
+| P | 0.505 / 0.576 | FULL | spec | 0.163; +0.343 [+0.258, +0.430] | 0.247; +0.329 [+0.279, +0.377] (149) |
+| P | 0.505 / 0.576 | MATCHED128 | spec | 0.421; +0.084 [+0.005, +0.169] | 0.490; +0.086 [+0.046, +0.127] (149) |
+| P | 0.505 / 0.576 | TITANROWS | spec | 0.727; -0.222 [-0.341, -0.097] | 0.724; -0.148 [-0.201, -0.095] (149) |
+| P | 0.505 / 0.576 | N512 | spec | 0.194; +0.311 [+0.213, +0.412] | 0.296; +0.280 [+0.235, +0.326] (149) |
+| P | 0.505 / 0.576 | FULL | DEV-regret | 0.159; +0.346 [+0.267, +0.429] | 0.249; +0.327 [+0.279, +0.375] (149) |
+| P | 0.505 / 0.576 | MATCHED128 | DEV-regret | 0.427; +0.078 [+0.001, +0.162] | 0.497; +0.079 [+0.038, +0.121] (149) |
+| P | 0.505 / 0.576 | TITANROWS | DEV-regret | 0.722; -0.216 [-0.338, -0.091] | 0.722; -0.146 [-0.199, -0.094] (149) |
+| P | 0.505 / 0.576 | N512 | DEV-regret | 0.185; +0.320 [+0.219, +0.424] | 0.300; +0.276 [+0.231, +0.321] (149) |
+| R | 0.132 / 0.135 | FULL | spec | 0.279; -0.147 [-0.192, -0.101] | 0.258; -0.123 [-0.142, -0.102] (150) |
+| R | 0.132 / 0.135 | MATCHED128 | spec | 0.957; -0.825 [-0.856, -0.795] | 0.952; -0.816 [-0.832, -0.800] (150) |
+| R | 0.132 / 0.135 | TITANROWS | spec | 0.963; -0.831 [-0.862, -0.800] | 0.950; -0.815 [-0.832, -0.797] (150) |
+| R | 0.132 / 0.135 | N512 | spec | 0.390; -0.258 [-0.304, -0.214] | 0.380; -0.244 [-0.264, -0.224] (150) |
+| R | 0.132 / 0.135 | N2000 | spec | 0.331; -0.199 [-0.239, -0.158] | 0.340; -0.205 [-0.224, -0.185] (150) |
+| R | 0.132 / 0.135 | FULL | DEV-regret | 0.287; -0.155 [-0.197, -0.111] | 0.260; -0.124 [-0.145, -0.103] (150) |
+| R | 0.132 / 0.135 | MATCHED128 | DEV-regret | 0.427; -0.295 [-0.328, -0.261] | 0.415; -0.280 [-0.298, -0.261] (150) |
+| R | 0.132 / 0.135 | TITANROWS | DEV-regret | 0.414; -0.282 [-0.337, -0.230] | 0.423; -0.287 [-0.310, -0.264] (150) |
+| R | 0.132 / 0.135 | N512 | DEV-regret | 0.390; -0.258 [-0.304, -0.214] | 0.380; -0.244 [-0.264, -0.224] (150) |
+| R | 0.132 / 0.135 | N2000 | DEV-regret | 0.339; -0.207 [-0.247, -0.166] | 0.341; -0.205 [-0.224, -0.186] (150) |
+
+### k = 2
+| Family | Titan chain_one pilot / confirm | S-roll arm | rule | pilot: S-roll; Titan - S-roll [CI] | confirm: S-roll; Titan - S-roll [CI] (n) |
+|---|---|---|---|---|---|
+| L | 0.366 / 0.388 | FULL | spec | 0.177; +0.189 [+0.087, +0.293] | 0.184; +0.203 [+0.153, +0.258] (150) |
+| L | 0.366 / 0.388 | MATCHED128 | spec | 0.507; -0.141 [-0.236, -0.040] | 0.533; -0.145 [-0.193, -0.095] (150) |
+| L | 0.366 / 0.388 | TITANROWS | spec | 0.450; -0.085 [-0.175, +0.009] | 0.468; -0.081 [-0.132, -0.025] (150) |
+| L | 0.366 / 0.388 | N512 | spec | 0.429; -0.063 [-0.143, +0.020] | 0.421; -0.033 [-0.084, +0.021] (150) |
+| L | 0.366 / 0.388 | N2000 | spec | 0.254; +0.111 [-0.011, +0.234] | 0.259; +0.128 [+0.075, +0.185] (150) |
+| L | 0.366 / 0.388 | FULL | DEV-regret | 0.020; +0.345 [+0.266, +0.432] | 0.042; +0.345 [+0.297, +0.397] (150) |
+| L | 0.366 / 0.388 | MATCHED128 | DEV-regret | 0.522; -0.156 [-0.241, -0.063] | 0.513; -0.126 [-0.172, -0.076] (150) |
+| L | 0.366 / 0.388 | TITANROWS | DEV-regret | 0.495; -0.130 [-0.252, -0.005] | 0.529; -0.141 [-0.197, -0.084] (150) |
+| L | 0.366 / 0.388 | N512 | DEV-regret | 0.297; +0.068 [-0.015, +0.152] | 0.337; +0.050 [+0.002, +0.101] (150) |
+| L | 0.366 / 0.388 | N2000 | DEV-regret | 0.072; +0.294 [+0.215, +0.377] | 0.093; +0.294 [+0.245, +0.346] (150) |
+| P | 0.681 / 0.734 | FULL | spec | 0.170; +0.511 [+0.386, +0.636] | 0.259; +0.475 [+0.428, +0.522] (150) |
+| P | 0.681 / 0.734 | MATCHED128 | spec | 0.458; +0.223 [+0.105, +0.342] | 0.519; +0.215 [+0.177, +0.253] (150) |
+| P | 0.681 / 0.734 | TITANROWS | spec | 0.666; +0.014 [-0.112, +0.149] | 0.698; +0.036 [-0.014, +0.086] (150) |
+| P | 0.681 / 0.734 | N512 | spec | 0.205; +0.475 [+0.347, +0.605] | 0.314; +0.420 [+0.377, +0.463] (150) |
+| P | 0.681 / 0.734 | FULL | DEV-regret | 0.169; +0.511 [+0.385, +0.638] | 0.260; +0.473 [+0.426, +0.519] (150) |
+| P | 0.681 / 0.734 | MATCHED128 | DEV-regret | 0.462; +0.219 [+0.106, +0.331] | 0.533; +0.200 [+0.164, +0.237] (150) |
+| P | 0.681 / 0.734 | TITANROWS | DEV-regret | 0.655; +0.025 [-0.102, +0.158] | 0.695; +0.039 [-0.011, +0.089] (150) |
+| P | 0.681 / 0.734 | N512 | DEV-regret | 0.199; +0.482 [+0.354, +0.612] | 0.316; +0.418 [+0.374, +0.461] (150) |
+| R | 0.208 / 0.199 | FULL | spec | 0.402; -0.193 [-0.242, -0.147] | 0.375; -0.175 [-0.195, -0.155] (150) |
+| R | 0.208 / 0.199 | MATCHED128 | spec | 0.970; -0.761 [-0.805, -0.714] | 0.964; -0.764 [-0.780, -0.748] (150) |
+| R | 0.208 / 0.199 | TITANROWS | spec | 0.970; -0.762 [-0.805, -0.715] | 0.960; -0.761 [-0.777, -0.744] (150) |
+| R | 0.208 / 0.199 | N512 | spec | 0.527; -0.319 [-0.372, -0.268] | 0.513; -0.314 [-0.334, -0.294] (150) |
+| R | 0.208 / 0.199 | N2000 | spec | 0.467; -0.259 [-0.317, -0.202] | 0.463; -0.264 [-0.284, -0.243] (150) |
+| R | 0.208 / 0.199 | FULL | DEV-regret | 0.410; -0.201 [-0.254, -0.153] | 0.372; -0.173 [-0.192, -0.154] (150) |
+| R | 0.208 / 0.199 | MATCHED128 | DEV-regret | 0.561; -0.352 [-0.403, -0.300] | 0.543; -0.343 [-0.362, -0.324] (150) |
+| R | 0.208 / 0.199 | TITANROWS | DEV-regret | 0.531; -0.323 [-0.383, -0.261] | 0.553; -0.353 [-0.377, -0.329] (150) |
+| R | 0.208 / 0.199 | N512 | DEV-regret | 0.527; -0.319 [-0.372, -0.268] | 0.513; -0.314 [-0.334, -0.294] (150) |
+| R | 0.208 / 0.199 | N2000 | DEV-regret | 0.466; -0.257 [-0.313, -0.202] | 0.469; -0.269 [-0.290, -0.249] (150) |
+
+### k = 4
+| Family | Titan chain_one pilot / confirm | S-roll arm | rule | pilot: S-roll; Titan - S-roll [CI] | confirm: S-roll; Titan - S-roll [CI] (n) |
+|---|---|---|---|---|---|
+| L | 0.507 / 0.539 | FULL | spec | 0.308; +0.199 [+0.051, +0.345] | 0.323; +0.216 [+0.156, +0.279] (150) |
+| L | 0.507 / 0.539 | MATCHED128 | spec | 0.693; -0.185 [-0.317, -0.051] | 0.706; -0.167 [-0.221, -0.111] (150) |
+| L | 0.507 / 0.539 | TITANROWS | spec | 0.666; -0.158 [-0.305, -0.008] | 0.643; -0.104 [-0.166, -0.039] (150) |
+| L | 0.507 / 0.539 | N512 | spec | 0.600; -0.093 [-0.213, +0.031] | 0.610; -0.071 [-0.131, -0.010] (150) |
+| L | 0.507 / 0.539 | N2000 | spec | 0.391; +0.116 [-0.029, +0.264] | 0.440; +0.099 [+0.036, +0.163] (150) |
+| L | 0.507 / 0.539 | FULL | DEV-regret | 0.051; +0.456 [+0.332, +0.588] | 0.082; +0.457 [+0.404, +0.514] (150) |
+| L | 0.507 / 0.539 | MATCHED128 | DEV-regret | 0.711; -0.204 [-0.329, -0.075] | 0.685; -0.146 [-0.201, -0.089] (150) |
+| L | 0.507 / 0.539 | TITANROWS | DEV-regret | 0.707; -0.199 [-0.371, -0.022] | 0.691; -0.152 [-0.218, -0.085] (150) |
+| L | 0.507 / 0.539 | N512 | DEV-regret | 0.454; +0.053 [-0.076, +0.189] | 0.474; +0.065 [+0.012, +0.121] (150) |
+| L | 0.507 / 0.539 | N2000 | DEV-regret | 0.134; +0.373 [+0.244, +0.509] | 0.157; +0.382 [+0.326, +0.441] (150) |
+| P | 0.879 / 0.899 | FULL | spec | 0.253; +0.626 [+0.491, +0.766] | 0.320; +0.579 [+0.532, +0.626] (150) |
+| P | 0.879 / 0.899 | MATCHED128 | spec | 0.545; +0.333 [+0.220, +0.450] | 0.593; +0.306 [+0.267, +0.345] (150) |
+| P | 0.879 / 0.899 | TITANROWS | spec | 0.752; +0.127 [-0.025, +0.278] | 0.749; +0.150 [+0.103, +0.198] (150) |
+| P | 0.879 / 0.899 | N512 | spec | 0.279; +0.599 [+0.481, +0.720] | 0.384; +0.515 [+0.469, +0.560] (150) |
+| P | 0.879 / 0.899 | FULL | DEV-regret | 0.252; +0.627 [+0.491, +0.766] | 0.321; +0.579 [+0.530, +0.625] (150) |
+| P | 0.879 / 0.899 | MATCHED128 | DEV-regret | 0.561; +0.318 [+0.205, +0.431] | 0.612; +0.288 [+0.249, +0.326] (150) |
+| P | 0.879 / 0.899 | TITANROWS | DEV-regret | 0.741; +0.137 [-0.025, +0.300] | 0.747; +0.152 [+0.106, +0.199] (150) |
+| P | 0.879 / 0.899 | N512 | DEV-regret | 0.280; +0.599 [+0.477, +0.722] | 0.390; +0.510 [+0.464, +0.554] (150) |
+| R | 0.386 / 0.356 | FULL | spec | 0.624; -0.239 [-0.296, -0.182] | 0.590; -0.234 [-0.258, -0.209] (150) |
+| R | 0.386 / 0.356 | MATCHED128 | spec | 0.992; -0.607 [-0.650, -0.565] | 0.980; -0.624 [-0.644, -0.602] (150) |
+| R | 0.386 / 0.356 | TITANROWS | spec | 0.984; -0.598 [-0.650, -0.549] | 0.982; -0.626 [-0.646, -0.604] (150) |
+| R | 0.386 / 0.356 | N512 | spec | 0.773; -0.387 [-0.442, -0.330] | 0.725; -0.369 [-0.392, -0.346] (150) |
+| R | 0.386 / 0.356 | N2000 | spec | 0.679; -0.293 [-0.348, -0.237] | 0.668; -0.312 [-0.336, -0.288] (150) |
+| R | 0.386 / 0.356 | FULL | DEV-regret | 0.620; -0.235 [-0.284, -0.185] | 0.587; -0.231 [-0.256, -0.206] (150) |
+| R | 0.386 / 0.356 | MATCHED128 | DEV-regret | 0.777; -0.391 [-0.438, -0.342] | 0.749; -0.393 [-0.415, -0.371] (150) |
+| R | 0.386 / 0.356 | TITANROWS | DEV-regret | 0.779; -0.394 [-0.457, -0.326] | 0.745; -0.389 [-0.416, -0.362] (150) |
+| R | 0.386 / 0.356 | N512 | DEV-regret | 0.773; -0.387 [-0.442, -0.330] | 0.725; -0.369 [-0.392, -0.346] (150) |
+| R | 0.386 / 0.356 | N2000 | DEV-regret | 0.672; -0.287 [-0.348, -0.223] | 0.671; -0.315 [-0.338, -0.292] (150) |
+
+### First-step accuracy by operation: Titan vs S-roll FULL (spec / DEV-regret)
+| Family | Stratum | pilot Titan | pilot S-roll FULL spec / DEV-regret | confirm Titan | confirm S-roll FULL spec / DEV-regret |
+|---|---|---|---|---|---|
+| L | add|posted | 0.568 | 0.957 / 0.865 | 0.561 | 0.971 / 0.882 |
+| L | add|void | 0.000 | 1.000 / 1.000 | 0.097 | 1.000 / 1.000 |
+| L | scale|posted | 0.554 | 0.093 / 0.114 | 0.585 | 0.135 / 0.143 |
+| L | scale|void | 0.125 | 1.000 / 1.000 | 0.191 | 0.996 / 1.000 |
+| L | transfer|posted | 0.305 | 0.971 / 0.819 | 0.345 | 0.968 / 0.846 |
+| L | transfer|void | 0.125 | 1.000 / 1.000 | 0.090 | 0.997 / 1.000 |
+| L | void|any | 0.100 | 1.000 / 1.000 | 0.124 | 0.997 / 1.000 |
+| L | ALL | 0.399 | 0.735 / 0.655 | 0.432 | 0.711 / 0.650 |
+| P | applicable | 0.368 | 0.816 / 0.821 | 0.515 | 0.815 / 0.810 |
+| P | inapplicable | 0.010 | 0.741 / 0.741 | 0.009 | 0.630 / 0.626 |
+| P | ALL | 0.210 | 0.783 / 0.786 | 0.324 | 0.745 / 0.741 |
+| R | add | 0.851 | 0.860 / 0.881 | 0.882 | 0.818 / 0.804 |
+| R | add|nowrap | 0.952 | 0.862 / 0.886 | 0.929 | 0.827 / 0.817 |
+| R | add|wrap | 0.000 | 0.840 / 0.840 | 0.000 | 0.667 / 0.567 |
+| R | conditional | 0.450 | 0.625 / 0.585 | 0.464 | 0.629 / 0.633 |
+| R | conditional|gt | 0.500 | 0.675 / 0.625 | 0.531 | 0.672 / 0.684 |
+| R | conditional|le | 0.417 | 0.592 / 0.558 | 0.399 | 0.588 / 0.582 |
+| R | mix | 0.019 | 0.019 / 0.026 | 0.006 | 0.016 / 0.016 |
+| R | mix|nowrap | 0.111 | 0.000 / 0.000 | 0.010 | 0.017 / 0.019 |
+| R | mix|wrap | 0.000 | 0.022 / 0.031 | 0.005 | 0.015 / 0.014 |
+| R | swap | 1.000 | 0.000 / 0.000 | 0.997 | 0.010 / 0.012 |
+| R | ALL | 0.606 | 0.319 / 0.318 | 0.575 | 0.323 / 0.322 |
+[  798.8s] wrote C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\runs\bank_pilot\analysis\confirm_replicate.json | wall 799s, process CPU 26.5 min

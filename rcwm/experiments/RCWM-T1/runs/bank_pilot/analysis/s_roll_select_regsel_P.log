@@ -1,0 +1,18 @@
+[    0.0s] S-roll family P crit=regret stage=select; torch 2.6.0+cu124 threads=2 cuda_visible='' cuda_available=False smoke=False
+[    0.5s] verified 19200 gold one-step transitions against the FDS oracle; chained gold == bank k=1/2/4 gold and phi for every candidate
+[    0.5s] Titan's training rows: 384 rows (0881c027d166...), every reference == env.step and the FDS oracle; system prompts == env.SYSTEM_ONE
+[    1.2s] [P] transitions train raw 4608 dedup 1986 | dev 896 | test 896 (28 parents) | TEST inputs seen in TRAIN 0.032 (10 parents) | Titan rows 128 {'applicable': 128} | degenerate TEST parents k1/2/4 [5, 4, 3]
+[    1.3s] [P] SANITY oracle one-step rollout: regret {1: 0.0, 2: 0.0, 4: 0.0} exact {1: 1.0, 2: 1.0, 4: 1.0}
+[    1.3s] [P] SANITY Titan regrets (parent-mean and last-parsed fill) vs PREREG_1_DRYRUN: max |diff| = 9.40e-08; chain_one k4 0.8786, last-parsed 0.8064
+[    1.3s] [P] Titan parse rate chain_one k1/2/4 {1: 0.96875, 2: 0.8258928571428571, 4: 0.59375} | anatomy {'applicable_n': 125, 'applicable_wrong': 79, 'applicable_wrong_eq_s_or_add': 18, 'applicable_wrong_eq_s_plus_add': 50, 'applicable_wrong_unparsed': 2, 'inapplicable_n': 99, 'inapplicable_titan_eq_ignore_precondition': 34, 'inapplicable_titan_eq_s_plus_add': 78, 'inapplicable_where_ignoring_gives_gold_n': 44, 'inapplicable_where_ignoring_gives_gold_titan_eq_s_plus_add': 30, 'inapplicable_where_ignoring_gives_gold_titan_right': 0}
+[    8.2s]   select[regret] P  FULL A {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.7467 dev_regret4=0.2706 best_step=[700]/[2700] (6.8s)
+[   16.6s]   select[regret] P  FULL B {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.001} dev_exact=0.7556 dev_regret4=0.2732 best_step=[2100]/[4100] (8.4s)
+[   27.8s]   select[regret] P  FULL B {'head': 'bits', 'encoding': 'sym', 'hidden': 512, 'depth': 2, 'lr': 0.003} dev_exact=0.7433 dev_regret4=0.2897 best_step=[300]/[2300] (11.2s)
+[   37.8s]   select[regret] P  FULL B {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003} dev_exact=0.7511 dev_regret4=0.2813 best_step=[1100]/[3100] (10.0s)
+[   37.8s]   select[regret] P  FULL CHOSEN {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.7467 dev_regret4=0.2706
+[   42.4s]   select[regret] P  N128 A {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.003} dev_exact=0.5015 dev_regret4=0.5910 best_step=[450, 525, 700]/[825, 900, 1075] (4.5s)
+[   47.0s]   select[regret] P  N128 B {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 2, 'lr': 0.001} dev_exact=0.5387 dev_regret4=0.5836 best_step=[450, 900, 350]/[825, 1275, 725] (4.6s)
+[   52.3s]   select[regret] P  N128 B {'head': 'bits', 'encoding': 'sym', 'hidden': 512, 'depth': 2, 'lr': 0.003} dev_exact=0.5100 dev_regret4=0.5832 best_step=[25, 275, 225]/[400, 650, 600] (5.3s)
+[   64.3s]   select[regret] P  N128 B {'head': 'bits', 'encoding': 'sym', 'hidden': 256, 'depth': 3, 'lr': 0.003} dev_exact=0.4364 dev_regret4=0.6297 best_step=[900, 1525, 2000]/[1275, 1900, 2000] (12.0s)
+[   64.3s]   select[regret] P  N128 CHOSEN {'head': 'bits', 'encoding': 'sym', 'hidden': 512, 'depth': 2, 'lr': 0.003} dev_exact=0.5100 dev_regret4=0.5832
+[   64.3s] [P] selection written to s_roll_select_regsel_P.json (63s)

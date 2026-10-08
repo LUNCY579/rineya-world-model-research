@@ -1,0 +1,42 @@
+== T2 data: copy-equal targets and heuristic baselines per sub-stratum
+ train: n=1501 copy-equal=0.350
+   l|add/posted       n= 125 copy=0.048 titan_heur=1.000
+   l|add/void         n=  42 copy=1.000 titan_heur=0.048
+   l|scale/posted     n= 125 copy=0.160 titan_heur=1.000
+   l|scale/void       n=  42 copy=1.000 titan_heur=0.167
+   l|transfer/posted  n= 125 copy=0.064 titan_heur=1.000
+   l|transfer/void    n=  42 copy=1.000 titan_heur=0.000
+   p|app_addonly      n= 133 copy=0.000 titan_heur=1.000
+   p|app_del          n=  35 copy=0.000 titan_heur=0.000
+   p|app_same         n=  82 copy=1.000 titan_heur=0.000
+   p|inapp            n= 250 copy=1.000 titan_heur=0.000
+   r|add/nowrap       n=  65 copy=0.123 titan_heur=0.000
+   r|add/wrap         n=  60 copy=0.000 titan_heur=0.000
+   r|cond/gt          n=  75 copy=0.173 titan_heur=0.000
+   r|cond/le          n=  75 copy=0.120 titan_heur=0.000
+   r|mix/nowrap       n=  85 copy=0.024 titan_heur=0.000
+   r|mix/wrap         n=  90 copy=0.011 titan_heur=0.000
+   r|swap             n=  50 copy=0.000 titan_heur=0.000
+ eval: n=600 copy-equal=0.323
+   l|add/posted       n=  40 copy=0.025 titan_heur=1.000
+   l|add/void         n=  40 copy=1.000 titan_heur=0.000
+   l|scale/posted     n=  40 copy=0.175 titan_heur=1.000
+   l|scale/void       n=  40 copy=1.000 titan_heur=0.200
+   l|transfer/posted  n=  40 copy=0.025 titan_heur=1.000
+   l|transfer/void    n=  40 copy=1.000 titan_heur=0.000
+   p|app_addonly      n=  16 copy=0.000 titan_heur=1.000
+   p|app_del          n=  10 copy=0.000 titan_heur=0.000
+   p|app_same         n=  14 copy=1.000 titan_heur=0.000
+   p|inapp            n=  40 copy=1.000 titan_heur=0.000
+   r|add/nowrap       n=  40 copy=0.050 titan_heur=0.000
+   r|add/wrap         n=  40 copy=0.000 titan_heur=0.000
+   r|cond/gt          n=  40 copy=0.100 titan_heur=0.000
+   r|cond/le          n=  40 copy=0.050 titan_heur=0.000
+   r|mix/nowrap       n=  40 copy=0.025 titan_heur=0.000
+   r|mix/wrap         n=  40 copy=0.050 titan_heur=0.000
+   r|swap             n=  40 copy=0.000 titan_heur=0.000
+== pilot TEST chains: copy-chain baseline vs Titan-Sparse (lenient)
+ chain_one chain acc  lk1=0.399(copy 0.144) lk2=0.202(copy 0.010) lk4=0.024(copy 0.000) pk1=0.210(copy 0.612) pk2=0.049(copy 0.451) pk4=0.000(copy 0.308) rk1=0.606(copy 0.038) rk2=0.361(copy 0.034) rk4=0.087(copy 0.000)
+ step-1 unique items, Titan-Sparse acc: l|add/posted 0.57 (n=35), l|add/void 0.00 (n=4), l|scale/posted 0.55 (n=56), l|scale/void 0.12 (n=8), l|transfer/posted 0.31 (n=95), l|transfer/void 0.12 (n=8), p|app_addonly 0.84 (n=32), p|app_del 0.00 (n=20), p|app_same 0.00 (n=22), p|inapp 0.02 (n=59), r|add/nowrap 0.95 (n=42), r|add/wrap 0.00 (n=5), r|cond/gt 0.50 (n=16), r|cond/le 0.42 (n=24), r|mix/nowrap 0.11 (n=9), r|mix/wrap 0.00 (n=45), r|swap 1.00 (n=67)
+ chain_m1 chain acc  lk1=0.389(copy 0.144) lk2=0.192(copy 0.010) lk4=0.024(copy 0.000) pk1=0.196(copy 0.612) pk2=0.036(copy 0.451) pk4=0.018(copy 0.308) rk1=0.611(copy 0.038) rk2=0.365(copy 0.034) rk4=0.087(copy 0.000)
+== off-task first token (Sparse): top-1 p quartiles [0.277 0.434 0.682], frac>0.9 0.101

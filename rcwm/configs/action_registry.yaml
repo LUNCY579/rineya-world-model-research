@@ -1,0 +1,44 @@
+schema_version: '1.0'
+synthetic_v1:
+  wait:
+    cost: 0.1
+  take_key:
+    cost: 1
+  open_door:
+    requires: key
+    cost: 1
+  collect:
+    requires: door
+    cost: 1
+  shortcut:
+    effect: object plus damage if object not yet collected
+    cost: 1
+native_proposed_disabled:
+  RETRIEVE:
+    required_arguments:
+    - corpus_id
+    - query
+    - top_k
+    - evidence_budget
+    side_effects: read_only
+  CALCULATE:
+    required_arguments:
+    - bounded_expression
+    - time_limit
+    side_effects: sandbox_only
+  VERIFY:
+    required_arguments:
+    - artifact
+    - verifier_id
+    - constraint_set
+    side_effects: sandbox_only
+  ANSWER:
+    required_arguments:
+    - answer_text
+    - format_id
+    side_effects: benchmark_output_only
+  RECUR:
+    status: deferred
+    requires: native recurrence qualification and measured utility
+policy: operator name alone never identifies an executable action; require executor
+  version

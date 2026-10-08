@@ -1,0 +1,33 @@
+{
+  "record": "L1_VAULT_ASSEMBLY_PLAN_DRAFT",
+  "schema": 1,
+  "status": "DRAFT. Nothing here has been or may be written to Rineya_Published_Cores or to Hugging Face without a PROMOTE verdict AND the operator's explicit go-ahead (D-26). No L1 script writes to the vault.",
+  "target_directory": "C:/Users/clclc/BusinessProject/Chat-Bubble/Rineya_Published_Cores/Rineya-Titan-Sparse-L815-Experimental-1.0.0-devfreeze",
+  "vault_rules_followed": [
+    "never overwrite an existing core directory; refuse if the target exists (archive-then-write only for a roster replacement, which this is not)",
+    "weights hash-verified before and after the copy (6282b456...)",
+    "do NOT use the legacy _materialize_core.py (vault README: it does not know the 1.6/1.7 roster and must not rebuild the catalog)",
+    "append the catalog only after directory verification"
+  ],
+  "files": [
+    {"dest": "model.safetensors", "from": "RCWM-T1/runs/l1_screen/arm-l8_15/model.safetensors", "sha256": "6282b45676fab8b2446d4363373b94931aea16c346ba769c284b81fcb0f97fe3"},
+    {"dest": "config.json", "from": "Rineya-Supa-1.7.0-devfreeze/config.json with torch_dtype set to \"float32\" (exactly as Titan-Sparse's)", "note": "the ONE sidecar that differs from the measured arm (gap G10)"},
+    {"dest": "generation_config.json, tokenizer.json, tokenizer_config.json, vocab.json, merges.txt", "from": "Rineya-Supa-1.7.0-devfreeze (byte copies)"},
+    {"dest": "LICENSE, .gitattributes", "from": "Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze (byte copies)"},
+    {"dest": "README.md", "from": "docs/l1/vault_draft/README.md, placeholders filled mechanically from L1_RESULTS.json, HTML comment removed"},
+    {"dest": "CORE.json", "from": "docs/l1/vault_draft/CORE.json, filled; DRAFT key removed"},
+    {"dest": "PROMOTION.json", "from": "docs/l1/vault_draft/PROMOTION.json, filled with the operator's authorization verbatim; DRAFT key removed"},
+    {"dest": "evidence/PREREG_L1.md", "from": "docs/l1/PREREG_L1_DRAFT.md as frozen (sha in PREREG_L1_FREEZE.json)"},
+    {"dest": "evidence/PREREG_L1_FREEZE.json", "from": "docs/l1/PREREG_L1_FREEZE.json"},
+    {"dest": "evidence/L1_RESULTS.md, evidence/L1_RESULTS.json", "from": "RCWM-T1/runs/l1_screen/"},
+    {"dest": "evidence/PARITY_GATE.json", "from": "RCWM-T1/runs/l1_screen/PARITY_GATE.json (the anchor parity gate, evaluated before L8-15 was loaded)"},
+    {"dest": "evidence/L8_15_EXPECTED.json", "from": "docs/l1/L8_15_EXPECTED.json"},
+    {"dest": "evidence/MATERIALIZATION.json", "from": "RCWM-T1/runs/l1_screen/arm-l8_15/MATERIALIZATION.json"},
+    {"dest": "evidence/offtask_fresh_prompts.SOURCE.json", "from": "docs/l1/offtask_fresh_prompts.SOURCE.json"},
+    {"dest": "evidence/l1_screen.py, evidence/VENDOR_5b4c22d.json, evidence/VENDOR_5b4c22d_REFONLY.json", "from": "RCWM-T1/scripts/l1_screen.py (the builder and the screen), docs/l1/vendor_5b4c22d/VENDOR.json and VENDOR_REFONLY.json"},
+    {"dest": "evidence/CANDIDATE_PROVENANCE.md", "from": "RCWM-T1 RESULTS_PILOT.md sections R12 and R14 and docs/localized/LOCALIZED_RESULTS.md, verbatim excerpts, headed 'the exploratory data that chose the cut; not evidence for the promotion'"}
+  ],
+  "catalog_entry_shape": {"core_id": "<CORE.json core_id>", "codename": "Titan-Sparse-L8-15", "directory": "Rineya-Titan-Sparse-L815-Experimental-1.0.0-devfreeze", "present": true, "core": "<the CORE.json object>"},
+  "model_registry_row_draft": "| 12 | **PREREG-L1** -> Titan-Sparse-L8-15 | `Rineya-Titan-Sparse-L815-Experimental-1.0.0-devfreeze` | 28L Qwen3 | **2,384,234,968 (FP32)** | `6282b456...` | - | Supa 1.7 + row 10's delta in blocks 8-15 only (41% of its energy). **No new training.** Cut chosen post hoc from RCWM-T1 pilot patching; promoted by a rule frozen before its instruments were read. Acquisition {{}}/384 vs row 10's {{}} (same run), retained {{}}/47, off-task KL drift {{}}x row 10's. **Experimental; not release-qualified. FP32 ONLY.** |",
+  "parent_record_note": "Separately from L1 and only by the operator's decision: Titan-Sparse's vault records predate RCI-001's confirmed literal-UNKNOWN damage (25/128 vs 40/128, p = 6.1e-5) and still state that no abstention confirmation instrument exists (gap G2). An AMENDMENT_002.json for the parent would correct that."
+}

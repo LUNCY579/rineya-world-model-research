@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rineya-rcwm-reference"
+version = "0.1.0"
+description = "CPU research mechanics for consequence-conditioned trajectory prediction; not native Rineya"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26,<3", "torch>=2.2,<3"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10", "jsonschema>=4,<5", "PyYAML>=6,<7"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+
+[tool.setuptools.packages.find]
+include = ["rcwm*"]

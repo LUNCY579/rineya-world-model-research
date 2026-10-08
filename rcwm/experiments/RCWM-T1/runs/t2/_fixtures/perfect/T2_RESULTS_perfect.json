@@ -1,0 +1,5542 @@
+{
+ "meta": {
+  "script_sha256": "d699dd5afa432dfef8b1c39cd14af26b92750237c7108328f7a61403decbcaf0",
+  "runs_root": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\t2\\_fixtures",
+  "tags": [
+   "perfect"
+  ],
+  "data_sha256": {
+   "t2_train": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744",
+   "t2_eval": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59",
+   "t2_eval_xframe": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de",
+   "t2_eval_supp": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086",
+   "t2_eval_substrata": "240ffddc7f50f7996716260ad2efe96756a2eacfd983f99f2878b93854ffdef6",
+   "bank_pilot": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+  },
+  "thresholds": {
+   "targeted_on": 0.8,
+   "untouched_drop": 0.05,
+   "chain_k4": {
+    "L": 0.25,
+    "R": 0.25,
+    "P": 0.41
+   },
+   "regret_drop": {
+    "L": 0.15,
+    "P": 0.15,
+    "R": 0.08
+   },
+   "g4": "point estimate ON <= OFF per family",
+   "g5_rule_strata": {
+    "L": [
+     "add/void",
+     "scale/void",
+     "transfer/void"
+    ],
+    "P": [
+     "applicable",
+     "inapplicable"
+    ],
+    "R": [
+     "add/wrap",
+     "mix/nowrap",
+     "mix/wrap",
+     "conditional/gt",
+     "conditional/le"
+    ]
+   },
+   "untouched_strata": {
+    "L": [
+     "add/posted",
+     "scale/posted",
+     "transfer/posted"
+    ],
+    "P": [],
+    "R": [
+     "swap",
+     "add/nowrap"
+    ]
+   }
+  },
+  "bootstrap": {
+   "B": 10000,
+   "seed": 20261009
+  },
+  "numeric_reply_classes": [
+   "arithmetic_chain",
+   "arithmetic_short_answer",
+   "context_recall",
+   "counting_sets",
+   "estimation_sanity",
+   "output_only",
+   "percentage_reasoning",
+   "ratio_proportion",
+   "sequence_pattern",
+   "time_duration",
+   "unit_conversion"
+  ],
+  "torch_imported": false,
+  "across": {
+   "tags": [
+    "perfect"
+   ],
+   "n_seeds": 1,
+   "three_seeds": false,
+   "metrics": [
+    {
+     "metric": "A L.pairs delta",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A L.posted delta",
+     "values": {
+      "perfect": 0.925
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A L.void_disc delta",
+     "values": {
+      "perfect": 0.0
+     },
+     "signs": "0",
+     "agree": "no change",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A P.app_addonly delta",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A P.app_del delta",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A P.inapp_disc delta",
+     "values": {
+      "perfect": 0.0
+     },
+     "signs": "0",
+     "agree": "no change",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A P.pairs delta",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A P.pre_off_only delta",
+     "values": {
+      "perfect": 0.0
+     },
+     "signs": "0",
+     "agree": "no change",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A R.add_nowrap delta",
+     "values": {
+      "perfect": 0.95
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A R.add_wrap delta",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A R.cond delta",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A R.mix_w0 delta",
+     "values": {
+      "perfect": 0.975
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A R.mix_w1 delta",
+     "values": {
+      "perfect": 0.9545454545454546
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A R.mix_w2 delta",
+     "values": {
+      "perfect": 0.9827586206896551
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A R.pairs delta",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A R.swap delta",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "A false-copy L (ON-OFF)",
+     "values": {
+      "perfect": -1.0
+     },
+     "signs": "-",
+     "agree": "yes (-)",
+     "good_direction": "-"
+    },
+    {
+     "metric": "A false-copy P (ON-OFF)",
+     "values": {
+      "perfect": -1.0
+     },
+     "signs": "-",
+     "agree": "yes (-)",
+     "good_direction": "-"
+    },
+    {
+     "metric": "A false-copy R (ON-OFF)",
+     "values": {
+      "perfect": -1.0
+     },
+     "signs": "-",
+     "agree": "yes (-)",
+     "good_direction": "-"
+    },
+    {
+     "metric": "B L|ALL|t=0 delta",
+     "values": {
+      "perfect": 0.848030018761726
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "B L|ALL|t=1-3 delta",
+     "values": {
+      "perfect": 0.8246268656716418
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "B P|ALL|t=0 delta",
+     "values": {
+      "perfect": 0.3821656050955414
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "B P|ALL|t=1-3 delta",
+     "values": {
+      "perfect": 0.2985781990521327
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "B R|ALL|t=0 delta",
+     "values": {
+      "perfect": 0.9555084745762712
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "B R|ALL|t=1-3 delta",
+     "values": {
+      "perfect": 0.9427966101694916
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "C xframe L.all delta",
+     "values": {
+      "perfect": 0.4625
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "C xframe P.applicable delta",
+     "values": {
+      "perfect": 0.65
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "C xframe R.all delta",
+     "values": {
+      "perfect": 0.9607142857142857
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "D chain_m1 L k4 delta (TRANSFER)",
+     "values": {
+      "perfect": 0.9759615384615384
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "D chain_m1 P k4 delta (primary)",
+     "values": {
+      "perfect": 0.9821428571428571
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "D chain_m1 R k4 delta (TRANSFER)",
+     "values": {
+      "perfect": 0.9134615384615384
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "D chain_one L k4 delta (primary)",
+     "values": {
+      "perfect": 0.9759615384615384
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "D chain_one P k4 delta (TRANSFER)",
+     "values": {
+      "perfect": 1.0
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "D chain_one R k4 delta (primary)",
+     "values": {
+      "perfect": 0.9134615384615384
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "E regret drop L|chain_m1 (TRANSFER)",
+     "values": {
+      "perfect": 0.5093939100893644
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "E regret drop L|chain_one (primary)",
+     "values": {
+      "perfect": 0.5073053447099832
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "E regret drop P|chain_m1 (primary)",
+     "values": {
+      "perfect": 0.8776778808006873
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "E regret drop P|chain_one (TRANSFER)",
+     "values": {
+      "perfect": 0.8785674824164464
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "E regret drop R|chain_m1 (TRANSFER)",
+     "values": {
+      "perfect": 0.3918845567565698
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "E regret drop R|chain_one (primary)",
+     "values": {
+      "perfect": 0.385574982716487
+     },
+     "signs": "+",
+     "agree": "yes (+)",
+     "good_direction": "+"
+    },
+    {
+     "metric": "F KL(OFF||ON) mean",
+     "values": {
+      "perfect": 0.0
+     },
+     "signs": "0",
+     "agree": "n/a (KL >= 0; see G8)",
+     "good_direction": "lower"
+    }
+   ],
+   "gates": {
+    "G1_targeted": {
+     "perfect": "PASS"
+    },
+    "G2_untouched": {
+     "perfect": "PASS"
+    },
+    "G3_app_del": {
+     "perfect": "PASS"
+    },
+    "G4_false_copy": {
+     "perfect": "PASS"
+    },
+    "G5_pilot_direction": {
+     "perfect": "PASS"
+    },
+    "G6_chains_k4": {
+     "perfect": "PASS"
+    },
+    "G7_decision": {
+     "perfect": "PASS"
+    },
+    "G8_forgetting": {
+     "perfect": "PENDING"
+    },
+    "rule_learned": {
+     "perfect": "PENDING"
+    }
+   },
+   "rule_learned_pass_seeds": 0,
+   "rule_learned_all_seeds": false
+  }
+ },
+ "results": {
+  "perfect": {
+   "run_dir": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\t2\\_fixtures\\perfect",
+   "checks": [],
+   "eval_json": {
+    "present": true,
+    "n": {
+     "t2_eval": 600,
+     "xframe": 600,
+     "supp": 360,
+     "pilot": 4819
+    },
+    "consistent": true,
+    "mismatches": [],
+    "base_fingerprint": "fixture",
+    "adapter": "fixture:perfect",
+    "data_sha_match": {
+     "t2_train": true,
+     "t2_eval": true,
+     "t2_eval_xframe": true,
+     "t2_eval_supp": true
+    }
+   },
+   "A": {
+    "cells": [
+     {
+      "id": "L.all",
+      "label": "L all t2_eval rows",
+      "role": "descriptive",
+      "n": 240,
+      "copy_floor": 0.5375,
+      "off": 0.5375,
+      "on": 1.0,
+      "delta": 0.4625,
+      "b": 0,
+      "c": 111,
+      "p_mcnemar": 7.703719777548943e-34,
+      "on_ci95": [
+       0.9842460800584412,
+       1.0
+      ],
+      "delta_ci95": [
+       0.3985370022839506,
+       0.525674116803158
+      ]
+     },
+     {
+      "id": "L.void_disc",
+      "label": "L void-disc (applying would change the state)",
+      "role": "targeted",
+      "n": 112,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9668386529330562,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.03316134706694385,
+       0.03316134706694385
+      ]
+     },
+     {
+      "id": "L.void_nondisc",
+      "label": "L void-nondisc (apply passes)",
+      "role": "descriptive",
+      "n": 8,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.6755924351161198,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.32440756488388023,
+       0.32440756488388023
+      ]
+     },
+     {
+      "id": "L.posted",
+      "label": "L posted (add+scale+transfer)",
+      "role": "untouched",
+      "n": 120,
+      "copy_floor": 0.075,
+      "off": 0.075,
+      "on": 1.0,
+      "delta": 0.925,
+      "b": 0,
+      "c": 111,
+      "p_mcnemar": 7.703719777548943e-34,
+      "on_ci95": [
+       0.9689808335812966,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8562011948528782,
+       0.9600428846040397
+      ]
+     },
+     {
+      "id": "L.add_posted",
+      "label": "  L add/posted",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     {
+      "id": "L.scale_posted",
+      "label": "  L scale/posted",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.175,
+      "off": 0.175,
+      "on": 1.0,
+      "delta": 0.825,
+      "b": 0,
+      "c": 33,
+      "p_mcnemar": 2.3283064365386963e-10,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.6560095651959787,
+       0.9125458625396408
+      ]
+     },
+     {
+      "id": "L.transfer_posted",
+      "label": "  L transfer/posted",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     {
+      "id": "L.pairs",
+      "label": "L minimal pairs posted/void (both correct)",
+      "role": "targeted",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "L.pair_posted",
+      "label": "  L pair member: posted",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "L.pair_void",
+      "label": "  L pair member: void",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     {
+      "id": "P.all",
+      "label": "P all t2_eval rows",
+      "role": "descriptive",
+      "n": 80,
+      "copy_floor": 0.675,
+      "off": 0.675,
+      "on": 1.0,
+      "delta": 0.32499999999999996,
+      "b": 0,
+      "c": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "on_ci95": [
+       0.9541818704644728,
+       0.9999999999999999
+      ],
+      "delta_ci95": [
+       0.22172195300801895,
+       0.4335947268938527
+      ]
+     },
+     {
+      "id": "P.applicable",
+      "label": "P applicable t2_eval rows (app-changed + app-noop)",
+      "role": "descriptive",
+      "n": 40,
+      "copy_floor": 0.35,
+      "off": 0.35,
+      "on": 1.0,
+      "delta": 0.65,
+      "b": 0,
+      "c": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.471999107139031,
+       0.7786547112682372
+      ]
+     },
+     {
+      "id": "P.app_changed",
+      "label": "P app-changed (add-only + app-del)",
+      "role": "detail",
+      "n": 26,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "on_ci95": [
+       0.8712710781407846,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8179498128370313,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_addonly",
+      "label": "P app-changed, add-only",
+      "role": "targeted",
+      "n": 16,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 16,
+      "p_mcnemar": 3.0517578125e-05,
+      "on_ci95": [
+       0.8063923194655637,
+       1.0
+      ],
+      "delta_ci95": [
+       0.7261973924086025,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_del",
+      "label": "P app-del (t2_eval app-changed with a deletion + supp app-del)",
+      "role": "targeted",
+      "n": 50,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 50,
+      "p_mcnemar": 1.7763568394002505e-15,
+      "on_ci95": [
+       0.9286524008666414,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8990992576628453,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_del_t2eval",
+      "label": "  P app-del, t2_eval part",
+      "role": "detail",
+      "n": 10,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 10,
+      "p_mcnemar": 0.001953125,
+      "on_ci95": [
+       0.7224672001371107,
+       0.9999999999999999
+      ],
+      "delta_ci95": [
+       0.6075093504305242,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_del_supp",
+      "label": "  P app-del, supp part",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_noop",
+      "label": "P applicable no-op (copy passes)",
+      "role": "descriptive",
+      "n": 14,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.7846891972623643,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.2153108027376357,
+       0.2153108027376357
+      ]
+     },
+     {
+      "id": "P.inapp_disc",
+      "label": "P inapp-disc (applying would change the state)",
+      "role": "targeted",
+      "n": 24,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8620237953250198,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.13797620467498017,
+       0.13797620467498017
+      ]
+     },
+     {
+      "id": "P.inapp_nondisc",
+      "label": "P inapp-nondisc (apply passes)",
+      "role": "descriptive",
+      "n": 16,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8063923194655637,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.19360768053443633,
+       0.19360768053443633
+      ]
+     },
+     {
+      "id": "P.pre_off_only",
+      "label": "P pre_off-only (supp)",
+      "role": "targeted",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     {
+      "id": "P.pairs",
+      "label": "P minimal pairs applicable/inapp-1bit (both correct)",
+      "role": "targeted",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "P.pair_applicable",
+      "label": "  P pair member: applicable",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "P.pair_inapp1bit",
+      "label": "  P pair member: one extra unmet pre_on bit",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     {
+      "id": "R.all",
+      "label": "R all t2_eval rows",
+      "role": "descriptive",
+      "n": 280,
+      "copy_floor": 0.039285714285714285,
+      "off": 0.039285714285714285,
+      "on": 1.0,
+      "delta": 0.9607142857142857,
+      "b": 0,
+      "c": 269,
+      "p_mcnemar": 2.1084395886461046e-81,
+      "on_ci95": [
+       0.9864661813793707,
+       1.0
+      ],
+      "delta_ci95": [
+       0.9280938913401479,
+       0.9779242341515795
+      ]
+     },
+     {
+      "id": "R.mix_w0",
+      "label": "R mix, wraps=0",
+      "role": "targeted",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     {
+      "id": "R.mix_w1",
+      "label": "R mix, wraps=1",
+      "role": "targeted",
+      "n": 22,
+      "copy_floor": 0.045454545454545456,
+      "off": 0.045454545454545456,
+      "on": 1.0,
+      "delta": 0.9545454545454546,
+      "b": 0,
+      "c": 21,
+      "p_mcnemar": 9.5367431640625e-07,
+      "on_ci95": [
+       0.8513451253913791,
+       1.0
+      ],
+      "delta_ci95": [
+       0.7268099448462984,
+       0.9919305723787362
+      ]
+     },
+     {
+      "id": "R.mix_w2",
+      "label": "R mix, wraps>=2 (t2_eval wraps=2 + supp mix-2wrap)",
+      "role": "targeted",
+      "n": 58,
+      "copy_floor": 0.017241379310344827,
+      "off": 0.017241379310344827,
+      "on": 1.0,
+      "delta": 0.9827586206896551,
+      "b": 0,
+      "c": 57,
+      "p_mcnemar": 1.3877787807814457e-17,
+      "on_ci95": [
+       0.9378821442127971,
+       1.0
+      ],
+      "delta_ci95": [
+       0.886014619302569,
+       0.9969499615539325
+      ]
+     },
+     {
+      "id": "R.mix_w2_t2eval",
+      "label": "  R mix wraps>=2, t2_eval part",
+      "role": "detail",
+      "n": 18,
+      "copy_floor": 0.05555555555555555,
+      "off": 0.05555555555555555,
+      "on": 1.0,
+      "delta": 0.9444444444444444,
+      "b": 0,
+      "c": 17,
+      "p_mcnemar": 1.52587890625e-05,
+      "on_ci95": [
+       0.8241207763533425,
+       1.0
+      ],
+      "delta_ci95": [
+       0.6765927087221362,
+       0.9901248090216969
+      ]
+     },
+     {
+      "id": "R.mix_w2_supp",
+      "label": "  R mix wraps>=2, supp part",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "R.cond",
+      "label": "R conditional (branch-dependent rows)",
+      "role": "targeted",
+      "n": 74,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 74,
+      "p_mcnemar": 1.0587911840678754e-22,
+      "on_ci95": [
+       0.950650220603614,
+       1.0
+      ],
+      "delta_ci95": [
+       0.9302088726775106,
+       1.0
+      ]
+     },
+     {
+      "id": "R.cond_gt",
+      "label": "  R conditional/gt",
+      "role": "detail",
+      "n": 36,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 36,
+      "p_mcnemar": 2.9103830456733704e-11,
+      "on_ci95": [
+       0.9035813714055363,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8636434677762952,
+       1.0
+      ]
+     },
+     {
+      "id": "R.cond_le",
+      "label": "  R conditional/le",
+      "role": "detail",
+      "n": 38,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.908190131774416,
+       0.9999999999999999
+      ],
+      "delta_ci95": [
+       0.8701612391956924,
+       1.0
+      ]
+     },
+     {
+      "id": "R.cond_v0",
+      "label": "R conditional, value = 0 mod 97 (branch-free)",
+      "role": "descriptive",
+      "n": 6,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.6096657120978346,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.3903342879021654,
+       0.3903342879021654
+      ]
+     },
+     {
+      "id": "R.add_wrap",
+      "label": "R add/wrap",
+      "role": "targeted",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "R.add_nowrap",
+      "label": "R add/nowrap",
+      "role": "untouched",
+      "n": 40,
+      "copy_floor": 0.05,
+      "off": 0.05,
+      "on": 1.0,
+      "delta": 0.95,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8053920318626955,
+       0.9861793326138516
+      ]
+     },
+     {
+      "id": "R.swap",
+      "label": "R swap",
+      "role": "untouched",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "R.pairs",
+      "label": "R conditional boundary pairs thr=other-1 / thr=other (both correct)",
+      "role": "targeted",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "R.pair_gt",
+      "label": "  R pair member: threshold = other-1 (gt)",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "R.pair_le",
+      "label": "  R pair member: threshold = other (le)",
+      "role": "detail",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     }
+    ],
+    "false_copy": {
+     "L": {
+      "n_rows": 320,
+      "n_target_ne_before": 151,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 151,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 151,
+      "p_mcnemar": 7.006492321624085e-46,
+      "delta_ci95": [
+       -1.0,
+       -0.9649148025025109
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     },
+     "P": {
+      "n_rows": 240,
+      "n_target_ne_before": 106,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 106,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 106,
+      "p_mcnemar": 2.465190328815662e-32,
+      "delta_ci95": [
+       -1.0,
+       -0.9505410505117956
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     },
+     "R": {
+      "n_rows": 400,
+      "n_target_ne_before": 389,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 389,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 389,
+      "p_mcnemar": 1.5862136483222808e-117,
+      "delta_ci95": [
+       -1.0,
+       -0.9861709016664583
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     }
+    },
+    "by_stratum": {
+     "L|add/posted": {
+      "id": "L|add/posted",
+      "label": "L add/posted",
+      "role": "untouched stratum",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     "L|add/void": {
+      "id": "L|add/void",
+      "label": "L add/void",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     "L|scale/posted": {
+      "id": "L|scale/posted",
+      "label": "L scale/posted",
+      "role": "untouched stratum",
+      "n": 40,
+      "copy_floor": 0.175,
+      "off": 0.175,
+      "on": 1.0,
+      "delta": 0.825,
+      "b": 0,
+      "c": 33,
+      "p_mcnemar": 2.3283064365386963e-10,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.6560095651959787,
+       0.9125458625396408
+      ]
+     },
+     "L|scale/void": {
+      "id": "L|scale/void",
+      "label": "L scale/void",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     "L|transfer/posted": {
+      "id": "L|transfer/posted",
+      "label": "L transfer/posted",
+      "role": "untouched stratum",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     "L|transfer/void": {
+      "id": "L|transfer/void",
+      "label": "L transfer/void",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     "P|applicable": {
+      "id": "P|applicable",
+      "label": "P applicable",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 0.35,
+      "off": 0.35,
+      "on": 1.0,
+      "delta": 0.65,
+      "b": 0,
+      "c": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.471999107139031,
+       0.7786547112682372
+      ]
+     },
+     "P|inapplicable": {
+      "id": "P|inapplicable",
+      "label": "P inapplicable",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     "R|add/nowrap": {
+      "id": "R|add/nowrap",
+      "label": "R add/nowrap",
+      "role": "untouched stratum",
+      "n": 40,
+      "copy_floor": 0.05,
+      "off": 0.05,
+      "on": 1.0,
+      "delta": 0.95,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8053920318626955,
+       0.9861793326138516
+      ]
+     },
+     "R|add/wrap": {
+      "id": "R|add/wrap",
+      "label": "R add/wrap",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     "R|conditional/gt": {
+      "id": "R|conditional/gt",
+      "label": "R conditional/gt",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 0.1,
+      "off": 0.1,
+      "on": 1.0,
+      "delta": 0.9,
+      "b": 0,
+      "c": 36,
+      "p_mcnemar": 2.9103830456733704e-11,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.7427981276976868,
+       0.9604204713173936
+      ]
+     },
+     "R|conditional/le": {
+      "id": "R|conditional/le",
+      "label": "R conditional/le",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 0.05,
+      "off": 0.05,
+      "on": 1.0,
+      "delta": 0.95,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8053920318626955,
+       0.9861793326138516
+      ]
+     },
+     "R|mix/nowrap": {
+      "id": "R|mix/nowrap",
+      "label": "R mix/nowrap",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     "R|mix/wrap": {
+      "id": "R|mix/wrap",
+      "label": "R mix/wrap",
+      "role": "rule stratum",
+      "n": 40,
+      "copy_floor": 0.05,
+      "off": 0.05,
+      "on": 1.0,
+      "delta": 0.95,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8053920318626955,
+       0.9861793326138516
+      ]
+     },
+     "R|swap": {
+      "id": "R|swap",
+      "label": "R swap",
+      "role": "untouched stratum",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     }
+    }
+   },
+   "C": {
+    "cells": [
+     {
+      "id": "L.all",
+      "label": "L all t2_eval rows",
+      "role": "TRANSFER",
+      "n": 240,
+      "copy_floor": 0.5375,
+      "off": 0.5375,
+      "on": 1.0,
+      "delta": 0.4625,
+      "b": 0,
+      "c": 111,
+      "p_mcnemar": 7.703719777548943e-34,
+      "on_ci95": [
+       0.9842460800584412,
+       1.0
+      ],
+      "delta_ci95": [
+       0.3985370022839506,
+       0.525674116803158
+      ]
+     },
+     {
+      "id": "L.void_disc",
+      "label": "L void-disc (applying would change the state)",
+      "role": "TRANSFER",
+      "n": 112,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9668386529330562,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.03316134706694385,
+       0.03316134706694385
+      ]
+     },
+     {
+      "id": "L.void_nondisc",
+      "label": "L void-nondisc (apply passes)",
+      "role": "TRANSFER",
+      "n": 8,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.6755924351161198,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.32440756488388023,
+       0.32440756488388023
+      ]
+     },
+     {
+      "id": "L.posted",
+      "label": "L posted (add+scale+transfer)",
+      "role": "TRANSFER",
+      "n": 120,
+      "copy_floor": 0.075,
+      "off": 0.075,
+      "on": 1.0,
+      "delta": 0.925,
+      "b": 0,
+      "c": 111,
+      "p_mcnemar": 7.703719777548943e-34,
+      "on_ci95": [
+       0.9689808335812966,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8562011948528782,
+       0.9600428846040397
+      ]
+     },
+     {
+      "id": "L.add_posted",
+      "label": "  L add/posted",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     {
+      "id": "L.scale_posted",
+      "label": "  L scale/posted",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.175,
+      "off": 0.175,
+      "on": 1.0,
+      "delta": 0.825,
+      "b": 0,
+      "c": 33,
+      "p_mcnemar": 2.3283064365386963e-10,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.6560095651959787,
+       0.9125458625396408
+      ]
+     },
+     {
+      "id": "L.transfer_posted",
+      "label": "  L transfer/posted",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     {
+      "id": "P.all",
+      "label": "P all t2_eval rows",
+      "role": "descriptive (mixes in the descriptive-only inapplicable rows; see P applicable)",
+      "n": 80,
+      "copy_floor": 0.675,
+      "off": 0.675,
+      "on": 1.0,
+      "delta": 0.32499999999999996,
+      "b": 0,
+      "c": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "on_ci95": [
+       0.9541818704644728,
+       0.9999999999999999
+      ],
+      "delta_ci95": [
+       0.22172195300801895,
+       0.4335947268938527
+      ]
+     },
+     {
+      "id": "P.applicable",
+      "label": "P applicable t2_eval rows (app-changed + app-noop)",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.35,
+      "off": 0.35,
+      "on": 1.0,
+      "delta": 0.65,
+      "b": 0,
+      "c": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.471999107139031,
+       0.7786547112682372
+      ]
+     },
+     {
+      "id": "P.app_changed",
+      "label": "P app-changed (add-only + app-del)",
+      "role": "TRANSFER",
+      "n": 26,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "on_ci95": [
+       0.8712710781407846,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8179498128370313,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_addonly",
+      "label": "P app-changed, add-only",
+      "role": "TRANSFER",
+      "n": 16,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 16,
+      "p_mcnemar": 3.0517578125e-05,
+      "on_ci95": [
+       0.8063923194655637,
+       1.0
+      ],
+      "delta_ci95": [
+       0.7261973924086025,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_del",
+      "label": "P app-del (t2_eval app-changed with a deletion + supp app-del) [xframe: t2_eval rows only; the supplement has no cross-frame version]",
+      "role": "TRANSFER",
+      "n": 10,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 10,
+      "p_mcnemar": 0.001953125,
+      "on_ci95": [
+       0.7224672001371107,
+       0.9999999999999999
+      ],
+      "delta_ci95": [
+       0.6075093504305242,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_del_t2eval",
+      "label": "  P app-del, t2_eval part",
+      "role": "TRANSFER",
+      "n": 10,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 10,
+      "p_mcnemar": 0.001953125,
+      "on_ci95": [
+       0.7224672001371107,
+       0.9999999999999999
+      ],
+      "delta_ci95": [
+       0.6075093504305242,
+       1.0
+      ]
+     },
+     {
+      "id": "P.app_noop",
+      "label": "P applicable no-op (copy passes)",
+      "role": "TRANSFER",
+      "n": 14,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.7846891972623643,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.2153108027376357,
+       0.2153108027376357
+      ]
+     },
+     {
+      "id": "P.inapp_disc",
+      "label": "P inapp-disc (applying would change the state)",
+      "role": "descriptive-only (one-step frame presumes applicability)",
+      "n": 24,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8620237953250198,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.13797620467498017,
+       0.13797620467498017
+      ]
+     },
+     {
+      "id": "P.inapp_nondisc",
+      "label": "P inapp-nondisc (apply passes)",
+      "role": "descriptive-only (one-step frame presumes applicability)",
+      "n": 16,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8063923194655637,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.19360768053443633,
+       0.19360768053443633
+      ]
+     },
+     {
+      "id": "R.all",
+      "label": "R all t2_eval rows",
+      "role": "TRANSFER",
+      "n": 280,
+      "copy_floor": 0.039285714285714285,
+      "off": 0.039285714285714285,
+      "on": 1.0,
+      "delta": 0.9607142857142857,
+      "b": 0,
+      "c": 269,
+      "p_mcnemar": 2.1084395886461046e-81,
+      "on_ci95": [
+       0.9864661813793707,
+       1.0
+      ],
+      "delta_ci95": [
+       0.9280938913401479,
+       0.9779242341515795
+      ]
+     },
+     {
+      "id": "R.mix_w0",
+      "label": "R mix, wraps=0",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     {
+      "id": "R.mix_w1",
+      "label": "R mix, wraps=1",
+      "role": "TRANSFER",
+      "n": 22,
+      "copy_floor": 0.045454545454545456,
+      "off": 0.045454545454545456,
+      "on": 1.0,
+      "delta": 0.9545454545454546,
+      "b": 0,
+      "c": 21,
+      "p_mcnemar": 9.5367431640625e-07,
+      "on_ci95": [
+       0.8513451253913791,
+       1.0
+      ],
+      "delta_ci95": [
+       0.7268099448462984,
+       0.9919305723787362
+      ]
+     },
+     {
+      "id": "R.mix_w2",
+      "label": "R mix, wraps>=2 (t2_eval wraps=2 + supp mix-2wrap) [xframe: t2_eval rows only; the supplement has no cross-frame version]",
+      "role": "TRANSFER",
+      "n": 18,
+      "copy_floor": 0.05555555555555555,
+      "off": 0.05555555555555555,
+      "on": 1.0,
+      "delta": 0.9444444444444444,
+      "b": 0,
+      "c": 17,
+      "p_mcnemar": 1.52587890625e-05,
+      "on_ci95": [
+       0.8241207763533425,
+       1.0
+      ],
+      "delta_ci95": [
+       0.6765927087221362,
+       0.9901248090216969
+      ]
+     },
+     {
+      "id": "R.mix_w2_t2eval",
+      "label": "  R mix wraps>=2, t2_eval part",
+      "role": "TRANSFER",
+      "n": 18,
+      "copy_floor": 0.05555555555555555,
+      "off": 0.05555555555555555,
+      "on": 1.0,
+      "delta": 0.9444444444444444,
+      "b": 0,
+      "c": 17,
+      "p_mcnemar": 1.52587890625e-05,
+      "on_ci95": [
+       0.8241207763533425,
+       1.0
+      ],
+      "delta_ci95": [
+       0.6765927087221362,
+       0.9901248090216969
+      ]
+     },
+     {
+      "id": "R.cond",
+      "label": "R conditional (branch-dependent rows)",
+      "role": "TRANSFER",
+      "n": 74,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 74,
+      "p_mcnemar": 1.0587911840678754e-22,
+      "on_ci95": [
+       0.950650220603614,
+       1.0
+      ],
+      "delta_ci95": [
+       0.9302088726775106,
+       1.0
+      ]
+     },
+     {
+      "id": "R.cond_gt",
+      "label": "  R conditional/gt",
+      "role": "TRANSFER",
+      "n": 36,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 36,
+      "p_mcnemar": 2.9103830456733704e-11,
+      "on_ci95": [
+       0.9035813714055363,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8636434677762952,
+       1.0
+      ]
+     },
+     {
+      "id": "R.cond_le",
+      "label": "  R conditional/le",
+      "role": "TRANSFER",
+      "n": 38,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.908190131774416,
+       0.9999999999999999
+      ],
+      "delta_ci95": [
+       0.8701612391956924,
+       1.0
+      ]
+     },
+     {
+      "id": "R.cond_v0",
+      "label": "R conditional, value = 0 mod 97 (branch-free)",
+      "role": "TRANSFER",
+      "n": 6,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.6096657120978346,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.3903342879021654,
+       0.3903342879021654
+      ]
+     },
+     {
+      "id": "R.add_wrap",
+      "label": "R add/wrap",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     {
+      "id": "R.add_nowrap",
+      "label": "R add/nowrap",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.05,
+      "off": 0.05,
+      "on": 1.0,
+      "delta": 0.95,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8053920318626955,
+       0.9861793326138516
+      ]
+     },
+     {
+      "id": "R.swap",
+      "label": "R swap",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     }
+    ],
+    "false_copy": {
+     "L": {
+      "n_rows": 240,
+      "n_target_ne_before": 111,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 111,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 111,
+      "p_mcnemar": 7.703719777548943e-34,
+      "delta_ci95": [
+       -1.0,
+       -0.9526944082798048
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     },
+     "P": {
+      "n_rows": 80,
+      "n_target_ne_before": 26,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 26,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "delta_ci95": [
+       -1.0,
+       -0.8179498128370313
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     },
+     "R": {
+      "n_rows": 280,
+      "n_target_ne_before": 269,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 269,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 269,
+      "p_mcnemar": 2.1084395886461046e-81,
+      "delta_ci95": [
+       -1.0,
+       -0.9800886449331968
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     }
+    },
+    "by_stratum": {
+     "L|add/posted": {
+      "id": "L|add/posted",
+      "label": "L add/posted",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     "L|add/void": {
+      "id": "L|add/void",
+      "label": "L add/void",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     "L|scale/posted": {
+      "id": "L|scale/posted",
+      "label": "L scale/posted",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.175,
+      "off": 0.175,
+      "on": 1.0,
+      "delta": 0.825,
+      "b": 0,
+      "c": 33,
+      "p_mcnemar": 2.3283064365386963e-10,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.6560095651959787,
+       0.9125458625396408
+      ]
+     },
+     "L|scale/void": {
+      "id": "L|scale/void",
+      "label": "L scale/void",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     "L|transfer/posted": {
+      "id": "L|transfer/posted",
+      "label": "L transfer/posted",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     "L|transfer/void": {
+      "id": "L|transfer/void",
+      "label": "L transfer/void",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     "P|applicable": {
+      "id": "P|applicable",
+      "label": "P applicable",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.35,
+      "off": 0.35,
+      "on": 1.0,
+      "delta": 0.65,
+      "b": 0,
+      "c": 26,
+      "p_mcnemar": 2.9802322387695312e-08,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.471999107139031,
+       0.7786547112682372
+      ]
+     },
+     "P|inapplicable": {
+      "id": "P|inapplicable",
+      "label": "P inapplicable",
+      "role": "descriptive-only (one-step frame presumes applicability)",
+      "n": 40,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       -0.08762160119728646,
+       0.08762160119728646
+      ]
+     },
+     "R|add/nowrap": {
+      "id": "R|add/nowrap",
+      "label": "R add/nowrap",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.05,
+      "off": 0.05,
+      "on": 1.0,
+      "delta": 0.95,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8053920318626955,
+       0.9861793326138516
+      ]
+     },
+     "R|add/wrap": {
+      "id": "R|add/wrap",
+      "label": "R add/wrap",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     },
+     "R|conditional/gt": {
+      "id": "R|conditional/gt",
+      "label": "R conditional/gt",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.1,
+      "off": 0.1,
+      "on": 1.0,
+      "delta": 0.9,
+      "b": 0,
+      "c": 36,
+      "p_mcnemar": 2.9103830456733704e-11,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.7427981276976868,
+       0.9604204713173936
+      ]
+     },
+     "R|conditional/le": {
+      "id": "R|conditional/le",
+      "label": "R conditional/le",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.05,
+      "off": 0.05,
+      "on": 1.0,
+      "delta": 0.95,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8053920318626955,
+       0.9861793326138516
+      ]
+     },
+     "R|mix/nowrap": {
+      "id": "R|mix/nowrap",
+      "label": "R mix/nowrap",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.025,
+      "off": 0.025,
+      "on": 1.0,
+      "delta": 0.975,
+      "b": 0,
+      "c": 39,
+      "p_mcnemar": 3.637978807091713e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8391514550981328,
+       0.9955731684973186
+      ]
+     },
+     "R|mix/wrap": {
+      "id": "R|mix/wrap",
+      "label": "R mix/wrap",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.05,
+      "off": 0.05,
+      "on": 1.0,
+      "delta": 0.95,
+      "b": 0,
+      "c": 38,
+      "p_mcnemar": 7.275957614183426e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8053920318626955,
+       0.9861793326138516
+      ]
+     },
+     "R|swap": {
+      "id": "R|swap",
+      "label": "R swap",
+      "role": "TRANSFER",
+      "n": 40,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 40,
+      "p_mcnemar": 1.8189894035458565e-12,
+      "on_ci95": [
+       0.9123783988027135,
+       1.0
+      ],
+      "delta_ci95": [
+       0.8760843432299508,
+       1.0
+      ]
+     }
+    }
+   },
+   "B": {
+    "cells": [
+     {
+      "id": "L|add/posted|t=0||bal|<=99",
+      "label": "L add/posted t=0 |bal|<=99",
+      "role": "pilot",
+      "n": 103,
+      "copy_floor": 0.04854368932038835,
+      "off": 0.04854368932038835,
+      "on": 1.0,
+      "delta": 0.9514563106796117,
+      "b": 0,
+      "c": 98,
+      "p_mcnemar": 6.310887241768095e-30,
+      "on_ci95": [
+       0.964045241771352,
+       1.0
+      ],
+      "n_clusters": 50,
+      "delta_ci95_cluster": [
+       0.9081632653061225,
+       0.9897959183673469
+      ]
+     },
+     {
+      "id": "L|add/posted|t=1-3||bal|<=99",
+      "label": "L add/posted t=1-3 |bal|<=99",
+      "role": "pilot",
+      "n": 281,
+      "copy_floor": 0.028469750889679714,
+      "off": 0.028469750889679714,
+      "on": 1.0,
+      "delta": 0.9715302491103203,
+      "b": 0,
+      "c": 273,
+      "p_mcnemar": 1.3177747429038154e-82,
+      "on_ci95": [
+       0.9865136948932973,
+       0.9999999999999998
+      ],
+      "n_clusters": 67,
+      "delta_ci95_cluster": [
+       0.9522026522270249,
+       0.9890510948905109
+      ]
+     },
+     {
+      "id": "L|add/posted|t=1-3|>99",
+      "label": "L add/posted t=1-3 >99",
+      "role": "pilot",
+      "n": 53,
+      "copy_floor": 0.03773584905660377,
+      "off": 0.03773584905660377,
+      "on": 1.0,
+      "delta": 0.9622641509433962,
+      "b": 0,
+      "c": 51,
+      "p_mcnemar": 8.881784197001252e-16,
+      "on_ci95": [
+       0.932418011423458,
+       0.9999999999999999
+      ],
+      "n_clusters": 37,
+      "delta_ci95_cluster": [
+       0.9038461538461539,
+       1.0
+      ]
+     },
+     {
+      "id": "L|add/void|t=0||bal|<=99",
+      "label": "L add/void t=0 |bal|<=99",
+      "role": "pilot",
+      "n": 15,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.7961166989641515,
+       1.0
+      ],
+      "n_clusters": 14,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "L|add/void|t=1-3||bal|<=99",
+      "label": "L add/void t=1-3 |bal|<=99",
+      "role": "pilot",
+      "n": 28,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8793566952341543,
+       0.9999999999999998
+      ],
+      "n_clusters": 25,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "L|add/void|t=1-3|>99",
+      "label": "L add/void t=1-3 >99",
+      "role": "pilot",
+      "n": 6,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.6096657120978346,
+       1.0
+      ],
+      "n_clusters": 6,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "L|scale/posted|t=0||bal|<=99",
+      "label": "L scale/posted t=0 |bal|<=99",
+      "role": "pilot",
+      "n": 114,
+      "copy_floor": 0.16666666666666666,
+      "off": 0.16666666666666666,
+      "on": 1.0,
+      "delta": 0.8333333333333334,
+      "b": 0,
+      "c": 95,
+      "p_mcnemar": 5.048709793414476e-29,
+      "on_ci95": [
+       0.9674014658411585,
+       1.0
+      ],
+      "n_clusters": 59,
+      "delta_ci95_cluster": [
+       0.7589285714285714,
+       0.9
+      ]
+     },
+     {
+      "id": "L|scale/posted|t=0|>99",
+      "label": "L scale/posted t=0 >99",
+      "role": "pilot",
+      "n": 47,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 47,
+      "p_mcnemar": 1.4210854715202004e-14,
+      "on_ci95": [
+       0.9244423958360037,
+       1.0
+      ],
+      "n_clusters": 37,
+      "delta_ci95_cluster": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "id": "L|scale/posted|t=1-3||bal|<=99",
+      "label": "L scale/posted t=1-3 |bal|<=99",
+      "role": "pilot",
+      "n": 281,
+      "copy_floor": 0.23487544483985764,
+      "off": 0.23487544483985764,
+      "on": 1.0,
+      "delta": 0.7651245551601423,
+      "b": 0,
+      "c": 215,
+      "p_mcnemar": 3.7982270983039195e-65,
+      "on_ci95": [
+       0.9865136948932973,
+       0.9999999999999998
+      ],
+      "n_clusters": 65,
+      "delta_ci95_cluster": [
+       0.7137809187279152,
+       0.8152202317830631
+      ]
+     },
+     {
+      "id": "L|scale/posted|t=1-3|>99",
+      "label": "L scale/posted t=1-3 >99",
+      "role": "pilot",
+      "n": 192,
+      "copy_floor": 0.057291666666666664,
+      "off": 0.057291666666666664,
+      "on": 1.0,
+      "delta": 0.9427083333333334,
+      "b": 0,
+      "c": 181,
+      "p_mcnemar": 6.525304467998525e-55,
+      "on_ci95": [
+       0.980384853933246,
+       1.0
+      ],
+      "n_clusters": 60,
+      "delta_ci95_cluster": [
+       0.905,
+       0.976878612716763
+      ]
+     },
+     {
+      "id": "L|scale/void|t=0||bal|<=99",
+      "label": "L scale/void t=0 |bal|<=99",
+      "role": "pilot",
+      "n": 15,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.7961166989641515,
+       1.0
+      ],
+      "n_clusters": 14,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "L|scale/void|t=1-3||bal|<=99",
+      "label": "L scale/void t=1-3 |bal|<=99",
+      "role": "pilot",
+      "n": 55,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9347150988829137,
+       1.0
+      ],
+      "n_clusters": 37,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "L|scale/void|t=1-3|>99",
+      "label": "L scale/void t=1-3 >99",
+      "role": "pilot",
+      "n": 12,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.7575059933447592,
+       1.0
+      ],
+      "n_clusters": 12,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "L|transfer/posted|t=0||bal|<=99",
+      "label": "L transfer/posted t=0 |bal|<=99",
+      "role": "pilot",
+      "n": 215,
+      "copy_floor": 0.013953488372093023,
+      "off": 0.013953488372093023,
+      "on": 1.0,
+      "delta": 0.986046511627907,
+      "b": 0,
+      "c": 212,
+      "p_mcnemar": 3.0385816786431356e-64,
+      "on_ci95": [
+       0.9824463845132672,
+       1.0
+      ],
+      "n_clusters": 66,
+      "delta_ci95_cluster": [
+       0.96875,
+       1.0
+      ]
+     },
+     {
+      "id": "L|transfer/posted|t=1-3||bal|<=99",
+      "label": "L transfer/posted t=1-3 |bal|<=99",
+      "role": "pilot",
+      "n": 500,
+      "copy_floor": 0.022,
+      "off": 0.022,
+      "on": 1.0,
+      "delta": 0.978,
+      "b": 0,
+      "c": 489,
+      "p_mcnemar": 1.2513019344894381e-147,
+      "on_ci95": [
+       0.9923756595384479,
+       1.0
+      ],
+      "n_clusters": 67,
+      "delta_ci95_cluster": [
+       0.9644194756554307,
+       0.9899401428652235
+      ]
+     },
+     {
+      "id": "L|transfer/posted|t=1-3|>99",
+      "label": "L transfer/posted t=1-3 >99",
+      "role": "pilot",
+      "n": 117,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 117,
+      "p_mcnemar": 1.2037062152420224e-35,
+      "on_ci95": [
+       0.9682107543372667,
+       1.0
+      ],
+      "n_clusters": 52,
+      "delta_ci95_cluster": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "id": "L|transfer/void|t=0||bal|<=99",
+      "label": "L transfer/void t=0 |bal|<=99",
+      "role": "pilot",
+      "n": 24,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8620237953250198,
+       1.0
+      ],
+      "n_clusters": 19,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "L|transfer/void|t=1-3||bal|<=99",
+      "label": "L transfer/void t=1-3 |bal|<=99",
+      "role": "pilot",
+      "n": 67,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9457738606086981,
+       0.9999999999999998
+      ],
+      "n_clusters": 43,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "L|transfer/void|t=1-3|>99",
+      "label": "L transfer/void t=1-3 >99",
+      "role": "pilot",
+      "n": 16,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8063923194655637,
+       1.0
+      ],
+      "n_clusters": 13,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "P|applicable|t=0|all",
+      "label": "P applicable t=0 all",
+      "role": "pilot",
+      "n": 88,
+      "copy_floor": 0.3181818181818182,
+      "off": 0.3181818181818182,
+      "on": 1.0,
+      "delta": 0.6818181818181819,
+      "b": 0,
+      "c": 60,
+      "p_mcnemar": 1.734723475976807e-18,
+      "on_ci95": [
+       0.9581729333351078,
+       0.9999999999999999
+      ],
+      "n_clusters": 44,
+      "delta_ci95_cluster": [
+       0.5675675675675675,
+       0.78125
+      ]
+     },
+     {
+      "id": "P|applicable|t=1-3|all",
+      "label": "P applicable t=1-3 all",
+      "role": "pilot",
+      "n": 355,
+      "copy_floor": 0.4676056338028169,
+      "off": 0.4676056338028169,
+      "on": 1.0,
+      "delta": 0.532394366197183,
+      "b": 0,
+      "c": 189,
+      "p_mcnemar": 2.5489470578119236e-57,
+      "on_ci95": [
+       0.9892948299972953,
+       1.0
+      ],
+      "n_clusters": 53,
+      "delta_ci95_cluster": [
+       0.4765830017345169,
+       0.5833333333333334
+      ]
+     },
+     {
+      "id": "P|inapplicable|t=0|all",
+      "label": "P inapplicable t=0 all",
+      "role": "pilot",
+      "n": 69,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9472627418109483,
+       1.0
+      ],
+      "n_clusters": 44,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "P|inapplicable|t=1-3|all",
+      "label": "P inapplicable t=1-3 all",
+      "role": "pilot",
+      "n": 278,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9863701428570234,
+       0.9999999999999999
+      ],
+      "n_clusters": 56,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     {
+      "id": "R|add/nowrap|t=0|all",
+      "label": "R add/nowrap t=0 all",
+      "role": "pilot",
+      "n": 81,
+      "copy_floor": 0.07407407407407407,
+      "off": 0.07407407407407407,
+      "on": 1.0,
+      "delta": 0.9259259259259259,
+      "b": 0,
+      "c": 75,
+      "p_mcnemar": 5.293955920339377e-23,
+      "on_ci95": [
+       0.9547219145675847,
+       1.0
+      ],
+      "n_clusters": 49,
+      "delta_ci95_cluster": [
+       0.8552631578947368,
+       0.9864864864864865
+      ]
+     },
+     {
+      "id": "R|add/nowrap|t=1-3|all",
+      "label": "R add/nowrap t=1-3 all",
+      "role": "pilot",
+      "n": 274,
+      "copy_floor": 0.09854014598540146,
+      "off": 0.09854014598540146,
+      "on": 1.0,
+      "delta": 0.9014598540145985,
+      "b": 0,
+      "c": 247,
+      "p_mcnemar": 8.843436600416711e-75,
+      "on_ci95": [
+       0.9861739178990808,
+       1.0
+      ],
+      "n_clusters": 58,
+      "delta_ci95_cluster": [
+       0.8671586715867159,
+       0.9335988539851916
+      ]
+     },
+     {
+      "id": "R|add/wrap|t=0|all",
+      "label": "R add/wrap t=0 all",
+      "role": "pilot",
+      "n": 7,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 7,
+      "p_mcnemar": 0.015625,
+      "on_ci95": [
+       0.6456695649333126,
+       1.0
+      ],
+      "n_clusters": 7,
+      "delta_ci95_cluster": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "id": "R|add/wrap|t=1-3|all",
+      "label": "R add/wrap t=1-3 all",
+      "role": "pilot",
+      "n": 16,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 16,
+      "p_mcnemar": 3.0517578125e-05,
+      "on_ci95": [
+       0.8063923194655637,
+       1.0
+      ],
+      "n_clusters": 13,
+      "delta_ci95_cluster": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "id": "R|conditional/gt|t=0|all",
+      "label": "R conditional/gt t=0 all",
+      "role": "pilot",
+      "n": 50,
+      "copy_floor": 0.1,
+      "off": 0.1,
+      "on": 1.0,
+      "delta": 0.9,
+      "b": 0,
+      "c": 45,
+      "p_mcnemar": 5.684341886080802e-14,
+      "on_ci95": [
+       0.9286524008666414,
+       1.0
+      ],
+      "n_clusters": 36,
+      "delta_ci95_cluster": [
+       0.8125,
+       0.9787234042553191
+      ]
+     },
+     {
+      "id": "R|conditional/gt|t=1-3|all",
+      "label": "R conditional/gt t=1-3 all",
+      "role": "pilot",
+      "n": 168,
+      "copy_floor": 0.16071428571428573,
+      "off": 0.16071428571428573,
+      "on": 1.0,
+      "delta": 0.8392857142857143,
+      "b": 0,
+      "c": 141,
+      "p_mcnemar": 7.174648137343064e-43,
+      "on_ci95": [
+       0.9776453316501321,
+       1.0
+      ],
+      "n_clusters": 57,
+      "delta_ci95_cluster": [
+       0.7857142857142857,
+       0.8875
+      ]
+     },
+     {
+      "id": "R|conditional/le|t=0|all",
+      "label": "R conditional/le t=0 all",
+      "role": "pilot",
+      "n": 54,
+      "copy_floor": 0.1111111111111111,
+      "off": 0.1111111111111111,
+      "on": 1.0,
+      "delta": 0.8888888888888888,
+      "b": 0,
+      "c": 48,
+      "p_mcnemar": 7.105427357601002e-15,
+      "on_ci95": [
+       0.9335864119091037,
+       1.0
+      ],
+      "n_clusters": 36,
+      "delta_ci95_cluster": [
+       0.7962962962962963,
+       0.9642857142857143
+      ]
+     },
+     {
+      "id": "R|conditional/le|t=1-3|all",
+      "label": "R conditional/le t=1-3 all",
+      "role": "pilot",
+      "n": 148,
+      "copy_floor": 0.08108108108108109,
+      "off": 0.08108108108108109,
+      "on": 1.0,
+      "delta": 0.9189189189189189,
+      "b": 0,
+      "c": 136,
+      "p_mcnemar": 2.2958874039497803e-41,
+      "on_ci95": [
+       0.9747008567322154,
+       0.9999999999999999
+      ],
+      "n_clusters": 54,
+      "delta_ci95_cluster": [
+       0.875,
+       0.958041958041958
+      ]
+     },
+     {
+      "id": "R|mix/nowrap|t=0|all",
+      "label": "R mix/nowrap t=0 all",
+      "role": "pilot",
+      "n": 29,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 29,
+      "p_mcnemar": 3.725290298461914e-09,
+      "on_ci95": [
+       0.8830302015002593,
+       1.0
+      ],
+      "n_clusters": 19,
+      "delta_ci95_cluster": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "id": "R|mix/nowrap|t=1-3|all",
+      "label": "R mix/nowrap t=1-3 all",
+      "role": "pilot",
+      "n": 95,
+      "copy_floor": 0.021052631578947368,
+      "off": 0.021052631578947368,
+      "on": 1.0,
+      "delta": 0.9789473684210527,
+      "b": 0,
+      "c": 93,
+      "p_mcnemar": 2.0194839173657902e-28,
+      "on_ci95": [
+       0.9611351464605271,
+       1.0
+      ],
+      "n_clusters": 39,
+      "delta_ci95_cluster": [
+       0.9473684210526315,
+       1.0
+      ]
+     },
+     {
+      "id": "R|mix/wrap|t=0|all",
+      "label": "R mix/wrap t=0 all",
+      "role": "pilot",
+      "n": 106,
+      "copy_floor": 0.018867924528301886,
+      "off": 0.018867924528301886,
+      "on": 1.0,
+      "delta": 0.9811320754716981,
+      "b": 0,
+      "c": 104,
+      "p_mcnemar": 9.860761315262648e-32,
+      "on_ci95": [
+       0.9650272414265277,
+       1.0
+      ],
+      "n_clusters": 50,
+      "delta_ci95_cluster": [
+       0.9512195121951219,
+       1.0
+      ]
+     },
+     {
+      "id": "R|mix/wrap|t=1-3|all",
+      "label": "R mix/wrap t=1-3 all",
+      "role": "pilot",
+      "n": 326,
+      "copy_floor": 0.018404907975460124,
+      "off": 0.018404907975460124,
+      "on": 1.0,
+      "delta": 0.9815950920245399,
+      "b": 0,
+      "c": 320,
+      "p_mcnemar": 9.363352709384397e-97,
+      "on_ci95": [
+       0.988353620450174,
+       1.0
+      ],
+      "n_clusters": 59,
+      "delta_ci95_cluster": [
+       0.9640522875816994,
+       0.9965878954893459
+      ]
+     },
+     {
+      "id": "R|swap|t=0|all",
+      "label": "R swap t=0 all",
+      "role": "pilot",
+      "n": 145,
+      "copy_floor": 0.013793103448275862,
+      "off": 0.013793103448275862,
+      "on": 1.0,
+      "delta": 0.9862068965517241,
+      "b": 0,
+      "c": 143,
+      "p_mcnemar": 1.793662034335766e-43,
+      "on_ci95": [
+       0.9741909354347176,
+       1.0
+      ],
+      "n_clusters": 56,
+      "delta_ci95_cluster": [
+       0.9568267125430091,
+       1.0
+      ]
+     },
+     {
+      "id": "R|swap|t=1-3|all",
+      "label": "R swap t=1-3 all",
+      "role": "pilot",
+      "n": 389,
+      "copy_floor": 0.017994858611825194,
+      "off": 0.017994858611825194,
+      "on": 1.0,
+      "delta": 0.9820051413881749,
+      "b": 0,
+      "c": 382,
+      "p_mcnemar": 2.0303534698525194e-115,
+      "on_ci95": [
+       0.9902213507906571,
+       1.0
+      ],
+      "n_clusters": 59,
+      "delta_ci95_cluster": [
+       0.9664082687338501,
+       0.9948717948717949
+      ]
+     }
+    ],
+    "pooled": [
+     {
+      "id": "L|ALL|t=0",
+      "label": "L all strata t=0",
+      "role": "pilot-pooled",
+      "n": 533,
+      "copy_floor": 0.15196998123827393,
+      "off": 0.15196998123827393,
+      "on": 1.0,
+      "delta": 0.848030018761726,
+      "b": 0,
+      "c": 452,
+      "p_mcnemar": 1.7197762835371747e-136,
+      "on_ci95": [
+       0.9928443327958819,
+       0.9999999999999999
+      ],
+      "n_clusters": 67,
+      "delta_ci95_cluster": [
+       0.8210922787193974,
+       0.874296435272045
+      ]
+     },
+     {
+      "id": "L|ALL|t=1-3",
+      "label": "L all strata t=1-3",
+      "role": "pilot-pooled",
+      "n": 1608,
+      "copy_floor": 0.17537313432835822,
+      "off": 0.17537313432835822,
+      "on": 1.0,
+      "delta": 0.8246268656716418,
+      "b": 0,
+      "c": 1326,
+      "p_mcnemar": 0.0,
+      "on_ci95": [
+       0.9976167266329625,
+       1.0
+      ],
+      "n_clusters": 67,
+      "delta_ci95_cluster": [
+       0.8053482587064676,
+       0.8439054726368159
+      ]
+     },
+     {
+      "id": "P|ALL|t=0",
+      "label": "P all strata t=0",
+      "role": "pilot-pooled",
+      "n": 157,
+      "copy_floor": 0.6178343949044586,
+      "off": 0.6178343949044586,
+      "on": 1.0,
+      "delta": 0.3821656050955414,
+      "b": 0,
+      "c": 60,
+      "p_mcnemar": 1.734723475976807e-18,
+      "on_ci95": [
+       0.976116488566691,
+       0.9999999999999999
+      ],
+      "n_clusters": 56,
+      "delta_ci95_cluster": [
+       0.29411764705882354,
+       0.4666666666666667
+      ]
+     },
+     {
+      "id": "P|ALL|t=1-3",
+      "label": "P all strata t=1-3",
+      "role": "pilot-pooled",
+      "n": 633,
+      "copy_floor": 0.7014218009478673,
+      "off": 0.7014218009478673,
+      "on": 1.0,
+      "delta": 0.2985781990521327,
+      "b": 0,
+      "c": 189,
+      "p_mcnemar": 2.5489470578119236e-57,
+      "on_ci95": [
+       0.9939679511007218,
+       1.0
+      ],
+      "n_clusters": 56,
+      "delta_ci95_cluster": [
+       0.2551697926374651,
+       0.3405578364068739
+      ]
+     },
+     {
+      "id": "R|ALL|t=0",
+      "label": "R all strata t=0",
+      "role": "pilot-pooled",
+      "n": 472,
+      "copy_floor": 0.04449152542372881,
+      "off": 0.04449152542372881,
+      "on": 1.0,
+      "delta": 0.9555084745762712,
+      "b": 0,
+      "c": 451,
+      "p_mcnemar": 3.4395525670743494e-136,
+      "on_ci95": [
+       0.9919270194946553,
+       0.9999999999999999
+      ],
+      "n_clusters": 59,
+      "delta_ci95_cluster": [
+       0.9364406779661016,
+       0.972457627118644
+      ]
+     },
+     {
+      "id": "R|ALL|t=1-3",
+      "label": "R all strata t=1-3",
+      "role": "pilot-pooled",
+      "n": 1416,
+      "copy_floor": 0.057203389830508475,
+      "off": 0.057203389830508475,
+      "on": 1.0,
+      "delta": 0.9427966101694916,
+      "b": 0,
+      "c": 1335,
+      "p_mcnemar": 0.0,
+      "on_ci95": [
+       0.99729444523765,
+       0.9999999999999998
+      ],
+      "n_clusters": 59,
+      "delta_ci95_cluster": [
+       0.9307909604519774,
+       0.9548022598870056
+      ]
+     }
+    ],
+    "g5_cells": {
+     "L|add/posted|steps2-4": {
+      "id": "L|add/posted|steps2-4",
+      "label": "L add/posted steps2-4",
+      "role": "g5",
+      "n": 334,
+      "copy_floor": 0.029940119760479042,
+      "off": 0.029940119760479042,
+      "on": 1.0,
+      "delta": 0.9700598802395209,
+      "b": 0,
+      "c": 324,
+      "p_mcnemar": 5.852095443365248e-98,
+      "on_ci95": [
+       0.9886294037620382,
+       1.0
+      ],
+      "n_clusters": 67,
+      "delta_ci95_cluster": [
+       0.9525316455696202,
+       0.9855491329479769
+      ]
+     },
+     "L|add/posted|big": {
+      "id": "L|add/posted|big",
+      "label": "L add/posted big",
+      "role": "g5",
+      "n": 53,
+      "copy_floor": 0.03773584905660377,
+      "off": 0.03773584905660377,
+      "on": 1.0,
+      "delta": 0.9622641509433962,
+      "b": 0,
+      "c": 51,
+      "p_mcnemar": 8.881784197001252e-16,
+      "on_ci95": [
+       0.932418011423458,
+       0.9999999999999999
+      ],
+      "n_clusters": 37,
+      "delta_ci95_cluster": [
+       0.9038461538461539,
+       1.0
+      ]
+     },
+     "L|add/void|steps2-4": {
+      "id": "L|add/void|steps2-4",
+      "label": "L add/void steps2-4",
+      "role": "g5",
+      "n": 34,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8984854458466761,
+       0.9999999999999999
+      ],
+      "n_clusters": 26,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     "L|add/void|big": {
+      "id": "L|add/void|big",
+      "label": "L add/void big",
+      "role": "g5",
+      "n": 6,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.6096657120978346,
+       1.0
+      ],
+      "n_clusters": 6,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     "L|scale/posted|steps2-4": {
+      "id": "L|scale/posted|steps2-4",
+      "label": "L scale/posted steps2-4",
+      "role": "g5",
+      "n": 473,
+      "copy_floor": 0.16279069767441862,
+      "off": 0.16279069767441862,
+      "on": 1.0,
+      "delta": 0.8372093023255813,
+      "b": 0,
+      "c": 396,
+      "p_mcnemar": 1.2392294127517818e-119,
+      "on_ci95": [
+       0.9919439496091749,
+       1.0
+      ],
+      "n_clusters": 67,
+      "delta_ci95_cluster": [
+       0.8004114178672902,
+       0.8723415383245794
+      ]
+     },
+     "L|scale/posted|big": {
+      "id": "L|scale/posted|big",
+      "label": "L scale/posted big",
+      "role": "g5",
+      "n": 239,
+      "copy_floor": 0.04602510460251046,
+      "off": 0.04602510460251046,
+      "on": 1.0,
+      "delta": 0.9539748953974896,
+      "b": 0,
+      "c": 228,
+      "p_mcnemar": 4.636507688359277e-69,
+      "on_ci95": [
+       0.984181206786727,
+       1.0
+      ],
+      "n_clusters": 64,
+      "delta_ci95_cluster": [
+       0.9237279626982506,
+       0.981042654028436
+      ]
+     },
+     "L|scale/void|steps2-4": {
+      "id": "L|scale/void|steps2-4",
+      "label": "L scale/void steps2-4",
+      "role": "g5",
+      "n": 67,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9457738606086981,
+       0.9999999999999998
+      ],
+      "n_clusters": 44,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     "L|scale/void|big": {
+      "id": "L|scale/void|big",
+      "label": "L scale/void big",
+      "role": "g5",
+      "n": 12,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.7575059933447592,
+       1.0
+      ],
+      "n_clusters": 12,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     "L|transfer/posted|steps2-4": {
+      "id": "L|transfer/posted|steps2-4",
+      "label": "L transfer/posted steps2-4",
+      "role": "g5",
+      "n": 617,
+      "copy_floor": 0.017828200972447326,
+      "off": 0.017828200972447326,
+      "on": 1.0,
+      "delta": 0.9821717990275527,
+      "b": 0,
+      "c": 606,
+      "p_mcnemar": 7.530999578446513e-183,
+      "on_ci95": [
+       0.9938124963046263,
+       0.9999999999999999
+      ],
+      "n_clusters": 67,
+      "delta_ci95_cluster": [
+       0.9710610932475884,
+       0.9918962722852512
+      ]
+     },
+     "L|transfer/posted|big": {
+      "id": "L|transfer/posted|big",
+      "label": "L transfer/posted big",
+      "role": "g5",
+      "n": 117,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 117,
+      "p_mcnemar": 1.2037062152420224e-35,
+      "on_ci95": [
+       0.9682107543372667,
+       1.0
+      ],
+      "n_clusters": 52,
+      "delta_ci95_cluster": [
+       1.0,
+       1.0
+      ]
+     },
+     "L|transfer/void|steps2-4": {
+      "id": "L|transfer/void|steps2-4",
+      "label": "L transfer/void steps2-4",
+      "role": "g5",
+      "n": 83,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9557646903580262,
+       1.0
+      ],
+      "n_clusters": 50,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     "L|transfer/void|big": {
+      "id": "L|transfer/void|big",
+      "label": "L transfer/void big",
+      "role": "g5",
+      "n": 16,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.8063923194655637,
+       1.0
+      ],
+      "n_clusters": 13,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     "P|applicable|steps2-4": {
+      "id": "P|applicable|steps2-4",
+      "label": "P applicable steps2-4",
+      "role": "g5",
+      "n": 355,
+      "copy_floor": 0.4676056338028169,
+      "off": 0.4676056338028169,
+      "on": 1.0,
+      "delta": 0.532394366197183,
+      "b": 0,
+      "c": 189,
+      "p_mcnemar": 2.5489470578119236e-57,
+      "on_ci95": [
+       0.9892948299972953,
+       1.0
+      ],
+      "n_clusters": 53,
+      "delta_ci95_cluster": [
+       0.4765830017345169,
+       0.5833333333333334
+      ]
+     },
+     "P|inapplicable|steps2-4": {
+      "id": "P|inapplicable|steps2-4",
+      "label": "P inapplicable steps2-4",
+      "role": "g5",
+      "n": 278,
+      "copy_floor": 1.0,
+      "off": 1.0,
+      "on": 1.0,
+      "delta": 0.0,
+      "b": 0,
+      "c": 0,
+      "p_mcnemar": 1.0,
+      "on_ci95": [
+       0.9863701428570234,
+       0.9999999999999999
+      ],
+      "n_clusters": 56,
+      "delta_ci95_cluster": [
+       0.0,
+       0.0
+      ]
+     },
+     "R|add/nowrap|steps2-4": {
+      "id": "R|add/nowrap|steps2-4",
+      "label": "R add/nowrap steps2-4",
+      "role": "g5",
+      "n": 274,
+      "copy_floor": 0.09854014598540146,
+      "off": 0.09854014598540146,
+      "on": 1.0,
+      "delta": 0.9014598540145985,
+      "b": 0,
+      "c": 247,
+      "p_mcnemar": 8.843436600416711e-75,
+      "on_ci95": [
+       0.9861739178990808,
+       1.0
+      ],
+      "n_clusters": 58,
+      "delta_ci95_cluster": [
+       0.8671586715867159,
+       0.9335988539851916
+      ]
+     },
+     "R|add/wrap|steps2-4": {
+      "id": "R|add/wrap|steps2-4",
+      "label": "R add/wrap steps2-4",
+      "role": "g5",
+      "n": 16,
+      "copy_floor": 0.0,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "b": 0,
+      "c": 16,
+      "p_mcnemar": 3.0517578125e-05,
+      "on_ci95": [
+       0.8063923194655637,
+       1.0
+      ],
+      "n_clusters": 13,
+      "delta_ci95_cluster": [
+       1.0,
+       1.0
+      ]
+     },
+     "R|conditional/gt|steps2-4": {
+      "id": "R|conditional/gt|steps2-4",
+      "label": "R conditional/gt steps2-4",
+      "role": "g5",
+      "n": 168,
+      "copy_floor": 0.16071428571428573,
+      "off": 0.16071428571428573,
+      "on": 1.0,
+      "delta": 0.8392857142857143,
+      "b": 0,
+      "c": 141,
+      "p_mcnemar": 7.174648137343064e-43,
+      "on_ci95": [
+       0.9776453316501321,
+       1.0
+      ],
+      "n_clusters": 57,
+      "delta_ci95_cluster": [
+       0.7857142857142857,
+       0.8875
+      ]
+     },
+     "R|conditional/le|steps2-4": {
+      "id": "R|conditional/le|steps2-4",
+      "label": "R conditional/le steps2-4",
+      "role": "g5",
+      "n": 148,
+      "copy_floor": 0.08108108108108109,
+      "off": 0.08108108108108109,
+      "on": 1.0,
+      "delta": 0.9189189189189189,
+      "b": 0,
+      "c": 136,
+      "p_mcnemar": 2.2958874039497803e-41,
+      "on_ci95": [
+       0.9747008567322154,
+       0.9999999999999999
+      ],
+      "n_clusters": 54,
+      "delta_ci95_cluster": [
+       0.875,
+       0.958041958041958
+      ]
+     },
+     "R|mix/nowrap|steps2-4": {
+      "id": "R|mix/nowrap|steps2-4",
+      "label": "R mix/nowrap steps2-4",
+      "role": "g5",
+      "n": 95,
+      "copy_floor": 0.021052631578947368,
+      "off": 0.021052631578947368,
+      "on": 1.0,
+      "delta": 0.9789473684210527,
+      "b": 0,
+      "c": 93,
+      "p_mcnemar": 2.0194839173657902e-28,
+      "on_ci95": [
+       0.9611351464605271,
+       1.0
+      ],
+      "n_clusters": 39,
+      "delta_ci95_cluster": [
+       0.9473684210526315,
+       1.0
+      ]
+     },
+     "R|mix/wrap|steps2-4": {
+      "id": "R|mix/wrap|steps2-4",
+      "label": "R mix/wrap steps2-4",
+      "role": "g5",
+      "n": 326,
+      "copy_floor": 0.018404907975460124,
+      "off": 0.018404907975460124,
+      "on": 1.0,
+      "delta": 0.9815950920245399,
+      "b": 0,
+      "c": 320,
+      "p_mcnemar": 9.363352709384397e-97,
+      "on_ci95": [
+       0.988353620450174,
+       1.0
+      ],
+      "n_clusters": 59,
+      "delta_ci95_cluster": [
+       0.9640522875816994,
+       0.9965878954893459
+      ]
+     },
+     "R|swap|steps2-4": {
+      "id": "R|swap|steps2-4",
+      "label": "R swap steps2-4",
+      "role": "g5",
+      "n": 389,
+      "copy_floor": 0.017994858611825194,
+      "off": 0.017994858611825194,
+      "on": 1.0,
+      "delta": 0.9820051413881749,
+      "b": 0,
+      "c": 382,
+      "p_mcnemar": 2.0303534698525194e-115,
+      "on_ci95": [
+       0.9902213507906571,
+       1.0
+      ],
+      "n_clusters": 59,
+      "delta_ci95_cluster": [
+       0.9664082687338501,
+       0.9948717948717949
+      ]
+     }
+    },
+    "per_step_test": {
+     "L|0": {
+      "n": 206,
+      "off": 0.14563106796116504,
+      "on": 1.0
+     },
+     "L|1": {
+      "n": 208,
+      "off": 0.13942307692307693,
+      "on": 1.0
+     },
+     "L|2": {
+      "n": 208,
+      "off": 0.17307692307692307,
+      "on": 1.0
+     },
+     "L|3": {
+      "n": 208,
+      "off": 0.18269230769230768,
+      "on": 1.0
+     },
+     "P|0": {
+      "n": 78,
+      "off": 0.5769230769230769,
+      "on": 1.0
+     },
+     "P|1": {
+      "n": 107,
+      "off": 0.6822429906542056,
+      "on": 1.0
+     },
+     "P|2": {
+      "n": 108,
+      "off": 0.7129629629629629,
+      "on": 1.0
+     },
+     "P|3": {
+      "n": 101,
+      "off": 0.7029702970297029,
+      "on": 1.0
+     },
+     "R|0": {
+      "n": 208,
+      "off": 0.038461538461538464,
+      "on": 1.0
+     },
+     "R|1": {
+      "n": 208,
+      "off": 0.0673076923076923,
+      "on": 1.0
+     },
+     "R|2": {
+      "n": 208,
+      "off": 0.03365384615384615,
+      "on": 1.0
+     },
+     "R|3": {
+      "n": 208,
+      "off": 0.0673076923076923,
+      "on": 1.0
+     }
+    },
+    "false_copy": {
+     "L": {
+      "n_rows": 2141,
+      "n_target_ne_before": 1778,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 1778,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 1778,
+      "p_mcnemar": 0.0,
+      "delta_ci95": [
+       -1.0,
+       -0.9969511074418939
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     },
+     "P": {
+      "n_rows": 790,
+      "n_target_ne_before": 249,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 249,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 249,
+      "p_mcnemar": 2.210859150104178e-75,
+      "delta_ci95": [
+       -1.0,
+       -0.9785136377995033
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     },
+     "R": {
+      "n_rows": 1888,
+      "n_target_ne_before": 1786,
+      "off": 1.0,
+      "on": 0.0,
+      "delta": -1.0,
+      "off_copies": 1786,
+      "on_copies": 0,
+      "on_new_copies": 0,
+      "on_stopped_copies": 1786,
+      "p_mcnemar": 0.0,
+      "delta_ci95": [
+       -1.0,
+       -0.9969647349843472
+      ],
+      "off_parse_fail": 0.0,
+      "on_parse_fail": 0.0
+     }
+    }
+   },
+   "D": {
+    "acc": [
+     {
+      "mode": "chain_one",
+      "fam": "L",
+      "k": 1,
+      "role": "primary",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.14423076923076922,
+      "off": 0.39903846153846156,
+      "on": 1.0,
+      "delta": 0.6009615384615384,
+      "delta_ci95_parent": [
+       0.5384615384615384,
+       0.6634615384615384
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_one",
+      "fam": "L",
+      "k": 2,
+      "role": "primary",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.009615384615384616,
+      "off": 0.20192307692307693,
+      "on": 1.0,
+      "delta": 0.7980769230769231,
+      "delta_ci95_parent": [
+       0.7451923076923077,
+       0.8509615384615384
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_one",
+      "fam": "L",
+      "k": 4,
+      "role": "primary",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.0,
+      "off": 0.02403846153846154,
+      "on": 1.0,
+      "delta": 0.9759615384615384,
+      "delta_ci95_parent": [
+       0.9567307692307693,
+       0.9951923076923077
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_one",
+      "fam": "P",
+      "k": 1,
+      "role": "TRANSFER",
+      "n": 224,
+      "n_parents": 28,
+      "copy_floor": 0.6116071428571429,
+      "off": 0.20982142857142858,
+      "on": 1.0,
+      "delta": 0.7901785714285714,
+      "delta_ci95_parent": [
+       0.7098214285714286,
+       0.8660714285714286
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_one",
+      "fam": "P",
+      "k": 2,
+      "role": "TRANSFER",
+      "n": 224,
+      "n_parents": 28,
+      "copy_floor": 0.45089285714285715,
+      "off": 0.049107142857142856,
+      "on": 1.0,
+      "delta": 0.9508928571428571,
+      "delta_ci95_parent": [
+       0.9196428571428571,
+       0.9776785714285714
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_one",
+      "fam": "P",
+      "k": 4,
+      "role": "TRANSFER",
+      "n": 224,
+      "n_parents": 28,
+      "copy_floor": 0.3080357142857143,
+      "off": 0.0,
+      "on": 1.0,
+      "delta": 1.0,
+      "delta_ci95_parent": [
+       1.0,
+       1.0
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_one",
+      "fam": "R",
+      "k": 1,
+      "role": "primary",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.038461538461538464,
+      "off": 0.6057692307692307,
+      "on": 1.0,
+      "delta": 0.3942307692307693,
+      "delta_ci95_parent": [
+       0.33653846153846156,
+       0.4567307692307692
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_one",
+      "fam": "R",
+      "k": 2,
+      "role": "primary",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.03365384615384615,
+      "off": 0.3605769230769231,
+      "on": 1.0,
+      "delta": 0.6394230769230769,
+      "delta_ci95_parent": [
+       0.5721153846153846,
+       0.7067307692307693
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_one",
+      "fam": "R",
+      "k": 4,
+      "role": "primary",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.0,
+      "off": 0.08653846153846154,
+      "on": 1.0,
+      "delta": 0.9134615384615384,
+      "delta_ci95_parent": [
+       0.8798076923076923,
+       0.9471153846153846
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "L",
+      "k": 1,
+      "role": "TRANSFER",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.14423076923076922,
+      "off": 0.3894230769230769,
+      "on": 1.0,
+      "delta": 0.6105769230769231,
+      "delta_ci95_parent": [
+       0.5528846153846154,
+       0.6682692307692307
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "L",
+      "k": 2,
+      "role": "TRANSFER",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.009615384615384616,
+      "off": 0.19230769230769232,
+      "on": 1.0,
+      "delta": 0.8076923076923077,
+      "delta_ci95_parent": [
+       0.7548076923076923,
+       0.8605769230769231
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "L",
+      "k": 4,
+      "role": "TRANSFER",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.0,
+      "off": 0.02403846153846154,
+      "on": 1.0,
+      "delta": 0.9759615384615384,
+      "delta_ci95_parent": [
+       0.9519230769230769,
+       0.9951923076923077
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "P",
+      "k": 1,
+      "role": "primary",
+      "n": 224,
+      "n_parents": 28,
+      "copy_floor": 0.6116071428571429,
+      "off": 0.19642857142857142,
+      "on": 1.0,
+      "delta": 0.8035714285714286,
+      "delta_ci95_parent": [
+       0.7232142857142857,
+       0.875
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "P",
+      "k": 2,
+      "role": "primary",
+      "n": 224,
+      "n_parents": 28,
+      "copy_floor": 0.45089285714285715,
+      "off": 0.03571428571428571,
+      "on": 1.0,
+      "delta": 0.9642857142857143,
+      "delta_ci95_parent": [
+       0.9375,
+       0.9866071428571429
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "P",
+      "k": 4,
+      "role": "primary",
+      "n": 224,
+      "n_parents": 28,
+      "copy_floor": 0.3080357142857143,
+      "off": 0.017857142857142856,
+      "on": 1.0,
+      "delta": 0.9821428571428571,
+      "delta_ci95_parent": [
+       0.9598214285714286,
+       1.0
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "R",
+      "k": 1,
+      "role": "TRANSFER",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.038461538461538464,
+      "off": 0.6105769230769231,
+      "on": 1.0,
+      "delta": 0.38942307692307687,
+      "delta_ci95_parent": [
+       0.3317307692307692,
+       0.44711538461538464
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "R",
+      "k": 2,
+      "role": "TRANSFER",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.03365384615384615,
+      "off": 0.36538461538461536,
+      "on": 1.0,
+      "delta": 0.6346153846153846,
+      "delta_ci95_parent": [
+       0.5625,
+       0.7020432692307674
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     },
+     {
+      "mode": "chain_m1",
+      "fam": "R",
+      "k": 4,
+      "role": "TRANSFER",
+      "n": 208,
+      "n_parents": 26,
+      "copy_floor": 0.0,
+      "off": 0.08653846153846154,
+      "on": 1.0,
+      "delta": 0.9134615384615384,
+      "delta_ci95_parent": [
+       0.8798076923076923,
+       0.9423076923076923
+      ],
+      "on_ci95_parent": [
+       1.0,
+       1.0
+      ]
+     }
+    ],
+    "predicted_k4": {
+     "L": {
+      "mode": "chain_one",
+      "product_of_step_acc": {
+       "off": 0.0006420193605799611,
+       "on": 1.0
+      },
+      "gold_path_product": {
+       "off": 0.0,
+       "on": 1.0
+      },
+      "observed": {
+       "off": 0.02403846153846154,
+       "on": 1.0
+      },
+      "chains_without_pilot_items": 0
+     },
+     "P": {
+      "mode": "chain_m1",
+      "product_of_step_acc": {
+       "off": 0.19726995165368436,
+       "on": 1.0
+      },
+      "gold_path_product": {
+       "off": 0.29910714285714285,
+       "on": 1.0
+      },
+      "observed": {
+       "off": 0.017857142857142856,
+       "on": 1.0
+      },
+      "chains_without_pilot_items": 0
+     },
+     "R": {
+      "mode": "chain_one",
+      "product_of_step_acc": {
+       "off": 5.863956750463919e-06,
+       "on": 1.0
+      },
+      "gold_path_product": {
+       "off": 0.0,
+       "on": 1.0
+      },
+      "observed": {
+       "off": 0.08653846153846154,
+       "on": 1.0
+      },
+      "chains_without_pilot_items": 0
+     }
+    },
+    "p_steps": {
+     "chain_one": {
+      "applicable, state-changing": {
+       "off": {
+        "n": 106,
+        "acc": 0.5
+       },
+       "on": {
+        "n": 244,
+        "acc": 1.0
+       },
+       "role": "TRANSFER"
+      },
+      "applicable, unchanged": {
+       "off": {
+        "n": 60,
+        "acc": 0.0
+       },
+       "on": {
+        "n": 234,
+        "acc": 1.0
+       },
+       "role": "TRANSFER"
+      },
+      "inapplicable": {
+       "off": {
+        "n": 117,
+        "acc": 0.008547008547008548
+       },
+       "on": {
+        "n": 418,
+        "acc": 1.0
+       },
+       "role": "descriptive-only (one-step frame presumes applicability)"
+      }
+     },
+     "chain_m1": {
+      "applicable, state-changing": {
+       "off": {
+        "n": 102,
+        "acc": 0.46078431372549017
+       },
+       "on": {
+        "n": 244,
+        "acc": 1.0
+       },
+       "role": "primary"
+      },
+      "applicable, unchanged": {
+       "off": {
+        "n": 56,
+        "acc": 0.0
+       },
+       "on": {
+        "n": 234,
+        "acc": 1.0
+       },
+       "role": "primary"
+      },
+      "inapplicable": {
+       "off": {
+        "n": 118,
+        "acc": 0.03389830508474576
+       },
+       "on": {
+        "n": 418,
+        "acc": 1.0
+       },
+       "role": "primary"
+      }
+     }
+    },
+    "repro": {
+     "chain_one|L": {
+      "n_chains": 208,
+      "identical_chains": 1.0,
+      "identical_step_texts": 1.0,
+      "n_steps_compared": 829,
+      "stored_acc": {
+       "1": 0.39903846153846156,
+       "2": 0.20192307692307693,
+       "4": 0.02403846153846154
+      },
+      "off_acc": {
+       "1": 0.39903846153846156,
+       "2": 0.20192307692307693,
+       "4": 0.02403846153846154
+      }
+     },
+     "chain_one|P": {
+      "n_chains": 224,
+      "identical_chains": 1.0,
+      "identical_step_texts": 1.0,
+      "n_steps_compared": 784,
+      "stored_acc": {
+       "1": 0.20982142857142858,
+       "2": 0.049107142857142856,
+       "4": 0.0
+      },
+      "off_acc": {
+       "1": 0.20982142857142858,
+       "2": 0.049107142857142856,
+       "4": 0.0
+      }
+     },
+     "chain_one|R": {
+      "n_chains": 208,
+      "identical_chains": 1.0,
+      "identical_step_texts": 1.0,
+      "n_steps_compared": 832,
+      "stored_acc": {
+       "1": 0.6057692307692307,
+       "2": 0.3605769230769231,
+       "4": 0.08653846153846154
+      },
+      "off_acc": {
+       "1": 0.6057692307692307,
+       "2": 0.3605769230769231,
+       "4": 0.08653846153846154
+      }
+     },
+     "chain_m1|L": {
+      "n_chains": 208,
+      "identical_chains": 1.0,
+      "identical_step_texts": 1.0,
+      "n_steps_compared": 829,
+      "stored_acc": {
+       "1": 0.3894230769230769,
+       "2": 0.19230769230769232,
+       "4": 0.02403846153846154
+      },
+      "off_acc": {
+       "1": 0.3894230769230769,
+       "2": 0.19230769230769232,
+       "4": 0.02403846153846154
+      }
+     },
+     "chain_m1|P": {
+      "n_chains": 224,
+      "identical_chains": 1.0,
+      "identical_step_texts": 1.0,
+      "n_steps_compared": 785,
+      "stored_acc": {
+       "1": 0.19642857142857142,
+       "2": 0.03571428571428571,
+       "4": 0.017857142857142856
+      },
+      "off_acc": {
+       "1": 0.19642857142857142,
+       "2": 0.03571428571428571,
+       "4": 0.017857142857142856
+      }
+     },
+     "chain_m1|R": {
+      "n_chains": 208,
+      "identical_chains": 1.0,
+      "identical_step_texts": 1.0,
+      "n_steps_compared": 832,
+      "stored_acc": {
+       "1": 0.6105769230769231,
+       "2": 0.36538461538461536,
+       "4": 0.08653846153846154
+      },
+      "off_acc": {
+       "1": 0.6105769230769231,
+       "2": 0.36538461538461536,
+       "4": 0.08653846153846154
+      }
+     }
+    }
+   },
+   "E": {
+    "L|chain_one": {
+     "fam": "L",
+     "mode": "chain_one",
+     "role": "primary",
+     "n_parents": 26,
+     "n_nan": 0,
+     "off": 0.5073053447099832,
+     "on": 0.0,
+     "stored_sparse": 0.5073053447099832,
+     "copy_chain": 1.010627996463042,
+     "drop": 0.5073053447099832,
+     "drop_ci95": [
+      0.3921154477776816,
+      0.6303156564155449
+     ],
+     "n_paired": 26
+    },
+    "L|chain_m1": {
+     "fam": "L",
+     "mode": "chain_m1",
+     "role": "TRANSFER",
+     "n_parents": 26,
+     "n_nan": 0,
+     "off": 0.5093939100893644,
+     "on": 0.0,
+     "stored_sparse": 0.5093939100893644,
+     "copy_chain": 1.010627996463042,
+     "drop": 0.5093939100893644,
+     "drop_ci95": [
+      0.40564246706378004,
+      0.6196177049539984
+     ],
+     "n_paired": 26
+    },
+    "P|chain_one": {
+     "fam": "P",
+     "mode": "chain_one",
+     "role": "TRANSFER",
+     "n_parents": 28,
+     "n_nan": 2,
+     "off": 0.8785674824164464,
+     "on": 0.0,
+     "stored_sparse": 0.8785674824164464,
+     "copy_chain": 0.9553932364170368,
+     "drop": 0.8785674824164464,
+     "drop_ci95": [
+      0.7613250624101895,
+      0.9919600976201204
+     ],
+     "n_paired": 26
+    },
+    "P|chain_m1": {
+     "fam": "P",
+     "mode": "chain_m1",
+     "role": "primary",
+     "n_parents": 28,
+     "n_nan": 2,
+     "off": 0.8776778808006873,
+     "on": 0.0,
+     "stored_sparse": 0.8776778808006873,
+     "copy_chain": 0.9553932364170368,
+     "drop": 0.8776778808006873,
+     "drop_ci95": [
+      0.769219412941199,
+      0.9757262842586407
+     ],
+     "n_paired": 26
+    },
+    "R|chain_one": {
+     "fam": "R",
+     "mode": "chain_one",
+     "role": "primary",
+     "n_parents": 26,
+     "n_nan": 0,
+     "off": 0.385574982716487,
+     "on": 0.0,
+     "stored_sparse": 0.385574982716487,
+     "copy_chain": 1.0070798053191259,
+     "drop": 0.385574982716487,
+     "drop_ci95": [
+      0.3487881391667403,
+      0.4242225936399056
+     ],
+     "n_paired": 26
+    },
+    "R|chain_m1": {
+     "fam": "R",
+     "mode": "chain_m1",
+     "role": "TRANSFER",
+     "n_parents": 26,
+     "n_nan": 0,
+     "off": 0.3918845567565698,
+     "on": 0.0,
+     "stored_sparse": 0.3918845567565698,
+     "copy_chain": 1.0070798053191259,
+     "drop": 0.3918845567565698,
+     "drop_ci95": [
+      0.3540125761467677,
+      0.4309078578192454
+     ],
+     "n_paired": 26
+    }
+   },
+   "F": {
+    "kl_off_on": {
+     "mean": 0.0,
+     "median": 0.0,
+     "p90": 0.0,
+     "max": 0.0,
+     "n": 248
+    },
+    "kl_noise_stored_off": {
+     "mean": 0.0,
+     "median": 0.0,
+     "p90": 0.0,
+     "max": 0.0,
+     "n": 248
+    },
+    "top1_agree_off_on": 1.0,
+    "top1_agree_stored_off": 1.0,
+    "kl_off_on_by_class_top10": [
+     [
+      "time_duration",
+      0.0
+     ],
+     [
+      "output_only",
+      0.0
+     ],
+     [
+      "conflict_deescalation",
+      0.0
+     ],
+     [
+      "direct_preference",
+      0.0
+     ],
+     [
+      "context_update",
+      0.0
+     ],
+     [
+      "celebration",
+      0.0
+     ],
+     [
+      "confirmation",
+      0.0
+     ],
+     [
+      "arithmetic_chain",
+      0.0
+     ],
+     [
+      "practical_one_step",
+      0.0
+     ],
+     [
+      "preference_opinion",
+      0.0
+     ]
+    ],
+    "kl_ref_supa_sparse": "pending",
+    "greedy_exact_agree": {
+     "n": 248,
+     "rate": 1.0
+    },
+    "greedy_exact_agree_by_class": {
+     "acknowledgment": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "acknowledgment_update": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "apology_repair": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "arithmetic_chain": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "arithmetic_short_answer": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "boundary_setting": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "causal_reasoning": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "celebration": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "clarification": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "clarification_request": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "communication_rewrite": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "comparative_recommendation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "comparison_ranking": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "comparison_recommendation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "complex_escalation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "concise_explanation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "conditional_rules": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "confirmation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "conflict_deescalation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "constraint_selection": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "context_recall": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "context_update": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "contradiction_detection": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "conversation_closure": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "counting_sets": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "decision_explanation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "deescalation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "direct_preference": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "empathy": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "empathy_validation": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "estimation_sanity": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "evidence_grounded_dialogue": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "evidence_inference": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "factual_compression": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "gentle_disagreement": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "informal_texting": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "insufficient_information": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "knowledge_boundary": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "logical_implication": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "multi_turn_context_update": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "natural_follow_up": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "negotiation_compromise": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "output_only": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "percentage_reasoning": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "physical_commonsense": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "plan_revision": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "practical_next_step": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "practical_one_step": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "preference_opinion": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "pronoun_resolution": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "ratio_proportion": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "roleplay_reasoning": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "roleplay_short": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "safety_boundary": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "schedule_ordering": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "sequence_pattern": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "spatial_relations": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "tactful_disagreement": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "time_duration": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "troubleshooting_diagnosis": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "uncertainty": {
+      "n": 4,
+      "rate": 1.0
+     },
+     "unit_conversion": {
+      "n": 4,
+      "rate": 1.0
+     }
+    },
+    "json_bleed": {
+     "off": {
+      "bleed_rate_nonnumeric": 0.0,
+      "n_nonnumeric": 204,
+      "json_state_rate_all": 0.0,
+      "n_all": 248
+     },
+     "on": {
+      "bleed_rate_nonnumeric": 0.0,
+      "n_nonnumeric": 204,
+      "json_state_rate_all": 0.0,
+      "n_all": 248
+     }
+    }
+   },
+   "gates": {
+    "G1_targeted": {
+     "status": "PASS",
+     "detail": "all >= 0.80: L.void_disc 1.000, L.pairs 1.000, P.app_addonly 1.000, P.app_del 1.000, P.inapp_disc 1.000, P.pre_off_only 1.000, P.pairs 1.000, R.mix_w0 1.000, R.mix_w1 1.000, R.mix_w2 1.000, R.cond 1.000, R.add_wrap 1.000, R.pairs 1.000",
+     "values": {
+      "L.void_disc": 1.0,
+      "L.pairs": 1.0,
+      "P.app_addonly": 1.0,
+      "P.app_del": 1.0,
+      "P.inapp_disc": 1.0,
+      "P.pre_off_only": 1.0,
+      "P.pairs": 1.0,
+      "R.mix_w0": 1.0,
+      "R.mix_w1": 1.0,
+      "R.mix_w2": 1.0,
+      "R.cond": 1.0,
+      "R.add_wrap": 1.0,
+      "R.pairs": 1.0
+     }
+    },
+    "G2_untouched": {
+     "status": "PASS",
+     "detail": "L.posted +0.925 (per kind, not gated: add +0.975, scale +0.825, transfer +0.975), R.add_nowrap +0.950, R.swap +1.000",
+     "values": {
+      "L.posted": 0.925,
+      "R.add_nowrap": 0.95,
+      "R.swap": 1.0
+     }
+    },
+    "G3_app_del": {
+     "status": "PASS",
+     "detail": "n=50 OFF 0.000 ON 1.000 delta +1.000 CI [+0.899, +1.000]",
+     "values": {
+      "delta": 1.0,
+      "ci_lo": 0.8990992576628453
+     }
+    },
+    "G4_false_copy": {
+     "status": "PASS",
+     "detail": "point estimate, one extra copied row fails: L 1.000->0.000 (151->0 of 151; new 0/stopped 151, McNemar p <0.001; 151 spare row(s) before FAIL); P 1.000->0.000 (106->0 of 106; new 0/stopped 106, McNemar p <0.001; 106 spare row(s) before FAIL); R 1.000->0.000 (389->0 of 389; new 0/stopped 389, McNemar p <0.001; 389 spare row(s) before FAIL)",
+     "values": {
+      "L": -1.0,
+      "P": -1.0,
+      "R": -1.0
+     },
+     "spare_rows": {
+      "L": 151,
+      "P": 106,
+      "R": 389
+     }
+    },
+    "G5_pilot_direction": {
+     "status": "PASS",
+     "detail": "6 pilot cells from 6 gained rule strata, all gain",
+     "checks": [
+      {
+       "cell": "P applicable steps2-4",
+       "perop_delta": 0.65,
+       "perop_p": 2.9802322387695312e-08,
+       "pilot_n": 355,
+       "pilot_off": 0.4676056338028169,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.532394366197183,
+       "pilot_delta_ci95_cluster": [
+        0.4765830017345169,
+        0.5833333333333334
+       ],
+       "ok": true
+      },
+      {
+       "cell": "R add/wrap steps2-4",
+       "perop_delta": 1.0,
+       "perop_p": 1.8189894035458565e-12,
+       "pilot_n": 16,
+       "pilot_off": 0.0,
+       "pilot_on": 1.0,
+       "pilot_delta": 1.0,
+       "pilot_delta_ci95_cluster": [
+        1.0,
+        1.0
+       ],
+       "ok": true
+      },
+      {
+       "cell": "R conditional/gt steps2-4",
+       "perop_delta": 0.9,
+       "perop_p": 2.9103830456733704e-11,
+       "pilot_n": 168,
+       "pilot_off": 0.16071428571428573,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.8392857142857143,
+       "pilot_delta_ci95_cluster": [
+        0.7857142857142857,
+        0.8875
+       ],
+       "ok": true
+      },
+      {
+       "cell": "R conditional/le steps2-4",
+       "perop_delta": 0.95,
+       "perop_p": 7.275957614183426e-12,
+       "pilot_n": 148,
+       "pilot_off": 0.08108108108108109,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9189189189189189,
+       "pilot_delta_ci95_cluster": [
+        0.875,
+        0.958041958041958
+       ],
+       "ok": true
+      },
+      {
+       "cell": "R mix/nowrap steps2-4",
+       "perop_delta": 0.975,
+       "perop_p": 3.637978807091713e-12,
+       "pilot_n": 95,
+       "pilot_off": 0.021052631578947368,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9789473684210527,
+       "pilot_delta_ci95_cluster": [
+        0.9473684210526315,
+        1.0
+       ],
+       "ok": true
+      },
+      {
+       "cell": "R mix/wrap steps2-4",
+       "perop_delta": 0.95,
+       "perop_p": 7.275957614183426e-12,
+       "pilot_n": 326,
+       "pilot_off": 0.018404907975460124,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9815950920245399,
+       "pilot_delta_ci95_cluster": [
+        0.9640522875816994,
+        0.9965878954893459
+       ],
+       "ok": true
+      }
+     ],
+     "skipped": [],
+     "descriptive": [
+      {
+       "cell": "L add/posted steps2-4",
+       "perop_delta": 0.975,
+       "perop_p": 3.637978807091713e-12,
+       "pilot_n": 334,
+       "pilot_off": 0.029940119760479042,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9700598802395209,
+       "pilot_delta_ci95_cluster": [
+        0.9525316455696202,
+        0.9855491329479769
+       ],
+       "why_not_gated": "untouched stratum (G2)"
+      },
+      {
+       "cell": "L add/posted big",
+       "perop_delta": 0.975,
+       "perop_p": 3.637978807091713e-12,
+       "pilot_n": 53,
+       "pilot_off": 0.03773584905660377,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9622641509433962,
+       "pilot_delta_ci95_cluster": [
+        0.9038461538461539,
+        1.0
+       ],
+       "why_not_gated": "untouched stratum (G2)"
+      },
+      {
+       "cell": "L scale/posted steps2-4",
+       "perop_delta": 0.825,
+       "perop_p": 2.3283064365386963e-10,
+       "pilot_n": 473,
+       "pilot_off": 0.16279069767441862,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.8372093023255813,
+       "pilot_delta_ci95_cluster": [
+        0.8004114178672902,
+        0.8723415383245794
+       ],
+       "why_not_gated": "untouched stratum (G2)"
+      },
+      {
+       "cell": "L scale/posted big",
+       "perop_delta": 0.825,
+       "perop_p": 2.3283064365386963e-10,
+       "pilot_n": 239,
+       "pilot_off": 0.04602510460251046,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9539748953974896,
+       "pilot_delta_ci95_cluster": [
+        0.9237279626982506,
+        0.981042654028436
+       ],
+       "why_not_gated": "untouched stratum (G2)"
+      },
+      {
+       "cell": "L transfer/posted steps2-4",
+       "perop_delta": 0.975,
+       "perop_p": 3.637978807091713e-12,
+       "pilot_n": 617,
+       "pilot_off": 0.017828200972447326,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9821717990275527,
+       "pilot_delta_ci95_cluster": [
+        0.9710610932475884,
+        0.9918962722852512
+       ],
+       "why_not_gated": "untouched stratum (G2)"
+      },
+      {
+       "cell": "L transfer/posted big",
+       "perop_delta": 0.975,
+       "perop_p": 3.637978807091713e-12,
+       "pilot_n": 117,
+       "pilot_off": 0.0,
+       "pilot_on": 1.0,
+       "pilot_delta": 1.0,
+       "pilot_delta_ci95_cluster": [
+        1.0,
+        1.0
+       ],
+       "why_not_gated": "untouched stratum (G2)"
+      },
+      {
+       "cell": "R add/nowrap steps2-4",
+       "perop_delta": 0.95,
+       "perop_p": 7.275957614183426e-12,
+       "pilot_n": 274,
+       "pilot_off": 0.09854014598540146,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9014598540145985,
+       "pilot_delta_ci95_cluster": [
+        0.8671586715867159,
+        0.9335988539851916
+       ],
+       "why_not_gated": "untouched stratum (G2)"
+      },
+      {
+       "cell": "R swap steps2-4",
+       "perop_delta": 1.0,
+       "perop_p": 1.8189894035458565e-12,
+       "pilot_n": 389,
+       "pilot_off": 0.017994858611825194,
+       "pilot_on": 1.0,
+       "pilot_delta": 0.9820051413881749,
+       "pilot_delta_ci95_cluster": [
+        0.9664082687338501,
+        0.9948717948717949
+       ],
+       "why_not_gated": "untouched stratum (G2)"
+      }
+     ],
+     "rule_strata_gained": [
+      "P applicable",
+      "R add/wrap",
+      "R conditional/gt",
+      "R conditional/le",
+      "R mix/nowrap",
+      "R mix/wrap"
+     ]
+    },
+    "G6_chains_k4": {
+     "status": "PASS",
+     "detail": "L chain_one 0.024->1.000 (>= 0.25), P chain_m1 0.018->1.000 (>= 0.41), R chain_one 0.087->1.000 (>= 0.25)",
+     "values": {
+      "L": 1.0,
+      "P": 1.0,
+      "R": 1.0
+     }
+    },
+    "G7_decision": {
+     "status": "PASS",
+     "detail": "L drop +0.507 [+0.392, +0.630] (>= 0.15), P drop +0.878 [+0.769, +0.976] (>= 0.15), R drop +0.386 [+0.349, +0.424] (>= 0.08)",
+     "values": {
+      "L": 0.5073053447099832,
+      "P": 0.8776778808006873,
+      "R": 0.385574982716487
+     }
+    },
+    "G8_forgetting": {
+     "status": "PENDING",
+     "detail": "KL(OFF||ON) mean 0.0000; reference KL(Supa||Sparse) pending (runs/bank_pilot/supa/offtask_logprobs.npy absent)",
+     "values": {
+      "kl": 0.0,
+      "ref": null
+     }
+    },
+    "rule_learned": {
+     "status": "PENDING",
+     "detail": "all of G1-G8; G1 PASS, G2 PASS, G3 PASS, G4 PASS, G5 PASS, G6 PASS, G7 PASS, G8 PENDING"
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,457 @@
+# RCWM-T1 decision and incident log
+
+Times are local (CDT). Entries are append-only.
+
+## 2026-10-05
+
+- **D-01 Subject and runtime.**
+  - Arms run in FP32 with TF32 off, under the hermes venv: torch 2.6.0+cu124 and transformers 5.14.1, the Titan programme's CONFIRM-002 runtime.
+  - Titan-Sparse and Transition are stored in FP32. Supa, Titan-Experimental and Qwen3-0.6B are stored in BF16 and upcast.
+  - Delta arms are built on the GPU from per-tensor safetensors reads.
+- **D-02 Multi-step prompt.**
+  - The ledger rule is the DMRF RULES_MULTI text verbatim.
+  - The prerequisite and register rules follow the same minimal edit.
+  - The prerequisite rule states the inapplicable = no-op convention. That is the FDS oracle's semantics, which the verbatim one-step prompt leaves unstated.
+- **D-03 Prerequisite φ.** φ for prerequisite has no cost term: a generated final state cannot reveal which actions applied, so latent and generative comparisons would be unequal.
+- **D-04 Pilot bank** (`data/bank_pilot.json`, sha 7c9b432c…):
+  - 200 parents per family, 8 candidates, H = 4, seed 20261005.
+  - Checked against 6,464 historical payloads: 0 collisions.
+  - The pilot is exploratory only.
+- **I-01 Fingerprint bug.** `param_fingerprint` used a float32 linspace, which rounded the last index of the 155M-element embedding to n, causing a CUDA index assert. Fixed with integer index arithmetic. No data was affected.
+- **I-02 Queue log exit codes.** The queue log printed `exit 0` because `$(date)` reset `$?`. Fixed: rc is captured first.
+- **D-05 Design critique** (3 lenses + synthesis; `docs/` keeps a copy). These MUST amendments were adopted before any pilot number was inspected:
+  - exact change-mask Δ as the fidelity metric
+  - a floor ladder
+  - ridge as the confirmatory readout
+  - input-decodability controls
+  - P `chain_m1` as comparator, with `chain_one` stratified by applicability
+  - generative parse-rate and impute-s0 sensitivity
+  - P strata (contested, discriminating)
+- **I-03 GPU contention.** The peer BWM session launched `grade_forward.py` while this session held the lease. Both jobs paged VRAM. The peer now uses the same lease (confirmed by message on 2026-10-06).
+
+## 2026-10-06
+
+- **I-04 Queue lost overnight.** The pilot queue died when the previous agent session ended. Sparse was mid-capture, with no DONE marker; its partial arrays were deleted.
+  - The queue is now launched through WMI (`scripts/launch_pilot_queue.cmd`) so it is independent of the agent process.
+  - A WSL-bash mis-launch (rc 127, no GPU use) and one unexplained silent death (no traceback, no exit line) were logged as attempts 3 and 4.
+- **D-06 Confirmation bank** (`data/bank_confirm.json`, sha 8bc6e2f8…):
+  - 150 test-only parents per family, seed 20261006.
+  - P parents need ≥ 4 distinct final states.
+  - Each parent has one order-twin (fidelity only; never part of a decision set).
+  - Parents and transitions are deduped against the pilot (5 collision rejections).
+  - Built with no model call. It stays **sealed** until PREREG.md is frozen.
+  - Answer-free floors computed now (exact-Δ, k = 4):
+
+    | Family | copy | first-only | last-only | ignore_pre | ignore_status | contested |
+    |---|---|---|---|---|---|---|
+    | P | 0.101 | 0.227 | 0.279 | 0.510 | — | 306/1200 items (124 parents) |
+    | L | 0.003 | 0.032 | 0.037 | — | 0.772 | — |
+    | R | 0.003 | 0.016 | 0.020 | — | — | — |
+- **D-07 Deviation from critique M8.**
+  - `ignore_pre` (P) and `ignore_status` (L) run the true dynamics with exactly one rule removed. They are rule-ablated simulators, not answer-free shortcuts, so they are not part of the H1 comparator.
+  - They are reported as diagnostics: they test whether the latent or generated consequence follows the ablated rule (H4).
+  - The H1 comparator is the maximum over trivial floors (copy, majority, first-only, last-only, touched-entity rule), the no-LLM learner S, and every generative mode.
+- **I-05 Lease breach by this session (10:44-10:46).** Two ad-hoc GPU tests of `generation.sample_batch` on a tiny random-weight Qwen3 ran outside the lease. The peer BWM session reported the collision. Earlier, at about 10:41, its P-actions training crashed with "CUDA error: unknown error"; the cause is not established. Remedies:
+  - All GPU work from this session, tests included, now goes through the lease.
+  - The queue yields to the peer's P-actions rerun (`scripts/wait_then_queue.sh`, fallback 11:45).
+  - The queue is launched hidden via WMI with `ShowWindow=0`. Attempt 5 died with `^C` in the launcher log, which is consistent with a visible console window being closed or interrupted on the desktop.
+- **D-08 Batched-sampling check.** On a tiny model, left-padded batched answer-slot states with explicit position_ids match unpadded single-sequence states to a relative difference of 1.0e-6. That makes PVR probes trained on unpadded captures valid for batched rollouts.
+- **I-06 Lease starvation and the alternation protocol (12:00-12:10).** The lease is not FIFO, so the peer's back-to-back launches won every poll race. The two sessions agreed an explicit alternation:
+  - The peer's next launch after `bwm:eval-pilot-core` waits for `rcwm-t1:supa` to be held and then released (max 50 min).
+  - This session's PVR stage1 then waits for `bwm:eval-pilot-400`, implemented as a one-shot `runs/.yield.json` read by `runtime.yield_to_peer`.
+  - After that, the lease is plain first-come.
+- **I-07 Generation paged VRAM (12:24-12:40).** Greedy e2e generation with batch 64 put a ~4.4 GB FP32 KV cache on top of the 2.4 GB model. 1.37 GB spilled to shared host memory and the job ran at ~39 W.
+  - The job was killed after capture had completed. That capture is preserved and marked by `runs/bank_pilot/sparse/CAPTURED.json`, using the fingerprint prefix from the log.
+  - `generation.generate_texts` now sizes batches by a 6,000-token budget (prompt plus new tokens).
+  - `run_arm` skips capture when the marker matches the arm fingerprint, and skips parity when `parity.json` exists.
+  - Sparse generation was re-queued as a separate leased job, which yields to `bwm:eval-pilot-400`.
+- **I-08 Machine reboot at 13:15:10.** Every process died: this session's detached GPU chains, the peer's jobs and the lock. The overnight loss (I-04) was likely the same kind of event.
+  - Completed artefacts survived: the sparse capture (CAPTURED marker) and the full supa arm (DONE).
+  - All remaining GPU work now runs in one idempotent `scripts/master_chain.sh`. Every step skips if its output exists, so the chain can simply be relaunched after a restart.
+  - The courtesy yields were merged into a single one-shot `runs/.yield.json`, which applies to the chain's first leased job.
+- **I-09 Adversarial verification of pilot claims C1-C4.** Three verifiers plus a ruling; see `docs/verification/RULING.md`.
+  - No alignment, layer, split or target bug was found.
+  - Interpretations corrected in RESULTS_PILOT.md revision 2:
+    - H2b ("delta installs only a readout") is withdrawn. The change-mask probe is insensitive to the skill, while the LM-head first digit (P) and the swapped value (R) favour Sparse.
+    - "Geometry preserved" was a family-pooling artefact (bug B1).
+  - Generation instrument fixes (B3): the P cap goes from 12 to 40 tokens, other families from 56 to 64; a lenient parser unwraps `"after"`.
+  - Other fixes: `run_arm` refuses an index from a different bank (B5); `mechanism_report` computes per family (B1).
+  - Open: B4. In the P one-frame prompt the action is presumed applicable, but gold treats it as a no-op. P one-frame must be reported on the applicable subset.
+- **D-09 New instrument: teacher-forced likelihood ranking** (`scripts/run_lik.py`, `lik_report.py`).
+  - Gold k-step consequence vs heuristic foils (copy, first-only, last-only, ignore-pre / ignore-status) and near-misses (one bit flipped, one value ±1).
+  - Parameter-free, so it tests the model's own conditional density without probes or generation-format issues. It is the most direct test of composition.
+- **D-10 New mechanism test: mode-vector steering** (`scripts/run_steer.py`). Motivation: per family, 97–99% of the L16–28 answer-slot shift for L and R is a constant offset. Three conditions:
+  - Supa + v[family, L] from the answer slot onward (sufficiency)
+  - Titan − v (necessity)
+  - a norm-matched random vector (control)
+- **D-11 Courtesy yield released early (13:50).** The peer replied "go" after its orchestrator died; `runs/.yield.json` is marked consumed.
+- **I-10 GPU driver resets (TDR) and unexpected shutdowns traced in the Windows System log.** Provider nvlddmkm logged events 153 and 14.
+  - Driver reset times: 10/5 23:15, 23:30; 10/6 10:42 (the peer's P-actions crash), 10:49, 12:40, 13:14:51 and 14:02:27 (this session's likelihood job, "CUDA error: unknown error").
+  - Kernel-Power 41 unexpected shutdowns: 10/5 22:54, and 10/6 00:02:12. At 00:02 both sessions' jobs were on the card with VRAM full.
+  - The 13:15 restart was a clean OS shutdown 8 s after a driver reset, consistent with the user restarting a frozen display.
+  - The GPU drives the desktop.
+  - Mitigations, effective from 14:04:
+    - `runtime.breathe()`: cuda synchronize plus 50 ms sleep between every batch (capture, generation, sampling, likelihood, off-task, steering).
+    - Batch token budgets halved: capture 8000 → 4000, generation 6000 → 4000, likelihood 12000 → 3000.
+    - `set_per_process_memory_fraction(0.70)`.
+    - One GPU process at a time (lease).
+  - The unthrottled sparse generation and likelihood jobs were stopped and re-queued. The peer session was informed.
+  - Raising the Windows TdrDelay registry value would be a system change, left to the user.
+- **I-11 Thermal guard** added to `runtime.breathe()` (as adopted by the peer): at most every 20 s, if GPU >= 84 C pause until <= 78 C. The peer confirmed Kernel-Power 41 events also coincide with its two lost sessions, and both sessions now run throttled, one GPU process at a time.
+- **I-12 Thermal: the in-process guard failed to fire.** The GPU reached 89-91 °C at 14:15-14:16 during the sparse likelihood job, with no `[thermal]` log line. nvidia-smi works in that launch environment (probe) and the guard logic passes a unit test; cause unknown.
+  - The chain was stopped at once and temperatures fell to 76 °C.
+  - Added `scripts/thermal_watchdog.py`, an independent process. Every 10 s it reads the temperature; at ≥ 84 °C it creates `runs/.thermal_pause`, removing it at ≤ 78 °C. It logs to `runs/thermal_log.txt`.
+  - `breathe()` and `gpu_lease()` block while the flag exists.
+  - The between-batch pause rose from 50 to 120 ms (lower duty cycle).
+  - The peer session was told about the shared flag. At the time of the alert its job was at 86 °C.
+- **I-13 Peak 95 °C at 109 W (14:19:33).** The GPU rose from 73 °C to 95 °C within 10 s of a resumed likelihood job. Fixed pauses (50-120 ms) do not bound heat when each batch is a long full-power FP32 burst. Changes:
+  - `breathe()` now sleeps max(0.12 s, 1.5 × the batch's compute time, capped at 5 s), bounding the duty cycle near 40%.
+  - Batch budgets halved again: capture 2000 tokens, likelihood 1500, generation 2000 / 16 sequences.
+  - Watchdog: pause at ≥ 80 °C, resume at ≤ 72 °C, sampling every 3 s.
+  - In-process guard: 80/72 °C, every 10 s.
+  - All jobs were stopped and relaunched at 14:23. Expect roughly 2-3× longer GPU wall time.
+- **I-14 Throttled operating regime (from 14:23).** Each resume produces a power burst of 68-148 W and a jump from about 65 °C to 82-89 °C within 3 s. The watchdog pauses within one sample and the GPU cools to about 67 °C within 3 s.
+  - No sustained operation above 80 °C.
+  - The peer session honours the same flag (it confirmed a 162 s pause).
+  - Peak readings of 86-89 °C are transient. Lowering them further would need a lower GPU power limit, which is a user and system setting (for example the laptop vendor's Silent/Performance mode); it is not changed here.
+- **D-12 Generative parsing is lenient everywhere from 14:30** (fidelity comparators and chain rollouts) so base Supa's wrapped answers are not counted as failures. This is conservative for every Titan > Supa contrast. Existing Supa chain outputs were produced under strict parsing: a wrapped answer ended that chain. They will be re-generated for the confirmation bank.
+- **I-15 Temperature-adaptive duty cycle.** With a fixed ratio of 3.0 the likelihood job ran at 5-17% GPU utilisation and 62-65 °C, which is overly conservative. `runtime._duty_ratio()` now pauses 0.5x below 70 °C, 1.5x at 70-74 °C and 3.0x at ≥ 75 °C (temperature cached 10 s). The watchdog (80/72 °C) remains the hard limit. This applies to jobs started after 14:56; the running sparse likelihood job keeps ratio 3.0.
+- **I-16 One-for-one GPU alternation with the peer** (agreed 15:50; conditional variant proposed by this session).
+  - Each side keeps `%TEMP%/rineya-gpu-0.waiting.<side>.json` while waiting for the GPU.
+  - On release it writes `%TEMP%/rineya-gpu-0.turn.json` = {last: side}.
+  - Before acquiring, a job yields if `last` is its own side and the peer has a live waiting marker (max 45 min). Otherwise it acquires normally.
+  - Implemented in `runtime.alternate_turn` and `gpu_lease`. The peer has moved its evaluations to a CPU lane.
+- **I-17 Lease blind spot under WDDM** (found by the peer, 16:00). `nvidia-smi --query-compute-apps` lists every process that touched the CUDA driver, including CPU-only torch processes. The lease's "foreign python > 512 MB RSS on the card" test therefore blocked indefinitely behind CPU-lane jobs, and the GPU sat idle.
+  - Fix: `rcwmt/lease_vendored.py`, a vendored copy whose only change is that a python counts as a holder only if its dedicated GPU memory (Windows counter) exceeds 256 MiB.
+  - `runtime.gpu_lease` uses it.
+  - The stuck jobs (regen supa, lik supa) were restarted at 16:08. The chains are idempotent.
+- **D-13 PREREG-1 FROZEN at 2026-10-06 16:36:30 -0500**, after the user's instruction to freeze and run the confirmation.
+  - Record: `PREREG_1_FREEZE.json` (PREREG sha 04374de8…).
+  - The pilot table comes from the code-validation dry run. C3 has no valid pilot estimate.
+  - From now until `PREREG_1_RESULTS.json` exists, no frozen file (`rcwmt/*.py`, `scripts/{run_arm,confirm_analysis,analyze,freeze_prereg1}.py`, data banks) may be edited. New exploratory code goes into new files only.
+  - `scripts/verify_freeze.py` checks the hashes before the analysis.
+  - The confirmation chain (`scripts/confirm_chain.sh`) runs sparse (capture plus generation), then supa (generation only), then the non-binding pilot regeneration, then the remaining pilot GPU queue.
+- **I-18 Watchdog tightened (16:50).** During the confirmation capture, readings at pause time were 85-92 °C with 3 s sampling (27 pauses in 10 min). The watchdog now samples every 1.5 s, pauses at ≥ 76 °C and resumes at ≤ 66 °C. The watchdog script is not a frozen file, and this changes wall time only. The peer was notified.
+- **D-14 PREREG-1 Amendment 1 (operational, 17:50).** `generate_texts` defaults changed: max_batch 16 → 32, token_budget 2000 → 8000.
+  - Reason: under the frozen 160-token cap, batches held about 5 sequences. Generation was projected at about 5 h (sparse) and more than 10 h (supa), blocking the shared GPU.
+  - Recorded before any outcome was observed: the sparse e2e had been stopped with nothing written, and no confirmation generation existed.
+  - Record: `PREREG_1_AMENDMENT_1.json`. `verify_freeze.py` now applies logged amendments.
+- **D-15 RCWM-T2 (exploratory, queued after PREREG-1's GPU runs): a rule-coverage LoRA.**
+  - Motivation: R8. Titan's one-step skill fails on void events, inapplicable actions, register mix, and mod-97 wrap.
+  - Trainer: vendored, with the peer's permission, from BWM-001 `native_v1` into `vendor_bwm/` (`bwmn/lm.py`, `scripts/train_generic.py`, `bwmn/gpu_lease.py`).
+  - Recipe: LoRA r16, alpha 32, on q, k, v, o, gate, up, down. Frozen FP32 Titan-Sparse, WSD schedule, token-weighted 4×4 microbatches, duty-capped, honours the shared thermal flag.
+  - Convergent evidence, cited with the peer's scope: BWM-001 native_v1 F_titan_main (single seed; LoRA r16 on Titan-Sparse; 1,455 RW2 transitions) scores 0.365 on 96 legality-flip doubles at limits 96/128, versus arithmetic 0.995 (validation-grade, not confirmatory). Sources: native_v1/DECISIONS.md F-01, F-02 and runs/F_titan_main/F_TABLE.json. Adapter-off probes are exploratory.
+  - The two results agree: transition fine-tunes learn arithmetic and surface operations but not parameterised legality rules, unless illegal cases are trained explicitly.
+- **D-16 T2 data and queue.**
+  - `data/t2_train.jsonl`: 1,501 rows, sha bf5a2276…
+  - `data/t2_eval.jsonl`: 600 rows, 40 per stratum × 15, sha 78b5c022…
+  - Both are fresh against 35,645 payloads (historical, pilot and confirmation).
+  - The vendored trainer was patched locally (3 marked edits) to be device-agnostic. A CPU smoke test passed: 1 step, loss 0.169, adapter saved.
+  - **Unleased GPU touch (incident).** An earlier smoke-test attempt with `CUDA_VISIBLE_DEVICES=""` briefly initialised CUDA outside the lease and crashed on the first forward pass. CPU tests now use `CUDA_VISIBLE_DEVICES=-1`.
+  - Queue: T2 train (190 steps, seed 0) then T2 eval run first in `master_chain.sh`, after the confirmation jobs and the regeneration.
+- **D-17** The non-binding pilot regeneration was moved to the end of `master_chain.sh` (`regen_chain.sh` is now a pass-through), so RCWM-T2 and the mechanism jobs run first after the confirmation GPU runs.
+- **I-19 Modern Standby crash (19:08-19:10).** The System log shows "entering Modern Standby" at 19:08:38 while the sparse confirmation generation was running (started 19:03). This was followed by Kernel-Power 41, an unclean reboot, at 19:10:20.
+  - The cause is a sleep transition with CUDA active, not heat (the last reading was 65 °C).
+  - The app's keep-awake setting holds only while a session is actively working, not while detached jobs run between turns.
+  - Fix: the watchdog (v3) holds a `SetThreadExecutionState(ES_SYSTEM_REQUIRED|ES_CONTINUOUS)` power request on AC power, blocking idle sleep while it runs. On battery it releases the request and sets the pause flag, so no GPU work runs on battery. It does not change any setting and cannot stop a lid close or a user-chosen Sleep.
+  - The confirmation chain was relaunched at about 19:25. Sparse generation restarts from scratch: nothing had been written, and the capture is intact.
+- **I-20 Watchdog v3.1 (19:26).** Following the peer's finding (WER bugcheck 0x19C WIN32K_POWER_WATCHDOG_TIMEOUT at 19:10; on Modern Standby laptops the display timeout drives the idle transition), the watchdog now holds ES_SYSTEM_REQUIRED|ES_DISPLAY_REQUIRED, but only while a GPU lease is held and the machine is on AC. It releases the request when no lease is held, so the screen times out normally when the GPU is idle.
+- **I-21 CPU-only torch recipe; supersedes the note in D-16 (20:40-21:05).** Model forward passes on CPU died with an access violation in 5 of 5 runs under `CUDA_VISIBLE_DEVICES=-1`. The crash site varied between the rotary matmul, a Linear layer and a later `read_text`, which suggests heap corruption. A bare `import torch; torch.cuda.is_available()` with `-1` also crashed at exit. Plain matmuls survived, which is how the 1-step trainer smoke in D-16 got through.
+  - **What works:** `CUDA_VISIBLE_DEVICES=""` set before torch is imported, plus patching `torch.cuda.is_available` and `torch.cuda.device_count` to report no GPU straight after import. This passed 2 of 2 runs. The fingerprint matched (Supa a9952c55f5a1).
+  - **Verification:** with this recipe the process is absent from `nvidia-smi --query-compute-apps` and from the dedicated GPU memory counter, so it never reaches the driver.
+  - **Why it is the combination:** D-16's `""` crash had no patch, so `is_available()` initialised the driver.
+  - **Use:** in `scripts/run_steer_cpu.py`. Use the same recipe for any future CPU model job.
+- **D-18 CPU steering preview (exploratory).** `scripts/run_steer_cpu.py` reproduces the steering test from `run_steer.py`, importing its offsets, hook and scoring, on CPU while PREREG-1 holds the GPU.
+  - Items: a random subset of TEST one-frame items, 48 per family (seed 17).
+  - Conditions: 11.
+  - Resources: 4 threads, below-normal priority, about 3 GB RAM.
+  - Per-item correctness is saved, so the result can be compared paired with the authoritative full GPU run in `master_chain.sh`.
+- **D-19 RCWM-T2 evaluation plan, fixed before any T2 output exists (21:30).** This follows the pre-flight review in `docs/t2_review/` (three lenses plus a merge). The training data is unchanged (D-16 hashes). No adapter has been trained yet.
+  - **Instrument (`scripts/run_t2.py eval`, rewritten).** Every stage runs with the adapter OFF and ON in one process. That gives a same-instrument Titan-Sparse baseline; the stored pilot chains are now only a reproducibility check.
+    - Per-op one-step sets:
+      - `t2_eval` (600, in-distribution);
+      - `t2_eval_xframe` (the same 600 rows re-rendered in the other frame), sha ddc0d798…;
+      - `t2_eval_supp` (360, built by `scripts/make_t2_supp.py`, seed 20261008, fresh against 37,746 payloads), sha 2c1efbc2…. It holds 40 each of P app-del, P pre_off-only and R mix double-wrap, plus 40 minimal pairs per family: L posted/void, P applicable vs one extra unmet pre_on bit, R conditional threshold = other−1 vs = other;
+      - `pilot`: the oracle-anchored transitions of the pilot DEV+TEST chains, with gold input state in the chain's primary frame.
+    - Chains: chain_one and chain_m1 on the pilot TEST plans.
+    - Off-task: first-token log-probs and 64-token greedy replies on the 248 neutral prompts.
+    - Per-row texts are dumped, and each stage is resumable.
+    - Sub-strata for `t2_eval` rows: `data/t2_eval_substrata.jsonl`, sha 240ffddc….
+  - **Primary cells.**
+    - Chains: chain_one for L/R and chain_m1 for P (the trained frames).
+    - Per-op, rule-isolating sub-cells:
+      - L void-disc (void rows where applying the event would change the state);
+      - P app-changed (split into add-only and app-del);
+      - P inapp-disc;
+      - P pre_off-only;
+      - R mix by wrap count;
+      - R conditional;
+      - R add/wrap;
+      - the three minimal-pair sets, scored as both members correct.
+  - **Transfer cells, reported separately:** chain_one P, chain_m1 L/R, and every xframe row. One-step-frame P inapplicable rows are descriptive only, because that prompt presumes the action is applicable.
+  - **Copy floors:** the copy-input baseline is shown next to every per-op and chain number. The false-copy rate P(output = input | target ≠ input) is reported per family.
+  - **Gates (per seed, ON minus same-session OFF).** "Rule learned" requires all of:
+    - Per-op: targeted cells ≥ 0.80 ON. Untouched cells (L posted, R swap and add/nowrap) drop ≤ 0.05. P app-del lower 95% CI > 0. The false-copy rate does not rise.
+    - Pilot-transition cells: the same direction at chain steps 2–4 and at |balance| > 99.
+    - Chains at k=4: L/R ≥ 0.25 exact (base 0.024/0.087); P chain_m1 ≥ 0.41 (copy floor + 0.10).
+    - Decision (G_chain k=4 normalised regret): drop ≥ 0.15 on L/P and ≥ 0.08 on R, with the CI excluding 0.
+    - Forgetting: KL(OFF‖ON) on the off-task prompts ≤ KL(Supa‖Sparse). Greedy-reply agreement is reported.
+  - **Scope of claims.**
+    - Ledger: "void → no-op" only; "pending" and "draft" are never shown.
+    - Register: no claim about the conditional boundary from `t2_eval`. The boundary minimal pairs in the supplement test it.
+    - Pilot TEST was used to diagnose the failures T2 targets, so T2 chain and regret results on it are hypothesis-generating only. The sealed confirmation bank is not used.
+  - **Seeds.** Seed 0 is a screen. Seeds 1 and 2 run, with the same recipe and step count and no checkpoint selection on any chain set, if `scripts/t2_screen.py` passes on seed 0. A direction counts only if all three seeds agree.
+  - **Conditional control.** A self-distillation LoRA (Sparse's own greedy answers on the same prompts) is queued only if the gates pass. It separates frame adaptation from rule learning.
+  - **Analysis.** `scripts/t2_analysis.py` will be written and its sha256 recorded here before any `eval.json` exists.
+  - **D-19 addendum (22:05): analysis frozen before any T2 output exists.** No `runs/t2/t2_s*` directory exists.
+    - `scripts/t2_analysis.py`, sha256 d699dd5afa432dfef8b1c39cd14af26b92750237c7108328f7a61403decbcaf0.
+    - `scripts/t2_analysis_selftest.py`, sha256 0d69cd8e558192cc7a333fbed2945e259c246ee8a5c68b0c0f4cd78f4dc2ae53.
+    - Written by a build-then-verify workflow, with three adversarial verifiers (plan fidelity, statistics, robustness). The fixtures under `runs/t2/_fixtures/` (null, perfect, copy-collapse, plus 16 malformed-run cases) all behave as specified.
+    - **Gates G1–G8** (the operational form of the D-19 gates; resolutions are in the script docstring):
+      - G1: targeted cells ≥ 0.80 ON.
+      - G2: untouched cells drop ≤ 0.05.
+      - G3: P app-del delta CI lower bound > 0.
+      - G4: false-copy ON ≤ OFF in every family, strict point estimate.
+      - G5: significant rule-stratum gains carry over to pilot chain steps 2–4, and for ledger to |balance| > 99.
+      - G6: chain k=4 thresholds.
+      - G7: regret drops with CIs excluding 0.
+      - G8: KL(OFF‖ON) ≤ KL(Supa‖Sparse); PENDING until Supa's off-task capture exists.
+    - "Rule learned" requires all eight gates. A corrupt or partial run stops the analysis instead of being scored.
+    - CPU smoke test of the rewritten `run_t2.py eval`: zero-init adapter, 3-row subsets, `runs/t2/smoke_cpu`. Every stage file was written, ON equalled OFF exactly everywhere, and a rerun refused to overwrite `eval.json`.
+- **I-22 Manual restart killed the sparse confirmation run (2026-10-06 23:12; recovered 2026-10-07 09:05–09:20).**
+  - **Cause:** System event 1074 at 23:12:42: StartMenuExperienceHost "initiated the restart … on behalf of user clclc", reason "Other (Unplanned)". Kernel-Power 109/577 record a clean reboot ("last shutdown's success status was true"). There was no TDR, bugcheck or thermal event; the last watchdog reading was 87 °C at 23:12:39, a one-sample resume burst, paused as usual.
+  - **What was lost:** `run_arm.py --arm sparse` (pid 3848) died during chain_m1. Before the crash it had completely written `gen_e2e.jsonl` (14,850 lines; log line "e2e generations 14850 in 5381s") and `gen_chain_one.jsonl` (4,050 lines; "chain_one 4050 chains in 5444s"). No DONE.json was written.
+  - **Side effects:**
+    - The watchdog did not restart, so `runs/.thermal_pause` stayed set. I relaunched the watchdog at 09:07 and it cleared the flag at 60 °C.
+    - The stale lease was reclaimed by the peer's lease module under its staleness rule (backup `rineya-gpu-0.lock.stale-3848.bak`). The peer then took its owed turn (bw-train-F).
+  - **Handling, per PREREG-1 §7 deviation policy:** "A crash before the results file is written allows an identical rerun", and partial generation files are regenerated. No procedure amendment and no file change.
+    - Both completed files were moved, not deleted, to `runs/bank_confirm/_interrupted_20261006_2312/sparse/`: gen_e2e sha 70c428b5…, gen_chain_one sha c77284a8….
+    - The registered command reruns from scratch through `confirm_chain.sh`. Capture is reused, as `run_arm.py` already does when the CAPTURED fingerprint matches.
+    - The moved files enter no analysis. After the rerun they are compared with the new files only as a descriptive determinism check (same code, same inputs, greedy FP32).
+    - I rejected resuming only chain_m1, which would have saved about 3 GPU hours, because it would have needed a procedure amendment and outputs stitched across processes.
+- **I-23 Unclean reset during the sparse confirmation rerun (2026-10-07, between 09:31:23 and 09:32:00).**
+  - **Evidence:** Kernel-Power 41 (rebooted without a clean shutdown), with BugcheckCode 0, no power-button press (LongPowerButtonPressDetected=false), no sleep in progress, and the lid open. No minidump was written. This is a spontaneous hard reset, not a user action and not a Windows bugcheck.
+  - **State just before:**
+    - The rerun had loaded sparse at 09:29 (fingerprint OK) and had just started e2e. The watchdog read 63–64 °C, near-idle, at its 09:30 and 09:31 minute samples.
+    - Host RAM had been exhausted minutes earlier: 0.66 GB free at 09:27. The rerun waited on its 2 GB host floor while holding the lease. Memory went to the peer's two CPU model lanes (3.9 and 3.65 GB), this session's CPU patching smoke test (3.2 GB, killed at 09:28, which brought free RAM back to 6 GB), and other apps.
+    - Last night's 3¾ h run under similar CPU and GPU load did not crash, so memory pressure is the main new factor. The cause is not established.
+  - **Nothing was written:** `runs/bank_confirm/sparse/` has no gen files, so the PREREG-1 §7 identical rerun simply restarts.
+  - **Mitigations:**
+    - **Watchdog v3.2:** it pauses GPU jobs (and blocks model loads) when available RAM < 3 GB and resumes at ≥ 5 GB. It logs RAM and CPU load every minute.
+    - **This session:** no model-loading CPU job while a confirmation GPU job runs. The patching test is deferred, and the S-roll finalisation is numpy-only.
+    - **Peer:** asked to keep ≥ 6 GB available during GPU jobs. They agreed, cut to one CPU lane at 6 threads, and gated their model loads on RAM.
+  - **Peer evidence (09:40):**
+    - At 09:30:01 there were 4.6 GB of free physical RAM and 7.3 GB of free commit, so memory was tight but not exhausted.
+    - ACPI zone `\_TZ.TZ01` read 86 °C at 09:34:32, about 2.5 min after boot with CPU at 1%. The peer's two CPU lanes (16 threads) were the main load at 09:31, while the GPU was at about 3.6 W.
+    - A thermal or power trip therefore fits at least as well as memory.
+  - **Response:** the watchdog now logs tz01 every minute; a background thread polls it every 30 s. It is logging only, with no threshold until its normal range is known. The idle baseline is 75–80 °C at 3–4% CPU.
+- **D-20 Post-confirmation GPU order (user, 09:50 2026-10-07: "run the patching test after confirmation. GPU is completely for your and your peer's use").** `master_chain.sh`, which `confirm_chain.sh` invokes after both arms:
+  1. **PREREG-1 §7 step 3 (CPU).** It runs only when both confirmation DONE files exist and no results file does: `verify_freeze.py && RCWM_THREADS=8 confirm_analysis.py && render_confirm.py`. `step` now returns its exit code, so a freeze failure blocks the analysis. The freeze was verified clean at 09:48 (Amendment 1 applied, no other differences).
+  2. **Per-item activation patching on the GPU,** under the lease: `run_patch.py --device cuda --out-name patch`, full pilot TEST one-frame set. It is being built by a workflow tested only on a tiny random Qwen3, so no real model is loaded during the confirmation run. It aborts at startup unless identity patches reproduce baselines exactly.
+  3. **Then the existing queue:** T2 s0 (screen, then s1/s2), likelihood, PVR, off-task Supa, retro, steering, dose and other arms, regeneration.
+- **I-24 Watchdog v3.3 and turn bundling (09:57).**
+  - **tz01 tripwire:** the shared flag is set when ACPI `\_TZ.TZ01` ≥ 98 °C, and resume also requires ≤ 90 °C. This matches the peer's CPU-lane guard.
+    - Under any real load tz01 sits flat at 95.1 °C, which is the CPU boost ceiling; near idle it reads 75–80 °C.
+    - It is polled every 30 s, so it is a coarse tripwire only.
+    - The swap was guarded: the flag was set by hand, the old watchdog stopped, and v3.3 started and cleared the flag. There was no unguarded gap.
+  - **Bundling:** the peer may run a bundle of jobs per turn, capped at 4.5 h of wall time, releasing at bundle end or on any crash.
+    - This session stays at one job per turn, because `rcwmt/runtime.py` is frozen. Its single jobs are about as long as the bundle cap.
+    - During this session's CPU-only PREREG-1 analysis step, the peer may use the card.
+- **I-22 addendum (14:05): the rerun is byte-identical to the interrupted run.** The sparse rerun finished at 11:58 (DONE.json written):
+  - e2e: 14,850 items in 3,385 s;
+  - chain_one: 4,050 chains in 2,177 s;
+  - chain_m1: 4,050 chains in 2,577 s.
+
+  Its `gen_e2e.jsonl` and `gen_chain_one.jsonl` have the same sha256 as the files moved aside from the interrupted run (70c428b5…, c77284a8…), and all 14,850 and 4,050 rows are identical. The confirmation instrument (greedy FP32, frozen code, Amendment 1 batching) is therefore deterministic across processes and reboots. The faster wall time reflects lower CPU contention. The moved files enter no analysis.
+- **I-25 Watchdog v3.3 stalled the Supa arm for about 30 min (14:03:38–14:33:34); fixed in v3.4.**
+  - **Bug:** an ordinary GPU-temperature pause (flag "87", set at 14:03:38) could not clear. v3.3 required tz01 ≤ 90 °C for every resume, but the peer's CPU lane held tz01 at 95–97 °C. The GPU sat at 58 °C, idle, holding the lease.
+  - **Fix (v3.4):** resume is reason-specific. Every resume needs AC power, GPU ≤ 66 °C, RAM ≥ 5 GB and tz01 < 98 °C. Only a pause that tz01 itself caused (flag reason "tz01 …") also needs tz01 ≤ 90 °C, which is reachable because the peer's CPU guard idles its lanes in the same 98/90 band.
+  - The swap was made while the job was already paused, and generation resumed at 14:33:34.
+  - The confirmation outputs are unaffected: the pause only delays batches.
+- **D-21 Patching test finalised (15:15).**
+  - **Code:** `scripts/run_patch.py`, sha256 d72c0912…. It was built and verified by a workflow with two adversarial verifiers, tested only on tiny random Qwen3 models: 56/56 checks pass. Design and decision table: `docs/patching/DESIGN.md`.
+  - **Where the delta is (checked directly from the safetensors, tensor by tensor; no model loaded):**
+    - Titan-Sparse − Supa is exactly zero in the embeddings, the final norm and blocks 0–7.
+    - In each of blocks 8–27 exactly 25.0% of entries are non-zero.
+    - The delta's energy is spread evenly over those blocks (4.6–5.9% each). Its size relative to the weights falls from 1.4e-3 (block 8) to 2.7e-4 (block 27).
+    - So both models compute identical residual streams through hidden_states[8], and the patching conditions at L=8 are exact no-ops that check the staging on the real GPU.
+  - **Conditions (23):**
+    - Prefill patches T2S_last, T2S_all, S2T_all and T2S_mis at L ∈ {8, 16, 24}.
+    - Difference swap T2S_dmis@24.
+    - Weight-spliced hybrids HlowT@L (Titan delta in blocks < L only) and HupT@L (delta in blocks ≥ L only) at L ∈ {12, 16, 20, 24}. These localise the computation along blocks 8–27 at every position, including decode, which prefill patches cannot reach. Every spliced block must hash-equal its source, or the run aborts.
+    - Size: 15,140 greedy generations, about 1–1.6 GPU-hours.
+  - **Reading:** FR = (acc − A_Supa)/(A_Titan − A_Supa) on changed items, with a parent-cluster bootstrap. HI means FR ≥ 0.7, LO means FR ≤ 0.2. These thresholds were fixed before any run.
+  - **Run:** `master_chain.sh` launches `run_patch.py --device cuda --out-name patch --layers 8,16,24 --hybrid-layers 12,16,20,24 --dmis-layers 24` after the PREREG-1 analysis.
+- **R-PREREG-1 (18:32, 2026-10-07): claim confirmed.** `confirm_analysis.py` ran once: rc 0, 1,430 s, 8 threads, after `verify_freeze.py` rc 0. It wrote `PREREG_1_RESULTS.json` (create-only), and `render_confirm.py` wrote `RESULTS_CONFIRM.md`.
+  - C0–C4 all PASS and all are strong passes.
+  - C0 is "pooled; driven by register": ledger −0.072 is above the −0.10 per-family threshold.
+  - C1 and C2 carry the floor qualifier: B3 and S are at or below F_touched.
+  - P's directional prediction holds.
+  - REPORT §3 uses the registered §8 wording with these qualifiers and limits.
+  - Integrity checked by hand: confirmation bank sha and n = 150/150. Full-precision values differ from the pilot dry run; C0 and C3 match it to 3 decimals by coincidence.
+- **D-22 RCWM-T2 train→eval pairing (user-approved; peer agreed about 21:00, 2026-10-07).** With `runs/t2/PAIRING.json` present and enabled, `run_t2.py train` holds ONE lease (`rcwm-t1:t2pair:<tag>`) and trains, then evaluates, that seed.
+  - **Conditions,** symmetric with the peer's bundles (I-24):
+    - ≤ 4.5 h from acquire;
+    - the eval starts only if its 2.5 h estimate fits the remaining budget;
+    - no eval stage starts within 0.5 h of the cap;
+    - unfinished stages are resumed by `master_chain.sh`'s existing `run_t2.py eval` line on the next turn;
+    - a crash releases the lease;
+    - every guard (flag, duty cycle, RAM, tz01) stays on.
+  - **Why the switch-file design:** `master_chain.sh` is running and must not be edited. The pairing lives in `run_t2.py`, sha256 ccbb2c6c19f76130…: `_train_body` and `_eval_body` were split out of the leased wrappers.
+  - **Behaviour:** the eval instrument is unchanged apart from deadline checks between stages, and pairing changes no output.
+  - **Test:** a CPU control-flow test with a tiny random Qwen3 passed 5/5: switch off, ample budget, deferral, mid-eval cap with resume, existing adapter.
+  - **Scope:** T2 pairs only. Every other job of this session stays one job per turn.
+- **R11 (21:50): post-hoc replication of R8, the integer-addition rule and R10 on the confirmation bank.**
+  - Run after PREREG-1's results were written, with frozen pilot settings and no tuning. A build → verify → fix workflow; the verifier found minor issues only, all fixed.
+  - Everything replicates: 0/84 S-roll contrasts lose significance, and only 1 changes sign (it was n.s. on the pilot).
+  - The integer-addition rule: right 383/415 where `state + add` = gold vs 2/333 where not.
+  - Details: `docs/replication/CONFIRM_REPLICATION.md`. Labelled exploratory everywhere.
+- **R12 (23:19, 2026-10-07): the skill is computed in blocks 8–15.** Patching ran cleanly: every sanity check exact, all hash gates passed. Weight-spliced hybrids:
+  - delta in blocks 8–15 only (41% of its energy): HI in all families (FR 0.85 / 1.00 / 0.97);
+  - delta in blocks 16–27 only (59%): LO in all families (0.09 / 0.00 / 0.00).
+
+  Details in RESULTS_PILOT R12. Exploratory.
+- **D-23 Course change (user asleep; standing instruction to change course when warranted): localised-delta interference test.**
+  - **Question:** does the dispensable block-16–27 part of the delta carry off-task drift?
+  - **Arms:** supa, sparse, loc8_15 and up16_27, measured on off-task first-token KL vs Supa, 64-token greedy agreement, answer-slot shift, and chain_one k=4 regret on pilot TEST.
+  - **Code:** `scripts/run_localized.py` + `localized_analysis.py`, built and verified on tiny models only.
+  - **Pre-stated reading:** "localisation reduces interference" iff the KL ratio loc8_15/sparse has an upper 95% CI < 0.8 AND regret(loc8_15) − regret(sparse) ≤ +0.05 in every family. "No reduction" if the ratio's lower CI > 0.9. Otherwise inconclusive.
+  - **Scheduling:** about 40 GPU-min, launched as a separate job gated to start only after the T2 s0 pair has finished, so the promised T2 result keeps its slot.
+  - **D-23 addendum (00:13, 2026-10-08).** The code was built and verified on tiny models only: 70/70 checks pass, minor issues all fixed.
+    - Hashes: `run_localized.py` sha 2dfff5f3…, `localized_analysis.py` sha 036043e7…
+    - The analysis applies the D-23 rule word for word. KL(arm‖supa) is the primary direction, declared in `docs/localized/DESIGN.md` before any data.
+    - It reports denominator sizes, and flags ratios with tiny denominators as uninterpretable; flags never change the verdict.
+    - P is marked low-headroom for regret, so P's skill evidence is its one-step FR.
+    - Launched at 00:13 via `scripts/launch_localized.cmd` with `--wait-for runs/t2/t2_s0/eval.json` (max 14 h). It holds no lease and no torch until T2 s0's eval is written.
+    - Expected GPU time about 1.1–1.25 h under one lease (`rcwm-t1:localized`).
+- **R13 (01:40, 2026-10-08): T2 seed 0.**
+  - **Run:** D-22 pair, 5,743 s in one turn. The screen passed (+0.42), so s1/s2 are queued by `master_chain.sh`.
+  - **Analysis:** frozen `t2_analysis.py` (hash verified). D-19 "rule learned" FAIL: G1, G3, G4, G6 and G7 fail; G2 and G5 pass; G8 pending.
+  - **Ledger is fixed:** void 1.00, chain k=4 0.02 → 0.68, regret 0.507 → 0.038.
+  - **P is a copy shortcut:** false copy 0.02 → 0.55; app-changed steps get worse.
+  - **R is unchanged.**
+  - Reported in RESULTS_PILOT R13 and REPORT §7, labelled exploratory. The same-session OFF chains reproduce the stored Titan chains exactly.
+- **D-24 PREREG-2 (confirm the T2 ledger effect on a fresh sealed bank): drafting started 01:50, 2026-10-08; NOT frozen.** A workflow is drafting `PREREG_2_DRAFT.md`, building `data/bank_confirm2.json` with the frozen builder and no model call, and writing `confirm2_gen.py` and `confirm2_analysis.py` (the latter dry-run on pilot T2 s0). Then a 3-lens adversarial review.
+  - **Freeze condition, stated before any seed-1/2 output exists** (no `runs/t2/t2_s1` or `t2_s2` directory exists yet):
+    - Freeze and run PREREG-2 only if T2 seeds 1 AND 2 each show a ledger chain_one k=4 regret drop (OFF − ON, pilot TEST, D-19 instrument and frozen analysis) ≥ 0.15 with a 95% paired CI excluding 0.
+    - If either seed fails, PREREG-2 is not run as drafted, and the seed instability is reported.
+    - The registered artifact is the seed-0 adapter, the only one fixed before this decision. Seeds 1/2 serve only as a replication gate and are never used to pick an adapter.
+  - **D-24 addendum (02:55, 2026-10-08): the PREREG-2 draft is freeze-ready; NOT frozen.**
+    - **State at writing:** `runs/t2/` holds only t2_s0. Seed 1 is still queued behind the peer's bundleC.
+    - **Files and hashes:**
+      - `PREREG_2_DRAFT.md` sha 59588a7b…
+      - `data/bank_confirm2.json` sha fafb13e5…: frozen builder, seed 20261020, 150 parents per family, 0 payload collisions across 293,851 excluded payloads, no model call.
+      - `scripts/confirm2_gen.py` sha 4253a420…
+      - `scripts/confirm2_analysis.py` sha 1c158a4e…
+      - Pre-seed snapshots `docs/prereg2/PRE_SEED_SNAPSHOT_{1,2}.json`.
+      - Registered artifact: the seed-0 adapter (adapter_model.safetensors sha 92bc7c74…).
+    - **Primaries (ledger chain_one k=4, ON − OFF same process, Holm):**
+      - P1: regret ≤ −0.15;
+      - P2: exact ≥ +0.25.
+      - A reversal check comes first. The claim is confirmed only if both pass. Joint power is about 0.88 at P1 = 0.20.
+    - **Forgetting guard:** a registered re-measurement with PASS/FAIL/INCONCLUSIVE outcomes; not part of the claim.
+    - **Freeze:** mechanical, via `confirm2_gen.py --freeze` after seeds 1 and 2. It runs the frozen `t2_analysis.py` and applies the D-24 rule; no number is read first.
+    - **Decided under the user's overnight delegation (open questions kept at their conservative defaults):** P2 stays at the D-19 value +0.25, and the guard stays outside the claim. Both are listed for the user's review. GPU time: 1.8 h at the observed rate, or 2 turns at the planning rate.
+- **I-26 Second watchdog stall (05:55:19–06:02:49, 2026-10-08); fixed in v3.5.**
+  - **Bug:** a GPU-temperature pause (flag "82") could not clear. v3.2–v3.4 required RAM ≥ 5 GB for every resume, while available RAM sat at 4.0–4.5 GB.
+  - **Where the RAM went:** it had already fallen to about 4 GB at 05:46, during the peer's overnight bundle and before the D-23 job loaded. Committed memory was 42.3 GB of a 52.2 GB limit. Non-paged pool was 2.8 GB. The D-23 process shows 7.85 GB private against 1.32 GB working set, probably CUDA host allocations.
+  - **Detection:** caught by the background stall detector after 5 min.
+  - **Fix (v3.5):** resume hysteresis is reason-specific for RAM as well. A RAM-caused pause needs ≥ 5 GB; any other pause needs RAM ≥ 3 GB, i.e. out of the pause zone. Together with I-25, every guard keeps its pause threshold, and only the guard that caused a pause applies its stricter resume threshold.
+  - The swap was made while paused, and the job resumed at 06:02:49.
+- **I-27 System memory exhaustion from leaked process objects (06:05–, 2026-10-08); all GPU work halted pending user action.**
+  - **Peer diagnosis, corroborated here:** RevoUninHelper.exe (pid 13508, elevated) holds 380k handles that keep growing. It appears to keep a handle to every process ever started, so every exited process stays in kernel memory.
+  - **Effect:** available memory fell from about 39 GB of commit headroom yesterday to 0.55–0.8 GB available now. Commit is 45.7–47.2 of 52.2 GB; non-paged pool is 2.8 GB.
+  - **Our contribution:** this watchdog spawned `nvidia-smi` every 1.5 s plus a PowerShell process every 30 s for tz01 (about 40 processes/min). The peer's loggers and both sessions' tool calls added more.
+  - **Damage:**
+    - the D-23 localised job (pid 803372) was killed at 06:07 but is stuck in termination: 1 thread, 8.15 GB private, still the lease holder;
+    - the peer has a similar stuck process;
+    - the watchdog stopped logging at 06:06:44, probably blocked on an `nvidia-smi` child;
+    - new processes may hang.
+  - **Actions:**
+    - the queue (`confirm_chain`/`master_chain`) and the waiting T2 s1 pair were stopped at 06:07. All are idempotent and relaunch from their completed outputs.
+    - watchdog v3.6 is written but not running: NVML/PDH in-process via `scripts/sensors_noproc.py`, no per-sample subprocess. It is to be started after the machine recovers.
+  - **Needs the user (elevation or reboot):** end RevoUninHelper or reboot. No GPU work runs until then.
+  - **Relaunch plan:** watchdog v3.6, then `launch_confirm.cmd` (skips everything done, continues with the T2 s1/s2 pairs), then `launch_localized.cmd` (its gate is satisfied; it resumes its stages).
+- **I-27 resolved (08:22–08:28, 2026-10-08).**
+  - **Reboot:** the user rebooted at 08:22:49. Memory is healthy again: 23.4 GB available, commit 9.3 of 52.2 GB, non-paged pool 0.52 GB.
+  - **Leak still possible:** RevoUninHelper restarted with the system (pid 11296, about 800 handles). The leak will rebuild in proportion to process spawning. The user is asked to disable Revo's real-time installation monitor.
+  - **Relaunched:**
+    - Watchdog v3.6 at 08:25: NVML/PDH in-process, 0 `nvidia-smi` spawns.
+    - The D-23 localised job at 08:26. It reclaimed the stale lock of dead pid 803372 under the normal rule; the peer had agreed it takes this turn. It resumed from its recorded stages, reusing Supa's off-task outputs.
+    - The queue at 08:27. It skipped all completed steps; the screen re-prints PASS, and the T2 s1 pair is waiting in the lease.
+  - **Monitoring:** long-lived `tail -F | awk` watchers only, with no per-iteration process spawns.
+- **D-25 User decision on PREREG-2's open questions (08:35, 2026-10-08): "Use your recommendations."**
+  - P2 stays at ≥ +0.25, the D-19 chain gate fixed before any T2 data.
+  - The forgetting guard stays registered as a re-measurement outside "claim confirmed": only a FAIL changes the headline (§5b).
+  - Both match the draft as written (`PREREG_2_DRAFT.md` sha 59588a7b…, unchanged), so no file was edited.
+  - Recorded before any T2 seed-1/2 output exists (`runs/t2/` holds only t2_s0).
+  - The freeze remains mechanical: `confirm2_gen.py --freeze` after seeds 1 and 2, per D-24.
+- **R14 (09:10, 2026-10-08): D-23 verdict "localisation reduces interference".** The analysis hash was verified, and the rule was applied as pre-stated.
+  - KL ratio loc8_15/sparse: 0.680 [0.617, 0.735].
+  - Regret loc8_15 − sparse: L +0.017, P +0.047 (low headroom), R −0.005.
+  - The upper delta (blocks 16–27) alone causes 17% of Titan's KL drift.
+  - The run also gives the G8 reference: KL(Supa‖Sparse) = 0.129 nats, against T2 s0's KL(OFF‖ON) = 0.064. Descriptive only; the formal G8 input is produced by the queue later.
+  - **Process rule from the peer-reported race at 08:53:59:** never more than one RCWM process waiting for the GPU; extra jobs go into the single queue. Reason: `rcwmt/runtime.alternate_turn` checks the turn only on entry, and runtime.py is frozen through PREREG-2.
+- **D-26 L8-15 as a candidate experimental core (user, about 09:30, 2026-10-08: "start step 1 for L8-15, and proceed with your recommendations").**
+  - **Workflow started (no GPU):**
+    - map the programme's retention and acquisition instruments and their SPENT/barred status, read-only from the vault and records trees;
+    - draft PREREG-L1, a promotion screen modelled on SPARSE-001/PROMOTION.json, honest that the 8–15 cut was chosen after seeing pilot data;
+    - adversarial review;
+    - a runner tested on tiny models only.
+  - **GPU run:** inserted into the single RCWM queue, keeping the one-waiter rule. The queue will be stopped and relaunched at a safe point, while its next job waits in the lease during the peer's turn.
+  - **Nothing goes into the vault or to Hugging Face without the user's explicit go-ahead.**
+- **D-27 Queue restructured for PREREG-2 and L1 (11:03, 2026-10-08).**
+  - **State:** the T2 s1 pair finished at 10:29 (5,746 s; `eval.json` written). Its numbers were NOT read: the PREREG-2 §9 freeze tool computes them first.
+  - **Change:** while the s2 pair was the only job waiting (the peer holds the turn), the queue was stopped and `master_chain.sh` edited. After the T2 seed loop it now runs:
+    1. the PREREG-2 freeze (CPU, mechanical gate; `--d23-offtask-seen yes`, because R14's off-task numbers were read at 09:10);
+    2. if frozen, the registered GPU job (a second call resumes if it spans turns) and the registered analysis once;
+    3. `scripts/queue_hooks/*.sh`, sourced in order. A frozen L1 screen joins the queue there without editing a running script.
+  - **Relaunch:** at 11:03, with one RCWM waiter (s2 pair).
+  - **Freeze compatibility:** the freeze tool's locked set is the draft plus 3 scripts (`SNAPSHOT_TRACKED`). DECISIONS.md appends do not block it.
+- **PREREG-2 FROZEN (15:34:35, 2026-10-08)** by `confirm2_gen.py --freeze --d23-offtask-seen yes`, run mechanically by the queue right after the T2 s2 pair.
+  - **§9 gate passed:** ledger chain_one k=4 regret drop s1 +0.410 [+0.291, +0.537], s2 +0.483 [+0.366, +0.606].
+  - **Files:** `PREREG_2.md` sha f90f2258…, plus `PREREG_2_FREEZE.json`.
+  - **GPU job:** registered, started 15:34:36, and yielded to the peer's turn per the alternation rule. Stages A0 → S1–S6, possibly over two turns, then the registered analysis once.
+  - **Three-seed T2 summary:** RESULTS_PILOT R13 addendum.
+- **D-28 Packaging policy after peer review (about 16:20, 2026-10-08).** The peer agreed with both recommendations and added two cautions from BWM-001 F-01/F-03/F-06 (shortcuts that stay in-distribution and fail only out of range). Adopted:
+  - **(a) L8-15:** before PREREG-L1 freezes, add OOD and rule-extrapolation probes from data not used to choose the cut, with L8-15 required to be non-inferior to Titan-Sparse, the paired arm. FP32 only.
+  - **(b) T2 adapter:** never a dense merge, even if PREREG-2 confirms. It would be packaged unmerged and ledger-scoped on frozen Titan-Sparse, so the adapter-off base stays recoverable.
+  - **Titan-Sparse core:** stays byte-for-byte (sha a28629c9…); peer adapters depend on it.
+  - **Publication:** nothing goes into the vault or to Hugging Face without the user's explicit go-ahead.
+- **D-29 PREREG-L1 draft complete; OOD amendment in progress (about 16:45, 2026-10-08).**
+  - **Draft:** `docs/l1/PREREG_L1_DRAFT.md` with runner `scripts/l1_screen.py`.
+    - Built by a discover → design → 3-lens adversarial review → revise workflow, read-only on the vault and records.
+    - Decision rule C0–C5: C0 identity, comparability and anchor parity (the parity gate runs before L8-15 is loaded); C1 SELECT-VIEWS-001 floors; C2 per-family acquisition non-inferiority vs Titan-Sparse; C3 arithmetic ≥ 62; C4 retained ≥ 37 and ≥ Titan-Sparse − 2; C5 drift ratio upper bound < 0.80 on 456 fresh off-task prompts.
+    - Long context and UNKNOWN (SPENT bank): report-only.
+    - The transformers 5.14.1 vs 4.51.3 deviation is named, with the parity gate registered as its replacement.
+  - **Open questions:** the drafter's defaults are adopted under the user's instruction to proceed with recommendations: C5 decides; margins as written; no rerun after NON-COMPARABLE; codename `Titan-Sparse-L8-15`.
+  - **Q7 disclosure (not resolved):** 20 of R14's 248 off-task prompts come from the source pools of the reserved HSKILL-CONFIRM-002 bank. Whether they are its reserved rows is unknown, because checking would open the reserved file. They are excluded from the L1 drift prompts, and the reserved file has not been opened.
+  - **Q9:** D-28(a) OOD probes are being added as criterion C6: a fresh 600-row rule-extrapolation bank, no model call, excluded against every used set; per-stratum paired non-inferiority vs Titan-Sparse.
+  - **Freeze:** PREREG-L1 freezes only after C6 is in and all checks pass. The GPU run is queued via `scripts/queue_hooks/`.
+- **D-30 PREREG-L1 FROZEN (17:52:49, 2026-10-08)**, under the user's D-26 instruction. Before freezing: integrity 70/70, parity-cpu 17/17, tiny tests 92/92.
+  - **Files:**
+    - `docs/l1/PREREG_L1_DRAFT.md` sha 4421a92baff6f893…
+    - `scripts/l1_screen.py` sha 568bb5f1be0160bb…
+    - `docs/l1/PREREG_L1_FREEZE.json` sha 0a284d2bbcc437f3…
+    - expected L8-15 weights sha 6282b456…
+    - OOD bank sha ac665c11… (600 rows, 6 strata, 0 overlap with 306,014 excluded payloads)
+  - **Decision rule:** C0 identity, comparability and the anchor parity gate (L8-15 is never loaded if parity fails); C1 SELECT-VIEWS-001 floors; C2 acquisition non-inferiority vs Titan-Sparse (−8/−5/−6, no detected loss); C3 arithmetic ≥ 62; C4 retained ≥ 37 and ≥ Titan-Sparse − 2; C5 drift-ratio upper bound < 0.80 on 456 fresh prompts; C6 OOD non-inferiority per stratum (≥ −5, no detected loss). The OOD stages run only after the gate.
+  - **Promotion itself still needs the operator's explicit go-ahead.**
+  - **Queue:** `scripts/queue_hooks/50_l1_screen.sh` installed byte-for-byte from the frozen draft (sha 1fc8a0c4…). The running chain sources it after the PREREG-2 steps: build (CPU), then run (GPU, one lease `rcwm-t1:l1screen`, about 2.1–2.6 h expected), then analyze.
+- **I-28 Disclosure: the programme's own exclusion harvester byte-reads the reserved HSKILL-CONFIRM-002 files.**
+  - **The path:** `rcwmt.bank.load_exclusions()` calls the FDS `generate.harvest_exclusions()`, which collects payloads from every file in the records tree, including the 4 `HSKILL_CONFIRM_V2*` files.
+  - **What used it:** every RCWM bank built with it read those payloads, solely to exclude them: bank_pilot, bank_confirm, bank_s4000, the T2 data and supplement, bank_confirm2.
+  - **What did not happen:** no model ever saw those rows; nothing was trained, selected or confirmed on them; no row content was printed or inspected.
+  - **Status question for the operator:** the bank is "UNSPENT_AND_UNREAD". Whether an exclusion-only harvest counts as a read is the operator's decision.
+  - **Since D-30:** L1 tooling skips those files by name. L1 integrity runs do read the retired HSKILL-CONFIRM-001.
+  - **I-28 addendum:** the peer checked BWM-001. It never calls `harvest_exclusions`, `load_exclusions` or `rcwmt.bank`, and never touches the records tree or any HSKILL file (grep over all .py: 0 hits). Its data comes from its own generators plus vendored PlanBench assets. Only RCWM-T1's bank builds are affected.
+- **R-PREREG-2 (18:38, 2026-10-08): CONFIRMED (strong pass).**
+  - **Primaries:**
+    - P1 ledger chain_one k=4 regret 0.544 → 0.056, −0.488 [−0.535, −0.443];
+    - P2 exact 0.029 → 0.698, +0.668 [+0.642, +0.695];
+    - Holm p 0.0002 for both.
+  - **Guard:** PASS, ratio 0.50 [0.34, 0.70]. Cumulative drift is 1.94× KL(Supa‖Sparse).
+  - **Predictions:** D1–D4 all hold.
+  - **Run:** the GPU job finished all stages in one turn; the analysis ran once (`PREREG_2_RESULTS.json` sha 3b42e0671d5a5fb1…).
+  - **Reported:** REPORT §3b, registered wording and limits verbatim.
+  - **Packaging:** per D-28, any packaging of this adapter stays unmerged and ledger-scoped.

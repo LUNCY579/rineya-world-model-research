@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RCWM precommitted trajectory v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "parent_id",
+    "counterfactual_family_id",
+    "episode_id",
+    "split",
+    "environment",
+    "plan_origin",
+    "decision_time",
+    "observations",
+    "actions",
+    "actual_outcomes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "parent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "counterfactual_family_id": {
+      "type": "string"
+    },
+    "episode_id": {
+      "type": "string"
+    },
+    "split": {
+      "enum": [
+        "train",
+        "dev",
+        "test"
+      ]
+    },
+    "environment": {
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "plan_origin": {
+      "const": "open_loop_precommitted"
+    },
+    "decision_time": {
+      "type": "number"
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "available_at",
+          "value"
+        ],
+        "properties": {
+          "kind": {
+            "const": "observed"
+          },
+          "available_at": {
+            "type": "number"
+          },
+          "value": {
+            "type": [
+              "string",
+              "object",
+              "array",
+              "number",
+              "boolean"
+            ]
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action_id",
+          "operator",
+          "arguments",
+          "executor_version",
+          "parents"
+        ],
+        "properties": {
+          "action_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "arguments": {
+            "type": "object"
+          },
+          "executor_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "parents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "budget": {
+            "type": "object"
+          },
+          "proposed_start": {
+            "type": "number"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "actual_outcomes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action_id",
+          "start",
+          "end",
+          "status",
+          "features",
+          "feature_valid",
+          "terminated",
+          "truncated"
+        ],
+        "properties": {
+          "action_id": {
+            "type": "string"
+          },
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "success",
+              "invalid_precondition",
+              "timeout",
+              "tool_error",
+              "refused",
+              "noop"
+            ]
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 1
+          },
+          "feature_valid": {
+            "type": "array",
+            "items": {
+              "type": "boolean"
+            },
+            "minItems": 1
+          },
+          "terminated": {
+            "type": "boolean"
+          },
+          "truncated": {
+            "type": "boolean"
+          },
+          "label_source": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "goal_weights": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "feature_schema": {
+      "type": "string"
+    },
+    "capture": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

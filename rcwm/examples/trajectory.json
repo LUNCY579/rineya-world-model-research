@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "parent_id": "toy-parent-001",
+  "counterfactual_family_id": "toy-parent-001",
+  "episode_id": "toy-parent-001-safe",
+  "split": "test",
+  "environment": {
+    "name": "keydoor",
+    "version": "synthetic-v1",
+    "snapshot_sha256": null
+  },
+  "plan_origin": "open_loop_precommitted",
+  "decision_time": 0.0,
+  "observations": [
+    {
+      "kind": "observed",
+      "available_at": 0.0,
+      "value": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "action_id": "a0",
+      "operator": "take_key",
+      "arguments": {},
+      "executor_version": "synthetic-v1",
+      "parents": [],
+      "budget": {
+        "max_steps": 1
+      }
+    },
+    {
+      "action_id": "a1",
+      "operator": "open_door",
+      "arguments": {},
+      "executor_version": "synthetic-v1",
+      "parents": [
+        "a0"
+      ],
+      "budget": {
+        "max_steps": 1
+      }
+    },
+    {
+      "action_id": "a2",
+      "operator": "collect",
+      "arguments": {},
+      "executor_version": "synthetic-v1",
+      "parents": [
+        "a1"
+      ],
+      "budget": {
+        "max_steps": 1
+      }
+    }
+  ],
+  "actual_outcomes": [
+    {
+      "action_id": "a0",
+      "start": 0.0,
+      "end": 1.0,
+      "status": "success",
+      "features": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "feature_valid": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "terminated": false,
+      "truncated": false,
+      "label_source": "exact_simulator"
+    },
+    {
+      "action_id": "a1",
+      "start": 1.0,
+      "end": 2.0,
+      "status": "success",
+      "features": [
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "feature_valid": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "terminated": false,
+      "truncated": false,
+      "label_source": "exact_simulator"
+    },
+    {
+      "action_id": "a2",
+      "start": 2.0,
+      "end": 3.0,
+      "status": "success",
+      "features": [
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "feature_valid": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "terminated": false,
+      "truncated": true,
+      "label_source": "exact_simulator"
+    }
+  ],
+  "goal_weights": [
+    0,
+    0,
+    10,
+    -20,
+    -1
+  ],
+  "feature_schema": "synthetic_v1",
+  "capture": null
+}

@@ -1,0 +1,123 @@
+== 1. labels and prompt rendering
+   rows 2101; mismatches: none
+== 2. sub-structure inside strata
+   train:
+      add/nowrap         copy-equal                     8
+      add/nowrap         value<0                        29
+      add/nowrap         value==0 mod 97                8
+      add/posted         amount=0                       6
+      add/posted         status=posted                  125
+      add/void           status=void                    42
+      add/wrap           value<0                        21
+      applicable         changed                        168
+      applicable         no-op (copy)                   82
+      conditional/gt     copy-equal                     13
+      conditional/gt     nowrap                         73
+      conditional/gt     value<0                        24
+      conditional/gt     value==0 mod 97                13
+      conditional/gt     wrap                           2
+      conditional/gt     |other-thr|<=2                 1
+      conditional/le     copy-equal                     9
+      conditional/le     nowrap                         73
+      conditional/le     value<0                        28
+      conditional/le     value==0 mod 97                9
+      conditional/le     wrap                           2
+      conditional/le     |other-thr|<=2                 2
+      inapplicable       applied-anyway == copy         78
+      inapplicable       applied-anyway changes state   172
+      inapplicable       both                           17
+      inapplicable       pre_off set                    44
+      inapplicable       pre_on missing                 189
+      mix/nowrap         copy-equal                     2
+      mix/nowrap         value<0                        33
+      mix/wrap           copy-equal                     1
+      mix/wrap           value<0                        37
+      scale/posted       scale amount=0                 4
+      scale/posted       scale amount=1                 16
+      scale/posted       status=posted                  125
+      scale/void         status=void                    42
+      swap               value<0                        20
+      transfer/posted    amount=0                       8
+      transfer/posted    status=posted                  125
+      transfer/void      status=void                    42
+   eval:
+      add/nowrap         copy-equal                     2
+      add/nowrap         value<0                        16
+      add/nowrap         value==0 mod 97                2
+      add/posted         amount=0                       1
+      add/posted         status=posted                  40
+      add/void           status=void                    40
+      add/wrap           value<0                        15
+      applicable         changed                        26
+      applicable         no-op (copy)                   14
+      conditional/gt     copy-equal                     4
+      conditional/gt     nowrap                         39
+      conditional/gt     value<0                        18
+      conditional/gt     value==0 mod 97                4
+      conditional/gt     wrap                           1
+      conditional/le     copy-equal                     2
+      conditional/le     nowrap                         37
+      conditional/le     other==threshold               1
+      conditional/le     value<0                        21
+      conditional/le     value==0 mod 97                2
+      conditional/le     wrap                           3
+      conditional/le     |other-thr|<=2                 3
+      inapplicable       applied-anyway == copy         16
+      inapplicable       applied-anyway changes state   24
+      inapplicable       both                           3
+      inapplicable       pre_off set                    7
+      inapplicable       pre_on missing                 30
+      mix/nowrap         copy-equal                     1
+      mix/nowrap         value<0                        14
+      mix/wrap           copy-equal                     2
+      mix/wrap           value<0                        12
+      scale/posted       scale amount=0                 1
+      scale/posted       scale amount=1                 7
+      scale/posted       status=posted                  40
+      scale/void         status=void                    40
+      swap               value<0                        23
+      transfer/posted    amount=0                       1
+      transfer/posted    status=posted                  40
+      transfer/void      status=void                    40
+   R value range train: -8 11 distinct 20
+   R threshold range train: 0 96
+   L amounts train: range -9 12 most common [(1, 80), (-1, 71), (2, 67), (-2, 62), (12, 26), (6, 20), (0, 20), (-6, 20)]
+   L/R tick train range 1 99
+== 3. train/eval disjointness
+   payload          eval rows sharing key with train:    0/600  within-train dups 0  within-eval dups 0  {}
+   operative        eval rows sharing key with train:    1/600  within-train dups 5  within-eval dups 0  {'P|applicable': 1}
+   answer-equiv     eval rows sharing key with train:   28/600  within-train dups 116  within-eval dups 3  {'P|inapplicable': 25, 'P|applicable': 1}
+   (before,answer)  eval rows sharing key with train:   45/600  within-train dups 186  within-eval dups 4  {'P|inapplicable': 32, 'P|applicable': 11}
+== 4. overlap with pilot TEST chain transitions (oracle-anchored) and banks
+   T2 train vs pilot-TEST L: steps 832  payload 0  operative 0  answer-equiv 0  {}
+   T2 train vs pilot-TEST P: steps 896  payload 0  operative 7  answer-equiv 299  {'operative@applicable': 7, 'answer-equiv@applicable': 7, 'answer-equiv@inapplicable': 292}
+   T2 train vs pilot-TEST R: steps 832  payload 0  operative 0  answer-equiv 0  {}
+   T2 eval vs pilot-TEST L: steps 832  payload 0  operative 0  answer-equiv 0  {}
+   T2 eval vs pilot-TEST P: steps 896  payload 0  operative 3  answer-equiv 73  {'operative@applicable': 3, 'answer-equiv@applicable': 3, 'answer-equiv@inapplicable': 70}
+   T2 eval vs pilot-TEST R: steps 832  payload 0  operative 0  answer-equiv 0  {}
+   P distinct action semantics: T2 train 349, pilot TEST 137, shared 42
+   payload hits vs all pilot+confirm transitions: train 0, eval 0
+   twin key present: pilot 0 confirm 450
+== 5. tokenization vs vendored encode_pair
+   runtime tokenizer dir == trainer core dir: True | lm.py core path string present: True
+   eos/pad 151645 151643 | eos token ['<|im_end|>']
+   boundary merges (tok(p+t) != tok(p)+tok(t)): 0; special ids in target: 0; max len 161 (train_generic --max-len 512; train_sft default 320)
+   train supervised tokens (target+EOS) by family: L: rows 0.334 tokens 0.512 (mean 21.0/row), P: rows 0.333 tokens 0.084 (mean 3.4/row), R: rows 0.333 tokens 0.404 (mean 16.6/row)
+      L add/posted         rows  125  sup-token share 0.127
+      L add/void           rows   42  sup-token share 0.043
+      L scale/posted       rows  125  sup-token share 0.130
+      L scale/void         rows   42  sup-token share 0.042
+      L transfer/posted    rows  125  sup-token share 0.127
+      L transfer/void      rows   42  sup-token share 0.042
+      P applicable         rows  250  sup-token share 0.043
+      P inapplicable       rows  250  sup-token share 0.041
+      R add/nowrap         rows   65  sup-token share 0.053
+      R add/wrap           rows   60  sup-token share 0.047
+      R conditional/gt     rows   75  sup-token share 0.061
+      R conditional/le     rows   75  sup-token share 0.061
+      R mix/nowrap         rows   85  sup-token share 0.068
+      R mix/wrap           rows   90  sup-token share 0.074
+      R swap               rows   50  sup-token share 0.041
+== 6. stored Titan-Sparse pilot chains: P per-step accuracy by frame (oracle-anchored)
+   chain_one: app-changed 0.500 (n=106), app-noop 0.000 (n=60), inapp 0.009 (n=117), inapp: answered applied-anyway 0.325 (n=117)
+   chain_m1: app-changed 0.461 (n=102), app-noop 0.000 (n=56), inapp 0.034 (n=118), inapp: answered applied-anyway 0.263 (n=118)

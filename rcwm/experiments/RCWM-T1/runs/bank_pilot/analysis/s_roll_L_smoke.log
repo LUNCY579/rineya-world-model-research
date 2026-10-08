@@ -1,0 +1,73 @@
+[    0.0s] S-roll family L crit=exact stage=all; torch 2.6.0+cu124 threads=2 cuda_visible='' cuda_available=False smoke=True
+[    1.5s] verified 19200 gold one-step transitions against the FDS oracle; chained gold == bank k=1/2/4 gold and phi for every candidate
+[    1.6s] Titan's training rows: 384 rows (0881c027d166...), every reference == env.step and the FDS oracle; system prompts == env.SYSTEM_ONE
+[    2.5s] [L] transitions train raw 4256 dedup 4245 | dev 1312 | test 832 (26 parents) | TEST inputs seen in TRAIN 0.000 (0 parents) | Titan rows 128 {'transfer|posted': 62, 'transfer|void': 11, 'void|any': 17, 'add|posted': 22, 'scale|void': 3, 'scale|posted': 27, 'add|void': 3} | degenerate TEST parents k1/2/4 [0, 0, 0]
+[    2.7s] [L] SANITY oracle one-step rollout: regret {1: 0.0, 2: 0.0, 4: 0.0} exact {1: 1.0, 2: 1.0, 4: 1.0}
+[    3.1s] [L] SANITY Titan regrets (parent-mean and last-parsed fill) vs PREREG_1_DRYRUN: max |diff| = 4.47e-08; chain_one k4 0.5073, last-parsed 0.5090
+[    3.1s] [L] Titan parse rate chain_one k1/2/4 {1: 0.9951923076923077, 2: 0.9951923076923077, 4: 0.9951923076923077} | anatomy {'void_n': 20, 'void_titan_eq_applied_as_posted': 9, 'void_titan_right': 2}
+[   10.9s]   select[exact] L  FULL A {'head': 'cls_delta', 'encoding': 'sym', 'hidden': 64, 'depth': 1, 'lr': 0.003} dev_exact=0.1776 best_step=[200]/[200] (7.8s)
+[   11.4s]   select[exact] L  FULL A {'head': 'reg_delta', 'encoding': 'sym', 'hidden': 64, 'depth': 1, 'lr': 0.003} dev_exact=0.0648 best_step=[200]/[200] (0.5s)
+[   12.0s]   select[exact] L  FULL A {'head': 'gated_delta', 'encoding': 'sym', 'hidden': 64, 'depth': 1, 'lr': 0.003} dev_exact=0.1921 best_step=[150]/[200] (0.5s)
+[   12.0s]   select[exact] L  FULL CHOSEN {'head': 'gated_delta', 'encoding': 'sym', 'hidden': 64, 'depth': 1, 'lr': 0.003} dev_exact=0.1921
+[   12.5s]   select[exact] L  N128 A {'head': 'cls_delta', 'encoding': 'sym', 'hidden': 64, 'depth': 1, 'lr': 0.003} dev_exact=0.1723 best_step=[50]/[200] (0.5s)
+[   12.8s]   select[exact] L  N128 A {'head': 'reg_delta', 'encoding': 'sym', 'hidden': 64, 'depth': 1, 'lr': 0.003} dev_exact=0.0008 best_step=[50]/[200] (0.3s)
+[   13.2s]   select[exact] L  N128 A {'head': 'gated_delta', 'encoding': 'sym', 'hidden': 64, 'depth': 1, 'lr': 0.003} dev_exact=0.1273 best_step=[50]/[200] (0.4s)
+[   13.2s]   select[exact] L  N128 CHOSEN {'head': 'cls_delta', 'encoding': 'sym', 'hidden': 64, 'depth': 1, 'lr': 0.003} dev_exact=0.1723
+[   13.2s] [L] selection written to s_roll_select_L_smoke.json (10s)
+[   13.8s]   fit[exact] L FULL              seed17      n= 4245 dev_exact=0.1921 step=150/200 (0.5s)
+[   14.2s]   fit[exact] L FULL              seed18      n= 4245 dev_exact=0.1913 step=200/200 (0.5s)
+[   14.6s]   fit[exact] L FULL              seed19      n= 4245 dev_exact=0.1959 step=150/200 (0.4s)
+[   15.0s]   fit[exact] L FULL              seed20      n= 4245 dev_exact=0.1845 step=200/200 (0.4s)
+[   15.6s]   fit[exact] L FULL              seed21      n= 4245 dev_exact=0.1974 step=150/200 (0.5s)
+[   16.0s]   fit[exact] L MATCHED128        r0_seed17   n=  128 dev_exact=0.1723 step=50/200 (0.4s)
+[   16.5s]   fit[exact] L MATCHED128        r0_seed18   n=  128 dev_exact=0.1684 step=50/200 (0.5s)
+[   17.0s]   fit[exact] L MATCHED128        r0_seed19   n=  128 dev_exact=0.1837 step=50/200 (0.4s)
+[   17.5s]   fit[exact] L MATCHED128        r0_seed20   n=  128 dev_exact=0.1745 step=150/200 (0.5s)
+[   17.9s]   fit[exact] L MATCHED128        r0_seed21   n=  128 dev_exact=0.1784 step=50/200 (0.5s)
+[   18.4s]   fit[exact] L MATCHED128        r1_seed17   n=  128 dev_exact=0.1791 step=50/200 (0.4s)
+[   18.8s]   fit[exact] L MATCHED128        r1_seed18   n=  128 dev_exact=0.1738 step=200/200 (0.4s)
+[   19.2s]   fit[exact] L MATCHED128        r1_seed19   n=  128 dev_exact=0.1768 step=50/200 (0.4s)
+[   19.5s]   fit[exact] L MATCHED128        r1_seed20   n=  128 dev_exact=0.1814 step=150/200 (0.3s)
+[   19.9s]   fit[exact] L MATCHED128        r1_seed21   n=  128 dev_exact=0.1753 step=50/200 (0.3s)
+[   20.3s]   fit[exact] L MATCHED128        r2_seed17   n=  128 dev_exact=0.1753 step=200/200 (0.4s)
+[   20.8s]   fit[exact] L MATCHED128        r2_seed18   n=  128 dev_exact=0.1776 step=200/200 (0.5s)
+[   21.1s]   fit[exact] L MATCHED128        r2_seed19   n=  128 dev_exact=0.1768 step=50/200 (0.3s)
+[   21.5s]   fit[exact] L MATCHED128        r2_seed20   n=  128 dev_exact=0.1776 step=150/200 (0.4s)
+[   22.0s]   fit[exact] L MATCHED128        r2_seed21   n=  128 dev_exact=0.1822 step=200/200 (0.5s)
+[   22.3s]   fit[exact] L MATCHED128        r3_seed17   n=  128 dev_exact=0.1860 step=150/200 (0.3s)
+[   22.8s]   fit[exact] L MATCHED128        r3_seed18   n=  128 dev_exact=0.1784 step=200/200 (0.5s)
+[   23.2s]   fit[exact] L MATCHED128        r3_seed19   n=  128 dev_exact=0.1784 step=150/200 (0.4s)
+[   23.5s]   fit[exact] L MATCHED128        r3_seed20   n=  128 dev_exact=0.1814 step=200/200 (0.3s)
+[   24.1s]   fit[exact] L MATCHED128        r3_seed21   n=  128 dev_exact=0.1814 step=200/200 (0.5s)
+[   24.5s]   fit[exact] L MATCHED128        r4_seed17   n=  128 dev_exact=0.1776 step=200/200 (0.4s)
+[   24.8s]   fit[exact] L MATCHED128        r4_seed18   n=  128 dev_exact=0.1875 step=150/200 (0.3s)
+[   25.2s]   fit[exact] L MATCHED128        r4_seed19   n=  128 dev_exact=0.1951 step=150/200 (0.4s)
+[   25.5s]   fit[exact] L MATCHED128        r4_seed20   n=  128 dev_exact=0.1738 step=200/200 (0.3s)
+[   25.8s]   fit[exact] L MATCHED128        r4_seed21   n=  128 dev_exact=0.1890 step=100/200 (0.3s)
+[   26.2s]   fit[exact] L TITANROWS         seed17      n=  128 dev_exact=0.1822 step=200/200 (0.3s)
+[   26.5s]   fit[exact] L TITANROWS         seed18      n=  128 dev_exact=0.1715 step=50/200 (0.3s)
+[   26.8s]   fit[exact] L TITANROWS         seed19      n=  128 dev_exact=0.1814 step=200/200 (0.3s)
+[   27.1s]   fit[exact] L TITANROWS         seed20      n=  128 dev_exact=0.1867 step=150/200 (0.3s)
+[   27.4s]   fit[exact] L TITANROWS         seed21      n=  128 dev_exact=0.1806 step=200/200 (0.3s)
+[   27.7s]   fit[exact] L MATCHED128_NOSTOP r0_seed17   n=  128 dev_exact=0.1715 step=200/200 (0.3s)
+[   28.0s]   fit[exact] L MATCHED128_NOSTOP r1_seed17   n=  128 dev_exact=0.1768 step=200/200 (0.3s)
+[   28.3s]   fit[exact] L MATCHED128_NOSTOP r2_seed17   n=  128 dev_exact=0.1753 step=200/200 (0.3s)
+[   28.7s]   fit[exact] L MATCHED128_NOSTOP r3_seed17   n=  128 dev_exact=0.1860 step=200/200 (0.4s)
+[   29.0s]   fit[exact] L MATCHED128_NOSTOP r4_seed17   n=  128 dev_exact=0.1776 step=200/200 (0.3s)
+[   29.4s]   fit[exact] L N512              r0_seed17   n=  512 dev_exact=0.1509 step=100/200 (0.3s)
+[   29.7s]   fit[exact] L N512              r1_seed18   n=  512 dev_exact=0.1646 step=150/200 (0.4s)
+[   30.0s]   fit[exact] L N512              r2_seed19   n=  512 dev_exact=0.1494 step=200/200 (0.2s)
+[   30.3s]   fit[exact] L N2000             r0_seed17   n= 2000 dev_exact=0.1890 step=200/200 (0.4s)
+[   30.7s]   fit[exact] L N2000             r1_seed18   n= 2000 dev_exact=0.1905 step=200/200 (0.3s)
+[   31.1s]   fit[exact] L N2000             r2_seed19   n= 2000 dev_exact=0.1951 step=200/200 (0.4s)
+[   31.6s] [L] S-roll[exact] FULL              regret k1/2/4 = 0.337 / 0.482 / 0.635 | exact k1/2/4 = 0.161 / 0.015 / 0.002 | TEST one-step exact 0.173
+[   34.4s] [L] S-roll[exact] MATCHED128        regret k1/2/4 = 0.503 / 0.627 / 0.772 | exact k1/2/4 = 0.167 / 0.021 / 0.001 | TEST one-step exact 0.173
+[   35.0s] [L] S-roll[exact] TITANROWS         regret k1/2/4 = 0.416 / 0.529 / 0.712 | exact k1/2/4 = 0.168 / 0.025 / 0.003 | TEST one-step exact 0.170
+[   35.6s] [L] S-roll[exact] MATCHED128_NOSTOP regret k1/2/4 = 0.388 / 0.548 / 0.719 | exact k1/2/4 = 0.172 / 0.023 / 0.000 | TEST one-step exact 0.177
+[   35.9s] [L] S-roll[exact] N512              regret k1/2/4 = 0.360 / 0.465 / 0.634 | exact k1/2/4 = 0.119 / 0.019 / 0.000 | TEST one-step exact 0.143
+[   36.3s] [L] S-roll[exact] N2000             regret k1/2/4 = 0.342 / 0.488 / 0.625 | exact k1/2/4 = 0.152 / 0.022 / 0.002 | TEST one-step exact 0.171
+[   36.7s] [L] k1 Titan chain_one 0.357 | S-roll[exact] FULL 0.337 diff +0.020 [-0.092, +0.138] | MATCHED 0.503 diff -0.146 [-0.243, -0.043] | TITANROWS 0.416 diff -0.059 [-0.164, +0.048]
+[   36.7s] [L] k2 Titan chain_one 0.366 | S-roll[exact] FULL 0.482 diff -0.116 [-0.198, -0.032] | MATCHED 0.627 diff -0.261 [-0.348, -0.171] | TITANROWS 0.529 diff -0.163 [-0.252, -0.070]
+[   36.7s] [L] k4 Titan chain_one 0.507 | S-roll[exact] FULL 0.635 diff -0.128 [-0.241, -0.010] | MATCHED 0.772 diff -0.264 [-0.387, -0.137] | TITANROWS 0.712 diff -0.205 [-0.342, -0.063]
+[   36.7s] [L] family done in 35s
+[   36.7s] wrote s_roll_L_smoke.json / s_roll_per_model_L_smoke.npz

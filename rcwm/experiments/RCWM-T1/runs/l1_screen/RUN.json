@@ -1,0 +1,300 @@
+{
+ "record": "L1_RUN",
+ "keys": {
+  "stages": {
+   "acq": {
+    "n": 384,
+    "ids_sha256": "cd20d669f820e92a6c5ae232cd5d5d5bd8999751bb1de58781602557221c20f5"
+   },
+   "ret": {
+    "n": 150,
+    "ids_sha256": "5cfdb4a499eb26ba1d3feb7ea53b27d82178f5d245739a9ffc8eeebb1bfe9445"
+   },
+   "lc": {
+    "n": 256,
+    "ids_sha256": "318e1f4afc73169fd1bc4b9feac9ec201e3b1737d5e690c654c842680158c01c"
+   },
+   "drift_fresh": {
+    "n": 456,
+    "ids_sha256": "4475e74f9dae271e5ad46bc8583504e7a52c7dc68f2d9c2b035bd1a6c05d0baa"
+   },
+   "drift_bridge": {
+    "n": 228,
+    "ids_sha256": "4fedef5325a495fc6026c86a614c66ef4ead2b3bace4c3277bf87d1c63311448"
+   },
+   "ood": {
+    "n": 600,
+    "ids_sha256": "60130923cc281143e395471ba983a2861517e6110ccaa97cda85a482fe7bf220"
+   }
+  },
+  "subset": null,
+  "forward": "dense",
+  "inputs_sha256": {
+   "views": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3",
+   "floors": "96b4ed55dddc68398974cd9b4cb4fe6ccf2ca0e0503f02f1d62f9253690ed59e",
+   "lc_prompts": "2619bd2c4a503e8d65e1d22d5090738b91229365b400332ade29c110dece0af5",
+   "lc_key": "b95cf52c29a44b3f4eb18d2979c18e3b941d93709a06d908c30295ac6ed66398",
+   "probe": "5f6df1c14aa082eb2f61024a2652809077dbc91a6d7a4e19933d55f7890ae266",
+   "audit": "4857cf868202763e76bc610f6e787aebee20b9d18bfa7451f42c603ed871e6d7",
+   "protocol": "ead4ddf07f8098b01cb4dda1db40df451ee4495adff80e33cfe1603807830ef7",
+   "b28": "ec3fca1e8b1eb418a6b848dadfea06235cf7c4317ddf6930061c84147afa9a8f",
+   "offtask_used": "ae92870bef9ab18e99229af71d764d12b0544d40590f2faf2c7d1e9356f3d6bc",
+   "hskill_views_build": "45103800078c99b3442b6011dbdf779c40a9c344bd20e5784057239fe5b89396",
+   "ood_bank": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c",
+   "rcwmt_env": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+  },
+  "fresh_prompts_sha256": "38b964bfc4a2940148e6f93372a5df3367d5bcb6334a3a122ad985290bde18ed"
+ },
+ "arms": [
+  "supa",
+  "sparse",
+  "l8_15"
+ ],
+ "lease_label": "rcwm-t1:l1screen",
+ "device": "cuda",
+ "dtype": "float32",
+ "tf32": false,
+ "forward": "dense",
+ "registered": {
+  "arms": [
+   "supa",
+   "sparse",
+   "l8_15"
+  ],
+  "l8_15_blocks": [
+   8,
+   15
+  ],
+  "families": [
+   "ledger_replay",
+   "prerequisite_plan",
+   "register_machine"
+  ],
+  "published_floors": {
+   "ledger_replay": {
+    "copy_before": 30,
+    "constant_majority": 1,
+    "n": 128
+   },
+   "prerequisite_plan": {
+    "copy_before": 0,
+    "constant_majority": 10,
+    "n": 128
+   },
+   "register_machine": {
+    "copy_before": 9,
+    "constant_majority": 1,
+    "n": 128
+   }
+  },
+  "acq_max_new": 96,
+  "lc_max_new": 24,
+  "lc_max_context": 4096,
+  "arith_bar": 62,
+  "retained_bar": 37,
+  "rep001_control": {
+   "ledger_replay": [
+    54,
+    71,
+    61
+   ],
+   "prerequisite_plan": [
+    95,
+    85,
+    93
+   ],
+   "register_machine": [
+    85,
+    73,
+    74
+   ],
+   "retained": [
+    40,
+    38,
+    36
+   ]
+  },
+  "acq_family_tol": {
+   "ledger_replay": 8,
+   "prerequisite_plan": 5,
+   "register_machine": 6
+  },
+  "retained_margin": 2,
+  "detect_p": 0.05,
+  "drift_upper": 0.8,
+  "parity_fraction": 0.03,
+  "parity_min_rows": 3,
+  "parity_tol": {
+   "acq_total": 3,
+   "arith_permissive": 2,
+   "arith_strict": 2,
+   "retained": 1
+  },
+  "parity_tol_report": {
+   "lc_total": 3,
+   "unknown_substring": 1,
+   "unknown_literal": 1
+  },
+  "ret_row_tol": 1,
+  "ret_class_tol": 1,
+  "bridge_top1_min": 0.99,
+  "bridge_kl_max": 0.001,
+  "bridge_r14_ratio": 0.6772,
+  "boot": 10000,
+  "boot_seed": 20261009,
+  "fresh_seed": 20261009,
+  "fresh_per_class": 8,
+  "fresh_n": 456,
+  "bridge_n": 228,
+  "l8_15_sha256": "6282b45676fab8b2446d4363373b94931aea16c346ba769c284b81fcb0f97fe3",
+  "ood_strata": [
+   "L_big",
+   "L_void",
+   "R_wrap",
+   "R_boundary",
+   "P_inapp",
+   "P_appdel"
+  ],
+  "ood_n_per_stratum": 100,
+  "ood_n": 600,
+  "ood_max_new": 96,
+  "ood_tol_min": 3,
+  "ood_tol_frac": 0.05,
+  "ood_parse": "rcwmt.env.parse_state(family, prediction, lenient=True) == json.loads(gold)",
+  "ood_bank_sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c",
+  "decision_rule": "L8-15 is eligible for promotion as an experimental core - promotion itself still requires the operator's explicit go-ahead (D-26) - if and only if, in the L1 run, ALL of the following hold. C0 identity and comparability, settled before any L8-15 output exists: the measured L8-15 weights are the frozen bytes (sha256 in L8_15_EXPECTED.json; per-group FP32 hashes equal to R14's loc8_15 arm); every build and load gate passed; the forward path is the programme's DenseReference (vendored from pilot commit 5b4c22d); the run used the frozen runner and the environment recorded in the freeze, in every invocation; the full decisive instruments were run (no row subset) and no decisive prompt was truncated or skipped; the L1 scorers reproduce every published per-row verdict and count on the anchors' published SELECT-VIEWS-001 and arithmetic-panel predictions, the L1 tokenizer and decoder return every one of those published texts unchanged (encode, decode, strip), and every arithmetic prompt fits the registered 512-token context; and the anchor parity gate, evaluated after both anchors and before L8-15 is loaded, passes: Supa 1.7 reproduces its published SELECT-VIEWS-001 texts on all but max(3, floor(3% of n)) rows, its canonical total within +-3 and its floor verdicts identically; Titan-Sparse does the same and also reproduces arithmetic_permissive and arithmetic_strict each within +-2 and references_retained within +-1 of its published 72, 63 and 41, its correct set on the 47 permissive and 41 strict source-correct rows up to 1 row per policy, its per-class arm_correct and terminated counts within +-1, and its 24 published arithmetic samples in text and termination on all but 3; and both anchors agree with R14's stored first-token log-probabilities on the 228 bridge prompts (top-1 agreement >= 0.99, mean KL(L1||R14) < 0.001 nats). If the anchor parity gate fails, L8-15 is never loaded and no arm generates on the OOD bank. C1 acquisition floors (GATE v2 term 3): on SELECT-VIEWS-001 every family's two-sided exact binomial 95% lower bound on canonical_correct exceeds its published binding floor (ledger_replay 0.2344, prerequisite_plan 0.0781, register_machine 0.0703). C2 acquisition non-inferiority, per family, paired within the run against Titan-Sparse on canonical correctness: in every family the net change (gained - lost) is >= -8 (ledger_replay), >= -5 (prerequisite_plan), >= -6 (register_machine), and no family shows a detected loss (lost > gained with a two-sided exact McNemar p < 0.05). C3 arithmetic (GATE v2 term 1): arithmetic_permissive(L8-15) >= 62 of 150. C4 source answers retained (GATE v2 term 2 plus non-inferiority): references_retained(L8-15) >= 37 of 47 AND >= references_retained(Titan-Sparse, same run) - 2. C5 off-task drift on the 456 fresh prompts: the paired percentile-bootstrap 95% upper bound (10,000 resamples over prompts, seed 20261009) of mean first-token KL(L8-15||Supa) / mean KL(Titan-Sparse||Supa) is < 0.80. C6 out-of-distribution rule extrapolation (amendment A-OOD, D-28(a)), paired within the run against Titan-Sparse on the 600-row OOD bank (docs/l1/ood_bank.jsonl, sha256 recorded in ood_bank.SOURCE.json and pinned in the runner; built with no model call from data that played no part in choosing the cut: six strata of 100 one-step transitions in Titan's trained one-step frame, L_big, L_void, R_wrap, R_boundary, P_inapp and P_appdel), every arm run on it only after the anchor parity gate passed, greedy with at most 96 new tokens, and a row correct iff rcwmt.env.parse_state(family, prediction, lenient=True) equals the oracle state: in every stratum the net change (gained - lost) is >= -max(3, ceil(5% of n)), which is -5 at n = 100, and no stratum shows a detected loss (lost > gained with a two-sided exact McNemar p < 0.05). Supa's OOD scores are report-only. If C0 fails the run is NON-COMPARABLE: no verdict, nothing promoted, no L8-15 endpoint computed, and this registration ends (a rerun is a new registration with a fresh drift draw that may not reuse these prompts, and with a fresh OOD bank if any arm has generated on this one). If C0 holds and any of C1-C6 fails: DO NOT PROMOTE. Long context and literal UNKNOWN (including every parity and scorer check on that SPENT bank), Supa's arithmetic against its CPU-measured source answers, the legacy per-class monitor and the bridge drift ratio are report-only and never enter C0-C6. No threshold may change after any L1 output exists."
+ },
+ "arm_identity": {
+  "supa": {
+   "sha256": "962abc5bcd5a83e3b7693bd278ae9215b6d83389a847913da9330b34dd5dd24b",
+   "group_hashes": {
+    "block0": "e65832902b8fe623",
+    "block1": "1d4ccb6e2a8a5de1",
+    "block2": "a4652a48736a38ce",
+    "block3": "0934348dfab29110",
+    "block4": "22d0569f02092489",
+    "block5": "f0f9e007c1830e5f",
+    "block6": "90b90ac98a87a771",
+    "block7": "7a8ee3dbb7d9904c",
+    "block8": "dcac83c442e1e512",
+    "block9": "91e5966ef7c3bfda",
+    "block10": "824a8418fba13f3e",
+    "block11": "ada94c80eb2c2911",
+    "block12": "a6f76e844ca529d9",
+    "block13": "07d22c3ba31fe61e",
+    "block14": "c58de07569d8691b",
+    "block15": "21b1594544ac34af",
+    "block16": "acfaf77f259e8737",
+    "block17": "6dbdf6f493aecf50",
+    "block18": "71f7456b11edd0ac",
+    "block19": "2de3f032507b282d",
+    "block20": "4f1dde1b6dc89b99",
+    "block21": "fc69c142ca953a5a",
+    "block22": "dfa424e2b91d241f",
+    "block23": "67fe76e531fb463b",
+    "block24": "13bced22d638bbad",
+    "block25": "ff7ef2b91bf59bd6",
+    "block26": "4d2d35e0c0aeee21",
+    "block27": "5144908fa492853c",
+    "model.embed_tokens": "a4885fb8780938c4",
+    "model.norm": "d9a95e8b0540226b"
+   }
+  },
+  "sparse": {
+   "sha256": "a28629c9d3454fbf2e884fd7ca442c1b406e7caf4b36d34b2c0614d0add31284",
+   "group_hashes": {
+    "block0": "e65832902b8fe623",
+    "block1": "1d4ccb6e2a8a5de1",
+    "block2": "a4652a48736a38ce",
+    "block3": "0934348dfab29110",
+    "block4": "22d0569f02092489",
+    "block5": "f0f9e007c1830e5f",
+    "block6": "90b90ac98a87a771",
+    "block7": "7a8ee3dbb7d9904c",
+    "block8": "e571075202259bc3",
+    "block9": "5bb0826b82812242",
+    "block10": "ac17ec0b21498aae",
+    "block11": "bc4490253aa7f2cd",
+    "block12": "3ebc4a89e6d8c87e",
+    "block13": "a5bb6271215894aa",
+    "block14": "8af3df9cac0914f2",
+    "block15": "f8e52f5e98954543",
+    "block16": "9dc5d32100ebce65",
+    "block17": "49ad6c0065e79c53",
+    "block18": "88ec950651671b36",
+    "block19": "ed36a057e69303f0",
+    "block20": "a8a9cba40c31848c",
+    "block21": "e39c833898bce490",
+    "block22": "bf026646f9505416",
+    "block23": "de5b0c508e0c9048",
+    "block24": "646586376b1fbfe3",
+    "block25": "568edefab63a156b",
+    "block26": "c72b0f8bf80880d4",
+    "block27": "d52de97295bce3db",
+    "model.embed_tokens": "a4885fb8780938c4",
+    "model.norm": "d9a95e8b0540226b"
+   }
+  },
+  "l8_15": {
+   "sha256": "6282b45676fab8b2446d4363373b94931aea16c346ba769c284b81fcb0f97fe3",
+   "group_hashes": {
+    "block0": "e65832902b8fe623",
+    "block1": "1d4ccb6e2a8a5de1",
+    "block2": "a4652a48736a38ce",
+    "block3": "0934348dfab29110",
+    "block4": "22d0569f02092489",
+    "block5": "f0f9e007c1830e5f",
+    "block6": "90b90ac98a87a771",
+    "block7": "7a8ee3dbb7d9904c",
+    "block8": "e571075202259bc3",
+    "block9": "5bb0826b82812242",
+    "block10": "ac17ec0b21498aae",
+    "block11": "bc4490253aa7f2cd",
+    "block12": "3ebc4a89e6d8c87e",
+    "block13": "a5bb6271215894aa",
+    "block14": "8af3df9cac0914f2",
+    "block15": "f8e52f5e98954543",
+    "block16": "acfaf77f259e8737",
+    "block17": "6dbdf6f493aecf50",
+    "block18": "71f7456b11edd0ac",
+    "block19": "2de3f032507b282d",
+    "block20": "4f1dde1b6dc89b99",
+    "block21": "fc69c142ca953a5a",
+    "block22": "dfa424e2b91d241f",
+    "block23": "67fe76e531fb463b",
+    "block24": "13bced22d638bbad",
+    "block25": "ff7ef2b91bf59bd6",
+    "block26": "4d2d35e0c0aeee21",
+    "block27": "5144908fa492853c",
+    "model.embed_tokens": "a4885fb8780938c4",
+    "model.norm": "d9a95e8b0540226b"
+   }
+  }
+ },
+ "invocations": [
+  {
+   "started": "2026-10-08 18:39:08",
+   "started_utc": "2026-10-08T23:39:08Z",
+   "argv": [
+    "run",
+    "--device",
+    "cuda"
+   ],
+   "no_freeze": false,
+   "script_sha256": "568bb5f1be0160bb926302db68a1569e07a0a682c403094952cdad8b3251cb50",
+   "freeze_sha256": "0a284d2bbcc437f33d62f67977ca2edbb372e856bcd95487992d31ed13bc6c88",
+   "env": {
+    "python_executable": "c:\\users\\clclc\\appdata\\local\\hermes\\hermes-agent\\venv\\scripts\\python.exe",
+    "python": "3.11.15",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.14.1",
+    "tokenizers": "0.22.2",
+    "safetensors": "0.8.0",
+    "numpy": "2.4.6",
+    "torch_cuda": "12.4",
+    "nvidia_driver": "566.07",
+    "gpu_name": "NVIDIA GeForce RTX 4070 Laptop GPU"
+   }
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+schema_version: '1.0'
+synthetic_v1:
+- name: key_gained
+  kind: count
+  source: exact simulator transition
+  unit: event
+  utility_sign: goal-dependent
+  measured: true
+- name: door_opened
+  kind: count
+  source: exact simulator transition
+  unit: event
+  utility_sign: goal-dependent
+  measured: true
+- name: object_gained
+  kind: count
+  source: exact simulator transition
+  unit: event
+  utility_sign: goal-dependent
+  measured: true
+- name: damage
+  kind: count
+  source: exact simulator transition
+  unit: event
+  utility_sign: goal-dependent
+  measured: true
+- name: action_cost
+  kind: continuous
+  source: exact simulator transition
+  unit: toy cost units
+  utility_sign: goal-dependent
+  measured: true
+native_proposed:
+- name: terminal_success
+  source: independent task verifier
+  payment: once at terminal success
+- name: satisfied_prerequisite_delta
+  source: exact constraint checker
+  role: auxiliary unless reward contract explicitly includes it
+- name: elapsed_ms
+  source: monotonic runtime clock
+  utility_sign: normally nonpositive weight; store positive measured value
+- name: generated_tokens
+  source: tokenizer counter
+  role: resource accounting
+- name: tool_failure
+  source: executor status
+  role: separate failure target
+learned_latent:
+  dimensions_proposed:
+  - 32
+  - 64
+  - 128
+  coordinates: not assumed interpretable
+  requires_target_encoder: true
+  reward_readout: fit on permitted goal calibration labels
+excluded_inference_features:
+- retention without a training update
+- self-reported correctness as ground truth
+- entropy reduction mislabeled as factual correctness

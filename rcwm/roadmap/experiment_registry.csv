@@ -1,0 +1,22 @@
+id,name,depends_on,arm,status,acceptance_focus
+G0-01,provenance and capture,none,mechanics,native blocked until approved,no source substitution; native parity
+G0-02,mask and split adversaries,none,mechanics,CPU reference subset tested,no future target and parent leakage
+G1-B0,heuristic / random controller,G0,B0,proposed,environment floor
+G1-B2,matched scalar Transformer,G0,B2,proposed,same candidate plans and context
+G1-B3,measured consequence predictor,G0,B3,toy mechanics included,same ground labels as B2
+G1-O1,exact candidate oracle,G0,O1,toy mechanics included,"candidate ceiling, not deployable model"
+G2-B1,frozen Rineya direct policy,G0-native,B1,proposed,exact checkpoint identity
+G2-B4,learned continuous consequences,G1,B4,proposed,independent verifier and matched budget
+G3-01,sparse grounding budget curve,G2,B2/B3/B4,proposed,nested identical labeled parents
+G3-02,train-only k-means,G2,B5,utility only implemented; experiment proposed,random and continuous controls
+G3-03,learned VQ consequences,G3-02,B5,deferred,rare failure and code collapse audit
+G3-04,new goal in-span revaluation,G2,B4/B6,proposed,new calibration versus sealed parents
+G3-05,out-of-span goal property,G3-04,B4,deferred,grounding requirement explicit
+G4-01,direct successor vs rollouts,G2,B6,deferred,policy/plan identity and horizon
+G4-02,long-context dependency sweep,G2,B2/B4,deferred,distance separate from horizon
+G4-03,synchronous parallel DAG,G4-02,B4,deferred,time/resource validity and joint success
+G5-B7,native typed-slot adapter,G2 + G0-native,B7,deferred,retention NI + measured memory
+G6-01,planner distillation,G4,policy,deferred,real-outcome teacher qualification
+G6-02,short imagined RL,G4,model-based RL,deferred,real anchors and exploitation sweep
+G7-01,compute-depth controller,G4 + recurrence qualification,extension,deferred,compare ordinary extra generation
+G7-02,visual encoder extension,G5,extension,deferred,perception versus dynamics separation

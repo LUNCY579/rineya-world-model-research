@@ -1,0 +1,46 @@
+=== 2026-10-06T11:37:05-05:00 start --arm sparse --parity --gen
+[sparse] items 19200, event rows 4800, encode 9.8s, tokens 3,209,907
+  [gpu-lease] waiting: foreign python pid 14020 (3.12 GiB) on the card
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:sparse token=979465b7
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 16757.11it/s]
+[sparse] loaded in 8.8s fingerprint 818be9c6b6a3
+[sparse] parity {"batch_vs_single_last": 0.0605010986328125, "batch_vs_single_event": 0.06060791015625, "prefix_vs_bulk_event": 0.0001220703125} rel {"batch_vs_single_last": 0.00039430963806807995, "batch_vs_single_event": 0.0003758762904908508, "prefix_vs_bulk_event": 7.657271225980367e-07}
+    batch 1/407 (B=71, T=112)
+    batch 51/407 (B=60, T=133)
+    batch 101/407 (B=56, T=142)
+    batch 151/407 (B=53, T=150)
+    batch 201/407 (B=46, T=173)
+    batch 251/407 (B=43, T=183)
+    batch 301/407 (B=38, T=207)
+    batch 351/407 (B=35, T=224)
+    batch 401/407 (B=31, T=254)
+[sparse] captured in 827.8s
+=== 2026-10-06T12:40:09-05:00 exit rc=127 --arm sparse --parity --gen
+=== 2026-10-06T12:40:09-05:00 start --arm supa --parity --gen
+[supa] items 19200, event rows 4800, encode 9.1s, tokens 3,209,907
+  [gpu-lease] reclaimed a stale lock from dead pid 74676; backed up to rineya-gpu-0.lock.stale-74676.bak
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:supa token=21fc62ee
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:23,  3.68it/s]Loading weights:  50%|####9     | 154/310 [00:00<00:00, 524.40it/s]Loading weights:  78%|#######8  | 242/310 [00:00<00:00, 566.14it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 494.66it/s]
+[supa] loaded in 1.9s fingerprint a9952c55f5a1
+[supa] parity {"batch_vs_single_last": 0.0608367919921875, "batch_vs_single_event": 0.0623779296875, "prefix_vs_bulk_event": 0.0001220703125} rel {"batch_vs_single_last": 0.00041546221473254263, "batch_vs_single_event": 0.0003696368366945535, "prefix_vs_bulk_event": 7.732060112175532e-07}
+    batch 1/407 (B=71, T=112)
+    batch 51/407 (B=60, T=133)
+    batch 101/407 (B=56, T=142)
+    batch 151/407 (B=53, T=150)
+    batch 201/407 (B=46, T=173)
+    batch 251/407 (B=43, T=183)
+    batch 301/407 (B=38, T=207)
+    batch 351/407 (B=35, T=224)
+    batch 401/407 (B=31, T=254)
+[supa] captured in 677.1s
+[supa] e2e generations 2560 in 302s
+[supa] chain_one 640 chains in 122s
+[supa] chain_m1 640 chains in 129s
+  [gpu-lease] released rineya-gpu-0.lock
+[supa] done
+=== 2026-10-06T13:01:10-05:00 exit rc=0 --arm supa --parity --gen
+=== 2026-10-06T13:01:10-05:00 start pvr stage1 --bank bank_pilot --arm sparse --splits dev,test
+  verifier[sparse] ledger_replay: layer 24 dev mean loglik -6.210 (n_train 1064)
+  verifier[sparse] prerequisite_plan: layer 28 dev mean loglik -3.043 (n_train 1152)
+  verifier[sparse] register_machine: layer 24 dev mean loglik -5.313 (n_train 1128)
+[yield] waiting for peer lease 'bwm:eval-pilot-400' to run and release (max 2400s)
