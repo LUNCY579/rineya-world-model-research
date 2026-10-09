@@ -462,3 +462,23 @@ Times are local (CDT). Entries are append-only.
   - **Pre-push scan:** no tokens, keys or the user's email in any pushed file.
   - **Other folders:** `bwm/` is reserved for the peer, which was notified with a collision-free protocol (own clone, own folder, pull --rebase, ≤ 25 MB, no secrets).
   - **Not a release.** Sync after updates: `python tools/export_rcwm.py`, then commit and push.
+- **R15 (exploratory, about 21:10, 2026-10-08): disagreement-gated deferral to the adapter-off base does not fix the T2 prerequisite shortcut.**
+  - **Method:** offline, on the stored per-row OFF and ON texts of T2 seeds 0–2 (pilot t2_eval, supp and pilot transitions).
+  - **Rule:** defer to the base when ON copies the input and the base changes it.
+  - **Results (P one-step accuracy, base / ON / deferral):**
+    - applicable state-changing: 0.51 / 0.10–0.36 / 0.55–0.57;
+    - applicable unchanged: 0.02 / 0.78–0.97 / 0.23–0.27;
+    - inapplicable: 0.01 / 0.90–0.93 / 0.10.
+    - "Defer on any disagreement" equals the base.
+  - **Reason:** neither model knows the precondition rule, so disagreement carries no signal about which side is right. This mirrors BWM F-06: deferral repairs errors only where the base is correct.
+  - **Consequence:** the P fix must teach or check the rule (T2b de-shortcut data, or an explicit applicability check). Shared with the peer for the joint roadmap.
+- **D-32 Joint brainstorm (user request, 2026-10-08 evening).**
+  - **RCWM side:** workflow output of 30 evidence-grounded ideas, 3 judge lenses, and a synthesized roadmap, in `docs/roadmap/RCWM_ROADMAP_2026-10-08.md` plus the pool and scores.
+  - **BWM side:** the peer merged both programmes into `native_v1/research/JOINT_ROADMAP_2026-10-08.md`, with an alternating turn order.
+  - **New evidence surfaced by the brainstorm:**
+    - The register conditional branch choice is at chance (0.51) before and after T2, in all seeds, while the in-branch arithmetic is right. Computed-predicate rules are not learned from bare-answer rows.
+    - Only 24% of T2's update energy sits in blocks 8–15, and 22% sits in blocks 0–7, which Titan's delta never touched.
+    - Where the 3 seeds agree (85% of steps), they are right 0.995 of the time.
+    - KL drift did not flag Titan's measured abstention loss.
+    - R15: deferral cannot fix P.
+  - **RCWM's single most important next experiment:** a sealed generalisation map of the T2 ledger adapter (rule or trigger?): about 1.5 GPU-h, no training, preregistered. It matches the peer's joint item 2.
