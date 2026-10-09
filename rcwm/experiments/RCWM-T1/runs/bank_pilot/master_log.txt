@@ -1791,3 +1791,23 @@ verdict: CONFIRMED (strong pass: both one-sided 95% bounds beyond the thresholds
 === 2026-10-09T02:04:19-05:00 start scripts/run_lik.py --bank bank_pilot --arm sparse --splits dev,test
 [sparse] 5824 items, 27755 scored sequences
   [gpu-lease] waiting: foreign python pid 92824 (4.71 GiB dedicated GPU memory)
+=== 2026-10-09T02:39:15-05:00 master chain start
+[t2-screen] T ledger|add/void          0.075 -> 1.000 (+0.925)
+[t2-screen] T ledger|scale/void        0.050 -> 1.000 (+0.950)
+[t2-screen] T ledger|transfer/void     0.000 -> 1.000 (+1.000)
+[t2-screen] T regist|mix/wrap          0.000 -> 0.000 (+0.000)
+[t2-screen] T regist|mix/nowrap        0.025 -> 0.050 (+0.025)
+[t2-screen] T regist|conditional/gt    0.425 -> 0.600 (+0.175)
+[t2-screen] T regist|conditional/le    0.525 -> 0.575 (+0.050)
+[t2-screen] T regist|add/wrap          0.000 -> 0.200 (+0.200)
+[t2-screen] T prereq|applicable        0.425 -> 0.550 (+0.125)
+[t2-screen] T prereq|inapplicable      0.025 -> 0.775 (+0.750)
+[t2-screen] U ledger|add/posted        0.550 -> 0.825 (+0.275)
+[t2-screen] U ledger|scale/posted      0.500 -> 0.950 (+0.450)
+[t2-screen] U ledger|transfer/posted   0.350 -> 0.850 (+0.500)
+[t2-screen] U regist|swap              1.000 -> 1.000 (+0.000)
+[t2-screen] U regist|add/nowrap        0.900 -> 0.900 (+0.000)
+[t2-screen] t2_s0: mean targeted gain +0.420 (>= 0.15), worst untouched +0.000 (>= -0.10) -> PASS: replicate seeds 1, 2
+=== 2026-10-09T02:39:15-05:00 start scripts/p3_run.py
+[prereg3] stages to run: ['A0', 'S1', 'S2', 'S3']
+  [gpu-lease] waiting: foreign python pid 92824 (5.10 GiB dedicated GPU memory)

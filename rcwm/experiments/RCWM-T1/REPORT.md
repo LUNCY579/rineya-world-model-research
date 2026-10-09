@@ -227,6 +227,13 @@ These are provisional and will be revised once PREREG-1 resolves.
 
 ## 7. Next steps
 
+0. **PREREG-3: is the T2 ledger fix a rule or a trigger?** Frozen 2026-10-09 02:38 (D-33). A sealed out-of-range bank of 1,500 one-step rows and 80 chains covers:
+   - unseen and neutral statuses, void look-alikes and "posted" look-alikes;
+   - 4–5-digit balances and large amounts;
+   - renamed or extra accounts, and reordered keys.
+
+   The arms are adapter OFF, T2 s0–s2 ON and Supa, with no training, about 1–1.35 GPU-h. It is queued as the next RCWM GPU job. The verdict is RULE, TRIGGER or PARTIAL, with separate magnitude, naming and format verdicts.
+
 1. **RCWM-T2** (3 seeds done, R13 and addendum; PREREG-2 frozen 2026-10-08 15:34 and running on a fresh sealed bank): a rule-coverage LoRA on frozen Titan-Sparse, using 1,501 fresh rows stratified over void, inapplicable, mix and wrap cases.
    - The ledger fix replicates in all three seeds: regret drop +0.47 / +0.41 / +0.48.
    - The prerequisite copy shortcut also replicates, and worsens by seed.

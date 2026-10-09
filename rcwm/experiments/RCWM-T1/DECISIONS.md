@@ -502,3 +502,38 @@ Times are local (CDT). Entries are append-only.
     - **Reading:** blocks 8–15 carry the rule and mode (R12). The 16–27 part of the delta, dispensable for R12's pilot transitions, still sharpens exact numeric output, so removing it costs precision, not the rule.
   - **Bookkeeping:** check script inline in session; inputs are the stored `runs/l1_screen/{sparse,l8_15}/acq.jsonl` and the read-only SELECT_VIEWS.jsonl.
   - **Consequence:** L8-15 is not promoted. No vault or Hugging Face action follows. R14's retention result stands as a mechanism finding. Any revisit (for example blocks 8–15 plus a late arithmetic subset) needs a new preregistration with a fresh acquisition instrument, because SELECT-VIEWS-001 is now spent for this comparison.
+- **I-29 Peer process outside the lease (23:08–00:06, 2026-10-08/09); no effect on PREREG-L1.**
+  - **What happened (reported by BWM):** at its 23:08 turn cap, the peer's bundle runner killed only its direct child. A grandchild Blocksworld eval (about 3 GB VRAM) kept running on the GPU without a lease until 00:06.
+  - **Effect on L1:** none.
+    - The L1 run was already waiting in `gpu_lease`, and the dedicated-memory check held it back ("waiting: foreign python pid 201764 (4.70 GiB dedicated GPU memory)").
+    - It acquired the lease at 00:06:04, and the first model load was at 00:06:06, after the stray process exited. So no L1 forward pass overlapped it.
+    - The parity gate (decisive 5/5) and P9 (anchors reproduce published per-row predictions on ≥ 99% of rows) independently confirm the anchors' outputs.
+  - **Cost:** about one hour of delay.
+  - **Peer fix:** `bundle.py` now kills the whole process tree at the cap (taskkill /T), plus a one-off guard for the current turn.
+  - **Lesson:** the foreign-VRAM check in RCWM's lease is a needed second line of defence, so keep it.
+- **D-33 PREREG-3 frozen: is the confirmed T2 ledger fix a rule or a trigger? (2026-10-09, about 02:40).**
+  - **Mandate:** the RCWM-T1 session, under the user's standing go-ahead of 2026-10-08 ("proceed with your recommendations whenever the current task and you are ready to go"; "take time wisely … change course whenever needed"). It is item 2 of the joint roadmap (D-32), agreed with BWM.
+  - **What it tests:** no training. A sealed out-of-range bank of 1,500 one-step rows and 80 k=4 chains, sha 0fd18295…. Arms: Titan-Sparse adapter OFF; T2 s0 (the registered PREREG-2 artifact), s1 and s2 ON; Supa 1.7. One lease, `rcwm-t1:prereg3`, at most 12,428 generations, about 1.0–1.35 GPU-h.
+  - **Pinned files:** PREREG_3_DRAFT.md e1821281…, `p3_run.py` 88ab385c…, `p3_analysis.py` 24b50b9c…, hook draft e2078444….
+  - **How it was built:** a drafting workflow (wf_2136ad9a-a24) with 3 adversarial review lenses. All MUST-FIX items were applied in revision 2. The revision-1 bank (9e7108df…) was replaced before any model saw it and is kept in `docs/prereg3/superseded/`.
+  - **Checks before freezing:**
+    - bank verify 17/17;
+    - wide freshness scan of 824 files and 252,072 transitions: 0 overlap; HSKILL files skipped by name;
+    - scorer self-test 10,500/10,500 golds and 12,000/12,000 negatives;
+    - dry run of 8 scenarios and 41 wording cases;
+    - tiny-model tests 47/47;
+    - pre-freeze conditions 9/9.
+  - **Open questions, resolved by me:**
+    - **Q1, RULE is a strict intersection (24 cells and 3 twin guards):** kept. A rule claim should hold for every unseen status in every seed. A near miss resolves to PARTIAL, with the per-cell table and a named pattern, which is the honest outcome. Power is disclosed in the draft: about 19% at a true per-cell accuracy of 0.85, 98% at 0.90.
+    - **Q2, "Posted"/"POSTED" variants:** stay out. The rule text gives no defensible gold, and adding them would mean rebuilding a verified bank.
+    - **Q3, s1/s2 anchors use their own eval files:** accepted. If the anchor fails, the run stops before any bank output.
+    - **Q4, launch route:** stop the live chain while its next step (`run_lik --arm sparse`) is still waiting for the lease, so nothing is held. Then install hook 60 and relaunch `scripts/launch_master.cmd` (hidden, WMI), which keeps one RCWM waiter. In the fresh chain every earlier step is skipped (outputs exist), and hook 60 runs before the remaining pilot steps.
+    - **Q5, "approved" stays a neutral status:** it is reported per word.
+    - **Q6, the additions are accepted:** twin copy cap 0.10; TRIGGER requires C_void ≥ 0.80 and that most errors apply the event; novelty threshold 0.20; pooled scale cell; base-rule judgement by OFF's twin copy rate.
+  - **Executed (02:38–02:39):**
+    - `p3_run.py --freeze`: frozen at 02:38:31. PREREG_3.md sha 5d49a33d…, PREREG_3_FREEZE.json sha 90f4cc57…; `--verify` rc 0.
+    - Hook installed: `scripts/queue_hooks/60_prereg3.sh` = draft (e2078444…).
+    - The old chain was stopped with taskkill /T: confirm_chain 40892, master_chain 28516, and the `run_lik --arm sparse` waiter. The waiter held no lease (BWM's bundleD did) and left no partial output.
+    - The fresh chain was relaunched hidden via WMI at 02:39. Every pre-hook step was skipped (outputs exist), and the L1 hook was a no-op.
+    - `p3_run.py` started at 02:39:15 and passed the one-waiter check. It is the single RCWM waiter (`rcwm-t1:prereg3`), with stages A0, S1, S2 and S3 pending.
+    - The remaining pilot steps (lik, pvr, steer, arms, regen) follow it in the same chain.

@@ -1,6 +1,6 @@
 {
  "ok": true,
- "n_checks": 39,
+ "n_checks": 47,
  "checks": [
   {
    "check": "sorted-key chain steps == env.one_step_messages (the registered frame)",
@@ -43,9 +43,14 @@
    "detail": "['lease', 'wait', 'load:sparse', 'unload', 'wait', 'load:supa', 'unload', 'release']"
   },
   {
-   "check": "anchor: every side reproduces its single-adapter reference (states 1.0 AND identical texts): adapter switching in one PeftModel == each adapter loaded alone",
+   "check": "anchor: every side reproduces its single-adapter reference (states 1.0 AND identical texts, identical_texts recorded 1.0): adapter switching in one PeftModel == each adapter loaded alone",
    "ok": true,
-   "detail": "{'off': 1.0, 's0': 1.0, 's1': 1.0, 's2': 1.0}"
+   "detail": "{'off': (1.0, 1.0), 's0': (1.0, 1.0), 's1': (1.0, 1.0), 's2': (1.0, 1.0)}"
+  },
+  {
+   "check": "provenance records only the planned generation count for S2 and S3 (no chain-break count before the analysis)",
+   "ok": true,
+   "detail": ""
   },
   {
    "check": "OFF, s0, s1, s2 one-step texts all differ (adapters active and distinct)",
@@ -60,7 +65,7 @@
   {
    "check": "the analysis runs end to end on the tiny run (fixture mode)",
    "ok": true,
-   "detail": "STATUS: TRIGGER"
+   "detail": "STATUS: PARTIAL"
   },
   {
    "check": "a rerun after DONE is a no-op (exit 0, no load, files unchanged)",
@@ -90,12 +95,12 @@
   {
    "check": "an anchor failure stops before any bank output (anchor.json pass false, no onestep/chains files)",
    "ok": true,
-   "detail": "[prereg3] ANCHOR FAILED {'off': {'n': 8, 'identical_states': 1.0, 'start_unix': 1791515925.2144005, 'end_unix': 1791515925.3979187, 'generations': 8}, 's0': {'n': 8, 'identical_states': 1.0, 'start_unix': 1791515925.3979187, 'end_unix': 179"
+   "detail": "[prereg3] ANCHOR FAILED {'off': {'n': 8, 'identical_states': 1.0, 'identical_texts': 1.0, 'start_unix': 1791530999.6601996, 'end_unix': 1791530999.835346, 'generations': 8}, 's0': {'n': 8, 'identical_states': 1.0, 'identical_texts': 1.0, 's"
   },
   {
    "check": "after an anchor failure a rerun refuses; a persisted STOPPED.json refuses every rerun",
    "ok": true,
-   "detail": "the anchor check failed in an earlier turn (deviation policy: investigate, log) | C:\\Users\\clclc\\AppData\\Local\\Temp\\claude\\C--Users-clclc-BusinessProject-WorldModel-Rineya-Consequence-World-Model-Bundle-2026-10-05\\4c2a936e-32bf-4e01-aa62-961d6b162be5\\scratchpad\\tmp\\p3_tiny_rlrctil0\\runs\\run_d\\STOPPE"
+   "detail": "the anchor check failed in an earlier turn (deviation policy: investigate, log) | C:\\Users\\clclc\\AppData\\Local\\Temp\\p3_tiny_4rw8clqq\\runs\\run_d\\STOPPED.json exists: a deterministic stop was persisted; an operator must investigate, log it in DECISIONS.md and move the file aside before any rerun"
   },
   {
    "check": "a Titan-Sparse fingerprint mismatch stops the job before any generation",
@@ -105,7 +110,27 @@
   {
    "check": "a live run lock refuses (not persisted); a stale one is reclaimed and the run completes",
    "ok": true,
-   "detail": "[prereg3] another p3_run.py holds the run lock {'pid': 273256, 'create_time': 1791515895.069843}"
+   "detail": "[prereg3] another p3_run.py holds the run lock {'pid': 289884, 'create_time': 1791530957.620489}"
+  },
+  {
+   "check": "runtime drift after the Sparse load stops the job before any generation (persisted)",
+   "ok": true,
+   "detail": "[prereg3] runtime {'transformers': '0.0.0-drift'} differs from the registered {'torch': '2.6.0+cu124', 'transformers': '5.14.1', 'peft': '0.20.0'}: restore the registered environment (nothing was gene"
+  },
+  {
+   "check": "runtime drift after the Supa load stops before S3 (persisted); A0-S2 stay recorded, no Supa output",
+   "ok": true,
+   "detail": "[prereg3] Supa load: runtime {'torch': '0.0.0-drift'} differs from the registered {'torch': '2.6.0+cu124', 'transformers': '5.14.1', 'peft': '0.20.0'}: restore the registered environment (S3 not gener"
+  },
+  {
+   "check": "one-waiter rule: a live RCWM waiting marker or a live RCWM lock holder refuses (not persisted; no lease, nothing written)",
+   "ok": true,
+   "detail": "[prereg3] another RCWM job waits for the GPU lease (rcwm-t1:l1screen, pid 291612): one-waiter rule (R14). Start PREREG-3 only when no other RCWM GPU job is running or waiting (never next to a live master chain) | [prereg3] another RCWM job holds the GPU lease (rcwm-t1:l1screen, pid 291612): one-wait"
+  },
+  {
+   "check": "one-waiter rule: a dead marker, a reused pid (process younger than the record) and a live BWM holder do not refuse; the run then completes",
+   "ok": true,
+   "detail": ""
   },
   {
    "check": "nothing fits the cap: every stage deferred, exit 5, nothing generated",
@@ -125,7 +150,7 @@
   {
    "check": "analysis verdicts: STATUS: RULE (learned by the adapter); ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN everywhere",
    "ok": true,
-   "detail": "('STATUS: RULE (learned by the adapter)', {'magnitude': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN', 'naming': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN', 'format': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN'})"
+   "detail": "('STATUS: RULE (learned by the adapter)', {'magnitude_at': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN', 'magnitude_scale': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN', 'naming': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN', 'format': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN'})"
   },
   {
    "check": "oracle chains: exact 1.0 at k = 1/2/4 for s0-s2 and Supa; OFF below 1 on CH_S (it applies non-void events)",
@@ -138,7 +163,12 @@
    "detail": "[]"
   },
   {
-   "check": "the freeze refuses without approval, with an existing p3 output, and when a pre-freeze check fails (tiny-test record, scorer self-test)",
+   "check": "run() before any freeze refuses WITHOUT persisting (no STOPPED.json, no output dir that would block the freeze)",
+   "ok": true,
+   "detail": "refusing to run the PREREG-3 GPU job: PREREG_3_FREEZE.json does not exist or is unreadable (PREREG-3 is a draft)"
+  },
+  {
+   "check": "the freeze refuses without approval, with an existing p3 output, when a pre-freeze check fails (tiny-test record, scorer self-test), and after an interrupted freeze (.partial left)",
    "ok": true,
    "detail": "--approval must state who approved the freeze, when, and the DECISIONS entry | PREREG-3 outputs exist before the freeze: ['runs\\\\bank_p3_oor']; investigate before freezing | pre-freeze checks failed: ['tiny-model runner tests passed with the current code'] | pre-freeze checks failed: ['scorer self-t"
   },
@@ -153,6 +183,16 @@
    "detail": "PREREG-3 is already frozen (PREREG_3_FREEZE.json or PREREG_3.md exists)"
   },
   {
+   "check": "an interrupted rename is diagnosed by --verify and refused by --freeze, with the recovery step",
+   "ok": true,
+   "detail": "['the freeze was interrupted between its two renames: PREREG_3.md is in place and PREREG_3_FREEZE.json.partial records its sha256. Rename PREREG_3_FREEZE.json.partial to PREREG_3_FREEZE.json, run --verify, and log it in DECISIONS.md'] | refusing to freeze: the freeze was interrupted between its two "
+  },
+  {
+   "check": "an installed 60_prereg3.sh that is not the frozen draft byte for byte refuses the run (not persisted, nothing written)",
+   "ok": true,
+   "detail": "[prereg3] scripts/queue_hooks/60_prereg3.sh (sha256 1f97fff5c5ea) is not the hook draft byte for byte; reinstall it byte for byte from docs/prereg3/queue_hook_p3.sh.draft (or remove it) before any run"
+  },
+  {
    "check": "a run under the (fake) freeze completes; provenance marks it registered under that freeze",
    "ok": true,
    "detail": ""
@@ -160,7 +200,7 @@
   {
    "check": "the registered analysis path accepts it (freeze verified, scorer self-test, every registered provenance check)",
    "ok": true,
-   "detail": "STATUS: TRIGGER"
+   "detail": "STATUS: PARTIAL"
   },
   {
    "check": "the registered analysis refuses a run not made under the freeze (run_a: not registered, CPU backend)",
@@ -190,23 +230,23 @@
   {
    "check": "the registered plan fits one turn at the planning and the observed rate",
    "ok": true,
-   "detail": "([{'stages': ['A0', 'S1', 'S2', 'S3'], 'projected_h': 1.29}], [{'stages': ['A0', 'S1', 'S2', 'S3'], 'projected_h': 0.94}])"
+   "detail": "([{'stages': ['A0', 'S1', 'S2', 'S3'], 'projected_h': 1.35}], [{'stages': ['A0', 'S1', 'S2', 'S3'], 'projected_h': 0.98}])"
   },
   {
    "check": "with a 1.25 h cap the D-22 rule splits the job and the resumed turn re-anchors",
    "ok": true,
-   "detail": "[{'stages': ['A0', 'S3'], 'projected_h': 0.59}, {'stages': ['A0 (re-anchor)', 'S1'], 'projected_h': 0.95}, {'stages': ['A0 (re-anchor)', 'S2'], 'projected_h': 0.51}]"
+   "detail": "[{'stages': ['A0', 'S3'], 'projected_h': 0.6}, {'stages': ['A0 (re-anchor)', 'S1'], 'projected_h': 0.99}, {'stages': ['A0 (re-anchor)', 'S2'], 'projected_h': 0.51}]"
   }
  ],
  "code_sha256": {
-  "scripts/p3_run.py": "a87a05b037e89db6bbd2e931662404761d4d3df5ce0985c13933d97c1879048d",
-  "scripts/p3_common.py": "59a0e0f099206e347c8d36db7e8aa5c719f781a5495720f721fe2c854997e49b",
-  "scripts/p3_analysis.py": "36fd97e3942c8dabbb1702223540f1a6d78a5b3ddb68529c1c34858c8d02b256",
-  "scripts/p3_test_tiny.py": "db8e833938378434a8ccd3a3a3b924c206cc4fe3087e98f031cd2da4f20eee49"
+  "scripts/p3_run.py": "88ab385cbcca9435317b1502c02da4ffc6c7dc8ea68486b40cf4eaa474e0bbbc",
+  "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+  "scripts/p3_analysis.py": "24b50b9ccadd5fe89808d2ac89eb03cd0174dca4e8154421bd734d8d626a70e9",
+  "scripts/p3_test_tiny.py": "5c40c246d1253fac29db302b49382a3b7125ca0489b94b1abab186dfa9d6f08e"
  },
- "seconds": 37.2,
+ "seconds": 44.1,
  "torch": "2.6.0+cu124",
  "transformers": "5.14.1",
- "peak_rss_mb": 818.9,
+ "peak_rss_mb": 824.1,
  "note": "tiny random Qwen3 stand-ins on CPU; no real model, no GPU, no lease"
 }
