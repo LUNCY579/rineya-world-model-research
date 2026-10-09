@@ -482,3 +482,23 @@ Times are local (CDT). Entries are append-only.
     - KL drift did not flag Titan's measured abstention loss.
     - R15: deferral cannot fix P.
   - **RCWM's single most important next experiment:** a sealed generalisation map of the T2 ledger adapter (rule or trigger?): about 1.5 GPU-h, no training, preregistered. It matches the peer's joint item 2.
+- **R-L1 (02:04, 2026-10-09): PREREG-L1 verdict DO NOT PROMOTE (failed: C2).** The run finished at 02:03:28 (`runs/l1_screen/DONE.json`, rc 0). `l1_screen.py analyze` ran once at 02:04:19 under the frozen freeze binding. Outputs: `L1_RESULTS.json` sha 1183dbda…, `L1_RESULTS.md` sha 46f7956c….
+  - **C0, identity and comparability:** holds. The anchor parity gate passed: decisive legs 5/5; scorer parity on published artifacts decisive 11/11 and report-only 6/6.
+  - **C2, per-family acquisition non-inferiority vs Titan-Sparse on SELECT-VIEWS-001 /128 per family:** fails on one family.
+    - prerequisite_plan: 96 → 88, net −8 (lost 9, gained 1, exact McNemar p 0.021). Tolerance −5, and the loss is detected. FAIL.
+    - ledger_replay: 53 → 53, net 0 (11/11). Pass.
+    - register_machine: 83 → 83, net 0 (2/2). Pass.
+  - **C1, C3, C4, C5 and C6:** all hold.
+    - All three family floors are cleared.
+    - Arithmetic /150 permissive: 63 against a bar of 62 (Titan-Sparse 72). Fragile.
+    - Retained /47: 43 (Titan-Sparse 41).
+    - Fresh-prompt drift ratio: 0.646 [0.597, 0.693].
+    - OOD strata: all within tolerance. L_big −2, L_void +6, R_boundary +7, P_inapp +2, P_appdel −1, R_wrap 0. L_void, R_wrap and P_* cannot fail by construction (report-only binding note).
+  - **Predictions:** P2 (per-family net within the pilot projection) is FALSIFIED: prerequisite −8 against the predicted [−4, +4]. P1 and P3–P10 held.
+  - **Report-only:** the SPARSE-001 selection rule would prefer L8-15, and drift is 0.65× Titan-Sparse's. This does not override the registered rule, which is decisive.
+  - **Interpretation (exploratory, post hoc, CPU only, not part of the verdict):** both losses are numeric, prerequisite acquisition (−8) and the arithmetic panel (−9 /150).
+    - All 128 SELECT-VIEWS-001 prerequisite rows are carry-free: the integer sum `(before & ~delete) + add` equals the bitwise answer on every row. So Titan's addition "rule" (R10/R11) is right on all of them in principle.
+    - The 9 rows L8-15 lost are near-miss sums. 8 of 9 are off by 1–4: 28→24, 62→64, 19→20, 59→60 (twice), 126→127, 46→48, 26→24. The ninth is "128" for 12, an unterminated continuation.
+    - **Reading:** blocks 8–15 carry the rule and mode (R12). The 16–27 part of the delta, dispensable for R12's pilot transitions, still sharpens exact numeric output, so removing it costs precision, not the rule.
+  - **Bookkeeping:** check script inline in session; inputs are the stored `runs/l1_screen/{sparse,l8_15}/acq.jsonl` and the read-only SELECT_VIEWS.jsonl.
+  - **Consequence:** L8-15 is not promoted. No vault or Hugging Face action follows. R14's retention result stands as a mechanism finding. Any revisit (for example blocks 8–15 plus a late arithmetic subset) needs a new preregistration with a fresh acquisition instrument, because SELECT-VIEWS-001 is now spent for this comparison.

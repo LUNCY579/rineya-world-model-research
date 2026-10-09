@@ -1,0 +1,993 @@
+{
+ "record": "P3_OOR_BANK",
+ "schema": 1,
+ "prereg": "PREREG-3 (PREREG_3_DRAFT.md)",
+ "built_utc": "2026-10-09T03:05:50Z",
+ "model_calls": 0,
+ "torch_imported": false,
+ "builder": "scripts/p3_make_bank.py",
+ "builder_sha256": "aa0d71546557c27181723abe8b539908fb058f7670a86774f8be6ba113f5a73c",
+ "common_sha256": "59a0e0f099206e347c8d36db7e8aa5c719f781a5495720f721fe2c854997e49b",
+ "harvest_module": "scripts/l1_make_ood.py",
+ "harvest_module_sha256": "dbfd3d2e8eedd4268f5d656e8db952665b2a35d12f2d67c868e5275c94a23122",
+ "code_sha256": {
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "fds/oracles.py": "6d22a5e40a69fb8f5c79230d2c2dc7fa51af605de70d3c0fc7cd7d69fe4c959c",
+  "fds/generate.py": "e7e0288af3b5b5c3930446295094734abc55ed22761a22521fa49b346d42d77e"
+ },
+ "recorded_marginals_sha256": "45674251e38e574229f4ea98d04c30fe623ec6ac58ad308ad491661c84afab7e",
+ "seed": 20261103,
+ "n_per_stratum": 100,
+ "strata": [
+  "T_posted",
+  "C_void",
+  "U_pending",
+  "U_draft",
+  "U_cancelled",
+  "U_reversed",
+  "U_held",
+  "N_voidcase",
+  "N_postedlike",
+  "M_bal",
+  "M_amt",
+  "A_renamed",
+  "A_many",
+  "F_keyorder"
+ ],
+ "strata_definitions": {
+  "T_posted": {
+   "group": "status",
+   "gold_rule": "apply",
+   "status": "posted",
+   "description": "posted twin of every status base (same before and event, status 'posted'); in-distribution posted control"
+  },
+  "C_void": {
+   "group": "status",
+   "gold_rule": "noop",
+   "status": "void",
+   "description": "the trained status 'void' on the same bases; in-distribution void control"
+  },
+  "U_pending": {
+   "group": "status",
+   "gold_rule": "noop",
+   "status": "pending",
+   "description": "unseen status 'pending' on the same bases"
+  },
+  "U_draft": {
+   "group": "status",
+   "gold_rule": "noop",
+   "status": "draft",
+   "description": "unseen status 'draft' on the same bases"
+  },
+  "U_cancelled": {
+   "group": "status",
+   "gold_rule": "noop",
+   "status": "cancelled",
+   "description": "unseen status 'cancelled' on the same bases"
+  },
+  "U_reversed": {
+   "group": "status",
+   "gold_rule": "noop",
+   "status": "reversed",
+   "description": "unseen status 'reversed' on the same bases"
+  },
+  "U_held": {
+   "group": "status",
+   "gold_rule": "noop",
+   "status": "held",
+   "description": "unseen status 'held' on the same bases"
+  },
+  "N_voidcase": {
+   "group": "status",
+   "gold_rule": "noop",
+   "status": [
+    "Void",
+    "VOID",
+    "voided"
+   ],
+   "description": "near-miss spellings of 'void' (Void / VOID / voided by base index mod 3)"
+  },
+  "N_postedlike": {
+   "group": "status",
+   "gold_rule": "noop",
+   "status": [
+    "unposted",
+    "not_posted",
+    "not posted"
+   ],
+   "description": "look-alikes containing 'posted' (unposted / not_posted / 'not posted' by base index mod 3)"
+  },
+  "M_bal": {
+   "group": "magnitude",
+   "gold_rule": "apply",
+   "status": "posted",
+   "description": "every balance has 4 or 5 digits (sign x uniform in the digit band); posted"
+  },
+  "M_amt": {
+   "group": "magnitude",
+   "gold_rule": "apply",
+   "status": "posted",
+   "description": "|amount| in 13..99 (50) or 100..500 (50), sign +-; balances in range; posted"
+  },
+  "A_renamed": {
+   "group": "naming",
+   "gold_rule": "apply",
+   "status": "posted",
+   "description": "4 accounts renamed: letters E-H (50) or 4 of 8 lower-case words (50); posted"
+  },
+  "A_many": {
+   "group": "naming",
+   "gold_rule": "apply",
+   "status": "posted",
+   "description": "5, 6, 7 or 8 accounts named A.. (25 each); the event may touch any; posted"
+  },
+  "F_keyorder": {
+   "group": "format",
+   "gold_rule": "apply",
+   "status": "posted",
+   "description": "accounts A-D, in range, posted; JSON keys reordered: 'event' first, event and balance keys permuted (never sorted)"
+  }
+ },
+ "chains": 80,
+ "frame": "Titan's one-step frame: rcwmt.env.one_step_messages(ledger_replay, before, event) (SYSTEM_ONE, compact JSON, sorted keys); F_keyorder rows and CH_X reordered steps: the same system text and compact JSON with the recorded key order (p3_common.user_json)",
+ "rule_text": "Apply one event to the supplied account balances. If status is not posted, leave all balances unchanged. add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.",
+ "gold": "rcwmt.env.step (any status other than the exact string 'posted' is a no-op), asserted equal to p3_common.rule_gold (the rule text implemented independently) and to the validated FDS oracle (env.cross_check) on every row and chain transition",
+ "rule_implies_gold": {
+  "T_posted": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "apply",
+   "statuses": {
+    "posted": 100
+   },
+   "clause": "status is 'posted', so the arithmetic clauses apply (\"add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously.\")",
+   "rows_where_clause_gives_gold": 100,
+   "description": "posted twin of every status base (same before and event, status 'posted'); in-distribution posted control"
+  },
+  "C_void": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "noop",
+   "statuses": {
+    "void": 100
+   },
+   "clause": "\"If status is not posted, leave all balances unchanged.\"",
+   "rows_where_clause_gives_gold": 100,
+   "description": "the trained status 'void' on the same bases; in-distribution void control"
+  },
+  "U_pending": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "noop",
+   "statuses": {
+    "pending": 100
+   },
+   "clause": "\"If status is not posted, leave all balances unchanged.\"",
+   "rows_where_clause_gives_gold": 100,
+   "description": "unseen status 'pending' on the same bases"
+  },
+  "U_draft": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "noop",
+   "statuses": {
+    "draft": 100
+   },
+   "clause": "\"If status is not posted, leave all balances unchanged.\"",
+   "rows_where_clause_gives_gold": 100,
+   "description": "unseen status 'draft' on the same bases"
+  },
+  "U_cancelled": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "noop",
+   "statuses": {
+    "cancelled": 100
+   },
+   "clause": "\"If status is not posted, leave all balances unchanged.\"",
+   "rows_where_clause_gives_gold": 100,
+   "description": "unseen status 'cancelled' on the same bases"
+  },
+  "U_reversed": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "noop",
+   "statuses": {
+    "reversed": 100
+   },
+   "clause": "\"If status is not posted, leave all balances unchanged.\"",
+   "rows_where_clause_gives_gold": 100,
+   "description": "unseen status 'reversed' on the same bases"
+  },
+  "U_held": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "noop",
+   "statuses": {
+    "held": 100
+   },
+   "clause": "\"If status is not posted, leave all balances unchanged.\"",
+   "rows_where_clause_gives_gold": 100,
+   "description": "unseen status 'held' on the same bases"
+  },
+  "N_voidcase": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "noop",
+   "statuses": {
+    "Void": 34,
+    "VOID": 33,
+    "voided": 33
+   },
+   "clause": "\"If status is not posted, leave all balances unchanged.\"",
+   "rows_where_clause_gives_gold": 100,
+   "description": "near-miss spellings of 'void' (Void / VOID / voided by base index mod 3)"
+  },
+  "N_postedlike": {
+   "n": 100,
+   "group": "status",
+   "gold_rule": "noop",
+   "statuses": {
+    "unposted": 34,
+    "not_posted": 33,
+    "not posted": 33
+   },
+   "clause": "\"If status is not posted, leave all balances unchanged.\"",
+   "rows_where_clause_gives_gold": 100,
+   "description": "look-alikes containing 'posted' (unposted / not_posted / 'not posted' by base index mod 3)"
+  },
+  "M_bal": {
+   "n": 100,
+   "group": "magnitude",
+   "gold_rule": "apply",
+   "statuses": {
+    "posted": 100
+   },
+   "clause": "status is 'posted', so the arithmetic clauses apply (\"add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously.\")",
+   "rows_where_clause_gives_gold": 100,
+   "description": "every balance has 4 or 5 digits (sign x uniform in the digit band); posted"
+  },
+  "M_amt": {
+   "n": 100,
+   "group": "magnitude",
+   "gold_rule": "apply",
+   "statuses": {
+    "posted": 100
+   },
+   "clause": "status is 'posted', so the arithmetic clauses apply (\"add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously.\")",
+   "rows_where_clause_gives_gold": 100,
+   "description": "|amount| in 13..99 (50) or 100..500 (50), sign +-; balances in range; posted"
+  },
+  "A_renamed": {
+   "n": 100,
+   "group": "naming",
+   "gold_rule": "apply",
+   "statuses": {
+    "posted": 100
+   },
+   "clause": "status is 'posted', so the arithmetic clauses apply (\"add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously.\")",
+   "rows_where_clause_gives_gold": 100,
+   "description": "4 accounts renamed: letters E-H (50) or 4 of 8 lower-case words (50); posted"
+  },
+  "A_many": {
+   "n": 100,
+   "group": "naming",
+   "gold_rule": "apply",
+   "statuses": {
+    "posted": 100
+   },
+   "clause": "status is 'posted', so the arithmetic clauses apply (\"add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously.\")",
+   "rows_where_clause_gives_gold": 100,
+   "description": "5, 6, 7 or 8 accounts named A.. (25 each); the event may touch any; posted"
+  },
+  "F_keyorder": {
+   "n": 100,
+   "group": "format",
+   "gold_rule": "apply",
+   "statuses": {
+    "posted": 100
+   },
+   "clause": "status is 'posted', so the arithmetic clauses apply (\"add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously.\")",
+   "rows_where_clause_gives_gold": 100,
+   "description": "accounts A-D, in range, posted; JSON keys reordered: 'event' first, event and balance keys permuted (never sorted)"
+  }
+ },
+ "scoring": "correct iff p3_common.parse_ledger(text, accounts of the row) == gold (order-insensitive); A-D rows use rcwmt.env.parse_state(lenient=True) itself",
+ "exclusion": "no (before, event) payload and no FDS operative content of any row or chain transition equals one of any source below; payloads unique within the bank; an operative content repeats only within one status base or one chain parent",
+ "exclusion_sources": {
+  "historical": {
+   "payloads": 6464,
+   "operative_contents": 6258,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ],
+   "harvest": "scripts/l1_make_ood.harvest_historical: FDS generate.harvest_exclusions line for line, except files named HSKILL_CONFIRM_V2* are skipped by name before any open; rcwmt.bank.load_exclusions() is NOT called"
+  },
+  "bank_pilot.json": {
+   "payloads": 15629,
+   "operative_contents": 15278,
+   "sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+  },
+  "bank_confirm.json": {
+   "payloads": 13552,
+   "operative_contents": 13247,
+   "sha256": "8bc6e2f8a8c7cae5b7b66293ef12b0efc440c281f820eca9d384a659b26a6a16"
+  },
+  "bank_confirm2.json": {
+   "payloads": 12163,
+   "operative_contents": 11903,
+   "sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea"
+  },
+  "bank_s4000.json": {
+   "payloads": 255745,
+   "operative_contents": 250614,
+   "sha256": "af1336c261375524a4a6eaf92cc48dc76b1159df093ce2705d279688f22bb4ce"
+  },
+  "t2_train.jsonl": {
+   "payloads": 1501,
+   "operative_contents": 1496,
+   "sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744"
+  },
+  "t2_eval.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59"
+  },
+  "t2_eval_xframe.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de"
+  },
+  "t2_eval_supp.jsonl": {
+   "payloads": 360,
+   "operative_contents": 360,
+   "sha256": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086"
+  },
+  "SELECT-VIEWS-001": {
+   "payloads": 384,
+   "operative_contents": 383,
+   "sha256": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3"
+  },
+  "l1_ood_bank.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c"
+  },
+  "fds/T_BANK.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "26c01effe9610230f7876bbe118792f85094605fe3dde5f873c78c67e1c493ba",
+   "path": "C:\\Users\\clclc\\BusinessProject\\ChatBubble-titan-clare-sparse-v1\\experiments\\fresh_dual_skill_instrument_v1\\T_BANK.json"
+  },
+  "fds/T_BANK_V2.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "fc094136a5b581cb9cc03393b1e5959ed8f69247638c81e37cf7f68fbf132e01",
+   "path": "C:\\Users\\clclc\\BusinessProject\\ChatBubble-titan-clare-sparse-v1\\experiments\\fresh_dual_skill_instrument_v1\\T_BANK_V2.json"
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "173aa372466d5e3cc8efbebe4cc7e7ba09a8eb34de4598ce8f9d96a2b8e6557c",
+   "path": "C:\\Users\\clclc\\BusinessProject\\ChatBubble-titan-clare-sparse-v1\\experiments\\composition_confirmation_v1\\T_BANK_V3X.json"
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payloads": 15,
+   "operative_contents": 15,
+   "sha256": "635c9c7ea6851d4a0147a299ecd158a880b91fa5b9046b0af787d2ebbd6eb0d4",
+   "path": "C:\\Users\\clclc\\BusinessProject\\ChatBubble-titan-clare-sparse-v1\\experiments\\composition_confirmation_v2\\STAGE_A_T_V3X.json"
+  },
+  "cc2/T_BANK_V4.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "82f0a6423dd6b58b81319708e7fbda7c5880b9734742323ea11574ff354c93c0",
+   "path": "C:\\Users\\clclc\\BusinessProject\\ChatBubble-titan-clare-sparse-v1\\experiments\\composition_confirmation_v2\\T_BANK_V4.json"
+  }
+ },
+ "exclusion_union": {
+  "payloads": 308726,
+  "operative": 301783
+ },
+ "overlap_counts": {
+  "historical": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_pilot.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_confirm.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_confirm2.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_s4000.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_train.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval_xframe.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval_supp.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "SELECT-VIEWS-001": {
+   "payload": 0,
+   "operative": 0
+  },
+  "l1_ood_bank.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "fds/T_BANK.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "fds/T_BANK_V2.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc2/T_BANK_V4.json": {
+   "payload": 0,
+   "operative": 0
+  }
+ },
+ "before_state_overlap_descriptive": {
+  "historical": 0,
+  "bank_pilot.json": 0,
+  "bank_confirm.json": 0,
+  "bank_confirm2.json": 0,
+  "bank_s4000.json": 0,
+  "t2_train.jsonl": 0,
+  "t2_eval.jsonl": 0,
+  "t2_eval_xframe.jsonl": 0,
+  "t2_eval_supp.jsonl": 0,
+  "SELECT-VIEWS-001": 0,
+  "l1_ood_bank.jsonl": 0,
+  "fds/T_BANK.json": 0,
+  "fds/T_BANK_V2.json": 0,
+  "cc1/T_BANK_V3X.json": 0,
+  "cc2/STAGE_A_T_V3X.json": 0,
+  "cc2/T_BANK_V4.json": 0
+ },
+ "union_status_counts": {
+  "draft": 2,
+  "held": 2,
+  "posted": 131082,
+  "void": 17768
+ },
+ "training_stats": {
+  "t2_train_sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744",
+  "t2_ledger_rows": 501,
+  "t2_statuses": {
+   "posted": 375,
+   "void": 126
+  },
+  "t2_kinds": {
+   "add": 167,
+   "transfer": 167,
+   "scale": 167
+  },
+  "t2_amount_range": [
+   -9,
+   12
+  ],
+  "t2_amounts": [
+   -9,
+   -8,
+   -7,
+   -6,
+   -5,
+   -4,
+   -2,
+   -1,
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "t2_max_abs_before": 98,
+  "t2_accounts": [
+   "A",
+   "B",
+   "C",
+   "D"
+  ],
+  "t2_tick_range": [
+   1,
+   99
+  ],
+  "t2_user_json_compact_sorted_keys": true,
+  "titan_384_train_file": "C:\\Users\\clclc\\BusinessProject\\rineya-dataset-retention-records\\rrp015-20260917\\control-prepared\\microfit-train.jsonl",
+  "titan_384_train_sha256": "0881c027d166f7cdd0286518aff20e5966f92120f4f3877cbca6855fbee2d9e1",
+  "titan_384_ledger_statuses": {
+   "posted": 111,
+   "void": 17
+  }
+ },
+ "oor_property_checks": {
+  "unseen, near-miss and look-alike statuses never occur in T2's or Titan's ledger training rows": true,
+  "T_posted / C_void use only trained statuses (posted / void) on in-range bases": true,
+  "M_bal: every balance |b| >= 1000 > T2's max |before|": true,
+  "M_amt: every |amount| >= 13, outside T2's amount range": true,
+  "A_renamed: no account named A-D": true,
+  "A_many: 5-8 accounts (T2: exactly A-D)": true,
+  "F_keyorder: user JSON differs from the sorted frame T2 trained on, and starts with the event": true,
+  "every one-step row outside M_amt, and every CH_S event, keeps an amount T2 trained on (-9..12)": true,
+  "status-group and in-range rows keep |before| <= 99 (T2's range); A_* / F_* likewise": true,
+  "chains: accounts A-D (the PREREG-2 decision pipeline applies)": true
+ },
+ "draws": {
+  "status_bases": 139,
+  "M_bal": 122,
+  "M_amt": 131,
+  "A_renamed": 118,
+  "A_many": 141,
+  "F_keyorder": 123,
+  "CH_S": 45,
+  "CH_X": 83
+ },
+ "rejected": {
+  "T_posted": {
+   "posted version is a no-op": 9,
+   "kind quota full": 30
+  },
+  "C_void": {},
+  "U_pending": {},
+  "U_draft": {},
+  "U_cancelled": {},
+  "U_reversed": {},
+  "U_held": {},
+  "N_voidcase": {},
+  "N_postedlike": {},
+  "M_bal": {
+   "event leaves the state unchanged": 9,
+   "kind quota full": 13
+  },
+  "M_amt": {
+   "kind quota full": 30,
+   "event leaves the state unchanged": 1
+  },
+  "A_renamed": {
+   "event leaves the state unchanged": 7,
+   "kind quota full": 11
+  },
+  "A_many": {
+   "event leaves the state unchanged": 10,
+   "kind quota full": 31
+  },
+  "F_keyorder": {
+   "event leaves the state unchanged": 11,
+   "kind quota full": 12
+  },
+  "CH_S": {
+   "needs >= 1 posted and >= 1 non-posted event": 5
+  },
+  "CH_X": {
+   "needs >= 1 posted OOR-amount event": 28,
+   "needs >= 1 posted and >= 1 non-posted event": 13,
+   "needs >= 1 reordered step": 2
+  }
+ },
+ "describe": {
+  "T_posted": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "posted": 100
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 468
+  },
+  "C_void": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "void": 100
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 98
+  },
+  "U_pending": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "pending": 100
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 98
+  },
+  "U_draft": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "draft": 100
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 98
+  },
+  "U_cancelled": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "cancelled": 100
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 98
+  },
+  "U_reversed": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "reversed": 100
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 98
+  },
+  "U_held": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "held": 100
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 98
+  },
+  "N_voidcase": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "VOID": 33,
+    "Void": 34,
+    "voided": 33
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 98
+  },
+  "N_postedlike": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "not posted": 33,
+    "not_posted": 33,
+    "unposted": 34
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 98
+  },
+  "M_bal": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "posted": 100
+   },
+   "balance_range": [
+    -99492,
+    99578
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 856332
+  },
+  "M_amt": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "posted": 100
+   },
+   "balance_range": [
+    -98,
+    93
+   ],
+   "amount_range": [
+    -461,
+    499
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 13265
+  },
+  "A_renamed": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "posted": 100
+   },
+   "balance_range": [
+    -97,
+    90
+   ],
+   "amount_range": [
+    -8,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 324,
+   "naming": {
+    "letters": 50,
+    "words": 50
+   }
+  },
+  "A_many": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "posted": 100
+   },
+   "balance_range": [
+    -98,
+    96
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "5": 25,
+    "6": 25,
+    "7": 25,
+    "8": 25
+   },
+   "gold_abs_max": 680
+  },
+  "F_keyorder": {
+   "kinds": {
+    "add": 22,
+    "scale": 33,
+    "transfer": 45
+   },
+   "statuses": {
+    "posted": 100
+   },
+   "balance_range": [
+    -98,
+    97
+   ],
+   "amount_range": [
+    -9,
+    12
+   ],
+   "n_accounts": {
+    "4": 100
+   },
+   "gold_abs_max": 580
+  },
+  "CH_S": {
+   "parents": 10,
+   "candidates": 40,
+   "step_classes": {
+    "near_void": 5,
+    "posted": 79,
+    "posted_like": 20,
+    "unseen": 56
+   },
+   "copy_chain_exact_floor_k4": 0.0,
+   "final_abs_max": 320
+  },
+  "CH_X": {
+   "parents": 10,
+   "candidates": 40,
+   "step_classes": {
+    "near_void": 10,
+    "near_void+reordered": 6,
+    "posted": 20,
+    "posted+reordered": 25,
+    "posted_like": 8,
+    "posted_like+reordered": 4,
+    "posted_oor_amount": 22,
+    "posted_oor_amount+reordered": 29,
+    "unseen": 17,
+    "unseen+reordered": 19
+   },
+   "copy_chain_exact_floor_k4": 0.0,
+   "final_abs_max": 918
+  }
+ },
+ "provenance": "Fresh. Built 2026-10-08/09 for PREREG-3 before any model saw it; no model, tokenizer or model output was used. No runs/t2/*/gen_* file was opened.",
+ "use": "PREREG-3 only (rule or trigger); spent by that use.",
+ "file": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\bank_p3_oor.jsonl",
+ "file_sha256": "9e7108df6aa681b8f08769b2e37b976933c8406ffd671034f542e4068881b545",
+ "onestep_rows": 1400,
+ "build_log": [
+  "[22:04:57] PREREG-3 OOR bank: seed 20261103, 100 per stratum, strata ['T_posted', 'C_void', 'U_pending', 'U_draft', 'U_cancelled', 'U_reversed', 'U_held', 'N_voidcase', 'N_postedlike', 'M_bal', 'M_amt', 'A_renamed', 'A_many', 'F_keyorder'], chains {'CH_S': 10, 'CH_X': 10} x 4; no model call",
+  "[22:04:57] code identity: {'rcwmt/env.py': '92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2', 'fds/oracles.py': '6d22a5e40a69fb8f5c79230d2c2dc7fa51af605de70d3c0fc7cd7d69fe4c959c', 'fds/generate.py': 'e7e0288af3b5b5c3930446295094734abc55ed22761a22521fa49b346d42d77e'}",
+  "[22:05:45] historical set: 6464 payloads (48s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[22:05:45] bank_pilot.json: 15629 payloads, 15278 operative contents",
+  "[22:05:45] bank_confirm.json: 13552 payloads, 13247 operative contents",
+  "[22:05:46] bank_confirm2.json: 12163 payloads, 11903 operative contents",
+  "[22:05:50] bank_s4000.json: 255745 payloads, 250614 operative contents",
+  "[22:05:50] t2_train.jsonl: 1501 payloads",
+  "[22:05:50] t2_eval.jsonl: 600 payloads",
+  "[22:05:50] t2_eval_xframe.jsonl: 600 payloads",
+  "[22:05:50] t2_eval_supp.jsonl: 360 payloads",
+  "[22:05:50] SELECT-VIEWS-001: 384 payloads",
+  "[22:05:50] l1_ood_bank.jsonl: 600 payloads",
+  "[22:05:50] fds/T_BANK.json: 192 payloads",
+  "[22:05:50] fds/T_BANK_V2.json: 192 payloads",
+  "[22:05:50] cc1/T_BANK_V3X.json: 864 payloads",
+  "[22:05:50] cc2/STAGE_A_T_V3X.json: 15 payloads",
+  "[22:05:50] cc2/T_BANK_V4.json: 864 payloads",
+  "[22:05:50] exclusion union: 308726 payloads, 301783 operative contents",
+  "[22:05:50] status bases: 100 from 139 draws; rejected {'posted version is a no-op': 9, 'kind quota full': 30}",
+  "[22:05:50] M_bal: 100 rows from 122 draws; rejected {'event leaves the state unchanged': 9, 'kind quota full': 13}",
+  "[22:05:50] M_amt: 100 rows from 131 draws; rejected {'kind quota full': 30, 'event leaves the state unchanged': 1}",
+  "[22:05:50] A_renamed: 100 rows from 118 draws; rejected {'event leaves the state unchanged': 7, 'kind quota full': 11}",
+  "[22:05:50] A_many: 100 rows from 141 draws; rejected {'event leaves the state unchanged': 10, 'kind quota full': 31}",
+  "[22:05:50] F_keyorder: 100 rows from 123 draws; rejected {'event leaves the state unchanged': 11, 'kind quota full': 12}",
+  "[22:05:50] CH_S: 10 parents x 4 candidates from 45 candidate draws; rejected {'needs >= 1 posted and >= 1 non-posted event': 5}",
+  "[22:05:50] CH_X: 10 parents x 4 candidates from 83 candidate draws; rejected {'needs >= 1 posted OOR-amount event': 28, 'needs >= 1 posted and >= 1 non-posted event': 13, 'needs >= 1 reordered step': 2}",
+  "[22:05:50] overlaps (payload / operative content) with every source: all 0 (16 sources)",
+  "[22:05:50] bank: 1400 one-step rows + 80 chains, sha256 9e7108df6aa681b8f08769b2e37b976933c8406ffd671034f542e4068881b545; 54s"
+ ]
+}

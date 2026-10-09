@@ -1,7 +1,7 @@
 # RCWM-T1 report: consequence models from a frozen 0.6B Rineya LM
 
 **Date:** 2026-10-06
-**Status:** PREREG-1 **confirmed** (2026-10-07; §3). PREREG-2 **confirmed** (2026-10-08; §3b). The L8-15 promotion screen (PREREG-L1) is frozen and running.
+**Status:** PREREG-1 **confirmed** (2026-10-07; §3). PREREG-2 **confirmed** (2026-10-08; §3b). The L8-15 promotion screen (PREREG-L1) ran on 2026-10-09: **DO NOT PROMOTE**, failing C2 (prerequisite acquisition −8 vs Titan-Sparse; DECISIONS R-L1).
 
 This is the first native execution of the RCWM-001 plan (`../../report/`) on Rineya Titan models. Confirmatory statements are limited to PREREG-1 (§3). Everything else is exploratory, from the pilot bank. Supporting documents:
 - full numbers: `RESULTS_PILOT.md`
@@ -212,6 +212,16 @@ These are provisional and will be revised once PREREG-1 resolves.
    - Test with interventions instead. Weight-spliced hybrids localise the skill to blocks 8–15 (R12).
    - The upper 59% of the delta is dispensable for the skill. Dropping it keeps decision quality and cuts off-task first-token KL drift by about a third (ratio 0.68 [0.62, 0.74]; D-23 pre-stated verdict "reduces interference", R14).
    - Two thirds of the drift sits in the same blocks as the skill, so layer localisation is a modest retention gain that stacks with magnitude pruning, not a cure.
+   - **The promotion screen did not pass (PREREG-L1, 2026-10-09, DO NOT PROMOTE).**
+     - Passed:
+       - C0, C1 and C3–C6 hold;
+       - drift is 0.65× Titan-Sparse's [0.60, 0.69];
+       - retention is 43 vs 41 /47.
+     - Failed:
+       - C2 fails on prerequisite acquisition: 96 → 88 /128, net −8 (p 0.021, tolerance −5);
+       - arithmetic falls 72 → 63 /150, just above its bar of 62.
+     - The lost rows are near-miss sums, off by 1–4. So the upper delta is not needed for the rule, but it does sharpen exact numeric output.
+     - "Dispensable" therefore holds for R12's transitions and not for exact arithmetic. L8-15 stays a mechanism result, not a core.
 5. **Probing for "world models" in these models needs control tasks and LM-head readouts.** Linear change-mask probes were both insensitive to the trained skill and able to compute answers themselves.
 6. **Infrastructure.** Every GPU job on this laptop should use the duty-cycle cap, the thermal watchdog flag, the dedicated-memory lease check and alternation. Without them, the RTX 4070 Laptop reached 95 °C and reset its driver.
 

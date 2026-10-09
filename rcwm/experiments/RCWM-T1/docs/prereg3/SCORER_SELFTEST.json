@@ -1,0 +1,48 @@
+{
+ "ok": true,
+ "checks": {
+  "gold renderings scored correct": {
+   "n": 10500,
+   "correct": 10500,
+   "ok": true
+  },
+  "copy answer == copy floor (1 on no-op rows, 0 on apply rows)": {
+   "per_stratum": {
+    "T_posted": 0.0,
+    "C_void": 1.0,
+    "U_pending": 1.0,
+    "U_draft": 1.0,
+    "U_cancelled": 1.0,
+    "U_reversed": 1.0,
+    "U_held": 1.0,
+    "U_neutral": 1.0,
+    "N_voidcase": 1.0,
+    "N_postedlike": 1.0,
+    "M_bal": 0.0,
+    "M_amt": 0.0,
+    "A_renamed": 0.0,
+    "A_many": 0.0,
+    "F_keyorder": 0.0
+   },
+   "ok": true
+  },
+  "negatives scored wrong (perturbed value, missing / extra / string / bool key, empty, prose, applied / copied)": {
+   "n": 12000,
+   "wrong": 12000,
+   "error_classes_ok": true,
+   "ok": true
+  },
+  "parse_general == rcwmt.env.parse_state on A-D texts": {
+   "n": 27300,
+   "mismatches": 0,
+   "ok": true
+  },
+  "chains: oracle exact 1.0 and regret 0; copy == copy-chain floor and F_copy_s0; files validate": {
+   "validation_errors": [],
+   "ok": true
+  }
+ },
+ "bank_sha256": "0fd18295d6eaa84d0f451c94b81ea1ecf37ab88e8ab298b58820d80ac740bf12",
+ "n_rows": 1500,
+ "n_chains": 80
+}

@@ -1605,3 +1605,189 @@ verdict: CONFIRMED (strong pass: both one-sided 95% bounds beyond the thresholds
 [18:38:56] G1: hashing the three arm files (sha256 + per-group FP32 hashes) before the lease ...
 [18:39:08] pending: supa:acq/ret/lc/drift_fresh/drift_bridge/ood, sparse:acq/ret/lc/drift_fresh/drift_bridge/ood, l8_15:acq/ret/lc/drift_fresh/drift_bridge/ood
   [gpu-lease] waiting: foreign python pid 201764 (4.70 GiB dedicated GPU memory)
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:l1screen token=3cd3b79d
+[00:06:06] loaded supa (dense_reference@5b4c22d, 962abc5bcd5a..., 3.2s); G2 passed
+[00:06:06] supa: acq (384 rows) ...
+[00:08:23] supa: acq 50/384 rows (137s)
+[00:10:20] supa: acq 100/384 rows (254s)
+[00:12:29] supa: acq 150/384 rows (383s)
+[00:14:48] supa: acq 200/384 rows (522s)
+[00:17:33] supa: acq 250/384 rows (687s)
+[00:19:48] supa: acq 300/384 rows (822s)
+[00:22:15] supa: acq 350/384 rows (969s)
+[00:23:57] supa: acq done in 1070s
+[00:23:57] supa: ret (150 rows) ...
+[00:24:31] supa: ret 50/150 rows (35s)
+[00:24:59] supa: ret 100/150 rows (62s)
+[00:25:36] supa: ret done in 99s
+[00:25:36] supa: lc (256 rows) ...
+[00:26:48] supa: lc 50/256 rows (72s)
+[00:28:26] supa: lc 100/256 rows (170s)
+[00:29:55] supa: lc 150/256 rows (259s)
+[00:31:24] supa: lc 200/256 rows (348s)
+[00:32:57] supa: lc 250/256 rows (441s)
+[00:33:10] supa: lc done in 454s
+[00:33:10] supa: drift_fresh (456 rows) ...
+[00:33:19] supa: drift_fresh 50/456 rows (9s)
+[00:33:29] supa: drift_fresh 100/456 rows (19s)
+[00:33:39] supa: drift_fresh 150/456 rows (29s)
+[00:33:49] supa: drift_fresh 200/456 rows (40s)
+[00:33:59] supa: drift_fresh 250/456 rows (50s)
+[00:34:09] supa: drift_fresh 300/456 rows (60s)
+[00:34:19] supa: drift_fresh 350/456 rows (70s)
+[00:34:30] supa: drift_fresh 400/456 rows (80s)
+[00:34:40] supa: drift_fresh 450/456 rows (90s)
+[00:34:41] supa: drift_fresh done in 91s
+[00:34:41] supa: drift_bridge (228 rows) ...
+[00:34:51] supa: drift_bridge 50/228 rows (10s)
+[00:35:02] supa: drift_bridge 100/228 rows (20s)
+[00:35:12] supa: drift_bridge 150/228 rows (31s)
+[00:35:22] supa: drift_bridge 200/228 rows (41s)
+[00:35:28] supa: drift_bridge done in 47s
+[00:35:35] loaded sparse (dense_reference@5b4c22d, a28629c9d345..., 7.2s); G2 passed
+[00:35:35] sparse: acq (384 rows) ...
+[00:37:14] sparse: acq 50/384 rows (99s)
+[00:38:20] sparse: acq 100/384 rows (164s)
+[00:39:26] sparse: acq 150/384 rows (231s)
+[00:40:39] sparse: acq 200/384 rows (304s)
+[00:41:50] sparse: acq 250/384 rows (375s)
+[00:42:51] sparse: acq 300/384 rows (435s)
+[00:44:00] sparse: acq 350/384 rows (505s)
+[00:44:44] sparse: acq done in 549s
+[00:44:44] sparse: ret (150 rows) ...
+[00:45:07] sparse: ret 50/150 rows (23s)
+[00:45:28] sparse: ret 100/150 rows (44s)
+[00:45:51] sparse: ret done in 67s
+[00:45:51] sparse: lc (256 rows) ...
+[00:47:04] sparse: lc 50/256 rows (73s)
+[00:48:29] sparse: lc 100/256 rows (157s)
+[00:49:52] sparse: lc 150/256 rows (240s)
+[00:51:07] sparse: lc 200/256 rows (316s)
+[00:52:15] sparse: lc 250/256 rows (383s)
+[00:52:22] sparse: lc done in 391s
+[00:52:22] sparse: drift_fresh (456 rows) ...
+[00:52:33] sparse: drift_fresh 50/456 rows (10s)
+[00:52:43] sparse: drift_fresh 100/456 rows (21s)
+[00:52:53] sparse: drift_fresh 150/456 rows (31s)
+[00:53:04] sparse: drift_fresh 200/456 rows (41s)
+[00:53:14] sparse: drift_fresh 250/456 rows (52s)
+[00:53:24] sparse: drift_fresh 300/456 rows (62s)
+[00:53:34] sparse: drift_fresh 350/456 rows (72s)
+[00:53:45] sparse: drift_fresh 400/456 rows (83s)
+[00:53:55] sparse: drift_fresh 450/456 rows (93s)
+[00:53:56] sparse: drift_fresh done in 94s
+[00:53:56] sparse: drift_bridge (228 rows) ...
+[00:54:07] sparse: drift_bridge 50/228 rows (10s)
+[00:54:17] sparse: drift_bridge 100/228 rows (20s)
+[00:54:27] sparse: drift_bridge 150/228 rows (31s)
+[00:54:37] sparse: drift_bridge 200/228 rows (41s)
+[00:54:43] sparse: drift_bridge done in 46s
+[00:54:43] PG: anchor parity gate on supa and sparse (CPU) ...
+[00:54:46] PG passed
+[00:54:46] sparse stays loaded across the parity gate for ood
+[00:54:46] sparse: ood (600 rows) ...
+[00:56:34] sparse: ood 50/600 rows (109s)
+[00:58:23] sparse: ood 100/600 rows (217s)
+[00:59:54] sparse: ood 150/600 rows (308s)
+[01:01:24] sparse: ood 200/600 rows (398s)
+[01:02:42] sparse: ood 250/600 rows (476s)
+[01:03:55] sparse: ood 300/600 rows (549s)
+[01:05:07] sparse: ood 350/600 rows (621s)
+[01:06:19] sparse: ood 400/600 rows (694s)
+[01:06:35] sparse: ood 450/600 rows (709s)
+[01:06:50] sparse: ood 500/600 rows (724s)
+[01:07:05] sparse: ood 550/600 rows (740s)
+[01:07:21] sparse: ood done in 755s
+[01:07:24] loaded supa (dense_reference@5b4c22d, 962abc5bcd5a..., 3.3s); G2 passed
+[01:07:24] supa: ood (600 rows) ...
+[01:09:45] supa: ood 50/600 rows (141s)
+[01:12:04] supa: ood 100/600 rows (280s)
+[01:13:56] supa: ood 150/600 rows (392s)
+[01:15:50] supa: ood 200/600 rows (506s)
+[01:19:22] supa: ood 250/600 rows (718s)
+[01:23:08] supa: ood 300/600 rows (944s)
+[01:26:43] supa: ood 350/600 rows (1159s)
+[01:30:19] supa: ood 400/600 rows (1375s)
+[01:30:57] supa: ood 450/600 rows (1412s)
+[01:31:32] supa: ood 500/600 rows (1448s)
+[01:32:09] supa: ood 550/600 rows (1485s)
+[01:32:46] supa: ood done in 1521s
+[01:32:51] loaded l8_15 (dense_reference@5b4c22d, 6282b45676fa..., 5.2s); G2 passed
+[01:32:51] l8_15: acq (384 rows) ...
+[01:33:58] l8_15: acq 50/384 rows (67s)
+[01:34:59] l8_15: acq 100/384 rows (128s)
+[01:35:54] l8_15: acq 150/384 rows (183s)
+[01:36:52] l8_15: acq 200/384 rows (241s)
+[01:37:56] l8_15: acq 250/384 rows (305s)
+[01:38:53] l8_15: acq 300/384 rows (363s)
+[01:39:57] l8_15: acq 350/384 rows (426s)
+[01:40:38] l8_15: acq done in 467s
+[01:40:38] l8_15: ret (150 rows) ...
+[01:41:02] l8_15: ret 50/150 rows (23s)
+[01:41:24] l8_15: ret 100/150 rows (46s)
+[01:41:48] l8_15: ret done in 70s
+[01:41:48] l8_15: lc (256 rows) ...
+[01:42:57] l8_15: lc 50/256 rows (69s)
+[01:44:09] l8_15: lc 100/256 rows (140s)
+[01:45:25] l8_15: lc 150/256 rows (217s)
+[01:46:51] l8_15: lc 200/256 rows (302s)
+[01:48:10] l8_15: lc 250/256 rows (381s)
+[01:48:18] l8_15: lc done in 389s
+[01:48:18] l8_15: drift_fresh (456 rows) ...
+[01:48:27] l8_15: drift_fresh 50/456 rows (9s)
+[01:48:37] l8_15: drift_fresh 100/456 rows (20s)
+[01:48:48] l8_15: drift_fresh 150/456 rows (30s)
+[01:48:58] l8_15: drift_fresh 200/456 rows (40s)
+[01:49:08] l8_15: drift_fresh 250/456 rows (51s)
+[01:49:18] l8_15: drift_fresh 300/456 rows (61s)
+[01:49:29] l8_15: drift_fresh 350/456 rows (71s)
+[01:49:39] l8_15: drift_fresh 400/456 rows (82s)
+[01:49:49] l8_15: drift_fresh 450/456 rows (92s)
+[01:49:50] l8_15: drift_fresh done in 93s
+[01:49:50] l8_15: drift_bridge (228 rows) ...
+[01:50:01] l8_15: drift_bridge 50/228 rows (10s)
+[01:50:11] l8_15: drift_bridge 100/228 rows (20s)
+[01:50:21] l8_15: drift_bridge 150/228 rows (30s)
+[01:50:31] l8_15: drift_bridge 200/228 rows (41s)
+[01:50:37] l8_15: drift_bridge done in 46s
+[01:50:37] l8_15: ood (600 rows) ...
+[01:52:28] l8_15: ood 50/600 rows (111s)
+[01:54:23] l8_15: ood 100/600 rows (226s)
+[01:55:55] l8_15: ood 150/600 rows (318s)
+[01:57:25] l8_15: ood 200/600 rows (408s)
+[01:58:42] l8_15: ood 250/600 rows (485s)
+[01:59:55] l8_15: ood 300/600 rows (558s)
+[02:01:07] l8_15: ood 350/600 rows (630s)
+[02:02:23] l8_15: ood 400/600 rows (706s)
+[02:02:39] l8_15: ood 450/600 rows (722s)
+[02:02:54] l8_15: ood 500/600 rows (738s)
+[02:03:10] l8_15: ood 550/600 rows (753s)
+[02:03:27] l8_15: ood done in 770s
+  [gpu-lease] released rineya-gpu-0.lock
+[02:03:28] wrote C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\runs\l1_screen\DONE.json
+=== 2026-10-09T02:03:29-05:00 exit rc=0 scripts/l1_screen.py run --device cuda
+=== 2026-10-09T02:03:29-05:00 start scripts/l1_screen.py analyze
+[02:03:30] scorer parity on the published artifacts ...
+  [PASS] SELECT-VIEWS-001: sha bound to FLOORS.json, role guard, leak checks, floors recomputed == published  (384 views)
+  [PASS] acquisition scorer reproduces sparse's published PROCESS file row by row  (canonical 232/384, floors 3/3)
+  [PASS] long-context scorer reproduces sparse's published LONGCTX file row by row [report-only (SPENT long-context bank)]  (164/256 (showcase 43, stability 121); UNKNOWN substring 12, literal 12, false abstentions 0)
+  [PASS] acquisition scorer reproduces supa's published PROCESS file row by row  (canonical 14/384, floors 0/3)
+  [PASS] long-context scorer reproduces supa's published LONGCTX file row by row [report-only (SPENT long-context bank)]  (161/256 (showcase 41, stability 120); UNKNOWN substring 13, literal 13, false abstentions 0)
+  [PASS] exact McNemar Titan-Sparse vs Supa reproduces the published 7 lost / 10 gained / p 0.6291 [report-only (SPENT long-context bank)]  ({'lost': 7, 'gained': 10, 'net': 3, 'discordant': 17, 'p': 0.629058837890625})
+  [PASS] frozen B28 source answers re-score to exactly the frozen reference sets (permissive 47, strict 41)
+  [PASS] monitor_verdict on Titan-Sparse's published per-class counts reproduces FAIL / failed classes
+  [PASS] the 24 published retention samples' source texts score consistently with the frozen references
+  [PASS] the 24 published Titan-Sparse arm samples score consistently with its published lost ids (both policies)  (9 source-correct sample rows checked)
+  [PASS] tabulator parity: Titan-Sparse's FRONTIER_DET row (232, 3/3, 72, 63, 41, Gate v2 PASS)  (acq 232, arith 72/63, retained 41)
+  [PASS] tabulator parity: Titan-Sparse's FRONTIER_DET long-context columns (164, UNKNOWN 12) [report-only (SPENT long-context bank)]  (lc 164, UNK 12)
+  [PASS] tokenizer + chat template of this environment reproduce the 256 recorded long-context input-token counts (the only recorded input counts) [report-only (SPENT long-context bank)]  (0 differ)
+  [PASS] every arithmetic-panel prompt fits the registered 512-token context (no truncation)  (max 204 tokens)
+  [PASS] SELECT-VIEWS-001 prompts render and tokenize  (110-144 tokens)
+  [PASS] decode path of this environment: every published anchor text on SELECT-VIEWS-001 and the arithmetic panel survives encode -> decode(skip_special_tokens) -> strip unchanged  (942 texts, 0 differ)
+  [PASS] decode path: the published long-context texts survive the same round trip [report-only (SPENT long-context bank)]  (512 texts, 0 differ)
+[02:03:53] anchor parity gate, re-derived ...
+[02:04:19] verdict: DO NOT PROMOTE (failed: ['C2']); wrote L1_RESULTS.json, L1_RESULTS.md
+=== 2026-10-09T02:04:19-05:00 exit rc=0 scripts/l1_screen.py analyze
+=== 2026-10-09T02:04:19-05:00 start scripts/run_lik.py --bank bank_pilot --arm sparse --splits dev,test
+[sparse] 5824 items, 27755 scored sequences
+  [gpu-lease] waiting: foreign python pid 92824 (4.71 GiB dedicated GPU memory)

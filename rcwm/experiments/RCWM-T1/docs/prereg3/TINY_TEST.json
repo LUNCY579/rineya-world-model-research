@@ -1,0 +1,212 @@
+{
+ "ok": true,
+ "n_checks": 39,
+ "checks": [
+  {
+   "check": "sorted-key chain steps == env.one_step_messages (the registered frame)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "reordered chain steps carry the recorded key order, same system text (83 steps)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "p3_chain == generation.chain on 8 sorted-key A-D chains (off): texts and states",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "p3_chain == generation.chain on 8 sorted-key A-D chains (s0): texts and states",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "tiny run exits 0 and writes DONE.json",
+   "ok": true,
+   "detail": "rc 0"
+  },
+  {
+   "check": "every stage recorded with file hashes; provenance not marked registered",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "one lease, label 'rcwm-t1:prereg3'",
+   "ok": true,
+   "detail": "[('lease', 'rcwm-t1:prereg3')]"
+  },
+  {
+   "check": "resource wait before each load; Sparse unloaded before Supa loads",
+   "ok": true,
+   "detail": "['lease', 'wait', 'load:sparse', 'unload', 'wait', 'load:supa', 'unload', 'release']"
+  },
+  {
+   "check": "anchor: every side reproduces its single-adapter reference (states 1.0 AND identical texts): adapter switching in one PeftModel == each adapter loaded alone",
+   "ok": true,
+   "detail": "{'off': 1.0, 's0': 1.0, 's1': 1.0, 's2': 1.0}"
+  },
+  {
+   "check": "OFF, s0, s1, s2 one-step texts all differ (adapters active and distinct)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "every output validates with the analysis' own validators (ids in bank order, chain states == parse(texts))",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the analysis runs end to end on the tiny run (fixture mode)",
+   "ok": true,
+   "detail": "STATUS: TRIGGER"
+  },
+  {
+   "check": "a rerun after DONE is a no-op (exit 0, no load, files unchanged)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the crash leaves A0 and S1 recorded, S2 partial, the run lock released",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the resume orphans the partial S2 (never deleted), re-anchors first (recorded, pass), and completes",
+   "ok": true,
+   "detail": "['S2', 'S3']"
+  },
+  {
+   "check": "the resumed run's outputs equal the uninterrupted run byte for byte (every output file but the timestamped anchor.json)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "a recorded output whose hash changed stops the job",
+   "ok": true,
+   "detail": "[prereg3] stage S1: onestep/onestep_off.jsonl changed after it was recorded (sha256)"
+  },
+  {
+   "check": "an anchor failure stops before any bank output (anchor.json pass false, no onestep/chains files)",
+   "ok": true,
+   "detail": "[prereg3] ANCHOR FAILED {'off': {'n': 8, 'identical_states': 1.0, 'start_unix': 1791515925.2144005, 'end_unix': 1791515925.3979187, 'generations': 8}, 's0': {'n': 8, 'identical_states': 1.0, 'start_unix': 1791515925.3979187, 'end_unix': 179"
+  },
+  {
+   "check": "after an anchor failure a rerun refuses; a persisted STOPPED.json refuses every rerun",
+   "ok": true,
+   "detail": "the anchor check failed in an earlier turn (deviation policy: investigate, log) | C:\\Users\\clclc\\AppData\\Local\\Temp\\claude\\C--Users-clclc-BusinessProject-WorldModel-Rineya-Consequence-World-Model-Bundle-2026-10-05\\4c2a936e-32bf-4e01-aa62-961d6b162be5\\scratchpad\\tmp\\p3_tiny_rlrctil0\\runs\\run_d\\STOPPE"
+  },
+  {
+   "check": "a Titan-Sparse fingerprint mismatch stops the job before any generation",
+   "ok": true,
+   "detail": "[prereg3] sparse fingerprint deadbeef0000 != 818be9c6b6a3"
+  },
+  {
+   "check": "a live run lock refuses (not persisted); a stale one is reclaimed and the run completes",
+   "ok": true,
+   "detail": "[prereg3] another p3_run.py holds the run lock {'pid': 273256, 'create_time': 1791515895.069843}"
+  },
+  {
+   "check": "nothing fits the cap: every stage deferred, exit 5, nothing generated",
+   "ok": true,
+   "detail": "['A0', 'S1', 'S2', 'S3']"
+  },
+  {
+   "check": "the next turn completes and equals the uninterrupted run",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "oracle run: OFF applies every non-void event (U strata 0.00, C_void 1.00), s0-s2 and Supa follow the rule",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "analysis verdicts: STATUS: RULE (learned by the adapter); ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN everywhere",
+   "ok": true,
+   "detail": "('STATUS: RULE (learned by the adapter)', {'magnitude': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN', 'naming': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN', 'format': 'ABOVE FLOOR WITHOUT A SHOWN ADAPTER GAIN'})"
+  },
+  {
+   "check": "oracle chains: exact 1.0 at k = 1/2/4 for s0-s2 and Supa; OFF below 1 on CH_S (it applies non-void events)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the fake root holds every required input (real code, draft and hook; tiny bank, adapters, references)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the freeze refuses without approval, with an existing p3 output, and when a pre-freeze check fails (tiny-test record, scorer self-test)",
+   "ok": true,
+   "detail": "--approval must state who approved the freeze, when, and the DECISIONS entry | PREREG-3 outputs exist before the freeze: ['runs\\\\bank_p3_oor']; investigate before freezing | pre-freeze checks failed: ['tiny-model runner tests passed with the current code'] | pre-freeze checks failed: ['scorer self-t"
+  },
+  {
+   "check": "the freeze fills the REAL draft (status line, section 10 record, appendices kept) and writes PREREG_3_FREEZE.json; it verifies",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "a second freeze refuses",
+   "ok": true,
+   "detail": "PREREG-3 is already frozen (PREREG_3_FREEZE.json or PREREG_3.md exists)"
+  },
+  {
+   "check": "a run under the (fake) freeze completes; provenance marks it registered under that freeze",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the registered analysis path accepts it (freeze verified, scorer self-test, every registered provenance check)",
+   "ok": true,
+   "detail": "STATUS: TRIGGER"
+  },
+  {
+   "check": "the registered analysis refuses a run not made under the freeze (run_a: not registered, CPU backend)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a changed frozen input fails verification",
+   "ok": true,
+   "detail": "['scripts/p3_analysis.py differs from the freeze (+ amendments)']"
+  },
+  {
+   "check": "... and the registered analysis then refuses",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a logged amendment (old -> new hash chain) restores verification",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "run() with require_freeze refuses when the freeze does not verify",
+   "ok": true,
+   "detail": "refusing to run the PREREG-3 GPU job: scripts/p3_analysis.py differs from the freeze (+ amendments)"
+  },
+  {
+   "check": "the registered plan fits one turn at the planning and the observed rate",
+   "ok": true,
+   "detail": "([{'stages': ['A0', 'S1', 'S2', 'S3'], 'projected_h': 1.29}], [{'stages': ['A0', 'S1', 'S2', 'S3'], 'projected_h': 0.94}])"
+  },
+  {
+   "check": "with a 1.25 h cap the D-22 rule splits the job and the resumed turn re-anchors",
+   "ok": true,
+   "detail": "[{'stages': ['A0', 'S3'], 'projected_h': 0.59}, {'stages': ['A0 (re-anchor)', 'S1'], 'projected_h': 0.95}, {'stages': ['A0 (re-anchor)', 'S2'], 'projected_h': 0.51}]"
+  }
+ ],
+ "code_sha256": {
+  "scripts/p3_run.py": "a87a05b037e89db6bbd2e931662404761d4d3df5ce0985c13933d97c1879048d",
+  "scripts/p3_common.py": "59a0e0f099206e347c8d36db7e8aa5c719f781a5495720f721fe2c854997e49b",
+  "scripts/p3_analysis.py": "36fd97e3942c8dabbb1702223540f1a6d78a5b3ddb68529c1c34858c8d02b256",
+  "scripts/p3_test_tiny.py": "db8e833938378434a8ccd3a3a3b924c206cc4fe3087e98f031cd2da4f20eee49"
+ },
+ "seconds": 37.2,
+ "torch": "2.6.0+cu124",
+ "transformers": "5.14.1",
+ "peak_rss_mb": 818.9,
+ "note": "tiny random Qwen3 stand-ins on CPU; no real model, no GPU, no lease"
+}
