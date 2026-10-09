@@ -1,0 +1,210 @@
+{
+ "scenarios": {
+  "go": {
+   "expected": [
+    "exact",
+    "GO"
+   ],
+   "verdict": "GO",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.605,
+    "trace-plain|mix": 0.5,
+    "trace-filler|conditional": 0.605,
+    "trace-filler|mix": 0.5,
+    "filler-plain|conditional": 0.0,
+    "filler-plain|mix": 0.0,
+    "trace-off|swap": 0.0,
+    "trace-off|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.5,
+    "trace-plain|mix_in": 0.0
+   },
+   "seconds": 2.3,
+   "trace_format_ok_mean": 1.0,
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 1.0,
+    "observed_k4_exact": 1.0
+   },
+   "regret_k4_ALL": {
+    "off": 0.37923,
+    "plain": 0.215155,
+    "trace": 0.0,
+    "filler": 0.215155
+   }
+  },
+  "filler_equals_trace": {
+   "expected": [
+    "exact",
+    "STOP (decision point 3): extra decode compute, not supervision"
+   ],
+   "verdict": "STOP (decision point 3): extra decode compute, not supervision",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.52,
+    "trace-plain|mix": 0.5,
+    "trace-filler|conditional": 0.0,
+    "trace-filler|mix": 0.0,
+    "filler-plain|conditional": 0.52,
+    "filler-plain|mix": 0.5,
+    "trace-off|swap": 0.0,
+    "trace-off|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.4875,
+    "trace-plain|mix_in": 0.0
+   },
+   "seconds": 2.9,
+   "trace_format_ok_mean": 1.0,
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 1.0,
+    "observed_k4_exact": 1.0
+   },
+   "regret_k4_ALL": {
+    "off": 0.379504,
+    "plain": 0.213204,
+    "trace": 0.0,
+    "filler": 0.0
+   }
+  },
+  "nothing_helps": {
+   "expected": [
+    "exact",
+    "STOP (decision point 3): extra decode compute, not supervision - neither format helped (trace ~ filler ~ plain)"
+   ],
+   "verdict": "STOP (decision point 3): extra decode compute, not supervision - neither format helped (trace ~ filler ~ plain)",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.0,
+    "trace-plain|mix": 0.0,
+    "trace-filler|conditional": 0.0,
+    "trace-filler|mix": 0.0,
+    "filler-plain|conditional": 0.0,
+    "filler-plain|mix": 0.0,
+    "trace-off|swap": 0.0,
+    "trace-off|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.0,
+    "trace-plain|mix_in": 0.0
+   },
+   "seconds": 2.6,
+   "trace_format_ok_mean": 1.0,
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 0.4663,
+    "observed_k4_exact": 0.4844
+   },
+   "regret_k4_ALL": {
+    "off": 0.378994,
+    "plain": 0.210832,
+    "trace": 0.210832,
+    "filler": 0.210832
+   }
+  },
+  "controls_lost": {
+   "expected": [
+    "exact",
+    "NO-GO (failed: G4)"
+   ],
+   "verdict": "NO-GO (failed: G4)",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.56,
+    "trace-plain|mix": 0.5,
+    "trace-filler|conditional": 0.56,
+    "trace-filler|mix": 0.5,
+    "filler-plain|conditional": 0.0,
+    "filler-plain|mix": 0.0,
+    "trace-off|swap": -1.0,
+    "trace-off|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.5375,
+    "trace-plain|mix_in": 0.0
+   },
+   "seconds": 2.7,
+   "trace_format_ok_mean": 1.0,
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 0.3153,
+    "observed_k4_exact": 0.388
+   },
+   "regret_k4_ALL": {
+    "off": 0.0,
+    "plain": 0.193099,
+    "trace": 0.485867,
+    "filler": 0.193099
+   }
+  },
+  "in_dist_worse": {
+   "expected": [
+    "exact",
+    "NO-GO (failed: G1; G2; G5)"
+   ],
+   "verdict": "NO-GO (failed: G1; G2; G5)",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.0,
+    "trace-plain|mix": 0.0,
+    "trace-filler|conditional": 0.555,
+    "trace-filler|mix": 0.5,
+    "filler-plain|conditional": -0.555,
+    "filler-plain|mix": -0.5,
+    "trace-off|swap": 0.0,
+    "trace-off|add_nowrap": 0.0,
+    "trace-plain|conditional_in": -0.5208,
+    "trace-plain|mix_in": -0.5
+   },
+   "seconds": 2.8,
+   "trace_format_ok_mean": 1.0,
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 0.4724,
+    "observed_k4_exact": 0.5469
+   },
+   "regret_k4_ALL": {
+    "off": 0.370689,
+    "plain": 0.0,
+    "trace": 0.176215,
+    "filler": 0.370689
+   }
+  },
+  "malformed_traces": {
+   "expected": [
+    "prefix",
+    "STOP (decision point 3)"
+   ],
+   "verdict": "STOP (decision point 3): extra decode compute, not supervision - neither format helped (trace ~ filler ~ plain)",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": -0.47,
+    "trace-plain|mix": -0.5,
+    "trace-filler|conditional": -0.47,
+    "trace-filler|mix": -0.5,
+    "filler-plain|conditional": 0.0,
+    "filler-plain|mix": 0.0,
+    "trace-off|swap": -1.0,
+    "trace-off|add_nowrap": -1.0,
+    "trace-plain|conditional_in": -0.5167,
+    "trace-plain|mix_in": -1.0
+   },
+   "seconds": 2.4,
+   "trace_format_ok_mean": 0.0,
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 0.0,
+    "observed_k4_exact": 0.0
+   },
+   "regret_k4_ALL": {
+    "off": 0.367505,
+    "plain": 0.209622,
+    "trace": 1.005332,
+    "filler": 0.209622
+   }
+  }
+ },
+ "n_boot": 2000,
+ "checks": {
+  "go: gold trace side product law predicted == observed == 1": true,
+  "go: gold trace side regret k4 == 0": true,
+  "malformed: every sorted-key trace rejected (format_ok 0)": true,
+  "go: trace fields of a gold trace all 1.0": true,
+  "multi-seed: one NO-GO seed -> not GO in every seed": true
+ },
+ "ok": true,
+ "code_sha256": {
+  "scripts/t2br_analysis.py": "a4ef7bb679c9de88f54f5b5917763807a1682c71451ba19660fafb3eda5424e3",
+  "scripts/t2br_common.py": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15"
+ },
+ "dev_sha256": "8b01899c60a0bb9d60ff2535531ec5c168564a9b98e313a034ac75ecff1a5427"
+}

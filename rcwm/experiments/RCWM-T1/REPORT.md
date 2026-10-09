@@ -1,7 +1,7 @@
 # RCWM-T1 report: consequence models from a frozen 0.6B Rineya LM
 
 **Date:** 2026-10-06
-**Status:** PREREG-1 **confirmed** (2026-10-07; §3). PREREG-2 **confirmed** (2026-10-08; §3b). The L8-15 promotion screen (PREREG-L1) ran on 2026-10-09: **DO NOT PROMOTE**, failing C2 (prerequisite acquisition −8 vs Titan-Sparse; DECISIONS R-L1).
+**Status:** PREREG-1 **confirmed** (2026-10-07; §3). PREREG-2 **confirmed** (2026-10-08; §3b). PREREG-3 **confirmed: TRIGGER** (2026-10-09; §3c): the void fix is a token cue, not the rule. The L8-15 promotion screen (PREREG-L1) ran on 2026-10-09: **DO NOT PROMOTE**, failing C2 (prerequisite acquisition −8 vs Titan-Sparse; DECISIONS R-L1).
 
 This is the first native execution of the RCWM-001 plan (`../../report/`) on Rineya Titan models. Confirmatory statements are limited to PREREG-1 (§3). Everything else is exploratory, from the pilot bank. Supporting documents:
 - full numbers: `RESULTS_PILOT.md`
@@ -94,10 +94,48 @@ Registered wording:
 **Limits that always accompany the claim (registered):**
 - Ledger only; horizon ≤ 4; one adapter (T2 seed 0); Titan-Sparse only; the chain_one frame.
 - The plans and the adapter's training rows come from the same event generator and marginals: the bank is fresh at payload level, not out-of-distribution.
+  - **PREREG-3 (§3c) tested this limit and it binds.** The void no-op is a token cue: unseen statuses score 0.01–0.18. Accuracy also drops out of range on magnitudes, key order and renamed accounts.
 - Rule learning is not separated from frame adaptation (no self-distillation or untargeted-LoRA control).
 - No comparison with non-LM learners at the same label budget: S@abundant reached 0.273 on ledger, and S-roll matched Titan at about 512 transitions (R10). The adapted model used 384 + 1,501 oracle-labelled rows.
 - Register and prerequisite are not claimed fixed.
 - Retention evidence is limited to the first-token guard and 64-token agreement on 248 prompts.
+
+## 3c. Confirmed results (PREREG-3): the ledger fix is a token trigger, not the rule
+
+PREREG-3 was frozen on 2026-10-09 at 02:38 (D-33) and run that day 06:34–07:19. It used no training. The bank was sealed and out of range: 1,500 one-step rows (100 bases × 15 strata, one factor changed at a time) plus 80 four-step chains. The arms were Titan-Sparse with the T2 adapter OFF, T2 seeds 0–2 ON (unmerged), and Supa 1.7.
+
+**Verdict: STATUS: TRIGGER (registered wording).**
+
+> "In all three T2 seeds the adapted model's no-op did not extend beyond 'void': accuracy on the seven unseen-status strata that contain no form of 'void' (the five not-applied words, the neutral and nonce words, the look-alikes of 'posted') was 0.01-0.18 (each <= 0.30), against C_void s0 0.99, s1 1.00, s2 1.00 (each >= 0.80); 1605 of the 2030 errors on those rows applied the event as if posted. … The adapted model treats 'void' and its near-miss spellings (Void, VOID, voided), not 'any status other than posted', as the no-op cue."
+
+| stratum | OFF | T2 s0 | s1 | s2 | Supa |
+|---|---:|---:|---:|---:|---:|
+| posted twins (in distribution) | 0.47 | 0.87 | 0.90 | 0.91 | 0.01 |
+| `void` (trained) | 0.05 | 0.99 | 1.00 | 1.00 | 0.11 |
+| unseen not-applied words (5 strata) | 0.03–0.04 | 0.01–0.12 | 0.01–0.05 | 0.01–0.18 | 0.10–0.14 |
+| neutral / nonce words | 0.02 | 0.02 | 0.01 | 0.02 | 0.10 |
+| Void / VOID / voided | 0.06 | 0.95 | 0.94 | 0.99 | 0.13 |
+| unposted / not_posted / "not posted" | 0.03 | 0.03 | 0.02 | 0.05 | 0.13 |
+| 4–5-digit balances | 0.28 | 0.50 | 0.57 | 0.60 | 0.01 |
+| amounts 13–490 | 0.10 | 0.19 | 0.25 | 0.14 | 0.01 |
+| renamed accounts | 0.37 | 0.71 | 0.76 | 0.77 | 0.06 |
+| 5–8 accounts | 0.41 | 0.84 | 0.90 | 0.90 | 0.04 |
+| reordered JSON keys | 0.21 | 0.37 | 0.47 | 0.37 | 0.03 |
+
+Group verdicts:
+- **Magnitude (add/transfer and scale):** DOES NOT GENERALISE, with a partial gain over OFF.
+- **Naming:** MIXED. More accounts generalise; renamed accounts fall short, especially word names.
+- **Format (key order):** DOES NOT GENERALISE, with a partial gain over OFF.
+
+In-range chains with unseen statuses reach k=4 exact 0.05–0.125 for T2 and 0 for OFF. Out-of-range chains reach k=4 exact 0 for every arm.
+
+**What this changes.**
+- PREREG-2's ledger fix is real in distribution, but its void no-op is a token cue, not the stated rule. Its arithmetic and format competence also shrink outside the trained surface ranges.
+- This is the ledger counterpart of BWM's F-01: small LoRAs learn the surface form of the rule cases they see.
+- Rule data must vary the surface of every rule: status vocabulary with held-out words, magnitudes, key order and names. The primary test must be out of range.
+- Neither base model reads the rule text either. Titan-Sparse OFF treats nothing as a no-op, and Supa's status sensitivity is 0.00–0.03.
+
+Limits: ledger only, in one frame. "Rule" is tested on 16 non-posted strings, not on every possible string. Case variants and synonyms of "posted" are not tested. The chains are descriptive, with K = 4 and 10 parents per stratum. Full table: `runs/bank_p3_oor/analysis/PREREG_3_RESULTS.md`.
 
 ## 4. Exploratory findings (pilot)
 
@@ -227,12 +265,11 @@ These are provisional and will be revised once PREREG-1 resolves.
 
 ## 7. Next steps
 
-0. **PREREG-3: is the T2 ledger fix a rule or a trigger?** Frozen 2026-10-09 02:38 (D-33). A sealed out-of-range bank of 1,500 one-step rows and 80 chains covers:
-   - unseen and neutral statuses, void look-alikes and "posted" look-alikes;
-   - 4–5-digit balances and large amounts;
-   - renamed or extra accounts, and reordered keys.
-
-   The arms are adapter OFF, T2 s0–s2 ON and Supa, with no training, about 1–1.35 GPU-h. It is queued as the next RCWM GPU job. The verdict is RULE, TRIGGER or PARTIAL, with separate magnitude, naming and format verdicts.
+0. **PREREG-3 is done: TRIGGER (§3c).** Roadmap decision point 1 has fired: the de-shortcut kits (D-34) switch on surface-diversified rule data before any training, and their confirmations use out-of-range primaries.
+   - **5a, prerequisite representation:** integer, trace and bitstring answer formats.
+   - **5b, register trace:** plain, trace and filler formats, in the joint `cmp/calc/after` format with BWM.
+   - **5c, retention suite:** being built on CPU.
+   - **Joint item 3:** beam search over ledger with T2 as F inside BWM's planner, restricted to T2's verified range.
 
 1. **RCWM-T2** (3 seeds done, R13 and addendum; PREREG-2 frozen 2026-10-08 15:34 and running on a fresh sealed bank): a rule-coverage LoRA on frozen Titan-Sparse, using 1,501 fresh rows stratified over void, inapplicable, mix and wrap cases.
    - The ledger fix replicates in all three seeds: regret drop +0.47 / +0.41 / +0.48.

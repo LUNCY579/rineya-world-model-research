@@ -1,0 +1,130 @@
+{
+ "design_prompt_counts": {
+  "dev": 2025,
+  "confirm_all_categories": 675
+ },
+ "plans": {
+  "dev": {
+   "mode": "dev",
+   "n_prompts": 2025,
+   "sides": {
+    "SUPA": [
+     "supa"
+    ]
+   },
+   "max_new_tokens": 48,
+   "rates_gens_per_s": {
+    "planning (conservative)": 1.0,
+    "optimistic (PREREG-2 registered)": 2.7
+   },
+   "load_s_per_model": 120.0,
+   "prefill_frac": 0.0,
+   "stages": [
+    {
+     "stage": "SUPA",
+     "sides": [
+      "supa"
+     ],
+     "generations": 2025,
+     "projected_h_planning": 0.596,
+     "projected_h_optimistic": 0.242
+    }
+   ],
+   "total_generations": 2025,
+   "turns_planning": [
+    {
+     "stages": [
+      "SUPA"
+     ],
+     "projected_h": 0.596
+    }
+   ],
+   "turns_optimistic": [
+    {
+     "stages": [
+      "SUPA"
+     ],
+     "projected_h": 0.242
+    }
+   ],
+   "per_arm_h_planning": 0.562,
+   "per_arm_h_optimistic": 0.208,
+   "lp_disk_gb": 0.0,
+   "stage_rule": "D-22: no stage starts within 0.5 h of the 4.5 h cap; a stage starts only if 1.25 x its estimate (+ the Supa reserve) fits",
+   "gpu_h_planning": 0.596,
+   "gpu_h_optimistic": 0.242
+  },
+  "confirm": {
+   "mode": "confirm",
+   "n_prompts": 675,
+   "sides": {
+    "SPARSE": [
+     "off",
+     "t2s0"
+    ],
+    "SUPA": [
+     "supa"
+    ]
+   },
+   "max_new_tokens": 48,
+   "rates_gens_per_s": {
+    "planning (conservative)": 1.0,
+    "optimistic (PREREG-2 registered)": 2.7
+   },
+   "load_s_per_model": 120.0,
+   "prefill_frac": 0.1,
+   "stages": [
+    {
+     "stage": "SPARSE",
+     "sides": [
+      "off",
+      "t2s0"
+     ],
+     "generations": 1350,
+     "projected_h_planning": 0.449,
+     "projected_h_optimistic": 0.189
+    },
+    {
+     "stage": "SUPA",
+     "sides": [
+      "supa"
+     ],
+     "generations": 675,
+     "projected_h_planning": 0.24,
+     "projected_h_optimistic": 0.11
+    }
+   ],
+   "total_generations": 2025,
+   "turns_planning": [
+    {
+     "stages": [
+      "SPARSE",
+      "SUPA"
+     ],
+     "projected_h": 0.688
+    }
+   ],
+   "turns_optimistic": [
+    {
+     "stages": [
+      "SPARSE",
+      "SUPA"
+     ],
+     "projected_h": 0.299
+    }
+   ],
+   "per_arm_h_planning": 0.206,
+   "per_arm_h_optimistic": 0.076,
+   "lp_disk_gb": 0.615,
+   "stage_rule": "D-22: no stage starts within 0.5 h of the 4.5 h cap; a stage starts only if 1.25 x its estimate (+ the Supa reserve) fits",
+   "gpu_h_planning": 0.688,
+   "gpu_h_optimistic": 0.299
+  }
+ },
+ "torch_imported": false,
+ "ok": true,
+ "code_sha256": {
+  "scripts/ret_run.py": "c09d4d03c52a065445e8335d7accf6bbf9ca1e5adc15cc31a5277372be77d2e9",
+  "scripts/ret_common.py": "3fa8eb8df29234749cdf0f7f6b8df578c8d110e4847a563626c82d1f186b8bfa"
+ }
+}

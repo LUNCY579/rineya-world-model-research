@@ -1,0 +1,638 @@
+{
+ "scenarios": {
+  "stop_all_below_0.20": {
+   "expected": "STOP_P_TRAINING",
+   "got": "STOP_P_TRAINING",
+   "ok": true,
+   "R": {
+    "dint": 0.2097,
+    "strace": 0.0556,
+    "bbits": 0.2097
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "FC": 1.0,
+     "ID": 0.5
+    },
+    "strace": {
+     "IAW": 0.0,
+     "OOR": 0.1667,
+     "K4": 0.0,
+     "FC": 0.0,
+     "ID": 0.1667
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "FC": 1.0,
+     "ID": 0.5
+    }
+   },
+   "wording": "Every arm scores below 0.20 on int-add-wrong (decision point 2): stop prerequisite training and move P to a code-side bit interface, reported as an interface, not as model skill."
+  },
+  "trace_wins": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.2097,
+    "strace": 1.0,
+    "bbits": 0.8597
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "FC": 1.0,
+     "ID": 0.5
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "FC": 0.0,
+     "ID": 1.0
+    },
+    "bbits": {
+     "IAW": 0.8267,
+     "OOR": 0.9066,
+     "K4": 0.8458,
+     "FC": 0.188,
+     "ID": 0.9045
+    }
+   },
+   "wording": "WINNER=S-trace: seeds 1 and 2 run S-trace (same rows, T2 recipe)."
+  },
+  "bbits_wins_trace_excluded_by_copy": {
+   "expected": "WINNER=bbits",
+   "got": "WINNER=bbits",
+   "ok": true,
+   "R": {
+    "dint": 0.2097,
+    "strace": 0.6278,
+    "bbits": 0.8889
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "FC": 1.0,
+     "ID": 0.5
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 0.2167,
+     "FC": 0.6,
+     "ID": 0.6667
+    },
+    "bbits": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 1.0,
+     "FC": 0.0,
+     "ID": 1.0
+    }
+   },
+   "wording": "WINNER=B-bits: seeds 1 and 2 run B-bits (same rows, T2 recipe)."
+  },
+  "no_eligible_arm": {
+   "expected": "NO_ELIGIBLE_ARM",
+   "got": "NO_ELIGIBLE_ARM",
+   "ok": true,
+   "R": {
+    "dint": 0.6278,
+    "strace": 0.6278,
+    "bbits": 0.6278
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 0.2167,
+     "FC": 0.6,
+     "ID": 0.6667
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 0.2167,
+     "FC": 0.6,
+     "ID": 0.6667
+    },
+    "bbits": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 0.2167,
+     "FC": 0.6,
+     "ID": 0.6667
+    }
+   },
+   "wording": "No arm is eligible (false copy > 0.25 or an in-distribution collapse in every arm); no arm is named for seeds 1-2."
+  },
+  "tie_goes_to_dint": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 1.0,
+    "strace": 1.0,
+    "bbits": 1.0
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "FC": 0.0,
+     "ID": 1.0
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "FC": 0.0,
+     "ID": 1.0
+    },
+    "bbits": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "FC": 0.0,
+     "ID": 1.0
+    }
+   },
+   "wording": "WINNER=D-int: seeds 1 and 2 run D-int (same rows, T2 recipe). The representation does not beat the rebalanced-data control."
+  },
+  "ignore_pre_arm_excluded_by_id": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.8889,
+    "strace": 0.7028,
+    "bbits": 0.2097
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 1.0,
+     "FC": 0.0,
+     "ID": 1.0
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 0.4417,
+     "FC": 0.0,
+     "ID": 0.6667
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "FC": 1.0,
+     "ID": 0.5
+    }
+   },
+   "wording": "WINNER=D-int: seeds 1 and 2 run D-int (same rows, T2 recipe). The representation does not beat the rebalanced-data control."
+  },
+  "filler_flag": {
+   "expected": "WINNER=strace+FLAG",
+   "got": "WINNER=strace+FLAG",
+   "ok": true,
+   "R": {
+    "dint": 0.2097,
+    "strace": 1.0,
+    "bbits": 0.2097,
+    "ffill": 1.0
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "FC": 1.0,
+     "ID": 0.5
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "FC": 0.0,
+     "ID": 1.0
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "FC": 1.0,
+     "ID": 0.5
+    },
+    "ffill": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "FC": 0.0,
+     "ID": 1.0
+    }
+   },
+   "wording": "WINNER=S-trace: seeds 1 and 2 run S-trace (same rows, T2 recipe). Flag: TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE."
+  },
+  "malformed_everywhere": {
+   "expected": "STOP_P_TRAINING",
+   "got": "STOP_P_TRAINING",
+   "ok": true,
+   "R": {
+    "dint": 0.0,
+    "strace": 0.0,
+    "bbits": 0.0
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.0,
+     "OOR": 0.0,
+     "K4": 0.0,
+     "FC": 0.0,
+     "ID": 0.0
+    },
+    "strace": {
+     "IAW": 0.0,
+     "OOR": 0.0,
+     "K4": 0.0,
+     "FC": 0.0,
+     "ID": 0.0
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.0,
+     "K4": 0.0,
+     "FC": 0.0,
+     "ID": 0.0
+    }
+   },
+   "wording": "Every arm scores below 0.20 on int-add-wrong (decision point 2): stop prerequisite training and move P to a code-side bit interface, reported as an interface, not as model skill."
+  }
+ },
+ "ok": true,
+ "rule_units": {
+  "ID non-inferiority excludes the best-R arm": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.5,
+    "strace": 0.9667,
+    "bbits": 0.3
+   },
+   "tie_break": null
+  },
+  "ID exactly ID(D-int) - 0.10 is eligible": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.5,
+    "strace": 0.9667,
+    "bbits": 0.3
+   },
+   "tie_break": null
+  },
+  "FC exactly 0.25 is eligible": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.5,
+    "strace": 0.6,
+    "bbits": 0.3
+   },
+   "tie_break": null
+  },
+  "IAW exactly 0.20 everywhere is not a stop": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.4,
+    "strace": 0.3333,
+    "bbits": 0.2667
+   },
+   "tie_break": null
+  },
+  "one arm at 0.20 prevents the stop": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.3967,
+    "strace": 0.3333,
+    "bbits": 0.2333
+   },
+   "tie_break": null
+  },
+  "R gap >= 0.02 decides regardless of IAW": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.7,
+    "strace": 0.6133,
+    "bbits": 0.1
+   },
+   "tie_break": null
+  },
+  "R tie (< 0.02): larger IAW wins": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.7,
+    "strace": 0.69,
+    "bbits": 0.1
+   },
+   "tie_break": "IAW"
+  },
+  "R and IAW tie: larger OOR wins": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.6333,
+    "strace": 0.63,
+    "bbits": 0.1
+   },
+   "tie_break": "OOR"
+  },
+  "all tie: fixed order D-int, B-bits, S-trace": {
+   "expected": "WINNER=bbits",
+   "got": "WINNER=bbits",
+   "ok": true,
+   "R": {
+    "dint": 0.1,
+    "strace": 0.6,
+    "bbits": 0.6
+   },
+   "tie_break": "fixed order D-int, B-bits, S-trace"
+  },
+  "filler at R(S) - 0.05 flags": {
+   "expected": "WINNER=strace+FLAG",
+   "got": "WINNER=strace+FLAG",
+   "ok": true,
+   "R": {
+    "dint": 0.3,
+    "strace": 0.9,
+    "bbits": 0.3,
+    "ffill": 0.85
+   },
+   "tie_break": null
+  },
+  "filler below R(S) - 0.05 does not flag": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.3,
+    "strace": 0.9,
+    "bbits": 0.3,
+    "ffill": 0.84
+   },
+   "tie_break": null
+  },
+  "filler is never eligible (best R, yet only the R5 flag)": {
+   "expected": "WINNER=strace+FLAG",
+   "got": "WINNER=strace+FLAG",
+   "ok": true,
+   "R": {
+    "dint": 0.3,
+    "strace": 0.4,
+    "bbits": 0.3,
+    "ffill": 1.0
+   },
+   "tie_break": null
+  },
+  "filler never eligible: D-int wins over a perfect filler": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.5,
+    "strace": 0.4,
+    "bbits": 0.3,
+    "ffill": 1.0
+   },
+   "tie_break": null
+  }
+ },
+ "missing_arm_refused": true,
+ "selftest": {
+  "golds": {
+   "dint": {
+    "n": 950,
+    "correct": 950
+   },
+   "strace": {
+    "n": 950,
+    "correct": 950,
+    "cmp_ok": 950,
+    "calc_ok": 950
+   },
+   "bbits": {
+    "n": 950,
+    "correct": 950,
+    "flag_ok": 950
+   },
+   "ffill": {
+    "n": 950,
+    "correct": 950
+   }
+  },
+  "heuristics": {
+   "dint": {
+    "copy": {
+     "direct_floor": 450,
+     "scored_in_format": 450,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "apply_regardless": {
+     "direct_floor": 650,
+     "scored_in_format": 650,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "int_add": {
+     "direct_floor": 150,
+     "scored_in_format": 150,
+     "out_of_range_predictions": 100,
+     "match": true
+    },
+    "or_add": {
+     "direct_floor": 335,
+     "scored_in_format": 335,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "int_add_del": {
+     "direct_floor": 300,
+     "scored_in_format": 300,
+     "out_of_range_predictions": 90,
+     "match": true
+    },
+    "delete_only": {
+     "direct_floor": 565,
+     "scored_in_format": 565,
+     "out_of_range_predictions": 0,
+     "match": true
+    }
+   },
+   "strace": {
+    "copy": {
+     "direct_floor": 450,
+     "scored_in_format": 450,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "apply_regardless": {
+     "direct_floor": 650,
+     "scored_in_format": 650,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "int_add": {
+     "direct_floor": 150,
+     "scored_in_format": 150,
+     "out_of_range_predictions": 100,
+     "match": true
+    },
+    "or_add": {
+     "direct_floor": 335,
+     "scored_in_format": 335,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "int_add_del": {
+     "direct_floor": 300,
+     "scored_in_format": 300,
+     "out_of_range_predictions": 90,
+     "match": true
+    },
+    "delete_only": {
+     "direct_floor": 565,
+     "scored_in_format": 565,
+     "out_of_range_predictions": 0,
+     "match": true
+    }
+   },
+   "bbits": {
+    "copy": {
+     "direct_floor": 450,
+     "scored_in_format": 450,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "apply_regardless": {
+     "direct_floor": 650,
+     "scored_in_format": 650,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "int_add": {
+     "direct_floor": 150,
+     "scored_in_format": 150,
+     "out_of_range_predictions": 100,
+     "match": true
+    },
+    "or_add": {
+     "direct_floor": 335,
+     "scored_in_format": 335,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "int_add_del": {
+     "direct_floor": 300,
+     "scored_in_format": 300,
+     "out_of_range_predictions": 90,
+     "match": true
+    },
+    "delete_only": {
+     "direct_floor": 565,
+     "scored_in_format": 565,
+     "out_of_range_predictions": 0,
+     "match": true
+    }
+   },
+   "ffill": {
+    "copy": {
+     "direct_floor": 450,
+     "scored_in_format": 450,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "apply_regardless": {
+     "direct_floor": 650,
+     "scored_in_format": 650,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "int_add": {
+     "direct_floor": 150,
+     "scored_in_format": 150,
+     "out_of_range_predictions": 100,
+     "match": true
+    },
+    "or_add": {
+     "direct_floor": 335,
+     "scored_in_format": 335,
+     "out_of_range_predictions": 0,
+     "match": true
+    },
+    "int_add_del": {
+     "direct_floor": 300,
+     "scored_in_format": 300,
+     "out_of_range_predictions": 90,
+     "match": true
+    },
+    "delete_only": {
+     "direct_floor": 565,
+     "scored_in_format": 565,
+     "out_of_range_predictions": 0,
+     "match": true
+    }
+   }
+  },
+  "negatives": {
+   "strace: keys reordered": true,
+   "strace: extra key": true,
+   "strace: duplicate after": true,
+   "strace: after as string": true,
+   "strace: after out of range": true,
+   "strace: bare integer": true,
+   "bbits: keys reordered": true,
+   "bbits: wrong width": true,
+   "bbits: integer after": true,
+   "bbits: flag as string": true,
+   "bbits: non-binary digit": true,
+   "ffill: keys reordered": true,
+   "dint: out of range": true,
+   "dint: boolean": true,
+   "dint: text": true
+  },
+  "dint_parser_equals_env": true,
+  "ok": true,
+  "filler_checked": true
+ },
+ "code_sha256": {
+  "scripts/t2bp_analysis.py": "7224dfead1bc45773acc32a67ef64a16f0fce5b0272d54a3f3011d6b45289834",
+  "scripts/t2bp_common.py": "dc36ba2576ae385988df806cb7b20f5a8bd8380f63592f1da448d657234cf794"
+ },
+ "seconds": 1.9,
+ "torch_imported": false
+}

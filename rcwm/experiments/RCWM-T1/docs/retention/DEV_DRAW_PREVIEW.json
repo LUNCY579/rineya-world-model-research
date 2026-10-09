@@ -1,0 +1,362 @@
+{
+ "what": "pre-mint audit of the dev draw (not a sealed draw; `ret_gen.py mint --purpose dev` after the kit freeze writes the sealed draw and repeats every check)",
+ "draw_id": "dev_20261121",
+ "seed": 20261121,
+ "surface_diversity": false,
+ "bytes_sha256": "d355e8e835f702e0a50d6324757a1b2f6372c4ba587629a5453fb09f22a43259",
+ "bytes": 1739575,
+ "generator_code_sha256": {
+  "scripts/ret_common.py": "3fa8eb8df29234749cdf0f7f6b8df578c8d110e4847a563626c82d1f186b8bfa",
+  "scripts/ret_gen.py": "e652271dbe122b4b86a1d1e48ba243cbd6a7c35cb88c27354b8f5932a28dfffc",
+  "scripts/ret_grade.py": "5445de4339127ae7baa6446b94d39a6115ec4ca4cb05398d523a2b7d1e116f43"
+ },
+ "stats": {
+  "n_prompts": 2025,
+  "n_items": 1800,
+  "items_per_cell": {
+   "arith_word|L1": 75,
+   "arith_word|L2": 75,
+   "arith_word|L3": 75,
+   "count_sort|L1": 75,
+   "count_sort|L2": 75,
+   "count_sort|L3": 75,
+   "date_time|L1": 75,
+   "date_time|L2": 75,
+   "date_time|L3": 75,
+   "format_follow|L1": 75,
+   "format_follow|L2": 75,
+   "format_follow|L3": 75,
+   "kv_recall|L1": 75,
+   "kv_recall|L2": 75,
+   "kv_recall|L3": 75,
+   "pct_ratio|L1": 75,
+   "pct_ratio|L2": 75,
+   "pct_ratio|L3": 75,
+   "unit_conv|L1": 75,
+   "unit_conv|L2": 75,
+   "unit_conv|L3": 75,
+   "unknown_twin|L1": 75,
+   "unknown_twin|L2": 75,
+   "unknown_twin|L3": 75
+  },
+  "subtypes": {
+   "arith_word|L1|2ops": 75,
+   "arith_word|L2|3ops": 75,
+   "arith_word|L3|4ops": 75,
+   "count_sort|L1|count_gt": 21,
+   "count_sort|L1|count_word": 33,
+   "count_sort|L1|sort_num_asc": 21,
+   "count_sort|L2|count_gt": 22,
+   "count_sort|L2|count_word": 15,
+   "count_sort|L2|sort_num_desc": 19,
+   "count_sort|L2|sort_words": 19,
+   "count_sort|L3|count_gt": 14,
+   "count_sort|L3|count_word": 27,
+   "count_sort|L3|sort_num_asc": 19,
+   "count_sort|L3|sort_words": 15,
+   "date_time|L1|clock_add": 43,
+   "date_time|L1|weekday_add": 32,
+   "date_time|L2|clock_add": 30,
+   "date_time|L2|duration_between": 24,
+   "date_time|L2|weekday_add": 21,
+   "date_time|L3|clock_midnight": 29,
+   "date_time|L3|date_add": 25,
+   "date_time|L3|weekday_back": 21,
+   "format_follow|L1|upper_echo": 36,
+   "format_follow|L1|yes_no": 39,
+   "format_follow|L2|first_letter": 25,
+   "format_follow|L2|last_word": 25,
+   "format_follow|L2|nth_word": 25,
+   "format_follow|L3|hyphen_spell": 27,
+   "format_follow|L3|json": 24,
+   "format_follow|L3|reverse": 24,
+   "kv_recall|L1|bikes": 8,
+   "kv_recall|L1|garden": 13,
+   "kv_recall|L1|lab": 11,
+   "kv_recall|L1|lockers": 15,
+   "kv_recall|L1|music": 17,
+   "kv_recall|L1|vans": 11,
+   "kv_recall|L2|bikes": 14,
+   "kv_recall|L2|garden": 14,
+   "kv_recall|L2|lab": 14,
+   "kv_recall|L2|lockers": 4,
+   "kv_recall|L2|music": 15,
+   "kv_recall|L2|vans": 14,
+   "kv_recall|L3|bikes": 6,
+   "kv_recall|L3|bikes_corrected": 6,
+   "kv_recall|L3|garden": 7,
+   "kv_recall|L3|garden_corrected": 7,
+   "kv_recall|L3|lab": 8,
+   "kv_recall|L3|lab_corrected": 9,
+   "kv_recall|L3|lockers": 7,
+   "kv_recall|L3|lockers_corrected": 2,
+   "kv_recall|L3|music": 4,
+   "kv_recall|L3|music_corrected": 9,
+   "kv_recall|L3|vans": 6,
+   "kv_recall|L3|vans_corrected": 4,
+   "pct_ratio|L1|pct_of": 35,
+   "pct_ratio|L1|ratio_scale": 40,
+   "pct_ratio|L2|pct_change": 34,
+   "pct_ratio|L2|ratio_simplify": 22,
+   "pct_ratio|L2|what_pct": 19,
+   "pct_ratio|L3|pct_of_hard": 24,
+   "pct_ratio|L3|ratio_split": 24,
+   "pct_ratio|L3|successive": 27,
+   "unit_conv|L1|forward": 75,
+   "unit_conv|L2|decimal": 33,
+   "unit_conv|L2|reverse": 42,
+   "unit_conv|L3|chain": 40,
+   "unit_conv|L3|chain_reverse": 35,
+   "unknown_twin|L1|absent_person": 75,
+   "unknown_twin|L2|absent_attribute": 75,
+   "unknown_twin|L3|near_miss_name": 75
+  },
+  "gold_kinds": {
+   "clock": 102,
+   "date": 25,
+   "exact": 201,
+   "json": 24,
+   "kv": 450,
+   "num_list": 59,
+   "number": 809,
+   "ratio": 22,
+   "unknown": 225,
+   "weekday": 74,
+   "word_list": 34
+  },
+  "user_chars": {
+   "min": 92,
+   "median": 161,
+   "max": 1172
+  },
+  "unknown_twins": {
+   "a": 225,
+   "u": 225
+  }
+ },
+ "within_cell": {},
+ "gold_selftest": {
+  "positives": 2025,
+  "positives_correct": 2025,
+  "negatives": 12600,
+  "negatives_rejected": 12600,
+  "ok": true
+ },
+ "F0_payload_prompts": 0,
+ "token_audit": {
+  "tokenizer_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+  "user_tokens_per_category": {
+   "arith_word": {
+    "min": 36,
+    "median": 51,
+    "max": 87
+   },
+   "unit_conv": {
+    "min": 26,
+    "median": 31,
+    "max": 37
+   },
+   "date_time": {
+    "min": 31,
+    "median": 40,
+    "max": 48
+   },
+   "count_sort": {
+    "min": 38,
+    "median": 47,
+    "max": 64
+   },
+   "pct_ratio": {
+    "min": 26,
+    "median": 36,
+    "max": 48
+   },
+   "kv_recall": {
+    "min": 178,
+    "median": 233,
+    "max": 299
+   },
+   "unknown_twin": {
+    "min": 186,
+    "median": 247,
+    "max": 311
+   },
+   "format_follow": {
+    "min": 21,
+    "median": 36,
+    "max": 46
+   }
+  },
+  "passage_tokens": {
+   "n": 450,
+   "min": 157,
+   "max": 280,
+   "by_level": {
+    "1": [
+     157,
+     191
+    ],
+    "2": [
+     196,
+     232
+    ],
+    "3": [
+     244,
+     280
+    ]
+   },
+   "outside_150_300": []
+  },
+  "ok": true
+ },
+ "duplicate_user_turns": 0,
+ "freshness": {
+  "sources": {
+   "records": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\rineya-dataset-retention-records",
+    "walk_identical_to_l1_harvest": true,
+    "files_parsed": 14147,
+    "strings_bytes": 1926453190,
+    "skipped_by_name_never_opened": [
+     "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+     "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+     "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+     "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+    ],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "rcwm_data": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 27,
+    "strings_bytes": 52257494,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "rcwm_docs_l1": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\docs\\l1",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 15,
+    "strings_bytes": 1345595,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "rcwm_docs_prereg3": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\docs\\prereg3",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 7,
+    "strings_bytes": 1613561,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "corpus_v2": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_General_Reasoning_and_Natural_Communication_Corpus_v2.0",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 18,
+    "strings_bytes": 148122752,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "corpus_v3": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_General_Reasoning_and_Natural_Communication_Corpus_v3.0",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 55,
+    "strings_bytes": 491359623,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "short_response_corpus": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Short_Response_Behavior_Corpus_v1.0",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 11,
+    "strings_bytes": 29264738,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "short_response_model_data": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\short-response-model-phase-0-1-2\\data",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 212,
+    "strings_bytes": 1081774149,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "long_context_demo": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Long_Context_Demo_v1",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 32,
+    "strings_bytes": 16625372,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "puzzle_51k": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya-Puzzle-Reasoning-51k",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 12,
+    "strings_bytes": 109035680,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "lcr_sft": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_LCR_SFT_v1",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 5,
+    "strings_bytes": 254626061,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   },
+   "invisible_limit_lab": {
+    "root": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Invisible_Limit_Lab_v1",
+    "walk_identical_to_l1_harvest": false,
+    "files_parsed": 12,
+    "strings_bytes": 109365409,
+    "skipped_by_name_never_opened": [],
+    "skipped_over_60mb": [],
+    "unparsed_lines": 0,
+    "missing": false
+   }
+  },
+  "seconds": 182.4,
+  "n_user_turns": 2025,
+  "n_gate_sentences": 7062,
+  "n_report_sentences": 1482,
+  "F1_user_turn_hits": 0,
+  "F2_gate_sentence_hits": 0,
+  "F3_report_sentence_hits": 0,
+  "F3_report_distinct_sentences_hit": 0,
+  "F3_report_sentences": {},
+  "examples": {
+   "user": [],
+   "gate": [],
+   "report": []
+  },
+  "skipped_by_name_all_reserved": true,
+  "n_skipped_by_name": 4,
+  "ok": true
+ },
+ "peak_rss_mib": 187.2,
+ "seconds": 186.3,
+ "ok": true
+}

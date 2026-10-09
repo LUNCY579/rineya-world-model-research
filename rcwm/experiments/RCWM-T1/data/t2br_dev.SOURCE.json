@@ -1,0 +1,253 @@
+{
+ "schema": 1,
+ "experiment": "RCWM-T1 T2b-register screen (roadmap item 3; joint item 5b)",
+ "built_utc": "2026-10-09T08:04:12Z",
+ "model_calls": 0,
+ "torch_imported": false,
+ "builder": "scripts/t2br_make_data.py",
+ "builder_sha256": "0b04340026746c7acf149844c786145771918a283339c33e4f5e16631d6e5d80",
+ "common_sha256": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15",
+ "env_sha256": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+ "recorded_marginals_sha256": "45674251e38e574229f4ea98d04c30fe623ec6ac58ad308ad491661c84afab7e",
+ "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+ "chat_template_check": "render_prompt == real template on 500 t2_train register prompts",
+ "exclusion_sources": {
+  "historical": {
+   "payloads": 6464,
+   "operative_contents": 6258,
+   "sha256": null,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ]
+  },
+  "bank_pilot.json": {
+   "payloads": 15629,
+   "operative_contents": 15278,
+   "sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+  },
+  "bank_confirm.json": {
+   "payloads": 13552,
+   "operative_contents": 13247,
+   "sha256": "8bc6e2f8a8c7cae5b7b66293ef12b0efc440c281f820eca9d384a659b26a6a16"
+  },
+  "bank_confirm2.json": {
+   "payloads": 12163,
+   "operative_contents": 11903,
+   "sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea"
+  },
+  "bank_s4000.json": {
+   "payloads": 255745,
+   "operative_contents": 250614,
+   "sha256": "af1336c261375524a4a6eaf92cc48dc76b1159df093ce2705d279688f22bb4ce"
+  },
+  "t2_train.jsonl": {
+   "payloads": 1501,
+   "operative_contents": 1496,
+   "sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744"
+  },
+  "t2_eval.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59"
+  },
+  "t2_eval_xframe.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de"
+  },
+  "t2_eval_supp.jsonl": {
+   "payloads": 360,
+   "operative_contents": 360,
+   "sha256": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086"
+  },
+  "SELECT-VIEWS-001": {
+   "payloads": 384,
+   "operative_contents": 383,
+   "sha256": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3"
+  },
+  "l1_ood_bank.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c"
+  },
+  "fds/T_BANK.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "26c01effe9610230f7876bbe118792f85094605fe3dde5f873c78c67e1c493ba"
+  },
+  "fds/T_BANK_V2.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "fc094136a5b581cb9cc03393b1e5959ed8f69247638c81e37cf7f68fbf132e01"
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "173aa372466d5e3cc8efbebe4cc7e7ba09a8eb34de4598ce8f9d96a2b8e6557c"
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payloads": 15,
+   "operative_contents": 15,
+   "sha256": "635c9c7ea6851d4a0147a299ecd158a880b91fa5b9046b0af787d2ebbd6eb0d4"
+  },
+  "cc2/T_BANK_V4.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "82f0a6423dd6b58b81319708e7fbda7c5880b9734742323ea11574ff354c93c0"
+  },
+  "multi_event_register_prompts": {
+   "payloads": 280,
+   "operative_contents": 280,
+   "sha256": null,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ]
+  }
+ },
+ "exclusion_union": {
+  "payloads": 308726,
+  "operative_contents": 301783
+ },
+ "freshness": "zero payload and zero operative-content overlap with every source; train / dev / chain units mutually disjoint (checked during the draw by Registry, re-checked by --verify)",
+ "peak_rss_mb_at_write": 261.0,
+ "record": "dev screen bank (one-step strata + k=4 chains)",
+ "seed": 20261110,
+ "chain_seed": 20261111,
+ "strata": {
+  "mix": [
+   "in",
+   "noninferiority",
+   "mix, in-range value, 50 wrap / 50 no-wrap"
+  ],
+  "wrap": [
+   "in",
+   "reported",
+   "add whose raw sum leaves [0, 96] (40 over / 40 under), in-range value"
+  ],
+  "cond_xm1": [
+   "in",
+   "noninferiority",
+   "conditional with other = threshold - 1 (ok false: subtract); triplet member"
+  ],
+  "cond_x0": [
+   "in",
+   "noninferiority",
+   "conditional with other = threshold (ok false under the STRICT '>'); triplet"
+  ],
+  "cond_xp1": [
+   "in",
+   "noninferiority",
+   "conditional with other = threshold + 1 (ok true: add); triplet member"
+  ],
+  "swap": [
+   "in",
+   "control",
+   "swap of two unequal registers (untouched skill: not in training)"
+  ],
+  "add_nowrap": [
+   "in",
+   "control",
+   "add, in-range value != 0, no wrap (untouched skill: not in training)"
+  ],
+  "mix_oor": [
+   "oor",
+   "primary",
+   "mix with |value| in 12..40 (outside the trained -8..11), 50 wrap / 50 no-wrap"
+  ],
+  "wrap_oor": [
+   "oor",
+   "reported",
+   "add with |value| in 12..40 whose raw sum leaves [0, 96] (40 over / 40 under)"
+  ],
+  "cond_oor_val": [
+   "oor",
+   "primary",
+   "conditional pairs at the boundary (other = threshold, ok false / threshold - 1, ok true), |value| in 12..40"
+  ],
+  "cond_oor_thr": [
+   "oor",
+   "primary",
+   "conditional pairs with thresholds outside the register range: -40..-1 (ok true) / 97..136 (ok false); value, registers in range"
+  ]
+ },
+ "files": {
+  "t2br_dev.jsonl": "8b01899c60a0bb9d60ff2535531ec5c168564a9b98e313a034ac75ecff1a5427",
+  "t2br_chains.jsonl": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
+ },
+ "describe": {
+  "n": 900,
+  "by_stratum": {
+   "mix": 100,
+   "wrap": 80,
+   "cond_xm1": 60,
+   "cond_x0": 60,
+   "cond_xp1": 60,
+   "swap": 80,
+   "add_nowrap": 80,
+   "mix_oor": 100,
+   "wrap_oor": 80,
+   "cond_oor_val": 100,
+   "cond_oor_thr": 100
+  },
+  "branch_by_stratum": {
+   "cond_xm1": {
+    "False": 60
+   },
+   "cond_x0": {
+    "False": 60
+   },
+   "cond_xp1": {
+    "True": 60
+   },
+   "cond_oor_val": {
+    "False": 50,
+    "True": 50
+   },
+   "cond_oor_thr": {
+    "True": 50,
+    "False": 50
+   }
+  },
+  "chains": {
+   "CH_IN": 32,
+   "CH_X": 16
+  },
+  "chain_candidates": 384
+ },
+ "go_rule": "PRE-STATED SCREEN GO RULE (T2b-register, seed by seed; point estimates on the fresh dev screen bank; 95% cluster-bootstrap CIs reported, not gating). Outcome = exact 'after' state (decision parser reads only 'after'; a malformed trace/filler answer is wrong). PRIMARY outcomes are the out-of-range strata (joint amendment 5): 'conditional' = cond_oor_val + cond_oor_thr pooled (branch-balanced by construction); 'mix' = mix_oor. GO iff ALL of: (G1) trace - plain >= +0.25 on conditional; (G2) trace - plain >= +0.30 on mix; (G3) filler below trace: trace - filler > 0 on both primaries; (G4) controls: trace ON - OFF >= -0.05 on swap and on add_nowrap (untouched skills); (G5) in-distribution non-inferiority: trace - plain >= -0.05 on conditional_in (branch-balanced mean of cond_xm1/cond_x0/cond_xp1) and on mix_in. DECISION POINT 3 (checked first): if trace - filler < 0.10 on BOTH primaries, STOP and report 'extra decode compute, not supervision' (sub-reason 'neither format helped' when filler - plain < 0.10 on both primaries as well). Otherwise NO-GO, naming every failed condition. The screen is seed 0; the roadmap's confirmation requires the same rule in all 3 seeds before a sealed R bank is built.",
+ "build_log": [
+  "[03:02:38] T2b-register data: seeds train 20261109 / dev 20261110 / chains 20261111; no model call",
+  "[03:02:38] render_prompt == real chat template on 500 t2_train register prompts",
+  "[03:03:23] historical set: 6464 payloads (45s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[03:03:23] bank_pilot.json: 15629 payloads, 15278 operative contents",
+  "[03:03:23] bank_confirm.json: 13552 payloads, 13247 operative contents",
+  "[03:03:23] bank_confirm2.json: 12163 payloads, 11903 operative contents",
+  "[03:03:27] bank_s4000.json: 255745 payloads, 250614 operative contents",
+  "[03:03:27] t2_train.jsonl: 1501 payloads",
+  "[03:03:27] t2_eval.jsonl: 600 payloads",
+  "[03:03:27] t2_eval_xframe.jsonl: 600 payloads",
+  "[03:03:27] t2_eval_supp.jsonl: 360 payloads",
+  "[03:03:27] SELECT-VIEWS-001: 384 payloads",
+  "[03:03:27] l1_ood_bank.jsonl: 600 payloads",
+  "[03:03:27] fds/T_BANK.json: 192 payloads",
+  "[03:03:27] fds/T_BANK_V2.json: 192 payloads",
+  "[03:03:27] cc1/T_BANK_V3X.json: 864 payloads",
+  "[03:03:27] cc2/STAGE_A_T_V3X.json: 15 payloads",
+  "[03:03:27] cc2/T_BANK_V4.json: 864 payloads",
+  "[03:04:08] multi-event register prompts: 280 transitions from 1 files (14161 scanned); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[03:04:08] exclusion union: 308726 payloads, 301783 operative contents (17 sources)",
+  "[03:04:08] train mix/wrap: 450 rows from 4984 draws; rejected {'state unchanged': 4, 'operative content in an exclusion source': 1, 'stratum full / not a wrap': 4529}",
+  "[03:04:08] train conditional: 150 pairs (300 rows) from 1098 draws; rejected {'x or twin threshold outside 0..96': 26, 'wrap pattern full / both wrap': 922}",
+  "[03:04:09] dev: 900 rows {'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100}; rejected {'wrap status / unchanged': 282, 'no wrap': 1745, 'operative content in an exclusion source': 1, 'equal registers': 1, 'wraps': 3}",
+  "[03:04:11] chains CH_IN: 32 parents x 8 candidates from 34 draws",
+  "[03:04:11] chains CH_X: 16 parents x 8 candidates from 18 draws",
+  "[03:04:11] chains rejected {'operative content in an exclusion source': 3, 'CH_X candidate without an out-of-range value': 1}",
+  "[03:04:11] audit: gated PASS copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500"
+ ]
+}

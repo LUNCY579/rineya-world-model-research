@@ -1,0 +1,184 @@
+{
+ "ok": true,
+ "n_checks": 34,
+ "n_pass": 34,
+ "checks": [
+  {
+   "check": "DESIGN.md states RULE_DEV and RULE_CONFIRM verbatim",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "McNemar 6 lost / 0 gained: p = 2/64",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "McNemar 9 lost / 4 gained: p = 2 * P(X<=4 | 13)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Holm step-down",
+   "ok": true,
+   "detail": "{'a': 0.04, 'c': 0.09, 'b': 0.09, 'd': 0.5}"
+  },
+  {
+   "check": "min losses to fail a 75-item category (8 categories) = 6",
+   "ok": true,
+   "detail": "6"
+  },
+  {
+   "check": "Wilson 30/75 = [0.2966, 0.5131] (hand-computed)",
+   "ok": true,
+   "detail": "[0.2966, 0.5131]"
+  },
+  {
+   "check": "AUROC perfect / inverted / ties",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "rule: identical arms -> RETAINED",
+   "ok": true,
+   "detail": "RETAINED"
+  },
+  {
+   "check": "rule: one category net -5 (5 lost, 0 gained) -> RETAINED",
+   "ok": true,
+   "detail": "RETAINED"
+  },
+  {
+   "check": "rule: one category 9 lost / 4 gained (net -5) -> RETAINED",
+   "ok": true,
+   "detail": "RETAINED"
+  },
+  {
+   "check": "rule: one category net -6 (raw p 0.031, Holm 0.25) -> MARGIN EXCEEDED",
+   "ok": true,
+   "detail": "MARGIN EXCEEDED"
+  },
+  {
+   "check": "rule: one category 12 lost (Holm p < 0.05) -> LOSS DETECTED",
+   "ok": true,
+   "detail": "LOSS DETECTED"
+  },
+  {
+   "check": "rule: net -4 in every category (pooled -32) -> RETAINED",
+   "ok": true,
+   "detail": "RETAINED"
+  },
+  {
+   "check": "rule: gains only (+10) -> RETAINED",
+   "ok": true,
+   "detail": "RETAINED"
+  },
+  {
+   "check": "rule: net -6 everywhere: detection via Holm (6 x p 0.031 -> first step 0.25) -> MARGIN EXCEEDED",
+   "ok": true,
+   "detail": "MARGIN EXCEEDED"
+  },
+  {
+   "check": "rule: net -8 everywhere: every p 0.0078, Holm 0.0625 -> no detection -> MARGIN EXCEEDED",
+   "ok": true,
+   "detail": "MARGIN EXCEEDED"
+  },
+  {
+   "check": "rule: net -9 everywhere: Holm 8 x 0.0039 = 0.031 -> detected -> LOSS DETECTED",
+   "ok": true,
+   "detail": "LOSS DETECTED"
+  },
+  {
+   "check": "Holm over the SELECTED categories only (3): 7 lost -> p 0.0156 x 3 = 0.047 -> LOSS DETECTED",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "binding note: a reference with 5 correct items cannot fail",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "dev rule: highest level >= 0.40; a category below 0.40 at every level is excluded",
+   "ok": true,
+   "detail": "{'arith_word': 2, 'date_time': 3, 'count_sort': 3, 'pct_ratio': 3, 'kv_recall': 3, 'unknown_twin': 3, 'format_follow': 3}"
+  },
+  {
+   "check": "confirm draw = selected categories at selected levels, 75 items each",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "sparse_vs_supa: 12 lost in one category -> LOSS DETECTED, NO-GO",
+   "ok": true,
+   "detail": "{'n': 75, 'ref_correct': 60, 'arm_correct': 48, 'lost': 12, 'gained': 0, 'net': -12, 'discordant': 12, 'p': 0.00048828125, 'p_holm': 0.00341796875, 'within_margin': False, 'detected_loss': True, 'retained': False, 'binding': {'min_lost_to_fail': 6, 'can_fail': True}}"
+  },
+  {
+   "check": "t2s0_vs_off: 6 lost (margin) in one category + 1 pair broken on its answerable twin -> MARGIN EXCEEDED",
+   "ok": true,
+   "detail": "{'arith_word': (0, 0), 'date_time': (6, 0), 'count_sort': (0, 0), 'pct_ratio': (0, 0), 'kv_recall': (0, 0), 'unknown_twin': (1, 0), 'format_follow': (0, 0)}"
+  },
+  {
+   "check": "t2s0_vs_supa is report-only",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "planted KL: AUROC for flips = 1.0",
+   "ok": true,
+   "detail": "{'auroc': 1.0, 'ci95': [1.0, 1.0], 'n': 525, 'n_pos': 7, 'boot_used': 1997}"
+  },
+  {
+   "check": "no KL difference: every item KL 0 -> AUROC 0.5 (ties)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "abstention components: 15 wrong items + 1 planted answerable twin answered UNKNOWN -> over-abstention 16/75",
+   "ok": true,
+   "detail": "{'unanswerable_literal_UNKNOWN': 0.8, 'unanswerable_abstains_lenient': 0.8, 'answerable_correct': 0.7867, 'answerable_over_abstention': 0.2133}"
+  },
+  {
+   "check": "markdown renders every comparison",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "canonical answers grade 100% (primary)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "all-UNKNOWN answers: unknown_twin pair accuracy 0 (over-abstention fails the pair)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "unterminated answers are wrong (primary) but count for the lenient grader",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the registered path refuses an unfrozen test root",
+   "ok": true,
+   "detail": "[retention] kit freeze does not verify: RET_FREEZE.json does not exist or is unr"
+  },
+  {
+   "check": "a changed output is refused",
+   "ok": true,
+   "detail": "[retention] sparse/gen_off.jsonl differs from DONE.json"
+  },
+  {
+   "check": "dev-select refuses once a confirmation draw exists",
+   "ok": true,
+   "detail": "[retention] confirmation draws already exist (['confirm_20261124.jsonl']): the d"
+  }
+ ],
+ "code_sha256": {
+  "scripts/ret_analysis.py": "3a8095f888951e3a678affc10bb03a2bc6052134de14ab163faee6d2910dbc68",
+  "scripts/ret_grade.py": "5445de4339127ae7baa6446b94d39a6115ec4ca4cb05398d523a2b7d1e116f43",
+  "scripts/ret_gen.py": "e652271dbe122b4b86a1d1e48ba243cbd6a7c35cb88c27354b8f5932a28dfffc",
+  "scripts/ret_common.py": "3fa8eb8df29234749cdf0f7f6b8df578c8d110e4847a563626c82d1f186b8bfa"
+ },
+ "recorded_local": "2026-10-09 03:32:42 -0500"
+}

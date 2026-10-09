@@ -1,0 +1,197 @@
+{
+ "ok": true,
+ "n_checks": 36,
+ "n_pass": 36,
+ "checks": [
+  {
+   "check": "dev run: exit 0, DONE.json, every prompt answered once, no log-probs",
+   "ok": true,
+   "detail": "(0, 81, 81)"
+  },
+  {
+   "check": "dev run: one lease 'rcwm-t1:retention', wait before the only load (supa)",
+   "ok": true,
+   "detail": "[('lease', 'rcwm-t1:retention'), ('wait',), ('load', 'supa'), ('unload',), ('release', 'rcwm-t1:retention')]"
+  },
+  {
+   "check": "dev rerun is a no-op",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "dev_select reads the tiny dev run (24 cells graded)",
+   "ok": true,
+   "detail": "{'selected': {}, 'excluded': ['arith_word', 'unit_conv', 'date_time', 'count_sort', 'pct_ratio', 'kv_recall', 'unknown_twin', 'format_follow']}"
+  },
+  {
+   "check": "confirm run: exit 0 and DONE.json",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "check": "one lease; SPARSE then SUPA; resource wait before each load; Sparse unloaded before Supa",
+   "ok": true,
+   "detail": "[('lease', 'rcwm-t1:retention'), ('wait',), ('load', 'sparse'), ('unload',), ('wait',), ('load', 'supa'), ('unload',), ('release', 'rcwm-t1:retention')]"
+  },
+  {
+   "check": "sides recorded: SPARSE off/t2s0/x_bwm, SUPA supa/xs_sx",
+   "ok": true,
+   "detail": "{'SPARSE': ['off', 't2s0', 'x_bwm'], 'SUPA': ['supa', 'xs_sx']}"
+  },
+  {
+   "check": "lp arrays: (n, 151936) float16, within [-60, 0], rows normalised",
+   "ok": true,
+   "detail": "((27, 151936), 0.9999691708761592)"
+  },
+  {
+   "check": "prefill first token == generated first token (every side)",
+   "ok": true,
+   "detail": "{'off': 1.0, 't2s0': 1.0, 'x_bwm': 1.0, 'supa': 1.0, 'xs_sx': 1.0}"
+  },
+  {
+   "check": "adapters active and distinct: off != t2s0 != x_bwm; supa != xs_sx",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "each side equals an independent load (disable_adapter == bare core; switching == loading alone)",
+   "ok": true,
+   "detail": "(True, True, True, True)"
+  },
+  {
+   "check": "analysis accepts the run: every comparison, KL available, verdicts from the rule",
+   "ok": true,
+   "detail": "{'sparse_vs_supa': 'RETAINED', 't2s0_vs_off': 'RETAINED', 'x_bwm_vs_off': 'RETAINED', 'xs_sx_vs_supa': 'RETAINED', 't2s0_vs_supa': 'RETAINED'}"
+  },
+  {
+   "check": "confirm rerun is a no-op",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "crash: lease released; only .partial files; nothing recorded",
+   "ok": true,
+   "detail": "['lp_off.npy.partial', 'lp_t2s0.npy.partial']"
+  },
+  {
+   "check": "resume: partial stage orphaned, run completes, stage files == uninterrupted run byte for byte",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "check": "cap 0: exit 5, nothing loaded, everything deferred",
+   "ok": true,
+   "detail": "[('lease', 'rcwm-t1:retention'), ('release', 'rcwm-t1:retention')]"
+  },
+  {
+   "check": "cap 1 h with a slow SPARSE: exit 5, SPARSE recorded, SUPA deferred (D-22 margin)",
+   "ok": true,
+   "detail": "{'pid': 306556, 'acquired_unix': 1791534752.0848808, 'acquired_source': 'lock record', 'entered_unix': 1791534752.0899646, 'stages_run': ['SPARSE'], 'deferred': ['SUPA'], 'device': 'cpu', 'sparse_runtime': {'torch': '2.6.0+cu124', 'transformers': '5.14.1'}, 'sparse_versions': {'peft': '0.20.0'}, 'sp"
+  },
+  {
+   "check": "next turn completes; stage files == uninterrupted run",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "check": "a recorded output changed: stop, persisted",
+   "ok": true,
+   "detail": "[retention] stage SPARSE: sparse/gen_off.jsonl changed after it was recorded (sha256)"
+  },
+  {
+   "check": "the rerun refuses on STOPPED.json",
+   "ok": true,
+   "detail": "[retention] C:\\Users\\clclc\\AppData\\Local\\Temp\\ret_tiny_6vfkfkmm\\runs\\confirm_tamper\\STOPPED.json exists: a deterministic stop was persisted; an operator must investigate, log it in DECISIONS.md and move the file aside before any rerun"
+  },
+  {
+   "check": "fingerprint mismatch: stop persisted, nothing generated",
+   "ok": true,
+   "detail": "[retention] sparse fingerprint deadbeef0000 != 818be9c6b6a3"
+  },
+  {
+   "check": "runtime drift: stop persisted, nothing generated",
+   "ok": true,
+   "detail": "[retention] runtime {'torch': '9.9.9'} differs from the registered {'torch': '2.6.0+cu124', 'transformers': '5.14.1', 'peft': '0.20.0'}: restore the registered environment (nothing generated in SPARSE)"
+  },
+  {
+   "check": "one-waiter: live RCWM waiting marker -> refused, no lease, not persisted",
+   "ok": true,
+   "detail": "(3, '[retention] another RCWM job waits for the GPU lease (rcwm-t1:x, pid 306464): on')"
+  },
+  {
+   "check": "one-waiter: dead RCWM waiting marker -> proceeds (lease taken, deferred by cap 0)",
+   "ok": true,
+   "detail": "(5, None)"
+  },
+  {
+   "check": "one-waiter: reused pid in the marker -> proceeds (lease taken, deferred by cap 0)",
+   "ok": true,
+   "detail": "(5, None)"
+  },
+  {
+   "check": "one-waiter: live RCWM lock holder -> refused, no lease, not persisted",
+   "ok": true,
+   "detail": "(3, '[retention] another RCWM job holds the GPU lease (rcwm-t1:other, pid 306464): on')"
+  },
+  {
+   "check": "one-waiter: live BWM lock holder -> proceeds (lease taken, deferred by cap 0)",
+   "ok": true,
+   "detail": "(5, None)"
+  },
+  {
+   "check": "a live run lock refuses (not persisted)",
+   "ok": true,
+   "detail": "[retention] another ret_run.py holds the run lock {'pid': 306464, 'create_time': 1791534724.2610335}"
+  },
+  {
+   "check": "a stale run lock is reclaimed",
+   "ok": true,
+   "detail": "(5, None)"
+  },
+  {
+   "check": "refused before the lease: tampered draw",
+   "ok": true,
+   "detail": "[retention] confirm_32.jsonl does not hash to its seal"
+  },
+  {
+   "check": "refused before the lease: purpose/mode mismatch",
+   "ok": true,
+   "detail": "[retention] draw purpose dev != mode confirm"
+  },
+  {
+   "check": "refused before the lease: unscanned draw",
+   "ok": true,
+   "detail": "[retention] the draw's freshness scan was skipped or failed"
+  },
+  {
+   "check": "refused before the lease: T2 s0 pin mismatch",
+   "ok": true,
+   "detail": "[retention] T2 s0 adapter files differ from the PREREG-2 pins"
+  },
+  {
+   "check": "refused before the lease: adapter trained on another base",
+   "ok": true,
+   "detail": "[retention] adapter x_bad was trained on 'C:/fake/Some-Other-Core', not Rineya-Titan-Spars"
+  },
+  {
+   "check": "refused before the lease: registered run in an unfrozen root",
+   "ok": true,
+   "detail": "[retention] the retention kit freeze does not verify: RET_FREEZE.json does not exist or is"
+  },
+  {
+   "check": "--allow-base-mismatch proceeds and records the mismatch",
+   "ok": true,
+   "detail": "(5, None)"
+  }
+ ],
+ "peak_rss_mib": 915.5,
+ "recorded_local": "2026-10-09 03:32:38 -0500",
+ "code_sha256": {
+  "scripts/ret_common.py": "3fa8eb8df29234749cdf0f7f6b8df578c8d110e4847a563626c82d1f186b8bfa",
+  "scripts/ret_gen.py": "e652271dbe122b4b86a1d1e48ba243cbd6a7c35cb88c27354b8f5932a28dfffc",
+  "scripts/ret_grade.py": "5445de4339127ae7baa6446b94d39a6115ec4ca4cb05398d523a2b7d1e116f43",
+  "scripts/ret_run.py": "c09d4d03c52a065445e8335d7accf6bbf9ca1e5adc15cc31a5277372be77d2e9",
+  "scripts/ret_analysis.py": "3a8095f888951e3a678affc10bb03a2bc6052134de14ab163faee6d2910dbc68",
+  "scripts/ret_test_tiny.py": "cbd90fd5cd6a49fe240bc0c62d9946dbe564f0397e48c8f484ab16f36193046a"
+ }
+}

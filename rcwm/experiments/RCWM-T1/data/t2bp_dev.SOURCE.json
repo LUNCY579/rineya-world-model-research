@@ -1,0 +1,558 @@
+{
+ "record": "T2BP_DEV",
+ "seed": 20261111,
+ "builder": "scripts/t2bp_make_data.py",
+ "builder_sha256": "a6c7d07275f486817da5b8d19daac8ef70b0a2d3c5245d251b719034648df5de",
+ "common_sha256": "379af3072b9cc9f388ceacc60e769127d3d82c3c90d51485d859c47e73651a8f",
+ "code_sha256": {
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "fds/oracles.py": "6d22a5e40a69fb8f5c79230d2c2dc7fa51af605de70d3c0fc7cd7d69fe4c959c",
+  "fds/generate.py": "e7e0288af3b5b5c3930446295094734abc55ed22761a22521fa49b346d42d77e"
+ },
+ "harvest": "scripts/l1_make_ood.harvest_historical via scripts/p3_make_bank.load_all_sources: files named HSKILL_CONFIRM_V2* are skipped by name before any open; rcwmt.bank.load_exclusions() is NOT called",
+ "exclusion_sources": {
+  "historical": {
+   "payloads": 6464,
+   "operative_contents": 6258,
+   "sha256": null,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ]
+  },
+  "bank_pilot.json": {
+   "payloads": 15629,
+   "operative_contents": 15278,
+   "sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+  },
+  "bank_confirm.json": {
+   "payloads": 13552,
+   "operative_contents": 13247,
+   "sha256": "8bc6e2f8a8c7cae5b7b66293ef12b0efc440c281f820eca9d384a659b26a6a16"
+  },
+  "bank_confirm2.json": {
+   "payloads": 12163,
+   "operative_contents": 11903,
+   "sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea"
+  },
+  "bank_s4000.json": {
+   "payloads": 255745,
+   "operative_contents": 250614,
+   "sha256": "af1336c261375524a4a6eaf92cc48dc76b1159df093ce2705d279688f22bb4ce"
+  },
+  "t2_train.jsonl": {
+   "payloads": 1501,
+   "operative_contents": 1496,
+   "sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744"
+  },
+  "t2_eval.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59"
+  },
+  "t2_eval_xframe.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de"
+  },
+  "t2_eval_supp.jsonl": {
+   "payloads": 360,
+   "operative_contents": 360,
+   "sha256": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086"
+  },
+  "SELECT-VIEWS-001": {
+   "payloads": 384,
+   "operative_contents": 383,
+   "sha256": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3"
+  },
+  "l1_ood_bank.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c"
+  },
+  "fds/T_BANK.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "26c01effe9610230f7876bbe118792f85094605fe3dde5f873c78c67e1c493ba"
+  },
+  "fds/T_BANK_V2.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "fc094136a5b581cb9cc03393b1e5959ed8f69247638c81e37cf7f68fbf132e01"
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "173aa372466d5e3cc8efbebe4cc7e7ba09a8eb34de4598ce8f9d96a2b8e6557c"
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payloads": 15,
+   "operative_contents": 15,
+   "sha256": "635c9c7ea6851d4a0147a299ecd158a880b91fa5b9046b0af787d2ebbd6eb0d4"
+  },
+  "cc2/T_BANK_V4.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "82f0a6423dd6b58b81319708e7fbda7c5880b9734742323ea11574ff354c93c0"
+  },
+  "bank_p3_oor.jsonl": {
+   "payloads": 1532,
+   "operative_contents": 500,
+   "sha256": "0fd18295d6eaa84d0f451c94b81ea1ecf37ab88e8ab298b58820d80ac740bf12"
+  }
+ },
+ "overlap_counts": {
+  "historical": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_pilot.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_confirm.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_confirm2.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_s4000.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_train.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval_xframe.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval_supp.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "SELECT-VIEWS-001": {
+   "payload": 0,
+   "operative": 0
+  },
+  "l1_ood_bank.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "fds/T_BANK.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "fds/T_BANK_V2.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc2/T_BANK_V4.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_p3_oor.jsonl": {
+   "payload": 0,
+   "operative": 0
+  }
+ },
+ "internal_overlap_operative": {
+  "train&dev": 0,
+  "train&chains": 0,
+  "dev&chains": 0
+ },
+ "model_calls": 0,
+ "torch_imported": false,
+ "built_utc": "2026-10-09T08:56:41Z",
+ "file": "t2bp_dev.jsonl",
+ "file_sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
+ "onestep_rows": 1050,
+ "chain_parents": 30,
+ "strata_n": {
+  "D_app_add": 100,
+  "D_app_unchanged": 100,
+  "D_app_delete": 100,
+  "D_int_add_wrong": 150,
+  "D_inapp_pre_on": 100,
+  "D_inapp_pre_off": 100,
+  "D_ood10": 150,
+  "D_ood12": 150,
+  "D_inapp_addset": 100
+ },
+ "describe": {
+  "strata": {
+   "D_app_add": {
+    "n": 100,
+    "subtypes": {
+     "A1": 100
+    },
+    "types": {
+     "A1": 100
+    },
+    "applicable": 100,
+    "heuristic_floors": {
+     "copy": 0.0,
+     "apply_regardless": 1.0,
+     "int_add": 1.0,
+     "or_add": 1.0,
+     "int_add_del": 1.0,
+     "delete_only": 0.0
+    },
+    "shortcut_floors": {
+     "pa_int_add": 1.0,
+     "pa_int_add_del": 1.0,
+     "pa_or_add": 1.0,
+     "pa_delete_only": 0.0,
+     "pre_on_only": 1.0,
+     "pre_off_only": 1.0,
+     "precount_cue": 0.89,
+     "add0_cue": 1.0,
+     "addset_apply": 1.0
+    }
+   },
+   "D_app_unchanged": {
+    "n": 100,
+    "subtypes": {
+     "A3": 100
+    },
+    "types": {
+     "A3": 100
+    },
+    "applicable": 100,
+    "heuristic_floors": {
+     "copy": 1.0,
+     "apply_regardless": 1.0,
+     "int_add": 0.0,
+     "or_add": 1.0,
+     "int_add_del": 0.0,
+     "delete_only": 1.0
+    },
+    "shortcut_floors": {
+     "pa_int_add": 0.0,
+     "pa_int_add_del": 0.0,
+     "pa_or_add": 1.0,
+     "pa_delete_only": 1.0,
+     "pre_on_only": 1.0,
+     "pre_off_only": 1.0,
+     "precount_cue": 1.0,
+     "add0_cue": 1.0,
+     "addset_apply": 1.0
+    }
+   },
+   "D_app_delete": {
+    "n": 100,
+    "subtypes": {
+     "A2": 100
+    },
+    "types": {
+     "A2": 100
+    },
+    "applicable": 100,
+    "heuristic_floors": {
+     "copy": 0.0,
+     "apply_regardless": 1.0,
+     "int_add": 0.0,
+     "or_add": 0.0,
+     "int_add_del": 1.0,
+     "delete_only": 0.0
+    },
+    "shortcut_floors": {
+     "pa_int_add": 0.0,
+     "pa_int_add_del": 1.0,
+     "pa_or_add": 0.0,
+     "pa_delete_only": 0.0,
+     "pre_on_only": 1.0,
+     "pre_off_only": 1.0,
+     "precount_cue": 0.85,
+     "add0_cue": 1.0,
+     "addset_apply": 1.0
+    }
+   },
+   "D_int_add_wrong": {
+    "n": 150,
+    "subtypes": {
+     "A4": 150
+    },
+    "types": {
+     "A4": 150
+    },
+    "applicable": 150,
+    "heuristic_floors": {
+     "copy": 0.0,
+     "apply_regardless": 1.0,
+     "int_add": 0.0,
+     "or_add": 0.0,
+     "int_add_del": 0.0,
+     "delete_only": 1.0
+    },
+    "shortcut_floors": {
+     "pa_int_add": 0.0,
+     "pa_int_add_del": 0.0,
+     "pa_or_add": 0.0,
+     "pa_delete_only": 1.0,
+     "pre_on_only": 1.0,
+     "pre_off_only": 1.0,
+     "precount_cue": 0.88,
+     "add0_cue": 1.0,
+     "addset_apply": 1.0
+    }
+   },
+   "D_inapp_pre_on": {
+    "n": 100,
+    "subtypes": {
+     "Ib": 91,
+     "Ia": 9
+    },
+    "types": {
+     "Ib": 91,
+     "Ia": 9
+    },
+    "applicable": 0,
+    "heuristic_floors": {
+     "copy": 1.0,
+     "apply_regardless": 0.0,
+     "int_add": 0.0,
+     "or_add": 0.09,
+     "int_add_del": 0.0,
+     "delete_only": 0.75
+    },
+    "shortcut_floors": {
+     "pa_int_add": 1.0,
+     "pa_int_add_del": 1.0,
+     "pa_or_add": 1.0,
+     "pa_delete_only": 1.0,
+     "pre_on_only": 1.0,
+     "pre_off_only": 0.0,
+     "precount_cue": 0.6,
+     "add0_cue": 0.0,
+     "addset_apply": 0.91
+    }
+   },
+   "D_inapp_pre_off": {
+    "n": 100,
+    "subtypes": {
+     "Ib": 89,
+     "Ia": 11
+    },
+    "types": {
+     "Ib": 89,
+     "Ia": 11
+    },
+    "applicable": 0,
+    "heuristic_floors": {
+     "copy": 1.0,
+     "apply_regardless": 0.0,
+     "int_add": 0.0,
+     "or_add": 0.11,
+     "int_add_del": 0.0,
+     "delete_only": 0.72
+    },
+    "shortcut_floors": {
+     "pa_int_add": 1.0,
+     "pa_int_add_del": 1.0,
+     "pa_or_add": 1.0,
+     "pa_delete_only": 1.0,
+     "pre_on_only": 0.0,
+     "pre_off_only": 1.0,
+     "precount_cue": 0.27,
+     "add0_cue": 0.0,
+     "addset_apply": 0.89
+    }
+   },
+   "D_ood10": {
+    "n": 150,
+    "subtypes": {
+     "A1": 25,
+     "A2": 25,
+     "A3": 25,
+     "A4": 25,
+     "inapp_pre_on": 25,
+     "inapp_pre_off": 25
+    },
+    "types": {
+     "A1": 25,
+     "A2": 25,
+     "A3": 25,
+     "A4": 25,
+     "Ib": 40,
+     "Ia": 10
+    },
+    "applicable": 100,
+    "heuristic_floors": {
+     "copy": 0.5,
+     "apply_regardless": 0.667,
+     "int_add": 0.167,
+     "or_add": 0.4,
+     "int_add_del": 0.333,
+     "delete_only": 0.54
+    },
+    "shortcut_floors": {
+     "pa_int_add": 0.5,
+     "pa_int_add_del": 0.667,
+     "pa_or_add": 0.667,
+     "pa_delete_only": 0.667,
+     "pre_on_only": 0.833,
+     "pre_off_only": 0.833,
+     "precount_cue": 0.767,
+     "add0_cue": 0.667,
+     "addset_apply": 0.933
+    }
+   },
+   "D_ood12": {
+    "n": 150,
+    "subtypes": {
+     "A1": 25,
+     "A2": 25,
+     "A3": 25,
+     "A4": 25,
+     "inapp_pre_on": 25,
+     "inapp_pre_off": 25
+    },
+    "types": {
+     "A1": 25,
+     "A2": 25,
+     "A3": 25,
+     "A4": 25,
+     "Ib": 45,
+     "Ia": 5
+    },
+    "applicable": 100,
+    "heuristic_floors": {
+     "copy": 0.5,
+     "apply_regardless": 0.667,
+     "int_add": 0.167,
+     "or_add": 0.367,
+     "int_add_del": 0.333,
+     "delete_only": 0.58
+    },
+    "shortcut_floors": {
+     "pa_int_add": 0.5,
+     "pa_int_add_del": 0.667,
+     "pa_or_add": 0.667,
+     "pa_delete_only": 0.667,
+     "pre_on_only": 0.833,
+     "pre_off_only": 0.833,
+     "precount_cue": 0.747,
+     "add0_cue": 0.667,
+     "addset_apply": 0.967
+    }
+   },
+   "D_inapp_addset": {
+    "n": 100,
+    "subtypes": {
+     "Ia/pre_on": 50,
+     "Ia/pre_off": 50
+    },
+    "types": {
+     "Ia": 100
+    },
+    "applicable": 0,
+    "heuristic_floors": {
+     "copy": 1.0,
+     "apply_regardless": 0.0,
+     "int_add": 0.0,
+     "or_add": 1.0,
+     "int_add_del": 0.0,
+     "delete_only": 0.0
+    },
+    "shortcut_floors": {
+     "pa_int_add": 1.0,
+     "pa_int_add_del": 1.0,
+     "pa_or_add": 1.0,
+     "pa_delete_only": 1.0,
+     "pre_on_only": 0.5,
+     "pre_off_only": 0.5,
+     "precount_cue": 0.38,
+     "add0_cue": 0.0,
+     "addset_apply": 0.0
+    }
+   }
+  },
+  "structural_overlap_with_training_descriptive": {
+   "D_app_add": 0.96,
+   "D_app_unchanged": 0.3,
+   "D_app_delete": 0.74,
+   "D_int_add_wrong": 0.953,
+   "D_inapp_pre_on": 0.81,
+   "D_inapp_pre_off": 0.87,
+   "D_ood10": 0.0,
+   "D_ood12": 0.0,
+   "D_inapp_addset": 0.41
+  },
+  "chains": {
+   "parents": 30,
+   "chains": 240,
+   "steps": 960,
+   "final_equals_s0_share (copy floor at k=4)": 0.1292,
+   "step_types": {
+    "I_noop": 175,
+    "A1": 186,
+    "A4": 60,
+    "A3": 169,
+    "Ib": 234,
+    "A2": 106,
+    "Ia": 30
+   },
+   "distinct_finals_per_parent_min": 4,
+   "k4_exact_floors_of_policies (self-rollout; out-of-range = broken)": {
+    "copy": 0.1292,
+    "apply_regardless": 0.4417,
+    "pa_int_add": 0.2292,
+    "pa_int_add_del": 0.3917,
+    "pa_or_add": 0.4542,
+    "pa_delete_only": 0.2208,
+    "pre_on_only": 0.8042,
+    "pre_off_only": 0.6333,
+    "precount_cue": 0.5833,
+    "add0_cue": 0.4417,
+    "addset_apply": 0.9083
+   }
+  }
+ },
+ "use": "T2b prerequisite representation screen (seed 0) only; a dev bank, not a confirmation instrument",
+ "build_log": [
+  "[03:55:40] T2b prerequisite data: seed 20261111, surface diversity off; no model call, no torch",
+  "[03:55:40] D-int frame == T2's stored prerequisite prompt on 500/500 rows (render_chat == the chat template)",
+  "[03:55:40] code identity: {'rcwmt/env.py': '92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2', 'fds/oracles.py': '6d22a5e40a69fb8f5c79230d2c2dc7fa51af605de70d3c0fc7cd7d69fe4c959c', 'fds/generate.py': 'e7e0288af3b5b5c3930446295094734abc55ed22761a22521fa49b346d42d77e'}",
+  "[03:56:27] historical set: 6464 payloads (47s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[03:56:28] bank_pilot.json: 15629 payloads, 15278 operative contents",
+  "[03:56:28] bank_confirm.json: 13552 payloads, 13247 operative contents",
+  "[03:56:28] bank_confirm2.json: 12163 payloads, 11903 operative contents",
+  "[03:56:32] bank_s4000.json: 255745 payloads, 250614 operative contents",
+  "[03:56:32] t2_train.jsonl: 1501 payloads",
+  "[03:56:32] t2_eval.jsonl: 600 payloads",
+  "[03:56:32] t2_eval_xframe.jsonl: 600 payloads",
+  "[03:56:32] t2_eval_supp.jsonl: 360 payloads",
+  "[03:56:32] SELECT-VIEWS-001: 384 payloads",
+  "[03:56:32] l1_ood_bank.jsonl: 600 payloads",
+  "[03:56:32] fds/T_BANK.json: 192 payloads",
+  "[03:56:32] fds/T_BANK_V2.json: 192 payloads",
+  "[03:56:32] cc1/T_BANK_V3X.json: 864 payloads",
+  "[03:56:32] cc2/STAGE_A_T_V3X.json: 15 payloads",
+  "[03:56:32] cc2/T_BANK_V4.json: 864 payloads",
+  "[03:56:32] bank_p3_oor.jsonl: 1532 payloads",
+  "[03:56:32] exclusion union: 310258 payloads, 302283 operative contents (17 sources)",
+  "[03:56:33] dev one-step: 1050 rows from 29751 draws {'D_app_add': 510, 'D_app_unchanged': 892, 'D_app_delete': 2258, 'D_int_add_wrong': 5467, 'D_inapp_pre_on': 471, 'D_inapp_pre_off': 2056, 'D_ood10': 4096, 'D_ood12': 2657, 'D_inapp_addset': 11344}",
+  "[03:56:33] dev chains: 30 parents x 8 candidates x 4 steps; rejected {'collision': 335, 'fewer than 4 distinct finals': 73}",
+  "[03:56:33] training: 1500 rows (275 minimal pairs); draws {'pair:A1': 263, 'pair:A2': 27, 'pair:A4': 41, 'pair:Za': 57, 'row:A1': 510, 'row:A2': 16, 'row:A3': 23, 'row:A4': 129, 'row:Ib': 303, 'row:Zi': 182}",
+  "[03:56:34] overlaps with every source (payload / operative): all 0 (17 sources); internal {'train&dev': 0, 'train&chains': 0, 'dev&chains': 0}",
+  "[03:56:35] audit: ok=True heuristics {'copy': 0.51, 'apply_regardless': 0.5, 'int_add': 0.48333333333333334, 'or_add': 0.5166666666666667, 'apply_ignoring_pre': 0.5, 'int_add_del': 0.39, 'delete_only': 0.4066666666666667} quotas {'minimal_pairs': 275, 'int_add_wrong_strict': 150, 'applicable_delete': 245, 'int_add_wrong_r11': 260, 'inapp_pre_on': 377, 'inapp_pre_off': 373}"
+ ]
+}

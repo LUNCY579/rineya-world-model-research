@@ -1,0 +1,202 @@
+{
+ "golds": {
+  "dint": {
+   "n": 950,
+   "correct": 950
+  },
+  "strace": {
+   "n": 950,
+   "correct": 950,
+   "cmp_ok": 950,
+   "calc_ok": 950
+  },
+  "bbits": {
+   "n": 950,
+   "correct": 950,
+   "flag_ok": 950
+  },
+  "ffill": {
+   "n": 950,
+   "correct": 950
+  }
+ },
+ "heuristics": {
+  "dint": {
+   "copy": {
+    "direct_floor": 450,
+    "scored_in_format": 450,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "apply_regardless": {
+    "direct_floor": 650,
+    "scored_in_format": 650,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "int_add": {
+    "direct_floor": 150,
+    "scored_in_format": 150,
+    "out_of_range_predictions": 100,
+    "match": true
+   },
+   "or_add": {
+    "direct_floor": 335,
+    "scored_in_format": 335,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "int_add_del": {
+    "direct_floor": 300,
+    "scored_in_format": 300,
+    "out_of_range_predictions": 90,
+    "match": true
+   },
+   "delete_only": {
+    "direct_floor": 565,
+    "scored_in_format": 565,
+    "out_of_range_predictions": 0,
+    "match": true
+   }
+  },
+  "strace": {
+   "copy": {
+    "direct_floor": 450,
+    "scored_in_format": 450,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "apply_regardless": {
+    "direct_floor": 650,
+    "scored_in_format": 650,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "int_add": {
+    "direct_floor": 150,
+    "scored_in_format": 150,
+    "out_of_range_predictions": 100,
+    "match": true
+   },
+   "or_add": {
+    "direct_floor": 335,
+    "scored_in_format": 335,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "int_add_del": {
+    "direct_floor": 300,
+    "scored_in_format": 300,
+    "out_of_range_predictions": 90,
+    "match": true
+   },
+   "delete_only": {
+    "direct_floor": 565,
+    "scored_in_format": 565,
+    "out_of_range_predictions": 0,
+    "match": true
+   }
+  },
+  "bbits": {
+   "copy": {
+    "direct_floor": 450,
+    "scored_in_format": 450,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "apply_regardless": {
+    "direct_floor": 650,
+    "scored_in_format": 650,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "int_add": {
+    "direct_floor": 150,
+    "scored_in_format": 150,
+    "out_of_range_predictions": 100,
+    "match": true
+   },
+   "or_add": {
+    "direct_floor": 335,
+    "scored_in_format": 335,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "int_add_del": {
+    "direct_floor": 300,
+    "scored_in_format": 300,
+    "out_of_range_predictions": 90,
+    "match": true
+   },
+   "delete_only": {
+    "direct_floor": 565,
+    "scored_in_format": 565,
+    "out_of_range_predictions": 0,
+    "match": true
+   }
+  },
+  "ffill": {
+   "copy": {
+    "direct_floor": 450,
+    "scored_in_format": 450,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "apply_regardless": {
+    "direct_floor": 650,
+    "scored_in_format": 650,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "int_add": {
+    "direct_floor": 150,
+    "scored_in_format": 150,
+    "out_of_range_predictions": 100,
+    "match": true
+   },
+   "or_add": {
+    "direct_floor": 335,
+    "scored_in_format": 335,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "int_add_del": {
+    "direct_floor": 300,
+    "scored_in_format": 300,
+    "out_of_range_predictions": 90,
+    "match": true
+   },
+   "delete_only": {
+    "direct_floor": 565,
+    "scored_in_format": 565,
+    "out_of_range_predictions": 0,
+    "match": true
+   }
+  }
+ },
+ "negatives": {
+  "strace: keys reordered": true,
+  "strace: extra key": true,
+  "strace: duplicate after": true,
+  "strace: after as string": true,
+  "strace: after out of range": true,
+  "strace: bare integer": true,
+  "bbits: keys reordered": true,
+  "bbits: wrong width": true,
+  "bbits: integer after": true,
+  "bbits: flag as string": true,
+  "bbits: non-binary digit": true,
+  "ffill: keys reordered": true,
+  "dint: out of range": true,
+  "dint: boolean": true,
+  "dint: text": true
+ },
+ "dint_parser_equals_env": true,
+ "ok": true,
+ "filler_checked": true,
+ "dev_sha256": "78e061d275f922f6725be36ed5ef55aba6719e1c60e35ba5a965b1add810b519",
+ "code_sha256": {
+  "scripts/t2bp_analysis.py": "7224dfead1bc45773acc32a67ef64a16f0fce5b0272d54a3f3011d6b45289834",
+  "scripts/t2bp_common.py": "dc36ba2576ae385988df806cb7b20f5a8bd8380f63592f1da448d657234cf794"
+ }
+}

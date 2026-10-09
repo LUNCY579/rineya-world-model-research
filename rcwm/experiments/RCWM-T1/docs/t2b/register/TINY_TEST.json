@@ -1,0 +1,134 @@
+{
+ "ok": true,
+ "n_checks": 23,
+ "n_pass": 23,
+ "checks": [
+  {
+   "check": "1 render_prompt == apply_chat_template on every training and dev prompt",
+   "ok": true,
+   "detail": "1650 prompts"
+  },
+  {
+   "check": "1 tokenizers counts == AutoTokenizer on every target; filler == trace tokens on every row (AutoTokenizer)",
+   "ok": true,
+   "detail": "4950 targets"
+  },
+  {
+   "check": "2 surface diversity: same rows/targets/golds; every paraphrase + field variant used; prompts parse back; chat template exact; Cfg(train_variant='sd') picks the files",
+   "ok": true,
+   "detail": "750/750 prompts differ from canonical"
+  },
+  {
+   "check": "3 t2br_chain(plain) == generation.chain chain_one (random tiny model and an oracle that parses)",
+   "ok": true,
+   "detail": "6 chains"
+  },
+  {
+   "check": "4 full tiny run: exit 0, DONE.json, all stages recorded, one lease 'rcwm-t1:t2b-register', a wait before each of 4 loads",
+   "ok": true,
+   "detail": "calls ['lease', 'wait', 'train_load', 'unload', 'wait', 'train_load', 'unload', 'wait', 'train_load', 'unload', 'wait', 'load', 'unload', 'release']"
+  },
+  {
+   "check": "4 three distinct adapters; every ON side differs from OFF",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "4 outputs validate with the analysis loaders (states == texts parsed by each side's parser); provenance ok",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "4 rerun is a no-op (exit 0, no lease)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "5 adapter switching in one PeftModel == each adapter loaded alone (identical texts)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "6 crash in E2: the lease is released; the resume orphans the stray partial, re-anchors (recorded), finishes; outputs byte-identical to the uninterrupted run (adapters included)",
+   "ok": true,
+   "detail": "orphans 1; differing []"
+  },
+  {
+   "check": "7 crash inside T_trace: .partial left; the resume orphans it, retrains, finishes; byte-identical to 4",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "8 cap: nothing fits -> exit 5, nothing trained or generated, every stage deferred",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "8 training deferred mid-way (exit 5), then E2 deferred (exit 5), then the next turn re-anchors and completes; byte-identical to 4",
+   "ok": true,
+   "detail": "rc 5 5 0"
+  },
+  {
+   "check": "9 anchor failure: exit 3, anchor.json pass false, no dev output, STOPPED.json; the rerun refuses",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "9 fingerprint mismatch: exit 3, persisted, nothing trained",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "9 runtime drift: exit 3, persisted, nothing loaded or trained",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "9 a recorded output changed: exit 3, persisted",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "9 one-waiter rule: a live RCWM waiter refuses (exit 3, not persisted, no lease); a live RCWM holder refuses; a dead marker, a reused pid and a live BWM holder do not",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "9 run lock: a live holder refuses (exit 3, not persisted); a stale one is reclaimed",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "10 oracle run on the FULL dev + chain bank: the analysis says GO; with filler = gold, STOP (decision point 3)",
+   "ok": true,
+   "detail": "GO | STOP (decision point 3): extra decode compute, not supervision"
+  },
+  {
+   "check": "10 oracle run: gold trace side regret k4 0, product law predicted == observed == 1",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "11 freeze tool (fake root): run() refuses before a freeze (not persisted); refuses without approval and with an output present; freezes; verifies; refuses a second freeze; an installed hook that is not the draft byte for byte is flagged, the exact copy is not; a changed input fails verification; run() refuses",
+   "ok": true,
+   "detail": "['no approval', 'output present', 'second freeze'] ['data/t2br_dev.jsonl differs from the freeze']"
+  },
+  {
+   "check": "12 plan: one turn at the planning and observed rates; a 3 h cap needs 2 turns (eval resumes with a re-anchor); an impossible cap raises",
+   "ok": true,
+   "detail": "3.66 h / 3.15 h; 3 h cap: [{'stages': ['T_plain', 'T_trace', 'T_filler', 'A0', 'E1'], 'projected_h': 2.6}, {'stages': ['A0 (re-anchor)', 'E2'], 'projected_h': 1.17}]"
+  }
+ ],
+ "seconds": 105.8,
+ "peak_working_set_mb": 1061.7,
+ "threads": 2,
+ "code_sha256": {
+  "scripts/t2br_run.py": "c0005a458114a007b5db42cdaf2f1b41b84319f800235476e5364da3232bb2bd",
+  "scripts/t2br_common.py": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15",
+  "scripts/t2br_analysis.py": "a4ef7bb679c9de88f54f5b5917763807a1682c71451ba19660fafb3eda5424e3",
+  "scripts/t2br_test_tiny.py": "bdb9bdc895824932353201c440c0dd0e4600eb8ee2fad85cb714105c8b2d7167"
+ },
+ "torch": "2.6.0+cu124",
+ "transformers": "5.14.1",
+ "written_utc": "2026-10-09T08:39:11Z"
+}

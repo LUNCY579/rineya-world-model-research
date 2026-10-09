@@ -537,3 +537,48 @@ Times are local (CDT). Entries are append-only.
     - The fresh chain was relaunched hidden via WMI at 02:39. Every pre-hook step was skipped (outputs exist), and the L1 hook was a no-op.
     - `p3_run.py` started at 02:39:15 and passed the one-waiter check. It is the single RCWM waiter (`rcwm-t1:prereg3`), with stages A0, S1, S2 and S3 pending.
     - The remaining pilot steps (lik, pvr, steer, arms, regen) follow it in the same chain.
+- **D-34 Joint trace format with BWM (BWM D-52); T2b kits built on CPU (2026-10-09, about 02:55).**
+  - **Format, agreed by message:** a trace target is one JSON object in literal key order `{"cmp": …, "calc": …, "after": …}`, never key-sorted. Parsers reject other orders and extra keys.
+    - `cmp`: the predicate's inputs plus `ok`.
+    - `calc`: the chosen branch's result; the unchanged state if not ok.
+    - `after`: each family's existing answer format. The decision and chain pipelines read only `after`.
+    - Filler control: `{"fill":" . . .","after":…}`, a run of the one-token unit " ." matched per row to the trace's token count.
+    - Out-of-range strata are the primary outcome. In-distribution strata are reported, gating only as non-inferiority controls.
+  - **BWM reference:** `native_v1/bwmn/traces.py`, covering RW2 and Blocksworld.
+  - **RCWM instances:**
+    - P: `cmp = {viol, …, ok}`.
+    - R conditional: `cmp = {x, thr, ok}`.
+  - **Build:** workflow wf_905f7b77-4e4 is building three CPU-only kits, each drafted, adversarially reviewed and revised. No GPU work and no hook until PREREG-3 has run and a decision is logged.
+    - 5a: P representation screen, with arms D-int / S-trace / B-bits.
+    - 5b: R trace screen, with arms plain / trace / filler.
+    - 5c: correctness retention suite.
+  - **Decision point 1 (roadmap):** if PREREG-3 returns TRIGGER, the kits' surface-diversity option is switched on before any training.
+  - **Restart:** a first launch (wx4ijnz21) was stopped after about 2 minutes to add BWM's amendments.
+- **R-PREREG-3 (07:19, 2026-10-09): STATUS: TRIGGER.** The run finished at 07:19:24 (`runs/bank_p3_oor/DONE.json`; rc 0). The lease was acquired at 06:34:02 after BWM's turn.
+  - **Stages:** A0 anchor 587 s, S1 1,229 s, S2 288 s, then S3 (Supa). About 45 min of GPU time in total.
+  - **Analysis:** `p3_analysis.py` ran once, at 07:19:25. Outputs: `PREREG_3_RESULTS.json` sha 8e03029a…, `.md` sha 30da0547….
+  - **Registered verdict (verbatim):** "In all three T2 seeds the adapted model's no-op did not extend beyond 'void': accuracy on the seven unseen-status strata that contain no form of 'void' … was 0.01-0.18 (each <= 0.30), against C_void s0 0.99, s1 1.00, s2 1.00 …; 1605 of the 2030 errors on those rows applied the event as if posted. Near-miss spellings of 'void' left unchanged: s0 0.95, s1 0.94, s2 0.99. The adapted model treats 'void' and its near-miss spellings (Void, VOID, voided), not 'any status other than posted', as the no-op cue."
+  - **Group verdicts:**
+    - **Magnitude, add/transfer:** DOES NOT GENERALISE, with a partial gain over OFF.
+      - M_bal: s0–s2 0.46–0.61 vs in-distribution twins 0.84–0.91.
+      - M_amt: 0.06–0.21. The retained gain is −0.28 to −0.34, CI excluding 0.
+    - **Magnitude, scale:** DOES NOT GENERALISE, with a partial gain: 0.44–0.53 vs twins 0.91–0.97.
+    - **Naming:** MIXED.
+      - A_many generalises (0.84–0.90, same as twins; retained gain about 0).
+      - A_renamed is below the floor (0.71–0.77). Letters E–H are 0.82–0.90, but word names only 0.60–0.66.
+    - **Format, key order:** DOES NOT GENERALISE: 0.37–0.47 vs twins 0.87–0.91. Top-level swap 0.46–0.64; all key orders permuted 0.28–0.30.
+  - **Base semantics:**
+    - Titan-Sparse OFF treats no status as a no-op: C_void 0.05, unseen 0.02–0.06.
+    - Supa: 0.10–0.14, mostly "other change" errors, with status sensitivity of 0.00–0.03.
+    - Neither base reads the rule text either.
+  - **Expectations E1 and E2:** hold.
+  - **Chains:**
+    - CH_S, in range with mixed statuses: T2 k4 exact 0.05–0.125 vs OFF 0.00. Steps with unseen and neutral statuses are 0.00 for every arm.
+    - CH_X, out of range: k4 exact 0.000 for every arm.
+  - **Consequences:**
+    - **(a) PREREG-2 wording:** the void gain is a token cue, not the stated rule. The limit "fresh at payload level, not out-of-distribution" binds. REPORT §3b gets a pointer to §3c.
+    - **(b) Roadmap decision point 1 fires:** rule data must be surface-diversified before reuse. Status vocabulary with held-out words, wider magnitudes, randomized key order, and account names beyond letters.
+      - The T2b kits (D-34) switch on their surface-diversity option before any training.
+      - The confirmations' primary outcome is out of range, held-out words included.
+    - **(c) Joint item 3 (T2 as F in BWM's beam planner):** problems must stay inside T2's verified range (accounts A–D, posted/void, |amount| ≤ 12, |balance| ≤ 98, sorted keys). Out of range is reported only, where F is known to break.
+    - **(d) Cross-programme:** this is the ledger counterpart of BWM F-01. The LoRA learned the surface form of the rule cases it saw, not the stated rule. Training data must vary the surface form of every rule.

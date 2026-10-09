@@ -1811,3 +1811,23 @@ verdict: CONFIRMED (strong pass: both one-sided 95% bounds beyond the thresholds
 === 2026-10-09T02:39:15-05:00 start scripts/p3_run.py
 [prereg3] stages to run: ['A0', 'S1', 'S2', 'S3']
   [gpu-lease] waiting: foreign python pid 92824 (5.10 GiB dedicated GPU memory)
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:prereg3 token=9afed3f7
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:22,  3.77it/s]Loading weights:  15%|#5        | 48/310 [00:00<00:01, 160.94it/s]Loading weights:  30%|##9       | 92/310 [00:00<00:00, 251.20it/s]Loading weights:  44%|####3     | 136/310 [00:00<00:00, 305.64it/s]Loading weights:  58%|#####8    | 180/310 [00:00<00:00, 346.61it/s]Loading weights:  72%|#######2  | 224/310 [00:00<00:00, 367.87it/s]Loading weights:  87%|########6 | 269/310 [00:00<00:00, 380.65it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 316.19it/s]
+[prereg3] Titan-Sparse 818be9c6b6a3 + T2 s0/s1/s2 adapters loaded in 6.1s
+[prereg3] A0 done in 587s (planned <= 3328 generations)
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[prereg3] S1 done in 1229s (planned <= 6000 generations)
+[prereg3] S2 done in 288s (planned <= 1280 generations)
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:57,  2.62it/s]Loading weights:  49%|####9     | 152/310 [00:00<00:00, 409.11it/s]Loading weights:  77%|#######6  | 238/310 [00:00<00:00, 482.33it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 422.86it/s]
+  [gpu-lease] released rineya-gpu-0.lock
+[prereg3] all stages complete; DONE.json written
+=== 2026-10-09T07:19:24-05:00 exit rc=0 scripts/p3_run.py
+=== 2026-10-09T07:19:24-05:00 start scripts/p3_analysis.py
+wrote C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\runs\bank_p3_oor\analysis\PREREG_3_RESULTS.json (+ .md, per-row .npz)
+verdict: STATUS: TRIGGER; magnitude_at: DOES NOT GENERALISE, with a partial gain over OFF; magnitude_scale: DOES NOT GENERALISE, with a partial gain over OFF; naming: MIXED; format: DOES NOT GENERALISE, with a partial gain over OFF
+=== 2026-10-09T07:19:25-05:00 exit rc=0 scripts/p3_analysis.py
+=== 2026-10-09T07:19:26-05:00 start scripts/run_lik.py --bank bank_pilot --arm sparse --splits dev,test
+[sparse] 5824 items, 27755 scored sequences
+[turn] last turn was ours and the peer is waiting (bwm:bundleD); yielding
+  [gpu-lease] waiting: foreign python pid 321076 (4.09 GiB dedicated GPU memory)

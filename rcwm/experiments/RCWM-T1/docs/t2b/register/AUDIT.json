@@ -1,0 +1,437 @@
+{
+ "ok": true,
+ "historical_harvest": true,
+ "checks": [
+  {
+   "check": "train files match their SOURCE sha256",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "dev + chain files match their SOURCE sha256",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "render_prompt == real chat template (t2_train register prompts)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "three renderings of the SAME rows (ids, before, event, order)",
+   "ok": true,
+   "detail": "750 rows"
+  },
+  {
+   "check": "identical prompts across arms",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "training golds = env.step = FDS oracle; targets re-derived; prompts canonical",
+   "ok": true,
+   "detail": "gold 0, target/prompt 0"
+  },
+  {
+   "check": "filler token count == trace token count on every row (Titan tokenizer); recorded counts exact",
+   "ok": true,
+   "detail": "0 mismatches"
+  },
+  {
+   "check": "trace key order literal (cmp, calc, after) and parseable",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "dev golds / targets / token equality re-derived",
+   "ok": true,
+   "detail": "0 bad"
+  },
+  {
+   "check": "dev strata sizes as designed",
+   "ok": true,
+   "detail": "{'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100}"
+  },
+  {
+   "check": "every dev row satisfies its stratum definition",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "pairs / triplets differ ONLY in the threshold; OOR conditional strata branch-balanced",
+   "ok": true,
+   "detail": "{'cond_oor_val': {False: 50, True: 50}, 'cond_oor_thr': {True: 50, False: 50}}"
+  },
+  {
+   "check": "training conditional twins: same row except the threshold, branch flipped",
+   "ok": true,
+   "detail": "150 pairs"
+  },
+  {
+   "check": "training value / threshold ranges in the recorded marginal",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "no swap / add-no-wrap row in training (controls untouched)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "chains: 8 x 4 per parent, >= 4 distinct finals, CH_X values out of range, oracle cross-check",
+   "ok": true,
+   "detail": "{'CH_IN': 32, 'CH_X': 16}"
+  },
+  {
+   "check": "freshness: zero payload / operative-content overlap with every source; units mutually disjoint",
+   "ok": true,
+   "detail": "{}"
+  },
+  {
+   "check": "historical harvest skipped exactly the HSKILL_CONFIRM_V2* files, by name (never opened)",
+   "ok": true,
+   "detail": "['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']"
+  },
+  {
+   "check": "surface-heuristic audit: copy / unreduced / always-add / always-subtract <= 0.55; branch 150 / 150",
+   "ok": true,
+   "detail": "copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500"
+  },
+  {
+   "check": "audit recorded at build == recomputed",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "audit": {
+  "n": {
+   "all": 750,
+   "mix": 300,
+   "wrap": 150,
+   "cond": 300
+  },
+  "max": 0.55,
+  "acc": {
+   "copy": {
+    "all": {
+     "n": 750,
+     "acc": 0.0
+    },
+    "mix": {
+     "n": 300,
+     "acc": 0.0
+    },
+    "wrap": {
+     "n": 150,
+     "acc": 0.0
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.0
+    }
+   },
+   "unreduced": {
+    "all": {
+     "n": 750,
+     "acc": 0.4667
+    },
+    "mix": {
+     "n": 300,
+     "acc": 0.5
+    },
+    "wrap": {
+     "n": 150,
+     "acc": 0.0
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.6667
+    }
+   },
+   "always_add": {
+    "all": {
+     "n": 300,
+     "acc": 0.5
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.5
+    }
+   },
+   "always_sub": {
+    "all": {
+     "n": 300,
+     "acc": 0.5
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.5
+    }
+   },
+   "wrong_register": {
+    "all": {
+     "n": 300,
+     "acc": 0.51
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.51
+    }
+   },
+   "non_strict": {
+    "all": {
+     "n": 300,
+     "acc": 0.6667
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.6667
+    }
+   },
+   "x_hi": {
+    "all": {
+     "n": 300,
+     "acc": 0.5
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.5
+    }
+   },
+   "thr_lo": {
+    "all": {
+     "n": 300,
+     "acc": 0.5067
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.5067
+    }
+   },
+   "v_pos": {
+    "all": {
+     "n": 300,
+     "acc": 0.5
+    },
+    "cond": {
+     "n": 300,
+     "acc": 0.5
+    }
+   },
+   "mix_1x": {
+    "all": {
+     "n": 300,
+     "acc": 0.03
+    },
+    "mix": {
+     "n": 300,
+     "acc": 0.03
+    }
+   },
+   "mix_no_v": {
+    "all": {
+     "n": 300,
+     "acc": 0.11
+    },
+    "mix": {
+     "n": 300,
+     "acc": 0.11
+    }
+   }
+  },
+  "gated": {
+   "copy|all": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "copy|mix": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "copy|wrap": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "copy|cond": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "unreduced|all": {
+    "acc": 0.4667,
+    "ok": true
+   },
+   "unreduced|mix": {
+    "acc": 0.5,
+    "ok": true
+   },
+   "unreduced|wrap": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "always_add|cond": {
+    "acc": 0.5,
+    "ok": true
+   },
+   "always_sub|cond": {
+    "acc": 0.5,
+    "ok": true
+   }
+  },
+  "diagnostic": {
+   "wrong_register|all": {
+    "acc": 0.51,
+    "above_bar": false
+   },
+   "wrong_register|cond": {
+    "acc": 0.51,
+    "above_bar": false
+   },
+   "non_strict|all": {
+    "acc": 0.6667,
+    "above_bar": true
+   },
+   "non_strict|cond": {
+    "acc": 0.6667,
+    "above_bar": true
+   },
+   "x_hi|all": {
+    "acc": 0.5,
+    "above_bar": false
+   },
+   "x_hi|cond": {
+    "acc": 0.5,
+    "above_bar": false
+   },
+   "thr_lo|all": {
+    "acc": 0.5067,
+    "above_bar": false
+   },
+   "thr_lo|cond": {
+    "acc": 0.5067,
+    "above_bar": false
+   },
+   "v_pos|all": {
+    "acc": 0.5,
+    "above_bar": false
+   },
+   "v_pos|cond": {
+    "acc": 0.5,
+    "above_bar": false
+   },
+   "mix_1x|all": {
+    "acc": 0.03,
+    "above_bar": false
+   },
+   "mix_1x|mix": {
+    "acc": 0.03,
+    "above_bar": false
+   },
+   "mix_no_v|all": {
+    "acc": 0.11,
+    "above_bar": false
+   },
+   "mix_no_v|mix": {
+    "acc": 0.11,
+    "above_bar": false
+   }
+  },
+  "diagnostic_note": "Not gated. non_strict (other >= threshold) is a RULE VARIANT, not a surface cue: it needs the comparison and differs from the env only at other == threshold (the x0 rows), so it scores 1 - share(x0) on conditional rows. unreduced on cond rows is reported (the conditional shortcut of interest is the branch).",
+  "branch_stump": {
+   "best_single_feature_accuracy": 0.5333,
+   "permutation_null_p95": 0.5867,
+   "within_null": true,
+   "features": [
+    "X",
+    "Y",
+    "Z",
+    "reg_val",
+    "other_val",
+    "threshold",
+    "value",
+    "tick",
+    "register_id",
+    "other_id"
+   ]
+  },
+  "branch_balance": {
+   "ok_true": 150,
+   "ok_false": 150
+  },
+  "ok": true
+ },
+ "train_describe": {
+  "n": 750,
+  "by_stratum": {
+   "cond/xp1": 150,
+   "mix/nowrap": 150,
+   "cond/x0": 100,
+   "add/wrap_under": 75,
+   "mix/wrap": 150,
+   "add/wrap_over": 75,
+   "cond/xm1": 50
+  },
+  "by_category": {
+   "cond": 300,
+   "mix": 300,
+   "wrap": 150
+  },
+  "branch": {
+   "True": 150,
+   "False": 150
+  },
+  "cond_patterns_pairs": {
+   "none": 50,
+   "add_wraps": 50,
+   "sub_wraps": 50
+  },
+  "wrap_rows": 400,
+  "value_range": [
+   -8,
+   11
+  ],
+  "threshold_range_cond": [
+   0,
+   96
+  ],
+  "mean_target_tokens": {
+   "plain": 15.55,
+   "trace": 38.08,
+   "filler": 38.08
+  }
+ },
+ "dev_describe": {
+  "by_stratum": {
+   "mix": 100,
+   "wrap": 80,
+   "cond_xm1": 60,
+   "cond_x0": 60,
+   "cond_xp1": 60,
+   "swap": 80,
+   "add_nowrap": 80,
+   "mix_oor": 100,
+   "wrap_oor": 80,
+   "cond_oor_val": 100,
+   "cond_oor_thr": 100
+  },
+  "chains": {
+   "CH_IN": 32,
+   "CH_X": 16
+  }
+ },
+ "files_sha256": {
+  "t2br_train_plain.jsonl": "7344677dff2538af1bff38f24d90e0e734fb0a1a424b42bb714bb9db9ae35ba7",
+  "t2br_train_trace.jsonl": "6c034182b2e96daad83b92dfaf0b7be943bf5bbb09d2a52adf166e2e7aefc5b2",
+  "t2br_train_filler.jsonl": "a3c8ada63535544b3e257294da53ba772d99415a158a5ab2cff9261e08f9ddc4",
+  "t2br_dev.jsonl": "8b01899c60a0bb9d60ff2535531ec5c168564a9b98e313a034ac75ecff1a5427",
+  "t2br_chains.jsonl": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
+  "t2br_train.SOURCE.json": "7731f0ae8fbc491bbfd8ff4ac8e39050d4dd74b23c639c0eec20354c699be9b5",
+  "t2br_dev.SOURCE.json": "15fab2ec2bf28451847b52daac792afc343e18d03029e723626bda0dcceeab05"
+ },
+ "code_sha256": {
+  "scripts/t2br_make_data.py": "40cbd657c8070cc4372942efbf521af2cfa45a28cf453a5d4bf09fc11382aae8",
+  "scripts/t2br_common.py": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15"
+ },
+ "torch_imported": false,
+ "peak_rss_mb": 542.3,
+ "written_utc": "2026-10-09T08:24:13Z"
+}

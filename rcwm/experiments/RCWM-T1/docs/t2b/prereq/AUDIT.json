@@ -1,0 +1,112 @@
+{
+ "core": {
+  "ok": true,
+  "n": 1500,
+  "heuristic_accuracy": {
+   "copy": 0.51,
+   "apply_regardless": 0.5,
+   "int_add": 0.49,
+   "or_add": 0.5133333333333333,
+   "apply_ignoring_pre": 0.5,
+   "int_add_del": 0.44666666666666666,
+   "delete_only": 0.4093333333333333
+  },
+  "balance_gate": {
+   "copy": true,
+   "apply_regardless": true,
+   "int_add": true,
+   "or_add": true,
+   "apply_ignoring_pre": true
+  },
+  "gate": "each of ['copy', 'apply_regardless', 'int_add', 'or_add'] in [0.48, 0.52]; ['apply_ignoring_pre'] identical to apply_regardless",
+  "types": {
+   "A1": 530,
+   "A2": 40,
+   "A3": 15,
+   "A4": 65,
+   "Ia": 20,
+   "Ib": 525,
+   "Za": 100,
+   "Zi": 205
+  },
+  "types_expected": {
+   "A1": 530,
+   "A2": 40,
+   "A3": 15,
+   "A4": 65,
+   "Ia": 20,
+   "Ib": 525,
+   "Za": 100,
+   "Zi": 205
+  },
+  "quotas": {
+   "minimal_pairs": 260,
+   "int_add_wrong_strict": 65,
+   "applicable_delete": 205,
+   "int_add_wrong_r11": 220,
+   "inapp_pre_on": 376,
+   "inapp_pre_off": 374
+  },
+  "quota_min": {
+   "minimal_pairs": 250,
+   "int_add_wrong_strict": 60,
+   "applicable_delete": 200,
+   "int_add_wrong_r11": 200,
+   "inapp_pre_on": 300,
+   "inapp_pre_off": 300
+  },
+  "quota_ok": {
+   "minimal_pairs": true,
+   "int_add_wrong_strict": true,
+   "applicable_delete": true,
+   "int_add_wrong_r11": true,
+   "inapp_pre_on": true,
+   "inapp_pre_off": true
+  },
+  "minimal_pair_errors": [],
+  "payloads_unique": true,
+  "operative_contents_unique": true,
+  "violations": {
+   "pre_off": 374,
+   "pre_on": 376
+  },
+  "row_errors": [],
+  "cue_ceilings": {
+   "add==0": 0.57,
+   "add bit already set": 0.54,
+   "delete hits a set bit": 0.574,
+   "pre_on==0": 0.632,
+   "pre_off==0": 0.668,
+   "popcount(pre_on)": 0.632,
+   "popcount(pre_off)": 0.668,
+   "popcount(pre_on|pre_off)": 0.7093,
+   "popcount(before)": 0.5147,
+   "answer rule 'add==0 -> copy, else apply-regardless'": 0.57,
+   "apply-regardless on add!=0 rows": 0.5439,
+   "copy on add!=0 rows": 0.4686
+  }
+ },
+ "checks": {
+  "every rendering has the same canonical rows in the same order": true,
+  "prompts == render_chat(messages(arm, row)) on every row": true,
+  "D-int canonical prompts == T2's frame env.multi_step_messages(P, before, [event])": true,
+  "every target parses back to its gold (strict; cmp/calc/flag exact)": true,
+  "filler target token count == trace target token count on every row": true,
+  "file sha256 == SOURCE record": true
+ },
+ "failures": {
+  "prompt": [],
+  "parse": [],
+  "fill": [],
+  "t2frame": []
+ },
+ "ok": true,
+ "variant": "canonical",
+ "files": {
+  "t2bp_train_dint.jsonl": "e2798526ac1ff3f1bdb5a480a607956995132550562b2dc2590e17edfd49872a",
+  "t2bp_train_strace.jsonl": "c10c6dd2f3caf01976e003cd5c1a879f5d73a586e1894a1b13421b8f2cd35276",
+  "t2bp_train_bbits.jsonl": "0f0e57090dfef78d97b3a5bf0d63e76af85aa4408b3155b48cd5c5270ce7db51",
+  "t2bp_train_ffill.jsonl": "093758a0aade5c70cf7a002f42de752879f9d939d144e33d42fdb333da6f1496"
+ },
+ "torch_imported": false
+}

@@ -1,0 +1,200 @@
+{
+ "cap_h": 4.5,
+ "load_s_each": 120.0,
+ "stage_rule": "a stage (an arm's training: its whole remaining train+eval pair) starts only if 1.25 x its estimate fits the turn and never within 0.5 h of the cap",
+ "timing_model": {
+  "train_s": "T2 190-step training time (planning: max 2191 s; observed: mean 1902 s) x arm tokens/row / 152.8",
+  "s_per_gen": "a + b*(answer tokens+1) fitted to PREREG-2 S4 (P chain_m1 6.52/s at 2.57 tokens) and S1 (ledger chain_one 3.80/s at 20.14 tokens); planning = observed x 3.8/2.7",
+  "a_s": 0.131,
+  "b_s_per_token": 0.00626
+ },
+ "planning": {
+  "anchor_s": 193.4,
+  "arms": {
+   "dint": {
+    "train_s": 2318.8,
+    "E1_s": 412.7,
+    "E2_s": 416.6,
+    "generations": {
+     "E1": 1900,
+     "E2": 1920
+    },
+    "pair_h": 0.91
+   },
+   "strace": {
+    "train_s": 3868.4,
+    "E1_s": 883.8,
+    "E2_s": 896.5,
+    "generations": {
+     "E1": 1900,
+     "E2": 1920
+    },
+    "pair_h": 1.6
+   },
+   "bbits": {
+    "train_s": 3760.4,
+    "E1_s": 667.7,
+    "E2_s": 658.6,
+    "generations": {
+     "E1": 1900,
+     "E2": 1920
+    },
+    "pair_h": 1.45
+   },
+   "ffill": {
+    "train_s": 3007.7,
+    "E1_s": 883.8,
+    "E2_s": 896.5,
+    "generations": {
+     "E1": 1900,
+     "E2": 1920
+    },
+    "pair_h": 1.36
+   }
+  },
+  "turns_screen": [
+   {
+    "stages": [
+     "dint:T",
+     "A0",
+     "dint:E1",
+     "dint:E2",
+     "strace:T",
+     "strace:E1",
+     "strace:E2",
+     "bbits:T",
+     "bbits:E1",
+     "bbits:E2"
+    ],
+    "projected_h": 4.01
+   }
+  ],
+  "turns_screen_plus_filler": [
+   {
+    "stages": [
+     "dint:T",
+     "A0",
+     "dint:E1",
+     "dint:E2",
+     "strace:T",
+     "strace:E1",
+     "strace:E2",
+     "bbits:T",
+     "bbits:E1",
+     "bbits:E2"
+    ],
+    "projected_h": 4.01
+   },
+   {
+    "stages": [
+     "ffill:T",
+     "A0",
+     "ffill:E1",
+     "ffill:E2"
+    ],
+    "projected_h": 1.42
+   }
+  ],
+  "gpu_h_screen": 4.01,
+  "gpu_h_screen_plus_filler": 5.43
+ },
+ "observed": {
+  "anchor_s": 137.4,
+  "arms": {
+   "dint": {
+    "train_s": 2028.7,
+    "E1_s": 293.3,
+    "E2_s": 296.0,
+    "generations": {
+     "E1": 1900,
+     "E2": 1920
+    },
+    "pair_h": 0.76
+   },
+   "strace": {
+    "train_s": 3373.9,
+    "E1_s": 627.9,
+    "E2_s": 637.0,
+    "generations": {
+     "E1": 1900,
+     "E2": 1920
+    },
+    "pair_h": 1.32
+   },
+   "bbits": {
+    "train_s": 3280.1,
+    "E1_s": 474.4,
+    "E2_s": 468.0,
+    "generations": {
+     "E1": 1900,
+     "E2": 1920
+    },
+    "pair_h": 1.21
+   },
+   "ffill": {
+    "train_s": 2626.8,
+    "E1_s": 627.9,
+    "E2_s": 637.0,
+    "generations": {
+     "E1": 1900,
+     "E2": 1920
+    },
+    "pair_h": 1.11
+   }
+  },
+  "turns_screen": [
+   {
+    "stages": [
+     "dint:T",
+     "A0",
+     "dint:E1",
+     "dint:E2",
+     "strace:T",
+     "strace:E1",
+     "strace:E2",
+     "bbits:T",
+     "bbits:E1",
+     "bbits:E2"
+    ],
+    "projected_h": 3.33
+   }
+  ],
+  "turns_screen_plus_filler": [
+   {
+    "stages": [
+     "dint:T",
+     "A0",
+     "dint:E1",
+     "dint:E2",
+     "strace:T",
+     "strace:E1",
+     "strace:E2",
+     "bbits:T",
+     "bbits:E1",
+     "bbits:E2"
+    ],
+    "projected_h": 3.33
+   },
+   {
+    "stages": [
+     "ffill:T",
+     "A0",
+     "ffill:E1",
+     "ffill:E2"
+    ],
+    "projected_h": 1.15
+   }
+  ],
+  "gpu_h_screen": 3.33,
+  "gpu_h_screen_plus_filler": 4.48
+ },
+ "generations_total_screen": 12356,
+ "seeds_1_2_per_seed_h_planning": {
+  "dint": 0.91,
+  "strace": 1.6,
+  "bbits": 1.45,
+  "ffill": 1.36
+ },
+ "torch_imported": false,
+ "train_source_sha256": "b07f6d9681f0ca18a1985fee9cfcebbb9b977c26c492e0e42e37f457a594d917"
+}
