@@ -22,76 +22,122 @@
    "after_ok": 1.0,
    "parsed": 1.0,
    "format_ok": 1.0,
-   "fill_exact": 1.0
+   "fill_units_of == FILL_UNITS[kind]": 1.0
+  }
+ },
+ "golds_heldout_surface": {
+  "off": {
+   "primary_conditional": 1.0,
+   "cond_oor_val": 1.0,
+   "cond_oor_thr": 1.0,
+   "cond_far": 1.0,
+   "primary_mix": 1.0,
+   "mix_oor": 1.0
+  },
+  "plain": {
+   "primary_conditional": 1.0,
+   "cond_oor_val": 1.0,
+   "cond_oor_thr": 1.0,
+   "cond_far": 1.0,
+   "primary_mix": 1.0,
+   "mix_oor": 1.0
+  },
+  "trace": {
+   "primary_conditional": 1.0,
+   "cond_oor_val": 1.0,
+   "cond_oor_thr": 1.0,
+   "cond_far": 1.0,
+   "primary_mix": 1.0,
+   "mix_oor": 1.0
+  },
+  "filler": {
+   "primary_conditional": 1.0,
+   "cond_oor_val": 1.0,
+   "cond_oor_thr": 1.0,
+   "cond_far": 1.0,
+   "primary_mix": 1.0,
+   "mix_oor": 1.0
   }
  },
  "negatives": {
+  "filler duplicate fill": {
+   "n": 1100,
+   "wrongly_accepted": 0
+  },
   "filler extra key": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "filler keys reversed": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "filler text to trace parser": {
-   "n": 900,
+   "n": 1100,
+   "wrongly_accepted": 0
+  },
+  "filler unterminated fill (repetition loop)": {
+   "n": 1100,
+   "wrongly_accepted": 0
+  },
+  "filler with a copied after": {
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "plain text to trace parser": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace + trailing text": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace calc keys reordered": {
-   "n": 820,
+   "n": 1020,
    "wrongly_accepted": 0
   },
   "trace duplicate after": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace extra key": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace flipped ok": {
-   "n": 380,
+   "n": 580,
    "wrongly_accepted": 0
   },
   "trace missing after": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace ok as 1/0": {
-   "n": 380,
+   "n": 580,
    "wrongly_accepted": 0
   },
   "trace order calc,cmp,after": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace sorted keys": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace text to filler parser": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace truncated": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace with copied after": {
-   "n": 900,
+   "n": 1100,
    "wrongly_accepted": 0
   },
   "trace wrong calc": {
-   "n": 820,
+   "n": 1020,
    "wrongly_accepted": 0
   }
  },
@@ -118,6 +164,11 @@
     "exact": true
    },
    "cond_xp1": {
+    "scored": 0.0,
+    "expected": 0.0,
+    "exact": true
+   },
+   "cond_mid": {
     "scored": 0.0,
     "expected": 0.0,
     "exact": true
@@ -151,6 +202,11 @@
     "scored": 0.0,
     "expected": 0.0,
     "exact": true
+   },
+   "cond_far": {
+    "scored": 0.0,
+    "expected": 0.0,
+    "exact": true
    }
   },
   "always_add": {
@@ -169,12 +225,22 @@
     "expected": 1.0,
     "exact": true
    },
+   "cond_mid": {
+    "scored": 0.5,
+    "expected": 0.5,
+    "exact": true
+   },
    "cond_oor_val": {
     "scored": 0.5,
     "expected": 0.5,
     "exact": true
    },
    "cond_oor_thr": {
+    "scored": 0.5,
+    "expected": 0.5,
+    "exact": true
+   },
+   "cond_far": {
     "scored": 0.5,
     "expected": 0.5,
     "exact": true
@@ -196,12 +262,22 @@
     "expected": 0.0,
     "exact": true
    },
+   "cond_mid": {
+    "scored": 0.5,
+    "expected": 0.5,
+    "exact": true
+   },
    "cond_oor_val": {
     "scored": 0.5,
     "expected": 0.5,
     "exact": true
    },
    "cond_oor_thr": {
+    "scored": 0.5,
+    "expected": 0.5,
+    "exact": true
+   },
+   "cond_far": {
     "scored": 0.5,
     "expected": 0.5,
     "exact": true
@@ -233,6 +309,11 @@
     "expected": 0.9833,
     "exact": true
    },
+   "cond_mid": {
+    "scored": 0.96,
+    "expected": 0.96,
+    "exact": true
+   },
    "swap": {
     "scored": 1.0,
     "expected": 1.0,
@@ -262,24 +343,42 @@
     "scored": 0.97,
     "expected": 0.97,
     "exact": true
+   },
+   "cond_far": {
+    "scored": 0.96,
+    "expected": 0.96,
+    "exact": true
    }
   }
  },
  "metrics": {
   "perfect": {
-   "primary_conditional": 1.0,
-   "primary_mix": 1.0,
-   "conditional_in": 1.0,
-   "mix_in": 1.0
+   "primary_conditional": "1",
+   "primary_mix": "1",
+   "conditional_in": "1",
+   "mix_in": "1",
+   "cond_oor_val": "1"
   },
   "always_sub": {
-   "primary_conditional": 0.5,
-   "conditional_in": 0.5
+   "primary_conditional": "1/2",
+   "conditional_in": "1/2",
+   "cond_oor_val": "1/2"
+  },
+  "always_sub_heldout_index": {
+   "primary_conditional": "1/2",
+   "cond_oor_val": "1/2"
   },
   "boot_identical_sides": [
    0.0,
    0.0
-  ]
+  ],
+  "n": {
+   "primary_conditional": 300,
+   "primary_mix": 100,
+   "conditional_in": 280,
+   "mix_in": 100,
+   "cond_oor_val": 100
+  }
  },
  "chains": {
   "gold_regret_k4_mean": 0.0,
@@ -291,14 +390,69 @@
   },
   "n_parents": 48
  },
+ "heldout_bank": {
+  "n": 400,
+  "bad_rows": 0,
+  "primary_rows_in_dev_order": true,
+  "ok": true
+ },
+ "fill_constant": {
+  "ok": true,
+  "fill_units_by_kind": {
+   "mix": [
+    14
+   ],
+   "add": [
+    14
+   ],
+   "conditional": [
+    26
+   ],
+   "swap": [
+    5
+   ]
+  },
+  "information_test": {
+   "cond_oor_val": {
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "zero_information": true
+   },
+   "cond_oor_thr": {
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "zero_information": true
+   },
+   "cond_far": {
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "zero_information": true
+   },
+   "mix_oor": {
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "zero_information": true
+   }
+  }
+ },
  "negative_failures": [],
+ "filler_other_lengths_accepted": {
+  "n": 3300,
+  "accepted": 3300
+ },
  "ok": true,
- "n_rows": 900,
- "n_negatives": 14100,
- "dev_sha256": "8b01899c60a0bb9d60ff2535531ec5c168564a9b98e313a034ac75ecff1a5427",
+ "n_rows": 1100,
+ "n_rows_heldout_surface": 400,
+ "n_negatives": 20800,
+ "dev_sha256": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+ "dev_hs_sha256": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
  "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
  "code_sha256": {
-  "scripts/t2br_analysis.py": "a4ef7bb679c9de88f54f5b5917763807a1682c71451ba19660fafb3eda5424e3",
-  "scripts/t2br_common.py": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15"
+  "scripts/t2br_analysis.py": "4fded162d3da619857fc6a049e2661d08020dd39332db5d8f9dd33d3a88000cc",
+  "scripts/t2br_common.py": "affa7d555c2924c7a587f55a13779315721b792c81b4f589c2a0f7519d783186"
  }
 }

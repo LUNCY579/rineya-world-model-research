@@ -1,7 +1,7 @@
 {
  "ok": true,
- "n_checks": 36,
- "n_pass": 36,
+ "n_checks": 39,
+ "n_pass": 39,
  "checks": [
   {
    "check": "dev run: exit 0, DONE.json, every prompt answered once, no log-probs",
@@ -39,9 +39,14 @@
    "detail": "{'SPARSE': ['off', 't2s0', 'x_bwm'], 'SUPA': ['supa', 'xs_sx']}"
   },
   {
+   "check": "provenance: pinned tokenizer files, and the chat-template hash of each load equals the pin",
+   "ok": true,
+   "detail": "({'dir': 'C:\\\\Users\\\\clclc\\\\BusinessProject\\\\Chat-Bubble\\\\Rineya_Published_Cores\\\\Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze', 'files': {'merges.txt': '8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5', 'tokenizer.json': 'aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b"
+  },
+  {
    "check": "lp arrays: (n, 151936) float16, within [-60, 0], rows normalised",
    "ok": true,
-   "detail": "((27, 151936), 0.9999691708761592)"
+   "detail": "((27, 151936), 0.9999502158219962)"
   },
   {
    "check": "prefill first token == generated first token (every side)",
@@ -59,9 +64,9 @@
    "detail": "(True, True, True, True)"
   },
   {
-   "check": "analysis accepts the run: every comparison, KL available, verdicts from the rule",
+   "check": "analysis accepts the run: every comparison, both graders, KL available, verdicts from the rule; gating = t2s0 / x_bwm vs off and xs_sx vs supa only",
    "ok": true,
-   "detail": "{'sparse_vs_supa': 'RETAINED', 't2s0_vs_off': 'RETAINED', 'x_bwm_vs_off': 'RETAINED', 'xs_sx_vs_supa': 'RETAINED', 't2s0_vs_supa': 'RETAINED'}"
+   "detail": "{'t2s0_vs_off': 'RETAINED', 'x_bwm_vs_off': 'RETAINED', 'xs_sx_vs_supa': 'RETAINED', 'sparse_vs_supa': 'RETAINED', 't2s0_vs_supa': 'RETAINED'}"
   },
   {
    "check": "confirm rerun is a no-op",
@@ -86,7 +91,7 @@
   {
    "check": "cap 1 h with a slow SPARSE: exit 5, SPARSE recorded, SUPA deferred (D-22 margin)",
    "ok": true,
-   "detail": "{'pid': 306556, 'acquired_unix': 1791534752.0848808, 'acquired_source': 'lock record', 'entered_unix': 1791534752.0899646, 'stages_run': ['SPARSE'], 'deferred': ['SUPA'], 'device': 'cpu', 'sparse_runtime': {'torch': '2.6.0+cu124', 'transformers': '5.14.1'}, 'sparse_versions': {'peft': '0.20.0'}, 'sp"
+   "detail": "{'pid': 331868, 'acquired_unix': 1791550094.2381978, 'acquired_source': 'lock record', 'entered_unix': 1791550094.24429, 'stages_run': ['SPARSE'], 'deferred': ['SUPA'], 'device': 'cpu', 'sparse_runtime': {'torch': '2.6.0+cu124', 'transformers': '5.14.1'}, 'sparse_versions': {'peft': '0.20.0'}, 'spar"
   },
   {
    "check": "next turn completes; stage files == uninterrupted run",
@@ -101,7 +106,7 @@
   {
    "check": "the rerun refuses on STOPPED.json",
    "ok": true,
-   "detail": "[retention] C:\\Users\\clclc\\AppData\\Local\\Temp\\ret_tiny_6vfkfkmm\\runs\\confirm_tamper\\STOPPED.json exists: a deterministic stop was persisted; an operator must investigate, log it in DECISIONS.md and move the file aside before any rerun"
+   "detail": "[retention] C:\\Users\\clclc\\AppData\\Local\\Temp\\ret_tiny_vb3qg_0d\\runs\\confirm_tamper\\STOPPED.json exists: a deterministic stop was persisted; an operator must investigate, log it in DECISIONS.md and move the file aside before any rerun"
   },
   {
    "check": "fingerprint mismatch: stop persisted, nothing generated",
@@ -116,7 +121,7 @@
   {
    "check": "one-waiter: live RCWM waiting marker -> refused, no lease, not persisted",
    "ok": true,
-   "detail": "(3, '[retention] another RCWM job waits for the GPU lease (rcwm-t1:x, pid 306464): on')"
+   "detail": "(3, '[retention] another RCWM job waits for the GPU lease (rcwm-t1:x, pid 329880): on')"
   },
   {
    "check": "one-waiter: dead RCWM waiting marker -> proceeds (lease taken, deferred by cap 0)",
@@ -131,7 +136,7 @@
   {
    "check": "one-waiter: live RCWM lock holder -> refused, no lease, not persisted",
    "ok": true,
-   "detail": "(3, '[retention] another RCWM job holds the GPU lease (rcwm-t1:other, pid 306464): on')"
+   "detail": "(3, '[retention] another RCWM job holds the GPU lease (rcwm-t1:other, pid 329880): on')"
   },
   {
    "check": "one-waiter: live BWM lock holder -> proceeds (lease taken, deferred by cap 0)",
@@ -141,7 +146,7 @@
   {
    "check": "a live run lock refuses (not persisted)",
    "ok": true,
-   "detail": "[retention] another ret_run.py holds the run lock {'pid': 306464, 'create_time': 1791534724.2610335}"
+   "detail": "[retention] another ret_run.py holds the run lock {'pid': 329880, 'create_time': 1791550068.467909}"
   },
   {
    "check": "a stale run lock is reclaimed",
@@ -179,19 +184,29 @@
    "detail": "[retention] the retention kit freeze does not verify: RET_FREEZE.json does not exist or is"
   },
   {
+   "check": "refused before the lease: a tokenizer directory whose chat template differs from the pin",
+   "ok": true,
+   "detail": "[retention] tokenizer files differ from the pins: ['tokenizer_config.json'] in C:\\Users\\clclc\\AppData\\Local\\Temp\\ret_tin"
+  },
+  {
+   "check": "a loaded chat template that differs from the pin: stop persisted, nothing generated",
+   "ok": true,
+   "detail": "[retention] the loaded chat template hashes to b86f0f757be666436de4c4cf24bc171ebced04b15bb53fe2f39881440924ba52, not the"
+  },
+  {
    "check": "--allow-base-mismatch proceeds and records the mismatch",
    "ok": true,
    "detail": "(5, None)"
   }
  ],
- "peak_rss_mib": 915.5,
- "recorded_local": "2026-10-09 03:32:38 -0500",
+ "peak_rss_mib": 923.7,
+ "recorded_local": "2026-10-09 07:48:21 -0500",
  "code_sha256": {
-  "scripts/ret_common.py": "3fa8eb8df29234749cdf0f7f6b8df578c8d110e4847a563626c82d1f186b8bfa",
-  "scripts/ret_gen.py": "e652271dbe122b4b86a1d1e48ba243cbd6a7c35cb88c27354b8f5932a28dfffc",
-  "scripts/ret_grade.py": "5445de4339127ae7baa6446b94d39a6115ec4ca4cb05398d523a2b7d1e116f43",
-  "scripts/ret_run.py": "c09d4d03c52a065445e8335d7accf6bbf9ca1e5adc15cc31a5277372be77d2e9",
-  "scripts/ret_analysis.py": "3a8095f888951e3a678affc10bb03a2bc6052134de14ab163faee6d2910dbc68",
-  "scripts/ret_test_tiny.py": "cbd90fd5cd6a49fe240bc0c62d9946dbe564f0397e48c8f484ab16f36193046a"
+  "scripts/ret_common.py": "60fb6c736ce0ba34114b7ffa6e9df0fd03a5c5451c8514b031579d2fa1452a24",
+  "scripts/ret_gen.py": "6fe3b331a5bf49b98754d774843ad190335f2d3293ca7b1144d957b6b25399c7",
+  "scripts/ret_grade.py": "13b2696c6efd7968c5d82032873cb81d292529897dd23f26eaa48736fd861611",
+  "scripts/ret_run.py": "a560feab98b1b74a6ffbb954dedb89d27a76e80b598bc01f35aef4df4b6f645e",
+  "scripts/ret_analysis.py": "6d7032e8e3df1195d476e7169c4d13b0318ca726b5c597dfc66b4fb49cc7ce3a",
+  "scripts/ret_test_tiny.py": "753bb27e8cb2c847eb5670a22c3356ac7a78324aea26a0d7b18474720eaa33a0"
  }
 }

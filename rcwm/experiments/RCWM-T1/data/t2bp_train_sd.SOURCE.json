@@ -1,0 +1,736 @@
+{
+ "record": "T2BP_TRAIN",
+ "revision": 3,
+ "seed": 20261111,
+ "builder": "scripts/t2bp_make_data.py",
+ "builder_sha256": "8f1489fa1d2bf580fb84420bc10de89d7e2a1b0f2ae7b506c74d8b0b3eda5f40",
+ "common_sha256": "1175b758551ac0f01b7b38070dfbb5bf91e5a1b5f0dae12d142aa2c84b5f7ee7",
+ "code_sha256": {
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "fds/oracles.py": "6d22a5e40a69fb8f5c79230d2c2dc7fa51af605de70d3c0fc7cd7d69fe4c959c",
+  "fds/generate.py": "e7e0288af3b5b5c3930446295094734abc55ed22761a22521fa49b346d42d77e"
+ },
+ "harvest": "scripts/l1_make_ood.harvest_historical via scripts/p3_make_bank.load_all_sources: files named HSKILL_CONFIRM_V2* are skipped by name before any open; rcwmt.bank.load_exclusions() is NOT called",
+ "exclusion_sources": {
+  "historical": {
+   "payloads": 6464,
+   "operative_contents": 6258,
+   "sha256": null,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ]
+  },
+  "bank_pilot.json": {
+   "payloads": 15629,
+   "operative_contents": 15278,
+   "sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+  },
+  "bank_confirm.json": {
+   "payloads": 13552,
+   "operative_contents": 13247,
+   "sha256": "8bc6e2f8a8c7cae5b7b66293ef12b0efc440c281f820eca9d384a659b26a6a16"
+  },
+  "bank_confirm2.json": {
+   "payloads": 12163,
+   "operative_contents": 11903,
+   "sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea"
+  },
+  "bank_s4000.json": {
+   "payloads": 255745,
+   "operative_contents": 250614,
+   "sha256": "af1336c261375524a4a6eaf92cc48dc76b1159df093ce2705d279688f22bb4ce"
+  },
+  "t2_train.jsonl": {
+   "payloads": 1501,
+   "operative_contents": 1496,
+   "sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744"
+  },
+  "t2_eval.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59"
+  },
+  "t2_eval_xframe.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de"
+  },
+  "t2_eval_supp.jsonl": {
+   "payloads": 360,
+   "operative_contents": 360,
+   "sha256": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086"
+  },
+  "SELECT-VIEWS-001": {
+   "payloads": 384,
+   "operative_contents": 383,
+   "sha256": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3"
+  },
+  "l1_ood_bank.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c"
+  },
+  "fds/T_BANK.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "26c01effe9610230f7876bbe118792f85094605fe3dde5f873c78c67e1c493ba"
+  },
+  "fds/T_BANK_V2.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "fc094136a5b581cb9cc03393b1e5959ed8f69247638c81e37cf7f68fbf132e01"
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "173aa372466d5e3cc8efbebe4cc7e7ba09a8eb34de4598ce8f9d96a2b8e6557c"
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payloads": 15,
+   "operative_contents": 15,
+   "sha256": "635c9c7ea6851d4a0147a299ecd158a880b91fa5b9046b0af787d2ebbd6eb0d4"
+  },
+  "cc2/T_BANK_V4.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "82f0a6423dd6b58b81319708e7fbda7c5880b9734742323ea11574ff354c93c0"
+  },
+  "bank_p3_oor.jsonl": {
+   "payloads": 1532,
+   "operative_contents": 500,
+   "sha256": "0fd18295d6eaa84d0f451c94b81ea1ecf37ab88e8ab298b58820d80ac740bf12"
+  }
+ },
+ "overlap_counts": {
+  "historical": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_pilot.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_confirm.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_confirm2.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_s4000.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_train.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval_xframe.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "t2_eval_supp.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "SELECT-VIEWS-001": {
+   "payload": 0,
+   "operative": 0
+  },
+  "l1_ood_bank.jsonl": {
+   "payload": 0,
+   "operative": 0
+  },
+  "fds/T_BANK.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "fds/T_BANK_V2.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "cc2/T_BANK_V4.json": {
+   "payload": 0,
+   "operative": 0
+  },
+  "bank_p3_oor.jsonl": {
+   "payload": 0,
+   "operative": 0
+  }
+ },
+ "internal_overlap_operative": {
+  "train&dev": 0,
+  "train&chains": 0,
+  "dev&chains": 0
+ },
+ "model_calls": 0,
+ "torch_imported": false,
+ "built_utc": "2026-10-09T17:19:12Z",
+ "surface_diversity": "on",
+ "files": {
+  "t2bp_train_sd_dint.jsonl": "3cdd5bba030d0f7829a589e25d1030bea3a6f414267a7287dfe8842076040a78",
+  "t2bp_train_sd_strace.jsonl": "d3577e68451b8fbc38b46dd8f1d4a0d7804fdbcba23f81908c067ec81ac22462",
+  "t2bp_train_sd_bbits.jsonl": "f190b34738cd219c98041d755f21143dc1b7c75e4b340bea217f1ddded71fea3",
+  "t2bp_train_sd_ffill.jsonl": "159d02ef590b7b597c42d86c2c8cf8e603de9bb83394c88f5e094cb325dba96f"
+ },
+ "rows": 1500,
+ "design": {
+  "unpaired": {
+   "A1": 330,
+   "A2": 15,
+   "A3": 15,
+   "A4": 115,
+   "Ib": 295,
+   "Zi": 180
+  },
+  "pairs": {
+   "A1": 160,
+   "A2": 25,
+   "A4": 35,
+   "Za": 55
+  },
+  "pair_inapp": {
+   "A1": "Ib",
+   "A2": "Ib",
+   "A4": "Ia",
+   "Za": "Zi"
+  }
+ },
+ "surface_design": {
+  "paraphrases": [
+   "Apply each action to the state, in order. An action is applicable only if all its {pre_on} bits are set and all its {pre_off} bits are clear in the current state; an inapplicable action leaves the state unchanged. For an applicable action, apply {delete} bits first, then {add} bits.",
+   "Process the actions one after another. An action may be used only when every bit of its {pre_on} mask is 1 and every bit of its {pre_off} mask is 0 in the current state; otherwise the action does nothing. When an action is used, first clear its {delete} bits, then set its {add} bits.",
+   "Go through the actions in the given order. An action takes effect only if the current state has all of its {pre_on} bits on and none of its {pre_off} bits on; an action that does not take effect keeps the state the same. An action that takes effect removes its {delete} bits and then adds its {add} bits.",
+   "Handle the actions in sequence. First check the preconditions: all {pre_on} bits must be set and all {pre_off} bits must be unset in the current state. If the check fails, leave the state as it is. If it passes, turn off the {delete} bits, then turn on the {add} bits.",
+   "Apply the actions in order. Each action fires only when its {pre_on} bits are all present and its {pre_off} bits are all absent in the current state; an action that does not fire changes nothing. A firing action drops its {delete} bits before setting its {add} bits."
+  ],
+  "state_sentences": [
+   "The state is {art} {w}-bit flag mask",
+   "The state is a mask of {w} flag bits",
+   "The state holds {w} flag bits",
+   "The state is a set of {w} flag bits kept in one mask",
+   "The state is a flag mask {w} bits wide"
+  ],
+  "field_variants": [
+   {
+    "before": "before",
+    "events": "events",
+    "add": "add",
+    "delete": "delete",
+    "pre_on": "pre_on",
+    "pre_off": "pre_off"
+   },
+   {
+    "before": "state",
+    "events": "actions",
+    "add": "set",
+    "delete": "clear",
+    "pre_on": "require_on",
+    "pre_off": "require_off"
+   },
+   {
+    "before": "current",
+    "events": "steps",
+    "add": "add_bits",
+    "delete": "del_bits",
+    "pre_on": "need_on",
+    "pre_off": "need_off"
+   },
+   {
+    "before": "flags",
+    "events": "ops",
+    "add": "turn_on",
+    "delete": "turn_off",
+    "pre_on": "if_on",
+    "pre_off": "if_off"
+   },
+   {
+    "before": "mask",
+    "events": "moves",
+    "add": "plus",
+    "delete": "minus",
+    "pre_on": "must_on",
+    "pre_off": "must_off"
+   }
+  ],
+  "train_index": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "heldout_index": 4,
+  "object_slots": {
+   "top": [
+    "before",
+    "events"
+   ],
+   "event": [
+    "add",
+    "cost",
+    "delete",
+    "kind",
+    "name",
+    "pre_off",
+    "pre_on"
+   ]
+  },
+  "order_seed": 202611116,
+  "p_identity_order": 0.25,
+  "heldout_orders": {
+   "top": [
+    [
+     "events",
+     "before"
+    ]
+   ],
+   "event": [
+    [
+     "pre_on",
+     "pre_off",
+     "name",
+     "kind",
+     "delete",
+     "cost",
+     "add"
+    ],
+    [
+     "add",
+     "delete",
+     "kind",
+     "pre_off",
+     "cost",
+     "pre_on",
+     "name"
+    ],
+    [
+     "cost",
+     "pre_off",
+     "delete",
+     "pre_on",
+     "name",
+     "kind",
+     "add"
+    ]
+   ]
+  },
+  "heldout_orders_regenerated_from_seed": true,
+  "note": "top-level object {before, events}: 2 keys, so only the reversed order exists besides the canonical one; it is held out and the training order is always canonical. Event object: 7 keys (5,040 orders); held out: the reversed order and 2 fixed random orders (ORDER_SEED); training: the other 5,037 (the canonical one with probability 0.25). Lists: the prompt's only list (events) has one element, so there is no list order to augment.",
+  "pair_members_share_one_surface": true,
+  "heldout_stage_E3": {
+   "stage": "E3",
+   "para": 4,
+   "names": 4,
+   "order_top": [
+    "events",
+    "before"
+   ],
+   "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the row's index within its stratum (id suffix)",
+   "held_out_event_orders": [
+    [
+     "pre_on",
+     "pre_off",
+     "name",
+     "kind",
+     "delete",
+     "cost",
+     "add"
+    ],
+    [
+     "add",
+     "delete",
+     "kind",
+     "pre_off",
+     "cost",
+     "pre_on",
+     "name"
+    ],
+    [
+     "cost",
+     "pre_off",
+     "delete",
+     "pre_on",
+     "name",
+     "kind",
+     "add"
+    ]
+   ]
+  }
+ },
+ "filler_4b": {
+  "fill_k": {
+   "action": 26
+  },
+  "items": 3510,
+  "longest_trace_head_tokens": 29,
+  "fill_head_tokens": 29,
+  "rule": "units = max over train+dev of tokens(trace head '{\"cmp\":..,\"calc\":N') - tokens('{\"fill\":\"\"') (BWM bwmn/traces.filler_length); one action kind ('action') in the prerequisite family"
+ },
+ "audit": {
+  "core": {
+   "ok": true,
+   "n": 1500,
+   "heuristic_accuracy": {
+    "copy": 0.51,
+    "apply_regardless": 0.5,
+    "int_add": 0.48333333333333334,
+    "or_add": 0.5166666666666667,
+    "apply_ignoring_pre": 0.5,
+    "int_add_del": 0.39,
+    "delete_only": 0.4066666666666667
+   },
+   "balance_gate": {
+    "copy": true,
+    "apply_regardless": true,
+    "int_add": true,
+    "or_add": true,
+    "apply_ignoring_pre": true
+   },
+   "gate": "each of ['copy', 'apply_regardless', 'int_add', 'or_add'] in [0.48, 0.52]; ['apply_ignoring_pre'] identical to apply_regardless",
+   "types": {
+    "A1": 490,
+    "A2": 40,
+    "A3": 15,
+    "A4": 150,
+    "Ia": 35,
+    "Ib": 480,
+    "Za": 55,
+    "Zi": 235
+   },
+   "types_expected": {
+    "A1": 490,
+    "A2": 40,
+    "A3": 15,
+    "A4": 150,
+    "Ia": 35,
+    "Ib": 480,
+    "Za": 55,
+    "Zi": 235
+   },
+   "quotas": {
+    "minimal_pairs": 275,
+    "int_add_wrong_strict": 150,
+    "applicable_delete": 245,
+    "int_add_wrong_r11": 260,
+    "inapp_pre_on": 377,
+    "inapp_pre_off": 373
+   },
+   "quota_min": {
+    "minimal_pairs": 250,
+    "int_add_wrong_strict": 150,
+    "applicable_delete": 200,
+    "int_add_wrong_r11": 200,
+    "inapp_pre_on": 300,
+    "inapp_pre_off": 300
+   },
+   "quota_ok": {
+    "minimal_pairs": true,
+    "int_add_wrong_strict": true,
+    "applicable_delete": true,
+    "int_add_wrong_r11": true,
+    "inapp_pre_on": true,
+    "inapp_pre_off": true
+   },
+   "minimal_pair_errors": [],
+   "payloads_unique": true,
+   "operative_contents_unique": true,
+   "violations": {
+    "pre_off": 373,
+    "pre_on": 377
+   },
+   "row_errors": [],
+   "cue_ceilings": {
+    "add==0": 0.62,
+    "add bit already set": 0.5867,
+    "delete hits a set bit": 0.5767,
+    "pre_on==0": 0.642,
+    "pre_off==0": 0.652,
+    "popcount(pre_on)": 0.642,
+    "popcount(pre_off)": 0.652,
+    "popcount(pre_on|pre_off)": 0.7047,
+    "popcount(before)": 0.52,
+    "answer rule 'add==0 -> copy, else apply-regardless'": 0.62,
+    "apply-regardless on add!=0 rows": 0.5744,
+    "copy on add!=0 rows": 0.438,
+    "applicable share among add-bit-already-set rows": 0.825
+   },
+   "shortcut_accuracy_descriptive": {
+    "pa_int_add": 0.8267,
+    "pa_int_add_del": 0.89,
+    "pa_or_add": 0.8367,
+    "pa_delete_only": 0.6467,
+    "pre_on_only": 0.7513,
+    "pre_off_only": 0.7487,
+    "precount_cue": 0.6593,
+    "add0_cue": 0.62,
+    "addset_apply": 0.9767
+   },
+   "rows_separating_precondition_aware_composites_from_the_rule": {
+    "pa_int_add": 260,
+    "pa_int_add_del": 165,
+    "pa_or_add": 245
+   },
+   "minimal_pair_twin_artefacts": {
+    "pre_on_popcounts_only_on_twins": {
+     "3": 6
+    },
+    "pre_off_popcounts_only_on_twins": {
+     "2": 39
+    },
+    "twin_rows_with_such_a_count": 45
+   }
+  },
+  "filler_4b": {
+   "distinct_fill_lengths_per_kind": {
+    "action": [
+     "26"
+    ]
+   },
+   "fill_units_constant": {
+    "action": true
+   },
+   "fill_length_lookup_accuracy": {
+    "applicable": 0.5,
+    "changed": 0.51,
+    "after": 0.0147,
+    "type": 0.3267
+   },
+   "majority_share": {
+    "applicable": 0.5,
+    "changed": 0.51,
+    "after": 0.0147,
+    "type": 0.3267
+   },
+   "mutual_information_bits": {
+    "applicable": 0.0,
+    "changed": 0.0,
+    "after": 0.0,
+    "type": 0.0
+   },
+   "rev2_row_matched_length_would_reveal_descriptive": {
+    "applicable_lookup_accuracy": 1.0,
+    "changed_lookup_accuracy": 0.99,
+    "applicable_majority_share": 0.5
+   },
+   "residual_tokens_descriptive": {
+    "min": 2,
+    "max": 7,
+    "mean": 5.001,
+    "share_positive": 1.0,
+    "mean_applicable": 5.493,
+    "mean_inapplicable": 4.508
+   },
+   "zero_information": true,
+   "never_shorter_than_trace": true
+  },
+  "surface": {
+   "checks": {
+    "every prompt's surface, read back from its text, equals the recorded surface": true,
+    "no prompt uses a held-out paraphrase, field-name variant or key order": true,
+    "no prompt contains text only a held-out surface produces": true
+   },
+   "failures": {
+    "recover": [],
+    "heldout": [],
+    "fragments": []
+   },
+   "stats": {
+    "rows": 1500,
+    "paraphrase_x_names_combinations": 16,
+    "rows_in_the_exact_canonical_surface (the in-surface evaluation surface of E1/E2)": 22,
+    "rows_per_paraphrase": {
+     "0": 403,
+     "1": 369,
+     "2": 379,
+     "3": 349
+    },
+    "rows_per_names": {
+     "0": 396,
+     "1": 354,
+     "2": 321,
+     "3": 429
+    },
+    "event_order_canonical_share": 0.2613,
+    "distinct_event_orders": 829,
+    "top_orders": {
+     "before,events": 1500
+    },
+    "heldout_fragments_scanned": {
+     "paraphrase 4": "Apply the actions in order. Each action fires only when its ",
+     "state sentence 4": " bits wide",
+     "field name 4 (before)": "\"mask\":",
+     "field name 4 (events)": "\"moves\":",
+     "field name 4 (add)": "\"plus\":",
+     "field name 4 (delete)": "\"minus\":",
+     "field name 4 (pre_on)": "\"must_on\":",
+     "field name 4 (pre_off)": "\"must_off\":"
+    }
+   }
+  },
+  "checks": {
+   "every rendering has the same canonical rows in the same order": true,
+   "prompts == render_chat(messages(arm, row)) on every row": true,
+   "D-int prompts in the canonical surface == T2's frame env.multi_step_messages(P, before, [event])": true,
+   "every target parses back to its gold (strict; cmp/calc/flag exact)": true,
+   "filler target == the amendment-4b constant-fill target on every row": true,
+   "fill length carries zero information about the answer (one value per kind; lookup == majority; MI 0)": true,
+   "no filler target is shorter than its row's trace target": true,
+   "every prompt's surface, read back from its text, equals the recorded surface": true,
+   "no prompt uses a held-out paraphrase, field-name variant or key order": true,
+   "no prompt contains text only a held-out surface produces": true
+  },
+  "failures": {
+   "prompt": [],
+   "parse": [],
+   "fill": [],
+   "t2frame": [],
+   "recover": [],
+   "heldout": [],
+   "fragments": []
+  },
+  "ok": true
+ },
+ "token_stats": {
+  "train": {
+   "dint": {
+    "rows": 1500,
+    "mean_prompt_tokens": 154.96,
+    "mean_target_tokens": 2.45,
+    "mean_row_tokens_incl_eos": 158.41
+   },
+   "strace": {
+    "rows": 1500,
+    "mean_prompt_tokens": 234.96,
+    "mean_target_tokens": 30.45,
+    "mean_row_tokens_incl_eos": 266.41
+   },
+   "bbits": {
+    "rows": 1500,
+    "mean_prompt_tokens": 241.92,
+    "mean_target_tokens": 17.0,
+    "mean_row_tokens_incl_eos": 259.92
+   },
+   "ffill": {
+    "rows": 1500,
+    "mean_prompt_tokens": 174.96,
+    "mean_target_tokens": 35.45,
+    "mean_row_tokens_incl_eos": 211.41
+   }
+  },
+  "dev_onestep": {
+   "dint": {
+    "rows": 1050,
+    "mean_prompt_tokens": 151.03,
+    "mean_target_tokens": 2.73
+   },
+   "strace": {
+    "rows": 1050,
+    "mean_prompt_tokens": 231.03,
+    "mean_target_tokens": 30.91
+   },
+   "bbits": {
+    "rows": 1050,
+    "mean_prompt_tokens": 240.93,
+    "mean_target_tokens": 17.86
+   },
+   "ffill": {
+    "rows": 1050,
+    "mean_prompt_tokens": 171.03,
+    "mean_target_tokens": 35.73
+   }
+  },
+  "dev_chain_steps": {
+   "dint": {
+    "steps": 960,
+    "mean_prompt_tokens": 150.29,
+    "mean_target_tokens": 2.7
+   },
+   "strace": {
+    "steps": 960,
+    "mean_prompt_tokens": 230.29,
+    "mean_target_tokens": 31.05
+   },
+   "bbits": {
+    "steps": 960,
+    "mean_prompt_tokens": 235.76,
+    "mean_target_tokens": 17.0
+   },
+   "ffill": {
+    "steps": 960,
+    "mean_prompt_tokens": 170.29,
+    "mean_target_tokens": 35.7
+   }
+  },
+  "dev_onestep_heldout_surface": {
+   "dint": {
+    "rows": 1050,
+    "mean_prompt_tokens": 145.03,
+    "mean_target_tokens": 2.73
+   },
+   "strace": {
+    "rows": 1050,
+    "mean_prompt_tokens": 225.03,
+    "mean_target_tokens": 30.91
+   },
+   "bbits": {
+    "rows": 1050,
+    "mean_prompt_tokens": 234.93,
+    "mean_target_tokens": 17.86
+   },
+   "ffill": {
+    "rows": 1050,
+    "mean_prompt_tokens": 165.03,
+    "mean_target_tokens": 35.73
+   }
+  },
+  "t2_train_reference": {
+   "rows": 1501,
+   "mean_row_tokens_incl_eos": 152.76
+  },
+  "rate_calibration": {
+   "P_chain_m1_mean_answer_tokens": 2.57,
+   "L_chain_one_mean_answer_tokens": 20.144,
+   "source": "gold states of data/bank_confirm2.json (no model output read)"
+  }
+ },
+ "canonical_dint_sha256": "c57187b4b9b152d3647cf21d77fb3ada25f03eb814994de50bb6976b92e6365e",
+ "targets": {
+  "dint": "166",
+  "strace": "{\"cmp\":{\"on_miss\":[],\"off_hit\":[5],\"viol\":1,\"ok\":false},\"calc\":166,\"after\":166}",
+  "bbits": "{\"applicable\":false,\"after\":\"10100110\"}",
+  "ffill": "{\"fill\":\" . . . . . . . . . . . . . . . . . . . . . . . . . .\",\"after\":166}"
+ },
+ "example_row": "t2bp-tr-0000",
+ "system_texts": {
+  "dint": "The state is an 8-bit flag mask. Apply each action to the state, in order. An action is applicable only if all its pre_on bits are set and all its pre_off bits are clear in the current state; an inapplicable action leaves the state unchanged. For an applicable action, apply delete bits first, then add bits. Return only the final resulting state as a JSON integer. Names and costs do not change the state.",
+  "strace": "The state is an 8-bit flag mask. Apply each action to the state, in order. An action is applicable only if all its pre_on bits are set and all its pre_off bits are clear in the current state; an inapplicable action leaves the state unchanged. For an applicable action, apply delete bits first, then add bits. Return only a JSON object with the keys cmp, calc and after, in this order: cmp holds on_miss (the positions of pre_on bits that are clear, bit 0 being the least significant), off_hit (the positions of pre_off bits that are set), viol (how many positions are listed) and ok (true if the action is applicable); calc is the state the action produces; after is the final resulting state as a JSON integer. Names and costs do not change the state.",
+  "bbits": "The state is an 8-bit flag mask, written as a string of 8 binary digits with the most significant bit first; pre_on, pre_off, delete and add are written the same way. Apply each action to the state, in order. An action is applicable only if all its pre_on bits are set and all its pre_off bits are clear in the current state; an inapplicable action leaves the state unchanged. For an applicable action, apply delete bits first, then add bits. Return only a JSON object with the keys applicable (true or false) and after (the final resulting state as a string of 8 binary digits), in this order. Names and costs do not change the state.",
+  "ffill": "The state is an 8-bit flag mask. Apply each action to the state, in order. An action is applicable only if all its pre_on bits are set and all its pre_off bits are clear in the current state; an inapplicable action leaves the state unchanged. For an applicable action, apply delete bits first, then add bits. Return only a JSON object with the keys fill (a run of dots) and after (the final resulting state as a JSON integer), in this order. Names and costs do not change the state."
+ },
+ "build_log": [
+  "[12:19:11] T2b prerequisite data: seed 20261111, surface diversity on; no model call, no torch",
+  "[12:19:11] D-int frame == T2's stored prerequisite prompt on 500/500 rows (render_chat == the chat template)",
+  "[12:19:11] canonical rows taken from t2bp_train_dint.jsonl (sha verified against t2bp_train.SOURCE.json)",
+  "[12:19:11] amendment 4b: constant fill {'action': 26} units (longest trace head 29 tokens over 3510 train+dev items)",
+  "[12:19:12] audit: ok=True heuristics {'copy': 0.51, 'apply_regardless': 0.5, 'int_add': 0.48333333333333334, 'or_add': 0.5166666666666667, 'apply_ignoring_pre': 0.5, 'int_add_del': 0.39, 'delete_only': 0.4066666666666667} quotas {'minimal_pairs': 275, 'int_add_wrong_strict': 150, 'applicable_delete': 245, 'int_add_wrong_r11': 260, 'inapp_pre_on': 377, 'inapp_pre_off': 373}",
+  "[12:19:21] done in 10s; peak RSS 146 MiB; files {'t2bp_train_sd_dint.jsonl': '3cdd5bba030d0f7829a589e25d1030bea3a6f414267a7287dfe8842076040a78', 't2bp_train_sd_strace.jsonl': 'd3577e68451b8fbc38b46dd8f1d4a0d7804fdbcba23f81908c067ec81ac22462', 't2bp_train_sd_bbits.jsonl': 'f190b34738cd219c98041d755f21143dc1b7c75e4b340bea217f1ddded71fea3', 't2bp_train_sd_ffill.jsonl': '159d02ef590b7b597c42d86c2c8cf8e603de9bb83394c88f5e094cb325dba96f'}"
+ ],
+ "dev_sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
+ "canonical_source_sha256": "4b847e102f3d5af2919a201bf860ecb4d94006e4a4237dbcf5ac8cbecc13124b"
+}

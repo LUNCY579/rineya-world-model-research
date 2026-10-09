@@ -1831,3 +1831,99 @@ verdict: STATUS: TRIGGER; magnitude_at: DOES NOT GENERALISE, with a partial gain
 [sparse] 5824 items, 27755 scored sequences
 [turn] last turn was ours and the peer is waiting (bwm:bundleD); yielding
   [gpu-lease] waiting: foreign python pid 321076 (4.09 GiB dedicated GPU memory)
+=== 2026-10-09T08:08:07-05:00 master chain start
+[t2-screen] T ledger|add/void          0.075 -> 1.000 (+0.925)
+[t2-screen] T ledger|scale/void        0.050 -> 1.000 (+0.950)
+[t2-screen] T ledger|transfer/void     0.000 -> 1.000 (+1.000)
+[t2-screen] T regist|mix/wrap          0.000 -> 0.000 (+0.000)
+[t2-screen] T regist|mix/nowrap        0.025 -> 0.050 (+0.025)
+[t2-screen] T regist|conditional/gt    0.425 -> 0.600 (+0.175)
+[t2-screen] T regist|conditional/le    0.525 -> 0.575 (+0.050)
+[t2-screen] T regist|add/wrap          0.000 -> 0.200 (+0.200)
+[t2-screen] T prereq|applicable        0.425 -> 0.550 (+0.125)
+[t2-screen] T prereq|inapplicable      0.025 -> 0.775 (+0.750)
+[t2-screen] U ledger|add/posted        0.550 -> 0.825 (+0.275)
+[t2-screen] U ledger|scale/posted      0.500 -> 0.950 (+0.450)
+[t2-screen] U ledger|transfer/posted   0.350 -> 0.850 (+0.500)
+[t2-screen] U regist|swap              1.000 -> 1.000 (+0.000)
+[t2-screen] U regist|add/nowrap        0.900 -> 0.900 (+0.000)
+[t2-screen] t2_s0: mean targeted gain +0.420 (>= 0.15), worst untouched +0.000 (>= -0.10) -> PASS: replicate seeds 1, 2
+=== 2026-10-09T08:08:07-05:00 start scripts/ret_run.py --mode dev --draw docs/retention/draws/dev_20261121.jsonl
+[retention] dev_20261121 (dev): stages to run ['SUPA']
+  [gpu-lease] waiting: foreign python pid 321076 (5.10 GiB dedicated GPU memory)
+=== 2026-10-09T12:02:57-05:00 master chain start
+[t2-screen] T ledger|add/void          0.075 -> 1.000 (+0.925)
+[t2-screen] T ledger|scale/void        0.050 -> 1.000 (+0.950)
+[t2-screen] T ledger|transfer/void     0.000 -> 1.000 (+1.000)
+[t2-screen] T regist|mix/wrap          0.000 -> 0.000 (+0.000)
+[t2-screen] T regist|mix/nowrap        0.025 -> 0.050 (+0.025)
+[t2-screen] T regist|conditional/gt    0.425 -> 0.600 (+0.175)
+[t2-screen] T regist|conditional/le    0.525 -> 0.575 (+0.050)
+[t2-screen] T regist|add/wrap          0.000 -> 0.200 (+0.200)
+[t2-screen] T prereq|applicable        0.425 -> 0.550 (+0.125)
+[t2-screen] T prereq|inapplicable      0.025 -> 0.775 (+0.750)
+[t2-screen] U ledger|add/posted        0.550 -> 0.825 (+0.275)
+[t2-screen] U ledger|scale/posted      0.500 -> 0.950 (+0.450)
+[t2-screen] U ledger|transfer/posted   0.350 -> 0.850 (+0.500)
+[t2-screen] U regist|swap              1.000 -> 1.000 (+0.000)
+[t2-screen] U regist|add/nowrap        0.900 -> 0.900 (+0.000)
+[t2-screen] t2_s0: mean targeted gain +0.420 (>= 0.15), worst untouched +0.000 (>= -0.10) -> PASS: replicate seeds 1, 2
+=== 2026-10-09T12:02:57-05:00 start scripts/ret_run.py --mode dev --draw docs/retention/draws/dev_20261121.jsonl
+[retention] reclaiming a stale run lock {'pid': 340024, 'create_time': 1791551287.4418533, 'started_utc': '2026-10-09T13:08:11Z'}
+[retention] dev_20261121 (dev): stages to run ['SUPA']
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:retention token=6abe2645
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<02:25,  2.12it/s]Loading weights:  55%|#####4    | 169/310 [00:00<00:00, 389.01it/s]Loading weights:  85%|########5 | 265/310 [00:00<00:00, 437.02it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 372.79it/s]
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[retention] SUPA/supa: 2025 prompts in 388s
+  [gpu-lease] released rineya-gpu-0.lock
+[retention] all stages complete; DONE.json written
+=== 2026-10-09T12:09:52-05:00 exit rc=0 scripts/ret_run.py --mode dev --draw docs/retention/draws/dev_20261121.jsonl
+=== 2026-10-09T12:09:52-05:00 start scripts/ret_analysis.py dev-select --run runs/retention/dev_20261121
+{
+ "selected": {
+  "unit_conv": 1,
+  "pct_ratio": 1,
+  "kv_recall": 3,
+  "unknown_twin": 2,
+  "format_follow": 1
+ },
+ "basis": {
+  "unit_conv": ">= 0.4 (no level reaches 0.7)",
+  "pct_ratio": ">= 0.4 (no level reaches 0.7)",
+  "kv_recall": ">= 0.7",
+  "unknown_twin": ">= 0.4 (no level reaches 0.7)",
+  "format_follow": ">= 0.7"
+ },
+ "excluded": [
+  "arith_word",
+  "date_time",
+  "count_sort"
+ ]
+}
+=== 2026-10-09T12:09:52-05:00 exit rc=0 scripts/ret_analysis.py dev-select --run runs/retention/dev_20261121
+=== 2026-10-09T12:09:52-05:00 start scripts/run_lik.py --bank bank_pilot --arm sparse --splits dev,test
+[sparse] 5824 items, 27755 scored sequences
+  [gpu-lease] waiting: foreign python pid 181216 (2.42 GiB dedicated GPU memory)

@@ -18,21 +18,47 @@ Arms: the SAME training rows rendered four ways (only D-int, S-trace and B-bits 
                     state (P's existing answer format, unchanged).
   bbits   B-bits    state and the four masks written as w-digit bit strings, most significant bit first, in the prompt;
                     target  {"applicable":true,"after":"00110101"}  (flag first, then the bit-string state).
-  ffill   F-filler  OFF unless the GPU budget allows (t2bp_run.py --with-filler). Target {"fill":" . . .","after":37}:
-                    the fill string is the one-token unit " ." repeated so the WHOLE target has exactly the trace
-                    target's token count under Titan's tokenizer (checked per row).
-Every arm's system prompt keeps the rule sentences of T2's frame byte for byte; only the format sentence ("Return only
-...") differs, and B-bits adds the bit-string convention to the state sentence. The decision pipelines read only the
+  ffill   F-filler  the decode-compute control (its own run, only after an S-trace win). Target
+                    {"fill":" . . .","after":37}: the one-token unit " ." repeated a CONSTANT number of times per
+                    (family, action kind) - amendment 4b (DECISIONS D-36): FILL_K below, at least the longest trace of
+                    that kind over the training and dev rows, so every filler target of a kind is identical up to
+                    'after' and the fill length carries no information about the answer (revision 2 matched the length
+                    per row to the trace, which leaks the answer through the length).
+In the canonical surface (paraphrase 0, field names 0, canonical key orders) every arm's system prompt keeps the rule
+sentences of T2's frame byte for byte; only the format sentence ("Return only ...") differs, and B-bits adds the
+bit-string convention to the state sentence (the surface-diversity build varies the rest: revision 3 below). The decision pipelines read only the
 state: D-int is parsed exactly like rcwmt.env.parse_state(..., lenient=True) (generalised to w bits); S-trace, B-bits
 and F-filler targets are parsed STRICTLY (literal key order, no extra or duplicate keys, typed values, in-range state;
-a malformed answer is a wrong answer). cmp_ok / calc_ok (S-trace) and flag_ok (B-bits) are scored separately.
+a malformed answer is a wrong answer). cmp_ok / calc_ok (S-trace) and flag_ok (B-bits) are scored separately;
+format_ok (the answer is in the arm's format, whatever its value) feeds the screen's instrument-validity gate WF.
 
-Surface diversity (decision point 1: if PREREG-3 says TRIGGER, items 2-3 must diversify surface forms). OFF by default;
-switched on WITHOUT code changes by `t2bp_make_data.py --surface-diversity on` (writes data/t2bp_train_sd_<arm>.jsonl)
-and `t2bp_run.py --data-variant sd`. ON: each training row gets a rule-text paraphrase (PARAPHRASES[0..3], 0 =
-canonical) and a field-name variant (FIELD_VARIANTS[0..3], 0 = canonical) drawn from a seeded RNG; PARAPHRASES[4] and
-FIELD_VARIANTS[4] are reserved for held-out evaluation (stage E3 of a `--data-variant sd` run: the dev one-step rows in
-surface 4, OFF and ON, descriptive) and never used in training. Targets do not change.
+Revision 2 (review, 2026-10-09, before any runs/t2bp output): training A4 rows 65 -> 150 (Ia 20 -> 35); the dev bank
+gains D_inapp_addset (100 inapplicable rows whose add bit is set and whose delete clears a set bit; the 950 revision-1
+rows and the 240 chains are unchanged); shortcut policies, precondition-aware composites and twin artefacts are
+recorded; the frozen-input list for SCREEN_RULE.json lives here (FROZEN_CODE, FROZEN_DATA).
+
+Revision 3 (operator decisions C1-C6 and 5a (a)-(c), 2026-10-09, after PREREG-3 returned STATUS: TRIGGER; DECISIONS
+D-35, R16, D-36; before any runs/t2bp output). Decision point 1 has fired: the screen's PRIMARY build is the
+surface-diversity ('sd') build (data/t2bp_train_sd_<arm>.jsonl); the canonical-only build is not run (t2bp_run.py
+refuses it). The sd build keeps the SAME canonical rows (read from the canonical files, never re-drawn) and targets, and
+renders each row (pair members share one surface) with
+  * a rule-text paraphrase PARAPHRASES[i] together with its own state sentence STATE_SENTENCES[i] (which carries the
+    width word: OOR prompts differ from 8-bit prompts only in the width word, in every surface), i in 0..3;
+  * a field-name variant FIELD_VARIANTS[j], j in 0..3;
+  * INPUT key-order augmentation: every JSON object of the prompt (the top-level {before, events} object and the
+    nested event object) is serialized in a key order drawn per row (seeded) from a TRAIN subset of the permutations
+    of its canonical keys: the canonical order with probability P_IDENTITY_ORDER, else uniformly among the other
+    permutations that are not held out. HELD-OUT orders (never in training), per object type: the fully reversed
+    canonical order plus 2 fixed random permutations (HELDOUT_ORDERS, regenerated from ORDER_SEED by
+    derive_heldout_orders()). The top-level object has only two keys, so its only held-out order is the reversed one
+    and its training order is always canonical. The prompt's only list (events) has one element, so there is no list
+    order to augment.
+0 is canonical for every factor (index 0 / the identity order reproduce T2's frame byte for byte). Index 4 of the
+paraphrases and field names and the held-out key orders are reserved for the held-out-surface stage E3: the dev one-step
+rows in the COMBINED held-out surface (paraphrase 4 + field names 4 + the reversed top-level order + one of the 3
+held-out event orders, rotating by the row's index within its stratum), adapter ON, paired by row with the in-surface
+stage E1; HS (the mean accuracy over the seven 8-bit strata there) enters the screen's ranking (revision 3 of the rule).
+Targets never change (literal cmp -> calc -> after order; the parsers reject other orders).
 """
 from __future__ import annotations
 
@@ -41,9 +67,12 @@ import sys
 sys.dont_write_bytecode = True
 
 import hashlib  # noqa: E402
+import itertools  # noqa: E402
 import json  # noqa: E402
 import math  # noqa: E402
 import os  # noqa: E402
+import random  # noqa: E402
+import re  # noqa: E402
 import time  # noqa: E402
 from collections import Counter  # noqa: E402
 from pathlib import Path  # noqa: E402
@@ -57,7 +86,9 @@ FAM = "prerequisite_plan"
 DATA = ROOT / "data"
 DOCS = ROOT / "docs" / "t2b" / "prereq"
 OUT_ROOT = ROOT / "runs" / "t2bp"
-FILLER_TAG = "s0_ffill"               # the R5 decode-compute control, run on its own only if S-trace wins the screen
+SCREEN_TAG = "sd_s0"                  # revision 3: the screen trains the surface-diversity build (C1)
+FILLER_TAG = "sd_s0_ffill"            # the R5 decode-compute control, run on its own only if S-trace wins the screen
+DATA_VARIANT = "sd"                   # the only variant the runner trains (C1: the canonical-only variant is not run)
 TOKENIZER_DIR = Path(r"C:/Users/clclc/BusinessProject/Chat-Bubble/Rineya_Published_Cores/"
                      r"Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze")          # == rcwmt.runtime.TOKENIZER_DIR
 TOKENIZER_JSON = TOKENIZER_DIR / "tokenizer.json"
@@ -137,11 +168,14 @@ FROZEN_CODE = ("scripts/t2bp_common.py", "scripts/t2bp_make_data.py", "scripts/t
                "vendor_bwm/scripts/train_generic.py", "vendor_bwm/bwmn/lm.py")
 FROZEN_DATA = ("data/t2bp_dev.jsonl", "data/t2bp_dev.SOURCE.json", "data/t2bp_train_dint.jsonl",
                "data/t2bp_train_strace.jsonl", "data/t2bp_train_bbits.jsonl", "data/t2bp_train_ffill.jsonl",
-               "data/t2bp_train.SOURCE.json")
+               "data/t2bp_train.SOURCE.json", "data/t2bp_train_sd_dint.jsonl", "data/t2bp_train_sd_strace.jsonl",
+               "data/t2bp_train_sd_bbits.jsonl", "data/t2bp_train_sd_ffill.jsonl", "data/t2bp_train_sd.SOURCE.json")
 SCREEN_RULE_JSON = "SCREEN_RULE.json"
 SCREEN_RULE_MD = "SCREEN_RULE.md"
 
 # ---------------------------------------------------------------------------------------------- surface forms
+# Field names: variant 0 is T2's frame; 1-3 are training variants; 4 is held out (stage E3 only). Keys that are not
+# renamed (cost, kind, name) keep their names in every variant.
 FIELD_VARIANTS = (
     {"before": "before", "events": "events", "add": "add", "delete": "delete", "pre_on": "pre_on", "pre_off": "pre_off"},
     {"before": "state", "events": "actions", "add": "set", "delete": "clear", "pre_on": "require_on", "pre_off": "require_off"},
@@ -166,10 +200,110 @@ PARAPHRASES = (   # the rule sentences; {pre_on} etc. are the field names of the
     "are all absent in the current state; an action that does not fire changes nothing. A firing action drops its "
     "{delete} bits before setting its {add} bits.",                                                     # held out
 )
+STATE_SENTENCES = (   # paraphrase i's state sentence (without its final period); {w} is the width word, {art} its article
+    "The state is {art} {w}-bit flag mask",                                    # 0 = T2's frame
+    "The state is a mask of {w} flag bits",
+    "The state holds {w} flag bits",
+    "The state is a set of {w} flag bits kept in one mask",
+    "The state is a flag mask {w} bits wide",                                  # held out
+)
 TRAIN_SURFACE_IDX = (0, 1, 2, 3)
 HELDOUT_SURFACE_IDX = 4
-HELDOUT_SURFACE = {"para": HELDOUT_SURFACE_IDX, "names": HELDOUT_SURFACE_IDX}   # stage E3 of a surface-diversity run
 TAIL = "Names and costs do not change the state."
+
+# Input key orders (C2). Slots are the canonical key identities in canonical (sorted) order: the identity permutation with
+# field variant 0 is env.dumps's sort_keys order, i.e. T2's frame. Held out per object type: the fully reversed order
+# plus 2 fixed random permutations (none exist for the 2-key top-level object). The constants below are what
+# derive_heldout_orders() regenerates from ORDER_SEED (checked by the data builder and the tests).
+OBJ_SLOTS = {"top": ("before", "events"), "event": ("add", "cost", "delete", "kind", "name", "pre_off", "pre_on")}
+ORDER_SEED = SEED * 10 + 6            # make_data's sub-seeds use SEED*10 + 1..5
+P_IDENTITY_ORDER = 0.25               # like paraphrase 0 and field names 0: the canonical order on ~1/4 of the rows
+HELDOUT_ORDERS = {
+    "top": (("events", "before"),),
+    "event": (("pre_on", "pre_off", "name", "kind", "delete", "cost", "add"),
+              ("add", "delete", "kind", "pre_off", "cost", "pre_on", "name"),
+              ("cost", "pre_off", "delete", "pre_on", "name", "kind", "add")),
+}
+HELDOUT_ORDER_NOTE = ("top-level object {before, events}: 2 keys, so only the reversed order exists besides the canonical "
+                      "one; it is held out and the training order is always canonical. Event object: 7 keys (5,040 "
+                      "orders); held out: the reversed order and 2 fixed random orders (ORDER_SEED); training: the other "
+                      "5,037 (the canonical one with probability 0.25). Lists: the prompt's only list (events) has one "
+                      "element, so there is no list order to augment.")
+
+
+def derive_heldout_orders() -> dict:
+    """The held-out key orders, regenerated from ORDER_SEED: per object type, the reversed canonical order, then 2
+    distinct orders drawn (random.Random(ORDER_SEED).sample) from the lexicographic list of the other permutations."""
+    rng = random.Random(ORDER_SEED)
+    out = {}
+    for obj, slots in OBJ_SLOTS.items():
+        rev = tuple(reversed(slots))
+        others = [p for p in itertools.permutations(slots) if p not in (slots, rev)]
+        out[obj] = (rev,) + tuple(rng.sample(others, min(2, len(others))))
+    return out
+
+
+_TRAIN_ORDERS: dict = {}
+
+
+def train_orders(obj: str) -> list:
+    """Every permutation of the object's slots that is not held out (the identity included), lexicographic."""
+    if obj not in _TRAIN_ORDERS:
+        _TRAIN_ORDERS[obj] = [p for p in itertools.permutations(OBJ_SLOTS[obj]) if p not in HELDOUT_ORDERS[obj]]
+    return _TRAIN_ORDERS[obj]
+
+
+def draw_order(rng: random.Random, obj: str) -> tuple:
+    """A training key order for one object: the canonical order with probability P_IDENTITY_ORDER, else uniform over
+    the other non-held-out orders. An object with no other training order consumes no randomness."""
+    ident = OBJ_SLOTS[obj]
+    rest = [p for p in train_orders(obj) if p != ident]
+    if not rest:
+        return ident
+    return ident if rng.random() < P_IDENTITY_ORDER else rest[rng.randrange(len(rest))]
+
+
+def order_of(surface, obj: str) -> tuple:
+    if surface and surface.get("order") and surface["order"].get(obj):
+        return tuple(surface["order"][obj])
+    return OBJ_SLOTS[obj]
+
+
+def heldout_surface(j: int) -> dict:
+    """Stage E3's COMBINED held-out surface for the row with index j within its stratum: paraphrase 4, field names 4,
+    the reversed top-level order and the (j mod 3)-th held-out event order."""
+    return {"para": HELDOUT_SURFACE_IDX, "names": HELDOUT_SURFACE_IDX,
+            "order": {"top": list(HELDOUT_ORDERS["top"][0]), "event": list(HELDOUT_ORDERS["event"][j % 3])}}
+
+
+HELDOUT_SURFACE = {"stage": "E3", "para": HELDOUT_SURFACE_IDX, "names": HELDOUT_SURFACE_IDX,
+                   "order_top": list(HELDOUT_ORDERS["top"][0]),
+                   "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the row's index within its stratum (id suffix)",
+                   "held_out_event_orders": [list(p) for p in HELDOUT_ORDERS["event"]]}
+
+
+def stratum_index(row: dict) -> int:
+    """The row's index within its dev stratum (the numeric suffix of its id; the tests check it equals the position)."""
+    return int(str(row["id"]).rsplit("-", 1)[1])
+
+
+def heldout_surface_of(row: dict) -> dict:
+    return heldout_surface(stratum_index(row))
+
+
+def heldout_factors(surface) -> list:
+    """The factors of a surface that are held out (empty for a training surface)."""
+    if not surface:
+        return []
+    bad = []
+    if int(surface.get("para", 0)) not in TRAIN_SURFACE_IDX:
+        bad.append("paraphrase")
+    if int(surface.get("names", 0)) not in TRAIN_SURFACE_IDX:
+        bad.append("field names")
+    for obj in OBJ_SLOTS:
+        if order_of(surface, obj) in HELDOUT_ORDERS[obj]:
+            bad.append(f"{obj} key order")
+    return bad
 
 
 def _article(w: int) -> str:
@@ -180,15 +314,20 @@ def names_of(surface) -> dict:
     return FIELD_VARIANTS[0 if not surface else int(surface.get("names", 0))]
 
 
+def para_of(surface) -> int:
+    return 0 if not surface else int(surface.get("para", 0))
+
+
 def system_text(arm: str, w: int, surface=None) -> str:
     nm = names_of(surface)
-    para = PARAPHRASES[0 if not surface else int(surface.get("para", 0))].format(**nm)
+    i = para_of(surface)
+    para = PARAPHRASES[i].format(**nm)
+    state = STATE_SENTENCES[i].format(art=_article(w), w=w)
     if arm == "bbits":
-        state = (f"The state is {_article(w)} {w}-bit flag mask, written as a string of {w} binary digits with the most "
-                 f"significant bit first; {nm['pre_on']}, {nm['pre_off']}, {nm['delete']} and {nm['add']} are written "
-                 "the same way.")
+        state += (f", written as a string of {w} binary digits with the most significant bit first; {nm['pre_on']}, "
+                  f"{nm['pre_off']}, {nm['delete']} and {nm['add']} are written the same way.")
     else:
-        state = f"The state is {_article(w)} {w}-bit flag mask."
+        state += "."
     if arm == "dint":
         ret = "Return only the final resulting state as a JSON integer."
     elif arm == "strace":
@@ -214,16 +353,79 @@ def bitstr(x: int, w: int) -> str:
     return format(x, f"0{w}b")
 
 
+def _obj_text(pairs) -> str:
+    """One JSON object in the given key order, env.dumps's separators (never key-sorted)."""
+    return "{" + ",".join(json.dumps(k) + ":" + v for k, v in pairs) + "}"
+
+
 def user_text(arm: str, before: int, event: dict, w: int, surface=None) -> str:
+    """{before, events: [event]} with the surface's field names and key orders (identity order + names 0 ==
+    env.dumps({"before", "events"}), i.e. T2's frame)."""
     nm = names_of(surface)
     ev = dict(event)
+    if set(ev) != set(OBJ_SLOTS["event"]):
+        raise ValueError(f"a prerequisite event has keys {sorted(ev)}, expected {OBJ_SLOTS['event']}")
     b = before
     if arm == "bbits":
         b = bitstr(before, w)
         for k in ("add", "delete", "pre_on", "pre_off"):
             ev[k] = bitstr(event[k], w)
-    ev = {nm.get(k, k): v for k, v in ev.items()}
-    return env.dumps({nm["before"]: b, nm["events"]: [ev]})
+    ev_txt = _obj_text([(nm.get(k, k), _dump(ev[k])) for k in order_of(surface, "event")])
+    vals = {"before": _dump(b), "events": "[" + ev_txt + "]"}
+    return _obj_text([(nm[k], vals[k]) for k in order_of(surface, "top")])
+
+
+def _pairs(pairs):
+    return list(pairs)
+
+
+def recover_surface(msgs: list) -> dict:
+    """Read a prompt's surface back from its TEXT alone (independent of any recorded surface): the field variant from
+    the JSON keys, the key orders from the key sequence, the paraphrase from the system text, the width from the first
+    number of the system text. Raises ValueError if the prompt is not exactly one known surface."""
+    sys_t, user = msgs[0]["content"], msgs[1]["content"]
+    obj = json.loads(user, object_pairs_hook=_pairs)
+    top_keys = [k for k, _ in obj]
+    cand = [j for j, nm in enumerate(FIELD_VARIANTS) if sorted(top_keys) == sorted((nm["before"], nm["events"]))]
+    if len(cand) != 1:
+        raise ValueError(f"top-level keys {top_keys} match field variants {cand}")
+    j = cand[0]
+    nm = FIELD_VARIANTS[j]
+    inv = {v: k for k, v in nm.items()}
+    evs = dict(obj)[nm["events"]]
+    if not isinstance(evs, list) or len(evs) != 1:
+        raise ValueError("the events list must hold exactly one event")
+    ev_keys = [k for k, _ in evs[0]]
+    ev_slots = tuple(inv.get(k, k) for k in ev_keys)
+    if sorted(ev_slots) != sorted(OBJ_SLOTS["event"]) or len(set(ev_keys)) != len(ev_keys):
+        raise ValueError(f"event keys {ev_keys} are not field variant {j}'s")
+    m = re.search(r"(\d+)", sys_t)
+    if not m:
+        raise ValueError("no width word in the system text")
+    w = int(m.group(1))
+    paras = [i for i in range(len(PARAPHRASES))
+             if PARAPHRASES[i].format(**nm) in sys_t and sys_t.startswith(STATE_SENTENCES[i].format(art=_article(w), w=w))]
+    if len(paras) != 1:
+        raise ValueError(f"system text matches paraphrases {paras}")
+    return {"para": paras[0], "names": j, "order": {"top": [inv[k] for k in top_keys], "event": list(ev_slots)},
+            "width": w}
+
+
+def read_prompt(msgs: list) -> dict:
+    """The row a prompt encodes (any surface, any arm): arm, width, before and the event, in canonical names."""
+    sf = recover_surface(msgs)
+    sys_t = msgs[0]["content"]
+    arm = ("bbits" if "binary digits" in sys_t else "strace" if "keys cmp, calc and after" in sys_t
+           else "ffill" if "keys fill" in sys_t else "dint")
+    nm = FIELD_VARIANTS[sf["names"]]
+    inv = {v: k for k, v in nm.items()}
+    u = json.loads(msgs[1]["content"])
+    b, ev = u[nm["before"]], {inv.get(k, k): v for k, v in u[nm["events"]][0].items()}
+    if arm == "bbits":
+        b = int(b, 2)
+        for k in ("add", "delete", "pre_on", "pre_off"):
+            ev[k] = int(ev[k], 2)
+    return {"arm": arm, "width": sf["width"], "before": b, "event": ev, "surface": sf}
 
 
 def messages(arm: str, before: int, event: dict, w: int, surface=None) -> list:
@@ -236,6 +438,29 @@ def render_chat(msgs: list) -> str:
     checks it byte for byte against T2's stored prompts, the tiny test against tok.apply_chat_template)."""
     out = "".join(f"<|im_start|>{m['role']}\n{m['content']}<|im_end|>\n" for m in msgs)
     return out + "<|im_start|>assistant\n<think>\n\n</think>\n\n"
+
+
+_CHAT_RE = re.compile(r"<\|im_start\|>system\n(.*?)<\|im_end\|>\n<\|im_start\|>user\n(.*?)<\|im_end\|>\n"
+                      r"<\|im_start\|>assistant\n<think>\n\n</think>\n\n", re.S)
+
+
+def split_chat(prompt: str) -> list:
+    """The two messages of a rendered prompt (inverse of render_chat; ValueError otherwise)."""
+    m = _CHAT_RE.fullmatch(prompt)
+    if not m:
+        raise ValueError("not a rendered system+user prompt")
+    return [{"role": "system", "content": m.group(1)}, {"role": "user", "content": m.group(2)}]
+
+
+def heldout_fragments() -> dict:
+    """Text that only a held-out surface produces: the held-out paraphrase's fixed text and state-sentence wording, and
+    the held-out field names as JSON keys. None may occur in a training prompt."""
+    para = PARAPHRASES[HELDOUT_SURFACE_IDX]
+    frags = {"paraphrase 4": para[:para.index("{")], "state sentence 4": " bits wide"}
+    for k, v in FIELD_VARIANTS[HELDOUT_SURFACE_IDX].items():
+        if v not in {x[k] for x in FIELD_VARIANTS[:HELDOUT_SURFACE_IDX]}:
+            frags[f"field name 4 ({k})"] = json.dumps(v) + ":"
+    return frags
 
 
 # ---------------------------------------------------------------------------------------------- gold and heuristics
@@ -356,26 +581,41 @@ def trace_text(before: int, ev: dict) -> str:
     return '{"cmp":' + cmp_txt + ',"calc":' + _dump(calc) + ',"after":' + _dump(gold(before, ev)) + "}"
 
 
-def filler_text(after: int, k: int) -> str:
-    return '{"fill":"' + FILL_UNIT * k + '","after":' + _dump(after) + "}"
+# Amendment 4b (DECISIONS D-36; BWM D-55, bwmn/traces.filler_length): the fill length is a CONSTANT per (family, action
+# kind), at least the longest trace of that kind over the training and dev rows (every surface variant has the same
+# targets): units = max over those rows of tokens('{"cmp":...,"calc":N') - tokens('{"fill":""'). The prerequisite family
+# has one action kind ("action"). t2bp_make_data.py recomputes it from the rows with Titan's tokenizer and refuses to
+# write if it differs; with it no filler target is shorter than its row's trace target (checked on every row). The
+# residual (filler tokens - trace tokens, >= 0, > 0 on most rows) is a descriptive covariate.
+FILL_K = {"action": 26}
+FILL_BASE_TEXT = '{"fill":""'
 
 
-def fill_k(before: int, ev: dict, count) -> int:
-    """The unit count k such that count(filler) == count(trace) exactly (count: text -> number of tokens)."""
-    n = count(trace_text(before, ev))
-    after = gold(before, ev)
-    k = max(1, n - count(filler_text(after, 1)) + 1)
-    for _ in range(64):
-        c = count(filler_text(after, k))
-        if c == n:
-            return k
-        k += 1 if c < n else -1
-        if k < 1:
-            break
-    raise ValueError(f"no filler length matches the trace token count {n} for {before} {ev}")
+def fill_units(ev: dict | None = None) -> int:
+    return FILL_K[(ev or {}).get("kind", "action")]
+
+
+def trace_head(before: int, ev: dict) -> str:
+    """The trace target without its ',"after":N}' tail (the part the filler replaces)."""
+    t = trace_text(before, ev)
+    return t[:t.index(',"after":')]
+
+
+def fill_k_required(items, count) -> dict:
+    """Per action kind: the constant unit count of amendment 4b over (before, event) items (BWM's formula)."""
+    heads = {}
+    for b, e in items:
+        heads.setdefault(e.get("kind", "action"), []).append(count(trace_head(b, e)))
+    base = count(FILL_BASE_TEXT)
+    return {k: max(1, max(v) - base) for k, v in heads.items()}
+
+
+def filler_text(after: int, k: int | None = None) -> str:
+    return '{"fill":"' + FILL_UNIT * (fill_units() if k is None else k) + '","after":' + _dump(after) + "}"
 
 
 def target_text(arm: str, before: int, ev: dict, w: int, count=None) -> str:
+    """The exact target text (count is accepted for backward compatibility and ignored: the filler is constant)."""
     after = gold(before, ev)
     if arm == "dint":
         return _dump(after)
@@ -384,9 +624,7 @@ def target_text(arm: str, before: int, ev: dict, w: int, count=None) -> str:
     if arm == "bbits":
         return '{"applicable":' + _dump(applicable(before, ev)) + ',"after":"' + bitstr(after, w) + '"}'
     if arm == "ffill":
-        if count is None:
-            raise ValueError("the filler target needs the tokenizer's token count")
-        return filler_text(after, fill_k(before, ev, count))
+        return filler_text(after, fill_units(ev))
     raise ValueError(arm)
 
 
@@ -401,7 +639,7 @@ def render_prediction(arm: str, state: int, before: int, ev: dict, w: int, count
     if arm == "bbits":
         return '{"applicable":' + _dump(state != before) + ',"after":"' + bitstr(state, w) + '"}'
     if arm == "ffill":
-        return filler_text(state, 3)
+        return filler_text(state, fill_units(ev))
     raise ValueError(arm)
 
 
@@ -709,14 +947,15 @@ def run_outputs(out_root: Path | None = None) -> list:
 def write_doc(name: str, text: str, docs: Path | None = None) -> Path:
     """Kit records under docs/t2b/prereq (AUDIT, DRYRUN, SCORER_SELFTEST, TINY_TEST, GEN_PLAN). Before any runs/t2bp
     output exists a rerun refreshes them (they carry the code hashes they were made with); once an output exists they
-    are never overwritten: the new record is written next to the old one with a UTC timestamp suffix."""
+    are never overwritten: the new record is written next to the old one with a UTC timestamp suffix. Every text file
+    this kit writes has LF line endings (newline='\\n'), never CRLF."""
     d = Path(docs or DOCS)
     d.mkdir(parents=True, exist_ok=True)
     p = d / name
     if p.exists() and run_outputs():
         p = d / f"{p.stem}.{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}{p.suffix}"
     tmp = p.with_name(p.name + ".partial")
-    tmp.write_text(text, encoding="utf-8")
+    tmp.write_text(text, encoding="utf-8", newline="\n")      # LF only, never CRLF (DECISIONS I-30)
     os.replace(tmp, p)
     return p
 

@@ -1,5 +1,7 @@
-"""T2b-register screen runner (RCWM roadmap item 3; joint item 5b): train the three R-only LoRA arms with the T2 recipe,
-then evaluate adapter OFF and every arm ON in ONE process, all under ONE GPU lease. Modelled on scripts/p3_run.py.
+"""T2b-register screen runner, revision 3 (RCWM roadmap item 3; joint item 5b): train the three R-only LoRA arms with the
+T2 recipe on the surface-diversity build 'sd' (decision C1: the canonical-only variant is not run), then evaluate adapter
+OFF and every arm ON in ONE process, in-surface and on the held-out surface (C3), all under ONE GPU lease. Modelled on
+scripts/p3_run.py.
 
   python -B scripts/t2br_run.py --plan        # CPU only (no torch, no model, no lease): stages, generations, training
                                               # tokens, GPU time per turn; writes docs/t2b/register/GEN_PLAN.json
@@ -8,27 +10,36 @@ then evaluate adapter OFF and every arm ON in ONE process, all under ONE GPU lea
                                               # CPU only: pre-freeze checks (audit, scorer self-test, analysis dry run,
                                               # tiny tests, plan; no output exists), then hashes every input
                                               # (create-only; refused if frozen)
-  python -B scripts/t2br_run.py [--seed 0] [--train-variant base|sd]    # the GPU job (refuses unless the freeze verifies)
+  python -B scripts/t2br_run.py [--seed 0] [--train-variant sd]          # the GPU job (refuses unless the freeze verifies;
+                                                                         # 'sd' is the only accepted variant, C1)
 
 GPU job. Before the lease: the freeze must verify; no other RCWM job may hold or wait for the lease (one-waiter rule,
 R14); one runner per output dir (run lock). One lease, label 'rcwm-t1:t2b-register' (rcwmt.runtime.gpu_lease:
-alternation, thermal flag, duty cycle, RAM floor), turn cap 4.5 h from lock acquisition with D-22's stage rule (no stage
-starts within 0.5 h of the cap; a stage starts only if 1.25 x its estimate fits). One model at a time. Stages, in order:
+alternation, thermal flag, duty cycle, RAM floor), turn cap 4.5 h from lock acquisition (a larger --cap-h is refused)
+with D-22's stage rule (no stage starts within 0.5 h of the cap; a stage starts only if 1.25 x its estimate fits),
+re-checked AFTER the resource / thermal wait that precedes every model load (a long wait defers the stage instead of
+pushing it past the cap). One model at a time. Stages, in order:
   T_plain, T_trace, T_filler   the T2 recipe per arm (vendored BWM trainer, D-15: bwmn.lm.load_core('titan-sparse') FP32,
                                attach_lora r16 / alpha 32 / dropout 0.05 on q,k,v,o,gate,up,down, train_sft 190 steps x
                                batch 16, lr 1e-4 WSD, max_len 512, seed s; train_generic's row order 10007 s + 17), on that
-                               arm's rendering of the SAME 750 register rows (data/t2br_train_<arm>.jsonl). The core's
+                               arm's surface-diversity rendering of the SAME 750 register rows
+                               (data/t2br_train_sd_<arm>.jsonl; 4.05 epochs, T2 recipe parity). The core's
                                fingerprint must be Titan-Sparse's (818be9c6b6a3). Written to train_<arm>.partial/, then
                                renamed (a crash leaves only a .partial, orphaned on resume).
   then load Titan-Sparse (rcwmt.runtime.load_arm, FP32) + the three adapters UNMERGED (PEFT; never a dense merge, D-28):
   A0 anchor   adapter OFF (disable_adapter() = Titan-Sparse) chain_one on the 208 pilot TEST register chains must
               reproduce runs/t2/t2_s0/gen_chain_one_base.jsonl (identical states on >= 99% of chains), else stop before
               any dev-bank output. A resumed turn re-anchors before E1/E2 (recorded; a failure is persisted).
-  E1          the 900 one-step dev rows (generation.generate_texts, 160-token cap) per side OFF / plain / trace / filler
+  E1          the 1,100 one-step dev rows in Titan's verbatim frame (generation.generate_texts, 160-token cap) per side
+              OFF / plain / trace / filler
+  E1H         the 400 primary dev rows in the combined HELD-OUT surface (data/t2br_dev_hs.jsonl: paraphrase 4 + field
+              names 4 + held-out key orders rotating by row; C3) per side OFF / plain / trace / filler. plain and trace
+              gate G1 / G2 (revision 3); OFF and filler are reported. Runs before E2 so that every gating output is
+              produced first; per-factor held-out renderings are not run (GPU budget).
   E2          the 384 k=4 dev chains (chain_one self-rollout in the one-step frame; each side's state = its own parser's
               'after': plain/OFF env.parse_state(lenient), trace/filler the strict joint parsers) per side
   Every eval stage generates ALL four sides in the same process and writes them only when all are done.
-Outputs (create-only) under runs/t2b_register/s<seed>[_<variant>]/. A stage is DONE only if all its files exist AND
+Outputs (create-only) under runs/t2b_register/s<seed>_sd/. A stage is DONE only if all its files exist AND
 provenance.json records them with matching sha256; anything else written by a stage makes it PARTIAL: moved to
 _orphans/ (never deleted) and redone in full. A recorded output whose hash changes stops the job. DONE.json at the end.
 
@@ -66,9 +77,9 @@ from rcwmt import env  # noqa: E402
 LEASE_LABEL = "rcwm-t1:t2b-register"
 OUT_ROOT = ROOT / "runs" / "t2b_register"
 FREEZE_REL = "docs/t2b/register/SCREEN_FREEZE.json"
-STAGE_ORDER = ("T_plain", "T_trace", "T_filler", "A0", "E1", "E2")
+STAGE_ORDER = ("T_plain", "T_trace", "T_filler", "A0", "E1", "E1H", "E2")
 TRAIN_STAGES = {"T_plain": "plain", "T_trace": "trace", "T_filler": "filler"}
-EVAL_STAGES = ("A0", "E1", "E2")
+EVAL_STAGES = ("A0", "E1", "E1H", "E2")
 ADAPTER_NAMES = {"plain": "t2br_plain", "trace": "t2br_trace", "filler": "t2br_filler"}
 RECIPE = {"core": "titan-sparse", "steps": 190, "batch": 16, "lr": 1e-4, "max_len": 512, "rank": 16, "alpha": 32,
           "dropout": 0.05, "targets": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
@@ -94,7 +105,11 @@ FREEZE_SCRIPTS = ("scripts/t2br_common.py", "scripts/t2br_make_data.py", "script
                   "scripts/t2br_test_tiny.py", "scripts/confirm2_gen.py", "scripts/l1_make_ood.py", "scripts/p3_make_bank.py",
                   "vendor_bwm/scripts/train_generic.py", "vendor_bwm/bwmn/lm.py")
 HOOK_DRAFT_REL = "docs/t2b/register/queue_hook_t2br.sh.draft"
-FREEZE_DOCS = ("docs/t2b/register/DESIGN.md", "docs/t2b/register/AUDIT.json", "docs/t2b/register/SCORER_SELFTEST.json",
+GO_RULE_REL = "docs/t2b/register/GO_RULE.md"
+GO_RULE_REV_RELS = {1: "docs/t2b/register/GO_RULE_rev1.md", 2: "docs/t2b/register/GO_RULE_rev2.md"}
+DESIGN_REV_RELS = {1: "docs/t2b/register/DESIGN_rev1.md", 2: "docs/t2b/register/DESIGN_rev2.md"}
+FREEZE_DOCS = ("docs/t2b/register/DESIGN.md", GO_RULE_REL, *GO_RULE_REV_RELS.values(), *DESIGN_REV_RELS.values(),
+               "docs/t2b/register/AUDIT.json", "docs/t2b/register/SCORER_SELFTEST.json",
                "docs/t2b/register/DRYRUN.json", "docs/t2b/register/TINY_TEST.json", "docs/t2b/register/GEN_PLAN.json",
                HOOK_DRAFT_REL)
 PROV_CODE = ("scripts/t2br_run.py", "scripts/t2br_common.py", "rcwmt/generation.py", "rcwmt/runtime.py", "rcwmt/env.py",
@@ -130,15 +145,16 @@ class Cfg:
     root: Path = ROOT
     seed: int = 0
     steps: int = RECIPE["steps"]
-    train_variant: str = "base"
-    out: Path | None = None                      # default runs/t2b_register/s<seed>[_<variant>]
+    train_variant: str = C.TRAIN_VARIANT         # 'sd' only (C1); run() refuses anything else
+    out: Path | None = None                      # default runs/t2b_register/s<seed>_<variant>
     dev: Path = C.DEV
+    dev_hs: Path = C.DEV_HS
     chains: Path = C.CHAINS
     train_files: dict | None = None              # default data/t2br_train[_<variant>]_<arm>.jsonl
     anchor_chains: list | None = None            # None: the 208 pilot TEST register chains
     anchor_ref: Path = ROOT / ANCHOR_REF_REL
     require_freeze: bool = True                  # False only from the tiny tests (never reachable from the CLI)
-    cap_h: float = CAP_H
+    cap_h: float = CAP_H                         # <= CAP_H (run() refuses a larger cap)
     rate: float = RATE_GENS_PER_S
 
     def __post_init__(self):
@@ -178,6 +194,8 @@ def stage_required(stage: str, out: Path) -> list:
         return [o / "anchor" / "chain_one_R_off.jsonl", o / "anchor" / "anchor.json"]
     if stage == "E1":
         return [o / "onestep" / f"onestep_{s}.jsonl" for s in C.SIDES]
+    if stage == "E1H":
+        return [o / "onestep" / f"onestep_hs_{s}.jsonl" for s in C.SIDES]
     if stage == "E2":
         return [o / "chains" / f"chains_{s}.jsonl" for s in C.SIDES]
     raise KeyError(stage)
@@ -232,7 +250,7 @@ def write_jsonl(path: Path, rows) -> None:
     if path.exists():
         raise Stop(f"[t2br] {path} exists (create-only)")
     tmp = _partial(path)
-    with tmp.open("x", encoding="utf-8") as f:
+    with tmp.open("x", encoding="utf-8", newline="\n") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
         f.flush()
@@ -244,6 +262,7 @@ def write_jsonl(path: Path, rows) -> None:
 def counts(cfg: Cfg | None = None) -> dict:
     cfg = cfg or Cfg()
     dev = C.load_dev(cfg.dev)
+    hs = C.load_dev_hs(cfg.dev_hs)
     parents = C.load_chain_bank(cfg.chains)
     n_cand = sum(len(p["candidates"]) for p in parents)
     n_anchor = len(cfg.anchor_chains) if cfg.anchor_chains is not None else len(pilot_anchor_chains())
@@ -255,23 +274,36 @@ def counts(cfg: Cfg | None = None) -> dict:
         tok[a] = {"rows": len(rows), "row_visits": len(order[: cfg.steps * RECIPE["batch"]]),
                   "epochs": round(cfg.steps * RECIPE["batch"] / len(rows), 3),
                   "tokens": sum(per[i] for i in order[: cfg.steps * RECIPE["batch"]])}
+    by_id = {r["id"]: r for r in dev}
+
+    def factors(rows):
+        """decode-length factor per side: (mean answer tokens + EOS) / (mean plain answer tokens + EOS)."""
+        mean = {a: sum(r["n_target_tokens"][a] for r in rows) / len(rows) for a in C.ARMS}
+        return {s: round((mean[C.SIDE_ARM[s]] + 1) / (mean["plain"] + 1), 4) for s in C.SIDES}
     mean = {a: sum(r["n_target_tokens"][a] for r in dev) / len(dev) for a in C.ARMS}
-    long_factor = (mean["trace"] + 1) / (mean["plain"] + 1)
-    return {"rows": len(dev), "chains": n_cand, "anchor_chains": n_anchor, "A0": n_anchor * C.H,
-            "E1": {"short": 2 * len(dev), "long": 2 * len(dev)}, "E2": {"short": 2 * n_cand * C.H, "long": 2 * n_cand * C.H},
+    return {"rows": len(dev), "rows_hs": len(hs), "chains": n_cand, "anchor_chains": n_anchor, "A0": n_anchor * C.H,
+            "E1": {s: len(dev) for s in C.SIDES}, "E1H": {s: len(hs) for s in C.SIDES},
+            "E2": {s: n_cand * C.H for s in C.SIDES},
+            "side_factor": {"E1": factors(dev), "E1H": factors([by_id[h["id"]] for h in hs]), "E2": factors(dev)},
             "train": tok, "mean_target_tokens_dev": {a: round(v, 2) for a, v in mean.items()},
-            "long_factor": round(long_factor, 4)}
+            "mean_prompt_tokens": {"E1": round(sum(r["n_prompt_tokens"] for r in dev) / len(dev), 2),
+                                   "E1H": round(sum(h["n_prompt_tokens"] for h in hs) / len(hs), 2)}}
+
+
+def weighted_gens(st: str, n: dict) -> float:
+    """Generations of an eval stage in plain-answer equivalents (decode time ~ answer length)."""
+    return sum(n[st][s] * n["side_factor"][st][s] for s in C.SIDES)
 
 
 def stage_est_s(st: str, rate: float, n: dict) -> float:
-    """Seconds. Training: T2's measured time scaled by the arm's processed tokens, plus one load. Generation: short
-    answers (OFF, plain) at `rate`, trace / filler answers at rate / long_factor (decode time ~ answer length). A0
+    """Seconds. Training: T2's measured time scaled by the arm's processed tokens, plus one load. Generation: each
+    side's answers at rate / that side's decode-length factor (OFF / plain 1; trace and the 4b filler longer). A0
     includes the eval model load (it is the first eval step of every turn that evaluates)."""
     if st in TRAIN_STAGES:
         return LOAD_S + T2_TRAIN_S * n["train"][TRAIN_STAGES[st]]["tokens"] / T2_TRAIN_TOKENS
     if st == "A0":
         return LOAD_S + n["A0"] / rate
-    return n[st]["short"] / rate + n[st]["long"] * n["long_factor"] / rate
+    return weighted_gens(st, n) / rate
 
 
 def can_start(elapsed_s: float, est_s: float, cap_s: float) -> bool:
@@ -318,27 +350,39 @@ def plan(cfg: Cfg | None = None, verbose: bool = True) -> dict:
     n = counts(cfg)
     what = {"T_plain": "train plain arm", "T_trace": "train trace arm", "T_filler": "train filler arm",
             "A0": f"load Sparse + 3 adapters; anchor OFF chain_one, {n['anchor_chains']} pilot TEST register chains",
-            "E1": f"{n['rows']} one-step dev rows x OFF/plain (short) + trace/filler (long)",
-            "E2": f"{n['chains']} k={C.H} dev chains x OFF/plain (short) + trace/filler (long)"}
-    gens = {"A0": n["A0"], "E1": n["E1"]["short"] + n["E1"]["long"], "E2": n["E2"]["short"] + n["E2"]["long"]}
+            "E1": f"{n['rows']} one-step dev rows (verbatim frame) x OFF / plain / trace / filler",
+            "E1H": f"{n['rows_hs']} primary dev rows, combined HELD-OUT surface x OFF / plain / trace / filler",
+            "E2": f"{n['chains']} k={C.H} dev chains x OFF / plain / trace / filler"}
+    gens = {"A0": n["A0"], **{st: sum(n[st].values()) for st in ("E1", "E1H", "E2")}}
     res = {"rate_gens_per_s": RATE_GENS_PER_S, "observed_rate_gens_per_s": OBSERVED_RATE, "load_s_each": LOAD_S,
            "cap_h": CAP_H, "recipe": RECIPE, "seed": cfg.seed, "train_variant": cfg.train_variant,
-           "long_answer_factor": n["long_factor"], "mean_target_tokens_dev": n["mean_target_tokens_dev"],
+           "go_rule_revision": C.GO_RULE_REVISION, "side_decode_factor": n["side_factor"],
+           "mean_target_tokens_dev": n["mean_target_tokens_dev"], "mean_prompt_tokens": n["mean_prompt_tokens"],
            "train": n["train"], "t2_reference": {"train_wall_s": T2_TRAIN_S, "tokens_processed": T2_TRAIN_TOKENS},
            "stages": [{"stage": s, "what": what[s], "generations_max": gens.get(s, 0),
                        "projected_s_planning": round(stage_est_s(s, RATE_GENS_PER_S, n), 1),
                        "projected_s_observed": round(stage_est_s(s, OBSERVED_RATE, n), 1)} for s in STAGE_ORDER],
            "total_generations_max": sum(gens.values()), "model_loads": 4,
            "stage_rule": f"no stage starts within {G2.STAGE_MARGIN_H} h of the cap; a stage starts only if "
-                         f"{G2.STAGE_SAFETY} x its estimate fits; eval starts only if A0 + the next eval stage fits; a "
-                         "turn that evaluates after an earlier A0 re-anchors first",
+                         f"{G2.STAGE_SAFETY} x its estimate fits (checked before AND after the resource / thermal wait "
+                         "that precedes each model load); eval starts only if A0 + the next eval stage fits; a turn "
+                         "that evaluates after an earlier A0 re-anchors first; --cap-h above 4.5 is refused",
            "turns_at_planning_rate": simulate_turns(RATE_GENS_PER_S, n),
            "turns_at_observed_rate": simulate_turns(OBSERVED_RATE, n)}
     res["projected_gpu_h_planning"] = round(sum(t["projected_h"] for t in res["turns_at_planning_rate"]), 2)
     res["projected_gpu_h_observed"] = round(sum(t["projected_h"] for t in res["turns_at_observed_rate"]), 2)
+    res["turn_split"] = (
+        "The runner defers by its own gate (no stage starts within 0.5 h of the cap; 1.25 x the estimate must fit, "
+        "re-checked after every resource wait): a stage that does not fit ends the turn with exit 5, the hook's second "
+        "call waits for the next RCWM turn and resumes from the recorded stages, re-anchoring (A0 re-check) before any "
+        "further evaluation. E1H (the held-out-surface stage, gating G1 / G2) runs before E2, so every gating output "
+        "exists by the end of the first turn whenever E1H fits there.")
+    res["per_factor_heldout_renderings"] = (
+        "not run: 3 more renderings of the 400 primary rows x 4 sides would add about 3 x E1H to a plan that already "
+        "needs a second turn at the planning rate (C3: descriptive only if they fit the GPU budget)")
     if verbose:
-        print(f"T2b-register GPU plan (no model loaded; {LOAD_S:.0f} s per model load; long-answer factor "
-              f"{n['long_factor']:.2f})")
+        print(f"T2b-register GPU plan, revision {C.GO_RULE_REVISION} (variant {cfg.train_variant}; no model loaded; {LOAD_S:.0f} s per "
+              f"model load; decode factors E1 {n['side_factor']['E1']})")
         for r in res["stages"]:
             print(f"  {r['stage']:<9} {r['what']:<78} gens<= {r['generations_max']:>5}  "
                   f"{r['projected_s_planning'] / 60:6.1f} min @{RATE_GENS_PER_S}/s  {r['projected_s_observed'] / 60:6.1f} "
@@ -356,14 +400,9 @@ def plan(cfg: Cfg | None = None, verbose: bool = True) -> dict:
 def freeze_inputs(root: Path) -> list:
     root = Path(root)
     rels = list(FREEZE_SCRIPTS) + list(FREEZE_DOCS) + [ANCHOR_REF_REL, "data/bank_pilot.json"]
-    rels += [f"data/{C.train_path(a).name}" for a in C.ARMS] + [f"data/{C.train_source().name}",
-                                                                f"data/{C.DEV.name}", f"data/{C.CHAINS.name}",
-                                                                f"data/{C.DEV_SOURCE.name}"]
-    for a in C.ARMS:                                  # the surface-diversity variant, if it was built before the freeze
-        if (root / "data" / C.train_path(a, "sd").name).is_file():
-            rels.append(f"data/{C.train_path(a, 'sd').name}")
-    if (root / "data" / C.train_source("sd").name).is_file():
-        rels.append(f"data/{C.train_source('sd').name}")
+    rels += [f"data/{C.train_path(a, v).name}" for v in ("base", "sd") for a in C.ARMS]
+    rels += [f"data/{C.train_source(v).name}" for v in ("base", "sd")]
+    rels += [f"data/{p.name}" for p in (C.DEV, C.DEV_HS, C.CHAINS, C.DEV_SOURCE)]
     rels += [f"rcwmt/{p.name}" for p in sorted((root / "rcwmt").glob("*.py"))]
     return sorted(set(rels))
 
@@ -380,8 +419,7 @@ def verify_freeze(root: Path | None = None) -> tuple[bool, list, dict | None]:
         return False, ["SCREEN_FREEZE.json does not exist or is unreadable (the screen is not frozen)"], None
     errs = []
     inputs = dict(fz.get("inputs") or {})
-    base_need = [r for r in freeze_inputs(root) if "_sd" not in r]
-    missing = sorted(set(base_need) - set(inputs))
+    missing = sorted(set(freeze_inputs(root)) - set(inputs))
     if missing:
         errs.append(f"not hashed in the freeze record: {missing}")
     for rel, h in sorted(inputs.items()):
@@ -419,8 +457,13 @@ def prefreeze_checks(root: Path) -> dict:
         (tt.get("code_sha256") or {}).get(r) == sha256(root / r) for r in TINY_CODE)
     gp = C.read_json(root / "docs/t2b/register/GEN_PLAN.json") or {}
     out["GEN_PLAN.json present"] = bool(gp.get("stages"))
-    out["DESIGN.md states the go rule verbatim"] = (root / "docs/t2b/register/DESIGN.md").is_file() and \
-        C.GO_RULE_TEXT in (root / "docs/t2b/register/DESIGN.md").read_text(encoding="utf-8")
+    out[f"DESIGN.md and GO_RULE.md state the go rule (revision {C.GO_RULE_REVISION}) verbatim"] = all(
+        (root / r).is_file() and C.GO_RULE_TEXT in (root / r).read_text(encoding="utf-8")
+        for r in ("docs/t2b/register/DESIGN.md", GO_RULE_REL))
+    for k, txt in ((1, C.GO_RULE_TEXT_REV1), (2, C.GO_RULE_TEXT_REV2)):
+        out[f"GO_RULE_rev{k}.md and DESIGN_rev{k}.md keep the superseded revision {k} verbatim"] = all(
+            (root / r).is_file() and txt in (root / r).read_text(encoding="utf-8")
+            for r in (GO_RULE_REV_RELS[k], DESIGN_REV_RELS[k]))
     out["no T2b-register output exists"] = not outputs_present(root)
     return out
 
@@ -445,7 +488,8 @@ def freeze(approval: str, root: Path | None = None) -> dict:
         raise Stop("the anchor reference is not the pinned T2 s0 file", persist=False)
     stamp = time.strftime("%Y-%m-%d %H:%M:%S %z")
     rec = {"frozen_at": stamp, "approval": approval.strip(), "inputs": inputs, "prefreeze_checks": chk,
-           "go_rule_text": C.GO_RULE_TEXT, "registered_runtime": REGISTERED_RUNTIME, "lease_label": LEASE_LABEL,
+           "go_rule_text": C.GO_RULE_TEXT, "go_rule_revision": C.GO_RULE_REVISION, "train_variant": C.TRAIN_VARIANT,
+           "registered_runtime": REGISTERED_RUNTIME, "lease_label": LEASE_LABEL,
            "recipe": RECIPE, "out_dir": "runs/t2b_register", "no_outputs_before_freeze": True}
     with _partial(fzp).open("x", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps(rec, indent=1) + "\n")
@@ -504,7 +548,7 @@ def acquire_run_lock(out: Path) -> Path:
             raise Stop(f"[t2br] another t2br_run.py holds the run lock {rec}", persist=False)
         print(f"[t2br] reclaiming a stale run lock {rec}", flush=True)
         lk.unlink()
-    with lk.open("x", encoding="utf-8") as fh:
+    with lk.open("x", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps({"pid": os.getpid(), "create_time": psutil.Process().create_time(),
                              "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}))
     return lk
@@ -683,7 +727,7 @@ def train_arm(cfg: Cfg, backend, arm: str, dst: Path) -> dict:
     rows = C.load_jsonl(cfg.train_files[arm])
     order = row_order(len(rows), cfg.steps, RECIPE["batch"], cfg.seed)
     dst.mkdir(parents=True, exist_ok=False)
-    logf = (dst / "log.txt").open("a", encoding="utf-8")
+    logf = (dst / "log.txt").open("a", encoding="utf-8", newline="\n")
 
     def P(*s):
         m = " ".join(str(x) for x in s)
@@ -708,7 +752,7 @@ def train_arm(cfg: Cfg, backend, arm: str, dst: Path) -> dict:
                          "dropout": RECIPE["dropout"], "targets": RECIPE["targets"]},
                 "data_sha256": sha256(cfg.train_files[arm])}
         backend.lm.save_adapter(pm, dst / "adapter", meta)
-        (dst / "metrics.json").write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8")
+        (dst / "metrics.json").write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8", newline="\n")
         P(f"[t2br] {arm}: done in {time.time() - t0:.0f}s")
         return meta
     finally:
@@ -722,6 +766,12 @@ def train_arm(cfg: Cfg, backend, arm: str, dst: Path) -> dict:
 def run(cfg: Cfg, backend) -> int:
     out = cfg.out
     fz = None
+    if cfg.train_variant != C.TRAIN_VARIANT:
+        raise Stop(f"[t2br] train variant {cfg.train_variant!r} refused: the screen trains the surface-diversity build "
+                   f"{C.TRAIN_VARIANT!r} only (decision C1; the canonical-only variant is not run)", persist=False)
+    if not 0 < cfg.cap_h <= CAP_H:
+        raise Stop(f"[t2br] --cap-h {cfg.cap_h} refused: the GPU turn cap is at most {CAP_H} h (shared GPU, one-for-one "
+                   "alternation)", persist=False)
     if cfg.require_freeze:
         ok, errs, fz = verify_freeze(cfg.root)
         if not ok:
@@ -731,8 +781,8 @@ def run(cfg: Cfg, backend) -> int:
         for a in C.ARMS:
             rel = f"data/{cfg.train_files[a].name}"
             need(rel in ins and sha256(cfg.train_files[a]) == ins[rel], f"{rel} is not a frozen input (or differs)")
-        need(sha256(cfg.dev) == ins[f"data/{C.DEV.name}"] and sha256(cfg.chains) == ins[f"data/{C.CHAINS.name}"],
-             "dev bank differs from the freeze")
+        need(sha256(cfg.dev) == ins[f"data/{C.DEV.name}"] and sha256(cfg.chains) == ins[f"data/{C.CHAINS.name}"]
+             and sha256(cfg.dev_hs) == ins[f"data/{C.DEV_HS.name}"], "dev bank differs from the freeze")
         need(sha256(cfg.anchor_ref) == ANCHOR_REF_SHA, "anchor reference differs from the pinned T2 s0 file")
     hp = hook_problem(cfg.root, fz)
     if hp:
@@ -750,6 +800,7 @@ def run(cfg: Cfg, backend) -> int:
     if list((out / "anchor").glob("RECHECK_FAILED_*.json")):
         raise Stop("an anchor re-check failed in an earlier turn (investigate, log)")
     dev = C.load_dev(cfg.dev)
+    dev_hs = C.load_dev_hs(cfg.dev_hs)
     parents = C.load_chain_bank(cfg.chains)
     chains = C.flat_chains(parents)
     anchor_chains = cfg.anchor_chains if cfg.anchor_chains is not None else pilot_anchor_chains()
@@ -759,7 +810,7 @@ def run(cfg: Cfg, backend) -> int:
                    persist=False)
     lock = acquire_run_lock(out)
     try:
-        return _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains)
+        return _run_locked(cfg, backend, out, fz, dev, dev_hs, chains, anchor_chains)
     finally:
         try:
             lock.unlink()
@@ -767,7 +818,7 @@ def run(cfg: Cfg, backend) -> int:
             pass
 
 
-def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
+def _run_locked(cfg, backend, out, fz, dev, dev_hs, chains, anchor_chains) -> int:
     prov_path = out / "provenance.json"
     prov = C.read_json(prov_path) if prov_path.exists() else None
     if prov_path.exists():
@@ -777,12 +828,12 @@ def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
                 "seed": cfg.seed, "steps": cfg.steps, "train_variant": cfg.train_variant, "recipe": RECIPE,
                 "lease_label": LEASE_LABEL, "stages": {}, "turns": []}
     prov["data_sha256"] = {**{a: sha256(cfg.train_files[a]) for a in C.ARMS}, "dev": sha256(cfg.dev),
-                           "chains": sha256(cfg.chains), "anchor_ref": sha256(cfg.anchor_ref)}
+                           "dev_hs": sha256(cfg.dev_hs), "chains": sha256(cfg.chains), "anchor_ref": sha256(cfg.anchor_ref)}
     prov["code_sha256"] = {r: sha256(ROOT / r) for r in PROV_CODE}
 
     def save():
         tmp = _partial(prov_path)
-        tmp.write_text(json.dumps(prov, indent=1) + "\n", encoding="utf-8")
+        tmp.write_text(json.dumps(prov, indent=1) + "\n", encoding="utf-8", newline="\n")
         os.replace(tmp, prov_path)
 
     states = stage_states(prov, out)
@@ -802,7 +853,7 @@ def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
     def finalize() -> None:
         need(set(prov["stages"]) == set(STAGE_ORDER) and stage_states(prov, out) == {s: "done" for s in STAGE_ORDER},
              "finalize: not every stage is recorded and unchanged")
-        with (out / "DONE.json").open("x", encoding="utf-8") as f:
+        with (out / "DONE.json").open("x", encoding="utf-8", newline="\n") as f:
             f.write(json.dumps({"finished_unix": time.time(), "stages": list(STAGE_ORDER),
                                 "files": {st: prov["stages"][st]["files"] for st in STAGE_ORDER},
                                 "provenance_sha256": sha256(prov_path)}, indent=1) + "\n")
@@ -846,6 +897,12 @@ def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
             arm = TRAIN_STAGES[st]
             vram_empty(f"training {arm}")
             backend.wait()
+            if not fits(stage_est_s(st, rate[0], n)):      # the wait may have used up the turn: re-check the gate
+                turn["deferred"] = [s for s in STAGE_ORDER if s not in done]
+                turn["deferred_after_wait"] = st
+                print(f"[t2br] cap (after the resource wait): deferring {turn['deferred']} to the next turn", flush=True)
+                save()
+                break
             t0 = time.time()
             final = out / f"train_{arm}"
             meta = train_arm(cfg, backend, arm, _partial(final))
@@ -869,6 +926,12 @@ def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
             else:
                 vram_empty("the eval load")
                 backend.wait()
+                if not fits(first):                         # the wait may have used up the turn: re-check the gate
+                    turn["deferred"] = list(ev_todo)
+                    turn["deferred_after_wait"] = "eval load"
+                    print(f"[t2br] cap (after the resource wait): deferring {ev_todo} to the next turn", flush=True)
+                    save()
+            if not turn["deferred"]:
                 t1 = time.time()
                 ads = {a: out / f"train_{a}" / "adapter" for a in C.ARMS}
                 ad_sha = {a: sha256(ads[a] / "adapter_model.safetensors") for a in C.ARMS}
@@ -893,7 +956,8 @@ def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
                         turn["anchor_recheck"] = res
                         save()
                         if not res["pass"]:
-                            with (out / "anchor" / f"RECHECK_FAILED_{int(time.time())}.json").open("x", encoding="utf-8") as fh:
+                            rf = out / "anchor" / f"RECHECK_FAILED_{int(time.time())}.json"
+                            with rf.open("x", encoding="utf-8", newline="\n") as fh:
                                 fh.write(json.dumps(res, indent=1) + "\n")
                             raise Stop(f"[t2br] ANCHOR RECHECK FAILED ({res['identical_states']:.3f} identical states)")
                     for st in ev_todo:
@@ -907,7 +971,7 @@ def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
                         if st == "A0":
                             rr, res = run_anchor(model, tok, anchor_chains, cfg.anchor_ref)
                             write_jsonl(out / "anchor" / "chain_one_R_off.jsonl", chain_rows(anchor_chains, rr))
-                            with (out / "anchor" / "anchor.json").open("x", encoding="utf-8") as fh:
+                            with (out / "anchor" / "anchor.json").open("x", encoding="utf-8", newline="\n") as fh:
                                 fh.write(json.dumps(res, indent=1) + "\n")
                             n_g = res["generations"]
                             if not res["pass"]:
@@ -926,6 +990,18 @@ def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
                                 write_jsonl(out / "onestep" / f"onestep_{s}.jsonl",
                                             [{"id": r["id"], "text": t} for r, t in zip(dev, res_t[s])])
                             n_g = len(dev) * len(C.SIDES)
+                        elif st == "E1H":
+                            res_t = {}
+                            for s in C.SIDES:
+                                ts = time.time()
+                                with side_ctx(model, s):
+                                    res_t[s] = onestep_texts(model, tok, dev_hs)
+                                sides_t[s] = {"pid": os.getpid(), "start_unix": ts, "end_unix": time.time()}
+                            for s in C.SIDES:
+                                write_jsonl(out / "onestep" / f"onestep_hs_{s}.jsonl",
+                                            [{"id": r["id"], "hs_index": r["hs_index"], "text": t}
+                                             for r, t in zip(dev_hs, res_t[s])])
+                            n_g = len(dev_hs) * len(C.SIDES)
                         else:
                             res_c = {}
                             for s in C.SIDES:
@@ -938,8 +1014,8 @@ def _run_locked(cfg, backend, out, fz, dev, chains, anchor_chains) -> int:
                             n_g = sum(len(r["texts"]) for s in C.SIDES for r in res_c[s])
                         sec = time.time() - t0
                         if st != "A0":
-                            rate[0] = max(0.3, (n[st]["short"] + n[st]["long"] * n["long_factor"]) / max(sec, 1e-9))
-                        record(st, {"generations_planned_max": (n["A0"] if st == "A0" else n[st]["short"] + n[st]["long"]),
+                            rate[0] = max(0.3, weighted_gens(st, n) / max(sec, 1e-9))
+                        record(st, {"generations_planned_max": (n["A0"] if st == "A0" else sum(n[st].values())),
                                     "generations": n_g, "seconds": round(sec, 1), "pid": os.getpid(), "sides": sides_t})
                         turn["stages_run"].append(st)
                         save()
@@ -961,7 +1037,7 @@ def persist_stop(out: Path, e: Stop) -> None:
         return
     try:
         out.mkdir(parents=True, exist_ok=True)
-        with (out / "STOPPED.json").open("x", encoding="utf-8") as fh:
+        with (out / "STOPPED.json").open("x", encoding="utf-8", newline="\n") as fh:
             fh.write(json.dumps({"unix": time.time(), "local": iso(time.time()), "pid": os.getpid(), "reason": str(e)},
                                 indent=1) + "\n")
     except FileExistsError:
@@ -976,9 +1052,10 @@ def main() -> int:
     g.add_argument("--freeze", action="store_true", help="CPU only: freeze the screen (refuses if any output exists)")
     ap.add_argument("--approval", default=None)
     ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--train-variant", choices=("base", "sd"), default="base",
-                    help="sd = the surface-diversity rendering (built by t2br_make_data.py --surface-diversity on)")
-    ap.add_argument("--cap-h", type=float, default=CAP_H)
+    ap.add_argument("--train-variant", choices=(C.TRAIN_VARIANT,), default=C.TRAIN_VARIANT,
+                    help="sd = the surface-diversity rendering (the only variant run, decision C1)")
+    ap.add_argument("--cap-h", type=float, default=CAP_H, help=f"turn cap in hours, at most {CAP_H} (a larger value is "
+                                                                 "refused)")
     a = ap.parse_args()
     if a.plan or a.verify or a.freeze:
         os.environ["CUDA_VISIBLE_DEVICES"] = ""
@@ -990,7 +1067,7 @@ def main() -> int:
             cfg = Cfg(seed=a.seed, train_variant=a.train_variant)
             res = plan(cfg)
             ok, errs, _ = verify_freeze()
-            res["checks"] = {"dev_sha256": sha256(C.DEV), "chains_sha256": sha256(C.CHAINS),
+            res["checks"] = {"dev_sha256": sha256(C.DEV), "dev_hs_sha256": sha256(C.DEV_HS), "chains_sha256": sha256(C.CHAINS),
                              "train_sha256": {x: sha256(cfg.train_files[x]) for x in C.ARMS},
                              "anchor_ref_matches_pin": sha256(ROOT / ANCHOR_REF_REL) == ANCHOR_REF_SHA,
                              "outputs_present": outputs_present(ROOT), "freeze_ok": ok, "freeze_blockers": errs[:3],
@@ -1001,7 +1078,7 @@ def main() -> int:
                 print("the screen is frozen: GEN_PLAN.json is a frozen input and is not rewritten")
                 return 0
             C.DOCS.mkdir(parents=True, exist_ok=True)
-            (C.DOCS / "GEN_PLAN.json").write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8")
+            (C.DOCS / "GEN_PLAN.json").write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8", newline="\n")
             print(f"wrote {C.DOCS / 'GEN_PLAN.json'}")
             return 0
         if a.verify:

@@ -2,30 +2,37 @@
 
   python -B scripts/t2bp_run.py --plan          # CPU only, no torch, no model, no lease: generations, GPU time per arm
                                                 # and per 4.5 h turn; writes docs/t2b/prereq/GEN_PLAN.json
-  python -B scripts/t2bp_run.py                 # the GPU job: seed 0, arms D-int, S-trace, B-bits, tag s0
-  python -B scripts/t2bp_run.py --tag s0_ffill --arms ffill         # the R5 decode-compute control: ONLY after the
+  python -B scripts/t2bp_run.py                 # the GPU job: seed 0, arms D-int, S-trace, B-bits, trained on the
+                                                # surface-diversity build (revision 3, C1), tag sd_s0
+  python -B scripts/t2bp_run.py --tag sd_s0_ffill --arms ffill      # the R5 decode-compute control: ONLY after the
                                                                     # screen names S-trace (then t2bp_analysis.py
-                                                                    # --filler-run runs/t2bp/s0_ffill)
-  python -B scripts/t2bp_run.py --with-filler   # alternative: the filler inside the s0 run (decided before its first
+                                                                    # --filler-run runs/t2bp/sd_s0_ffill)
+  python -B scripts/t2bp_run.py --with-filler   # alternative: the filler inside the sd_s0 run (decided before its first
                                                 # turn; after DONE an arms mismatch is a stop, never a silent no-op)
-  python -B scripts/t2bp_run.py --tag s1 --seed 1 --arms <winner>   # seeds 1-2 of the arm the screen names
-  python -B scripts/t2bp_run.py --data-variant sd                   # surface-diversity training files (decision point 1);
-                                                                    # outputs under runs/t2bp/sd_<tag>/, + stage E3
+  python -B scripts/t2bp_run.py --tag sd_s1 --seed 1 --arms <winner>   # seeds 1-2 of the arm the screen names
+
+Revision 3 (operator decision C1): the screen trains ONLY the surface-diversity build (data/t2bp_train_sd_<arm>.jsonl:
+the canonical rows with seeded paraphrases, field-name variants and input key orders from the training subsets); the
+canonical-only build is not run (a non-sd configuration is refused before the lease). Tags get the prefix "sd_".
 
 Recipe (T2, DECISIONS D-15/D-16, unchanged): vendored BWM-001 trainer (vendor_bwm/scripts/train_generic.py, called
 exactly as scripts/run_t2.py calls it): LoRA r16 / alpha 32 / dropout 0.05 on q,k,v,o,gate,up,down of frozen FP32
 Titan-Sparse, WSD schedule, lr 1e-4, batch 16 (4 x 4 token-weighted microbatches), 190 steps, seed 0, duty-capped.
 Every arm trains on the SAME 1,500 canonical rows in the same file order (so the trainer's seeded row order is
-identical across arms); only the rendering differs (t2bp_common.py).
+identical across arms) with the same per-row surface; only the arm's rendering differs (t2bp_common.py).
 
 Evaluation (D-19 instrument style): one process, the adapter loaded unmerged with PEFT exactly as run_t2.py loads it
 (runtime.load_arm('sparse') + PeftModel.from_pretrained); OFF = model.disable_adapter() (Titan-Sparse) and ON in the
 same process; greedy FP32, rcwmt.generation.generate_texts (160-token cap, its batching):
-  E1  the dev bank's 1,050 one-step rows (9 strata incl. 10/12-bit masks), in the arm's own frame, OFF and ON
-  E2  the dev bank's 240 k=4 chains (30 parents x 8 plans): self-rollout in the arm's frame, the arm's after-only parser
-      feeds each predicted state back (a broken chain stays broken), OFF and ON
-  E3  (surface-diversity runs only) the dev one-step rows rendered in the HELD-OUT surface (paraphrase 4, field names 4;
-      never used in training), OFF and ON; descriptive (does the learned rule survive a new surface?)
+  E1  the dev bank's 1,050 one-step rows (9 strata incl. 10/12-bit masks), in the arm's own frame (the canonical
+      surface: in-surface), OFF and ON
+  E2  the dev bank's 240 k=4 chains (30 parents x 8 plans): self-rollout in the arm's frame (canonical surface), the
+      arm's after-only parser feeds each predicted state back (a broken chain stays broken), OFF and ON
+  E3  held-out surface (C3): the same 1,050 one-step rows and golds in the COMBINED held-out surface (paraphrase 4 with
+      its state sentence, field names 4, the reversed top-level key order, and the held-out event key orders rotating
+      by the row's index within its stratum: t2bp_common.heldout_surface_of), adapter ON only, paired by row with E1.
+      HS (the seven 8-bit strata) enters the screen's ranking. The adapter-OFF side and per-factor held-out renderings
+      are not run: they do not fit the 2-turn planning budget (GEN_PLAN.json) and the rule does not use them.
 A0 anchor (once per turn, before the first evaluation stage of that turn): adapter disabled, pilot TEST prerequisite
 chain_m1 (224 chains, rcwmt.generation.chain) must reproduce runs/t2/t2_s0/gen_chain_m1_base.jsonl (sha pinned) with
 identical states on >= 99% of chains, else the job stops (persisted) before any evaluation output of that turn.
@@ -83,8 +90,10 @@ OUT_ROOT = ROOT / "runs" / "t2bp"
 RCWM_LABEL_PREFIX = "rcwm-t1:"
 CAP_H = 4.5
 STEPS, LR = 190, 1e-4
-STAGES = ("T", "E1", "E2")
-STAGES_SD = ("T", "E1", "E2", "E3")
+STAGES = ("T", "E1", "E2", "E3")      # revision 3: every run is the surface-diversity build with the held-out stage E3
+STAGES_SD = STAGES
+E3_SIDES = ("on",)                   # the held-out-surface stage generates adapter ON only (the rule reads ON)
+FACTOR_ROWS = 750                    # per-factor held-out renderings (descriptive, NOT run): 3 factors x the 8-bit rows
 NATIVE_OFF_ARMS = ("dint",)          # base Titan's own frame (T2's prerequisite prompt): OFF planned at the gold length
 GEN_CAP_TOKENS = 160                 # rcwmt.generation.max_tokens
 FP = dict(G2.FP)
@@ -142,10 +151,10 @@ def iso(ts: float) -> str:
 @dataclass
 class Cfg:
     root: Path = ROOT
-    tag: str = "s0"
+    tag: str = C.SCREEN_TAG
     seed: int = 0
     arms: tuple = C.SCREEN_ARMS
-    data_variant: str = ""                        # "" canonical, "sd" surface diversity
+    data_variant: str = C.DATA_VARIANT            # "sd" (revision 3, C1); anything else is refused by run()
     out: Path | None = None
     train_files: dict | None = None
     train_source: Path | None = None
@@ -172,7 +181,7 @@ class Cfg:
 
     @property
     def stages(self) -> tuple:
-        return STAGES_SD if self.data_variant == "sd" else STAGES
+        return STAGES
 
 
 def pilot_anchor_chains() -> list:
@@ -219,8 +228,9 @@ def estimates(cfg: Cfg, n_rows: int | None = None, n_steps: int | None = None, n
         out["arms"][a] = {"T": LOAD_S + t2_s * (tr / t2_tok) * (cfg.steps / STEPS),
                           "E1": e1,
                           "E2": n_steps * (s_per_gen(off_tokens(a, d2, cfg.planning), cfg.planning) + s_per_gen(d2, cfg.planning)),
-                          "E3": e1,
-                          "gens": {"E1": 2 * n_rows, "E2": 2 * n_steps, "E3": 2 * n_rows}}
+                          "E3": n_rows * s_per_gen(d1, cfg.planning),                     # ON only
+                          "gens": {"E1": 2 * n_rows, "E2": 2 * n_steps, "E3": n_rows},
+                          "per_factor_not_run": 3 * FACTOR_ROWS * s_per_gen(d1, cfg.planning)}
     return out
 
 
@@ -265,9 +275,13 @@ def simulate_turns(cfg: Cfg, arms, est: dict | None = None) -> list:
 
 
 def plan(verbose: bool = True) -> dict:
-    res = {"cap_h": CAP_H, "load_s_each": LOAD_S, "stage_rule": f"a stage (an arm's training: its whole remaining "
-           f"train+eval pair) starts only if {G2.STAGE_SAFETY} x its estimate fits the turn and never within "
-           f"{G2.STAGE_MARGIN_H} h of the cap", "timing_model": {
+    """Revision 3: every projection is the surface-diversity build (C1) with the held-out stage E3 (ON only)."""
+    res = {"cap_h": CAP_H, "load_s_each": LOAD_S, "data_variant": C.DATA_VARIANT,
+           "train_source": C.TRAIN_SOURCE_SD.name, "stages_per_arm": list(STAGES),
+           "stage_rule": f"a stage (an arm's training: its whole remaining train+eval pair) starts only if "
+                         f"{G2.STAGE_SAFETY} x its estimate fits the turn and never within {G2.STAGE_MARGIN_H} h of the "
+                         "cap; otherwise the arm (and every later arm) is deferred to the next turn (exit 5) and resumed",
+           "timing_model": {
                "train_s": "T2 190-step training time (planning: max 2191 s; observed: mean 1902 s) x arm tokens/row / 152.8",
                "s_per_gen": "a + b*(answer tokens+1) fitted to PREREG-2 S4 (P chain_m1 6.52/s at 2.57 tokens) and S1 "
                             "(ledger chain_one 3.80/s at 20.14 tokens); planning = observed x 3.8/2.7",
@@ -275,6 +289,7 @@ def plan(verbose: bool = True) -> dict:
                                      f"except {list(NATIVE_OFF_ARMS)} (base Titan has never seen those formats; worst "
                                      "case); observed: the gold answer length (best case). The true screen time lies "
                                      "between the two."),
+               "E3": "the held-out-surface stage: the 1,050 one-step rows, adapter ON only, at the gold answer length",
                "a_s": round(P_M1_S_PER_GEN - (L_ONE_S_PER_GEN - P_M1_S_PER_GEN) / (20.144 - 2.57) * 3.57, 4),
                "b_s_per_token": round((L_ONE_S_PER_GEN - P_M1_S_PER_GEN) / (20.144 - 2.57), 5)}}
     for mode in ("planning", "observed"):
@@ -282,18 +297,33 @@ def plan(verbose: bool = True) -> dict:
         est = estimates(cfg)
         res[mode] = {"anchor_s": round(est["anchor"], 1), "arms": {
             a: {"train_s": round(est["arms"][a]["T"], 1), "E1_s": round(est["arms"][a]["E1"], 1),
-                "E2_s": round(est["arms"][a]["E2"], 1), "generations": est["arms"][a]["gens"],
-                "pair_h": round((est["arms"][a]["T"] + LOAD_S + est["arms"][a]["E1"] + est["arms"][a]["E2"]) / 3600, 2)}
+                "E2_s": round(est["arms"][a]["E2"], 1), "E3_s": round(est["arms"][a]["E3"], 1),
+                "generations": est["arms"][a]["gens"],
+                "pair_h": round((est["arms"][a]["T"] + LOAD_S + sum(est["arms"][a][s] for s in STAGES[1:])) / 3600, 2)}
             for a in C.ARMS},
             "turns_screen": simulate_turns(cfg, C.SCREEN_ARMS, est),
             "turns_filler_control_run_if_strace_wins": simulate_turns(cfg, C.CONTROL_ARMS, est),
-            "turns_screen_plus_filler_in_s0": simulate_turns(cfg, C.SCREEN_ARMS + C.CONTROL_ARMS, est),
-            "turns_screen_surface_diversity": simulate_turns(Cfg(planning=(mode == "planning"), data_variant="sd"),
-                                                             C.SCREEN_ARMS, est)}
+            "turns_screen_plus_filler_in_s0": simulate_turns(cfg, C.SCREEN_ARMS + C.CONTROL_ARMS, est)}
+        # per-factor held-out renderings (C3: descriptive only if they fit): what the screen would need with them
+        est_pf = json.loads(json.dumps(est))
+        for a in C.ARMS:
+            est_pf["arms"][a]["E3"] += est_pf["arms"][a]["per_factor_not_run"]
+        res[mode]["turns_screen_if_per_factor_heldout_added"] = simulate_turns(cfg, C.SCREEN_ARMS, est_pf)
+        res[mode]["per_factor_heldout_extra_h"] = {a: round(est["arms"][a]["per_factor_not_run"] / 3600, 2) for a in C.ARMS}
         for k in ("turns_screen", "turns_filler_control_run_if_strace_wins", "turns_screen_plus_filler_in_s0",
-                  "turns_screen_surface_diversity"):
+                  "turns_screen_if_per_factor_heldout_added"):
             res[mode][k.replace("turns", "gpu_h")] = round(sum(t["projected_h"] for t in res[mode][k]), 2)
-    res["generations_total_screen"] = sum(sum(res["planning"]["arms"][a]["generations"].values()) for a in C.SCREEN_ARMS) + 224 * 4
+    n_turns_pf = len(res["planning"]["turns_screen_if_per_factor_heldout_added"])
+    res["per_factor_heldout_renderings"] = {
+        "run": False,
+        "reason": (f"adding the three per-factor held-out renderings (paraphrase only, field names only, key order only; "
+                   f"{FACTOR_ROWS} 8-bit rows each, ON) would take the screen from "
+                   f"{len(res['planning']['turns_screen'])} to {n_turns_pf} turns at the planning rate; C3 makes them "
+                   "descriptive only if they fit the budget, so they are omitted")}
+    res["generations_total_screen"] = sum(res["planning"]["arms"][a]["generations"][s] for a in C.SCREEN_ARMS
+                                          for s in STAGES[1:]) + 224 * 4 * len(res["planning"]["turns_screen"])
+    res["generations_note"] = ("E1 + E2 per screen arm (OFF + ON) + E3 (ON, held-out surface) + one 224-chain x 4-step "
+                               "anchor per turn (planning turn count)")
     res["seeds_1_2_per_seed_h_planning"] = {a: res["planning"]["arms"][a]["pair_h"] for a in C.ARMS}
     if verbose:
         for mode in ("planning", "observed"):
@@ -302,11 +332,13 @@ def plan(verbose: bool = True) -> dict:
             for a in C.ARMS:
                 x = r["arms"][a]
                 print(f"  {C.ARM_LABEL[a]:<9} train {x['train_s'] / 60:5.1f} min  E1 {x['E1_s'] / 60:5.1f} min  "
-                      f"E2 {x['E2_s'] / 60:5.1f} min  pair {x['pair_h']:.2f} h  gens {x['generations']}")
+                      f"E2 {x['E2_s'] / 60:5.1f} min  E3 {x['E3_s'] / 60:5.1f} min  pair {x['pair_h']:.2f} h  "
+                      f"gens {x['generations']}")
             for k in ("turns_screen", "turns_filler_control_run_if_strace_wins", "turns_screen_plus_filler_in_s0",
-                      "turns_screen_surface_diversity"):
+                      "turns_screen_if_per_factor_heldout_added"):
                 print(f"  {k}: " + "; ".join(f"turn {i + 1}: {t['stages']} {t['projected_h']} h" for i, t in enumerate(r[k]))
                       + f"  (total {r[k.replace('turns', 'gpu_h')]} h)")
+        print(res["per_factor_heldout_renderings"]["reason"])
     return res
 
 
@@ -324,7 +356,7 @@ def stage_required(arm: str, st: str, out: Path) -> list:
     if st == "E2":
         return [d / "chains_off.jsonl", d / "chains_on.jsonl"]
     if st == "E3":
-        return [d / "onestep_heldout_off.jsonl", d / "onestep_heldout_on.jsonl"]
+        return [d / f"onestep_heldout_{side}.jsonl" for side in E3_SIDES]
     raise KeyError(st)
 
 
@@ -377,7 +409,7 @@ def write_jsonl(path: Path, rows) -> None:
     if path.exists():
         raise Stop(f"[t2bp] {path} exists (create-only)")
     tmp = _partial(path)
-    with tmp.open("x", encoding="utf-8") as f:
+    with tmp.open("x", encoding="utf-8", newline="\n") as f:       # LF only (DECISIONS I-30)
         for r in rows:
             f.write(json.dumps(r) + "\n")
         f.flush()
@@ -402,7 +434,7 @@ def acquire_run_lock(out: Path) -> Path:
             raise Stop(f"[t2bp] another t2bp_run.py holds the run lock {rec}", persist=False)
         print(f"[t2bp] reclaiming a stale run lock {rec}", flush=True)
         lk.unlink()
-    with lk.open("x", encoding="utf-8") as fh:
+    with lk.open("x", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps({"pid": os.getpid(), "create_time": psutil.Process().create_time(),
                              "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}))
     return lk
@@ -597,6 +629,10 @@ def check_inputs(cfg: Cfg) -> dict:
         need(p.is_file(), f"{p} missing", persist=False)
         shas[p.name] = C.sha256(p)
         need(shas[p.name] == (src.get("files") or {}).get(p.name), f"{p.name} differs from its SOURCE record")
+    if cfg.data_variant == "sd" and src.get("canonical_dint_sha256") is not None:
+        # the sd rows are the canonical rows: the canonical row source must be the file the sd build read
+        need(C.sha256(C.TRAIN_FILES["dint"]) == src["canonical_dint_sha256"],
+             "data/t2bp_train_dint.jsonl (the canonical row source) differs from the sd SOURCE's record")
     dsrc = _read_json(cfg.dev_source) or {}
     shas[Path(cfg.dev).name] = C.sha256(cfg.dev)
     need(shas[Path(cfg.dev).name] == dsrc.get("file_sha256"), "dev bank differs from its SOURCE record")
@@ -609,14 +645,16 @@ def check_inputs(cfg: Cfg) -> dict:
 
 
 def frozen_files(cfg: Cfg) -> dict:
-    """{repo-relative name: path} of the frozen inputs this run uses (canonical training files only for canonical runs)."""
+    """{repo-relative name: path} of the frozen inputs this run uses: the code, the dev bank, the arms' surface-diversity
+    training files and their SOURCE, and the canonical row source (the canonical D-int file and SOURCE)."""
     files = {rel: ROOT / rel for rel in C.FROZEN_CODE}
     files["data/" + C.DEV.name] = Path(cfg.dev)
     files["data/" + C.DEV_SOURCE.name] = Path(cfg.dev_source)
-    if not cfg.data_variant:
-        for a in cfg.arms:
-            files["data/" + C.TRAIN_FILES[a].name] = Path(cfg.train_files[a])
-        files["data/" + C.TRAIN_SOURCE.name] = Path(cfg.train_source)
+    files["data/" + C.TRAIN_FILES["dint"].name] = C.TRAIN_FILES["dint"]
+    files["data/" + C.TRAIN_SOURCE.name] = C.TRAIN_SOURCE
+    for a in cfg.arms:
+        files["data/" + C.TRAIN_FILES_SD[a].name] = Path(cfg.train_files[a])
+    files["data/" + C.TRAIN_SOURCE_SD.name] = Path(cfg.train_source)
     return files
 
 
@@ -650,6 +688,8 @@ def check_prompts(cfg: Cfg, tok) -> dict:
 # ---------------------------------------------------------------- the job
 def run(cfg: Cfg, backend) -> int:
     out = Path(cfg.out)
+    need(cfg.data_variant == C.DATA_VARIANT, f"data variant {cfg.data_variant!r}: revision 3 (operator decision C1) trains "
+         f"only the surface-diversity build ({C.DATA_VARIANT!r}); the canonical-only variant is not run", persist=False)
     for a in cfg.arms:
         need(a in C.ARMS, f"unknown arm {a}", persist=False)
     if (out / "DONE.json").exists():
@@ -703,7 +743,7 @@ def _run_locked(cfg, backend, out, shas, dev_rows, chains, anchor_chains, tok, n
 
     def save():
         tmp = _partial(prov_path)
-        tmp.write_text(json.dumps(prov, indent=1) + "\n", encoding="utf-8")
+        tmp.write_text(json.dumps(prov, indent=1) + "\n", encoding="utf-8", newline="\n")
         os.replace(tmp, prov_path)
 
     STG = cfg.stages
@@ -721,7 +761,7 @@ def _run_locked(cfg, backend, out, shas, dev_rows, chains, anchor_chains, tok, n
     def finalize() -> None:
         st2 = stage_states(prov, out, cfg.arms, STG)
         need(all(v == "done" for a in cfg.arms for v in st2[a].values()), "finalize: not every stage recorded and unchanged")
-        with (out / "DONE.json").open("x", encoding="utf-8") as f:
+        with (out / "DONE.json").open("x", encoding="utf-8", newline="\n") as f:
             f.write(json.dumps({"finished_unix": time.time(), "arms": list(cfg.arms),
                                 "files": {a: {s: prov["stages"][a][s]["files"] for s in STG} for a in cfg.arms},
                                 "provenance_sha256": C.sha256(prov_path)}, indent=1) + "\n")
@@ -809,15 +849,20 @@ def _run_locked(cfg, backend, out, shas, dev_rows, chains, anchor_chains, tok, n
                         t0 = time.time()
                         sides = {}
                         if st in ("E1", "E3"):
-                            sf = C.HELDOUT_SURFACE if st == "E3" else None
-                            msgs = [C.messages(a, r["before"], r["event"], r["width"], sf) for r in dev_rows]
+                            if st == "E3":       # the combined held-out surface, row by row (C3); ON only
+                                msgs = [C.messages(a, r["before"], r["event"], r["width"], C.heldout_surface_of(r))
+                                        for r in dev_rows]
+                                run_sides = E3_SIDES
+                            else:
+                                msgs = [C.messages(a, r["before"], r["event"], r["width"]) for r in dev_rows]
+                                run_sides = ("off", "on")
                             tx = {}
-                            for side in ("off", "on"):
+                            for side in run_sides:
                                 ts = time.time()
                                 with side_ctx(model, side):
                                     tx[side] = gen_texts(model, tok, msgs)
                                 sides[side] = {"start_unix": ts, "end_unix": time.time()}
-                            for side, p in zip(("off", "on"), stage_required(a, st, out)):
+                            for side, p in zip(run_sides, stage_required(a, st, out)):
                                 write_jsonl(p, [{"id": r["id"], "text": t} for r, t in zip(dev_rows, tx[side])])
                         else:
                             rc = {}
@@ -832,7 +877,8 @@ def _run_locked(cfg, backend, out, shas, dev_rows, chains, anchor_chains, tok, n
                         corr["E"] = max(0.5, sec / e[st])
                         record(a, st, {"seconds": round(sec, 1), "planned_s": round(e[st], 1), "generations_planned_max": e["gens"][st],
                                        "sides": sides, "pid": os.getpid(),
-                                       **({"surface": C.HELDOUT_SURFACE} if st == "E3" else {})})
+                                       **({"surface": C.HELDOUT_SURFACE, "sides_run": list(E3_SIDES)}
+                                          if st == "E3" else {})})
                         print(f"[t2bp] {a}:{st} done in {sec:.0f}s (planned {e[st]:.0f}s)", flush=True)
                 finally:
                     del model
@@ -856,7 +902,7 @@ def persist_stop(out: Path, e: Stop) -> None:
         return
     try:
         out.mkdir(parents=True, exist_ok=True)
-        with (out / "STOPPED.json").open("x", encoding="utf-8") as fh:
+        with (out / "STOPPED.json").open("x", encoding="utf-8", newline="\n") as fh:
             fh.write(json.dumps({"unix": time.time(), "local": iso(time.time()), "pid": os.getpid(), "reason": str(e)}, indent=1) + "\n")
     except FileExistsError:
         pass
@@ -865,11 +911,12 @@ def persist_stop(out: Path, e: Stop) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--plan", action="store_true", help="CPU only: no torch import, no model; projected GPU time per turn")
-    ap.add_argument("--tag", default="s0")
+    ap.add_argument("--tag", default=C.SCREEN_TAG)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--arms", default=",".join(C.SCREEN_ARMS))
     ap.add_argument("--with-filler", action="store_true", help="add the F-filler control arm")
-    ap.add_argument("--data-variant", choices=("", "sd"), default="")
+    ap.add_argument("--data-variant", choices=(C.DATA_VARIANT,), default=C.DATA_VARIANT,
+                    help="revision 3 (C1): only the surface-diversity build is trained")
     ap.add_argument("--cap-h", type=float, default=CAP_H)
     a = ap.parse_args()
     if a.plan:
@@ -877,7 +924,7 @@ def main() -> int:
         res = plan()
         need("torch" not in sys.modules, "--plan must not import torch", persist=False)
         res["torch_imported"] = "torch" in sys.modules
-        res["train_source_sha256"] = C.sha256(C.TRAIN_SOURCE) if C.TRAIN_SOURCE.exists() else None
+        res["train_source_sha256"] = C.sha256(C.TRAIN_SOURCE_SD) if C.TRAIN_SOURCE_SD.exists() else None
         res["code_sha256"] = {"scripts/t2bp_run.py": C.sha256(Path(__file__))}
         p = C.write_doc("GEN_PLAN.json", json.dumps(res, indent=1) + "\n")
         print(f"wrote {p}")
@@ -885,7 +932,7 @@ def main() -> int:
     arms = tuple(x for x in a.arms.split(",") if x)
     if a.with_filler and "ffill" not in arms:
         arms = arms + ("ffill",)
-    tag = "sd_" + a.tag if a.data_variant == "sd" and not a.tag.startswith("sd_") else a.tag
+    tag = a.tag if a.tag.startswith("sd_") else "sd_" + a.tag
     cfg = Cfg(tag=tag, seed=a.seed, arms=arms, data_variant=a.data_variant, cap_h=a.cap_h)
     try:
         return run(cfg, RealBackend())

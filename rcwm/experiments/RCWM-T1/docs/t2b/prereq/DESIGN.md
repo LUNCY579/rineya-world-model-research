@@ -1,293 +1,311 @@
-# T2b prerequisite representation screen (RCWM roadmap item 2; joint roadmap 5a)
+# T2b prerequisite representation screen (RCWM roadmap item 2; joint roadmap 5a), revision 3
 
-**Status:** kit built and tested on CPU only (2026-10-09). No GPU job has run; no `runs/t2bp/` output exists.
-Nothing here is a preregistration: this is a seed-0 screen on a dev bank. The decision rule below was written
-before any output existed (`SCREEN_RULE.md`, hashes in `SCREEN_RULE.json`).
+**Status:** kit rebuilt and tested on CPU only (2026-10-09, after the 09:42 restart). No GPU job has run; no `runs/t2bp/`
+output exists. Nothing here is a preregistration: this is a seed-0 screen on a dev bank.
 
-## 1. Question and inputs
+Revision 3 applies the operator's decisions after PREREG-3 returned STATUS: TRIGGER (DECISIONS R-PREREG-3, D-35, R16,
+D-36). The decision rule (revision 3) was written before any output existed. It is recorded in `SCREEN_RULE.md`, and
+`SCREEN_RULE.json` holds the sha256 of 26 frozen inputs; the runner and the analysis refuse when one differs.
+Revisions 1 and 2 of the rule are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*`), and this document's revision 2 is
+kept as `DESIGN_rev2.md`. The queue hook is still a draft (`queue_hook_t2bp.sh.draft`): not installed, not frozen.
 
-- T2's prerequisite fix learned a COPY shortcut (false copy 0.039 -> 0.624; applicable state-changing 0.587 -> 0.353).
-- Titan's own prerequisite "rule" is integer addition: right on 383/415 applicable steps where `state + add` equals the
-  bitwise answer, and on 2/333 where it does not (R11).
-- Deferral cannot fix it (R15). Computed predicates are not learned from bare-answer rows (D-32 (i)).
-- The screen asks whether a de-shortcut training set, and/or a different target representation, lets the T2 recipe
-  learn the precondition rule and the bitwise update, including out of range.
-- **Decision point 2 (roadmap):** if every arm scores < 0.20 on int-add-wrong, stop P training and move P to a
-  code-side bit interface, reported as an interface, not as skill.
-- **Decision point 1:** if PREREG-3 says TRIGGER, use the surface-diversity option (section 4.4).
+## 0. Operator decisions applied in revision 3 (binding), each with its reason
 
-## 2. Arms: the same 1,500 rows, rendered four ways
-
-Every arm's system prompt keeps T2's rule sentences byte for byte. Only two things vary:
-- the format sentence ("Return only ...");
-- for B-bits, the state sentence adds the bit-string convention.
-
-The D-int prompt is T2's prerequisite frame (`env.multi_step_messages` with one event). It matched T2's 500 stored
-prompts byte for byte.
-
-| Arm | Prompt state / masks | Exact target text (row example: before 9, inapplicable, pre_off bit 3 set) | Parser |
-|---|---|---|---|
-| D-int (data control) | integers | `9` | lenient, exactly `env.parse_state(P, ., lenient=True)` with range [0, 2^w) |
-| S-trace (joint format) | integers | `{"cmp":{"on_miss":[],"off_hit":[3],"viol":1,"ok":false},"calc":9,"after":9}` | strict |
-| B-bits | w-digit bit strings, MSB first | `{"applicable":false,"after":"00001001"}` | strict |
-| F-filler (control, OFF by default) | integers | `{"fill":" . . . (20 units) .","after":9}` | strict |
-
-**S-trace** (joint trace format, binding amendments 1–4 of BWM D-52).
-- Keys appear in this literal order: cmp -> calc -> after.
-- cmp lists the predicate's inputs and its result:
-  - `on_miss`: ascending bit positions (bit 0 = least significant) of pre_on bits that are clear in the state;
-  - `off_hit`: the positions of pre_off bits that are set;
-  - `viol = len(on_miss) + len(off_hit)`, which equals `popcount((pre_on & ~before) | (pre_off & before))` because pre_on and pre_off are disjoint;
-  - `ok = viol == 0`.
-- `calc = (before & ~delete) | add` if ok, else before (the chosen branch's result).
-- `after` = the integer state, P's existing format.
-- Serialization uses an explicit key order and never sorts keys. The parser rejects:
-  - any other key order;
-  - extra or duplicate keys;
-  - a non-int or out-of-range `after`.
-
-  A malformed trace counts as a wrong `after`. `cmp_ok` (exact, including key order and types) and `calc_ok` are
-  scored separately. The decision parser reads only `after`.
-
-**B-bits.** The target text is `'{"applicable":' + ('true'|'false') + ',"after":"' + format(after, '0{w}b') + '"}'`.
-- The flag comes first.
-- The parser rejects:
-  - another key order;
-  - a non-bool flag;
-  - a bit string of the wrong length or containing non-binary digits.
-- `flag_ok` is scored separately.
-
-**F-filler.** The format is BWM's shared one: `{"fill":" . . .","after":N}`. The fill is the one-token unit `" ."`
-repeated so that the whole filler target has EXACTLY the S-trace target's token count under Titan's tokenizer. This
-held on all 1,500 training rows and 950 dev rows, under both the HF tokenizer and the `tokenizers` library.
-
-**Training.** All arms train on the same canonical rows in the same file order, so the vendored trainer's seeded row
-order is identical across arms.
-
-## 3. Training data (`data/t2bp_train_{dint,strace,bbits,ffill}.jsonl`, seed 20261111)
-
-### 3.1 Row types and the heuristic algebra
-
-Notation: b = before, a = add, d = delete. The env generator draws a single-bit add, and d is disjoint from a.
-
-| Type | Definition | copy | apply-regardless | int b+a | OR b\|a | Count |
-|---|---|---|---|---|---|---|
-| A1 | applicable; a not in b; d clears nothing | 0 | 1 | 1 | 1 | 530 |
-| A2 | applicable; a not in b; d clears a set bit | 0 | 1 | 0 | 0 | 40 |
-| A3 | applicable; a already in b; d clears nothing (gold = b) | 1 | 1 | 0 | 1 | 15 |
-| A4 | applicable; a already in b; d clears a set bit (int-add-wrong, strict) | 0 | 1 | 0 | 0 | 65 |
-| Za | applicable; add = 0 (delete-only); d clears a set bit | 0 | 1 | 0 | 0 | 100 |
-| Ib | inapplicable; a not in b | 1 | 0 | 0 | 0 | 525 |
-| Ia | inapplicable; a in b; d clears a set bit | 1 | 0 | 0 | 1 | 20 |
-| Zi | inapplicable; add = 0; d clears a set bit | 1 | 0 | 1 | 1 | 205 |
-
-**Why add = 0 rows exist.** Integer b+a is right only on A1 and on add = 0 rows.
-- So holding b+a at 0.50 together with apply-regardless at 0.50 forces
-  #Zi − #Za = #A2 + #A3 + #A4 (within the 0.02 tolerance); the derivation is in the header comment of `t2bp_common.py`.
-- Without add = 0 rows, every delete or carry row would push int b+a below 0.48.
-- The price is a cue: among add = 0 rows, 67% are copies. The answer rule "add==0 -> copy, else apply-regardless"
-  scores 0.57 on the training rows, and apply-regardless scores 0.544 on the add ≠ 0 rows (copy 0.469).
-- The dev bank has no add = 0 rows, so this cue cannot inflate any dev score. It can only bias the model mildly toward
-  applying on add ≠ 0 rows; the inapplicable strata measure that.
-
-**"(before&~del)|add ignoring preconditions"** is the same predictor as apply-regardless under env semantics. The
-audit checks that they are identical on every row and gates both.
-
-**Two descriptive integer heuristics are not gated:**
-- (b&~d)+a scores 0.447. It cannot reach 0.50 while carry rows exist (it is wrong on every carry row and right on no
-  inapplicable row).
-- b&~d scores 0.409.
-
-### 3.2 Audit (`scripts/t2bp_audit.py`; refuses otherwise)
-
-| Check | Value | Gate |
+| Decision | What the kit does now | Reason |
 |---|---|---|
-| copy-input | 0.5100 | 0.48–0.52 |
-| apply-regardless (= ignoring preconditions) | 0.5000 | 0.48–0.52 |
-| integer before+add | 0.4900 | 0.48–0.52 |
-| OR before\|add | 0.5133 | 0.48–0.52 |
-| minimal pairs | 260 | ≥ 250 |
-| int-add-wrong, strict (A4) | 65 | ≥ 60 |
-| applicable-delete (A2+A4+Za) | 205 | ≥ 200 |
-| int-add-wrong, R11 definition (applicable, gold ≠ b+a) | 220 | ≥ 200 |
-| inapplicable pre_on-missing / pre_off-present | 376 / 374 | ≥ 300 each; none both |
+| **C0** interruption | A previous attempt was cut off by a usage limit. Its state was inspected before any change: all six scripts already carried the revision-3 code; the data had been re-rendered and the sd build written; DESIGN.md, the rule, the dry-run, scorer, tiny-test records and the hook draft were still revision 2. The work was finished, the data rebuilt from the final code (row files byte-identical; only the SOURCE records changed), and every check rerun. Every text file the kit writes now has LF line endings. The kit writes through `newline='\n'`; this fixed six records that had been written CRLF. | No half-applied revision; DECISIONS I-30 (CRLF from Python text-mode writes on Windows). |
+| **C1** primary build = surface diversity (`sd`) | `t2bp_run.py` trains only `data/t2bp_train_sd_<arm>.jsonl`. Tags are `sd_*`, and a non-sd configuration is refused before the lease. The analysis scores only sd runs. The sd files hold the 1,500 canonical rows (read from the canonical D-int file after its hash check, never re-drawn) and their unchanged targets, each with a seeded paraphrase, field-name variant and key orders. The canonical-only variant is not run. | Decision point 1 fired (PREREG-3 TRIGGER): small LoRAs learn the surface form of the rule cases they see. |
+| **C2** input key-order augmentation | Every JSON object of a training prompt is serialized in a key order drawn per row (seeded; pair members share it) from a training subset. Held out per object type, fixed by `ORDER_SEED` and recorded: the reversed canonical order plus 2 random permutations (section 3.6). The prompt's only list (`events`) has one element, so there is no list order to augment. Targets keep the literal cmp -> calc -> after order. Tests and the audit prove that no training prompt uses a held-out order, paraphrase or field variant: each surface is read back from the prompt text, and 8 text fragments are scanned. | R16: both LoRA world models are locked to JSON key order (BWM reversed order 0.458 vs 1.000; T2 0.37–0.47 vs 0.87–0.91). |
+| **C3** held-out-surface evaluation | New stage **E3**: the 1,050 one-step rows, with the same rows and golds, in ONE combined held-out surface: paraphrase 4 with its state sentence, field names 4, the reversed top-level order, and one of the 3 held-out event orders, rotating by the row's index within its stratum. Adapter ON, paired by row with E1. The per-factor held-out renderings are **omitted**: they would take the screen from 2 to 3 turns at the planning rate (GEN_PLAN.json). | D-35: every claim gets a surface-form audit next to the out-of-range audit. |
+| **C4 / 5a (c)** amendment 4b filler | `FILL_K = {"action": 26}`: one constant fill per (family, action kind). It is at least the longest trace over train + dev (all surfaces share targets) and is recomputed by the builder, which refuses on a mismatch. Per-row length matching is removed. A test shows the fill length carries zero information about the answer, and the residual is reported descriptively (section 3.7). | D-36: a filler matched to the trace per row leaks the answer through its length, giving it a hidden scratch channel. Here, the revision-2 length alone predicts applicability at 1.0 on the training rows. |
+| **C5** turn cap | Everything fits the 4.5 h cap with the existing deferral/resume. At the planning rate the screen takes 2 turns, at the observed rate 1. `--plan`, `GEN_PLAN.json` and the hook draft (variant sd, tags `sd_s0` / `sd_s0_ffill`) are updated. | Operator constraint. |
+| **C6** new rule revision | `t2bp_analysis.py --freeze-rule` wrote revision 3, with a "what changed and why" preface. It renamed revision 2 to `SCREEN_RULE_rev2.*`; nothing was deleted. No `runs/` output exists. | Pre-stated rule, revisions kept. |
+| **5a (a)** ranking | R(A) = (K4 + IAW + OOR + HS) / 4. HS is the equal-weight mean accuracy of the seven 8-bit strata in E3. The rest is unchanged: eligibility (IAW ≥ 0.20, FC ≤ 0.25, FA ≤ 0.25, ID non-inferiority), R0 on the in-surface format rate, tie-breaks and close-call wording. | A surface-locked arm must not win on in-surface scores. |
+| **5a (b)** open questions | All accepted as they were. The add = 0 -> copy cue at 0.62 stays descriptive, guarded by FC and FA. Strict A4 IAW is kept for decision point 2, with the R11 union reported. The three representation choices stay. The width word appears in held-out form in E3, because each paraphrase's state sentence words the width its own way (held out: "a flag mask 12 bits wide"). The thresholds stay: ID margin 0.10, FA ≤ 0.25, WF ≥ 0.90, close call < 0.05. | Operator answers. |
 
-**Minimal pairs (260).** The two members share the same before and the same event, except for exactly one added bit in
-pre_on (a clear bit) or in pre_off (a set bit). Applicability flips and the golds differ.
+## 1. Question
 
-| Applicable / inapplicable | Pairs |
-|---|---|
-| A1/Ib | 160 |
-| A2/Ib | 25 |
-| A4/Ia | 20 |
-| Za/Zi | 55 |
+- T2's prerequisite fix learned a COPY shortcut: false copy rose from 0.039 to 0.624, and applicable state-changing accuracy fell from 0.587 to 0.353.
+- Titan's own prerequisite "rule" is integer addition (R11).
+- The screen asks whether a de-shortcut training set and/or a different target representation lets the T2 recipe learn the precondition rule and the bitwise update. It must do so out of range AND, since revision 3, on a surface no training prompt used.
+- **Decision point 2:** if every arm scores < 0.20 on int-add-wrong, stop P training and move P to a code-side bit interface.
 
-The flip kinds alternate between pre_on and pre_off.
+## 2. Arms: the same 1,500 rows, rendered four ways (formats unchanged since revision 1)
 
-**Cue ceilings (descriptive; majority lookup on the training rows, predicting applicability):**
-
-| Feature | Accuracy |
-|---|---|
-| popcount(pre_on\|pre_off) | 0.709 |
-| pre_off == 0 | 0.668 |
-| pre_on == 0 | 0.632 |
-| others | ≤ 0.578 |
-
-Part of this is the rule itself: a row with no precondition bits is always applicable. The rest is the recorded
-marginals plus the add-one-bit minimal pairs.
-
-### 3.3 Freshness
-
-The exclusion union holds 310,258 payloads and 302,283 operative contents from 17 sources:
-- the historical records tree, using `l1_make_ood.harvest_historical` via `p3_make_bank.load_all_sources`. The 4
-  `HSKILL_CONFIRM_V2*` files are skipped by name and never opened; `rcwmt.bank.load_exclusions()` is not called;
-- the pilot, confirm, confirm2 and s4000 banks;
-- the 4 T2 data files;
-- SELECT-VIEWS-001;
-- the L1 OOD bank;
-- 5 FDS/composition T banks;
-- the PREREG-3 bank.
-
-Results:
-- Training rows, dev one-step rows and chain transitions have 0 payload overlap and 0 operative-content overlap with
-  every source and with each other.
-- Gold = `env.step`, checked against the FDS oracle (`env.cross_check`) on every row and every chain transition.
-- No model, model output or GPU was used; torch was not imported (peak RSS 364 MiB).
-
-### 3.4 Surface diversity (decision point 1); OFF by default
-
-`t2bp_make_data.py --surface-diversity on` writes `data/t2bp_train_sd_<arm>.jsonl` plus
-`data/t2bp_train_sd.SOURCE.json`.
-- These hold the SAME canonical rows, read from the canonical files and never re-drawn.
-- Each row gets a seeded rule-text paraphrase (`PARAPHRASES[0..3]`) and a field-name variant (`FIELD_VARIANTS[0..3]`).
-  Variant 0 is canonical, and the two members of a minimal pair share a variant.
-- Targets are unchanged.
-- Variant 4 of both is reserved for held-out evaluation.
-
-`t2bp_run.py --data-variant sd` trains on these files, with outputs under `runs/t2bp/sd_<tag>/`. Neither step needs a
-code change. The tiny test renders all 16 combinations and checks that they pass the same audit.
-
-## 4. Dev screen bank (`data/t2bp_dev.jsonl`; no model call)
-
-| Stratum | n | Definition | Heuristic floors (copy / apply-regardless / b+a / OR / (b&~d)+a / b&~d) |
+| Arm | Prompt state / masks | Exact target (row: before 9, inapplicable, pre_off bit 3 set) | Parser |
 |---|---|---|---|
-| D_app_add | 100 | A1 | 0 / 1 / 1 / 1 / 1 / 0 |
-| D_app_unchanged | 100 | A3 (applicable, unchanged: carry) | 1 / 1 / 0 / 1 / 0 / 1 |
-| D_app_delete | 100 | A2 | 0 / 1 / 0 / 0 / 1 / 0 |
-| **D_int_add_wrong** | 150 | A4: bitwise ≠ b+a, ≠ (b&~d)+a, ≠ b | 0 / 1 / 0 / 0 / 0 / 1 |
-| D_inapp_pre_on | 100 | only pre_on violated; applying would change the state | 1 / 0 / 0 / .09 / 0 / .75 |
-| D_inapp_pre_off | 100 | only pre_off violated; applying would change the state | 1 / 0 / 0 / .11 / 0 / .72 |
-| **D_ood10** | 150 | 10-bit masks; before ≥ 256; a bit ≥ 8 operative; 25 each of A1, A2, A3, A4, inapp-pre_on, inapp-pre_off | .5 / .667 / .167 / .40 / .333 / .54 |
-| **D_ood12** | 150 | the same with 12 bits | .5 / .667 / .167 / .367 / .333 / .58 |
+| D-int (data control) | integers | `9` | lenient, exactly `env.parse_state` with range [0, 2^w) |
+| S-trace (joint format, D-34) | integers | `{"cmp":{"on_miss":[],"off_hit":[3],"viol":1,"ok":false},"calc":9,"after":9}` | strict, literal key order |
+| B-bits | w-digit bit strings, MSB first | `{"applicable":false,"after":"00001001"}` | strict |
+| F-filler (control, conditional) | integers | `{"fill":" . … (26 units) .","after":9}`, the same fill on every row | strict |
 
-Notes on the strata:
-- **OOD prompts.** These differ from the arm's 8-bit prompt only in the width word ("a 10-bit"). For B-bits, the bit
-  strings are also 10 or 12 digits long.
-- **Chains.** 30 prerequisite parents, each with 8 candidate plans of 4 events, drawn exactly as `rcwmt.bank.build`
-  draws them (6-action library, at least 4 distinct finals per parent, all transitions fresh): 240 chains and 960
-  steps. The copy floor at k=4 is 0.129.
-- **Union cells reported in the analysis:**
-  - applicable state-changing (the T2 definition);
-  - app-del (the L1/T2 definition);
-  - int-add-wrong (the R11 definition);
-  - inapplicable;
-  - out-of-range.
-- **Structural overlap with the training rows (descriptive).** A bit-permutation-invariant signature overlaps on
-  0.34–0.96 of each in-distribution stratum and 0 of the OOD strata. A dev bank built from the same generator is
-  in-distribution by construction.
+- **Canonical surface:** paraphrase 0, field names 0, canonical key orders. In it, the D-int prompt is T2's prerequisite frame byte for byte (500/500 stored T2 prompts reproduced).
+- **What varies by arm:** only the format sentence. B-bits also adds the bit-string convention to the state sentence.
+- **`format_ok` vs value:** an out-of-range state is a wrong answer in the right format. WF counts format.
+
+## 3. Training data
+
+### 3.1–3.5 Rows, audit, shortcuts, cues, freshness (unchanged from revision 2; details in `DESIGN_rev2.md` §3)
+
+- **Rows:** seed 20261111; 1,500 rows. Types: A1 490, A2 40, A3 15, A4 150, Za 55, Ib 480, Ia 35, Zi 235. There are 275 minimal pairs.
+- **Audit gates** (each 0.48–0.52):
+
+  | Heuristic | Score |
+  |---|---|
+  | copy | 0.5100 |
+  | apply-regardless (= ignoring preconditions) | 0.5000 |
+  | before+add | 0.4833 |
+  | OR | 0.5167 |
+
+- **Quotas:**
+
+  | Quota | Count |
+  |---|---|
+  | int-add-wrong, strict (A4) | 150 |
+  | applicable-delete | 245 |
+  | int-add-wrong, R11 definition | 260 |
+  | pre_on-missing / pre_off-present | 377 / 373 |
+
+- **Shortcut policies (descriptive):**
+
+  | Policy | Score |
+  |---|---|
+  | pa_int_add | 0.827 |
+  | pa_int_add_del | 0.890 |
+  | pa_or_add | 0.837 |
+  | addset_apply | 0.977 |
+  | add0_cue | 0.620 |
+  | precount_cue | 0.659 |
+
+- **Minimal-pair twins:** 45 twin rows carry precondition counts that no other row has.
+- **Freshness:** `--verify` re-ran a fresh name-skipping harvest on 2026-10-09 at 12:13 (17 sources; the `HSKILL_CONFIRM_V2*` files were skipped by name and never opened; `load_exclusions()` was not called). All 3,510 items (training rows, dev rows and chain transitions) were checked against every source and against each other: 0 overlaps. Peak RSS 371 MiB.
+
+### 3.6 The surface-diversity build (PRIMARY; C1, C2)
+
+`data/t2bp_train_sd_<arm>.jsonl` + `data/t2bp_train_sd.SOURCE.json`. Same rows, same order, same targets as the canonical files (checked by the audit, the test and `--verify`). Each row (pair members share one surface) gets:
+
+| Factor | Training subset | Held out (E3 only) |
+|---|---|---|
+| Rule-text paraphrase + its state sentence (which carries the width word) | `PARAPHRASES[0..3]` / `STATE_SENTENCES[0..3]` (0 = T2's) | index 4: "Apply the actions in order. Each action fires only when …" / "The state is a flag mask {w} bits wide" |
+| Field names (before, events, add, delete, pre_on, pre_off) | `FIELD_VARIANTS[0..3]` (0 = T2's) | index 4: mask, moves, plus, minus, must_on, must_off |
+| Top-level object {before, events} (2 keys) | the canonical order only (no other order exists) | the reversed order (events, before) |
+| Event object (7 keys: add, cost, delete, kind, name, pre_off, pre_on) | 5,037 orders. The canonical order is drawn with p = 0.25; otherwise the order is uniform over the rest. | the reversed order; (add, delete, kind, pre_off, cost, pre_on, name); (cost, pre_off, delete, pre_on, name, kind, add). These are regenerated from `ORDER_SEED` = 202611116 and checked. |
+| List order | the only list (events) has one element | none |
+
+**Diversity actually used** (`AUDIT.json`):
+- All 16 paraphrase × field-name combinations occur.
+- Rows per paraphrase: 403 / 369 / 379 / 349.
+- Rows per field-name variant: 396 / 354 / 321 / 429.
+- The canonical event order is on 26.1% of rows; 829 distinct event orders occur.
+- The top-level order is always canonical.
+- Only **22** training rows are in the exact canonical surface that E1/E2 evaluate. Each of its factors is common (paraphrase 0 on 403 rows, names 0 on 396, the canonical event order on 392), but the combination is rare.
+
+**Proof that no held-out surface is in training:**
+- **Text read-back:** every one of the 6,000 sd training prompts (4 arms × 1,500) has its paraphrase, field variant, top and event orders and width read back from the prompt TEXT (`recover_surface`, independent of the recorded surface). The read-back equals the recorded surface and holds no held-out factor: 0 hits.
+- **Text fragments:** none of the 8 held-out fragments occurs in any prompt: paraphrase 4's opening words, " bits wide", and the 6 held-out names as JSON keys.
+- **Refusal tests:** the audit refuses a row rendered with any single held-out factor (6 cases), and a prompt in a held-out order whose record claims a training order.
+
+### 3.7 Amendment 4b filler (C4)
+
+`FILL_K = {"action": 26}` is BWM's formula: the longest trace head over train + dev + dev chain steps (3,510 items; 29 tokens) minus the `{"fill":""` base. It is recomputed by the builder under the `tokenizers` library and by the test under the HF tokenizer; both agree.
+
+**Zero-information test** (`AUDIT.json` → `filler_4b`; tiny test §4): all 3,000 training filler targets (canonical + sd) and all 1,050 dev golds share one fill string. On the training rows, predicting each property from the fill length scores exactly the majority share, with mutual information 0 bits:
+
+| Property | Accuracy from fill length (= majority share) |
+|---|---|
+| applicable | 0.500 |
+| changed | 0.510 |
+| after | 0.0147 |
+| type | 0.327 |
+
+**What revision 2's row-matched length would have revealed** (descriptive):
+
+| Rows | Applicability (majority share) | Change (majority share) |
+|---|---|---|
+| Training | 1.00 (0.50) | 0.99 (0.51) |
+| Dev 8-bit | 1.00 (0.60) | 0.87 (0.53) |
+| Dev out-of-range | 0.997 (0.667) | 0.83 (0.50) |
+
+**Residual covariate** (filler tokens − trace tokens; descriptive):
+- Training: 2–7, mean 5.0, positive on 100% of rows. The mean is 5.49 on applicable rows and 4.51 on inapplicable rows. This is a property of the row's trace, not of the filler target, which is identical across rows.
+- Dev: 0–7, mean 4.8.
+- The analysis reports the filler arm's accuracy by residual value and stratum.
+
+The superseded row-matched filler file and the revision-2 SOURCE record are kept as `data/t2bp_train_ffill.rev2_rowmatched.jsonl` and `data/t2bp_train.rev2.SOURCE.json`.
+
+## 4. Dev screen bank (`data/t2bp_dev.jsonl`; unchanged, sha 46421b99…)
+
+The bank has 1,050 one-step rows in 9 strata:
+
+| Stratum | Rows |
+|---|---|
+| D_app_add | 100 |
+| D_app_unchanged | 100 |
+| D_app_delete | 100 |
+| D_int_add_wrong | 150 |
+| D_inapp_pre_on | 100 |
+| D_inapp_pre_off | 100 |
+| D_inapp_addset | 100 |
+| D_ood10 | 150 |
+| D_ood12 | 150 |
+
+It also holds 240 k=4 chains (960 steps; the copy floor at k=4 is 0.129). Floors, subtypes and shortcut floors are in `DESIGN_rev2.md` §4 and `t2bp_dev.SOURCE.json`.
+
+**E3 rendering.**
+- **Surface:** `heldout_surface_of(row)` = paraphrase 4, names 4, reversed top order, and the event order `HELDOUT_ORDERS["event"][j % 3]`, where j is the row's index within its stratum (its id suffix; checked on all 1,050 rows). The 3 orders rotate evenly within every stratum (e.g. 34/33/33).
+- **Read-back:** every E3 prompt reads back as that surface and encodes the row's own state and event.
+- **OOR rows:** they differ from 8-bit rows only in the width word, in every surface: 200 system texts checked (4 arms × 5 paraphrases × 5 field variants × 10/12 bits).
+- **Prompt length:** E3 prompts are about 6 tokens shorter than in-surface prompts. For D-int the mean is 145 vs 151 tokens.
 
 ## 5. Runner (`scripts/t2bp_run.py`)
 
-**Recipe.** This is T2 unchanged:
-- the vendored trainer is called exactly as `run_t2.py` calls it;
-- LoRA r16 / alpha 32 / dropout 0.05 on q, k, v, o, gate, up, down;
-- frozen FP32 Titan-Sparse;
-- WSD schedule, lr 1e-4, batch 16 (4 × 4 microbatches), 190 steps, seed 0;
-- the trainer hashes are pinned.
+**Recipe:** the T2 recipe, unchanged.
+- LoRA r16 / alpha 32 / dropout 0.05 on q, k, v, o, gate, up and down.
+- Frozen FP32 Titan-Sparse; WSD schedule, lr 1e-4, batch 16, 190 steps, seed 0.
+- The vendored trainer is pinned. No merge (D-28).
 
-**Evaluation.** The adapter is loaded unmerged with PEFT, as `run_t2.py` loads it. OFF (`disable_adapter()`) and ON run
-in one process, with greedy FP32 decoding, `generation.generate_texts` and a 160-token cap.
-- **E1:** the 950 one-step rows in the arm's own frame.
-- **E2:** the 240 chains as a self-rollout in the arm's frame. The arm's after-only parser feeds each step's state into
-  the next. For D-int this is `generation.chain(..., 'chain_m1')`, which the tests confirm.
+**Stages per arm:**
 
-**Anchor A0.** Once per turn, before the first evaluation stage:
-- with the adapter disabled, run pilot TEST prerequisite chain_m1 (224 chains);
-- the result must reproduce `runs/t2/t2_s0/gen_chain_m1_base.jsonl` (sha 7ebc8288…, only hashed here) on at least
-  99% of chains;
-- otherwise the job stops, and the stop is persisted.
+| Stage | What it runs | Sides |
+|---|---|---|
+| T | training | – |
+| E1 | 1,050 one-step rows, canonical surface | OFF + ON |
+| E2 | 240 chains, self-rollout, canonical surface | OFF + ON |
+| E3 | 1,050 one-step rows, combined held-out surface | **ON only** |
 
-**One lease, `rcwm-t1:t2b-prereq`.** The D-22 turn rules apply:
-- 4.5 h cap from acquisition;
-- an arm's training starts only if 1.25 × (its train + eval + load [+ anchor]) fits;
-- each eval stage starts only if 1.25 × its estimate fits;
-- no stage starts within 0.5 h of the cap;
-- otherwise the arm is deferred to the next turn (exit 5). The next call resumes from the recorded stages and
-  re-anchors.
+The anchor A0 runs once per turn (224 pilot chains, ≥ 99% identical to T2's chain_m1 OFF file).
 
 **Checks before the lease:**
-- data hashes equal the SOURCE records;
-- every training prompt equals `tok.apply_chat_template(messages(row))`;
-- the one-waiter rule (R14);
-- a run lock.
+- the frozen inputs equal `SCREEN_RULE.json`;
+- the sd files and the canonical row source match their SOURCE records;
+- every training prompt equals the chat template of its messages (the row's own surface);
+- the one-waiter rule and the run lock.
 
-**Outputs and exit codes:**
-- Outputs are create-only, with stage records hashed in `provenance.json`.
-- A partial stage is moved to `_orphans/`, never deleted, and redone.
-- Exit codes: 0 done, 3 deterministic stop, 5 deferred, 1 crash.
+A resume refuses under changed code, and a completed run refuses other arms. Exit codes: 0 / 3 / 5 / 1.
 
-**GPU estimate** (`GEN_PLAN.json`; no model loaded). Training time is T2's measured 190-step time scaled by tokens per
-row. The generation time model is fitted to PREREG-2's measured P chain_m1 and ledger chain_one rates; planning
-applies a factor of 3.8/2.7.
+All writes are create-only and LF. They were checked against the current rule record for tags `sd_s0`, `sd_s0_ffill` and `sd_s1` (CPU, without the lease).
 
-| Arm | Train | E1 | E2 | Pair (planning) | Pair (observed rates) |
-|---|---|---|---|---|---|
-| D-int | 38.6 min | 6.9 min | 6.9 min | 0.91 h | 0.76 h |
-| S-trace | 64.5 min | 14.7 min | 14.9 min | 1.60 h | 1.32 h |
-| B-bits | 62.7 min | 11.1 min | 11.0 min | 1.45 h | 1.21 h |
-| F-filler | 50.1 min | 14.7 min | 14.9 min | 1.36 h | 1.11 h |
+**GPU plan** (`GEN_PLAN.json`; no model loaded; 4.5 h cap; a stage starts only if 1.25 × its estimate fits, and never within 0.5 h of the cap):
 
-- **Screen (3 arms):** one turn, 4.01 h at the planning rate (3.33 h at the observed rates), plus the 3.2 min anchor.
-  The B-bits pair passes the 1.25× rule with only 0.12 h to spare; if it does not fit, it defers to a second turn.
-- **With F-filler:** a second turn of 1.42 h (total 5.43 h). It stays OFF unless the budget allows.
-- **Seeds 1–2 of the winner:** about 0.9–1.6 h per seed, one pair per turn.
-- **Generations:** 3,820 per arm (1,900 one-step + 1,920 chain steps, OFF+ON), plus 896 for the anchor in each turn.
+| Arm | Train | E1 | E2 | E3 (ON) | Pair, planning | Pair, observed |
+|---|---|---|---|---|---|---|
+| D-int | 39.9 min | 7.6 min | 6.9 min | 3.8 min | 1.00 h | 0.83 h |
+| S-trace | 65.7 min | 36.2 min | 33.1 min | 8.2 min | 2.42 h | 1.45 h |
+| B-bits | 64.1 min | 34.2 min | 31.1 min | 6.1 min | 2.29 h | 1.31 h |
+| F-filler | 52.5 min | 37.0 min | 33.8 min | 8.9 min | 2.24 h | 1.31 h |
 
-## 6. Analysis (`scripts/t2bp_analysis.py`)
+**Turns:**
+- **Screen, planning rate** (OFF of non-native formats at the 160-token cap): 2 turns.
+  - Turn 1: D-int + S-trace, 3.48 h.
+  - Turn 2: B-bits, 2.35 h.
+  - Total 5.83 h.
+- **Screen, observed rate:** one turn of 3.64 h. The runner corrects its estimates from measured times and defers or resumes on its own.
+- **Anchor:** 3.2 min per turn.
+- **Generations:** 17,002 for the two-turn screen.
+- **R5 filler control** (only if S-trace wins): its own run, one turn, 2.29 h planning / 1.34 h observed.
+- **Seeds 1–2 of the winner:** 1.00–2.42 h per seed, one per turn.
+- **Margin:** every arm's whole pair × 1.25 fits an empty turn (S-trace needs 3.09 h). A 3.0 h cap would be too small (tested).
+- **Per-factor held-out renderings** (3 × 750 8-bit rows, ON): they would make the planning screen 3 turns (6.52 h), so they are omitted (C3).
 
-The analysis runs on CPU only and never imports torch. The scorer self-test runs before any output is read:
-- golds are 950/950 in each of the 4 formats;
-- the 6 heuristics are scored at their exact floors in every format;
-- 15 malformed answers are rejected;
-- the D-int parser equals `env.parse_state` on a 21-string battery.
+## 6. Analysis and the rule (revision 3, verbatim in `SCREEN_RULE.md`)
 
-The run is validated before scoring: DONE.json, provenance hashes, ids in order, and chain states equal to the parser
-applied to the texts. The verdict follows the pre-stated rule (`SCREEN_RULE.md`). Everything else is descriptive:
-- OFF baselines;
-- per-stratum and OOD-subtype accuracies with Wilson CIs;
-- heuristic agreement per stratum;
-- cmp_ok, calc_ok and flag_ok;
-- k=1/2/4 exact;
-- step accuracy from the model's own state;
-- G_chain regret, using `decisions.g_only` with 256 goals, seed 1001, and floors;
-- paired ON−OFF and arm−D-int contrasts.
+Before any output is read:
+- `SCREEN_RULE.json` must verify: 26 inputs, the rule text and `SCREEN_RULE.md`.
+- The scorer self-test must pass:
+  - golds score 1,050/1,050 in each of the 4 formats;
+  - every heuristic and shortcut policy scores at its exact floor;
+  - all 16 malformed strings are rejected;
+  - one constant fill on every dev gold, and no filler shorter than its trace.
 
-A run that lacks one of the three screen arms (for example a seed-1/2 run) gets NO_VERDICT and a descriptive report.
+**Metrics** (adapter ON; all in-surface except HS):
 
-## 7. Open questions for the operator
+| Metric | Definition |
+|---|---|
+| IAW | D_int_add_wrong |
+| OOR | mean of D_ood10 and D_ood12 |
+| K4 | 240 chains |
+| **HS** | the seven 8-bit strata in E3, equal weight |
+| FC | 350 rows |
+| FA | the worst of 3 inapplicable strata |
+| WF | in-surface format rate |
+| ID | the seven 8-bit strata |
 
-1. **The add = 0 balancing rows** (section 3.1) are the only way to meet the binding 0.50 ± 0.02 audit for integer
-   b+a while also including delete and carry rows. They add an "add 0 -> mostly copy" cue to the training data, and a
-   slight bias toward applying (0.544) on add ≠ 0 rows. The alternative is to relax the int b+a gate, or to drop most
-   delete and carry rows. That alternative would leave 60 or fewer of them and defeat the point.
-2. **IAW = A4 only (strict).** The stratum is also solved by "apply delete, ignore add" (b&~d floor 1.0), because the
-   add bit is already set. A2 is excluded because Titan's integer-with-delete reading (b&~d)+a solves it. The R11-wide
-   union (A2+A3+A4) is reported. Should decision point 2 use the union instead?
-3. **Representation choices.** S-trace lists bit positions, while BWM's P instance lists `viol` and `ok` only. The
-   B-bits order is MSB first. OOD prompts change only the width word. Reviewers may prefer integer masks in cmp.
-4. **ID non-inferiority margin of 0.10 against D-int and the composite R = mean(K4, IAW, OOR) with equal weights.**
-   Both were chosen here, not given in the task. The task said to "rank by k4 exact and int-add-wrong"; D-52 (5) makes
-   the out-of-range strata primary, so OOR is included.
-5. **F-filler** fits only in a second turn (+1.42 h planning). Run it only if S-trace wins (R5 flag)?
-6. **Queue placement.** The hook draft `queue_hook_t2bp.sh.draft` is NOT installed, and it must follow PREREG-3 under
-   the one-waiter rule. Installing it needs a fresh chain, which is an operator decision.
+**Rule:**
+- **R0:** WF < 0.90 or an unanchored turn → NO_VERDICT_INSTRUMENT. Malformed held-out answers count as wrong answers; they are not an instrument failure.
+- **R1:** STOP_P_TRAINING, quoting the dose (150 A4 rows of 1,500).
+- **R2:** eligibility.
+- **R3:** NO_ELIGIBLE_ARM.
+- **R4:** rank by **R = (K4 + IAW + OOR + HS)/4**, with tie-breaks at 0.02 (IAW, then OOR, then the order D-int, B-bits, S-trace). A margin < 0.05 is worded as a close call.
+- **R5:** the F-filler control (4b fill, all stages including E3; its R includes its HS) flags TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE if R(F) ≥ R(S) − 0.05.
+- **No verdict:** a run that is not sd, or lacks E3, gets no verdict.
+- **Descriptive only:** held-out OOR strata; FC, FA, WF and ID in the held-out surface; paired held-out − in-surface contrasts per stratum; accuracy by held-out event order; the filler residual.
+
+**Dry run: 61/61** (`DRYRUN.json`).
+- **Counts:**
+
+  | Unit type | Count |
+  |---|---|
+  | end-to-end scenarios | 21 |
+  | rule units (incl. the anchor unit) | 28 |
+  | close-call units | 3 |
+  | R5 addendum units | 4 |
+  | refusals | 5 |
+
+- **New for revision 3:**
+  - **Surface-locked S-trace** (the rule in-surface, malformed or copying on the held-out surface): it has the largest R under revision 2's formula (1.00 vs B-bits 0.889), but B-bits wins under revision 3 (0.917 vs 0.750 / 0.893).
+  - **HS breaks an in-surface tie:** D-int loses the rule on the held-out surface, so S-trace wins.
+  - **Malformed held-out answers everywhere:** not an instrument failure.
+  - **Perfect HS:** it does not rescue an FA-excluded arm.
+  - **HS = 0 everywhere:** still a verdict.
+  - **The filler's R includes its HS.**
+  - **A screen run without E3:** NO_VERDICT.
+
+## 7. Limits (state them with every result)
+
+- **One held-out surface.** E3 holds out ONE paraphrase, ONE name set and 1 + 3 key orders, combined. A drop on E3 cannot be attributed to a factor, because the per-factor renderings were omitted for budget. A pass shows transfer to this surface, not to every surface.
+- **The top-level key order is never varied in training.** The object has 2 keys, so the only other order is the held-out reversed one. E3's top-level order is therefore a pure extrapolation; this follows from C2's definition.
+- **In-surface means "made of training factors".** E1/E2 use the canonical surface, which is exactly matched by only 22 training rows; its factors are each common.
+- **Resolution.** The SE of a difference in R is about 0.02–0.03 (HS adds n = 750, paired). A win by < 0.05 is a close call.
+- **Controls are partial.**
+  - F-filler differs from S-trace in its system sentence and its loss target. With the 4b fill it is also longer than the trace on almost every row (residual mean 5 tokens), so it has slightly more decode compute.
+  - There is no length control for B-bits.
+- **calc adds nothing for one-step P.** calc == after on every one-step row.
+- **Training artefacts absent from the dev bank:** add = 0 rows (19.3%) and 45 twin rows.
+- **Dose.** 150 A4 rows of 1,500.
+- **Scope.** Dev bank, seed 0, one recipe: no confirmatory claim. A confirmation needs a sealed bank and a preregistration with held-out-surface primaries (D-35).
+
+## 8. Records and tests (revision 3)
+
+| Record | Content |
+|---|---|
+| `AUDIT.json` (sd) / `AUDIT_canonical.json` | every gate ok; 4b filler; surface proof and diversity |
+| `SCORER_SELFTEST.json` | ok |
+| `DRYRUN.json` | 61/61 |
+| `TINY_TEST.json` | 79/79 checks, 125.6 s, peak RSS 1,155 MB, 2 threads, CPU only, tiny random Qwen3 |
+| `GEN_PLAN.json` | `--plan`, torch not imported |
+| `SCREEN_RULE.md/.json` | revision 3, 26 inputs, pre-freeze checks 6/6 |
+
+The tiny test adds these checks for revision 3:
+- OOR prompts differ only in the width word in every surface (the held-out one included);
+- no CRLF in any kit file;
+- the audit refuses held-out factors;
+- the 6,000-prompt proof;
+- held-out orders regenerate from the seed;
+- E3 rotation and read-back;
+- 4b under the HF tokenizer and the zero-information test;
+- a tiny sd run with E3 ON only, where held-out prompts appear only in E3;
+- an oracle run on the full dev bank with HS 1.0;
+- the R5 addendum with the 4b filler and its residual covariate;
+- C1 refusals in the runner and the analysis;
+- a changed sd file refuses before the lease;
+- crash/resume and deferral byte-identical with E3;
+- the plan's turn counts and per-arm fit.
+
+`--verify`: all checks ok (fresh harvest). Analysis CLI without a run: exit 3, nothing written.
+
+**Line endings.** `SCREEN_RULE_rev1.json` (CRLF, written by revision 1) is kept byte for byte, because the revision-2 record pins its sha256. Every other kit file is LF.
+
+## 9. Open questions for the operator
+
+1. **Queue placement.** Installing the hook draft needs a fresh chain at a safe point (one-waiter rule); this is an operator decision logged in DECISIONS.md.
+2. **Per-factor held-out renderings.** If the screen's first turn shows the observed rate (1 turn, 3.64 h), the three per-factor renderings would also fit one turn (4.10 h observed). Adding them would be a new kit revision before any run, not a mid-run change.

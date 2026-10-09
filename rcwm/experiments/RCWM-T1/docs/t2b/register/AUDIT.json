@@ -1,14 +1,15 @@
 {
  "ok": true,
+ "revision": 3,
  "historical_harvest": true,
  "checks": [
   {
-   "check": "train files match their SOURCE sha256",
+   "check": "train files (base + sd) match their SOURCE sha256",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "dev + chain files match their SOURCE sha256",
+   "check": "dev + held-out-surface + chain files match their SOURCE sha256",
    "ok": true,
    "detail": ""
   },
@@ -18,22 +19,22 @@
    "detail": ""
   },
   {
-   "check": "three renderings of the SAME rows (ids, before, event, order)",
+   "check": "six renderings of the SAME rows: base and sd, each arm (ids, before, event, golds, order; sd targets == base targets)",
    "ok": true,
    "detail": "750 rows"
   },
   {
-   "check": "identical prompts across arms",
+   "check": "identical prompts across arms (base; sd)",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "training golds = env.step = FDS oracle; targets re-derived; prompts canonical",
+   "check": "training golds = env.step = FDS oracle; targets re-derived; base prompts canonical; sd prompts = their recorded surface",
    "ok": true,
    "detail": "gold 0, target/prompt 0"
   },
   {
-   "check": "filler token count == trace token count on every row (Titan tokenizer); recorded counts exact",
+   "check": "filler targets carry the kind's constant fill (amendment 4b); recorded token counts and residuals exact",
    "ok": true,
    "detail": "0 mismatches"
   },
@@ -43,32 +44,32 @@
    "detail": ""
   },
   {
-   "check": "dev golds / targets / token equality re-derived",
+   "check": "dev golds / targets / token counts re-derived; in-surface prompts are Titan's verbatim frame",
    "ok": true,
    "detail": "0 bad"
   },
   {
    "check": "dev strata sizes as designed",
    "ok": true,
-   "detail": "{'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100}"
+   "detail": "{'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100, 'cond_mid': 100, 'cond_far': 100}"
   },
   {
-   "check": "every dev row satisfies its stratum definition",
+   "check": "every dev row satisfies its stratum definition (and C.is_oor agrees with its group)",
    "ok": true,
    "detail": "[]"
   },
   {
-   "check": "pairs / triplets differ ONLY in the threshold; OOR conditional strata branch-balanced",
+   "check": "pairs / triplets differ in ONE number (the threshold; cond_mid pairs: the threshold or the other register, 25 pairs each; cond_far pairs: the other register); pair strata branch-balanced, one ok-true + one ok-false member per pair",
    "ok": true,
-   "detail": "{'cond_oor_val': {False: 50, True: 50}, 'cond_oor_thr': {True: 50, False: 50}}"
+   "detail": "bad []; {'cond_mid': {True: 50, False: 50}, 'cond_oor_val': {False: 50, True: 50}, 'cond_oor_thr': {True: 50, False: 50}, 'cond_far': {True: 50, False: 50}}"
   },
   {
-   "check": "training conditional twins: same row except the threshold, branch flipped",
+   "check": "training conditionals: 150 core rows at x - thr = -1 / 0 / +1 (50 each) + 150 twins differing in ONE number (25 threshold / 25 other per offset), branch flipped, |x - thr| in 2..15",
    "ok": true,
-   "detail": "150 pairs"
+   "detail": "150 pairs; bad []"
   },
   {
-   "check": "training value / threshold ranges in the recorded marginal",
+   "check": "training value / threshold / register ranges in the recorded marginal",
    "ok": true,
    "detail": ""
   },
@@ -83,6 +84,36 @@
    "detail": "{'CH_IN': 32, 'CH_X': 16}"
   },
   {
+   "check": "rows identical to revision 2 (never re-drawn): training rows + plain / trace targets + canonical prompts, dev rows, chain bank byte for byte",
+   "ok": true,
+   "detail": "{'train_rows': 'fd6710e20a5556708b296364718b6edb7275f7b3adac02a52b95700384302e42', 'dev_rows': '1113af0fedb5d9e955445472d703799eac21403e37fbec7838c45cb2bc6d5648', 'chains_sha256': 'fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62'}"
+  },
+  {
+   "check": "the four revision-2 data files are reconstructed byte for byte from the current rows (their recorded sha256)",
+   "ok": true,
+   "detail": "{'t2br_train_plain.jsonl': '49067515714f', 't2br_train_trace.jsonl': '1bad81166f18', 't2br_train_filler.jsonl': '3102361dae2f', 't2br_dev.jsonl': '2c0250a2189e'}"
+  },
+  {
+   "check": "amendment 4b (C4): the constant fill per kind re-derived from train + dev + chain gold steps == the pre-stated FILL_UNITS; ONE fill string per kind (every filler target identical up to 'after'); fill length carries zero information about wrap / branch in every cell (best cut == majority); residual >= 0",
+   "ok": true,
+   "detail": "{'swap': (5, 1, 0), 'add': (14, 1, 0), 'mix': (14, 1, 0), 'conditional': (26, 1, 0)}"
+  },
+  {
+   "check": "C2: NO training prompt uses a held-out paraphrase, field name or key order (every sd prompt decoded by read_prompt to its row and recorded surface; raw-string check); every train paraphrase / name / state order used",
+   "ok": true,
+   "detail": "{'decode_failures': 0, 'rows_using_a_heldout_factor': 0, 'rows_with_a_heldout_name_or_paraphrase_string': 0}"
+  },
+  {
+   "check": "C3: the held-out-surface bank = the 400 primary dev rows in dev order (same ids and golds); every prompt decodes to its row and uses ONLY held-out factors (paraphrase 4, names 4, held-out orders rotating by row)",
+   "ok": true,
+   "detail": "{'n_rows': 400, 'bad_rows': 0}"
+  },
+  {
+   "check": "the CURRENT builder rebuilds every data file byte for byte (fresh name-skipping harvest)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
    "check": "freshness: zero payload / operative-content overlap with every source; units mutually disjoint",
    "ok": true,
    "detail": "{}"
@@ -93,16 +124,46 @@
    "detail": "['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']"
   },
   {
-   "check": "surface-heuristic audit: copy / unreduced / always-add / always-subtract <= 0.55; branch 150 / 150",
+   "check": "audit: surface heuristics <= 0.55 (copy, unreduced, always-add/-subtract, wrong register, other > 48, threshold < 48, value > 0); rule variants contradicted by >= 1/6 of the conditional rows; branch 150 / 150",
    "ok": true,
-   "detail": "copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500"
+   "detail": "copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500, wrong_register|cond 0.527, x_hi|cond 0.527, thr_lo|cond 0.540, v_pos|cond 0.500, non_strict|cond 0.833, eq_plus1|cond 0.667, units_eq_plus1|cond 0.680, units_digit_gt|cond 0.717, tens_digit_gt|cond 0.757"
   },
   {
    "check": "audit recorded at build == recomputed",
    "ok": true,
    "detail": ""
+  },
+  {
+   "check": "data-only tables recorded at build == recomputed (4b constants and information test, surface audit, dev heuristic floors)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the dev SOURCE states the current go rule (revision 3)",
+   "ok": true,
+   "detail": ""
   }
  ],
+ "rebuild": {
+  "identical": true,
+  "differs": [],
+  "files": {
+   "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
+   "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
+   "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
+   "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
+   "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
+   "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
+   "t2br_dev.jsonl": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+   "t2br_dev_hs.jsonl": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
+   "t2br_chains.jsonl": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
+  }
+ },
+ "exclusion_union": {
+  "payloads": 308726,
+  "operative_contents": 301783,
+  "sources": 17
+ },
  "audit": {
   "n": {
    "all": 750,
@@ -115,127 +176,213 @@
    "copy": {
     "all": {
      "n": 750,
+     "correct": 0,
      "acc": 0.0
     },
     "mix": {
      "n": 300,
+     "correct": 0,
      "acc": 0.0
     },
     "wrap": {
      "n": 150,
+     "correct": 0,
      "acc": 0.0
     },
     "cond": {
      "n": 300,
+     "correct": 0,
      "acc": 0.0
     }
    },
    "unreduced": {
     "all": {
      "n": 750,
+     "correct": 350,
      "acc": 0.4667
     },
     "mix": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     },
     "wrap": {
      "n": 150,
+     "correct": 0,
      "acc": 0.0
     },
     "cond": {
      "n": 300,
+     "correct": 200,
      "acc": 0.6667
     }
    },
    "always_add": {
     "all": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     },
     "cond": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     }
    },
    "always_sub": {
     "all": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     },
     "cond": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     }
    },
    "wrong_register": {
     "all": {
      "n": 300,
-     "acc": 0.51
+     "correct": 158,
+     "acc": 0.5267
     },
     "cond": {
      "n": 300,
-     "acc": 0.51
-    }
-   },
-   "non_strict": {
-    "all": {
-     "n": 300,
-     "acc": 0.6667
-    },
-    "cond": {
-     "n": 300,
-     "acc": 0.6667
+     "correct": 158,
+     "acc": 0.5267
     }
    },
    "x_hi": {
     "all": {
      "n": 300,
-     "acc": 0.5
+     "correct": 158,
+     "acc": 0.5267
     },
     "cond": {
      "n": 300,
-     "acc": 0.5
+     "correct": 158,
+     "acc": 0.5267
     }
    },
    "thr_lo": {
     "all": {
      "n": 300,
-     "acc": 0.5067
+     "correct": 162,
+     "acc": 0.54
     },
     "cond": {
      "n": 300,
-     "acc": 0.5067
+     "correct": 162,
+     "acc": 0.54
     }
    },
    "v_pos": {
     "all": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     },
     "cond": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
+    }
+   },
+   "non_strict": {
+    "all": {
+     "n": 300,
+     "correct": 250,
+     "acc": 0.8333
+    },
+    "cond": {
+     "n": 300,
+     "correct": 250,
+     "acc": 0.8333
+    }
+   },
+   "eq_plus1": {
+    "all": {
+     "n": 300,
+     "correct": 200,
+     "acc": 0.6667
+    },
+    "cond": {
+     "n": 300,
+     "correct": 200,
+     "acc": 0.6667
+    }
+   },
+   "units_eq_plus1": {
+    "all": {
+     "n": 300,
+     "correct": 204,
+     "acc": 0.68
+    },
+    "cond": {
+     "n": 300,
+     "correct": 204,
+     "acc": 0.68
+    }
+   },
+   "units_digit_gt": {
+    "all": {
+     "n": 300,
+     "correct": 215,
+     "acc": 0.7167
+    },
+    "cond": {
+     "n": 300,
+     "correct": 215,
+     "acc": 0.7167
+    }
+   },
+   "tens_digit_gt": {
+    "all": {
+     "n": 300,
+     "correct": 227,
+     "acc": 0.7567
+    },
+    "cond": {
+     "n": 300,
+     "correct": 227,
+     "acc": 0.7567
     }
    },
    "mix_1x": {
     "all": {
      "n": 300,
+     "correct": 9,
      "acc": 0.03
     },
     "mix": {
      "n": 300,
+     "correct": 9,
      "acc": 0.03
     }
    },
    "mix_no_v": {
     "all": {
      "n": 300,
+     "correct": 33,
      "acc": 0.11
     },
     "mix": {
      "n": 300,
+     "correct": 33,
      "acc": 0.11
+    }
+   },
+   "always_wrap": {
+    "all": {
+     "n": 150,
+     "correct": 150,
+     "acc": 1.0
+    },
+    "wrap": {
+     "n": 150,
+     "correct": 150,
+     "acc": 1.0
     }
    }
   },
@@ -275,70 +422,102 @@
    "always_sub|cond": {
     "acc": 0.5,
     "ok": true
-   }
-  },
-  "diagnostic": {
-   "wrong_register|all": {
-    "acc": 0.51,
-    "above_bar": false
    },
    "wrong_register|cond": {
-    "acc": 0.51,
-    "above_bar": false
-   },
-   "non_strict|all": {
-    "acc": 0.6667,
-    "above_bar": true
-   },
-   "non_strict|cond": {
-    "acc": 0.6667,
-    "above_bar": true
-   },
-   "x_hi|all": {
-    "acc": 0.5,
-    "above_bar": false
+    "acc": 0.5267,
+    "ok": true
    },
    "x_hi|cond": {
-    "acc": 0.5,
-    "above_bar": false
-   },
-   "thr_lo|all": {
-    "acc": 0.5067,
-    "above_bar": false
+    "acc": 0.5267,
+    "ok": true
    },
    "thr_lo|cond": {
-    "acc": 0.5067,
-    "above_bar": false
-   },
-   "v_pos|all": {
-    "acc": 0.5,
-    "above_bar": false
+    "acc": 0.54,
+    "ok": true
    },
    "v_pos|cond": {
     "acc": 0.5,
-    "above_bar": false
+    "ok": true
+   }
+  },
+  "rule_variants": {
+   "non_strict|cond": {
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "ok": true
    },
-   "mix_1x|all": {
-    "acc": 0.03,
-    "above_bar": false
+   "eq_plus1|cond": {
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "ok": true
+   },
+   "units_eq_plus1|cond": {
+    "acc": 0.68,
+    "contradicted_by": 96,
+    "n": 300,
+    "ok": true
+   },
+   "units_digit_gt|cond": {
+    "acc": 0.7167,
+    "contradicted_by": 85,
+    "n": 300,
+    "ok": true
+   },
+   "tens_digit_gt|cond": {
+    "acc": 0.7567,
+    "contradicted_by": 73,
+    "n": 300,
+    "ok": true
+   }
+  },
+  "diagnostic": {
+   "unreduced|cond": {
+    "acc": 0.6667,
+    "above_0.55": true
    },
    "mix_1x|mix": {
     "acc": 0.03,
-    "above_bar": false
-   },
-   "mix_no_v|all": {
-    "acc": 0.11,
-    "above_bar": false
+    "above_0.55": false
    },
    "mix_no_v|mix": {
     "acc": 0.11,
-    "above_bar": false
+    "above_0.55": false
+   },
+   "always_wrap|wrap": {
+    "acc": 1.0,
+    "above_0.55": true
    }
   },
-  "diagnostic_note": "Not gated. non_strict (other >= threshold) is a RULE VARIANT, not a surface cue: it needs the comparison and differs from the env only at other == threshold (the x0 rows), so it scores 1 - share(x0) on conditional rows. unreduced on cond rows is reported (the conditional shortcut of interest is the branch).",
+  "rule_variant_bar": {
+   "max_acc": 0.8333,
+   "min_contradicting_share": "1/6"
+  },
+  "diagnostic_note": "Not gated. unreduced on cond rows is reported (the conditional shortcut of interest is the branch). always_wrap ('add => wrap by 97') is 1.0 on the training adds BY DESIGN (every training add wraps; add without a wrap is the untouched add_nowrap control), so a G4 loss on add_nowrap shared by every trained arm is a property of the data, not of the trace format (the analysis reports trace - plain beside trace - OFF).",
+  "rule_variant_note": "eq_plus1 = P(ok false) + P(other = threshold + 1) >= 0.5 + 50/300; non_strict = 1 - P(other = threshold) = 1 - 50/300 by construction; a 0.55 bar would need >= 1,000 conditional rows. The twins (distance 2..15, on the other side of the threshold) contradict every near-only rule; the core rows contradict coarse comparisons.",
+  "distance": {
+   "core": {
+    "-1": 50,
+    "0": 50,
+    "1": 50
+   },
+   "twin_abs": [
+    2,
+    15
+   ],
+   "twin_type": {
+    "threshold": 75,
+    "other": 75
+   },
+   "twin_side": {
+    "ok_true": 100,
+    "ok_false": 50
+   }
+  },
   "branch_stump": {
-   "best_single_feature_accuracy": 0.5333,
-   "permutation_null_p95": 0.5867,
+   "best_single_feature_accuracy": 0.5467,
+   "permutation_null_p95": 0.5933,
    "within_null": true,
    "features": [
     "X",
@@ -351,7 +530,8 @@
     "tick",
     "register_id",
     "other_id"
-   ]
+   ],
+   "gated": false
   },
   "branch_balance": {
    "ok_true": 150,
@@ -359,16 +539,769 @@
   },
   "ok": true
  },
+ "fill_constant": {
+  "constants": {
+   "swap": 5,
+   "add": 14,
+   "mix": 14,
+   "conditional": 26
+  },
+  "per_kind": {
+   "swap": {
+    "n_rows": 475,
+    "derived_constant": 5,
+    "pre_stated": 5,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 26,
+    "longest_trace_cell": "dev swap",
+    "residual_min": 0,
+    "residual_mean": 0.0,
+    "residual_max": 0,
+    "residual_positive_share": 0.0
+   },
+   "add": {
+    "n_rows": 724,
+    "derived_constant": 14,
+    "pre_stated": 14,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 35,
+    "longest_trace_cell": "train wrap",
+    "residual_min": 0,
+    "residual_mean": 1.3191,
+    "residual_max": 3,
+    "residual_positive_share": 0.953
+   },
+   "mix": {
+    "n_rows": 951,
+    "derived_constant": 14,
+    "pre_stated": 14,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 35,
+    "longest_trace_cell": "train mix",
+    "residual_min": 0,
+    "residual_mean": 0.4595,
+    "residual_max": 3,
+    "residual_positive_share": 0.4311
+   },
+   "conditional": {
+    "n_rows": 1236,
+    "derived_constant": 26,
+    "pre_stated": 26,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 47,
+    "longest_trace_cell": "dev cond_oor_val",
+    "residual_min": 0,
+    "residual_mean": 1.3665,
+    "residual_max": 5,
+    "residual_positive_share": 0.9579
+   }
+  },
+  "cells": {
+   "chain CH_IN / swap": {
+    "n": 262,
+    "fill_units": [
+     5
+    ],
+    "residual_mean": 0.0,
+    "residual_range": [
+     0,
+     0
+    ]
+   },
+   "chain CH_IN / add": {
+    "n": 229,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.1397,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.9913,
+    "fill_length_best_cut": 0.9913,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9913
+   },
+   "chain CH_IN / mix": {
+    "n": 298,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.3255,
+    "residual_range": [
+     0,
+     2
+    ],
+    "label": "wrap",
+    "majority": 0.7651,
+    "fill_length_best_cut": 0.7651,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9161
+   },
+   "chain CH_IN / conditional": {
+    "n": 235,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.2894,
+    "residual_range": [
+     1,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5702,
+    "fill_length_best_cut": 0.5702,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.5702
+   },
+   "chain CH_X / swap": {
+    "n": 133,
+    "fill_units": [
+     5
+    ],
+    "residual_mean": 0.0,
+    "residual_range": [
+     0,
+     0
+    ]
+   },
+   "chain CH_X / add": {
+    "n": 105,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.0095,
+    "residual_range": [
+     0,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.7143,
+    "fill_length_best_cut": 0.7143,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.8
+   },
+   "chain CH_X / mix": {
+    "n": 153,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.2876,
+    "residual_range": [
+     0,
+     2
+    ],
+    "label": "wrap",
+    "majority": 0.7778,
+    "fill_length_best_cut": 0.7778,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9412
+   },
+   "chain CH_X / conditional": {
+    "n": 121,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.281,
+    "residual_range": [
+     0,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.6364,
+    "fill_length_best_cut": 0.6364,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.6364
+   },
+   "dev add_nowrap / add": {
+    "n": 80,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.2,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_far / conditional": {
+    "n": 100,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.38,
+    "residual_range": [
+     1,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.72
+   },
+   "dev cond_mid / conditional": {
+    "n": 100,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.34,
+    "residual_range": [
+     1,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.53
+   },
+   "dev cond_oor_thr / conditional": {
+    "n": 100,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 0.91,
+    "residual_range": [
+     0,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.85
+   },
+   "dev cond_oor_val / conditional": {
+    "n": 100,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.19,
+    "residual_range": [
+     0,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.57
+   },
+   "dev cond_x0 / conditional": {
+    "n": 60,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.2667,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_xm1 / conditional": {
+    "n": 60,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.2667,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_xp1 / conditional": {
+    "n": 60,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.3,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev mix / mix": {
+    "n": 100,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.62,
+    "residual_range": [
+     0,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.94
+   },
+   "dev mix_oor / mix": {
+    "n": 100,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.61,
+    "residual_range": [
+     0,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.97
+   },
+   "dev swap / swap": {
+    "n": 80,
+    "fill_units": [
+     5
+    ],
+    "residual_mean": 0.0,
+    "residual_range": [
+     0,
+     0
+    ]
+   },
+   "dev wrap / add": {
+    "n": 80,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.825,
+    "residual_range": [
+     1,
+     2
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev wrap_oor / add": {
+    "n": 80,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.9375,
+    "residual_range": [
+     0,
+     2
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "train cond / conditional": {
+    "n": 300,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.73,
+    "residual_range": [
+     1,
+     5
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.5267
+   },
+   "train mix / mix": {
+    "n": 300,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.5767,
+    "residual_range": [
+     0,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9567
+   },
+   "train wrap / add": {
+    "n": 150,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.8067,
+    "residual_range": [
+     0,
+     2
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   }
+  },
+  "ok": true,
+  "note": "fill length is a function of the action kind alone (prompt-derived): within a kind it is constant, so it carries zero information about the answer (fill_length_best_cut == majority in every cell). The residual (constant filler longer than the row's trace) is answer-dependent only through the TRACE's length; it is a descriptive covariate, not something the filler arm emits."
+ },
+ "surface": {
+  "train_sd": {
+   "n_rows": 750,
+   "decode_failures": 0,
+   "rows_using_a_heldout_factor": 0,
+   "rows_with_a_heldout_name_or_paraphrase_string": 0,
+   "identical_prompt_across_arms": true,
+   "base_prompts_not_canonical": 0,
+   "paraphrase_use": {
+    "0": 172,
+    "1": 181,
+    "2": 196,
+    "3": 201
+   },
+   "name_variant_use": {
+    "register": {
+     "0": 173,
+     "1": 201,
+     "2": 194,
+     "3": 182
+    },
+    "other": {
+     "0": 186,
+     "1": 185,
+     "2": 181,
+     "3": 198
+    },
+    "value": {
+     "0": 200,
+     "1": 182,
+     "2": 191,
+     "3": 177
+    },
+    "threshold": {
+     "0": 198,
+     "1": 170,
+     "2": 211,
+     "3": 171
+    },
+    "kind": {
+     "0": 197,
+     "1": 203,
+     "2": 179,
+     "3": 171
+    },
+    "before": {
+     "0": 173,
+     "1": 179,
+     "2": 194,
+     "3": 204
+    },
+    "event": {
+     "0": 178,
+     "1": 190,
+     "2": 217,
+     "3": 165
+    }
+   },
+   "order_use": {
+    "top": {
+     "before/event": 750
+    },
+    "state": {
+     "X/Y/Z": 270,
+     "Y/Z/X": 246,
+     "Z/X/Y": 234
+    },
+    "event_distinct_orders": 464,
+    "event_train_orders_available": 717
+   },
+   "rows_fully_canonical": 0,
+   "ok": true
+  },
+  "heldout_surface_bank": {
+   "n_rows": 400,
+   "strata": {
+    "mix_oor": 100,
+    "cond_oor_val": 100,
+    "cond_oor_thr": 100,
+    "cond_far": 100
+   },
+   "bad_rows": 0,
+   "same_ids_and_golds_as_in_surface": true,
+   "order_rotation": {
+    "top": {
+     "event/before": 400
+    },
+    "state": {
+     "X/Z/Y": 133,
+     "Y/X/Z": 133,
+     "Z/Y/X": 134
+    },
+    "event": {
+     "other/kind/tick/threshold/register/value": 133,
+     "threshold/kind/tick/other/value/register": 133,
+     "value/tick/threshold/register/other/kind": 134
+    }
+   },
+   "mean_prompt_tokens": {
+    "held_out": 182.17,
+    "in_surface_same_rows": 143.17
+   },
+   "per_factor_renderings": "not built (C3: they do not fit the GPU budget; see DESIGN.md)",
+   "ok": true
+  },
+  "heldout": {
+   "paraphrase": 4,
+   "field_names": {
+    "register": "dest",
+    "other": "peer",
+    "value": "offset",
+    "threshold": "pivot",
+    "kind": "opcode",
+    "before": "memory",
+    "event": "operation"
+   },
+   "orders": {
+    "top": [
+     [
+      "event",
+      "before"
+     ]
+    ],
+    "state": [
+     [
+      "Z",
+      "Y",
+      "X"
+     ],
+     [
+      "Y",
+      "X",
+      "Z"
+     ],
+     [
+      "X",
+      "Z",
+      "Y"
+     ]
+    ],
+    "event": [
+     [
+      "value",
+      "tick",
+      "threshold",
+      "register",
+      "other",
+      "kind"
+     ],
+     [
+      "other",
+      "kind",
+      "tick",
+      "threshold",
+      "register",
+      "value"
+     ],
+     [
+      "threshold",
+      "kind",
+      "tick",
+      "other",
+      "value",
+      "register"
+     ]
+    ]
+   },
+   "order_seed": 20261113,
+   "train_orders_per_type": {
+    "top": 1,
+    "state": 3,
+    "event": 717
+   },
+   "lists": "none in the register one-step prompt (no list-order factor)"
+  },
+  "ok": true
+ },
+ "dev_heuristics": {
+  "mix": {
+   "copy": 0.0,
+   "unreduced": 0.5,
+   "mix_1x": 0.04,
+   "mix_no_v": 0.12
+  },
+  "wrap": {
+   "copy": 0.0,
+   "unreduced": 0.0,
+   "always_wrap": 1.0
+  },
+  "cond_xm1": {
+   "always_add": 0.0,
+   "always_sub": 1.0,
+   "wrong_register": 0.5333,
+   "x_hi": 0.4833,
+   "thr_lo": 0.5333,
+   "v_pos": 0.4,
+   "non_strict": 1.0,
+   "eq_plus1": 1.0,
+   "units_eq_plus1": 1.0,
+   "units_digit_gt": 0.85,
+   "tens_digit_gt": 1.0
+  },
+  "cond_x0": {
+   "always_add": 0.0,
+   "always_sub": 1.0,
+   "wrong_register": 0.5333,
+   "x_hi": 0.4833,
+   "thr_lo": 0.5167,
+   "v_pos": 0.4,
+   "non_strict": 0.0,
+   "eq_plus1": 1.0,
+   "units_eq_plus1": 1.0,
+   "units_digit_gt": 1.0,
+   "tens_digit_gt": 1.0
+  },
+  "cond_xp1": {
+   "always_add": 1.0,
+   "always_sub": 0.0,
+   "wrong_register": 0.4667,
+   "x_hi": 0.5167,
+   "thr_lo": 0.4833,
+   "v_pos": 0.6,
+   "non_strict": 1.0,
+   "eq_plus1": 1.0,
+   "units_eq_plus1": 1.0,
+   "units_digit_gt": 0.9,
+   "tens_digit_gt": 0.1
+  },
+  "cond_mid": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.54,
+   "x_hi": 0.58,
+   "thr_lo": 0.58,
+   "v_pos": 0.5,
+   "non_strict": 1.0,
+   "eq_plus1": 0.5,
+   "units_eq_plus1": 0.54,
+   "units_digit_gt": 0.62,
+   "tens_digit_gt": 0.86
+  },
+  "swap": {
+   "copy": 0.0,
+   "unreduced": 1.0
+  },
+  "add_nowrap": {
+   "copy": 0.0,
+   "unreduced": 1.0,
+   "always_wrap": 0.0
+  },
+  "mix_oor": {
+   "copy": 0.0,
+   "unreduced": 0.5,
+   "mix_1x": 0.04,
+   "mix_no_v": 0.0
+  },
+  "wrap_oor": {
+   "copy": 0.0,
+   "unreduced": 0.0,
+   "always_wrap": 1.0
+  },
+  "cond_oor_val": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.51,
+   "x_hi": 0.5,
+   "thr_lo": 0.5,
+   "v_pos": 0.5,
+   "non_strict": 0.5,
+   "eq_plus1": 1.0,
+   "units_eq_plus1": 1.0,
+   "units_digit_gt": 0.97,
+   "tens_digit_gt": 0.53
+  },
+  "cond_oor_thr": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 1.0,
+   "x_hi": 0.5,
+   "thr_lo": 1.0,
+   "v_pos": 0.5,
+   "non_strict": 1.0,
+   "eq_plus1": 0.5,
+   "units_eq_plus1": 0.5,
+   "units_digit_gt": 0.5,
+   "tens_digit_gt": 1.0
+  },
+  "cond_far": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.5,
+   "x_hi": 0.95,
+   "thr_lo": 0.5,
+   "v_pos": 0.5,
+   "non_strict": 1.0,
+   "eq_plus1": 0.5,
+   "units_eq_plus1": 0.54,
+   "units_digit_gt": 0.56,
+   "tens_digit_gt": 1.0
+  },
+  "primary_conditional": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.67,
+   "x_hi": 0.65,
+   "thr_lo": 0.6667,
+   "v_pos": 0.5,
+   "non_strict": 0.8333,
+   "eq_plus1": 0.6667,
+   "units_eq_plus1": 0.68,
+   "units_digit_gt": 0.6767,
+   "tens_digit_gt": 0.8433
+  },
+  "primary_mix": {
+   "copy": 0.0,
+   "unreduced": 0.5,
+   "mix_1x": 0.04,
+   "mix_no_v": 0.0
+  }
+ },
  "train_describe": {
   "n": 750,
   "by_stratum": {
-   "cond/xp1": 150,
+   "cond/twin_gt": 100,
    "mix/nowrap": 150,
-   "cond/x0": 100,
+   "cond/xp1": 50,
+   "cond/x0": 50,
    "add/wrap_under": 75,
    "mix/wrap": 150,
+   "cond/xm1": 50,
    "add/wrap_over": 75,
-   "cond/xm1": 50
+   "cond/twin_le": 50
   },
   "by_category": {
    "cond": 300,
@@ -381,8 +1314,12 @@
   },
   "cond_patterns_pairs": {
    "none": 50,
-   "add_wraps": 50,
-   "sub_wraps": 50
+   "sub_wraps": 50,
+   "add_wraps": 50
+  },
+  "cond_twin_types": {
+   "threshold": 75,
+   "other": 75
   },
   "wrap_rows": 400,
   "value_range": [
@@ -390,14 +1327,25 @@
    11
   ],
   "threshold_range_cond": [
-   0,
+   1,
    96
   ],
   "mean_target_tokens": {
    "plain": 15.55,
-   "trace": 38.08,
-   "filler": 38.08
+   "trace": 38.06,
+   "filler": 39.35
   }
+ },
+ "rows_identical_to_revision_2": {
+  "train_rows": "fd6710e20a5556708b296364718b6edb7275f7b3adac02a52b95700384302e42",
+  "dev_rows": "1113af0fedb5d9e955445472d703799eac21403e37fbec7838c45cb2bc6d5648",
+  "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
+ },
+ "revision_2_files_reconstructed": {
+  "t2br_train_plain.jsonl": "49067515714f09a72838f7b3414523a937707dfadf565a107bef6709fd294534",
+  "t2br_train_trace.jsonl": "1bad81166f18494829b58a79e2c3cdaa34bb5b64f42f52068305d720b5658884",
+  "t2br_train_filler.jsonl": "3102361dae2f6dddf8b643635409caf790b3ac0dc454fdda51d0d37a66b6721d",
+  "t2br_dev.jsonl": "2c0250a2189e1b5a37ccdc6157f4b5f41d6a9c69eef4a4049472beff97070b43"
  },
  "dev_describe": {
   "by_stratum": {
@@ -411,27 +1359,62 @@
    "mix_oor": 100,
    "wrap_oor": 80,
    "cond_oor_val": 100,
-   "cond_oor_thr": 100
+   "cond_oor_thr": 100,
+   "cond_mid": 100,
+   "cond_far": 100
   },
   "chains": {
    "CH_IN": 32,
    "CH_X": 16
+  },
+  "heldout_surface_rows": 400,
+  "branch_by_stratum": {
+   "cond_xm1": {
+    "False": 60
+   },
+   "cond_x0": {
+    "False": 60
+   },
+   "cond_xp1": {
+    "True": 60
+   },
+   "cond_mid": {
+    "True": 50,
+    "False": 50
+   },
+   "cond_oor_val": {
+    "False": 50,
+    "True": 50
+   },
+   "cond_oor_thr": {
+    "True": 50,
+    "False": 50
+   },
+   "cond_far": {
+    "True": 50,
+    "False": 50
+   }
   }
  },
  "files_sha256": {
-  "t2br_train_plain.jsonl": "7344677dff2538af1bff38f24d90e0e734fb0a1a424b42bb714bb9db9ae35ba7",
-  "t2br_train_trace.jsonl": "6c034182b2e96daad83b92dfaf0b7be943bf5bbb09d2a52adf166e2e7aefc5b2",
-  "t2br_train_filler.jsonl": "a3c8ada63535544b3e257294da53ba772d99415a158a5ab2cff9261e08f9ddc4",
-  "t2br_dev.jsonl": "8b01899c60a0bb9d60ff2535531ec5c168564a9b98e313a034ac75ecff1a5427",
+  "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
+  "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
+  "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
+  "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
+  "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
+  "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
+  "t2br_dev.jsonl": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+  "t2br_dev_hs.jsonl": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
   "t2br_chains.jsonl": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
-  "t2br_train.SOURCE.json": "7731f0ae8fbc491bbfd8ff4ac8e39050d4dd74b23c639c0eec20354c699be9b5",
-  "t2br_dev.SOURCE.json": "15fab2ec2bf28451847b52daac792afc343e18d03029e723626bda0dcceeab05"
+  "t2br_train.SOURCE.json": "7d58ea86baec2e11023afe21ed7f668dce0890495da669bed2e15637e2bc295b",
+  "t2br_train_sd.SOURCE.json": "1af89f5b2da6cbc0cf445dc78fc229a099268f1a762f9460a2d9062d03aa8b68",
+  "t2br_dev.SOURCE.json": "aab1f5554ffdcb7a0e4d2b8cc48c5d22e6eed3cf4108f878147efadf63ba0405"
  },
  "code_sha256": {
-  "scripts/t2br_make_data.py": "40cbd657c8070cc4372942efbf521af2cfa45a28cf453a5d4bf09fc11382aae8",
-  "scripts/t2br_common.py": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15"
+  "scripts/t2br_make_data.py": "b94886243ed607096d7b0cf23bbe21de8fab0919755eb2798fa6aff9d334b4a6",
+  "scripts/t2br_common.py": "affa7d555c2924c7a587f55a13779315721b792c81b4f589c2a0f7519d783186"
  },
  "torch_imported": false,
- "peak_rss_mb": 542.3,
- "written_utc": "2026-10-09T08:24:13Z"
+ "peak_rss_mb": 564.0,
+ "written_utc": "2026-10-09T17:28:17Z"
 }

@@ -5,6 +5,16 @@
    "got": "STOP_P_TRAINING",
    "ok": true,
    "R": {
+    "dint": 0.3002,
+    "strace": 0.0774,
+    "bbits": 0.3002
+   },
+   "policies_on": {
+    "dint": "copy",
+    "strace": "intadd",
+    "bbits": "copy"
+   },
+   "R_without_HS_revision2_formula": {
     "dint": 0.2097,
     "strace": 0.0556,
     "bbits": 0.2097
@@ -14,65 +24,161 @@
      "IAW": 0.0,
      "OOR": 0.5,
      "K4": 0.1292,
+     "HS": 0.5714,
      "FC": 1.0,
-     "ID": 0.5
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
     },
     "strace": {
      "IAW": 0.0,
      "OOR": 0.1667,
      "K4": 0.0,
+     "HS": 0.1429,
      "FC": 0.0,
-     "ID": 0.1667
+     "FA": 1.0,
+     "WF": 1.0,
+     "ID": 0.1429
     },
     "bbits": {
      "IAW": 0.0,
      "OOR": 0.5,
      "K4": 0.1292,
+     "HS": 0.5714,
      "FC": 1.0,
-     "ID": 0.5
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
     }
    },
-   "wording": "Every arm scores below 0.20 on int-add-wrong (decision point 2): stop prerequisite training and move P to a code-side bit interface, reported as an interface, not as model skill."
+   "excluded": null,
+   "wording": "Every arm scores below 0.20 on int-add-wrong (decision point 2): stop prerequisite training and move P to a code-side bit interface, reported as an interface, not as model skill (150 of the 1,500 training rows were int-add-wrong (A4) rows)."
   },
-  "trace_wins": {
+  "stop_titan_reading_everywhere (R11 pa_int_add / pa_or_add)": {
+   "expected": "STOP_P_TRAINING",
+   "got": "STOP_P_TRAINING",
+   "ok": true,
+   "R": {
+    "dint": 0.3251,
+    "strace": 0.3251,
+    "bbits": 0.4588
+   },
+   "policies_on": {
+    "dint": "pa_int_add",
+    "strace": "pa_int_add",
+    "bbits": "pa_or_add"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.2431,
+    "strace": 0.2431,
+    "bbits": 0.3736
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.2292,
+     "HS": 0.5714,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
+    },
+    "strace": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.2292,
+     "HS": 0.5714,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.6667,
+     "K4": 0.4542,
+     "HS": 0.7143,
+     "FC": 0.4286,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.7143
+    }
+   },
+   "excluded": null,
+   "wording": "Every arm scores below 0.20 on int-add-wrong (decision point 2): stop prerequisite training and move P to a code-side bit interface, reported as an interface, not as model skill (150 of the 1,500 training rows were int-add-wrong (A4) rows)."
+  },
+  "trace_wins (filler control pending)": {
    "expected": "WINNER=strace",
    "got": "WINNER=strace",
    "ok": true,
    "R": {
+    "dint": 0.3002,
+    "strace": 1.0,
+    "bbits": 0.8712
+   },
+   "policies_on": {
+    "dint": "copy",
+    "strace": "perfect",
+    "bbits": "noisy80"
+   },
+   "R_without_HS_revision2_formula": {
     "dint": 0.2097,
     "strace": 1.0,
-    "bbits": 0.8597
+    "bbits": 0.8569
    },
    "metrics": {
     "dint": {
      "IAW": 0.0,
      "OOR": 0.5,
      "K4": 0.1292,
+     "HS": 0.5714,
      "FC": 1.0,
-     "ID": 0.5
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
     },
     "strace": {
      "IAW": 1.0,
      "OOR": 1.0,
      "K4": 1.0,
+     "HS": 1.0,
      "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
      "ID": 1.0
     },
     "bbits": {
      "IAW": 0.8267,
      "OOR": 0.9066,
-     "K4": 0.8458,
-     "FC": 0.188,
-     "ID": 0.9045
+     "K4": 0.8375,
+     "HS": 0.9138,
+     "FC": 0.1886,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.9181
     }
    },
-   "wording": "WINNER=S-trace: seeds 1 and 2 run S-trace (same rows, T2 recipe)."
+   "excluded": {
+    "dint": "IAW 0.000 < 0.2; false copy 1.000 > 0.25"
+   },
+   "wording": "WINNER=S-trace: seeds 1 and 2 run S-trace (same rows, T2 recipe). Decode-compute control pending (R5: run tag sd_s0_ffill, then t2bp_analysis.py --filler-run runs/t2bp/sd_s0_ffill)."
   },
   "bbits_wins_trace_excluded_by_copy": {
    "expected": "WINNER=bbits",
    "got": "WINNER=bbits",
    "ok": true,
    "R": {
+    "dint": 0.3002,
+    "strace": 0.6494,
+    "bbits": 0.9167
+   },
+   "policies_on": {
+    "dint": "copy",
+    "strace": "iaw_only",
+    "bbits": "perfect_id_ignore_ood"
+   },
+   "R_without_HS_revision2_formula": {
     "dint": 0.2097,
     "strace": 0.6278,
     "bbits": 0.8889
@@ -82,23 +188,36 @@
      "IAW": 0.0,
      "OOR": 0.5,
      "K4": 0.1292,
+     "HS": 0.5714,
      "FC": 1.0,
-     "ID": 0.5
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
     },
     "strace": {
      "IAW": 1.0,
      "OOR": 0.6667,
      "K4": 0.2167,
-     "FC": 0.6,
-     "ID": 0.6667
+     "HS": 0.7143,
+     "FC": 0.5714,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.7143
     },
     "bbits": {
      "IAW": 1.0,
      "OOR": 0.6667,
      "K4": 1.0,
+     "HS": 1.0,
      "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
      "ID": 1.0
     }
+   },
+   "excluded": {
+    "dint": "IAW 0.000 < 0.2; false copy 1.000 > 0.25",
+    "strace": "false copy 0.571 > 0.25"
    },
    "wording": "WINNER=B-bits: seeds 1 and 2 run B-bits (same rows, T2 recipe)."
   },
@@ -107,6 +226,16 @@
    "got": "NO_ELIGIBLE_ARM",
    "ok": true,
    "R": {
+    "dint": 0.6494,
+    "strace": 0.6494,
+    "bbits": 0.6494
+   },
+   "policies_on": {
+    "dint": "iaw_only",
+    "strace": "iaw_only",
+    "bbits": "iaw_only"
+   },
+   "R_without_HS_revision2_formula": {
     "dint": 0.6278,
     "strace": 0.6278,
     "bbits": 0.6278
@@ -116,25 +245,39 @@
      "IAW": 1.0,
      "OOR": 0.6667,
      "K4": 0.2167,
-     "FC": 0.6,
-     "ID": 0.6667
+     "HS": 0.7143,
+     "FC": 0.5714,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.7143
     },
     "strace": {
      "IAW": 1.0,
      "OOR": 0.6667,
      "K4": 0.2167,
-     "FC": 0.6,
-     "ID": 0.6667
+     "HS": 0.7143,
+     "FC": 0.5714,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.7143
     },
     "bbits": {
      "IAW": 1.0,
      "OOR": 0.6667,
      "K4": 0.2167,
-     "FC": 0.6,
-     "ID": 0.6667
+     "HS": 0.7143,
+     "FC": 0.5714,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.7143
     }
    },
-   "wording": "No arm is eligible (false copy > 0.25 or an in-distribution collapse in every arm); no arm is named for seeds 1-2."
+   "excluded": {
+    "dint": "false copy 0.571 > 0.25",
+    "strace": "false copy 0.571 > 0.25",
+    "bbits": "false copy 0.571 > 0.25"
+   },
+   "wording": "No arm is eligible (int-add-wrong < 0.20, false copy > 0.25, false apply > 0.25 or an in-distribution collapse in every arm); no arm is named for seeds 1-2."
   },
   "tie_goes_to_dint": {
    "expected": "WINNER=dint",
@@ -145,36 +288,66 @@
     "strace": 1.0,
     "bbits": 1.0
    },
+   "policies_on": {
+    "dint": "perfect",
+    "strace": "perfect",
+    "bbits": "perfect"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 1.0,
+    "strace": 1.0,
+    "bbits": 1.0
+   },
    "metrics": {
     "dint": {
      "IAW": 1.0,
      "OOR": 1.0,
      "K4": 1.0,
+     "HS": 1.0,
      "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
      "ID": 1.0
     },
     "strace": {
      "IAW": 1.0,
      "OOR": 1.0,
      "K4": 1.0,
+     "HS": 1.0,
      "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
      "ID": 1.0
     },
     "bbits": {
      "IAW": 1.0,
      "OOR": 1.0,
      "K4": 1.0,
+     "HS": 1.0,
      "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
      "ID": 1.0
     }
    },
-   "wording": "WINNER=D-int: seeds 1 and 2 run D-int (same rows, T2 recipe). The representation does not beat the rebalanced-data control."
+   "excluded": {},
+   "wording": "WINNER=D-int: seeds 1 and 2 run D-int (same rows, T2 recipe). The representation does not beat the rebalanced-data control. Close call: the winner's R exceeds another eligible arm's by 0.000 < 0.05 (about two standard errors); a screen choice, not a finding."
   },
-  "ignore_pre_arm_excluded_by_id": {
+  "ignore_pre_arm_excluded_by_false_apply": {
    "expected": "WINNER=dint",
    "got": "WINNER=dint",
    "ok": true,
    "R": {
+    "dint": 0.9167,
+    "strace": 0.67,
+    "bbits": 0.3002
+   },
+   "policies_on": {
+    "dint": "perfect_id_ignore_ood",
+    "strace": "ignore_pre",
+    "bbits": "copy"
+   },
+   "R_without_HS_revision2_formula": {
     "dint": 0.8889,
     "strace": 0.7028,
     "bbits": 0.2097
@@ -184,31 +357,508 @@
      "IAW": 1.0,
      "OOR": 0.6667,
      "K4": 1.0,
+     "HS": 1.0,
      "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
      "ID": 1.0
     },
     "strace": {
      "IAW": 1.0,
      "OOR": 0.6667,
      "K4": 0.4417,
+     "HS": 0.5714,
      "FC": 0.0,
-     "ID": 0.6667
+     "FA": 1.0,
+     "WF": 1.0,
+     "ID": 0.5714
     },
     "bbits": {
      "IAW": 0.0,
      "OOR": 0.5,
      "K4": 0.1292,
+     "HS": 0.5714,
      "FC": 1.0,
-     "ID": 0.5
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
     }
+   },
+   "excluded": {
+    "strace": "false apply 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1",
+    "bbits": "IAW 0.000 < 0.2; false copy 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1"
    },
    "wording": "WINNER=D-int: seeds 1 and 2 run D-int (same rows, T2 recipe). The representation does not beat the rebalanced-data control."
   },
-  "filler_flag": {
-   "expected": "WINNER=strace+FLAG",
-   "got": "WINNER=strace+FLAG",
+  "review case 1: pre_on-only arm (ignores pre_off) loses to an 80% rule arm": {
+   "expected": "WINNER=bbits",
+   "got": "WINNER=bbits",
    "ok": true,
    "R": {
+    "dint": 0.5525,
+    "strace": 0.8558,
+    "bbits": 0.8712
+   },
+   "policies_on": {
+    "dint": "t2like",
+    "strace": "pre_on_only",
+    "bbits": "noisy80"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.4861,
+    "strace": 0.8792,
+    "bbits": 0.8569
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.3667,
+     "OOR": 0.6833,
+     "K4": 0.4083,
+     "HS": 0.7519,
+     "FC": 0.5686,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.761
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.8333,
+     "K4": 0.8042,
+     "HS": 0.7857,
+     "FC": 0.0,
+     "FA": 1.0,
+     "WF": 1.0,
+     "ID": 0.7857
+    },
+    "bbits": {
+     "IAW": 0.8267,
+     "OOR": 0.9066,
+     "K4": 0.8375,
+     "HS": 0.9138,
+     "FC": 0.1886,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.9181
+    }
+   },
+   "excluded": {
+    "dint": "false copy 0.569 > 0.25",
+    "strace": "false apply 1.000 > 0.25"
+   },
+   "wording": "WINNER=B-bits: seeds 1 and 2 run B-bits (same rows, T2 recipe)."
+  },
+  "review case 1b: pre_off-only arm loses to an 80% rule arm": {
+   "expected": "WINNER=bbits",
+   "got": "WINNER=bbits",
+   "ok": true,
+   "R": {
+    "dint": 0.5525,
+    "strace": 0.8131,
+    "bbits": 0.8712
+   },
+   "policies_on": {
+    "dint": "t2like",
+    "strace": "pre_off_only",
+    "bbits": "noisy80"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.4861,
+    "strace": 0.8222,
+    "bbits": 0.8569
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.3667,
+     "OOR": 0.6833,
+     "K4": 0.4083,
+     "HS": 0.7519,
+     "FC": 0.5686,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.761
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.8333,
+     "K4": 0.6333,
+     "HS": 0.7857,
+     "FC": 0.0,
+     "FA": 1.0,
+     "WF": 1.0,
+     "ID": 0.7857
+    },
+    "bbits": {
+     "IAW": 0.8267,
+     "OOR": 0.9066,
+     "K4": 0.8375,
+     "HS": 0.9138,
+     "FC": 0.1886,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.9181
+    }
+   },
+   "excluded": {
+    "dint": "false copy 0.569 > 0.25",
+    "strace": "false apply 1.000 > 0.25"
+   },
+   "wording": "WINNER=B-bits: seeds 1 and 2 run B-bits (same rows, T2 recipe)."
+  },
+  "review case 2: ignore-preconditions arm vs a T2-like control": {
+   "expected": "NO_ELIGIBLE_ARM",
+   "got": "NO_ELIGIBLE_ARM",
+   "ok": true,
+   "R": {
+    "dint": 0.5525,
+    "strace": 0.67,
+    "bbits": 0.3002
+   },
+   "policies_on": {
+    "dint": "t2like",
+    "strace": "ignore_pre",
+    "bbits": "copy"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.4861,
+    "strace": 0.7028,
+    "bbits": 0.2097
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.3667,
+     "OOR": 0.6833,
+     "K4": 0.4083,
+     "HS": 0.7519,
+     "FC": 0.5686,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.761
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 0.4417,
+     "HS": 0.5714,
+     "FC": 0.0,
+     "FA": 1.0,
+     "WF": 1.0,
+     "ID": 0.5714
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "HS": 0.5714,
+     "FC": 1.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
+    }
+   },
+   "excluded": {
+    "dint": "false copy 0.569 > 0.25",
+    "strace": "false apply 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1",
+    "bbits": "IAW 0.000 < 0.2; false copy 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1"
+   },
+   "wording": "No arm is eligible (int-add-wrong < 0.20, false copy > 0.25, false apply > 0.25 or an in-distribution collapse in every arm); no arm is named for seeds 1-2."
+  },
+  "review case 3: precondition-count cue arm": {
+   "expected": "NO_ELIGIBLE_ARM",
+   "got": "NO_ELIGIBLE_ARM",
+   "ok": true,
+   "R": {
+    "dint": 0.5525,
+    "strace": 0.7289,
+    "bbits": 0.3002
+   },
+   "policies_on": {
+    "dint": "t2like",
+    "strace": "precount_cue",
+    "bbits": "copy"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.4861,
+    "strace": 0.74,
+    "bbits": 0.2097
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.3667,
+     "OOR": 0.6833,
+     "K4": 0.4083,
+     "HS": 0.7519,
+     "FC": 0.5686,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.761
+    },
+    "strace": {
+     "IAW": 0.88,
+     "OOR": 0.7567,
+     "K4": 0.5833,
+     "HS": 0.6957,
+     "FC": 0.1257,
+     "FA": 0.73,
+     "WF": 1.0,
+     "ID": 0.6957
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "HS": 0.5714,
+     "FC": 1.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
+    }
+   },
+   "excluded": {
+    "dint": "false copy 0.569 > 0.25",
+    "strace": "false apply 0.730 > 0.25",
+    "bbits": "IAW 0.000 < 0.2; false copy 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1"
+   },
+   "wording": "No arm is eligible (int-add-wrong < 0.20, false copy > 0.25, false apply > 0.25 or an in-distribution collapse in every arm); no arm is named for seeds 1-2."
+  },
+  "add-bit-set -> apply cue arm (caught by D_inapp_addset)": {
+   "expected": "WINNER=bbits",
+   "got": "WINNER=bbits",
+   "ok": true,
+   "R": {
+    "dint": 0.5525,
+    "strace": 0.9217,
+    "bbits": 0.8712
+   },
+   "policies_on": {
+    "dint": "t2like",
+    "strace": "addset_apply",
+    "bbits": "noisy80"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.4861,
+    "strace": 0.9528,
+    "bbits": 0.8569
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.3667,
+     "OOR": 0.6833,
+     "K4": 0.4083,
+     "HS": 0.7519,
+     "FC": 0.5686,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.761
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.95,
+     "K4": 0.9083,
+     "HS": 0.8286,
+     "FC": 0.0,
+     "FA": 1.0,
+     "WF": 1.0,
+     "ID": 0.8286
+    },
+    "bbits": {
+     "IAW": 0.8267,
+     "OOR": 0.9066,
+     "K4": 0.8375,
+     "HS": 0.9138,
+     "FC": 0.1886,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.9181
+    }
+   },
+   "excluded": {
+    "dint": "false copy 0.569 > 0.25",
+    "strace": "false apply 1.000 > 0.25"
+   },
+   "wording": "WINNER=B-bits: seeds 1 and 2 run B-bits (same rows, T2 recipe)."
+  },
+  "delete-only arm (IAW 1.0, fails D_app_add) vs a perfect D-int": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 1.0,
+    "strace": 0.6505,
+    "bbits": 0.3002
+   },
+   "policies_on": {
+    "dint": "perfect",
+    "strace": "pa_delete_only",
+    "bbits": "copy"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 1.0,
+    "strace": 0.6292,
+    "bbits": 0.2097
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 1.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 0.2208,
+     "HS": 0.7143,
+     "FC": 0.2857,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.7143
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "HS": 0.5714,
+     "FC": 1.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
+    }
+   },
+   "excluded": {
+    "strace": "false copy 0.286 > 0.25; ID 0.714 < ID(D-int) - 0.1",
+    "bbits": "IAW 0.000 < 0.2; false copy 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1"
+   },
+   "wording": "WINNER=D-int: seeds 1 and 2 run D-int (same rows, T2 recipe). The representation does not beat the rebalanced-data control."
+  },
+  "malformed_everywhere": {
+   "expected": "NO_VERDICT_INSTRUMENT",
+   "got": "NO_VERDICT_INSTRUMENT",
+   "ok": true,
+   "R": {
+    "dint": 0.0,
+    "strace": 0.0,
+    "bbits": 0.0
+   },
+   "policies_on": {
+    "dint": "malformed",
+    "strace": "malformed",
+    "bbits": "malformed"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.0,
+    "strace": 0.0,
+    "bbits": 0.0
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.0,
+     "OOR": 0.0,
+     "K4": 0.0,
+     "HS": 0.0,
+     "FC": 0.0,
+     "FA": 1.0,
+     "WF": 0.0,
+     "ID": 0.0
+    },
+    "strace": {
+     "IAW": 0.0,
+     "OOR": 0.0,
+     "K4": 0.0,
+     "HS": 0.0,
+     "FC": 0.0,
+     "FA": 1.0,
+     "WF": 0.0,
+     "ID": 0.0
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.0,
+     "K4": 0.0,
+     "HS": 0.0,
+     "FC": 0.0,
+     "FA": 1.0,
+     "WF": 0.0,
+     "ID": 0.0
+    }
+   },
+   "excluded": null,
+   "wording": "No verdict: instrument or format failure (WF(D-int) 0.000 < 0.9; WF(S-trace) 0.000 < 0.9; WF(B-bits) 0.000 < 0.9). This is not a result; no programme decision follows; investigate and log it in DECISIONS.md."
+  },
+  "one arm 15% malformed": {
+   "expected": "NO_VERDICT_INSTRUMENT",
+   "got": "NO_VERDICT_INSTRUMENT",
+   "ok": true,
+   "R": {
+    "dint": 1.0,
+    "strace": 0.736,
+    "bbits": 1.0
+   },
+   "policies_on": {
+    "dint": "perfect",
+    "strace": "malformed15",
+    "bbits": "perfect"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 1.0,
+    "strace": 0.7084,
+    "bbits": 1.0
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 1.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    },
+    "strace": {
+     "IAW": 0.8067,
+     "OOR": 0.8434,
+     "K4": 0.475,
+     "HS": 0.819,
+     "FC": 0.0,
+     "FA": 0.22,
+     "WF": 0.8227,
+     "ID": 0.8238
+    },
+    "bbits": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 1.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    }
+   },
+   "excluded": null,
+   "wording": "No verdict: instrument or format failure (WF(S-trace) 0.823 < 0.9). This is not a result; no programme decision follows; investigate and log it in DECISIONS.md."
+  },
+  "filler in the s0 run flags": {
+   "expected": "WINNER=strace+TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE",
+   "got": "WINNER=strace+TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE",
+   "ok": true,
+   "R": {
+    "dint": 0.3002,
+    "strace": 1.0,
+    "bbits": 0.3002,
+    "ffill": 1.0
+   },
+   "policies_on": {
+    "dint": "copy",
+    "strace": "perfect",
+    "bbits": "copy",
+    "ffill": "perfect"
+   },
+   "R_without_HS_revision2_formula": {
     "dint": 0.2097,
     "strace": 1.0,
     "bbits": 0.2097,
@@ -219,66 +869,352 @@
      "IAW": 0.0,
      "OOR": 0.5,
      "K4": 0.1292,
+     "HS": 0.5714,
      "FC": 1.0,
-     "ID": 0.5
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
     },
     "strace": {
      "IAW": 1.0,
      "OOR": 1.0,
      "K4": 1.0,
+     "HS": 1.0,
      "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
      "ID": 1.0
     },
     "bbits": {
      "IAW": 0.0,
      "OOR": 0.5,
      "K4": 0.1292,
+     "HS": 0.5714,
      "FC": 1.0,
-     "ID": 0.5
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
     },
     "ffill": {
      "IAW": 1.0,
      "OOR": 1.0,
      "K4": 1.0,
+     "HS": 1.0,
      "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
      "ID": 1.0
     }
    },
+   "excluded": {
+    "dint": "IAW 0.000 < 0.2; false copy 1.000 > 0.25",
+    "bbits": "IAW 0.000 < 0.2; false copy 1.000 > 0.25"
+   },
    "wording": "WINNER=S-trace: seeds 1 and 2 run S-trace (same rows, T2 recipe). Flag: TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE."
   },
-  "malformed_everywhere": {
-   "expected": "STOP_P_TRAINING",
-   "got": "STOP_P_TRAINING",
+  "rev3: surface-locked arm (the rule in-surface, malformed on the held-out surface) loses to a surface-robust arm": {
+   "expected": "WINNER=bbits",
+   "got": "WINNER=bbits",
    "ok": true,
    "R": {
-    "dint": 0.0,
-    "strace": 0.0,
-    "bbits": 0.0
+    "dint": 0.5525,
+    "strace": 0.75,
+    "bbits": 0.9167
+   },
+   "policies_on": {
+    "dint": "t2like",
+    "strace": [
+     "perfect",
+     "malformed"
+    ],
+    "bbits": "perfect_id_ignore_ood"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.4861,
+    "strace": 1.0,
+    "bbits": 0.8889
    },
    "metrics": {
     "dint": {
-     "IAW": 0.0,
-     "OOR": 0.0,
-     "K4": 0.0,
-     "FC": 0.0,
-     "ID": 0.0
+     "IAW": 0.3667,
+     "OOR": 0.6833,
+     "K4": 0.4083,
+     "HS": 0.7519,
+     "FC": 0.5686,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.761
     },
     "strace": {
-     "IAW": 0.0,
-     "OOR": 0.0,
-     "K4": 0.0,
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 0.0,
      "FC": 0.0,
-     "ID": 0.0
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    },
+    "bbits": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 1.0,
+     "HS": 1.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    }
+   },
+   "excluded": {
+    "dint": "false copy 0.569 > 0.25"
+   },
+   "wording": "WINNER=B-bits: seeds 1 and 2 run B-bits (same rows, T2 recipe)."
+  },
+  "rev3: surface-locked arm (the rule in-surface, copies on the held-out surface) loses (a close call)": {
+   "expected": "WINNER=bbits",
+   "got": "WINNER=bbits",
+   "ok": true,
+   "R": {
+    "dint": 0.5525,
+    "strace": 0.8929,
+    "bbits": 0.9167
+   },
+   "policies_on": {
+    "dint": "t2like",
+    "strace": [
+     "perfect",
+     "copy"
+    ],
+    "bbits": "perfect_id_ignore_ood"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.4861,
+    "strace": 1.0,
+    "bbits": 0.8889
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.3667,
+     "OOR": 0.6833,
+     "K4": 0.4083,
+     "HS": 0.7519,
+     "FC": 0.5686,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.761
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 0.5714,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    },
+    "bbits": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 1.0,
+     "HS": 1.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    }
+   },
+   "excluded": {
+    "dint": "false copy 0.569 > 0.25"
+   },
+   "wording": "WINNER=B-bits: seeds 1 and 2 run B-bits (same rows, T2 recipe). Close call: the winner's R exceeds another eligible arm's by 0.024 < 0.05 (about two standard errors); a screen choice, not a finding."
+  },
+  "rev3: HS separates two arms tied in-surface (D-int loses the rule on the held-out surface)": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.8929,
+    "strace": 1.0,
+    "bbits": 0.3002
+   },
+   "policies_on": {
+    "dint": [
+     "perfect",
+     "copy"
+    ],
+    "strace": "perfect",
+    "bbits": "copy"
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 1.0,
+    "strace": 1.0,
+    "bbits": 0.2097
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 0.5714,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 1.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
     },
     "bbits": {
      "IAW": 0.0,
-     "OOR": 0.0,
-     "K4": 0.0,
-     "FC": 0.0,
-     "ID": 0.0
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "HS": 0.5714,
+     "FC": 1.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
     }
    },
-   "wording": "Every arm scores below 0.20 on int-add-wrong (decision point 2): stop prerequisite training and move P to a code-side bit interface, reported as an interface, not as model skill."
+   "excluded": {
+    "bbits": "IAW 0.000 < 0.2; false copy 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1"
+   },
+   "wording": "WINNER=S-trace: seeds 1 and 2 run S-trace (same rows, T2 recipe). Decode-compute control pending (R5: run tag sd_s0_ffill, then t2bp_analysis.py --filler-run runs/t2bp/sd_s0_ffill)."
+  },
+  "rev3: malformed held-out answers everywhere are wrong answers, not an instrument failure (R0 is in-surface)": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.75,
+    "strace": 0.75,
+    "bbits": 0.75
+   },
+   "policies_on": {
+    "dint": [
+     "perfect",
+     "malformed"
+    ],
+    "strace": [
+     "perfect",
+     "malformed"
+    ],
+    "bbits": [
+     "perfect",
+     "malformed"
+    ]
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 1.0,
+    "strace": 1.0,
+    "bbits": 1.0
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 0.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 0.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    },
+    "bbits": {
+     "IAW": 1.0,
+     "OOR": 1.0,
+     "K4": 1.0,
+     "HS": 0.0,
+     "FC": 0.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 1.0
+    }
+   },
+   "excluded": {},
+   "wording": "WINNER=D-int: seeds 1 and 2 run D-int (same rows, T2 recipe). The representation does not beat the rebalanced-data control. Close call: the winner's R exceeds another eligible arm's by 0.000 < 0.05 (about two standard errors); a screen choice, not a finding."
+  },
+  "rev3: an ignore-preconditions arm stays excluded by FA however well it does on the held-out surface": {
+   "expected": "NO_ELIGIBLE_ARM",
+   "got": "NO_ELIGIBLE_ARM",
+   "ok": true,
+   "R": {
+    "dint": 0.5074,
+    "strace": 0.67,
+    "bbits": 0.4073
+   },
+   "policies_on": {
+    "dint": [
+     "t2like",
+     "copy"
+    ],
+    "strace": "ignore_pre",
+    "bbits": [
+     "copy",
+     "perfect"
+    ]
+   },
+   "R_without_HS_revision2_formula": {
+    "dint": 0.4861,
+    "strace": 0.7028,
+    "bbits": 0.2097
+   },
+   "metrics": {
+    "dint": {
+     "IAW": 0.3667,
+     "OOR": 0.6833,
+     "K4": 0.4083,
+     "HS": 0.5714,
+     "FC": 0.5686,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.761
+    },
+    "strace": {
+     "IAW": 1.0,
+     "OOR": 0.6667,
+     "K4": 0.4417,
+     "HS": 0.5714,
+     "FC": 0.0,
+     "FA": 1.0,
+     "WF": 1.0,
+     "ID": 0.5714
+    },
+    "bbits": {
+     "IAW": 0.0,
+     "OOR": 0.5,
+     "K4": 0.1292,
+     "HS": 1.0,
+     "FC": 1.0,
+     "FA": 0.0,
+     "WF": 1.0,
+     "ID": 0.5714
+    }
+   },
+   "excluded": {
+    "dint": "false copy 0.569 > 0.25",
+    "strace": "false apply 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1",
+    "bbits": "IAW 0.000 < 0.2; false copy 1.000 > 0.25; ID 0.571 < ID(D-int) - 0.1"
+   },
+   "wording": "No arm is eligible (int-add-wrong < 0.20, false copy > 0.25, false apply > 0.25 or an in-distribution collapse in every arm); no arm is named for seeds 1-2."
   }
  },
  "ok": true,
@@ -316,7 +1252,40 @@
    },
    "tie_break": null
   },
-  "IAW exactly 0.20 everywhere is not a stop": {
+  "FC 0.26 is excluded": {
+   "expected": "NO_ELIGIBLE_ARM",
+   "got": "NO_ELIGIBLE_ARM",
+   "ok": true,
+   "R": {
+    "dint": 0.5,
+    "strace": 0.6,
+    "bbits": 0.3
+   },
+   "tie_break": null
+  },
+  "FA exactly 0.25 is eligible": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.5,
+    "strace": 0.6,
+    "bbits": 0.3
+   },
+   "tie_break": null
+  },
+  "FA 0.26 excludes the best-R arm (a false-apply shortcut cannot win)": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.5,
+    "strace": 1.0,
+    "bbits": 0.3
+   },
+   "tie_break": null
+  },
+  "IAW exactly 0.20 everywhere is not a stop and is eligible": {
    "expected": "WINNER=dint",
    "got": "WINNER=dint",
    "ok": true,
@@ -327,14 +1296,47 @@
    },
    "tie_break": null
   },
-  "one arm at 0.20 prevents the stop": {
-   "expected": "WINNER=dint",
-   "got": "WINNER=dint",
+  "one arm at 0.20 prevents the stop and is the only eligible arm": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
    "ok": true,
    "R": {
     "dint": 0.3967,
     "strace": 0.3333,
     "bbits": 0.2333
+   },
+   "tie_break": null
+  },
+  "R1/R2 gap: the only arm with IAW >= 0.20 is ineligible -> no winner below 0.20": {
+   "expected": "NO_ELIGIBLE_ARM",
+   "got": "NO_ELIGIBLE_ARM",
+   "ok": true,
+   "R": {
+    "dint": 0.35,
+    "strace": 0.3167,
+    "bbits": 0.2667
+   },
+   "tie_break": null
+  },
+  "WF 0.89 in one arm: NO_VERDICT_INSTRUMENT (checked before the stop)": {
+   "expected": "NO_VERDICT_INSTRUMENT",
+   "got": "NO_VERDICT_INSTRUMENT",
+   "ok": true,
+   "R": {
+    "dint": 0.3333,
+    "strace": 0.2667,
+    "bbits": 0.2
+   },
+   "tie_break": null
+  },
+  "WF exactly 0.90 is valid": {
+   "expected": "STOP_P_TRAINING",
+   "got": "STOP_P_TRAINING",
+   "ok": true,
+   "R": {
+    "dint": 0.3333,
+    "strace": 0.2667,
+    "bbits": 0.2
    },
    "tie_break": null
   },
@@ -383,8 +1385,8 @@
    "tie_break": "fixed order D-int, B-bits, S-trace"
   },
   "filler at R(S) - 0.05 flags": {
-   "expected": "WINNER=strace+FLAG",
-   "got": "WINNER=strace+FLAG",
+   "expected": "WINNER=strace+TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE",
+   "got": "WINNER=strace+TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE",
    "ok": true,
    "R": {
     "dint": 0.3,
@@ -407,8 +1409,8 @@
    "tie_break": null
   },
   "filler is never eligible (best R, yet only the R5 flag)": {
-   "expected": "WINNER=strace+FLAG",
-   "got": "WINNER=strace+FLAG",
+   "expected": "WINNER=strace+TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE",
+   "got": "WINNER=strace+TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE",
    "ok": true,
    "R": {
     "dint": 0.3,
@@ -429,210 +1431,180 @@
     "ffill": 1.0
    },
    "tie_break": null
+  },
+  "a malformed filler voids the control (no flag of separation)": {
+   "expected": "WINNER=strace+DECODE_COMPUTE_CONTROL_VOID",
+   "got": "WINNER=strace+DECODE_COMPUTE_CONTROL_VOID",
+   "ok": true,
+   "R": {
+    "dint": 0.3,
+    "strace": 0.9,
+    "bbits": 0.3,
+    "ffill": 0.0
+   },
+   "tie_break": null
+  },
+  "rev3: equal in-surface scores, the larger HS wins": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.575,
+    "strace": 0.625,
+    "bbits": 0.3
+   },
+   "tie_break": null
+  },
+  "rev3: HS weighs 1/4 (a 0.70 HS gain beats a 0.20 in-surface gain on each of K4, IAW, OOR by 0.025)": {
+   "expected": "WINNER=bbits",
+   "got": "WINNER=bbits",
+   "ok": true,
+   "R": {
+    "dint": 0.65,
+    "strace": 0.1,
+    "bbits": 0.675
+   },
+   "tie_break": null
+  },
+  "rev3: an R gap < 0.02 created by HS still goes to the IAW tie-break": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.725,
+    "strace": 0.7075,
+    "bbits": 0.1
+   },
+   "tie_break": "IAW"
+  },
+  "rev3: a perfect HS does not rescue an arm excluded by false apply": {
+   "expected": "WINNER=dint",
+   "got": "WINNER=dint",
+   "ok": true,
+   "R": {
+    "dint": 0.5,
+    "strace": 1.0,
+    "bbits": 0.3
+   },
+   "tie_break": null
+  },
+  "rev3: HS 0 in every arm is no instrument failure (R0 reads the in-surface format rate)": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.375,
+    "strace": 0.525,
+    "bbits": 0.225
+   },
+   "tie_break": null
+  },
+  "rev3: the filler's R includes its HS (an S-trace win flagged by a filler with the same four scores)": {
+   "expected": "WINNER=strace+TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE",
+   "got": "WINNER=strace+TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE",
+   "ok": true,
+   "R": {
+    "dint": 0.3,
+    "strace": 0.8,
+    "bbits": 0.3,
+    "ffill": 0.8
+   },
+   "tie_break": null
+  },
+  "rev3: a filler that loses only on HS by more than 0.20 does not flag": {
+   "expected": "WINNER=strace",
+   "got": "WINNER=strace",
+   "ok": true,
+   "R": {
+    "dint": 0.3,
+    "strace": 0.9,
+    "bbits": 0.3,
+    "ffill": 0.8475
+   },
+   "tie_break": null
+  },
+  "a turn without a passed anchor: NO_VERDICT_INSTRUMENT": {
+   "expected": "NO_VERDICT_INSTRUMENT",
+   "got": "NO_VERDICT_INSTRUMENT",
+   "ok": true
   }
  },
- "missing_arm_refused": true,
- "selftest": {
-  "golds": {
-   "dint": {
-    "n": 950,
-    "correct": 950
-   },
-   "strace": {
-    "n": 950,
-    "correct": 950,
-    "cmp_ok": 950,
-    "calc_ok": 950
-   },
-   "bbits": {
-    "n": 950,
-    "correct": 950,
-    "flag_ok": 950
-   },
-   "ffill": {
-    "n": 950,
-    "correct": 950
-   }
+ "close_call_units": {
+  "margin 0.049 is a close call": {
+   "expected": true,
+   "got": true,
+   "margin": 0.049,
+   "verdict": "WINNER=strace",
+   "ok": true
   },
-  "heuristics": {
-   "dint": {
-    "copy": {
-     "direct_floor": 450,
-     "scored_in_format": 450,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "apply_regardless": {
-     "direct_floor": 650,
-     "scored_in_format": 650,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "int_add": {
-     "direct_floor": 150,
-     "scored_in_format": 150,
-     "out_of_range_predictions": 100,
-     "match": true
-    },
-    "or_add": {
-     "direct_floor": 335,
-     "scored_in_format": 335,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "int_add_del": {
-     "direct_floor": 300,
-     "scored_in_format": 300,
-     "out_of_range_predictions": 90,
-     "match": true
-    },
-    "delete_only": {
-     "direct_floor": 565,
-     "scored_in_format": 565,
-     "out_of_range_predictions": 0,
-     "match": true
-    }
-   },
-   "strace": {
-    "copy": {
-     "direct_floor": 450,
-     "scored_in_format": 450,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "apply_regardless": {
-     "direct_floor": 650,
-     "scored_in_format": 650,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "int_add": {
-     "direct_floor": 150,
-     "scored_in_format": 150,
-     "out_of_range_predictions": 100,
-     "match": true
-    },
-    "or_add": {
-     "direct_floor": 335,
-     "scored_in_format": 335,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "int_add_del": {
-     "direct_floor": 300,
-     "scored_in_format": 300,
-     "out_of_range_predictions": 90,
-     "match": true
-    },
-    "delete_only": {
-     "direct_floor": 565,
-     "scored_in_format": 565,
-     "out_of_range_predictions": 0,
-     "match": true
-    }
-   },
-   "bbits": {
-    "copy": {
-     "direct_floor": 450,
-     "scored_in_format": 450,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "apply_regardless": {
-     "direct_floor": 650,
-     "scored_in_format": 650,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "int_add": {
-     "direct_floor": 150,
-     "scored_in_format": 150,
-     "out_of_range_predictions": 100,
-     "match": true
-    },
-    "or_add": {
-     "direct_floor": 335,
-     "scored_in_format": 335,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "int_add_del": {
-     "direct_floor": 300,
-     "scored_in_format": 300,
-     "out_of_range_predictions": 90,
-     "match": true
-    },
-    "delete_only": {
-     "direct_floor": 565,
-     "scored_in_format": 565,
-     "out_of_range_predictions": 0,
-     "match": true
-    }
-   },
-   "ffill": {
-    "copy": {
-     "direct_floor": 450,
-     "scored_in_format": 450,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "apply_regardless": {
-     "direct_floor": 650,
-     "scored_in_format": 650,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "int_add": {
-     "direct_floor": 150,
-     "scored_in_format": 150,
-     "out_of_range_predictions": 100,
-     "match": true
-    },
-    "or_add": {
-     "direct_floor": 335,
-     "scored_in_format": 335,
-     "out_of_range_predictions": 0,
-     "match": true
-    },
-    "int_add_del": {
-     "direct_floor": 300,
-     "scored_in_format": 300,
-     "out_of_range_predictions": 90,
-     "match": true
-    },
-    "delete_only": {
-     "direct_floor": 565,
-     "scored_in_format": 565,
-     "out_of_range_predictions": 0,
-     "match": true
-    }
-   }
+  "margin 0.05 is not a close call": {
+   "expected": false,
+   "got": false,
+   "margin": 0.05,
+   "verdict": "WINNER=strace",
+   "ok": true
   },
-  "negatives": {
-   "strace: keys reordered": true,
-   "strace: extra key": true,
-   "strace: duplicate after": true,
-   "strace: after as string": true,
-   "strace: after out of range": true,
-   "strace: bare integer": true,
-   "bbits: keys reordered": true,
-   "bbits: wrong width": true,
-   "bbits: integer after": true,
-   "bbits: flag as string": true,
-   "bbits: non-binary digit": true,
-   "ffill: keys reordered": true,
-   "dint: out of range": true,
-   "dint: boolean": true,
-   "dint: text": true
-  },
-  "dint_parser_equals_env": true,
-  "ok": true,
-  "filler_checked": true
+  "an ineligible runner-up does not make a close call": {
+   "expected": false,
+   "got": false,
+   "margin": 0.3,
+   "verdict": "WINNER=strace",
+   "ok": true
+  }
  },
+ "filler_units": {
+  "addendum: filler R at R(S) - 0.05 flags": {
+   "expected": "not_separable",
+   "got": "not_separable",
+   "ok": true,
+   "flags": [
+    "TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE"
+   ]
+  },
+  "addendum: filler R below R(S) - 0.05 separates": {
+   "expected": "separated",
+   "got": "separated",
+   "ok": true,
+   "flags": []
+  },
+  "addendum: filler WF 0.89 voids the control": {
+   "expected": "void",
+   "got": "void",
+   "ok": true,
+   "flags": [
+    "DECODE_COMPUTE_CONTROL_VOID"
+   ]
+  },
+  "addendum: a filler turn without a passed anchor voids the control": {
+   "expected": "void",
+   "got": "void",
+   "ok": true,
+   "flags": [
+    "DECODE_COMPUTE_CONTROL_VOID"
+   ]
+  }
+ },
+ "refusals": {
+  "an incomplete screen run gives no verdict": true,
+  "the R5 addendum refuses after a non-S-trace verdict": true,
+  "the R5 addendum refuses when the filler was in the screen run": true,
+  "rev3: a screen arm without HS (no held-out stage E3) gives no verdict": true,
+  "rev3: a run without the held-out stage is analysed with NO_VERDICT": true
+ },
+ "counts": {
+  "scenarios": 21,
+  "rule_units": 28,
+  "close_call_units": 3,
+  "filler_units": 4,
+  "refusals": 5,
+  "passed": 61
+ },
+ "selftest_ok": true,
  "code_sha256": {
-  "scripts/t2bp_analysis.py": "7224dfead1bc45773acc32a67ef64a16f0fce5b0272d54a3f3011d6b45289834",
-  "scripts/t2bp_common.py": "dc36ba2576ae385988df806cb7b20f5a8bd8380f63592f1da448d657234cf794"
+  "scripts/t2bp_analysis.py": "5b605a4c3202d1c764c74e80b93964f626b0966d303f48d1977048086de0cd05",
+  "scripts/t2bp_common.py": "1175b758551ac0f01b7b38070dfbb5bf91e5a1b5f0dae12d142aa2c84b5f7ee7"
  },
- "seconds": 1.9,
+ "dev_sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
+ "seconds": 12.3,
  "torch_imported": false
 }

@@ -1,20 +1,25 @@
 {
  "ok": true,
- "n_checks": 55,
- "passed": 55,
+ "n_checks": 79,
+ "passed": 79,
  "checks": [
   {
-   "check": "D-int messages == env.multi_step_messages on every 8-bit dev and training row (2150)",
+   "check": "D-int canonical messages == env.multi_step_messages on every 8-bit dev and training row (2250)",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "OOD D-int prompts differ from T2's frame only in the width word ('a 10-bit' / 'a 12-bit')",
+   "check": "OOD D-int canonical prompts differ from T2's frame only in the width word ('a 10-bit' / 'a 12-bit')",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "render_chat == tok.apply_chat_template (2352 prompts, 8/10/12-bit, surface variants)",
+   "check": "OOR system texts differ from the 8-bit texts only in the width word in every surface (200 texts: 4 arms x 5 paraphrases x 5 field variants x 10/12 bits); the held-out paraphrase words the width its own way",
+   "ok": true,
+   "detail": "([], 'The state is a flag mask 12 bits wide. Apply the actions in ')"
+  },
+  {
+   "check": "render_chat == tok.apply_chat_template (3120 prompts: 8/10/12-bit; canonical, training sd surfaces with permuted key orders, held-out surfaces)",
    "ok": true,
    "detail": "0"
   },
@@ -39,9 +44,19 @@
    "detail": ""
   },
   {
-   "check": "the written training files pass the audit (balance, quotas, pairs, renderings, filler, SOURCE hashes)",
+   "check": "line endings: no kit script, data file or record has CRLF line endings (exempt: TINY_TEST.json, rewritten with LF at the end of this test, and the superseded SCREEN_RULE_rev1.json, kept byte for byte because the revision-2 record pins its sha256)",
    "ok": true,
-   "detail": "{'copy': 0.51, 'apply_regardless': 0.5, 'int_add': 0.49, 'or_add': 0.5133, 'apply_ignoring_pre': 0.5, 'int_add_del': 0.4467, 'delete_only': 0.4093}"
+   "detail": "[]"
+  },
+  {
+   "check": "the PRIMARY (surface-diversity) training files pass the audit (balance, quotas, pairs, renderings, 4b filler, surface proof, rows/targets == canonical, SOURCE hashes)",
+   "ok": true,
+   "detail": "{'copy': 0.51, 'apply_regardless': 0.5, 'int_add': 0.4833, 'or_add': 0.5167, 'apply_ignoring_pre': 0.5, 'int_add_del': 0.39, 'delete_only': 0.4067}"
+  },
+  {
+   "check": "the canonical files (the row source) pass the audit",
+   "ok": true,
+   "detail": "[]"
   },
   {
    "check": "refused: composition without the add=0 inapplicable rows (int_add balance breaks)",
@@ -59,7 +74,7 @@
    "detail": ""
   },
   {
-   "check": "refused: a filler target one token short of the trace",
+   "check": "refused: one filler target with a different fill length (amendment 4b: one constant per kind)",
    "ok": true,
    "detail": ""
   },
@@ -69,54 +84,84 @@
    "detail": ""
   },
   {
-   "check": "surface-diversity renderings pass the same audit",
+   "check": "refused: one training row rendered (consistently) with the held-out paraphrase, field names, top-level order or any of the 3 held-out event orders",
    "ok": true,
-   "detail": "{'every rendering has the same canonical rows in the same order': True, 'prompts == render_chat(messages(arm, row)) on every row': True, \"D-int canonical prompts == T2's frame env.multi_step_messages(P, before, [event])\": True, 'every target parses back to its gold (strict; cmp/calc/flag exact)': Tr"
+   "detail": "{'para': True, 'names': True, 'top': True, 'event0': True, 'event1': True, 'event2': True}"
   },
   {
-   "check": "surface diversity keeps the canonical rows and every target",
-   "ok": true,
-   "detail": ""
-  },
-  {
-   "check": "only training variants are used (held-out paraphrase/field set 4 never), all 16 combinations appear",
-   "ok": true,
-   "detail": "[(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3), (2, 0), (2, 1), (2, 2), (2, 3), (3, 0), (3, 1), (3, 2), (3, 3)]"
-  },
-  {
-   "check": "pair members share one surface; system texts and user keys vary",
+   "check": "refused: a prompt in a held-out order whose recorded surface claims a training order (read back from the text)",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "surface diversity is OFF by default: canonical files carry surface null",
+   "check": "held-out key orders regenerate from ORDER_SEED: event = reversed + 2 fixed random orders, top = reversed only (a 2-key object has no third order); training subsets exclude them (event 5,037 orders, top 1)",
+   "ok": true,
+   "detail": "{'top': (('events', 'before'),), 'event': (('pre_on', 'pre_off', 'name', 'kind', 'delete', 'cost', 'add'), ('add', 'delete', 'kind', 'pre_off', 'cost', 'pre_on', 'name'), ('cost', 'pre_off', 'delete', 'pre_on', 'name', 'kind', 'add'))}"
+  },
+  {
+   "check": "PROOF: none of the 6,000 training prompts (4 sd files) uses a held-out paraphrase, field-name variant or key order (each surface read back from the prompt TEXT), and none contains a held-out text fragment (8 fragments scanned)",
+   "ok": true,
+   "detail": "(0, 0)"
+  },
+  {
+   "check": "the sd files keep the canonical rows and every target (literal order); the canonical files carry surface null",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "scorer self-test: golds 100% in every format, heuristics at their exact floors, negatives rejected, D-int parser == env.parse_state",
+   "check": "diversity used: all 16 paraphrase x field-name combinations, the canonical event order on ~1/4 of the rows, >= 500 distinct event orders, the top-level order always canonical; pair members share one surface; every arm uses the same per-row surface",
    "ok": true,
-   "detail": "{'dint': '950/950', 'strace': '950/950', 'bbits': '950/950', 'ffill': '950/950'}"
+   "detail": "{'event_order_canonical_share': 0.2613, 'distinct_event_orders': 829}"
   },
   {
-   "check": "filler token count == trace token count under the HF tokenizer on all 1,500 training and 950 dev rows; HF counts == tokenizers-library counts",
+   "check": "E3 rendering: dev id suffix == index within the stratum on all 1,050 rows; the 3 held-out event orders rotate evenly within every stratum; every E3 prompt (4 arms) reads back as paraphrase 4 + names 4 + reversed top + its held-out event order, encoding the row's own state and event",
    "ok": true,
-   "detail": "(0, 0, 0)"
+   "detail": "{'D_app_add': {0: 34, 1: 33, 2: 33}, 'D_app_unchanged': {0: 34, 1: 33, 2: 33}}"
   },
   {
-   "check": "analysis dry run: 8 synthetic scenarios + 13 rule units give the pre-stated verdicts",
+   "check": "scorer self-test: golds 100% in every format, heuristics at their exact floors, negatives rejected, D-int parser == env.parse_state, one constant fill on every dev gold, filler >= trace tokens",
    "ok": true,
-   "detail": "{'stop_all_below_0.20': 'STOP_P_TRAINING', 'trace_wins': 'WINNER=strace', 'bbits_wins_trace_excluded_by_copy': 'WINNER=bbits', 'no_eligible_arm': 'NO_ELIGIBLE_ARM', 'tie_goes_to_dint': 'WINNER=dint', 'ignore_pre_arm_excluded_by_id': 'WINNER=dint', 'filler_flag': 'WINNER=strace+FLAG', 'malformed_ever"
+   "detail": "{'dint': '1050/1050', 'strace': '1050/1050', 'bbits': '1050/1050', 'ffill': '1050/1050'}"
   },
   {
-   "check": "tiny run exits 0 and writes DONE.json",
+   "check": "amendment 4b under the HF tokenizer: FILL_K {'action': 26} == the formula over 3,510 train+dev items (longest trace head - base); no filler target shorter than its trace; HF counts == tokenizers-library counts",
+   "ok": true,
+   "detail": "({'action': 26}, 0, 0)"
+  },
+  {
+   "check": "FILL LENGTH CARRIES ZERO INFORMATION: one fill string on all 3,000 training targets (canonical + sd) and all 1,050 dev golds; predicting applicability / change / after / type from the fill length == the majority share; mutual information 0 bits",
+   "ok": true,
+   "detail": "(1, {'applicable': 0.5, 'changed': 0.51, 'after': 0.0147, 'type': 0.3267}, {'applicable': 0.0, 'changed': 0.0, 'after': 0.0, 'type': 0.0})"
+  },
+  {
+   "check": "descriptive contrast: the revision-2 row-matched fill length (= the trace token count) would have revealed applicability far above the majority share on the same rows; the 4b residual is >= 0 on every row",
+   "ok": true,
+   "detail": "({'applicable_lookup_accuracy': 1.0, 'changed_lookup_accuracy': 0.99, 'applicable_majority_share': 0.5}, {'min': 2, 'max': 7, 'mean': 5.001, 'share_positive': 1.0, 'mean_applicable': 5.493, 'mean_inapplicable': 4.508})"
+  },
+  {
+   "check": "analysis dry run: 21 synthetic scenarios, 28 rule units, 3 close-call units, 4 R5 addendum units and 5 refusals give the pre-stated results",
+   "ok": true,
+   "detail": "{'scenarios': 21, 'rule_units': 28, 'close_call_units': 3, 'filler_units': 4, 'refusals': 5, 'passed': 61}"
+  },
+  {
+   "check": "the held-out-surface gate changes the outcome: in both surface-locked scenarios S-trace has the larger R under revision 2's formula (no HS) but B-bits wins under revision 3",
+   "ok": true,
+   "detail": "{'rev3: surface-locked arm (the rule in-su': ({'dint': 0.4861, 'strace': 1.0, 'bbits': 0.8889}, {'dint': 0.5525, 'strace': 0.8929, 'bbits': 0.9167})}"
+  },
+  {
+   "check": "tiny run on the sd files exits 0 and writes DONE.json",
    "ok": true,
    "detail": "0"
   },
   {
-   "check": "every arm's stages T/E1/E2 recorded with file hashes",
+   "check": "every arm's stages T/E1/E2/E3 recorded with file hashes; E3 wrote the ON file only",
    "ok": true,
    "detail": ""
+  },
+  {
+   "check": "held-out-surface prompts appear only in E3, adapter ON only (1 x rows x arms), each exactly its row's combined held-out surface; every other evaluation prompt is the canonical surface",
+   "ok": true,
+   "detail": "(54, 252)"
   },
   {
    "check": "one lease, label 'rcwm-t1:t2b-prereq'",
@@ -136,12 +181,17 @@
   {
    "check": "OFF != ON one-step texts in every arm (the trained adapter is active)",
    "ok": true,
-   "detail": "{'dint': 16, 'strace': 16, 'bbits': 16}"
+   "detail": "{'dint': 18, 'strace': 18, 'bbits': 18}"
   },
   {
-   "check": "the analysis validators accept the run and the rule produces a verdict",
+   "check": "the analysis validators accept the run (E3 included) and the rule produces a verdict with HS for every arm",
    "ok": true,
-   "detail": "STOP_P_TRAINING"
+   "detail": "NO_VERDICT_INSTRUMENT"
+  },
+  {
+   "check": "provenance records the frozen code hashes and the screen-rule record at the first turn; anchors_ok",
+   "ok": true,
+   "detail": ""
   },
   {
    "check": "adapters are the T2 recipe's LoRA (r16, alpha 32, the 7 target modules)",
@@ -154,12 +204,17 @@
    "detail": ""
   },
   {
-   "check": "oracle run (ON = the rule in each arm's format, OFF = copy) on all 950 rows and 240 chains: exit 0; the analysis validates every file and reads ON metrics 1.0 / FC 0, OFF FC 1.0; verdict WINNER=dint (tie rule)",
+   "check": "oracle run (ON = the rule in each arm's format in any surface, OFF = copy) on all 1,050 rows and 240 chains: exit 0; the analysis validates every file and reads ON IAW/OOR/K4/HS/ID/WF 1.0, FC 0, FA 0; OFF FC 1.0, FA 0; verdict WINNER=dint (tie rule)",
    "ok": true,
-   "detail": "('WINNER=dint', {'dint': {'IAW': 1.0, 'OOR': 1.0, 'K4': 1.0, 'FC': 0.0, 'ID': 1.0}, 'strace': {'IAW': 1.0, 'OOR': 1.0, 'K4': 1.0, 'FC': 0.0, 'ID': 1.0}, 'bbits': {'IAW': 1.0, 'OOR': 1.0, 'K4': 1.0, 'FC': 0.0, 'ID': 1.0}}, {'dint': 1.0, 'strace': 1.0, 'bbits': 1.0})"
+   "detail": "('WINNER=dint', {'dint': {'IAW': 1.0, 'OOR': 1.0, 'K4': 1.0, 'HS': 1.0, 'FC': 0.0, 'FA': 0.0, 'WF': 1.0, 'ID': 1.0}, 'strace': {'IAW': 1.0, 'OOR': 1.0, 'K4': 1.0, 'HS': 1.0, 'FC': 0.0, 'FA': 0.0, 'WF': 1.0, 'ID': 1.0}, 'bbits': {'IAW': 1.0, 'OOR': 1.0, 'K4': 1.0, 'HS': 1.0, 'FC': 0.0, 'FA': 0.0, 'WF"
   },
   {
-   "check": "the markdown rendering carries the verdict and every stratum",
+   "check": "held-out-surface descriptives: per-stratum cells, OOR in the held-out surface, accuracy by held-out event order (3 orders x 8-bit/OOR), paired held-out minus in-surface contrasts (0 under the oracle)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the markdown rendering carries the verdict, HS and every stratum (in-surface and held-out)",
    "ok": true,
    "detail": ""
   },
@@ -174,6 +229,61 @@
    "detail": "{'dint': {'cmp_ok': None, 'calc_ok': None, 'flag_ok': None}, 'strace': {'cmp_ok': 1.0, 'calc_ok': 1.0, 'flag_ok': None}, 'bbits': {'cmp_ok': None, 'calc_ok': None, 'flag_ok': 1.0}}"
   },
   {
+   "check": "analysis CLI path on the oracle run: T2BP_SCREEN.json/.md written (verdict WINNER=dint, rule revision 3), a second call refuses (create-only, exit 3)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "R5 addendum path: a separate oracle filler run (sd, with E3; R 1.0 >= 0.9 - 0.05) after an S-trace screen flags TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE; after the D-int screen it refuses (exit 3); the filler's residual length is reported as a covariate",
+   "ok": true,
+   "detail": "(0, 3, 0, {'status': 'not_separable', 'flag': 'TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE', 'R_ffill': 1.0, 'R_strace': 0.9}, {'min': 0, 'max': 7, 'mean': 4.815})"
+  },
+  {
+   "check": "a frozen input that differs from SCREEN_RULE.json refuses before the lease (not persisted, no lease, no output)",
+   "ok": true,
+   "detail": "[t2bp] the frozen screen rule does not verify (run nothing until it does): scripts/t2bp_run.py: differs from the frozen screen rule (sha256)"
+  },
+  {
+   "check": "a surface-diversity training file that differs from SCREEN_RULE.json refuses before the lease",
+   "ok": true,
+   "detail": "[t2bp] the frozen screen rule does not verify (run nothing until it does): data/t2bp_train_sd_strace.jsonl: differs from the frozen screen rule (sha256)"
+  },
+  {
+   "check": "a missing screen-rule record refuses before the lease (not persisted)",
+   "ok": true,
+   "detail": "[t2bp] the frozen screen rule does not verify (run nothing until it does): docs/t2b/prereq/SCREEN_RULE.json is missing or not a screen-rule record (t2bp_analysis.py --freeze-rule)"
+  },
+  {
+   "check": "C1: a canonical-variant run is refused before the lease (not persisted, no lease, no output)",
+   "ok": true,
+   "detail": "[t2bp] data variant '': revision 3 (operator decision C1) trains only the surface-diversity build ('sd'); the canonical-only variant is not run"
+  },
+  {
+   "check": "C1: the analysis refuses to score a run that is not the surface-diversity build",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the analysis' frozen check: [] on the record, problems on a changed input hash and on a changed SCREEN_RULE.md",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "restored SCREEN_RULE.md verifies again",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a resume under code that differs from the run's first turn refuses (not persisted, no second lease)",
+   "ok": true,
+   "detail": "[t2bp] code changed since the run's first turn (['rcwmt/generation.py']): a resumed run uses the code it started with; restore it, or move the run aside and log it in DECISIONS.md"
+  },
+  {
+   "check": "--with-filler after a completed 3-arm run is an explicit stop (not persisted, no lease, files unchanged)",
+   "ok": true,
+   "detail": "[t2bp] C:\\Users\\clclc\\AppData\\Local\\Temp\\t2bp_tiny_qksildh5\\runs\\run_a\\DONE.json records arms ['dint', 'strace', 'bbits'], this call asks for ['dint', 'strace', 'bbits', 'ffill']: a completed run is never extended (the R5 filler control run"
+  },
+  {
    "check": "crash in training propagates; the lease is released",
    "ok": true,
    "detail": ""
@@ -181,42 +291,42 @@
   {
    "check": "the resume orphaned the partial training dir; a crash inside E2 propagates",
    "ok": true,
-   "detail": "['strace_T_20261009_032753_304436']"
+   "detail": "['strace_T_20261009_122311_198912']"
   },
   {
    "check": "the second resume orphaned the partial E2, re-anchored and finished (exit 0)",
    "ok": true,
-   "detail": "[['dint:T', 'dint:E1', 'dint:E2'], ['strace:T', 'strace:E1'], ['strace:E2', 'bbits:T', 'bbits:E1', 'bbits:E2']]"
+   "detail": "[['dint:T', 'dint:E1', 'dint:E2', 'dint:E3'], ['strace:T', 'strace:E1'], ['strace:E2', 'strace:E3', 'bbits:T', 'bbits:E1', 'bbits:E2', 'bbits:E3']]"
   },
   {
-   "check": "every output of the crashed-and-resumed run equals the uninterrupted run byte for byte (adapters included)",
+   "check": "every output of the crashed-and-resumed run equals the uninterrupted run byte for byte (adapters and E3 included)",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "nothing fits (cap 0.5 h = the stage margin): exit 5, every stage deferred, no training, no load",
+   "check": "nothing fits (cap 0.5 h = the stage margin): exit 5, every stage deferred (3 arms x T/E1/E2/E3), no training, no load",
    "ok": true,
-   "detail": "['dint:T', 'dint:E1', 'dint:E2', 'strace:T', 'strace:E1', 'strace:E2', 'bbits:T', 'bbits:E1', 'bbits:E2']"
+   "detail": "['dint:T', 'dint:E1', 'dint:E2', 'dint:E3', 'strace:T', 'strace:E1', 'strace:E2', 'strace:E3', 'bbits:T', 'bbits:E1', 'bbits:E2', 'bbits:E3']"
   },
   {
    "check": "arm-level deferral: D-int pair runs; S-trace (pair does not fit) and B-bits deferred; exit 5",
    "ok": true,
-   "detail": "{'pid': 304436, 'acquired_unix': 1791534485.8038409, 'acquired_source': 'lock record', 'entered_unix': 1791534485.8098407, 'stages_run': ['dint:T', 'dint:E1', 'dint:E2'], 'deferred': ['strace:T', 'strace:E1', 'strace:E2', 'bbits:T', 'bbits:E1', 'bbits:E2'], 'device': 'cpu-tiny', 'prompts_checked': {"
+   "detail": "{'pid': 198912, 'acquired_unix': 1791566606.3642917, 'acquired_source': 'lock record', 'entered_unix': 1791566606.372303, 'stages_run': ['dint:T', 'dint:E1', 'dint:E2', 'dint:E3'], 'deferred': ['strace:T', 'strace:E1', 'strace:E2', 'strace:E3', 'bbits:T', 'bbits:E1', 'bbits:E2', 'bbits:E3'], 'device"
   },
   {
-   "check": "stage-level deferral: S-trace trained and E1 done, E2 deferred with B-bits; exit 5",
+   "check": "stage-level deferral: S-trace trained and E1 done, E2 deferred with E3 and B-bits; exit 5",
    "ok": true,
-   "detail": "{'pid': 304436, 'acquired_unix': 1791534489.9980583, 'acquired_source': 'lock record', 'entered_unix': 1791534490.0040631, 'stages_run': ['strace:T', 'strace:E1'], 'deferred': ['strace:E2', 'bbits:T', 'bbits:E1', 'bbits:E2'], 'device': 'cpu-tiny', 'prompts_checked': {'dint': 1500, 'strace': 1500, 'b"
+   "detail": "{'pid': 198912, 'acquired_unix': 1791566611.168569, 'acquired_source': 'lock record', 'entered_unix': 1791566611.1748695, 'stages_run': ['strace:T', 'strace:E1'], 'deferred': ['strace:E2', 'strace:E3', 'bbits:T', 'bbits:E1', 'bbits:E2', 'bbits:E3'], 'device': 'cpu-tiny', 'prompts_checked': {'dint': "
   },
   {
-   "check": "the next call resumes (re-anchors, S-trace E2 then B-bits) and completes; outputs == run 6 byte for byte",
+   "check": "the next call resumes (re-anchors, S-trace E2/E3 then B-bits) and completes; outputs == run 6 byte for byte",
    "ok": true,
-   "detail": "['strace:E2', 'bbits:T', 'bbits:E1', 'bbits:E2']"
+   "detail": "['strace:E2', 'strace:E3', 'bbits:T', 'bbits:E1', 'bbits:E2', 'bbits:E3']"
   },
   {
    "check": "a live RCWM waiting marker refuses (not persisted, no lease)",
    "ok": true,
-   "detail": "[t2bp] another RCWM job waits for the GPU lease (rcwm-t1:other, pid 300732): one-waiter rule (R14). Start only when no other RCWM GPU job runs or waits"
+   "detail": "[t2bp] another RCWM job waits for the GPU lease (rcwm-t1:other, pid 203540): one-waiter rule (R14). Start only when no other RCWM GPU job runs or waits"
   },
   {
    "check": "a dead RCWM marker does not refuse",
@@ -231,12 +341,12 @@
   {
    "check": "a live RCWM lease holder refuses (not persisted)",
    "ok": true,
-   "detail": "[t2bp] another RCWM job holds the GPU lease (rcwm-t1:prereg3, pid 300732): one-waiter rule (R14). Start only when no other RCWM GPU job runs or waits"
+   "detail": "[t2bp] another RCWM job holds the GPU lease (rcwm-t1:prereg3, pid 203540): one-waiter rule (R14). Start only when no other RCWM GPU job runs or waits"
   },
   {
    "check": "a live run lock refuses (not persisted)",
    "ok": true,
-   "detail": "[t2bp] another t2bp_run.py holds the run lock {'pid': 300732, 'create_time': 1791534419.5078983}"
+   "detail": "[t2bp] another t2bp_run.py holds the run lock {'pid': 203540, 'create_time': 1791566499.503204}"
   },
   {
    "check": "stale run lock reclaimed; anchor failure stops (persisted) before any evaluation output",
@@ -254,51 +364,67 @@
    "detail": "[t2bp] runtime {'transformers': '0.0.0'} differs from the registered {'torch': '2.6.0+cu124', 'transformers': '5.14.1', 'peft': '0.20.0'}: restore the registered environment (nothing evaluated)"
   },
   {
-   "check": "a recorded output whose sha256 changed stops (persisted)",
+   "check": "a recorded output whose sha256 changed stops (persisted; here the E3 held-out-surface file)",
    "ok": true,
-   "detail": "[t2bp] bbits/E2: bbits/chains_on.jsonl changed after it was recorded (sha256)"
+   "detail": "[t2bp] bbits/E3: bbits/onestep_heldout_on.jsonl changed after it was recorded (sha256)"
   },
   {
    "check": "a training file that differs from its SOURCE record stops before the lease",
    "ok": true,
-   "detail": "[t2bp] t2bp_train_bbits.jsonl differs from its SOURCE record"
+   "detail": "[t2bp] t2bp_train_sd_bbits.jsonl differs from its SOURCE record"
   },
   {
-   "check": "plan: the 3-arm screen fits one 4.5 h turn at the planning rate; + filler needs a second turn",
+   "check": "plan (sd, E3 ON): the 3-arm screen takes 2 turns at the planning rate (OFF of non-native frames at the 160-token cap) and 1 at the observed rates; every turn within the cap; each arm's T/E1/E2/E3 in one turn; the filler control run is one turn; per-factor held-out renderings would need a third planning turn",
    "ok": true,
-   "detail": "(4.01, 5.43)"
+   "detail": "(5.83, 3.64)"
   },
   {
-   "check": "plan: a 2.2 h cap splits the screen into several turns, each arm's pair in one turn",
+   "check": "plan: every arm's whole pair (T + E1 + E2 + E3 + load + anchor) x 1.25 fits an empty 4.5 h turn at the planning rate, so no arm can be deferred for ever (the largest needs a turn of more than 3.0 h)",
    "ok": true,
-   "detail": "[{'stages': ['dint:T', 'A0', 'dint:E1', 'dint:E2'], 'projected_h': 0.96}, {'stages': ['strace:T', 'A0', 'strace:E1', 'strace:E2'], 'projected_h': 1.66}, {'stages': ['bbits:T', 'A0', 'bbits:E1', 'bbits:E2'], 'projected_h': 1.5}]"
+   "detail": "{'dint': 1.32, 'strace': 3.09, 'bbits': 2.93, 'ffill': 2.86}"
   },
   {
-   "check": "docs/t2b/prereq/GEN_PLAN.json was written by --plan without importing torch",
+   "check": "plan: a 3.5 h cap splits the screen into several turns, each arm's pair in one turn",
+   "ok": true,
+   "detail": "[{'stages': ['dint:T', 'A0', 'dint:E1', 'dint:E2', 'dint:E3'], 'projected_h': 1.06}, {'stages': ['strace:T', 'A0', 'strace:E1', 'strace:E2', 'strace:E3'], 'projected_h': 2.47}, {'stages': ['bbits:T', 'A0', 'bbits:E1', 'bbits:E2', 'bbits:E3'], 'projected_h': 2.35}]"
+  },
+  {
+   "check": "plan: a 3.0 h cap is too small for the S-trace pair with E3 (the simulator refuses instead of looping)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "docs/t2b/prereq/GEN_PLAN.json was written by --plan (sd, stages T/E1/E2/E3) without importing torch",
    "ok": true,
    "detail": ""
   }
  ],
- "seconds": 82.7,
- "peak_rss_mb": 1096.6,
+ "seconds": 125.6,
+ "peak_rss_mb": 1154.9,
  "threads": 2,
  "versions": {
   "torch": "2.6.0+cu124",
   "transformers": "5.14.1"
  },
  "code_sha256": {
-  "scripts/t2bp_run.py": "df13b38aba95e997718f39ea824f181dea48b7dfc056b63bd0db0d55ce3bf05c",
-  "scripts/t2bp_common.py": "dc36ba2576ae385988df806cb7b20f5a8bd8380f63592f1da448d657234cf794",
-  "scripts/t2bp_analysis.py": "7224dfead1bc45773acc32a67ef64a16f0fce5b0272d54a3f3011d6b45289834",
-  "scripts/t2bp_make_data.py": "5648efec77346997b8664243f81882ba089743b2172884fcd4cd6bf1d0fb8bdd",
-  "scripts/t2bp_audit.py": "204fb7df3cb571867bcee079b5f0c23a4f55cd7d6e8a3d98293357c5c96bc70a",
-  "scripts/t2bp_test.py": "adaf0ac012f771f267af1f1d066f7389e34c46926a773b0c78bfdb9b5aeb9429"
+  "scripts/t2bp_run.py": "c737e1be8189d3d8999fc1c85ce9293705f49d0276e494cfb563c66fb5d5c4ec",
+  "scripts/t2bp_common.py": "1175b758551ac0f01b7b38070dfbb5bf91e5a1b5f0dae12d142aa2c84b5f7ee7",
+  "scripts/t2bp_analysis.py": "5b605a4c3202d1c764c74e80b93964f626b0966d303f48d1977048086de0cd05",
+  "scripts/t2bp_make_data.py": "8f1489fa1d2bf580fb84420bc10de89d7e2a1b0f2ae7b506c74d8b0b3eda5f40",
+  "scripts/t2bp_audit.py": "60b706cfdfb6ef35404138abbb7924d0d40db3d0ccaf3744b847942be5ec0330",
+  "scripts/t2bp_test.py": "110cf61f0b44711270a403aaeacc3d2f9a77c5325cea0ca71d2edfbe2cc357ed"
  },
  "data_sha256": {
-  "t2bp_train_dint.jsonl": "e2798526ac1ff3f1bdb5a480a607956995132550562b2dc2590e17edfd49872a",
-  "t2bp_train_strace.jsonl": "c10c6dd2f3caf01976e003cd5c1a879f5d73a586e1894a1b13421b8f2cd35276",
-  "t2bp_train_bbits.jsonl": "0f0e57090dfef78d97b3a5bf0d63e76af85aa4408b3155b48cd5c5270ce7db51",
-  "t2bp_train_ffill.jsonl": "093758a0aade5c70cf7a002f42de752879f9d939d144e33d42fdb333da6f1496",
-  "t2bp_dev.jsonl": "78e061d275f922f6725be36ed5ef55aba6719e1c60e35ba5a965b1add810b519"
+  "t2bp_train_dint.jsonl": "c57187b4b9b152d3647cf21d77fb3ada25f03eb814994de50bb6976b92e6365e",
+  "t2bp_train_strace.jsonl": "ef8fba31d9a1606b300be3b965955ee29f4a5ae4c65333d9aba64dacc961bc66",
+  "t2bp_train_bbits.jsonl": "f95f6a802858ff29558b440f7daf88f5c2cf29559b6a07277bf494146450565b",
+  "t2bp_train_ffill.jsonl": "d92c74af3a26a55a71d6793ae8823f8aa04164959b0cf77f8dda8706c9b84ab7",
+  "t2bp_train_sd_dint.jsonl": "3cdd5bba030d0f7829a589e25d1030bea3a6f414267a7287dfe8842076040a78",
+  "t2bp_train_sd_strace.jsonl": "d3577e68451b8fbc38b46dd8f1d4a0d7804fdbcba23f81908c067ec81ac22462",
+  "t2bp_train_sd_bbits.jsonl": "f190b34738cd219c98041d755f21143dc1b7c75e4b340bea217f1ddded71fea3",
+  "t2bp_train_sd_ffill.jsonl": "159d02ef590b7b597c42d86c2c8cf8e603de9bb83394c88f5e094cb325dba96f",
+  "t2bp_dev.jsonl": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
+  "t2bp_train.SOURCE.json": "4b847e102f3d5af2919a201bf860ecb4d94006e4a4237dbcf5ac8cbecc13124b",
+  "t2bp_train_sd.SOURCE.json": "5a4e11c136238dc7b83e82f738a8af897118c80b8c14df77540fe8f11c0c0196"
  }
 }

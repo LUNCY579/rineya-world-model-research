@@ -1,30 +1,30 @@
 {
  "golds": {
   "dint": {
-   "n": 950,
-   "correct": 950
+   "n": 1050,
+   "correct": 1050
   },
   "strace": {
-   "n": 950,
-   "correct": 950,
-   "cmp_ok": 950,
-   "calc_ok": 950
+   "n": 1050,
+   "correct": 1050,
+   "cmp_ok": 1050,
+   "calc_ok": 1050
   },
   "bbits": {
-   "n": 950,
-   "correct": 950,
-   "flag_ok": 950
+   "n": 1050,
+   "correct": 1050,
+   "flag_ok": 1050
   },
   "ffill": {
-   "n": 950,
-   "correct": 950
+   "n": 1050,
+   "correct": 1050
   }
  },
  "heuristics": {
   "dint": {
    "copy": {
-    "direct_floor": 450,
-    "scored_in_format": 450,
+    "direct_floor": 550,
+    "scored_in_format": 550,
     "out_of_range_predictions": 0,
     "match": true
    },
@@ -37,19 +37,19 @@
    "int_add": {
     "direct_floor": 150,
     "scored_in_format": 150,
-    "out_of_range_predictions": 100,
+    "out_of_range_predictions": 125,
     "match": true
    },
    "or_add": {
-    "direct_floor": 335,
-    "scored_in_format": 335,
+    "direct_floor": 435,
+    "scored_in_format": 435,
     "out_of_range_predictions": 0,
     "match": true
    },
    "int_add_del": {
     "direct_floor": 300,
     "scored_in_format": 300,
-    "out_of_range_predictions": 90,
+    "out_of_range_predictions": 111,
     "match": true
    },
    "delete_only": {
@@ -61,8 +61,8 @@
   },
   "strace": {
    "copy": {
-    "direct_floor": 450,
-    "scored_in_format": 450,
+    "direct_floor": 550,
+    "scored_in_format": 550,
     "out_of_range_predictions": 0,
     "match": true
    },
@@ -75,19 +75,19 @@
    "int_add": {
     "direct_floor": 150,
     "scored_in_format": 150,
-    "out_of_range_predictions": 100,
+    "out_of_range_predictions": 125,
     "match": true
    },
    "or_add": {
-    "direct_floor": 335,
-    "scored_in_format": 335,
+    "direct_floor": 435,
+    "scored_in_format": 435,
     "out_of_range_predictions": 0,
     "match": true
    },
    "int_add_del": {
     "direct_floor": 300,
     "scored_in_format": 300,
-    "out_of_range_predictions": 90,
+    "out_of_range_predictions": 111,
     "match": true
    },
    "delete_only": {
@@ -99,8 +99,8 @@
   },
   "bbits": {
    "copy": {
-    "direct_floor": 450,
-    "scored_in_format": 450,
+    "direct_floor": 550,
+    "scored_in_format": 550,
     "out_of_range_predictions": 0,
     "match": true
    },
@@ -113,19 +113,19 @@
    "int_add": {
     "direct_floor": 150,
     "scored_in_format": 150,
-    "out_of_range_predictions": 100,
+    "out_of_range_predictions": 125,
     "match": true
    },
    "or_add": {
-    "direct_floor": 335,
-    "scored_in_format": 335,
+    "direct_floor": 435,
+    "scored_in_format": 435,
     "out_of_range_predictions": 0,
     "match": true
    },
    "int_add_del": {
     "direct_floor": 300,
     "scored_in_format": 300,
-    "out_of_range_predictions": 90,
+    "out_of_range_predictions": 111,
     "match": true
    },
    "delete_only": {
@@ -137,8 +137,8 @@
   },
   "ffill": {
    "copy": {
-    "direct_floor": 450,
-    "scored_in_format": 450,
+    "direct_floor": 550,
+    "scored_in_format": 550,
     "out_of_range_predictions": 0,
     "match": true
    },
@@ -151,24 +151,250 @@
    "int_add": {
     "direct_floor": 150,
     "scored_in_format": 150,
-    "out_of_range_predictions": 100,
+    "out_of_range_predictions": 125,
     "match": true
    },
    "or_add": {
-    "direct_floor": 335,
-    "scored_in_format": 335,
+    "direct_floor": 435,
+    "scored_in_format": 435,
     "out_of_range_predictions": 0,
     "match": true
    },
    "int_add_del": {
     "direct_floor": 300,
     "scored_in_format": 300,
-    "out_of_range_predictions": 90,
+    "out_of_range_predictions": 111,
     "match": true
    },
    "delete_only": {
     "direct_floor": 565,
     "scored_in_format": 565,
+    "out_of_range_predictions": 0,
+    "match": true
+   }
+  }
+ },
+ "shortcuts": {
+  "dint": {
+   "pa_int_add": {
+    "direct_floor": 550,
+    "scored_in_format": 550,
+    "out_of_range_predictions": 90,
+    "match": true
+   },
+   "pa_int_add_del": {
+    "direct_floor": 700,
+    "scored_in_format": 700,
+    "out_of_range_predictions": 82,
+    "match": true
+   },
+   "pa_or_add": {
+    "direct_floor": 700,
+    "scored_in_format": 700,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pa_delete_only": {
+    "direct_floor": 750,
+    "scored_in_format": 750,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pre_on_only": {
+    "direct_floor": 850,
+    "scored_in_format": 850,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pre_off_only": {
+    "direct_floor": 850,
+    "scored_in_format": 850,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "precount_cue": {
+    "direct_floor": 758,
+    "scored_in_format": 758,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "add0_cue": {
+    "direct_floor": 650,
+    "scored_in_format": 650,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "addset_apply": {
+    "direct_floor": 915,
+    "scored_in_format": 915,
+    "out_of_range_predictions": 0,
+    "match": true
+   }
+  },
+  "strace": {
+   "pa_int_add": {
+    "direct_floor": 550,
+    "scored_in_format": 550,
+    "out_of_range_predictions": 90,
+    "match": true
+   },
+   "pa_int_add_del": {
+    "direct_floor": 700,
+    "scored_in_format": 700,
+    "out_of_range_predictions": 82,
+    "match": true
+   },
+   "pa_or_add": {
+    "direct_floor": 700,
+    "scored_in_format": 700,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pa_delete_only": {
+    "direct_floor": 750,
+    "scored_in_format": 750,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pre_on_only": {
+    "direct_floor": 850,
+    "scored_in_format": 850,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pre_off_only": {
+    "direct_floor": 850,
+    "scored_in_format": 850,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "precount_cue": {
+    "direct_floor": 758,
+    "scored_in_format": 758,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "add0_cue": {
+    "direct_floor": 650,
+    "scored_in_format": 650,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "addset_apply": {
+    "direct_floor": 915,
+    "scored_in_format": 915,
+    "out_of_range_predictions": 0,
+    "match": true
+   }
+  },
+  "bbits": {
+   "pa_int_add": {
+    "direct_floor": 550,
+    "scored_in_format": 550,
+    "out_of_range_predictions": 90,
+    "match": true
+   },
+   "pa_int_add_del": {
+    "direct_floor": 700,
+    "scored_in_format": 700,
+    "out_of_range_predictions": 82,
+    "match": true
+   },
+   "pa_or_add": {
+    "direct_floor": 700,
+    "scored_in_format": 700,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pa_delete_only": {
+    "direct_floor": 750,
+    "scored_in_format": 750,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pre_on_only": {
+    "direct_floor": 850,
+    "scored_in_format": 850,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pre_off_only": {
+    "direct_floor": 850,
+    "scored_in_format": 850,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "precount_cue": {
+    "direct_floor": 758,
+    "scored_in_format": 758,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "add0_cue": {
+    "direct_floor": 650,
+    "scored_in_format": 650,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "addset_apply": {
+    "direct_floor": 915,
+    "scored_in_format": 915,
+    "out_of_range_predictions": 0,
+    "match": true
+   }
+  },
+  "ffill": {
+   "pa_int_add": {
+    "direct_floor": 550,
+    "scored_in_format": 550,
+    "out_of_range_predictions": 90,
+    "match": true
+   },
+   "pa_int_add_del": {
+    "direct_floor": 700,
+    "scored_in_format": 700,
+    "out_of_range_predictions": 82,
+    "match": true
+   },
+   "pa_or_add": {
+    "direct_floor": 700,
+    "scored_in_format": 700,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pa_delete_only": {
+    "direct_floor": 750,
+    "scored_in_format": 750,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pre_on_only": {
+    "direct_floor": 850,
+    "scored_in_format": 850,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "pre_off_only": {
+    "direct_floor": 850,
+    "scored_in_format": 850,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "precount_cue": {
+    "direct_floor": 758,
+    "scored_in_format": 758,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "add0_cue": {
+    "direct_floor": 650,
+    "scored_in_format": 650,
+    "out_of_range_predictions": 0,
+    "match": true
+   },
+   "addset_apply": {
+    "direct_floor": 915,
+    "scored_in_format": 915,
     "out_of_range_predictions": 0,
     "match": true
    }
@@ -187,16 +413,25 @@
   "bbits: flag as string": true,
   "bbits: non-binary digit": true,
   "ffill: keys reordered": true,
+  "ffill: after as string": true,
   "dint: out of range": true,
   "dint: boolean": true,
   "dint: text": true
  },
  "dint_parser_equals_env": true,
+ "format_ok_on_golds": {
+  "dint": 1050,
+  "strace": 1050,
+  "bbits": 1050,
+  "ffill": 1050
+ },
+ "filler_constant_on_dev_golds": true,
+ "filler_tokens_ge_trace_tokens": true,
  "ok": true,
  "filler_checked": true,
- "dev_sha256": "78e061d275f922f6725be36ed5ef55aba6719e1c60e35ba5a965b1add810b519",
+ "dev_sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
  "code_sha256": {
-  "scripts/t2bp_analysis.py": "7224dfead1bc45773acc32a67ef64a16f0fce5b0272d54a3f3011d6b45289834",
-  "scripts/t2bp_common.py": "dc36ba2576ae385988df806cb7b20f5a8bd8380f63592f1da448d657234cf794"
+  "scripts/t2bp_analysis.py": "5b605a4c3202d1c764c74e80b93964f626b0966d303f48d1977048086de0cd05",
+  "scripts/t2bp_common.py": "1175b758551ac0f01b7b38070dfbb5bf91e5a1b5f0dae12d142aa2c84b5f7ee7"
  }
 }

@@ -1,16 +1,24 @@
 {
- "schema": 1,
+ "schema": 3,
+ "revision": 3,
  "experiment": "RCWM-T1 T2b-register screen (roadmap item 3; joint item 5b)",
- "built_utc": "2026-10-09T08:04:12Z",
+ "built_utc": "2026-10-09T17:25:55Z",
  "model_calls": 0,
  "torch_imported": false,
  "builder": "scripts/t2br_make_data.py",
- "builder_sha256": "0b04340026746c7acf149844c786145771918a283339c33e4f5e16631d6e5d80",
- "common_sha256": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15",
+ "builder_sha256_at_build": "b94886243ed607096d7b0cf23bbe21de8fab0919755eb2798fa6aff9d334b4a6",
+ "common_sha256_at_build": "affa7d555c2924c7a587f55a13779315721b792c81b4f589c2a0f7519d783186",
+ "builder_note": "the files' provenance is the --verify rebuild check (AUDIT.json): the CURRENT builder must rebuild every data file byte for byte; the hashes above are the code at build time",
  "env_sha256": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
  "recorded_marginals_sha256": "45674251e38e574229f4ea98d04c30fe623ec6ac58ad308ad491661c84afab7e",
  "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
  "chat_template_check": "render_prompt == real template on 500 t2_train register prompts",
+ "rows_identical_to_revision_2": {
+  "ok": true,
+  "train_rows": "fd6710e20a5556708b296364718b6edb7275f7b3adac02a52b95700384302e42",
+  "dev_rows": "1113af0fedb5d9e955445472d703799eac21403e37fbec7838c45cb2bc6d5648",
+  "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
+ },
  "exclusion_sources": {
   "historical": {
    "payloads": 6464,
@@ -115,25 +123,27 @@
   "operative_contents": 301783
  },
  "freshness": "zero payload and zero operative-content overlap with every source; train / dev / chain units mutually disjoint (checked during the draw by Registry, re-checked by --verify)",
- "peak_rss_mb_at_write": 261.0,
- "record": "training rows (three renderings of the same rows)",
+ "peak_rss_mb_at_write": 481.6,
+ "record": "training rows, canonical rendering (the rows' source of truth; NOT trained, C1)",
  "seed": 20261109,
  "shuffle_seed": 7,
  "files": {
-  "t2br_train_plain.jsonl": "7344677dff2538af1bff38f24d90e0e734fb0a1a424b42bb714bb9db9ae35ba7",
-  "t2br_train_trace.jsonl": "6c034182b2e96daad83b92dfaf0b7be943bf5bbb09d2a52adf166e2e7aefc5b2",
-  "t2br_train_filler.jsonl": "a3c8ada63535544b3e257294da53ba772d99415a158a5ab2cff9261e08f9ddc4"
+  "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
+  "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
+  "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a"
  },
  "describe": {
   "n": 750,
   "by_stratum": {
-   "cond/xp1": 150,
+   "cond/twin_gt": 100,
    "mix/nowrap": 150,
-   "cond/x0": 100,
+   "cond/xp1": 50,
+   "cond/x0": 50,
    "add/wrap_under": 75,
    "mix/wrap": 150,
+   "cond/xm1": 50,
    "add/wrap_over": 75,
-   "cond/xm1": 50
+   "cond/twin_le": 50
   },
   "by_category": {
    "cond": 300,
@@ -146,8 +156,12 @@
   },
   "cond_patterns_pairs": {
    "none": 50,
-   "add_wraps": 50,
-   "sub_wraps": 50
+   "sub_wraps": 50,
+   "add_wraps": 50
+  },
+  "cond_twin_types": {
+   "threshold": 75,
+   "other": 75
   },
   "wrap_rows": 400,
   "value_range": [
@@ -155,13 +169,13 @@
    11
   ],
   "threshold_range_cond": [
-   0,
+   1,
    96
   ],
   "mean_target_tokens": {
    "plain": 15.55,
-   "trace": 38.08,
-   "filler": 38.08
+   "trace": 38.06,
+   "filler": 39.35
   }
  },
  "audit": {
@@ -176,127 +190,213 @@
    "copy": {
     "all": {
      "n": 750,
+     "correct": 0,
      "acc": 0.0
     },
     "mix": {
      "n": 300,
+     "correct": 0,
      "acc": 0.0
     },
     "wrap": {
      "n": 150,
+     "correct": 0,
      "acc": 0.0
     },
     "cond": {
      "n": 300,
+     "correct": 0,
      "acc": 0.0
     }
    },
    "unreduced": {
     "all": {
      "n": 750,
+     "correct": 350,
      "acc": 0.4667
     },
     "mix": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     },
     "wrap": {
      "n": 150,
+     "correct": 0,
      "acc": 0.0
     },
     "cond": {
      "n": 300,
+     "correct": 200,
      "acc": 0.6667
     }
    },
    "always_add": {
     "all": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     },
     "cond": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     }
    },
    "always_sub": {
     "all": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     },
     "cond": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     }
    },
    "wrong_register": {
     "all": {
      "n": 300,
-     "acc": 0.51
+     "correct": 158,
+     "acc": 0.5267
     },
     "cond": {
      "n": 300,
-     "acc": 0.51
-    }
-   },
-   "non_strict": {
-    "all": {
-     "n": 300,
-     "acc": 0.6667
-    },
-    "cond": {
-     "n": 300,
-     "acc": 0.6667
+     "correct": 158,
+     "acc": 0.5267
     }
    },
    "x_hi": {
     "all": {
      "n": 300,
-     "acc": 0.5
+     "correct": 158,
+     "acc": 0.5267
     },
     "cond": {
      "n": 300,
-     "acc": 0.5
+     "correct": 158,
+     "acc": 0.5267
     }
    },
    "thr_lo": {
     "all": {
      "n": 300,
-     "acc": 0.5067
+     "correct": 162,
+     "acc": 0.54
     },
     "cond": {
      "n": 300,
-     "acc": 0.5067
+     "correct": 162,
+     "acc": 0.54
     }
    },
    "v_pos": {
     "all": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
     },
     "cond": {
      "n": 300,
+     "correct": 150,
      "acc": 0.5
+    }
+   },
+   "non_strict": {
+    "all": {
+     "n": 300,
+     "correct": 250,
+     "acc": 0.8333
+    },
+    "cond": {
+     "n": 300,
+     "correct": 250,
+     "acc": 0.8333
+    }
+   },
+   "eq_plus1": {
+    "all": {
+     "n": 300,
+     "correct": 200,
+     "acc": 0.6667
+    },
+    "cond": {
+     "n": 300,
+     "correct": 200,
+     "acc": 0.6667
+    }
+   },
+   "units_eq_plus1": {
+    "all": {
+     "n": 300,
+     "correct": 204,
+     "acc": 0.68
+    },
+    "cond": {
+     "n": 300,
+     "correct": 204,
+     "acc": 0.68
+    }
+   },
+   "units_digit_gt": {
+    "all": {
+     "n": 300,
+     "correct": 215,
+     "acc": 0.7167
+    },
+    "cond": {
+     "n": 300,
+     "correct": 215,
+     "acc": 0.7167
+    }
+   },
+   "tens_digit_gt": {
+    "all": {
+     "n": 300,
+     "correct": 227,
+     "acc": 0.7567
+    },
+    "cond": {
+     "n": 300,
+     "correct": 227,
+     "acc": 0.7567
     }
    },
    "mix_1x": {
     "all": {
      "n": 300,
+     "correct": 9,
      "acc": 0.03
     },
     "mix": {
      "n": 300,
+     "correct": 9,
      "acc": 0.03
     }
    },
    "mix_no_v": {
     "all": {
      "n": 300,
+     "correct": 33,
      "acc": 0.11
     },
     "mix": {
      "n": 300,
+     "correct": 33,
      "acc": 0.11
+    }
+   },
+   "always_wrap": {
+    "all": {
+     "n": 150,
+     "correct": 150,
+     "acc": 1.0
+    },
+    "wrap": {
+     "n": 150,
+     "correct": 150,
+     "acc": 1.0
     }
    }
   },
@@ -336,70 +436,102 @@
    "always_sub|cond": {
     "acc": 0.5,
     "ok": true
-   }
-  },
-  "diagnostic": {
-   "wrong_register|all": {
-    "acc": 0.51,
-    "above_bar": false
    },
    "wrong_register|cond": {
-    "acc": 0.51,
-    "above_bar": false
-   },
-   "non_strict|all": {
-    "acc": 0.6667,
-    "above_bar": true
-   },
-   "non_strict|cond": {
-    "acc": 0.6667,
-    "above_bar": true
-   },
-   "x_hi|all": {
-    "acc": 0.5,
-    "above_bar": false
+    "acc": 0.5267,
+    "ok": true
    },
    "x_hi|cond": {
-    "acc": 0.5,
-    "above_bar": false
-   },
-   "thr_lo|all": {
-    "acc": 0.5067,
-    "above_bar": false
+    "acc": 0.5267,
+    "ok": true
    },
    "thr_lo|cond": {
-    "acc": 0.5067,
-    "above_bar": false
-   },
-   "v_pos|all": {
-    "acc": 0.5,
-    "above_bar": false
+    "acc": 0.54,
+    "ok": true
    },
    "v_pos|cond": {
     "acc": 0.5,
-    "above_bar": false
+    "ok": true
+   }
+  },
+  "rule_variants": {
+   "non_strict|cond": {
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "ok": true
    },
-   "mix_1x|all": {
-    "acc": 0.03,
-    "above_bar": false
+   "eq_plus1|cond": {
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "ok": true
+   },
+   "units_eq_plus1|cond": {
+    "acc": 0.68,
+    "contradicted_by": 96,
+    "n": 300,
+    "ok": true
+   },
+   "units_digit_gt|cond": {
+    "acc": 0.7167,
+    "contradicted_by": 85,
+    "n": 300,
+    "ok": true
+   },
+   "tens_digit_gt|cond": {
+    "acc": 0.7567,
+    "contradicted_by": 73,
+    "n": 300,
+    "ok": true
+   }
+  },
+  "diagnostic": {
+   "unreduced|cond": {
+    "acc": 0.6667,
+    "above_0.55": true
    },
    "mix_1x|mix": {
     "acc": 0.03,
-    "above_bar": false
-   },
-   "mix_no_v|all": {
-    "acc": 0.11,
-    "above_bar": false
+    "above_0.55": false
    },
    "mix_no_v|mix": {
     "acc": 0.11,
-    "above_bar": false
+    "above_0.55": false
+   },
+   "always_wrap|wrap": {
+    "acc": 1.0,
+    "above_0.55": true
    }
   },
-  "diagnostic_note": "Not gated. non_strict (other >= threshold) is a RULE VARIANT, not a surface cue: it needs the comparison and differs from the env only at other == threshold (the x0 rows), so it scores 1 - share(x0) on conditional rows. unreduced on cond rows is reported (the conditional shortcut of interest is the branch).",
+  "rule_variant_bar": {
+   "max_acc": 0.8333,
+   "min_contradicting_share": "1/6"
+  },
+  "diagnostic_note": "Not gated. unreduced on cond rows is reported (the conditional shortcut of interest is the branch). always_wrap ('add => wrap by 97') is 1.0 on the training adds BY DESIGN (every training add wraps; add without a wrap is the untouched add_nowrap control), so a G4 loss on add_nowrap shared by every trained arm is a property of the data, not of the trace format (the analysis reports trace - plain beside trace - OFF).",
+  "rule_variant_note": "eq_plus1 = P(ok false) + P(other = threshold + 1) >= 0.5 + 50/300; non_strict = 1 - P(other = threshold) = 1 - 50/300 by construction; a 0.55 bar would need >= 1,000 conditional rows. The twins (distance 2..15, on the other side of the threshold) contradict every near-only rule; the core rows contradict coarse comparisons.",
+  "distance": {
+   "core": {
+    "-1": 50,
+    "0": 50,
+    "1": 50
+   },
+   "twin_abs": [
+    2,
+    15
+   ],
+   "twin_type": {
+    "threshold": 75,
+    "other": 75
+   },
+   "twin_side": {
+    "ok_true": 100,
+    "ok_false": 50
+   }
+  },
   "branch_stump": {
-   "best_single_feature_accuracy": 0.5333,
-   "permutation_null_p95": 0.5867,
+   "best_single_feature_accuracy": 0.5467,
+   "permutation_null_p95": 0.5933,
    "within_null": true,
    "features": [
     "X",
@@ -412,13 +544,445 @@
     "tick",
     "register_id",
     "other_id"
-   ]
+   ],
+   "gated": false
   },
   "branch_balance": {
    "ok_true": 150,
    "ok_false": 150
   },
   "ok": true
+ },
+ "fill_constant": {
+  "constants": {
+   "swap": 5,
+   "add": 14,
+   "mix": 14,
+   "conditional": 26
+  },
+  "per_kind": {
+   "swap": {
+    "n_rows": 475,
+    "derived_constant": 5,
+    "pre_stated": 5,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 26,
+    "longest_trace_cell": "dev swap",
+    "residual_min": 0,
+    "residual_mean": 0.0,
+    "residual_max": 0,
+    "residual_positive_share": 0.0
+   },
+   "add": {
+    "n_rows": 724,
+    "derived_constant": 14,
+    "pre_stated": 14,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 35,
+    "longest_trace_cell": "train wrap",
+    "residual_min": 0,
+    "residual_mean": 1.3191,
+    "residual_max": 3,
+    "residual_positive_share": 0.953
+   },
+   "mix": {
+    "n_rows": 951,
+    "derived_constant": 14,
+    "pre_stated": 14,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 35,
+    "longest_trace_cell": "train mix",
+    "residual_min": 0,
+    "residual_mean": 0.4595,
+    "residual_max": 3,
+    "residual_positive_share": 0.4311
+   },
+   "conditional": {
+    "n_rows": 1236,
+    "derived_constant": 26,
+    "pre_stated": 26,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 47,
+    "longest_trace_cell": "dev cond_oor_val",
+    "residual_min": 0,
+    "residual_mean": 1.3665,
+    "residual_max": 5,
+    "residual_positive_share": 0.9579
+   }
+  },
+  "cells": {
+   "chain CH_IN / swap": {
+    "n": 262,
+    "fill_units": [
+     5
+    ],
+    "residual_mean": 0.0,
+    "residual_range": [
+     0,
+     0
+    ]
+   },
+   "chain CH_IN / add": {
+    "n": 229,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.1397,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.9913,
+    "fill_length_best_cut": 0.9913,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9913
+   },
+   "chain CH_IN / mix": {
+    "n": 298,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.3255,
+    "residual_range": [
+     0,
+     2
+    ],
+    "label": "wrap",
+    "majority": 0.7651,
+    "fill_length_best_cut": 0.7651,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9161
+   },
+   "chain CH_IN / conditional": {
+    "n": 235,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.2894,
+    "residual_range": [
+     1,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5702,
+    "fill_length_best_cut": 0.5702,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.5702
+   },
+   "chain CH_X / swap": {
+    "n": 133,
+    "fill_units": [
+     5
+    ],
+    "residual_mean": 0.0,
+    "residual_range": [
+     0,
+     0
+    ]
+   },
+   "chain CH_X / add": {
+    "n": 105,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.0095,
+    "residual_range": [
+     0,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.7143,
+    "fill_length_best_cut": 0.7143,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.8
+   },
+   "chain CH_X / mix": {
+    "n": 153,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.2876,
+    "residual_range": [
+     0,
+     2
+    ],
+    "label": "wrap",
+    "majority": 0.7778,
+    "fill_length_best_cut": 0.7778,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9412
+   },
+   "chain CH_X / conditional": {
+    "n": 121,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.281,
+    "residual_range": [
+     0,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.6364,
+    "fill_length_best_cut": 0.6364,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.6364
+   },
+   "dev add_nowrap / add": {
+    "n": 80,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.2,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_far / conditional": {
+    "n": 100,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.38,
+    "residual_range": [
+     1,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.72
+   },
+   "dev cond_mid / conditional": {
+    "n": 100,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.34,
+    "residual_range": [
+     1,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.53
+   },
+   "dev cond_oor_thr / conditional": {
+    "n": 100,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 0.91,
+    "residual_range": [
+     0,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.85
+   },
+   "dev cond_oor_val / conditional": {
+    "n": 100,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.19,
+    "residual_range": [
+     0,
+     4
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.57
+   },
+   "dev cond_x0 / conditional": {
+    "n": 60,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.2667,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_xm1 / conditional": {
+    "n": 60,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.2667,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_xp1 / conditional": {
+    "n": 60,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.3,
+    "residual_range": [
+     1,
+     3
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev mix / mix": {
+    "n": 100,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.62,
+    "residual_range": [
+     0,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.94
+   },
+   "dev mix_oor / mix": {
+    "n": 100,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.61,
+    "residual_range": [
+     0,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.97
+   },
+   "dev swap / swap": {
+    "n": 80,
+    "fill_units": [
+     5
+    ],
+    "residual_mean": 0.0,
+    "residual_range": [
+     0,
+     0
+    ]
+   },
+   "dev wrap / add": {
+    "n": 80,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.825,
+    "residual_range": [
+     1,
+     2
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev wrap_oor / add": {
+    "n": 80,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.9375,
+    "residual_range": [
+     0,
+     2
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "train cond / conditional": {
+    "n": 300,
+    "fill_units": [
+     26
+    ],
+    "residual_mean": 1.73,
+    "residual_range": [
+     1,
+     5
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.5267
+   },
+   "train mix / mix": {
+    "n": 300,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 0.5767,
+    "residual_range": [
+     0,
+     3
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9567
+   },
+   "train wrap / add": {
+    "n": 150,
+    "fill_units": [
+     14
+    ],
+    "residual_mean": 1.8067,
+    "residual_range": [
+     0,
+     2
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   }
+  },
+  "ok": true,
+  "note": "fill length is a function of the action kind alone (prompt-derived): within a kind it is constant, so it carries zero information about the answer (fill_length_best_cut == majority in every cell). The residual (constant filler longer than the row's trace) is answer-dependent only through the TRACE's length; it is a descriptive covariate, not something the filler arm emits."
  },
  "design": {
   "quota": {
@@ -432,11 +996,15 @@
    0,
    1
   ],
-  "twin_shift": {
-   "-1": -2,
-   "0": -1,
-   "1": 1
-  },
+  "twin_dist": [
+   2,
+   15
+  ],
+  "twin_types": [
+   "threshold",
+   "other"
+  ],
+  "twin_type_quota_per_offset": 25,
   "cond_pattern_quota": {
    "-1": [
     17,
@@ -453,36 +1021,43 @@
     17,
     17
    ]
-  }
+  },
+  "dev_pair_type_quota": 25,
+  "far_dist": [
+   16,
+   96
+  ]
  },
- "surface_diversity": "off (default)",
  "build_log": [
-  "[03:02:38] T2b-register data: seeds train 20261109 / dev 20261110 / chains 20261111; no model call",
-  "[03:02:38] render_prompt == real chat template on 500 t2_train register prompts",
-  "[03:03:23] historical set: 6464 payloads (45s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
-  "[03:03:23] bank_pilot.json: 15629 payloads, 15278 operative contents",
-  "[03:03:23] bank_confirm.json: 13552 payloads, 13247 operative contents",
-  "[03:03:23] bank_confirm2.json: 12163 payloads, 11903 operative contents",
-  "[03:03:27] bank_s4000.json: 255745 payloads, 250614 operative contents",
-  "[03:03:27] t2_train.jsonl: 1501 payloads",
-  "[03:03:27] t2_eval.jsonl: 600 payloads",
-  "[03:03:27] t2_eval_xframe.jsonl: 600 payloads",
-  "[03:03:27] t2_eval_supp.jsonl: 360 payloads",
-  "[03:03:27] SELECT-VIEWS-001: 384 payloads",
-  "[03:03:27] l1_ood_bank.jsonl: 600 payloads",
-  "[03:03:27] fds/T_BANK.json: 192 payloads",
-  "[03:03:27] fds/T_BANK_V2.json: 192 payloads",
-  "[03:03:27] cc1/T_BANK_V3X.json: 864 payloads",
-  "[03:03:27] cc2/STAGE_A_T_V3X.json: 15 payloads",
-  "[03:03:27] cc2/T_BANK_V4.json: 864 payloads",
-  "[03:04:08] multi-event register prompts: 280 transitions from 1 files (14161 scanned); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
-  "[03:04:08] exclusion union: 308726 payloads, 301783 operative contents (17 sources)",
-  "[03:04:08] train mix/wrap: 450 rows from 4984 draws; rejected {'state unchanged': 4, 'operative content in an exclusion source': 1, 'stratum full / not a wrap': 4529}",
-  "[03:04:08] train conditional: 150 pairs (300 rows) from 1098 draws; rejected {'x or twin threshold outside 0..96': 26, 'wrap pattern full / both wrap': 922}",
-  "[03:04:09] dev: 900 rows {'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100}; rejected {'wrap status / unchanged': 282, 'no wrap': 1745, 'operative content in an exclusion source': 1, 'equal registers': 1, 'wraps': 3}",
-  "[03:04:11] chains CH_IN: 32 parents x 8 candidates from 34 draws",
-  "[03:04:11] chains CH_X: 16 parents x 8 candidates from 18 draws",
-  "[03:04:11] chains rejected {'operative content in an exclusion source': 3, 'CH_X candidate without an out-of-range value': 1}",
-  "[03:04:11] audit: gated PASS copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500"
+  "[12:24:02] T2b-register data (revision 3): seeds train 20261109 / dev 20261110 / chains 20261111 / surfaces 20261112; no model call",
+  "[12:24:02] render_prompt == real chat template on 500 t2_train register prompts",
+  "[12:24:55] historical set: 6464 payloads (53s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[12:24:56] bank_pilot.json: 15629 payloads, 15278 operative contents",
+  "[12:24:56] bank_confirm.json: 13552 payloads, 13247 operative contents",
+  "[12:24:56] bank_confirm2.json: 12163 payloads, 11903 operative contents",
+  "[12:25:00] bank_s4000.json: 255745 payloads, 250614 operative contents",
+  "[12:25:00] t2_train.jsonl: 1501 payloads",
+  "[12:25:00] t2_eval.jsonl: 600 payloads",
+  "[12:25:00] t2_eval_xframe.jsonl: 600 payloads",
+  "[12:25:00] t2_eval_supp.jsonl: 360 payloads",
+  "[12:25:00] SELECT-VIEWS-001: 384 payloads",
+  "[12:25:00] l1_ood_bank.jsonl: 600 payloads",
+  "[12:25:00] fds/T_BANK.json: 192 payloads",
+  "[12:25:00] fds/T_BANK_V2.json: 192 payloads",
+  "[12:25:00] cc1/T_BANK_V3X.json: 864 payloads",
+  "[12:25:00] cc2/STAGE_A_T_V3X.json: 15 payloads",
+  "[12:25:00] cc2/T_BANK_V4.json: 864 payloads",
+  "[12:25:51] multi-event register prompts: 280 transitions from 1 files (14161 scanned); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[12:25:51] exclusion union: 308726 payloads, 301783 operative contents (17 sources)",
+  "[12:25:52] train mix/wrap: 450 rows from 4984 draws; rejected {'state unchanged': 4, 'operative content in an exclusion source': 1, 'stratum full / not a wrap': 4529}",
+  "[12:25:52] train conditional: 150 pairs (300 rows) from 1317 draws; rejected {'twin threshold / other outside 0..96': 103, 'wrap pattern / twin type full, or both wrap': 1055, 'x outside 0..96': 9}",
+  "[12:25:52] dev: 1100 rows {'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100, 'cond_mid': 100, 'cond_far': 100}; rejected {'wrap status / unchanged': 282, 'no wrap': 1745, 'operative content in an exclusion source': 1, 'equal registers': 1, 'wraps': 3, 'cond_far: threshold leaves no room': 15}",
+  "[12:25:52] chains CH_IN: 32 parents x 8 candidates from 34 draws",
+  "[12:25:52] chains CH_X: 16 parents x 8 candidates from 18 draws",
+  "[12:25:52] chains rejected {'operative content in an exclusion source': 3, 'CH_X candidate without an out-of-range value': 1}",
+  "[12:25:54] rows identical to revision 2 (never re-drawn): True",
+  "[12:25:54] audit: PASS copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500, wrong_register|cond 0.527, x_hi|cond 0.527, thr_lo|cond 0.540, v_pos|cond 0.500, non_strict|cond 0.833, eq_plus1|cond 0.667, units_eq_plus1|cond 0.680, units_digit_gt|cond 0.717, tens_digit_gt|cond 0.757",
+  "[12:25:55] amendment 4b: swap derived 5 (pre-stated 5), 1 fill string(s), add derived 14 (pre-stated 14), 1 fill string(s), mix derived 14 (pre-stated 14), 1 fill string(s), conditional derived 26 (pre-stated 26), 1 fill string(s)",
+  "[12:25:55] surface audit: training rows using a held-out factor 0; held-out-surface bank ok True"
  ]
 }

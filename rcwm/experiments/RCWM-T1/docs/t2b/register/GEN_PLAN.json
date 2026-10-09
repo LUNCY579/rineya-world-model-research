@@ -27,31 +27,55 @@
   "source": "T2 (runs/t2/t2_s0/metrics.json args; scripts/run_t2.py _train_body)"
  },
  "seed": 0,
- "train_variant": "base",
- "long_answer_factor": 2.3394,
+ "train_variant": "sd",
+ "go_rule_revision": 3,
+ "side_decode_factor": {
+  "E1": {
+   "off": 1.0,
+   "plain": 1.0,
+   "trace": 2.4188,
+   "filler": 2.4817
+  },
+  "E1H": {
+   "off": 1.0,
+   "plain": 1.0,
+   "trace": 2.6181,
+   "filler": 2.6794
+  },
+  "E2": {
+   "off": 1.0,
+   "plain": 1.0,
+   "trace": 2.4188,
+   "filler": 2.4817
+  }
+ },
  "mean_target_tokens_dev": {
-  "plain": 15.64,
-  "trace": 37.93,
-  "filler": 37.93
+  "plain": 15.65,
+  "trace": 39.28,
+  "filler": 40.32
+ },
+ "mean_prompt_tokens": {
+  "E1": 142.83,
+  "E1H": 182.17
  },
  "train": {
   "plain": {
    "rows": 750,
    "row_visits": 3040,
    "epochs": 4.053,
-   "tokens": 483105
+   "tokens": 534460
   },
   "trace": {
    "rows": 750,
    "row_visits": 3040,
    "epochs": 4.053,
-   "tokens": 551595
+   "tokens": 602919
   },
   "filler": {
    "rows": 750,
    "row_visits": 3040,
    "epochs": 4.053,
-   "tokens": 551595
+   "tokens": 606824
   }
  },
  "t2_reference": {
@@ -63,22 +87,22 @@
    "stage": "T_plain",
    "what": "train plain arm",
    "generations_max": 0,
-   "projected_s_planning": 2053.6,
-   "projected_s_observed": 2053.6
+   "projected_s_planning": 2259.2,
+   "projected_s_observed": 2259.2
   },
   {
    "stage": "T_trace",
    "what": "train trace arm",
    "generations_max": 0,
-   "projected_s_planning": 2327.8,
-   "projected_s_observed": 2327.8
+   "projected_s_planning": 2533.2,
+   "projected_s_observed": 2533.2
   },
   {
    "stage": "T_filler",
    "what": "train filler arm",
    "generations_max": 0,
-   "projected_s_planning": 2327.8,
-   "projected_s_observed": 2327.8
+   "projected_s_planning": 2548.8,
+   "projected_s_observed": 2548.8
   },
   {
    "stage": "A0",
@@ -89,22 +113,29 @@
   },
   {
    "stage": "E1",
-   "what": "900 one-step dev rows x OFF/plain (short) + trace/filler (long)",
-   "generations_max": 3600,
-   "projected_s_planning": 2226.3,
-   "projected_s_observed": 1581.8
+   "what": "1100 one-step dev rows (verbatim frame) x OFF / plain / trace / filler",
+   "generations_max": 4400,
+   "projected_s_planning": 2811.3,
+   "projected_s_observed": 1997.5
+  },
+  {
+   "stage": "E1H",
+   "what": "400 primary dev rows, combined HELD-OUT surface x OFF / plain / trace / filler",
+   "generations_max": 1600,
+   "projected_s_planning": 1081.1,
+   "projected_s_observed": 768.2
   },
   {
    "stage": "E2",
-   "what": "384 k=4 dev chains x OFF/plain (short) + trace/filler (long)",
+   "what": "384 k=4 dev chains x OFF / plain / trace / filler",
    "generations_max": 6144,
-   "projected_s_planning": 3799.5,
-   "projected_s_observed": 2699.6
+   "projected_s_planning": 3925.6,
+   "projected_s_observed": 2789.3
   }
  ],
- "total_generations_max": 10576,
+ "total_generations_max": 12976,
  "model_loads": 4,
- "stage_rule": "no stage starts within 0.5 h of the cap; a stage starts only if 1.25 x its estimate fits; eval starts only if A0 + the next eval stage fits; a turn that evaluates after an earlier A0 re-anchors first",
+ "stage_rule": "no stage starts within 0.5 h of the cap; a stage starts only if 1.25 x its estimate fits (checked before AND after the resource / thermal wait that precedes each model load); eval starts only if A0 + the next eval stage fits; a turn that evaluates after an earlier A0 re-anchors first; --cap-h above 4.5 is refused",
  "turns_at_planning_rate": [
   {
    "stages": [
@@ -113,9 +144,16 @@
     "T_filler",
     "A0",
     "E1",
+    "E1H"
+   ],
+   "projected_h": 3.24
+  },
+  {
+   "stages": [
+    "A0 (re-anchor)",
     "E2"
    ],
-   "projected_h": 3.66
+   "projected_h": 1.21
   }
  ],
  "turns_at_observed_rate": [
@@ -126,20 +164,24 @@
     "T_filler",
     "A0",
     "E1",
+    "E1H",
     "E2"
    ],
-   "projected_h": 3.15
+   "projected_h": 3.68
   }
  ],
- "projected_gpu_h_planning": 3.66,
- "projected_gpu_h_observed": 3.15,
+ "projected_gpu_h_planning": 4.45,
+ "projected_gpu_h_observed": 3.68,
+ "turn_split": "The runner defers by its own gate (no stage starts within 0.5 h of the cap; 1.25 x the estimate must fit, re-checked after every resource wait): a stage that does not fit ends the turn with exit 5, the hook's second call waits for the next RCWM turn and resumes from the recorded stages, re-anchoring (A0 re-check) before any further evaluation. E1H (the held-out-surface stage, gating G1 / G2) runs before E2, so every gating output exists by the end of the first turn whenever E1H fits there.",
+ "per_factor_heldout_renderings": "not run: 3 more renderings of the 400 primary rows x 4 sides would add about 3 x E1H to a plan that already needs a second turn at the planning rate (C3: descriptive only if they fit the GPU budget)",
  "checks": {
-  "dev_sha256": "8b01899c60a0bb9d60ff2535531ec5c168564a9b98e313a034ac75ecff1a5427",
+  "dev_sha256": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+  "dev_hs_sha256": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
   "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
   "train_sha256": {
-   "plain": "7344677dff2538af1bff38f24d90e0e734fb0a1a424b42bb714bb9db9ae35ba7",
-   "trace": "6c034182b2e96daad83b92dfaf0b7be943bf5bbb09d2a52adf166e2e7aefc5b2",
-   "filler": "a3c8ada63535544b3e257294da53ba772d99415a158a5ab2cff9261e08f9ddc4"
+   "plain": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
+   "trace": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
+   "filler": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd"
   },
   "anchor_ref_matches_pin": true,
   "outputs_present": [],

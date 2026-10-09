@@ -1,31 +1,40 @@
-"""CPU tests of the T2b prerequisite screen kit (data audit, scorer, analysis rule, runner) with tiny random Qwen3
-stand-ins. No real model is loaded (AutoModelForCausalLM.from_pretrained is disabled; the vendored trainer's load_core
-returns the tiny model), no GPU is touched (CUDA_VISIBLE_DEVICES="" before torch, is_available/device_count patched),
-no lease is taken (a fake runtime stands in for rcwmt.runtime under the runner's own RealBackend code). Threads 2. One
-process. Runner outputs go to a temporary directory only.
+"""CPU tests of the T2b prerequisite screen kit, revision 3 (data audit, surface proofs, amendment-4b filler, scorer,
+analysis rule, runner) with tiny random Qwen3 stand-ins. No real model is loaded (AutoModelForCausalLM.from_pretrained is
+disabled; the vendored trainer's load_core returns the tiny model), no GPU is touched (CUDA_VISIBLE_DEVICES="" before
+torch, is_available/device_count patched), no lease is taken (a fake runtime stands in for rcwmt.runtime under the
+runner's own RealBackend code). Threads 2. One process. Runner outputs go to a temporary directory only.
 
 Stand-ins: Qwen3 with 2 blocks, hidden 64, 4 heads, 2 KV heads, head_dim 16, the real vocabulary and the real
 tokenizer (read-only). Training runs the REAL vendored trainer (train_generic.main -> lm.attach_lora r16 ->
-lm.train_sft) for 2 steps at lr 0.05 (so the adapter visibly changes greedy outputs). Pacing-only deviations:
-generation.breathe / throttle_list no-ops, Tensor.cuda the identity, a 12-token decode cap, BWM_DEVICE=cpu.
+lm.train_sft) for 2 steps at lr 0.05 (so the adapter visibly changes greedy outputs) on the REAL surface-diversity
+training files. Pacing-only deviations: generation.breathe / throttle_list no-ops, Tensor.cuda the identity, a 12-token
+decode cap, BWM_DEVICE=cpu.
 
 Checks
-  1 frames: D-int messages == env.multi_step_messages; render_chat == tok.apply_chat_template for every arm (8-, 10-,
-    12-bit, with and without surface variants); t2bp_chain('dint') == generation.chain('chain_m1') OFF and ON
-  2 data audit: the written files pass; perturbed copies (composition, a broken minimal pair, a wrong gold, a filler off
-    by one token, a reordered trace target) are refused
-  3 surface diversity: rendered SD files pass the same audit, keep the canonical rows and targets, use only training
-    variants, and actually vary the system text and field names
-  4 scorer self-test (golds 100%, heuristics and shortcut policies at their floors, negatives rejected and classified
-    format vs value, D-int parser == env.parse_state) and filler token equality under the HF tokenizer == the tokenizers
-    library count on every training and dev row
-  5 analysis dry run: every synthetic scenario, rule unit, close-call unit, R5 addendum unit and refusal gives the
-    pre-stated result
-  6 full tiny run (3 arms): exit 0, DONE.json, one lease 'rcwm-t1:t2b-prereq', resource wait before every load, train
-    before eval per arm, anchor pass recorded, OFF != ON, analysis validators accept the outputs, a rerun is a no-op;
-    an oracle-generator run on the whole dev bank; frozen-rule stops (a changed frozen input or a missing record refuses
-    before the lease; code changed between turns refuses the resume; a completed run refuses other arms, e.g.
-    --with-filler after DONE; the analysis' frozen check); a surface-diversity run with stage E3 (held-out surface)
+  1 frames: D-int canonical messages == env.multi_step_messages; OOR prompts differ from 8-bit prompts only in the
+    width word, in EVERY surface (incl. the held-out paraphrase, whose state sentence words the width its own way);
+    render_chat == tok.apply_chat_template for every arm (8-, 10-, 12-bit; canonical, training sd and held-out
+    surfaces with permuted key orders); t2bp_chain('dint') == generation.chain('chain_m1') OFF and ON; no kit file has
+    CRLF line endings
+  2 data audit: the sd (primary) and canonical files pass; perturbed copies are refused (composition, a broken minimal
+    pair, a wrong gold, a filler of another length, a reordered trace target, and a training row rendered with a
+    held-out paraphrase / field-name variant / top-level order / event order, or with a prompt that differs from its
+    recorded surface)
+  3 surface proofs (C2): the held-out key orders regenerate from ORDER_SEED (reversed + 2 random event orders; reversed
+    only for the 2-key top object); every one of the 6,000 training prompts read back FROM ITS TEXT has no held-out
+    factor and no held-out text fragment; the sd files keep the canonical rows and targets; diversity used; the E3
+    rendering rotates the 3 held-out event orders within every stratum and reads back as the held-out surface
+  4 scorer self-test and amendment 4b: golds, floors, negatives; FILL_K == the formula under the HF tokenizer; one fill
+    string on every training and dev target; no filler shorter than its trace; the fill length carries zero
+    information about the answer (lookup == majority share, mutual information 0), while the revision-2 row-matched
+    length would have revealed applicability
+  5 analysis dry run: every synthetic scenario (incl. the new held-out-surface ones), rule unit, close-call unit, R5
+    addendum unit and refusal gives the pre-stated result
+  6 full tiny run (3 arms, sd files): exit 0, DONE.json, stages T/E1/E2/E3, E3 ON only and in the held-out surface only,
+    one lease 'rcwm-t1:t2b-prereq', resource wait before every load, train before eval per arm, anchor pass recorded,
+    OFF != ON, analysis validators accept the outputs (HS present), a rerun is a no-op; an oracle-generator run on the
+    whole dev bank (HS 1.0); the R5 addendum path; frozen-rule stops; the canonical variant is refused by the runner
+    and by the analysis
   7 crash + resume: a crash inside training (partial train dir) and a crash inside E2 (stray .partial) are orphaned and
     redone; the lease is released by the crash; every output equals the uninterrupted run byte for byte
   8 deferral: nothing fits -> exit 5, no load, no training; an arm-level deferral (pair does not fit) and a stage-level
@@ -33,7 +42,9 @@ Checks
   9 stops: one-waiter rule (live RCWM marker / live RCWM holder refuse, not persisted; dead marker and live BWM holder
     pass); live run lock refuses, stale lock reclaimed; anchor failure (persisted; no evaluation output); fingerprint
     mismatch; runtime drift; a recorded output changed; a data file changed after recording
- 10 --plan logic: the screen fits one turn at the planning rate, the filler arm needs a second, a short cap splits turns
+ 10 --plan logic: the sd screen takes 2 turns at the planning rate and 1 at the observed rate; per-factor held-out
+    renderings would need a third planning turn (omitted); the filler control run is one turn; every arm's whole pair
+    x 1.25 fits an empty 4.5 h turn; a 3.5 h cap splits the screen, a 3.0 h cap is refused (S-trace with E3 needs more)
 
   python -B scripts/t2bp_test.py [--keep] [--no-record]       -> docs/t2b/prereq/TINY_TEST.json
 """
@@ -68,9 +79,11 @@ import copy  # noqa: E402
 import gc  # noqa: E402
 import hashlib  # noqa: E402
 import json  # noqa: E402
+import re  # noqa: E402
 import shutil  # noqa: E402
 import tempfile  # noqa: E402
 import time  # noqa: E402
+from collections import Counter  # noqa: E402
 from contextlib import contextmanager  # noqa: E402
 from pathlib import Path  # noqa: E402
 
@@ -117,6 +130,7 @@ CFG = dict(vocab_size=151936, hidden_size=64, intermediate_size=128, num_hidden_
 SEEDS = {"sparse": 2002, "supa": 1001}
 STEPS, LR_TINY = 2, 0.05
 RESULTS: list = []
+LF_EXEMPT = {"TINY_TEST.json", "SCREEN_RULE_rev1.json"}
 
 
 def check(name, ok, detail=""):
@@ -176,7 +190,7 @@ class FakeRuntime:
     @contextmanager
     def gpu_lease(self, label, job):
         self.calls.append(("lease", label))
-        self.LOCK_PATH.write_text(json.dumps({"label": label, "pid": os.getpid(), "created": time.time()}), encoding="utf-8")
+        self.LOCK_PATH.write_text(json.dumps({"label": label, "pid": os.getpid(), "created": time.time()}), encoding="utf-8", newline="\n")
         try:
             yield
         finally:
@@ -242,7 +256,7 @@ def make_anchor_ref(tmp: Path, chains: list, name: str = "anchor_ref.jsonl") -> 
     m = build("sparse")
     rr = generation.chain(m, tok(), chains, "chain_m1")
     p = tmp / name
-    p.write_text("".join(json.dumps(x) + "\n" for x in R.chain_rows(chains, rr)), encoding="utf-8")
+    p.write_text("".join(json.dumps(x) + "\n" for x in R.chain_rows(chains, rr)), encoding="utf-8", newline="\n")
     del m
     gc.collect()
     return p
@@ -257,28 +271,15 @@ def side_of(model) -> str:
     return "off"
 
 
-_CNT = []
-
-
 def oracle_generate(model, tok_, message_lists, max_new_tokens, **kw):
-    """ON: the stated rule, in the arm's own format (arm and width read from the prompt); OFF: copy the input state."""
-    import re
-    if not _CNT:
-        _CNT.append(MD.counter())
+    """ON: the stated rule, in the arm's own format; OFF: copy the input state. The arm, the width, the state and the
+    event are read back from the prompt itself (any surface: t2bp_common.read_prompt)."""
     side = side_of(model)
     out = []
     for msgs in message_lists:
-        sys_t = msgs[0]["content"]
-        arm = ("bbits" if "binary digits" in sys_t else "strace" if "keys cmp, calc and after" in sys_t
-               else "ffill" if "keys fill" in sys_t else "dint")
-        w = int(re.search(r"(\d+)-bit", sys_t).group(1))
-        u = json.loads(msgs[1]["content"])
-        b, ev = u["before"], dict(u["events"][0])
-        if arm == "bbits":
-            b = int(b, 2)
-            for k in ("add", "delete", "pre_on", "pre_off"):
-                ev[k] = int(ev[k], 2)
-        out.append(C.target_text(arm, b, ev, w, _CNT[0]) if side == "on" else C.render_prediction(arm, b, b, ev, w))
+        x = C.read_prompt(msgs)
+        a, w, b, ev = x["arm"], x["width"], x["before"], x["event"]
+        out.append(C.target_text(a, b, ev, w) if side == "on" else C.render_prediction(a, b, b, ev, w))
     return out
 
 
@@ -288,6 +289,12 @@ def _peak_mb() -> float:
     return round(getattr(mi, "peak_wset", mi.rss) / 2 ** 20, 1)
 
 
+def _norm_width(t: str, w: int) -> str:
+    """The text with its width word replaced by a placeholder (and the article before a number normalised)."""
+    t = re.sub(r"\ban? (?=\d)", "<A> ", t)
+    return t.replace(str(w), "<W>")
+
+
 def main() -> int:
     t0 = time.time()
     tmp = Path(tempfile.mkdtemp(prefix="t2bp_tiny_"))
@@ -295,28 +302,52 @@ def main() -> int:
     dev_rows, parents = C.load_dev()
     dchains = C.dev_chains(parents)
     tr = {a: C.load_jsonl(C.TRAIN_FILES[a]) for a in C.ARMS}
+    trs = {a: C.load_jsonl(C.TRAIN_FILES_SD[a]) for a in C.ARMS}
     try:
         # ------------------------------------------------------------ 1 frames
         print("1 frames", flush=True)
         w8 = [r for r in dev_rows + tr["dint"] if r["width"] == C.WIDTH_ID]
-        check(f"D-int messages == env.multi_step_messages on every 8-bit dev and training row ({len(w8)})",
+        check(f"D-int canonical messages == env.multi_step_messages on every 8-bit dev and training row ({len(w8)})",
               all(C.messages("dint", r["before"], r["event"], r["width"]) == env.multi_step_messages(C.FAM, r["before"], [r["event"]])
                   for r in w8))
         ood = [r for r in dev_rows if r["width"] != C.WIDTH_ID]
-        check("OOD D-int prompts differ from T2's frame only in the width word ('a 10-bit' / 'a 12-bit')",
+        check("OOD D-int canonical prompts differ from T2's frame only in the width word ('a 10-bit' / 'a 12-bit')",
               all(C.messages("dint", r["before"], r["event"], r["width"])[0]["content"] ==
                   env.SYSTEM_MULTI[C.FAM].replace("an 8-bit", f"a {r['width']}-bit") and
                   C.messages("dint", r["before"], r["event"], r["width"])[1] == env.multi_step_messages(C.FAM, r["before"], [r["event"]])[1]
                   for r in ood))
+        bad_w, n_w = [], 0
+        for a in C.ARMS:
+            for i in range(len(C.PARAPHRASES)):
+                for j in range(len(C.FIELD_VARIANTS)):
+                    sf = {"para": i, "names": j}
+                    t8 = C.system_text(a, 8, sf)
+                    for w in C.OOD_WIDTHS:
+                        n_w += 1
+                        tw = C.system_text(a, w, sf)
+                        if _norm_width(tw, w) != _norm_width(t8, 8) or str(w) not in tw or "8" in tw:
+                            bad_w.append((a, i, j, w))
+        ho = C.system_text("dint", 12, C.heldout_surface(0))
+        check(f"OOR system texts differ from the 8-bit texts only in the width word in every surface ({n_w} texts: 4 arms x "
+              "5 paraphrases x 5 field variants x 10/12 bits); the held-out paraphrase words the width its own way",
+              not bad_w and ho.startswith("The state is a flag mask 12 bits wide."), (bad_w[:3], ho[:60]))
         bad = 0
         sample = dev_rows[::7] + tr["dint"][::25]
+        sd_sample = {r["id"]: r["surface"] for r in trs["dint"][::25]}
+        n_pr = 0
         for a in C.ARMS:
             for r in sample:
-                for sf in (None, {"para": 2, "names": 3}, {"para": 4, "names": 4}):
+                sfs = [None, {"para": 2, "names": 3}, sd_sample.get(r["id"]) or {"para": 1, "names": 2, "order": {
+                    "top": list(C.OBJ_SLOTS["top"]), "event": list(C.train_orders("event")[777])}}]
+                if r.get("split") == "dev":
+                    sfs.append(C.heldout_surface_of(r))
+                for sf in sfs:
                     msgs = C.messages(a, r["before"], r["event"], r["width"], sf)
+                    n_pr += 1
                     bad += int(C.render_chat(msgs) != tok().apply_chat_template(msgs, tokenize=False, add_generation_prompt=True,
                                                                                enable_thinking=False))
-        check(f"render_chat == tok.apply_chat_template ({len(sample) * 3 * len(C.ARMS)} prompts, 8/10/12-bit, surface variants)", bad == 0, bad)
+        check(f"render_chat == tok.apply_chat_template ({n_pr} prompts: 8/10/12-bit; canonical, training sd surfaces with "
+              "permuted key orders, held-out surfaces)", bad == 0, bad)
         ad = tmp / "adapter_probe"
         _make_probe_adapter(ad)
         pm = PeftModel.from_pretrained(build("sparse"), str(ad), adapter_name=R.ADAPTER_NAME, is_trainable=False).eval()
@@ -345,16 +376,26 @@ def main() -> int:
         del pm
         gc.collect()
 
+        crlf = []
+        for p in sorted(list((ROOT / "scripts").glob("t2bp_*")) + list((ROOT / "data").glob("t2bp_*")) + list(C.DOCS.glob("*"))):
+            if p.is_file() and p.name not in LF_EXEMPT and b"\r\n" in p.read_bytes():
+                crlf.append(p.name)
+        check("line endings: no kit script, data file or record has CRLF line endings (exempt: TINY_TEST.json, rewritten "
+              "with LF at the end of this test, and the superseded SCREEN_RULE_rev1.json, kept byte for byte because the "
+              "revision-2 record pins its sha256)", not crlf, crlf)
+
         # ------------------------------------------------------------ 2 data audit
         print("2 data audit", flush=True)
-        au = AU.audit("")
-        hs = au["core"]["heuristic_accuracy"]
-        check("the written training files pass the audit (balance, quotas, pairs, renderings, filler, SOURCE hashes)",
-              au["ok"], {k: round(v, 4) for k, v in hs.items()})
+        au = AU.audit("sd")
+        hs_ = au["core"]["heuristic_accuracy"]
+        check("the PRIMARY (surface-diversity) training files pass the audit (balance, quotas, pairs, renderings, 4b filler, "
+              "surface proof, rows/targets == canonical, SOURCE hashes)", au["ok"], {k: round(v, 4) for k, v in hs_.items()})
+        auc = AU.audit("canonical")
+        check("the canonical files (the row source) pass the audit", auc["ok"], [k for k, v in auc["checks"].items() if not v])
         cnt = MD.counter()
 
-        def audit_variant(mutate) -> bool:
-            rows = {a: copy.deepcopy(v) for a, v in tr.items()}
+        def audit_variant(mutate, base=None) -> bool:
+            rows = {a: copy.deepcopy(v) for a, v in (base or trs).items()}
             mutate(rows)
             return MD.audit_files(rows, cnt)["ok"]
 
@@ -376,10 +417,11 @@ def main() -> int:
                 rows[a][0]["gold"] = rows[a][0]["gold"] ^ 1
         check("refused: a wrong gold", not audit_variant(wrong_gold))
 
-        def short_fill(rows):
+        def longer_fill(rows):
             r = rows["ffill"][3]
-            r["target"] = r["target"].replace('"fill":" .', '"fill":"', 1)
-        check("refused: a filler target one token short of the trace", not audit_variant(short_fill))
+            r["target"] = r["target"].replace('"fill":"', '"fill":" .', 1)
+        check("refused: one filler target with a different fill length (amendment 4b: one constant per kind)",
+              not audit_variant(longer_fill))
 
         def reorder_trace(rows):
             r = rows["strace"][5]
@@ -387,44 +429,125 @@ def main() -> int:
             r["target"] = json.dumps({"calc": d["calc"], "cmp": d["cmp"], "after": d["after"]}, separators=(",", ":"))
         check("refused: a trace target with keys out of the literal order", not audit_variant(reorder_trace))
 
-        # ------------------------------------------------------------ 3 surface diversity
-        print("3 surface diversity", flush=True)
-        canon = MD.canonical_from_arm_rows(tr["dint"])
-        surf = MD.assign_surfaces(canon, True)
-        sd_rows = {a: MD.render_arm(canon, a, cnt, surf) for a in C.ARMS}
-        au_sd = MD.audit_files(sd_rows, cnt)
-        check("surface-diversity renderings pass the same audit", au_sd["ok"], au_sd["checks"])
-        check("surface diversity keeps the canonical rows and every target",
-              all(MD.canonical_from_arm_rows(sd_rows[a]) == canon and [r["target"] for r in sd_rows[a]] == [r["target"] for r in tr[a]]
-                  for a in C.ARMS))
-        used = {(s["para"], s["names"]) for s in surf.values()}
-        check("only training variants are used (held-out paraphrase/field set 4 never), all 16 combinations appear",
-              all(p in C.TRAIN_SURFACE_IDX and n in C.TRAIN_SURFACE_IDX for p, n in used) and len(used) == 16, sorted(used))
-        pair_same = all(surf[x["id"]] == surf[y["id"]] for x in canon for y in canon[:0])
-        mp = {}
-        for r in canon:
-            if r["pair_id"]:
-                mp.setdefault(r["pair_id"], []).append(surf[r["id"]])
-        check("pair members share one surface; system texts and user keys vary",
-              all(v[0] == v[1] for v in mp.values()) and len({r["prompt"].split("<|im_end|>")[0] for r in sd_rows["dint"]}) >= 16
-              and any('"state":' in r["prompt"] for r in sd_rows["dint"]) and pair_same is True)
-        check("surface diversity is OFF by default: canonical files carry surface null",
-              all(r["surface"] is None for a in C.ARMS for r in tr[a]))
+        def heldout_mut(factor):
+            def mut(rows):
+                k = 7
+                for a in rows:
+                    r = rows[a][k]
+                    sf = copy.deepcopy(r["surface"])
+                    if factor == "para":
+                        sf["para"] = C.HELDOUT_SURFACE_IDX
+                    elif factor == "names":
+                        sf["names"] = C.HELDOUT_SURFACE_IDX
+                    elif factor == "top":
+                        sf["order"]["top"] = list(C.HELDOUT_ORDERS["top"][0])
+                    else:
+                        sf["order"]["event"] = list(C.HELDOUT_ORDERS["event"][int(factor[-1])])
+                    r["surface"] = sf
+                    r["prompt"] = C.render_chat(C.messages(a, r["before"], r["event"], r["width"], sf))
+            return mut
+        ref = {f: not audit_variant(heldout_mut(f)) for f in ("para", "names", "top", "event0", "event1", "event2")}
+        check("refused: one training row rendered (consistently) with the held-out paraphrase, field names, top-level order "
+              "or any of the 3 held-out event orders", all(ref.values()), ref)
 
-        # ------------------------------------------------------------ 4 scorer
-        print("4 scorer self-test", flush=True)
+        def silent_heldout(rows):                      # the prompt uses a held-out order, the record claims a training one
+            r = rows["bbits"][11]
+            sf = copy.deepcopy(r["surface"])
+            sf["order"]["event"] = list(C.HELDOUT_ORDERS["event"][1])
+            r["prompt"] = C.render_chat(C.messages("bbits", r["before"], r["event"], r["width"], sf))
+        check("refused: a prompt in a held-out order whose recorded surface claims a training order (read back from the text)",
+              not audit_variant(silent_heldout))
+
+        # ------------------------------------------------------------ 3 surface proofs
+        print("3 surface proofs", flush=True)
+        ho_ = C.derive_heldout_orders()
+        check("held-out key orders regenerate from ORDER_SEED: event = reversed + 2 fixed random orders, top = reversed only "
+              "(a 2-key object has no third order); training subsets exclude them (event 5,037 orders, top 1)",
+              ho_ == C.HELDOUT_ORDERS and ho_["event"][0] == tuple(reversed(C.OBJ_SLOTS["event"])) and
+              len(set(ho_["event"])) == 3 and ho_["top"] == (tuple(reversed(C.OBJ_SLOTS["top"])),) and
+              len(C.train_orders("event")) == 5037 and C.train_orders("top") == [C.OBJ_SLOTS["top"]] and
+              not set(C.train_orders("event")) & set(ho_["event"]), ho_)
+        frags = C.heldout_fragments()
+        n_pr, held_hits, frag_hits = 0, 0, 0
+        for a in C.ARMS:
+            for r in trs[a]:
+                n_pr += 1
+                got = C.recover_surface(C.split_chat(r["prompt"]))
+                held_hits += int(bool(C.heldout_factors(got)))
+                frag_hits += sum(f in r["prompt"] for f in frags.values())
+        check(f"PROOF: none of the {n_pr:,} training prompts (4 sd files) uses a held-out paraphrase, field-name variant or "
+              "key order (each surface read back from the prompt TEXT), and none contains a held-out text fragment "
+              f"({len(frags)} fragments scanned)", n_pr == 6000 and held_hits == 0 and frag_hits == 0, (held_hits, frag_hits))
+        canon = MD.canonical_from_arm_rows(tr["dint"])
+        check("the sd files keep the canonical rows and every target (literal order); the canonical files carry surface null",
+              all(MD.canonical_from_arm_rows(trs[a]) == canon and [r["target"] for r in trs[a]] == [r["target"] for r in tr[a]]
+                  for a in C.ARMS) and all(r["surface"] is None for a in C.ARMS for r in tr[a]))
+        st_ = au["surface"]["stats"]
+        mp = {}
+        for r in trs["dint"]:
+            if r["pair_id"]:
+                mp.setdefault(r["pair_id"], []).append(r["surface"])
+        check("diversity used: all 16 paraphrase x field-name combinations, the canonical event order on ~1/4 of the rows, "
+              ">= 500 distinct event orders, the top-level order always canonical; pair members share one surface; every "
+              "arm uses the same per-row surface",
+              st_["paraphrase_x_names_combinations"] == 16 and 0.2 <= st_["event_order_canonical_share"] <= 0.32 and
+              st_["distinct_event_orders"] >= 500 and st_["top_orders"] == {"before,events": 1500} and
+              all(v[0] == v[1] for v in mp.values()) and
+              all([r["surface"] for r in trs[a]] == [r["surface"] for r in trs["dint"]] for a in C.ARMS),
+              {k: st_[k] for k in ("event_order_canonical_share", "distinct_event_orders")})
+        pos = Counter()
+        idx_ok = True
+        for r in dev_rows:
+            idx_ok &= C.stratum_index(r) == pos[r["stratum"]]
+            pos[r["stratum"]] += 1
+        rot = {s: Counter(C.stratum_index(r) % 3 for r in dev_rows if r["stratum"] == s) for s in C.DEV_STRATA}
+        hs_ok = True
+        for a in C.ARMS:
+            for r in dev_rows:
+                msgs = C.messages(a, r["before"], r["event"], r["width"], C.heldout_surface_of(r))
+                x = C.read_prompt(msgs)
+                hs_ok &= (x["surface"]["para"] == 4 and x["surface"]["names"] == 4 and
+                          tuple(x["surface"]["order"]["top"]) == C.HELDOUT_ORDERS["top"][0] and
+                          tuple(x["surface"]["order"]["event"]) == C.HELDOUT_ORDERS["event"][C.stratum_index(r) % 3] and
+                          x["before"] == r["before"] and x["event"] == r["event"] and x["width"] == r["width"] and x["arm"] == a)
+        check("E3 rendering: dev id suffix == index within the stratum on all 1,050 rows; the 3 held-out event orders rotate "
+              "evenly within every stratum; every E3 prompt (4 arms) reads back as paraphrase 4 + names 4 + reversed top + "
+              "its held-out event order, encoding the row's own state and event",
+              idx_ok and hs_ok and all(max(c.values()) - min(c.values()) <= 1 and len(c) == 3 for c in rot.values()),
+              {s: dict(c) for s, c in list(rot.items())[:2]})
+
+        # ------------------------------------------------------------ 4 scorer + amendment 4b
+        print("4 scorer self-test and amendment 4b", flush=True)
         st = A.scorer_selftest(dev_rows, dchains)
         check("scorer self-test: golds 100% in every format, heuristics at their exact floors, negatives rejected, "
-              "D-int parser == env.parse_state", st["ok"],
+              "D-int parser == env.parse_state, one constant fill on every dev gold, filler >= trace tokens", st["ok"],
               {k: f"{v['correct']}/{v['n']}" for k, v in st["golds"].items()})
         hf = lambda s: len(tok()(s, add_special_tokens=False).input_ids)   # noqa: E731
-        bad_fill = sum(hf(r["target"]) != hf(C.trace_text(r["before"], r["event"])) for r in tr["ffill"])
-        bad_cnt = sum(hf(r["target"]) != cnt(r["target"]) for a in C.ARMS for r in tr[a][::10])
-        dev_fill = sum(hf(C.target_text("ffill", r["before"], r["event"], r["width"], hf)) != hf(C.trace_text(r["before"], r["event"]))
-                       for r in dev_rows)
-        check(f"filler token count == trace token count under the HF tokenizer on all {len(tr['ffill']):,} training and "
-              f"{len(dev_rows):,} dev rows; HF counts == tokenizers-library counts", bad_fill == 0 and dev_fill == 0 and bad_cnt == 0,
-              (bad_fill, dev_fill, bad_cnt))
+        items = [(r["before"], r["event"]) for r in canon + dev_rows]
+        for c in dchains:
+            stt = C.chain_gold_states(c)
+            items += [(stt[t], e) for t, e in enumerate(c["events"])]
+        k_hf = C.fill_k_required(items, hf)
+        short = sum(hf(C.target_text("ffill", b, e, 12)) < hf(C.trace_text(b, e)) for b, e in items)
+        same_cnt = sum(hf(r["target"]) != cnt(r["target"]) for a in C.ARMS for r in trs[a][::10])
+        check(f"amendment 4b under the HF tokenizer: FILL_K {C.FILL_K} == the formula over {len(items):,} train+dev items "
+              f"(longest trace head - base); no filler target shorter than its trace; HF counts == tokenizers-library counts",
+              k_hf == C.FILL_K and short == 0 and same_cnt == 0, (k_hf, short, same_cnt))
+        fills = {r["target"][:r["target"].index('","after":')] for rr in (tr["ffill"], trs["ffill"]) for r in rr}
+        fills |= {C.target_text("ffill", r["before"], r["event"], r["width"])[:-len(',"after":' + str(r["gold"]) + "}") - 1]
+                  for r in dev_rows}
+        info = MD.filler_information(trs["ffill"], cnt)
+        check("FILL LENGTH CARRIES ZERO INFORMATION: one fill string on all 3,000 training targets (canonical + sd) and all "
+              "1,050 dev golds; predicting applicability / change / after / type from the fill length == the majority "
+              "share; mutual information 0 bits",
+              len(fills) == 1 and info["zero_information"] and
+              all(v == 0 for v in info["mutual_information_bits"].values()),
+              (len(fills), info["fill_length_lookup_accuracy"], info["mutual_information_bits"]))
+        rv = info["rev2_row_matched_length_would_reveal_descriptive"]
+        check("descriptive contrast: the revision-2 row-matched fill length (= the trace token count) would have revealed "
+              "applicability far above the majority share on the same rows; the 4b residual is >= 0 on every row",
+              rv["applicable_lookup_accuracy"] >= rv["applicable_majority_share"] + 0.3 and
+              info["residual_tokens_descriptive"]["min"] >= 0, (rv, info["residual_tokens_descriptive"]))
 
         # ------------------------------------------------------------ 5 analysis dry run
         print("5 analysis dry run", flush=True)
@@ -432,9 +555,15 @@ def main() -> int:
         check(f"analysis dry run: {dr['counts']['scenarios']} synthetic scenarios, {dr['counts']['rule_units']} rule units, "
               f"{dr['counts']['close_call_units']} close-call units, {dr['counts']['filler_units']} R5 addendum units and "
               f"{dr['counts']['refusals']} refusals give the pre-stated results", dr["ok"], dr["counts"])
+        rev3 = {k: v for k, v in dr["scenarios"].items() if k.startswith("rev3: surface-locked")}
+        check("the held-out-surface gate changes the outcome: in both surface-locked scenarios S-trace has the larger R "
+              "under revision 2's formula (no HS) but B-bits wins under revision 3",
+              len(rev3) == 2 and all(v["R_without_HS_revision2_formula"]["strace"] > v["R_without_HS_revision2_formula"]["bbits"]
+                                     and v["got"] == "WINNER=bbits" for v in rev3.values()),
+              {k[:40]: (v["R_without_HS_revision2_formula"], v["R"]) for k, v in rev3.items()})
 
         # ------------------------------------------------------------ 6 full tiny run
-        print("6 full tiny run", flush=True)
+        print("6 full tiny run (surface-diversity files, stages T/E1/E2/E3)", flush=True)
         anchor_chains = R.pilot_anchor_chains()[:8]
         anchor_ref = make_anchor_ref(tmp, anchor_chains)
         rule_dir = tmp / "rule"
@@ -444,7 +573,7 @@ def main() -> int:
                     "rule_md_sha256": sha(rule_dir / C.SCREEN_RULE_MD),
                     "rule_text_sha256": hashlib.sha256(A.rule_text().encode("utf-8")).hexdigest()}
         rule_path = rule_dir / C.SCREEN_RULE_JSON
-        rule_path.write_text(json.dumps(rule_rec), encoding="utf-8")
+        rule_path.write_text(json.dumps(rule_rec), encoding="utf-8", newline="\n")
 
         def cfg_for(name, **kw):
             base = dict(tag=name, out=tmp / "runs" / name, steps=STEPS, lr=LR_TINY, anchor_chains=anchor_chains,
@@ -452,14 +581,42 @@ def main() -> int:
             base.update(kw)
             return R.Cfg(**base)
 
+        seen = []
+        real_gen = R.gen_texts
+
+        def spy_gen(model, tok_, message_lists):
+            seen.extend((side_of(model), m_) for m_ in message_lists)
+            return real_gen(model, tok_, message_lists)
+        R.gen_texts = spy_gen
         rt = FakeRuntime(tmp)
         be = TinyBackend(rt)
         cfg = cfg_for("run_a")
-        rc = R.run(cfg, be)
+        try:
+            rc = R.run(cfg, be)
+        finally:
+            R.gen_texts = real_gen
         out = cfg.out
-        check("tiny run exits 0 and writes DONE.json", rc == 0 and (out / "DONE.json").is_file(), rc)
+        check("tiny run on the sd files exits 0 and writes DONE.json", rc == 0 and (out / "DONE.json").is_file()
+              and cfg.train_files == C.TRAIN_FILES_SD and cfg.data_variant == "sd", rc)
         prov = json.loads((out / "provenance.json").read_text(encoding="utf-8"))
-        check("every arm's stages T/E1/E2 recorded with file hashes", all(set(prov["stages"][a]) == set(R.STAGES) for a in cfg.arms))
+        check("every arm's stages T/E1/E2/E3 recorded with file hashes; E3 wrote the ON file only",
+              all(set(prov["stages"][a]) == set(R.STAGES) for a in cfg.arms) and prov["data_variant"] == "sd" and
+              all(list(prov["stages"][a]["E3"]["files"]) == [f"{a}/onestep_heldout_on.jsonl"] for a in cfg.arms) and
+              not any((out / a / "onestep_heldout_off.jsonl").exists() for a in cfg.arms))
+        sub_rows, sub_ch = R.load_dev(cfg)
+        held = [(s_, m_) for s_, m_ in seen if C.recover_surface(m_)["names"] == C.HELDOUT_SURFACE_IDX]
+        e3_ok = all(s_ == "on" and m_ == C.messages(C.read_prompt(m_)["arm"], C.read_prompt(m_)["before"],
+                                                    C.read_prompt(m_)["event"], C.read_prompt(m_)["width"],
+                                                    C.heldout_surface_of(next(r for r in sub_rows if r["before"] == C.read_prompt(m_)["before"]
+                                                                              and r["event"] == C.read_prompt(m_)["event"])))
+                    for s_, m_ in held)
+        nonheld = [m_ for _, m_ in seen if C.recover_surface(m_)["names"] != C.HELDOUT_SURFACE_IDX]
+        check("held-out-surface prompts appear only in E3, adapter ON only (1 x rows x arms), each exactly its row's "
+              "combined held-out surface; every other evaluation prompt is the canonical surface",
+              len(held) == len(sub_rows) * len(cfg.arms) and e3_ok and
+              all(C.recover_surface(m_)["para"] == 0 and C.recover_surface(m_)["names"] == 0 and
+                  C.recover_surface(m_)["order"] == {o: list(C.OBJ_SLOTS[o]) for o in C.OBJ_SLOTS} for m_ in nonheld),
+              (len(held), len(nonheld)))
         leases = [c for c in rt.calls if c[0] == "lease"]
         check("one lease, label 'rcwm-t1:t2b-prereq'", leases == [("lease", R.LEASE_LABEL)], leases)
         seq = [c[0] if c[0] not in ("load", "train") else f"{c[0]}:{c[1]}" for c in rt.calls]
@@ -469,12 +626,13 @@ def main() -> int:
               order_ok and waits_ok and len(prov["turns"]) == 1 and prov["turns"][0]["anchor"]["pass"], seq)
         check("anchor reproduces the base-model chain_m1 reference (states and texts 1.0)",
               prov["turns"][0]["anchor"]["identical_states"] == 1.0 and prov["turns"][0]["anchor"]["identical_texts"] == 1.0)
-        sub_rows, sub_ch = R.load_dev(cfg)
         outputs = A.validate_run(out, sub_rows, sub_ch, list(cfg.arms))
         diff = {a: sum(x != y for x, y in zip(outputs[a]["off"]["onestep"], outputs[a]["on"]["onestep"])) for a in cfg.arms}
         check("OFF != ON one-step texts in every arm (the trained adapter is active)", all(v > 0 for v in diff.values()), diff)
         res = A.analyse(outputs, sub_rows, sub_ch)
-        check("the analysis validators accept the run and the rule produces a verdict", bool(res["rule"]["verdict"]), res["rule"]["verdict"])
+        check("the analysis validators accept the run (E3 included) and the rule produces a verdict with HS for every arm",
+              bool(res["rule"]["verdict"]) and res["rule"]["verdict"] != "NO_VERDICT" and
+              all(res["rule"]["metrics"][a]["HS"] is not None for a in cfg.arms), res["rule"]["verdict"])
         prov_a = json.loads((out / "provenance.json").read_text(encoding="utf-8"))
         check("provenance records the frozen code hashes and the screen-rule record at the first turn; anchors_ok",
               prov_a["code_sha256"] == R.code_hashes() and prov_a["screen_rule_sha256"] == sha(rule_path) and A.anchors_ok(prov_a))
@@ -503,37 +661,96 @@ def main() -> int:
         mo = res_o["rule"]["metrics"]
         off_fc = {a: res_o["arms"][a]["off"]["onestep"]["FC"] for a in cfg_o.arms}
         off_fa = {a: res_o["arms"][a]["off"]["onestep"]["FA"] for a in cfg_o.arms}
-        check(f"oracle run (ON = the rule in each arm's format, OFF = copy) on all {len(dev_rows):,} rows and {len(dchains)} "
-              "chains: exit 0; the analysis validates every file and reads ON IAW/OOR/K4/ID/WF 1.0, FC 0, FA 0; OFF FC 1.0, "
-              "FA 0; verdict WINNER=dint (tie rule)",
+        check(f"oracle run (ON = the rule in each arm's format in any surface, OFF = copy) on all {len(dev_rows):,} rows "
+              f"and {len(dchains)} chains: exit 0; the analysis validates every file and reads ON IAW/OOR/K4/HS/ID/WF 1.0, "
+              "FC 0, FA 0; OFF FC 1.0, FA 0; verdict WINNER=dint (tie rule)",
               rc_o == 0 and res_o["rule"]["verdict"] == "WINNER=dint" and all(
-                  mo[a]["IAW"] == mo[a]["OOR"] == mo[a]["K4"] == mo[a]["ID"] == mo[a]["WF"] == 1.0 and mo[a]["FC"] == 0.0
-                  and mo[a]["FA"] == 0.0 for a in cfg_o.arms)
+                  mo[a]["IAW"] == mo[a]["OOR"] == mo[a]["K4"] == mo[a]["HS"] == mo[a]["ID"] == mo[a]["WF"] == 1.0
+                  and mo[a]["FC"] == 0.0 and mo[a]["FA"] == 0.0 for a in cfg_o.arms)
               and all(v == 1.0 for v in off_fc.values()) and all(v == 0.0 for v in off_fa.values()), (res_o["rule"]["verdict"], mo, off_fc))
+        hso = res_o["arms"]["strace"]["on"]["heldout_surface"]
+        check("held-out-surface descriptives: per-stratum cells, OOR in the held-out surface, accuracy by held-out event "
+              "order (3 orders x 8-bit/OOR), paired held-out minus in-surface contrasts (0 under the oracle)",
+              hso["OOR"] == 1.0 and len(hso["by_heldout_event_order"]) == 6 and
+              all(v["acc"] == 1.0 for v in hso["by_heldout_event_order"].values()) and
+              all(v["diff"] == 0.0 for v in hso["paired_heldout_minus_in_surface"].values()))
         md = A.render_md(res_o)
-        check("the markdown rendering carries the verdict and every stratum", "WINNER=dint" in md and all(s_ in md for s_ in C.DEV_STRATA))
+        check("the markdown rendering carries the verdict, HS and every stratum (in-surface and held-out)",
+              "WINNER=dint" in md and "| HS |" in md and md.count("| D_int_add_wrong |") == 2 and all(s_ in md for s_ in C.DEV_STRATA))
         one_arm = A.analyse({"bbits": outputs_o["bbits"]}, dev_rows, dchains, st)
         check("a single-arm (seed 1/2) run is analysed descriptively with NO_VERDICT", one_arm["rule"]["verdict"] == "NO_VERDICT")
         mech = {a: {k: res_o["arms"][a]["on"]["onestep"]["strata"]["D_int_add_wrong"].get(k) for k in ("cmp_ok", "calc_ok", "flag_ok")}
                 for a in cfg_o.arms}
         check("oracle run: mechanism scores 1.0 (S-trace cmp_ok/calc_ok, B-bits flag_ok)",
               mech["strace"]["cmp_ok"] == 1.0 and mech["strace"]["calc_ok"] == 1.0 and mech["bbits"]["flag_ok"] == 1.0, mech)
+        rc_sm = A.screen_main(cfg_o.out, dev_rows, dchains, st)
+        scr = json.loads((cfg_o.out / "analysis" / "T2BP_SCREEN.json").read_text(encoding="utf-8"))
+        check("analysis CLI path on the oracle run: T2BP_SCREEN.json/.md written (verdict WINNER=dint, rule revision 3), a "
+              "second call refuses (create-only, exit 3)", rc_sm == 0 and scr["verdict"] == "WINNER=dint" and
+              scr["rule_revision"] == 3 and (cfg_o.out / "analysis" / "T2BP_SCREEN.md").is_file() and
+              A.screen_main(cfg_o.out, dev_rows, dchains, st) == 3)
+        generation.generate_texts = oracle_generate
+        try:
+            cfg_f1 = cfg_for("run_ffill", anchor_ref=ref_o, dev_subset=None, arms=("ffill",))
+            rc_f1 = R.run(cfg_f1, TinyBackend(FakeRuntime(tmp)))
+        finally:
+            generation.generate_texts = REAL_GENERATE
+        fake_screen = tmp / "runs" / "screen_strace"
+        (fake_screen / "analysis").mkdir(parents=True)
+        shutil.copy(cfg_o.out / "provenance.json", fake_screen / "provenance.json")
+        (fake_screen / "analysis" / "T2BP_SCREEN.json").write_text(json.dumps(
+            {"verdict": "WINNER=strace", "rule": {"verdict": "WINNER=strace", "R": {"dint": .5, "strace": .9, "bbits": .5},
+                                                  "metrics": {a: {} for a in C.SCREEN_ARMS}}}), encoding="utf-8", newline="\n")
+        rc_ref = A.filler_main(cfg_f1.out, cfg_o.out, dev_rows, dchains, st)       # the screen named D-int: refuse
+        written_on_refusal = (cfg_f1.out / "analysis" / "T2BP_FILLER.json").exists()
+        rc_fm = A.filler_main(cfg_f1.out, fake_screen, dev_rows, dchains, st)
+        fil = json.loads((cfg_f1.out / "analysis" / "T2BP_FILLER.json").read_text(encoding="utf-8"))
+        fres = fil["descriptive"].get("filler_residual_covariate_descriptive") or {}
+        check("R5 addendum path: a separate oracle filler run (sd, with E3; R 1.0 >= 0.9 - 0.05) after an S-trace screen "
+              "flags TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE; after the D-int screen it refuses (exit 3); the filler's "
+              "residual length is reported as a covariate",
+              rc_f1 == 0 and rc_fm == 0 and fil["addendum"]["flags"] == [A.FLAG_FILLER] and
+              fil["filler_metrics_on"]["HS"] == 1.0 and rc_ref == 3 and not written_on_refusal and
+              fres.get("available") is True and fres["residual_tokens"]["min"] >= 0,
+              (rc_f1, rc_ref, rc_fm, fil["addendum"]["filler_control"], fres.get("residual_tokens")))
 
-        # ------------------------------------------------------------ 6c frozen rule, resume code check, DONE arms
-        print("6c frozen rule", flush=True)
+        # ------------------------------------------------------------ 6c frozen rule, C1, resume code check, DONE arms
+        print("6c frozen rule and C1", flush=True)
         bad_rec = dict(rule_rec, inputs=dict(rule_rec["inputs"], **{"scripts/t2bp_run.py": "0" * 64}))
         bad_path = rule_dir / "SCREEN_RULE_bad.json"
-        bad_path.write_text(json.dumps(bad_rec), encoding="utf-8")
+        bad_path.write_text(json.dumps(bad_rec), encoding="utf-8", newline="\n")
         rt_z = FakeRuntime(tmp)
         ok, msg, pers = raises_stop(lambda: R.run(cfg_for("run_z", rule_record=bad_path), TinyBackend(rt_z)), "frozen screen rule")
         check("a frozen input that differs from SCREEN_RULE.json refuses before the lease (not persisted, no lease, no output)",
               ok and pers is False and not rt_z.calls and not (tmp / "runs" / "run_z" / "provenance.json").exists(), msg)
+        bad_rec2 = dict(rule_rec, inputs=dict(rule_rec["inputs"], **{"data/t2bp_train_sd_strace.jsonl": "0" * 64}))
+        bad_path2 = rule_dir / "SCREEN_RULE_bad2.json"
+        bad_path2.write_text(json.dumps(bad_rec2), encoding="utf-8", newline="\n")
+        ok2, msg2, pers2 = raises_stop(lambda: R.run(cfg_for("run_z", rule_record=bad_path2), TinyBackend(rt_z)), "frozen screen rule")
+        check("a surface-diversity training file that differs from SCREEN_RULE.json refuses before the lease",
+              ok2 and pers2 is False and not rt_z.calls, msg2)
         ok, msg, pers = raises_stop(lambda: R.run(cfg_for("run_z", rule_record=rule_dir / "missing.json"), TinyBackend(rt_z)),
                                     "not a screen-rule record")
         check("a missing screen-rule record refuses before the lease (not persisted)", ok and pers is False and not rt_z.calls, msg)
+        ok, msg, pers = raises_stop(lambda: R.run(cfg_for("run_canon", data_variant="", train_files=dict(C.TRAIN_FILES),
+                                                          train_source=C.TRAIN_SOURCE), TinyBackend(rt_z)), "canonical-only")
+        check("C1: a canonical-variant run is refused before the lease (not persisted, no lease, no output)",
+              ok and pers is False and not rt_z.calls and not (tmp / "runs" / "run_canon").exists(), msg)
+        fake_canon = tmp / "runs" / "canon_copy"
+        fake_canon.mkdir(parents=True)
+        pc = json.loads((cfg_o.out / "provenance.json").read_text(encoding="utf-8"))
+        pc["data_variant"] = ""
+        (fake_canon / "provenance.json").write_text(json.dumps(pc), encoding="utf-8", newline="\n")
+        (fake_canon / "DONE.json").write_text("{}", encoding="utf-8", newline="\n")
+        try:
+            A.validate_run(fake_canon, dev_rows, dchains, list(C.SCREEN_ARMS))
+            refused = False
+        except A.Refuse:
+            refused = True
+        check("C1: the analysis refuses to score a run that is not the surface-diversity build", refused)
         check("the analysis' frozen check: [] on the record, problems on a changed input hash and on a changed SCREEN_RULE.md",
               A.check_frozen(rule_path) == [] and A.check_frozen(bad_path) != [] and
-              (lambda: ((rule_dir / C.SCREEN_RULE_MD).write_text("x", encoding="utf-8"), A.check_frozen(rule_path))[1])() != [])
+              (lambda: ((rule_dir / C.SCREEN_RULE_MD).write_text("x", encoding="utf-8", newline="\n"), A.check_frozen(rule_path))[1])() != [])
         (rule_dir / C.SCREEN_RULE_MD).write_text(A.rule_md(), encoding="utf-8", newline="\n")
         check("restored SCREEN_RULE.md verifies again", A.check_frozen(rule_path) == [])
         rt_h = FakeRuntime(tmp)
@@ -542,7 +759,7 @@ def main() -> int:
         ph = cfg_h.out / "provenance.json"
         prov_h = json.loads(ph.read_text(encoding="utf-8"))
         prov_h["code_sha256"]["rcwmt/generation.py"] = "f" * 64
-        ph.write_text(json.dumps(prov_h), encoding="utf-8")
+        ph.write_text(json.dumps(prov_h), encoding="utf-8", newline="\n")
         ok, msg, pers = raises_stop(lambda: R.run(cfg_for("run_h"), TinyBackend(rt_h)), "code changed since the run's first turn")
         check("a resume under code that differs from the run's first turn refuses (not persisted, no second lease)",
               rc_h == 5 and ok and pers is False and [c[0] for c in rt_h.calls].count("lease") == 1, msg)
@@ -552,44 +769,6 @@ def main() -> int:
         check("--with-filler after a completed 3-arm run is an explicit stop (not persisted, no lease, files unchanged)",
               ok and pers is False and len(rt.calls) == n and tree_hashes(out, rels) == h_a
               and not (out / "STOPPED.json").exists(), msg)
-
-        # ------------------------------------------------------------ 6d surface diversity run (stage E3)
-        print("6d surface-diversity run", flush=True)
-        sd_dir = tmp / "sd_data"
-        sd_dir.mkdir()
-        sd_files = {}
-        for a in C.SCREEN_ARMS:
-            sd_files[a] = sd_dir / C.TRAIN_FILES_SD[a].name
-            sd_files[a].write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in sd_rows[a]), encoding="utf-8")
-        sd_src = sd_dir / C.TRAIN_SOURCE_SD.name
-        sd_src.write_text(json.dumps({"files": {p_.name: sha(p_) for p_ in sd_files.values()}}), encoding="utf-8")
-        seen = []
-        real_gen = R.gen_texts
-
-        def spy_gen(model, tok_, message_lists):
-            seen.extend(m_[1]["content"] for m_ in message_lists)
-            return real_gen(model, tok_, message_lists)
-        R.gen_texts = spy_gen
-        try:
-            rt_s = FakeRuntime(tmp)
-            cfg_s = cfg_for("sd_run", data_variant="sd", train_files=sd_files, train_source=sd_src)
-            rc_s = R.run(cfg_s, TinyBackend(rt_s))
-        finally:
-            R.gen_texts = real_gen
-        prov_s = json.loads((cfg_s.out / "provenance.json").read_text(encoding="utf-8"))
-        held = [x for x in seen if '"mask":' in x and '"moves":' in x]
-        check("surface-diversity run: exit 0, stages T/E1/E2/E3 per arm, E3 outputs written, held-out field names used only "
-              "in E3 (OFF+ON: 2 x rows x arms prompts)",
-              rc_s == 0 and prov_s["stages_per_arm"] == list(R.STAGES_SD) and
-              all(set(prov_s["stages"][a]) == set(R.STAGES_SD) for a in C.SCREEN_ARMS) and
-              all((cfg_s.out / a / "onestep_heldout_on.jsonl").is_file() for a in C.SCREEN_ARMS) and
-              len(held) == 2 * len(R.load_dev(cfg_s)[0]) * len(C.SCREEN_ARMS), (rc_s, len(held)))
-        s_rows, s_ch = R.load_dev(cfg_s)
-        out_s = A.validate_run(cfg_s.out, s_rows, s_ch, list(C.SCREEN_ARMS))
-        res_s = A.analyse(out_s, s_rows, s_ch, anchors=A.anchors_ok(prov_s))
-        check("the analysis validates E3 and reports the held-out surface descriptively (the verdict ignores it)",
-              all("heldout_surface_descriptive" in res_s["arms"][a]["on"] for a in C.SCREEN_ARMS)
-              and res_s["arms"]["dint"]["on"]["heldout_surface_descriptive"]["surface"] == C.HELDOUT_SURFACE)
 
         # ------------------------------------------------------------ 7 crash + resume
         print("7 crash + resume", flush=True)
@@ -603,7 +782,7 @@ def main() -> int:
             state["train"] += 1
             if state["train"] == 2:                                # inside the second arm's training
                 Path(out_dir).mkdir(parents=True, exist_ok=True)
-                (Path(out_dir) / "log.txt").write_text("half a training\n", encoding="utf-8")
+                (Path(out_dir) / "log.txt").write_text("half a training\n", encoding="utf-8", newline="\n")
                 raise RuntimeError("simulated crash in training")
             return orig_train(self, rows_path, out_dir, steps, seed, lr)
         TinyBackend.train = crashing_train
@@ -620,7 +799,7 @@ def main() -> int:
         def crashing_chain(model, tok_, arm, chains):
             state["chain"] += 1
             if arm == "strace" and state["chain"] == 2:            # inside strace E2, ON side
-                (cfg_b.out / "strace" / "chains_off.jsonl.partial").write_text("half", encoding="utf-8")
+                (cfg_b.out / "strace" / "chains_off.jsonl.partial").write_text("half", encoding="utf-8", newline="\n")
                 raise RuntimeError("simulated crash in E2")
             return REAL_CHAIN(model, tok_, arm, chains)
         R.t2bp_chain = crashing_chain
@@ -640,7 +819,7 @@ def main() -> int:
         check("the second resume orphaned the partial E2, re-anchored and finished (exit 0)",
               rc_b == 0 and any(x.startswith("strace_E2_") for x in orph) and all("anchor" in t for t in prov_b["turns"] if t["stages_run"]),
               [t.get("stages_run") for t in prov_b["turns"]])
-        check("every output of the crashed-and-resumed run equals the uninterrupted run byte for byte (adapters included)",
+        check("every output of the crashed-and-resumed run equals the uninterrupted run byte for byte (adapters and E3 included)",
               tree_hashes(cfg_b.out, rels) == h_a)
 
         # ------------------------------------------------------------ 8 deferral
@@ -650,9 +829,9 @@ def main() -> int:
         cfg_c = cfg_for("run_c", cap_h=0.5)
         rc_c = R.run(cfg_c, be_c)
         prov_c = json.loads((cfg_c.out / "provenance.json").read_text(encoding="utf-8"))
-        check("nothing fits (cap 0.5 h = the stage margin): exit 5, every stage deferred, no training, no load",
-              rc_c == 5 and not [c for c in rt_c.calls if c[0] in ("load", "train")] and len(prov_c["turns"][0]["deferred"]) == 9,
-              prov_c["turns"][0]["deferred"])
+        check("nothing fits (cap 0.5 h = the stage margin): exit 5, every stage deferred (3 arms x T/E1/E2/E3), no training, "
+              "no load", rc_c == 5 and not [c for c in rt_c.calls if c[0] in ("load", "train")] and
+              len(prov_c["turns"][0]["deferred"]) == 12, prov_c["turns"][0]["deferred"])
         cfg_c2 = cfg_for("run_c")
         orig_est = R.estimates
 
@@ -667,7 +846,7 @@ def main() -> int:
             R.estimates = orig_est
         prov_c = json.loads((cfg_c.out / "provenance.json").read_text(encoding="utf-8"))
         check("arm-level deferral: D-int pair runs; S-trace (pair does not fit) and B-bits deferred; exit 5",
-              rc_c2 == 5 and prov_c["turns"][-1]["stages_run"] == ["dint:T", "dint:E1", "dint:E2"]
+              rc_c2 == 5 and prov_c["turns"][-1]["stages_run"] == ["dint:T", "dint:E1", "dint:E2", "dint:E3"]
               and prov_c["turns"][-1]["deferred"][:1] == ["strace:T"], prov_c["turns"][-1])
         orig_cs = R.G2.can_start
         calls = {"n": 0}
@@ -681,13 +860,13 @@ def main() -> int:
         finally:
             R.G2.can_start = orig_cs
         prov_c = json.loads((cfg_c.out / "provenance.json").read_text(encoding="utf-8"))
-        check("stage-level deferral: S-trace trained and E1 done, E2 deferred with B-bits; exit 5",
+        check("stage-level deferral: S-trace trained and E1 done, E2 deferred with E3 and B-bits; exit 5",
               rc_c3 == 5 and prov_c["turns"][-1]["stages_run"] == ["strace:T", "strace:E1"]
-              and prov_c["turns"][-1]["deferred"][:1] == ["strace:E2"], prov_c["turns"][-1])
+              and prov_c["turns"][-1]["deferred"][:2] == ["strace:E2", "strace:E3"], prov_c["turns"][-1])
         rc_c4 = R.run(cfg_c2, be_c)
         prov_c = json.loads((cfg_c.out / "provenance.json").read_text(encoding="utf-8"))
-        check("the next call resumes (re-anchors, S-trace E2 then B-bits) and completes; outputs == run 6 byte for byte",
-              rc_c4 == 0 and prov_c["turns"][-1]["stages_run"][0] == "strace:E2" and "anchor" in prov_c["turns"][-1]
+        check("the next call resumes (re-anchors, S-trace E2/E3 then B-bits) and completes; outputs == run 6 byte for byte",
+              rc_c4 == 0 and prov_c["turns"][-1]["stages_run"][:2] == ["strace:E2", "strace:E3"] and "anchor" in prov_c["turns"][-1]
               and tree_hashes(cfg_c.out, rels) == h_a, prov_c["turns"][-1]["stages_run"])
 
         # ------------------------------------------------------------ 9 stops
@@ -695,29 +874,29 @@ def main() -> int:
         rt_d = FakeRuntime(tmp)
         be_d = TinyBackend(rt_d)
         cfg_d = cfg_for("run_d")
-        rt_d.WAITING["rcwm"].write_text(json.dumps({"pid": os.getppid(), "label": "rcwm-t1:other", "since": time.time()}), encoding="utf-8")
+        rt_d.WAITING["rcwm"].write_text(json.dumps({"pid": os.getppid(), "label": "rcwm-t1:other", "since": time.time()}), encoding="utf-8", newline="\n")
         ok, msg, pers = raises_stop(lambda: R.run(cfg_d, be_d), "one-waiter")
         check("a live RCWM waiting marker refuses (not persisted, no lease)", ok and pers is False and not rt_d.calls, msg)
-        rt_d.WAITING["rcwm"].write_text(json.dumps({"pid": 999999, "label": "rcwm-t1:dead", "since": time.time()}), encoding="utf-8")
+        rt_d.WAITING["rcwm"].write_text(json.dumps({"pid": 999999, "label": "rcwm-t1:dead", "since": time.time()}), encoding="utf-8", newline="\n")
         check("a dead RCWM marker does not refuse", R.one_waiter_problem(be_d) is None)
         rt_d.WAITING["rcwm"].unlink()
-        rt_d.LOCK_PATH.write_text(json.dumps({"label": "bwm:bundle", "pid": os.getppid(), "created": time.time()}), encoding="utf-8")
+        rt_d.LOCK_PATH.write_text(json.dumps({"label": "bwm:bundle", "pid": os.getppid(), "created": time.time()}), encoding="utf-8", newline="\n")
         check("a live BWM lease holder does not refuse", R.one_waiter_problem(be_d) is None)
-        rt_d.LOCK_PATH.write_text(json.dumps({"label": "rcwm-t1:prereg3", "pid": os.getppid(), "created": time.time()}), encoding="utf-8")
+        rt_d.LOCK_PATH.write_text(json.dumps({"label": "rcwm-t1:prereg3", "pid": os.getppid(), "created": time.time()}), encoding="utf-8", newline="\n")
         ok, msg, pers = raises_stop(lambda: R.run(cfg_d, be_d), "holds the GPU lease")
         check("a live RCWM lease holder refuses (not persisted)", ok and pers is False, msg)
         rt_d.LOCK_PATH.unlink()
         cfg_d.out.mkdir(parents=True, exist_ok=True)
         import psutil
-        (cfg_d.out / ".run.lock").write_text(json.dumps({"pid": os.getppid(), "create_time": psutil.Process(os.getppid()).create_time()}), encoding="utf-8")
+        (cfg_d.out / ".run.lock").write_text(json.dumps({"pid": os.getppid(), "create_time": psutil.Process(os.getppid()).create_time()}), encoding="utf-8", newline="\n")
         ok, msg, pers = raises_stop(lambda: R.run(cfg_d, be_d), "run lock")
         check("a live run lock refuses (not persisted)", ok and pers is False, msg)
-        (cfg_d.out / ".run.lock").write_text(json.dumps({"pid": 999999, "create_time": 1.0}), encoding="utf-8")
+        (cfg_d.out / ".run.lock").write_text(json.dumps({"pid": 999999, "create_time": 1.0}), encoding="utf-8", newline="\n")
         bad_ref = tmp / "anchor_bad.jsonl"
         rows_ = C.load_jsonl(anchor_ref)
         for x in rows_:
             x["states"] = ["-1"] + x["states"][1:]           # a different start state: the states can never match
-        bad_ref.write_text("".join(json.dumps(x) + "\n" for x in rows_), encoding="utf-8")
+        bad_ref.write_text("".join(json.dumps(x) + "\n" for x in rows_), encoding="utf-8", newline="\n")
         cfg_d = cfg_for("run_d", anchor_ref=bad_ref)
         ok, msg, pers = raises_stop(lambda: R.run(cfg_d, be_d), "ANCHOR FAILED")
         check("stale run lock reclaimed; anchor failure stops (persisted) before any evaluation output",
@@ -733,21 +912,21 @@ def main() -> int:
         ok, msg, pers = raises_stop(lambda: R.run(cfg_f, TinyBackend(rt_f)), "runtime")
         check("runtime drift at the evaluation load stops (persisted; nothing evaluated)",
               ok and pers is True and not (cfg_f.out / "dint" / "onestep_off.jsonl").exists(), msg)
-        f = cfg.out / "bbits" / "chains_on.jsonl"
+        f = cfg.out / "bbits" / "onestep_heldout_on.jsonl"
         orig_bytes = f.read_bytes()
         (cfg.out / "DONE.json").rename(cfg.out / "DONE.json.bak")
         f.write_bytes(orig_bytes + b"\n")
         ok, msg, pers = raises_stop(lambda: R.run(cfg, be), "changed after it was recorded")
         f.write_bytes(orig_bytes)
         (cfg.out / "DONE.json.bak").rename(cfg.out / "DONE.json")
-        check("a recorded output whose sha256 changed stops (persisted)", ok and pers is True, msg)
+        check("a recorded output whose sha256 changed stops (persisted; here the E3 held-out-surface file)", ok and pers is True, msg)
         tmpd = tmp / "data_copy"
         tmpd.mkdir()
         for a in C.SCREEN_ARMS:
-            shutil.copy(C.TRAIN_FILES[a], tmpd / C.TRAIN_FILES[a].name)
-        with (tmpd / C.TRAIN_FILES["bbits"].name).open("a", encoding="utf-8") as fh:
+            shutil.copy(C.TRAIN_FILES_SD[a], tmpd / C.TRAIN_FILES_SD[a].name)
+        with (tmpd / C.TRAIN_FILES_SD["bbits"].name).open("a", encoding="utf-8", newline="\n") as fh:
             fh.write("\n")
-        cfg_g = cfg_for("run_g", train_files={a: tmpd / C.TRAIN_FILES[a].name for a in C.SCREEN_ARMS})
+        cfg_g = cfg_for("run_g", train_files={a: tmpd / C.TRAIN_FILES_SD[a].name for a in C.SCREEN_ARMS})
         ok, msg, pers = raises_stop(lambda: R.run(cfg_g, TinyBackend(FakeRuntime(tmp))), "differs from its SOURCE record")
         check("a training file that differs from its SOURCE record stops before the lease", ok, msg)
 
@@ -755,19 +934,37 @@ def main() -> int:
         print("10 plan", flush=True)
         pl = R.plan(verbose=False)
         tp, to = pl["planning"]["turns_screen"], pl["observed"]["turns_screen"]
-        check("plan: the 3-arm screen takes 2 turns at the planning rate (OFF of non-native frames at the 160-token cap) "
-              "and 1 at the observed rates; every turn within the cap; each arm's T/E1/E2 in one turn; the filler control "
-              "run is one turn",
+        check("plan (sd, E3 ON): the 3-arm screen takes 2 turns at the planning rate (OFF of non-native frames at the "
+              "160-token cap) and 1 at the observed rates; every turn within the cap; each arm's T/E1/E2/E3 in one turn; "
+              "the filler control run is one turn; per-factor held-out renderings would need a third planning turn",
               len(tp) == 2 and len(to) == 1 and all(t["projected_h"] <= R.CAP_H for t in tp + to) and
               all(sum(f"{a}:T" in t["stages"] for t in tp) == 1 and
-                  [t_ for t_ in tp if f"{a}:T" in t_["stages"]][0]["stages"].count(f"{a}:E2") == 1 for a in C.SCREEN_ARMS) and
-              len(pl["planning"]["turns_filler_control_run_if_strace_wins"]) == 1,
+                  all([t_ for t_ in tp if f"{a}:T" in t_["stages"]][0]["stages"].count(f"{a}:{s}") == 1 for s in ("E1", "E2", "E3"))
+                  for a in C.SCREEN_ARMS) and
+              len(pl["planning"]["turns_filler_control_run_if_strace_wins"]) == 1 and
+              len(pl["planning"]["turns_screen_if_per_factor_heldout_added"]) == 3 and
+              pl["per_factor_heldout_renderings"]["run"] is False,
               (pl["planning"]["gpu_h_screen"], pl["observed"]["gpu_h_screen"]))
-        short = R.simulate_turns(R.Cfg(cap_h=3.0), C.SCREEN_ARMS)
-        check("plan: a 3.0 h cap splits the screen into several turns, each arm's pair in one turn",
+        est_p = R.estimates(R.Cfg(planning=True))
+        need_h = {a: round(R.G2.STAGE_SAFETY * (sum(est_p["arms"][a][s] for s in R.STAGES) + R.LOAD_S + est_p["anchor"]) / 3600, 2)
+                  for a in C.ARMS}
+        check("plan: every arm's whole pair (T + E1 + E2 + E3 + load + anchor) x 1.25 fits an empty 4.5 h turn at the "
+              "planning rate, so no arm can be deferred for ever (the largest needs a turn of more than 3.0 h)",
+              all(v <= R.CAP_H for v in need_h.values()) and max(need_h.values()) > 3.0, need_h)
+        short = R.simulate_turns(R.Cfg(cap_h=3.5), C.SCREEN_ARMS)
+        check("plan: a 3.5 h cap splits the screen into several turns, each arm's pair in one turn",
               len(short) >= 2 and all(any(s.endswith(":T") for s in t["stages"]) for t in short), short)
+        try:
+            R.simulate_turns(R.Cfg(cap_h=3.0), C.SCREEN_ARMS)
+            too_small = False
+        except RuntimeError:
+            too_small = True
+        check("plan: a 3.0 h cap is too small for the S-trace pair with E3 (the simulator refuses instead of looping)",
+              too_small)
         gp = json.loads((C.DOCS / "GEN_PLAN.json").read_text(encoding="utf-8"))
-        check("docs/t2b/prereq/GEN_PLAN.json was written by --plan without importing torch", gp.get("torch_imported") is False)
+        check("docs/t2b/prereq/GEN_PLAN.json was written by --plan (sd, stages T/E1/E2/E3) without importing torch",
+              gp.get("torch_imported") is False and gp.get("data_variant") == "sd" and gp.get("stages_per_arm") == list(R.STAGES)
+              and gp.get("code_sha256", {}).get("scripts/t2bp_run.py") == sha(ROOT / "scripts" / "t2bp_run.py"))
     finally:
         if not KEEP:
             shutil.rmtree(tmp, ignore_errors=True)
@@ -777,7 +974,8 @@ def main() -> int:
            "versions": {"torch": torch.__version__, "transformers": transformers.__version__},
            "code_sha256": {r: sha(ROOT / r) for r in ("scripts/t2bp_run.py", "scripts/t2bp_common.py", "scripts/t2bp_analysis.py",
                                                      "scripts/t2bp_make_data.py", "scripts/t2bp_audit.py", "scripts/t2bp_test.py")},
-           "data_sha256": {p.name: sha(p) for p in list(C.TRAIN_FILES.values()) + [C.DEV]}}
+           "data_sha256": {p.name: sha(p) for p in list(C.TRAIN_FILES.values()) + list(C.TRAIN_FILES_SD.values())
+                           + [C.DEV, C.TRAIN_SOURCE, C.TRAIN_SOURCE_SD]}}
     print(f"{rec['passed']}/{rec['n_checks']} checks passed in {rec['seconds']} s; peak RSS {rec['peak_rss_mb']} MB", flush=True)
     if RECORD:
         C.write_doc("TINY_TEST.json", json.dumps(rec, indent=1) + "\n")

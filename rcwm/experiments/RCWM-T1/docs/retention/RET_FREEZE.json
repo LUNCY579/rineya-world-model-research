@@ -1,0 +1,70 @@
+{
+ "frozen_at": "2026-10-09 08:03:22 -0500",
+ "approval": "RCWM-T1 session under the user's standing go-ahead of 2026-10-08 ('proceed with your recommendations whenever ... ready'); joint roadmap item 5c (D-32); gate signed off in DECISIONS D-36; 2026-10-09",
+ "files": {
+  "scripts/ret_common.py": "60fb6c736ce0ba34114b7ffa6e9df0fd03a5c5451c8514b031579d2fa1452a24",
+  "scripts/ret_grade.py": "13b2696c6efd7968c5d82032873cb81d292529897dd23f26eaa48736fd861611",
+  "scripts/ret_gen.py": "6fe3b331a5bf49b98754d774843ad190335f2d3293ca7b1144d957b6b25399c7",
+  "scripts/ret_run.py": "a560feab98b1b74a6ffbb954dedb89d27a76e80b598bc01f35aef4df4b6f645e",
+  "scripts/ret_analysis.py": "6d7032e8e3df1195d476e7169c4d13b0318ca726b5c597dfc66b4fb49cc7ce3a",
+  "scripts/ret_test_graders.py": "ec6c72ba791f960ae1168c02d3cdfc8bc94d08fd2f0147268608b9bc7211a3b5",
+  "scripts/ret_test_tiny.py": "753bb27e8cb2c847eb5670a22c3356ac7a78324aea26a0d7b18474720eaa33a0",
+  "docs/retention/DESIGN.md": "69f785eb2decc88f30a200712bfcb03e5befbc841a0b2e68fefd963111268ded",
+  "docs/retention/GRADER_TEST.json": "181b092e5b359634636f6a23cd639d147b933bc67afdd8529ba6990f10ee1007",
+  "docs/retention/TINY_TEST.json": "f9f2e4ec2d3baeb0f0ad2c055770944e2e94cb99d44c6446671544accaa1aee1",
+  "docs/retention/DRYRUN.json": "24ae68a9ce7e60f4b5dd7d2f749ec87ccac8ecee21113c00d1b2c5745403d6fd",
+  "docs/retention/RET_PLAN.json": "8c4a14ad2fbad446bf47e9f648a5d2085665cf7a9b281530cf87b4e592611f24",
+  "docs/retention/DEV_DRAW_PREVIEW.json": "2b06b62fede8ec8c4ade6b95651385490fbf3a45dfcb1e9127cfd34d3b013d8c",
+  "docs/retention/DEV_DRAW_PREVIEW_SD.json": "38d91568bd4e4830b117650c41c90c31e29daa4ca7b3d4744b33f0ad2d2371b3"
+ },
+ "test_records_ok": {
+  "docs/retention/GRADER_TEST.json": true,
+  "docs/retention/TINY_TEST.json": true,
+  "docs/retention/DRYRUN.json": true,
+  "docs/retention/RET_PLAN.json": true,
+  "docs/retention/DEV_DRAW_PREVIEW.json": true,
+  "docs/retention/DEV_DRAW_PREVIEW_SD.json": true
+ },
+ "design": {
+  "categories": [
+   "arith_word",
+   "unit_conv",
+   "date_time",
+   "count_sort",
+   "pct_ratio",
+   "kv_recall",
+   "unknown_twin",
+   "format_follow"
+  ],
+  "levels": [
+   1,
+   2,
+   3
+  ],
+  "n_per_cell": 75,
+  "dev_seeds": {
+   "sd0": 20261121,
+   "sd1": 20261125
+  },
+  "max_new_tokens": 48,
+  "dev_target_acc": 0.7,
+  "dev_min_acc": 0.4,
+  "category_flag_margin": 5,
+  "category_margin": 11,
+  "pooled_margin_rate": 0.04,
+  "alpha": 0.05
+ },
+ "rules_verbatim_in_design": true,
+ "tokenizer_pins": {
+  "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+  "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+  "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+  "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+ },
+ "chat_template_sha256": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+ "python": {
+  "version": "3.11.15",
+  "implementation": "CPython",
+  "full": "3.11.15 (main, Jun  2 2026, 22:29:49) [MSC v.1944 64 bit (AMD64)]"
+ }
+}

@@ -2,14 +2,18 @@
 optional report-only --tokens audit, which reads the tokenizer file through the `tokenizers` library), no torch.
 
   python -B scripts/ret_gen.py freeze --approval "<who, when, DECISIONS entry>"   # RET_FREEZE.json (create-only)
+  python -B scripts/ret_gen.py preview                           # pre-freeze audit of BOTH dev draws (one harvest pass)
+                                                                 # -> DEV_DRAW_PREVIEW.json, DEV_DRAW_PREVIEW_SD.json
   python -B scripts/ret_gen.py mint --purpose dev                # the dev draw: fixed DEV_SEED, 8 categories x 3 levels x 75
+  python -B scripts/ret_gen.py mint --purpose dev --surface-diversity    # the variant's dev draw: fixed DEV_SEED_SD
   python -B scripts/ret_gen.py mint --purpose confirm            # a sealed confirmation draw: fresh OS-entropy seed, the
-                                                                 # DEV_SELECTION.json categories at their selected levels
+                                                                 # dev selection's categories at their selected levels
   python -B scripts/ret_gen.py verify --draw <draw.jsonl>        # regenerate from the seal; sha256 must match
   python -B scripts/ret_gen.py stats  --draw <draw.jsonl> [--tokens]
   options: --surface-diversity (paraphrased instructions/system prompts and field-name variants; OFF by default;
-           recorded in the seal; a confirmation draw must use the dev selection's setting), --no-scan (tests only:
-           the seal records the scan as skipped and the runner refuses such a draw outside tests)
+           recorded in the seal; each setting has its own pre-registered dev seed and its own dev selection, and a
+           confirmation draw uses the selection of its setting), --no-scan (tests only: the seal records the scan as
+           skipped and the runner refuses such a draw outside tests)
 
 Determinism. A draw is a pure function of (seed, plan {category: [levels]}, surface_diversity, this code). Every cell
 (category, level) has its own random.Random seeded with the string f"{seed}|{category}|L{level}|sd{0|1}" (str seeds are
@@ -18,7 +22,10 @@ UTF-8 JSONL, one prompt per line, fixed key order, '\\n' newlines. Same seed -> 
 
 Items. 8 categories x 75 items per level (docs/retention/DESIGN.md section 3). unknown_twin items are PAIRS (an
 answerable twin 'a' and an unanswerable twin 'u' over the same passage): 150 prompts, and the item is correct only if
-both twins are. Every other item is one prompt. Answers are computed by code; ret_grade.py grades them.
+both twins are. Every other item is one prompt. Answers are computed by code; ret_grade.py grades them. Subtypes are
+STRATIFIED: each cell's 75 items are dealt round-robin over the cell's strata (STRATA) and shuffled, so every draw of
+a cell (dev or confirmation) has the same subtype mix. Questions about a passage record are in the present tense, so
+the gold of a corrected record (its latest value) is the only reading.
 
 Freshness (the seal records it; minting refuses on any gated hit):
   F1 gate   no prompt's normalised user turn equals a harvested string or a user turn of any earlier draw
@@ -49,6 +56,7 @@ if __name__ == "__main__":                         # as a CLI nothing here touch
 import argparse  # noqa: E402
 import json  # noqa: E402
 import math  # noqa: E402
+import platform  # noqa: E402
 import random  # noqa: E402
 import re  # noqa: E402
 import secrets  # noqa: E402
@@ -81,12 +89,13 @@ SCAN_SOURCES = (   # (name, root, walk identical to l1_make_ood.harvest_historic
     ("puzzle_51k", CB / "Rineya-Puzzle-Reasoning-51k", False),
     ("lcr_sft", CB / "Rineya_LCR_SFT_v1", False),
     ("invisible_limit_lab", CB / "Rineya_Invisible_Limit_Lab_v1", False),
+    ("bwm_bundle", BUSINESS / "WorldModel" / "Rineya_BWM_001_Research_Bundle", False),   # BWM data, banks, runs
 )
 SKIP_DIRS = {".git", ".claude", ".venv", "venv", "node_modules", "__pycache__"}
 MAX_JSON_BYTES = 60_000_000
 MIN_STR = 16
 GATE_WORDS, REPORT_WORDS = 8, 6
-TOKENIZER_JSON = BUSINESS / "Chat-Bubble" / "Rineya_Published_Cores" / "Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze" / "tokenizer.json"
+TOKENIZER_JSON = RC.TOKENIZER_DIR / "tokenizer.json"                 # pinned (RC.TOKENIZER_PINS)
 PASSAGE_TOKENS = (150, 300)
 
 # ------------------------------------------------------------------------------------------------ vocabularies
@@ -197,6 +206,14 @@ def two_people(rng):
     return a, b
 
 
+def two_full_names(rng):
+    """Two full names with different first names (the item's person is identified by a full name, so short templates
+    have a large space and independent draws practically never share a user turn)."""
+    a = full_name(rng)
+    b = full_name(rng, first_pool=tuple(x for x in FIRST if x != a.split()[0]))
+    return a, b
+
+
 def hhmm(m: int) -> str:
     return f"{(m // 60) % 24:02d}:{m % 60:02d}"
 
@@ -228,7 +245,7 @@ def one(sub, user, gold, op, surf) -> dict:
 
 
 # ------------------------------------------------------------------------------------------------ 1 arith_word
-def gen_arith_word(rng, level, surf):
+def gen_arith_word(rng, level, surf, stratum):
     """Multi-step integer word problem: L1 2 ops (+/-), L2 3 ops (+/-, one x2/x3), L3 4 ops (+/-, one xk, one /k)."""
     plural, single = rng.choice(OBJS)
     a, b = two_people(rng)
@@ -319,7 +336,7 @@ UTYPE = {"m": "length", "cm": "length", "mm": "length", "km": "length", "kg": "m
          "in": "imperial", "yd": "imperial", "lb": "weight", "oz": "weight"}
 
 
-def gen_unit_conv(rng, level, surf):
+def gen_unit_conv(rng, level, surf, stratum):
     from fractions import Fraction
     a = full_name(rng)
     for _ in range(500):
@@ -329,7 +346,7 @@ def gen_unit_conv(rng, level, surf):
             y, sub = x * f, "forward"
         elif level == 2:
             src, dst, f = rng.choice(CONV)
-            if rng.random() < 0.5:                       # reverse: "how many meters are in 4500 centimeters?"
+            if stratum == "reverse":                     # reverse: "how many meters are in 4500 centimeters?"
                 y = Fraction(rng.randint(2, 60))
                 x, src, dst, sub = y * f, dst, src, "reverse"
             else:                                        # decimal source with an integer result
@@ -340,7 +357,7 @@ def gen_unit_conv(rng, level, surf):
         else:
             ch = rng.choice(CHAINS)
             f = FACTOR[(ch[0], ch[1])] * FACTOR[(ch[1], ch[2])]
-            if rng.random() < 0.5:
+            if stratum == "chain":
                 x = Fraction(rng.randint(2, 9)) + (Fraction(1, 2) if rng.random() < 0.5 else 0)
                 src, dst, y, sub = ch[0], ch[2], x * f, "chain"
             else:
@@ -369,12 +386,10 @@ def _dur_text(mins: int) -> str:
     return f"{m} minutes"
 
 
-def gen_date_time(rng, level, surf):
+def gen_date_time(rng, level, surf, stratum):
     who = full_name(rng)
     ev = rng.choice(EVENTS)
-    subs = {1: ("clock_add", "weekday_add"), 2: ("clock_add", "weekday_add", "duration_between"),
-            3: ("date_add", "clock_midnight", "weekday_back")}[level]
-    sub = rng.choice(subs)
+    sub = stratum
     for _ in range(500):
         if sub == "clock_add":
             start = rng.randrange(6 * 60, 20 * 60, 5)
@@ -433,11 +448,9 @@ def gen_date_time(rng, level, surf):
 
 
 # ------------------------------------------------------------------------------------------------ 4 count_sort
-def gen_count_sort(rng, level, surf):
+def gen_count_sort(rng, level, surf, stratum):
     n = {1: 5, 2: 7, 3: 9}[level]
-    subs = {1: ("count_word", "count_gt", "sort_num_asc"), 2: ("count_word", "count_gt", "sort_num_desc", "sort_words"),
-            3: ("count_word", "count_gt", "sort_num_asc", "sort_words")}[level]
-    sub = rng.choice(subs)
+    sub = stratum
     who = rng.choice(FIRST)
     lo = -50 if level == 3 else 1
     if sub == "count_word":
@@ -491,12 +504,10 @@ COIN = ("coin", "coins")
 PCT_UNITS = ("%", "percent", "per cent")
 
 
-def gen_pct_ratio(rng, level, surf):
+def gen_pct_ratio(rng, level, surf, stratum):
     from fractions import Fraction
-    a, b = two_people(rng)
-    subs = {1: ("pct_of", "ratio_scale"), 2: ("pct_change", "what_pct", "ratio_simplify"),
-            3: ("pct_of_hard", "successive", "ratio_split")}[level]
-    sub = rng.choice(subs)
+    a, b = two_full_names(rng)
+    sub = stratum
     for _ in range(500):
         if sub in ("pct_of", "pct_of_hard"):
             p = Fraction(rng.choice((10, 20, 25, 50))) if sub == "pct_of" else Fraction(rng.choice(
@@ -570,7 +581,9 @@ def _code3(rng):
 
 
 # 'fn': field-name variants (index 0 = default; surface diversity draws one per passage and uses it in the records,
-# the corrections and the question alike).
+# the corrections and the question alike). Every question 'q' asks for the CURRENT value in the present tense (the
+# corrections are past events), so a corrected record has one reading: its latest value (ret_test_graders checks the
+# tense of every template and re-derives every gold from the prompt text).
 THEMES = {
     "lockers": {"intro": "These are the locker assignments for the {place} swimming club.",
                 "fn": ("door code", "entry code", "keypad code"),
@@ -603,14 +616,14 @@ THEMES = {
     "lab": {"intro": "The {place} lab logbook lists where sample trays are stored.",
             "fn": ("freezer", "cold store", "storage freezer"),
             "rec": "{who} logged sample tray {n} in {fn} {v}.",
-            "q": ("In which {fn} did {who} log a sample tray?", "Which {fn} holds the sample tray {who} logged?"),
+            "q": ("In which {fn} is {who}'s sample tray stored?", "Which {fn} holds the sample tray {who} logged?"),
             "mode": "code", "val": _code3,
             "corr": "Later, sample tray {n} from {who} was moved to {fn} {v}.",
             "alt": ("bench number", "safety badge number", "project code")},
     "music": {"intro": "The {place} music school booked its practice rooms.",
               "fn": ("room", "studio", "practice room"),
               "rec": "{who} booked {fn} {n} for {v} practice.",
-              "q": ("Which instrument did {who} book a {fn} for?", "For which instrument did {who} book a {fn}?"),
+              "q": ("Which instrument is {who}'s {fn} booked for?", "For which instrument is {who}'s {fn} currently booked?"),
               "mode": "word", "pool": INSTRUMENTS,
               "corr": "Later, {who} changed the {fn} {n} booking to {v} practice.",
               "alt": ("locker number", "lesson fee", "teacher's name")},
@@ -665,10 +678,9 @@ def _assemble(rng, th, level, nrec, shared_first, fn):
     return " ".join(sents), recs, sorted(vals_seen)
 
 
-def build_passage(rng, level, surf, shared_first: bool):
+def build_passage(rng, level, surf, shared_first: bool, theme_name: str):
     """One theme's records: (passage text, records [{who, n, v, old}], theme, every value incl. superseded ones,
     field name)."""
-    theme_name = rng.choice(THEME_ORDER)
     th = THEMES[theme_name]
     fn = surf.pick(th["fn"])
     lo, hi = PASSAGE_BAND[level]
@@ -688,27 +700,29 @@ def _kv_gold(th, rec, values):
     return {"kind": "kv", "mode": th["mode"], "value": rec["v"], "distractors": [v for v in values if v != rec["v"]]}
 
 
-def gen_kv_recall(rng, level, surf):
+def gen_kv_recall(rng, level, surf, stratum):
     """Key-value recall from a 150-300-token passage (records are added until the level's token band is reached:
     L1 ~150-230, L2 ~190-265, L3 ~230-298 tokens). L2: some first names repeat, so the full name is needed. L3: also
-    two later corrections; the question targets a corrected record half the time (gold: the latest value; the
-    superseded value is a distractor)."""
-    passage, recs, tname, values, fn = build_passage(rng, level, surf, shared_first=level >= 2)
+    two later corrections; the stratum '<theme>_corrected' asks about a corrected record (gold: the latest value; the
+    superseded value is a distractor), the stratum '<theme>' about an uncorrected one."""
+    tname = stratum[: -len("_corrected")] if stratum.endswith("_corrected") else stratum
+    passage, recs, tname, values, fn = build_passage(rng, level, surf, level >= 2, tname)
     th = THEMES[tname]
     corrected = [r for r in recs if r["old"] is not None]
-    rec = rng.choice(corrected) if (corrected and rng.random() < 0.5) else rng.choice(recs)
+    plain = [r for r in recs if r["old"] is None]
+    rec = rng.choice(corrected if stratum.endswith("_corrected") else plain)
     q = surf.pick(th["q"]).format(who=rec["who"], fn=fn)
     user = f"{passage}\n\n{q} {surf.pick(I_KV)}"
     sub = f"{tname}{'_corrected' if rec['old'] is not None else ''}"
     return one(sub, user, _kv_gold(th, rec, values), f"{level}|{tname}|{rec['who']}|{rec['v']}", surf)
 
 
-def gen_unknown_twin(rng, level, surf):
-    """A PAIR over one passage: 'a' asks a value the passage states (gold: the value), 'u' asks one it does not
-    (gold: the literal UNKNOWN). L1 'u' asks about a person absent from the passage; L2 asks the same person's
-    attribute the passage never mentions; L3 asks about a near-miss name (one record's first name with another record's
-    last name; that combination is absent)."""
-    passage, recs, tname, values, fn = build_passage(rng, level, surf, shared_first=level == 3)
+def gen_unknown_twin(rng, level, surf, stratum):
+    """A PAIR over one passage of theme `stratum`: 'a' asks a value the passage states (gold: the value), 'u' asks one
+    it does not (gold: the literal UNKNOWN). L1 'u' asks about a person absent from the passage; L2 asks the same
+    person's attribute the passage never mentions; L3 asks about a near-miss name (one record's first name with another
+    record's last name; that combination is absent)."""
+    passage, recs, tname, values, fn = build_passage(rng, level, surf, level == 3, stratum)
     th = THEMES[tname]
     rec = rng.choice(recs)
     instr = surf.pick(I_UNK)
@@ -742,11 +756,9 @@ def gen_unknown_twin(rng, level, surf):
 
 
 # ------------------------------------------------------------------------------------------------ 8 format_follow
-def gen_format_follow(rng, level, surf):
-    who = rng.choice(FIRST)
-    subs = {1: ("upper_echo", "yes_no"), 2: ("nth_word", "first_letter", "last_word"),
-            3: ("reverse", "json", "hyphen_spell")}[level]
-    sub = rng.choice(subs)
+def gen_format_follow(rng, level, surf, stratum):
+    who = full_name(rng)
+    sub = stratum
     w = rng.choice(WORDS)
     ctx = rng.choice((f"{who} is labelling storage bins.", f"{who} is testing a new label printer.",
                       f"{who} is preparing cards for a word game.", f"{who} is checking a printed list."))
@@ -756,7 +768,7 @@ def gen_format_follow(rng, level, surf):
     if sub == "yes_no":
         plural, _ = rng.choice(OBJS)
         x, y = rng.sample(range(3, 99), 2)
-        other = rng.choice([f for f in FIRST if f != who])
+        other = full_name(rng, first_pool=tuple(f for f in FIRST if f != who.split()[0]))
         user = (f"{who} has {x} {plural} and {other} has {y} {plural}. Does {who} have more {plural} than {other}? "
                 + surf.pick(I_YESNO))
         return one(sub, user, {"kind": "exact", "value": "yes" if x > y else "no", "case": False},
@@ -789,6 +801,30 @@ def gen_format_follow(rng, level, surf):
     return one(sub, user, {"kind": "exact", "value": "-".join(w.upper()), "case": True}, f"{level}|{sub}|{w}", surf)
 
 
+# Strata per (category, level): each cell's items are dealt round-robin over these and shuffled (same mix every draw).
+STRATA = {
+    "arith_word": {1: ("2ops",), 2: ("3ops",), 3: ("4ops",)},
+    "unit_conv": {1: ("forward",), 2: ("reverse", "decimal"), 3: ("chain", "chain_reverse")},
+    "date_time": {1: ("clock_add", "weekday_add"), 2: ("clock_add", "weekday_add", "duration_between"),
+                  3: ("date_add", "clock_midnight", "weekday_back")},
+    "count_sort": {1: ("count_word", "count_gt", "sort_num_asc"), 2: ("count_word", "count_gt", "sort_num_desc", "sort_words"),
+                   3: ("count_word", "count_gt", "sort_num_asc", "sort_words")},
+    "pct_ratio": {1: ("pct_of", "ratio_scale"), 2: ("pct_change", "what_pct", "ratio_simplify"),
+                  3: ("pct_of_hard", "successive", "ratio_split")},
+    "kv_recall": {1: THEME_ORDER, 2: THEME_ORDER, 3: tuple(f"{t}{c}" for t in THEME_ORDER for c in ("", "_corrected"))},
+    "unknown_twin": {1: THEME_ORDER, 2: THEME_ORDER, 3: THEME_ORDER},
+    "format_follow": {1: ("upper_echo", "yes_no"), 2: ("nth_word", "first_letter", "last_word"),
+                      3: ("reverse", "json", "hyphen_spell")},
+}
+
+
+def stratum_schedule(rng, cat: str, level: int, n: int) -> list:
+    st = STRATA[cat][level]
+    sched = [st[i % len(st)] for i in range(n)]
+    rng.shuffle(sched)
+    return sched
+
+
 GENERATORS = {"arith_word": gen_arith_word, "unit_conv": gen_unit_conv, "date_time": gen_date_time,
               "count_sort": gen_count_sort, "pct_ratio": gen_pct_ratio, "kv_recall": gen_kv_recall,
               "unknown_twin": gen_unknown_twin, "format_follow": gen_format_follow}
@@ -805,12 +841,15 @@ def gen_cell(seed: int, cat: str, level: int, n: int, diversity: bool) -> tuple[
     where 50 redraws allow it (remaining duplicates are counted)."""
     rng = random.Random(f"{seed}|{cat}|L{level}|sd{int(bool(diversity))}")
     surf = Surf(rng, diversity)
+    sched = stratum_schedule(rng, cat, level, n)
     items, users, ops = [], set(), Counter()
     op_dups = 0
     while len(items) < n:
         it = None
+        stratum = sched[len(items)]
         for attempt in range(50):
-            cand = GENERATORS[cat](rng, level, surf)
+            cand = GENERATORS[cat](rng, level, surf, stratum)
+            cand["stratum"] = stratum
             us = tuple(RC.norm_text(RC.user_text(p["messages"])) for p in cand["prompts"])
             if any(u in users for u in us):
                 continue
@@ -841,8 +880,8 @@ def generate(seed: int, purpose: str, plan: dict, diversity: bool = False, n: in
                 for p in it["prompts"]:
                     RG.validate_gold(p["gold"])
                     rows.append({"pid": iid + (f"/{p['twin']}" if p["twin"] else ""), "item": iid, "category": cat,
-                                 "level": level, "subtype": it["subtype"], "twin": p["twin"], "messages": p["messages"],
-                                 "gold": p["gold"], "op": it["op"]})
+                                 "level": level, "subtype": it["subtype"], "stratum": it["stratum"], "twin": p["twin"],
+                                 "messages": p["messages"], "gold": p["gold"], "op": it["op"]})
     return rows, notes
 
 
@@ -986,34 +1025,45 @@ def _walk_strings(doc, visit):
 
 def freshness_scan(rows: list, sources=SCAN_SOURCES, verbose: bool = True) -> dict:
     """F1/F2/F3 against every harvested string. Holds only the draw's own texts; streams the corpora."""
+    return freshness_scan_multi({"draw": rows}, sources, verbose)["draw"]
+
+
+def freshness_scan_multi(sets: dict, sources=SCAN_SOURCES, verbose: bool = True) -> dict:
+    """freshness_scan for several draws {label: rows} in ONE harvest pass (each draw judged on its own)."""
     t0 = time.time()
-    users = defaultdict(list)
-    for r in rows:
-        users[RC.norm_text(RC.user_text(r["messages"]))].append(r["pid"])
-    gate = item_unique_sentences(rows, GATE_WORDS)
-    report = {s: v for s, v in all_sentences(rows, REPORT_WORDS).items() if s not in gate}
-    hits = {"user": Counter(), "gate": Counter(), "report": Counter()}
-    examples = {"user": [], "gate": [], "report": []}
+    S = {}
+    for label, rows in sets.items():
+        users = defaultdict(list)
+        for r in rows:
+            users[RC.norm_text(RC.user_text(r["messages"]))].append(r["pid"])
+        gate = item_unique_sentences(rows, GATE_WORDS)
+        report = {s: v for s, v in all_sentences(rows, REPORT_WORDS).items() if s not in gate}
+        S[label] = {"users": users, "gate": gate, "report": report,
+                    "hits": {"user": Counter(), "gate": Counter(), "report": Counter()},
+                    "examples": {"user": [], "gate": [], "report": []}}
     stat = {}
     cur_file = [""]
 
     def visit(s: str):
         n = RC.norm_text(s)
-        if n in users:
-            hits["user"][n] += 1
-            if len(examples["user"]) < 10:
-                examples["user"].append({"pids": users[n][:3], "file": cur_file[0]})
+        for D in S.values():
+            if n in D["users"]:
+                D["hits"]["user"][n] += 1
+                if len(D["examples"]["user"]) < 10:
+                    D["examples"]["user"].append({"pids": D["users"][n][:3], "file": cur_file[0]})
         if len(n) < 30:
             return
         for sent in RC.split_sentences(n):
-            if sent in gate:
-                hits["gate"][sent] += 1
-                if len(examples["gate"]) < 10:
-                    examples["gate"].append({"pids": gate[sent][:3], "sentence": sent, "file": cur_file[0]})
-            elif sent in report:
-                hits["report"][sent] += 1
-                if len(examples["report"]) < 10:
-                    examples["report"].append({"sentence": sent, "n_pids": len(report[sent]), "file": cur_file[0]})
+            for D in S.values():
+                if sent in D["gate"]:
+                    D["hits"]["gate"][sent] += 1
+                    if len(D["examples"]["gate"]) < 10:
+                        D["examples"]["gate"].append({"pids": D["gate"][sent][:3], "sentence": sent, "file": cur_file[0]})
+                elif sent in D["report"]:
+                    D["hits"]["report"][sent] += 1
+                    if len(D["examples"]["report"]) < 10:
+                        D["examples"]["report"].append({"sentence": sent, "n_pids": len(D["report"][sent]),
+                                                        "file": cur_file[0]})
 
     for name, root, ident in sources:
         st = {"root": str(root), "walk_identical_to_l1_harvest": ident, "files_parsed": 0, "strings_bytes": 0,
@@ -1060,37 +1110,45 @@ def freshness_scan(rows: list, sources=SCAN_SOURCES, verbose: bool = True) -> di
             print(f"  [{time.strftime('%H:%M:%S')}] {name}: {st['files_parsed']} files, "
                   f"{st['strings_bytes'] / 1e6:.0f} MB; skipped by name {len(st['skipped_by_name_never_opened'])}", flush=True)
     skipped = [x for s in stat.values() for x in s["skipped_by_name_never_opened"]]
-    return {"sources": stat, "seconds": round(time.time() - t0, 1),
-            "n_user_turns": len(users), "n_gate_sentences": len(gate), "n_report_sentences": len(report),
-            "F1_user_turn_hits": sum(hits["user"].values()), "F2_gate_sentence_hits": sum(hits["gate"].values()),
-            "F3_report_sentence_hits": sum(hits["report"].values()),
-            "F3_report_distinct_sentences_hit": len(hits["report"]),
-            "F3_report_sentences": dict(hits["report"].most_common(50)),
-            "examples": examples,
-            "skipped_by_name_all_reserved": all(Path(x).name.startswith(RC.RESERVED_PREFIX) for x in skipped),
-            "n_skipped_by_name": len(skipped),
-            "ok": sum(hits["user"].values()) == 0 and sum(hits["gate"].values()) == 0}
+    out = {}
+    for label, D in S.items():
+        hits = D["hits"]
+        out[label] = {"sources": stat, "seconds": round(time.time() - t0, 1),
+                      "n_user_turns": len(D["users"]), "n_gate_sentences": len(D["gate"]),
+                      "n_report_sentences": len(D["report"]),
+                      "F1_user_turn_hits": sum(hits["user"].values()), "F2_gate_sentence_hits": sum(hits["gate"].values()),
+                      "F3_report_sentence_hits": sum(hits["report"].values()),
+                      "F3_report_distinct_sentences_hit": len(hits["report"]),
+                      "F3_report_sentences": dict(hits["report"].most_common(50)),
+                      "examples": D["examples"],
+                      "skipped_by_name_all_reserved": all(Path(x).name.startswith(RC.RESERVED_PREFIX) for x in skipped),
+                      "n_skipped_by_name": len(skipped),
+                      "ok": sum(hits["user"].values()) == 0 and sum(hits["gate"].values()) == 0}
+    return out
+
+
+def overlap(rows: list, other: list) -> dict:
+    """F1 user turns (gate), passage sentences >= 8 words (gate), item-unique sentences >= 8 words (report),
+    operative contents (report) shared by two draws."""
+    me_users = {RC.norm_text(RC.user_text(r["messages"])) for r in rows}
+    o_users = {RC.norm_text(RC.user_text(r["messages"])) for r in other}
+    return {"user_turn_overlap": len(me_users & o_users),
+            "passage_sentence_overlap": len(passage_sentences(rows, GATE_WORDS) & passage_sentences(other, GATE_WORDS)),
+            "item_unique_sentence_overlap_report": len(set(item_unique_sentences(rows, GATE_WORDS))
+                                                       & set(item_unique_sentences(other, GATE_WORDS))),
+            "operative_overlap_report": len({(r["category"], r["op"]) for r in rows}
+                                            & {(r["category"], r["op"]) for r in other})}
 
 
 def cross_draw(rows: list, draws_dir: Path, exclude_name: str | None = None) -> dict:
-    """Against every earlier sealed draw: F1 user turns (gate), passage sentences >= 8 words (gate),
-    any item-unique sentence >= 8 words (report), operative contents (report)."""
-    me_users = {RC.norm_text(RC.user_text(r["messages"])) for r in rows}
-    me_pass = passage_sentences(rows, GATE_WORDS)
-    me_sent = set(item_unique_sentences(rows, GATE_WORDS))
-    me_ops = {(r["category"], r["op"]) for r in rows}
+    """Against every earlier sealed draw: overlap() gates F1 and the passage-sentence part of F2."""
     out = {"draws": {}, "F1_user_turn_overlap": 0, "F2_passage_sentence_overlap": 0}
     for seal_p in sorted(Path(draws_dir).glob("*.SEAL.json")):
         seal = RC.read_json(seal_p) or {}
         f = Path(draws_dir) / Path(seal.get("file", "")).name
         if not f.is_file() or f.name == exclude_name:
             continue
-        other = RC.read_jsonl(f)
-        o_users = {RC.norm_text(RC.user_text(r["messages"])) for r in other}
-        rec = {"user_turn_overlap": len(me_users & o_users),
-               "passage_sentence_overlap": len(me_pass & passage_sentences(other, GATE_WORDS)),
-               "item_unique_sentence_overlap_report": len(me_sent & set(item_unique_sentences(other, GATE_WORDS))),
-               "operative_overlap_report": len(me_ops & {(r["category"], r["op"]) for r in other})}
+        rec = overlap(rows, RC.read_jsonl(f))
         out["draws"][f.name] = rec
         out["F1_user_turn_overlap"] += rec["user_turn_overlap"]
         out["F2_passage_sentence_overlap"] += rec["passage_sentence_overlap"]
@@ -1105,11 +1163,13 @@ def describe(rows: list) -> dict:
         items.setdefault(r["item"], r)
     cell = Counter((r["category"], r["level"]) for r in items.values())
     sub = Counter((r["category"], r["level"], r["subtype"]) for r in items.values())
+    strata = Counter((r["category"], r["level"], r["stratum"]) for r in items.values())
     kinds = Counter(r["gold"]["kind"] for r in rows)
     ulen = [len(RC.user_text(r["messages"])) for r in rows]
     return {"n_prompts": len(rows), "n_items": len(items),
             "items_per_cell": {f"{c}|L{l}": n for (c, l), n in sorted(cell.items())},
             "subtypes": {f"{c}|L{l}|{s}": n for (c, l, s), n in sorted(sub.items())},
+            "strata": {f"{c}|L{l}|{s}": n for (c, l, s), n in sorted(strata.items())},
             "gold_kinds": dict(sorted(kinds.items())),
             "user_chars": {"min": min(ulen), "median": sorted(ulen)[len(ulen) // 2], "max": max(ulen)},
             "unknown_twins": dict(Counter(r["twin"] for r in rows if r["twin"]))}
@@ -1132,13 +1192,14 @@ def token_audit(rows: list) -> dict:
     by_level = defaultdict(list)
     for _, l, n in passages:
         by_level[l].append(n)
-    return {"tokenizer_sha256": RC.sha256_file(TOKENIZER_JSON),
+    tk_sha = RC.sha256_file(TOKENIZER_JSON)
+    return {"tokenizer_sha256": tk_sha, "tokenizer_pinned": tk_sha == RC.TOKENIZER_PINS["tokenizer.json"],
             "user_tokens_per_category": {c: {"min": min(v), "median": sorted(v)[len(v) // 2], "max": max(v)}
                                          for c, v in per_cat.items()},
             "passage_tokens": {"n": len(pt), "min": min(pt) if pt else None, "max": max(pt) if pt else None,
                                "by_level": {l: [min(v), max(v)] for l, v in sorted(by_level.items())},
                                "outside_150_300": [p for p, _, n in passages if not lo <= n <= hi]},
-            "ok": all(lo <= n <= hi for n in pt)}
+            "ok": all(lo <= n <= hi for n in pt) and tk_sha == RC.TOKENIZER_PINS["tokenizer.json"]}
 
 
 # ------------------------------------------------------------------------------------------------ freeze / mint / verify
@@ -1148,6 +1209,12 @@ def freeze(approval: str, root: Path | None = None) -> dict:
     RC.need(bool(approval) and len(approval.strip()) >= 8, "--approval must state who approved, when, DECISIONS entry")
     fz_path = root / "docs" / "retention" / "RET_FREEZE.json"
     RC.need(not fz_path.exists(), f"{fz_path} exists: the kit is frozen (move it aside and log why to re-freeze)")
+    import ret_analysis as RA                          # lazy: ret_analysis imports this module
+    design = (root / "docs" / "retention" / "DESIGN.md").read_text(encoding="utf-8")
+    RC.need(RA.RULE_DEV in design and RA.RULE_CONFIRM in design,
+            "DESIGN.md does not state RULE_DEV and RULE_CONFIRM verbatim (ret_analysis.py)")
+    tp = RC.tokenizer_problem()
+    RC.need(tp is None, f"{tp}: the pinned tokenizer is not the one on disk")
     cur = RC.code_sha(root)
     checks = {}
     for rel in RC.TEST_RECORDS:
@@ -1159,8 +1226,13 @@ def freeze(approval: str, root: Path | None = None) -> dict:
     RC.need(set(RC.FROZEN_CODE + RC.FROZEN_DOCS) <= set(files), "a kit file is missing")
     rec = {"frozen_at": time.strftime("%Y-%m-%d %H:%M:%S %z"), "approval": approval.strip(), "files": files,
            "test_records_ok": checks, "design": {"categories": RC.CATEGORIES, "levels": RC.LEVELS, "n_per_cell": RC.N_PER_CELL,
-                                                 "dev_seed": RC.DEV_SEED, "max_new_tokens": RC.MAX_NEW_TOKENS,
-                                                 "dev_min_acc": RC.DEV_MIN_ACC, "margin": RC.MARGIN, "alpha": RC.ALPHA}}
+                                                 "dev_seeds": {"sd0": RC.DEV_SEED, "sd1": RC.DEV_SEED_SD},
+                                                 "max_new_tokens": RC.MAX_NEW_TOKENS, "dev_target_acc": RC.DEV_TARGET_ACC,
+                                                 "dev_min_acc": RC.DEV_MIN_ACC, "category_flag_margin": RC.MARGIN,
+                                                 "category_margin": RC.CATEGORY_MARGIN,
+                                                 "pooled_margin_rate": RC.POOLED_MARGIN_RATE, "alpha": RC.ALPHA},
+           "rules_verbatim_in_design": True, "tokenizer_pins": RC.TOKENIZER_PINS,
+           "chat_template_sha256": RC.CHAT_TEMPLATE_SHA, "python": python_info()}
     RC.write_json_create(fz_path, rec)
     return rec
 
@@ -1183,14 +1255,17 @@ def mint(purpose: str, seed: int | None = None, diversity: bool = False, scan: b
     existing = [RC.read_json(p) or {} for p in sorted(draws.glob("*.SEAL.json"))]
     sel_sha = None
     if purpose == "dev":
-        seed = RC.DEV_SEED if seed is None else int(seed)
-        seed_source = "fixed DEV_SEED" if seed == RC.DEV_SEED else "explicit (tests)"
+        fixed = RC.DEV_SEEDS[bool(diversity)]
+        seed = fixed if seed is None else int(seed)
+        seed_source = ("fixed DEV_SEED_SD" if diversity else "fixed DEV_SEED") if seed == fixed else "explicit (tests)"
+        if require_freeze:
+            RC.need(seed == fixed, f"a registered dev draw uses the pre-registered dev seed of its setting ({fixed})")
         plan = plan or dev_plan()
     else:
-        sel_p = root / "docs" / "retention" / "DEV_SELECTION.json"
+        sel_p = root / RC.selection_rel(diversity)
         sel = RC.read_json(sel_p)
-        RC.need(sel is not None and sel.get("selected"), "no DEV_SELECTION.json: run the dev draw and "
-                "`ret_analysis.py dev-select` before minting any confirmation draw")
+        RC.need(sel is not None and sel.get("selected"), f"no {sel_p.name}: run the dev draw of this surface-diversity "
+                "setting and `ret_analysis.py dev-select` before minting any confirmation draw")
         RC.need(bool(sel.get("surface_diversity")) == bool(diversity), "surface diversity differs from the dev selection's")
         if require_freeze:
             RC.need(sel.get("registered") is True and sel.get("freeze_sha256") == bind["freeze_sha256"],
@@ -1199,7 +1274,7 @@ def mint(purpose: str, seed: int | None = None, diversity: bool = False, scan: b
         plan = selection_plan(sel)
         seed_source = "OS entropy (secrets.randbits(62))" if seed is None else "explicit (tests)"
         seed = secrets.randbits(62) if seed is None else int(seed)
-        RC.need(seed != RC.DEV_SEED, "a confirmation draw may not reuse the dev seed")
+        RC.need(seed not in RC.DEV_SEEDS.values(), "a confirmation draw may not reuse a dev seed")
     RC.need(all(e.get("seed") != seed for e in existing), f"seed {seed} was already used by an earlier draw")
     did = draw_id(purpose, seed)
     out, seal_p = draws / f"{did}.jsonl", draws / f"{did}.SEAL.json"
@@ -1230,7 +1305,8 @@ def mint(purpose: str, seed: int | None = None, diversity: bool = False, scan: b
             "file": f"docs/retention/draws/{did}.jsonl", "file_sha256": RC.sha256_bytes(text.encode("utf-8")),
             "generator_code_sha256": {r: RC.sha256_file(root / r) if (root / r).is_file() else RC.sha256_file(ROOT / r)
                                       for r in GEN_CODE},
-            **bind, "selection_sha256": sel_sha, "minted_local": time.strftime("%Y-%m-%d %H:%M:%S %z"),
+            **bind, "selection_sha256": sel_sha, "python": python_info(),
+            "minted_local": time.strftime("%Y-%m-%d %H:%M:%S %z"),
             "mint_seconds": None, "stats": describe(rows), "within_cell": notes, "gold_selftest": {k: v for k, v in st.items() if k != "failures"},
             "F0_payload_prompts": f0, "cross_draw": cd, "token_audit": ta, "freshness": fr}
     RC.write_create(out, text)
@@ -1251,15 +1327,75 @@ def load_draw(draw_path: Path) -> tuple[list, dict]:
     return RC.read_jsonl(draw_path), seal
 
 
+def python_info() -> dict:
+    """The interpreter that minted a draw: CPython's random (Mersenne Twister, SHA-512 str seeding, shuffle/choice
+    algorithms) backs the determinism claim, so verify() reports a different interpreter next to a mismatch."""
+    return {"version": platform.python_version(), "implementation": platform.python_implementation(),
+            "full": sys.version}
+
+
 def verify(draw_path: Path) -> dict:
     rows, seal = load_draw(draw_path)
     re_rows, _ = generate(int(seal["seed"]), seal["purpose"], {c: list(v) for c, v in seal["plan"].items()},
                           bool(seal["surface_diversity"]), int(seal.get("n_per_cell", RC.N_PER_CELL)))
     same = RC.sha256_bytes(serialize(re_rows).encode("utf-8")) == seal["file_sha256"]
     cur = {r: RC.sha256_file(ROOT / r) for r in GEN_CODE}
-    return {"draw": seal["draw_id"], "regenerates_identically": same,
-            "generator_code_unchanged": cur == seal["generator_code_sha256"], "n_prompts": len(rows),
-            "ok": same}
+    py = python_info()
+    sp = seal.get("python") or {}
+    py_same = (sp.get("version"), sp.get("implementation")) == (py["version"], py["implementation"])
+    res = {"draw": seal["draw_id"], "regenerates_identically": same,
+           "generator_code_unchanged": cur == seal["generator_code_sha256"], "python_same": py_same,
+           "python_seal": sp.get("version"), "python_now": py["version"], "n_prompts": len(rows), "ok": same}
+    if not same:
+        res["explanation"] = ("generator code changed" if not res["generator_code_unchanged"] else
+                              "a different Python interpreter (random-module algorithms)" if not py_same else
+                              "unexplained: same code and interpreter")
+    return res
+
+
+def preview(sources=SCAN_SOURCES, scan: bool = True, record: bool = True, n: int = RC.N_PER_CELL) -> dict:
+    """Pre-freeze audit of BOTH pre-registered dev draws (surface diversity OFF / ON), with one harvest pass:
+    the bytes their sealed draws will have if the code is frozen unchanged, stats, golds, tokens, freshness, and the
+    overlap of the two draws (both must be mintable). -> DEV_DRAW_PREVIEW.json, DEV_DRAW_PREVIEW_SD.json."""
+    import psutil
+    t0 = time.time()
+    recs, rows_by = {}, {}
+    for sd in (False, True):
+        seed = RC.DEV_SEEDS[sd]
+        rows, notes = generate(seed, "dev", dev_plan(), sd, n)
+        text = serialize(rows)
+        users = [RC.norm_text(RC.user_text(r["messages"])) for r in rows]
+        rows_by[sd] = rows
+        recs[sd] = {"what": "pre-mint audit of a pre-registered dev draw (not a sealed draw; `ret_gen.py mint --purpose "
+                            "dev" + (" --surface-diversity" if sd else "") + "` after the kit freeze writes the sealed "
+                            "draw and repeats every check)",
+                    "draw_id": draw_id("dev", seed), "seed": seed, "surface_diversity": sd,
+                    "bytes_sha256": RC.sha256_bytes(text.encode("utf-8")), "bytes": len(text.encode("utf-8")),
+                    "stats": describe(rows),
+                    "within_cell": {k: v for k, v in notes.items() if v["operative_duplicates_within_cell"]},
+                    "gold_selftest": {k: v for k, v in gold_selftest(rows).items() if k != "failures"},
+                    "F0_payload_prompts": payload_check(rows), "token_audit": token_audit(rows),
+                    "duplicate_user_turns": len(users) - len(set(users))}
+    ov = overlap(rows_by[False], rows_by[True])
+    fr = freshness_scan_multi({sd: rows_by[sd] for sd in (False, True)}, sources) if scan else \
+        {sd: {"skipped": True, "ok": None} for sd in (False, True)}
+    for sd in (False, True):
+        r = recs[sd]
+        r["overlap_with_other_dev_draw"] = ov
+        r["freshness"] = fr[sd]
+        r["python"] = python_info()
+        r["peak_rss_mib"] = round(psutil.Process().memory_info().peak_wset / 2 ** 20, 1)
+        r["seconds"] = round(time.time() - t0, 1)
+        r["ok"] = bool(r["gold_selftest"]["ok"] and r["F0_payload_prompts"] == 0 and r["token_audit"]["ok"]
+                       and r["duplicate_user_turns"] == 0 and fr[sd].get("ok") is True
+                       and ov["user_turn_overlap"] == 0 and ov["passage_sentence_overlap"] == 0)
+        r["code_sha256"] = {g: RC.sha256_file(ROOT / g) for g in GEN_CODE}
+        r["recorded_local"] = time.strftime("%Y-%m-%d %H:%M:%S %z")
+    if record:
+        RC.need(not RC.FREEZE.exists(), "the kit is frozen: the dev-draw previews are frozen records")
+        for sd, name in ((False, "DEV_DRAW_PREVIEW.json"), (True, "DEV_DRAW_PREVIEW_SD.json")):
+            (RC.DOCS / name).write_text(json.dumps(recs[sd], indent=1) + "\n", encoding="utf-8")
+    return recs
 
 
 def main() -> int:
@@ -1267,6 +1403,8 @@ def main() -> int:
     sp = ap.add_subparsers(dest="cmd", required=True)
     f = sp.add_parser("freeze")
     f.add_argument("--approval", required=True)
+    pv = sp.add_parser("preview")
+    pv.add_argument("--no-record", action="store_true")
     m = sp.add_parser("mint")
     m.add_argument("--purpose", choices=("dev", "confirm"), required=True)
     m.add_argument("--surface-diversity", action="store_true")
@@ -1282,6 +1420,12 @@ def main() -> int:
             rec = freeze(a.approval)
             print(f"[retention] frozen: {len(rec['files'])} files")
             return 0
+        if a.cmd == "preview":
+            recs = preview(record=not a.no_record)
+            for sd, r in recs.items():
+                print(json.dumps({"surface_diversity": sd, "draw_id": r["draw_id"], "bytes_sha256": r["bytes_sha256"],
+                                  "ok": r["ok"], "seconds": r["seconds"], "peak_rss_mib": r["peak_rss_mib"]}))
+            return 0 if all(r["ok"] for r in recs.values()) else 1
         if a.cmd == "mint":
             mint(a.purpose, diversity=a.surface_diversity, scan=not a.no_scan)
             return 0

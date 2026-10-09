@@ -16,7 +16,8 @@ Checks
   2  confirm mode: SPARSE (off, t2s0, x_bwm) in ONE process then SUPA (supa, xs_sx) after unloading; one lease; lp
      arrays (n, 151936) float16, clamped at -60, rows normalised; prefill first token == generated first token;
      adapters active and distinct; each side equals an independent load (bare Titan-Sparse for 'off', the t2s0
-     adapter alone, bare Supa, the Supa adapter alone); the analysis accepts the run (all comparisons, KL available);
+     adapter alone, bare Supa, the Supa adapter alone); provenance records the pinned tokenizer files and the
+     chat-template hash of each load; the analysis accepts the run (all comparisons, both graders, KL available);
      a rerun is a no-op
   3  crash in SPARSE after one side: lease released, nothing but .partial files; the resume orphans them, completes,
      and every stage file equals the uninterrupted run byte for byte
@@ -27,7 +28,9 @@ Checks
      refuse without a lease, not persisted; a dead marker, a reused pid and a live BWM holder proceed); a live run lock
      refuses, a stale one is reclaimed
   6  pre-lease refusals: tampered draw, purpose/mode mismatch, unscanned draw, T2 s0 pin mismatch, an adapter trained
-     on another base (unless --allow-base-mismatch), a registered run in an unfrozen root
+     on another base (unless --allow-base-mismatch), a registered run in an unfrozen root, a tokenizer directory whose
+     tokenizer_config.json (chat template) differs from the pin; after the load: a chat template that differs from the
+     pin stops the run (persisted, nothing generated)
 
   python -B scripts/ret_test_tiny.py [--keep] [--no-record]
 Writes docs/retention/TINY_TEST.json (unless --no-record; refused once the kit is frozen).
@@ -154,10 +157,12 @@ class FakeRuntime:
     def __init__(self, tmp: Path):
         self.LOCK_PATH = tmp / "fake_gpu.lock"
         self.WAITING = {"rcwm": tmp / "fake_gpu.waiting.rcwm.json", "bwm": tmp / "fake_gpu.waiting.bwm.json"}
+        self.TOKENIZER_DIR = TOKENIZER_DIR              # the real, pinned tokenizer (read-only)
         self.calls: list = []
         self.fp_override: dict = {}
         self.runtime_override: list = []
         self.on_unload = None
+        self.template_suffix = None
 
     @contextmanager
     def gpu_lease(self, label, job):
@@ -177,6 +182,10 @@ class FakeRuntime:
         return build(arm), {"param_fingerprint": self.fp_override.get(arm, R.FP[arm] + "-tiny-standin")}
 
     def tokenizer(self):
+        if self.template_suffix:                        # a fresh tokenizer whose chat template differs from the pin
+            t = AutoTokenizer.from_pretrained(str(TOKENIZER_DIR), local_files_only=True)
+            t.chat_template = t.chat_template + self.template_suffix
+            return t
         return tok()
 
     def unload(self, m):
@@ -281,6 +290,12 @@ def main() -> int:
         prov = RC.read_json(out / "provenance.json")
         check("sides recorded: SPARSE off/t2s0/x_bwm, SUPA supa/xs_sx",
               prov["sides"] == {"SPARSE": ["off", "t2s0", "x_bwm"], "SUPA": ["supa", "xs_sx"]}, prov["sides"])
+        t0 = prov["turns"][0]
+        check("provenance: pinned tokenizer files, and the chat-template hash of each load equals the pin",
+              prov["tokenizer"]["files"] == RC.TOKENIZER_PINS
+              and t0.get("sparse_chat_template_sha256") == RC.CHAT_TEMPLATE_SHA
+              and t0.get("supa_chat_template_sha256") == RC.CHAT_TEMPLATE_SHA,
+              (prov["tokenizer"], t0.get("sparse_chat_template_sha256")))
         lp = np.load(out / "sparse" / "lp_t2s0.npy")
         rowsum = np.exp(lp.astype(np.float64)).sum(1)
         check("lp arrays: (n, 151936) float16, within [-60, 0], rows normalised",
@@ -313,10 +328,13 @@ def main() -> int:
         run_c = root / "runs" / "retention" / cseal["draw_id"]
         shutil.copytree(out, run_c)
         res = RA.analyze_run(run_c, root, registered=False)
-        check("analysis accepts the run: every comparison, KL available, verdicts from the rule",
+        check("analysis accepts the run: every comparison, both graders, KL available, verdicts from the rule; gating = "
+              "t2s0 / x_bwm vs off and xs_sx vs supa only",
               set(res["comparisons"]) == {"sparse_vs_supa", "t2s0_vs_off", "x_bwm_vs_off", "xs_sx_vs_supa", "t2s0_vs_supa"}
+              and all(set(c["graders"]) == {"primary", "lenient"} for c in res["comparisons"].values())
               and all(c["kl"]["available"] for c in res["comparisons"].values())
-              and all(c["verdict"] in ("RETAINED", "LOSS DETECTED", "MARGIN EXCEEDED") for c in res["comparisons"].values()),
+              and all(c["verdict"] in ("RETAINED", "LOSS DETECTED", "MARGIN EXCEEDED") for c in res["comparisons"].values())
+              and set(res["go"]) == {"t2s0_vs_off", "x_bwm_vs_off", "xs_sx_vs_supa"},
               {n: c["verdict"] for n, c in res["comparisons"].items()})
         fake.calls.clear()
         check("confirm rerun is a no-op", R.run(cfg(cdraw, "confirm", out), backend(fake)) == 0 and fake.calls == [])
@@ -466,6 +484,33 @@ def main() -> int:
             rc, e = main_like(c)
             check(f"refused before the lease: {name}", rc == 3 and not fake.calls and not (c.out / "STOPPED.json").exists(),
                   str(e)[:90])
+        bad_tok = tmp / "tokenizer_other_template"
+        bad_tok.mkdir()
+        for f in RC.TOKENIZER_PINS:
+            shutil.copy(TOKENIZER_DIR / f, bad_tok / f)
+        cfgj = json.loads((bad_tok / "tokenizer_config.json").read_text(encoding="utf-8"))
+        cfgj["chat_template"] = str(cfgj.get("chat_template", "")) + " "
+        (bad_tok / "tokenizer_config.json").write_text(json.dumps(cfgj), encoding="utf-8")
+        fake.TOKENIZER_DIR = bad_tok
+        fake.calls.clear()
+        c8 = cfg(cdraw, "confirm", tmp / "runs" / "r8")
+        try:
+            rc, e = main_like(c8)
+        finally:
+            fake.TOKENIZER_DIR = TOKENIZER_DIR
+        check("refused before the lease: a tokenizer directory whose chat template differs from the pin",
+              rc == 3 and not fake.calls and not (c8.out / "STOPPED.json").exists() and "tokenizer_config.json" in str(e),
+              str(e)[:120])
+        out9 = tmp / "runs" / "r9"
+        fake.template_suffix = "{# drift #}"
+        fake.calls.clear()
+        try:
+            rc, e = main_like(cfg(cdraw, "confirm", out9))
+        finally:
+            fake.template_suffix = None
+        check("a loaded chat template that differs from the pin: stop persisted, nothing generated",
+              rc == 3 and (out9 / "STOPPED.json").exists() and not list(out9.glob("sparse/*"))
+              and fake.calls[-1] == ("release", "rcwm-t1:retention"), str(e)[:120])
         fake.calls.clear()
         rc, e = main_like(cfg(cdraw, "confirm", tmp / "runs" / "r7", extra={"bad": ad["wrongbase"]}, allow_base_mismatch=True,
                               cap_h=0.0))

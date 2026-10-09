@@ -1,0 +1,378 @@
+{
+ "record": "LBEAM_PROBLEM_SET",
+ "generator": "lbeam-problems-v1",
+ "spec": {
+  "name": "dev",
+  "seed": 20261141,
+  "n_in_per_depth": 24,
+  "n_oor_per_depth": 6,
+  "depths": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "V": 8,
+  "K": 8
+ },
+ "n": 150,
+ "file_sha256": "a64f1424864fb9e3ab3c1e105a1b2d08843e03aeecd49687017bebebeb93c3ed",
+ "per_stratum": {
+  "in-d2": 24,
+  "in-d3": 24,
+  "in-d4": 24,
+  "in-d5": 24,
+  "in-d6": 24,
+  "oor-d2": 6,
+  "oor-d3": 6,
+  "oor-d4": 6,
+  "oor-d5": 6,
+  "oor-d6": 6
+ },
+ "rejected": {
+  "in-d2": {
+   "shortcut: d* 1 < seed length 2": 5,
+   "in: init or goal out of range": 3,
+   "no vocab action moves away from the goal at init": 4,
+   "an action tuple is used by another instance": 1
+  },
+  "in-d3": {
+   "shortcut: d* 1 < seed length 3": 5,
+   "in: init or goal out of range": 14,
+   "shortcut: d* 2 < seed length 3": 11,
+   "no vocab action moves away from the goal at init": 5
+  },
+  "in-d4": {
+   "an action tuple is used by another instance": 1,
+   "shortcut: d* 3 < seed length 4": 8,
+   "in: init or goal out of range": 15,
+   "shortcut: d* 2 < seed length 4": 7,
+   "shortcut: d* 1 < seed length 4": 1,
+   "no vocab action moves away from the goal at init": 4
+  },
+  "in-d5": {
+   "in: init or goal out of range": 22,
+   "shortcut: d* 4 < seed length 5": 10,
+   "fresh: operative content in an exclusion source": 1,
+   "shortcut: d* 3 < seed length 5": 13,
+   "no vocab action moves away from the goal at init": 11,
+   "shortcut: d* 1 < seed length 5": 5,
+   "an action tuple is used by another instance": 3,
+   "shortcut: d* 2 < seed length 5": 1
+  },
+  "in-d6": {
+   "in: init or goal out of range": 24,
+   "no vocab action moves away from the goal at init": 16,
+   "shortcut: d* 4 < seed length 6": 10,
+   "shortcut: d* 3 < seed length 6": 5,
+   "shortcut: d* 5 < seed length 6": 4,
+   "shortcut: d* 2 < seed length 6": 5,
+   "shortcut: d* 1 < seed length 6": 4,
+   "an action tuple is used by another instance": 1
+  },
+  "oor-d2": {
+   "an action tuple is used by another instance": 1,
+   "shortcut: d* 1 < seed length 2": 1
+  },
+  "oor-d3": {
+   "shortcut: d* 1 < seed length 3": 2,
+   "no vocab action moves away from the goal at init": 1
+  },
+  "oor-d4": {
+   "oor: the optimal plan stays in range": 1,
+   "shortcut: d* 2 < seed length 4": 2,
+   "no vocab action moves away from the goal at init": 2,
+   "shortcut: d* 3 < seed length 4": 1,
+   "an action tuple is used by another instance": 1
+  },
+  "oor-d5": {
+   "an action tuple is used by another instance": 2,
+   "no vocab action moves away from the goal at init": 1,
+   "shortcut: d* 2 < seed length 5": 2,
+   "shortcut: d* 3 < seed length 5": 1,
+   "shortcut: d* 4 < seed length 5": 1
+  },
+  "oor-d6": {
+   "shortcut: d* 4 < seed length 6": 2,
+   "shortcut: d* 3 < seed length 6": 2,
+   "shortcut: d* 5 < seed length 6": 1,
+   "an action tuple is used by another instance": 1
+  }
+ },
+ "fresh_rejections": [
+  {
+   "stratum": "in-d5",
+   "slot": 2,
+   "attempt": 3,
+   "why": "fresh: operative content in an exclusion source"
+  }
+ ],
+ "draws_per_accepted_instance": {
+  "1": 59,
+  "2": 39,
+  "3": 20,
+  "4": 12,
+  "5": 7,
+  "6": 5,
+  "8": 2,
+  "9": 2,
+  "10": 1,
+  "12": 2,
+  "16": 1
+ },
+ "freshness": {
+  "historical": true,
+  "sources": {
+   "historical": {
+    "payloads": 6464,
+    "operative": 6258,
+    "skipped_by_name_never_opened": [
+     "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+     "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+     "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+     "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+    ]
+   },
+   "bank_pilot.json": {
+    "payloads": 15629,
+    "operative": 15278,
+    "sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+   },
+   "bank_confirm.json": {
+    "payloads": 13552,
+    "operative": 13247,
+    "sha256": "8bc6e2f8a8c7cae5b7b66293ef12b0efc440c281f820eca9d384a659b26a6a16"
+   },
+   "bank_confirm2.json": {
+    "payloads": 12163,
+    "operative": 11903,
+    "sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea"
+   },
+   "bank_s4000.json": {
+    "payloads": 255745,
+    "operative": 250614,
+    "sha256": "af1336c261375524a4a6eaf92cc48dc76b1159df093ce2705d279688f22bb4ce"
+   },
+   "t2_train.jsonl": {
+    "payloads": 1501,
+    "operative": 1496,
+    "sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744"
+   },
+   "t2_eval.jsonl": {
+    "payloads": 600,
+    "operative": 600,
+    "sha256": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59"
+   },
+   "t2_eval_xframe.jsonl": {
+    "payloads": 600,
+    "operative": 600,
+    "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de"
+   },
+   "t2_eval_supp.jsonl": {
+    "payloads": 360,
+    "operative": 360,
+    "sha256": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086"
+   },
+   "SELECT-VIEWS-001": {
+    "payloads": 384,
+    "operative": 383,
+    "sha256": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3"
+   },
+   "l1_ood_bank.jsonl": {
+    "payloads": 600,
+    "operative": 600,
+    "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c"
+   },
+   "fds/T_BANK.json": {
+    "payloads": 192,
+    "operative": 192,
+    "sha256": "26c01effe9610230f7876bbe118792f85094605fe3dde5f873c78c67e1c493ba"
+   },
+   "fds/T_BANK_V2.json": {
+    "payloads": 192,
+    "operative": 192,
+    "sha256": "fc094136a5b581cb9cc03393b1e5959ed8f69247638c81e37cf7f68fbf132e01"
+   },
+   "cc1/T_BANK_V3X.json": {
+    "payloads": 864,
+    "operative": 864,
+    "sha256": "173aa372466d5e3cc8efbebe4cc7e7ba09a8eb34de4598ce8f9d96a2b8e6557c"
+   },
+   "cc2/STAGE_A_T_V3X.json": {
+    "payloads": 15,
+    "operative": 15,
+    "sha256": "635c9c7ea6851d4a0147a299ecd158a880b91fa5b9046b0af787d2ebbd6eb0d4"
+   },
+   "cc2/T_BANK_V4.json": {
+    "payloads": 864,
+    "operative": 864,
+    "sha256": "82f0a6423dd6b58b81319708e7fbda7c5880b9734742323ea11574ff354c93c0"
+   },
+   "bank_p3_oor.jsonl": {
+    "payloads": 1720,
+    "operative": 860,
+    "sha256": "0fd18295d6eaa84d0f451c94b81ea1ecf37ab88e8ab298b58820d80ac740bf12"
+   },
+   "data/t2_eval_substrata.jsonl": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "240ffddc7f50f7996716260ad2efe96756a2eacfd983f99f2878b93854ffdef6",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_dev.jsonl": {
+    "payloads": 1050,
+    "operative": 1050,
+    "sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_bbits.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "f95f6a802858ff29558b440f7daf88f5c2cf29559b6a07277bf494146450565b",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_dint.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "c57187b4b9b152d3647cf21d77fb3ada25f03eb814994de50bb6976b92e6365e",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_ffill.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "527fc4639d5747c315c8290414c4a3ba8e8270baf1ce8d40592b1d420d38399a",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_strace.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "ef8fba31d9a1606b300be3b965955ee29f4a5ae4c65333d9aba64dacc961bc66",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_chains.jsonl": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
+    "multi_event_objects": 384,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_dev.jsonl": {
+    "payloads": 900,
+    "operative": 900,
+    "sha256": "8b01899c60a0bb9d60ff2535531ec5c168564a9b98e313a034ac75ecff1a5427",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_filler.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "a3c8ada63535544b3e257294da53ba772d99415a158a5ab2cff9261e08f9ddc4",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_plain.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "7344677dff2538af1bff38f24d90e0e734fb0a1a424b42bb714bb9db9ae35ba7",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_trace.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "6c034182b2e96daad83b92dfaf0b7be943bf5bbb09d2a52adf166e2e7aefc5b2",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   }
+  },
+  "rule": "p3_make_bank.load_all_sources (l1_make_ood.harvest_historical skips HSKILL_CONFIRM_V2* by name, never opened; rcwmt.bank.load_exclusions() NOT called) + data/bank_p3_oor.jsonl transitions + every {before, event} payload of the other data/*.json[l] files"
+ },
+ "model_calls": 0,
+ "torch_imported": false,
+ "seconds": 0.9,
+ "overlap": {
+  "binding_transitions": 3898,
+  "payload_overlap": 0,
+  "operative_overlap": 0
+ },
+ "ball_overlap_depth2_descriptive": {
+  "depth": 2,
+  "transitions": 8904,
+  "payload_overlap": 0,
+  "operative_overlap": 0
+ },
+ "describe": {
+  "n": 150,
+  "per_stratum": {
+   "in-d2": 24,
+   "in-d3": 24,
+   "in-d4": 24,
+   "in-d5": 24,
+   "in-d6": 24,
+   "oor-d2": 6,
+   "oor-d3": 6,
+   "oor-d4": 6,
+   "oor-d5": 6,
+   "oor-d6": 6
+  },
+  "goal_type": {
+   "all": 105,
+   "subset": 45
+  },
+  "fixed_kinds": {
+   "random": 412,
+   "substitute": 300,
+   "void_swap": 300,
+   "opt": 150,
+   "order_swap": 38
+  },
+  "vocab_roles": {
+   "random": 551,
+   "void_twin": 229,
+   "core": 420
+  },
+  "vocab_effect_at_init": {
+   "away": 418,
+   "neutral": 397,
+   "toward": 385
+  },
+  "vocab_kinds": {
+   "scale": 325,
+   "transfer": 591,
+   "add": 284
+  },
+  "in_n_opt_plans_median_by_depth": {
+   "2": 2.0,
+   "3": 3.0,
+   "4": 12.0,
+   "5": 17.5,
+   "6": 30.0
+  },
+  "in_max_abs_balance_on_opt_plan": 98,
+  "in_fixed_mean_true_unmet": 82.95,
+  "oor_n_opt_plans_median_by_depth": {
+   "2": 2.0,
+   "3": 3.0,
+   "4": 4.0,
+   "5": 10.0,
+   "6": 51.0
+  },
+  "oor_max_abs_balance_on_opt_plan": 67824,
+  "oor_fixed_mean_true_unmet": 3439.93
+ },
+ "verify": {
+  "n": 150,
+  "problems": {},
+  "ok": true
+ },
+ "generator_sha256": "8f680afb7ab11fc323e10a6653a2a981043c93c45c6e0ad63b019ac5e760b8d0",
+ "built_utc": "2026-10-09T12:42:23Z",
+ "use": "DEV set for the joint beam harness and budget tuning (BWM + RCWM). NOT a confirmation set: the confirmation set is drawn at the joint freeze with a fresh seed and the same generator."
+}

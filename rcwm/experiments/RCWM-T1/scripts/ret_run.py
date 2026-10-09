@@ -24,10 +24,13 @@ confirm mode, the full first-token log-probability vector from a prefill forward
 
 Integrity before the lease: the kit freeze (docs/retention/RET_FREEZE.json) verifies; the draw hashes to its seal, was
 minted under this freeze, passed its freshness scan, has the purpose of the mode, and (confirm) was minted under the
-current DEV_SELECTION.json; T2 s0's adapter files equal the PREREG-2 pins; extra adapters are hashed (again at load,
-must be unchanged); no other RCWM job holds or waits for the GPU lease (one-waiter rule, R14); one runner per output
-directory (run lock). After each load: the parameter fingerprint and torch / transformers / peft == the registered
-runtime, else stop before anything is generated.
+current dev selection of its surface-diversity setting; the tokenizer files the runtime loads (tokenizer.json,
+tokenizer_config.json with the chat template, vocab.json, merges.txt) equal the pins in ret_common.TOKENIZER_PINS (bound
+by the freeze); T2 s0's adapter files equal the PREREG-2 pins; extra adapters are hashed (again at load, must be
+unchanged); no other RCWM job holds or waits for the GPU lease (one-waiter rule, R14); one runner per output directory
+(run lock). After each load: the parameter fingerprint, torch / transformers / peft == the registered runtime, and the
+sha256 of the loaded tokenizer's chat template == ret_common.CHAT_TEMPLATE_SHA, else stop before anything is
+generated. The tokenizer hashes and the chat-template hash are recorded in provenance.json.
 
 Outputs (create-only) under runs/retention/<draw_id>/: provenance.json, sparse/gen_<side>.jsonl (+ lp_<side>.npy),
 supa/gen_<side>.jsonl (+ lp_<side>.npy), DONE.json. A stage (SPARSE, SUPA) is written only when ALL its sides are
@@ -296,15 +299,20 @@ def adapter_base(d: Path) -> str:
     return str(cfg.get("base_model_name_or_path") or "")
 
 
-def preflight(cfg: Cfg) -> dict:
-    """Everything checked before the lease. Returns {rows, seal, adapters, freeze_sha}."""
+def preflight(cfg: Cfg, tokenizer_dir: Path | None = None) -> dict:
+    """Everything checked before the lease. Returns {rows, seal, adapters, freeze_sha256, tokenizer}."""
     root = Path(cfg.root)
     need(cfg.mode in STAGES, f"unknown mode {cfg.mode}")
     fz_sha = None
     if cfg.require_freeze:
-        ok, errs, _ = RC.verify_freeze(root)
+        ok, errs, fz = RC.verify_freeze(root)
         need(ok, "the retention kit freeze does not verify: " + "; ".join(errs[:4]))
+        need(fz.get("tokenizer_pins") == RC.TOKENIZER_PINS and fz.get("chat_template_sha256") == RC.CHAT_TEMPLATE_SHA,
+             "the freeze record does not carry the tokenizer / chat-template pins of the code")
         fz_sha = RC.sha256_file(root / "docs" / "retention" / "RET_FREEZE.json")
+    tdir = Path(tokenizer_dir or RC.TOKENIZER_DIR)
+    tp = RC.tokenizer_problem(tdir)
+    need(tp is None, f"{tp} in {tdir}: the runtime would load another tokenizer or chat template")
     rows, seal = RGEN.load_draw(cfg.draw)
     need(seal.get("purpose") == cfg.mode, f"draw purpose {seal.get('purpose')} != mode {cfg.mode}")
     if cfg.require_freeze:
@@ -312,9 +320,9 @@ def preflight(cfg: Cfg) -> dict:
     fr = seal.get("freshness") or {}
     need(cfg.allow_unscanned or fr.get("ok") is True, "the draw's freshness scan was skipped or failed")
     if cfg.mode == "confirm" and cfg.require_freeze:
-        sel = root / "docs" / "retention" / "DEV_SELECTION.json"
+        sel = root / RC.selection_rel(bool(seal.get("surface_diversity")))
         need(sel.is_file() and RC.sha256_file(sel) == seal.get("selection_sha256"),
-             "the draw was not minted under the current DEV_SELECTION.json")
+             f"the draw was not minted under the current {sel.name}")
     ads = {}
     for name in list(cfg.extra) + list(cfg.extra_supa):
         need(bool(NAME_RE.match(name)), f"adapter name {name!r} must match {NAME_RE.pattern}")
@@ -331,7 +339,8 @@ def preflight(cfg: Cfg) -> dict:
             need(cfg.allow_base_mismatch, f"adapter {name} was trained on {a['base_model_name_or_path']!r}, not "
                                           f"{CORE_DIRNAME[a['base']]} (pass --allow-base-mismatch to record and proceed)")
             a["base_mismatch_allowed"] = True
-    return {"rows": rows, "seal": seal, "adapters": ads, "freeze_sha256": fz_sha}
+    return {"rows": rows, "seal": seal, "adapters": ads, "freeze_sha256": fz_sha,
+            "tokenizer": {"dir": str(tdir), "files": RC.tokenizer_hashes(tdir)}}
 
 
 # ---------------------------------------------------------------- run lock and one-waiter rule
@@ -446,6 +455,9 @@ class RealBackend:
     def tokenizer(self):
         return self.rt.tokenizer()
 
+    def tokenizer_dir(self) -> Path:
+        return Path(self.rt.TOKENIZER_DIR)
+
     def unload(self) -> None:
         self.rt.unload(None)
 
@@ -537,8 +549,13 @@ def generate_side(model, tok, rows: list, max_new: int, backend, lp_out=None) ->
 
 
 # ---------------------------------------------------------------- the job
+def chat_template_sha(tok) -> str | None:
+    ct = getattr(tok, "chat_template", None)
+    return RC.sha256_bytes(ct.encode("utf-8")) if isinstance(ct, str) else None
+
+
 def run(cfg: Cfg, backend) -> int:
-    pf = preflight(cfg)
+    pf = preflight(cfg, backend.tokenizer_dir())
     rows, seal = pf["rows"], pf["seal"]
     out = cfg.out_dir(seal["draw_id"])
     if (out / "DONE.json").exists():
@@ -573,10 +590,13 @@ def _run_locked(cfg: Cfg, backend, out: Path, pf: dict) -> int:
         need({k: v["sha256"] for k, v in prov.get("adapters", {}).items()} ==
              {k: v["sha256"] for k, v in pf["adapters"].items()}, "adapter files differ from the first invocation's",
              persist=True)
+        need((prov.get("tokenizer") or {}).get("files") == pf["tokenizer"]["files"],
+             "tokenizer files differ from the first invocation's", persist=True)
     else:
         prov = {"draw_id": seal["draw_id"], "draw_sha256": seal["file_sha256"], "seal_sha256": RC.sha256_file(
             Path(cfg.draw).with_name(seal["draw_id"] + ".SEAL.json")), "mode": cfg.mode, "freeze_sha256": pf["freeze_sha256"],
             "registered": bool(cfg.require_freeze), "sides": stage_sides(cfg), "adapters": pf["adapters"],
+            "tokenizer": {**pf["tokenizer"], "chat_template_sha256_pin": RC.CHAT_TEMPLATE_SHA},
             "max_new_tokens": cfg.max_new, "lp": wants_lp(cfg), "stages": {}, "turns": []}
     prov["code_sha256"] = {r: RC.sha256_file(ROOT / r) for r in PROV_CODE if (ROOT / r).is_file()}
 
@@ -655,8 +675,12 @@ def _run_locked(cfg: Cfg, backend, out: Path, pf: dict) -> int:
                     raise Stop(f"[retention] {rp}: restore the registered environment (nothing generated in {st})",
                                persist=True)
                 turn[f"{which}_load_s"] = round(time.time() - t0, 1)
-                save()
                 tok = backend.tokenizer()
+                cts = chat_template_sha(tok)
+                turn[f"{which}_chat_template_sha256"] = cts
+                save()
+                need(cts == RC.CHAT_TEMPLATE_SHA, f"the loaded chat template hashes to {cts}, not the pinned "
+                     f"{RC.CHAT_TEMPLATE_SHA} (nothing generated in {st})", persist=True)
                 d = out / STAGE_DIR[st]
                 d.mkdir(parents=True, exist_ok=True)
                 res, times = {}, {}

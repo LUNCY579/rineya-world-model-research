@@ -582,3 +582,84 @@ Times are local (CDT). Entries are append-only.
       - The confirmations' primary outcome is out of range, held-out words included.
     - **(c) Joint item 3 (T2 as F in BWM's beam planner):** problems must stay inside T2's verified range (accounts A–D, posted/void, |amount| ≤ 12, |balance| ≤ 98, sorted keys). Out of range is reported only, where F is known to break.
     - **(d) Cross-programme:** this is the ledger counterpart of BWM F-01. The LoRA learned the surface form of the rule cases it saw, not the stated rule. Training data must vary the surface form of every rule.
+- **D-35 Joint rule after PREREG-3 (agreed with BWM, 2026-10-09 about 07:40): every claim gets a surface-form audit alongside the out-of-range audit.**
+  - **Audit contents:** names, key order and list order; for rules, also held-out trigger words.
+  - **Verdict meaning:** an audited stratum that is invariant counts as rule-level; one that is not counts as trigger-level.
+  - **BWM side:** BWM is running the Blocksworld delta world model in 5 renderings at 5 and 10 blocks (`scripts/bw_surface_audit.py`, CPU), then RW2.
+  - **RCWM side:** the T2b kits (D-34) and the joint item 3 problems carry surface-diversified training data, and their confirmations use held-out-surface primaries.
+- **R16 Joint finding, exploratory (2026-10-09 about 08:00): both LoRA world models are locked to JSON key order but invariant to names.**
+  - **BWM surface audit (BWM F-08),** on the Blocksworld delta world model, 120 keys at 5 and 10 blocks:
+    - training format 1.000;
+    - unseen block names 0.992;
+    - shuffled fact lists 1.000;
+    - reversed JSON key order 0.458;
+    - all changes 0.458.
+  - **RCWM (PREREG-3),** T2 ON:
+    - reordered keys 0.37–0.47 vs twins 0.87–0.91;
+    - more accounts 0.84–0.90;
+    - renamed letters 0.82–0.90, but word names 0.60–0.66.
+  - **Consequence (both sides):** augment input key and list order in training data, and test on held-out orders never seen in training.
+    - Target traces stay in literal cmp → calc → after order (D-34), with no target-order augmentation.
+    - Frozen planner results that always render the training format are unaffected.
+- **D-36 T2b kits after PREREG-3, and filler amendment 4b (2026-10-09 about 08:40).**
+  - **Kits built:** workflow wf_905f7b77-4e4, with 9 agents (draft, adversarial review and revision per kit). All were CPU only; no GPU, freeze or hook.
+    - 5a (`t2bp_*`, `docs/t2b/prereq/`) and 5c (`ret_*`, `docs/retention/`) had major issues at review, all fixed in revision.
+    - 5b (`t2br_*`, `docs/t2b/register/`) was reviewed and revised the same way.
+  - **Amendment 4b (filler), found by the 5b review and agreed with BWM (their D-55):**
+    - **Problem:** a filler matched per row to the trace's length leaks the answer. Fill length alone predicts wrap at 0.957 (training) and 0.970 (dev, out of range), and the conditional branch at 0.57–0.85. That gives the filler model a hidden scratch channel.
+    - **Fix:** the filler length is now a constant per (family or domain, action kind), at least the longest trace of that kind. The residual is reported as a covariate.
+    - **Status:** BWM has implemented it in `bwmn/traces.py`.
+  - **Operator decisions applied in finalisation workflow wf_1cd4bf8f-573 (5a, 5b):**
+    - **Decision point 1 fired:** the primary build is surface-diversified, with paraphrased rule text, field-name variants, and input key-order augmentation drawn from a train subset of permutations. Held out: the reversed order plus 2 fixed permutations, paraphrase 4, and field variant 4.
+    - **Held-out-surface stage:** a combined held-out rendering of the primary strata, paired by row.
+    - **5a:** ranking R = mean(K4, IAW, OOR, HS), where HS is held-out-surface accuracy. The answers to its open questions are recorded in DESIGN.md.
+    - **5b:**
+      - G1/G2 must hold both in-surface and on the held-out surface.
+      - G1 also requires +0.25 on cond_oor_val alone, which guards against a coarse tens-digit comparison.
+      - G3 uses the 4b filler.
+      - Accepted: the 5/6 identification bar, the distance bands, 190 steps, and point-estimate margins with SE flags.
+  - **5c gate sign-off:** the revised retention gate is accepted.
+    - **Revised gate:** a NO-GO on any of: a Holm-McNemar detected loss in a category, a category net below −11, or a pooled net below −4% of items, under both graders.
+    - **Old rule:** "net ≥ −5/75 per category", kept as a reported flag.
+    - **Reason:** the old rule had a false NO-GO rate of 0.11–0.50 under ordinary churn. The new gate's operating characteristics were simulated before any model output.
+    - **Main limitation:** losses of 6–12 items confined to one category are often missed.
+  - **Executed (08:00–08:08):**
+    - Retention suite frozen: `ret_gen.py freeze`, 14 files, `docs/retention/RET_FREEZE.json`.
+    - Dev draw minted: dev_20261121, 2,025 prompts, sha 348d83b9…, equal to the preview.
+    - Freshness: a scan over 15k files (BWM bundle included) found 0 hits.
+    - Hook `scripts/queue_hooks/65_retention_dev.sh` installed. It runs a Supa-only dev run (0.24–0.60 GPU-h, lease `rcwm-t1:retention`), then `ret_analysis.py dev-select`, which writes the create-only DEV_SELECTION.json.
+    - The chain was stopped and relaunched again while `run_lik --arm sparse` was only waiting. BWM's bundleD held the lease, and no partial output was left.
+    - The retention dev run is now the single RCWM waiter. The T2b screen hooks (5a, 5b) go in at the next safe point, once those kits are frozen.
+- **I-30 User restart (2026-10-09 09:41:49); recovered 12:02–12:03.**
+  - **Cause:** System event 1074, a Start-menu restart by the user ("Other (Unplanned)"). It was a clean shutdown; the last-shutdown status is true.
+  - **State at the restart:**
+    - BWM's bundleD had just released the lease, at 09:41:50.
+    - RCWM had only a waiter (retention dev, `ret_run.py`), which held no lease. Nothing RCWM was lost.
+    - Two CPU workflows were cut off by a usage limit and resumed with interruption notes: kit finalisation wf_1cd4bf8f-573 and the ledger-beam revise step wf_0012b286-d48.
+  - **Recovery:**
+    - 12:02: thermal watchdog relaunched. It is the only flag writer; BWM's health logger never writes the flag.
+    - 12:03: master chain relaunched.
+    - BWM set a one-shot yield after its turn was cut short. The retention dev run acquired the lease at about 12:03.
+  - **Housekeeping:** REPORT.md and RESULTS_PILOT.md had picked up CRLF line endings from Python text-mode writes on Windows. They were normalised back to LF; the content is unchanged and no freeze pins either file. From now on, scripts write files with `newline='\n'`.
+- **D-37 Joint item 3 kit ready: the ledger world model for BWM's beam planner (2026-10-09 about 12:40).**
+  - **Build:** workflow wf_0012b286-d48 (build, adversarial review with minor issues, revise; the revise step resumed after I-30). 73/73 CPU checks pass.
+  - **Files:**
+    - `scripts/lbeam_f.py` 9a76562c…, `lbeam_problems.py` 2353e2fc…, `lbeam_proposer.py` 6c555d2e…, `lbeam_test.py` 1f21b65f…;
+    - `docs/ledger_beam/INTERFACE.md` rev 3, 6404d644…;
+    - dev sets `dev2_primary` (120 instances, bb63aef4…) and `dev2_oor` (30 instances, descriptive).
+  - **Range rule from PREREG-3, enforced by construction:**
+    - Every state reachable within 8 vocabulary steps has |b| ≤ 98 (an independent re-check covered 603,187 states).
+    - Amounts take trained values only, and statuses are posted or void only.
+    - `beam_kwargs` sets max_depth = 8 − candidate length.
+    - `RangeGuardF` is registered for every arm.
+    - `LedgerF` renders only the canonical frame and checks every prompt byte for byte against `env.one_step_messages`.
+  - **ORACLE sizing:**
+    - Enumerating beam: success 0.85 at W2 E12 (62 calls/instance), 0.90 at W4 E24, 0.967 at W8 E48, with precision 1.000.
+    - Fixed-candidate selection: 1.000 at 22.8 calls. Its candidate set contains the optimal plan, so it is a different regime and is not used as the primary comparator.
+  - **Positions sent to BWM for the joint preregistration:**
+    - **Primary:** beam(T2) vs beam(OFF), paired success at the same config, with T2/ORACLE as a ratio.
+    - **Budget:** enum W2 E12 primary, W4 E24 secondary. The proposer is model-free.
+    - **Claim scope:** T2's training surface only.
+    - **Before planning:** rerun the A0 anchor, and mint a fresh confirmation draw at the freeze.
+    - **Runner:** RCWM writes `lbeam_run.py`; BWM drafts the prereg text.
+  - **GPU:** about 1.7 h for 120 instances (T2 + OFF, fixed + W2 E12).

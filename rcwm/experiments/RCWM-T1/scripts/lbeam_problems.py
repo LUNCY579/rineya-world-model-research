@@ -1,11 +1,32 @@
 """Ledger PLANNING problems for the joint RCWM-T1 x BWM-001 beam test (joint roadmap item 3). Torch-free and model-free:
 no model, tokenizer or model output is used anywhere in this module.
 
-  python -B scripts/lbeam_problems.py --make-dev            # writes docs/ledger_beam/dev_set.jsonl + dev_set.SOURCE.json
-                                                            # (create-only; full freshness incl. the name-skipping harvest)
+  python -B scripts/lbeam_problems.py --make-dev            # writes the two DEV sets (create-only; full freshness incl.
+                                                            # the name-skipping harvest):
+                                                            #   docs/ledger_beam/dev2_primary.jsonl (+ .SOURCE.json)
+                                                            #   docs/ledger_beam/dev2_oor.jsonl     (+ .SOURCE.json)
   python -B scripts/lbeam_problems.py --verify <set.jsonl>  # re-checks every instance from the file (BFS depth, plans,
-                                                            # fixed candidates, oracle); --fresh also re-checks freshness
+                                                            # fixed candidates, oracle, reachable-state closure);
+                                                            # --fresh also re-checks freshness
   python -B scripts/lbeam_problems.py --describe <set.jsonl>
+
+Generator v2 (2026-10-09, after PREREG-3 = STATUS: TRIGGER, REPORT section 3c; DECISIONS D-34(c)). T2 is reliable only
+inside its trained surface: accounts A-D, statuses posted / void, |amount| <= 12 (the 21 trained values -9..12),
+|balance| <= 98, canonical sorted keys. Out of range it breaks (amounts 13-490: 0.14-0.25; reordered keys 0.37-0.47;
+4-5 digit balances 0.50-0.60). Hence:
+  * PRIMARY sets contain only 'in' instances, and every 'in' instance is CLOSED under its vocabulary: every state
+    reachable from init by ANY sequence of <= d_close (D_CLOSE = 8) vocabulary actions has |balance| <= 98 (BFS over
+    all reachable states; enforced at generation, re-derived by verify_instances and the tests). Every vocabulary action
+    has a trained amount and status posted / void, accounts are A-D, and lbeam_f.LedgerF renders only the canonical
+    sorted-key frame, so with the registered plan_beam max_depth (registered_max_depth: d_close minus the simulated
+    candidate length) EVERY F input and every exact F output of a search lies inside T2's trained surface. Because each
+    void twin performs the arithmetic of a posted vocabulary action, the rule-blind dynamics (void applied as posted:
+    OFF's dominant error) reach exactly the same states, so the closure covers them too. A consequence of closure:
+    scale actions in a primary set have factor 0 or -1 (a factor |k| >= 2 on an account that is non-zero in a
+    reachable state escapes |b| <= 98 within 8 applications).
+  * Out-of-range problems are a SEPARATE, DESCRIPTIVE set (range 'oor', its own seed); never a primary, never guarded.
+  * The v1 dev set (docs/ledger_beam/dev_set.jsonl, generator v1, seed 20261141: 120 'in' + 30 'oor', no closure) is
+    SUPERSEDED: 103 of its 120 'in' instances fail the closure at depth 8. Kept unchanged as a record only.
 
 Domain (rcwmt.env, ledger_replay; Titan's one-step semantics):
   state   hashable canonical tuple (("A", a), ("B", b), ("C", c), ("D", d)), accounts sorted, int balances
@@ -32,12 +53,23 @@ Instance (one per stratum slot; RNG keyed on (set seed, range, depth, slot, atte
            A slot of depth d accepts a draw only if d* == d (the seed plan has length d, so d* <= d; shortcuts are
            rejected).
   strata   depth d* in 2..6 x range:
-           'in'  : init, goal, every vocab amount (the 21 trained values -9..12) and every state on the stored optimal
-                   plan inside T2's training range (|b| <= 98); the stored plan is the in-range BFS plan and must be
-                   optimal overall (bounded and unbounded BFS agree on d*).
-           'oor' : REPORT STRATUM ONLY (PREREG-3 maps whether the rule holds out of range): posted add/transfer amounts
-                   +-13..99 w.p. .5 and init balances +-100..999 w.p. .4 per account; the stored optimal plan must touch
-                   an out-of-range amount or state. Statuses stay posted / void in both strata.
+           'in'  : (PRIMARY sets) init, goal and every vocab amount (the 21 trained values -9..12) inside T2's
+                   training range AND the reachable-state closure above (every state within d_close steps has
+                   |b| <= 98); hence the BFS plan is in range and bounded and unbounded BFS agree on d*.
+           'oor' : (DESCRIPTIVE set only, permanently): PREREG-3 found that magnitude does NOT generalise for T2
+                   (M_bal|at s0 0.46 vs 0.84 on in-distribution twins) and D-34(c) keeps the joint item 3 primary inside
+                   T2's verified range; out of range is reported only, where F is known to break. Posted add/transfer
+                   amounts +-13..99 w.p. .5 and init balances +-100..999 w.p. .4 per account; the stored optimal plan
+                   must touch an out-of-range amount or state. Statuses stay posted / void.
+           With an EXACT F the closure makes every state a registered search can imagine in range. A model F can still
+           imagine a WRONG state outside the range (an arithmetic error near the bound); lbeam_f.RangeGuardF makes F
+           return None for such inputs, identically for every arm (inert under ORACLE on a primary set; tested).
+  floors   answer-free reference points (computed, not stored): void_free_floor(inst) = success of a uniform pick
+           among the fixed candidates that contain no void action (the optimal plan never contains one: a no-op
+           step cannot be on a shortest plan; void_swap distractors always do); greedy_solvable(inst) = greedy
+           one-step descent on the TRUE unmet hook with the full vocabulary (ties: vocabulary order, up to D_MAX
+           steps) reaches the goal. score() reports success separately for greedy-solvable and needs-lookahead
+           instances, so a planning claim is not carried by instances that greedy descent already solves.
   fixed    the PREREG-2-style fixed-candidate view: K = 8 candidate plans of length d*, one optimal plus near-miss and
            random distractors (void_swap: one posted step replaced by a void action; order_swap: two adjacent steps
            swapped; substitute: one step replaced by another vocab action; random), each distractor truly NOT reaching
@@ -49,10 +81,13 @@ transition (init x every vocab action, every step of the stored optimal plan, ev
 equals one of: the exclusion union of scripts/p3_make_bank.load_all_sources (the historical records harvested by
 scripts/l1_make_ood.harvest_historical, which skips files named HSKILL_CONFIRM_V2* by NAME, never opened or hashed;
 rcwmt.bank.load_exclusions() is NOT called; the four RCWM banks; the T2 files; SELECT-VIEWS-001; the L1 OOD bank; the
-pinned FDS-era banks), every transition of data/bank_p3_oor.jsonl (PREREG-3), and every {before, event} payload of every
-other data/*.json[l] file (incl. the concurrent T2b/T2br data; recorded with sha256 at build time). A colliding draw is
-redrawn (next attempt of the same slot), so a set is deterministic given (seed, spec, exclusion union) and its sha
-equals the no-exclusion build whenever no draw collided (recorded).
+pinned FDS-era banks), every transition of data/bank_p3_oor.jsonl (PREREG-3), and every {before, event} payload and
+every rolled-out ledger multi-event transition ({before|s0, events}, {s0, candidates}) of every other data/*.json[l]
+file (incl. the concurrent T2b/T2br data; each recorded with its sha256 at build time). The test suite additionally rolls
+out every multi-event ledger prompt of the records tree (p3_make_bank.status_census, same name-skipping walk). A
+colliding draw is redrawn (next attempt of the same slot) and recorded in the SOURCE record's 'fresh_rejections'; a set
+is therefore reproducible byte for byte from (seed, spec, recorded rejections) without loading the exclusion union
+(make_set(..., replay_rejections=...); --verify does this).
 """
 from __future__ import annotations
 
@@ -77,7 +112,7 @@ for _p in (str(ROOT), str(ROOT / "scripts")):
         sys.path.insert(0, _p)
 from rcwmt import env  # noqa: E402  (torch-free)
 
-GEN_VERSION = "lbeam-problems-v1"
+GEN_VERSION = "lbeam-problems-v2"   # v2: reachable-state closure for 'in'; primary and oor drawn as separate sets
 LEDGER = "ledger_replay"
 ACCOUNTS = env.ACCOUNTS
 AIDX = {a: i for i, a in enumerate(ACCOUNTS)}
@@ -85,14 +120,19 @@ ACTION_FIELDS = ("kind", "account", "other", "amount", "status", "tick")
 KIND_CODE = {"add": 0, "scale": 1, "transfer": 2}
 IN_RANGE_MAX_ABS = 98            # T2 training: max |before| = 98 (data/t2_train.jsonl, PREREG_3 §1)
 D_MIN, D_MAX = 2, 6
+D_CLOSE = 8                      # closure depth of a primary instance (>= any F input / exact output depth of a
+                                 # registered search: plan_beam max_depth = D_CLOSE - simulated candidate length)
 V_DEFAULT = 8
 K_FIXED = 8
 OOR_AMT = (13, 99)
 OOR_BAL = (100, 999)
-DEV_SEED = 20261141              # not used by any earlier RCWM-T1 builder, analysis or bootstrap (grep, 2026-10-09)
-MAX_ATTEMPTS = 5000
+DEV_SEED_V1 = 20261141           # spent: the superseded v1 dev set (docs/ledger_beam/dev_set.jsonl)
+DEV_SEED = 20261142              # v2 primary dev set (grep over both bundles, 2026-10-09 12:10: unused elsewhere)
+DEV_OOR_SEED = 20261143          # v2 descriptive out-of-range dev set (same grep)
+MAX_ATTEMPTS = 20000
 DOCS = ROOT / "docs" / "ledger_beam"
 RANGES = ("in", "oor")
+SET_FILES = {"primary": "dev2_primary.jsonl", "oor": "dev2_oor.jsonl"}
 
 
 # ------------------------------------------------------------------------------------------------ canonical forms
@@ -236,6 +276,60 @@ def bfs_plan(state: tuple, goal: tuple, vocab, dmax: int = D_MAX) -> list | None
     return None if r is None else [vocab[i] for i in r["plan"]]
 
 
+# ------------------------------------------------------------------------------------------------ reachable-state closure
+def closure(init_v: tuple, comp: list, depth: int = D_CLOSE, bound: int = IN_RANGE_MAX_ABS, ignore_status: bool = False,
+            keep: bool = False) -> dict:
+    """BFS over EVERY state reachable from init_v by any sequence of <= depth compiled vocabulary actions (all orders,
+    repetition allowed). ok iff every such state has |balance| <= bound for all four accounts; stops at the first
+    violation. ignore_status: the rule-blind dynamics (every action applied as posted). Returns {ok, n_states, max_abs,
+    first_violation_depth, states (if keep)}."""
+    if ignore_status:
+        comp = [c[:4] + (True,) for c in comp]
+    comp = list(dict.fromkeys(c for c in comp if c[4]))    # non-posted actions are the identity: no new states
+    seen = {init_v}
+    layer = [init_v]
+    mx = max(abs(x) for x in init_v)
+    if mx > bound:
+        return {"ok": False, "n_states": 1, "max_abs": mx, "first_violation_depth": 0}
+    for d in range(1, depth + 1):
+        nxt = []
+        for s in layer:
+            for c in comp:
+                ns = vstep(s, c)
+                if ns in seen:
+                    continue
+                m = max(abs(ns[0]), abs(ns[1]), abs(ns[2]), abs(ns[3]))
+                if m > bound:
+                    return {"ok": False, "n_states": len(seen), "max_abs": m, "first_violation_depth": d}
+                if m > mx:
+                    mx = m
+                seen.add(ns)
+                nxt.append(ns)
+        if not nxt:
+            break
+        layer = nxt
+    out = {"ok": True, "n_states": len(seen), "max_abs": mx, "first_violation_depth": None}
+    if keep:
+        out["states"] = seen
+    return out
+
+
+def inst_closure(inst: dict, depth: int | None = None, ignore_status: bool = False, keep: bool = False) -> dict:
+    return closure(vec(inst["init"]), [compile_action(a) for a in inst["vocab"]],
+                   inst.get("closure", {}).get("depth", D_CLOSE) if depth is None else depth,
+                   ignore_status=ignore_status, keep=keep)
+
+
+def registered_max_depth(sim_len: int, d_close: int = D_CLOSE) -> int:
+    """plan_beam's max_depth for a primary set: BWM keeps nodes of depth <= max_depth and rolls each expanded node's
+    candidates out for sim_len steps (sim_len = the candidate length, or max_rollout if smaller), so F inputs lie at
+    depth <= max_depth + sim_len - 1 and exact F outputs at depth <= max_depth + sim_len. With max_depth = d_close -
+    sim_len every one of them is a closure state (|b| <= 98)."""
+    if not 1 <= sim_len <= d_close:
+        raise ValueError(f"simulated candidate length {sim_len} outside 1..{d_close}")
+    return d_close - sim_len
+
+
 # ------------------------------------------------------------------------------------------------ marginals and draws
 _M: list = []
 
@@ -298,13 +392,28 @@ def _rollout(s: tuple, plan) -> list:
 
 @dataclass
 class SetSpec:
-    name: str = "dev"
+    """A problem set. A PRIMARY set has n_oor_per_depth = 0; the descriptive out-of-range set has n_in_per_depth = 0
+    (separate seed). d_close: closure depth of every 'in' instance."""
+    name: str = "dev2p"
     seed: int = DEV_SEED
     n_in_per_depth: int = 24
-    n_oor_per_depth: int = 6
+    n_oor_per_depth: int = 0
     depths: tuple = (2, 3, 4, 5, 6)
     V: int = V_DEFAULT
     K: int = K_FIXED
+    d_close: int = D_CLOSE
+
+
+def primary_spec(**kw) -> SetSpec:
+    return SetSpec(**{"name": "dev2p", "seed": DEV_SEED, "n_in_per_depth": 24, "n_oor_per_depth": 0, **kw})
+
+
+def oor_spec(**kw) -> SetSpec:
+    return SetSpec(**{"name": "dev2x", "seed": DEV_OOR_SEED, "n_in_per_depth": 0, "n_oor_per_depth": 6, **kw})
+
+
+def spec_from_record(rec: dict) -> SetSpec:
+    return SetSpec(**{**rec["spec"], "depths": tuple(rec["spec"]["depths"])})
 
 
 def _fixed_candidates(rng, init, goal, vocab, opt_plan, K) -> dict:
@@ -432,19 +541,24 @@ def draw_instance(spec: SetSpec, rng_range: str, d: int, slot: int, attempt: int
         return None, "no vocab action moves away from the goal at init"
     comp = [compile_action(a) for a in vocab]
     gc = _goal_c(goal)
+    clo = None
+    if not oor:
+        if any(abs(v) > IN_RANGE_MAX_ABS for _, v in init) or any(abs(t) > IN_RANGE_MAX_ABS for _, t in goal):
+            return None, "in: init or goal out of range"
+        if any(a[3] not in M["amount_set"] or a[4] not in ("posted", "void") for a in vocab):
+            return None, "in: vocab amount / status out of range"
+        clo = closure(vec(init), comp, spec.d_close)
+        if not clo["ok"]:
+            return None, f"in: closure: a state within {spec.d_close} steps leaves |b| <= {IN_RANGE_MAX_ABS}"
     full = bfs(vec(init), comp, gc, d)
     if full is None:
         raise AssertionError("the seed plan reaches the goal, so BFS must")
     if full["depth"] != d:
         return None, f"shortcut: d* {full['depth']} < seed length {d}"
     if not oor:
-        if any(abs(v) > IN_RANGE_MAX_ABS for _, v in init) or any(abs(t) > IN_RANGE_MAX_ABS for _, t in goal):
-            return None, "in: init or goal out of range"
-        if any(a[3] not in M["amount_set"] for a in vocab):
-            return None, "in: vocab amount out of range"
         bnd = bfs(vec(init), comp, gc, d, bound=IN_RANGE_MAX_ABS)
-        if bnd is None or bnd["depth"] != d:
-            return None, "in: no in-range optimal plan"
+        if bnd is None or bnd["depth"] != d or bnd["plan"] != full["plan"] or bnd["n_opt"] != full["n_opt"]:
+            raise AssertionError("closure holds, so the bounded and unbounded BFS must agree")
         plan_idx, n_opt_in = bnd["plan"], bnd["n_opt"]
     else:
         plan_idx, n_opt_in = full["plan"], None
@@ -476,7 +590,9 @@ def draw_instance(spec: SetSpec, rng_range: str, d: int, slot: int, attempt: int
             "opt_plan": opt_plan, "opt_states": opt_states, "n_opt_plans": full["n_opt"],
             "n_opt_plans_in_range": n_opt_in, "n_goal_states_at_depth": full["n_goal_states"],
             "bfs_explored": full["explored"], "oor_features": oor_feat, "fixed": fixed,
-            "init_unmet": u0}
+            "init_unmet": u0,
+            "closure": None if clo is None else {"depth": spec.d_close, "bound": IN_RANGE_MAX_ABS,
+                                                 "n_states": clo["n_states"], "max_abs": clo["max_abs"]}}
     return inst, None
 
 
@@ -569,15 +685,64 @@ def load_exclusions(historical: bool = True, extra_data: bool = True, log=print)
                 rec[f"data/{p.name}"] = {"error": f"{type(e).__name__}: {e}"}
                 continue
             e_ops = L1.op_keys_of_payloads(e_pay)
-            rec[f"data/{p.name}"] = {"payloads": len(e_pay), "operative": len(e_ops), "sha256": sha}
-            pay |= e_pay
-            ops |= e_ops
+            m_pay, m_ops, n_obj = _multi_event_ledger_transitions(p, MB, L1)
+            rec[f"data/{p.name}"] = {"payloads": len(e_pay), "operative": len(e_ops), "sha256": sha,
+                                     "multi_event_objects": n_obj, "multi_event_transitions": len(m_pay)}
+            pay |= e_pay | m_pay
+            ops |= e_ops | m_ops
     log(f"[lbeam] exclusion union: {len(pay)} payloads, {len(ops)} operative contents from {len(rec)} sources "
         f"({time.time() - t0:.0f}s)")
     return {"pay": pay, "ops": ops, "sources": rec, "historical": historical, "build_log": lines,
             "rule": ("p3_make_bank.load_all_sources (l1_make_ood.harvest_historical skips HSKILL_CONFIRM_V2* by name, "
                      "never opened; rcwmt.bank.load_exclusions() NOT called) + data/bank_p3_oor.jsonl transitions + every "
                      "{before, event} payload of the other data/*.json[l] files")}
+
+
+def _multi_event_ledger_transitions(path: Path, MB, L1) -> tuple:
+    """Every (state, event) of every LEDGER multi-event object in a data file, rolled out with env.step: {before|s0,
+    events} objects (p3_make_bank._multi_event_objects, also JSON-in-string) and {s0, candidates: [{events}]} parents."""
+    pay, ops, n_obj = set(), set(), 0
+    raw = path.read_text(encoding="utf-8", errors="ignore")
+    if '"events"' not in raw and '\\"events\\"' not in raw:
+        return pay, ops, 0
+    docs = []
+    if path.suffix == ".jsonl":
+        for line in raw.splitlines():
+            if '"events' in line or '\\"events' in line:
+                try:
+                    docs.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+    else:
+        try:
+            docs.append(json.loads(raw))
+        except json.JSONDecodeError:
+            pass
+    del raw
+
+    def objects(doc):
+        yield from MB._multi_event_objects(doc)
+        stack = [doc]
+        while stack:
+            cur = stack.pop()
+            if isinstance(cur, dict):
+                if isinstance(cur.get("s0"), dict) and isinstance(cur.get("candidates"), list):
+                    for c in cur["candidates"]:
+                        if isinstance(c, dict) and isinstance(c.get("events"), list):
+                            yield cur["s0"], c["events"]
+                stack.extend(cur.values())
+            elif isinstance(cur, list):
+                stack.extend(cur)
+    for doc in docs:
+        for st, evs in objects(doc):
+            n_obj += 1
+            try:
+                for b, e in MB._rollout_items(st, evs):
+                    pay.add(L1.payload(b, e))
+                    ops.add(L1.opkey(LEDGER, b, e))
+            except (KeyError, TypeError, ValueError):
+                continue
+    return pay, ops, n_obj
 
 
 def fresh_problem(inst: dict, excl: dict | None) -> str | None:
@@ -626,15 +791,22 @@ def ball_overlap(insts: list, excl: dict, depth: int = 2) -> dict:
 
 
 # ------------------------------------------------------------------------------------------------ set generation
-def make_set(spec: SetSpec, excl: dict | None = None, log=None) -> tuple:
+def make_set(spec: SetSpec, excl: dict | None = None, log=None, replay_rejections=None) -> tuple:
     """(instances, record). Deterministic given (spec, exclusion union): the RNG of every draw is keyed on
-    (GEN_VERSION, seed, range, depth, slot, attempt); strata are filled in a fixed order."""
+    (GEN_VERSION, seed, range, depth, slot, attempt); strata are filled in a fixed order. replay_rejections: the
+    'fresh_rejections' list of a build record; those draws are rejected again WITHOUT loading the exclusion union, so a
+    set built with freshness is reproduced byte for byte from (seed, spec, recorded rejections) alone."""
+    replay = {(r["stratum"], r["slot"], r["attempt"]) for r in (replay_rejections or [])}
+    if spec.n_in_per_depth and spec.d_close < max(spec.depths):
+        raise ValueError("d_close must be >= every optimal depth of the set")
     t0 = time.time()
     insts, rejected, used_actions = [], {}, set()
     attempts_hist = Counter()
     fresh_rejections = []
     for rr in RANGES:
         n = spec.n_in_per_depth if rr == "in" else spec.n_oor_per_depth
+        if not n:
+            continue
         for d in spec.depths:
             rej = rejected.setdefault(f"{rr}-d{d}", Counter())
             for slot in range(n):
@@ -644,6 +816,8 @@ def make_set(spec: SetSpec, excl: dict | None = None, log=None) -> tuple:
                         inst, why = None, "an action tuple is used by another instance"
                     if inst is not None:
                         why = fresh_problem(inst, excl)
+                        if not why and (f"{rr}-d{d}", slot, attempt) in replay:
+                            why = "fresh: replayed rejection (recorded at build)"
                         if why:
                             fresh_rejections.append({"stratum": f"{rr}-d{d}", "slot": slot, "attempt": attempt, "why": why})
                             inst = None
@@ -660,6 +834,7 @@ def make_set(spec: SetSpec, excl: dict | None = None, log=None) -> tuple:
                 log(f"[lbeam] {rr} d{d}: {n} instances; rejected {dict(rej)} ({time.time() - t0:.1f}s)")
     text = dumps_set(insts)
     rec = {"record": "LBEAM_PROBLEM_SET", "generator": GEN_VERSION, "spec": asdict(spec), "n": len(insts),
+           "kind": "primary" if not spec.n_oor_per_depth else ("oor_descriptive" if not spec.n_in_per_depth else "mixed"),
            "file_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
            "per_stratum": dict(Counter(f"{i['range']}-d{i['depth']}" for i in insts)),
            "rejected": {k: dict(v) for k, v in rejected.items()}, "fresh_rejections": fresh_rejections,
@@ -707,10 +882,81 @@ def load_set(path: Path) -> list:
     return [from_json(json.loads(l)) for l in Path(path).read_text(encoding="utf-8").splitlines() if l.strip()]
 
 
-def planner_instances(insts: list) -> list:
+PLANNER_FIELDS = ("id", "init", "goal", "objs")
+
+
+def planner_instances(insts: list, blind: bool = True) -> list:
     """The dicts BWM's plan_beam takes: id, init (hashable state), goal (hashable), objs (the vocab tuple, forwarded by
-    plan_beam to the proposer's items), plus the full record under 'rec'."""
-    return [{"id": i["id"], "init": i["init"], "goal": i["goal"], "objs": tuple(i["vocab"]), "rec": i} for i in insts]
+    plan_beam to the proposer's items). blind=True (the default, and the only form handed to BWM for registered runs)
+    carries NOTHING else: no optimal plan, seed plan, vocab roles or fixed candidates. blind=False adds the full record
+    under 'rec' (RCWM-side harness use only; scoring and the fixed-candidate baseline take the records directly)."""
+    out = []
+    for i in insts:
+        d = {"id": i["id"], "init": i["init"], "goal": i["goal"], "objs": tuple(i["vocab"])}
+        if not blind:
+            d["rec"] = i
+        out.append(d)
+    return out
+
+
+def in_range_actions(insts: list) -> frozenset:
+    """Every vocabulary action of the 'in' instances: the keys lbeam_f.RangeGuardF guards (applies_to=...)."""
+    return frozenset(a for i in insts if i["range"] == "in" for a in i["vocab"])
+
+
+def trained_amounts() -> frozenset:
+    """The 21 amounts T2 was trained on (-9..12; the recorded marginal)."""
+    return marg()["amount_set"]
+
+
+def in_verified_range(state: tuple, action: tuple, bound: int = IN_RANGE_MAX_ABS) -> bool:
+    """D-34(c): T2's verified range for an F INPUT: every balance |b| <= 98, an amount T2 was trained on, status
+    posted / void (accounts A-D are guaranteed by is_state). Model-free: reads only the (imagined) input."""
+    return (all(abs(v) <= bound for _, v in state) and action[3] in marg()["amount_set"]
+            and action[4] in ("posted", "void"))
+
+
+# ------------------------------------------------------------------------------------------------ answer-free floors
+_GREEDY: dict = {}
+
+
+def greedy_solvable(inst: dict) -> bool:
+    """Greedy one-step descent on the TRUE unmet hook with the full vocabulary (ties: vocabulary order; it may also
+    step sideways or uphill), up to D_MAX steps, reaches the goal. Model-free; an instance property."""
+    key = (inst["id"], inst["init"], inst["goal"])
+    if key not in _GREEDY:
+        s, g = inst["init"], inst["goal"]
+        for _ in range(D_MAX):
+            if goal_met(s, g):
+                break
+            s = min((step_state(s, a) for a in inst["vocab"]), key=lambda x: unmet(x, g))
+        _GREEDY[key] = goal_met(s, g)
+    return _GREEDY[key]
+
+
+def void_free_floor(inst: dict) -> float:
+    """Success of a uniform pick among the fixed candidates without a void action (an answer-free floor of the fixed
+    view: the optimal plan never contains a void step, every void_swap distractor does)."""
+    vf = [j for j, c in enumerate(inst["fixed"]["cands"]) if all(a[4] == "posted" for a in c)]
+    if inst["fixed"]["opt_index"] not in vf:
+        raise AssertionError(f"{inst['id']}: the optimal plan contains a void step")
+    return 1.0 / len(vf)
+
+
+def answer_free_floors(insts: list) -> dict:
+    out = {}
+    for rr in ("all",) + RANGES:
+        sub = [i for i in insts if rr == "all" or i["range"] == rr]
+        if not sub:
+            continue
+        out[rr] = {"n": len(sub), "fixed_uniform_over_K": round(statistics.fmean(1 / i["fixed"]["K"] for i in sub), 4),
+                   "fixed_uniform_over_void_free": round(statistics.fmean(void_free_floor(i) for i in sub), 4),
+                   "greedy_true_unmet_solves": sum(greedy_solvable(i) for i in sub),
+                   "greedy_true_unmet_rate": round(sum(greedy_solvable(i) for i in sub) / len(sub), 4),
+                   "greedy_rate_by_depth": {str(d): round(statistics.fmean(greedy_solvable(i) for i in sub
+                                                                          if i["opt_depth"] == d), 4)
+                                            for d in sorted({i["opt_depth"] for i in sub})}}
+    return out
 
 
 def owner_of_action(insts: list) -> dict:
@@ -754,6 +1000,7 @@ def score(insts: list, eps: list, calls_by_id: dict | None = None) -> tuple:
         ex = execute(i, e.get("plan") or [])
         den = statistics.fmean(i["fixed"]["true_unmet"])
         rows.append({"id": i["id"], "range": i["range"], "depth": i["opt_depth"], "success": ex["success"],
+                     "lookahead": "greedy" if greedy_solvable(i) else "needs_lookahead",
                      "valid": ex["valid"], "verified": bool(e.get("verified")), "len": len(e.get("plan") or []),
                      "optimal_len": bool(ex["success"] and len(e.get("plan") or []) == i["opt_depth"]),
                      "unmet": ex["unmet"], "nregret": ex["unmet"] / den if den else None, "fail": e.get("fail"),
@@ -767,15 +1014,27 @@ def score(insts: list, eps: list, calls_by_id: dict | None = None) -> tuple:
             "optimal_length_rate": sum(r["optimal_len"] for r in rows) / n,
             "mean_nregret": statistics.fmean(r["nregret"] for r in rows if r["nregret"] is not None),
             "proposer_tokens_per_instance": sum(r["gen_tokens"] for r in rows) / n}
-    for key in ("range", "depth"):
+    for key in ("range", "depth", "lookahead"):
         g = {}
         for r in rows:
             g.setdefault(r[key], []).append(r["success"])
         summ[f"success_by_{key}"] = {str(k): round(sum(v) / len(v), 4) for k, v in sorted(g.items())}
+    g = {}
+    for r in rows:
+        if r["range"] == "in":
+            g.setdefault(r["lookahead"], []).append(r["success"])
+    summ["success_in_by_lookahead"] = {k: round(sum(v) / len(v), 4) for k, v in sorted(g.items())}
+    vin = [r for r in ver if r["range"] == "in"]
+    summ["verification_precision_in"] = (sum(r["success"] for r in vin) / len(vin)) if vin else None
     if calls_by_id is not None:
         c = [r["f_calls"] for r in rows]
         summ["f_calls_per_instance"] = {"mean": round(statistics.fmean(c), 2), "median": _q(c, 0.5), "p90": _q(c, 0.9),
                                         "max": max(c), "total": sum(c)}
+        for rr in RANGES:
+            c = [r["f_calls"] for r in rows if r["range"] == rr]
+            if c:
+                summ[f"f_calls_per_instance_{rr}"] = {"mean": round(statistics.fmean(c), 2), "median": _q(c, 0.5),
+                                                      "p90": _q(c, 0.9), "max": max(c), "total": sum(c)}
     return summ, rows
 
 
@@ -816,8 +1075,19 @@ def verify_instances(insts: list) -> dict:
                 bad["oracle"] += 1
         if i["range"] == "in":
             if any(abs(v) > IN_RANGE_MAX_ABS for s in st for _, v in s) or any(a[3] not in M["amount_set"] for a in voc) \
-                    or any(a[4] not in ("posted", "void") for a in voc):
+                    or any(a[4] not in ("posted", "void") for a in voc) or any(abs(t) > IN_RANGE_MAX_ABS for _, t in i["goal"]):
                 bad["in-range definition"] += 1
+            c = i.get("closure") or {}
+            if c.get("depth", -1) < i["opt_depth"] or c.get("bound") != IN_RANGE_MAX_ABS:
+                bad["closure: missing / depth / bound"] += 1
+            else:
+                cl = inst_closure(i, keep=True)
+                if not cl["ok"] or cl["n_states"] != c.get("n_states") or cl["max_abs"] != c.get("max_abs"):
+                    bad["closure: a reachable state leaves |b| <= 98 (or the record differs)"] += 1
+                else:
+                    cg = inst_closure(i, ignore_status=True, keep=True)
+                    if not cg["ok"] or cg["states"] != cl["states"]:
+                        bad["closure: rule-blind dynamics reach a different state set"] += 1
         f = i["fixed"]
         if len(f["cands"]) != f["K"] or len({tuple(c) for c in f["cands"]}) != f["K"] or f["cands"][f["opt_index"]] != i["opt_plan"]:
             bad["fixed: K / distinct / opt"] += 1
@@ -827,6 +1097,8 @@ def verify_instances(insts: list) -> dict:
                 bad["fixed: candidate"] += 1
         if "away" not in i["vocab_effect_at_init"] or "void_twin" not in i["vocab_roles"]:
             bad["vocab roles"] += 1
+        if any(a[4] != "posted" for a in i["opt_plan"]):
+            bad["void step on the optimal plan"] += 1
     return {"n": len(insts), "problems": dict(bad), "ok": not bad}
 
 
@@ -836,7 +1108,11 @@ def describe(insts: list) -> dict:
            "fixed_kinds": dict(Counter(k for i in insts for k in i["fixed"]["kinds"])),
            "vocab_roles": dict(Counter(r for i in insts for r in i["vocab_roles"])),
            "vocab_effect_at_init": dict(Counter(r for i in insts for r in i["vocab_effect_at_init"])),
-           "vocab_kinds": dict(Counter(a[0] for i in insts for a in i["vocab"]))}
+           "vocab_kinds": dict(Counter(a[0] for i in insts for a in i["vocab"])),
+           "posted_kind_amount": {k: dict(sorted(Counter(a[3] for i in insts for a in i["vocab"]
+                                                         if a[4] == "posted" and a[0] == k).items()))
+                                  for k in KIND_CODE},
+           "init_abs_balance_quantiles": {q: _q([abs(v) for i in insts for _, v in i["init"]], q) for q in (0.5, 0.9, 1.0)}}
     for rr in RANGES:
         sub = [i for i in insts if i["range"] == rr]
         if not sub:
@@ -845,6 +1121,13 @@ def describe(insts: list) -> dict:
                                                     for d in sorted({i["depth"] for i in sub})}
         out[f"{rr}_max_abs_balance_on_opt_plan"] = max(abs(v) for i in sub for s in i["opt_states"] for _, v in s)
         out[f"{rr}_fixed_mean_true_unmet"] = round(statistics.fmean(statistics.fmean(i["fixed"]["true_unmet"]) for i in sub), 2)
+        if rr == "in" and all(i.get("closure") for i in sub):
+            ns = [i["closure"]["n_states"] for i in sub]
+            out["in_closure"] = {"depth": sorted({i["closure"]["depth"] for i in sub}), "bound": IN_RANGE_MAX_ABS,
+                                 "reachable_states_total": sum(ns), "reachable_states_median": statistics.median(ns),
+                                 "reachable_states_max": max(ns),
+                                 "max_abs_balance_over_all_reachable_states": max(i["closure"]["max_abs"] for i in sub)}
+    out["answer_free_floors"] = answer_free_floors(insts)
     return out
 
 
@@ -860,7 +1143,7 @@ def _nice():
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     g = ap.add_mutually_exclusive_group(required=True)
-    g.add_argument("--make-dev", action="store_true", help="write docs/ledger_beam/dev_set.jsonl + SOURCE (create-only)")
+    g.add_argument("--make-dev", action="store_true", help="write docs/ledger_beam/dev2_primary.jsonl + dev2_oor.jsonl + SOURCE records (create-only)")
     g.add_argument("--verify", metavar="SET_JSONL")
     g.add_argument("--describe", metavar="SET_JSONL")
     ap.add_argument("--fresh", action="store_true", help="with --verify: re-check freshness (loads the exclusion union)")
@@ -882,10 +1165,12 @@ def main() -> int:
         if src.exists():
             rec = json.loads(src.read_text(encoding="utf-8"))
             res["source_record_sha256_equal"] = rec.get("file_sha256") == res["file_sha256"]
-            spec = SetSpec(**{**rec["spec"], "depths": tuple(rec["spec"]["depths"])})
-            regen, _ = make_set(spec)
-            res["regenerated_without_exclusions_sha256"] = set_sha(regen)
-            res["regenerated_equal"] = res["regenerated_without_exclusions_sha256"] == res["file_sha256"]
+            if rec.get("generator") != GEN_VERSION:
+                raise SystemExit(f"{p.name} was built by {rec.get('generator')}, not {GEN_VERSION} (superseded set)")
+            spec = spec_from_record(rec)
+            regen, _ = make_set(spec, replay_rejections=rec.get("fresh_rejections"))
+            res["regenerated_from_seed_and_recorded_rejections_sha256"] = set_sha(regen)
+            res["regenerated_equal"] = res["regenerated_from_seed_and_recorded_rejections_sha256"] == res["file_sha256"]
             res["fresh_rejections_at_build"] = len(rec.get("fresh_rejections") or [])
         if a.fresh:
             excl = load_exclusions(historical=not a.no_historical)
@@ -893,37 +1178,48 @@ def main() -> int:
             res["ball_overlap_depth2_descriptive"] = ball_overlap(insts, excl, 2)
         res["torch_imported"] = "torch" in sys.modules
         print(json.dumps(res, indent=1))
-        return 0 if res["ok"] and res.get("reserialised_sha256_equal") and (not a.fresh or (
+        return 0 if res["ok"] and res.get("reserialised_sha256_equal") and res.get("regenerated_equal", True) and (not a.fresh or (
             res["overlap"]["payload_overlap"] == 0 and res["overlap"]["operative_overlap"] == 0)) else 1
-    out, srcp = DOCS / "dev_set.jsonl", DOCS / "dev_set.SOURCE.json"
-    if out.exists() or srcp.exists():
-        raise SystemExit(f"refusing to overwrite {out} / {srcp} (create-only)")
+    targets = [(kind, DOCS / fn, DOCS / fn.replace(".jsonl", ".SOURCE.json")) for kind, fn in SET_FILES.items()]
+    for _, out, srcp in targets:
+        if out.exists() or srcp.exists():
+            raise SystemExit(f"refusing to overwrite {out} / {srcp} (create-only)")
     excl = load_exclusions(historical=not a.no_historical)
-    insts, rec = make_set(SetSpec(), excl, log=print)
-    ov = overlap_counts(insts, excl)
-    if ov["payload_overlap"] or ov["operative_overlap"]:
-        raise SystemExit(f"overlap after the build: {ov}")
-    rec["overlap"] = ov
-    rec["ball_overlap_depth2_descriptive"] = ball_overlap(insts, excl, 2)
-    rec["describe"] = describe(insts)
-    rec["verify"] = verify_instances(insts)
-    rec["generator_sha256"] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
-    rec["built_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    rec["use"] = ("DEV set for the joint beam harness and budget tuning (BWM + RCWM). NOT a confirmation set: the "
-                  "confirmation set is drawn at the joint freeze with a fresh seed and the same generator.")
-    rec["torch_imported"] = "torch" in sys.modules
-    if not rec["verify"]["ok"]:
-        raise SystemExit(f"verification failed: {rec['verify']}")
+    built = []
+    for kind, out, srcp in targets:
+        spec = primary_spec() if kind == "primary" else oor_spec()
+        insts, rec = make_set(spec, excl, log=print)
+        ov = overlap_counts(insts, excl)
+        if ov["payload_overlap"] or ov["operative_overlap"]:
+            raise SystemExit(f"overlap after the build: {ov}")
+        rec["overlap"] = ov
+        rec["exclusion_union_size"] = {"payloads": len(excl["pay"]), "operative": len(excl["ops"])}
+        rec["ball_overlap_depth2_descriptive"] = ball_overlap(insts, excl, 2)
+        rec["describe"] = describe(insts)
+        rec["verify"] = verify_instances(insts)
+        rec["generator_sha256"] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+        rec["built_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        rec["use"] = ("PRIMARY DEV set (in-range, reachable-state closure at depth d_close) for the joint beam harness "
+                      "and budget tuning (BWM + RCWM). NOT a confirmation set: the confirmation set is drawn at the joint "
+                      "freeze with a fresh seed and the same generator." if kind == "primary" else
+                      "DESCRIPTIVE out-of-range DEV set: report only (D-34(c), PREREG-3 TRIGGER); never a primary, "
+                      "never guarded, never pooled with the primary.")
+        rec["supersedes"] = "docs/ledger_beam/dev_set.jsonl (generator v1, seed 20261141; no closure)"
+        rec["torch_imported"] = "torch" in sys.modules
+        if not rec["verify"]["ok"]:
+            raise SystemExit(f"verification failed: {rec['verify']}")
+        built.append((out, srcp, insts, rec))
     DOCS.mkdir(parents=True, exist_ok=True)
-    text = dumps_set(insts)
-    for path, payload in ((out, text), (srcp, json.dumps(rec, indent=1) + "\n")):
-        tmp = Path(str(path) + ".tmp")
-        with open(tmp, "x", encoding="utf-8", newline="\n") as fh:
-            fh.write(payload)
-        os.replace(tmp, path)
-    print(json.dumps({"file": str(out), "file_sha256": rec["file_sha256"], "n": rec["n"], "per_stratum": rec["per_stratum"],
-                      "overlap": ov, "fresh_rejections": len(rec["fresh_rejections"]),
-                      "torch_imported": rec["torch_imported"]}, indent=1))
+    for out, srcp, insts, rec in built:
+        for path, payload in ((out, dumps_set(insts)), (srcp, json.dumps(rec, indent=1) + "\n")):
+            tmp = Path(str(path) + ".tmp")
+            with open(tmp, "x", encoding="utf-8", newline="\n") as fh:
+                fh.write(payload)
+            os.replace(tmp, path)
+        print(json.dumps({"file": str(out), "file_sha256": rec["file_sha256"], "n": rec["n"],
+                          "per_stratum": rec["per_stratum"], "overlap": rec["overlap"],
+                          "fresh_rejections": len(rec["fresh_rejections"]), "torch_imported": rec["torch_imported"]},
+                         indent=1))
     return 0
 
 

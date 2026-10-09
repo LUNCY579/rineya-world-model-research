@@ -17,7 +17,8 @@ section 4 states the same list):
       (matched case-insensitively); clock answers may instead begin with 'at', weekday/date answers with 'on'.
   N6  The remainder is parsed as the declared kind and must be consumed entirely. Numbers: ASCII digits, optional
       sign, exact rationals (integers, finite decimals, one a/b fraction), commas only in valid groups of three, no
-      scientific notation, no number words. A declared unit alias may follow a number; any other suffix is wrong.
+      scientific notation, no number words. A fraction must be in lowest terms and is wrong when the answer is a
+      whole number ('48/2' or '24/1' for 24). A declared unit alias may follow a number; any other suffix is wrong.
 
 Kinds: number (value + allowed unit aliases), clock (minute of day; 24-hour unless am/pm is written), weekday (full
 English name), date (full month name + day, either order, optional ordinal suffix, optional 'of', optional year equal
@@ -26,13 +27,17 @@ multiplicity), ratio ('a:b' or 'a to b', exactly the requested form), kv (exactl
 unknown (exactly the literal UNKNOWN, case-sensitive), exact (one declared string, case-sensitive iff declared),
 json (one JSON object equal to the declared object; duplicate keys are wrong).
 
-LENIENT grader (report-only, never decision-bearing): value extraction from free text (last number / time / weekday /
-date / ratio, in-vocabulary list order, kv value present with no other passage value, abstention phrases). It exists
-to tell format drift from skill loss in the report.
+LENIENT grader (decision-bearing as the second grader of the go rule, docs/retention/DESIGN.md section 7): value
+extraction from free text (last number / time / weekday / date / ratio, in-vocabulary list order, kv value present
+with no other passage value, abstention phrases with no passage value). Alternatives are wrong: an answer that offers
+two or more distinct candidate values of its kind together with 'or' / 'either' is wrong, as is 'yes'
+together with 'no', an exact answer next to 'or' / 'either', and two different JSON objects. Format changes are
+neutral under it, so a format gain cannot offset a skill loss.
 """
 from __future__ import annotations
 
 import json
+import math
 import re
 import unicodedata
 from fractions import Fraction
@@ -99,11 +104,22 @@ def parse_rational(token: str) -> Fraction:
     raise ParseError(f"not an exact rational: {token!r}")
 
 
-def _split_number(text: str) -> tuple[Fraction, str]:
+def _split_number(text: str) -> tuple[Fraction, str, str]:
     m = _LEAD_NUM_RE.match(text)
     if not m:
         raise ParseError(f"no leading number in {text!r}")
-    return parse_rational(m.group(0)), text[m.end():].strip()
+    return parse_rational(m.group(0)), m.group(0), text[m.end():].strip()
+
+
+def _fraction_ok(token: str, want: Fraction) -> None:
+    """A written fraction must be in lowest terms, and a whole-number answer may not be written as a fraction."""
+    if "/" not in token:
+        return
+    num, den = (int(x.strip().replace(",", "")) for x in token.split("/"))
+    if math.gcd(abs(num), den) != 1:
+        raise ParseError(f"fraction not in lowest terms: {token!r}")
+    if want.denominator == 1:
+        raise ParseError(f"a fraction for a whole-number answer: {token!r}")
 
 
 def _basic(text: str) -> str:
@@ -244,9 +260,10 @@ def parse_answer(text: str, g: dict):
     cs = k in CASE_SENSITIVE_KINDS or (k == "exact" and bool(g.get("case")))
     body = prepare(text, k, cs)
     if k == "number":
-        v, rest = _split_number(body)
+        v, tok, rest = _split_number(body)
         if rest and rest not in g.get("units", []):
             raise ParseError(f"unit {rest!r} is not declared for this item")
+        _fraction_ok(tok, parse_rational(str(g["value"])))
         return v
     if k == "clock":
         return clock_minutes(body)
@@ -360,6 +377,9 @@ _NUM_ANY = re.compile(r"(?<![\w.])[+-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?")
 _TIME_ANY = re.compile(r"(\d{1,2}):(\d{2})(?:\s*(a\.?m\.?|p\.?m\.?))?")
 _RATIO_ANY = re.compile(r"(\d+)\s*(?::|to)\s*(\d+)")
 _ABBR_DAYS = {d[:3]: d for d in WEEKDAYS}
+_ALT = re.compile(r"\b(or|either)\b")
+_DATE_MD_ANY = re.compile(r"\b([a-z]+)\.?\s+(\d{1,2})(?:st|nd|rd|th)?\b")
+_DATE_DM_ANY = re.compile(r"\b(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?([a-z]+)\b")
 _ABBR_MON = {m[:3]: i + 1 for i, m in enumerate(MONTHS)}
 
 
@@ -373,37 +393,55 @@ def _numbers(t: str) -> list:
     return out
 
 
+def _hedged(low: str, values: list) -> bool:
+    """An alternative is offered: 'or' / 'either' and two or more distinct candidate values of the kind."""
+    return _ALT.search(low) is not None and len(set(values)) >= 2
+
+
+def _clock_values(low: str) -> list:
+    out = []
+    for m in _TIME_ANY.finditer(low):
+        mer = (m.group(3) or "").replace(".", "")
+        try:
+            out.append(clock_minutes(f"{int(m.group(1))}:{m.group(2)}" + (f" {mer}" if mer else "")))
+        except ParseError:
+            out.append(None)
+    return out
+
+
+def _date_values(low: str) -> list:
+    """Every 'month day' and 'day [of] month' mention in text order. Two separate passes, so a non-month word before a
+    number ('the 5th') cannot consume a 'day of month' mention ('5th of april')."""
+    hits = []
+    for m in _DATE_MD_ANY.finditer(low):
+        mon = MONTHS.index(m.group(1)) + 1 if m.group(1) in MONTHS else _ABBR_MON.get(m.group(1))
+        if mon:
+            hits.append((m.start(), (mon, int(m.group(2)))))
+    for m in _DATE_DM_ANY.finditer(low):
+        mon = MONTHS.index(m.group(2)) + 1 if m.group(2) in MONTHS else _ABBR_MON.get(m.group(2))
+        if mon:
+            hits.append((m.start(), (mon, int(m.group(1)))))
+    return [v for _, v in sorted(hits)]
+
+
 def grade_lenient(g: dict, text: str) -> bool:
-    """Report-only value extraction (see the module doc). Never used by any decision."""
+    """Lenient value extraction (see the module doc): the second grader of the go rule."""
     validate_gold(g)
     t = _basic(text)
     low = t.casefold()
     k = g["kind"]
     if k == "number":
         ns = _numbers(low.replace("%", " "))
-        return bool(ns) and ns[-1] == parse_rational(str(g["value"]))
+        return bool(ns) and ns[-1] == parse_rational(str(g["value"])) and not _hedged(low, ns)
     if k == "clock":
-        ms = list(_TIME_ANY.finditer(low))
-        if not ms:
-            return False
-        m = ms[-1]
-        mer = (m.group(3) or "").replace(".", "")
-        try:
-            v = clock_minutes(f"{int(m.group(1))}:{m.group(2)}" + (f" {mer}" if mer else ""))
-        except ParseError:
-            return False
-        return v == g["minute"]
+        vs = _clock_values(low)
+        return bool(vs) and vs[-1] == g["minute"] and not _hedged(low, vs)
     if k == "weekday":
-        found = [w for w in re.findall(r"[a-z]+", low) if w in WEEKDAYS or w in _ABBR_DAYS]
-        return bool(found) and _ABBR_DAYS.get(found[-1], found[-1]) == g["value"]
+        found = [_ABBR_DAYS.get(w, w) for w in re.findall(r"[a-z]+", low) if w in WEEKDAYS or w in _ABBR_DAYS]
+        return bool(found) and found[-1] == g["value"] and not _hedged(low, found)
     if k == "date":
-        hits = []
-        for m in re.finditer(r"([a-z]+)\.?\s+(\d{1,2})(?:st|nd|rd|th)?\b|(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?([a-z]+)", low):
-            name, day = (m.group(1), m.group(2)) if m.group(1) else (m.group(4), m.group(3))
-            mon = MONTHS.index(name) + 1 if name in MONTHS else _ABBR_MON.get(name)
-            if mon:
-                hits.append((mon, int(day)))
-        return bool(hits) and hits[-1] == (g["month"], g["day"])
+        hits = _date_values(low)
+        return bool(hits) and hits[-1] == (g["month"], g["day"]) and not _hedged(low, hits)
     if k == "num_list":
         return [int(x) for x in _numbers(low) if x.denominator == 1] == list(g["value"])
     if k == "word_list":
@@ -411,8 +449,8 @@ def grade_lenient(g: dict, text: str) -> bool:
         seq = [w for w in re.findall(r"[a-z][a-z'-]*", low) if w in vocab]
         return seq == [w.casefold() for w in g["value"]]
     if k == "ratio":
-        ms = list(_RATIO_ANY.finditer(low))
-        return bool(ms) and (int(ms[-1].group(1)), int(ms[-1].group(2))) == (g["a"], g["b"])
+        rs = [(int(m.group(1)), int(m.group(2))) for m in _RATIO_ANY.finditer(low)]
+        return bool(rs) and rs[-1] == (g["a"], g["b"]) and not _hedged(low, rs)
     if k == "kv":
         def has(v):
             return re.search(r"(?<![\w])" + re.escape(str(v).casefold()) + r"(?![\w])", low) is not None
@@ -427,15 +465,21 @@ def grade_lenient(g: dict, text: str) -> bool:
     if k == "exact":
         v = g["value"] if g.get("case") else g["value"].casefold()
         src = t if g.get("case") else low
-        return re.search(r"(?<![\w-])" + re.escape(v) + r"(?![\w-])", src) is not None
+        if re.search(r"(?<![\w-])" + re.escape(v) + r"(?![\w-])", src) is None:
+            return False
+        if v.casefold() in ("yes", "no"):
+            other = "no" if v.casefold() == "yes" else "yes"
+            if re.search(r"\b" + other + r"\b", low):
+                return False
+        return re.search(r"\b(or|either)\b", low) is None
     if k == "json":
-        m = re.search(r"\{.*?\}", t, re.S)
-        if not m:
-            return False
-        try:
-            return json.loads(m.group(0)) == g["value"]
-        except json.JSONDecodeError:
-            return False
+        objs = []
+        for m in re.finditer(r"\{.*?\}", t, re.S):
+            try:
+                objs.append(json.loads(m.group(0)))
+            except json.JSONDecodeError:
+                continue
+        return bool(objs) and objs[0] == g["value"] and all(o == objs[0] for o in objs)
     raise GoldError(k)
 
 

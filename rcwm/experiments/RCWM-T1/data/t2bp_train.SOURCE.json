@@ -1,9 +1,10 @@
 {
  "record": "T2BP_TRAIN",
+ "revision": 3,
  "seed": 20261111,
  "builder": "scripts/t2bp_make_data.py",
- "builder_sha256": "a6c7d07275f486817da5b8d19daac8ef70b0a2d3c5245d251b719034648df5de",
- "common_sha256": "379af3072b9cc9f388ceacc60e769127d3d82c3c90d51485d859c47e73651a8f",
+ "builder_sha256": "8f1489fa1d2bf580fb84420bc10de89d7e2a1b0f2ae7b506c74d8b0b3eda5f40",
+ "common_sha256": "1175b758551ac0f01b7b38070dfbb5bf91e5a1b5f0dae12d142aa2c84b5f7ee7",
  "code_sha256": {
   "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
   "fds/oracles.py": "6d22a5e40a69fb8f5c79230d2c2dc7fa51af605de70d3c0fc7cd7d69fe4c959c",
@@ -180,13 +181,13 @@
  },
  "model_calls": 0,
  "torch_imported": false,
- "built_utc": "2026-10-09T08:56:41Z",
+ "built_utc": "2026-10-09T17:19:03Z",
  "surface_diversity": "off",
  "files": {
   "t2bp_train_dint.jsonl": "c57187b4b9b152d3647cf21d77fb3ada25f03eb814994de50bb6976b92e6365e",
   "t2bp_train_strace.jsonl": "ef8fba31d9a1606b300be3b965955ee29f4a5ae4c65333d9aba64dacc961bc66",
   "t2bp_train_bbits.jsonl": "f95f6a802858ff29558b440f7daf88f5c2cf29559b6a07277bf494146450565b",
-  "t2bp_train_ffill.jsonl": "527fc4639d5747c315c8290414c4a3ba8e8270baf1ce8d40592b1d420d38399a"
+  "t2bp_train_ffill.jsonl": "d92c74af3a26a55a71d6793ae8823f8aa04164959b0cf77f8dda8706c9b84ab7"
  },
  "rows": 1500,
  "design": {
@@ -210,6 +211,16 @@
    "A4": "Ia",
    "Za": "Zi"
   }
+ },
+ "surface_design": null,
+ "filler_4b": {
+  "fill_k": {
+   "action": 26
+  },
+  "items": 3510,
+  "longest_trace_head_tokens": 29,
+  "fill_head_tokens": 29,
+  "rule": "units = max over train+dev of tokens(trace head '{\"cmp\":..,\"calc\":N') - tokens('{\"fill\":\"\"') (BWM bwmn/traces.filler_length); one action kind ('action') in the prerequisite family"
  },
  "audit": {
   "core": {
@@ -325,18 +336,107 @@
     "twin_rows_with_such_a_count": 45
    }
   },
+  "filler_4b": {
+   "distinct_fill_lengths_per_kind": {
+    "action": [
+     "26"
+    ]
+   },
+   "fill_units_constant": {
+    "action": true
+   },
+   "fill_length_lookup_accuracy": {
+    "applicable": 0.5,
+    "changed": 0.51,
+    "after": 0.0147,
+    "type": 0.3267
+   },
+   "majority_share": {
+    "applicable": 0.5,
+    "changed": 0.51,
+    "after": 0.0147,
+    "type": 0.3267
+   },
+   "mutual_information_bits": {
+    "applicable": 0.0,
+    "changed": 0.0,
+    "after": 0.0,
+    "type": 0.0
+   },
+   "rev2_row_matched_length_would_reveal_descriptive": {
+    "applicable_lookup_accuracy": 1.0,
+    "changed_lookup_accuracy": 0.99,
+    "applicable_majority_share": 0.5
+   },
+   "residual_tokens_descriptive": {
+    "min": 2,
+    "max": 7,
+    "mean": 5.001,
+    "share_positive": 1.0,
+    "mean_applicable": 5.493,
+    "mean_inapplicable": 4.508
+   },
+   "zero_information": true,
+   "never_shorter_than_trace": true
+  },
+  "surface": {
+   "checks": {
+    "every prompt's surface, read back from its text, equals the recorded surface": true,
+    "no prompt uses a held-out paraphrase, field-name variant or key order": true,
+    "no prompt contains text only a held-out surface produces": true
+   },
+   "failures": {
+    "recover": [],
+    "heldout": [],
+    "fragments": []
+   },
+   "stats": {
+    "rows": 1500,
+    "paraphrase_x_names_combinations": 1,
+    "rows_in_the_exact_canonical_surface (the in-surface evaluation surface of E1/E2)": 1500,
+    "rows_per_paraphrase": {
+     "0": 1500
+    },
+    "rows_per_names": {
+     "0": 1500
+    },
+    "event_order_canonical_share": 1.0,
+    "distinct_event_orders": 1,
+    "top_orders": {
+     "before,events": 1500
+    },
+    "heldout_fragments_scanned": {
+     "paraphrase 4": "Apply the actions in order. Each action fires only when its ",
+     "state sentence 4": " bits wide",
+     "field name 4 (before)": "\"mask\":",
+     "field name 4 (events)": "\"moves\":",
+     "field name 4 (add)": "\"plus\":",
+     "field name 4 (delete)": "\"minus\":",
+     "field name 4 (pre_on)": "\"must_on\":",
+     "field name 4 (pre_off)": "\"must_off\":"
+    }
+   }
+  },
   "checks": {
    "every rendering has the same canonical rows in the same order": true,
    "prompts == render_chat(messages(arm, row)) on every row": true,
-   "D-int canonical prompts == T2's frame env.multi_step_messages(P, before, [event])": true,
+   "D-int prompts in the canonical surface == T2's frame env.multi_step_messages(P, before, [event])": true,
    "every target parses back to its gold (strict; cmp/calc/flag exact)": true,
-   "filler target token count == trace target token count on every row": true
+   "filler target == the amendment-4b constant-fill target on every row": true,
+   "fill length carries zero information about the answer (one value per kind; lookup == majority; MI 0)": true,
+   "no filler target is shorter than its row's trace target": true,
+   "every prompt's surface, read back from its text, equals the recorded surface": true,
+   "no prompt uses a held-out paraphrase, field-name variant or key order": true,
+   "no prompt contains text only a held-out surface produces": true
   },
   "failures": {
    "prompt": [],
    "parse": [],
    "fill": [],
-   "t2frame": []
+   "t2frame": [],
+   "recover": [],
+   "heldout": [],
+   "fragments": []
   },
   "ok": true
  },
@@ -363,8 +463,8 @@
    "ffill": {
     "rows": 1500,
     "mean_prompt_tokens": 169.83,
-    "mean_target_tokens": 30.45,
-    "mean_row_tokens_incl_eos": 201.28
+    "mean_target_tokens": 35.45,
+    "mean_row_tokens_incl_eos": 206.28
    }
   },
   "dev_onestep": {
@@ -386,7 +486,7 @@
    "ffill": {
     "rows": 1050,
     "mean_prompt_tokens": 171.03,
-    "mean_target_tokens": 30.91
+    "mean_target_tokens": 35.73
    }
   },
   "dev_chain_steps": {
@@ -408,7 +508,29 @@
    "ffill": {
     "steps": 960,
     "mean_prompt_tokens": 170.29,
-    "mean_target_tokens": 31.05
+    "mean_target_tokens": 35.7
+   }
+  },
+  "dev_onestep_heldout_surface": {
+   "dint": {
+    "rows": 1050,
+    "mean_prompt_tokens": 145.03,
+    "mean_target_tokens": 2.73
+   },
+   "strace": {
+    "rows": 1050,
+    "mean_prompt_tokens": 225.03,
+    "mean_target_tokens": 30.91
+   },
+   "bbits": {
+    "rows": 1050,
+    "mean_prompt_tokens": 234.93,
+    "mean_target_tokens": 17.86
+   },
+   "ffill": {
+    "rows": 1050,
+    "mean_prompt_tokens": 165.03,
+    "mean_target_tokens": 35.73
    }
   },
   "t2_train_reference": {
@@ -421,12 +543,12 @@
    "source": "gold states of data/bank_confirm2.json (no model output read)"
   }
  },
- "canonical_dint_sha256": null,
+ "canonical_dint_sha256": "c57187b4b9b152d3647cf21d77fb3ada25f03eb814994de50bb6976b92e6365e",
  "targets": {
   "dint": "166",
   "strace": "{\"cmp\":{\"on_miss\":[],\"off_hit\":[5],\"viol\":1,\"ok\":false},\"calc\":166,\"after\":166}",
   "bbits": "{\"applicable\":false,\"after\":\"10100110\"}",
-  "ffill": "{\"fill\":\" . . . . . . . . . . . . . . . . . . . . . .\",\"after\":166}"
+  "ffill": "{\"fill\":\" . . . . . . . . . . . . . . . . . . . . . . . . . .\",\"after\":166}"
  },
  "example_row": "t2bp-tr-0000",
  "system_texts": {
@@ -436,32 +558,16 @@
   "ffill": "The state is an 8-bit flag mask. Apply each action to the state, in order. An action is applicable only if all its pre_on bits are set and all its pre_off bits are clear in the current state; an inapplicable action leaves the state unchanged. For an applicable action, apply delete bits first, then add bits. Return only a JSON object with the keys fill (a run of dots) and after (the final resulting state as a JSON integer), in this order. Names and costs do not change the state."
  },
  "build_log": [
-  "[03:55:40] T2b prerequisite data: seed 20261111, surface diversity off; no model call, no torch",
-  "[03:55:40] D-int frame == T2's stored prerequisite prompt on 500/500 rows (render_chat == the chat template)",
-  "[03:55:40] code identity: {'rcwmt/env.py': '92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2', 'fds/oracles.py': '6d22a5e40a69fb8f5c79230d2c2dc7fa51af605de70d3c0fc7cd7d69fe4c959c', 'fds/generate.py': 'e7e0288af3b5b5c3930446295094734abc55ed22761a22521fa49b346d42d77e'}",
-  "[03:56:27] historical set: 6464 payloads (47s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
-  "[03:56:28] bank_pilot.json: 15629 payloads, 15278 operative contents",
-  "[03:56:28] bank_confirm.json: 13552 payloads, 13247 operative contents",
-  "[03:56:28] bank_confirm2.json: 12163 payloads, 11903 operative contents",
-  "[03:56:32] bank_s4000.json: 255745 payloads, 250614 operative contents",
-  "[03:56:32] t2_train.jsonl: 1501 payloads",
-  "[03:56:32] t2_eval.jsonl: 600 payloads",
-  "[03:56:32] t2_eval_xframe.jsonl: 600 payloads",
-  "[03:56:32] t2_eval_supp.jsonl: 360 payloads",
-  "[03:56:32] SELECT-VIEWS-001: 384 payloads",
-  "[03:56:32] l1_ood_bank.jsonl: 600 payloads",
-  "[03:56:32] fds/T_BANK.json: 192 payloads",
-  "[03:56:32] fds/T_BANK_V2.json: 192 payloads",
-  "[03:56:32] cc1/T_BANK_V3X.json: 864 payloads",
-  "[03:56:32] cc2/STAGE_A_T_V3X.json: 15 payloads",
-  "[03:56:32] cc2/T_BANK_V4.json: 864 payloads",
-  "[03:56:32] bank_p3_oor.jsonl: 1532 payloads",
-  "[03:56:32] exclusion union: 310258 payloads, 302283 operative contents (17 sources)",
-  "[03:56:33] dev one-step: 1050 rows from 29751 draws {'D_app_add': 510, 'D_app_unchanged': 892, 'D_app_delete': 2258, 'D_int_add_wrong': 5467, 'D_inapp_pre_on': 471, 'D_inapp_pre_off': 2056, 'D_ood10': 4096, 'D_ood12': 2657, 'D_inapp_addset': 11344}",
-  "[03:56:33] dev chains: 30 parents x 8 candidates x 4 steps; rejected {'collision': 335, 'fewer than 4 distinct finals': 73}",
-  "[03:56:33] training: 1500 rows (275 minimal pairs); draws {'pair:A1': 263, 'pair:A2': 27, 'pair:A4': 41, 'pair:Za': 57, 'row:A1': 510, 'row:A2': 16, 'row:A3': 23, 'row:A4': 129, 'row:Ib': 303, 'row:Zi': 182}",
-  "[03:56:34] overlaps with every source (payload / operative): all 0 (17 sources); internal {'train&dev': 0, 'train&chains': 0, 'dev&chains': 0}",
-  "[03:56:35] audit: ok=True heuristics {'copy': 0.51, 'apply_regardless': 0.5, 'int_add': 0.48333333333333334, 'or_add': 0.5166666666666667, 'apply_ignoring_pre': 0.5, 'int_add_del': 0.39, 'delete_only': 0.4066666666666667} quotas {'minimal_pairs': 275, 'int_add_wrong_strict': 150, 'applicable_delete': 245, 'int_add_wrong_r11': 260, 'inapp_pre_on': 377, 'inapp_pre_off': 373}"
+  "[12:19:02] canonical rows taken from t2bp_train_dint.jsonl (sha verified against t2bp_train.SOURCE.json)",
+  "[12:19:03] re-render: D-int/S-trace/B-bits byte-identical; F-filler -> constant fill {'action': 26} (amendment 4b)",
+  "[12:19:03] done in 1s; files {'t2bp_train_dint.jsonl': 'c57187b4b9b152d3647cf21d77fb3ada25f03eb814994de50bb6976b92e6365e', 't2bp_train_strace.jsonl': 'ef8fba31d9a1606b300be3b965955ee29f4a5ae4c65333d9aba64dacc961bc66', 't2bp_train_bbits.jsonl': 'f95f6a802858ff29558b440f7daf88f5c2cf29559b6a07277bf494146450565b', 't2bp_train_ffill.jsonl': 'd92c74af3a26a55a71d6793ae8823f8aa04164959b0cf77f8dda8706c9b84ab7'}"
  ],
- "dev_sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54"
+ "dev_sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
+ "supersedes": {
+  "record": "t2bp_train.rev2.SOURCE.json",
+  "record_sha256": "63f4d7a52886cf445b3d8428e4ba555a69dabe1ffa3d77f9398c1486c87f26bb",
+  "filler_file": "t2bp_train_ffill.rev2_rowmatched.jsonl",
+  "filler_sha256": "527fc4639d5747c315c8290414c4a3ba8e8270baf1ce8d40592b1d420d38399a",
+  "reason": "amendment 4b (DECISIONS D-36): the revision-2 filler matched its length per row to the trace, which leaks the answer through the length; the canonical rows, the D-int/S-trace/B-bits files and the exclusion record are unchanged (carried over)"
+ }
 }

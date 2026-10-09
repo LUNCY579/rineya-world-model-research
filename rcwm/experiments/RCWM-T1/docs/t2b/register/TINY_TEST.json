@@ -1,17 +1,17 @@
 {
  "ok": true,
- "n_checks": 23,
- "n_pass": 23,
+ "n_checks": 25,
+ "n_pass": 25,
  "checks": [
   {
    "check": "1 render_prompt == apply_chat_template on every training and dev prompt",
    "ok": true,
-   "detail": "1650 prompts"
+   "detail": "1850 prompts"
   },
   {
    "check": "1 tokenizers counts == AutoTokenizer on every target; filler == trace tokens on every row (AutoTokenizer)",
    "ok": true,
-   "detail": "4950 targets"
+   "detail": "5550 targets"
   },
   {
    "check": "2 surface diversity: same rows/targets/golds; every paraphrase + field variant used; prompts parse back; chat template exact; Cfg(train_variant='sd') picks the files",
@@ -69,6 +69,16 @@
    "detail": "rc 5 5 0"
   },
   {
+   "check": "8 the D-22 gate is re-checked after the resource wait: a wait that uses up the turn defers before a training load / before the eval load (exit 5, nothing loaded); the resumed run completes byte-identically to 4",
+   "ok": true,
+   "detail": "{'wait_train': (5, 'T_plain', [], []), 'wait_eval': (5, 'eval load', ['T_filler', 'T_plain', 'T_trace'], ['train_load', 'train_load', 'train_load'])}"
+  },
+  {
+   "check": "8 --cap-h above 4.5 is refused (exit 3, not persisted, no lease)",
+   "ok": true,
+   "detail": ""
+  },
+  {
    "check": "9 anchor failure: exit 3, anchor.json pass false, no dev output, STOPPED.json; the rerun refuses",
    "ok": true,
    "detail": ""
@@ -101,7 +111,7 @@
   {
    "check": "10 oracle run on the FULL dev + chain bank: the analysis says GO; with filler = gold, STOP (decision point 3)",
    "ok": true,
-   "detail": "GO | STOP (decision point 3): extra decode compute, not supervision"
+   "detail": "GO | STOP (decision point 3): trace ~ filler, not supervision of the intermediates (extra decode compute and/or the length-coded magnitude/branch information in the amendment-4 fill; not attributable to decode compute alone)"
   },
   {
    "check": "10 oracle run: gold trace side regret k4 0, product law predicted == observed == 1",
@@ -116,19 +126,19 @@
   {
    "check": "12 plan: one turn at the planning and observed rates; a 3 h cap needs 2 turns (eval resumes with a re-anchor); an impossible cap raises",
    "ok": true,
-   "detail": "3.66 h / 3.15 h; 3 h cap: [{'stages': ['T_plain', 'T_trace', 'T_filler', 'A0', 'E1'], 'projected_h': 2.6}, {'stages': ['A0 (re-anchor)', 'E2'], 'projected_h': 1.17}]"
+   "detail": "3.84 h / 3.27 h; 3 h cap: [{'stages': ['T_plain', 'T_trace', 'T_filler', 'A0', 'E1'], 'projected_h': 2.76}, {'stages': ['A0 (re-anchor)', 'E2'], 'projected_h': 1.2}]"
   }
  ],
- "seconds": 105.8,
- "peak_working_set_mb": 1061.7,
+ "seconds": 134.4,
+ "peak_working_set_mb": 1062.3,
  "threads": 2,
  "code_sha256": {
-  "scripts/t2br_run.py": "c0005a458114a007b5db42cdaf2f1b41b84319f800235476e5364da3232bb2bd",
-  "scripts/t2br_common.py": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15",
-  "scripts/t2br_analysis.py": "a4ef7bb679c9de88f54f5b5917763807a1682c71451ba19660fafb3eda5424e3",
-  "scripts/t2br_test_tiny.py": "bdb9bdc895824932353201c440c0dd0e4600eb8ee2fad85cb714105c8b2d7167"
+  "scripts/t2br_run.py": "e3783d6aadffe0f99b67dbe33c5b8a2714223ae4bc52052dcc4a6436e6474d43",
+  "scripts/t2br_common.py": "d12a66a49fe3dd3f03fcc5dfb67f614ba6d79782635c3df4d349f134696ad8d9",
+  "scripts/t2br_analysis.py": "ce405fec2dbd02d1f010efcf54343429f571b5fc06a9d40a0e537fdc9289495b",
+  "scripts/t2br_test_tiny.py": "a651563ae9eb0e4075649bb250d011536cb5228b6e9af3edec2b2c452feb8c28"
  },
  "torch": "2.6.0+cu124",
  "transformers": "5.14.1",
- "written_utc": "2026-10-09T08:39:11Z"
+ "written_utc": "2026-10-09T12:58:08Z"
 }

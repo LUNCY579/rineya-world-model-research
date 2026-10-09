@@ -8,58 +8,122 @@
    "verdict": "GO",
    "ok": true,
    "values": {
-    "trace-plain|conditional": 0.605,
+    "trace-plain|conditional": 0.5833,
+    "trace-plain|cond_oor_val": 0.63,
     "trace-plain|mix": 0.5,
-    "trace-filler|conditional": 0.605,
+    "trace-plain|conditional HS": 0.5833,
+    "trace-plain|cond_oor_val HS": 0.63,
+    "trace-plain|mix HS": 0.5,
+    "trace-filler|conditional": 0.5833,
     "trace-filler|mix": 0.5,
     "filler-plain|conditional": 0.0,
     "filler-plain|mix": 0.0,
     "trace-off|swap": 0.0,
     "trace-off|add_nowrap": 0.0,
-    "trace-plain|conditional_in": 0.5,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": 0.0,
+    "trace-plain|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.5045,
     "trace-plain|mix_in": 0.0
    },
-   "seconds": 2.3,
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 1.4,
    "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
    "product_law_ALL_trace": {
     "predicted_k4_exact_product": 1.0,
     "observed_k4_exact": 1.0
    },
    "regret_k4_ALL": {
     "off": 0.37923,
-    "plain": 0.215155,
+    "plain": 0.21291,
     "trace": 0.0,
-    "filler": 0.215155
+    "filler": 0.21291
    }
   },
   "filler_equals_trace": {
    "expected": [
     "exact",
-    "STOP (decision point 3): extra decode compute, not supervision"
+    "STOP (decision point 3): trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format)"
    ],
-   "verdict": "STOP (decision point 3): extra decode compute, not supervision",
+   "verdict": "STOP (decision point 3): trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format)",
    "ok": true,
    "values": {
-    "trace-plain|conditional": 0.52,
+    "trace-plain|conditional": 0.54,
+    "trace-plain|cond_oor_val": 0.53,
     "trace-plain|mix": 0.5,
+    "trace-plain|conditional HS": 0.54,
+    "trace-plain|cond_oor_val HS": 0.53,
+    "trace-plain|mix HS": 0.5,
     "trace-filler|conditional": 0.0,
     "trace-filler|mix": 0.0,
-    "filler-plain|conditional": 0.52,
+    "filler-plain|conditional": 0.54,
     "filler-plain|mix": 0.5,
     "trace-off|swap": 0.0,
     "trace-off|add_nowrap": 0.0,
-    "trace-plain|conditional_in": 0.4875,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": 0.0,
+    "trace-plain|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.4973,
     "trace-plain|mix_in": 0.0
    },
-   "seconds": 2.9,
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 1.4,
    "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
    "product_law_ALL_trace": {
     "predicted_k4_exact_product": 1.0,
     "observed_k4_exact": 1.0
    },
    "regret_k4_ALL": {
     "off": 0.379504,
-    "plain": 0.213204,
+    "plain": 0.213108,
     "trace": 0.0,
     "filler": 0.0
    }
@@ -67,144 +131,1286 @@
   "nothing_helps": {
    "expected": [
     "exact",
-    "STOP (decision point 3): extra decode compute, not supervision - neither format helped (trace ~ filler ~ plain)"
+    "STOP (decision point 3): trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format) - neither format helped (trace ~ filler ~ plain)"
    ],
-   "verdict": "STOP (decision point 3): extra decode compute, not supervision - neither format helped (trace ~ filler ~ plain)",
+   "verdict": "STOP (decision point 3): trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format) - neither format helped (trace ~ filler ~ plain)",
    "ok": true,
    "values": {
     "trace-plain|conditional": 0.0,
+    "trace-plain|cond_oor_val": 0.0,
     "trace-plain|mix": 0.0,
+    "trace-plain|conditional HS": 0.0,
+    "trace-plain|cond_oor_val HS": 0.0,
+    "trace-plain|mix HS": 0.0,
     "trace-filler|conditional": 0.0,
     "trace-filler|mix": 0.0,
     "filler-plain|conditional": 0.0,
     "filler-plain|mix": 0.0,
     "trace-off|swap": 0.0,
     "trace-off|add_nowrap": 0.0,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": 0.0,
+    "trace-plain|add_nowrap": 0.0,
     "trace-plain|conditional_in": 0.0,
     "trace-plain|mix_in": 0.0
    },
-   "seconds": 2.6,
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 1.9,
    "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
    "product_law_ALL_trace": {
-    "predicted_k4_exact_product": 0.4663,
+    "predicted_k4_exact_product": 0.4654,
     "observed_k4_exact": 0.4844
    },
    "regret_k4_ALL": {
     "off": 0.378994,
-    "plain": 0.210832,
-    "trace": 0.210832,
-    "filler": 0.210832
+    "plain": 0.209182,
+    "trace": 0.209182,
+    "filler": 0.209182
    }
   },
   "controls_lost": {
    "expected": [
     "exact",
-    "NO-GO (failed: G4)"
+    "NO-GO (failed: G4 [swap])"
    ],
-   "verdict": "NO-GO (failed: G4)",
+   "verdict": "NO-GO (failed: G4 [swap])",
    "ok": true,
    "values": {
-    "trace-plain|conditional": 0.56,
+    "trace-plain|conditional": 0.5767,
+    "trace-plain|cond_oor_val": 0.67,
     "trace-plain|mix": 0.5,
-    "trace-filler|conditional": 0.56,
+    "trace-plain|conditional HS": 0.5767,
+    "trace-plain|cond_oor_val HS": 0.67,
+    "trace-plain|mix HS": 0.5,
+    "trace-filler|conditional": 0.5767,
     "trace-filler|mix": 0.5,
     "filler-plain|conditional": 0.0,
     "filler-plain|mix": 0.0,
     "trace-off|swap": -1.0,
     "trace-off|add_nowrap": 0.0,
-    "trace-plain|conditional_in": 0.5375,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": -1.0,
+    "trace-plain|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.5227,
     "trace-plain|mix_in": 0.0
    },
-   "seconds": 2.7,
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 2.0,
    "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
    "product_law_ALL_trace": {
     "predicted_k4_exact_product": 0.3153,
     "observed_k4_exact": 0.388
    },
    "regret_k4_ALL": {
     "off": 0.0,
-    "plain": 0.193099,
+    "plain": 0.193005,
     "trace": 0.485867,
-    "filler": 0.193099
+    "filler": 0.193005
    }
   },
   "in_dist_worse": {
    "expected": [
     "exact",
-    "NO-GO (failed: G1; G2; G5)"
+    "NO-GO (failed: G1 [conditional, cond_oor_val, conditional HS, cond_oor_val HS]; G2 [mix, mix HS]; G5 [conditional_in, mix_in])"
    ],
-   "verdict": "NO-GO (failed: G1; G2; G5)",
+   "verdict": "NO-GO (failed: G1 [conditional, cond_oor_val, conditional HS, cond_oor_val HS]; G2 [mix, mix HS]; G5 [conditional_in, mix_in])",
    "ok": true,
    "values": {
     "trace-plain|conditional": 0.0,
+    "trace-plain|cond_oor_val": 0.0,
     "trace-plain|mix": 0.0,
-    "trace-filler|conditional": 0.555,
+    "trace-plain|conditional HS": 0.0,
+    "trace-plain|cond_oor_val HS": 0.0,
+    "trace-plain|mix HS": 0.0,
+    "trace-filler|conditional": 0.5367,
     "trace-filler|mix": 0.5,
-    "filler-plain|conditional": -0.555,
+    "filler-plain|conditional": -0.5367,
     "filler-plain|mix": -0.5,
     "trace-off|swap": 0.0,
     "trace-off|add_nowrap": 0.0,
-    "trace-plain|conditional_in": -0.5208,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": 0.0,
+    "trace-plain|add_nowrap": 0.0,
+    "trace-plain|conditional_in": -0.4963,
     "trace-plain|mix_in": -0.5
    },
-   "seconds": 2.8,
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 2.0,
    "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
    "product_law_ALL_trace": {
-    "predicted_k4_exact_product": 0.4724,
-    "observed_k4_exact": 0.5469
+    "predicted_k4_exact_product": 0.5571,
+    "observed_k4_exact": 0.6354
    },
    "regret_k4_ALL": {
     "off": 0.370689,
     "plain": 0.0,
-    "trace": 0.176215,
+    "trace": 0.160336,
     "filler": 0.370689
+   }
+  },
+  "g3_only": {
+   "expected": [
+    "exact",
+    "NO-GO (failed: G3 [mix])"
+   ],
+   "verdict": "NO-GO (failed: G3 [mix])",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.57,
+    "trace-plain|cond_oor_val": 0.59,
+    "trace-plain|mix": 0.5,
+    "trace-plain|conditional HS": 0.57,
+    "trace-plain|cond_oor_val HS": 0.59,
+    "trace-plain|mix HS": 0.5,
+    "trace-filler|conditional": 0.57,
+    "trace-filler|mix": 0.0,
+    "filler-plain|conditional": 0.0,
+    "filler-plain|mix": 0.5,
+    "trace-off|swap": 0.0,
+    "trace-off|add_nowrap": 0.0,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": 0.0,
+    "trace-plain|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.5388,
+    "trace-plain|mix_in": 0.0
+   },
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 2.0,
+   "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 1.0,
+    "observed_k4_exact": 1.0
+   },
+   "regret_k4_ALL": {
+    "off": 0.374894,
+    "plain": 0.20486,
+    "trace": 0.0,
+    "filler": 0.126065
+   }
+  },
+  "filler_invalid": {
+   "expected": [
+    "exact",
+    "INCONCLUSIVE: filler control invalid (G1-G5 hold, but filler format_ok < 0.95 on a primary)"
+   ],
+   "verdict": "INCONCLUSIVE: filler control invalid (G1-G5 hold, but filler format_ok < 0.95 on a primary)",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.5667,
+    "trace-plain|cond_oor_val": 0.68,
+    "trace-plain|mix": 0.5,
+    "trace-plain|conditional HS": 0.5667,
+    "trace-plain|cond_oor_val HS": 0.68,
+    "trace-plain|mix HS": 0.5,
+    "trace-filler|conditional": 1.0,
+    "trace-filler|mix": 1.0,
+    "filler-plain|conditional": -0.4333,
+    "filler-plain|mix": -0.5,
+    "trace-off|swap": 0.0,
+    "trace-off|add_nowrap": 0.0,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": -1.0,
+    "filler-off|add_nowrap": -1.0,
+    "trace-plain|swap": 0.0,
+    "trace-plain|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.4548,
+    "trace-plain|mix_in": 0.0
+   },
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": false,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 0.0,
+      "primary_mix": 0.0
+     }
+    }
+   },
+   "seconds": 1.8,
+   "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 1.0,
+    "observed_k4_exact": 1.0
+   },
+   "regret_k4_ALL": {
+    "off": 0.373616,
+    "plain": 0.195109,
+    "trace": 0.0,
+    "filler": 1.005332
    }
   },
   "malformed_traces": {
    "expected": [
-    "prefix",
-    "STOP (decision point 3)"
+    "exact",
+    "STOP (decision point 3): trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format) - trace format failed (trace format_ok < 0.95 on a primary)"
    ],
-   "verdict": "STOP (decision point 3): extra decode compute, not supervision - neither format helped (trace ~ filler ~ plain)",
+   "verdict": "STOP (decision point 3): trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format) - trace format failed (trace format_ok < 0.95 on a primary)",
    "ok": true,
    "values": {
-    "trace-plain|conditional": -0.47,
+    "trace-plain|conditional": -0.4367,
+    "trace-plain|cond_oor_val": -0.34,
     "trace-plain|mix": -0.5,
-    "trace-filler|conditional": -0.47,
+    "trace-plain|conditional HS": -0.4367,
+    "trace-plain|cond_oor_val HS": -0.34,
+    "trace-plain|mix HS": -0.5,
+    "trace-filler|conditional": -0.4367,
     "trace-filler|mix": -0.5,
     "filler-plain|conditional": 0.0,
     "filler-plain|mix": 0.0,
     "trace-off|swap": -1.0,
     "trace-off|add_nowrap": -1.0,
-    "trace-plain|conditional_in": -0.5167,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": -1.0,
+    "trace-plain|add_nowrap": -1.0,
+    "trace-plain|conditional_in": -0.5174,
     "trace-plain|mix_in": -1.0
    },
-   "seconds": 2.4,
+   "validity": {
+    "trace_valid": false,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 0.0,
+      "primary_mix": 0.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 1.8,
    "trace_format_ok_mean": 0.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
    "product_law_ALL_trace": {
     "predicted_k4_exact_product": 0.0,
     "observed_k4_exact": 0.0
    },
    "regret_k4_ALL": {
     "off": 0.367505,
-    "plain": 0.209622,
+    "plain": 0.207222,
     "trace": 1.005332,
-    "filler": 0.209622
+    "filler": 0.207222
+   }
+  },
+  "surface_locked": {
+   "expected": [
+    "exact",
+    "NO-GO (failed: G1 [conditional HS, cond_oor_val HS]; G2 [mix HS])"
+   ],
+   "verdict": "NO-GO (failed: G1 [conditional HS, cond_oor_val HS]; G2 [mix HS])",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.5033,
+    "trace-plain|cond_oor_val": 0.63,
+    "trace-plain|mix": 0.5,
+    "trace-plain|conditional HS": 0.0,
+    "trace-plain|cond_oor_val HS": 0.0,
+    "trace-plain|mix HS": 0.0,
+    "trace-filler|conditional": 0.5033,
+    "trace-filler|mix": 0.5,
+    "filler-plain|conditional": 0.0,
+    "filler-plain|mix": 0.0,
+    "trace-off|swap": 0.0,
+    "trace-off|add_nowrap": 0.0,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": 0.0,
+    "trace-plain|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.5168,
+    "trace-plain|mix_in": 0.0
+   },
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 1.8,
+   "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": -0.5033,
+    "cond_oor_val": -0.63,
+    "cond_oor_thr": -0.38,
+    "cond_far": -0.5,
+    "primary_mix": -0.5,
+    "mix_oor": -0.5
+   },
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 1.0,
+    "observed_k4_exact": 1.0
+   },
+   "regret_k4_ALL": {
+    "off": 0.367055,
+    "plain": 0.206225,
+    "trace": 0.0,
+    "filler": 0.206225
+   }
+  },
+  "coarse_comparison": {
+   "expected": [
+    "exact",
+    "NO-GO (failed: G1 [cond_oor_val, cond_oor_val HS])"
+   ],
+   "verdict": "NO-GO (failed: G1 [cond_oor_val, cond_oor_val HS])",
+   "ok": true,
+   "values": {
+    "trace-plain|conditional": 0.3967,
+    "trace-plain|cond_oor_val": 0.12,
+    "trace-plain|mix": 0.5,
+    "trace-plain|conditional HS": 0.3967,
+    "trace-plain|cond_oor_val HS": 0.12,
+    "trace-plain|mix HS": 0.5,
+    "trace-filler|conditional": 0.3967,
+    "trace-filler|mix": 0.5,
+    "filler-plain|conditional": 0.0,
+    "filler-plain|mix": 0.0,
+    "trace-off|swap": 0.0,
+    "trace-off|add_nowrap": 0.0,
+    "plain-off|swap": 0.0,
+    "plain-off|add_nowrap": 0.0,
+    "filler-off|swap": 0.0,
+    "filler-off|add_nowrap": 0.0,
+    "trace-plain|swap": 0.0,
+    "trace-plain|add_nowrap": 0.0,
+    "trace-plain|conditional_in": 0.1939,
+    "trace-plain|mix_in": 0.0
+   },
+   "validity": {
+    "trace_valid": true,
+    "filler_valid": true,
+    "format_ok": {
+     "trace": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     },
+     "filler": {
+      "primary_conditional": 1.0,
+      "primary_mix": 1.0
+     }
+    }
+   },
+   "seconds": 1.9,
+   "trace_format_ok_mean": 1.0,
+   "surface_audit_trace": {
+    "primary_conditional": 0.0,
+    "cond_oor_val": 0.0,
+    "cond_oor_thr": 0.0,
+    "cond_far": 0.0,
+    "primary_mix": 0.0,
+    "mix_oor": 0.0
+   },
+   "product_law_ALL_trace": {
+    "predicted_k4_exact_product": 0.9536,
+    "observed_k4_exact": 0.9531
+   },
+   "regret_k4_ALL": {
+    "off": 0.374686,
+    "plain": 0.200195,
+    "trace": 0.016775,
+    "filler": 0.200195
    }
   }
  },
+ "engineered": {
+  "boundary_go": {
+   "expected": "GO",
+   "verdict": "GO",
+   "ok": true,
+   "components": [
+    {
+     "condition": "G1",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "primary_conditional",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "cond_oor_val",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "primary_conditional",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "cond_oor_val",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G2",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "primary_mix",
+     "value": "3/10",
+     "bar": "3/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G2",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "primary_mix",
+     "value": "3/10",
+     "bar": "3/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_conditional",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_mix",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G4",
+     "surface": "in",
+     "contrast": "trace-off",
+     "metric": "swap",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G4",
+     "surface": "in",
+     "contrast": "trace-off",
+     "metric": "add_nowrap",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G5",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "conditional_in",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G5",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "mix_in",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "DP3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_conditional",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "DP3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_mix",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": false,
+     "within_1se": true
+    }
+   ],
+   "within_1se_of_bar": [
+    "G1 trace-plain conditional",
+    "G1 trace-plain cond_oor_val",
+    "G1 trace-plain conditional HS",
+    "G1 trace-plain cond_oor_val HS",
+    "G2 trace-plain mix",
+    "G2 trace-plain mix HS",
+    "G3 trace-filler conditional",
+    "G3 trace-filler mix",
+    "G4 trace-off swap",
+    "G4 trace-off add_nowrap",
+    "G5 trace-plain conditional_in",
+    "G5 trace-plain mix_in",
+    "DP3 trace-filler conditional",
+    "DP3 trace-filler mix"
+   ],
+   "seconds": 1.9
+  },
+  "boundary_below": {
+   "expected": "NO-GO (failed: G1 [conditional, cond_oor_val, conditional HS, cond_oor_val HS]; G2 [mix, mix HS]; G3 [conditional]; G4 [swap]; G5 [conditional_in, mix_in])",
+   "verdict": "NO-GO (failed: G1 [conditional, cond_oor_val, conditional HS, cond_oor_val HS]; G2 [mix, mix HS]; G3 [conditional]; G4 [swap]; G5 [conditional_in, mix_in])",
+   "ok": true,
+   "components": [
+    {
+     "condition": "G1",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "primary_conditional",
+     "value": "37/150",
+     "bar": "1/4",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "cond_oor_val",
+     "value": "6/25",
+     "bar": "1/4",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "primary_conditional",
+     "value": "37/150",
+     "bar": "1/4",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "cond_oor_val",
+     "value": "6/25",
+     "bar": "1/4",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G2",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "primary_mix",
+     "value": "29/100",
+     "bar": "3/10",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G2",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "primary_mix",
+     "value": "29/100",
+     "bar": "3/10",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_conditional",
+     "value": "29/300",
+     "bar": "1/10",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_mix",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G4",
+     "surface": "in",
+     "contrast": "trace-off",
+     "metric": "swap",
+     "value": "-1/16",
+     "bar": "-1/20",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G4",
+     "surface": "in",
+     "contrast": "trace-off",
+     "metric": "add_nowrap",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G5",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "conditional_in",
+     "value": "-9/170",
+     "bar": "-1/20",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G5",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "mix_in",
+     "value": "-3/50",
+     "bar": "-1/20",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "DP3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_conditional",
+     "value": "29/300",
+     "bar": "1/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "DP3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_mix",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": false,
+     "within_1se": true
+    }
+   ],
+   "within_1se_of_bar": [
+    "G1 trace-plain conditional",
+    "G1 trace-plain cond_oor_val",
+    "G1 trace-plain conditional HS",
+    "G1 trace-plain cond_oor_val HS",
+    "G2 trace-plain mix",
+    "G2 trace-plain mix HS",
+    "G3 trace-filler conditional",
+    "G3 trace-filler mix",
+    "G4 trace-off swap",
+    "G4 trace-off add_nowrap",
+    "G5 trace-plain conditional_in",
+    "G5 trace-plain mix_in",
+    "DP3 trace-filler conditional",
+    "DP3 trace-filler mix"
+   ],
+   "seconds": 1.8
+  },
+  "boundary_hs_cond_oor_val": {
+   "expected": "NO-GO (failed: G1 [cond_oor_val HS])",
+   "verdict": "NO-GO (failed: G1 [cond_oor_val HS])",
+   "ok": true,
+   "components": [
+    {
+     "condition": "G1",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "primary_conditional",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "cond_oor_val",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "primary_conditional",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "cond_oor_val",
+     "value": "6/25",
+     "bar": "1/4",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G2",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "primary_mix",
+     "value": "3/10",
+     "bar": "3/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G2",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "primary_mix",
+     "value": "3/10",
+     "bar": "3/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_conditional",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_mix",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G4",
+     "surface": "in",
+     "contrast": "trace-off",
+     "metric": "swap",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G4",
+     "surface": "in",
+     "contrast": "trace-off",
+     "metric": "add_nowrap",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G5",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "conditional_in",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G5",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "mix_in",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "DP3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_conditional",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "DP3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_mix",
+     "value": "1/10",
+     "bar": "1/10",
+     "holds": false,
+     "within_1se": true
+    }
+   ],
+   "within_1se_of_bar": [
+    "G1 trace-plain conditional",
+    "G1 trace-plain cond_oor_val",
+    "G1 trace-plain conditional HS",
+    "G1 trace-plain cond_oor_val HS",
+    "G2 trace-plain mix",
+    "G2 trace-plain mix HS",
+    "G3 trace-filler conditional",
+    "G3 trace-filler mix",
+    "G4 trace-off swap",
+    "G4 trace-off add_nowrap",
+    "G5 trace-plain conditional_in",
+    "G5 trace-plain mix_in",
+    "DP3 trace-filler conditional",
+    "DP3 trace-filler mix"
+   ],
+   "seconds": 1.8
+  },
+  "boundary_dp3": {
+   "expected": "STOP (decision point 3): trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format)",
+   "verdict": "STOP (decision point 3): trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format)",
+   "ok": true,
+   "components": [
+    {
+     "condition": "G1",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "primary_conditional",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "cond_oor_val",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "primary_conditional",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G1",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "cond_oor_val",
+     "value": "1/4",
+     "bar": "1/4",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G2",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "primary_mix",
+     "value": "3/10",
+     "bar": "3/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G2",
+     "surface": "hs",
+     "contrast": "trace-plain",
+     "metric": "primary_mix",
+     "value": "3/10",
+     "bar": "3/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_conditional",
+     "value": "29/300",
+     "bar": "1/10",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_mix",
+     "value": "9/100",
+     "bar": "1/10",
+     "holds": false,
+     "within_1se": true
+    },
+    {
+     "condition": "G4",
+     "surface": "in",
+     "contrast": "trace-off",
+     "metric": "swap",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G4",
+     "surface": "in",
+     "contrast": "trace-off",
+     "metric": "add_nowrap",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G5",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "conditional_in",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "G5",
+     "surface": "in",
+     "contrast": "trace-plain",
+     "metric": "mix_in",
+     "value": "-1/20",
+     "bar": "-1/20",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "DP3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_conditional",
+     "value": "29/300",
+     "bar": "1/10",
+     "holds": true,
+     "within_1se": true
+    },
+    {
+     "condition": "DP3",
+     "surface": "in",
+     "contrast": "trace-filler",
+     "metric": "primary_mix",
+     "value": "9/100",
+     "bar": "1/10",
+     "holds": true,
+     "within_1se": true
+    }
+   ],
+   "within_1se_of_bar": [
+    "G1 trace-plain conditional",
+    "G1 trace-plain cond_oor_val",
+    "G1 trace-plain conditional HS",
+    "G1 trace-plain cond_oor_val HS",
+    "G2 trace-plain mix",
+    "G2 trace-plain mix HS",
+    "G3 trace-filler conditional",
+    "G3 trace-filler mix",
+    "G4 trace-off swap",
+    "G4 trace-off add_nowrap",
+    "G5 trace-plain conditional_in",
+    "G5 trace-plain mix_in",
+    "DP3 trace-filler conditional",
+    "DP3 trace-filler mix"
+   ],
+   "seconds": 1.7
+  }
+ },
  "n_boot": 2000,
+ "boundary_checks": {
+  "G1 conditional": {
+   "cases": 452,
+   "wrong": 0,
+   "at_bar_cases": 226,
+   "float_impl_would_misjudge": 36
+  },
+  "G1 cond_oor_val": {
+   "cases": 152,
+   "wrong": 0,
+   "at_bar_cases": 76,
+   "float_impl_would_misjudge": 12
+  },
+  "G2 mix": {
+   "cases": 142,
+   "wrong": 0,
+   "at_bar_cases": 71,
+   "float_impl_would_misjudge": 15
+  },
+  "G1 conditional HS": {
+   "cases": 452,
+   "wrong": 0,
+   "at_bar_cases": 226,
+   "float_impl_would_misjudge": 36
+  },
+  "G1 cond_oor_val HS": {
+   "cases": 152,
+   "wrong": 0,
+   "at_bar_cases": 76,
+   "float_impl_would_misjudge": 12
+  },
+  "G2 mix HS": {
+   "cases": 142,
+   "wrong": 0,
+   "at_bar_cases": 71,
+   "float_impl_would_misjudge": 15
+  },
+  "G3 primary_conditional": {
+   "cases": 542,
+   "wrong": 0,
+   "at_bar_cases": 271,
+   "float_impl_would_misjudge": 167
+  },
+  "DP3 primary_conditional": {
+   "cases": 542,
+   "wrong": 0,
+   "at_bar_cases": 271,
+   "float_impl_would_misjudge": 167
+  },
+  "G3 primary_mix": {
+   "cases": 182,
+   "wrong": 0,
+   "at_bar_cases": 91,
+   "float_impl_would_misjudge": 56
+  },
+  "DP3 primary_mix": {
+   "cases": 182,
+   "wrong": 0,
+   "at_bar_cases": 91,
+   "float_impl_would_misjudge": 56
+  },
+  "G4 swap": {
+   "cases": 152,
+   "wrong": 0,
+   "at_bar_cases": 76,
+   "float_impl_would_misjudge": 32
+  },
+  "G4 add_nowrap": {
+   "cases": 152,
+   "wrong": 0,
+   "at_bar_cases": 76,
+   "float_impl_would_misjudge": 32
+  },
+  "G5 mix_in": {
+   "cases": 190,
+   "wrong": 0,
+   "at_bar_cases": 95,
+   "float_impl_would_misjudge": 39
+  },
+  "G5 conditional_in": {
+   "cases": 38,
+   "wrong": 0,
+   "at_bar_cases": 19,
+   "float_impl_would_misjudge": 4
+  },
+  "ok": true
+ },
  "checks": {
   "go: gold trace side product law predicted == observed == 1": true,
   "go: gold trace side regret k4 == 0": true,
-  "malformed: every sorted-key trace rejected (format_ok 0)": true,
+  "malformed: every sorted-key trace rejected (format_ok 0; trace side invalid)": true,
+  "filler_invalid: filler side invalid, trace side valid": true,
   "go: trace fields of a gold trace all 1.0": true,
+  "coarse_comparison: the POOLED conditional passes on both surfaces; only the cond_oor_val clause fails": true,
+  "surface_locked: every in-surface G1 / G2 part holds; every held-out-surface part fails; the trace side's surface audit shows the loss": true,
+  "go: a gold trace side has zero surface-audit loss": true,
+  "boundary_go: every component value equals its bar exactly (both surfaces)": true,
+  "boundary_go: every component (all at their bar) is flagged within 1 SE": true,
+  "verdict() exact-boundary checks (exhaustive on the bank's denominators, both surfaces)": true,
+  "verdict() refuses floats": true,
+  "results stem carries the training variant": true,
+  "amendment 4b: the dev bank's fills are one constant per kind with zero information about the answer": true,
   "multi-seed: one NO-GO seed -> not GO in every seed": true
  },
  "ok": true,
+ "n_scenarios": 14,
  "code_sha256": {
-  "scripts/t2br_analysis.py": "a4ef7bb679c9de88f54f5b5917763807a1682c71451ba19660fafb3eda5424e3",
-  "scripts/t2br_common.py": "75f47d7b5ea1b92e73de1df0e2884df28835c589e55bdc84a94069f96c57ce15"
+  "scripts/t2br_analysis.py": "4fded162d3da619857fc6a049e2661d08020dd39332db5d8f9dd33d3a88000cc",
+  "scripts/t2br_common.py": "affa7d555c2924c7a587f55a13779315721b792c81b4f589c2a0f7519d783186"
  },
- "dev_sha256": "8b01899c60a0bb9d60ff2535531ec5c168564a9b98e313a034ac75ecff1a5427"
+ "dev_sha256": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+ "dev_hs_sha256": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
+ "go_rule_revision": 3
 }
