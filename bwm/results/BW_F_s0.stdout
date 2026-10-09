@@ -1,0 +1,411 @@
+  [gpu-lease] waiting: foreign python pid 339048 (1.37 GiB) on the card
+  [gpu-lease] waiting: foreign python pid 3848 (1.41 GiB) on the card
+  [gpu-lease] reclaimed a stale lock from dead pid 3848; backed up to rineya-gpu-0.lock.stale-3848.bak
+  [gpu-lease] acquired rineya-gpu-0.lock label=bwm:bw-train-F token=e8080a4b
+rows 12000 from runs/BW_data/forward_train.jsonl; steps 600 x 16 = 0.80 epochs
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<02:10,  2.36it/s]Loading weights:   8%|7         | 24/310 [00:00<00:04, 58.48it/s]Loading weights:  14%|#4        | 44/310 [00:00<00:02, 94.77it/s]Loading weights:  23%|##2       | 70/310 [00:00<00:01, 136.56it/s]Loading weights:  31%|###       | 96/310 [00:00<00:01, 169.32it/s]Loading weights:  38%|###8      | 118/310 [00:00<00:01, 181.32it/s]Loading weights:  45%|####5     | 140/310 [00:01<00:00, 178.05it/s]Loading weights:  55%|#####4    | 169/310 [00:01<00:00, 205.94it/s]Loading weights:  62%|######1   | 192/310 [00:01<00:00, 211.21it/s]Loading weights:  69%|######9   | 215/310 [00:01<00:00, 213.99it/s]Loading weights:  77%|#######6  | 238/310 [00:01<00:00, 205.71it/s]Loading weights:  85%|########4 | 262/310 [00:01<00:00, 120.34it/s]Loading weights:  92%|#########1| 284/310 [00:01<00:00, 138.21it/s]Loading weights:  98%|#########8| 304/310 [00:02<00:00, 150.66it/s]Loading weights: 100%|##########| 310/310 [00:02<00:00, 146.80it/s]
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+  [thermal] 09:07:30 GPU 66 C
+step 1/600 loss 0.7153 lr 1.67e-06 gn 3.20 17s peak 2.68GiB
+  [thermal] 09:08:04 paused 5s, GPU now 64 C
+  [thermal] 09:08:56 paused 5s, GPU now 66 C
+  [thermal] 09:09:04 paused 5s, GPU now 65 C
+  [thermal] 09:09:13 paused 5s, GPU now 65 C
+  [thermal] 09:09:29 paused 5s, GPU now 65 C
+  [thermal] 09:10:37 paused 5s, GPU now 66 C
+  [thermal] 09:10:46 paused 5s, GPU now 67 C
+  [thermal] 09:11:10 paused 5s, GPU now 66 C
+  [thermal] 09:11:32 paused 5s, GPU now 66 C
+  [thermal] 09:11:45 paused 5s, GPU now 66 C
+  [thermal] 09:12:09 paused 5s, GPU now 66 C
+  [thermal] 09:12:36 paused 5s, GPU now 66 C
+  [thermal] 09:12:39 GPU 68 C
+  [thermal] 09:13:09 paused 16s, GPU now 66 C
+  [thermal] 09:14:22 paused 16s, GPU now 67 C
+  [thermal] 09:14:50 paused 10s, GPU now 66 C
+  [thermal] 09:15:02 paused 5s, GPU now 66 C
+  [thermal] 09:15:17 paused 5s, GPU now 66 C
+  [thermal] 09:15:26 paused 5s, GPU now 66 C
+  [thermal] 09:15:39 paused 5s, GPU now 67 C
+  [thermal] 09:16:00 paused 10s, GPU now 66 C
+  [thermal] 09:16:54 paused 10s, GPU now 66 C
+  [thermal] 09:17:19 paused 10s, GPU now 67 C
+  [thermal] 09:17:34 paused 5s, GPU now 66 C
+  [thermal] 09:17:44 paused 5s, GPU now 66 C
+  [thermal] 09:17:52 paused 5s, GPU now 66 C
+  [thermal] 09:17:56 GPU 67 C
+  [thermal] 09:18:38 paused 16s, GPU now 66 C
+  [thermal] 09:18:47 paused 5s, GPU now 66 C
+  [thermal] 09:19:41 paused 15s, GPU now 66 C
+  [thermal] 09:20:03 paused 10s, GPU now 67 C
+  [thermal] 09:20:16 paused 5s, GPU now 66 C
+  [thermal] 09:20:30 paused 5s, GPU now 66 C
+  [thermal] 09:20:57 paused 10s, GPU now 66 C
+  [thermal] 09:21:37 paused 16s, GPU now 66 C
+  [thermal] 09:22:04 paused 10s, GPU now 66 C
+  [thermal] 09:22:18 paused 5s, GPU now 66 C
+  [thermal] 09:22:28 paused 6s, GPU now 66 C
+  [thermal] 09:23:00 paused 11s, GPU now 66 C
+  [thermal] 09:23:05 GPU 67 C
+  [thermal] 09:23:19 paused 6s, GPU now 66 C
+  [thermal] 09:23:29 paused 5s, GPU now 66 C
+  [thermal] 09:23:45 paused 5s, GPU now 66 C
+  [thermal] 09:24:04 paused 5s, GPU now 67 C
+  [thermal] 09:24:12 paused 5s, GPU now 66 C
+  [thermal] 09:24:20 paused 5s, GPU now 66 C
+  [thermal] 09:24:29 paused 5s, GPU now 66 C
+  [thermal] 09:24:57 paused 11s, GPU now 67 C
+  [thermal] 09:25:18 paused 10s, GPU now 66 C
+  [thermal] 09:25:57 paused 11s, GPU now 66 C
+step 50/600 loss 0.2802 lr 8.33e-05 gn 1.15 1115s peak 2.77GiB
+  [thermal] 09:26:28 paused 11s, GPU now 66 C
+  [thermal] 09:26:56 paused 16s, GPU now 67 C
+  [thermal] 09:27:20 paused 16s, GPU now 66 C
+Traceback (most recent call last):
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_BWM_001_Research_Bundle\native_v1\scripts\train_generic.py", line 64, in <module>
+    main()
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_BWM_001_Research_Bundle\native_v1\scripts\train_generic.py", line 55, in main
+    log = lm.train_sft(pm, tok, rows, steps=a.steps, batch_size=a.batch, lr=a.lr, seed=a.seed, logger=P,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_BWM_001_Research_Bundle\native_v1\bwmn\lm.py", line 324, in train_sft
+    mloss, mn = chunked_ce(model, ids, att, lab)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_BWM_001_Research_Bundle\native_v1\bwmn\lm.py", line 244, in chunked_ce
+    h = dec(input_ids=ids, attention_mask=att).last_hidden_state
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\utils\generic.py", line 1040, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\utils\output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 424, in forward
+    hidden_states = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\modeling_layers.py", line 109, in __call__
+    return self._gradient_checkpointing_func(partial(super().__call__, **kwargs), *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\_compile.py", line 32, in inner
+    return disable_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\_dynamo\eval_frame.py", line 745, in _fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\utils\checkpoint.py", line 496, in checkpoint
+    ret = function(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 332, in forward
+    hidden_states = self.mlp(hidden_states)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 82, in forward
+    down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\peft\tuners\lora\layer.py", line 1058, in forward
+    result = result + lora_B(lora_A(dropout(x))) * scaling
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+RuntimeError: CUDA error: out of memory
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+  [gpu-lease] released rineya-gpu-0.lock
+  [gpu-lease] waiting: foreign python pid 339096 (1.38 GiB) on the card
+  [gpu-run] alternation: last turn was ours and RCWM (rcwm-t1:sparse) is waiting; yielding
+  [gpu-lease] waiting: foreign python pid 7996 (1.41 GiB) on the card
+  [gpu-lease] waiting: foreign python pid 7996 (1.04 GiB) on the card
+  [gpu-lease] acquired rineya-gpu-0.lock label=bwm:bw-train-F token=554b59bc
+rows 12000 from runs/BW_data/forward_train.jsonl; steps 600 x 16 = 0.80 epochs
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:12,  4.24it/s]Loading weights:  17%|#6        | 52/310 [00:00<00:01, 191.92it/s]Loading weights:  33%|###3      | 103/310 [00:00<00:00, 296.98it/s]Loading weights:  51%|#####     | 157/310 [00:00<00:00, 373.04it/s]Loading weights:  67%|######6   | 207/310 [00:00<00:00, 411.98it/s]Loading weights:  83%|########2 | 257/310 [00:00<00:00, 437.94it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 370.75it/s]
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+  [thermal] 11:59:01 GPU 63 C
+step 1/600 loss 0.7153 lr 1.67e-06 gn 3.20 6s peak 2.68GiB
+  [thermal] 11:59:22 paused 5s, GPU now 58 C
+  [thermal] 11:59:44 paused 5s, GPU now 58 C
+  [thermal] 12:00:03 paused 5s, GPU now 58 C
+  [thermal] 12:00:14 paused 5s, GPU now 58 C
+  [thermal] 12:00:27 paused 5s, GPU now 57 C
+  [thermal] 12:00:39 paused 5s, GPU now 57 C
+  [thermal] 12:01:08 paused 5s, GPU now 58 C
+  [thermal] 12:01:34 paused 5s, GPU now 59 C
+  [thermal] 12:01:51 paused 5s, GPU now 58 C
+  [thermal] 12:02:21 paused 5s, GPU now 59 C
+  [thermal] 12:02:33 paused 5s, GPU now 58 C
+  [thermal] 12:02:47 paused 5s, GPU now 58 C
+  [thermal] 12:03:03 paused 5s, GPU now 58 C
+  [thermal] 12:03:28 paused 5s, GPU now 58 C
+  [thermal] 12:03:53 paused 5s, GPU now 59 C
+  [thermal] 12:04:05 paused 5s, GPU now 58 C
+  [thermal] 12:04:07 GPU 59 C
+  [thermal] 12:04:20 paused 5s, GPU now 57 C
+  [thermal] 12:04:55 paused 5s, GPU now 58 C
+  [thermal] 12:05:26 paused 5s, GPU now 59 C
+  [thermal] 12:06:00 paused 5s, GPU now 59 C
+step 50/600 loss 0.2802 lr 8.33e-05 gn 1.15 442s peak 2.77GiB
+  [thermal] 12:06:51 paused 5s, GPU now 60 C
+  [thermal] 12:07:16 paused 5s, GPU now 59 C
+  [thermal] 12:07:34 paused 5s, GPU now 58 C
+  [thermal] 12:07:56 paused 5s, GPU now 58 C
+  [thermal] 12:08:15 paused 5s, GPU now 58 C
+  [thermal] 12:08:47 paused 5s, GPU now 59 C
+  [thermal] 12:09:01 paused 5s, GPU now 59 C
+  [thermal] 12:09:20 paused 5s, GPU now 58 C
+  [thermal] 12:09:23 GPU 59 C
+  [thermal] 12:09:36 paused 5s, GPU now 58 C
+  [thermal] 12:10:07 paused 5s, GPU now 59 C
+  [thermal] 12:10:18 paused 5s, GPU now 58 C
+  [thermal] 12:10:44 paused 5s, GPU now 58 C
+  [thermal] 12:10:58 paused 5s, GPU now 58 C
+  [thermal] 12:11:12 paused 5s, GPU now 57 C
+  [thermal] 12:11:31 paused 5s, GPU now 58 C
+  [thermal] 12:12:08 paused 5s, GPU now 58 C
+  [thermal] 12:12:20 paused 5s, GPU now 57 C
+  [thermal] 12:12:35 paused 5s, GPU now 57 C
+  [thermal] 12:12:48 paused 5s, GPU now 57 C
+  [thermal] 12:13:10 paused 5s, GPU now 57 C
+  [thermal] 12:13:44 paused 5s, GPU now 58 C
+step 100/600 loss 0.0218 lr 1.00e-04 gn 0.82 905s peak 2.77GiB
+  [thermal] 12:14:34 paused 5s, GPU now 59 C
+  [thermal] 12:14:36 GPU 60 C
+  [thermal] 12:15:11 paused 5s, GPU now 59 C
+  [thermal] 12:15:24 paused 5s, GPU now 59 C
+  [thermal] 12:15:47 paused 5s, GPU now 59 C
+  [thermal] 12:16:20 paused 5s, GPU now 59 C
+  [thermal] 12:16:48 paused 5s, GPU now 60 C
+  [thermal] 12:16:58 paused 5s, GPU now 59 C
+  [thermal] 12:17:29 paused 5s, GPU now 59 C
+  [thermal] 12:17:56 paused 5s, GPU now 59 C
+  [thermal] 12:18:24 paused 5s, GPU now 59 C
+  [thermal] 12:18:45 paused 5s, GPU now 59 C
+  [thermal] 12:19:04 paused 5s, GPU now 59 C
+  [thermal] 12:19:42 paused 5s, GPU now 59 C
+  [thermal] 12:19:45 GPU 60 C
+  [thermal] 12:20:00 paused 5s, GPU now 59 C
+  [thermal] 12:20:28 paused 5s, GPU now 59 C
+  [thermal] 12:21:01 paused 5s, GPU now 59 C
+step 150/600 loss 0.0096 lr 1.00e-04 gn 0.42 1324s peak 2.78GiB
+  [thermal] 12:21:35 paused 5s, GPU now 59 C
+  [thermal] 12:22:06 paused 5s, GPU now 60 C
+  [thermal] 12:22:49 paused 5s, GPU now 60 C
+  [thermal] 12:23:13 paused 5s, GPU now 59 C
+  [thermal] 12:23:24 paused 5s, GPU now 59 C
+  [thermal] 12:23:38 paused 5s, GPU now 58 C
+  [thermal] 12:23:52 paused 5s, GPU now 58 C
+  [thermal] 12:24:17 paused 5s, GPU now 58 C
+  [thermal] 12:24:27 paused 5s, GPU now 58 C
+  [thermal] 12:24:55 paused 5s, GPU now 58 C
+  [thermal] 12:24:59 GPU 59 C
+  [thermal] 12:25:22 paused 5s, GPU now 58 C
+  [thermal] 12:25:59 paused 5s, GPU now 59 C
+  [thermal] 12:26:21 paused 5s, GPU now 59 C
+  [thermal] 12:26:46 paused 5s, GPU now 59 C
+  [thermal] 12:27:00 paused 5s, GPU now 58 C
+  [thermal] 12:27:15 paused 5s, GPU now 57 C
+  [thermal] 12:27:34 paused 5s, GPU now 58 C
+  [thermal] 12:27:51 paused 5s, GPU now 58 C
+  [thermal] 12:28:13 paused 5s, GPU now 59 C
+step 200/600 loss 0.0051 lr 1.00e-04 gn 0.19 1779s peak 2.78GiB
+  [thermal] 12:29:01 paused 5s, GPU now 59 C
+  [thermal] 12:29:35 paused 5s, GPU now 60 C
+  [thermal] 12:30:06 paused 5s, GPU now 60 C
+  [thermal] 12:30:09 GPU 60 C
+  [thermal] 12:30:37 paused 5s, GPU now 59 C
+  [thermal] 12:30:51 paused 5s, GPU now 59 C
+  [thermal] 12:31:02 paused 5s, GPU now 58 C
+  [thermal] 12:31:35 paused 5s, GPU now 59 C
+  [thermal] 12:31:53 paused 5s, GPU now 58 C
+  [thermal] 12:32:07 paused 5s, GPU now 58 C
+  [thermal] 12:32:21 paused 5s, GPU now 58 C
+  [thermal] 12:32:35 paused 5s, GPU now 57 C
+  [thermal] 12:32:46 paused 5s, GPU now 57 C
+  [thermal] 12:33:22 paused 5s, GPU now 59 C
+  [thermal] 12:33:36 paused 5s, GPU now 58 C
+  [thermal] 12:33:50 paused 5s, GPU now 58 C
+  [thermal] 12:34:05 paused 5s, GPU now 57 C
+  [thermal] 12:34:16 paused 5s, GPU now 57 C
+  [thermal] 12:34:30 paused 5s, GPU now 57 C
+  [thermal] 12:35:03 paused 5s, GPU now 58 C
+  [thermal] 12:35:17 GPU 63 C
+  [thermal] 12:35:33 paused 5s, GPU now 59 C
+  [thermal] 12:36:00 paused 5s, GPU now 59 C
+step 250/600 loss 0.0030 lr 1.00e-04 gn 0.01 2241s peak 2.78GiB
+  [thermal] 12:36:46 paused 5s, GPU now 60 C
+  [thermal] 12:37:00 paused 5s, GPU now 59 C
+  [thermal] 12:37:34 paused 5s, GPU now 59 C
+  [thermal] 12:37:51 paused 5s, GPU now 59 C
+  [thermal] 12:38:12 paused 5s, GPU now 59 C
+  [thermal] 12:38:41 paused 5s, GPU now 59 C
+  [thermal] 12:39:02 paused 5s, GPU now 59 C
+  [thermal] 12:39:30 paused 5s, GPU now 60 C
+  [thermal] 12:39:43 paused 5s, GPU now 58 C
+  [thermal] 12:40:12 paused 5s, GPU now 59 C
+  [thermal] 12:40:26 GPU 63 C
+  [thermal] 12:40:40 paused 5s, GPU now 59 C
+  [thermal] 12:41:01 paused 5s, GPU now 59 C
+  [thermal] 12:41:36 paused 5s, GPU now 60 C
+  [thermal] 12:42:09 paused 5s, GPU now 60 C
+  [thermal] 12:42:23 paused 5s, GPU now 59 C
+  [thermal] 12:42:46 paused 5s, GPU now 59 C
+  [thermal] 12:43:03 paused 5s, GPU now 59 C
+  [thermal] 12:43:22 paused 5s, GPU now 59 C
+  [thermal] 12:43:36 paused 5s, GPU now 58 C
+  [thermal] 12:43:49 paused 5s, GPU now 58 C
+step 300/600 loss 0.0019 lr 1.00e-04 gn 0.06 2694s peak 2.78GiB
+  [thermal] 12:44:29 paused 5s, GPU now 59 C
+  [thermal] 12:44:44 paused 5s, GPU now 59 C
+  [thermal] 12:45:14 paused 5s, GPU now 59 C
+  [thermal] 12:45:24 paused 5s, GPU now 59 C
+  [thermal] 12:45:27 GPU 60 C
+  [thermal] 12:45:42 paused 5s, GPU now 58 C
+  [thermal] 12:45:59 paused 5s, GPU now 58 C
+  [thermal] 12:46:17 paused 5s, GPU now 57 C
+  [thermal] 12:46:48 paused 5s, GPU now 58 C
+  [thermal] 12:46:59 paused 5s, GPU now 58 C
+  [thermal] 12:47:13 paused 5s, GPU now 57 C
+  [thermal] 12:47:37 paused 5s, GPU now 58 C
+  [thermal] 12:48:09 paused 5s, GPU now 59 C
+  [thermal] 12:48:26 paused 5s, GPU now 58 C
+  [thermal] 12:48:45 paused 5s, GPU now 58 C
+  [thermal] 12:49:16 paused 5s, GPU now 59 C
+  [thermal] 12:49:41 paused 5s, GPU now 59 C
+  [thermal] 12:49:55 paused 5s, GPU now 58 C
+  [thermal] 12:50:07 paused 5s, GPU now 58 C
+  [thermal] 12:50:21 paused 5s, GPU now 57 C
+  [thermal] 12:50:40 paused 5s, GPU now 58 C
+  [thermal] 12:50:42 GPU 59 C
+  [thermal] 12:51:03 paused 5s, GPU now 58 C
+  [thermal] 12:51:16 paused 5s, GPU now 58 C
+  [thermal] 12:51:31 paused 5s, GPU now 58 C
+  [thermal] 12:51:53 paused 5s, GPU now 58 C
+step 350/600 loss 0.0022 lr 1.00e-04 gn 0.09 3183s peak 2.78GiB
+  [thermal] 12:52:11 paused 5s, GPU now 58 C
+  [thermal] 12:52:43 paused 5s, GPU now 59 C
+  [thermal] 12:53:00 paused 5s, GPU now 58 C
+  [thermal] 12:53:34 paused 5s, GPU now 59 C
+  [thermal] 12:53:57 paused 5s, GPU now 59 C
+  [thermal] 12:54:14 paused 5s, GPU now 58 C
+  [thermal] 12:54:50 paused 5s, GPU now 59 C
+  [thermal] 12:55:21 paused 5s, GPU now 60 C
+  [thermal] 12:55:38 paused 5s, GPU now 59 C
+  [thermal] 12:55:55 paused 5s, GPU now 59 C
+  [thermal] 12:55:58 GPU 60 C
+  [thermal] 12:56:11 paused 5s, GPU now 59 C
+  [thermal] 12:56:46 paused 5s, GPU now 59 C
+  [thermal] 12:57:15 paused 5s, GPU now 59 C
+  [thermal] 12:57:27 paused 5s, GPU now 59 C
+  [thermal] 12:57:52 paused 5s, GPU now 59 C
+  [thermal] 12:58:24 paused 5s, GPU now 59 C
+  [thermal] 12:58:51 paused 5s, GPU now 60 C
+step 400/600 loss 0.0009 lr 1.00e-04 gn 0.01 3612s peak 2.78GiB
+  [thermal] 12:59:33 paused 5s, GPU now 60 C
+  [thermal] 13:00:04 paused 5s, GPU now 60 C
+  [thermal] 13:00:26 paused 5s, GPU now 59 C
+  [thermal] 13:00:46 paused 5s, GPU now 58 C
+  [thermal] 13:01:00 paused 5s, GPU now 58 C
+  [thermal] 13:01:02 GPU 59 C
+  [thermal] 13:01:25 paused 5s, GPU now 59 C
+  [thermal] 13:01:50 paused 5s, GPU now 59 C
+  [thermal] 13:02:21 paused 5s, GPU now 59 C
+  [thermal] 13:02:55 paused 5s, GPU now 60 C
+  [thermal] 13:03:11 paused 5s, GPU now 60 C
+  [thermal] 13:03:34 paused 5s, GPU now 59 C
+  [thermal] 13:04:06 paused 5s, GPU now 60 C
+  [thermal] 13:04:20 paused 5s, GPU now 59 C
+  [thermal] 13:04:38 paused 5s, GPU now 59 C
+  [thermal] 13:04:55 paused 5s, GPU now 59 C
+  [thermal] 13:05:26 paused 5s, GPU now 59 C
+  [thermal] 13:05:49 paused 5s, GPU now 59 C
+  [thermal] 13:06:13 GPU 64 C
+  [thermal] 13:06:25 paused 5s, GPU now 60 C
+step 450/600 loss 0.0006 lr 1.00e-04 gn 0.04 4048s peak 2.78GiB
+  [thermal] 13:07:09 paused 5s, GPU now 60 C
+  [thermal] 13:07:26 paused 5s, GPU now 59 C
+  [thermal] 13:07:54 paused 5s, GPU now 60 C
+  [thermal] 13:08:08 paused 5s, GPU now 59 C
+  [thermal] 13:08:29 paused 5s, GPU now 59 C
+  [thermal] 13:08:45 paused 5s, GPU now 59 C
+  [thermal] 13:09:07 paused 5s, GPU now 59 C
+  [thermal] 13:09:35 paused 5s, GPU now 59 C
+  [thermal] 13:10:07 paused 5s, GPU now 60 C
+  [thermal] 13:10:35 paused 5s, GPU now 60 C
+  [thermal] 13:11:08 paused 5s, GPU now 60 C
+  [thermal] 13:11:22 GPU 64 C
+  [thermal] 13:11:41 paused 5s, GPU now 60 C
+  [thermal] 13:11:56 paused 5s, GPU now 60 C
+  [thermal] 13:12:15 paused 5s, GPU now 59 C
+  [thermal] 13:12:38 paused 5s, GPU now 59 C
+  [thermal] 13:13:05 paused 5s, GPU now 59 C
+  [thermal] 13:13:19 paused 5s, GPU now 58 C
+  [thermal] 13:13:42 paused 5s, GPU now 59 C
+step 500/600 loss 0.0014 lr 8.58e-05 gn 0.00 4482s peak 2.78GiB
+  [thermal] 13:14:10 paused 5s, GPU now 59 C
+  [thermal] 13:14:41 paused 5s, GPU now 59 C
+  [thermal] 13:14:54 paused 5s, GPU now 59 C
+  [thermal] 13:15:08 paused 5s, GPU now 58 C
+  [thermal] 13:15:19 paused 5s, GPU now 57 C
+  [thermal] 13:15:33 paused 5s, GPU now 57 C
+  [thermal] 13:15:52 paused 5s, GPU now 58 C
+  [thermal] 13:16:07 paused 5s, GPU now 57 C
+  [thermal] 13:16:24 paused 5s, GPU now 57 C
+  [thermal] 13:16:27 GPU 58 C
+  [thermal] 13:16:57 paused 5s, GPU now 59 C
+  [thermal] 13:17:29 paused 5s, GPU now 59 C
+  [thermal] 13:17:48 paused 5s, GPU now 59 C
+  [thermal] 13:18:21 paused 5s, GPU now 59 C
+  [thermal] 13:18:49 paused 5s, GPU now 59 C
+  [thermal] 13:19:25 paused 5s, GPU now 60 C
+  [thermal] 13:19:56 paused 5s, GPU now 60 C
+  [thermal] 13:20:10 paused 5s, GPU now 59 C
+  [thermal] 13:20:32 paused 5s, GPU now 59 C
+  [thermal] 13:20:48 paused 5s, GPU now 59 C
+  [thermal] 13:21:15 paused 5s, GPU now 60 C
+step 550/600 loss 0.0005 lr 4.83e-05 gn 0.00 4941s peak 2.78GiB
+  [thermal] 13:21:29 GPU 61 C
+  [thermal] 13:21:48 paused 5s, GPU now 59 C
+  [thermal] 13:22:22 paused 5s, GPU now 60 C
+  [thermal] 13:22:46 paused 5s, GPU now 60 C
+  [thermal] 13:23:10 paused 5s, GPU now 60 C
+  [thermal] 13:24:07 paused 40s, GPU now 55 C
+  [thermal] 13:24:23 paused 5s, GPU now 56 C
+  [thermal] 13:24:37 paused 5s, GPU now 56 C
+  [thermal] 13:24:59 paused 5s, GPU now 57 C
+  [thermal] 13:25:10 paused 5s, GPU now 57 C
+  [thermal] 13:25:26 paused 5s, GPU now 57 C
+  [thermal] 13:25:38 paused 5s, GPU now 57 C
+  [thermal] 13:25:57 paused 5s, GPU now 57 C
+  [thermal] 13:26:13 paused 5s, GPU now 57 C
+  [thermal] 13:26:36 GPU 63 C
+  [thermal] 13:26:45 paused 5s, GPU now 59 C
+  [thermal] 13:27:01 paused 5s, GPU now 58 C
+  [thermal] 13:27:32 paused 5s, GPU now 60 C
+  [thermal] 13:27:57 paused 5s, GPU now 60 C
+  [thermal] 13:28:11 paused 5s, GPU now 59 C
+  [thermal] 13:28:38 paused 5s, GPU now 59 C
+  [thermal] 13:28:56 paused 5s, GPU now 59 C
+  [thermal] 13:29:30 paused 5s, GPU now 59 C
+step 600/600 loss 0.0008 lr 1.07e-05 gn 0.00 5438s peak 2.78GiB
+done 5440.3
+  [gpu-lease] released rineya-gpu-0.lock

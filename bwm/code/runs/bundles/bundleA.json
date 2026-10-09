@@ -1,0 +1,69 @@
+{
+ "budget_s": 16200,
+ "jobs": [
+  {
+   "name": "bw-train-Pa-v2",
+   "marker": "runs/BW_Pa_v2_s1/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Pa_v2_s1.stdout",
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_data_v2/proposer_actions_train.jsonl",
+    "--steps",
+    "1000",
+    "--seed",
+    "1",
+    "--max-len",
+    "256",
+    "--out",
+    "runs/BW_Pa_v2_s1"
+   ],
+   "est_s": 10800
+  },
+  {
+   "name": "bw-train-Fdelta",
+   "marker": "runs/BW_Fdelta_s0/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Fdelta_s0.stdout",
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_data/forward_delta_train.jsonl",
+    "--steps",
+    "600",
+    "--seed",
+    "0",
+    "--max-len",
+    "256",
+    "--out",
+    "runs/BW_Fdelta_s0"
+   ],
+   "est_s": 5000
+  },
+  {
+   "name": "pilotG-actions",
+   "marker": "runs/EVAL_pilot_gpu_s1/.done_pilotG-actions",
+   "log": "runs/EVAL_pilot_gpu_s1.pilotG-actions.stdout",
+   "cmd": [
+    "scripts/run_eval.py",
+    "--fwd",
+    "runs/F_titan_main/adapter",
+    "--pa",
+    "runs/P_actions_s1/adapter",
+    "--ps",
+    "runs/P_states_s1/adapter",
+    "--arms",
+    "A00,A01",
+    "--splits",
+    "id_val",
+    "--n-scale",
+    "0.5",
+    "--share-prefix",
+    "--tag",
+    "pilotG",
+    "--out",
+    "runs/EVAL_pilot_gpu_s1"
+   ],
+   "est_s": 5400
+  }
+ ]
+}

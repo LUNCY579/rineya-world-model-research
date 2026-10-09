@@ -1,0 +1,957 @@
+{
+ "meta": {
+  "core": "titan-sparse",
+  "args": {
+   "core": "titan-sparse",
+   "rows": 4096,
+   "steps": 400,
+   "batch": 16,
+   "lr": 0.0001,
+   "seed": 0,
+   "families": 3000,
+   "out": "runs/F_titan_zeroshot",
+   "zero_shot_only": true
+  },
+  "core_path": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Published_Cores\\Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze"
+ },
+ "zero_shot": {
+  "id": {
+   "acc": 0.0,
+   "n_seen": 1455,
+   "n": 1455,
+   "malformed": 1455,
+   "correct": 0,
+   "correct_seen": 0,
+   "n_add1": 291,
+   "correct_add1": 0,
+   "n_illegal": 294,
+   "correct_illegal": 0,
+   "n_sub1": 291,
+   "correct_sub1": 0,
+   "n_double": 291,
+   "correct_double": 0,
+   "n_halve": 291,
+   "correct_halve": 0,
+   "n_finish": 291,
+   "correct_finish": 0,
+   "acc_add1": 0.0,
+   "acc_sub1": 0.0,
+   "acc_double": 0.0,
+   "acc_halve": 0.0,
+   "acc_finish": 0.0,
+   "acc_illegal": 0.0,
+   "acc_seen": 0.0,
+   "acc_unseen": 0.0,
+   "errors_sample": [
+    {
+     "x": -32,
+     "a": "add1",
+     "L": 32,
+     "ref": [
+      -31,
+      true,
+      false
+     ],
+     "out": "{\"x\":-33}"
+    },
+    {
+     "x": -32,
+     "a": "sub1",
+     "L": 32,
+     "ref": [
+      -32,
+      false,
+      false
+     ],
+     "out": "{\"x\":-31}"
+    },
+    {
+     "x": -32,
+     "a": "double",
+     "L": 32,
+     "ref": [
+      -32,
+      false,
+      false
+     ],
+     "out": "{\"x\":-64}"
+    },
+    {
+     "x": -32,
+     "a": "halve",
+     "L": 32,
+     "ref": [
+      -16,
+      true,
+      false
+     ],
+     "out": "{\"x\":16}"
+    },
+    {
+     "x": -32,
+     "a": "finish",
+     "L": 32,
+     "ref": [
+      -32,
+      true,
+      true
+     ],
+     "out": "{\"x\":-32}"
+    },
+    {
+     "x": -31,
+     "a": "add1",
+     "L": 32,
+     "ref": [
+      -30,
+      true,
+      false
+     ],
+     "out": "{\"x\":-30}"
+    },
+    {
+     "x": -31,
+     "a": "sub1",
+     "L": 32,
+     "ref": [
+      -32,
+      true,
+      false
+     ],
+     "out": "{\"x\":-30}"
+    },
+    {
+     "x": -31,
+     "a": "double",
+     "L": 32,
+     "ref": [
+      -31,
+      false,
+      false
+     ],
+     "out": "{\"x\":-62}"
+    },
+    {
+     "x": -31,
+     "a": "halve",
+     "L": 32,
+     "ref": [
+      -31,
+      false,
+      false
+     ],
+     "out": "{\"x\":15}"
+    },
+    {
+     "x": -31,
+     "a": "finish",
+     "L": 32,
+     "ref": [
+      -31,
+      true,
+      true
+     ],
+     "out": "{\"x\":-31}"
+    },
+    {
+     "x": -30,
+     "a": "add1",
+     "L": 32,
+     "ref": [
+      -29,
+      true,
+      false
+     ],
+     "out": "{\"x\":-29}"
+    },
+    {
+     "x": -30,
+     "a": "sub1",
+     "L": 32,
+     "ref": [
+      -31,
+      true,
+      false
+     ],
+     "out": "{\"x\":-29}"
+    },
+    {
+     "x": -30,
+     "a": "double",
+     "L": 32,
+     "ref": [
+      -30,
+      false,
+      false
+     ],
+     "out": "{\"x\":-60}"
+    },
+    {
+     "x": -30,
+     "a": "halve",
+     "L": 32,
+     "ref": [
+      -15,
+      true,
+      false
+     ],
+     "out": "{\"x\":-15}"
+    },
+    {
+     "x": -30,
+     "a": "finish",
+     "L": 32,
+     "ref": [
+      -30,
+      true,
+      true
+     ],
+     "out": "{\"x\":-30}"
+    },
+    {
+     "x": -29,
+     "a": "add1",
+     "L": 32,
+     "ref": [
+      -28,
+      true,
+      false
+     ],
+     "out": "{\"x\":-28}"
+    },
+    {
+     "x": -29,
+     "a": "sub1",
+     "L": 32,
+     "ref": [
+      -30,
+      true,
+      false
+     ],
+     "out": "{\"x\":-30}"
+    },
+    {
+     "x": -29,
+     "a": "double",
+     "L": 32,
+     "ref": [
+      -29,
+      false,
+      false
+     ],
+     "out": "{\"x\":-58}"
+    },
+    {
+     "x": -29,
+     "a": "halve",
+     "L": 32,
+     "ref": [
+      -29,
+      false,
+      false
+     ],
+     "out": "{\"x\":14}"
+    },
+    {
+     "x": -29,
+     "a": "finish",
+     "L": 32,
+     "ref": [
+      -29,
+      true,
+      true
+     ],
+     "out": "{\"x\":-29}"
+    },
+    {
+     "x": -28,
+     "a": "add1",
+     "L": 32,
+     "ref": [
+      -27,
+      true,
+      false
+     ],
+     "out": "{\"x\":-29}"
+    },
+    {
+     "x": -28,
+     "a": "sub1",
+     "L": 32,
+     "ref": [
+      -29,
+      true,
+      false
+     ],
+     "out": "{\"x\":-29}"
+    },
+    {
+     "x": -28,
+     "a": "double",
+     "L": 32,
+     "ref": [
+      -28,
+      false,
+      false
+     ],
+     "out": "{\"x\":-56}"
+    },
+    {
+     "x": -28,
+     "a": "halve",
+     "L": 32,
+     "ref": [
+      -14,
+      true,
+      false
+     ],
+     "out": "{\"x\":-14}"
+    },
+    {
+     "x": -28,
+     "a": "finish",
+     "L": 32,
+     "ref": [
+      -28,
+      true,
+      true
+     ],
+     "out": "{\"x\":-28}"
+    },
+    {
+     "x": -27,
+     "a": "add1",
+     "L": 32,
+     "ref": [
+      -26,
+      true,
+      false
+     ],
+     "out": "{\"x\":-28}"
+    },
+    {
+     "x": -27,
+     "a": "sub1",
+     "L": 32,
+     "ref": [
+      -28,
+      true,
+      false
+     ],
+     "out": "{\"x\":-28}"
+    },
+    {
+     "x": -27,
+     "a": "double",
+     "L": 32,
+     "ref": [
+      -27,
+      false,
+      false
+     ],
+     "out": "{\"x\":-54}"
+    },
+    {
+     "x": -27,
+     "a": "halve",
+     "L": 32,
+     "ref": [
+      -27,
+      false,
+      false
+     ],
+     "out": "{\"x\":13.5}"
+    },
+    {
+     "x": -27,
+     "a": "finish",
+     "L": 32,
+     "ref": [
+      -27,
+      true,
+      true
+     ],
+     "out": "{\"x\":-27}"
+    },
+    {
+     "x": -26,
+     "a": "add1",
+     "L": 32,
+     "ref": [
+      -25,
+      true,
+      false
+     ],
+     "out": "{\"x\":-27}"
+    },
+    {
+     "x": -26,
+     "a": "sub1",
+     "L": 32,
+     "ref": [
+      -27,
+      true,
+      false
+     ],
+     "out": "{\"x\":-27}"
+    },
+    {
+     "x": -26,
+     "a": "double",
+     "L": 32,
+     "ref": [
+      -26,
+      false,
+      false
+     ],
+     "out": "{\"x\":-52}"
+    },
+    {
+     "x": -26,
+     "a": "halve",
+     "L": 32,
+     "ref": [
+      -13,
+      true,
+      false
+     ],
+     "out": "{\"x\":-13}"
+    },
+    {
+     "x": -26,
+     "a": "finish",
+     "L": 32,
+     "ref": [
+      -26,
+      true,
+      true
+     ],
+     "out": "{\"x\":-26}"
+    },
+    {
+     "x": -25,
+     "a": "add1",
+     "L": 32,
+     "ref": [
+      -24,
+      true,
+      false
+     ],
+     "out": "{\"x\":-26}"
+    },
+    {
+     "x": -25,
+     "a": "sub1",
+     "L": 32,
+     "ref": [
+      -26,
+      true,
+      false
+     ],
+     "out": "{\"x\":-26}"
+    },
+    {
+     "x": -25,
+     "a": "double",
+     "L": 32,
+     "ref": [
+      -25,
+      false,
+      false
+     ],
+     "out": "{\"x\":-50}"
+    },
+    {
+     "x": -25,
+     "a": "halve",
+     "L": 32,
+     "ref": [
+      -25,
+      false,
+      false
+     ],
+     "out": "{\"x\":12.5}"
+    },
+    {
+     "x": -25,
+     "a": "finish",
+     "L": 32,
+     "ref": [
+      -25,
+      true,
+      true
+     ],
+     "out": "{\"x\":-25}"
+    }
+   ]
+  },
+  "ood": {
+   "acc": 0.0,
+   "n_unseen": 960,
+   "n": 960,
+   "malformed": 960,
+   "correct": 0,
+   "correct_unseen": 0,
+   "n_add1": 192,
+   "correct_add1": 0,
+   "n_illegal": 292,
+   "correct_illegal": 0,
+   "n_sub1": 192,
+   "correct_sub1": 0,
+   "n_double": 192,
+   "correct_double": 0,
+   "n_halve": 192,
+   "correct_halve": 0,
+   "n_finish": 192,
+   "correct_finish": 0,
+   "acc_add1": 0.0,
+   "acc_sub1": 0.0,
+   "acc_double": 0.0,
+   "acc_halve": 0.0,
+   "acc_finish": 0.0,
+   "acc_illegal": 0.0,
+   "errors_sample": [
+    {
+     "x": -96,
+     "a": "add1",
+     "L": 96,
+     "ref": [
+      -95,
+      true,
+      false
+     ],
+     "out": "{\"x\":-97}"
+    },
+    {
+     "x": -96,
+     "a": "sub1",
+     "L": 96,
+     "ref": [
+      -96,
+      false,
+      false
+     ],
+     "out": "{\"x\":-95}"
+    },
+    {
+     "x": -96,
+     "a": "double",
+     "L": 96,
+     "ref": [
+      -96,
+      false,
+      false
+     ],
+     "out": "{\"x\":-192}"
+    },
+    {
+     "x": -96,
+     "a": "halve",
+     "L": 96,
+     "ref": [
+      -48,
+      true,
+      false
+     ],
+     "out": "{\"x\":48}"
+    },
+    {
+     "x": -96,
+     "a": "finish",
+     "L": 96,
+     "ref": [
+      -96,
+      true,
+      true
+     ],
+     "out": "{\"x\":-96}"
+    },
+    {
+     "x": -95,
+     "a": "add1",
+     "L": 96,
+     "ref": [
+      -94,
+      true,
+      false
+     ],
+     "out": "{\"x\":-96}"
+    },
+    {
+     "x": -95,
+     "a": "sub1",
+     "L": 96,
+     "ref": [
+      -96,
+      true,
+      false
+     ],
+     "out": "{\"x\":-96}"
+    },
+    {
+     "x": -95,
+     "a": "double",
+     "L": 96,
+     "ref": [
+      -95,
+      false,
+      false
+     ],
+     "out": "{\"x\":-190}"
+    },
+    {
+     "x": -95,
+     "a": "halve",
+     "L": 96,
+     "ref": [
+      -95,
+      false,
+      false
+     ],
+     "out": "{\"x\":47}"
+    },
+    {
+     "x": -95,
+     "a": "finish",
+     "L": 96,
+     "ref": [
+      -95,
+      true,
+      true
+     ],
+     "out": "{\"x\":-95}"
+    },
+    {
+     "x": -94,
+     "a": "add1",
+     "L": 96,
+     "ref": [
+      -93,
+      true,
+      false
+     ],
+     "out": "{\"x\":-95}"
+    },
+    {
+     "x": -94,
+     "a": "sub1",
+     "L": 96,
+     "ref": [
+      -95,
+      true,
+      false
+     ],
+     "out": "{\"x\":-95}"
+    },
+    {
+     "x": -94,
+     "a": "double",
+     "L": 96,
+     "ref": [
+      -94,
+      false,
+      false
+     ],
+     "out": "{\"x\":-188}"
+    },
+    {
+     "x": -94,
+     "a": "halve",
+     "L": 96,
+     "ref": [
+      -47,
+      true,
+      false
+     ],
+     "out": "{\"x\":-47}"
+    },
+    {
+     "x": -94,
+     "a": "finish",
+     "L": 96,
+     "ref": [
+      -94,
+      true,
+      true
+     ],
+     "out": "{\"x\":-94}"
+    },
+    {
+     "x": -93,
+     "a": "add1",
+     "L": 96,
+     "ref": [
+      -92,
+      true,
+      false
+     ],
+     "out": "{\"x\":-94}"
+    },
+    {
+     "x": -93,
+     "a": "sub1",
+     "L": 96,
+     "ref": [
+      -94,
+      true,
+      false
+     ],
+     "out": "{\"x\":-94}"
+    },
+    {
+     "x": -93,
+     "a": "double",
+     "L": 96,
+     "ref": [
+      -93,
+      false,
+      false
+     ],
+     "out": "{\"x\":-186}"
+    },
+    {
+     "x": -93,
+     "a": "halve",
+     "L": 96,
+     "ref": [
+      -93,
+      false,
+      false
+     ],
+     "out": "{\"x\":46}"
+    },
+    {
+     "x": -93,
+     "a": "finish",
+     "L": 96,
+     "ref": [
+      -93,
+      true,
+      true
+     ],
+     "out": "{\"x\":-93}"
+    },
+    {
+     "x": -92,
+     "a": "add1",
+     "L": 96,
+     "ref": [
+      -91,
+      true,
+      false
+     ],
+     "out": "{\"x\":-93}"
+    },
+    {
+     "x": -92,
+     "a": "sub1",
+     "L": 96,
+     "ref": [
+      -93,
+      true,
+      false
+     ],
+     "out": "{\"x\":-91}"
+    },
+    {
+     "x": -92,
+     "a": "double",
+     "L": 96,
+     "ref": [
+      -92,
+      false,
+      false
+     ],
+     "out": "{\"x\":-184}"
+    },
+    {
+     "x": -92,
+     "a": "halve",
+     "L": 96,
+     "ref": [
+      -46,
+      true,
+      false
+     ],
+     "out": "{\"x\":-46}"
+    },
+    {
+     "x": -92,
+     "a": "finish",
+     "L": 96,
+     "ref": [
+      -92,
+      true,
+      true
+     ],
+     "out": "{\"x\":-92}"
+    },
+    {
+     "x": -91,
+     "a": "add1",
+     "L": 96,
+     "ref": [
+      -90,
+      true,
+      false
+     ],
+     "out": "{\"x\":-92}"
+    },
+    {
+     "x": -91,
+     "a": "sub1",
+     "L": 96,
+     "ref": [
+      -92,
+      true,
+      false
+     ],
+     "out": "{\"x\":-90}"
+    },
+    {
+     "x": -91,
+     "a": "double",
+     "L": 96,
+     "ref": [
+      -91,
+      false,
+      false
+     ],
+     "out": "{\"x\":-182}"
+    },
+    {
+     "x": -91,
+     "a": "halve",
+     "L": 96,
+     "ref": [
+      -91,
+      false,
+      false
+     ],
+     "out": "{\"x\":45}"
+    },
+    {
+     "x": -91,
+     "a": "finish",
+     "L": 96,
+     "ref": [
+      -91,
+      true,
+      true
+     ],
+     "out": "{\"x\":-91}"
+    },
+    {
+     "x": -90,
+     "a": "add1",
+     "L": 96,
+     "ref": [
+      -89,
+      true,
+      false
+     ],
+     "out": "{\"x\":-89}"
+    },
+    {
+     "x": -90,
+     "a": "sub1",
+     "L": 96,
+     "ref": [
+      -91,
+      true,
+      false
+     ],
+     "out": "{\"x\":-89}"
+    },
+    {
+     "x": -90,
+     "a": "double",
+     "L": 96,
+     "ref": [
+      -90,
+      false,
+      false
+     ],
+     "out": "{\"x\":-180}"
+    },
+    {
+     "x": -90,
+     "a": "halve",
+     "L": 96,
+     "ref": [
+      -45,
+      true,
+      false
+     ],
+     "out": "{\"x\":45}"
+    },
+    {
+     "x": -90,
+     "a": "finish",
+     "L": 96,
+     "ref": [
+      -90,
+      true,
+      true
+     ],
+     "out": "{\"x\":-90}"
+    },
+    {
+     "x": -89,
+     "a": "add1",
+     "L": 96,
+     "ref": [
+      -88,
+      true,
+      false
+     ],
+     "out": "{\"x\":-89,\"limit\":96}"
+    },
+    {
+     "x": -89,
+     "a": "sub1",
+     "L": 96,
+     "ref": [
+      -90,
+      true,
+      false
+     ],
+     "out": "{\"x\":-90}"
+    },
+    {
+     "x": -89,
+     "a": "double",
+     "L": 96,
+     "ref": [
+      -89,
+      false,
+      false
+     ],
+     "out": "{\"x\":-178}"
+    },
+    {
+     "x": -89,
+     "a": "halve",
+     "L": 96,
+     "ref": [
+      -89,
+      false,
+      false
+     ],
+     "out": "{\"x\":44}"
+    },
+    {
+     "x": -89,
+     "a": "finish",
+     "L": 96,
+     "ref": [
+      -89,
+      true,
+      true
+     ],
+     "out": "{\"x\":-89}"
+    }
+   ]
+  }
+ }
+}

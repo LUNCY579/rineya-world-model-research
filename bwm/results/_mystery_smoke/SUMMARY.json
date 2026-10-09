@@ -1,0 +1,242 @@
+{
+ "args": {
+  "n": 200,
+  "seed": 20261006,
+  "max_states": 20000,
+  "val_checks": 10,
+  "tokenizer": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Published_Cores\\Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze",
+  "out": "runs/_mystery_smoke"
+ },
+ "checks": {
+  "isomorphism": {
+   "bw_family_size": 357,
+   "blocksworld_detected": true,
+   "mystery_detected": true,
+   "renamed_flipped_bw_detected": true,
+   "projection_detected": true,
+   "mystery_to_bw": {
+    "pred": {
+     "craves": "on",
+     "harmony": "handempty",
+     "pain": "holding",
+     "planet": "ontable",
+     "province": "clear"
+    },
+    "act": {
+     "attack": "pick-up",
+     "feast": "unstack",
+     "overcome": "stack",
+     "succumb": "put-down"
+    }
+   }
+  },
+  "executor_vs_blocks": {
+   "transitions_compared": 122064,
+   "bfs_lengths_compared": 60,
+   "agree": true,
+   "also_through_mystery_renaming": true,
+   "seconds": 1.8
+  },
+  "format_identity": {
+   "mystery_instances": 603,
+   "regimeA_pipeline_reproduces_mystery_prompt": 20
+  },
+  "executor_vs_VAL_mystery": {
+   "instances": 10,
+   "plans_per_instance": 3,
+   "agree": true
+  },
+  "bfs_solvable_and_optimal": true,
+  "no_vocab_collisions": {
+   "checked_instances": 400,
+   "collisions": 0
+  },
+  "regime_B_blocksworld_family": 0,
+  "targets_roundtrip": true
+ },
+ "vocab": {
+  "n_forbidden": 8616,
+  "n_source_files": 2120,
+  "deceptive_vocab": [
+   "attack",
+   "craves",
+   "feast",
+   "harmony",
+   "overcome",
+   "pain",
+   "planet",
+   "province",
+   "succumb"
+  ],
+  "randomized_vocab_files": [],
+  "seconds": 1.5
+ },
+ "test_signatures_excluded": 347,
+ "regime_A": {
+  "rejections": {
+   "planbench_signature": 125,
+   "generate": 59,
+   "duplicate_in_sample": 47
+  },
+  "seconds": 3.3,
+  "plan_len_hist": {
+   "2": 23,
+   "4": 28,
+   "6": 42,
+   "8": 44,
+   "10": 30,
+   "12": 20,
+   "14": 12,
+   "18": 1
+  },
+  "n_objects": {
+   "4": 10,
+   "5": 133,
+   "6": 57
+  },
+  "distinct_schema_hashes": 1,
+  "proposer_rows": 1688,
+  "forward_rows": 400,
+  "proposer_outcomes": {
+   "success": 1492,
+   "failure": 196
+  },
+  "forward_legal": {
+   "True": 200,
+   "False": 200
+  }
+ },
+ "regime_B": {
+  "rejections": {
+   "no_deep_states": 1733,
+   "schema_sampling": 1205,
+   "duplicate_action": 1595,
+   "too_shallow_for_want": 1904,
+   "unused_predicate": 452,
+   "length_miss": 364,
+   "arity_mix": 533,
+   "blocksworld_family": 159,
+   "goal_too_shallow": 26,
+   "no_add": 53,
+   "want_redrawn": 5
+  },
+  "seconds": 191.9,
+  "plan_len_hist": {
+   "2": 34,
+   "3": 22,
+   "4": 18,
+   "5": 18,
+   "6": 39,
+   "7": 15,
+   "8": 18,
+   "9": 11,
+   "10": 9,
+   "11": 10,
+   "12": 6
+  },
+  "n_objects": {
+   "3": 18,
+   "4": 46,
+   "5": 64,
+   "6": 72
+  },
+  "distinct_schema_hashes": 200,
+  "proposer_rows": 1350,
+  "forward_rows": 400,
+  "proposer_outcomes": {
+   "success": 1155,
+   "failure": 195
+  },
+  "forward_legal": {
+   "True": 178,
+   "False": 222
+  }
+ },
+ "tokens_titan": {
+  "A": {
+   "proposer_prompt": {
+    "n": 1688,
+    "median": 394.0,
+    "p95": 444,
+    "max": 468
+   },
+   "target_actions": {
+    "n": 1688,
+    "median": 45.0,
+    "p95": 106,
+    "max": 188
+   },
+   "target_states": {
+    "n": 1688,
+    "median": 389.5,
+    "p95": 985,
+    "max": 1581
+   },
+   "proposer_prompt+states_target": {
+    "n": 1688,
+    "median": 784.0,
+    "p95": 1399,
+    "max": 1983
+   },
+   "forward_prompt": {
+    "n": 400,
+    "median": 381.0,
+    "p95": 425,
+    "max": 459
+   },
+   "forward_target": {
+    "n": 400,
+    "median": 71.0,
+    "p95": 96,
+    "max": 113
+   }
+  },
+  "B": {
+   "proposer_prompt": {
+    "n": 1350,
+    "median": 409.5,
+    "p95": 550,
+    "max": 715
+   },
+   "target_actions": {
+    "n": 1350,
+    "median": 38.5,
+    "p95": 92,
+    "max": 155
+   },
+   "target_states": {
+    "n": 1350,
+    "median": 455.5,
+    "p95": 1559,
+    "max": 3294
+   },
+   "proposer_prompt+states_target": {
+    "n": 1350,
+    "median": 857.5,
+    "p95": 2084,
+    "max": 4004
+   },
+   "forward_prompt": {
+    "n": 400,
+    "median": 378.5,
+    "p95": 523,
+    "max": 682
+   },
+   "forward_target": {
+    "n": 400,
+    "median": 101.0,
+    "p95": 287,
+    "max": 469
+   }
+  },
+  "mystery_eval": {
+   "proposer_prompt": {
+    "n": 603,
+    "median": 266,
+    "p95": 278,
+    "max": 285
+   }
+  }
+ },
+ "seconds_total": 227.0
+}

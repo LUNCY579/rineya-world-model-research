@@ -1,0 +1,248 @@
+[
+ {
+  "name": "e2-zs-titan-sparse",
+  "marker": "runs/E2/zs_titan-sparse.json",
+  "log": "runs/E2/zs_titan-sparse.stdout",
+  "cmd": [
+   "scripts/grade_forward.py",
+   "--core",
+   "titan-sparse",
+   "--out",
+   "runs/E2/zs_titan-sparse.json"
+  ]
+ },
+ {
+  "name": "e2-titan-sparse-r256",
+  "marker": "runs/E2/F_titan-sparse_r256_s0/metrics.json",
+  "log": "runs/E2/F_titan-sparse_r256_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "titan-sparse",
+   "--rows",
+   "256",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_titan-sparse_r256_s0"
+  ]
+ },
+ {
+  "name": "bw-train-F",
+  "marker": "runs/BW_F_s0/adapter/adapter_model.safetensors",
+  "log": "runs/BW_F_s0.stdout",
+  "cmd": [
+   "scripts/train_generic.py",
+   "--rows",
+   "runs/BW_data/forward_train.jsonl",
+   "--steps",
+   "600",
+   "--seed",
+   "0",
+   "--max-len",
+   "256",
+   "--out",
+   "runs/BW_F_s0"
+  ]
+ },
+ {
+  "name": "bundleA",
+  "marker": "runs/bundles/bundleA.done",
+  "log": "runs/bundles/bundleA.stdout",
+  "cmd": [
+   "scripts/bundle.py",
+   "runs/bundles/bundleA.json"
+  ]
+ },
+ {
+  "name": "bundleB",
+  "marker": "runs/bundles/bundleB.done",
+  "log": "runs/bundles/bundleB.stdout",
+  "cmd": [
+   "scripts/bundle.py",
+   "runs/bundles/bundleB.json"
+  ]
+ },
+ {
+  "name": "bundleC",
+  "marker": "runs/bundles/bundleC.done",
+  "log": "runs/bundles/bundleC.stdout",
+  "cmd": [
+   "scripts/bundle.py",
+   "runs/bundles/bundleC.json"
+  ]
+ },
+ {
+  "name": "bundleD",
+  "marker": "runs/bundles/bundleD.done",
+  "log": "runs/bundles/bundleD.stdout",
+  "cmd": [
+   "scripts/bundle.py",
+   "runs/bundles/bundleD.json"
+  ]
+ },
+ {
+  "name": "a2-train-Fvlab",
+  "marker": "runs/A2_Fvlab_s0/adapter/adapter_model.safetensors",
+  "log": "runs/A2_Fvlab_s0.stdout",
+  "after": "runs/A2_vlab_labels/vlab_sft.jsonl",
+  "cmd": [
+   "scripts/train_generic.py",
+   "--rows",
+   "runs/A2_vlab_labels/vlab_sft.jsonl",
+   "--steps",
+   "400",
+   "--seed",
+   "0",
+   "--max-len",
+   "256",
+   "--out",
+   "runs/A2_Fvlab_s0"
+  ]
+ },
+ {
+  "name": "train-P-actions-s1-1600",
+  "marker": "runs/P_actions_s1_1600/adapter/adapter_model.safetensors",
+  "log": "runs/P_actions_s1_1600.stdout",
+  "cmd": [
+   "scripts/train_proposer.py",
+   "--mode",
+   "actions",
+   "--seed",
+   "1",
+   "--data-seed",
+   "1",
+   "--families",
+   "5121",
+   "--steps",
+   "1600",
+   "--save-at",
+   "1200",
+   "--out",
+   "runs/P_actions_s1_1600"
+  ]
+ },
+ {
+  "name": "e2-titan-sparse-r1024",
+  "marker": "runs/E2/F_titan-sparse_r1024_s0/metrics.json",
+  "log": "runs/E2/F_titan-sparse_r1024_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "titan-sparse",
+   "--rows",
+   "1024",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_titan-sparse_r1024_s0",
+   "--no-grade"
+  ]
+ },
+ {
+  "name": "e2-supa-r256",
+  "marker": "runs/E2/F_supa_r256_s0/metrics.json",
+  "log": "runs/E2/F_supa_r256_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "supa",
+   "--rows",
+   "256",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_supa_r256_s0",
+   "--no-grade"
+  ]
+ },
+ {
+  "name": "e2-supa-r1024",
+  "marker": "runs/E2/F_supa_r1024_s0/metrics.json",
+  "log": "runs/E2/F_supa_r1024_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "supa",
+   "--rows",
+   "1024",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_supa_r1024_s0",
+   "--no-grade"
+  ]
+ },
+ {
+  "name": "e2-qwen3-0.6b-r256",
+  "marker": "runs/E2/F_qwen3-0.6b_r256_s0/metrics.json",
+  "log": "runs/E2/F_qwen3-0.6b_r256_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "qwen3-0.6b",
+   "--rows",
+   "256",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_qwen3-0.6b_r256_s0",
+   "--no-grade"
+  ]
+ },
+ {
+  "name": "e2-qwen3-0.6b-r1024",
+  "marker": "runs/E2/F_qwen3-0.6b_r1024_s0/metrics.json",
+  "log": "runs/E2/F_qwen3-0.6b_r1024_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "qwen3-0.6b",
+   "--rows",
+   "1024",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_qwen3-0.6b_r1024_s0",
+   "--no-grade"
+  ]
+ },
+ {
+  "name": "e2-xlimB",
+  "marker": "runs/E2/F_titan_xlimB_s0/metrics.json",
+  "log": "runs/E2/F_titan_xlimB_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "titan-sparse",
+   "--rows",
+   "4000",
+   "--steps",
+   "300",
+   "--extra-limits",
+   "8,16,24,40,56",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_titan_xlimB_s0"
+  ]
+ }
+]

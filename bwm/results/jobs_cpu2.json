@@ -1,0 +1,86 @@
+[
+ {
+  "name": "a1-pass",
+  "marker": "runs/A1_factorized/.pass_done",
+  "log": "runs/A1_factorized.stdout",
+  "cmd": [
+   "scripts/f_factorized.py",
+   "--out",
+   "runs/A1_factorized"
+  ]
+ },
+ {
+  "name": "a1-analysis",
+  "marker": "runs/A1_factorized/analysis.json",
+  "log": "runs/A1_factorized.analysis.stdout",
+  "after": "runs/A1_factorized/.pass_done",
+  "cmd": [
+   "scripts/f_factorized.py",
+   "--out",
+   "runs/A1_factorized",
+   "--analyze"
+  ]
+ },
+ {
+  "name": "a2-vlab-pass",
+  "marker": "runs/A2_vlab_labels/.pass_done",
+  "log": "runs/A2_vlab_labels.stdout",
+  "cmd": [
+   "scripts/f_factorized.py",
+   "--keyset",
+   "vlab",
+   "--out",
+   "runs/A2_vlab_labels"
+  ]
+ },
+ {
+  "name": "a2-emit",
+  "marker": "runs/A2_vlab_labels/vlab_sft.jsonl",
+  "log": "runs/A2_vlab_labels.stdout",
+  "after": "runs/A2_vlab_labels/.pass_done",
+  "cmd": [
+   "scripts/f_factorized.py",
+   "--emit-vlab",
+   "--out",
+   "runs/A2_vlab_labels"
+  ]
+ },
+ {
+  "name": "grade-e2-titan-sparse-r256",
+  "marker": "runs/E2/F_titan-sparse_r256_s0/grade_cpu.json",
+  "log": "runs/E2/F_titan-sparse_r256_s0.grade.stdout",
+  "cmd": [
+   "scripts/grade_forward.py",
+   "--core",
+   "titan-sparse",
+   "--adapter",
+   "runs/E2/F_titan-sparse_r256_s0/adapter",
+   "--out",
+   "runs/E2/F_titan-sparse_r256_s0/grade_cpu.json"
+  ]
+ },
+ {
+  "name": "e2-zs-supa",
+  "marker": "runs/E2/zs_supa.json",
+  "log": "runs/E2/zs_supa.stdout",
+  "cmd": [
+   "scripts/grade_forward.py",
+   "--core",
+   "supa",
+   "--out",
+   "runs/E2/zs_supa.json"
+  ]
+ },
+ {
+  "name": "e2-zs-qwen3-0.6b",
+  "marker": "runs/E2/zs_qwen3-0.6b.json",
+  "log": "runs/E2/zs_qwen3-0.6b.stdout",
+  "cmd": [
+   "scripts/grade_forward.py",
+   "--core",
+   "qwen3-0.6b",
+   "--out",
+   "runs/E2/zs_qwen3-0.6b.json"
+  ]
+ }
+]

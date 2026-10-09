@@ -1,0 +1,45 @@
+eligible: [(0.807, 4145, '{"E": 24, "K": 8, "M": 80, "P": 1, "R": 12, "W": 4, "fwd": "delta", "planner": "beam"}'), (0.79, 1877, '{"E": 24, "K": 4, "M": 80, "P": 1, "R": 12, "W": 4, "fwd": "delta", "planner": "beam"}'), (0.74, 1353, '{"E": 24, "K": 4, "R": 12, "W": 4, "fwd": "delta", "planner": "beam"}')]
+selected: {"E": 24, "K": 8, "M": 80, "P": 1, "R": 12, "W": 4, "fwd": "delta", "planner": "beam"} mean success 0.807
+{
+ "beam": {
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v2_s1/adapter",
+  "mode": "actions",
+  "eval_seed": 0,
+  "max_depth": 80,
+  "step_cap": 24,
+  "fwd": "lm",
+  "fwd_adapter": "runs/BW_Fdelta_s0/adapter",
+  "fwd_fmt": "delta",
+  "K": 8,
+  "planner": "beam",
+  "W": 4,
+  "E": 24,
+  "R": 12,
+  "M": 80,
+  "P": 1
+ },
+ "direct": {
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v2_s1/adapter",
+  "mode": "actions",
+  "eval_seed": 0,
+  "max_depth": 80,
+  "step_cap": 24,
+  "fwd": "exact",
+  "fwd_adapter": null,
+  "fwd_fmt": "state",
+  "K": 1,
+  "planner": "direct",
+  "W": 4,
+  "E": 48,
+  "R": 0,
+  "M": 256,
+  "P": 0
+ },
+ "prereg_sha256": "adfc4354adb0262ad5175c517ff186e7a17e4efe95ddd33ba6ae4ad1fc3bf4d2",
+ "pa_sha256": "ee1c5aec5e4a55e30f6df0e30a3cd68242c928cd158f9e5cf06184f409108110",
+ "fwd_sha256": "2ed0bb0064bc6b11ec9c661840a38094e468462cea2ff833cda3bf234ead65ae",
+ "selected_from": "{\"E\": 24, \"K\": 8, \"M\": 80, \"P\": 1, \"R\": 12, \"W\": 4, \"fwd\": \"delta\", \"planner\": \"beam\"}",
+ "selection_mean_success": 0.8066666666666666
+}

@@ -1,0 +1,369 @@
+{
+ "adapter": "runs/BW_Fdelta_s0/adapter",
+ "args": {
+  "core": "titan-sparse",
+  "adapter": "runs/BW_Fdelta_s0/adapter",
+  "val_rows": 600,
+  "sizes": "3,4,5,6,8,10,12,15",
+  "per_size": 60,
+  "seed": 20261007,
+  "chunk": 120,
+  "check": 0,
+  "fmt": "delta",
+  "out": "runs/BW_Fdelta_s0/grade_size.json"
+ },
+ "decoder_check": null,
+ "strata": {
+  "size": {
+   "n": 480,
+   "exact": 0.9896,
+   "legality": 0.9896
+  },
+  "size_n10": {
+   "n": 60,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n10_illegal": {
+   "n": 28,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n10_legal": {
+   "n": 32,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n12": {
+   "n": 60,
+   "exact": 0.9833,
+   "legality": 0.9833
+  },
+  "size_n12_illegal": {
+   "n": 26,
+   "exact": 0.9615,
+   "legality": 0.9615
+  },
+  "size_n12_legal": {
+   "n": 34,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n15": {
+   "n": 60,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n15_illegal": {
+   "n": 32,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n15_legal": {
+   "n": 28,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n3": {
+   "n": 60,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n3_illegal": {
+   "n": 32,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n3_legal": {
+   "n": 28,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n4": {
+   "n": 60,
+   "exact": 0.95,
+   "legality": 0.95
+  },
+  "size_n4_illegal": {
+   "n": 34,
+   "exact": 0.9118,
+   "legality": 0.9118
+  },
+  "size_n4_legal": {
+   "n": 26,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n5": {
+   "n": 60,
+   "exact": 0.9833,
+   "legality": 0.9833
+  },
+  "size_n5_illegal": {
+   "n": 30,
+   "exact": 0.9667,
+   "legality": 0.9667
+  },
+  "size_n5_legal": {
+   "n": 30,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n6": {
+   "n": 60,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n6_illegal": {
+   "n": 40,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n6_legal": {
+   "n": 20,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n8": {
+   "n": 60,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n8_illegal": {
+   "n": 32,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "size_n8_legal": {
+   "n": 28,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "val": {
+   "n": 600,
+   "exact": 0.99,
+   "legality": 0.99
+  },
+  "val_n4": {
+   "n": 63,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "val_n4_illegal": {
+   "n": 26,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "val_n4_legal": {
+   "n": 37,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "val_n5": {
+   "n": 439,
+   "exact": 0.9909,
+   "legality": 0.9909
+  },
+  "val_n5_illegal": {
+   "n": 224,
+   "exact": 0.9821,
+   "legality": 0.9821
+  },
+  "val_n5_legal": {
+   "n": 215,
+   "exact": 1.0,
+   "legality": 1.0
+  },
+  "val_n6": {
+   "n": 98,
+   "exact": 0.9796,
+   "legality": 0.9796
+  },
+  "val_n6_illegal": {
+   "n": 54,
+   "exact": 0.963,
+   "legality": 0.963
+  },
+  "val_n6_legal": {
+   "n": 44,
+   "exact": 1.0,
+   "legality": 1.0
+  }
+ },
+ "errors": {
+  "val": [
+   {
+    "prompt_tail": "and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up j\",\"state\":{\"clear\":[\"d\",\"j\",\"l\"],\"hand\":\"empty\",\"on\":[[\"d\",\"h\"],[\"h\",\"e\"],[\"j\",\"m\"]],\"table\":[\"e\",\"l\",\"m\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding j\"],\"del\":[\"clear j\",\"handempty\",\"ontable j\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": " adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up o\",\"state\":{\"clear\":[\"o\"],\"hand\":\"empty\",\"on\":[[\"b\",\"k\"],[\"e\",\"b\"],[\"k\",\"i\"],[\"o\",\"e\"]],\"table\":[\"i\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding o\"],\"del\":[\"clear o\",\"handempty\",\"ontable o\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up a\",\"state\":{\"clear\":[\"a\",\"n\"],\"hand\":\"empty\",\"on\":[[\"a\",\"m\"],[\"f\",\"h\"],[\"m\",\"f\"]],\"table\":[\"h\",\"n\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding a\"],\"del\":[\"clear a\",\"handempty\",\"ontable a\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up i\",\"state\":{\"clear\":[\"i\",\"m\"],\"hand\":\"empty\",\"on\":[[\"i\",\"h\"],[\"m\",\"n\"],[\"n\",\"b\"]],\"table\":[\"b\",\"h\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding i\"],\"del\":[\"clear i\",\"handempty\",\"ontable i\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "val_n6": [
+   {
+    "prompt_tail": "and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up j\",\"state\":{\"clear\":[\"d\",\"j\",\"l\"],\"hand\":\"empty\",\"on\":[[\"d\",\"h\"],[\"h\",\"e\"],[\"j\",\"m\"]],\"table\":[\"e\",\"l\",\"m\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding j\"],\"del\":[\"clear j\",\"handempty\",\"ontable j\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up i\",\"state\":{\"clear\":[\"f\",\"i\",\"l\"],\"hand\":\"empty\",\"on\":[[\"c\",\"m\"],[\"i\",\"c\"],[\"m\",\"b\"]],\"table\":[\"b\",\"f\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding i\"],\"del\":[\"clear i\",\"handempty\",\"ontable i\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "val_n6_illegal": [
+   {
+    "prompt_tail": "and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up j\",\"state\":{\"clear\":[\"d\",\"j\",\"l\"],\"hand\":\"empty\",\"on\":[[\"d\",\"h\"],[\"h\",\"e\"],[\"j\",\"m\"]],\"table\":[\"e\",\"l\",\"m\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding j\"],\"del\":[\"clear j\",\"handempty\",\"ontable j\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up i\",\"state\":{\"clear\":[\"f\",\"i\",\"l\"],\"hand\":\"empty\",\"on\":[[\"c\",\"m\"],[\"i\",\"c\"],[\"m\",\"b\"]],\"table\":[\"b\",\"f\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding i\"],\"del\":[\"clear i\",\"handempty\",\"ontable i\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "val_n5": [
+   {
+    "prompt_tail": " adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up o\",\"state\":{\"clear\":[\"o\"],\"hand\":\"empty\",\"on\":[[\"b\",\"k\"],[\"e\",\"b\"],[\"k\",\"i\"],[\"o\",\"e\"]],\"table\":[\"i\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding o\"],\"del\":[\"clear o\",\"handempty\",\"ontable o\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up a\",\"state\":{\"clear\":[\"a\",\"n\"],\"hand\":\"empty\",\"on\":[[\"a\",\"m\"],[\"f\",\"h\"],[\"m\",\"f\"]],\"table\":[\"h\",\"n\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding a\"],\"del\":[\"clear a\",\"handempty\",\"ontable a\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up i\",\"state\":{\"clear\":[\"i\",\"m\"],\"hand\":\"empty\",\"on\":[[\"i\",\"h\"],[\"m\",\"n\"],[\"n\",\"b\"]],\"table\":[\"b\",\"h\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding i\"],\"del\":[\"clear i\",\"handempty\",\"ontable i\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "cts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up e\",\"state\":{\"clear\":[\"e\",\"i\",\"j\",\"o\"],\"hand\":\"empty\",\"on\":[[\"e\",\"h\"]],\"table\":[\"h\",\"i\",\"j\",\"o\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding e\"],\"del\":[\"clear e\",\"handempty\",\"ontable e\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "val_n5_illegal": [
+   {
+    "prompt_tail": " adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up o\",\"state\":{\"clear\":[\"o\"],\"hand\":\"empty\",\"on\":[[\"b\",\"k\"],[\"e\",\"b\"],[\"k\",\"i\"],[\"o\",\"e\"]],\"table\":[\"i\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding o\"],\"del\":[\"clear o\",\"handempty\",\"ontable o\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up a\",\"state\":{\"clear\":[\"a\",\"n\"],\"hand\":\"empty\",\"on\":[[\"a\",\"m\"],[\"f\",\"h\"],[\"m\",\"f\"]],\"table\":[\"h\",\"n\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding a\"],\"del\":[\"clear a\",\"handempty\",\"ontable a\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up i\",\"state\":{\"clear\":[\"i\",\"m\"],\"hand\":\"empty\",\"on\":[[\"i\",\"h\"],[\"m\",\"n\"],[\"n\",\"b\"]],\"table\":[\"b\",\"h\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding i\"],\"del\":[\"clear i\",\"handempty\",\"ontable i\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "cts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up e\",\"state\":{\"clear\":[\"e\",\"i\",\"j\",\"o\"],\"hand\":\"empty\",\"on\":[[\"e\",\"h\"]],\"table\":[\"h\",\"i\",\"j\",\"o\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding e\"],\"del\":[\"clear e\",\"handempty\",\"ontable e\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "size": [
+   {
+    "prompt_tail": "the facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up k\",\"state\":{\"clear\":[\"b\",\"k\"],\"hand\":\"empty\",\"on\":[[\"b\",\"e\"],[\"k\",\"l\"]],\"table\":[\"e\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding k\"],\"del\":[\"clear k\",\"handempty\",\"ontable k\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "the facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up j\",\"state\":{\"clear\":[\"c\",\"j\"],\"hand\":\"empty\",\"on\":[[\"c\",\"o\"],[\"j\",\"a\"]],\"table\":[\"a\",\"o\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding j\"],\"del\":[\"clear j\",\"handempty\",\"ontable j\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"unstack k a\",\"state\":{\"clear\":[\"k\"],\"hand\":\"empty\",\"on\":[[\"a\",\"o\"],[\"e\",\"a\"],[\"k\",\"e\"]],\"table\":[\"o\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"clear a\",\"holding k\"],\"del\":[\"clear k\",\"handempty\",\"on k a\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "s it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up f\",\"state\":{\"clear\":[\"c\",\"d\",\"f\"],\"hand\":\"empty\",\"on\":[[\"d\",\"l\"],[\"f\",\"b\"]],\"table\":[\"b\",\"c\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding f\"],\"del\":[\"clear f\",\"handempty\",\"ontable f\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "size_n4": [
+   {
+    "prompt_tail": "the facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up k\",\"state\":{\"clear\":[\"b\",\"k\"],\"hand\":\"empty\",\"on\":[[\"b\",\"e\"],[\"k\",\"l\"]],\"table\":[\"e\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding k\"],\"del\":[\"clear k\",\"handempty\",\"ontable k\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "the facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up j\",\"state\":{\"clear\":[\"c\",\"j\"],\"hand\":\"empty\",\"on\":[[\"c\",\"o\"],[\"j\",\"a\"]],\"table\":[\"a\",\"o\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding j\"],\"del\":[\"clear j\",\"handempty\",\"ontable j\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"unstack k a\",\"state\":{\"clear\":[\"k\"],\"hand\":\"empty\",\"on\":[[\"a\",\"o\"],[\"e\",\"a\"],[\"k\",\"e\"]],\"table\":[\"o\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"clear a\",\"holding k\"],\"del\":[\"clear k\",\"handempty\",\"on k a\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "size_n4_illegal": [
+   {
+    "prompt_tail": "the facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up k\",\"state\":{\"clear\":[\"b\",\"k\"],\"hand\":\"empty\",\"on\":[[\"b\",\"e\"],[\"k\",\"l\"]],\"table\":[\"e\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding k\"],\"del\":[\"clear k\",\"handempty\",\"ontable k\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "the facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up j\",\"state\":{\"clear\":[\"c\",\"j\"],\"hand\":\"empty\",\"on\":[[\"c\",\"o\"],[\"j\",\"a\"]],\"table\":[\"a\",\"o\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding j\"],\"del\":[\"clear j\",\"handempty\",\"ontable j\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   },
+   {
+    "prompt_tail": "facts it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"unstack k a\",\"state\":{\"clear\":[\"k\"],\"hand\":\"empty\",\"on\":[[\"a\",\"o\"],[\"e\",\"a\"],[\"k\",\"e\"]],\"table\":[\"o\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"clear a\",\"holding k\"],\"del\":[\"clear k\",\"handempty\",\"on k a\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "size_n5": [
+   {
+    "prompt_tail": "s it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up f\",\"state\":{\"clear\":[\"c\",\"d\",\"f\"],\"hand\":\"empty\",\"on\":[[\"d\",\"l\"],[\"f\",\"b\"]],\"table\":[\"b\",\"c\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding f\"],\"del\":[\"clear f\",\"handempty\",\"ontable f\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "size_n5_illegal": [
+   {
+    "prompt_tail": "s it adds and deletes.<|im_end|>\n<|im_start|>user\n{\"action\":\"pick-up f\",\"state\":{\"clear\":[\"c\",\"d\",\"f\"],\"hand\":\"empty\",\"on\":[[\"d\",\"l\"],[\"f\",\"b\"]],\"table\":[\"b\",\"c\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding f\"],\"del\":[\"clear f\",\"handempty\",\"ontable f\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "size_n12": [
+   {
+    "prompt_tail": "k-up m\",\"state\":{\"clear\":[\"b\",\"f\",\"j\",\"k\",\"l\",\"m\"],\"hand\":\"empty\",\"on\":[[\"d\",\"i\"],[\"f\",\"d\"],[\"g\",\"h\"],[\"j\",\"c\"],[\"k\",\"a\"],[\"m\",\"g\"]],\"table\":[\"a\",\"b\",\"c\",\"h\",\"i\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding m\"],\"del\":[\"clear m\",\"handempty\",\"ontable m\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ],
+  "size_n12_illegal": [
+   {
+    "prompt_tail": "k-up m\",\"state\":{\"clear\":[\"b\",\"f\",\"j\",\"k\",\"l\",\"m\"],\"hand\":\"empty\",\"on\":[[\"d\",\"i\"],[\"f\",\"d\"],[\"g\",\"h\"],[\"j\",\"c\"],[\"k\",\"a\"],[\"m\",\"g\"]],\"table\":[\"a\",\"b\",\"c\",\"h\",\"i\",\"l\"]}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "pred": "{\"add\":[\"holding m\"],\"del\":[\"clear m\",\"handempty\",\"ontable m\"],\"legal\":true}",
+    "ref": "{\"add\":[],\"del\":[],\"legal\":false}"
+   }
+  ]
+ }
+}

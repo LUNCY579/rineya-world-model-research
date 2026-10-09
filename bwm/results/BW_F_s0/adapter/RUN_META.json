@@ -1,0 +1,41 @@
+{
+  "args": {
+    "batch": 16,
+    "core": "titan-sparse",
+    "filter": "",
+    "lr": 0.0001,
+    "max_len": 256,
+    "out": "runs/BW_F_s0",
+    "rows": "runs/BW_data/forward_train.jsonl",
+    "seed": 0,
+    "steps": 600
+  },
+  "core": "titan-sparse",
+  "rows": 12000,
+  "train": {
+    "batch_size": 16,
+    "final_loss_avg50": 0.0008184930476636509,
+    "loss_curve_every50": [
+      0.28021,
+      0.0218,
+      0.00962,
+      0.00512,
+      0.00304,
+      0.00189,
+      0.00221,
+      0.00091,
+      0.00063,
+      0.00137,
+      0.0005,
+      0.00082
+    ],
+    "lr_peak": 0.0001,
+    "max_grad_norm": 3.3208377361297607,
+    "peak_mem_gib": 2.776494026184082,
+    "rows_available": 12000,
+    "steps": 600,
+    "supervised_tokens": 383877,
+    "tokens_processed": 1673502,
+    "wall_s": 5437.6
+  }
+}

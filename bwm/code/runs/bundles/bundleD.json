@@ -1,0 +1,66 @@
+{
+ "budget_s": 16200,
+ "jobs": [
+  {
+   "name": "bw-tests",
+   "marker": "runs/BW_TEST_B2/.done",
+   "log": "runs/BW_TEST_B2.stdout",
+   "est_s": 3600,
+   "cmd": [
+    "scripts/bw_run_tests.py"
+   ]
+  },
+  {
+   "name": "pilotG-actions",
+   "marker": "runs/EVAL_pilot_gpu_s1/.done_pilotG-actions",
+   "log": "runs/EVAL_pilot_gpu_s1.pilotG-actions.stdout",
+   "cmd": [
+    "scripts/run_eval.py",
+    "--fwd",
+    "runs/F_titan_main/adapter",
+    "--pa",
+    "runs/P_actions_s1/adapter",
+    "--ps",
+    "runs/P_states_s1/adapter",
+    "--arms",
+    "A00,A01",
+    "--splits",
+    "id_val",
+    "--n-scale",
+    "0.5",
+    "--share-prefix",
+    "--tag",
+    "pilotG",
+    "--out",
+    "runs/EVAL_pilot_gpu_s1"
+   ],
+   "est_s": 5400
+  },
+  {
+   "name": "pilotG-states",
+   "marker": "runs/EVAL_pilot_gpu_s1/.done_pilotG-states",
+   "log": "runs/EVAL_pilot_gpu_s1.pilotG-states.stdout",
+   "cmd": [
+    "scripts/run_eval.py",
+    "--fwd",
+    "runs/F_titan_main/adapter",
+    "--pa",
+    "runs/P_actions_s1/adapter",
+    "--ps",
+    "runs/P_states_s1/adapter",
+    "--arms",
+    "A10,A11",
+    "--splits",
+    "id_val",
+    "--n-scale",
+    "0.5",
+    "--share-prefix",
+    "--tag",
+    "pilotG",
+    "--out",
+    "runs/EVAL_pilot_gpu_s1"
+   ],
+   "est_s": 7200
+  }
+ ]
+}

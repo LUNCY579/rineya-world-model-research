@@ -1,0 +1,489 @@
+{
+ "args": {
+  "core": "titan-sparse",
+  "fwd": "runs/F_titan_main/adapter",
+  "pa": "runs/P_actions_s1/adapter",
+  "ps": "runs/P_states_s1/adapter",
+  "arms": "A01k12",
+  "baselines": "",
+  "splits": "id_val",
+  "n_scale": 0.5,
+  "temperature": 1.0,
+  "top_p": 0.95,
+  "eval_seed": 0,
+  "tag": "pilotQ",
+  "smoke": false,
+  "slice": "50:100",
+  "share_prefix": true,
+  "out": "runs/EVAL_pilot_s1"
+ },
+ "summary": {
+  "G1F/id_val": {
+   "n": 400,
+   "success": 0.65,
+   "outcomes": {
+    "success": 260,
+    "fail": 140
+   },
+   "mean_return": 0.5902499999999994,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 21.15,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.8076923076923077,
+   "wall_s": 0.0
+  },
+  "G1F/long_val": {
+   "n": 200,
+   "success": 0.74,
+   "outcomes": {
+    "fail": 52,
+    "success": 148
+   },
+   "mean_return": 0.6170000000000004,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 45.96,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.722972972972973,
+   "wall_s": 0.0
+  },
+  "G1F/range_val": {
+   "n": 300,
+   "success": 0.47333333333333333,
+   "outcomes": {
+    "fail": 158,
+    "success": 142
+   },
+   "mean_return": 0.3888000000000004,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 27.72,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.09666666666666666,
+   "optimal_rate_given_success": 0.7112676056338029,
+   "wall_s": 0.0
+  },
+  "G2F/id_val": {
+   "n": 400,
+   "success": 0.7975,
+   "outcomes": {
+    "success": 319,
+    "fail": 81
+   },
+   "mean_return": 0.7392749999999993,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 50.83,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.8589341692789969,
+   "wall_s": 6.7
+  },
+  "G2F/long_val": {
+   "n": 200,
+   "success": 0.83,
+   "outcomes": {
+    "fail": 34,
+    "success": 166
+   },
+   "mean_return": 0.7085000000000007,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 93.1,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.8072289156626506,
+   "wall_s": 7.2
+  },
+  "G2F/range_val": {
+   "n": 300,
+   "success": 0.5166666666666667,
+   "outcomes": {
+    "fail": 145,
+    "success": 155
+   },
+   "mean_return": 0.428366666666667,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 61.10666666666667,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.14,
+   "optimal_rate_given_success": 0.7612903225806451,
+   "wall_s": 15.2
+  },
+  "BFS16F/id_val": {
+   "n": 400,
+   "success": 0.675,
+   "outcomes": {
+    "success": 270,
+    "fail": 130
+   },
+   "mean_return": 0.6155999999999993,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 36.245,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.8592592592592593,
+   "wall_s": 6.7
+  },
+  "BFS16F/long_val": {
+   "n": 200,
+   "success": 0.78,
+   "outcomes": {
+    "fail": 44,
+    "success": 156
+   },
+   "mean_return": 0.6580500000000005,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 82.48,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.8589743589743589,
+   "wall_s": 6.5
+  },
+  "BFS16F/range_val": {
+   "n": 300,
+   "success": 0.47333333333333333,
+   "outcomes": {
+    "fail": 158,
+    "success": 142
+   },
+   "mean_return": 0.3888666666666671,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 47.28,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.09666666666666666,
+   "optimal_rate_given_success": 0.7253521126760564,
+   "wall_s": 13.1
+  },
+  "BFS64F/id_val": {
+   "n": 400,
+   "success": 0.78,
+   "outcomes": {
+    "success": 312,
+    "fail": 88
+   },
+   "mean_return": 0.7216499999999992,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 60.12,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.9166666666666666,
+   "wall_s": 27.0
+  },
+  "BFS64F/long_val": {
+   "n": 200,
+   "success": 0.87,
+   "outcomes": {
+    "fail": 26,
+    "success": 174
+   },
+   "mean_return": 0.7493000000000005,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 136.345,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.9022988505747126,
+   "wall_s": 25.3
+  },
+  "BFS64F/range_val": {
+   "n": 300,
+   "success": 0.5066666666666667,
+   "outcomes": {
+    "fail": 148,
+    "success": 152
+   },
+   "mean_return": 0.4227000000000004,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 85.54,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.09666666666666666,
+   "optimal_rate_given_success": 0.7697368421052632,
+   "wall_s": 43.3
+  },
+  "BFS256F/id_val": {
+   "n": 400,
+   "success": 1.0,
+   "outcomes": {
+    "success": 400
+   },
+   "mean_return": 0.9444750000000003,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 78.525,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 1.0,
+   "wall_s": 24.5
+  },
+  "BFS256F/long_val": {
+   "n": 200,
+   "success": 0.965,
+   "outcomes": {
+    "success": 193,
+    "fail": 7
+   },
+   "mean_return": 0.8454500000000001,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 240.36,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.9481865284974094,
+   "wall_s": 62.6
+  },
+  "BFS256F/range_val": {
+   "n": 300,
+   "success": 0.72,
+   "outcomes": {
+    "fail": 84,
+    "success": 216
+   },
+   "mean_return": 0.6387999999999991,
+   "gen_tokens_per_task": 0.0,
+   "prompt_tokens_per_task": 0.0,
+   "f_calls_per_task": 143.72333333333333,
+   "candidates_per_task": 0.0,
+   "malformed_rate": 0.0,
+   "coverage_first": null,
+   "open_loop_success": null,
+   "first_action_optimal": null,
+   "illegal_steps_per_task": 0.09666666666666666,
+   "optimal_rate_given_success": 0.9398148148148148,
+   "wall_s": 85.3
+  },
+  "A00/id_val": {
+   "n": 200,
+   "success": 0.62,
+   "outcomes": {
+    "success": 124,
+    "finished_wrong": 76
+   },
+   "mean_return": 0.5584499999999999,
+   "gen_tokens_per_task": 306.355,
+   "prompt_tokens_per_task": 2706.92,
+   "f_calls_per_task": 0.0,
+   "candidates_per_task": 23.82,
+   "malformed_rate": 0.0,
+   "coverage_first": 0.385,
+   "open_loop_success": 0.245,
+   "first_action_optimal": 0.705,
+   "illegal_steps_per_task": 0.02,
+   "optimal_rate_given_success": 0.8548387096774194,
+   "would_abstain_any": 0.0,
+   "wall_s": 3918.2
+  },
+  "A01/id_val__0-50": {
+   "n": 50,
+   "success": 0.66,
+   "outcomes": {
+    "success": 33,
+    "finished_wrong": 17
+   },
+   "mean_return": 0.5955999999999998,
+   "gen_tokens_per_task": 281.86,
+   "prompt_tokens_per_task": 2560.8,
+   "f_calls_per_task": 21.54,
+   "candidates_per_task": 22.56,
+   "malformed_rate": 0.0,
+   "coverage_first": 0.32,
+   "open_loop_success": 0.32,
+   "first_action_optimal": 0.68,
+   "illegal_steps_per_task": 0.08,
+   "optimal_rate_given_success": 0.8787878787878788,
+   "would_abstain_any": 0.78,
+   "wall_s": 1121.1
+  },
+  "A01/id_val__50-100": {
+   "n": 50,
+   "success": 0.68,
+   "outcomes": {
+    "finished_wrong": 16,
+    "success": 34
+   },
+   "mean_return": 0.6199999999999999,
+   "gen_tokens_per_task": 310.04,
+   "prompt_tokens_per_task": 2726.24,
+   "f_calls_per_task": 27.14,
+   "candidates_per_task": 24.0,
+   "malformed_rate": 0.0,
+   "coverage_first": 0.36,
+   "open_loop_success": 0.36,
+   "first_action_optimal": 0.82,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.8529411764705882,
+   "would_abstain_any": 0.76,
+   "wall_s": 1100.8
+  },
+  "A01/id_val__100-150": {
+   "n": 50,
+   "success": 0.64,
+   "outcomes": {
+    "finished_wrong": 18,
+    "success": 32
+   },
+   "mean_return": 0.5770000000000002,
+   "gen_tokens_per_task": 334.74,
+   "prompt_tokens_per_task": 2866.4,
+   "f_calls_per_task": 29.08,
+   "candidates_per_task": 25.2,
+   "malformed_rate": 0.0,
+   "coverage_first": 0.46,
+   "open_loop_success": 0.46,
+   "first_action_optimal": 0.78,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.84375,
+   "would_abstain_any": 0.76,
+   "wall_s": 973.7
+  },
+  "A01/id_val__150-200": {
+   "n": 50,
+   "success": 0.72,
+   "outcomes": {
+    "finished_wrong": 14,
+    "success": 36
+   },
+   "mean_return": 0.6632000000000001,
+   "gen_tokens_per_task": 286.96,
+   "prompt_tokens_per_task": 2583.2,
+   "f_calls_per_task": 22.84,
+   "candidates_per_task": 22.72,
+   "malformed_rate": 0.0,
+   "coverage_first": 0.4,
+   "open_loop_success": 0.4,
+   "first_action_optimal": 0.72,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.8611111111111112,
+   "would_abstain_any": 0.76,
+   "wall_s": 1023.9
+  },
+  "A01/id_val": {
+   "n": 200,
+   "success": 0.675,
+   "outcomes": {
+    "success": 135,
+    "finished_wrong": 65
+   },
+   "mean_return": 0.61395,
+   "gen_tokens_per_task": 303.4,
+   "prompt_tokens_per_task": 2684.16,
+   "f_calls_per_task": 25.15,
+   "candidates_per_task": 23.62,
+   "malformed_rate": 0.0,
+   "coverage_first": 0.385,
+   "open_loop_success": 0.385,
+   "first_action_optimal": 0.75,
+   "illegal_steps_per_task": 0.02,
+   "optimal_rate_given_success": 0.8592592592592593,
+   "would_abstain_any": 0.765,
+   "merged_from_parts": "0-50,50-100,100-150,150-200"
+  },
+  "A01k12/id_val__0-50": {
+   "n": 50,
+   "success": 0.82,
+   "outcomes": {
+    "success": 41,
+    "finished_wrong": 9
+   },
+   "mean_return": 0.7562000000000002,
+   "gen_tokens_per_task": 840.48,
+   "prompt_tokens_per_task": 7599.84,
+   "f_calls_per_task": 33.2,
+   "candidates_per_task": 66.96,
+   "malformed_rate": 0.0,
+   "coverage_first": 0.6,
+   "open_loop_success": 0.6,
+   "first_action_optimal": 0.82,
+   "illegal_steps_per_task": 0.08,
+   "optimal_rate_given_success": 0.8780487804878049,
+   "would_abstain_any": 0.48,
+   "wall_s": 1527.1
+  },
+  "A01k12/id_val__50-100": {
+   "n": 50,
+   "success": 0.82,
+   "outcomes": {
+    "success": 41,
+    "finished_wrong": 9
+   },
+   "mean_return": 0.7615999999999999,
+   "gen_tokens_per_task": 899.12,
+   "prompt_tokens_per_task": 7958.16,
+   "f_calls_per_task": 39.98,
+   "candidates_per_task": 70.08,
+   "malformed_rate": 0.0,
+   "coverage_first": 0.6,
+   "open_loop_success": 0.6,
+   "first_action_optimal": 0.88,
+   "illegal_steps_per_task": 0.0,
+   "optimal_rate_given_success": 0.9024390243902439,
+   "would_abstain_any": 0.5,
+   "wall_s": 1720.4
+  }
+ }
+}
