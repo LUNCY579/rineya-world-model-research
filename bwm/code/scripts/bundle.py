@@ -52,7 +52,12 @@ def main() -> int:
             try:
                 rc = p.wait(timeout=max(1.0, deadline - time.time()))
             except subprocess.TimeoutExpired:
-                p.terminate()
+                # kill the WHOLE tree: on 2026-10-08 terminate() stopped only the direct child and its blocks_eval
+                # grandchild kept using the GPU outside the lease for ~1 h (incident I-15)
+                if os.name == "nt":
+                    subprocess.run(["taskkill", "/F", "/T", "/PID", str(p.pid)], capture_output=True)
+                else:
+                    p.terminate()
                 p.wait()
                 print(f"[bundle] {time.strftime('%H:%M:%S')} {j['name']} stopped at the {budget:.0f} s cap after "
                       f"{time.time() - t0:.0f} s; resumes next turn", flush=True)

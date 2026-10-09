@@ -436,3 +436,41 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
   batch-independent sampling, frozen memoised F), each run once, merged by `bw_run_tests.merge` (unit-tested).
   bundleD = sharded tests -> RW2 pilot. The GPU orchestrator had died between 14:56 and 15:06 (`^C` in its stderr,
   probably a console-close event when this assistant session restarted); relaunched 16:03.
+- **D-51 Records repository (user-approved 2026-10-08 ~19:00).** BWM-001 records, code and results are exported to
+  the PRIVATE GitHub repo LUNCY579/rineya-world-model-research under `bwm/` (created by the RCWM session at the
+  user's request) by `tools/export_bwm.py` from a separate clone (`Rineya_BWM_001_Research_Bundle/gh_export`):
+  docs, code, run records; no adapter weights, training data or caches (listed with size + SHA-256 in
+  `bwm/EXCLUDED_LARGE_FILES.json`); host health logs not exported; secret/email scan must pass before writing.
+  First push: commit ea466a3 (254 files, 14 MB). Re-export after each milestone; pull --rebase before push.
+- **P-07 (INTERIM, frozen B2 configuration, PlanBench Blocksworld-hard shards 0-2 = 42 of 110 instances; no
+  decision depends on it, the remaining shards run unchanged).** S-beam 25/42 = 0.595 (Clopper-Pearson 95% CI
+  0.433-0.744); S-direct on the same 42 instances 1/42; paired: beam-only 24, direct-only 0, exact McNemar
+  p = 1.2e-7. VAL agrees with the executor on every plan. By block count: 6: 1/1, 7: 1/1, 8: 3/4, 9: 5/5,
+  10: 4/6, 11: 1/2, 12: 1/3, 13: 5/8, 14: 4/10, 15: 0/2. Shard 3 was cut at the turn cap (restarts next turn);
+  ~1.5 h per shard, so shards 3-7 need about two more BWM turns.
+- **I-15 GPU used outside the lease (my fault), 23:08-00:06 on 10-08.** At bundleD's turn cap, `bundle.py` called
+  `terminate()` on its direct child (`bw_run_tests.py`) only; the grandchild `blocks_eval.py` (hard-beam shard 3,
+  ~3 GB VRAM) kept running until it finished at 00:06, overlapping the peer's L1 screen (whose analysis passed its
+  parity gate; peer informed, offered a re-run turn). Shard 3's output is valid (frozen configuration, ran to
+  completion): 10/14. **Fix:** `bundle.py` kills the whole process tree at the cap (`taskkill /F /T`); a one-off
+  guard kills leftover eval processes when the current turn (old code loaded) ends at 06:33.
+  *I-15 follow-up (peer, 02:2x):* no overlap occurred. The peer's L1 job was waiting in its lease, whose
+  foreign-dedicated-VRAM check held it until the stray process exited (acquired 00:06:04); all L1 passes ran alone.
+  Cost: ~1 h delay to the peer. Our lease already has the same foreign-VRAM check (D-25).
+- **D-52 Shared trace-target schema (joint roadmap item 5b, agreed with RCWM 2026-10-09).** One JSON object in fixed
+  key order `{"cmp": .., "calc": .., "after": ..}` (explicit order, never sorted; parsers reject other orders). RW2:
+  moves `cmp = {"cand": c, "slack": L-|c|, "ok": slack>=0}`, halve `{"x", "rem", "ok"}`, finish `null`;
+  `calc` = c if ok else x; `after` = existing `{"legal","terminated","x"}`. Blocksworld: `cmp` = each precondition fact
+  with its truth + ok; `calc` = delta; `after` = existing delta answer. Arms: plain / trace / filler (token-matched).
+  Primary outcome: out-of-range strata. Replaces the A3 slack-scratchpad plan.
+- **P-08 (FINAL, frozen B2 configuration, run once; PlanBench Blocksworld-hard, 110 instances, 6-15 blocks,
+  20-40-step optimal plans, planning without execution feedback, VAL-scored).** **S-beam 73/110 = 0.664**
+  (Clopper-Pearson 95% CI 0.567-0.751); **S-direct 5/110 = 0.045** (0.015-0.103); paired beam-only 68 /
+  direct-only 0, exact McNemar p = 6.8e-21. VAL agrees with the executor on all 220 plans. Every plan S-beam
+  verified in imagination was valid (73/73; all 37 failures were unverified, i.e. the system knew it had not found a
+  plan). By block count (beam/direct/n): 6: 1/0/1, 7: 1/0/1, 8: 6/2/7, 9: 14/3/14, 10: 10/0/13, 11: 9/0/12,
+  12: 8/0/13, 13: 11/0/18, 14: 11/0/21, 15: 2/0/10. Cost per instance: ~8.0k proposer tokens + ~187 unique F
+  queries. Published zero-shot references (different regime, aggregate only; unpaired Fisher tests):
+  vs o1-preview 26/110 p = 2.4e-10; vs o1-mini 10% p = 1.2e-18; vs DeepSeek-R1 53.6% (~59/110) two-sided p = 0.073
+  (one-sided 0.037), so "above R1" is NOT established at the two-sided 5% level. Training saw <= 6 blocks.
+  Mirror (generated, same block counts): S-direct 6/110 = 0.055; S-beam pending (8 shards).

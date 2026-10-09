@@ -1,0 +1,51 @@
+{
+ "args": {
+  "set": "hard",
+  "planner": "beam",
+  "W": 4,
+  "E": 24,
+  "max_depth": 80,
+  "step_cap": 24,
+  "R": 12,
+  "fwd_fmt": "delta",
+  "max_batch_tokens": 5000,
+  "M": 80,
+  "P": 1,
+  "prop_batch_tokens": 6000,
+  "freeze": "runs/FREEZE_B2_beam.json",
+  "shard": "4/8",
+  "n": 0,
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v2_s1/adapter",
+  "mode": "actions",
+  "fwd": "lm",
+  "fwd_adapter": "runs/BW_Fdelta_s0/adapter",
+  "K": 8,
+  "eval_seed": 0,
+  "val": true,
+  "out": "runs\\BW_TEST_B2\\hard_beam\\shard_4of8"
+ },
+ "summary": {
+  "success": 0.6428571428571429,
+  "n": 14,
+  "verified_rate": 0.6428571428571429,
+  "verification_precision": 1.0,
+  "wall_s": 4083.5,
+  "f_model_queries": 2685,
+  "f_queries_per_instance": 191.8,
+  "proposer_tokens_per_instance": 8089.3,
+  "expansions_per_instance": 14.0,
+  "val_success": 0.6428571428571429,
+  "val_disagreements": 0,
+  "success_by_blocks": {
+   "8": 1.0,
+   "9": 1.0,
+   "10": 1.0,
+   "11": 1.0,
+   "12": 0.6667,
+   "13": 0.3333,
+   "14": 0.0,
+   "15": 0.0
+  }
+ }
+}

@@ -100,8 +100,17 @@ def readme(meas, frz, sel_mean):
         ptxt = "-" if pr is None else f"+{pr['beam_only']} / -{pr['direct_only']}, p = {pr['exact_mcnemar_p']:.2g}"
         lines.append(f"| {label} | {cell(r.get('S_beam'))} | {cell(r.get('S_direct'))} | {ptxt} |")
     lines += ["", "Published zero-shot references on Blocksworld-hard (different regime: general models, no domain training):", ""]
+    from scipy.stats import fisher_exact
     for k, v in PUBLISHED_HARD.items():
-        lines.append(f"- {k}: {v:.1%}")
+        txt = f"- {k}: {v:.1%}"
+        if sb is not None:
+            m = round(v * 110)
+            p2 = fisher_exact([[sb["solved"], sb["n"] - sb["solved"]], [m, 110 - m]])[1]
+            txt += f" (unpaired Fisher vs ours, two-sided p = {p2:.2g})"
+        lines.append(txt)
+    lines.append("")
+    lines.append("Published systems report aggregates only, so these comparisons are unpaired. A difference with two-sided")
+    lines.append("p >= 0.05 is not claimed (this applies to DeepSeek-R1).")
     lines += ["", "## What this does and does not show", "",
               "- It shows that a 0.6B frozen core with a *learned* world model and search plans far beyond the problem sizes its",
               "  training data covered, where the same proposer without the world model collapses (paired comparison above).",

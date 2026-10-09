@@ -31,9 +31,11 @@ Single training seed; validation-grade unless marked frozen.
 - **The world model plus search rescues larger problems (P-06, selection).** On generated hard-style 6-15-block
   problems, beam search under the learned F solves 0.63, against 0.13 for the same proposer without F. Every plan the
   F verified was valid.
-- **Frozen, PlanBench Blocksworld-hard (110 instances): the no-F arm solves 5/110 (4.5%).** The world-model arm is
-  running in 8 shards (`results/BW_TEST_B2/hard_beam/`). Published zero-shot references: DeepSeek-R1 53.6%,
-  o1-preview 23.6%. Those are general models in a different regime.
+- **FINAL, frozen, run once: PlanBench Blocksworld-hard (110; 6-15 blocks).** World model + beam search
+  solves **73/110 = 66.4%** (95% CI 56.7-75.1%); the same proposer without the world model solves 5/110 = 4.5%.
+  Paired comparison: +68 / -0, p = 6.8e-21. VAL agrees on every plan. Every plan the system verified was valid.
+  Training saw <= 6 blocks. Published zero-shot references (a different regime): o1-preview 23.6% (p = 2.4e-10),
+  DeepSeek-R1 53.6% (two-sided p = 0.073, so not established). Details: `docs/DECISIONS.md` P-08.
 - **RegisterWorld (F-01/F-03/F-04/F-06; P-03/P-04/P-05).**
   - The forward LoRA learns a data-forced shortcut for a parameterized legality rule.
   - Deferring to the frozen base model (adapter off), gated on the forward model's own confidence, repairs the soft
@@ -43,5 +45,5 @@ Single training seed; validation-grade unless marked frozen.
 
 ## Status
 
-The world-model arm's frozen runs on Blocksworld-hard, the mirror set and PlanBench-600 are in progress. A local
+The Blocksworld-hard result is final. The mirror-set and PlanBench-600 runs are in progress. A local
 devfreeze package will follow (DECISIONS D-49). Publishing anywhere public requires the user's explicit approval.
