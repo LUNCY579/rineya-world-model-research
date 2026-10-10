@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "role": "independent Quality Adjudicator",
+  "reviewer_execution_id": "/root/research_architect",
+  "completed_at_utc": "2026-10-10T00:03:42.605621+00:00",
+  "batch": "pilot-v2",
+  "records": 360,
+  "decision_counts": {
+    "ACCEPT": 348,
+    "REVISE": 12
+  },
+  "track_decisions": {
+    "RCM-001": {
+      "ACCEPT": 240
+    },
+    "RGM-001": {
+      "ACCEPT": 48,
+      "REVISE": 12
+    },
+    "RVM-001": {
+      "ACCEPT": 60
+    }
+  },
+  "reviewer_disagreements_preserved": 12,
+  "independence": {
+    "actual_execution_identity": "/root/research_architect",
+    "previous_role": "Dataset Research Architect",
+    "prior_actions": "Research source review and curriculum specifications only; no sample generation, expert review, adversarial review or approval.",
+    "producer_identities": [
+      "/root",
+      "/root/relational_critic_producer"
+    ],
+    "expert_identity": "/root/expert_reviewer",
+    "adversarial_identity": "/root/adversarial_auditor",
+    "oracle_author_identity": "/root/formal_oracle",
+    "distinct_from_producers_and_reviewers": true,
+    "blindness": "Adjudication intentionally reads final reviewer verdicts after independent first judgments; this is not a blind expert review.",
+    "correlated_error_risk": "All agents share the underlying model family. Distinct execution/context does not ensure statistically independent errors."
+  },
+  "checks": {
+    "all_exact_record_hashes": true,
+    "all_review_hashes_match": true,
+    "all_oracle_passes": true,
+    "all_student_payloads_match": true,
+    "all_adjudicator_oracle_rechecks_pass": true,
+    "all_12_rgm_dev_labels_false": true
+  },
+  "inputs_sha256": {
+    "data/RCM-001/candidate_renderings/pilot-v2.jsonl": "edd6f4b5efff19ba4badf5a3b8a92d6f84941f9c311270f094c251fa6a488838",
+    "data/RGM-001/candidate_renderings/pilot-v2.jsonl": "f60a1421de412a05bb6078d645de2621ae69fb68d6df70c7716b526b277dfd02",
+    "data/RVM-001/candidate_renderings/pilot-v2.jsonl": "896f22f5ffff3adbf36d025282930fecd1fa5d304f453fcd56f7c242bb717c2e",
+    "reviews/expert/pilot-v2.jsonl": "b2a87f6a063de720e9550d90f796e70fee5b03dc7e83cb7a68911f9966d6d783",
+    "reviews/adversarial/pilot-v2.jsonl": "b45a3dfcc1bff98b493439f992d7b13c386b9f48f727eb71724a1ce69d026f6b",
+    "reviews/oracle/pilot-v2.jsonl": "3a8c3a776c8338824dc282ad11958fcdbadcf7e4d15a25ba45f0545def26aeaf",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "CURRICULUM.md": "ffbd21107d6bdc076899244d43045ad85a7330cadd40704fc1b7bc6400605d84",
+    "reviews/expert/semantic_inspection_v2.md": "f40a5eb38e52453217b986ca11f8b9c7f98c5ab578b551463eceefc9a821b59f",
+    "reviews/expert/verification_summary_v2.json": "b81ae28893a7f638cbaf152d1fe014ab153bd7155fd3115fc7f9d6e67ba05135",
+    "reviews/adversarial/execution-pilot-v2.json": "d66651688cf875862a31fe3437b896984a23f775143182b51e1ada69c9d262c1",
+    "reviews/oracle/formal_oracle_execution.json": "8703ef1a939871b90b0e1da5c80ce34296a0827b985bd930fa3333c4bfc2a2d5",
+    "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "research/ARCHITECT_EXECUTION.json": "52e68d3b10236cc11491acdf4787e9866edbb391d3a0008667b472cf669010b5"
+  },
+  "output_sha256": {
+    "reviews/adjudication/pilot-v2.jsonl": "c8c197567da2d46da8add6b57e1b33a864a5c48d1422b6155501c8e35576999e"
+  },
+  "excluded_batches": [
+    "pilot-v3",
+    "extended-pilot-v2"
+  ],
+  "excluded_batch_policy": "Independent final receipts were not complete for these batches at task assignment; no decision or acceptance is made here.",
+  "writes": [
+    "reviews/adjudication/pilot-v2.jsonl",
+    "reviews/adjudication/execution-pilot-v2.json",
+    "reviews/adjudication/ADJUDICATION_PILOT_V2.md",
+    "reviews/adjudication/adjudicate_pilot_v2.py"
+  ],
+  "producer_or_release_mutations": false,
+  "protected_instruments_opened": false
+}

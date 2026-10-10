@@ -2,10 +2,12 @@
 
 Read PROJECT_STATUS.md, quality_reports/CURRENT.json and backup_logs receipts first. Inspect original repo/worktree status; never switch or clean the research checkout.
 
-No quality-approved release yet.
+- RCM-001 v0001: 240 records, 30 parents; QUALITY_APPROVED_LOCAL.
+- RVM-001 v0001: 60 records, 30 parents; QUALITY_APPROVED_LOCAL.
 
 - foundation-r2: BACKED_UP; commit 517a51a60a00e6b7a625edeeb8e6bc126393856c.
 - foundation: FAILED_LOCAL_ARTIFACTS_PRESERVED; commit pending.
+- review-milestone: BACKED_UP; commit 7decf8635f37a9e0e514b05dcd5dc7135a7eeb57.
 
 Run `/opt/anaconda3/bin/python3 -m unittest discover -s tests -p '*.py'` from the factory. Audit each candidate batch with `-m factory.pipeline audit --batch NAME`. Reviewers must see no prior verdict before their first judgement. New hashes require new review receipts. Assemble only ACCEPT-gated immutable releases with `-m factory.pipeline release --batch NAME --version vNNNN`. Revisions require new batches and regression evidence; do not rewrite existing releases.
 

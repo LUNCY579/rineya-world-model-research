@@ -1,0 +1,83 @@
+{
+  "receipt_type": "extended_oracle_authorship_and_execution_evidence",
+  "author_execution_id": "/root/formal_oracle",
+  "author_role": "independent Formal Oracle Engineer",
+  "runner_execution_id": "/root/formal_oracle",
+  "identity_source": "Actual collaboration task identity /root/formal_oracle",
+  "recorded_at_utc": "2026-10-10 00:01:22 UTC",
+  "contract": "High-Quality_Dataset/schemas/EXTENDED_SEMANTICS.md",
+  "apis": [
+    "oracles.extended_independent.solve(task) -> target",
+    "oracles.independent.solve(task) -> target"
+  ],
+  "malformed_input_exception": "OracleError(ValueError)",
+  "implementation_dependencies": [
+    "Python standard library",
+    "Own original oracle validation primitives"
+  ],
+  "independent_inputs": [
+    "Public EXTENDED_SEMANTICS.md contract only"
+  ],
+  "excluded_inputs": [
+    "Extended producer reference",
+    "Extended generator implementation",
+    "Extended expected targets",
+    "Other reviews"
+  ],
+  "methods": [
+    "Exhaustive paired-state reachability for predictive equivalence",
+    "Acyclic skills call graph validation including unchosen branches and unused procedures",
+    "Ordered shared-state skills interpretation",
+    "Explicit competence routing and immutable protected values",
+    "Version/time/input-index episodic retrieval",
+    "Type-sensitive finite-world filtering and canonical JSON scalar counting",
+    "Complete feasible-assignment enumeration and minimum Hamming repair",
+    "Specified greedy diversity selection",
+    "Explicit event observer updates and policy evaluation"
+  ],
+  "test_runtime": "/opt/anaconda3/bin/python3",
+  "test_command": "/opt/anaconda3/bin/python3 -m unittest discover -s High-Quality_Dataset/tests -p 'oracle*.py' -v",
+  "test_chunk_id": "e4c56a",
+  "test_exit_code": 0,
+  "tests": {
+    "extended": 35,
+    "original_regression": 31,
+    "total": 66
+  },
+  "extended_property_counts": {
+    "three_state_two_action_quotients": 5832,
+    "typed_two_state_two_action_quotients": 144,
+    "total_quotients": 5976,
+    "binary_constraint_repair_diversity_worlds": 1280,
+    "candidate_repairs_checked": 10240
+  },
+  "independent_test_representations": [
+    "Canonical partition table refinement vs implementation's paired-state graph",
+    "Predetermined constraint predicates over enumerated binary assignments",
+    "Sorted explicit Hamming/lexical candidates and separately computed pair distances"
+  ],
+  "metamorphic_properties": [
+    "Procedure dictionary permutation",
+    "Procedure inlining preserving after/primitives/conditions",
+    "Register renaming",
+    "Module permutation",
+    "Irrelevant episodic key/future event append",
+    "Episodic key renaming",
+    "Belief world/observation order invariance where permitted",
+    "Duplicate observation idempotence",
+    "Predictive state/action/map ordering and consistent renaming",
+    "Constraint/alphabet/candidate permutations",
+    "Object/place/agent renaming and observer order invariance",
+    "Task immutability and output state independence"
+  ],
+  "files_sha256": {
+    "High-Quality_Dataset/oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+    "High-Quality_Dataset/oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "High-Quality_Dataset/schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "High-Quality_Dataset/tests/oracle_extended_test.py": "997deca2f7bd8c0f4dbd2dc07f848f46fcd4d67ddf48f70689275a1be7d1f521"
+  },
+  "test_output": "High-Quality_Dataset/reviews/oracle/extended_formal_oracle_test_output.txt",
+  "canonical_dataset_comparison": "Not performed by this author; any parent-side verification must retain the parent's runner identity.",
+  "approval_verdict": null,
+  "approval_note": "Independent implementation/test evidence only; no records or releases approved."
+}

@@ -3,17 +3,24 @@
 | Track | Batch | Candidate records | Independent semantic parents |
 |---|---|---:|---:|
 | RBM-001 | extended-pilot-v1 | 24 | 12 |
+| RBM-001 | extended-pilot-v2 | 24 | 12 |
 | RCM-001 | pilot-v1 | 120 | 30 |
 | RCM-001 | pilot-v2 | 240 | 30 |
 | RDP-001 | extended-pilot-v1 | 24 | 12 |
+| RDP-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v1 | 24 | 12 |
+| REM-001 | extended-pilot-v2 | 24 | 12 |
 | RGM-001 | pilot-v1 | 60 | 30 |
 | RGM-001 | pilot-v2 | 60 | 30 |
 | RGM-001 | pilot-v3 | 72 | 30 |
 | RJP-001 | extended-pilot-v1 | 24 | 12 |
+| RJP-001 | extended-pilot-v2 | 24 | 12 |
 | RMM-001 | extended-pilot-v1 | 24 | 12 |
+| RMM-001 | extended-pilot-v2 | 24 | 12 |
 | ROM-001 | extended-pilot-v1 | 24 | 12 |
+| ROM-001 | extended-pilot-v2 | 24 | 12 |
 | RSM-001 | extended-pilot-v1 | 24 | 12 |
+| RSM-001 | extended-pilot-v2 | 24 | 12 |
 | RVM-001 | pilot-v1 | 60 | 30 |
 | RVM-001 | pilot-v2 | 60 | 30 |
 
@@ -23,6 +30,10 @@ Difficulty counts by batch:
 ```json
 {
   "RBM-001/extended-pilot-v1": {
+    "2": 16,
+    "3": 8
+  },
+  "RBM-001/extended-pilot-v2": {
     "2": 16,
     "3": 8
   },
@@ -41,7 +52,14 @@ Difficulty counts by batch:
     "2": 4,
     "3": 20
   },
+  "RDP-001/extended-pilot-v2": {
+    "2": 4,
+    "3": 20
+  },
   "REM-001/extended-pilot-v1": {
+    "3": 24
+  },
+  "REM-001/extended-pilot-v2": {
     "3": 24
   },
   "RGM-001/pilot-v1": {
@@ -65,13 +83,28 @@ Difficulty counts by batch:
     "2": 12,
     "3": 12
   },
+  "RJP-001/extended-pilot-v2": {
+    "2": 12,
+    "3": 12
+  },
   "RMM-001/extended-pilot-v1": {
+    "3": 24
+  },
+  "RMM-001/extended-pilot-v2": {
     "3": 24
   },
   "ROM-001/extended-pilot-v1": {
     "3": 24
   },
+  "ROM-001/extended-pilot-v2": {
+    "3": 24
+  },
   "RSM-001/extended-pilot-v1": {
+    "2": 4,
+    "3": 16,
+    "4": 4
+  },
+  "RSM-001/extended-pilot-v2": {
     "2": 4,
     "3": 16,
     "4": 4

@@ -3,13 +3,21 @@
   "producer_roles": {
     "causal_specialist": "/root",
     "relational_planning_specialist": "/root/relational_critic_producer",
-    "value_critic_specialist": "/root/relational_critic_producer"
+    "value_critic_specialist": "/root/relational_critic_producer",
+    "hierarchical_skills_and_memory_specialist": "/root/relational_critic_producer",
+    "remaining_bounded_tracks": "/root/relational_critic_producer",
+    "improvement_engineer": "/root"
   },
   "independent_roles": {
     "research_architect": "/root/research_architect",
     "formal_oracle_engineer": "/root/formal_oracle",
-    "backup_manager": "/root/backup_manager"
+    "backup_manager": "/root/backup_manager",
+    "blind_expert": "/root/expert_reviewer",
+    "blind_adversarial_and_diversity_auditor": "/root/adversarial_auditor",
+    "quality_adjudicator": "/root/research_architect"
   },
-  "reviewer_roles": "pending independent new executions with no prior verdicts",
-  "disclosure": "Roles are allocated to real executions. Two producer roles share one execution; no fictional identities. Same underlying model implies correlated-error risk."
+  "reviewer_roles": "Actual blind initial judgments saved separately before cross-review adjudication; all same underlying model.",
+  "disclosure": "Roles are allocated to real executions. Two producer roles share one execution; no fictional identities. Same underlying model implies correlated-error risk.",
+  "role_capacity_note": "Six genuinely spawned non-root executions are reused across waves due environment execution/thread limits. Research Architect later adjudicates without generating/reviewing samples. Production roles share one execution. Adversarial/diversity roles share one execution. No fictional 12-agent independence claim.",
+  "backup_execution_note": "Backup manager authored/tested preflight/helper; /root executes exact inventory checkpoints and is recorded separately in receipts."
 }

@@ -5,17 +5,24 @@ Machine evidence: quality_reports/CURRENT.json. Candidate batches are retained e
 | Track | Batch | Candidate records | Independent semantic parents |
 |---|---|---:|---:|
 | RBM-001 | extended-pilot-v1 | 24 | 12 |
+| RBM-001 | extended-pilot-v2 | 24 | 12 |
 | RCM-001 | pilot-v1 | 120 | 30 |
 | RCM-001 | pilot-v2 | 240 | 30 |
 | RDP-001 | extended-pilot-v1 | 24 | 12 |
+| RDP-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v1 | 24 | 12 |
+| REM-001 | extended-pilot-v2 | 24 | 12 |
 | RGM-001 | pilot-v1 | 60 | 30 |
 | RGM-001 | pilot-v2 | 60 | 30 |
 | RGM-001 | pilot-v3 | 72 | 30 |
 | RJP-001 | extended-pilot-v1 | 24 | 12 |
+| RJP-001 | extended-pilot-v2 | 24 | 12 |
 | RMM-001 | extended-pilot-v1 | 24 | 12 |
+| RMM-001 | extended-pilot-v2 | 24 | 12 |
 | ROM-001 | extended-pilot-v1 | 24 | 12 |
+| ROM-001 | extended-pilot-v2 | 24 | 12 |
 | RSM-001 | extended-pilot-v1 | 24 | 12 |
+| RSM-001 | extended-pilot-v2 | 24 | 12 |
 | RVM-001 | pilot-v1 | 60 | 30 |
 | RVM-001 | pilot-v2 | 60 | 30 |
 
@@ -32,15 +39,18 @@ Review decision counts:
     }
   },
   "adversarial": {
-    "records": 1200,
+    "records": 1344,
     "decisions": {
-      "ACCEPT": 1140,
+      "ACCEPT": 1284,
       "REVISE": 60
     }
   },
   "adjudication": {
-    "records": 0,
-    "decisions": {}
+    "records": 360,
+    "decisions": {
+      "ACCEPT": 348,
+      "REVISE": 12
+    }
   }
 }
 ```
@@ -118,6 +128,33 @@ Exact oracle, schema, duplicates and family split audit summaries:
     "scope": "fresh generated development data; not a sealed generalization instrument"
   },
   {
+    "batch": "extended-pilot-v2",
+    "records": 168,
+    "unique_parents": 84,
+    "distinct_parent_semantic_signatures": 84,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "2": 36,
+      "3": 128,
+      "4": 4
+    },
+    "tracks": {
+      "RBM-001": 24,
+      "RDP-001": 24,
+      "REM-001": 24,
+      "RJP-001": 24,
+      "RMM-001": 24,
+      "ROM-001": 24,
+      "RSM-001": 24
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
     "batch": "pilot-v1",
     "records": 240,
     "unique_parents": 90,
@@ -145,6 +182,7 @@ Exact oracle, schema, duplicates and family split audit summaries:
     "batch": "pilot-v2",
     "records": 360,
     "unique_parents": 90,
+    "distinct_parent_semantic_signatures": 90,
     "oracle_failures": 0,
     "split_leakage": [],
     "cross_parent_semantic_duplicates": [],
