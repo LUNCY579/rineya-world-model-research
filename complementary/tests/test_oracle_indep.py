@@ -4,6 +4,7 @@ The oracle module is loaded by file path so that no other rcx code is executed.
 """
 import ast as pyast
 import importlib.util
+import itertools
 import json
 import os
 import random
@@ -221,6 +222,161 @@ GOLD = [
      '{"cmp":{"status":"POSTED","listed":true,"ok":true},"calc":{"A":11,"B":-8},"after":{"B":-8,"A":11,"D":0,"C":1}}'),
 ]
 
+# Copy-world variant (SPEC section 1.1): set / swap. Same tuple layout, computed by hand.
+COPY_GOLD = [
+    ("SPOS:t0", S("S+", "posted"),
+     'RULE: Only events with status posted take effect; other events change nothing.\n'
+     'STATE: {"A":10,"B":20,"C":30,"D":40}\n'
+     'EVENT: {"account":"B","amount":7,"kind":"set","other":"C","status":"posted"}',
+     True, True, '{"after":{"A":10,"B":7,"C":30,"D":40}}',
+     '{"cmp":{"status":"posted","listed":true,"ok":true},"calc":{"B":7},"after":{"A":10,"B":7,"C":30,"D":40}}'),
+    ("SPOS:t0", S("S+", "posted"),
+     'RULE: Only events with status posted take effect; other events change nothing.\n'
+     'STATE: {"A":10,"B":20,"C":30,"D":40}\n'
+     'EVENT: {"account":"C","amount":30,"kind":"set","other":"A","status":"posted"}',
+     True, True, '{"after":{"A":10,"B":20,"C":30,"D":40}}',
+     '{"cmp":{"status":"posted","listed":true,"ok":true},"calc":{"C":30},"after":{"A":10,"B":20,"C":30,"D":40}}'),
+    ("SPOS:t1", S("S+", "posted"),
+     'RULE: An event is applied only if its status is posted.\n'
+     'STATE: {"A":5,"B":6,"C":7,"D":8}\n'
+     'EVENT: {"account":"C","amount":0,"kind":"set","other":"A","status":"void"}',
+     False, False, '{"after":{"A":5,"B":6,"C":7,"D":8}}',
+     '{"cmp":{"status":"void","listed":false,"ok":false},"calc":{"C":7},"after":{"A":5,"B":6,"C":7,"D":8}}'),
+    ("SPOS:t2", S("S+", "cleared", "settled"),
+     'RULE: Apply the event when its status is cleared or settled; otherwise leave the balances unchanged.\n'
+     'STATE: {"A":11,"B":22,"C":33,"D":44}\n'
+     'EVENT: {"status":"settled","kind":"swap","account":"A","other":"C","amount":3}',
+     True, True, '{"after":{"A":33,"B":22,"C":11,"D":44}}',
+     '{"cmp":{"status":"settled","listed":true,"ok":true},"calc":{"A":33,"C":11},"after":{"A":33,"B":22,"C":11,"D":44}}'),
+    ("SPOS:t3", S("S+", "booked", "queued", "flagged"),
+     'RULE: Events whose status is booked, queued or flagged update the balances. All other events are ignored.\n'
+     'STATE: {"C":1,"A":2,"D":3,"B":4}\n'
+     'EVENT: {"amount":6,"account":"D","status":"final","other":"A","kind":"swap"}',
+     False, False, '{"after":{"C":1,"A":2,"D":3,"B":4}}',
+     '{"cmp":{"status":"final","listed":false,"ok":false},"calc":{"D":3,"A":2},"after":{"C":1,"A":2,"D":3,"B":4}}'),
+    ("SPOS:h0", S("S+", "lapsed", "pruned"),
+     'RULE: If the status is lapsed or pruned, carry out the event; for any other status, do nothing.\n'
+     'STATE: {"U":6,"R":3,"P":1,"T":5,"Q":2,"S":4}\n'
+     'EVENT: {"account":"R","amount":12,"kind":"swap","other":"S","status":"pruned"}',
+     True, True, '{"after":{"U":6,"R":4,"P":1,"T":5,"Q":2,"S":3}}',
+     '{"cmp":{"status":"pruned","listed":true,"ok":true},"calc":{"R":4,"S":3},'
+     '"after":{"U":6,"R":4,"P":1,"T":5,"Q":2,"S":3}}'),
+    ("SPOS:h1", S("S+", "parked", "routed"),
+     'RULE: Balances change only for parked or routed events.\n'
+     'STATE: {"P":-5,"Q":17,"R":0,"S":42}\n'
+     'EVENT: {"account":"Q","amount":512,"kind":"set","other":"S","status":"routed"}',
+     True, True, '{"after":{"P":-5,"Q":512,"R":0,"S":42}}',
+     '{"cmp":{"status":"routed","listed":true,"ok":true},"calc":{"Q":512},"after":{"P":-5,"Q":512,"R":0,"S":42}}'),
+    ("SNEG:t0", S("S-", "void"),
+     'RULE: Events with status void are ignored; all other events take effect.\n'
+     'STATE: {"A":1,"B":2,"C":3,"D":4}\n'
+     'EVENT: {"account":"D","amount":98,"kind":"set","other":"B","status":"posted"}',
+     True, False, '{"after":{"A":1,"B":2,"C":3,"D":98}}',
+     '{"cmp":{"status":"posted","listed":false,"ok":true},"calc":{"D":98},"after":{"A":1,"B":2,"C":3,"D":98}}'),
+    ("SNEG:t1", S("S-", "rejected", "disputed"),
+     'RULE: An event is applied unless its status is rejected or disputed.\n'
+     'STATE: {"A":50,"B":60,"C":70,"D":80}\n'
+     'EVENT: {"kind":"set","status":"disputed","account":"A","other":"B","amount":12}',
+     False, True, '{"after":{"A":50,"B":60,"C":70,"D":80}}',
+     '{"cmp":{"status":"disputed","listed":true,"ok":false},"calc":{"A":50},"after":{"A":50,"B":60,"C":70,"D":80}}'),
+    ("SNEG:t2", S("S-", "frozen", "paid", "billed"),
+     'RULE: Skip the event when its status is frozen, paid or billed; otherwise apply it.\n'
+     'STATE: {"D":40,"B":20,"A":10,"C":30}\n'
+     'EVENT: {"other":"D","amount":5,"status":"open","account":"C","kind":"swap"}',
+     True, False, '{"after":{"D":30,"B":20,"A":10,"C":40}}',
+     '{"cmp":{"status":"open","listed":false,"ok":true},"calc":{"C":40,"D":30},"after":{"D":30,"B":20,"A":10,"C":40}}'),
+    ("SNEG:t3", S("S-", "void"),
+     'RULE: Events whose status is void change nothing. All other events update the balances.\n'
+     'STATE: {"A":9,"B":8,"C":7,"D":6}\n'
+     'EVENT: {"account":"B","amount":1,"kind":"swap","other":"D","status":"void"}',
+     False, True, '{"after":{"A":9,"B":8,"C":7,"D":6}}',
+     '{"cmp":{"status":"void","listed":true,"ok":false},"calc":{"B":8,"D":6},"after":{"A":9,"B":8,"C":7,"D":6}}'),
+    ("SNEG:h0", S("S-", "tagged", "minted"),
+     'RULE: If the status is tagged or minted, do nothing; for any other status, carry out the event.\n'
+     'STATE: {"oak":3,"pine":-8,"east":5,"west":0,"north":2,"south":9}\n'
+     'EVENT: {"kind":"swap","account":"south","amount":7,"status":"boxed","other":"pine"}',
+     True, False, '{"after":{"oak":3,"pine":9,"east":5,"west":0,"north":2,"south":-8}}',
+     '{"cmp":{"status":"boxed","listed":false,"ok":true},"calc":{"south":-8,"pine":9},'
+     '"after":{"oak":3,"pine":9,"east":5,"west":0,"north":2,"south":-8}}'),
+    ("SNEG:h1", S("S-", "void"),
+     'RULE: Every event takes effect except void events.\n'
+     'STATE: {"west":5,"south":6,"pine":7,"oak":8,"north":9}\n'
+     'EVENT: {"status":"Void","other":"oak","kind":"set","amount":0,"account":"north"}',
+     True, False, '{"after":{"west":5,"south":6,"pine":7,"oak":8,"north":0}}',
+     '{"cmp":{"status":"Void","listed":false,"ok":true},"calc":{"north":0},'
+     '"after":{"west":5,"south":6,"pine":7,"oak":8,"north":0}}'),
+    ("AND:t0", C("AND", S("S+", "posted"), K("set")),
+     'RULE: An event takes effect only if its status is in [posted] and its kind is set; otherwise nothing changes.\n'
+     'STATE: {"A":10,"B":20,"C":30,"D":40}\n'
+     'EVENT: {"account":"A","amount":2,"kind":"swap","other":"D","status":"posted"}',
+     False, True, '{"after":{"A":10,"B":20,"C":30,"D":40}}',
+     '{"cmp":{"status":"posted","listed":true,"ok":false},"calc":{"A":10,"D":40},"after":{"A":10,"B":20,"C":30,"D":40}}'),
+    ("AND:t1", C("AND", S("S-", "void"), K("set", "swap")),
+     'RULE: Apply the event when its status is not in [void] and its kind is set or swap. '
+     'Otherwise leave the balances unchanged.\n'
+     'STATE: {"A":0,"B":0,"C":0,"D":0}\n'
+     'EVENT: {"account":"C","amount":45,"kind":"set","other":"B","status":"open"}',
+     True, False, '{"after":{"A":0,"B":0,"C":45,"D":0}}',
+     '{"cmp":{"status":"open","listed":false,"ok":true},"calc":{"C":45},"after":{"A":0,"B":0,"C":45,"D":0}}'),
+    ("AND:h0", C("AND", K("swap"), S("S+", "cleared")),
+     'RULE: Both conditions must hold for an event to take effect: its kind is swap; its status is in [cleared].\n'
+     'STATE: {"B":2,"D":4,"A":1,"C":3}\n'
+     'EVENT: {"account":"B","amount":4,"kind":"swap","other":"C","status":"cleared"}',
+     True, True, '{"after":{"B":3,"D":4,"A":1,"C":2}}',
+     '{"cmp":{"status":"cleared","listed":true,"ok":true},"calc":{"B":3,"C":2},"after":{"B":3,"D":4,"A":1,"C":2}}'),
+    ("OR:t0", C("OR", S("S+", "posted"), K("swap")),
+     'RULE: An event takes effect if its status is in [posted] or if its kind is swap; otherwise nothing changes.\n'
+     'STATE: {"A":15,"B":25,"C":35,"D":45}\n'
+     'EVENT: {"account":"D","amount":9,"kind":"swap","other":"A","status":"void"}',
+     True, False, '{"after":{"A":45,"B":25,"C":35,"D":15}}',
+     '{"cmp":{"status":"void","listed":false,"ok":true},"calc":{"D":15,"A":45},"after":{"A":45,"B":25,"C":35,"D":15}}'),
+    ("OR:t1", C("OR", S("S-", "locked"), K("add", "set")),
+     'RULE: Apply the event when its status is not in [locked] or when its kind is add or set. '
+     'Otherwise leave the balances unchanged.\n'
+     'STATE: {"A":1,"B":2,"C":3,"D":4}\n'
+     'EVENT: {"account":"A","amount":5,"kind":"swap","other":"C","status":"locked"}',
+     False, True, '{"after":{"A":1,"B":2,"C":3,"D":4}}',
+     '{"cmp":{"status":"locked","listed":true,"ok":false},"calc":{"A":1,"C":3},"after":{"A":1,"B":2,"C":3,"D":4}}'),
+    ("OR:h0", C("OR", K("set", "swap"), S("S+", "waived")),
+     'RULE: An event takes effect when either its kind is set or swap or its status is in [waived].\n'
+     'STATE: {"A":3,"B":4,"C":5,"D":6}\n'
+     'EVENT: {"account":"B","amount":60,"kind":"set","other":"A","status":"Waived"}',
+     True, False, '{"after":{"A":3,"B":60,"C":5,"D":6}}',
+     '{"cmp":{"status":"Waived","listed":false,"ok":true},"calc":{"B":60},"after":{"A":3,"B":60,"C":5,"D":6}}'),
+    ("OR:h0", C("OR", S("S+", "set"), K("swap")),
+     'RULE: An event takes effect when either its status is in [set] or its kind is swap.\n'
+     'STATE: {"A":7,"B":8,"C":9,"D":10}\n'
+     'EVENT: {"account":"C","amount":1,"kind":"set","other":"D","status":"swap"}',
+     False, False, '{"after":{"A":7,"B":8,"C":9,"D":10}}',
+     '{"cmp":{"status":"swap","listed":false,"ok":false},"calc":{"C":9},"after":{"A":7,"B":8,"C":9,"D":10}}'),
+    ("ATOM:t0", K("set"),
+     'RULE: An event takes effect only if its kind is set; otherwise nothing changes.\n'
+     'STATE: {"A":10,"B":10,"C":10,"D":10}\n'
+     'EVENT: {"account":"A","amount":33,"kind":"set","other":"B","status":"posted"}',
+     True, None, '{"after":{"A":33,"B":10,"C":10,"D":10}}',
+     '{"cmp":{"status":"posted","listed":null,"ok":true},"calc":{"A":33},"after":{"A":33,"B":10,"C":10,"D":10}}'),
+    ("ATOM:t0", K("swap"),
+     'RULE: An event takes effect only if its kind is swap; otherwise nothing changes.\n'
+     'STATE: {"A":1,"B":2,"C":3,"D":4}\n'
+     'EVENT: {"account":"A","amount":2,"kind":"set","other":"B","status":"posted"}',
+     False, None, '{"after":{"A":1,"B":2,"C":3,"D":4}}',
+     '{"cmp":{"status":"posted","listed":null,"ok":false},"calc":{"A":1},"after":{"A":1,"B":2,"C":3,"D":4}}'),
+    ("ATOM:t0", T("AGE", 10),
+     'RULE: An event takes effect only if its amount is at least 10; otherwise nothing changes.\n'
+     'STATE: {"A":1,"B":2,"C":3,"D":4}\n'
+     'EVENT: {"account":"D","amount":12,"kind":"swap","other":"B","status":"x"}',
+     True, None, '{"after":{"A":1,"B":4,"C":3,"D":2}}',
+     '{"cmp":{"status":"x","listed":null,"ok":true},"calc":{"D":2,"B":4},"after":{"A":1,"B":4,"C":3,"D":2}}'),
+    ("ATOM:t0", T("BGE", 50),
+     'RULE: An event takes effect only if the account balance is at least 50; otherwise nothing changes.\n'
+     'STATE: {"A":50,"B":0,"C":0,"D":0}\n'
+     'EVENT: {"account":"A","amount":5,"kind":"set","other":"B","status":"posted"}',
+     True, None, '{"after":{"A":5,"B":0,"C":0,"D":0}}',
+     '{"cmp":{"status":"posted","listed":null,"ok":true},"calc":{"A":5},"after":{"A":5,"B":0,"C":0,"D":0}}'),
+]
+
+ALL_GOLD = GOLD + COPY_GOLD
+
 BASE = GOLD[0][2]
 BASE_RULE, BASE_STATE, BASE_EVENT = BASE.split("\n")
 
@@ -233,7 +389,7 @@ class GoldCases(unittest.TestCase):
         self.assertEqual(ops, {"S+", "S-", "K+", "AGE", "ALT", "BGE", "AND", "OR"})
 
     def test_parse_input(self):
-        for tid, ast, text, *_ in GOLD:
+        for tid, ast, text, *_ in ALL_GOLD:
             with self.subTest(text=text):
                 p = O.parse_input(text)
                 self.assertEqual(p["template_id"], tid)
@@ -245,7 +401,7 @@ class GoldCases(unittest.TestCase):
                 self.assertEqual(O.render_input(ast, p["state"], p["event"], tid), text)
 
     def test_gold_targets(self):
-        for tid, ast, text, ok, listed, ans, trace in GOLD:
+        for tid, ast, text, ok, listed, ans, trace in ALL_GOLD:
             with self.subTest(text=text):
                 g = O.gold_targets(text)
                 self.assertIs(g["ok"], ok)
@@ -255,7 +411,7 @@ class GoldCases(unittest.TestCase):
                 self.assertEqual(json.dumps({"after": g["after"]}, separators=(",", ":")), ans)
 
     def test_targets_parse_back(self):
-        for tid, ast, text, ok, listed, ans, trace in GOLD:
+        for tid, ast, text, ok, listed, ans, trace in ALL_GOLD:
             with self.subTest(text=text):
                 pa = O.parse_target(ans, "ans", source=text)
                 pt = O.parse_target(trace, "trace", source=text)
@@ -300,6 +456,23 @@ class MalformedInputs(unittest.TestCase):
         "An event takes effect only if its amount is at least 5 or its kind is add; otherwise nothing changes.",
         "Both conditions must hold for an event to take effect: its amount is below 5.",
         "An event takes effect when either its amount is below 5 or its amount is below 5",
+        # K+ clauses naming the copy-world kinds (SPEC 1.1): only distinct names from {add, transfer, set, swap}.
+        "An event takes effect only if its kind is set or set; otherwise nothing changes.",
+        "An event takes effect only if its kind is Set; otherwise nothing changes.",
+        "An event takes effect only if its kind is SWAP; otherwise nothing changes.",
+        "An event takes effect only if its kind is set, swap; otherwise nothing changes.",
+        "An event takes effect only if its kind is set and swap; otherwise nothing changes.",
+        "An event takes effect only if its kind is set or  swap; otherwise nothing changes.",
+        "An event takes effect only if its kind is set or swap or; otherwise nothing changes.",
+        "An event takes effect only if its kind is [set]; otherwise nothing changes.",
+        "An event takes effect only if its kind is copy; otherwise nothing changes.",
+        "An event takes effect only if its kind is swapped; otherwise nothing changes.",
+        "An event takes effect only if its kind is swap or scale; otherwise nothing changes.",
+        "An event takes effect only if its kind is add or transfer or set or swap or add; otherwise nothing changes.",
+        "An event takes effect only if its status is in [a] and its kind is set or set; otherwise nothing changes.",
+        "An event takes effect if its status is in [a] or if its kind is swap or swap; otherwise nothing changes.",
+        "An event takes effect when either its kind is set or swap or its kind is scale.",
+        "Both conditions must hold for an event to take effect: its kind is set; its kind is sets.",
     ]
 
     def test_bad_rules(self):
@@ -339,6 +512,15 @@ class MalformedInputs(unittest.TestCase):
             (BASE_STATE, 'EVENT: {"account":"E","amount":5,"kind":"add","other":"C","status":"posted"}'),
             (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"add","other":"Z","status":"posted"}'),
             (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"refund","other":"C","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"Set","other":"C","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"SWAP","other":"C","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"swapped","other":"C","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"","other":"C","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":null,"kind":"swap","other":"C","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":"7","kind":"set","other":"C","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"swap","other":"B","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"swap","other":"E","status":"posted"}'),
+            (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"set","status":"posted"}'),
             (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"add","other":"C","status":"not posted"}'),
             (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"add","other":"C","status":""}'),
             (BASE_STATE, 'EVENT: {"account":"B","amount":5,"kind":"add","other":"C","status":"po.sted"}'),
@@ -493,6 +675,182 @@ class Semantics(unittest.TestCase):
                     O.evaluate(rule, self.ST, self.ev())
 
 
+ALL_K = ("add", "transfer", "set", "swap")             # nameable in K+ (SPEC 2 + 1.1)
+ALL_EVENT_KINDS = ("add", "transfer", "scale", "set", "swap")
+
+
+def _copy_case(tid, kind):
+    return next(g for g in COPY_GOLD if g[0] == tid and O.parse_input(g[2])["event"]["kind"] == kind)
+
+
+class CopyWorld(unittest.TestCase):
+    """SPEC section 1.1: the arithmetic-free `set` / `swap` kinds and K+ clauses naming them."""
+    ST = {"D": 4, "B": 2, "A": 3, "C": 1}
+
+    def ev(self, **kw):
+        e = {"account": "A", "amount": 5, "kind": "set", "other": "B", "status": "posted"}
+        e.update(kw)
+        return e
+
+    def test_kind_constants(self):
+        self.assertEqual(set(O.KINDS), set(ALL_K))
+        self.assertEqual(set(O.EVENT_KINDS), set(ALL_EVENT_KINDS))
+
+    def test_gold_coverage(self):
+        self.assertEqual({g[0] for g in COPY_GOLD}, set(O.TEMPLATE_IDS))
+        parsed = [(g, O.parse_input(g[2])) for g in COPY_GOLD]
+        self.assertEqual({(p["event"]["kind"], g[3]) for g, p in parsed},
+                         {(k, ok) for k in ("set", "swap") for ok in (True, False)})
+        fam_kind_ok = {(g[0].split(":")[0], p["event"]["kind"], g[3]) for g, p in parsed}
+        for fam in ("SPOS", "SNEG"):
+            for kind in ("set", "swap"):
+                for ok in (True, False):
+                    self.assertIn((fam, kind, ok), fam_kind_ok)
+        named = {(g[1]["op"], k) for g in COPY_GOLD if g[1]["op"] in ("AND", "OR")
+                 for a in g[1]["args"] if a["op"] == "K+" for k in a["kinds"]}
+        self.assertLessEqual({(op, k) for op in ("AND", "OR") for k in ("set", "swap")}, named)
+        nonadjacent = [g for g, p in parsed if p["event"]["kind"] == "swap" and g[3]
+                       and p["state_order"] != sorted(p["state_order"])
+                       and abs(p["state_order"].index(p["event"]["account"])
+                               - p["state_order"].index(p["event"]["other"])) > 1]
+        self.assertGreaterEqual(len(nonadjacent), 3)
+
+    def test_gold_calc_and_after_order(self):
+        for tid, ast, text, ok, listed, ans, trace in COPY_GOLD:
+            with self.subTest(text=text):
+                p = O.parse_input(text)
+                ev, before = p["event"], p["state"]
+                acc, oth = ev["account"], ev["other"]
+                tr = json.loads(trace)
+                self.assertEqual(list(tr["after"]), p["state_order"])
+                self.assertEqual(list(json.loads(ans)["after"]), p["state_order"])
+                want_keys = [acc, oth] if ev["kind"] == "swap" else [acc]
+                self.assertEqual(list(tr["calc"]), want_keys)
+                self.assertEqual(tr["calc"], {k: tr["after"][k] for k in want_keys})
+                untouched = [k for k in before if k not in want_keys]
+                self.assertEqual({k: tr["after"][k] for k in untouched}, {k: before[k] for k in untouched})
+                if not ok:
+                    self.assertEqual(tr["after"], before)
+                elif ev["kind"] == "set":
+                    self.assertEqual(tr["after"][acc], ev["amount"])
+                else:
+                    self.assertEqual((tr["after"][acc], tr["after"][oth]), (before[oth], before[acc]))
+
+    def test_transition_set(self):
+        after = O.transition(self.ST, self.ev(account="A", amount=0), True)
+        self.assertEqual(list(after.items()), [("D", 4), ("B", 2), ("A", 0), ("C", 1)])
+        after = O.transition(self.ST, self.ev(account="C", other="D", amount=-7), True)
+        self.assertEqual(list(after.items()), [("D", 4), ("B", 2), ("A", 3), ("C", -7)])
+        after = O.transition(self.ST, self.ev(account="D", amount=4), True)
+        self.assertEqual(list(after.items()), list(self.ST.items()))
+        noop = O.transition(self.ST, self.ev(account="B", other="C", amount=99), False)
+        self.assertEqual(list(noop.items()), list(self.ST.items()))
+        self.assertIsNot(noop, self.ST)
+        self.assertEqual(self.ST, {"D": 4, "B": 2, "A": 3, "C": 1})
+
+    def test_transition_swap(self):
+        # account after other in the state order, and the two are non-adjacent (positions 3 and 0).
+        after = O.transition(self.ST, self.ev(kind="swap", account="C", other="D", amount=12), True)
+        self.assertEqual(list(after.items()), [("D", 1), ("B", 2), ("A", 3), ("C", 4)])
+        after = O.transition(self.ST, self.ev(kind="swap", account="D", other="A", amount=1), True)
+        self.assertEqual(list(after.items()), [("D", 3), ("B", 2), ("A", 4), ("C", 1)])
+        for amt in (-5, 0, 1, 12, 999):  # amount is ignored by swap
+            after = O.transition(self.ST, self.ev(kind="swap", account="B", other="C", amount=amt), True)
+            self.assertEqual(list(after.items()), [("D", 4), ("B", 1), ("A", 3), ("C", 2)])
+        twice = O.transition(after, self.ev(kind="swap", account="C", other="B"), True)
+        self.assertEqual(list(twice.items()), list(self.ST.items()))
+        eq = {"A": 5, "B": 5, "C": 0, "D": 1}
+        self.assertEqual(list(O.transition(eq, self.ev(kind="swap", account="A", other="B"), True).items()),
+                         list(eq.items()))
+        noop = O.transition(self.ST, self.ev(kind="swap", account="C", other="D"), False)
+        self.assertEqual(list(noop.items()), list(self.ST.items()))
+        self.assertEqual(self.ST, {"D": 4, "B": 2, "A": 3, "C": 1})
+
+    def test_atoms(self):
+        cases = [
+            (K("set"), self.ev(kind="set"), True), (K("set"), self.ev(kind="swap"), False),
+            (K("swap"), self.ev(kind="swap"), True), (K("swap"), self.ev(kind="transfer"), False),
+            (K("swap", "add"), self.ev(kind="swap"), True), (K("add", "transfer"), self.ev(kind="set"), False),
+            (K("set"), self.ev(kind="add"), False), (K("add", "transfer", "set", "swap"), self.ev(kind="scale"), False),
+            (K("transfer", "swap", "set", "add"), self.ev(kind="add"), True),
+            (T("AGE", 10), self.ev(kind="swap", amount=10), True), (T("ALT", 10), self.ev(kind="swap", amount=10), False),
+            (T("BGE", 3), self.ev(kind="set", account="A", amount=99), True),
+            (T("BGE", 4), self.ev(kind="set", account="A", amount=99), False),
+            (C("AND", S("S+", "posted"), K("set")), self.ev(kind="set"), True),
+            (C("AND", S("S+", "posted"), K("set")), self.ev(kind="swap"), False),
+            (C("OR", S("S-", "posted"), K("swap")), self.ev(kind="set"), False),
+            (C("OR", S("S-", "posted"), K("swap")), self.ev(kind="swap"), True),
+        ]
+        for rule, ev, want in cases:
+            with self.subTest(rule=rule, ev=ev):
+                self.assertIs(O.evaluate(rule, self.ST, ev), want)
+
+    def test_invalid(self):
+        for rule in (K("set", "set"), K("Set"), K("scale", "set"), K("add", "transfer", "set", "swap", "add"),
+                     {"op": "K+", "kinds": "set"}, {"op": "K+", "kinds": ["set or swap"]}):
+            with self.subTest(rule=rule):
+                with self.assertRaises(ValueError):
+                    O.evaluate(rule, self.ST, self.ev())
+                with self.assertRaises(ValueError):
+                    O.render_rule(rule, "ATOM:t0")
+        for ev in (self.ev(kind="Set"), self.ev(kind="SWAP"), self.ev(kind="copy"),
+                   self.ev(kind="swap", amount=None), self.ev(kind="swap", other="A")):
+            with self.subTest(ev=ev):
+                with self.assertRaises(ValueError):
+                    O.evaluate(K("set"), self.ST, ev)
+                with self.assertRaises(ValueError):
+                    O.transition(self.ST, ev, True)
+
+    def test_trace_calc_keys_with_source(self):
+        _, _, src, _, _, ans, trace = _copy_case("SNEG:t2", "swap")  # calc {"C":40,"D":30}
+        self.assertIsNotNone(O.parse_target(trace, "trace", source=src))
+        swapped = trace.replace('"calc":{"C":40,"D":30}', '"calc":{"D":30,"C":40}')
+        self.assertNotEqual(swapped, trace)
+        self.assertIsNotNone(O.parse_target(swapped, "trace"))
+        self.assertIsNone(O.parse_target(swapped, "trace", source=src))
+        for calc in ('"calc":{"C":40}', '"calc":{"D":30}', '"calc":{"C":40,"A":10}'):
+            bad = trace.replace('"calc":{"C":40,"D":30}', calc)
+            self.assertIsNotNone(O.parse_target(bad, "trace"))
+            self.assertIsNone(O.parse_target(bad, "trace", source=src))
+        sorted_after = '"after":{"A":10,"B":20,"C":40,"D":30}'
+        bad = trace.replace('"after":{"D":30,"B":20,"A":10,"C":40}', sorted_after)
+        self.assertNotEqual(bad, trace)
+        self.assertIsNone(O.parse_target(bad, "trace", source=src))
+        self.assertIsNone(O.parse_target("{" + sorted_after + "}", "ans", source=src))
+        self.assertEqual(O.parse_target(ans, "ans", source=src), json.loads(ans))
+
+        _, _, src, _, _, _, trace = _copy_case("SPOS:t1", "set")  # calc {"C":7}, other A
+        self.assertIsNotNone(O.parse_target(trace, "trace", source=src))
+        for calc in ('"calc":{"C":7,"A":5}', '"calc":{"A":5,"C":7}', '"calc":{"A":5}'):
+            bad = trace.replace('"calc":{"C":7}', calc)
+            self.assertNotEqual(bad, trace)
+            self.assertIsNotNone(O.parse_target(bad, "trace"))
+            self.assertIsNone(O.parse_target(bad, "trace", source=src))
+
+    def test_k_plus_every_kind_list_round_trips(self):
+        """Every ordered non-empty K+ kind list renders and parses back in every frame and slot."""
+        lists = [list(p) for r in range(1, len(ALL_K) + 1) for p in itertools.permutations(ALL_K, r)]
+        self.assertEqual(len(lists), 64)
+        st = {"A": 1, "B": 2, "C": 3, "D": 4}
+        status_atom = S("S+", "set", "swap")
+        for kinds in lists:
+            k = K(*kinds)
+            rules = [("ATOM:t0", k)]
+            for op, pool in (("AND", O.AND_FRAMES), ("OR", O.OR_FRAMES)):
+                for fid in pool:
+                    rules += [(f"{op}:{fid}", C(op, k, status_atom)), (f"{op}:{fid}", C(op, status_atom, k)),
+                              (f"{op}:{fid}", C(op, k, K("swap"))), (f"{op}:{fid}", C(op, K("set", "add"), k))]
+            for tid, rule in rules:
+                with self.subTest(tid=tid, rule=rule):
+                    for kind in ALL_EVENT_KINDS:
+                        ev = {"kind": kind, "status": "add", "account": "D", "other": "A", "amount": 3}
+                        text = O.render_input(rule, st, ev, tid)
+                        p = O.parse_input(text)
+                        self.assertEqual((p["template_id"], p["rule_ast"]), (tid, rule))
+                        self.assertIs(O.evaluate(p["rule_ast"], p["state"], p["event"]),
+                                      RoundTripProperty.ref_ok(rule, st, ev))
+
+
 class TemplateDrift(unittest.TestCase):
     def test_strings_match_templates_py(self):
         """The hard-coded copies must equal the literals in templates.py (read as text, not imported)."""
@@ -516,7 +874,7 @@ class TemplateDrift(unittest.TestCase):
 class RoundTripProperty(unittest.TestCase):
     TRICKY = ["or", "and", "in", "not", "is", "its", "status", "events", "event", "if", "when", "either", "do",
               "Void", "VOID", "void_", "un-posted", "posted", "void", "-", "_", "0", "-5", "add", "transfer",
-              "t0", "nothing", "carry", "out", "only", "except", "balances"]
+              "t0", "nothing", "carry", "out", "only", "except", "balances", "set", "swap", "scale", "kind"]
     CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"
     NAMES = (list("ABCD"), list("PQRSTU"), ["north", "south", "east", "west", "pine", "oak"])
 
@@ -538,7 +896,7 @@ class RoundTripProperty(unittest.TestCase):
         if op in ("S+", "S-"):
             return S(op, *self.words(rng, rng.randint(1, 3)))
         if op == "K+":
-            return K(*rng.choice([["add"], ["transfer"], ["add", "transfer"], ["transfer", "add"]]))
+            return K(*rng.sample(ALL_K, rng.choice((1, 1, 2, 2, 3, 4))))
         return T(op, rng.randint(-150, 150))
 
     def case(self, rng):
@@ -560,7 +918,7 @@ class RoundTripProperty(unittest.TestCase):
         acc, oth = rng.sample(names, 2)
         sets = [a["set"] for a in rule.get("args", [rule]) if "set" in a]
         status = rng.choice(sets[0]) if sets and rng.random() < 0.5 else self.word(rng)
-        kind = rng.choice(["add", "transfer", "add", "transfer", "scale"])
+        kind = rng.choice(ALL_EVENT_KINDS)
         fields = {"account": acc, "amount": rng.randint(-120, 120), "kind": kind, "other": oth, "status": status}
         event = {k: fields[k] for k in rng.sample(sorted(fields), 5)}
         return tid, rule, state, event
@@ -583,7 +941,7 @@ class RoundTripProperty(unittest.TestCase):
 
     def test_round_trip_2000(self):
         rng = random.Random(20261009)
-        seen_ids, n_ok = set(), 0
+        seen_ids, seen_kind_ok, seen_k_named, n_ok = set(), set(), set(), 0
         for i in range(2000):
             tid, rule, state, event = self.case(rng)
             text = O.render_input(rule, state, event, tid)
@@ -598,23 +956,35 @@ class RoundTripProperty(unittest.TestCase):
                 g = O.gold_targets(text)
                 want_ok = self.ref_ok(rule, state, event)
                 self.assertIs(g["ok"], want_ok)
-                acc, oth, amt = event["account"], event["other"], event["amount"]
+                acc, oth, amt, kind = event["account"], event["other"], event["amount"], event["kind"]
                 want = dict(state)
                 if want_ok:
-                    if event["kind"] == "add":
+                    if kind == "add":
                         want[acc] += amt
-                    elif event["kind"] == "transfer":
+                    elif kind == "transfer":
                         want[acc], want[oth] = want[acc] - amt, want[oth] + amt
-                    else:
+                    elif kind == "scale":
                         want[acc] *= amt
+                    elif kind == "set":
+                        want[acc] = amt
+                    else:
+                        self.assertEqual(kind, "swap")
+                        want[acc], want[oth] = state[oth], state[acc]
                 self.assertEqual(list(g["after"].items()), list(want.items()))
                 self.assertEqual(O.parse_target(g["ans"], "ans", source=text), {"after": want})
                 pt = O.parse_target(g["trace"], "trace", source=p)
                 self.assertEqual(pt["after"], want)
                 self.assertEqual(pt["cmp"], {"status": event["status"], "listed": g["listed"], "ok": want_ok})
+                calc_keys = [acc, oth] if kind in ("transfer", "swap") else [acc]
+                self.assertEqual(list(pt["calc"].items()), [(k, want[k]) for k in calc_keys])
                 seen_ids.add(tid)
+                seen_kind_ok.add((kind, want_ok))
+                seen_k_named |= {(rule["op"], k) for a in rule.get("args", [rule]) if a["op"] == "K+"
+                                 for k in a["kinds"]}
                 n_ok += want_ok
         self.assertEqual(seen_ids, set(O.TEMPLATE_IDS))
+        self.assertEqual(seen_kind_ok, {(k, ok) for k in ALL_EVENT_KINDS for ok in (True, False)})
+        self.assertLessEqual({(op, k) for op in ("K+", "AND", "OR") for k in ALL_K}, seen_k_named)
         self.assertTrue(300 < n_ok < 1700, n_ok)
 
     def test_mutations_never_misparse(self):

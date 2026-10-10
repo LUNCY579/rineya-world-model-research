@@ -1,0 +1,1733 @@
+{
+ "arm": "VR-trace",
+ "regime": "VR",
+ "fmt": "trace",
+ "seed": 0,
+ "train_seed": 20261600,
+ "n_train": 32000,
+ "train_parents": 32000,
+ "fill_units": null,
+ "battery": "dev",
+ "battery_sha256": "bfff28572eba4fb3fda77e3492a146c594c581de51373f9d608afbe4212cf07c",
+ "model_config": {
+  "d_model": 128,
+  "n_layers": 3,
+  "n_heads": 4,
+  "d_ff": 512,
+  "dropout": 0.0,
+  "max_len": 640,
+  "rope_base": 10000.0,
+  "vocab_size": 100
+ },
+ "train_config": {
+  "steps": 3000,
+  "batch_size": 32,
+  "lr": 0.001,
+  "warmup": 150,
+  "weight_decay": 0.1,
+  "grad_clip": 1.0,
+  "min_lr_frac": 0.1,
+  "betas": [
+   0.9,
+   0.98
+  ],
+  "bucket": 8,
+  "log_every": 50,
+  "eval_every": 500,
+  "guard_every": 10,
+  "checkpoint_path": "runs\\RCX-E01\\pilot\\VR-trace_s0\\ckpt.pt",
+  "checkpoint_every": 500
+ },
+ "params": 604416,
+ "tokens": 30803031,
+ "target_tokens": 10586622,
+ "train_wall_s": 808.7790627479553,
+ "eval_wall_s": 78.81990814208984,
+ "guard_wait_s": 0.20825810000678757,
+ "final_loss": 0.029028353299945592,
+ "iid": {
+  "n": 1500,
+  "exact": 0.4093333333333333,
+  "decision": 0.584,
+  "errors": {
+   "applied_when_noop": 188,
+   "false_copy": 436,
+   "arith": 262,
+   "format": 0
+  }
+ },
+ "learning_curve": [
+  {
+   "step": 500,
+   "iid_exact": 0.0,
+   "iid_decision": 0.41333333333333333,
+   "iid_format_err": 0.0
+  },
+  {
+   "step": 1000,
+   "iid_exact": 0.0,
+   "iid_decision": 0.41333333333333333,
+   "iid_format_err": 0.006666666666666667
+  },
+  {
+   "step": 1500,
+   "iid_exact": 0.03333333333333333,
+   "iid_decision": 0.42,
+   "iid_format_err": 0.016666666666666666
+  },
+  {
+   "step": 2000,
+   "iid_exact": 0.44666666666666666,
+   "iid_decision": 0.6266666666666667,
+   "iid_format_err": 0.0033333333333333335
+  },
+  {
+   "step": 2500,
+   "iid_exact": 0.38333333333333336,
+   "iid_decision": 0.6133333333333333,
+   "iid_format_err": 0.0033333333333333335
+  },
+  {
+   "step": 3000,
+   "iid_exact": 0.46,
+   "iid_decision": 0.6233333333333333,
+   "iid_format_err": 0.0
+  }
+ ],
+ "composite_exact": {
+  "in": 0.35119047619047616,
+  "ho": 0.0,
+  "ho_tpl": 0.24047619047619048,
+  "ho_key": 0.0,
+  "ho_name": 0.0,
+  "ho_many": 0.0
+ },
+ "composite_decision": {
+  "in": 0.41071428571428564,
+  "ho": 0.0,
+  "ho_tpl": 0.3607142857142857,
+  "ho_key": 0.0,
+  "ho_name": 0.0,
+  "ho_many": 0.0
+ },
+ "cells": {
+  "F1_void|in": {
+   "exact": 0.5,
+   "decision": 0.5,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 60
+   }
+  },
+  "F1_void|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F1_void|ho_tpl": {
+   "exact": 0.35833333333333334,
+   "decision": 0.375,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 50,
+    "format": 23,
+    "arith": 2,
+    "applied_when_noop": 2
+   }
+  },
+  "F1_void|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F1_void|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F1_void|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F2_unseen_real|in": {
+   "exact": 0.5,
+   "decision": 0.5,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 60
+   }
+  },
+  "F2_unseen_real|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F2_unseen_real|ho_tpl": {
+   "exact": 0.2833333333333333,
+   "decision": 0.35,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 27,
+    "false_copy": 37,
+    "applied_when_noop": 14,
+    "arith": 8
+   }
+  },
+  "F2_unseen_real|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F2_unseen_real|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F2_unseen_real|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F3_unseen_nonce|in": {
+   "exact": 0.475,
+   "decision": 0.475,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 60,
+    "format": 3
+   }
+  },
+  "F3_unseen_nonce|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F3_unseen_nonce|ho_tpl": {
+   "exact": 0.325,
+   "decision": 0.375,
+   "parent_all_exact": 0.016666666666666666,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 41,
+    "format": 26,
+    "arith": 6,
+    "applied_when_noop": 8
+   }
+  },
+  "F3_unseen_nonce|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F3_unseen_nonce|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F3_unseen_nonce|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F4_nearmiss|in": {
+   "exact": 0.49166666666666664,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 60,
+    "format": 1
+   }
+  },
+  "F4_nearmiss|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F4_nearmiss|ho_tpl": {
+   "exact": 0.3333333333333333,
+   "decision": 0.36666666666666664,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 41,
+    "arith": 4,
+    "applied_when_noop": 4,
+    "format": 31
+   }
+  },
+  "F4_nearmiss|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F4_nearmiss|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F4_nearmiss|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F5_postedlike|in": {
+   "exact": 0.21666666666666667,
+   "decision": 0.21666666666666667,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 60,
+    "format": 34
+   }
+  },
+  "F5_postedlike|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F5_postedlike|ho_tpl": {
+   "exact": 0.14166666666666666,
+   "decision": 0.23333333333333334,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 37,
+    "arith": 11,
+    "format": 46,
+    "applied_when_noop": 9
+   }
+  },
+  "F5_postedlike|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F5_postedlike|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F5_postedlike|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V1_pos|in": {
+   "exact": 0.44166666666666665,
+   "decision": 0.45,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 59,
+    "arith": 1,
+    "format": 3,
+    "applied_when_noop": 4
+   }
+  },
+  "V1_pos|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V1_pos|ho_tpl": {
+   "exact": 0.31666666666666665,
+   "decision": 0.425,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "arith": 13,
+    "applied_when_noop": 12,
+    "format": 19,
+    "false_copy": 38
+   }
+  },
+  "V1_pos|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V1_pos|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V1_pos|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V2_neg|in": {
+   "exact": 0.20833333333333334,
+   "decision": 0.44166666666666665,
+   "parent_all_exact": 0.016666666666666666,
+   "n_parents": 60,
+   "errors": {
+    "format": 4,
+    "arith": 28,
+    "applied_when_noop": 36,
+    "false_copy": 27
+   }
+  },
+  "V2_neg|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V2_neg|ho_tpl": {
+   "exact": 0.15,
+   "decision": 0.43333333333333335,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "applied_when_noop": 35,
+    "false_copy": 14,
+    "arith": 34,
+    "format": 19
+   }
+  },
+  "V2_neg|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V2_neg|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V2_neg|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V3_inverted|in": {
+   "exact": 0.24166666666666667,
+   "decision": 0.25,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 56,
+    "applied_when_noop": 30,
+    "format": 4,
+    "arith": 1
+   }
+  },
+  "V3_inverted|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V3_inverted|ho_tpl": {
+   "exact": 0.16666666666666666,
+   "decision": 0.20833333333333334,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 47,
+    "applied_when_noop": 35,
+    "format": 13,
+    "arith": 5
+   }
+  },
+  "V3_inverted|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V3_inverted|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V3_inverted|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V5_posted_override|in": {
+   "exact": 0.375,
+   "decision": 0.5416666666666666,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "applied_when_noop": 32,
+    "arith": 40,
+    "false_copy": 77,
+    "format": 1
+   }
+  },
+  "V5_posted_override|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 240
+   }
+  },
+  "V5_posted_override|ho_tpl": {
+   "exact": 0.3,
+   "decision": 0.5,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "applied_when_noop": 34,
+    "arith": 48,
+    "false_copy": 56,
+    "format": 30
+   }
+  },
+  "V5_posted_override|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 240
+   }
+  },
+  "V5_posted_override|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 240
+   }
+  },
+  "V5_posted_override|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 240
+   }
+  },
+  "V6_compose|in": {
+   "exact": 0.36666666666666664,
+   "decision": 0.475,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 43,
+    "arith": 13,
+    "applied_when_noop": 13,
+    "format": 7
+   }
+  },
+  "V6_compose|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V6_compose|ho_tpl": {
+   "exact": 0.175,
+   "decision": 0.48333333333333334,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "arith": 37,
+    "applied_when_noop": 40,
+    "false_copy": 18,
+    "format": 4
+   }
+  },
+  "V6_compose|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V6_compose|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V6_compose|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V7_bigset|in": {
+   "exact": 0.26666666666666666,
+   "decision": 0.4666666666666667,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 32,
+    "applied_when_noop": 27,
+    "arith": 24,
+    "format": 5
+   }
+  },
+  "V7_bigset|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V7_bigset|ho_tpl": {
+   "exact": 0.23333333333333334,
+   "decision": 0.475,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 25,
+    "applied_when_noop": 34,
+    "arith": 29,
+    "format": 4
+   }
+  },
+  "V7_bigset|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V7_bigset|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V7_bigset|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M1_bal|in": {
+   "exact": 0.0,
+   "decision": 0.44166666666666665,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "arith": 53,
+    "applied_when_noop": 56,
+    "format": 11
+   }
+  },
+  "M1_bal|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M1_bal|ho_tpl": {
+   "exact": 0.0,
+   "decision": 0.39166666666666666,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "arith": 47,
+    "applied_when_noop": 48,
+    "format": 25
+   }
+  },
+  "M1_bal|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M1_bal|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M1_bal|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M2_amt|in": {
+   "exact": 0.275,
+   "decision": 0.4583333333333333,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 36,
+    "applied_when_noop": 23,
+    "format": 6,
+    "arith": 22
+   }
+  },
+  "M2_amt|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M2_amt|ho_tpl": {
+   "exact": 0.225,
+   "decision": 0.4666666666666667,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 28,
+    "format": 9,
+    "applied_when_noop": 27,
+    "arith": 29
+   }
+  },
+  "M2_amt|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M2_amt|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M2_amt|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  }
+ },
+ "probe_in": {
+  "F1_void:twin_posted": 0.0,
+  "F1_void:probe": 1.0,
+  "F2_unseen_real:twin_posted": 0.0,
+  "F2_unseen_real:probe": 1.0,
+  "F3_unseen_nonce:twin_posted": 0.0,
+  "F3_unseen_nonce:probe": 0.95,
+  "F4_nearmiss:twin_posted": 0.0,
+  "F4_nearmiss:probe": 0.9833333333333333,
+  "F5_postedlike:twin_posted": 0.0,
+  "F5_postedlike:probe": 0.43333333333333335
+ },
+ "probe_ho": {
+  "F1_void:twin_posted": 0.0,
+  "F1_void:probe": 0.0,
+  "F2_unseen_real:twin_posted": 0.0,
+  "F2_unseen_real:probe": 0.0,
+  "F3_unseen_nonce:twin_posted": 0.0,
+  "F3_unseen_nonce:probe": 0.0,
+  "F4_nearmiss:twin_posted": 0.0,
+  "F4_nearmiss:probe": 0.0,
+  "F5_postedlike:twin_posted": 0.0,
+  "F5_postedlike:probe": 0.0
+ },
+ "code_sha256": {
+  "rcx/rcl/world.py": "51e00a15c57e5ecfcaa53b8395b61d85118908378853d9e1d8cd5f3c56b7501d",
+  "rcx/rcl/gen.py": "fd89a80d90be4a66d4b0e875ec56e01993042d0e2d23de5f56f6508940fae744",
+  "rcx/rcl/score.py": "771fd12ca3755f054db23df974db753b2a12120da5c9d52d6134293b0477d22e",
+  "rcx/rcl/templates.py": "c0d6f35544100d91bf2f0fec7095a4d7dba4b3dbb7fb79630450ce601eb5f642",
+  "rcx/rcl/vocab.py": "de9f1adbc0f4eec96939bf5037688ded0ef6f3ee75a7af4bcb3c5708505d8e55",
+  "rcx/models/char_lm.py": "f3c109cd8838240904ab15003127f11e60e57430203037698ef71032b419ca8e",
+  "experiments/RCX-E01/run_e01.py": "e67700ff10ee45bd6a7cba19f33c8ec559630fa13b7e30b46714d5653fdd92d8"
+ },
+ "canon": {
+  "composite_exact": {
+   "in": 0.35119047619047616,
+   "ho": 0.0,
+   "ho_tpl": 0.35119047619047616,
+   "ho_key": 0.35892857142857143,
+   "ho_name": 0.35119047619047616,
+   "ho_many": 0.0
+  },
+  "cells": {
+   "F1_void|in": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F1_void|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F1_void|ho_tpl": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F1_void|ho_key": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F1_void|ho_name": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F1_void|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F2_unseen_real|in": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F2_unseen_real|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F2_unseen_real|ho_tpl": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F2_unseen_real|ho_key": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F2_unseen_real|ho_name": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F2_unseen_real|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F3_unseen_nonce|in": {
+    "exact": 0.475,
+    "decision": 0.475,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 3
+    }
+   },
+   "F3_unseen_nonce|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F3_unseen_nonce|ho_tpl": {
+    "exact": 0.475,
+    "decision": 0.475,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 3
+    }
+   },
+   "F3_unseen_nonce|ho_key": {
+    "exact": 0.475,
+    "decision": 0.475,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 3
+    }
+   },
+   "F3_unseen_nonce|ho_name": {
+    "exact": 0.475,
+    "decision": 0.475,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 3
+    }
+   },
+   "F3_unseen_nonce|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F4_nearmiss|in": {
+    "exact": 0.49166666666666664,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 1
+    }
+   },
+   "F4_nearmiss|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F4_nearmiss|ho_tpl": {
+    "exact": 0.49166666666666664,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 1
+    }
+   },
+   "F4_nearmiss|ho_key": {
+    "exact": 0.5,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60
+    }
+   },
+   "F4_nearmiss|ho_name": {
+    "exact": 0.49166666666666664,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 1
+    }
+   },
+   "F4_nearmiss|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F5_postedlike|in": {
+    "exact": 0.21666666666666667,
+    "decision": 0.21666666666666667,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 34
+    }
+   },
+   "F5_postedlike|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F5_postedlike|ho_tpl": {
+    "exact": 0.21666666666666667,
+    "decision": 0.21666666666666667,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 34
+    }
+   },
+   "F5_postedlike|ho_key": {
+    "exact": 0.24166666666666667,
+    "decision": 0.25,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 59,
+     "format": 30,
+     "arith": 1,
+     "applied_when_noop": 1
+    }
+   },
+   "F5_postedlike|ho_name": {
+    "exact": 0.21666666666666667,
+    "decision": 0.21666666666666667,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 60,
+     "format": 34
+    }
+   },
+   "F5_postedlike|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V1_pos|in": {
+    "exact": 0.44166666666666665,
+    "decision": 0.45,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 59,
+     "arith": 1,
+     "format": 3,
+     "applied_when_noop": 4
+    }
+   },
+   "V1_pos|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V1_pos|ho_tpl": {
+    "exact": 0.44166666666666665,
+    "decision": 0.45,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 59,
+     "arith": 1,
+     "format": 3,
+     "applied_when_noop": 4
+    }
+   },
+   "V1_pos|ho_key": {
+    "exact": 0.475,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 58,
+     "format": 2,
+     "arith": 2,
+     "applied_when_noop": 1
+    }
+   },
+   "V1_pos|ho_name": {
+    "exact": 0.44166666666666665,
+    "decision": 0.45,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 59,
+     "arith": 1,
+     "format": 3,
+     "applied_when_noop": 4
+    }
+   },
+   "V1_pos|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V2_neg|in": {
+    "exact": 0.20833333333333334,
+    "decision": 0.44166666666666665,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "format": 4,
+     "arith": 28,
+     "applied_when_noop": 36,
+     "false_copy": 27
+    }
+   },
+   "V2_neg|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V2_neg|ho_tpl": {
+    "exact": 0.20833333333333334,
+    "decision": 0.44166666666666665,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "format": 4,
+     "arith": 28,
+     "applied_when_noop": 36,
+     "false_copy": 27
+    }
+   },
+   "V2_neg|ho_key": {
+    "exact": 0.225,
+    "decision": 0.45,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "format": 2,
+     "arith": 27,
+     "applied_when_noop": 34,
+     "false_copy": 30
+    }
+   },
+   "V2_neg|ho_name": {
+    "exact": 0.20833333333333334,
+    "decision": 0.44166666666666665,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "format": 4,
+     "arith": 28,
+     "applied_when_noop": 36,
+     "false_copy": 27
+    }
+   },
+   "V2_neg|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V3_inverted|in": {
+    "exact": 0.24166666666666667,
+    "decision": 0.25,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 56,
+     "applied_when_noop": 30,
+     "format": 4,
+     "arith": 1
+    }
+   },
+   "V3_inverted|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V3_inverted|ho_tpl": {
+    "exact": 0.24166666666666667,
+    "decision": 0.25,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 56,
+     "applied_when_noop": 30,
+     "format": 4,
+     "arith": 1
+    }
+   },
+   "V3_inverted|ho_key": {
+    "exact": 0.225,
+    "decision": 0.23333333333333334,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 4,
+     "applied_when_noop": 31,
+     "false_copy": 57,
+     "arith": 1
+    }
+   },
+   "V3_inverted|ho_name": {
+    "exact": 0.24166666666666667,
+    "decision": 0.25,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 56,
+     "applied_when_noop": 30,
+     "format": 4,
+     "arith": 1
+    }
+   },
+   "V3_inverted|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V5_posted_override|in": {
+    "exact": 0.375,
+    "decision": 0.5416666666666666,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 32,
+     "arith": 40,
+     "false_copy": 77,
+     "format": 1
+    }
+   },
+   "V5_posted_override|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 240
+    }
+   },
+   "V5_posted_override|ho_tpl": {
+    "exact": 0.375,
+    "decision": 0.5416666666666666,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 32,
+     "arith": 40,
+     "false_copy": 77,
+     "format": 1
+    }
+   },
+   "V5_posted_override|ho_key": {
+    "exact": 0.37083333333333335,
+    "decision": 0.5333333333333333,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "arith": 39,
+     "false_copy": 77,
+     "applied_when_noop": 34,
+     "format": 1
+    }
+   },
+   "V5_posted_override|ho_name": {
+    "exact": 0.375,
+    "decision": 0.5416666666666666,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 32,
+     "arith": 40,
+     "false_copy": 77,
+     "format": 1
+    }
+   },
+   "V5_posted_override|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 240
+    }
+   },
+   "V6_compose|in": {
+    "exact": 0.36666666666666664,
+    "decision": 0.475,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 43,
+     "arith": 13,
+     "applied_when_noop": 13,
+     "format": 7
+    }
+   },
+   "V6_compose|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V6_compose|ho_tpl": {
+    "exact": 0.36666666666666664,
+    "decision": 0.475,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 43,
+     "arith": 13,
+     "applied_when_noop": 13,
+     "format": 7
+    }
+   },
+   "V6_compose|ho_key": {
+    "exact": 0.4,
+    "decision": 0.48333333333333334,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 45,
+     "arith": 10,
+     "applied_when_noop": 13,
+     "format": 4
+    }
+   },
+   "V6_compose|ho_name": {
+    "exact": 0.36666666666666664,
+    "decision": 0.475,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 43,
+     "arith": 13,
+     "applied_when_noop": 13,
+     "format": 7
+    }
+   },
+   "V6_compose|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V7_bigset|in": {
+    "exact": 0.26666666666666666,
+    "decision": 0.4666666666666667,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 32,
+     "applied_when_noop": 27,
+     "arith": 24,
+     "format": 5
+    }
+   },
+   "V7_bigset|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V7_bigset|ho_tpl": {
+    "exact": 0.26666666666666666,
+    "decision": 0.4666666666666667,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 32,
+     "applied_when_noop": 27,
+     "arith": 24,
+     "format": 5
+    }
+   },
+   "V7_bigset|ho_key": {
+    "exact": 0.2833333333333333,
+    "decision": 0.45,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 34,
+     "applied_when_noop": 25,
+     "arith": 20,
+     "format": 7
+    }
+   },
+   "V7_bigset|ho_name": {
+    "exact": 0.26666666666666666,
+    "decision": 0.4666666666666667,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 32,
+     "applied_when_noop": 27,
+     "arith": 24,
+     "format": 5
+    }
+   },
+   "V7_bigset|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "M1_bal|in": {
+    "exact": 0.0,
+    "decision": 0.44166666666666665,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "arith": 53,
+     "applied_when_noop": 56,
+     "format": 11
+    }
+   },
+   "M1_bal|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "M1_bal|ho_tpl": {
+    "exact": 0.0,
+    "decision": 0.44166666666666665,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "arith": 53,
+     "applied_when_noop": 56,
+     "format": 11
+    }
+   },
+   "M1_bal|ho_key": {
+    "exact": 0.0,
+    "decision": 0.44166666666666665,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "arith": 53,
+     "applied_when_noop": 55,
+     "format": 12
+    }
+   },
+   "M1_bal|ho_name": {
+    "exact": 0.0,
+    "decision": 0.44166666666666665,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "arith": 53,
+     "applied_when_noop": 56,
+     "format": 11
+    }
+   },
+   "M1_bal|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "M2_amt|in": {
+    "exact": 0.275,
+    "decision": 0.4583333333333333,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 36,
+     "applied_when_noop": 23,
+     "format": 6,
+     "arith": 22
+    }
+   },
+   "M2_amt|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "M2_amt|ho_tpl": {
+    "exact": 0.275,
+    "decision": 0.4583333333333333,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 36,
+     "applied_when_noop": 23,
+     "format": 6,
+     "arith": 22
+    }
+   },
+   "M2_amt|ho_key": {
+    "exact": 0.25833333333333336,
+    "decision": 0.43333333333333335,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 36,
+     "applied_when_noop": 25,
+     "format": 7,
+     "arith": 21
+    }
+   },
+   "M2_amt|ho_name": {
+    "exact": 0.275,
+    "decision": 0.4583333333333333,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 36,
+     "applied_when_noop": 23,
+     "format": 6,
+     "arith": 22
+    }
+   },
+   "M2_amt|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   }
+  }
+ }
+}

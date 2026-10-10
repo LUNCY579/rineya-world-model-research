@@ -62,3 +62,49 @@ and the evidence path.
     - a 4 GB free-RAM floor before any job over 2 GB;
     - honor RCWM's flag.
   - The RCX guard already pauses on the flag, at tz01 ≥ 97 °C and on low RAM.
+
+## 2026-10-10
+
+- **CX D-08 E01 pilot: first learnability failure (about 23:18 on 10-09). Outcomes known: yes, DEV pilot only.**
+  - `VR-ans`: CharLM d128/L3, 32k examples, 3,000 steps, 617 s.
+    - It collapsed to COPY: IID exact 0.522 and decision 0.523; 711 of 717 IID errors are false_copy.
+    - The DEV `in` composite is 0.478, with every stratum at about 0.5.
+    - Every `ho` surface except `ho_tpl` gives format errors (unseen names, extra accounts and held-out key orders).
+  - **Reading.** At this budget, an answer-only from-scratch character model neither reads the rule nor does the
+    arithmetic. The decision is never supervised directly, so the model hedges toward copying the state.
+  - **Consequence for the design.** Arm-vs-arm comparisons are uninformative until every arm learns its *own training
+    distribution*. This calls for learnability diagnostics before the factorial:
+    1. `FX-ans`: is a fixed trigger learnable?
+    2. `VR-trace`: does explicit `listed`/`ok` supervision unlock rule reading?
+    3. Then, as needed, capacity/steps and a pretrained small-LM learner.
+  - **Prereg rule.** The `ho` composite is not measurable for from-scratch character models, because they cannot emit
+    unseen names. Under the draft prereg rule, the CPU tier's primary endpoint therefore falls back to P-in. `ho`
+    surface robustness is measured via the canonicalizer.
+- **CX I-01 Background job stall (2026-10-09 about 23:31 to 2026-10-10 about 06:02).**
+  - The background runner finished `FX-ans` but did not start `VR-trace` until about 06:02. The machine stayed awake:
+    the watchdog kept logging and the peers ran GPU jobs.
+  - No data were lost. `VR-trace` started fresh, with no resumed checkpoint.
+  - Cause unknown. The likely explanation is that the host suspended the session's background shell.
+  - **Lesson:** long queues are checked for progress, not assumed to be running.
+- **CX D-09 E01 learnability diagnostics: the arith world is not learnable by the CPU char model at this budget.
+  Outcomes known: yes (DEV pilot).**
+  - Results at d128/L3, 32k examples:
+
+    | Arm | Steps | IID exact | IID decision | Note |
+    |---|---|---|---|---|
+    | `FX-ans` (T2 analog) | 3,000 | 0.169 | 0.627 | 687 of 1,247 errors are arithmetic |
+    | `VR-trace` | 3,000 | 0.409 | 0.584 | |
+    | `VR-ans` | 3,000 | 0.522 | 0.523 | collapsed to COPY |
+
+  - **Reading.** Two-digit add/transfer arithmetic plus a rule decision is too much for the CPU tier's budget. Even the
+    fixed trigger is not cleanly learned. Trace supervision of `listed`/`ok` does not unlock the decision.
+  - **Decision.** Add the arithmetic-free **copy world** (SPEC §1.1: `set`, `swap`). The CPU mechanism tier then studies
+    applicability C with the calculation A factored out, as in the bundle's RCM factorization C/A/assembler.
+  - **Qualification.** The independent oracle was extended blind, from the spec only (29 oracle tests). Qualification
+    passes in both worlds: Q2/Q3 on 76,320 records, plus Q1. All 89 tests pass.
+  - The arith world stays the native-tier instrument, because pretrained cores already compute.
+  - **Provenance note.** The `code_sha256` of the arith-world pilot summaries for `FX-ans` and `VR-trace` was computed
+    at the end of each run, after `gen.py` and `world.py` had been edited to add the copy world. The arith-world
+    behaviour is byte-identical: qualification Q2/Q3 reproduced the same records.
+  - **Next.** Learnability of `VR-ans` and `CFSD-ans` in the copy world, then the native tier-A/B probe
+    (`experiments/RCX-E01N/native_probe.py`: OFF, T2 s0 and Supa on the arith battery, CPU inference with ≥ 12 GB RAM).

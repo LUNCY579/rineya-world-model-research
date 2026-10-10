@@ -6,12 +6,18 @@ transition and builds/parses the `ans` and `trace` targets. Parsing is exhaustiv
 every template/split that could produce the sentence is tried, and the sentence is
 rejected unless exactly one reading exists (fail closed). The `fill` format is not
 implemented because its width is a TRAIN-derived constant.
+
+Event kinds: the arith world (`add`, `transfer`, plus the native-kit `scale`) and the
+copy-world variant of SPEC section 1.1 (`set`, `swap`). `K+` clauses may name any
+non-empty set of distinct kinds from {add, transfer, set, swap}; `scale` is never
+nameable in a rule.
 """
 import json
 import re
 
 __all__ = [
     "SPOS", "SNEG", "AND_FRAMES", "OR_FRAMES", "ATOM_FRAME", "CLAUSE", "TEMPLATE_IDS",
+    "KINDS", "EVENT_KINDS", "TWO_ACCOUNT_KINDS",
     "parse_input", "parse_rule", "validate_ast", "evaluate", "transition", "listed_of",
     "gold_targets", "parse_target", "render_list", "render_clause", "render_rule", "render_input",
 ]
@@ -62,8 +68,12 @@ TEMPLATE_IDS = tuple(
 
 STATUS_OPS = ("S+", "S-")
 THRESH_OPS = ("AGE", "ALT", "BGE")
-KINDS = ("add", "transfer")
-EVENT_KINDS = ("add", "transfer", "scale")
+# Kinds a K+ atom may name (SPEC section 2, extended by section 1.1); scale is not nameable.
+KINDS = ("add", "transfer", "set", "swap")
+# Kinds an event may carry (SPEC section 1 and 1.1).
+EVENT_KINDS = ("add", "transfer", "scale", "set", "swap")
+# Kinds that touch `other` as well as `account` (calc keys: account, then other).
+TWO_ACCOUNT_KINDS = ("transfer", "swap")
 EVENT_KEYS = frozenset({"account", "amount", "kind", "other", "status"})
 
 _WORD = r"[A-Za-z0-9_-]+"
@@ -126,7 +136,7 @@ def _parse_clause(text):
             return None if words is None else {"op": op, "set": words}
         if op == "K+":
             kinds = arg.split(" or ")
-            ok = 1 <= len(kinds) <= 2 and _distinct(kinds) and all(k in KINDS for k in kinds)
+            ok = 1 <= len(kinds) <= len(KINDS) and _distinct(kinds) and all(k in KINDS for k in kinds)
             return {"op": op, "kinds": kinds} if ok else None
         t = _parse_int(arg)
         return None if t is None else {"op": op, "t": t}
@@ -276,7 +286,7 @@ def _validate_atom(node):
     if op in STATUS_OPS:
         ok = set(node) == {"op", "set"} and _check_words(node["set"], 3)
     elif op == "K+":
-        ok = set(node) == {"op", "kinds"} and _check_words(node["kinds"], 2, KINDS)
+        ok = set(node) == {"op", "kinds"} and _check_words(node["kinds"], len(KINDS), KINDS)
     elif op in THRESH_OPS:
         ok = set(node) == {"op", "t"} and _is_int(node["t"])
     else:
@@ -324,7 +334,7 @@ def evaluate(rule_ast, state, event):
 
 
 def transition(state, event, ok):
-    """Ledger dynamics of SPEC section 1; returns a new dict in the input key order."""
+    """Ledger dynamics of SPEC sections 1 and 1.1; returns a new dict in the input key order."""
     _check_state(state)
     _check_event(event, state)
     if not isinstance(ok, bool):
@@ -332,14 +342,21 @@ def transition(state, event, ok):
     after = dict(state)
     if not ok:
         return after
-    acc, amt, kind = event["account"], event["amount"], event["kind"]
+    acc, oth, amt, kind = event["account"], event["other"], event["amount"], event["kind"]
     if kind == "add":
         after[acc] = state[acc] + amt
     elif kind == "transfer":
         after[acc] = state[acc] - amt
-        after[event["other"]] = state[event["other"]] + amt
-    else:
+        after[oth] = state[oth] + amt
+    elif kind == "scale":
         after[acc] = state[acc] * amt
+    elif kind == "set":
+        after[acc] = amt
+    elif kind == "swap":
+        after[acc] = state[oth]
+        after[oth] = state[acc]
+    else:  # unreachable: _check_event already restricts kinds
+        raise ValueError(f"bad event kind {kind!r}")
     return after
 
 
@@ -354,7 +371,8 @@ def listed_of(rule_ast, event):
 
 
 def _calc_keys(event):
-    return [event["account"]] + ([event["other"]] if event["kind"] == "transfer" else [])
+    """Touched accounts: [account], plus other for transfer and swap (account first)."""
+    return [event["account"]] + ([event["other"]] if event["kind"] in TWO_ACCOUNT_KINDS else [])
 
 
 def gold_targets(text):
@@ -384,7 +402,7 @@ def parse_target(text, fmt, source=None):
     text (including other Unicode/control "whitespace"), a different key
     order, extra/missing keys, duplicate keys or non-integer balances make it malformed.
     If `source` (input text or parse_input result) is given, `after` keys must equal the
-    STATE key order and `calc` keys must be [account] (+ [other] for transfer).
+    STATE key order and `calc` keys must be [account] (+ [other] for transfer and swap).
     """
     if fmt not in ("ans", "trace"):
         raise ValueError(f"unsupported format {fmt!r}")

@@ -51,8 +51,8 @@ def sha_file(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
-def load_battery(out_dir, split, n_parents, seed):
-    path = Path(out_dir) / f"battery_{split}_{n_parents}_{seed}.jsonl"
+def load_battery(out_dir, split, n_parents, seed, world="arith"):
+    path = Path(out_dir) / f"battery_{world}_{split}_{n_parents}_{seed}.jsonl"
     if not path.exists():
         recs = gen.make_battery(split, n_parents, seed)
         with open(path, "w", encoding="utf-8", newline="\n") as f:
@@ -124,27 +124,50 @@ def run_arm(arm, args, battery, battery_sha):
         battery = [gen.with_fill(r, units) for r in battery]
     records = [{"input": r["input"], "target": r["targets"][fmt]} for r in train]
     max_tgt = max(len(r["target"]) for r in records)
+    # Same-distribution fresh-parent split (interpolation check; COMMON_PROTOCOL OOD matrix, first row).
+    seen_sem = {r["semantic_hash"] for r in train}
+    seen_sk = {r["skeleton_hash"] for r in train}
+    iid = [r for r in gen.make_train(regime, args.n_iid, tseed + 50000)
+           if r["semantic_hash"] not in seen_sem and r["skeleton_hash"] not in seen_sk]
+    if fmt == "fill":
+        iid = [gen.with_fill(r, units) for r in iid]
+    curve_set = iid[:300]
+
+    def eval_fn(model, step):
+        _, parsed = predict(model, curve_set, fmt, max_tgt + 20, args.eval_batch)
+        res = [S.classify(r, a) for r, a in zip(curve_set, parsed)]
+        return {"iid_exact": sum(x["exact"] for x in res) / len(res),
+                "iid_decision": sum(x["decision_ok"] for x in res) / len(res),
+                "iid_format_err": sum(x["err"] == "format" for x in res) / len(res)}
     cfg = LM.TrainConfig(model=model_config(args), steps=args.steps, batch_size=args.batch, lr=args.lr,
                          warmup=args.warmup, weight_decay=0.1, grad_clip=1.0, bucket=args.bucket,
-                         log_every=50, guard_every=10, checkpoint_path=str(out / "ckpt.pt"),
-                         checkpoint_every=500)
+                         log_every=50, eval_every=args.eval_every, guard_every=10,
+                         checkpoint_path=str(out / "ckpt.pt"), checkpoint_every=500)
     guard = ThermalGuard(log=lambda m: print(f"[{arm}] guard: {m}", flush=True))
     t0 = time.time()
     print(f"[{arm}] regime={regime} fmt={fmt} n_train={len(records)} max_target={max_tgt} seed={tseed}", flush=True)
-    model, hist = LM.train(records, cfg, seed=args.seed, log_path=out / "train_log.jsonl", guard=guard)
+    model, hist = LM.train(records, cfg, seed=args.seed, log_path=out / "train_log.jsonl", guard=guard,
+                           eval_fn=eval_fn)
     t_train = time.time() - t0
     max_new = max_tgt + 60
     t1 = time.time()
     outs, res, summ, comp = evaluate(model, battery, fmt, max_new, args.eval_batch)
+    _, iid_parsed = predict(model, iid, fmt, max_new, args.eval_batch)
+    iid_res = [S.classify(r, a) for r, a in zip(iid, iid_parsed)]
     t_eval = time.time() - t1
     summary = {
-        "arm": arm, "regime": regime, "fmt": fmt, "seed": args.seed, "train_seed": tseed,
+        "arm": arm, "regime": regime, "fmt": fmt, "seed": args.seed, "train_seed": tseed, "world": args.world,
         "n_train": len(records), "train_parents": len({r["parent_id"] for r in train}),
         "fill_units": units, "battery": args.battery, "battery_sha256": battery_sha,
         "model_config": vars(model_config(args)), "train_config": {k: v for k, v in vars(cfg).items() if k != "model"},
         "params": hist["params"], "tokens": hist["tokens"], "target_tokens": hist["target_tokens"],
         "train_wall_s": t_train, "eval_wall_s": t_eval, "guard_wait_s": hist["guard_wait_s"],
         "final_loss": hist["log"][-1]["loss"] if hist["log"] else None,
+        "iid": {"n": len(iid), "exact": sum(x["exact"] for x in iid_res) / len(iid_res),
+                "decision": sum(x["decision_ok"] for x in iid_res) / len(iid_res),
+                "errors": {e: sum(x["err"] == e for x in iid_res) for e in
+                           ("applied_when_noop", "false_copy", "arith", "format")}},
+        "learning_curve": hist["evals"],
         "composite_exact": comp,
         "composite_decision": {s: S.composite(summ, s, field="decision") for s in gen.SURFACES},
         "cells": summ, "probe_in": probe_table(battery, res, "in"), "probe_ho": probe_table(battery, res, "ho"),
@@ -168,8 +191,8 @@ def run_arm(arm, args, battery, battery_sha):
     if ck.exists() and not args.keep_ckpt:
         LM.save(model, out / "model.pt")
         ck.unlink()
-    print(f"[{arm}] done train {t_train:.0f}s eval {t_eval:.0f}s  P-in {comp['in']:.3f}  P-ho {comp['ho']:.3f}",
-          flush=True)
+    print(f"[{arm}] done train {t_train:.0f}s eval {t_eval:.0f}s  iid {summary['iid']['exact']:.3f}  "
+          f"P-in {comp['in']:.3f}  P-ho {comp['ho']:.3f}", flush=True)
     return summary
 
 
@@ -181,6 +204,8 @@ def main():
     ap.add_argument("--battery", default="dev", choices=["dev"])
     ap.add_argument("--dev-parents", type=int, default=60)
     ap.add_argument("--n-train", type=int, default=32000)
+    ap.add_argument("--n-iid", dest="n_iid", type=int, default=1500)
+    ap.add_argument("--eval-every", dest="eval_every", type=int, default=500)
     ap.add_argument("--steps", type=int, default=3000)
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--eval-batch", type=int, default=128)
@@ -193,11 +218,13 @@ def main():
     ap.add_argument("--d-ff", dest="d_ff", type=int, default=512)
     ap.add_argument("--dropout", type=float, default=0.0)
     ap.add_argument("--max-len", dest="max_len", type=int, default=640)
+    ap.add_argument("--world", default="arith", choices=sorted(gen.WORLDS))
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--keep-ckpt", action="store_true")
     args = ap.parse_args()
     Path(args.out).mkdir(parents=True, exist_ok=True)
-    battery, bsha = load_battery(args.out, args.battery, args.dev_parents, BATTERY_SEEDS[args.battery])
+    gen.use_world(args.world)
+    battery, bsha = load_battery(args.out, args.battery, args.dev_parents, BATTERY_SEEDS[args.battery], args.world)
     print(f"battery {args.battery}: {len(battery)} records sha {bsha[:12]}", flush=True)
     for arm in args.arms.split(","):
         run_arm(arm.strip(), args, battery, bsha)

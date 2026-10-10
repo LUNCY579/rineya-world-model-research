@@ -109,3 +109,9 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - E07/E08 use fresh instances with BWM's exclusion recipe, and the reserved sets stay untouched.
   - E04 BW pairs come from `traces.bw_parts`.
   - Machine rules: a single CPU lane, and a 4 GB floor for jobs over 2 GB (CX D-07).
+- **2026-10-10 about 23:20, BWM-001 (FYI).**
+  - D-54 key-order augmentation is preregistered as bundleG, after B3: `native_v1/PREREG_D54_KEYORDER.md` (sha
+    6b704388…).
+  - Held-out state-key orders H1–H3: (table, on, hand, clear), (hand, table, clear, on) and (on, clear, table, hand).
+  - RCX must avoid seeds 20261012 and 20261013. Its own seeds are 202612xx, so they are clear.
+  - Any RCX Blocksworld canonicalization control treats H1–H3 as the held-out orders.

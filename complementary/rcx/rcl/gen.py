@@ -27,6 +27,22 @@ TRAIN_COMBOS = (("AND", "K+"), ("OR", "ALT"), ("AND", "AGE"))
 HELDOUT_COMBOS = (("OR", "K+"), ("AND", "ALT"), ("OR", "AGE"))
 
 REGIMES = ("FX", "FX_SD", "VR", "VR_SD", "CF", "CF_SD")
+
+# World variant: "arith" = RCWM-compatible kinds (add, transfer); "copy" = arithmetic-free kinds (set, swap),
+# used by the CPU mechanism tier to factor out the calculation A and study applicability C (SPEC_RCL 1.1).
+WORLDS = {"arith": ("add", "transfer"), "copy": ("set", "swap")}
+KINDS = WORLDS["arith"]
+
+
+def use_world(name):
+    """Select the event-kind variant for all subsequent generation in this process."""
+    global KINDS
+    KINDS = WORLDS[name]
+    return KINDS
+
+
+def _thr_range():
+    return (10, 90) if "set" in KINDS else (2, 10)
 STRATA = ("F1_void", "F2_unseen_real", "F3_unseen_nonce", "F4_nearmiss", "F5_postedlike",
           "V1_pos", "V2_neg", "V3_inverted", "V5_posted_override", "V6_compose", "V7_bigset",
           "M1_bal", "M2_amt")
@@ -38,9 +54,13 @@ VOID = V.ANCHOR_NOOP
 # ----------------------------------------------------------------------------- semantic parents
 
 def _event(rng, accounts, kind=None, amt_range="std"):
-    kind = kind or rng.choice(("add", "transfer"))
+    kind = kind or rng.choice(KINDS)
     acc, other = rng.sample(list(accounts), 2)
-    if amt_range == "big":
+    if kind == "set":
+        amount = rng.randint(100, 999) if amt_range == "big" else rng.randint(0, 98)
+    elif kind == "swap":
+        amount = rng.randint(13, 99) if amt_range == "big" else rng.randint(1, 12)
+    elif amt_range == "big":
         amount = rng.choice([a for a in range(-99, 100) if abs(a) >= 13]) if kind == "add" \
             else rng.randint(13, 99)
     else:
@@ -87,9 +107,9 @@ def _status_atom(rng, ws, polarity=None, size=None):
 
 def _other_atom(rng, op):
     if op == "K+":
-        return {"op": "K+", "kinds": [rng.choice(("add", "transfer"))]}
+        return {"op": "K+", "kinds": [rng.choice(KINDS)]}
     if op in ("AGE", "ALT"):
-        return {"op": op, "t": rng.randint(2, 10)}
+        return {"op": op, "t": rng.randint(*_thr_range())}
     if op == "BGE":
         return {"op": op, "t": rng.randint(10, 90)}
     raise ValueError(op)
@@ -350,7 +370,7 @@ def _stratum_parent(stratum, rng, ws_real, ws_nonce, ws_mix):
                       ({"op": "S+", "set": [x]}, x, "pos_x_status_x")]
     if stratum == "V6_compose":
         conn, op = rng.choice(HELDOUT_COMBOS)
-        kind = rng.choice(("add", "transfer"))
+        kind = rng.choice(KINDS)
         core = _core(rng, kind=kind)
         sa = _status_atom(rng, ws_mix, size=1)
         oa = _other_atom(rng, op)

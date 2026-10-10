@@ -59,7 +59,7 @@ def listed(ast, event):
 
 
 def touched(event):
-    return [event["account"]] + ([event["other"]] if event["kind"] == "transfer" else [])
+    return [event["account"]] + ([event["other"]] if event["kind"] in ("transfer", "swap") else [])
 
 
 def applied(state, event):
@@ -73,6 +73,10 @@ def applied(state, event):
         after[event["other"]] = state[event["other"]] + amt
     elif kind == "scale":
         after[acc] = state[acc] * amt
+    elif kind == "set":
+        after[acc] = amt
+    elif kind == "swap":
+        after[acc], after[event["other"]] = state[event["other"]], state[acc]
     else:
         raise ValueError(f"unknown kind {kind}")
     return after
@@ -206,7 +210,7 @@ def _tpl_regex(tpl, slots):
 _CLAUSE_RE = {
     "S+": re.compile(r"^its status is in \[(?P<B>" + _WORD + r"(?:, " + _WORD + r")*)\]$"),
     "S-": re.compile(r"^its status is not in \[(?P<B>" + _WORD + r"(?:, " + _WORD + r")*)\]$"),
-    "K+": re.compile(r"^its kind is (?P<K>(?:add|transfer)(?: or (?:add|transfer))?)$"),
+    "K+": re.compile(r"^its kind is (?P<K>(?:add|transfer|set|swap)(?: or (?:add|transfer|set|swap)){0,3})$"),
     "AGE": re.compile(r"^its amount is at least (?P<T>-?[0-9]+)$"),
     "ALT": re.compile(r"^its amount is below (?P<T>-?[0-9]+)$"),
     "BGE": re.compile(r"^the account balance is at least (?P<T>-?[0-9]+)$"),
@@ -221,7 +225,9 @@ def _parse_clause(c):
             if op in STATUS_OPS:
                 hits.append({"op": op, "set": m.group("B").split(", ")})
             elif op == "K+":
-                hits.append({"op": op, "kinds": m.group("K").split(" or ")})
+                kinds = m.group("K").split(" or ")
+                if len(set(kinds)) == len(kinds):
+                    hits.append({"op": op, "kinds": kinds})
             else:
                 hits.append({"op": op, "t": int(m.group("T"))})
     if len(hits) != 1:

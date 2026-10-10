@@ -94,19 +94,22 @@ def run(out_path=None, n_train=3000, n_parents=60):
     from . import oracle_indep as O
     report = {"q1": q1_posted_subset()}
     counts = {}
-    for regime in gen.REGIMES:
-        recs = gen.make_train(regime, n_train, 20261203)
-        counts[f"train:{regime}"] = q2_q3_records(recs, O)
-    for split, seed in (("dev", 20261204), ("sealed", 20261205)):
-        bat = gen.make_battery(split, n_parents, seed)
-        counts[f"battery:{split}"] = q2_q3_records(bat, O)
+    for world in sorted(gen.WORLDS):
+        gen.use_world(world)
+        for regime in gen.REGIMES:
+            recs = gen.make_train(regime, n_train, 20261203)
+            counts[f"{world}:train:{regime}"] = q2_q3_records(recs, O)
+        for split, seed in (("dev", 20261204), ("sealed", 20261205)):
+            bat = gen.make_battery(split, n_parents, seed)
+            counts[f"{world}:battery:{split}"] = q2_q3_records(bat, O)
+    gen.use_world("arith")
     report["q2_q3"] = {"records_checked": counts, "result": "PASS"}
     report["vocab"] = vocab.audit()
     report["oracle_indep_sha256"] = _sha(Path(O.__file__))
     report["world_sha256"] = _sha(Path(W.__file__))
     report["gen_sha256"] = _sha(Path(gen.__file__))
     report["templates_sha256"] = _sha(Path(W.T.__file__))
-    report["status"] = "QUALIFIED for: S+/S-/K+/AGE/ALT/BGE atoms, AND/OR of two atoms, kinds add/transfer/scale, " \
+    report["status"] = "QUALIFIED for: S+/S-/K+/AGE/ALT/BGE atoms, AND/OR of two atoms, kinds add/transfer/scale/set/swap, " \
                        "all template ids in templates.py, 3-6 accounts, letters/letters2/words names, all key orders. " \
                        "NOT qualified for: deeper nesting, other templates, spaces in status words."
     if out_path:

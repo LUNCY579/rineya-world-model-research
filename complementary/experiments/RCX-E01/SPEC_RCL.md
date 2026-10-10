@@ -20,7 +20,8 @@ varies.
 - **Event.** A JSON object with exactly these 5 keys:
   - `account`: the target account name (a key of the state);
   - `amount`: an integer;
-  - `kind`: `"add"` or `"transfer"` (`"scale"` is reserved for the native kit and is not used in the CPU study);
+  - `kind`: `"add"` or `"transfer"` in the arith world, and `"set"` or `"swap"` in the copy world (§1.1). `"scale"` is
+    reserved for the native kit and is not used in the CPU study;
   - `other`: a state key different from `account`, present for every kind but used only by `transfer`;
   - `status`: a non-empty lowercase-or-mixed string of letters, digits, `_` or `-`, never containing spaces.
 - **Dynamics (`calc`).** These apply only when the rule's applicability predicate is true:
@@ -32,6 +33,22 @@ varies.
 - **RCWM equivalence.** With the canonical *posted rule* (`S+{posted}`) and RCWM's kinds and fields, the transition must
   equal `rcwmt.env.step("ledger_replay", before, ev)` once `tick` is added. This is checked in teacher qualification.
 
+### 1.1 Copy-world variant (CPU mechanism tier; added 2026-10-10, CX D-09)
+
+This variant is arithmetic-free. It factors out the calculation A, so that small learners trained from scratch can be
+studied on applicability C.
+
+| Kind | Effect | Touched accounts |
+|---|---|---|
+| `set` | `after[account] = amount` | `account` |
+| `swap` | `after[account] = before[other]` and `after[other] = before[account]` | `account`, then `other` |
+
+- `amount` ranges: 0–98 for `set` (100–999 in the `M2_amt` stratum), and 1–12 for `swap`, where it is ignored.
+- `K+` clauses may name `set` or `swap`.
+- In this variant, `AGE`/`ALT` thresholds are drawn from 10–90.
+- Everything else (rules, rendering, targets, strata) is unchanged.
+- The arith world (`add`, `transfer`) remains the instrument for native, pretrained-core runs.
+
 ## 2. Rule language (applicability predicate)
 
 A rule is an AST node. Atoms:
@@ -40,7 +57,7 @@ A rule is an AST node. Atoms:
 |---|---|---|
 | `S+` | `event.status ∈ set` | `set`: a list of 1–3 distinct status strings |
 | `S-` | `event.status ∉ set` | `set` |
-| `K+` | `event.kind ∈ kinds` | `kinds`: a non-empty subset of {add, transfer} |
+| `K+` | `event.kind ∈ kinds` | `kinds`: a non-empty list of distinct kinds from {add, transfer, set, swap}. Generators emit one kind from the active world; parsers accept any such list. |
 | `AGE` | `event.amount >= t` | `t`: an integer |
 | `ALT` | `event.amount < t` | `t` |
 | `BGE` | `before[event.account] >= t` | `t` |
