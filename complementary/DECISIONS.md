@@ -143,3 +143,15 @@ and the evidence path.
     | 20261275 | split |
     | 20261276–79 | model seeds |
     | 20261280–89 | unit tests |
+- **CX D-12 Native-tier cost on CPU (about 09:55).**
+  - **Inference.** The native tier-A/B probe (probe1: OFF, T2 and SUPA; 40 parents; `in` and `ho_tpl`; 2,240 battery
+    prompts plus 800 verbatim-frame controls per arm) runs at about 1.5 s per prompt. Prefill of about 150 tokens
+    dominates. The guard pauses on the shared flag, including GPU-temperature reasons, as a courtesy to the peers' GPU
+    jobs.
+  - **Training estimate.** A D-03 LoRA cell (190 × 16, about 0.46M processed tokens) is about 3 h on 4 CPU threads, plus
+    about 1 h of evaluation.
+  - **Plan.**
+    1. Finish probe1 on CPU, about 3.5 h in total.
+    2. Decide between CPU training (seed 0 of N-FX, N-VR and N-CFSD ≈ 12 h of the single lane) and a GPU-slot request
+       to both peers (≈ 0.75 GPU-h per cell). The request goes only after the probe's baseline justifies the cells,
+       and never in competition with leased work.
