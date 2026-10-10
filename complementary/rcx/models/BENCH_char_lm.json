@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-09 22:50:28",
+  "torch": "2.6.0+cu124",
+  "threads": 4,
+  "python": "3.11.15",
+  "machine": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+  "shape": {
+    "batch": 32,
+    "input_len": 200,
+    "target_len": 30,
+    "positions_per_row": 232,
+    "max_len": 256
+  },
+  "method": "train(): 8 steps, median step time after 2 warm-up steps (collate + fwd + bwd + AdamW, fp32). Decode: generate() greedy KV-cache on a random-init model with the EOS row zeroed so every row emits 31 tokens; time includes prefill.",
+  "total_s": 11.6,
+  "results": [
+    {
+      "d_model": 128,
+      "n_layers": 3,
+      "n_heads": 4,
+      "d_ff": 512,
+      "params": 604416,
+      "train_step_s_median": 0.1933,
+      "train_step_s": [
+        0.1791,
+        0.2628,
+        0.2574,
+        0.2075,
+        0.1774,
+        0.1751
+      ],
+      "train_tokens_per_step": 7424.0,
+      "train_tok_s": 38405,
+      "train_target_tok_s": 5132,
+      "est_s_per_1000_steps": 193.3,
+      "decode_rows": 64,
+      "decode_batch": 32,
+      "decode_new_tokens": 1984,
+      "decode_s": 0.186,
+      "decode_tok_s": 10676,
+      "decode_rows_s": 344.4
+    },
+    {
+      "d_model": 160,
+      "n_layers": 4,
+      "n_heads": 4,
+      "d_ff": 640,
+      "params": 1247680,
+      "train_step_s_median": 0.3773,
+      "train_step_s": [
+        0.383,
+        0.3717,
+        0.3965,
+        0.3586,
+        0.3922,
+        0.3709
+      ],
+      "train_tokens_per_step": 7424.0,
+      "train_tok_s": 19676,
+      "train_target_tok_s": 2629,
+      "est_s_per_1000_steps": 377.3,
+      "decode_rows": 64,
+      "decode_batch": 32,
+      "decode_new_tokens": 1984,
+      "decode_s": 0.361,
+      "decode_tok_s": 5500,
+      "decode_rows_s": 177.4
+    },
+    {
+      "d_model": 192,
+      "n_layers": 4,
+      "n_heads": 6,
+      "d_ff": 768,
+      "params": 1792128,
+      "train_step_s_median": 0.4269,
+      "train_step_s": [
+        0.5674,
+        0.4291,
+        0.4348,
+        0.4247,
+        0.4243,
+        0.4193
+      ],
+      "train_tokens_per_step": 7424.0,
+      "train_tok_s": 17392,
+      "train_target_tok_s": 2324,
+      "est_s_per_1000_steps": 426.9,
+      "decode_rows": 64,
+      "decode_batch": 32,
+      "decode_new_tokens": 1984,
+      "decode_s": 0.406,
+      "decode_tok_s": 4888,
+      "decode_rows_s": 157.7
+    }
+  ]
+}
