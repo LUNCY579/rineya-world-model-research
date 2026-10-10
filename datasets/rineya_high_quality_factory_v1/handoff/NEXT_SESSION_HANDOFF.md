@@ -24,7 +24,7 @@ Read PROJECT_STATUS.md, manifests/ACTIVE_RELEASE_CATALOG.json, quality_reports/C
 - RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, BACKED_UP (session-final).
 - RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
 - REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (session-final).
-- REM-001 v0002: 768 historical records, 768 active; ACTIVE, LOCAL_ONLY (verification pending).
+- REM-001 v0002: 768 historical records, 768 active; ACTIVE, BACKED_UP (memory-gap-v2-final).
 - RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (session-final).
 - RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (session-final).
 - RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
@@ -41,6 +41,7 @@ Read PROJECT_STATUS.md, manifests/ACTIVE_RELEASE_CATALOG.json, quality_reports/C
 - foundation-r2: BACKED_UP; commit 517a51a60a00e6b7a625edeeb8e6bc126393856c.
 - foundation: FAILED_LOCAL_ARTIFACTS_PRESERVED; commit pending.
 - json-type-memory-provisional: BACKED_UP; commit 75934fb845af8c2e3a418a66cb2a812563e10f74.
+- memory-gap-v2-final: BACKED_UP; commit 98cd4b3ad4f3d47af5a98e1d41936b67136e867b.
 - production-milestone: BACKED_UP; commit ee7a91cf8cf4195238dafb0caa6f494a20c0b7ef.
 - review-milestone: BACKED_UP; commit 7decf8635f37a9e0e514b05dcd5dc7135a7eeb57.
 - session-final: BACKED_UP; commit eac47777c60387092bb10851b137adad36a6eb4b.

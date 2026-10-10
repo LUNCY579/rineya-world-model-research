@@ -1,7 +1,7 @@
 {
-  "at_utc": "2026-10-10T01:57:31.288326+00:00",
+  "at_utc": "2026-10-10T02:07:29.522446+00:00",
   "runner_execution": "/root",
-  "status": "V2_QUALITY_APPROVED_LOCAL; VERIFIED_REMOTE_CHECKPOINT_PENDING",
+  "status": "V2_QUALITY_APPROVED_BACKED_UP; NEXT_RBM_PUBLIC_DESIGN_ORACLE_PROPERTIES_ACTIVE",
   "active_approved_records": 3340,
   "active_source_families": 648,
   "candidate_batch": "memory-gap-v2",
@@ -26,7 +26,7 @@
     "oracles/memory_controls_independent.py": "a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388",
     "schemas/MEMORY_CONTROL_METADATA.md": "2a1e71c61b8773390cbd0789e9727cc30a006c517c7ca530a349de037f11e470"
   },
-  "remote_status": "Latest checkpoint75934fb845af8c2e3a418a66cb2a812563e10f74 preserves v1 and typed gate; v2 and subsequent reports local until next checkpoint",
+  "remote_status": "BACKED_UP;98cd4b3ad4f3d47af5a98e1d41936b67136e867b;961actualremote files and6 decoded diagnostic payloads",
   "constraints": [
     "No accepted data/release mutations",
     "No model training",
@@ -46,9 +46,9 @@
   },
   "remote_original_batch_checkpoint": "75934fb845af8c2e3a418a66cb2a812563e10f74",
   "pending": [
-    "Exact remote checkpoint including complete frozen reviews/code/release and six lossless diagnostic payloads",
-    "Actual GitHub gzip blob decompression verification",
-    "Next public RBM design then fresh production/oracle/reviews"
+    "Small checkpoint of postpush receipt, actual lossless remote proof and updated living handoff",
+    "Finalize public RBM design and independent pre-generation property tests",
+    "Fresh RBM generation with all actual independent review gates"
   ],
   "expert_v2": {
     "ACCEPT": 768,
@@ -58,5 +58,8 @@
   },
   "release": "data/REM-001/releases/v0002",
   "next_gap_analysis": "reviews/expert/RBM-gap-analysis-20261010T015614Z.md",
-  "next_gap_ticket": "feedback/improvement_requests/RBM-GAP-007.json"
+  "next_gap_ticket": "feedback/improvement_requests/RBM-GAP-007.json",
+  "latest_verified_checkpoint": "backup_logs/memory-gap-v2-final_RECEIPT.json",
+  "next_public_designer": "/root/research_architect",
+  "next_formal_engineer": "/root/formal_oracle"
 }
