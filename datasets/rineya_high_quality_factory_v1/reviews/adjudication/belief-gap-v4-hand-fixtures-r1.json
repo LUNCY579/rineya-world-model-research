@@ -1,0 +1,155 @@
+{
+  "actual_author_execution_id": "/root/research_architect",
+  "actual_task_position_policy": "strict integers; diagnostic textual label grammar is decoder choice only, not new public gate",
+  "coordinate_cases": [
+    {
+      "axes": [
+        "id",
+        "position",
+        "fact"
+      ],
+      "case_id": "legitimate_position_0",
+      "expected": "[\"q0\",0,\"f\"]",
+      "raw": "[\"q0\", 0, \"f\"]"
+    },
+    {
+      "axes": [
+        "id",
+        "position",
+        "fact"
+      ],
+      "case_id": "legitimate_position_1",
+      "expected": "[\"q0\",1,\"f\"]",
+      "raw": "[\"q0\", 1, \"f\"]"
+    },
+    {
+      "axes": [
+        "id",
+        "position",
+        "fact"
+      ],
+      "case_id": "legitimate_position_2",
+      "expected": "[\"q0\",2,\"f\"]",
+      "raw": "[\"q0\", 2, \"f\"]"
+    },
+    {
+      "axes": [
+        "id",
+        "position",
+        "fact"
+      ],
+      "case_id": "legitimate_position_'0'",
+      "expected": "[\"q0\",0,\"f\"]",
+      "raw": "[\"q0\", \"0\", \"f\"]"
+    },
+    {
+      "axes": [
+        "id",
+        "position",
+        "fact"
+      ],
+      "case_id": "legitimate_position_'1'",
+      "expected": "[\"q0\",1,\"f\"]",
+      "raw": "[\"q0\", \"1\", \"f\"]"
+    },
+    {
+      "axes": [
+        "id",
+        "position",
+        "fact"
+      ],
+      "case_id": "legitimate_position_'2'",
+      "expected": "[\"q0\",2,\"f\"]",
+      "raw": "[\"q0\", \"2\", \"f\"]"
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "malformed_position_True",
+      "raw": "[true]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "malformed_position_False",
+      "raw": "[false]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "malformed_position_0.0",
+      "raw": "[0.0]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "malformed_position_-1",
+      "raw": "[-1]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "malformed_position_3",
+      "raw": "[3]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "malformed_position_'true'",
+      "raw": "[\"true\"]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "malformed_position_'03'",
+      "raw": "[\"03\"]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "malformed_position_None",
+      "raw": "[null]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "position"
+      ],
+      "case_id": "wrong_arity",
+      "raw": "[0,1]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "id"
+      ],
+      "case_id": "typed_id_integer",
+      "raw": "[0]",
+      "reject": true
+    },
+    {
+      "axes": [
+        "fact"
+      ],
+      "case_id": "scalar_name_string_zero_preserved",
+      "expected": "[\"0\"]",
+      "raw": "[\"0\"]"
+    }
+  ],
+  "scope": "new hand diagnostic-coordinate examples; prior frozen own28resolver fixtures also executed separately"
+}

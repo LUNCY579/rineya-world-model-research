@@ -1,0 +1,37 @@
+test_nonobject_row_returns_failures (__main__.FinalSelfAudit.test_nonobject_row_returns_failures) ... ERROR
+test_unhashable_coordinate_returns_failures (__main__.FinalSelfAudit.test_unhashable_coordinate_returns_failures) ... ok
+test_unused_callee_argument_does_not_prove_pending_saved_dependency (__main__.FinalSelfAudit.test_unused_callee_argument_does_not_prove_pending_saved_dependency) ... FAIL
+
+======================================================================
+ERROR: test_nonobject_row_returns_failures (__main__.FinalSelfAudit.test_nonobject_row_returns_failures)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/targeted_self_audit_attempt01.py", line 25, in test_nonobject_row_returns_failures
+    def test_nonobject_row_returns_failures(self): self.assertIsInstance(C.check(None),list)
+                                                                         ^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_checker_attempt02.py", line 159, in check
+    part('record',base); part('claim',lambda:claims(row)); part('task',task); part('prompt',lambda:prompt_task(row)); part('witness',witnesses)
+                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_checker_attempt02.py", line 129, in part
+    try: fn()
+         ^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_checker_attempt02.py", line 159, in <lambda>
+    part('record',base); part('claim',lambda:claims(row)); part('task',task); part('prompt',lambda:prompt_task(row)); part('witness',witnesses)
+                                                                                                   ^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_checker_attempt02.py", line 119, in prompt_task
+    text=row.get('rendered_input'); need(type(text) is str and '\nTask JSON:\n' in text,'complete public prompt required')
+         ^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+======================================================================
+FAIL: test_unused_callee_argument_does_not_prove_pending_saved_dependency (__main__.FinalSelfAudit.test_unused_callee_argument_does_not_prove_pending_saved_dependency)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/targeted_self_audit_attempt01.py", line 34, in test_unused_callee_argument_does_not_prove_pending_saved_dependency
+    with self.assertRaisesRegex(ValueError,'pending work'): C.family_analysis(tasks)
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.611s
+
+FAILED (failures=1, errors=1)

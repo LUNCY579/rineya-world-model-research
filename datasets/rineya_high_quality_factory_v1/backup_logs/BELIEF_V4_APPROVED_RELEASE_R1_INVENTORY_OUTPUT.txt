@@ -1,0 +1,27 @@
+{"phase": "actual_streaming_snapshot", "observed_paths": 250, "included_or_raw": 247}
+{"phase": "actual_streaming_snapshot", "observed_paths": 500, "included_or_raw": 497}
+{"phase": "actual_streaming_snapshot", "observed_paths": 750, "included_or_raw": 743}
+{"phase": "actual_streaming_snapshot", "observed_paths": 1000, "included_or_raw": 993}
+{"phase": "actual_streaming_snapshot", "observed_paths": 1250, "included_or_raw": 1204}
+{"phase": "actual_streaming_snapshot", "observed_paths": 1500, "included_or_raw": 1445}
+{"phase": "actual_streaming_snapshot", "observed_paths": 1750, "included_or_raw": 1694}
+{"phase": "actual_streaming_snapshot", "observed_paths": 2000, "included_or_raw": 1944}
+{"phase": "actual_streaming_snapshot", "observed_paths": 2250, "included_or_raw": 2191}
+{"phase": "actual_streaming_snapshot", "observed_paths": 2500, "included_or_raw": 2435}
+{"phase": "actual_streaming_snapshot", "observed_paths": 2750, "included_or_raw": 2685}
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/prepare_belief_v4_approved_release_inventory_r1.py", line 276, in <module>
+    try:main()
+        ^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/prepare_belief_v4_approved_release_inventory_r1.py", line 211, in main
+    try:e,blob=snapshot(path)
+               ^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/prepare_belief_v4_approved_release_inventory_r1.py", line 61, in snapshot
+    actual=runner().proof(path,scan)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/run_provisional_archival_checkpoint_v3.py", line 143, in proof
+    out = stream_proof(h, before.st_size, scan)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/run_provisional_archival_checkpoint_v3.py", line 131, in stream_proof
+    raise ValueError("Potential secret; content withheld")
+ValueError: Potential secret; content withheld

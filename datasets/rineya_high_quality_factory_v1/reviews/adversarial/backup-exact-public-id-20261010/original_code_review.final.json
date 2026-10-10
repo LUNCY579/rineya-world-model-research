@@ -1,0 +1,155 @@
+{
+  "schema": "independent-backup-code-review-v1",
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "reviewer_role": "adversarial_backup_code_reviewer",
+  "stage": "first_actual_original_draft_review",
+  "at_utc": "2026-10-10T10:55:11.895513+00:00",
+  "decision": "REVISE_CODE",
+  "confidence": 0.99,
+  "source_bindings": [
+    {
+      "path": "reviews/adversarial/backup-exact-public-id-20261010/replay_r2.py",
+      "size": 12167,
+      "sha256": "cb628b744ada80dcc6a41be6842747b02bca032f8b3598915dd664efe836de81"
+    },
+    {
+      "path": "backup_logs/exact_four_public_metadata_secret_scan.py",
+      "size": 8207,
+      "sha256": "74d64143c755268c76e02ebb05a6494cca328035e1b153bbbb176386dee92ffc"
+    },
+    {
+      "path": "backup_logs/EXACT_FOUR_PUBLIC_ID_SECRET_EXCEPTION_CONFIG.json",
+      "size": 2442,
+      "sha256": "2e18c2c156aaefcee75ad6ad92fe51c66abf864150924d5ac1cd26dbeed5aa05"
+    },
+    {
+      "path": "backup_logs/run_provisional_archival_checkpoint_v4.py",
+      "size": 57089,
+      "sha256": "c01051b4b2deaa9e145e96c72091398ff2df1a6fadb6c268408ff2ed81a0a3dd"
+    },
+    {
+      "path": "backup_logs/prepare_belief_v4_approved_release_inventory_r2.py",
+      "size": 24109,
+      "sha256": "b05af181bf8df8ebe69fb1ec32d10854d6339366b2a36938b993d471d6a373f8"
+    },
+    {
+      "path": "backup_logs/test_provisional_archival_runner_v4.py",
+      "size": 39221,
+      "sha256": "3ae9580db2ab8afb0bee5984a5eff4625e8ae83cb2e754aa7a02b65333c96fb7"
+    },
+    {
+      "path": "backup_logs/test_belief_v4_approved_release_inventory_r2.py",
+      "size": 8555,
+      "sha256": "aa3de94a00c204ae168ede91b0337d67b61aff306ff180eded15dbe72c32f054"
+    },
+    {
+      "path": "backup_logs/run_provisional_archival_checkpoint_v3.py",
+      "size": 55494,
+      "sha256": "91bb1b946001e425954414c1dcf644c73fe6557471fcc8aaf175d5e87aa8e9ae"
+    },
+    {
+      "path": "quality_reports/BELIEF_V4_EXACT_PUBLIC_ID_SECRET_FALSE_POSITIVE_ROOT_READBACK.json",
+      "size": 2530,
+      "sha256": "356dd5e9acf77d365bec9fbd223c49470f3e11bcf5dbf2c4c768461f2cd6f76a"
+    },
+    {
+      "path": "reviews/oracle/RSM-option-resumption-official-20261010T0932Z/FINAL_RECEIPT.json",
+      "size": 13530,
+      "sha256": "1513eb28199054bfc023e462f5fde2d10f3df24160cca79bc489e97c124b9d04"
+    },
+    {
+      "path": "reviews/oracle/RSM-option-resumption-official-20261010T0932Z/attempt01-execution.json",
+      "size": 901,
+      "sha256": "2ebb35681afa918e8e969f7db1f16b74d1f8bcf8190094d05da2ba634b537341"
+    },
+    {
+      "path": "reviews/oracle/RSM-option-resumption-official-20261010T0932Z/attempt01-source-blobs/c35c317807c522a5d695528c4937ee755f8bb0e938f0c6ba7c2ec60a1ed6dc5e.source",
+      "size": 2075,
+      "sha256": "c35c317807c522a5d695528c4937ee755f8bb0e938f0c6ba7c2ec60a1ed6dc5e"
+    },
+    {
+      "path": "reviews/oracle/RSM-option-resumption-official-20261010T0932Z/run_task_solver_attempt01.py",
+      "size": 2075,
+      "sha256": "c35c317807c522a5d695528c4937ee755f8bb0e938f0c6ba7c2ec60a1ed6dc5e"
+    }
+  ],
+  "execution": {
+    "path": "reviews/adversarial/backup-exact-public-id-20261010/replay_r2.execution.json",
+    "size": 115073,
+    "sha256": "e952c6c940bc3e892ccd36b69dc5f11cae0a971a5d2cdc862614573a416f1afe"
+  },
+  "actual_checks": {
+    "total": 416,
+    "passed": 412,
+    "failed": 4
+  },
+  "critical_defects": [],
+  "issues": [
+    {
+      "severity": "moderate",
+      "code": "overlap_truncates_preceding_context_before_dedup",
+      "evidence": {
+        "exact_file_sha256": "1513eb28199054bfc023e462f5fde2d10f3df24160cca79bc489e97c124b9d04",
+        "match_absolute_span": [
+          565,
+          599
+        ],
+        "actual_rejected_valid_chunk_sizes": [
+          1,
+          2
+        ],
+        "minimal_short_read_cuts": [
+          [
+            4660,
+            4661
+          ],
+          [
+            4661,
+            4662
+          ]
+        ],
+        "failed_checks": [
+          "positive_file_0_chunk_1",
+          "positive_file_0_chunk_2",
+          "overlap_context_file_0_4660",
+          "overlap_context_file_0_4661"
+        ]
+      },
+      "fix": "Deduplicate previously fully validated exact absolute index/start/end/digest before requiring context that can fall out of overlap; preserve rejection of extensions/new matches and full payload binding."
+    },
+    {
+      "severity": "moderate",
+      "code": "builder_reports_four_without_observation_completeness_check",
+      "evidence": "The runner requires four observations, but builder hardcodes count4 and helper report may report PASS with an empty/subset observation cache. Current full path cut includes the four files, so this is reporting rigor rather than observed secret-admission widening.",
+      "fix": "Require the exact four path/size/SHA/match observations before final builder and stage success."
+    },
+    {
+      "severity": "low",
+      "code": "anchored_assignment_fixture_outside_regex_language",
+      "evidence": "Manager password-assignment test prefixes the assignment with ordinary prose on the same line; unchanged regex is line-anchored. Independent negative-control correctly returns, newline anchored assignment rejects.",
+      "fix": "Place the sensitive assignment at start of a line."
+    }
+  ],
+  "positive_evidence": [
+    "Exact four opaque payload hashes/spans independently reproduce root metadata; no payload parsed as RSM code.",
+    "Original regex bytes/flags match; omitted/reordered/changed patterns reject.",
+    "Known metadata row/path/type/span/digest/context and full byte mutations reject.",
+    "Extra exact match, other pattern, greedy extension, unbound copied path, symlink and literal aliases reject.",
+    "Actual copy function preserves an old target when source bytes differ; successful ordinary copy and unchanged target are rehashed.",
+    "Static main chain: scanned inventory precedes copy, copied SHA256/git-blob identity must match inventory, index objects and final source/targets rehash before commit. No Git/main execution performed."
+  ],
+  "limits": [
+    "This bounded code review does not certify arbitrary secret encodings or semantic data quality.",
+    "No remote/stage/commit/push execution; those orchestration stages inspected statically only.",
+    "Regex scanner remains a known-pattern detector; exact exceptions do not supply general clearance.",
+    "Same-model and root-guided false-positive diagnosis; independent fixture execution, no expert verdict read."
+  ],
+  "preserved_owned_failure": {
+    "path": "reviews/adversarial/backup-exact-public-id-20261010/replay_r1.execution.json",
+    "size": 115078,
+    "sha256": "3a911353797044df57bb3188c81c378fe3875380e24ff414c11e589621f7ba63"
+  },
+  "owned_fixture_correction": "Original r1 diagnosis-key typo preserved; new r2 uses findings and reproduces four implementation failures.",
+  "no_dataset_or_publication_approval": true,
+  "no_old_artifact_edits": true
+}

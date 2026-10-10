@@ -1,0 +1,865 @@
+#!/usr/bin/env python3
+"""NEW v3: parent-bound archival runner with exact frozen six-warning exception.
+
+This NEW runner never certifies remote payload persistence. Run the unchanged
+bounded recover_remote_checkpoint.py with two workers after a successful push.
+All payload reads/copies use 64 KiB chunks; metadata responses are capped.
+"""
+from __future__ import annotations
+
+import argparse
+import base64
+import datetime as dt
+import gzip
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import threading
+
+AUTHOR = "/root/backup_manager"
+PROSPECTIVE_PARENT = "4d0b5eff1af3184fedf7fa25ada729a6cc909268"
+PRIOR_SPEC_SHA = "6b310f0656a468dd65920c64f15efe82e0b592d3d76250366f9555cef46aaad5"
+JOINED_SHA = "32c1fbeb9cef515b532e4097a750cd325470010768f594c413439a5720db85c9"
+BASE_SOURCE_SHA = "df03bdebc7d9cb6b24c65f82f1e17b42e8f857a106fafc3bfd2ac3ac341a0897"
+FACTORY = Path(__file__).resolve().parent.parent
+PREFIX = "datasets/rineya_high_quality_factory_v1"
+BRANCH = "research/rineya-high-quality-dataset-v1"
+REPOSITORY = "LUNCY579/rineya-world-model-research"
+ORIGINAL_HEAD = "a223884d55ff47baf3890c7d4a82054d07223215"
+RECOVERY_SHA = "3f496d27e6fc36ecda3eabcff4593b13deaea03a04fee543e49674f843bf37b1"
+OLD_HELPER_SHA = "07ef424f92d903c265c6cc06622733dcdeabf5bd03d3c13d98f793c2ddcc2d4b"
+CHUNK = 64 * 1024
+MAX_BYTES = 25 * 1024 * 1024
+RESERVE = 512 * 1024 * 1024
+ENV = {**os.environ, "GIT_OPTIONAL_LOCKS": "0", "PYTHONDONTWRITEBYTECODE": "1"}
+sys.dont_write_bytecode = True
+SECRET_PATTERNS = [
+    re.compile(rb"(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{30,})"),
+    re.compile(rb"sk-(?:proj-)?[A-Za-z0-9_-]{30,}"),
+    re.compile(rb"AKIA[A-Z0-9]{16}"),
+    re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
+    re.compile(rb"(?im)^\s*(?:api_key|access_token|password|secret)\s*[=:]\s*[\"']?[A-Za-z0-9_+/=-]{16,}"),
+]
+
+
+def now():
+    return dt.datetime.now(dt.timezone.utc).isoformat()
+
+
+def run(args, cwd=None, allowed=(0,), data=None):
+    if data is not None and len(data) > 16 * 1024 * 1024:
+        raise ValueError("Metadata input exceeds bounded limit")
+    p = subprocess.Popen(args, cwd=cwd, stdin=subprocess.PIPE if data is not None else subprocess.DEVNULL,
+                         stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=ENV)
+    timer = threading.Timer(180, p.kill);timer.daemon = True;timer.start()
+    writer = None
+    if data is not None:
+        def feed():
+            try:p.stdin.write(data);p.stdin.close()
+            except BrokenPipeError:pass
+        writer = threading.Thread(target=feed, daemon=True);writer.start()
+    try:
+        output = bytearray()
+        while True:
+            part = p.stdout.read(CHUNK)
+            if not part:break
+            output.extend(part)
+            if len(output) > 16 * 1024 * 1024:
+                raise ValueError("Metadata response exceeds bounded limit")
+        code = p.wait(timeout=10)
+        if code not in allowed:
+            raise RuntimeError(f"{args[0]} command failed with exit {code}; output withheld")
+        return bytes(output)
+    finally:
+        timer.cancel();p.stdout.close()
+        if p.poll() is None:p.kill()
+        p.wait()
+        if writer:writer.join(timeout=1)
+
+
+def git(worktree, *args, **kwargs):
+    return run(["git", *args], worktree, **kwargs)
+
+
+def text(worktree, *args):
+    return git(worktree, *args).decode().strip()
+
+
+def safe(root, relative, must_exist=True):
+    if (not isinstance(relative, str) or not relative or "\0" in relative
+            or "\n" in relative or "\r" in relative):
+        raise ValueError("Invalid literal inventory path")
+    p = Path(relative)
+    if p.is_absolute() or p.as_posix() != relative or any(x in {"..", ".git"} for x in p.parts):
+        raise ValueError("Unsafe inventory path")
+    root = root.resolve()
+    result = root / p
+    for i in range(1, len(p.parts) + 1):
+        if root.joinpath(*p.parts[:i]).is_symlink():
+            raise ValueError("Symlink inventory path rejected")
+    if not result.resolve().is_relative_to(root):
+        raise ValueError("Inventory path escapes its root")
+    if result.name in {".env", ".DS_Store"} or result.suffix in {".key", ".pem", ".pyc"}:
+        raise ValueError("Sensitive/generated path rejected")
+    if must_exist and not result.is_file():
+        raise ValueError("Missing regular inventory file")
+    return result
+
+
+def stream_proof(handle, size, scan=True, sink=None):
+    sha = hashlib.sha256()
+    blob = hashlib.sha1(f"blob {size}\0".encode())
+    count, tail = 0, b""
+    while True:
+        data = handle.read(CHUNK)
+        if not data:
+            break
+        count += len(data)
+        if count > size:
+            raise ValueError("Payload exceeds frozen size")
+        sha.update(data)
+        blob.update(data)
+        if scan:
+            if any(p.search(tail + data) for p in SECRET_PATTERNS):
+                raise ValueError("Potential secret; content withheld")
+            tail = (tail + data)[-4096:]
+        if sink:
+            sink.write(data)
+    if count != size:
+        raise ValueError("Payload size differs from frozen size")
+    return {"size": count, "sha256": sha.hexdigest(), "git_blob": blob.hexdigest()}
+
+
+def proof(path, scan=True):
+    before = path.stat()
+    with path.open("rb") as h:
+        out = stream_proof(h, before.st_size, scan)
+    after = path.stat()
+    fields = ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns")
+    if any(getattr(before, f) != getattr(after, f) for f in fields):
+        raise ValueError("Source changed during streaming validation")
+    return out
+
+
+def equal(entry, actual):
+    return entry["size"] == actual["size"] and entry["sha256"] == actual["sha256"]
+
+
+def inventory(factory, spec):
+    if (spec.get("approval") not in {"provisional_checkpoint", "code_review_milestone", "reviewed_release"}
+            or not spec.get("approved_by") or spec.get("validation_status") != "passed"):
+        raise ValueError("Explicit validated checkpoint authorization is missing")
+    entries = spec.get("files")
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("Exact inventory is empty")
+    out = {}
+    for e in entries:
+        p = e.get("path")
+        if p in out or type(e.get("size")) is not int or not 0 <= e["size"] <= MAX_BYTES:
+            raise ValueError("Duplicate path or invalid capped size")
+        if not re.fullmatch(r"[0-9a-f]{64}", e.get("sha256", "")):
+            raise ValueError("Invalid SHA256")
+        actual = proof(safe(factory, p))
+        if not equal(e, actual):
+            raise ValueError(f"Frozen source changed: {p}")
+        out[p] = actual
+    return out
+
+
+def declared_path(factory, value):
+    p = Path(value)
+    if p.is_absolute():
+        value = p.relative_to(factory.resolve()).as_posix()
+    return safe(factory, value)
+
+
+def lossless(factory, spec, checked):
+    exclusions = spec.get("raw_size_exclusions", [])
+    names = [e["path"] for e in exclusions]
+    if len(names) != len(set(names)):
+        raise ValueError("Duplicate oversized raw exclusion")
+    actual_oversized = {p.relative_to(factory).as_posix() for p in factory.rglob("*")
+                        if p.is_file() and p.stat().st_size > MAX_BYTES
+                        and "__pycache__" not in p.parts and p.suffix != ".pyc"}
+    if actual_oversized != set(names):
+        raise ValueError("Oversized local evidence is missing or silently excluded")
+    verified = []
+    for e in exclusions:
+        if e["size"] <= MAX_BYTES or e["path"] in checked:
+            raise ValueError("Invalid raw cap exclusion")
+        raw = safe(factory, e["path"])
+        raw_proof = proof(raw)
+        if not equal(e, raw_proof) or not e.get("lossless_representations"):
+            raise ValueError("Frozen raw differs or has no lossless representation")
+        for rep in e["lossless_representations"]:
+            for key in ("gzip", "manifest"):
+                r = rep[key]
+                if r["path"] not in checked or not equal(r, checked[r["path"]]):
+                    raise ValueError("Lossless evidence omitted from exact inventory")
+            gz = safe(factory, rep["gzip"]["path"])
+            manifest = json.loads(safe(factory, rep["manifest"]["path"]).read_bytes())
+            records = manifest.get("artifacts", manifest.get("items", [manifest]))
+            matching = False
+            for rec in records:
+                raw_path = declared_path(factory, rec["raw_path"])
+                gz_path = declared_path(factory, rec.get("gzip_path", rec.get("compressed_path")))
+                if raw_path == raw and gz_path == gz:
+                    matching = (rec.get("raw_bytes", rec.get("raw_length")) == e["size"]
+                                and rec["raw_sha256"] == e["sha256"]
+                                and rec.get("gzip_bytes", rec.get("compressed_length")) == rep["gzip"]["size"]
+                                and rec.get("gzip_sha256", rec.get("compressed_sha256")) == rep["gzip"]["sha256"])
+                    if matching:
+                        break
+            if not matching:
+                raise ValueError("Actual lossless manifest does not bind the frozen bytes")
+            with raw.open("rb") as a, gzip.open(gz, "rb") as b:
+                while True:
+                    x, y = a.read(CHUNK), b.read(CHUNK)
+                    if x != y:
+                        raise ValueError("Actual gzip/raw byte comparison failed")
+                    if not x:
+                        break
+            if not equal(e, proof(raw, False)):
+                raise ValueError("Raw changed during lossless comparison")
+        verified.append({"path": e["path"], "size": e["size"], "sha256": e["sha256"],
+                         "secret_scan": "PASS", "byte_for_byte_lossless": True})
+    return verified
+
+
+def tree(worktree, commit):
+    out = {}
+    for rec in git(worktree, "ls-tree", "-r", "-z", commit, "--", PREFIX).split(b"\0"):
+        if not rec:
+            continue
+        left, name = rec.split(b"\t", 1)
+        mode, kind, blob = left.decode().split()
+        name = name.decode()
+        if not name.startswith(PREFIX + "/") or kind != "blob" or mode != "100644":
+            raise ValueError("Unexpected tracked dataset mode/path/type")
+        out[name[len(PREFIX) + 1:]] = blob
+    return out
+
+
+def guard_previous(previous, checked):
+    if not previous.keys() <= checked.keys():
+        raise ValueError("Previously tracked artifacts cannot be omitted")
+    for name, blob in previous.items():
+        if "/releases/" in "/" + name and checked[name]["git_blob"] != blob:
+            raise ValueError("Immutable historical release would change")
+
+
+def copy_one(factory, worktree, name, expected):
+    source = safe(factory, name)
+    target = safe(worktree, PREFIX + "/" + name, False)
+    if target.is_file() and proof(target, False) == expected:
+        return "UNCHANGED_TARGET_REVERIFIED"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=".archival-copy-", dir=target.parent)
+    try:
+        with source.open("rb") as src, os.fdopen(fd, "wb") as dst:
+            actual = stream_proof(src, expected["size"], scan=False, sink=dst)
+            dst.flush()
+            os.fsync(dst.fileno())
+        if actual != expected:
+            raise ValueError("Frozen source changed during copy")
+        os.chmod(temporary, 0o644)
+        os.replace(temporary, target)
+        if proof(target, False) != expected:
+            raise ValueError("Copied target bytes differ")
+        return "COPIED_AND_REVERIFIED"
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)  # Only this runner's incomplete temporary file.
+
+
+def index(worktree):
+    out = {}
+    for rec in git(worktree, "ls-files", "--stage", "-z", "--", PREFIX).split(b"\0"):
+        if not rec:
+            continue
+        left, path = rec.split(b"\t", 1)
+        mode, blob, stage = left.decode().split()
+        path = path.decode()
+        if stage != "0" or mode != "100644" or not path.startswith(PREFIX + "/"):
+            raise ValueError("Unexpected index conflict/mode/path")
+        out[path[len(PREFIX) + 1:]] = blob
+    return out
+
+
+WARNING_SOURCE = "backup_logs/BELIEF_V4_R2_RESUMPTION_FIXTURES/exact_official_test_13990.source"
+WARNING_STDOUT = "backup_logs/BELIEF_V4_R2_RESUMPTION_FIXTURES/exact_diff_check_stdout.txt"
+LINE_B64 = "ICAgICAgICBmb3IgcGF0aCBpbiAoJy9vdXRzaWRlLmpzb24nLCcuLi9vdXRzaWRlLmpzb24nLCdDOlxcb3V0c2lkZS5qc29uJywnLicpOiAK"
+
+
+def canonical_exception():
+    source_line = base64.b64decode(LINE_B64, validate=True)
+    return {"schema": "prospective-frozen-six-warning-byte-preservation-v1",
+            "expected_parent": PROSPECTIVE_PARENT, "required_exit_code": 2,
+            "required_stderr_bytes": 0, "warning_count": 6,
+            "files": [
+                {"path": WARNING_STDOUT, "size": 1249,
+                 "sha256": "256b3790a01671d8b33647213342d1256f95fd776dcd738065db160efd60d55e",
+                 "lines": [2, 4, 6, 8, 10],
+                 "line_bytes_base64": base64.b64encode(b"+" + source_line).decode()},
+                {"path": WARNING_SOURCE, "size": 20749,
+                 "sha256": "13990b79681d988f66eca74562aa67e07f33d23bd2d8d55cd9021726221ae95c",
+                 "lines": [212], "line_bytes_base64": LINE_B64}],
+            "diagnostic_type": "trailing whitespace.",
+            "reason": "Preserve exact postcut official-test and failed-stage diagnostic fixtures; no whitespace-policy/config change.",
+            "grants_data_approval": False}
+
+
+def exact_types(actual, wanted):
+    if type(actual) is not type(wanted):
+        return False
+    if type(wanted) is dict:
+        return set(actual) == set(wanted) and all(exact_types(actual[k], wanted[k]) for k in wanted)
+    if type(wanted) is list:
+        return len(actual) == len(wanted) and all(exact_types(a, b) for a, b in zip(actual, wanted))
+    return actual == wanted
+
+
+def validate_exception(config):
+    if not exact_types(config, canonical_exception()):
+        raise ValueError("Only the exact two-file/six-warning exception is permitted")
+    return config
+
+
+def expected_diagnostics(config):
+    validate_exception(config)
+    return b"".join((PREFIX + "/" + row["path"] + ":" + str(line) + ": trailing whitespace.\n").encode()
+                    + b"+" + base64.b64decode(row["line_bytes_base64"], validate=True)
+                    for row in config["files"] for line in row["lines"])
+
+
+def bounded_diff(worktree, paths=None):
+    args = ["git", "--literal-pathspecs", "diff", "--cached", "--check"]
+    if paths is not None:
+        if not paths:
+            raise ValueError("Empty restricted diff must not accidentally become unrestricted")
+        args += ["--", *paths]
+    process = subprocess.Popen(args, cwd=worktree, stdin=subprocess.DEVNULL,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=ENV)
+    data = {"stdout": bytearray(), "stderr": bytearray()};errors = []
+    def read(key):
+        try:
+            while part := getattr(process, key).read(CHUNK):
+                if len(data[key]) + len(part) > 2 * 1024 * 1024:
+                    raise ValueError("Bounded diff diagnostics cap exceeded")
+                data[key].extend(part)
+        except Exception as error:
+            errors.append(error)
+            if process.poll() is None:process.kill()
+        finally:getattr(process, key).close()
+    threads = [threading.Thread(target=read, args=(key,), daemon=True) for key in data]
+    for thread in threads:thread.start()
+    try:code = process.wait(timeout=180)
+    finally:
+        if process.poll() is None:process.kill()
+        process.wait()
+        for thread in threads:thread.join()
+    if errors:raise errors[0]
+    return {"returncode": code, **{key: bytes(value) for key, value in data.items()}}
+
+
+class DiffCheckRejected(ValueError):
+    def __init__(self, message, observation):
+        super().__init__(message);self.observation = observation
+
+
+def diff_observation(result):
+    if (type(result) is not dict or set(result) != {"returncode", "stdout", "stderr"}
+            or type(result["returncode"]) is not int
+            or type(result["stdout"]) is not bytes or type(result["stderr"]) is not bytes):
+        raise ValueError("Untrusted diff diagnostics schema")
+    return {"actual_exit_code": result["returncode"],
+            "actual_stdout_bytes": len(result["stdout"]), "actual_stderr_bytes": len(result["stderr"]),
+            "actual_stdout_sha256": hashlib.sha256(result["stdout"]).hexdigest(),
+            "actual_stderr_sha256": hashlib.sha256(result["stderr"]).hexdigest(),
+            "actual_stdout_base64": base64.b64encode(result["stdout"]).decode(),
+            "actual_stderr_base64": base64.b64encode(result["stderr"]).decode()}
+
+
+def validate_diagnostics(result, config):
+    observation = diff_observation(result)
+    if result != {"returncode": 2, "stdout": expected_diagnostics(config), "stderr": b""}:
+        raise DiffCheckRejected("Unrestricted diff differs from the exact six-warning frozen exception", observation)
+    return {**observation, "strict_diff_check": "NONZERO_EXIT_2_NOT_AN_UNQUALIFIED_PASS",
+            "narrow_frozen_evidence_exception": "EXACT_BOUND_SIX_WARNINGS_MATCH",
+            "warning_count": 6, "exception_files": config["files"]}
+
+
+def verify_warning_sources(factory, worktree, checked, actual_index, config):
+    validate_exception(config)
+    for row in config["files"]:
+        expected = checked.get(row["path"])
+        if (expected is None or not equal(row, expected)
+                or actual_index.get(row["path"]) != expected["git_blob"]):
+            raise ValueError("Exact exception source/hash/index binding missing or changed")
+        for root, name in ((factory, row["path"]), (worktree, PREFIX + "/" + row["path"])):
+            path = safe(root, name)
+            if proof(path, False) != expected:
+                raise ValueError("Exception source/target bytes changed")
+            # Only these bounded 20 KiB fixtures use read_bytes; payload copy/proof remains streamed.
+            lines = path.read_bytes().splitlines(keepends=True)
+            if [i+1 for i,x in enumerate(lines) if x.rstrip(b"\r\n").endswith((b" ",b"\t"))] != row["lines"]:
+                raise ValueError("Exception whitespace line coverage changed")
+            if any(lines[line-1] != base64.b64decode(row["line_bytes_base64"], validate=True) for line in row["lines"]):
+                raise ValueError("Exception exact source-line bytes differ")
+
+
+def verify_diff_exception(worktree, factory, checked, staged, config):
+    verify_warning_sources(factory, worktree, checked, index(worktree), config)
+    excepted = {PREFIX + "/" + row["path"] for row in config["files"]}
+    if not excepted <= set(staged):
+        raise ValueError("All two exception files must actually be newly staged")
+    observation = validate_diagnostics(bounded_diff(worktree), config)
+    other = sorted(set(staged) - excepted)
+    if not other:
+        raise ValueError("No other staged checkpoint paths to strictly validate")
+    for start in range(0, len(other), 100):
+        result = bounded_diff(worktree, other[start:start+100])
+        if result != {"returncode": 0, "stdout": b"", "stderr": b""}:
+            raise DiffCheckRejected("Restricted strict diff of other paths failed", diff_observation(result))
+    return {**observation, "restricted_strict_diff_check": "PASS",
+            "restricted_changed_path_count": len(other), "excluded_exact_path_count": 2}
+
+
+def whole_tree(worktree, commit):
+    out = {}
+    for record in git(worktree, "ls-tree", "-r", "-z", commit).split(b"\0"):
+        if not record:continue
+        left, path = record.split(b"\t", 1);mode, kind, blob = left.decode().split();path = path.decode()
+        if kind != "blob" or path in out:raise ValueError("Unexpected parent tree kind/duplicate")
+        out[path] = (mode, blob)
+    return out
+
+
+def whole_index(worktree):
+    out = {}
+    for record in git(worktree, "ls-files", "--stage", "-z").split(b"\0"):
+        if not record:continue
+        left, path = record.split(b"\t", 1);mode, blob, stage = left.decode().split();path = path.decode()
+        if stage != "0" or path in out:raise ValueError("Full index conflict or duplicate")
+        out[path] = (mode, blob)
+    return out
+
+
+def expected_whole_tree(parent_tree, checked):
+    out = {p: v for p,v in parent_tree.items() if not p.startswith(PREFIX + "/")}
+    out.update({PREFIX + "/" + p: ("100644", v["git_blob"]) for p,v in checked.items()})
+    return out
+
+
+def verify_whole_index(worktree, parent, checked):
+    expected = expected_whole_tree(whole_tree(worktree, parent), checked)
+    if whole_index(worktree) != expected:
+        raise ValueError("Full index differs; outside-prefix parent bytes must remain unchanged")
+    return expected
+
+
+def validate_worktree_changes(worktree, checked, previous):
+    wanted = {PREFIX + "/" + p for p,v in checked.items() if previous.get(p) != v["git_blob"]}
+    staged = [p.decode() for p in git(worktree, "diff", "--cached", "--name-only", "-z").split(b"\0") if p]
+    if not wanted or len(staged) != len(set(staged)) or set(staged) != wanted:
+        raise ValueError("Staged change set differs from exact parent/inventory delta")
+    for args in (("diff", "--name-only", "-z"), ("ls-files", "--others", "--exclude-standard", "-z"),
+                 ("ls-files", "--others", "--ignored", "--exclude-standard", "-z"),
+                 ("diff", "--cached", "--diff-filter=D", "--name-only", "-z")):
+        if git(worktree, *args):raise ValueError("Unstaged/untracked/ignored/deleted changes are not authorized")
+    return staged
+
+
+def release_inventory(spec):
+    records = {}
+    for row in spec["files"] + spec.get("raw_size_exclusions", []):
+        if "/releases/" not in "/" + row["path"]:continue
+        if row["path"] in records:raise ValueError("Duplicate capped/raw release path")
+        records[row["path"]] = {"path": row["path"], "size": row["size"], "sha256": row["sha256"]}
+    return [records[p] for p in sorted(records)]
+
+
+def validate_execution_config(config, args, spec, prior, checked):
+    # A NEW execution config is required only after actual release/packing/inventory freezes.
+    fixed = {"schema": "prospective-archival-stage-v3-execution-v1", "author_execution": AUTHOR,
+             "runner_execution": "/root", "expected_parent": PROSPECTIVE_PARENT,
+             "prior_spec_sha256": PRIOR_SPEC_SHA, "prior_tracked_path_count": 2685,
+             "prior_release_file_count": 210, "expected_release_file_count": 222,
+             "readonly_reference_count": 65, "grants_data_approval": False}
+    if type(config) is not dict:
+        raise ValueError("Future frozen execution config required")
+    for key, value in fixed.items():
+        if key not in config or not exact_types(config[key], value):raise ValueError("Execution scope/type binding differs: " + key)
+    for key, value in (("spec_sha256", args.expected_spec_sha256), ("source_freeze_sha256", args.expected_freeze_sha256),
+                       ("custody_adapter_sha256", args.expected_custody_sha256), ("exception_config_sha256", args.expected_exception_sha256),
+                       ("checkpoint_id", spec.get("checkpoint_id"))):
+        if type(value) is not str or config.get(key) != value:raise ValueError("Execution input binding differs: " + key)
+    if args.expected_parent != PROSPECTIVE_PARENT or args.runner != "/root":raise ValueError("Only root may execute the bound prospective parent stage")
+    if len(prior["files"]) != 2685 or not {e["path"] for e in prior["files"]} <= set(checked):
+        raise ValueError("All 2685 previous tracked paths are mandatory")
+    old_releases = release_inventory(prior);current_releases = release_inventory(spec)
+    if len(old_releases) != 210 or len(current_releases) != 222 or config.get("release_files") != current_releases:
+        raise ValueError("Exact 210 old plus 12 new capped/raw release bindings required")
+    current = {e["path"]: e for e in current_releases}
+    if any(current.get(e["path"]) != e for e in old_releases):raise ValueError("Old immutable release size/hash would change")
+    old_raw = prior.get("raw_size_exclusions", []);new_raw = {e["path"]: e for e in spec.get("raw_size_exclusions", [])}
+    if len(old_raw) != 26 or config.get("raw_lossless_required_count") != len(new_raw) or type(config.get("raw_lossless_required_count")) is not int:
+        raise ValueError("All prior 26 raws plus actual new raw scope required")
+    for row in old_raw:
+        new = new_raw.get(row["path"])
+        if new is None or not equal(row, new) or any(rep not in new.get("lossless_representations", []) for rep in row["lossless_representations"]):
+            raise ValueError("Old raw/gzip/manifest mappings cannot be omitted or altered")
+    return {"prior_tracked_paths": 2685, "prior_release_files": 210,
+            "all_release_files_including_oversized_raws": 222, "prior_raw_paths_retained": 26,
+            "all_raw_paths": len(new_raw)}
+
+
+def verify_readonly_references(config):
+    rows = config.get("readonly_reference_files")
+    root = (FACTORY.parent / "rineya_complementary_research_2026-10-09").resolve()
+    if type(rows) is not list or len(rows) != 65:raise ValueError("Exact 65 readonly reference bindings required")
+    names = set()
+    for row in rows:
+        if type(row) is not dict or set(row) != {"path", "size", "sha256"} or type(row["path"]) is not str or row["path"] in names:
+            raise ValueError("Invalid/duplicate readonly reference binding")
+        names.add(row["path"]);path = Path(row["path"])
+        if not path.is_absolute() or str(path) != row["path"] or not path.resolve().is_relative_to(root):
+            raise ValueError("Readonly reference must remain in protected root")
+        relative = path.relative_to(root).as_posix()
+        if type(row["size"]) is not int or row["size"] < 0 or not re.fullmatch(r"[0-9a-f]{64}", row["sha256"]):
+            raise ValueError("Readonly reference size/hash type differs")
+        if not equal(row, proof(safe(root, relative), False)):
+            raise ValueError("Protected readonly reference bytes changed")
+    return 65
+
+
+def stage_exact(worktree, checked, allow_ignored, exception=None, factory=None):
+    tracked = set(index(worktree))
+    names = sorted(checked)
+    paths = [PREFIX + "/" + n for n in names]
+    ignored = {p.decode()[len(PREFIX) + 1:] for p in
+               git(worktree, "check-ignore", "--no-index", "-z", "--stdin", allowed=(0, 1),
+                   data=("\0".join(paths) + "\0").encode()).split(b"\0") if p}
+    forced = ignored - tracked
+    if forced != set(allow_ignored):
+        raise ValueError("New ignored paths require exact explicit --allow-ignored-path declarations")
+    for path in forced:
+        if path not in checked:
+            raise ValueError("Forced path outside exact inventory")
+    regular = [p for p in names if p not in forced]
+    for batch, force in ((regular, False), (sorted(forced), True)):
+        for start in range(0, len(batch), 100):
+            args = ["--literal-pathspecs", "add"] + (["--force"] if force else [])
+            git(worktree, *args, "--", *[PREFIX + "/" + p for p in batch[start:start + 100]])
+    staged = [x.decode() for x in git(worktree, "diff", "--cached", "--name-only", "-z").split(b"\0") if x]
+    if not staged or any(not p.startswith(PREFIX + "/") or p[len(PREFIX) + 1:] not in checked for p in staged):
+        raise ValueError("Empty or unrelated staged paths")
+    if git(worktree, "diff", "--cached", "--diff-filter=D", "--name-only", "-z"):
+        raise ValueError("No tracked deletion is authorized")
+    diff_result = ({"strict_diff_check": "PASS"} if exception is None else
+                   verify_diff_exception(worktree, factory, checked, staged, exception))
+    if exception is None:git(worktree, "diff", "--cached", "--check")
+    actual_index = index(worktree)
+    if set(actual_index) != set(checked) or any(actual_index[p] != checked[p]["git_blob"] for p in checked):
+        raise ValueError("Full exact inventory index blob IDs differ")
+    return {"ignored_inventory_paths": sorted(ignored), "new_ignored_exact_paths_force_staged": sorted(forced),
+            "staged_paths": staged, **diff_result}
+
+
+def exclusive(path, value):
+    with path.open("x", encoding="utf-8") as h:
+        json.dump(value, h, indent=2)
+        h.write("\n")
+        h.flush()
+        os.fsync(h.fileno())
+
+
+PROTECTED_EXPECTATIONS = {
+    "common_config": ("config", True, "1b63f67839c506daadf8d6fe1d23c593df985f41c026eb72895d3c1cda13746d"),
+    "common_HEAD": ("HEAD", True, "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80"),
+    "original_index": ("index", True, "02d57d88ca5bdbe0c8f2157851ba2c02b7d220317b7823a388d61b29aa53c9a2"),
+    "original_worktree_config": ("config.worktree", False, None),
+    "main_ref": ("refs/heads/main", True, "363a7880e8a3dc10eeddd8902023f402b5fdb223f3c118584c88222cf0601e3d"),
+    "packed_refs": ("packed-refs", True, "2a14a80913656f7f9fa034ec70e2c8b178610913a2b824eb27c1f5e2e1b457c1"),
+}
+
+
+def parent_sha(value):
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{40}", value):
+        raise ValueError("Expected parent must be an explicit complete lowercase SHA1")
+    return value
+
+
+def require_head(worktree, expected):
+    parent_sha(expected)
+    if text(worktree, "rev-parse", "HEAD") != expected:
+        raise ValueError("Actual HEAD differs from explicitly bound expected commit")
+
+
+def normalize_baselines(original, baseline):
+    candidates = []
+    if isinstance(baseline, list):
+        candidates.append(baseline)
+    elif isinstance(baseline, dict):
+        if "protected_git_byte_baselines" in baseline:
+            candidates.append(baseline["protected_git_byte_baselines"])
+        nested = baseline.get("original")
+        if "original" in baseline and not isinstance(nested, dict):
+            raise ValueError("Nested original custody schema is not an object")
+        if isinstance(nested, dict) and "protected_git_byte_baselines_match" in nested:
+            candidates.append(nested["protected_git_byte_baselines_match"])
+    if not candidates:
+        raise ValueError("Missing direct or nested exact six-record custody schema")
+    normalized = []
+    for rows in candidates:
+        if not isinstance(rows, list) or len(rows) != 6:
+            raise ValueError("Custody baseline must contain exactly six records")
+        values = {}
+        for item in rows:
+            if not isinstance(item, dict):
+                raise ValueError("Custody record is not an object")
+            label = item.get("label")
+            if not isinstance(label, str) or label not in PROTECTED_EXPECTATIONS or label in values:
+                raise ValueError("Unknown or duplicate protected custody label")
+            filename, exists, checksum = PROTECTED_EXPECTATIONS[label]
+            expected_path = str(original.resolve() / ".git" / filename)
+            if item.get("path") != expected_path or type(item.get("expected_exists")) is not bool:
+                raise ValueError("Protected path or existence type differs")
+            if item["expected_exists"] is not exists:
+                raise ValueError("Original frozen protected existence expectation differs")
+            if exists:
+                if type(item.get("sha256")) is not str or item["sha256"] != checksum:
+                    raise ValueError("Original frozen protected SHA256 differs")
+            elif "sha256" in item:
+                raise ValueError("Absent protected file cannot carry an invented hash")
+            if "actual_exists" in item and (type(item["actual_exists"]) is not bool or item["actual_exists"] is not exists):
+                raise ValueError("Readiness existence observation contradicts custody")
+            if "actual_sha256" in item and (not exists or type(item["actual_sha256"]) is not str or item["actual_sha256"] != checksum):
+                raise ValueError("Readiness hash observation contradicts custody")
+            if "matches_sparse_restore_baseline" in item and item["matches_sparse_restore_baseline"] is not True:
+                raise ValueError("Readiness does not attest the original frozen baseline")
+            if "matches_frozen_baseline" in item and item["matches_frozen_baseline"] is not True:
+                raise ValueError("Join does not attest the original frozen baseline")
+            record = {"label": label, "path": expected_path, "expected_exists": exists}
+            if exists:
+                record["sha256"] = checksum
+            values[label] = record
+        if set(values) != set(PROTECTED_EXPECTATIONS):
+            raise ValueError("Required protected custody record is missing")
+        normalized.append([values[label] for label in PROTECTED_EXPECTATIONS])
+    if any(rows != normalized[0] for rows in normalized[1:]):
+        raise ValueError("Direct and nested custody schemas disagree")
+    return normalized[0]
+
+
+def verify_committed_parent_tree(worktree, commit, expected_parent, checked):
+    parent_sha(expected_parent)
+    if text(worktree, "rev-list", "--parents", "-n", "1", commit).split() != [commit, expected_parent]:
+        raise ValueError("Committed object does not have exactly the one bound parent")
+    if tree(worktree, commit) != {name: value["git_blob"] for name, value in checked.items()}:
+        raise ValueError("Committed exact inventory tree differs")
+    if whole_tree(worktree, commit) != expected_whole_tree(whole_tree(worktree, expected_parent), checked):
+        raise ValueError("Committed outside-prefix bytes changed")
+
+
+def original_custody(original, baseline):
+    if (text(original, "rev-parse", "HEAD") != ORIGINAL_HEAD
+            or text(original, "branch", "--show-current") != "main"
+            or text(original, "status", "--porcelain=v1", "--untracked-files=all")):
+        raise ValueError("Original main custody changed")
+    for item in normalize_baselines(original, baseline):
+        p = Path(item["path"])
+        if p.exists() != item["expected_exists"]:
+            raise ValueError("Protected Git baseline existence changed")
+        if p.exists() and proof(p, False)["sha256"] != item["sha256"]:
+            raise ValueError("Protected original/common Git bytes changed")
+
+
+def dedicated_custody(worktree, expected, clean=True):
+    require_head(worktree, expected)
+    if (text(worktree, "branch", "--show-current") != BRANCH
+            or text(worktree, "remote", "get-url", "origin") != f"https://github.com/{REPOSITORY}.git"):
+        raise ValueError("Dedicated HEAD/branch/remote custody changed")
+    if clean and text(worktree, "status", "--porcelain=v1", "--untracked-files=all"):
+        raise ValueError("Dedicated worktree is dirty; preserve it")
+    remote = text(worktree, "ls-remote", "--heads", "origin", "refs/heads/" + BRANCH)
+    if remote.split() != [expected, "refs/heads/" + BRANCH]:
+        raise ValueError("Remote branch is not the exact expected parent/commit")
+    meta = json.loads(run(["gh", "repo", "view", REPOSITORY, "--json", "isPrivate,nameWithOwner,viewerPermission"]))
+    if meta != {"isPrivate": True, "nameWithOwner": REPOSITORY, "viewerPermission": "ADMIN"}:
+        raise ValueError("Actual private ADMIN repository verification failed")
+    if text(worktree, "config", "--get", "index.sparse") != "false":
+        raise ValueError("Expected full Git index unavailable")
+    if set(text(worktree, "sparse-checkout", "list").splitlines()) != {"tools", PREFIX}:
+        raise ValueError("Expected restored dedicated sparse scope unavailable")
+    return meta
+
+
+def frozen_inputs(args):
+    logs = FACTORY / "backup_logs"
+    for p in (args.receipt, args.local_commit_receipt, args.ledger):
+        if p.exists() or p.is_symlink() or not p.resolve().is_relative_to(logs):
+            raise ValueError("Evidence outputs must be fresh paths in backup_logs")
+    if len({p.resolve() for p in (args.receipt, args.local_commit_receipt, args.ledger)}) != 3:
+        raise ValueError("Evidence output paths must be distinct")
+    for p in (args.spec, args.source_freeze, args.custody_baseline, args.exception_config, args.execution_config):
+        if p.is_symlink() or not p.resolve().is_relative_to(logs):
+            raise ValueError("Frozen input must be a local backup_logs file")
+    expectations = ((args.spec, args.expected_spec_sha256), (args.source_freeze, args.expected_freeze_sha256),
+                    (args.custody_baseline, args.expected_custody_sha256),
+                    (logs / "recover_remote_checkpoint.py", RECOVERY_SHA),
+                    (logs / "checkpoint_backup.py", OLD_HELPER_SHA),
+                    (args.exception_config, args.expected_exception_sha256),
+                    (args.execution_config, args.expected_execution_config_sha256),
+                    (logs / "belief-v4-validated-code-candidate-r2_SPEC.json", PRIOR_SPEC_SHA),
+                    (logs / "BELIEF_V4_R2_JOINED_CUSTODY.json", JOINED_SHA),
+                    (logs / "run_provisional_archival_checkpoint_v2.py", BASE_SOURCE_SHA))
+    for p, expected in expectations:
+        if proof(p, False)["sha256"] != expected:
+            raise ValueError("Frozen input/helper checksum differs")
+    freeze = json.loads(args.source_freeze.read_bytes())
+    if (freeze["runner_source"]["sha256"] != proof(Path(__file__), False)["sha256"]
+            or freeze.get("author_execution") != AUTHOR):
+        raise ValueError("Runner lacks its exact independent source freeze")
+    for row in freeze["frozen_inputs"]:
+        if proof(safe(FACTORY, row["path"]), False)["sha256"] != row["sha256"]:
+            raise ValueError("Frozen preparation source/test/fixture dependency changed")
+    return [(p, expected) for p, expected in expectations]
+
+
+def parse_args(argv=None):
+    p = argparse.ArgumentParser(description=__doc__)
+    for name in ("spec", "source-freeze", "custody-baseline", "exception-config", "execution-config", "receipt", "local-commit-receipt", "ledger"):
+        p.add_argument("--" + name, type=Path, required=True)
+    for name in ("expected-spec-sha256", "expected-freeze-sha256", "expected-custody-sha256", "expected-exception-sha256", "expected-execution-config-sha256", "message", "runner"):
+        p.add_argument("--" + name, required=True)
+    p.add_argument("--allow-ignored-path", action="append", default=[])
+    p.add_argument("--expected-parent", type=parent_sha, required=True)
+    p.add_argument("--execute", action="store_true")
+    return p.parse_args(argv)
+
+
+def main():
+    args = parse_args()
+    parent = args.expected_parent
+    frozen = frozen_inputs(args)
+    spec = json.loads(args.spec.read_bytes());baseline = json.loads(args.custody_baseline.read_bytes())
+    exception = validate_exception(json.loads(args.exception_config.read_bytes()))
+    execution_config = json.loads(args.execution_config.read_bytes())
+    prior = json.loads((FACTORY / "backup_logs/belief-v4-validated-code-candidate-r2_SPEC.json").read_bytes())
+    worktree = FACTORY.parent / ".rineya-dataset-git-worktree"
+    original = FACTORY.parent / "rineya-world-model-research"
+    if FACTORY.is_relative_to(worktree.resolve()) or worktree.resolve().is_relative_to(FACTORY):
+        raise ValueError("Factory/worktree must be separate")
+    report = {"author_execution": AUTHOR, "runner_execution": args.runner,
+              "model_disclosure": "Inherited same-model independent agent execution; no model diversity claim",
+              "started_at_utc": now(), "status": "PENDING_LOCAL_VALIDATION",
+              "checkpoint_id": spec.get("checkpoint_id"), "spec_sha256": args.expected_spec_sha256,
+              "source_sha256": proof(Path(__file__), False)["sha256"], "source_freeze_sha256": args.expected_freeze_sha256,
+              "repository": REPOSITORY, "branch": BRANCH, "expected_parent_sha": parent,
+              "approval": spec.get("approval"), "approved_by": spec.get("approved_by"), "grants_data_approval": False,
+              "scope": "Exact frozen byte preservation only; no old helper edit, training, release approval, deletion, main modification, force push, or claim of remote payload verification",
+              "self_inventory_boundary": "Runner execution receipts/ledger are post-inventory local evidence until a later exact checkpoint"}
+    with args.ledger.open("x", encoding="utf-8") as ledger:
+        def log(phase, **values):
+            ledger.write(json.dumps({"at_utc": now(), "phase": phase, **values}, separators=(",", ":")) + "\n")
+            ledger.flush();os.fsync(ledger.fileno())
+        try:
+            original_custody(original, baseline)
+            report["private_repository_evidence"] = dedicated_custody(worktree, parent)
+            checked = inventory(FACTORY, spec)
+            report["execution_scope_guards"] = validate_execution_config(execution_config, args, spec, prior, checked)
+            report["readonly_reference_count_verified"] = verify_readonly_references(execution_config)
+            report["raw_lossless_proofs"] = lossless(FACTORY, spec, checked)
+            previous = tree(worktree, parent);guard_previous(previous, checked)
+            if set(previous) != {e["path"] for e in prior["files"]}:
+                raise ValueError("Parent tracked scope differs from exact prior 2685-file spec")
+            if any(row["path"] in previous for row in exception["files"]):
+                raise ValueError("Exception applies only to the two newly staged evidence fixtures")
+            required = 2 * sum(v["size"] for v in checked.values()) + RESERVE
+            free = shutil.disk_usage(worktree).free
+            if free < required:
+                raise ValueError("Insufficient free space for 2x full inventory plus 512 MiB reserve")
+            report.update(files=len(checked), total_bytes=sum(v["size"] for v in checked.values()),
+                          free_bytes_at_preflight=free, required_free_bytes=required,
+                          protected_original_baselines_verified=True, prior_release_guard="PASS")
+            log("FULL_LOCAL_FROZEN_INPUTS_VALIDATED", files=len(checked), bytes=report["total_bytes"])
+            if not args.execute:
+                report["status"] = "VALIDATED_NO_COPY_COMMIT_PUSH"
+                exclusive(args.receipt, report);print(json.dumps({"status": report["status"], "receipt": str(args.receipt)}));return
+            for n, name in enumerate(sorted(checked), 1):
+                outcome = copy_one(FACTORY, worktree, name, checked[name])
+                log("source_target_verified", path=name, **checked[name], copy_outcome=outcome)
+                if n % 100 == 0:
+                    print(json.dumps({"phase": "verified_copy", "files": n, "total": len(checked)}), flush=True)
+            original_custody(original, baseline)
+            dedicated_custody(worktree, parent, False)
+            report.update(stage_exact(worktree, checked, args.allow_ignored_path, exception, FACTORY))
+            verify_whole_index(worktree, parent, checked)
+            report["staged_paths"] = validate_worktree_changes(worktree, checked, previous)
+            report["whole_index_and_outside_parent_guard"] = "PASS"
+            groups = {}
+            for name, value in checked.items():groups.setdefault(value["git_blob"], []).append(name)
+            helper_spec = importlib.util.spec_from_file_location("frozen_remote", FACTORY / "backup_logs/recover_remote_checkpoint.py")
+            helper = importlib.util.module_from_spec(helper_spec);helper_spec.loader.exec_module(helper)
+            for i, (blob, names) in enumerate(sorted(groups.items()), 1):
+                expected = checked[names[0]]
+                actual = helper.process_stream(["git", "cat-file", "blob", blob],
+                                               lambda handle: stream_proof(handle, expected["size"], scan=False), worktree)
+                if actual != expected:
+                    raise ValueError("Actual index object SHA256/SHA1 differs")
+                log("actual_index_blob_verified", **actual, paths=names)
+                if i % 100 == 0:print(json.dumps({"phase": "index_blob_verified", "blobs": i, "total": len(groups)}), flush=True)
+            for name, expected in checked.items():
+                if proof(safe(FACTORY, name), False) != expected or proof(safe(worktree, PREFIX + "/" + name), False) != expected:
+                    raise ValueError("Frozen source or target changed before commit")
+            for path, checksum in frozen:
+                if proof(path, False)["sha256"] != checksum:raise ValueError("Frozen inputs changed before commit")
+            if proof(Path(__file__), False)["sha256"] != report["source_sha256"]:
+                raise ValueError("Source-frozen runner changed before commit")
+            original_custody(original, baseline);dedicated_custody(worktree, parent, False)
+            verify_readonly_references(execution_config)
+            report.update(verify_diff_exception(worktree, FACTORY, checked, report["staged_paths"], exception))
+            verify_whole_index(worktree, parent, checked)
+            validate_worktree_changes(worktree, checked, previous)
+            report["all_source_target_index_sha256_and_sha1_verified"] = True
+            git(worktree, "commit", "-m", args.message)
+            commit = text(worktree, "rev-parse", "HEAD")
+            verify_committed_parent_tree(worktree, commit, parent, checked)
+            report.update(status="LOCAL_COMMIT_PRESERVED", commit_sha=commit)
+            exclusive(args.local_commit_receipt, report);log("LOCAL_COMMIT_PRESERVED", commit_sha=commit)
+            original_custody(original, baseline)
+            if text(worktree, "status", "--porcelain=v1", "--untracked-files=all"):
+                raise ValueError("Committed worktree must be clean before push")
+            if text(worktree, "ls-remote", "--heads", "origin", "refs/heads/" + BRANCH).split() != [parent, "refs/heads/" + BRANCH]:
+                raise ValueError("Remote parent advanced before nonforce push")
+            meta = json.loads(run(["gh", "repo", "view", REPOSITORY, "--json", "isPrivate,nameWithOwner,viewerPermission"]))
+            if meta != report["private_repository_evidence"]:raise ValueError("Private ADMIN changed before push")
+            git(worktree, "push", "origin", "HEAD:refs/heads/" + BRANCH)
+            dedicated_custody(worktree, commit)
+            original_custody(original, baseline)
+            report.update(status="PUSHED_REMOTE_BYTES_VERIFICATION_PENDING", remote_commit_sha=commit, finished_at_utc=now())
+            report["next_actual_bounded_verification"] = ["python3", str(FACTORY / "backup_logs/recover_remote_checkpoint.py"),
+                "--spec", str(args.spec), "--expected-spec-sha256", args.expected_spec_sha256,
+                "--commit", commit, "--output", "NEW_RECOVERY_RECEIPT_IN_BACKUP_LOGS", "--ledger", "NEW_RECOVERY_LEDGER_IN_BACKUP_LOGS",
+                "--prior-evidence", str(args.receipt), "--runner", args.runner, "--workers", "2"]
+            exclusive(args.receipt, report);log("PUSHED_REMOTE_BYTES_VERIFICATION_PENDING", commit_sha=commit)
+            print(json.dumps({"status": report["status"], "commit_sha": commit, "files": len(checked), "receipt": str(args.receipt)}))
+        except Exception as error:
+            report.update(status="FAILED_NEW_EXECUTION_LOCAL_ARTIFACTS_PRESERVED", error_type=type(error).__name__,
+                          error=str(error), finished_at_utc=now())
+            if isinstance(error, DiffCheckRejected):report["failed_actual_diff_check"] = error.observation
+            log("FAILED_NEW_EXECUTION_LOCAL_ARTIFACTS_PRESERVED", error_type=type(error).__name__, error=str(error))
+            if not args.receipt.exists():exclusive(args.receipt, report)
+            raise
+
+
+if __name__ == "__main__":
+    main()

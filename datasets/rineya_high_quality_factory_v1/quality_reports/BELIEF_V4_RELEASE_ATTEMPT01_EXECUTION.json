@@ -1,0 +1,1195 @@
+{
+  "actual_approval_joins": 10368,
+  "approval_boundary": "Root executes frozen independent adjudication; root supplies no data-quality verdict.",
+  "at_utc": "2026-10-10T10:10:26.536497+00:00",
+  "authoritative_adjudicator_execution": "/root/research_architect",
+  "batch": "belief-gap-v4",
+  "code_sha256": {
+    "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "factory/belief_controls.py": "cdd1e95fdf11cffca13db243bbdee1a2010450f497773714f093db5899985967",
+    "factory/catalog.py": "6a309e428c67ee653ab2fc5b5559b9dbabab82b9ed47479b481d0af9c97c7e58",
+    "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+    "factory/export_validation.py": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
+    "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+    "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+    "factory/pipeline.py": "1be38a6061c35d5239c51cc51b6881ac4c432c514ed5e071ea6e97f24af92752",
+    "factory/planning_controls.py": "352f5fc0247b339293206958144e25f7d4437477f4a60702d926b805f25c18c3",
+    "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+    "factory/status.py": "ea88618378e4919967bdcfa02d5341c3fe7957bc497fb657535511a5d7034a47",
+    "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+    "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+    "generators/critic/archive/expansion_v1_generate.py": "f88662fdfd7af26673c9003bac6c0a354c429d381e8174921965086788c1983c",
+    "generators/critic/claim_controls.py": "83fae00f2ef905d8bff74022fdb58a0d1af0fb3db1d97ae3a37104fb5ec499f2",
+    "generators/critic/generate.py": "131b559479e5608ce90b0989e34d687ef37a17821a0146a2fe68646106a0bd5a",
+    "generators/critic/route_facts.py": "527d2b36931681418a0b4db35d54dffea3840d0e911cb0734186a82443c541ae",
+    "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+    "generators/memory/history_gap.py": "ae2ab80fcf9363941e89baee1fcc0c42ff66b35967e1dba4698e5bdae50c507d",
+    "generators/memory/history_gap_v2.py": "e98e35ffbde97d5754ad577402ecc124a559fec3bfbaafcfea6d2a3e0b1a303b",
+    "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+    "generators/other_tracks/belief_gap.py": "f27373cd70b09d52880ab3c6f526347ccd440264f5b7918995c6ef8782694522",
+    "generators/other_tracks/belief_gap_v2.py": "dbfc7d23b4f57f9c61286b3e0f9046c1304445f1a4a706148a635eb9f26e33a1",
+    "generators/other_tracks/belief_gap_v3.py": "8e55d6d634524d8bac0e33a50fdaf3f24f51eaa1a92148246690dde1e3b4c083",
+    "generators/other_tracks/belief_gap_v4_attempt01.py": "8c952fac71a0f6ffd28db3e4e55224395035d2a95e4914087c87b6dbc19e47ba",
+    "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+    "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+    "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+    "generators/relational/archive/expansion_v1_diversity.py": "4b8f169621db336f208c727d2101c53f61d86d87be48574c786290a6e92f6d37",
+    "generators/relational/archive/expansion_v1_generate.py": "6a4a660ee89f0ce6d856042331d700db49f6320caddcc228c6c24f786aee25ea",
+    "generators/relational/archive/expansion_v2_diversity.py": "4636fd58168ff11ccdfa974be18e6943c6853af9718ee8b594acc661f8434f9a",
+    "generators/relational/archive/expansion_v2_generate.py": "826169eeece3fdb82d5e32ba10fbb8dcc343ec416b8d821c6b614a110f09df0c",
+    "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+    "generators/relational/expansion.py": "013d918ffd426e74690a9ffe5b054153eb76cbb38d4ba476cf562362de45218e",
+    "generators/relational/generate.py": "c85d6577b3ca2fef45ac7c0de8fa8b28553131dbe1300de9001b8a3f6049c1b4",
+    "generators/relational/planning_gap.py": "0ae4e24c841102cef06a9be22df1aafb4c4b77ca3f97be3efec1dc9e123a192a",
+    "generators/relational/planning_gap_v2.py": "ac0f71174d14a36ed602004731547d5b052df89c70d784e5eaaeb33e1f5ce562",
+    "generators/relational/planning_gap_v2_attempt02.py": "706e8f396e35930b4addbbbb412c6bb5f92c9d6a0aa853e04e6c91895791dcf7",
+    "generators/relational/planning_gap_v2_attempt03.py": "4aa2aee9f92a0b9eb3214f2c2d6c5b909097592c9c8a933ce4b401e202aace2c",
+    "generators/relational/planning_gap_v2_attempt04.py": "049ec9c9b06fa60811c9f96ddff181092524f8ff6d2eb45b9c276aabc58a28a0",
+    "generators/relational/planning_gap_v2_renderer_r1.py": "95b82ef4ff07b643fb4eec704933dcd1077c45a3f8d2d7f12ad030a73e63c542",
+    "generators/relational/planning_gap_v2_renderer_r1_attempt02.py": "abba20cbe3243c3f28c2fc2db7c57040c4cd43f3c256f89e650303c0806bc038",
+    "generators/relational/planning_gap_v2_renderer_r1_attempt03.py": "b80b92b6cc74f41e9d9e002eb75e7a214540c2178a54e6b088ee44adef482ac2",
+    "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274",
+    "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+    "oracles/belief_controls_independent.py": "ec9f387485f2a2d58ab557db0a2a7d95c24e77cb3108afa503a80c575e04b03e",
+    "oracles/belief_controls_v2_independent.py": "5b97b73df0b9248b1ad155307e75e2a73b995dff64e81232382a6c05a2fe4984",
+    "oracles/belief_controls_v3_independent.py": "ff1a72153e985810d2771fecf299944b39cc8afa52effbd833feac056f143271",
+    "oracles/belief_controls_v4_independent.py": "0ff69cc8499d5f1fa8cfd2515d118f3a3a1ad43359bdf5c22bd3d4a81cab8613",
+    "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+    "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "oracles/memory_controls_independent.py": "a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388",
+    "oracles/metadata_independent.py": "f218765cf0e67d4f813aea55a062b9f853b88eaaf8754619de09343de78c014e",
+    "oracles/rgm_planning_controls_independent.py": "cd92cff9bb92eb38afd5a989109718cd600390a9609a13fc070f9cc1e1677bf3",
+    "oracles/rgm_planning_controls_v2_independent.py": "69944b8e06fb984947d0d686296d0bb886aecc358ae6f7405d279d0ba5a40fdf",
+    "schemas/BELIEF_CONTROL_PROPERTIES.md": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+    "schemas/BELIEF_CONTROL_PROPERTIES_METADATA_V4.md": "40b552ecf47c11bfffb2669283640dda991d6dc6e7094ed3051fb9cad2489fce",
+    "schemas/BELIEF_CONTROL_PROPERTIES_METADATA_V4_ENCODING_ADDENDUM.md": "925ccae4e6fdc79fec2d0778d871e5d316257c3026b59c6e166556da71eb346c",
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md": "46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f",
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V3.md": "3a223952d9664577d7b637ddfb3e18d329863a3d5371a6c47cad233a1f50ff11",
+    "schemas/COMPETENCY_TAGS.md": "efbfc5755fa7dda2c388e621ca17ac5d96c99bc9f59115d62027e2247dd0e097",
+    "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "schemas/MEMORY_CONTROL_METADATA.md": "2a1e71c61b8773390cbd0789e9727cc30a006c517c7ca530a349de037f11e470",
+    "schemas/MEMORY_CONTROL_PROPERTIES.md": "9f05ff5c3c81ad042e2b98c7d7b3489bd03bbd48ea728770fa7a338773267ace",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES.md": "f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2.md": "d59ce14dd66c6ebd644580f7736e714fbceda32dd132d8c9cb5cf61e78a5a258",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2_BEFORE_SELECTIVE_CLARIFICATION_e6a22e6d026c2bc5d17de598f1a13bd18be95507b666d41ca2f9ab19c57750f0.md": "e6a22e6d026c2bc5d17de598f1a13bd18be95507b666d41ca2f9ab19c57750f0",
+    "schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+    "schemas/RGM_PLANNING_V2_RENDERER_CONTROL_ENCODING_ADDENDUM.md": "48e1ebbe954944d8b6569866fa102962607c4ecf27a1d7133f1259f815eac603",
+    "schemas/RGM_PLANNING_V2_RENDERER_REVISION_POLICY.md": "6e3759ebe9e3e1f801257d30df610b7dea091eb3324f0a76b59ad9520eac5e56",
+    "schemas/RSM_OPTION_RESUMPTION_METADATA_V1.md": "1612b14d7549b7fb406cbef8e127440dcfddaf30548ef29d217bc49aefb6c854",
+    "schemas/RSM_OPTION_RESUMPTION_METADATA_V1_AMENDMENT_R1.md": "5f7f6a2c45dd6a0b51c7a912b28fd49badd9aa3aa2eac8632e9b9781c201b57b",
+    "schemas/RSM_OPTION_RESUMPTION_METADATA_V1_AMENDMENT_R2.md": "b62663c3082c9e2ee2bf34aadc1fdd10f263a6497396b6768f1475b12f568fe4",
+    "schemas/RSM_OPTION_RESUMPTION_V1.md": "44652656ad18e60c98c96db14e0a96b4e46b0dad0bd57f257bca30384ab53b3f",
+    "schemas/RSM_OPTION_RESUMPTION_V1_FIRST_DRAFT_20261010.md": "b600d535518221a1aebb58d83c621f36b507e0ee6f5f40b93e23e484e9d81262",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+    "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+    "schemas/process_reward/v1.schema.json": "b4084f1a1b849e9fd91d54cb6d38fbdc26e97a0e5e035aa59bd6bcf6c1c636a4",
+    "schemas/sft/v1.schema.json": "dcad9e7b91b1c5eb1ae7cb3fd96c9fa77eee633032fd66b5e5b0107ab3430830"
+  },
+  "completed_stages": [
+    "new_immutable_release_written",
+    "new_release_targets_reviews_controls_exports_checksums_validated",
+    "active_catalog_updated_after_full_validation"
+  ],
+  "configuration_sha256": "5f760b9344fdc1e140a6d5604754fd94ec6b9914bc72a55a87b06674e0836487",
+  "exact_input_bindings": [
+    {
+      "bytes": 3994084,
+      "path": "audits/diversity/belief-gap-v4-canonical-adversarial-r2.json",
+      "sha256": "4c40140ad226fd2e54d52505a7aabd6f6dfa8bdbdb726d85e1cb750ee8317306"
+    },
+    {
+      "bytes": 7229,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-diagnostic-r1.full_preexec.json",
+      "sha256": "624a2d81aa3f2e61d345e3016469b032643df3fb26b300599944f98d7aefd4ef"
+    },
+    {
+      "bytes": 122964,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-diagnostic-r1.json",
+      "sha256": "c84b3d2186ed704d125665b36598725f93d95f7237475d0447a2eaed6dadb1f8"
+    },
+    {
+      "bytes": 1440,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-diagnostic-r1.preexec.json",
+      "sha256": "828fcecea881a8b304c454e024ce1db59382728c4e054c89d40c702ee256071f"
+    },
+    {
+      "bytes": 340,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-r1.failure.json",
+      "sha256": "b4960f4b3e33d87ab7ffee05f41a432d8ed8ef4634cd0e85fc199e9554d89c49"
+    },
+    {
+      "bytes": 7030,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-r1.preexec.json",
+      "sha256": "fbe22ce823ad76bc23ca634be222c8797075a204959d4d16b6d65fa30b3150cd"
+    },
+    {
+      "bytes": 106509,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-r2.json",
+      "sha256": "7f5943868bb2f0503020577207a2cba792f754bfa0aafe4aaefffc94cd5bfcf3"
+    },
+    {
+      "bytes": 8718,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-r2.preexec.json",
+      "sha256": "2ac4b8c7be7b305a1243a2207c0cc4f8c1a3b2f292ee26a7aabae355beae80fb"
+    },
+    {
+      "bytes": 65989,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-surface-r1.json",
+      "sha256": "a7efae947af806e4d118601cf2b832fe34bfa5a19da289305d056fdd832b34ea"
+    },
+    {
+      "bytes": 9533,
+      "path": "audits/execution/belief-gap-v4-canonical-adversarial-surface-r1.preexec.json",
+      "sha256": "f6e2dd9af5a488e315bfbe848c8c390b40d60c48df0f10cbfc02c9f28e6c0bab"
+    },
+    {
+      "bytes": 261,
+      "path": "audits/execution/belief-gap-v4-input-only-adversarial-r1.failure.json",
+      "sha256": "a32d6d7b4601c1d3ac9d48b3e8ec893d00775dac99165ef69099973be01bea2f"
+    },
+    {
+      "bytes": 5580,
+      "path": "audits/execution/belief-gap-v4-input-only-adversarial-r1.preexec.json",
+      "sha256": "ae5b5043c6f5fd9e852d914feffab0857c716e3002932c82d7d018b2f43aa389"
+    },
+    {
+      "bytes": 13019,
+      "path": "audits/execution/belief-gap-v4-input-only-adversarial-r2.json",
+      "sha256": "70410e9b059933abdfc10c10a3b23bee398e5a8ea42743d8e938f394612d21ec"
+    },
+    {
+      "bytes": 6552,
+      "path": "audits/execution/belief-gap-v4-input-only-adversarial-r2.preexec.json",
+      "sha256": "fbfacdc347e54b3d99015f37299e240633848974a12fb516ad7b4cc55bef5e51"
+    },
+    {
+      "bytes": 43639,
+      "path": "backup_logs/BELIEF_V4_R2_JOINED_CUSTODY.json",
+      "sha256": "32c1fbeb9cef515b532e4097a750cd325470010768f594c413439a5720db85c9"
+    },
+    {
+      "bytes": 3718,
+      "path": "backup_logs/BELIEF_V4_R2_JOIN_EXECUTION.json",
+      "sha256": "bcef85f8bf6b4bed281e440074174ab09dbef496794fd8d777aac6e1aefae624"
+    },
+    {
+      "bytes": 7844,
+      "path": "backup_logs/BELIEF_V4_R2_JOIN_SOURCE_FREEZE.json",
+      "sha256": "efaf12f20c4b9b24cc5ac37f2c9f0b33422dea476eb937a3a863aaf94ba2c3d3"
+    },
+    {
+      "bytes": 16605,
+      "path": "backup_logs/BELIEF_V4_R2_REMOTE_LOSSLESS.json",
+      "sha256": "9d3bad935112f0dd366c7aabf4130d14c033b2be474dfb9faa88ca8330ea279b"
+    },
+    {
+      "bytes": 1294491,
+      "path": "backup_logs/belief-v4-validated-code-candidate-r2_RECOVERY_VERIFICATION_LEDGER.jsonl",
+      "sha256": "cdab74649d7b1b81246859b0e3f37a414b6345e6d8b6881c5db0c1aa1e9eac82"
+    },
+    {
+      "bytes": 1098512,
+      "path": "backup_logs/belief-v4-validated-code-candidate-r2_RECOVERY_VERIFIED_RECEIPT.json",
+      "sha256": "a9f89c399d3bb352731e7f4412cc0ef901e34d9658cfdff575ce8557688cbad9"
+    },
+    {
+      "bytes": 17084,
+      "path": "backup_logs/belief-v4-validated-code-candidate-r2_REMOTE_LOSSLESS_LEDGER.jsonl",
+      "sha256": "4a25f498e44207536454056d64c8fa31d0aaec4ce0b1436a63f2b0ed8a679974"
+    },
+    {
+      "bytes": 40541020,
+      "path": "data/RBM-001/candidate_renderings/belief-gap-v3.jsonl",
+      "sha256": "7284cb67509120efdc0f234f4bff026588f4926e5a72e0675eff7421cdf6a90c"
+    },
+    {
+      "bytes": 41453404,
+      "path": "data/RBM-001/candidate_renderings/belief-gap-v4.jsonl",
+      "sha256": "38016627c8d43dbabaac5d9dfb279d7cdd55bc5ca49fdd65bcdb276d550a0a6c"
+    },
+    {
+      "bytes": 19841301,
+      "path": "data/RBM-001/manifests/belief-gap-v3.family_controls.json",
+      "sha256": "d197e82d9b6c35e1f7cdac7a212f5e9973446dda986b4b73669b5120a282d2a2"
+    },
+    {
+      "bytes": 19918421,
+      "path": "data/RBM-001/manifests/belief-gap-v4.family_controls.json",
+      "sha256": "6b91a54b60dcf5a702889452a29ec5348acb4eb8c0ef62b1a03408f04fad2631"
+    },
+    {
+      "bytes": 30526,
+      "path": "quality_reports/BELIEF_V4_FINAL_REVIEW_JOIN_ATTEMPT01.json",
+      "sha256": "9abefe4663b31f04300e991ea3a173675a728ffd5ce0755d56cb827430da88a4"
+    },
+    {
+      "bytes": 1217,
+      "path": "quality_reports/BELIEF_V4_FINAL_REVIEW_JOIN_ATTEMPT01_EXECUTION.json",
+      "sha256": "5054028bddc35c5f012a027bdf22bcbb8ce81a00cacd1f212b93568f919d561c"
+    },
+    {
+      "bytes": 28813,
+      "path": "quality_reports/BELIEF_V4_FINAL_REVIEW_JOIN_ATTEMPT01_SOURCE_FREEZE.json",
+      "sha256": "f428de0b68019e6e6686991bf1633326a99896244abbf982528a082fb3524b3d"
+    },
+    {
+      "bytes": 611,
+      "path": "quality_reports/BELIEF_V4_FINAL_REVIEW_JOIN_ATTEMPT01_UNEXECUTED_DRAFT_CUSTODY.json",
+      "sha256": "5a732a35e1fc37918784e621695ecad370b999d8ae393f9117fd780725d3aceb"
+    },
+    {
+      "bytes": 124932,
+      "path": "quality_reports/BELIEF_V4_FULL_SUITE_EXECUTION_ATTEMPT01.json",
+      "sha256": "8730b3683c24e34462439ad192f4b1ac3a11435d357880700f70da1ad4eaa108"
+    },
+    {
+      "bytes": 74431,
+      "path": "quality_reports/BELIEF_V4_FULL_SUITE_OUTPUT_ATTEMPT01.txt",
+      "sha256": "ef603d1f96d35d14949f584b033e4b93c09d77e3a0a0df13a13acdf9eef43f21"
+    },
+    {
+      "bytes": 59634,
+      "path": "quality_reports/BELIEF_V4_FULL_SUITE_SOURCE_FREEZE_ATTEMPT01.json",
+      "sha256": "ffb751bc7456f0a7df8d92f03d81798df97e91749d9e8a258ca84e1d0b2bd1c5"
+    },
+    {
+      "bytes": 121305,
+      "path": "quality_reports/BELIEF_V4_MACHINE_AUDIT_EXECUTION_ATTEMPT01.json",
+      "sha256": "854b05357772ee19ad93472c75fae6226d528c0aca4ace786ab3d7975a432f5e"
+    },
+    {
+      "bytes": 1646,
+      "path": "quality_reports/BELIEF_V4_MACHINE_AUDIT_OUTPUT_ATTEMPT01.txt",
+      "sha256": "08a41fc8c44f6a53a1b7d02198257e59130a1740d57d0db5fa70f5a21524c045"
+    },
+    {
+      "bytes": 59513,
+      "path": "quality_reports/BELIEF_V4_MACHINE_AUDIT_SOURCE_FREEZE_ATTEMPT01.json",
+      "sha256": "e297b8b9f10ab52f1a127cfc61a09f7b13d2a2ad33938ecef74da06c09685a24"
+    },
+    {
+      "bytes": 494,
+      "path": "quality_reports/BELIEF_V4_PUBLICATION_PREPARATION_DISCOVERY_FAILURE_ATTEMPT01.json",
+      "sha256": "58459cf3577af52fd8ffb138a9a591167d48a82e18dfa0105cb6e90d38954732"
+    },
+    {
+      "bytes": 817,
+      "path": "quality_reports/BELIEF_V4_R2_PUBLICATION_HOLD_LIFT_RECEIPT.json",
+      "sha256": "9547887fc57275a2fe82835547552c6e3b01b23d0614e279bc994ecbe94f0695"
+    },
+    {
+      "bytes": 5919,
+      "path": "quality_reports/source_history/belief-v4-final-review-join-attempt01/8e5ef5c8ef70869f1c59fa5e5191f36f21038398337b7282271ac324c7434619.source",
+      "sha256": "8e5ef5c8ef70869f1c59fa5e5191f36f21038398337b7282271ac324c7434619"
+    },
+    {
+      "bytes": 5919,
+      "path": "quality_reports/verify_belief_v4_final_review_join_attempt01.py",
+      "sha256": "8e5ef5c8ef70869f1c59fa5e5191f36f21038398337b7282271ac324c7434619"
+    },
+    {
+      "bytes": 3004,
+      "path": "research/curricula/BELIEF-METADATA-V4-CLARIFICATION-EXECUTION.json",
+      "sha256": "2d100ce2ad27ded95275316991f3ec8ace9ef9daf2a40c50c3f06946c777ec0d"
+    },
+    {
+      "bytes": 1066,
+      "path": "research/curricula/BELIEF_METADATA_V4_ENCODING_ROOT_FREEZE.json",
+      "sha256": "2bbd9d577e0b7eb488143bd7f532f9ce3fd1c3c51be918d90470b29bc7b61625"
+    },
+    {
+      "bytes": 14594,
+      "path": "research/curricula/RBM-EVIDENCE-GAP.md",
+      "sha256": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120"
+    },
+    {
+      "bytes": 4145,
+      "path": "reviews/adjudication/belief-gap-v4-FINAL-r1.json",
+      "sha256": "0e82d670141e5b4c25dd928eeefbb9fcabf2894ffc7e7f37d1883e0f614f7acd"
+    },
+    {
+      "bytes": 3331,
+      "path": "reviews/adjudication/belief-gap-v4-REPORT-r1.md",
+      "sha256": "d0d093410bae22a55ab477a9c689ca99e949f789ed96e6e02c4d9c8b5e5e3fe1"
+    },
+    {
+      "bytes": 53385,
+      "path": "reviews/adjudication/belief-gap-v4-adjudicate-r1.first-draft.py",
+      "sha256": "e9e5fa385445be722cb5bd37903af3742f4e6bc4c757b97597b9df61e05f1d90"
+    },
+    {
+      "bytes": 54577,
+      "path": "reviews/adjudication/belief-gap-v4-adjudicate-r1.py",
+      "sha256": "c1985c9a2ac15657d8446cf1a3dcb40fc700d5e9136b50723cc128bdd211661c"
+    },
+    {
+      "bytes": 54416,
+      "path": "reviews/adjudication/belief-gap-v4-adjudicate-r1.second-draft.py",
+      "sha256": "68c2b4e59133175bac9235081d8e8748c5716ac4253d63f2f2f5ea05b32ba339"
+    },
+    {
+      "bytes": 54577,
+      "path": "reviews/adjudication/belief-gap-v4-adjudicate-r1.source-before-execution.py",
+      "sha256": "c1985c9a2ac15657d8446cf1a3dcb40fc700d5e9136b50723cc128bdd211661c"
+    },
+    {
+      "bytes": 7661952,
+      "path": "reviews/adjudication/belief-gap-v4-adjudication-r1.jsonl",
+      "sha256": "73773c44d7864e5c9469f29a1397e1b9b745155f9e82cf49a1147f04415317eb"
+    },
+    {
+      "bytes": 15564,
+      "path": "reviews/adjudication/belief-gap-v4-audit-r1.json",
+      "sha256": "ce9113bb7e1e8fe1a2dfbf8f27ef51b812df834fc41cfa4db4bdc73dfa0de69b"
+    },
+    {
+      "bytes": 3576,
+      "path": "reviews/adjudication/belief-gap-v4-completion-receipt-r1.json",
+      "sha256": "ef02dc03ae0485fe4aac22556bd19f687723546670ed587af40d89877761ae7a"
+    },
+    {
+      "bytes": 365440,
+      "path": "reviews/adjudication/belief-gap-v4-conditional-histogram-ledger-r1.jsonl",
+      "sha256": "e407b4fdba12899cdf6dd1c53922c445111040ae5acd3111f2fd23f53072fe16"
+    },
+    {
+      "bytes": 3978,
+      "path": "reviews/adjudication/belief-gap-v4-config-r1.json",
+      "sha256": "7762147f1571c247cd953b8d23764434b8aaad0e8c316a85f716e8d1c2957baf"
+    },
+    {
+      "bytes": 53247,
+      "path": "reviews/adjudication/belief-gap-v4-execution-r1.json",
+      "sha256": "641860efa65ec844caf91082f514517e5ddcf8c552bdd898b2d032df1f6054c6"
+    },
+    {
+      "bytes": 730,
+      "path": "reviews/adjudication/belief-gap-v4-first-draft-history-r1.json",
+      "sha256": "c433bc3b9d76b0099472ae94bc12f0623fd66264796055b74e89fe32e513d272"
+    },
+    {
+      "bytes": 2944,
+      "path": "reviews/adjudication/belief-gap-v4-followup-ticket-r1.json",
+      "sha256": "c232e09175241e5f0964845626ed084850facbecaf2afc22e519b77d8b79fc9a"
+    },
+    {
+      "bytes": 16838,
+      "path": "reviews/adjudication/belief-gap-v4-frequency-counterexamples-r1.json",
+      "sha256": "75977b18b091c0a70eac3d507081950478a57bcc0516d965866f994185b3748d"
+    },
+    {
+      "bytes": 3139,
+      "path": "reviews/adjudication/belief-gap-v4-hand-fixtures-r1.json",
+      "sha256": "446edc126237366baae943390172c6d62e8d5f5af3e0e178db333f73fc4fb0c9"
+    },
+    {
+      "bytes": 3989,
+      "path": "reviews/adjudication/belief-gap-v4-hand-results-r1.json",
+      "sha256": "1f7907d6eb9d35aa74c1efdf13dff478da1b2be5d08a6ca2afba5049e9951b2b"
+    },
+    {
+      "bytes": 5470848,
+      "path": "reviews/adjudication/belief-gap-v4-inherited-claim-ledger-r1.jsonl",
+      "sha256": "ff672ec5cefadeb41b7f9e0fa1fc4affd920479a191b7a96011afa90a704b325"
+    },
+    {
+      "bytes": 2138076,
+      "path": "reviews/adjudication/belief-gap-v4-per-record-measurements-r1.jsonl",
+      "sha256": "4ec4614937c59694b45865e99b9460278ac6c73e5665de5e12d7634cd7300bbe"
+    },
+    {
+      "bytes": 27554,
+      "path": "reviews/adjudication/belief-gap-v4-preexecution-r1.json",
+      "sha256": "974f791a408e0c7e2b28a20514473e6556fff9aefe4fca07631359e293cce17c"
+    },
+    {
+      "bytes": 7661952,
+      "path": "reviews/adjudication/belief-gap-v4.jsonl",
+      "sha256": "73773c44d7864e5c9469f29a1397e1b9b745155f9e82cf49a1147f04415317eb"
+    },
+    {
+      "bytes": 4735,
+      "path": "reviews/adjudication/belief-v4-input-only-audit.json",
+      "sha256": "513ad1a196f0d0ff9f32f4ac7e47dfc0fc13cf6d97c61be599ed9cd30f5837c0"
+    },
+    {
+      "bytes": 1842,
+      "path": "reviews/adjudication/belief-v4-input-only-config.json",
+      "sha256": "8e17feaf53b9beb28ec3d3330c24fd94589960f68763b145cdaad362c2e24778"
+    },
+    {
+      "bytes": 3516,
+      "path": "reviews/adjudication/belief-v4-input-only-execution.json",
+      "sha256": "97b7888fa86c09fa097fa7d9fe07c3c2f2e2535fdaf80f9877123e9056016fae"
+    },
+    {
+      "bytes": 6677,
+      "path": "reviews/adjudication/belief-v4-input-only-final-freeze.json",
+      "sha256": "e8dc87d8a27e68ce9d7edd1329a01caf0a5b48eaec882f16e81f24427601f392"
+    },
+    {
+      "bytes": 2958336,
+      "path": "reviews/adjudication/belief-v4-input-only-first-input-judgments.jsonl",
+      "sha256": "320c7cc2f3aae87495601a311fdd2917ad1ece1271c42ce30360618d666d7a22"
+    },
+    {
+      "bytes": 8860,
+      "path": "reviews/adjudication/belief-v4-input-only-hand-fixtures.json",
+      "sha256": "7913176939e9a8ca0a1958486630b30a14a21a71c5ab768978e60f0f9e62ca92"
+    },
+    {
+      "bytes": 968,
+      "path": "reviews/adjudication/belief-v4-input-only-hand-results.json",
+      "sha256": "caa7a12dcce6e8f2a91d9b6021ce5781d1ab617c797cd00c545715bcd74a8ce5"
+    },
+    {
+      "bytes": 23321,
+      "path": "reviews/adjudication/belief-v4-input-only-own-prior-solver-archive.py",
+      "sha256": "56b7fc0d32076b7d6d2140fd3333b19d535487f5a413bb63cf31effcac46a3a7"
+    },
+    {
+      "bytes": 4316328,
+      "path": "reviews/adjudication/belief-v4-input-only-predictions.jsonl",
+      "sha256": "fff8c87d72c82f0a06022b103835e20ad7b6dfe9c1ccc95bef207db632a39293"
+    },
+    {
+      "bytes": 4137,
+      "path": "reviews/adjudication/belief-v4-input-only-preexecution-freeze.json",
+      "sha256": "0c01ea16ac6caf325072173c492a48d1293871c23b8a89fa1c841bf193d260a0"
+    },
+    {
+      "bytes": 13666,
+      "path": "reviews/adjudication/belief-v4-input-only-recompute.py",
+      "sha256": "bb5b8ec72e54401c843d975a21fa70405c5f38edce8343ecdc0ab6c2904701f4"
+    },
+    {
+      "bytes": 3250,
+      "path": "reviews/adjudication/belief-v4-input-only-report.md",
+      "sha256": "aae52e64b7799938ba3e616f44cab52330799ae7845f2d82896b3bdd08d4644e"
+    },
+    {
+      "bytes": 2578176,
+      "path": "reviews/adjudication/belief-v4-input-only-typed-input-joins.jsonl",
+      "sha256": "b98343ce92dfb39466f896f1911893678a381acde95357bc93305a61c46bd029"
+    },
+    {
+      "bytes": 5701,
+      "path": "reviews/adjudication/belief-v4-prospective-components.first-draft.py",
+      "sha256": "afe3c4c8ba873c2aac903c2fd3395930c9253baf9ce9253d6fccd4be45d2e6a0"
+    },
+    {
+      "bytes": 5668,
+      "path": "reviews/adjudication/belief-v4-prospective-components.py",
+      "sha256": "b3c27ed152b1ba526f198d97ba52286d7e343b5b93fdae6f59303c026a7be9c1"
+    },
+    {
+      "bytes": 2383,
+      "path": "reviews/adjudication/belief-v4-prospective-execution.json",
+      "sha256": "e67235b2f4996d30e4cbddf86a69fa45e841a4d3da48bf82cf64a5cf3a565664"
+    },
+    {
+      "bytes": 5472,
+      "path": "reviews/adjudication/belief-v4-prospective-final-freeze.json",
+      "sha256": "d78c8817e281b952025f5f47c4c1883d62f6f9d8da5636e2ec5bf9a148ef4482"
+    },
+    {
+      "bytes": 762,
+      "path": "reviews/adjudication/belief-v4-prospective-first-draft-history.json",
+      "sha256": "098f9de010b9fa48d7d4916eedb711946172abe7c2989ff1748ffc9055020080"
+    },
+    {
+      "bytes": 748,
+      "path": "reviews/adjudication/belief-v4-prospective-first-read-failure.json",
+      "sha256": "1b9d7e79e4545a9a37e79b5a49c69434dee001bdf6c86cafcc9a6b88bdf3336b"
+    },
+    {
+      "bytes": 6075,
+      "path": "reviews/adjudication/belief-v4-prospective-fixture-construction.py",
+      "sha256": "851b4634ec4ebd17e5d369e457ebb9778b69ba0ba9131e0710217de0f41880cb"
+    },
+    {
+      "bytes": 102711,
+      "path": "reviews/adjudication/belief-v4-prospective-hand-fixtures.json",
+      "sha256": "01e279b14cce8f51f9b296ae65b46d77835079eca35add986be153b3d01e42f7"
+    },
+    {
+      "bytes": 8308,
+      "path": "reviews/adjudication/belief-v4-prospective-hand-results.json",
+      "sha256": "5b3935ea9d00d1b1329c26c80b144e9593fc3e91796700ca15ca79c48ec29ddd"
+    },
+    {
+      "bytes": 5678,
+      "path": "reviews/adjudication/belief-v4-prospective-preexecution-freeze.json",
+      "sha256": "fc62a2a9dc458fba874d12d86fd5ccdde5881f05c022b761c30dff0ed69d4369"
+    },
+    {
+      "bytes": 9003,
+      "path": "reviews/adjudication/belief-v4-prospective-procedure.md",
+      "sha256": "947870df1f146c29aec5a0b28040516afdc84239e39c11a7d11b4554e5afa028"
+    },
+    {
+      "bytes": 15159420,
+      "path": "reviews/adversarial/belief-gap-v4.canonical_first_judgments.jsonl",
+      "sha256": "eccc76406292afd9fc807c97b52207511339d5a6fdc0c0b25fc675aee0644f29"
+    },
+    {
+      "bytes": 636,
+      "path": "reviews/adversarial/belief-gap-v4.input_expectation_freeze.json",
+      "sha256": "16c51a1faca3c8020783462df0d71829d3cf175d3b07bd2d32384c05cc0db43f"
+    },
+    {
+      "bytes": 6206976,
+      "path": "reviews/adversarial/belief-gap-v4.input_first_judgments.jsonl",
+      "sha256": "285ca0500aabda0b4dd76a65d4ce871bd4468e605157e7db9eb3e8eb5cc2f8d0"
+    },
+    {
+      "bytes": 905750,
+      "path": "reviews/adversarial/belief-gap-v4.input_lineage.json",
+      "sha256": "b926e4a7b8837cac67df3fae082f561a6187adc02ba12f4b4059e220f44f659f"
+    },
+    {
+      "bytes": 6956172,
+      "path": "reviews/adversarial/belief-gap-v4.input_predictions.jsonl",
+      "sha256": "a67e17397c55c6d72ee766649517ade5f807bfcb79d34d5b7e24a4d7ae284d03"
+    },
+    {
+      "bytes": 15159420,
+      "path": "reviews/adversarial/belief-gap-v4.jsonl",
+      "sha256": "eccc76406292afd9fc807c97b52207511339d5a6fdc0c0b25fc675aee0644f29"
+    },
+    {
+      "bytes": 326,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt01.failure.json",
+      "sha256": "8b75c389cc6d2c2f18c0b880469c9a02cdff7bec2eccd6888149c05d54b32598"
+    },
+    {
+      "bytes": 5311,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt01.preexecution.json",
+      "sha256": "84e6f2a813c6db0c898b8015a59026b034146e603af28674663a18bbee7b1799"
+    },
+    {
+      "bytes": 55040,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt01.source.preexecution.py",
+      "sha256": "8129bcebfa9a53cb5a86f37d3c6fcd8b86c7b5e9476a3609c9bc70e9f771174f"
+    },
+    {
+      "bytes": 7045124,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt02.analysis.json",
+      "sha256": "32c0754534e9fe427179a668991976bca55f06953335a0d19c45feb27e0d0a60"
+    },
+    {
+      "bytes": 10644,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt02.execution.json",
+      "sha256": "6eb1480097ade83f0473f0f02926949d8d5ea9f56641dc56ae52aaef04179f56"
+    },
+    {
+      "bytes": 645,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt02.first.freeze.json",
+      "sha256": "dcf852ae148af193c15db607fd3e9392b7d8899ebc66b9621e5af03362cb1778"
+    },
+    {
+      "bytes": 5632,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt02.preexecution.json",
+      "sha256": "0468e991353d6a074c718aa617a7f8eaffd888745c4874dc2040ec3562ff6edd"
+    },
+    {
+      "bytes": 56376,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt02.source.preexecution.py",
+      "sha256": "5efe9f4a85e168dbaf03c202902f1f0e100d535432086b9900132fbad9fe80a8"
+    },
+    {
+      "bytes": 6513607,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt03.analysis.json",
+      "sha256": "098ac542d42fd38bd89826303e81f45bddc99d3c265e93cc27f07e283fec5d59"
+    },
+    {
+      "bytes": 12401,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt03.execution.json",
+      "sha256": "0da3142a23c77c156cc24adeff973052e7c0c22a32cc287474cf037e50e9645a"
+    },
+    {
+      "bytes": 650,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt03.first.freeze.json",
+      "sha256": "34ac8f8d11c0a8d8f1f694fb1ef265e8b3d23f34aef8e140bd012f5300fdb546"
+    },
+    {
+      "bytes": 6735,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt03.preexecution.json",
+      "sha256": "665560876b1957006d651a27d7645c0081fc54d26ba8b8262a3db715e00f4719"
+    },
+    {
+      "bytes": 62379,
+      "path": "reviews/expert/belief-gap-v4-canonical-attempt03.source.preexecution.py",
+      "sha256": "c23633c0a7a2e528543f5f93121c9362b28b847e3acacacecabd22208022f6cc"
+    },
+    {
+      "bytes": 14613,
+      "path": "reviews/expert/belief-gap-v4-canonical-finalize-attempt01.execution.json",
+      "sha256": "09e647a0fa4c9962b4e320d1504986cd3966f46b17470ec8f65712dfe2c9f3d6"
+    },
+    {
+      "bytes": 7627,
+      "path": "reviews/expert/belief-gap-v4-canonical-finalize-attempt01.preexecution.json",
+      "sha256": "34cfba8ed2bf32fac00e1e45a230ff06d2f6aa2e3fd138636dce5c4b02b0bcd3"
+    },
+    {
+      "bytes": 16505,
+      "path": "reviews/expert/belief-gap-v4-canonical-finalize-attempt01.py",
+      "sha256": "6ce6bbeceb6eb7febca75b1e1675cb5926b8d728ce7bf0da11b56f82f8bd4131"
+    },
+    {
+      "bytes": 16505,
+      "path": "reviews/expert/belief-gap-v4-canonical-finalize-attempt01.source.preexecution.py",
+      "sha256": "6ce6bbeceb6eb7febca75b1e1675cb5926b8d728ce7bf0da11b56f82f8bd4131"
+    },
+    {
+      "bytes": 227047,
+      "path": "reviews/expert/belief-gap-v4-canonical-inspection-attempt01.evidence.json",
+      "sha256": "4da6f65fdf6e7ce8a060abd2e1c0332f1ea4f90d4aa0ba7714db6a926005916b"
+    },
+    {
+      "bytes": 2892,
+      "path": "reviews/expert/belief-gap-v4-canonical-inspection-attempt01.execution.json",
+      "sha256": "2a7e49fe047c5dbe90751597dec894b7d1a929d675410ad5742367840da12984"
+    },
+    {
+      "bytes": 1699,
+      "path": "reviews/expert/belief-gap-v4-canonical-inspection-attempt01.preexecution.json",
+      "sha256": "64e13c02de3424c81ddba4d8b70ccc83ec6ea78dae6c018e416ab826fb2ae901"
+    },
+    {
+      "bytes": 6020,
+      "path": "reviews/expert/belief-gap-v4-canonical-inspection-attempt01.py",
+      "sha256": "cbacc5aa409db14362dbd457864bd1a09fcf45715efd8744834382cbb80a4d50"
+    },
+    {
+      "bytes": 6020,
+      "path": "reviews/expert/belief-gap-v4-canonical-inspection-attempt01.source.preexecution.py",
+      "sha256": "cbacc5aa409db14362dbd457864bd1a09fcf45715efd8744834382cbb80a4d50"
+    },
+    {
+      "bytes": 55040,
+      "path": "reviews/expert/belief-gap-v4-canonical-review-attempt01.py",
+      "sha256": "8129bcebfa9a53cb5a86f37d3c6fcd8b86c7b5e9476a3609c9bc70e9f771174f"
+    },
+    {
+      "bytes": 56376,
+      "path": "reviews/expert/belief-gap-v4-canonical-review-attempt02.py",
+      "sha256": "5efe9f4a85e168dbaf03c202902f1f0e100d535432086b9900132fbad9fe80a8"
+    },
+    {
+      "bytes": 62379,
+      "path": "reviews/expert/belief-gap-v4-canonical-review-attempt03.py",
+      "sha256": "c23633c0a7a2e528543f5f93121c9362b28b847e3acacacecabd22208022f6cc"
+    },
+    {
+      "bytes": 5905,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.FINAL.json",
+      "sha256": "a234382d8e1116de7dd81c78f3e0746afa46d9495f3ed571f553d460103eebce"
+    },
+    {
+      "bytes": 80697,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.analysis.json",
+      "sha256": "202cdc93647b3783eae775bd6b28f88bc49254292787bda1441c384ae18aaede"
+    },
+    {
+      "bytes": 7617,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.execution.json",
+      "sha256": "7e6cba6b28a926e5ee8782c57783420e957868008817cd426bfeed35eba5aced"
+    },
+    {
+      "bytes": 16201728,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.first-input-judgments.jsonl",
+      "sha256": "5a0ba9a30c7fbec74c8c69322ba592941046e5b98d375f36bda2118343fe7815"
+    },
+    {
+      "bytes": 1783,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.freeze.json",
+      "sha256": "d7e5571e67243b716f8635289191206fd405e29b3af2b1eef7ce11f506e2d4f6"
+    },
+    {
+      "bytes": 4565,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.handmade-calibration.json",
+      "sha256": "729340776f87b01b437fe40e7264163c1aba0d0d711d6adada0e79cf099456b9"
+    },
+    {
+      "bytes": 14807124,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.predictions.jsonl",
+      "sha256": "d9a55125b127edc6ab691f4981ea61edfa60b03b333e90ad4fc7c865b1ccc9ed"
+    },
+    {
+      "bytes": 4419,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.preexecution.json",
+      "sha256": "c0f935707c0cf0f3195e69c76af6ac0c3003f9606d6ff65c1245d5f3d14c6bb1"
+    },
+    {
+      "bytes": 10863,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.semantic-inspection.md",
+      "sha256": "d99b31bcf62882f28f3b89280392813c2e80539a27493033f77d9d278f6b9402"
+    },
+    {
+      "bytes": 29504,
+      "path": "reviews/expert/belief-gap-v4-input-attempt01.source.preexecution.py",
+      "sha256": "9f16f085aca910718e83dae721bb77ff42736177160b1b6da69b502e7b102db1"
+    },
+    {
+      "bytes": 1833,
+      "path": "reviews/expert/belief-gap-v4-input-finalize-attempt01.preexecution.json",
+      "sha256": "f1ec3003a848c3cb2e77d0ea0fd47b380f81f559c2e9b8788856f17ec617943c"
+    },
+    {
+      "bytes": 5837,
+      "path": "reviews/expert/belief-gap-v4-input-finalize-attempt01.py",
+      "sha256": "effc43f4b51f94859af182bba52df0f7656477eec16a8722cc27d43c631fe333"
+    },
+    {
+      "bytes": 5837,
+      "path": "reviews/expert/belief-gap-v4-input-finalize-attempt01.source.preexecution.py",
+      "sha256": "effc43f4b51f94859af182bba52df0f7656477eec16a8722cc27d43c631fe333"
+    },
+    {
+      "bytes": 29504,
+      "path": "reviews/expert/belief-gap-v4-input-review-attempt01.py",
+      "sha256": "9f16f085aca910718e83dae721bb77ff42736177160b1b6da69b502e7b102db1"
+    },
+    {
+      "bytes": 3587,
+      "path": "reviews/expert/belief-gap-v4.canonical-FINAL.json",
+      "sha256": "76e4871239b8638bb7a3dcd6e9ffae63671e59d76ffb5a49e90e742fd566ad41"
+    },
+    {
+      "bytes": 17497960,
+      "path": "reviews/expert/belief-gap-v4.canonical-corrective-attempt03.jsonl",
+      "sha256": "155f65a1766addc6322b55ff51c6c5bf71f9c32cd8f536935ca479eeccc99d4a"
+    },
+    {
+      "bytes": 14769,
+      "path": "reviews/expert/belief-gap-v4.canonical-final-summary.json",
+      "sha256": "c1cbef9a2b4dfead315f8e00eb371de1a11170f93d482f489ad0a65c224b8fb8"
+    },
+    {
+      "bytes": 18631528,
+      "path": "reviews/expert/belief-gap-v4.canonical-first-judgments.jsonl",
+      "sha256": "b1cd43c4c0e54acce5964e2010bb8ae431dfd53e6b7971d842770a7579c6b6fc"
+    },
+    {
+      "bytes": 11190,
+      "path": "reviews/expert/belief-gap-v4.canonical-histogram-inspect.execution.json",
+      "sha256": "b7f5719a0d2f1e171b0ce1bdde1519e4fa4ca174920b6613f039db3a4d5d6008"
+    },
+    {
+      "bytes": 1261,
+      "path": "reviews/expert/belief-gap-v4.canonical-histogram-inspect.preexecution.json",
+      "sha256": "f73a0de17ae2c57f652f44b0c70cc308b08cfd55a44119f77a6f7ea5765229d7"
+    },
+    {
+      "bytes": 4659,
+      "path": "reviews/expert/belief-gap-v4.canonical-histogram-inspect.py",
+      "sha256": "6b358e5c414b830c2b9767455b9a95b0f07736d305c769e81a353b41b8541baf"
+    },
+    {
+      "bytes": 4659,
+      "path": "reviews/expert/belief-gap-v4.canonical-histogram-inspect.source.preexecution.py",
+      "sha256": "6b358e5c414b830c2b9767455b9a95b0f07736d305c769e81a353b41b8541baf"
+    },
+    {
+      "bytes": 17483,
+      "path": "reviews/expert/belief-gap-v4.canonical-semantic-inspection.md",
+      "sha256": "595709da153f2168b008eb63c4978a549316121ad9f650b00772885c7296374c"
+    },
+    {
+      "bytes": 17497960,
+      "path": "reviews/expert/belief-gap-v4.jsonl",
+      "sha256": "155f65a1766addc6322b55ff51c6c5bf71f9c32cd8f536935ca479eeccc99d4a"
+    },
+    {
+      "bytes": 933330,
+      "path": "reviews/input_only/belief-gap-v4.input_lineage.json",
+      "sha256": "a8fe0ee79f395e6ed5ce8c5e10c47a1c79f9b63aa1ea360440b6ecda3c48ca0a"
+    },
+    {
+      "bytes": 17534736,
+      "path": "reviews/input_only/belief-gap-v4.jsonl",
+      "sha256": "ad3c3f79a3547474476a6572c14d1e12bbe3f94e18468dd610638efdbe6d54b5"
+    },
+    {
+      "bytes": 3616,
+      "path": "reviews/input_only/belief-gap-v4.manifest.json",
+      "sha256": "dad2b33321ae1baca05120ccdddadce97d6f8fff9ae10d7736a12c1d065a0d39"
+    },
+    {
+      "bytes": 19798,
+      "path": "schemas/BELIEF_CONTROL_PROPERTIES.md",
+      "sha256": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034"
+    },
+    {
+      "bytes": 8433,
+      "path": "schemas/BELIEF_CONTROL_PROPERTIES_METADATA_V4.md",
+      "sha256": "40b552ecf47c11bfffb2669283640dda991d6dc6e7094ed3051fb9cad2489fce"
+    },
+    {
+      "bytes": 4725,
+      "path": "schemas/BELIEF_CONTROL_PROPERTIES_METADATA_V4_ENCODING_ADDENDUM.md",
+      "sha256": "925ccae4e6fdc79fec2d0778d871e5d316257c3026b59c6e166556da71eb346c"
+    },
+    {
+      "bytes": 12981,
+      "path": "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md",
+      "sha256": "46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f"
+    },
+    {
+      "bytes": 17119,
+      "path": "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V3.md",
+      "sha256": "3a223952d9664577d7b637ddfb3e18d329863a3d5371a6c47cad233a1f50ff11"
+    },
+    {
+      "bytes": 2448,
+      "path": "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json",
+      "sha256": "611656b37d7fe917d64eeb191d901d272a32d8d3c72c9f8865476c6889a3e51a"
+    },
+    {
+      "bytes": 11509,
+      "path": "schemas/EXTENDED_SEMANTICS.md",
+      "sha256": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23"
+    }
+  ],
+  "exact_inputs_unchanged": true,
+  "finished_at_utc": "2026-10-10T10:13:53.568276+00:00",
+  "historical_release_bindings": {
+    "data/RBM-001/releases/v0001/CHECKSUMS.sha256": "b21c0950a828e767981c615d4099017a10aaf0c1fa785cdd1a2adebf9dbeab9e",
+    "data/RBM-001/releases/v0001/MANIFEST.json": "fefe3fa2dcea310feabfd1516576e5890fb135f9c1582765d3ffe7f62e96a11e",
+    "data/RBM-001/releases/v0001/QUALITY_REPORT.md": "cd04f894b47a290dcf3c3c320803cf86661f67b42a46edd12d9c61a36c0e438f",
+    "data/RBM-001/releases/v0001/canonical.jsonl": "b5845f8303ee8e89d644de2ccea20f21f61507ce515723d83c1fa297e6c51f38",
+    "data/RBM-001/releases/v0001/dev_challenge-belief_updates.jsonl": "f43a4a9ec5016d1c576e865cd1f9f161e64e9a19e5b9627d144f6241ec3376d7",
+    "data/RBM-001/releases/v0001/dev_challenge-sft.jsonl": "3d14dd6f3728f0710937b8eb669c269caba38a590f8294825e2d01adbb3240a8",
+    "data/RBM-001/releases/v0001/dev_challenge-structured.jsonl": "f43a4a9ec5016d1c576e865cd1f9f161e64e9a19e5b9627d144f6241ec3376d7",
+    "data/RBM-001/releases/v0001/oracle_receipts.jsonl": "6638d1af9f54ea9ec51891457447d6e6613a0539a647e32d143c3f73e0e1f3b2",
+    "data/RBM-001/releases/v0001/review_receipts.jsonl": "2a0ecd5e9605a90857472e2d6740031d365682d4e609eb3e4ee15a25ae394eef",
+    "data/RBM-001/releases/v0001/train-belief_updates.jsonl": "5604aa0be7ad14c22032a413f12a7ca48a0f62a473c9de572bcf87e2c828c74b",
+    "data/RBM-001/releases/v0001/train-sft.jsonl": "46fba3239ae8c46514d761add632389b275cf904e6ebe53ca08c5148b3fa45dc",
+    "data/RBM-001/releases/v0001/train-structured.jsonl": "5604aa0be7ad14c22032a413f12a7ca48a0f62a473c9de572bcf87e2c828c74b",
+    "data/RCM-001/releases/v0001/CHECKSUMS.sha256": "a0ac87ac812fc7fec518fefe5e1b5e7bcb3be828701fa0d35f78a8efe4ccac86",
+    "data/RCM-001/releases/v0001/MANIFEST.json": "f45bd7278c020bfa1361d6837fdb252b46c0b7d9b894b102fbcd2e1113d92a8a",
+    "data/RCM-001/releases/v0001/QUALITY_REPORT.md": "8926a84dfd9e4f214844f5bd5845d74bf0e8ab5b316887a1e2ca0ac3f75c443a",
+    "data/RCM-001/releases/v0001/canonical.jsonl": "e8f10d2b297b602200427a159fa67e6fcb763875603d1a1cd211795d2cadca2a",
+    "data/RCM-001/releases/v0001/dev_challenge-sft.jsonl": "c07d79bc07b7ca46e340dac2fe269f76b60af101d4e8854d456835f9fc46f3b5",
+    "data/RCM-001/releases/v0001/dev_challenge-structured.jsonl": "5a9c0eb57867c59fd908e3c276f0aa1a7dfd8b4e35c1b95782d4c4e7b49553a4",
+    "data/RCM-001/releases/v0001/oracle_receipts.jsonl": "088786a9ee5286e4a2b6563929f14b89fa126fcba13db82a8b09a00f04cbaf2e",
+    "data/RCM-001/releases/v0001/review_receipts.jsonl": "b6ae9dde2a09f47451f0c6d6cfafaf7259d87f4b70f0d4664cf8492416f08545",
+    "data/RCM-001/releases/v0001/train-sft.jsonl": "535569cc484261eda09a4c46c07ed306c7489725c2da959a1b3715800938f11f",
+    "data/RCM-001/releases/v0001/train-structured.jsonl": "574d36f46ba38455da66baaeb4518678eef2def676af85a36dcf35655adf3d0d",
+    "data/RCM-001/releases/v0002/CHECKSUMS.sha256": "c84d783e2a3b41d8a3f14cbd26de9d77647a350978014f45435db3e4f12d7148",
+    "data/RCM-001/releases/v0002/MANIFEST.json": "0e0a946c01a5b4eafa2515cba2c429edcc5c0b4837039ae394c48b4da884f7b4",
+    "data/RCM-001/releases/v0002/QUALITY_REPORT.md": "7bf09236d90094e9b89ca613232c0a4bfef28c628b7d562c8f841b25a0200530",
+    "data/RCM-001/releases/v0002/canonical.jsonl": "4744be7c5b23de7549124a237a044b03b8766c7875ef665af1024594486463b7",
+    "data/RCM-001/releases/v0002/dev_challenge-sft.jsonl": "6a79c5e95672bc1b5b22a19e2689568bd8ea582a2515c105afaf981bf23f25e3",
+    "data/RCM-001/releases/v0002/dev_challenge-structured.jsonl": "3c86b434d32cdbefd4a8cfa470fe33f2a24118bb8725c26a662ad2855af6fb18",
+    "data/RCM-001/releases/v0002/oracle_receipts.jsonl": "f60eabb309e5d75a122cadf9702c8001ebc93585a419a07cd800084353709cae",
+    "data/RCM-001/releases/v0002/review_receipts.jsonl": "99e8279f6b315d7533d52f2ceddd900de7b2df47c1bedd095826a7934624beda",
+    "data/RCM-001/releases/v0002/train-sft.jsonl": "d5d4dcdb9622bd01c6d9aab55e0ebbbb569f1e6fd3f140fa5004700d8b2d4388",
+    "data/RCM-001/releases/v0002/train-structured.jsonl": "c4e631935dfb3f6bc273fbf7a2cbfb6632d12e2eb3ade15f9b214622a0aa10ca",
+    "data/RCM-001/releases/v0003/CHECKSUMS.sha256": "eefafd914b3ae481a7a390659c07b215b37fd70ccc9f015621fee176d29f7416",
+    "data/RCM-001/releases/v0003/MANIFEST.json": "02310e7212b17155ca6ba557da5631ad6f81d16e42d72cb46c9d1686aa0d62fb",
+    "data/RCM-001/releases/v0003/QUALITY_REPORT.md": "dde8cf0c5be53afa7e891a270cba447242614c63af4e3864161382c78db5bd8f",
+    "data/RCM-001/releases/v0003/canonical.jsonl": "4744be7c5b23de7549124a237a044b03b8766c7875ef665af1024594486463b7",
+    "data/RCM-001/releases/v0003/dev_challenge-sft.jsonl": "6a79c5e95672bc1b5b22a19e2689568bd8ea582a2515c105afaf981bf23f25e3",
+    "data/RCM-001/releases/v0003/dev_challenge-structured.jsonl": "3c86b434d32cdbefd4a8cfa470fe33f2a24118bb8725c26a662ad2855af6fb18",
+    "data/RCM-001/releases/v0003/oracle_receipts.jsonl": "fb21c5d7c6bd66632c71691cff5c95f2f633792fd7abebd9f1b482dc92e3cd8f",
+    "data/RCM-001/releases/v0003/review_receipts.jsonl": "99e8279f6b315d7533d52f2ceddd900de7b2df47c1bedd095826a7934624beda",
+    "data/RCM-001/releases/v0003/train-sft.jsonl": "d5d4dcdb9622bd01c6d9aab55e0ebbbb569f1e6fd3f140fa5004700d8b2d4388",
+    "data/RCM-001/releases/v0003/train-structured.jsonl": "c4e631935dfb3f6bc273fbf7a2cbfb6632d12e2eb3ade15f9b214622a0aa10ca",
+    "data/RDP-001/releases/v0001/CHECKSUMS.sha256": "2856ddf6beccfd928bc18a2736636df82b849a49271fde0b0c00da4c8f23f6ba",
+    "data/RDP-001/releases/v0001/MANIFEST.json": "23537560032d409dc487bf6d4238b5cb76b2a80399af14951570540352514eb7",
+    "data/RDP-001/releases/v0001/QUALITY_REPORT.md": "75a42d7b7f67cc77d2024cf228b5e6151c96485b59df7e7782fd31efaba3a96c",
+    "data/RDP-001/releases/v0001/canonical.jsonl": "9a850a1312406ce7a68a060fa2f5e26ec5dfd4417d63129705678ce69926aa1c",
+    "data/RDP-001/releases/v0001/dev_challenge-sft.jsonl": "7be24151c3e6e4fa67075c809844e8e13094d55f66abc98245ffb3e0d163adad",
+    "data/RDP-001/releases/v0001/dev_challenge-structured.jsonl": "751fb55f6de9c2a66c84bf26339f60f236b5db05f5156b5c710b0b09a4fa41d3",
+    "data/RDP-001/releases/v0001/oracle_receipts.jsonl": "509d5faa9be7197ecefed8dd99bfe652e5bf58835e7dc2eda45b2c7dd5510a53",
+    "data/RDP-001/releases/v0001/review_receipts.jsonl": "78878645cbbfbfd5b3d3843dbc4891eae2e63cc58bf35dcba96957b7f0a2e407",
+    "data/RDP-001/releases/v0001/train-sft.jsonl": "ad425a3278cf058c064d09887db1c96a38b5d600964d7883006dd4ad331291fa",
+    "data/RDP-001/releases/v0001/train-structured.jsonl": "81584b475a19bd00afbf08e99450bb677871bf847450cca26e4f592cefaa36b8",
+    "data/REM-001/releases/v0001/CHECKSUMS.sha256": "74f18f407b315d98564d9a7e1c8c9f497f5bfb48f3a2322886a39c5fd64f11aa",
+    "data/REM-001/releases/v0001/MANIFEST.json": "0dde7cdf65e587077a386818b2ca1228c2332b25077f0de339bc291a98ec27dc",
+    "data/REM-001/releases/v0001/QUALITY_REPORT.md": "a64243d591e23979bebcfa7e43788a3d5f6ba251dc80173f829906b9d5a9075c",
+    "data/REM-001/releases/v0001/canonical.jsonl": "f05717db521ae9fcfa325874a9dd523666d5009992e965eebdc1e91b4c82aeee",
+    "data/REM-001/releases/v0001/dev_challenge-memory_updates.jsonl": "fb0bb3f73966ee496686fb2858aa433d842203777a0a20f7dc2a61bd34799b64",
+    "data/REM-001/releases/v0001/dev_challenge-sft.jsonl": "c8a6941cb6d1a7f5f17b949f68dccca95f53d6f40fd0ae407de4f4af6cc5dd3c",
+    "data/REM-001/releases/v0001/dev_challenge-structured.jsonl": "fb0bb3f73966ee496686fb2858aa433d842203777a0a20f7dc2a61bd34799b64",
+    "data/REM-001/releases/v0001/oracle_receipts.jsonl": "77f30ab41e62bf9fe53bfd14b5a15a3ad6ea759665a8ea1cb161f338e1845e51",
+    "data/REM-001/releases/v0001/review_receipts.jsonl": "50c8f9ae5837e1003ac809a03bbd3261324201687d830717264e21e8695dd0f3",
+    "data/REM-001/releases/v0001/train-memory_updates.jsonl": "a4c6a07d6a3354b0b97c457b5e64259691f31f9b1be93c9a2f53520f42b016bd",
+    "data/REM-001/releases/v0001/train-sft.jsonl": "a8f8d594fffabed2246af16bfedfe91ea2ee81f52e656e437a33bc6c579642cf",
+    "data/REM-001/releases/v0001/train-structured.jsonl": "a4c6a07d6a3354b0b97c457b5e64259691f31f9b1be93c9a2f53520f42b016bd",
+    "data/REM-001/releases/v0002/CHECKSUMS.sha256": "bedba6757515d2ea9459751f75a721d9a09fa0f1dd16e4a8c87c441e916b7e09",
+    "data/REM-001/releases/v0002/MANIFEST.json": "54009ae77edcd7aca4b4022e8c050e4f09aa42621e4448d7fbf499a5793beffd",
+    "data/REM-001/releases/v0002/QUALITY_REPORT.md": "238b700591ede826e07ef62536dbc491289ae95a29a197d5abee3d1337018982",
+    "data/REM-001/releases/v0002/canonical.jsonl": "05b89fac8fbc15f54329be47d530f62b9244c7e64b65979147e89df8a1452f62",
+    "data/REM-001/releases/v0002/dev_challenge-memory_updates.jsonl": "3deec36bd65b5cfe2e997798e2d57d0cda30ffa5d78f8950c614002bf8f67e54",
+    "data/REM-001/releases/v0002/dev_challenge-sft.jsonl": "6e74ca8498b5b2d66c1ab113463e5ea6f96b6d6bda35893733f7b093dd2613c7",
+    "data/REM-001/releases/v0002/dev_challenge-structured.jsonl": "3deec36bd65b5cfe2e997798e2d57d0cda30ffa5d78f8950c614002bf8f67e54",
+    "data/REM-001/releases/v0002/oracle_receipts.jsonl": "cb967ecbfff689e9ebaa3beaebd9d35ab869faee49ccf43210527a5b7148a077",
+    "data/REM-001/releases/v0002/review_receipts.jsonl": "7f5f936a631bb9ea58c6c71fb5bdb7926745f662dbb8cc2ebe70dd8c07ba7c24",
+    "data/REM-001/releases/v0002/train-memory_updates.jsonl": "d715feeb134c38b5a0c2107150bec5264fc84c03c8c51f8fba2d1d60402847d0",
+    "data/REM-001/releases/v0002/train-sft.jsonl": "74540f7f9071d506aa92f6dbbdf52e4338557bbcbe91329d2f0227ed1cd352a6",
+    "data/REM-001/releases/v0002/train-structured.jsonl": "d715feeb134c38b5a0c2107150bec5264fc84c03c8c51f8fba2d1d60402847d0",
+    "data/RGM-001/releases/v0001/CHECKSUMS.sha256": "15f5847295f0a2677a586a07052770723309849f18db39d4984f08f40c460637",
+    "data/RGM-001/releases/v0001/MANIFEST.json": "e32969c6d815c447591f2f4f97710494c06dc46c2eaa30307c9a4a85d6b486e4",
+    "data/RGM-001/releases/v0001/QUALITY_REPORT.md": "340d90076b6245512e8cd42dcef67e7b3f53f59abd31331e44e033bd27287595",
+    "data/RGM-001/releases/v0001/canonical.jsonl": "bc0a821670884bc0ccf9a42c22a53ade3654718c797946d445f0266ae8ee6990",
+    "data/RGM-001/releases/v0001/dev_challenge-sft.jsonl": "5be2e8436995765a826c45020c33b99246cd14b69414f346b9949d2f9ce0ad83",
+    "data/RGM-001/releases/v0001/dev_challenge-structured.jsonl": "1b24d38506ad0fa08e15ecba52fcd6553d4c44e16e14227ebafac301f6a341ca",
+    "data/RGM-001/releases/v0001/dev_challenge-trajectories.jsonl": "c4fdc083729f6404b58831b271d5dd58242e327e06066e5b84c9cb20bc60a210",
+    "data/RGM-001/releases/v0001/oracle_receipts.jsonl": "03b592ab2e03cf9d9cedbed1169988202df1d3fd26d5d89a11f2c482b8a8880e",
+    "data/RGM-001/releases/v0001/review_receipts.jsonl": "14e48528abdcba4fc1530e9704e6d3532c5b8048896d44c590331ea051982737",
+    "data/RGM-001/releases/v0001/train-sft.jsonl": "1cc9ad6c4d58ab62be5a8e89b4af11f436947a9782cb2f2346c49c4a853c9189",
+    "data/RGM-001/releases/v0001/train-structured.jsonl": "4282daa6cf933ea8935899657f2732cd9d440a50c1fce802635176260f09ce25",
+    "data/RGM-001/releases/v0001/train-trajectories.jsonl": "b6ce8995dace6bb3332ab424315e4803ddb4f557f474cfd7beb8e57d31440580",
+    "data/RGM-001/releases/v0002/CHECKSUMS.sha256": "0893b818032d72ea73a1cd99045ab7c85fff063f640b42a3efb9612a11de32f4",
+    "data/RGM-001/releases/v0002/MANIFEST.json": "04d816424491c0a35ee4cefd194ad8a5a47bb741a376b60cf35638ab96641a3f",
+    "data/RGM-001/releases/v0002/QUALITY_REPORT.md": "f0a5ab2580336d8a302d3f3d127d38dd6a5fd00cc93e942c9ee10635859bb35d",
+    "data/RGM-001/releases/v0002/canonical.jsonl": "ead8cb798dc5216b4a4a3260a698078b54fe267114edb41b69cfb084ce1eb2bc",
+    "data/RGM-001/releases/v0002/dev_challenge-sft.jsonl": "d0fd69b4c5eb6dfd6455acb104fc7240a6a3c39e9695467b96544d2d79f6e6be",
+    "data/RGM-001/releases/v0002/dev_challenge-structured.jsonl": "995ff610fc70ae3c81fd06d0f27366ee2f12dc426df20951a292f7377f5e7b4b",
+    "data/RGM-001/releases/v0002/dev_challenge-trajectories.jsonl": "86a9645548c34d4f08ddf20e0e5126ec769e970d6b18428e4107b57f21391cbe",
+    "data/RGM-001/releases/v0002/oracle_receipts.jsonl": "bfbeddecb068a45a3578f7730344e804031a1804e3a1938c24f506c23b9d25c2",
+    "data/RGM-001/releases/v0002/review_receipts.jsonl": "a5ba30ed5a09fd27c3e043f46cc1edab919d24b606c1ecff07d09ebd0e107587",
+    "data/RGM-001/releases/v0002/train-sft.jsonl": "862a581a1fc405cd9890c80a2f3ae8ec895ffe45e2956b7caf3d644eb7c06edc",
+    "data/RGM-001/releases/v0002/train-structured.jsonl": "9fc51d59cdc780423831a18b59bd903c11e986608c4e98d184afe83de75842a2",
+    "data/RGM-001/releases/v0002/train-trajectories.jsonl": "69755f01c1316fc8dc384cf6b6e0ace1a8ff80f88cf0c314839199d1833f0745",
+    "data/RGM-001/releases/v0003/CHECKSUMS.sha256": "2a3c48a1e285db6006573776cd9b6029b3d3df405732642cedf9531d6595f83d",
+    "data/RGM-001/releases/v0003/MANIFEST.json": "ab67c2b14d9a395d8e50cd078c4fff71c5698a9b2c4e5457d66705cd80943768",
+    "data/RGM-001/releases/v0003/QUALITY_REPORT.md": "514ab378bc6df329feb47e76f17d63739050c38ffd716158b6a340c18e855e8a",
+    "data/RGM-001/releases/v0003/canonical.jsonl": "83c03ee0af0f4bb7301198a3edc6c9ec6321ecd5687088a51a7edbf09cb0ef0c",
+    "data/RGM-001/releases/v0003/dev_challenge-sft.jsonl": "661ee7667e27575fe1a99855f2b82ebdfdda3459962927b6c2af0deeb4dc4ad4",
+    "data/RGM-001/releases/v0003/dev_challenge-structured.jsonl": "e3703e0dd186703b8c2ba7b74344703f8e6e5ebd1b5cfd5c2a560b834d643c0b",
+    "data/RGM-001/releases/v0003/dev_challenge-trajectories.jsonl": "942663d3053d3a0ea2ce9944ed16ab26eed792c84299488be3cb301c82cd9029",
+    "data/RGM-001/releases/v0003/oracle_receipts.jsonl": "554e500582de903e5b727de2fee3d991763b89acbe4409e8edb78569308553d4",
+    "data/RGM-001/releases/v0003/review_receipts.jsonl": "aaa6047c2b730f634b7b8fe8177dbcac9754907bdc3769ba556b32e337ec63e4",
+    "data/RGM-001/releases/v0003/train-sft.jsonl": "b85e545f53e1d06ec782a27a62be015fcc0fdff0a655143f533c1bd3fd947a34",
+    "data/RGM-001/releases/v0003/train-structured.jsonl": "8aedaeb5918271d5995420d3f52db79ad2d75ed52547d419efd0ebe9cf192d79",
+    "data/RGM-001/releases/v0003/train-trajectories.jsonl": "8ec33dbb36b6e179d6abe5c81425c10166191f60122e6fb30f4de124ce4fe1a7",
+    "data/RJP-001/releases/v0001/CHECKSUMS.sha256": "63029779544eaec5224bba1bb5dac01c7e3a063de7a9ab0f872808779f79c466",
+    "data/RJP-001/releases/v0001/MANIFEST.json": "ba58c05f4099daec67177a5eab595a13ea0ff439bf5d95a0131f087e85fd5c95",
+    "data/RJP-001/releases/v0001/QUALITY_REPORT.md": "1fc038d914b2083720a47f20681bf81498f6b5f1e558dd6fcafb427dd8671e80",
+    "data/RJP-001/releases/v0001/canonical.jsonl": "d5c83b79b78eeea4dd0d4ae8df1d9a7e4e4adf020428a43bf97a341a7ed9f1be",
+    "data/RJP-001/releases/v0001/dev_challenge-sft.jsonl": "4af60426d076fef3df050245c984d7133e02f23f46f0980e81fa4255af69d8f8",
+    "data/RJP-001/releases/v0001/dev_challenge-structured.jsonl": "3fcbad932893584aa138d776631541701c3dbd93436ab77a2f3999845537aa41",
+    "data/RJP-001/releases/v0001/oracle_receipts.jsonl": "8a203f6ffb78095fd38c5d27038656fd72883ab967bc8cf3e65355b7363b65dd",
+    "data/RJP-001/releases/v0001/review_receipts.jsonl": "14a56729739b43679b0ad7e3f7a163da516325eb3c90a13cfeb403d9dbbf35a0",
+    "data/RJP-001/releases/v0001/train-sft.jsonl": "e91c2ece5067429e20654c93510829e962c4ad4cd5e53ffd0a6f2e5bae52d37a",
+    "data/RJP-001/releases/v0001/train-structured.jsonl": "11e4ea79a266e88a182a6e3ae3c94036130e3f9bcb23a8d5a769d1eee94c3db6",
+    "data/RMM-001/releases/v0001/CHECKSUMS.sha256": "834ca8c0398e618317f9e00859cba788a55fd30093f68da4d085b65030b477c3",
+    "data/RMM-001/releases/v0001/MANIFEST.json": "16ff60a93e6bf3b819e7cd13c1806f2b16e5cfd21f13777c438b906ba111d69d",
+    "data/RMM-001/releases/v0001/QUALITY_REPORT.md": "4f464921cbe0bbc092dd77fb474081bba135345e863a9c48cb31e0322b1e05bd",
+    "data/RMM-001/releases/v0001/canonical.jsonl": "bd150158faef6ba77673bcc1a7f500a6deedca063ba690ed75bc3bf236485356",
+    "data/RMM-001/releases/v0001/dev_challenge-memory_updates.jsonl": "18ccdb77af262bfc77a2d739227e879c97262124099f9562a4d1bacc93d54d28",
+    "data/RMM-001/releases/v0001/dev_challenge-sft.jsonl": "18ff85eb3b98eb38c36110bfa50cf40f6b9a39b750c01bdc6118a1641067cb17",
+    "data/RMM-001/releases/v0001/dev_challenge-structured.jsonl": "18ccdb77af262bfc77a2d739227e879c97262124099f9562a4d1bacc93d54d28",
+    "data/RMM-001/releases/v0001/oracle_receipts.jsonl": "a1733a318e1bf100f0d555409097fab447b9274a080699f918f810c3d4ba5711",
+    "data/RMM-001/releases/v0001/review_receipts.jsonl": "f25c26516e136bc9f116b1ca75486c97d832415ddb1c9e67ba2ead4f24ea05aa",
+    "data/RMM-001/releases/v0001/train-memory_updates.jsonl": "6b2f32a57234333c280efd27722da074938f88fb3ac08ac76d9039d85f7ed89a",
+    "data/RMM-001/releases/v0001/train-sft.jsonl": "41ba0e09fce8c8800f9c287ce645ec9a6df00d935288d850e0da0f9cc1055b2b",
+    "data/RMM-001/releases/v0001/train-structured.jsonl": "6b2f32a57234333c280efd27722da074938f88fb3ac08ac76d9039d85f7ed89a",
+    "data/ROM-001/releases/v0001/CHECKSUMS.sha256": "bdea4c856643132c9eb3a8dccf9b3f7f63f4d28b6f67552dc0e45a7ddb93dfe7",
+    "data/ROM-001/releases/v0001/MANIFEST.json": "9cbaf26adc07dc9256cbc8d73e9b64b01e281505d4f5e386191de414a4844f7e",
+    "data/ROM-001/releases/v0001/QUALITY_REPORT.md": "6cc0c590ba39196994718d9c8cd8259f87ecc5aa486b1782e495fce76baa0717",
+    "data/ROM-001/releases/v0001/canonical.jsonl": "e8510bb86619f4070c4ed185a00cbaa33225afd54e42a819f4145517ef2b3114",
+    "data/ROM-001/releases/v0001/dev_challenge-belief_updates.jsonl": "931f46efa3243ccb232e4f96effd6927394cd0b4564996655ed2a6cc4196b0e0",
+    "data/ROM-001/releases/v0001/dev_challenge-sft.jsonl": "13fc9232da4aa6bedcef0b318ca966aacd55c8551b3391ba26a7d0b923555c64",
+    "data/ROM-001/releases/v0001/dev_challenge-structured.jsonl": "931f46efa3243ccb232e4f96effd6927394cd0b4564996655ed2a6cc4196b0e0",
+    "data/ROM-001/releases/v0001/oracle_receipts.jsonl": "9951884789810f919e751a7113f5a9ac81cc6575c7bc8b8b7a96f90e3697e7a6",
+    "data/ROM-001/releases/v0001/review_receipts.jsonl": "87b5bde8d79474fa10d640700076d2e23e5a93a93520b7a89c4f1a8a525b3862",
+    "data/ROM-001/releases/v0001/train-belief_updates.jsonl": "d306aa98defda8149ff04b8dd5a1c7a598fc5be2ce75af567faf4a53fee2c934",
+    "data/ROM-001/releases/v0001/train-sft.jsonl": "9fbea35c6f5d09c68aa6e7e70590b8a490d02789d6b17104be9189d1b488f663",
+    "data/ROM-001/releases/v0001/train-structured.jsonl": "d306aa98defda8149ff04b8dd5a1c7a598fc5be2ce75af567faf4a53fee2c934",
+    "data/RSM-001/releases/v0001/CHECKSUMS.sha256": "4ade61067d43a6f577fc721c9c639d092e9ede0fba358baddbaedc93fcbe2ba0",
+    "data/RSM-001/releases/v0001/MANIFEST.json": "9bc04fa4f3ae6238896418abecef67507af51fd19da020184b81b36a10edc484",
+    "data/RSM-001/releases/v0001/QUALITY_REPORT.md": "1be6aee84beae6d99725138a5b9f01e857a1aab50b2733c5932505db4aebb97f",
+    "data/RSM-001/releases/v0001/canonical.jsonl": "443a2f260ae174c93fa82a9854f4074665e1538a0a588f5b35652cc56975de37",
+    "data/RSM-001/releases/v0001/dev_challenge-sft.jsonl": "c7da247859efca79060191a924c9a51a4b01f5bde78bbcff6423e89fd1228104",
+    "data/RSM-001/releases/v0001/dev_challenge-skill_demonstrations.jsonl": "6fcdbf32de4646a1d6039d5b4b92557ffb5f5848c2ad4f65ffad2abbcb37c029",
+    "data/RSM-001/releases/v0001/dev_challenge-structured.jsonl": "6fcdbf32de4646a1d6039d5b4b92557ffb5f5848c2ad4f65ffad2abbcb37c029",
+    "data/RSM-001/releases/v0001/oracle_receipts.jsonl": "34d43020edde2141884688e9e170589e050983485fa0560265d58577b0e71249",
+    "data/RSM-001/releases/v0001/review_receipts.jsonl": "2a761d616bb69a2213fca2428de5233172bdbafa5b910312b0c012e1786d7ac8",
+    "data/RSM-001/releases/v0001/train-sft.jsonl": "e2b3e7779dbe2c73907e047c058ea1e16350c07350c76c8ef0e439ca587adf10",
+    "data/RSM-001/releases/v0001/train-skill_demonstrations.jsonl": "75e8c2ab9cf0bc8620cb91e68921bea6636084d8a0f7efb1f8db5d154df7d1b3",
+    "data/RSM-001/releases/v0001/train-structured.jsonl": "75e8c2ab9cf0bc8620cb91e68921bea6636084d8a0f7efb1f8db5d154df7d1b3",
+    "data/RVM-001/releases/v0001/CHECKSUMS.sha256": "04100b67acc17cf860653417858a2c0554b986394720c3e8aaa8c7c0e9c0b844",
+    "data/RVM-001/releases/v0001/MANIFEST.json": "313f0dad18727d28684f7a844005239e4c96068a2d30395b78e685c4363a545e",
+    "data/RVM-001/releases/v0001/QUALITY_REPORT.md": "9febcaa1a4e8bd2fedd59af0319a1a0500e1f07756fa99334874c4fbe28b6982",
+    "data/RVM-001/releases/v0001/canonical.jsonl": "262d9bc470353c3aacb105b1bde2bb5b87f1e9771472966ab7f1c53ac672bac3",
+    "data/RVM-001/releases/v0001/dev_challenge-sft.jsonl": "1996f2f2b823a95a531f70720549bc99fab88870c395096ef7f4828f6ba8d851",
+    "data/RVM-001/releases/v0001/dev_challenge-structured.jsonl": "d5fe3787ccdf8089d354a96dc20fd3283e551e624ddcc0f8128fdcb8c6031369",
+    "data/RVM-001/releases/v0001/oracle_receipts.jsonl": "4b9f478855a282bb7d5e5e9dd1700ac86ed8f28e7a4b25ac21152205a0c6eac4",
+    "data/RVM-001/releases/v0001/review_receipts.jsonl": "dc551a1b47c5c86ea567525f8af24f708b26fbe7141db319d63a39bef63326ba",
+    "data/RVM-001/releases/v0001/train-sft.jsonl": "644fdec208e336807eb8b7d355b350b248a4e65ff4261fc271c96937baa8f94c",
+    "data/RVM-001/releases/v0001/train-structured.jsonl": "9b2f69572bc26a0f3d271ad44b0e989d9adfc82c86bf7035c93be17ce173abf5",
+    "data/RVM-001/releases/v0002/CHECKSUMS.sha256": "38aac728da72c80a3c3a3c3596f2308f00968982588ae521edb473879c5d5fab",
+    "data/RVM-001/releases/v0002/MANIFEST.json": "3a2b29a70e760276c8fb33d0ea94ffb2ed91f79f51a5e5d16fc5f254ede25614",
+    "data/RVM-001/releases/v0002/QUALITY_REPORT.md": "d0b9327ee895afc86e592923f9599bd5ebc1da73bbd1cfda51993c67755c63dd",
+    "data/RVM-001/releases/v0002/canonical.jsonl": "0e23a3393e9a63d043e694aac13df2846e50b3c77ca02159cf609a1c6820c0f1",
+    "data/RVM-001/releases/v0002/dev_challenge-preference.jsonl": "5a359c7afd1ea09652e39162e0e4776767a05afe4a43f3b0db2a8cde113aad4e",
+    "data/RVM-001/releases/v0002/dev_challenge-process_reward.jsonl": "2801ef028172c92fbc254d95a05d282e595627aa625599539c478d601b71cd38",
+    "data/RVM-001/releases/v0002/dev_challenge-sft.jsonl": "e1ab220a2c450c1de8c4eb2e6942f4fcb857d55aff15cd67d63f1c890e7e0ce4",
+    "data/RVM-001/releases/v0002/dev_challenge-structured.jsonl": "a6f1c229e311def31a8f50a7267fe50783a7d08add38c9004b6ef4b49611add3",
+    "data/RVM-001/releases/v0002/oracle_receipts.jsonl": "e7d35d4cc0ff0b03a8430dc2ff657a42402a1dcc147bc4f325699f70bbbfbd91",
+    "data/RVM-001/releases/v0002/review_receipts.jsonl": "ff2a6e7c1533203e9472dfec660d12661c1a6f12b4902ccc6c21a0d06d04912d",
+    "data/RVM-001/releases/v0002/train-preference.jsonl": "a44bae9b80e8f5982a7a5f729b43870a4d0a91f0699047834e9cbf9024cad458",
+    "data/RVM-001/releases/v0002/train-process_reward.jsonl": "f6f84b18c6f573f35ea1b0321a9d9a546154d8568fae84d5da3f4d81a49344a4",
+    "data/RVM-001/releases/v0002/train-sft.jsonl": "80400638c9d2e2918850b76810d9e4ce8f272f908e629810ecb345a025a76b08",
+    "data/RVM-001/releases/v0002/train-structured.jsonl": "bf334dbbbf5b6c46f21cc10cc508197832e4d7543a99ae8a3be4a16f6c4bb56a",
+    "data/RVM-001/releases/v0003/CHECKSUMS.sha256": "2a4c7d3883ae39eb429cfffee94c476f37d7ebc727bb0a26825e69cb2875a97a",
+    "data/RVM-001/releases/v0003/MANIFEST.json": "22b00626feb741ad5b4e9b9b5e002f6135a102d5e8e3ebaca660917b27074545",
+    "data/RVM-001/releases/v0003/QUALITY_REPORT.md": "beb57be50144d89aa1b9e74fd968a79a58af7b5b105634d582b54314f164ccd5",
+    "data/RVM-001/releases/v0003/canonical.jsonl": "4bb29efeb4e4f8df69ddc5d3f05dd336e442a1d6fc1fa0b3009635b7c9bfb76e",
+    "data/RVM-001/releases/v0003/dev_challenge-preference.jsonl": "7726855acf2e55d7d85a0a073a52092174c8483631236beb4ff117804ebed18d",
+    "data/RVM-001/releases/v0003/dev_challenge-process_reward.jsonl": "75ee7e2766c24f4a7928240fc0deec8253dbea5a953a42bca66114139b3df367",
+    "data/RVM-001/releases/v0003/dev_challenge-sft.jsonl": "1996f2f2b823a95a531f70720549bc99fab88870c395096ef7f4828f6ba8d851",
+    "data/RVM-001/releases/v0003/dev_challenge-structured.jsonl": "d5fe3787ccdf8089d354a96dc20fd3283e551e624ddcc0f8128fdcb8c6031369",
+    "data/RVM-001/releases/v0003/oracle_receipts.jsonl": "92e1ef8f7cd938c543740db6a7a58c77f54bf49fc13766e0cef4c2602299f928",
+    "data/RVM-001/releases/v0003/review_receipts.jsonl": "e1cfba82e0825f5c70d65080a738794dbc4f19833138c026e4e844ef508d8859",
+    "data/RVM-001/releases/v0003/train-preference.jsonl": "ac04d96d8370be9742563cb227356ae69dd1303c65c541faaad1e4bfd1b8fd86",
+    "data/RVM-001/releases/v0003/train-process_reward.jsonl": "56d3dabcb5a22ea6407ef8ec1a3f8e9a06eb267f461f7b46a266f6339c001908",
+    "data/RVM-001/releases/v0003/train-sft.jsonl": "644fdec208e336807eb8b7d355b350b248a4e65ff4261fc271c96937baa8f94c",
+    "data/RVM-001/releases/v0003/train-structured.jsonl": "9b2f69572bc26a0f3d271ad44b0e989d9adfc82c86bf7035c93be17ce173abf5",
+    "data/RVM-001/releases/v0004/CHECKSUMS.sha256": "13ad029604e1d1c77c00f1677cfcb251fe88860718d00ba3be313bea3fa6769e",
+    "data/RVM-001/releases/v0004/MANIFEST.json": "e4638b0abe151b54d79db1c3d932be4ae068d2039c3409e4a6904696fcd39a62",
+    "data/RVM-001/releases/v0004/QUALITY_REPORT.md": "1d16934eb2810d213139125b26553bca9981be29df87445f3a62ddf6148dadb6",
+    "data/RVM-001/releases/v0004/canonical.jsonl": "b8ab3087c33a3c032f248bdbce6cfcb95f31201cc192feb3294b020e3ccad8bb",
+    "data/RVM-001/releases/v0004/dev_challenge-preference.jsonl": "021fb61f93d1afb3d931b9834e054565c75433cabf4f5b89ccbd6066a201219f",
+    "data/RVM-001/releases/v0004/dev_challenge-process_reward.jsonl": "14b6edb77526285f310acf8f38ecc00c2ad36dfdfb00eb38d59fd25142a43c0d",
+    "data/RVM-001/releases/v0004/dev_challenge-sft.jsonl": "d203cefea67fa0a2d6c6c0f328e6b0ebad1098ff4f03476dd1777fd80c960c77",
+    "data/RVM-001/releases/v0004/dev_challenge-structured.jsonl": "0284db823fda72a9381f8c463d76beecd37fb3ea69a78df1395214f7dec8f88c",
+    "data/RVM-001/releases/v0004/oracle_receipts.jsonl": "bc705f3bb8dce3332de3657f8df64bec5f28d12eb794b8a5ef901017088fd88f",
+    "data/RVM-001/releases/v0004/review_receipts.jsonl": "2f18d3eedcdaf3c67fee4ba2a97f112e0534c0368005857706f7fddceeacc9fc",
+    "data/RVM-001/releases/v0004/train-preference.jsonl": "6e2b71a2b5c461fba16e1f51daca9c8d4436408222bc5b404f839f4d1aa93829",
+    "data/RVM-001/releases/v0004/train-process_reward.jsonl": "91f32af465746f6ad3deeaf42b11315ae13cdb149536a0f19ebe692467827def",
+    "data/RVM-001/releases/v0004/train-sft.jsonl": "ceb458d818e84b75d74769416b9b9818793abcd44a32aa9afddb356222173cd9",
+    "data/RVM-001/releases/v0004/train-structured.jsonl": "370e8f01790cb3071b936859977ca8a8a697b3046dc0cd1a39198296536ebbd1"
+  },
+  "historical_release_files_unchanged": true,
+  "independent_input_binding_count": 152,
+  "output_path": "quality_reports/BELIEF_V4_RELEASE_ATTEMPT01_OUTPUT.txt",
+  "output_sha256": "c6699ff9cf2e3795c0ceac77826d75ecbac69dd472f225c7eba43fbabe46b24b",
+  "prior_reports_preserved": {
+    "audits/diversity/belief-gap-v4-belief-controls.json": {
+      "archive": "handoff/report_history/belief-v4-publication-attempt01/279beb55eff0c5b6ea60c04d614a67d00606c25c4d1dbdaf99b8ae4ef825fe25-belief-gap-v4-belief-controls.json",
+      "bytes": 123141333,
+      "sha256": "279beb55eff0c5b6ea60c04d614a67d00606c25c4d1dbdaf99b8ae4ef825fe25"
+    },
+    "audits/leakage/belief-gap-v4.json": {
+      "archive": "handoff/report_history/belief-v4-publication-attempt01/08a41fc8c44f6a53a1b7d02198257e59130a1740d57d0db5fa70f5a21524c045-belief-gap-v4.json",
+      "bytes": 1646,
+      "sha256": "08a41fc8c44f6a53a1b7d02198257e59130a1740d57d0db5fa70f5a21524c045"
+    },
+    "manifests/ACTIVE_RELEASE_CATALOG.json": {
+      "archive": "handoff/report_history/belief-v4-publication-attempt01/85a6b220aa0996717886fca76794aa2e1298a89047effb98d787c03094b2a852-ACTIVE_RELEASE_CATALOG.json",
+      "bytes": 6672,
+      "sha256": "85a6b220aa0996717886fca76794aa2e1298a89047effb98d787c03094b2a852"
+    },
+    "reviews/oracle/belief-gap-v4.jsonl": {
+      "archive": "handoff/report_history/belief-v4-publication-attempt01/a489c70e0a2c38fbe8d3baa28d97bfe010f39e891a1ac26f55ca60f68f3fbb12-belief-gap-v4.jsonl",
+      "bytes": 1254528,
+      "sha256": "a489c70e0a2c38fbe8d3baa28d97bfe010f39e891a1ac26f55ca60f68f3fbb12"
+    }
+  },
+  "release": "data/RBM-001/releases/v0002",
+  "release_code_set_unchanged": true,
+  "remote_boundary": "New release bytes require their own subsequent actual remote-byte proof.",
+  "result": {
+    "active_catalog_counts": {
+      "records": 7204,
+      "source_families": 700
+    },
+    "active_catalog_sha256": "5d90edad2e9af72e4ed5be382efac03447a83bbb6d79aba08103038a24d3bbff",
+    "active_releases": 17,
+    "active_track_records": {
+      "RBM-001": 3480,
+      "RCM-001": 1440,
+      "RDP-001": 24,
+      "REM-001": 888,
+      "RGM-001": 840,
+      "RJP-001": 24,
+      "RMM-001": 76,
+      "ROM-001": 24,
+      "RSM-001": 24,
+      "RVM-001": 384
+    },
+    "created": [
+      "data/RBM-001/releases/v0002"
+    ],
+    "historical_releases": 19,
+    "new_release_files": {
+      "CHECKSUMS.sha256": {
+        "bytes": 974,
+        "sha256": "2a651deb8011efeaeb6c9c1b7bcff1fa9f52beaa1ec67e945aeb44f2cc3f03eb"
+      },
+      "MANIFEST.json": {
+        "bytes": 11617,
+        "sha256": "19ce525f83059a4f5d7e3b648740b278a4fa3f5219bfddd0458ad39eb79e3acc"
+      },
+      "QUALITY_REPORT.md": {
+        "bytes": 436,
+        "sha256": "ce35a5cf1d09db4f38c0448e0eea3d5e45635bb8f5f4751a42e9deb3725b324d"
+      },
+      "canonical.jsonl": {
+        "bytes": 42448732,
+        "sha256": "4c5f301baf1d3512a12ef34a25d372f3c71470d65eb5769b98d03692e55e7d84"
+      },
+      "dev_challenge-belief_updates.jsonl": {
+        "bytes": 6780744,
+        "sha256": "f82db0874d1dfe60c75948be55498a58cf963ca0a85e56eb507528b69e432f3c"
+      },
+      "dev_challenge-sft.jsonl": {
+        "bytes": 6987672,
+        "sha256": "535c6283256bab9bff10c99bd4a1cdcd475f354019e8fd64f97ca4b4f8e33614"
+      },
+      "dev_challenge-structured.jsonl": {
+        "bytes": 6780744,
+        "sha256": "f82db0874d1dfe60c75948be55498a58cf963ca0a85e56eb507528b69e432f3c"
+      },
+      "oracle_receipts.jsonl": {
+        "bytes": 1254528,
+        "sha256": "a489c70e0a2c38fbe8d3baa28d97bfe010f39e891a1ac26f55ca60f68f3fbb12"
+      },
+      "review_receipts.jsonl": {
+        "bytes": 40319332,
+        "sha256": "ae6e5a03f2ce14e31fbf74bad9bd5d414bf671c040feae9634922b3e80463ade"
+      },
+      "train-belief_updates.jsonl": {
+        "bytes": 6835068,
+        "sha256": "594def14e00f1d04de1d8c78ed498a58d41a94db727ea745bea931ab38f27ab4"
+      },
+      "train-sft.jsonl": {
+        "bytes": 7042860,
+        "sha256": "0604e519bf4ccef350a8c93d4013c54b643d112ca2a6ff1dab66fd4fe4c68671"
+      },
+      "train-structured.jsonl": {
+        "bytes": 6835068,
+        "sha256": "594def14e00f1d04de1d8c78ed498a58d41a94db727ea745bea931ab38f27ab4"
+      }
+    },
+    "validation": {
+      "checksum_files": 11,
+      "pass": true,
+      "path": "data/RBM-001/releases/v0002",
+      "records": 3456,
+      "specialized_exports": {
+        "dev_challenge-belief_updates.jsonl": 1728,
+        "train-belief_updates.jsonl": 1728
+      }
+    }
+  },
+  "runner_execution": "/root",
+  "same_task_revision": {
+    "new_semantic_tasks_relative_to_v3_quarantine": 0,
+    "new_source_families_relative_to_v3_quarantine": 0,
+    "records": 3456,
+    "source_families": 4
+  },
+  "source_freeze_sha256": "a88f250c872574204df71fcfa613623644ca86a8c575af0bc31f6c1ca984b3f0",
+  "source_sha256": "3cdb9d80ce02c48602dc96ee3411fc9d3617fe6c48064b6d1604cc13b333a302",
+  "status": "COMPLETED_VALIDATED_LOCAL_RELEASE",
+  "wall_seconds": 207.04020837500866
+}

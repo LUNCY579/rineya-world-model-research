@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/run_tests_attempt01.py", line 21, in <module>
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_tests_attempt01.py", line 12, in <module>
+    C=local('corpus_checker_attempt01'); H=local('hand_fixture_recipe_attempt01')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_tests_attempt01.py", line 11, in local
+    spec=importlib.util.spec_from_file_location('rsm_corpus_'+name,HERE/(name+'.py')); m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m
+                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_checker_attempt01.py", line 460
+    for field,key in (('mode_status',str(row['semantic_task'].get('mode'))),('history_length_status',str(len(row['semantic_task'].get('history',[])))):
+                                                                                                                                                      ^
+SyntaxError: invalid syntax
