@@ -1,0 +1,2082 @@
+{
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "batch": "belief-gap-v1",
+  "status": "completed",
+  "script_sha256": "b2660d0ae5faa8636ffada368e58d5a47d71bf889f2153694efe26de19d4ff1b",
+  "frozen_judgments_sha256": {
+    "reviews/adversarial/belief-gap-v1.input_predictions.jsonl": "c57ec11f4621d296f390b266f13a2877f4db326c53084dcae0d252b976111756",
+    "reviews/adversarial/belief-gap-v1.first_judgments.jsonl": "956f4d601a08c9cff0d13e074d78edc262adbe76d2ddcbaf419f5145465f3611",
+    "reviews/adversarial/belief-gap-v1.jsonl": "eec54648acbcb9800a2f6959aeaf16daf89ff906caf465ec6fd5623b38be172e"
+  },
+  "stripped_input_sha256": "86a07b5b6e4bf89706e9491ed41415e3facc8a744acdf14ad551cbade8529ac6",
+  "own_solver_script_sha256": "51c3029ffc89e6fdedc47cf0036a9945b80dd4d22fbd1a1895f86496bf5e9d33",
+  "incomplete_resolver_mutants": {
+    "coercing_filter": {
+      "tasks": 1296,
+      "complete_target_failures": 648
+    },
+    "coercing_partitions": {
+      "tasks": 1296,
+      "complete_target_failures": 324
+    },
+    "reset_filter_each_observation": {
+      "tasks": 1296,
+      "complete_target_failures": 1296
+    },
+    "drop_multiplicity": {
+      "tasks": 1296,
+      "complete_target_failures": 864
+    },
+    "null_means_not_entailed": {
+      "tasks": 1296,
+      "complete_target_failures": 648
+    }
+  },
+  "mutant_actual_failure_examples": {
+    "reset_filter_each_observation": {
+      "sample_id": "RBM-001-belief-gap-v1-p0012-A-s00-forward",
+      "record_hash": "a7a60bdbb15bd1877f7650bb8a40a0b9ccda605b379990b6ec82e6d40c4db3b1",
+      "correct": {
+        "belief_sizes": [
+          6,
+          2
+        ],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": null
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "query_id": "q0"
+          },
+          {
+            "can_reduce_uncertainty": true,
+            "counts": [
+              {
+                "count": 1,
+                "value": null
+              },
+              {
+                "count": 1,
+                "value": true
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "query_id": "q1"
+          },
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": "reed"
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": "reed",
+            "query_id": "q2"
+          }
+        ],
+        "surviving_worlds": [
+          "w13956",
+          "w78775"
+        ]
+      },
+      "incorrect_mutant": {
+        "surviving_worlds": [
+          "w13956",
+          "w29105",
+          "w52003",
+          "w78775"
+        ],
+        "belief_sizes": [
+          6,
+          4
+        ],
+        "queries": [
+          {
+            "query_id": "q0",
+            "counts": [
+              {
+                "value": "opal",
+                "count": 2
+              },
+              {
+                "value": null,
+                "count": 2
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          },
+          {
+            "query_id": "q1",
+            "counts": [
+              {
+                "value": "unknown",
+                "count": 2
+              },
+              {
+                "value": null,
+                "count": 1
+              },
+              {
+                "value": true,
+                "count": 1
+              }
+            ],
+            "distinct_values": 3,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          },
+          {
+            "query_id": "q2",
+            "counts": [
+              {
+                "value": "fern",
+                "count": 2
+              },
+              {
+                "value": "reed",
+                "count": 2
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          }
+        ]
+      },
+      "input": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": "reed",
+            "fact": "ribbon"
+          },
+          {
+            "equals": "linen",
+            "fact": "copper"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "rivet",
+            "query_id": "q0"
+          },
+          {
+            "fact": "basket",
+            "query_id": "q1"
+          },
+          {
+            "fact": "ribbon",
+            "query_id": "q2"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "basket": 3,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "stone",
+              "rivet": "opal"
+            },
+            "world_id": "w75392"
+          },
+          {
+            "facts": {
+              "basket": true,
+              "canvas": "west",
+              "copper": "linen",
+              "ribbon": "reed",
+              "rivet": null
+            },
+            "world_id": "w13956"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "west",
+              "copper": "cotton",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w20057"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w66393"
+          },
+          {
+            "facts": {
+              "basket": "unknown",
+              "canvas": "east",
+              "copper": "linen",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w29105"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "east",
+              "copper": "cotton",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w57915"
+          },
+          {
+            "facts": {
+              "basket": 1,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w25757"
+          },
+          {
+            "facts": {
+              "basket": 1,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w81846"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w65776"
+          },
+          {
+            "facts": {
+              "basket": 3,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "stone",
+              "rivet": "opal"
+            },
+            "world_id": "w51823"
+          },
+          {
+            "facts": {
+              "basket": null,
+              "canvas": "east",
+              "copper": "linen",
+              "ribbon": "reed",
+              "rivet": null
+            },
+            "world_id": "w78775"
+          },
+          {
+            "facts": {
+              "basket": "unknown",
+              "canvas": "west",
+              "copper": "linen",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w52003"
+          }
+        ]
+      }
+    },
+    "drop_multiplicity": {
+      "sample_id": "RBM-001-belief-gap-v1-p0012-A-s00-forward",
+      "record_hash": "a7a60bdbb15bd1877f7650bb8a40a0b9ccda605b379990b6ec82e6d40c4db3b1",
+      "correct": {
+        "belief_sizes": [
+          6,
+          2
+        ],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": null
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "query_id": "q0"
+          },
+          {
+            "can_reduce_uncertainty": true,
+            "counts": [
+              {
+                "count": 1,
+                "value": null
+              },
+              {
+                "count": 1,
+                "value": true
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "query_id": "q1"
+          },
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": "reed"
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": "reed",
+            "query_id": "q2"
+          }
+        ],
+        "surviving_worlds": [
+          "w13956",
+          "w78775"
+        ]
+      },
+      "incorrect_mutant": {
+        "surviving_worlds": [
+          "w13956",
+          "w78775"
+        ],
+        "belief_sizes": [
+          6,
+          2
+        ],
+        "queries": [
+          {
+            "query_id": "q0",
+            "counts": [
+              {
+                "value": null,
+                "count": 1
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "can_reduce_uncertainty": false
+          },
+          {
+            "query_id": "q1",
+            "counts": [
+              {
+                "value": null,
+                "count": 1
+              },
+              {
+                "value": true,
+                "count": 1
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          },
+          {
+            "query_id": "q2",
+            "counts": [
+              {
+                "value": "reed",
+                "count": 1
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": "reed",
+            "can_reduce_uncertainty": false
+          }
+        ]
+      },
+      "input": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": "reed",
+            "fact": "ribbon"
+          },
+          {
+            "equals": "linen",
+            "fact": "copper"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "rivet",
+            "query_id": "q0"
+          },
+          {
+            "fact": "basket",
+            "query_id": "q1"
+          },
+          {
+            "fact": "ribbon",
+            "query_id": "q2"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "basket": 3,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "stone",
+              "rivet": "opal"
+            },
+            "world_id": "w75392"
+          },
+          {
+            "facts": {
+              "basket": true,
+              "canvas": "west",
+              "copper": "linen",
+              "ribbon": "reed",
+              "rivet": null
+            },
+            "world_id": "w13956"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "west",
+              "copper": "cotton",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w20057"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w66393"
+          },
+          {
+            "facts": {
+              "basket": "unknown",
+              "canvas": "east",
+              "copper": "linen",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w29105"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "east",
+              "copper": "cotton",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w57915"
+          },
+          {
+            "facts": {
+              "basket": 1,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w25757"
+          },
+          {
+            "facts": {
+              "basket": 1,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w81846"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w65776"
+          },
+          {
+            "facts": {
+              "basket": 3,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "stone",
+              "rivet": "opal"
+            },
+            "world_id": "w51823"
+          },
+          {
+            "facts": {
+              "basket": null,
+              "canvas": "east",
+              "copper": "linen",
+              "ribbon": "reed",
+              "rivet": null
+            },
+            "world_id": "w78775"
+          },
+          {
+            "facts": {
+              "basket": "unknown",
+              "canvas": "west",
+              "copper": "linen",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w52003"
+          }
+        ]
+      }
+    },
+    "null_means_not_entailed": {
+      "sample_id": "RBM-001-belief-gap-v1-p0012-A-s00-forward",
+      "record_hash": "a7a60bdbb15bd1877f7650bb8a40a0b9ccda605b379990b6ec82e6d40c4db3b1",
+      "correct": {
+        "belief_sizes": [
+          6,
+          2
+        ],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": null
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "query_id": "q0"
+          },
+          {
+            "can_reduce_uncertainty": true,
+            "counts": [
+              {
+                "count": 1,
+                "value": null
+              },
+              {
+                "count": 1,
+                "value": true
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "query_id": "q1"
+          },
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": "reed"
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": "reed",
+            "query_id": "q2"
+          }
+        ],
+        "surviving_worlds": [
+          "w13956",
+          "w78775"
+        ]
+      },
+      "incorrect_mutant": {
+        "surviving_worlds": [
+          "w13956",
+          "w78775"
+        ],
+        "belief_sizes": [
+          6,
+          2
+        ],
+        "queries": [
+          {
+            "query_id": "q0",
+            "counts": [
+              {
+                "value": null,
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": false
+          },
+          {
+            "query_id": "q1",
+            "counts": [
+              {
+                "value": null,
+                "count": 1
+              },
+              {
+                "value": true,
+                "count": 1
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          },
+          {
+            "query_id": "q2",
+            "counts": [
+              {
+                "value": "reed",
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": "reed",
+            "can_reduce_uncertainty": false
+          }
+        ]
+      },
+      "input": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": "reed",
+            "fact": "ribbon"
+          },
+          {
+            "equals": "linen",
+            "fact": "copper"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "rivet",
+            "query_id": "q0"
+          },
+          {
+            "fact": "basket",
+            "query_id": "q1"
+          },
+          {
+            "fact": "ribbon",
+            "query_id": "q2"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "basket": 3,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "stone",
+              "rivet": "opal"
+            },
+            "world_id": "w75392"
+          },
+          {
+            "facts": {
+              "basket": true,
+              "canvas": "west",
+              "copper": "linen",
+              "ribbon": "reed",
+              "rivet": null
+            },
+            "world_id": "w13956"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "west",
+              "copper": "cotton",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w20057"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w66393"
+          },
+          {
+            "facts": {
+              "basket": "unknown",
+              "canvas": "east",
+              "copper": "linen",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w29105"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "east",
+              "copper": "cotton",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w57915"
+          },
+          {
+            "facts": {
+              "basket": 1,
+              "canvas": "east",
+              "copper": "silk",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w25757"
+          },
+          {
+            "facts": {
+              "basket": 1,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "reed",
+              "rivet": "opal"
+            },
+            "world_id": "w81846"
+          },
+          {
+            "facts": {
+              "basket": 2,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w65776"
+          },
+          {
+            "facts": {
+              "basket": 3,
+              "canvas": "west",
+              "copper": "silk",
+              "ribbon": "stone",
+              "rivet": "opal"
+            },
+            "world_id": "w51823"
+          },
+          {
+            "facts": {
+              "basket": null,
+              "canvas": "east",
+              "copper": "linen",
+              "ribbon": "reed",
+              "rivet": null
+            },
+            "world_id": "w78775"
+          },
+          {
+            "facts": {
+              "basket": "unknown",
+              "canvas": "west",
+              "copper": "linen",
+              "ribbon": "fern",
+              "rivet": "opal"
+            },
+            "world_id": "w52003"
+          }
+        ]
+      }
+    },
+    "coercing_filter": {
+      "sample_id": "RBM-001-belief-gap-v1-p0013-A-s00-forward",
+      "record_hash": "f217739c36601a879b1678188282713ce4ba8311272da06f8a330086dce1f0d1",
+      "correct": {
+        "belief_sizes": [
+          5,
+          2
+        ],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": null
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "query_id": "q0"
+          },
+          {
+            "can_reduce_uncertainty": true,
+            "counts": [
+              {
+                "count": 1,
+                "value": 0
+              },
+              {
+                "count": 1,
+                "value": false
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "query_id": "q1"
+          },
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": false
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": false,
+            "query_id": "q2"
+          }
+        ],
+        "surviving_worlds": [
+          "w22298",
+          "w51037"
+        ]
+      },
+      "incorrect_mutant": {
+        "surviving_worlds": [
+          "w20290",
+          "w22298",
+          "w51037",
+          "w71311"
+        ],
+        "belief_sizes": [
+          7,
+          4
+        ],
+        "queries": [
+          {
+            "query_id": "q0",
+            "counts": [
+              {
+                "value": "opal",
+                "count": 2
+              },
+              {
+                "value": null,
+                "count": 2
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          },
+          {
+            "query_id": "q1",
+            "counts": [
+              {
+                "value": "unknown",
+                "count": 2
+              },
+              {
+                "value": 0,
+                "count": 1
+              },
+              {
+                "value": false,
+                "count": 1
+              }
+            ],
+            "distinct_values": 3,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          },
+          {
+            "query_id": "q2",
+            "counts": [
+              {
+                "value": 0,
+                "count": 2
+              },
+              {
+                "value": false,
+                "count": 2
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          }
+        ]
+      },
+      "input": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": false,
+            "fact": "copper"
+          },
+          {
+            "equals": "linen",
+            "fact": "vessel"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "ribbon",
+            "query_id": "q0"
+          },
+          {
+            "fact": "panel",
+            "query_id": "q1"
+          },
+          {
+            "fact": "copper",
+            "query_id": "q2"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "copper": 0,
+              "panel": "unknown",
+              "ribbon": "opal",
+              "socket": "west",
+              "vessel": "linen"
+            },
+            "world_id": "w20290"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": 1,
+              "ribbon": "opal",
+              "socket": "east",
+              "vessel": "silk"
+            },
+            "world_id": "w24407"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": 2,
+              "ribbon": "opal",
+              "socket": "west",
+              "vessel": "cotton"
+            },
+            "world_id": "w82246"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": 0,
+              "ribbon": null,
+              "socket": "west",
+              "vessel": "linen"
+            },
+            "world_id": "w51037"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": false,
+              "ribbon": null,
+              "socket": "east",
+              "vessel": "linen"
+            },
+            "world_id": "w22298"
+          },
+          {
+            "facts": {
+              "copper": "unknown",
+              "panel": 3,
+              "ribbon": "opal",
+              "socket": "east",
+              "vessel": "silk"
+            },
+            "world_id": "w89924"
+          },
+          {
+            "facts": {
+              "copper": 0,
+              "panel": "unknown",
+              "ribbon": "opal",
+              "socket": "east",
+              "vessel": "linen"
+            },
+            "world_id": "w71311"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": 2,
+              "ribbon": "opal",
+              "socket": "east",
+              "vessel": "cotton"
+            },
+            "world_id": "w92694"
+          }
+        ]
+      }
+    },
+    "coercing_partitions": {
+      "sample_id": "RBM-001-belief-gap-v1-p0013-A-s00-forward",
+      "record_hash": "f217739c36601a879b1678188282713ce4ba8311272da06f8a330086dce1f0d1",
+      "correct": {
+        "belief_sizes": [
+          5,
+          2
+        ],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": null
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "query_id": "q0"
+          },
+          {
+            "can_reduce_uncertainty": true,
+            "counts": [
+              {
+                "count": 1,
+                "value": 0
+              },
+              {
+                "count": 1,
+                "value": false
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "query_id": "q1"
+          },
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 2,
+                "value": false
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": false,
+            "query_id": "q2"
+          }
+        ],
+        "surviving_worlds": [
+          "w22298",
+          "w51037"
+        ]
+      },
+      "incorrect_mutant": {
+        "surviving_worlds": [
+          "w22298",
+          "w51037"
+        ],
+        "belief_sizes": [
+          5,
+          2
+        ],
+        "queries": [
+          {
+            "query_id": "q0",
+            "counts": [
+              {
+                "value": null,
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "can_reduce_uncertainty": false
+          },
+          {
+            "query_id": "q1",
+            "counts": [
+              {
+                "value": 0,
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": 0,
+            "can_reduce_uncertainty": false
+          },
+          {
+            "query_id": "q2",
+            "counts": [
+              {
+                "value": false,
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": false,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      },
+      "input": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": false,
+            "fact": "copper"
+          },
+          {
+            "equals": "linen",
+            "fact": "vessel"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "ribbon",
+            "query_id": "q0"
+          },
+          {
+            "fact": "panel",
+            "query_id": "q1"
+          },
+          {
+            "fact": "copper",
+            "query_id": "q2"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "copper": 0,
+              "panel": "unknown",
+              "ribbon": "opal",
+              "socket": "west",
+              "vessel": "linen"
+            },
+            "world_id": "w20290"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": 1,
+              "ribbon": "opal",
+              "socket": "east",
+              "vessel": "silk"
+            },
+            "world_id": "w24407"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": 2,
+              "ribbon": "opal",
+              "socket": "west",
+              "vessel": "cotton"
+            },
+            "world_id": "w82246"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": 0,
+              "ribbon": null,
+              "socket": "west",
+              "vessel": "linen"
+            },
+            "world_id": "w51037"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": false,
+              "ribbon": null,
+              "socket": "east",
+              "vessel": "linen"
+            },
+            "world_id": "w22298"
+          },
+          {
+            "facts": {
+              "copper": "unknown",
+              "panel": 3,
+              "ribbon": "opal",
+              "socket": "east",
+              "vessel": "silk"
+            },
+            "world_id": "w89924"
+          },
+          {
+            "facts": {
+              "copper": 0,
+              "panel": "unknown",
+              "ribbon": "opal",
+              "socket": "east",
+              "vessel": "linen"
+            },
+            "world_id": "w71311"
+          },
+          {
+            "facts": {
+              "copper": false,
+              "panel": 2,
+              "ribbon": "opal",
+              "socket": "east",
+              "vessel": "cotton"
+            },
+            "world_id": "w92694"
+          }
+        ]
+      }
+    }
+  },
+  "train_only_lexical_marker_derivation": {
+    "train_empty_observation_string_values": [
+      "linen",
+      "reed",
+      "stone",
+      "unknown"
+    ],
+    "train_nonempty_observation_string_values": [
+      "fern",
+      "linen",
+      "reed"
+    ],
+    "empty_only_marker_values": [
+      "stone",
+      "unknown"
+    ],
+    "classification_results": {
+      "train": {
+        "records": 648,
+        "correct": 648
+      },
+      "dev_challenge": {
+        "records": 648,
+        "correct": 648
+      }
+    }
+  },
+  "minimal_public_contract_diagnostic_probes": [
+    {
+      "name": "typed_query_partition_true",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": true
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": 1
+            }
+          }
+        ],
+        "observations": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": 1,
+                "count": 1
+              },
+              {
+                "value": true,
+                "count": 1
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          }
+        ]
+      },
+      "coercing_wrong": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": true,
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": true,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "typed_observation_filter_true",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": true
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": 1
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "f",
+            "equals": true
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a"
+        ],
+        "belief_sizes": [
+          1
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": true,
+                "count": 1
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": true,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      },
+      "coercing_wrong": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [
+          2
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": 1,
+                "count": 1
+              },
+              {
+                "value": true,
+                "count": 1
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "typed_query_partition_false",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": false
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": 0
+            }
+          }
+        ],
+        "observations": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": 0,
+                "count": 1
+              },
+              {
+                "value": false,
+                "count": 1
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          }
+        ]
+      },
+      "coercing_wrong": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": false,
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": false,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "typed_observation_filter_false",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": false
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": 0
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "f",
+            "equals": false
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a"
+        ],
+        "belief_sizes": [
+          1
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": false,
+                "count": 1
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": false,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      },
+      "coercing_wrong": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [
+          2
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": 0,
+                "count": 1
+              },
+              {
+                "value": false,
+                "count": 1
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "multiworld_entailed_null",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": null,
+              "g": 0
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": null,
+              "g": 1
+            }
+          }
+        ],
+        "observations": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": null,
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "ambiguous_null",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": null,
+              "g": 0
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": 0,
+              "g": 1
+            }
+          }
+        ],
+        "observations": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": 0,
+                "count": 1
+              },
+              {
+                "value": null,
+                "count": 1
+              }
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty_null_guarantee",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": null,
+              "g": 0
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": 0,
+              "g": 1
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "f",
+            "equals": "unsupported"
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [],
+        "belief_sizes": [
+          0
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "literal_unknown_ordinary_scalar",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": "unknown",
+              "g": 0
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": "unknown",
+              "g": 1
+            }
+          }
+        ],
+        "observations": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": "unknown",
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": "unknown",
+            "can_reduce_uncertainty": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "cross_fact_contradiction_absorption",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "x": 1,
+              "y": 1
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "x",
+            "equals": 0
+          },
+          {
+            "fact": "y",
+            "equals": 1
+          },
+          {
+            "fact": "x",
+            "equals": 1
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "x"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [],
+        "belief_sizes": [
+          1,
+          0,
+          0
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "guaranteed": null,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      },
+      "reset_wrong": {
+        "surviving_worlds": [
+          "b"
+        ],
+        "belief_sizes": [
+          1,
+          1,
+          1
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": 1,
+                "count": 1
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": 1,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "nonempty_repetition",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "x": 1,
+              "y": 1
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "x",
+            "equals": 0
+          },
+          {
+            "fact": "x",
+            "equals": 0
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "x"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a"
+        ],
+        "belief_sizes": [
+          1,
+          1
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": 0,
+                "count": 1
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": 0,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "stone_observation_jointly_supported",
+      "scope": "audit_probe",
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "a",
+            "facts": {
+              "f": null,
+              "g": 0,
+              "x": "stone",
+              "y": "linen"
+            }
+          },
+          {
+            "world_id": "b",
+            "facts": {
+              "f": null,
+              "g": 1,
+              "x": "stone",
+              "y": "linen"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "x",
+            "equals": "stone"
+          },
+          {
+            "fact": "y",
+            "equals": "linen"
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "fact": "f"
+          }
+        ]
+      },
+      "correct": {
+        "surviving_worlds": [
+          "a",
+          "b"
+        ],
+        "belief_sizes": [
+          2,
+          2
+        ],
+        "queries": [
+          {
+            "query_id": "q",
+            "counts": [
+              {
+                "value": null,
+                "count": 2
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "can_reduce_uncertainty": false
+          }
+        ]
+      },
+      "marker_wrong": "empty belief"
+    }
+  ],
+  "malformed_rejections": [
+    "float_fact",
+    "float_observation",
+    "duplicate_world_id",
+    "unknown_query_fact"
+  ],
+  "diagnostic_scope": "Executed audit probes add no supplied records, contexts or source families. No producer/reference/oracle/checker/tests or reviewer verdicts read. Frozen input expectations/first/final judgments unchanged.",
+  "same_model_common_public_design": true
+}

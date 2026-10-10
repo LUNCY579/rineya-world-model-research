@@ -1,0 +1,67 @@
+{
+  "execution_id": "/root/formal_oracle",
+  "role": "Independent Formal Oracle Engineer",
+  "actual_author": "/root/formal_oracle",
+  "actual_runner": "/root/formal_oracle",
+  "APIs": [
+    "oracles.belief_controls_independent.check(row) -> list[str]",
+    "oracles.belief_controls_independent.check_batch(rows) -> report with errors/counts and independently executed witness evidence"
+  ],
+  "new_checker_sha256": "ec9f387485f2a2d58ab557db0a2a7d95c24e77cb3108afa503a80c575e04b03e",
+  "new_tests_sha256": "9332d3a9b23fc054c5dbeaaaa29c3e652f505f99932d032c6b221cc5cef3d29b",
+  "predecessor_checker_sha256": "d140306ee9c7d1465b9d5f5fd12f2524b03506644ec44abd6c2ad51604677da4",
+  "predecessor_tests_sha256": "359ac7c2282a578848f081da5cf571e12c18b9a1f9a78228ce6109f3e43a287d",
+  "predecessor_source_blobs_exactly_verified": true,
+  "predecessor_test_reports_and_root_first_audit_modified": false,
+  "root_first_audit_or_private_verdicts_read": false,
+  "corrective_exact_source_evidence": "High-Quality_Dataset/reviews/oracle/RBM-controls-corrective-preexecution-20261010T024959Z.json",
+  "corrective_exact_source_evidence_sha256": "fd2881b1651caa4222e15a16cb45846d0de7609b1ca2db87dd1d04fbb487f58b",
+  "interpretation": {
+    "absorption": "Checker interface bug: requiring prefix0 was an unpublished extra. Full W remains independently checked; first-empty and subsequent relevant prefix locators remain required.",
+    "probe_identifiers": "Checker interface bug: comparing declared IDs only to internally generated spelling was unpublished. Arbitrary descriptive IDs now bind actual independent input-derived execution in the claimed family/property. No unseen producer ledger is inferred; IDs/pointers supply no truth."
+  },
+  "actual_execution": {
+    "tool": "exec_command and write_stdin",
+    "start_chunk_id": "9eb659",
+    "session_id": 63706,
+    "completion_chunk_id": "9aa547",
+    "exit_code": 0,
+    "runtime": "PYTHONDONTWRITEBYTECODE=1 /opt/anaconda3/bin/python3",
+    "report": "High-Quality_Dataset/reviews/oracle/RBM-controls-corrective-execution-20261010T025035Z.json",
+    "report_sha256": "ef5252186f9fbb16afb2f499217b399152e9a6af917c7f58b0d47dbb3218fb09",
+    "tests": 26,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 35.7571285830054,
+    "hand_fixture_batch_counts": {
+      "added_probe_corpus_records": 0,
+      "added_probe_source_families": 0,
+      "base_context_query_observations": 72,
+      "base_contexts": 24,
+      "controlled_records": 1296,
+      "distinct_decoded_world_tables": 4,
+      "distinct_literal_query_signatures": 9,
+      "distinct_parsed_tasks": 648,
+      "distinct_renderings": 1296,
+      "distinct_visible_world_tables": 12,
+      "executed_probes": 58,
+      "records": 1296,
+      "rendered_query_observations": 3888,
+      "rotation_level_query_observations": 1944,
+      "source_families": 4
+    },
+    "hand_fixture_baseline_errors": []
+  },
+  "negative_regressions": [
+    "Missing actual first-empty prefix",
+    "Later observation unsupported in full W",
+    "Unchanged world list presented as a permutation",
+    "Unsupported scoped audit transformation",
+    "Same declared probe ID bound to conflicting public properties",
+    "Foreign-family pair IDs"
+  ],
+  "semantics_changed": false,
+  "producer_sources_candidate_targets_or_private_verdicts_used": false,
+  "scope": "Corrective public-encoding interpretation and mechanism tests only. Original failure/evidence bytes remain preserved. No data/sample/release approval.",
+  "approval_verdict": null
+}

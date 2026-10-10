@@ -78,8 +78,19 @@ def main():
     for entry, path in candidates:
         if path.name.endswith("compression_manifest.json") or path.name.endswith(".lossless.json"):
             metadata = json.loads(path.read_text())
-            raw = local_declared(metadata["raw_path"])
-            manifests.setdefault(raw.relative_to(FACTORY).as_posix(), []).append((path, metadata))
+            records = metadata.get("artifacts", [metadata])
+            for record in records:
+                normalized = dict(record)
+                # Preserve expert nested manifests as their actual original bytes;
+                # support their field names alongside the standard gzip schema.
+                for target, alternate in [("raw_bytes", "raw_length"),
+                                          ("gzip_path", "compressed_path"),
+                                          ("gzip_bytes", "compressed_length"),
+                                          ("gzip_sha256", "compressed_sha256")]:
+                    if target not in normalized and alternate in normalized:
+                        normalized[target] = normalized[alternate]
+                raw = local_declared(normalized["raw_path"])
+                manifests.setdefault(raw.relative_to(FACTORY).as_posix(), []).append((path, normalized))
 
     files = []
     pairings = []

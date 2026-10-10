@@ -1,0 +1,396 @@
+{
+  "approval": "provisional_checkpoint",
+  "approved_by": "/root",
+  "branch": "research/rineya-high-quality-dataset-v1",
+  "checkpoint_id": "belief-public-preparation",
+  "commit_sha": "e65f3c2a07b3f09572584befdbd2925fcd108ee1",
+  "diff_numstat": "5\t0\tdatasets/rineya_high_quality_factory_v1/NEXT_SESSION_HANDOFF.md\n5\t0\tdatasets/rineya_high_quality_factory_v1/PROJECT_STATUS.md\n107\t0\tdatasets/rineya_high_quality_factory_v1/audits/shortcut_detection/belief_rule_mutants.py\n261\t0\tdatasets/rineya_high_quality_factory_v1/backup_logs/memory-gap-v2-handoff_RECEIPT.json\n103\t0\tdatasets/rineya_high_quality_factory_v1/backup_logs/memory-gap-v2-handoff_SPEC.json\n50\t0\tdatasets/rineya_high_quality_factory_v1/factory/pipeline.py\n174\t0\tdatasets/rineya_high_quality_factory_v1/feedback/improvement_requests/RBM-GAP-007-DESIGN-SUPPLEMENT.json\n50\t0\tdatasets/rineya_high_quality_factory_v1/handoff/BELIEF_PREPARATION_CHECKPOINT.json\n33\t0\tdatasets/rineya_high_quality_factory_v1/handoff/MEMORY_WAVE_SAFE_CHECKPOINT.json\n5\t0\tdatasets/rineya_high_quality_factory_v1/handoff/NEXT_SESSION_HANDOFF.md\n17\t0\tdatasets/rineya_high_quality_factory_v1/quality_reports/BELIEF_GATE_PATCH_PRECHECK.json\n26\t0\tdatasets/rineya_high_quality_factory_v1/quality_reports/BELIEF_PREPARATION_CUSTODY.json\n63\t0\tdatasets/rineya_high_quality_factory_v1/quality_reports/BELIEF_PREPARATION_FULL_SUITE_EXECUTION.json\n5\t0\tdatasets/rineya_high_quality_factory_v1/quality_reports/BELIEF_PREPARATION_FULL_SUITE_OUTPUT.txt\n68\t0\tdatasets/rineya_high_quality_factory_v1/reproducibility/make_input_only_review_view.py\n68\t0\tdatasets/rineya_high_quality_factory_v1/reproducibility/source_blobs/682a984097e601f7023e574019b55d73a751e86fc6a745413f9bae73688b46e6.source\n355\t0\tdatasets/rineya_high_quality_factory_v1/reproducibility/source_blobs/7d03d06452b45cdc37e63d112a07fdf42cb5bd6d779b501d4d53319ca147cde7.source\n107\t0\tdatasets/rineya_high_quality_factory_v1/reproducibility/source_blobs/c593918fa3655606abbb016e741029686ecaba8782cddb99a69b861e9cb033cf.source\n12\t0\tdatasets/rineya_high_quality_factory_v1/research/ROLE_REGISTRY.json\n218\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RBM-EVIDENCE-GAP-EXECUTION.json\n19\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RBM-EVIDENCE-GAP-ROOT_FREEZE.json\n88\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RBM-EVIDENCE-GAP.md\n74\t0\tdatasets/rineya_high_quality_factory_v1/reviews/oracle/RBM-properties-execution-20261010T020750Z.json\n44\t0\tdatasets/rineya_high_quality_factory_v1/reviews/oracle/RBM-properties-execution-20261010T020910Z.json\n47\t0\tdatasets/rineya_high_quality_factory_v1/reviews/oracle/RBM-properties-preexecution-20261010T020726Z.json\n50\t0\tdatasets/rineya_high_quality_factory_v1/reviews/oracle/RBM-properties-preexecution-20261010T020834Z.json\n62\t0\tdatasets/rineya_high_quality_factory_v1/reviews/oracle/RBM-properties-receipt-20261010T020910Z.json\n82\t0\tdatasets/rineya_high_quality_factory_v1/schemas/BELIEF_CONTROL_PROPERTIES.md\n299\t0\tdatasets/rineya_high_quality_factory_v1/tests/oracle_belief_properties_test.py",
+  "diff_stat": ".../NEXT_SESSION_HANDOFF.md                        |   5 +\n .../PROJECT_STATUS.md                              |   5 +\n .../shortcut_detection/belief_rule_mutants.py      | 107 +++++++\n .../backup_logs/memory-gap-v2-handoff_RECEIPT.json | 261 +++++++++++++++\n .../backup_logs/memory-gap-v2-handoff_SPEC.json    | 103 ++++++\n .../factory/pipeline.py                            |  50 +++\n .../RBM-GAP-007-DESIGN-SUPPLEMENT.json             | 174 ++++++++++\n .../handoff/BELIEF_PREPARATION_CHECKPOINT.json     |  50 +++\n .../handoff/MEMORY_WAVE_SAFE_CHECKPOINT.json       |  33 ++\n .../handoff/NEXT_SESSION_HANDOFF.md                |   5 +\n .../BELIEF_GATE_PATCH_PRECHECK.json                |  17 +\n .../BELIEF_PREPARATION_CUSTODY.json                |  26 ++\n .../BELIEF_PREPARATION_FULL_SUITE_EXECUTION.json   |  63 ++++\n .../BELIEF_PREPARATION_FULL_SUITE_OUTPUT.txt       |   5 +\n .../reproducibility/make_input_only_review_view.py |  68 ++++\n ...19b55d73a751e86fc6a745413f9bae73688b46e6.source |  68 ++++\n ...2a07fdf42cb5bd6d779b501d4d53319ca147cde7.source | 355 +++++++++++++++++++++\n ...741029686ecaba8782cddb99a69b861e9cb033cf.source | 107 +++++++\n .../research/ROLE_REGISTRY.json                    |  12 +\n .../curricula/RBM-EVIDENCE-GAP-EXECUTION.json      | 218 +++++++++++++\n .../curricula/RBM-EVIDENCE-GAP-ROOT_FREEZE.json    |  19 ++\n .../research/curricula/RBM-EVIDENCE-GAP.md         |  88 +++++\n .../RBM-properties-execution-20261010T020750Z.json |  74 +++++\n .../RBM-properties-execution-20261010T020910Z.json |  44 +++\n ...M-properties-preexecution-20261010T020726Z.json |  47 +++\n ...M-properties-preexecution-20261010T020834Z.json |  50 +++\n .../RBM-properties-receipt-20261010T020910Z.json   |  62 ++++\n .../schemas/BELIEF_CONTROL_PROPERTIES.md           |  82 +++++\n .../tests/oracle_belief_properties_test.py         | 299 +++++++++++++++++\n 29 files changed, 2497 insertions(+)",
+  "execution_role": "GitHub Integrity and Backup Manager",
+  "files": 30,
+  "finished_at_utc": "2026-10-10T02:28:35.592099+00:00",
+  "helper_author_execution": "/root/backup_manager",
+  "inventory": [
+    {
+      "path": "NEXT_SESSION_HANDOFF.md",
+      "sha256": "c810725c8623ae57cb512f83a7eff18a62a7223edb557b67e85cad4067fae76b",
+      "size": 6684
+    },
+    {
+      "path": "PROJECT_STATUS.md",
+      "sha256": "0c0fcd7be30e69c76b2bb1ed03c057457bbe6a8a459630a7efefd85912ac6f43",
+      "size": 5545
+    },
+    {
+      "path": "audits/shortcut_detection/belief_rule_mutants.py",
+      "sha256": "c593918fa3655606abbb016e741029686ecaba8782cddb99a69b861e9cb033cf",
+      "size": 6197
+    },
+    {
+      "path": "backup_logs/memory-gap-v2-handoff_RECEIPT.json",
+      "sha256": "4ec11eef39e1b04caccb300f4a11dd36e92bef360144ae830cdac2c8febe06a5",
+      "size": 11354
+    },
+    {
+      "path": "backup_logs/memory-gap-v2-handoff_SPEC.json",
+      "sha256": "246bb584d87bc2268ee08e89fee61c1298ddd20180ddb0d15720405dd7f3271a",
+      "size": 3819
+    },
+    {
+      "path": "factory/pipeline.py",
+      "sha256": "7d03d06452b45cdc37e63d112a07fdf42cb5bd6d779b501d4d53319ca147cde7",
+      "size": 24490
+    },
+    {
+      "path": "feedback/improvement_requests/RBM-GAP-007-DESIGN-SUPPLEMENT.json",
+      "sha256": "4d7c0374a7ce4a761b29eaf87474f94bee00f2a7dca34ad2ce986d3bb6ec0052",
+      "size": 8416
+    },
+    {
+      "path": "handoff/BELIEF_PREPARATION_CHECKPOINT.json",
+      "sha256": "25bcbaaf2341090ee32969f955c26c87efd7275c12941f1991aedd00bcaed017",
+      "size": 2994
+    },
+    {
+      "path": "handoff/MEMORY_WAVE_SAFE_CHECKPOINT.json",
+      "sha256": "72bcfcb55e431670b7a46ce309c481da35089c363e198e5c08ec1c8c81e4b51e",
+      "size": 2100
+    },
+    {
+      "path": "handoff/NEXT_SESSION_HANDOFF.md",
+      "sha256": "c810725c8623ae57cb512f83a7eff18a62a7223edb557b67e85cad4067fae76b",
+      "size": 6684
+    },
+    {
+      "path": "quality_reports/BELIEF_GATE_PATCH_PRECHECK.json",
+      "sha256": "e95d343cf3b4f952c17d0993836d94d7ba5aa98f6ffb4c6ca624879adb0813e6",
+      "size": 1165
+    },
+    {
+      "path": "quality_reports/BELIEF_PREPARATION_CUSTODY.json",
+      "sha256": "a2f4599d3b0ed70ec5d770d054d2f406efa71a6df447a66ad6a6a3238d647d17",
+      "size": 915
+    },
+    {
+      "path": "quality_reports/BELIEF_PREPARATION_FULL_SUITE_EXECUTION.json",
+      "sha256": "773018bbb53286747545b0f22ce3561f8bc7978679256df96ae980c40a450484",
+      "size": 3905
+    },
+    {
+      "path": "quality_reports/BELIEF_PREPARATION_FULL_SUITE_OUTPUT.txt",
+      "sha256": "88bdf4295d381450ebff6a7a97e6dc42c258cea7b0847d304790ad32f774a3d2",
+      "size": 303
+    },
+    {
+      "path": "reproducibility/make_input_only_review_view.py",
+      "sha256": "682a984097e601f7023e574019b55d73a751e86fc6a745413f9bae73688b46e6",
+      "size": 3349
+    },
+    {
+      "path": "reproducibility/source_blobs/682a984097e601f7023e574019b55d73a751e86fc6a745413f9bae73688b46e6.source",
+      "sha256": "682a984097e601f7023e574019b55d73a751e86fc6a745413f9bae73688b46e6",
+      "size": 3349
+    },
+    {
+      "path": "reproducibility/source_blobs/6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b.source",
+      "sha256": "6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b",
+      "size": 21602
+    },
+    {
+      "path": "reproducibility/source_blobs/7d03d06452b45cdc37e63d112a07fdf42cb5bd6d779b501d4d53319ca147cde7.source",
+      "sha256": "7d03d06452b45cdc37e63d112a07fdf42cb5bd6d779b501d4d53319ca147cde7",
+      "size": 24490
+    },
+    {
+      "path": "reproducibility/source_blobs/c593918fa3655606abbb016e741029686ecaba8782cddb99a69b861e9cb033cf.source",
+      "sha256": "c593918fa3655606abbb016e741029686ecaba8782cddb99a69b861e9cb033cf",
+      "size": 6197
+    },
+    {
+      "path": "research/ROLE_REGISTRY.json",
+      "sha256": "08c15ecadbd38ab6376673f612dcaefb74faaedad1e3c5581961e855286a6c98",
+      "size": 4421
+    },
+    {
+      "path": "research/curricula/RBM-EVIDENCE-GAP-EXECUTION.json",
+      "sha256": "06021e1b7703605fb4e9b91638e4fc7abd8dc4ebf0d32b99228117d1fab0d4c1",
+      "size": 7132
+    },
+    {
+      "path": "research/curricula/RBM-EVIDENCE-GAP-ROOT_FREEZE.json",
+      "sha256": "c67ed03e6b62ef031a43855819cba58296e17baa780aca181e57bca9ce4ee64b",
+      "size": 918
+    },
+    {
+      "path": "research/curricula/RBM-EVIDENCE-GAP.md",
+      "sha256": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120",
+      "size": 14594
+    },
+    {
+      "path": "reviews/oracle/RBM-properties-execution-20261010T020750Z.json",
+      "sha256": "890e6d648d52b92ebec59a87d65a0e4028720d304a3edf430e27a529a97a58f4",
+      "size": 7905
+    },
+    {
+      "path": "reviews/oracle/RBM-properties-execution-20261010T020910Z.json",
+      "sha256": "87bd9da599d843dc2c8734f2a64c7767fa51213cd667193e9ec9332f16a5b847",
+      "size": 4800
+    },
+    {
+      "path": "reviews/oracle/RBM-properties-preexecution-20261010T020726Z.json",
+      "sha256": "b48030e82aaf1734bd471527752d3dbc28da7410c1e7f0b1dbc72464b9945297",
+      "size": 20758
+    },
+    {
+      "path": "reviews/oracle/RBM-properties-preexecution-20261010T020834Z.json",
+      "sha256": "a1fd80a1f82faebed3c208c87755868bd7de90ed3594fe7079651ec9d2b10cbe",
+      "size": 21452
+    },
+    {
+      "path": "reviews/oracle/RBM-properties-receipt-20261010T020910Z.json",
+      "sha256": "bb31d345d0e070fe117c72989cf1f16070b198a16215c19e178b2ac72f550903",
+      "size": 3056
+    },
+    {
+      "path": "schemas/BELIEF_CONTROL_PROPERTIES.md",
+      "sha256": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+      "size": 19798
+    },
+    {
+      "path": "tests/oracle_belief_properties_test.py",
+      "sha256": "1dc53523164e24de76b59af2c3327b498e3bed26f65ee66157a21108d1bef861",
+      "size": 17427
+    }
+  ],
+  "private_repository_evidence": {
+    "isPrivate": true,
+    "nameWithOwner": "LUNCY579/rineya-world-model-research",
+    "viewerPermission": "ADMIN"
+  },
+  "remote_before_sha": "2ceaa5535076d09f9d87554260cdfaaa40243230",
+  "remote_commit_sha": "e65f3c2a07b3f09572584befdbd2925fcd108ee1",
+  "remote_verification": {
+    "blob_receipts": [
+      {
+        "git_blob": "0535ffeb14e6b5a1fea665e6f6df68f84d0afa59",
+        "paths": [
+          "backup_logs/memory-gap-v2-handoff_RECEIPT.json"
+        ],
+        "sha256": "4ec11eef39e1b04caccb300f4a11dd36e92bef360144ae830cdac2c8febe06a5",
+        "size": 11354
+      },
+      {
+        "git_blob": "0b5356a9d2633ab56887aa8ad18921607153736d",
+        "paths": [
+          "factory/pipeline.py",
+          "reproducibility/source_blobs/7d03d06452b45cdc37e63d112a07fdf42cb5bd6d779b501d4d53319ca147cde7.source"
+        ],
+        "sha256": "7d03d06452b45cdc37e63d112a07fdf42cb5bd6d779b501d4d53319ca147cde7",
+        "size": 24490
+      },
+      {
+        "git_blob": "177244ff9f0a63c555d2fba57d7929805edc2707",
+        "paths": [
+          "quality_reports/BELIEF_PREPARATION_FULL_SUITE_OUTPUT.txt"
+        ],
+        "sha256": "88bdf4295d381450ebff6a7a97e6dc42c258cea7b0847d304790ad32f774a3d2",
+        "size": 303
+      },
+      {
+        "git_blob": "17aaeadc5e8782bf0c9c0bdc9abcdba1b6c30186",
+        "paths": [
+          "schemas/BELIEF_CONTROL_PROPERTIES.md"
+        ],
+        "sha256": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+        "size": 19798
+      },
+      {
+        "git_blob": "1b91c4c236e2116674eabf142124995f583989af",
+        "paths": [
+          "reviews/oracle/RBM-properties-execution-20261010T020910Z.json"
+        ],
+        "sha256": "87bd9da599d843dc2c8734f2a64c7767fa51213cd667193e9ec9332f16a5b847",
+        "size": 4800
+      },
+      {
+        "git_blob": "1d15475bebece2afe197547aed3ddbe36a4bc166",
+        "paths": [
+          "reviews/oracle/RBM-properties-preexecution-20261010T020834Z.json"
+        ],
+        "sha256": "a1fd80a1f82faebed3c208c87755868bd7de90ed3594fe7079651ec9d2b10cbe",
+        "size": 21452
+      },
+      {
+        "git_blob": "2c80782b59cac095d218e327467cfda035947d4d",
+        "paths": [
+          "quality_reports/BELIEF_PREPARATION_FULL_SUITE_EXECUTION.json"
+        ],
+        "sha256": "773018bbb53286747545b0f22ce3561f8bc7978679256df96ae980c40a450484",
+        "size": 3905
+      },
+      {
+        "git_blob": "42253036d92f96f445d645127d831d92285c457d",
+        "paths": [
+          "research/curricula/RBM-EVIDENCE-GAP.md"
+        ],
+        "sha256": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120",
+        "size": 14594
+      },
+      {
+        "git_blob": "4d6df78e37124a8c0b992cc707180f62718fa717",
+        "paths": [
+          "reviews/oracle/RBM-properties-receipt-20261010T020910Z.json"
+        ],
+        "sha256": "bb31d345d0e070fe117c72989cf1f16070b198a16215c19e178b2ac72f550903",
+        "size": 3056
+      },
+      {
+        "git_blob": "5ca78205bea34c440a1daf1ad69b6b8cec024564",
+        "paths": [
+          "handoff/MEMORY_WAVE_SAFE_CHECKPOINT.json"
+        ],
+        "sha256": "72bcfcb55e431670b7a46ce309c481da35089c363e198e5c08ec1c8c81e4b51e",
+        "size": 2100
+      },
+      {
+        "git_blob": "6f42614ed1cf2befd73e38ff828e7e700bbf190d",
+        "paths": [
+          "quality_reports/BELIEF_GATE_PATCH_PRECHECK.json"
+        ],
+        "sha256": "e95d343cf3b4f952c17d0993836d94d7ba5aa98f6ffb4c6ca624879adb0813e6",
+        "size": 1165
+      },
+      {
+        "git_blob": "9b626f979a94f39e6c8f33c95491b93b26554593",
+        "paths": [
+          "backup_logs/memory-gap-v2-handoff_SPEC.json"
+        ],
+        "sha256": "246bb584d87bc2268ee08e89fee61c1298ddd20180ddb0d15720405dd7f3271a",
+        "size": 3819
+      },
+      {
+        "git_blob": "a38c77042e21aa2919ed5d7aea12cd37968296de",
+        "paths": [
+          "PROJECT_STATUS.md"
+        ],
+        "sha256": "0c0fcd7be30e69c76b2bb1ed03c057457bbe6a8a459630a7efefd85912ac6f43",
+        "size": 5545
+      },
+      {
+        "git_blob": "a479106cded25d675170be98c226c92dacf4e71a",
+        "paths": [
+          "quality_reports/BELIEF_PREPARATION_CUSTODY.json"
+        ],
+        "sha256": "a2f4599d3b0ed70ec5d770d054d2f406efa71a6df447a66ad6a6a3238d647d17",
+        "size": 915
+      },
+      {
+        "git_blob": "ac3636d6b9f1e05120fa858a76db7269481d856e",
+        "paths": [
+          "research/ROLE_REGISTRY.json"
+        ],
+        "sha256": "08c15ecadbd38ab6376673f612dcaefb74faaedad1e3c5581961e855286a6c98",
+        "size": 4421
+      },
+      {
+        "git_blob": "bcef6911bcb55df6407911f9953c0fb116fe2806",
+        "paths": [
+          "reproducibility/source_blobs/6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b.source"
+        ],
+        "sha256": "6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b",
+        "size": 21602
+      },
+      {
+        "git_blob": "bcfe664ea6c5af0ec41cdd54cfbece2a0713bfa6",
+        "paths": [
+          "NEXT_SESSION_HANDOFF.md",
+          "handoff/NEXT_SESSION_HANDOFF.md"
+        ],
+        "sha256": "c810725c8623ae57cb512f83a7eff18a62a7223edb557b67e85cad4067fae76b",
+        "size": 6684
+      },
+      {
+        "git_blob": "c16741f449378e9054875f9036f2392a5c77c748",
+        "paths": [
+          "reviews/oracle/RBM-properties-preexecution-20261010T020726Z.json"
+        ],
+        "sha256": "b48030e82aaf1734bd471527752d3dbc28da7410c1e7f0b1dbc72464b9945297",
+        "size": 20758
+      },
+      {
+        "git_blob": "c17fdc81f04ef995a2794a991d4ab9647a852e65",
+        "paths": [
+          "handoff/BELIEF_PREPARATION_CHECKPOINT.json"
+        ],
+        "sha256": "25bcbaaf2341090ee32969f955c26c87efd7275c12941f1991aedd00bcaed017",
+        "size": 2994
+      },
+      {
+        "git_blob": "d44372f972235a12389c038e7ded19d46575e43d",
+        "paths": [
+          "reproducibility/make_input_only_review_view.py",
+          "reproducibility/source_blobs/682a984097e601f7023e574019b55d73a751e86fc6a745413f9bae73688b46e6.source"
+        ],
+        "sha256": "682a984097e601f7023e574019b55d73a751e86fc6a745413f9bae73688b46e6",
+        "size": 3349
+      },
+      {
+        "git_blob": "deb25aaef99d09945d90df288bff88c2728574ec",
+        "paths": [
+          "audits/shortcut_detection/belief_rule_mutants.py",
+          "reproducibility/source_blobs/c593918fa3655606abbb016e741029686ecaba8782cddb99a69b861e9cb033cf.source"
+        ],
+        "sha256": "c593918fa3655606abbb016e741029686ecaba8782cddb99a69b861e9cb033cf",
+        "size": 6197
+      },
+      {
+        "git_blob": "eaf8ea69f35a1e5462a6c54f869b926c28a6396a",
+        "paths": [
+          "reviews/oracle/RBM-properties-execution-20261010T020750Z.json"
+        ],
+        "sha256": "890e6d648d52b92ebec59a87d65a0e4028720d304a3edf430e27a529a97a58f4",
+        "size": 7905
+      },
+      {
+        "git_blob": "ee88096ace0ba84af21aaa88d5decc6762ef2265",
+        "paths": [
+          "feedback/improvement_requests/RBM-GAP-007-DESIGN-SUPPLEMENT.json"
+        ],
+        "sha256": "4d7c0374a7ce4a761b29eaf87474f94bee00f2a7dca34ad2ce986d3bb6ec0052",
+        "size": 8416
+      },
+      {
+        "git_blob": "f0f8cd13cd37876ad14aff196c6b5396bab12d60",
+        "paths": [
+          "research/curricula/RBM-EVIDENCE-GAP-EXECUTION.json"
+        ],
+        "sha256": "06021e1b7703605fb4e9b91638e4fc7abd8dc4ebf0d32b99228117d1fab0d4c1",
+        "size": 7132
+      },
+      {
+        "git_blob": "fa9a1fb1fb00754ddcf60f307a56e6277889798c",
+        "paths": [
+          "tests/oracle_belief_properties_test.py"
+        ],
+        "sha256": "1dc53523164e24de76b59af2c3327b498e3bed26f65ee66157a21108d1bef861",
+        "size": 17427
+      },
+      {
+        "git_blob": "fecb9d686115e082173f4fd2c5d21d784b3e52cc",
+        "paths": [
+          "research/curricula/RBM-EVIDENCE-GAP-ROOT_FREEZE.json"
+        ],
+        "sha256": "c67ed03e6b62ef031a43855819cba58296e17baa780aca181e57bca9ce4ee64b",
+        "size": 918
+      }
+    ],
+    "remote_tree_sha": "af5d53405af2b4db1d3f3888745f6a948bcb8d80",
+    "verified_files": 30,
+    "verified_unique_blobs": 26
+  },
+  "repository": "LUNCY579/rineya-world-model-research",
+  "runner_execution": "/root",
+  "started_at_utc": "2026-10-10T02:28:26.611876+00:00",
+  "status": "BACKED_UP",
+  "total_bytes": 265819
+}

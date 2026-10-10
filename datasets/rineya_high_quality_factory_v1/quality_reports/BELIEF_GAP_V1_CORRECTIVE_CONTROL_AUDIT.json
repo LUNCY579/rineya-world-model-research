@@ -1,0 +1,55 @@
+{
+  "at_utc": "2026-10-10T02:54:53.740571+00:00",
+  "runner_execution": "/root",
+  "status": "CORRECTIVE_MACHINE_AUDIT_PASS_WITH_UNRESOLVED_ADVERSARIAL_SHORTCUT",
+  "input_candidate_sha256": "423e3dc3b2ba79a656ce01a4e0ed25a40be0f1e74fa5362770f914e5555b027e",
+  "artifact_inventory": {
+    "factory/pipeline.py": {
+      "sha256": "7d03d06452b45cdc37e63d112a07fdf42cb5bd6d779b501d4d53319ca147cde7",
+      "bytes": 24490
+    },
+    "oracles/belief_controls_independent.py": {
+      "sha256": "ec9f387485f2a2d58ab557db0a2a7d95c24e77cb3108afa503a80c575e04b03e",
+      "bytes": 51104
+    },
+    "tests/test_belief_control_gate.py": {
+      "sha256": "647971b9e28435242cc5a6420091431eefa8296499eced5899be5d5d20c20b2f",
+      "bytes": 4611
+    },
+    "tests/oracle_belief_controls_test.py": {
+      "sha256": "9332d3a9b23fc054c5dbeaaaa29c3e652f505f99932d032c6b221cc5cef3d29b",
+      "bytes": 23452
+    },
+    "audits/leakage/belief-gap-v1.json": {
+      "sha256": "33d707067b78d44c9784d90efcb3bc504115ecbe6ee0448df2445706d9451e34",
+      "bytes": 1170
+    },
+    "audits/diversity/belief-gap-v1-belief-controls.json": {
+      "sha256": "9eb23be5f7e510bdff079c89aadfbd246d516966602375b91bd2e805cc20c5ec",
+      "bytes": 29036017
+    },
+    "reviews/oracle/belief-gap-v1.jsonl": {
+      "sha256": "93f96164cf36f888e3aca9bae294b4fb4220ae599e6942ab863c5833fd517712",
+      "bytes": 457488
+    }
+  },
+  "audit_execution": {
+    "session": 50337,
+    "start_chunk": "1c6fbb",
+    "completion_chunk": "400445",
+    "exit_code": 0,
+    "records": 1296,
+    "oracle_failures": 0,
+    "metadata_failures": 0,
+    "belief_control_errors": 0,
+    "independently_executed_probes": 68
+  },
+  "gate_tests_execution": {
+    "session": 60786,
+    "start_chunk": "a0801b",
+    "completion_chunk": "PENDING_ROOT_ACTUAL_COMPLETION_METADATA",
+    "status": "pending_receipt_update"
+  },
+  "prior_failed_machine_report": "quality_reports/BELIEF_GAP_V1_FIRST_CONTROL_AUDIT.json",
+  "meaning": "Machine truth/locators pass after public-interface correction. The red lexical shortcut remains unresolved and blocks release; no increase in approved records."
+}

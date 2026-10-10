@@ -1,0 +1,37 @@
+{
+  "runner_execution": "/root",
+  "at_utc": "2026-10-10T02:35:42.328771+00:00",
+  "candidate_sha256": "423e3dc3b2ba79a656ce01a4e0ed25a40be0f1e74fa5362770f914e5555b027e",
+  "records": 1296,
+  "source_families": 4,
+  "distinct_parsed_tasks": 648,
+  "distinct_prompts": 1296,
+  "split_records": {
+    "train": 648,
+    "dev_challenge": 648
+  },
+  "split_families": {
+    "train": 2,
+    "dev_challenge": 2
+  },
+  "all_schema_record_hash_rendered_input_checks_passed": true,
+  "source_family_index_assignment_passed": true,
+  "cross_release": {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  "cross_parent_exact_task_duplicates": 0,
+  "protected_benchmark_inspected": false,
+  "core_target_verification": "audits/shortcut_detection/belief-gap-v1-fixed-rule-mutants.json: all1296fulltypedtargets independently recomputed; no mismatch",
+  "reproduction": "quality_reports/BELIEF_GAP_V1_REPRODUCTION.json:5frozencoreartifacts byteidentical; originalunchanged",
+  "pending_gates": "New input-derived factualcontrol/profile/histogram audit, actual first/final expert/red review and adjudication remain pending; this is not approval.",
+  "source_hashes": {
+    "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+    "factory/pipeline.py": "7d03d06452b45cdc37e63d112a07fdf42cb5bd6d779b501d4d53319ca147cde7",
+    "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+    "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f"
+  },
+  "pass": true
+}

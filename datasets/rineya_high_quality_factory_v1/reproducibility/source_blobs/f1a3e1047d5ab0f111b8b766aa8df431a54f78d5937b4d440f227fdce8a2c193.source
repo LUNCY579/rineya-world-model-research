@@ -1,0 +1,1 @@
+Version 1 exports are produced only from accepted records. Student-visible data excludes provenance, split, reviewer receipts and internal IDs. Preference and process reward extraction remains gated by independently reviewed objective labels.

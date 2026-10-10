@@ -1,0 +1,76 @@
+{
+  "batch": "belief-gap-v1",
+  "track_id": "RBM-001",
+  "status": "PROVISIONAL_PENDING_INDEPENDENT_REVIEW",
+  "seed": 20261009,
+  "source_family_indices": [
+    12,
+    13,
+    18,
+    19
+  ],
+  "producer_agent_id": "/root/relational_critic_producer",
+  "producer_role": "belief_producer",
+  "source_sha256": "f27373cd70b09d52880ab3c6f526347ccd440264f5b7918995c6ef8782694522",
+  "public_input_sha256": {
+    "schemas/BELIEF_CONTROL_PROPERTIES.md": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+    "research/curricula/RBM-EVIDENCE-GAP.md": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120"
+  },
+  "root_freeze_sha256": "c67ed03e6b62ef031a43855819cba58296e17baa780aca181e57bca9ce4ee64b",
+  "reference_sha256": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+  "reproduction": "/opt/anaconda3/bin/python3 -m generators.other_tracks.belief_gap --batch belief-gap-v1",
+  "config": {
+    "profiles": {
+      "12": "cyclic_uniform",
+      "13": "acyclic_branching",
+      "18": "cyclic_weighted",
+      "19": "typed_path"
+    },
+    "contexts": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ],
+    "id_shifts": [
+      0,
+      1,
+      2
+    ],
+    "position_shifts": [
+      0,
+      1,
+      2
+    ],
+    "fact_shifts": [
+      0,
+      1,
+      2
+    ],
+    "field_orders": [
+      "forward",
+      "reverse"
+    ]
+  },
+  "actual_counts": {
+    "source_families": 4,
+    "records": 1296,
+    "reference_solve_calls": 656
+  },
+  "cost": {
+    "wall_seconds": 1.7240218329970958,
+    "world_observation_comparisons": 15120,
+    "output_bytes": 18674680
+  },
+  "artifact_sha256": {
+    "data/RBM-001/candidate_renderings/belief-gap-v1.jsonl": "423e3dc3b2ba79a656ce01a4e0ed25a40be0f1e74fa5362770f914e5555b027e",
+    "data/RBM-001/semantic_parents/belief-gap-v1.jsonl": "169d1d5da4da175a8cc56136ff97c40e197d93145e3758f51156ca1c32aacf4f",
+    "manifests/belief-gap-v1_SOURCE.py": "f27373cd70b09d52880ab3c6f526347ccd440264f5b7918995c6ef8782694522",
+    "data/RBM-001/manifests/belief-gap-v1.producer_integrity.json": "8f45e2febc448fa4da8d31d64b135b944c86f7c20ffe9ab3b2f8bc3aa4d10480",
+    "data/RBM-001/manifests/belief-gap-v1.family_controls.json": "be9d205ba12ff312da2283f9ea50c0a0090bbad6935a649aa3f2b4130987b595"
+  },
+  "initial_run_failure": null,
+  "no_approval_release_or_push": true
+}

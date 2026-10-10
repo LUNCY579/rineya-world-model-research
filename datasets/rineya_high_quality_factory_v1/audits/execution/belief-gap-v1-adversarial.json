@@ -1,0 +1,66 @@
+{
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "batch": "belief-gap-v1",
+  "status": "completed",
+  "input_only_sha256": "86a07b5b6e4bf89706e9491ed41415e3facc8a744acdf14ad551cbade8529ac6",
+  "candidate_sha256": "423e3dc3b2ba79a656ce01a4e0ed25a40be0f1e74fa5362770f914e5555b027e",
+  "input_predictions_sha256": "c57ec11f4621d296f390b266f13a2877f4db326c53084dcae0d252b976111756",
+  "first_judgments_sha256": "956f4d601a08c9cff0d13e074d78edc262adbe76d2ddcbaf419f5145465f3611",
+  "final_receipts_sha256": "eec54648acbcb9800a2f6959aeaf16daf89ff906caf465ec6fd5623b38be172e",
+  "script_sha256": "51c3029ffc89e6fdedc47cf0036a9945b80dd4d22fbd1a1895f86496bf5e9d33",
+  "public_contract_hashes": {
+    "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "schemas/BELIEF_CONTROL_PROPERTIES.md": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+    "research/curricula/RBM-EVIDENCE-GAP.md": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120"
+  },
+  "diversity_sha256": "68e1628fa84be1eae23165f7274b071bd2070078f7751f4d31dc26546b1e9270",
+  "shortcut_sha256": "b4eb37e3fef4ac190889f67d5f79baebe48ef2b9ae0c772f312a59e557797bd1",
+  "records": 1296,
+  "decisions": {
+    "ACCEPT": 864,
+    "REVISE": 432
+  },
+  "metamorphic_counts": {
+    "object_field_order": 1296,
+    "world_order_invariance": 1296,
+    "world_id_rename_equivariance": 1296,
+    "query_order_equivariance": 1296,
+    "query_id_rename_equivariance": 1296,
+    "consistent_fact_rename": 1296,
+    "observation_reorder_final_with_recomputed_prefix": 1296,
+    "nonempty_repeat_append": 864,
+    "post_empty_supported_append": 432
+  },
+  "scalar_bijection_checks": 1296,
+  "metadata_or_claim_errors": 0,
+  "finding": {
+    "code": "observation_scalar_token_empty_target_shortcut",
+    "severity": "high",
+    "evidence": {
+      "marker_strings": [
+        "stone",
+        "unknown"
+      ],
+      "split_results": {
+        "train": {
+          "records": 648,
+          "empty_records": 216,
+          "marker_empty_flag_correct": 648,
+          "empty_complete_target_core_correct_from_train_marker_worldcount_observationcount_lookup": 216
+        },
+        "dev_challenge": {
+          "records": 648,
+          "empty_records": 216,
+          "marker_empty_flag_correct": 648,
+          "empty_complete_target_core_correct_from_train_marker_worldcount_observationcount_lookup": 216
+        }
+      },
+      "semantically_irrelevant_bijection_breaks_marker": true,
+      "affected_empty_context_records": 432
+    },
+    "fix": "In a new batch, cross consistent scalar-token assignments with supported and contradictory roles within matched worlds/families. Preserve the factual structural/control requirements; do not count renamings as new independent source families. Re-evaluate complete target and conditional token baselines."
+  },
+  "forbidden_sources_read": false,
+  "expectations_frozen_before_gold_or_metadata_access": true,
+  "scope": "Prompt-derived exact typed solver, actual prefix/property locator proofs, exhaustive complete schedules and own metamorphic/counterexample executions. Same-model/common-public-design; no efficacy or sealed custody claims."
+}

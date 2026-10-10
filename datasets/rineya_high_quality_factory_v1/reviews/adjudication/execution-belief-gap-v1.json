@@ -1,0 +1,164 @@
+{
+  "status": "COMPLETED_FROZEN_DATA_ADJUDICATION",
+  "actual_execution_id": "/root/research_architect",
+  "reviewer_role": "independent_adjudicator",
+  "completed_at_utc": "2026-10-10T03:01:39.116679+00:00",
+  "candidate_sha256": "423e3dc3b2ba79a656ce01a4e0ed25a40be0f1e74fa5362770f914e5555b027e",
+  "records": 1296,
+  "decisions": {
+    "REVISE": 1296
+  },
+  "direct_lexical_defects": 432,
+  "dependency_holds": 864,
+  "expert_red_disagreements_preserved": 432,
+  "release_eligible_records": 0,
+  "actual_python": "/opt/anaconda3/bin/python3",
+  "actual_commands": [
+    {
+      "command": "/opt/anaconda3/bin/python3 High-Quality_Dataset/reviews/adjudication/audit_belief_gap_v1.py",
+      "exit_code": 1,
+      "reason": "Older release lacks source_family_key; failed source and execution preserved before repair."
+    },
+    {
+      "command": "/opt/anaconda3/bin/python3 High-Quality_Dataset/reviews/adjudication/audit_belief_gap_v1.py",
+      "exit_code": 0,
+      "reason": "Corrected only own prior-lineage reader; all input/target/hash/property/schedule/lexical checks completed."
+    },
+    {
+      "command": "/opt/anaconda3/bin/python3 High-Quality_Dataset/reviews/adjudication/finalize_belief_gap_v1_adjudication.py",
+      "exit_code": 0,
+      "reason": "Exact final review join, train-only marker core lookup, measured ticket and all per-row decisions."
+    }
+  ],
+  "source_bindings": {
+    "candidate": {
+      "path": "data/RBM-001/candidate_renderings/belief-gap-v1.jsonl",
+      "sha256": "423e3dc3b2ba79a656ce01a4e0ed25a40be0f1e74fa5362770f914e5555b027e"
+    },
+    "expert": {
+      "path": "reviews/expert/belief-gap-v1.jsonl",
+      "sha256": "ab6d6c73c907b817400dcbec65f294dfaa51e0f8721b57af398f9c333b5eb1f0"
+    },
+    "red": {
+      "path": "reviews/adversarial/belief-gap-v1.jsonl",
+      "sha256": "eec54648acbcb9800a2f6959aeaf16daf89ff906caf465ec6fd5623b38be172e"
+    },
+    "oracle": {
+      "path": "reviews/oracle/belief-gap-v1.jsonl",
+      "sha256": "93f96164cf36f888e3aca9bae294b4fb4220ae599e6942ab863c5833fd517712"
+    },
+    "expert_first": {
+      "path": "reviews/expert/belief-gap-v1.first_judgments.jsonl",
+      "sha256": "ab6d6c73c907b817400dcbec65f294dfaa51e0f8721b57af398f9c333b5eb1f0"
+    },
+    "red_first": {
+      "path": "reviews/adversarial/belief-gap-v1.first_judgments.jsonl",
+      "sha256": "956f4d601a08c9cff0d13e074d78edc262adbe76d2ddcbaf419f5145465f3611"
+    },
+    "expert_execution": {
+      "path": "reviews/expert/belief-gap-v1.completed_execution.json",
+      "sha256": "8cc3c08740fd78563baad39290d82dcbb7173e511e4ce730ed86c9564e737b0f"
+    },
+    "expert_final_binding": {
+      "path": "reviews/expert/belief-gap-v1.final_artifact_receipt.json",
+      "sha256": "d484487fd9b451e6482200f40cf08ff78a1effd30077fbd56dc6d82782b77a8b"
+    },
+    "red_execution": {
+      "path": "audits/execution/belief-gap-v1-adversarial.json",
+      "sha256": "30f17ee0820527d870722b16920d705e944736ed4d3a1df4621f53adf1afe88c"
+    },
+    "red_shortcut": {
+      "path": "audits/shortcut_detection/belief-gap-v1-adversarial.json",
+      "sha256": "b4eb37e3fef4ac190889f67d5f79baebe48ef2b9ae0c772f312a59e557797bd1"
+    },
+    "root_belief_audit": {
+      "path": "audits/diversity/belief-gap-v1-belief-controls.json",
+      "sha256": "9eb23be5f7e510bdff079c89aadfbd246d516966602375b91bd2e805cc20c5ec"
+    },
+    "root_leakage": {
+      "path": "audits/leakage/belief-gap-v1.json",
+      "sha256": "33d707067b78d44c9784d90efcb3bc504115ecbe6ee0448df2445706d9451e34"
+    },
+    "public_properties": {
+      "path": "schemas/BELIEF_CONTROL_PROPERTIES.md",
+      "sha256": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034"
+    },
+    "public_curriculum": {
+      "path": "research/curricula/RBM-EVIDENCE-GAP.md",
+      "sha256": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120"
+    },
+    "public_semantics": {
+      "path": "schemas/EXTENDED_SEMANTICS.md",
+      "sha256": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23"
+    }
+  },
+  "current_machine_snapshots": [
+    {
+      "original_path": "audits/diversity/belief-gap-v1-belief-controls.json",
+      "sha256": "9eb23be5f7e510bdff079c89aadfbd246d516966602375b91bd2e805cc20c5ec",
+      "preserved_path": "reviews/adjudication/belief-gap-v1-source-snapshots/9eb23be5f7e510bdff079c89aadfbd246d516966602375b91bd2e805cc20c5ec.json"
+    },
+    {
+      "original_path": "audits/leakage/belief-gap-v1.json",
+      "sha256": "33d707067b78d44c9784d90efcb3bc504115ecbe6ee0448df2445706d9451e34",
+      "preserved_path": "reviews/adjudication/belief-gap-v1-source-snapshots/33d707067b78d44c9784d90efcb3bc504115ecbe6ee0448df2445706d9451e34.json"
+    }
+  ],
+  "preserved_first_machine_reports": [
+    {
+      "path": "audits/leakage/history/belief-gap-v1-70a9aae7018bff7489e8967e0c97eed74e3e693353563443650c0c19ea0e1daf.json",
+      "sha256": "70a9aae7018bff7489e8967e0c97eed74e3e693353563443650c0c19ea0e1daf"
+    },
+    {
+      "path": "audits/diversity/history/belief-gap-v1-belief-controls-d6ecd515ca09f88b2f293c7050a4d79df349f6e221da425f70ca1fd1800cf11d.json",
+      "sha256": "d6ecd515ca09f88b2f293c7050a4d79df349f6e221da425f70ca1fd1800cf11d"
+    },
+    {
+      "path": "reviews/oracle/history/belief-gap-v1-38c76a2aa17296728dff99c1823af384326fb49ad78c6ca3d2c9154dbd1239c7.jsonl",
+      "sha256": "38c76a2aa17296728dff99c1823af384326fb49ad78c6ca3d2c9154dbd1239c7"
+    }
+  ],
+  "current_corrected_machine_error_counts": {
+    "records": 1296,
+    "oracle_failures": 0,
+    "metadata_failures": 0,
+    "validation_failures": 0,
+    "belief_control_error_count": 0
+  },
+  "first_final_review_preservation": {
+    "expert_byte_equal": true,
+    "red_first_preserved": true,
+    "red_first": {
+      "ACCEPT": 1296
+    },
+    "red_final": {
+      "ACCEPT": 864,
+      "REVISE": 432
+    }
+  },
+  "output_sha256": {
+    "reviews/adjudication/belief-gap-v1.jsonl": "405101df098e9f33e6d82dee834ddd7008e3652e3531b6efa8108a9eba5f9027",
+    "reviews/adjudication/belief-gap-v1.independent_adjudicator_audit.json": "c4c0b8b295e952bd9a9fa1ce7d10c5d2accd62b782efbd6dd0fe92552e9045a5",
+    "reviews/adjudication/belief-gap-v1.lexical_baseline_supplement.json": "fb6d896403ae5bae2d0acabaf69a93901710bcc731e58b4f02cd6ff3c88475ef",
+    "feedback/improvement_requests/RBM-GAP-007-LEXICAL-EMPTY-MEASURED.json": "b3e2fd786bf931d5062bd6de2e979ef3e83d0d384b4496019ef3215ff682be42",
+    "reviews/adjudication/ADJUDICATION_BELIEF_GAP_V1.md": "71d48372098d600eb2b776bfdd92e4f994b597195b604a49181ec087035de032",
+    "reviews/adjudication/audit_belief_gap_v1.py": "56b7fc0d32076b7d6d2140fd3333b19d535487f5a413bb63cf31effcac46a3a7",
+    "reviews/adjudication/finalize_belief_gap_v1_adjudication.py": "6768de11092436cb09df1356b4c43e01d11ff2091597153c02d5f669292f9e07",
+    "reviews/adjudication/belief-gap-v1-execution-history/first-failure.json": "560cef096e20fe57970a5111fd5bd891e33eb89273bf2edf86a1771b958d9b3e"
+  },
+  "prospective_revision_files_frozen": {
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md": "46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f",
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V2.md": "c2eb841ed546848088db4e0499e8e8f7087aa3d213af333ff39237ae6558bd33",
+    "feedback/improvement_requests/RBM-GAP-007-REVISION-V2.json": "4b588b85ba83efe34e9c6b50d453d2adf15c2c95074831eaf74f39b0ae15885e",
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V2-EXECUTION.json": "10b531fa89bba43dec68a1d5210aed84343d4a4747ff10cb1fbb217e8d677934"
+  },
+  "original_public_design_author_and_later_adjudicator_disclosed": true,
+  "private_verdicts_read_after_completed_final_confirmation": true,
+  "producer_reference_or_oracle_implementation_read": false,
+  "same_underlying_model_correlated_error_risk": true,
+  "child_analysis_spawn_attempt": "Denied by actual agent-thread limit; no child evidence invented.",
+  "production_samples_generated_or_approved": 0,
+  "candidate_or_gold_edits": 0,
+  "release_writes": 0,
+  "freeze": "Per-record decisions and research output complete; future packing adds lossless custody artifacts without changing raw bytes."
+}

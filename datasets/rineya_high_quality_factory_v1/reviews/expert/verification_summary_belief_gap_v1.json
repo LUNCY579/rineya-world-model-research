@@ -1,0 +1,230 @@
+{
+  "actual_author": "/root/expert_reviewer",
+  "reviewer_execution_id": "/root/expert_reviewer",
+  "completed_utc": "2026-10-10T02:37:59.928793+00:00",
+  "review_type": "INITIAL_EXPERT_REVIEW_GUIDED_BY_PUBLIC_PROSPECTIVE_DIAGNOSIS",
+  "candidate": {
+    "path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/data/RBM-001/candidate_renderings/belief-gap-v1.jsonl",
+    "sha256": "423e3dc3b2ba79a656ce01a4e0ed25a40be0f1e74fa5362770f914e5555b027e",
+    "records": 1296
+  },
+  "input_only_prediction": {
+    "path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/expert/belief-gap-v1.input_only_predictions.json",
+    "sha256": "f732c60d2ae3646bb3cc92bc166dc05a867c94bbc3b364558630e6e1f647d4fe",
+    "length": 16751487
+  },
+  "first_judgments": {
+    "path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/expert/belief-gap-v1.first_judgments.jsonl",
+    "sha256": "ab6d6c73c907b817400dcbec65f294dfaa51e0f8721b57af398f9c333b5eb1f0",
+    "length": 7950618,
+    "immutable": true
+  },
+  "final_receipts": {
+    "path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/expert/belief-gap-v1.jsonl",
+    "sha256": "ab6d6c73c907b817400dcbec65f294dfaa51e0f8721b57af398f9c333b5eb1f0",
+    "byte_equal_first": true
+  },
+  "decisions": {
+    "ACCEPT": 1296
+  },
+  "counts": {
+    "records": 1296,
+    "declared_source_families": 4,
+    "base_contexts": 24,
+    "unique_typed_tasks": 648,
+    "literal_typed_world_tables": 12,
+    "decoded_world_tables": 4,
+    "rendered_prompt_strings": 1296,
+    "supplied_typed_counterfactual_pairs": 162,
+    "field_pairs": 648,
+    "executed_invariance_probes": 9072,
+    "executed_typed_equals_probes": 972,
+    "qualifying_typed_equals_probes": 648,
+    "query_observations": 3888,
+    "split": {
+      "train": 648,
+      "dev_challenge": 648
+    },
+    "contexts": {
+      "A": 216,
+      "B": 216,
+      "C": 216,
+      "D": 216,
+      "E": 216,
+      "F": 216
+    },
+    "per_record_property_counts": {
+      "ambiguous_null_partition": 324,
+      "conjunction_required_invariant": 594,
+      "cross_fact_inconsistent_conjunction": 432,
+      "multiworld_all_queries_redundant": 216,
+      "multiworld_entailed_null": 648,
+      "multiworld_unobserved_invariant": 864,
+      "nonempty_repeated_observation": 216,
+      "post_empty_absorption": 216,
+      "skewed_possible_value_partition": 162,
+      "typed_observation_separator": 648,
+      "typed_query_partition_separator": 324,
+      "useful_after_conjunctive_evidence": 648
+    },
+    "skill_tag_counts": {
+      "finite_synthetic_proxy": 1296,
+      "finite_noiseless_filter": 1296,
+      "possible_value_partition": 1296,
+      "ambiguous_null_partition": 324,
+      "conjunction_required_invariant": 594,
+      "multiworld_entailed_null": 648,
+      "multiworld_unobserved_invariant": 864,
+      "useful_after_conjunctive_evidence": 648,
+      "multiworld_all_queries_redundant": 216,
+      "nonempty_repeated_observation": 216,
+      "cross_fact_inconsistent_conjunction": 432,
+      "post_empty_absorption": 216,
+      "typed_observation_separator": 648,
+      "typed_query_partition_separator": 324,
+      "skewed_possible_value_partition": 162
+    },
+    "incomplete_useful_heuristic_errors": 1080,
+    "incomplete_entailed_heuristic_errors": 1080,
+    "incomplete_heuristic_complete_task_errors": 864,
+    "histogram_context_renderer_groups": 48,
+    "typed_payload_provenance_histogram_axes_pass": 336,
+    "query_categories": {
+      "entailed": 1944,
+      "ambiguous": 648,
+      "empty": 1296
+    },
+    "guaranteed_null_interpretations": {
+      "entailed": 648,
+      "ambiguous": 648,
+      "empty": 1296
+    },
+    "positive_count_bin_types": {
+      "NoneType": 972,
+      "bool": 1134,
+      "str": 648,
+      "int": 486
+    }
+  },
+  "target_mismatch_count": 0,
+  "per_row_metadata_errors": 0,
+  "remaining_family_or_quality_blockers": 0,
+  "preparation_checks": {
+    "toy_fixtures": 5,
+    "executed_metamorphic_and_typed_probes": 42
+  },
+  "own_initial_diagnostic_implementation_warnings_preserved": 972,
+  "warning_resolution": "Initial program had implemented typed_equals_counterfactual only as probe, not supplied A/B relationship. New exact same-world/query single-typed-equals pairs establish the corpus witness in13,18,19. No target or first judgment changed; initial diagnostic is retained.",
+  "freshness": {
+    "own_prior_analysis_path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/expert/RBM-gap-analysis-20261010T015614Z.json",
+    "own_prior_analysis_sha256": "b9f3e35c18d39a6b4d82ab51519068f78b98fc45dbc11da1361086bd3d37d6ac",
+    "prior_world_counts": [
+      4,
+      6
+    ],
+    "new_world_counts": [
+      8,
+      12
+    ],
+    "nonisomorphic_to_every_prior_world_table": true,
+    "proof": "Different world-vertex cardinality4/6 versus8/12 cannot be removed by world/fact/value renaming.",
+    "mutual_new_table_nonisomorphism": [
+      {
+        "families": [
+          "RBM-seed20261009-p0012",
+          "RBM-seed20261009-p0013"
+        ],
+        "isomorphic": false,
+        "search_nodes": 0
+      },
+      {
+        "families": [
+          "RBM-seed20261009-p0012",
+          "RBM-seed20261009-p0018"
+        ],
+        "isomorphic": false,
+        "search_nodes": 0
+      },
+      {
+        "families": [
+          "RBM-seed20261009-p0012",
+          "RBM-seed20261009-p0019"
+        ],
+        "isomorphic": false,
+        "search_nodes": 0
+      },
+      {
+        "families": [
+          "RBM-seed20261009-p0013",
+          "RBM-seed20261009-p0018"
+        ],
+        "isomorphic": false,
+        "search_nodes": 0
+      },
+      {
+        "families": [
+          "RBM-seed20261009-p0013",
+          "RBM-seed20261009-p0019"
+        ],
+        "isomorphic": false,
+        "search_nodes": 0
+      },
+      {
+        "families": [
+          "RBM-seed20261009-p0018",
+          "RBM-seed20261009-p0019"
+        ],
+        "isomorphic": false,
+        "search_nodes": 0
+      }
+    ],
+    "shared_submotifs": "Uniform and weighted cyclic families share unweighted topology; null/opal invariant and linen auxiliary motif reused in all four."
+  },
+  "substantive_inspection_ids": [
+    "RBM-001-belief-gap-v1-p0012-A-s00-forward",
+    "RBM-001-belief-gap-v1-p0012-B-s00-forward",
+    "RBM-001-belief-gap-v1-p0012-C-s00-forward",
+    "RBM-001-belief-gap-v1-p0012-D-s00-forward",
+    "RBM-001-belief-gap-v1-p0012-E-s00-forward",
+    "RBM-001-belief-gap-v1-p0012-F-s00-forward",
+    "RBM-001-belief-gap-v1-p0013-A-s00-forward",
+    "RBM-001-belief-gap-v1-p0013-B-s00-forward",
+    "RBM-001-belief-gap-v1-p0013-C-s00-forward",
+    "RBM-001-belief-gap-v1-p0013-D-s00-forward",
+    "RBM-001-belief-gap-v1-p0013-E-s00-forward",
+    "RBM-001-belief-gap-v1-p0013-F-s00-forward",
+    "RBM-001-belief-gap-v1-p0018-A-s00-forward",
+    "RBM-001-belief-gap-v1-p0018-B-s00-forward",
+    "RBM-001-belief-gap-v1-p0018-C-s00-forward",
+    "RBM-001-belief-gap-v1-p0018-D-s00-forward",
+    "RBM-001-belief-gap-v1-p0018-E-s00-forward",
+    "RBM-001-belief-gap-v1-p0018-F-s00-forward",
+    "RBM-001-belief-gap-v1-p0019-A-s00-forward",
+    "RBM-001-belief-gap-v1-p0019-B-s00-forward",
+    "RBM-001-belief-gap-v1-p0019-C-s00-forward",
+    "RBM-001-belief-gap-v1-p0019-D-s00-forward",
+    "RBM-001-belief-gap-v1-p0019-E-s00-forward",
+    "RBM-001-belief-gap-v1-p0019-F-s00-forward",
+    "RBM-001-belief-gap-v1-p0012-A-s26-reverse",
+    "RBM-001-belief-gap-v1-p0013-A-s26-reverse",
+    "RBM-001-belief-gap-v1-p0018-A-s26-reverse",
+    "RBM-001-belief-gap-v1-p0019-A-s26-reverse"
+  ],
+  "noncritical_limitations": [
+    "Four independent source tables, not1296 mechanisms",
+    "Shared null/opal/linen submotifs and cyclic row-role patterns",
+    "Support-only joint-flag majority compatibility5/6; audit-role/context determinism does not prove a student-facing shortcut",
+    "E/F empty and D repeated substeps are simple; all difficulty levels3 and component metrics explicit",
+    "Exposed dev, finite noiseless proxy; no Bayes/action/utility/OOD/efficacy claim"
+  ],
+  "forbidden_reads": {
+    "producer_source_or_reports": 0,
+    "reference_or_oracle_source_tests": 0,
+    "formal_or_root_mutant_reports": 0,
+    "other_private_review_verdicts": 0
+  },
+  "actual_execution_scope": "Programmatic every-record recomputation and property/locator/control checks plus actual-agent substantive semantic inspection, not a human reading every row individually.",
+  "release_approval": false,
+  "other_review_release_REM_files_changed": false,
+  "evidence_compression_manifest": "reviews/expert/belief-gap-v1.evidence_compression_manifest.json"
+}
