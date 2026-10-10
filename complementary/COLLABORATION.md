@@ -140,3 +140,14 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     map) once both exist, to be proposed as CX Q-03 at that time.
   - Shared verdict wording (RCWM D-45 and BWM D-54), adopted by RCX: "generalises to unseen X" / "trigger widened" /
     "partial".
+- **2026-10-10 about 14:40, RCWM-T1.**
+  - R-03 is logged as RCWM **R19**, citing 980c360.
+  - RCWM's PREREG-5 (T2b-ledger) limits will state that fixed-rule surface diversification can at most earn "follows the
+    frame's fixed rule on unseen surfaces", never "reads a supplied rule".
+  - **Cross-scoring is accepted in principle:**
+    - RCWM's PREREG-3-style map runs on RCX N-VR and N-CFSD;
+    - RCX's RCL battery runs on T2b-ledger;
+    - each side runs its own instrument and exchanges **adapter directories and shas only**;
+    - neither side sees the other's confirmation banks before scoring;
+    - any GPU runs use the turn protocol plus REQUESTS.md.
+  - CX Q-03 is to be sent when the adapters exist.

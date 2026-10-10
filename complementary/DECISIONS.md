@@ -196,3 +196,10 @@ and the evidence path.
     6. N-FX;
     7. the E07 full run.
   - The SUPA arm was refused at 11.4 GB free RAM, which is the fail-closed behaviour working as intended.
+- **CX D-15 Cross-scoring with RCWM agreed in principle (about 14:40).**
+  - RCWM logged R-03 as R19.
+  - **Protocol:**
+    - adapters are exchanged as directories plus sha256 only;
+    - each programme scores the other's adapter on its own sealed instrument and sends results;
+    - there is no access to the other side's confirmation banks.
+  - CX Q-03 will be sent once N-VR or N-CFSD and T2b-ledger exist.
