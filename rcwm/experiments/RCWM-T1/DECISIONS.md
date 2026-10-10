@@ -834,3 +834,24 @@ Times are local (CDT). Entries are append-only.
     - `t2br_run.py --freeze`: SCREEN_FREEZE.json sha 05ec83f0…; `--verify` rc 0.
     - Hook `scripts/queue_hooks/80_t2br.sh` installed, identical to the draft (5b6d7249…).
     - The chain is relaunched at the 5a waiter's waiting point, so the hook order is 70 (LB, done) → 75 (5a) → 80 (5b).
+- **I-32 User reboot (2026-10-10, boot 09:24:04); recovered 09:26–09:28.**
+  - **State at the reboot:**
+    - BWM's bundleE (B3 search distillation) had held the lease since about 05:19, about 4.1 h of its 4.5 h cap.
+    - RCWM had only the 5a waiter, which never started. Nothing RCWM was lost.
+  - **Integrity after the reboot:**
+    - Every confirmed result and freeze hash-verifies: PREREG-2, PREREG-3, PREREG-LB, L1, the 5a rule and the 5b freeze.
+    - `lbeam_run.py --verify` and `t2br_run.py --verify` pass.
+    - DECISIONS and REPORT are intact and LF-only. The repo is clean at ea1f36c.
+  - **Recovery:**
+    - 09:26: thermal watchdog relaunched.
+    - The master chain was relaunched; its single waiter is 5a.
+    - BWM's stale bundleE lock (pid 63900, worker 247728, both dead) is left to BWM. RCWM asked BWM to clear it and proposed that RCWM's 5a take the next turn, since bundleE had run most of a turn.
+    - A joint plan was sent to BWM for amendment: 5a/5b screens; new T2b-ledger, a surface-diversified ledger adapter re-tested on PREREG-3's map and PREREG-LB's held-out surface; B3 and BWM items; PREREG-4 at the end.
+- **D-45 Joint plan after the 2026-10-10 reboot (agreed with BWM by message).**
+  - **Plan document:** `docs/roadmap/JOINT_PLAN_2026-10-10.md`.
+  - **Turn order:** 5a (running since 09:27), BWM B3 resume, 5b, BWM (B3 remainder, then the D-54 key-order retrain), RCWM T2b-ledger, BWM item 7 seeds and item 9, joint PREREG-4.
+  - **New RCWM item, T2b-ledger:**
+    - A surface-diversified ledger adapter.
+    - Its sealed confirmation covers four things: PREREG-3's out-of-range map on fresh held-out surfaces, non-inferiority to T2 s0 in distribution, the 5c retention guard, and LB-style planning on the held-out surface (today 5/180).
+  - **Shared wording with BWM D-54:** "generalises to unseen X" vs "trigger widened" vs "partial".
+  - **Stale lock:** BWM cleared its own stale bundleE lock under its protocol at about 09:27 and wrote turn.json (last = bwm).

@@ -1,0 +1,63 @@
+{
+ "tag": "sd_s0",
+ "seed": 0,
+ "steps": 190,
+ "lr": 0.0001,
+ "arms": [
+  "dint",
+  "strace",
+  "bbits"
+ ],
+ "data_variant": "sd",
+ "stages_per_arm": [
+  "T",
+  "E1",
+  "E2",
+  "E3",
+  "E4"
+ ],
+ "data_sha256": {
+  "t2bp_train_sd_dint.jsonl": "3cdd5bba030d0f7829a589e25d1030bea3a6f414267a7287dfe8842076040a78",
+  "t2bp_train_sd_strace.jsonl": "d3577e68451b8fbc38b46dd8f1d4a0d7804fdbcba23f81908c067ec81ac22462",
+  "t2bp_train_sd_bbits.jsonl": "f190b34738cd219c98041d755f21143dc1b7c75e4b340bea217f1ddded71fea3",
+  "t2bp_dev.jsonl": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54"
+ },
+ "dev_subset": null,
+ "n_dev_rows": 1050,
+ "n_chains": 240,
+ "lease_label": "rcwm-t1:t2b-prereq",
+ "code_sha256": {
+  "scripts/t2bp_common.py": "a913523a9a848dfaa01783fb6858c4e88b80aa7d3b783db924f9fcc99634017c",
+  "scripts/t2bp_make_data.py": "176e6cb3992c2cda426b3e423c0fb1e6f5e87d17f9015b4e12e1256eda136131",
+  "scripts/t2bp_run.py": "09135f4d07e14fef3d2d6df5112fdb5763ac8a8286bb89325a456d26c4433150",
+  "scripts/t2bp_analysis.py": "5853c55d9473abc4d12ea127ccb3c85d3965a439538e8a1c30f67312ac6087ea",
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+  "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+  "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+  "rcwmt/data.py": "f77270ee04d64985e5b6fa9a88f989a04b0b7ed8cc75f69a4984ca7e7593beb4",
+  "rcwmt/decide.py": "148e98ab528dcd283f6896f07f01135ede658e124d09d08d293e7d3645463643",
+  "rcwmt/decisions.py": "bd6a4531622d2479f1b7fe35fcb11338d831c1ab2e9402b515f9a35ef5237188",
+  "rcwmt/fidelity.py": "da03bbca4962c05b13eb13dfa0414578344bbe2674015dc93070465ca4e1bb0e",
+  "vendor_bwm/scripts/train_generic.py": "816d2f562946177397a5f186e9fcadd7febd2b49c894afc9abafe9474665ad61",
+  "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57"
+ },
+ "screen_rule_sha256": "530a9dbd2b2582fc19a78daec319af05a7de9cefdde10dd7ffa9183b01c47220",
+ "stages": {},
+ "turns": [
+  {
+   "pid": 38824,
+   "acquired_unix": 1791642462.4115937,
+   "acquired_source": "lock record",
+   "entered_unix": 1791642462.5382388,
+   "stages_run": [],
+   "deferred": [],
+   "device": "cuda",
+   "prompts_checked": {
+    "dint": 1500,
+    "strace": 1500,
+    "bbits": 1500
+   }
+  }
+ ]
+}
