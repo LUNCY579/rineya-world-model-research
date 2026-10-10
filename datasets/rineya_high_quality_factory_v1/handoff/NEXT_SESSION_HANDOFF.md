@@ -56,3 +56,8 @@ The 80 expansion competency-tag errors and 6 historical pilot errors were fixed 
 Create no sealed evaluation under current exposed custody. Back up exact file inventories with checkpoint_backup.py; failed pushes preserve local commits and support --resume-commit. Each post-push receipt is local until a later checkpoint. No model training or background execution is promised.
 
 Source bytes are preserved under reproducibility/source_blobs and indexed in reproducibility/SOURCE_ARCHIVE_INDEX.json. Three original broad source snapshots for historical RCM v0002 could not be recovered; v0003 supersedes it with identical reviewed data, independently reproduced generation and available source bytes. The historical limitation remains documented in quality_reports/reproducibility/RCM-001-v0002.json. Machine audit reruns preserve prior bytes when results change.
+
+
+## Belief evidence-gap preparation — 2026-10-10 UTC
+
+The public RBM-GAP-007 design is frozen. Four proposed fresh families use six contexts and27 independent query ID/position/fact-name shifts with two field-order views (1,296 planned correlated records, not yet approved). Generation and a separately authored input-only control checker are in progress. Actual independent pre-generation belief properties passed14tests; all202tests present at this preparation checkpoint passed together. Expert review preparation is separate. First reviewer expectations will be frozen from stripped input-only copies before target/property-claim comparison. Existing approved counts remain3,340records/648sourcefamilies/all10tracks. See `handoff/BELIEF_PREPARATION_CHECKPOINT.json` for exact current stage and custody. New production/control/review artifacts still require their own frozen audits and approvals.

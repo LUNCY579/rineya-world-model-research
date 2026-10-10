@@ -1,0 +1,174 @@
+{
+  "ticket": "RBM-GAP-007-DESIGN-SUPPLEMENT",
+  "parent_ticket": "RBM-GAP-007",
+  "parent_ticket_sha256": "3677df852d351a1a503a9a09172e9945be37ffcb2b8409f3ef87172833b2e5d5",
+  "status": "FINAL_PUBLIC_SPECIFICATION_NO_GENERATION_OR_APPROVAL",
+  "created_at_utc": "2026-10-10T02:19:40.252202+00:00",
+  "author_execution_id": "/root/research_architect",
+  "author_role": "dataset_research_architect",
+  "public_properties": "schemas/BELIEF_CONTROL_PROPERTIES.md",
+  "curriculum": "research/curricula/RBM-EVIDENCE-GAP.md",
+  "existing_belief_semantics_changed": false,
+  "measured_problem": {
+    "approved_records": 24,
+    "existing_query_observations": 72,
+    "support_observed_fact_usefulness_mutant_matches": 72,
+    "support_observed_fact_entailment_mutant_matches": 72,
+    "unobserved_multiworld_invariant_queries": 0,
+    "useful_queries_after2plus_observations": 0,
+    "evidence": "reviews/expert/RBM-gap-analysis-20261010T015614Z.json",
+    "interpretation": "Existing release discrimination gap, not trained-model performance or hidden truth leakage."
+  },
+  "selected_design": {
+    "source_family_indices": [
+      12,
+      13,
+      18,
+      19
+    ],
+    "source_splits": {
+      "12": "train",
+      "13": "train",
+      "18": "dev_challenge",
+      "19": "dev_challenge"
+    },
+    "common_split_check": "Indices12/13 have index%10<8;18/19 have index%10>=8, as root confirmed. All descendants retain their source split.",
+    "structural_profiles": {
+      "12": "cyclic_uniform",
+      "13": "acyclic_branching",
+      "18": "cyclic_weighted",
+      "19": "typed_path"
+    },
+    "world_payloads_distinct": true,
+    "minimum_actual_fact_roles": 5,
+    "queried_fact_roles": 3,
+    "proposed_world_count_range": [
+      8,
+      20
+    ],
+    "contexts": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ],
+    "contexts_per_family": 6,
+    "nuisance_schedule": "Independent id_shift, position_shift, fact_name_shift in0..2; schedule_index=9*u+3*v+w.",
+    "schedules_per_context": 27,
+    "field_order_views": 2,
+    "planned_source_families": 4,
+    "planned_base_contexts": 24,
+    "planned_base_context_query_observations": 72,
+    "planned_correlated_records": 1296,
+    "planned_rotation_level_tasks": 648,
+    "planned_rotation_query_observations": 1944,
+    "planned_rendered_query_observations": 3888,
+    "planned_train_records": 648,
+    "planned_exposed_dev_records": 648,
+    "achievement_status": "PROPOSED_NOT_GENERATED"
+  },
+  "schedule_rationale": {
+    "original_expert_nine": "Marginal/pair balanced, but r=i+p-n reveals role through nuisance triple.",
+    "selected27": "Minimal positive uniform complete triple support conditional on every role; one occurrence per role/triple/context/style.",
+    "cost": "Three times the original432 correlated rows; no additional families, contexts or mechanisms.",
+    "remaining_limit": "Cyclic row-order patterns and unqueried-fact/world-ID styles are not fully crossed."
+  },
+  "per_record_properties": [
+    "multiworld_unobserved_invariant",
+    "conjunction_required_invariant",
+    "useful_after_conjunctive_evidence",
+    "multiworld_all_queries_redundant",
+    "multiworld_entailed_null",
+    "ambiguous_null_partition",
+    "cross_fact_inconsistent_conjunction",
+    "post_empty_absorption",
+    "nonempty_repeated_observation",
+    "typed_observation_separator",
+    "typed_query_partition_separator",
+    "skewed_possible_value_partition"
+  ],
+  "family_controls": [
+    "equal_support_usefulness_counterfactual",
+    "observation_reorder_final_invariance",
+    "nonempty_repetition_final_invariance",
+    "cross_fact_contradiction_counterfactual",
+    "post_empty_append_absorption",
+    "typed_equals_counterfactual",
+    "null_guarantee_contrast",
+    "query_id_position_fact_crossing",
+    "field_order_invariance",
+    "world_order_invariance",
+    "world_id_rename_equivariance"
+  ],
+  "metadata_interface": "Explicit pilot metadata encoding section in schemas/BELIEF_CONTROL_PROPERTIES.md. Unknown aliases/exact-key assumptions from memory are not implicitly imported.",
+  "witness_encoding": "Locator map matching truthful public per-row property tags. Required query_ids,observation_indices,prefix_indices; optional supporting_world_ids,note. No producer target/count payload. Independently recompute all facts and omission comparisons.",
+  "required_coverage": [
+    "Every A has multiworld unobserved invariant requiring both different-fact observations plus an actual useful query after two strict nonempty filters.",
+    "A/B changes only one observation equals value, preserving table/queries/observation count/final support cardinality while usefulness changes; B all offered queries redundant with an unoffered varying fact.",
+    "C recomputes reordered prefixes and supplies an actual prefix-cardinality difference while preserving full final answers.",
+    "D supplies a repeated nonempty observation, not merely an audit-only invariance.",
+    "E supplies different-fact individually supported jointly impossible evidence; F supplies an ordinary supported later observation after empty.",
+    "Null entailed/ambiguous/empty contrasts in at least one train and one dev family; active true/int1 and false/int0 filtering/partition evidence.",
+    "All four exact/order-invariant source profiles fresh and pairwise distinct beyond arbitrary names/values; shared submotifs disclosed.",
+    "Actual per-family/context/style full role/flag/category/type/count/provenance histograms match every marginal/pair/triple bucket; annotations alone insufficient."
+  ],
+  "acceptance_gates": [
+    "Unchanged public-contract typed exact targets and sorted IDs/scalar bins/prefix traces.",
+    "Every attached per-row property and locator independently witnessed; legitimate contexts can lack many tags.",
+    "Supplied corpus pairs distinguished from actually executed audit probes; probes add zero corpus records/families.",
+    "Exact prior/current source/world/task lineage and whole-family split custody.",
+    "Formal oracle separate from generation; both actual independent expert/red final exact-hash reviews required before later adjudication.",
+    "Preserve disagreements and disclose prospective/guided design context, actual same identity and same-model risk."
+  ],
+  "difficulty_scope": {
+    "supported_levels": [
+      2,
+      3
+    ],
+    "not_established_by_size_or_views": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "dependency": "Two genuinely necessary distinct-fact constraints for invariant; exact filtered value partitions. Queries independent.",
+    "metrics": [
+      "world_count",
+      "fact_count",
+      "query_count",
+      "observation_count",
+      "strict_nonempty_filter_count",
+      "essential_constraint_count",
+      "distinct_surviving_payload_count",
+      "active_typed_separator_count",
+      "partition_bin_count",
+      "positive_bin_skew",
+      "minimal_contradiction_witness_size",
+      "steps_after_first_empty"
+    ]
+  },
+  "claims_excluded": [
+    "Probability/Bayesian posterior",
+    "Noisy/authority fusion",
+    "Inspection utility or selected information action",
+    "Sealed structural OOD",
+    "Model efficacy/calibration",
+    "Learned persistent memory or composition"
+  ],
+  "actual_schedule_review_execution": "/root/research_architect/rbm_schedule_design",
+  "later_adjudicator_design_role_must_be_disclosed": true,
+  "same_underlying_model_correlated_error_risk": true,
+  "new_samples_or_targets": 0,
+  "new_sample_approvals": 0,
+  "evidence_sha256": {
+    "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "research/curricula/RBM-001.md": "54f2971f4bbffc28240c0702cd00321739511d5fc7754e3f4c9416e52ee4c07c",
+    "reviews/expert/RBM-gap-analysis-20261010T015614Z.md": "4fcac3c1836683462c670b8c85a859668a54a1158a324219f9da44ef5e37ed1f",
+    "reviews/expert/RBM-gap-analysis-20261010T015614Z.json": "b9f3e35c18d39a6b4d82ab51519068f78b98fc45dbc11da1361086bd3d37d6ac",
+    "reviews/expert/RBM-gap-analysis-20261010T015614Z.execution.json": "ca2251ac5802d00b2b8a3f89de93cc6ddab8f04a1148fdb2429b3afce9680102",
+    "reviews/expert/RBM-gap-analysis-20261010T015614Z.final_receipt.json": "a216af2c3972b6f0f641f7b23312be2e637a89cc51f02d099bc21325b876839f",
+    "feedback/improvement_requests/RBM-GAP-007.json": "3677df852d351a1a503a9a09172e9945be37ffcb2b8409f3ef87172833b2e5d5"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "execution_id": "/root/formal_oracle",
+  "role": "Independent Formal Oracle Engineer",
+  "actual_author": "/root/formal_oracle",
+  "actual_runner": "/root/formal_oracle",
+  "final_test_path": "High-Quality_Dataset/tests/oracle_belief_properties_test.py",
+  "final_test_sha256": "1dc53523164e24de76b59af2c3327b498e3bed26f65ee66157a21108d1bef861",
+  "initial_test_sha256": "d67171d9a08d12387ac434910bc854ad8a3907c5331c04589ab7a2309b844e8a",
+  "exact_source_preservation": {
+    "initial": "High-Quality_Dataset/reviews/oracle/RBM-properties-preexecution-20261010T020726Z.json",
+    "corrected": "High-Quality_Dataset/reviews/oracle/RBM-properties-preexecution-20261010T020834Z.json",
+    "format": "Each preexecution evidence embeds exact authored test source before its solver invocations."
+  },
+  "initial_execution": {
+    "tool": "exec_command",
+    "actual_chunk_id": "fb4b36",
+    "exit_code": 1,
+    "report": "High-Quality_Dataset/reviews/oracle/RBM-properties-execution-20261010T020750Z.json",
+    "report_sha256": "890e6d648d52b92ebec59a87d65a0e4028720d304a3edf430e27a529a97a58f4",
+    "interpretation": "Invalid generated zero-world task queried nonexistent fact names. Correct oracle rejection; no source semantic discrepancy inferred. First failure retained before only the new test fixture changed."
+  },
+  "final_execution": {
+    "tool": "exec_command and write_stdin",
+    "start_chunk_id": "61e525",
+    "session_id": 79169,
+    "completion_chunk_id": "e2149e",
+    "exit_code": 0,
+    "runtime": "PYTHONDONTWRITEBYTECODE=1 /opt/anaconda3/bin/python3",
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 20.73255079199589,
+    "report": "High-Quality_Dataset/reviews/oracle/RBM-properties-execution-20261010T020910Z.json",
+    "report_sha256": "87bd9da599d843dc2c8734f2a64c7767fa51213cd667193e9ec9332f16a5b847",
+    "counts": {
+      "expected_stream_sha256": "e20ccb403c6dec96f9981933a557fda69170e2fcb21e37049cff73c2d18fd25f",
+      "generated_histories": 141330,
+      "maximum_observations": 2,
+      "maximum_worlds": 3,
+      "observation_prefixes": 263296,
+      "query_observations": 282656,
+      "solver_cross_checks": 282660,
+      "typed_grids": 2,
+      "world_tables": 1938
+    },
+    "first_valid_input_mismatch": null
+  },
+  "enumeration_scope": "Generated histories/counts are bounded synthetic mechanism checks, not training samples or distinct dataset source families. The two typed grids are enumerated separately. Targeted hand fixtures are additional test cases and are not included in bounded enumeration counts.",
+  "independence": {
+    "public_contract_only_expected_derivation": true,
+    "future_producer_candidate_or_gold_accessed": false,
+    "reviewer_verdicts_accessed": false,
+    "reference_source_inspected": false,
+    "reference_called": true,
+    "existing_independent_called": true,
+    "existing_checkpointed_files_modified": false,
+    "sealed_evaluation_used": false,
+    "model_training": false
+  },
+  "checkpoint_sources_unchanged": true,
+  "approval_verdict": null
+}

@@ -1,0 +1,50 @@
+{
+  "runner_execution": "/root",
+  "at_utc": "2026-10-10T02:28:13.469797+00:00",
+  "goal_status": "ACTIVE_CONTINUOUS_IMPROVEMENT",
+  "approved_records": 3340,
+  "source_families": 648,
+  "approved_track_count": 10,
+  "last_verified_approved_release_commit": "98cd4b3ad4f3d47af5a98e1d41936b67136e867b",
+  "last_verified_handoff_commit": "2ceaa5535076d09f9d87554260cdfaaa40243230",
+  "current_wave": "belief-gap-v1 underRBM-GAP-007",
+  "public_design_status": "FROZEN_PUBLIC_SPECIFICATION",
+  "public_design_receipt": "research/curricula/RBM-EVIDENCE-GAP-EXECUTION.json",
+  "pre_generation_independent_property_tests": 14,
+  "all_tests_present_at_preparation_checkpoint_passed": 202,
+  "test_evidence": "quality_reports/BELIEF_PREPARATION_FULL_SUITE_EXECUTION.json",
+  "current_actual_executions": {
+    "producer": "/root/relational_critic_producer",
+    "independent_control_checker": "/root/formal_oracle",
+    "expert_review_preparation": "/root/expert_reviewer",
+    "later_blind_adversarial": "/root/adversarial_auditor",
+    "later_adjudicator": "/root/research_architect"
+  },
+  "planned_units": {
+    "families": 4,
+    "source_indices": [
+      12,
+      13,
+      18,
+      19
+    ],
+    "contexts": 24,
+    "schedules_per_context": 27,
+    "field_orders": 2,
+    "correlated_records": 1296,
+    "train_records": 648,
+    "exposed_dev_records": 648
+  },
+  "planned_counts_achieved_claimed": false,
+  "current_gate_patch": "factory/pipeline.py hooks call the separately authored pending belief checker; partial new acceptance cannot bypass family checks before directory creation. New integration tests await actual checker/candidates.",
+  "next_steps": [
+    "Finish and freeze actual independent checker/production sources and outputs; preserve first failures.",
+    "Create immutable input-only review view (only student-visible tasks plus join keys), freeze independent expert/red predictions before original target/claim comparisons.",
+    "Run full input/target/control/lineage/histogram audits, corruption integration tests and appropriate full suite.",
+    "Adjudicate only completed exact-hash independent first/final evidence; root/producer/formal never approve.",
+    "Release only complete accepted source-family controls, validate and verify actual-byte backup."
+  ],
+  "checkpoint_scope": "This public/preparation checkpoint excludes nonfrozen concurrent producer/checker/reviewer artifacts. They remain local/provisional until a later snapshot. No new belief data approvals, release or remote persistence claimed.",
+  "blindness": "Input-only view helper strips targets, allproducerrole/property/locator/familyclaims and allreviewevidence. Fullmetadata assessment is a later stage after independent expectations are frozen.",
+  "boundaries": "Same-model correlation risk; finite noiseless synthetic filtering/counts, exposed train/dev; no Bayes/utility/inspection/OOD/efficacy/training claim. OwnbackupSPEC/receipt are necessarily local until a subsequent checkpoint."
+}

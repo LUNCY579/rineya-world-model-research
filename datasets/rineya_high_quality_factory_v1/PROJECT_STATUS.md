@@ -92,3 +92,8 @@ Backups:
 - session-handoff: BACKED_UP; commit 61530fc87b64db1254cb9447ea800a23048a563e.
 
 All ten curricula exist. P0 pilot correctness/review precedes expansion. Counterfactual/rendering counts do not inflate parent counts. Exposed dev challenges are not sealed tests. Exact state correctness is a data property; model benefit remains untested.
+
+
+## Belief evidence-gap preparation — 2026-10-10 UTC
+
+The public RBM-GAP-007 design is frozen. Four proposed fresh families use six contexts and27 independent query ID/position/fact-name shifts with two field-order views (1,296 planned correlated records, not yet approved). Generation and a separately authored input-only control checker are in progress. Actual independent pre-generation belief properties passed14tests; all202tests present at this preparation checkpoint passed together. Expert review preparation is separate. First reviewer expectations will be frozen from stripped input-only copies before target/property-claim comparison. Existing approved counts remain3,340records/648sourcefamilies/all10tracks. See `handoff/BELIEF_PREPARATION_CHECKPOINT.json` for exact current stage and custody. New production/control/review artifacts still require their own frozen audits and approvals.

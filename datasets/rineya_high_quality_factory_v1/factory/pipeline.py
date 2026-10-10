@@ -27,6 +27,33 @@ def memory_control_report(rows):
     return check_batch(selected)
 
 
+BELIEF_PROPERTY_TAGS = {
+    'multiworld_unobserved_invariant', 'conjunction_required_invariant',
+    'useful_after_conjunctive_evidence', 'multiworld_all_queries_redundant',
+    'multiworld_entailed_null', 'ambiguous_null_partition',
+    'cross_fact_inconsistent_conjunction', 'post_empty_absorption',
+    'nonempty_repeated_observation', 'typed_observation_separator',
+    'typed_query_partition_separator', 'skewed_possible_value_partition',
+}
+
+
+def belief_control_rows(rows):
+    markers = {'controlled_context', 'structural_family_profile',
+               'fact_role_assignments', 'query_role_assignments',
+               'property_witnesses', 'family_control_claims'}
+    tags = BELIEF_PROPERTY_TAGS | {'finite_noiseless_filter', 'possible_value_partition'}
+    return [row for row in rows if row.get('semantic_task', {}).get('kind') == 'belief'
+            and (markers.intersection(row) or tags.intersection(row.get('skill_tags', [])))]
+
+
+def belief_control_report(rows):
+    selected = belief_control_rows(rows)
+    if not selected:
+        return None
+    from oracles.belief_controls_independent import check_batch
+    return check_batch(selected)
+
+
 def schema_validate(row):
     from jsonschema import Draft202012Validator
     schema=json.loads((ROOT/"schemas/canonical/v1.schema.json").read_text())
@@ -71,6 +98,8 @@ def audit(batch):
     rows=[r for p in candidate_paths(batch) for r in load_jsonl(p)]
     control_source=ROOT/'oracles/memory_controls_independent.py'
     control_source_sha=hashlib.sha256(control_source.read_bytes()).hexdigest() if memory_control_rows(rows) else None
+    belief_source=ROOT/'oracles/belief_controls_independent.py'
+    belief_source_sha=hashlib.sha256(belief_source.read_bytes()).hexdigest() if belief_control_rows(rows) else None
     checks=[]
     lineage=collections.defaultdict(set)
     payloads=collections.defaultdict(list)
@@ -87,6 +116,9 @@ def audit(batch):
         if memory_control_rows([row]):
             from oracles.memory_controls_independent import check as memory_check
             metadata_errors.extend(memory_check(row))
+        if belief_control_rows([row]):
+            from oracles.belief_controls_independent import check as belief_check
+            metadata_errors.extend(belief_check(row))
         errors.extend('Metadata: '+e for e in metadata_errors)
         lineage[row["semantic_family_id"]].add(row["split"])
         payloads[digest(row["semantic_task"])].append(row["sample_id"])
@@ -114,6 +146,17 @@ def audit(batch):
         payload={'oracle_author_execution':'/root/formal_oracle','check_runner_execution':'/root',
                  'checker_sha256':control_source_sha,
                  'batch':batch,'report':controls}
+        content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
+        preserve_prior_audit(control_path,content)
+        atomic(control_path,content.decode('utf-8'))
+    belief_controls=belief_control_report(rows)
+    stats['belief_control_error_count']=len(belief_controls['errors']) if belief_controls else 0
+    if belief_controls:
+        assert hashlib.sha256(belief_source.read_bytes()).hexdigest()==belief_source_sha,'Belief checker source changed during audit; rerun after source is stable'
+        stats['belief_control_counts']=belief_controls['counts']
+        control_path=ROOT/f'audits/diversity/{batch}-belief-controls.json'
+        payload={'oracle_author_execution':'/root/formal_oracle','check_runner_execution':'/root',
+                 'checker_sha256':belief_source_sha,'batch':batch,'report':belief_controls}
         content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
         preserve_prior_audit(control_path,content)
         atomic(control_path,content.decode('utf-8'))
@@ -210,6 +253,8 @@ def release(batch,version,tracks=None,supersedes=None):
         # A missing approved rotation cannot silently break the release's claim.
         controls=memory_control_report(accepted)
         assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
+        belief_controls=belief_control_report(accepted)
+        assert not belief_controls or not belief_controls['errors'],'Released belief family controls incomplete or false'
         dest=ROOT/f"data/{track}/releases/{version}"
         if dest.exists():raise FileExistsError(f"Immutable release already exists: {dest}")
         dest.mkdir(parents=True)
@@ -269,6 +314,9 @@ def validate_release(path):
         if memory_control_rows([r]):
             from oracles.memory_controls_independent import check as memory_check
             metadata_failures.extend(memory_check(r))
+        if belief_control_rows([r]):
+            from oracles.belief_controls_independent import check as belief_check
+            metadata_failures.extend(belief_check(r))
         if metadata_failures:
             from factory.catalog import catalog
             active,_=catalog()
@@ -294,6 +342,8 @@ def validate_release(path):
     specialized_counts=validate_specialized(path,rows)
     controls=memory_control_report(rows)
     assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
+    belief_controls=belief_control_report(rows)
+    assert not belief_controls or not belief_controls['errors'],'Released belief family controls incomplete or false'
     return {"path":str(path.relative_to(ROOT)),"records":len(rows),"checksum_files":len(files),"specialized_exports":specialized_counts,"pass":True}
 
 
