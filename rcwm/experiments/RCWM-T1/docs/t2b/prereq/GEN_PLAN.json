@@ -7,7 +7,8 @@
   "T",
   "E1",
   "E2",
-  "E3"
+  "E3",
+  "E4"
  ],
  "stage_rule": "a stage (an arm's training: its whole remaining train+eval pair) starts only if 1.25 x its estimate fits the turn and never within 0.5 h of the cap; otherwise the arm (and every later arm) is deferred to the next turn (exit 5) and resumed",
  "timing_model": {
@@ -15,6 +16,7 @@
   "s_per_gen": "a + b*(answer tokens+1) fitted to PREREG-2 S4 (P chain_m1 6.52/s at 2.57 tokens) and S1 (ledger chain_one 3.80/s at 20.14 tokens); planning = observed x 3.8/2.7",
   "off_answer_tokens": "planning: the 160-token cap for the adapter-OFF side of every arm except ['dint'] (base Titan has never seen those formats; worst case); observed: the gold answer length (best case). The true screen time lies between the two.",
   "E3": "the held-out-surface stage: the 1,050 one-step rows, adapter ON only, at the gold answer length",
+  "E4": "the report-only held-out-surface chains: the 240 k=4 chains (960 steps at most), adapter ON only, at the gold answer length of the chain steps",
   "a_s": 0.131,
   "b_s_per_token": 0.00626
  },
@@ -26,48 +28,56 @@
     "E1_s": 456.2,
     "E2_s": 416.6,
     "E3_s": 228.1,
+    "E4_s": 208.3,
     "generations": {
      "E1": 2100,
      "E2": 1920,
-     "E3": 1050
+     "E3": 1050,
+     "E4": 960
     },
-    "pair_h": 1.0
+    "pair_h": 1.06
    },
    "strace": {
     "train_s": 3941.6,
     "E1_s": 2172.9,
     "E2_s": 1987.9,
     "E3_s": 489.0,
+    "E4_s": 448.2,
     "generations": {
      "E1": 2100,
      "E2": 1920,
-     "E3": 1050
+     "E3": 1050,
+     "E4": 960
     },
-    "pair_h": 2.42
+    "pair_h": 2.54
    },
    "bbits": {
     "train_s": 3848.5,
     "E1_s": 2052.1,
     "E2_s": 1869.0,
     "E3_s": 368.2,
+    "E4_s": 329.3,
     "generations": {
      "E1": 2100,
      "E2": 1920,
-     "E3": 1050
+     "E3": 1050,
+     "E4": 960
     },
-    "pair_h": 2.29
+    "pair_h": 2.39
    },
    "ffill": {
     "train_s": 3152.6,
     "E1_s": 2217.6,
     "E2_s": 2027.2,
     "E3_s": 533.6,
+    "E4_s": 487.6,
     "generations": {
      "E1": 2100,
      "E2": 1920,
-     "E3": 1050
+     "E3": 1050,
+     "E4": 960
     },
-    "pair_h": 2.24
+    "pair_h": 2.37
    }
   },
   "turns_screen": [
@@ -78,12 +88,14 @@
      "dint:E1",
      "dint:E2",
      "dint:E3",
+     "dint:E4",
      "strace:T",
      "strace:E1",
      "strace:E2",
-     "strace:E3"
+     "strace:E3",
+     "strace:E4"
     ],
-    "projected_h": 3.48
+    "projected_h": 3.66
    },
    {
     "stages": [
@@ -91,9 +103,10 @@
      "A0",
      "bbits:E1",
      "bbits:E2",
-     "bbits:E3"
+     "bbits:E3",
+     "bbits:E4"
     ],
-    "projected_h": 2.35
+    "projected_h": 2.44
    }
   ],
   "turns_filler_control_run_if_strace_wins": [
@@ -103,9 +116,10 @@
      "A0",
      "ffill:E1",
      "ffill:E2",
-     "ffill:E3"
+     "ffill:E3",
+     "ffill:E4"
     ],
-    "projected_h": 2.29
+    "projected_h": 2.43
    }
   ],
   "turns_screen_plus_filler_in_s0": [
@@ -116,12 +130,14 @@
      "dint:E1",
      "dint:E2",
      "dint:E3",
+     "dint:E4",
      "strace:T",
      "strace:E1",
      "strace:E2",
-     "strace:E3"
+     "strace:E3",
+     "strace:E4"
     ],
-    "projected_h": 3.48
+    "projected_h": 3.66
    },
    {
     "stages": [
@@ -129,9 +145,10 @@
      "A0",
      "bbits:E1",
      "bbits:E2",
-     "bbits:E3"
+     "bbits:E3",
+     "bbits:E4"
     ],
-    "projected_h": 2.35
+    "projected_h": 2.44
    },
    {
     "stages": [
@@ -139,9 +156,10 @@
      "A0",
      "ffill:E1",
      "ffill:E2",
-     "ffill:E3"
+     "ffill:E3",
+     "ffill:E4"
     ],
-    "projected_h": 2.29
+    "projected_h": 2.43
    }
   ],
   "turns_screen_if_per_factor_heldout_added": [
@@ -151,9 +169,10 @@
      "A0",
      "dint:E1",
      "dint:E2",
-     "dint:E3"
+     "dint:E3",
+     "dint:E4"
     ],
-    "projected_h": 1.19
+    "projected_h": 1.25
    },
    {
     "stages": [
@@ -161,9 +180,10 @@
      "A0",
      "strace:E1",
      "strace:E2",
-     "strace:E3"
+     "strace:E3",
+     "strace:E4"
     ],
-    "projected_h": 2.76
+    "projected_h": 2.89
    },
    {
     "stages": [
@@ -171,9 +191,10 @@
      "A0",
      "bbits:E1",
      "bbits:E2",
-     "bbits:E3"
+     "bbits:E3",
+     "bbits:E4"
     ],
-    "projected_h": 2.57
+    "projected_h": 2.66
    }
   ],
   "per_factor_heldout_extra_h": {
@@ -182,10 +203,10 @@
    "bbits": 0.22,
    "ffill": 0.32
   },
-  "gpu_h_screen": 5.83,
-  "gpu_h_filler_control_run_if_strace_wins": 2.29,
-  "gpu_h_screen_plus_filler_in_s0": 8.12,
-  "gpu_h_screen_if_per_factor_heldout_added": 6.52
+  "gpu_h_screen": 6.1,
+  "gpu_h_filler_control_run_if_strace_wins": 2.43,
+  "gpu_h_screen_plus_filler_in_s0": 8.53,
+  "gpu_h_screen_if_per_factor_heldout_added": 6.8
  },
  "observed": {
   "anchor_s": 137.4,
@@ -195,48 +216,56 @@
     "E1_s": 324.1,
     "E2_s": 296.0,
     "E3_s": 162.1,
+    "E4_s": 148.0,
     "generations": {
      "E1": 2100,
      "E2": 1920,
-     "E3": 1050
+     "E3": 1050,
+     "E4": 960
     },
-    "pair_h": 0.83
+    "pair_h": 0.87
    },
    "strace": {
     "train_s": 3437.4,
     "E1_s": 694.8,
     "E2_s": 637.0,
     "E3_s": 347.4,
+    "E4_s": 318.5,
     "generations": {
      "E1": 2100,
      "E2": 1920,
-     "E3": 1050
+     "E3": 1050,
+     "E4": 960
     },
-    "pair_h": 1.45
+    "pair_h": 1.54
    },
    "bbits": {
     "train_s": 3356.6,
     "E1_s": 523.2,
     "E2_s": 468.0,
     "E3_s": 261.6,
+    "E4_s": 234.0,
     "generations": {
      "E1": 2100,
      "E2": 1920,
-     "E3": 1050
+     "E3": 1050,
+     "E4": 960
     },
-    "pair_h": 1.31
+    "pair_h": 1.38
    },
    "ffill": {
     "train_s": 2752.5,
     "E1_s": 758.2,
     "E2_s": 692.9,
     "E3_s": 379.1,
+    "E4_s": 346.4,
     "generations": {
      "E1": 2100,
      "E2": 1920,
-     "E3": 1050
+     "E3": 1050,
+     "E4": 960
     },
-    "pair_h": 1.31
+    "pair_h": 1.4
    }
   },
   "turns_screen": [
@@ -247,16 +276,19 @@
      "dint:E1",
      "dint:E2",
      "dint:E3",
+     "dint:E4",
      "strace:T",
      "strace:E1",
      "strace:E2",
      "strace:E3",
+     "strace:E4",
      "bbits:T",
      "bbits:E1",
      "bbits:E2",
-     "bbits:E3"
+     "bbits:E3",
+     "bbits:E4"
     ],
-    "projected_h": 3.64
+    "projected_h": 3.83
    }
   ],
   "turns_filler_control_run_if_strace_wins": [
@@ -266,9 +298,10 @@
      "A0",
      "ffill:E1",
      "ffill:E2",
-     "ffill:E3"
+     "ffill:E3",
+     "ffill:E4"
     ],
-    "projected_h": 1.34
+    "projected_h": 1.44
    }
   ],
   "turns_screen_plus_filler_in_s0": [
@@ -279,16 +312,19 @@
      "dint:E1",
      "dint:E2",
      "dint:E3",
+     "dint:E4",
      "strace:T",
      "strace:E1",
      "strace:E2",
      "strace:E3",
+     "strace:E4",
      "bbits:T",
      "bbits:E1",
      "bbits:E2",
-     "bbits:E3"
+     "bbits:E3",
+     "bbits:E4"
     ],
-    "projected_h": 3.64
+    "projected_h": 3.83
    },
    {
     "stages": [
@@ -296,9 +332,10 @@
      "A0",
      "ffill:E1",
      "ffill:E2",
-     "ffill:E3"
+     "ffill:E3",
+     "ffill:E4"
     ],
-    "projected_h": 1.34
+    "projected_h": 1.44
    }
   ],
   "turns_screen_if_per_factor_heldout_added": [
@@ -309,16 +346,25 @@
      "dint:E1",
      "dint:E2",
      "dint:E3",
+     "dint:E4",
      "strace:T",
      "strace:E1",
      "strace:E2",
      "strace:E3",
+     "strace:E4"
+    ],
+    "projected_h": 2.76
+   },
+   {
+    "stages": [
      "bbits:T",
+     "A0",
      "bbits:E1",
      "bbits:E2",
-     "bbits:E3"
+     "bbits:E3",
+     "bbits:E4"
     ],
-    "projected_h": 4.1
+    "projected_h": 1.57
    }
   ],
   "per_factor_heldout_extra_h": {
@@ -327,26 +373,33 @@
    "bbits": 0.16,
    "ffill": 0.23
   },
-  "gpu_h_screen": 3.64,
-  "gpu_h_filler_control_run_if_strace_wins": 1.34,
-  "gpu_h_screen_plus_filler_in_s0": 4.98,
-  "gpu_h_screen_if_per_factor_heldout_added": 4.1
+  "gpu_h_screen": 3.83,
+  "gpu_h_filler_control_run_if_strace_wins": 1.44,
+  "gpu_h_screen_plus_filler_in_s0": 5.27,
+  "gpu_h_screen_if_per_factor_heldout_added": 4.33
  },
  "per_factor_heldout_renderings": {
   "run": false,
   "reason": "adding the three per-factor held-out renderings (paraphrase only, field names only, key order only; 750 8-bit rows each, ON) would take the screen from 2 to 3 turns at the planning rate; C3 makes them descriptive only if they fit the budget, so they are omitted"
  },
- "generations_total_screen": 17002,
- "generations_note": "E1 + E2 per screen arm (OFF + ON) + E3 (ON, held-out surface) + one 224-chain x 4-step anchor per turn (planning turn count)",
+ "generations_total_screen": 19882,
+ "generations_note": "E1 + E2 per screen arm (OFF + ON) + E3 (ON, held-out surface) + E4 (ON, held-out-surface chains, report-only; at most 960 steps, fewer once chains break) + one 224-chain x 4-step anchor per turn (planning turn count)",
+ "E4_report_only": {
+  "added_h": {
+   "planning": 0.27,
+   "observed": 0.19
+  },
+  "note": "stage E4 (revision 4) runs the 240 dev chains in the combined held-out surface, ON only; it enters neither R nor eligibility"
+ },
  "seeds_1_2_per_seed_h_planning": {
-  "dint": 1.0,
-  "strace": 2.42,
-  "bbits": 2.29,
-  "ffill": 2.24
+  "dint": 1.06,
+  "strace": 2.54,
+  "bbits": 2.39,
+  "ffill": 2.37
  },
  "torch_imported": false,
  "train_source_sha256": "5a4e11c136238dc7b83e82f738a8af897118c80b8c14df77540fe8f11c0c0196",
  "code_sha256": {
-  "scripts/t2bp_run.py": "c737e1be8189d3d8999fc1c85ce9293705f49d0276e494cfb563c66fb5d5c4ec"
+  "scripts/t2bp_run.py": "09135f4d07e14fef3d2d6df5112fdb5763ac8a8286bb89325a456d26c4433150"
  }
 }

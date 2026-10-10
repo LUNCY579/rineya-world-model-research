@@ -1,6 +1,8 @@
-# DRAFT queue hook for the T2b-register screen, revision 3 (docs/t2b/register/DESIGN.md; roadmap item 3, joint item 5b;
-# DECISIONS D-36). NOT INSTALLED. Its sha256 is a frozen input of the screen (scripts/t2br_run.py --freeze). Install only
-# after the freeze, as an operator decision logged in DECISIONS.md:
+# DRAFT queue hook for the T2b-register screen, revision 5 (docs/t2b/register/DESIGN.md; roadmap item 3, joint item 5b;
+# DECISIONS D-36; revision 5 = the operator's decisions on the checker's two identification gaps; the stage names and
+# this hook's logic are unchanged since revision 4, only these comments). NOT INSTALLED. Its sha256 is a frozen input of
+# the screen (scripts/t2br_run.py --freeze). Install only after the freeze, as an operator decision logged in
+# DECISIONS.md:
 #   cp docs/t2b/register/queue_hook_t2br.sh.draft scripts/queue_hooks/80_t2br.sh
 # (name order after PREREG-3's 60, the retention dev run's 65 and the prerequisite screen's 70). master_chain.sh globs
 # scripts/queue_hooks/*.sh ONCE when it enters that loop, so a new hook needs a FRESH chain, launched only after the live
@@ -10,8 +12,9 @@
 # DECISION POINT 1 HAS FIRED (PREREG-3 STATUS: TRIGGER; operator decision C1): the screen trains ONLY the
 # surface-diversity build 'sd' (data/t2br_train_sd_<arm>.jsonl); the runner refuses any other variant. Outputs:
 # runs/t2b_register/s0_sd/; the analysis writes runs/t2b_register/analysis/T2BR_RESULTS_s0_sd.{json,md}.
-# GPU plan (docs/t2b/register/GEN_PLAN.json): about 4.45 GPU-h in TWO turns at the registered planning rate (turn 1:
-# training + A0 + E1 + E1H, 3.24 h; turn 2: re-anchor + E2, 1.21 h), ONE turn of 3.68 h at the observed rate.
+# GPU plan (docs/t2b/register/GEN_PLAN.json): about 4.82 GPU-h in TWO turns at the registered planning rate (turn 1:
+# training + A0 + E1 + E1H, 3.57 h; turn 2: re-anchor + E2, 1.25 h), ONE turn of 3.94 h at the observed rate.
+# Generations: 14,416 with the anchor once; 15,248 with the planning rate's re-anchor; at most 16,080 (3 calls).
 # Idempotent: every line checks its own output. The run step takes the shared lease itself (rcwmt.runtime.gpu_lease,
 # label rcwm-t1:t2b-register: alternation, thermal flag, holder check, 4.5 h cap with D-22 pairing) and holds a
 # one-runner lock (<out>/.run.lock). Exit codes of scripts/t2br_run.py: 0 complete; 3 deterministic stop - NEVER retried

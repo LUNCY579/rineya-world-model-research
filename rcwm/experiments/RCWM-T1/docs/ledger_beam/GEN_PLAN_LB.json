@@ -1,0 +1,170 @@
+{
+ "n_instances": 180,
+ "rate_gens_per_s": 2.7,
+ "observed_rate_gens_per_s": 3.8,
+ "batch1_rate_gens_per_s": 0.3,
+ "load_s": 120.0,
+ "cap_h": 4.5,
+ "sizing_per_instance": {
+  "G1": {
+   "T2": 69.91,
+   "OFF": 80.76
+  },
+  "G2": {
+   "T2": 14.23,
+   "OFF": 17.33
+  },
+  "G3": {
+   "T2": 55.56
+  },
+  "G4": {
+   "T2@heldout_combined": 80.76
+  }
+ },
+ "ceiling_per_instance": {
+  "G1": {
+   "T2": 104,
+   "OFF": 104
+  },
+  "G2": {
+   "T2": 48,
+   "OFF": 48
+  },
+  "G3": {
+   "T2": 216
+  },
+  "G4": {
+   "T2@heldout_combined": 104
+  }
+ },
+ "stages": [
+  {
+   "stage": "A0",
+   "what": "anchor 208 chains x 4 steps x OFF/ON + batch invariance 256 keys x T2/OFF x (batched, batch 1)",
+   "generations_expected": 2688,
+   "generations_ceiling": 2688,
+   "h_expected_planning": 0.7,
+   "h_expected_observed": 0.63,
+   "h_ceiling_planning": 0.7
+  },
+  {
+   "stage": "G1",
+   "what": "PRIMARY plan_beam enum W2 E12, T2 + OFF",
+   "generations_expected": 27121,
+   "generations_ceiling": 37440,
+   "h_expected_planning": 2.79,
+   "h_expected_observed": 1.98,
+   "h_ceiling_planning": 3.85
+  },
+  {
+   "stage": "G2",
+   "what": "select_fixed T2 + OFF (new keys only)",
+   "generations_expected": 5681,
+   "generations_ceiling": 17280,
+   "h_expected_planning": 0.58,
+   "h_expected_observed": 0.42,
+   "h_ceiling_planning": 1.78
+  },
+  {
+   "stage": "G3",
+   "what": "plan_beam enum W4 E24, T2 (new keys only)",
+   "generations_expected": 10001,
+   "generations_ceiling": 38880,
+   "h_expected_planning": 1.03,
+   "h_expected_observed": 0.73,
+   "h_ceiling_planning": 4.0
+  },
+  {
+   "stage": "G4",
+   "what": "SurfaceAuditF T2 heldout_combined, enum W2 E12",
+   "generations_expected": 14537,
+   "generations_ceiling": 18720,
+   "h_expected_planning": 1.5,
+   "h_expected_observed": 1.06,
+   "h_ceiling_planning": 1.93
+  }
+ ],
+ "cpu_stage": "C1 (ORACLE / IGNORE_STATUS beams and select_fixed): CPU only, never under the lease, at the start of the invocation after the one that records A0 (before its lease, no CUDA use); about 1-2 CPU-min",
+ "stage_rule": "no stage starts within 0.5 h of the 4.5 h cap; a stage starts only if 1.25 x its estimate fits; every turn after the first re-runs A0 (anchor + batch invariance) before any planning stage; the start-of-turn check adds the model load and the longest A0 measured so far; two consecutive turns without a recorded stage stop the job; the running rate is re-measured after each planning stage",
+ "turns_expected_planning_rate": [
+  {
+   "stages": [
+    "A0",
+    "G1",
+    "G2"
+   ],
+   "projected_h": 4.11
+  },
+  {
+   "stages": [
+    "A0 re-check (anchor + batch invariance)",
+    "G3",
+    "G4"
+   ],
+   "projected_h": 3.26
+  }
+ ],
+ "gpu_h_expected_planning_rate": 7.37,
+ "turns_expected_observed_rate": [
+  {
+   "stages": [
+    "A0",
+    "G1",
+    "G2",
+    "G3"
+   ],
+   "projected_h": 3.8
+  },
+  {
+   "stages": [
+    "A0 re-check (anchor + batch invariance)",
+    "G4"
+   ],
+   "projected_h": 1.73
+  }
+ ],
+ "gpu_h_expected_observed_rate": 5.53,
+ "turns_ceiling_planning_rate": "no stage fits an empty turn at 2.7 gens/s (ceiling)",
+ "gpu_h_ceiling_planning_rate": null,
+ "turns_ceiling_observed_rate": [
+  {
+   "stages": [
+    "A0",
+    "G1"
+   ],
+   "projected_h": 3.4
+  },
+  {
+   "stages": [
+    "A0 re-check (anchor + batch invariance)",
+    "G2"
+   ],
+   "projected_h": 1.93
+  },
+  {
+   "stages": [
+    "A0 re-check (anchor + batch invariance)",
+    "G3"
+   ],
+   "projected_h": 3.51
+  },
+  {
+   "stages": [
+    "A0 re-check (anchor + batch invariance)",
+    "G4"
+   ],
+   "projected_h": 2.03
+  }
+ ],
+ "gpu_h_ceiling_observed_rate": 10.87,
+ "checks": {
+  "pins_match": true,
+  "bwm_planner_pinned": true,
+  "lbeam_outputs_present": [],
+  "freeze_ok": false,
+  "freeze_blockers": [
+   "PREREG_LB_FREEZE.json does not exist or is unreadable (PREREG-LB is a draft)"
+  ],
+  "torch_imported": false
+ }
+}

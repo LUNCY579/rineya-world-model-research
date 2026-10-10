@@ -1,0 +1,39 @@
+# DRAFT queue hook for the T2b prerequisite representation screen (docs/t2b/prereq/DESIGN.md, revision 4: the
+# surface-diversity build 'sd' is the only variant that runs, tags sd_*; stages T/E1/E2/E3 + the report-only
+# held-out-surface chains E4). NOT INSTALLED and NOT FROZEN.
+# Installing it (cp to scripts/queue_hooks/70_t2bp.sh) is an operator decision logged in DECISIONS.md: master_chain.sh
+# globs scripts/queue_hooks/*.sh ONCE when it enters that loop, so a new hook needs a FRESH chain, launched only after the
+# live chain has finished or been stopped at a safe point (R14 one-waiter rule; the waiting RCWM job keeps its slot). The
+# runner also refuses (exit 3, not persisted) while another RCWM job holds or waits for the GPU lease, whenever a frozen
+# input differs from docs/t2b/prereq/SCREEN_RULE.json (revision 4), and for any variant other than sd (C1).
+# Idempotent: every line checks its own output. The run step takes the shared lease itself (rcwmt.runtime.gpu_lease,
+# label rcwm-t1:t2b-prereq: alternation, thermal flag, holder check, 4.5 h cap with D-22 pairing) and holds a one-runner
+# lock (runs/t2bp/<tag>/.run.lock). Exit codes of scripts/t2bp_run.py: 0 complete; 3 deterministic stop - NEVER retried
+# (persisted as runs/t2bp/<tag>/STOPPED.json when it concerns the run); 5 deferred by the turn cap (the next call waits
+# for the next turn and resumes; the sd screen takes 2 turns at the planning rate, 1 at the observed rate); anything
+# else is a crash (the lease is released) - one retry.
+if [ -f docs/t2b/prereq/SCREEN_RULE.json ] && [ -f data/t2bp_train_sd.SOURCE.json ] && [ -f data/t2bp_dev.SOURCE.json ] \
+   && [ ! -f runs/t2bp/sd_s0/STOPPED.json ]; then
+  for t2bp_try in 1 2 3; do                              # at most 3 calls: turn 1, turn 2 (deferral), one crash retry
+    [ -f runs/t2bp/sd_s0/DONE.json ] || [ -f runs/t2bp/sd_s0/STOPPED.json ] && break
+    step scripts/t2bp_run.py                             # default: --tag sd_s0, arms D-int, S-trace, B-bits, stages T/E1/E2/E3/E4
+    [ $? -eq 3 ] && break
+  done
+  # CPU, once, create-only: frozen-rule check and scorer self-test BEFORE any output is read, then the pre-stated rule
+  if [ -f runs/t2bp/sd_s0/DONE.json ] && [ ! -f runs/t2bp/sd_s0/analysis/T2BP_SCREEN.json ]; then
+    step scripts/t2bp_analysis.py                        # default: --run runs/t2bp/sd_s0
+  fi
+  # R5 decode-compute control (amendment-4b constant fill): ONLY if the screen named S-trace (one turn), then the
+  # pre-stated addendum
+  if [ -f runs/t2bp/sd_s0/analysis/T2BP_SCREEN.json ] && grep -q '"verdict": "WINNER=strace"' runs/t2bp/sd_s0/analysis/T2BP_SCREEN.json \
+     && [ ! -f runs/t2bp/sd_s0_ffill/STOPPED.json ]; then
+    for t2bp_try in 1 2; do
+      [ -f runs/t2bp/sd_s0_ffill/DONE.json ] || [ -f runs/t2bp/sd_s0_ffill/STOPPED.json ] && break
+      step scripts/t2bp_run.py --tag sd_s0_ffill --arms ffill
+      [ $? -eq 3 ] && break
+    done
+    if [ -f runs/t2bp/sd_s0_ffill/DONE.json ] && [ ! -f runs/t2bp/sd_s0_ffill/analysis/T2BP_FILLER.json ]; then
+      step scripts/t2bp_analysis.py --filler-run runs/t2bp/sd_s0_ffill
+    fi
+  fi
+fi

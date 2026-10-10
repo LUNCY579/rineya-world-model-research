@@ -1,0 +1,2923 @@
+{
+ "ok": true,
+ "stats_selftest": {
+  "ok": true,
+  "cases": {
+   "exact McNemar == the two-sided binomial test on the discordant pairs (9 cases)": true,
+   "Holm (m=2): 0.004, 0.03 -> 0.008, 0.03; 0.03, 0.004 -> 0.03, 0.008; 0.02, 0.02 -> 0.04, 0.04; 0.6, 0.7 -> 1.0, 1.0": true,
+   "bootstrap ratio CI is deterministic for the fixed seed and brackets the point ratio": true,
+   "delta boundary: exactly +0.20 with Holm p < 0.01 is PASS; +0.1944 is SHORT": true,
+   "Holm boundary: adjusted p 0.01 is NS; 0.0099 passes": true,
+   "audit reading: b 12 / c 18 of 180 (difference -0.033, p 0.36, CI lower bound < -0.05) is 'inconclusive'": true,
+   "audit reading: b 2 / c 3 of 180 (CI lower bound >= -0.05) is 'surface-invariant within 0.05'": true,
+   "audit reading: a significant drop (b 2 / c 40) is 'surface-dependent'; the CI is deterministic": true
+  }
+ },
+ "wording_selftest": {
+  "ok": true,
+  "every_branch_exercised": [
+   "DIRECTIONAL",
+   "GREEDY_ONLY",
+   "GREEDY_ONLY_NEAR",
+   "LOOKAHEAD_ONLY",
+   "MIXED_LOOKAHEAD_BETTER",
+   "MIXED_PASS",
+   "MIXED_SHORT",
+   "NO",
+   "REVERSED",
+   "REVERSED_LOOKAHEAD",
+   "YES",
+   "YES_NEAR"
+  ],
+  "every_status_exercised": [
+   "NS",
+   "PASS",
+   "REVERSED",
+   "SHORT"
+  ],
+  "cases": {
+   "YES_NEAR": {
+    "ok": true,
+    "want": [
+     "YES_NEAR",
+     "PASS",
+     "PASS",
+     true
+    ],
+    "got": [
+     "YES_NEAR",
+     "PASS",
+     "PASS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES NEAR-ORACLE PLANNING (T2/ORACLE over all instances; on its training surface)",
+    "reading": "near-oracle planning",
+    "conclusion": "T2's one-step prediction turns into goal-reaching plans: T2 enables planning, including on the instances greedy descent on the true hook cannot solve, and reaches the near-oracle bar against the exact simulator over all instances (the T2/ORACLE ratio on the needs-lookahead instances is reported separately).",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 145,
+      "off_success": 32,
+      "b_t2_only": 122,
+      "c_off_only": 9,
+      "t2_rate": 0.806,
+      "off_rate": 0.178,
+      "delta": 0.628,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 35,
+      "off_success": 3,
+      "b_t2_only": 35,
+      "c_off_only": 3,
+      "t2_rate": 0.547,
+      "off_rate": 0.047,
+      "delta": 0.5,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.806,
+     "oracle": 0.85,
+     "ratio": 0.948,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.91,
+     "hi": 0.98,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "YES (ratio below 0.80)": {
+    "ok": true,
+    "want": [
+     "YES",
+     "PASS",
+     "PASS",
+     false
+    ],
+    "got": [
+     "YES",
+     "PASS",
+     "PASS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES PLANNING, BELOW THE NEAR-ORACLE BAR (on its training surface)",
+    "reading": "enables planning",
+    "conclusion": "T2 enables planning, including on the instances greedy descent on the true hook cannot solve, but it stays below the near-oracle bar (T2/ORACLE >= 0.80 with lower bound >= 0.70).",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 107,
+      "off_success": 26,
+      "b_t2_only": 107,
+      "c_off_only": 26,
+      "t2_rate": 0.594,
+      "off_rate": 0.144,
+      "delta": 0.45,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 26,
+      "off_success": 3,
+      "b_t2_only": 26,
+      "c_off_only": 3,
+      "t2_rate": 0.406,
+      "off_rate": 0.047,
+      "delta": 0.359,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.594,
+     "oracle": 0.85,
+     "ratio": 0.699,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.625,
+     "hi": 0.772,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "GREEDY_ONLY_NEAR (lookahead NS)": {
+    "ok": true,
+    "want": [
+     "GREEDY_ONLY_NEAR",
+     "PASS",
+     "NS",
+     true
+    ],
+    "got": [
+     "GREEDY_ONLY_NEAR",
+     "PASS",
+     "NS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES NEAR-ORACLE PLANNING OVERALL (T2/ORACLE over all instances), BUT ITS GAIN OVER OFF IS NOT SHOWN WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "near-oracle planning, qualified: not shown where lookahead is needed",
+    "conclusion": "T2 enables planning and reaches the near-oracle bar over all instances (T2/ORACLE over all instances), but on the instances that need lookahead its gain over OFF is not significant (Holm-adjusted p >= 0.01), so the planning gain at the pre-set bar is not shown where lookahead is needed.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 135,
+      "off_success": 45,
+      "b_t2_only": 106,
+      "c_off_only": 16,
+      "t2_rate": 0.75,
+      "off_rate": 0.25,
+      "delta": 0.5,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 19,
+      "off_success": 16,
+      "b_t2_only": 19,
+      "c_off_only": 16,
+      "t2_rate": 0.297,
+      "off_rate": 0.25,
+      "delta": 0.047,
+      "p_raw": 0.736,
+      "p_holm": 0.736
+     }
+    },
+    "ratio": {
+     "t2": 0.75,
+     "oracle": 0.789,
+     "ratio": 0.951,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.913,
+     "hi": 0.985,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "GREEDY_ONLY (lookahead NS)": {
+    "ok": true,
+    "want": [
+     "GREEDY_ONLY",
+     "PASS",
+     "NS",
+     false
+    ],
+    "got": [
+     "GREEDY_ONLY",
+     "PASS",
+     "NS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES PLANNING ON INSTANCES GREEDY DESCENT ALREADY SOLVES; NOT SHOWN WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "enables planning, qualified: not shown where lookahead is needed",
+    "conclusion": "T2 enables planning on instances greedy descent already solves; not shown where lookahead is needed (the needs-lookahead contrast is not significant (Holm-adjusted p >= 0.01)).",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 103,
+      "off_success": 29,
+      "b_t2_only": 103,
+      "c_off_only": 29,
+      "t2_rate": 0.572,
+      "off_rate": 0.161,
+      "delta": 0.411,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 6,
+      "b_t2_only": 10,
+      "c_off_only": 6,
+      "t2_rate": 0.156,
+      "off_rate": 0.094,
+      "delta": 0.062,
+      "p_raw": 0.454,
+      "p_holm": 0.454
+     }
+    },
+    "ratio": {
+     "t2": 0.572,
+     "oracle": 0.85,
+     "ratio": 0.673,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.599,
+     "hi": 0.747,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "GREEDY_ONLY (lookahead SHORT)": {
+    "ok": true,
+    "want": [
+     "GREEDY_ONLY",
+     "PASS",
+     "SHORT",
+     false
+    ],
+    "got": [
+     "GREEDY_ONLY",
+     "PASS",
+     "SHORT",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES PLANNING ON INSTANCES GREEDY DESCENT ALREADY SOLVES; NOT SHOWN WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "enables planning, qualified: not shown where lookahead is needed",
+    "conclusion": "T2 enables planning on instances greedy descent already solves; not shown where lookahead is needed (the needs-lookahead contrast is significant in T2's favour (Holm-adjusted p < 0.01) but below the pre-set +0.20).",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 360,
+      "t2_success": 212,
+      "off_success": 86,
+      "b_t2_only": 164,
+      "c_off_only": 38,
+      "t2_rate": 0.589,
+      "off_rate": 0.239,
+      "delta": 0.35,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 200,
+      "t2_success": 60,
+      "off_success": 30,
+      "b_t2_only": 60,
+      "c_off_only": 30,
+      "t2_rate": 0.3,
+      "off_rate": 0.15,
+      "delta": 0.15,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.589,
+     "oracle": 0.767,
+     "ratio": 0.768,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.719,
+     "hi": 0.816,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "LOOKAHEAD_ONLY (all SHORT)": {
+    "ok": true,
+    "want": [
+     "LOOKAHEAD_ONLY",
+     "SHORT",
+     "PASS",
+     false
+    ],
+    "got": [
+     "LOOKAHEAD_ONLY",
+     "SHORT",
+     "PASS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 ENABLES PLANNING WHERE LOOKAHEAD IS NEEDED, BUT ITS GAIN OVER ALL INSTANCES IS NOT SHOWN AT THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "On the instances that need lookahead T2 passes the pre-set bar, but over all instances its gain is significant in T2's favour (Holm-adjusted p < 0.01) but below the pre-set +0.20, so 'T2 enables planning' (co-primary 1) is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 75,
+      "off_success": 49,
+      "b_t2_only": 26,
+      "c_off_only": 0,
+      "t2_rate": 0.417,
+      "off_rate": 0.272,
+      "delta": 0.144,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 29,
+      "off_success": 3,
+      "b_t2_only": 26,
+      "c_off_only": 0,
+      "t2_rate": 0.453,
+      "off_rate": 0.047,
+      "delta": 0.406,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.417,
+     "oracle": 0.85,
+     "ratio": 0.49,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.411,
+     "hi": 0.569,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "LOOKAHEAD_ONLY (all NS, near)": {
+    "ok": true,
+    "want": [
+     "LOOKAHEAD_ONLY",
+     "NS",
+     "PASS",
+     true
+    ],
+    "got": [
+     "LOOKAHEAD_ONLY",
+     "NS",
+     "PASS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 ENABLES PLANNING WHERE LOOKAHEAD IS NEEDED, BUT ITS GAIN OVER ALL INSTANCES IS NOT SHOWN AT THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "On the instances that need lookahead T2 passes the pre-set bar, but over all instances its gain is not significant (Holm-adjusted p >= 0.01), so 'T2 enables planning' (co-primary 1) is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 0.938 (95% CI [0.893, 0.973]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 136,
+      "off_success": 116,
+      "b_t2_only": 38,
+      "c_off_only": 18,
+      "t2_rate": 0.756,
+      "off_rate": 0.644,
+      "delta": 0.111,
+      "p_raw": 0.01,
+      "p_holm": 0.01
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 32,
+      "off_success": 6,
+      "b_t2_only": 32,
+      "c_off_only": 6,
+      "t2_rate": 0.5,
+      "off_rate": 0.094,
+      "delta": 0.406,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.756,
+     "oracle": 0.806,
+     "ratio": 0.938,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.893,
+     "hi": 0.973,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "DIRECTIONAL (both SHORT)": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "SHORT",
+     "SHORT",
+     false
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "SHORT",
+     "SHORT",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 1 and co-primary 2 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 86,
+      "off_success": 57,
+      "b_t2_only": 29,
+      "c_off_only": 0,
+      "t2_rate": 0.478,
+      "off_rate": 0.317,
+      "delta": 0.161,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 16,
+      "off_success": 5,
+      "b_t2_only": 11,
+      "c_off_only": 0,
+      "t2_rate": 0.25,
+      "off_rate": 0.078,
+      "delta": 0.172,
+      "p_raw": 0.001,
+      "p_holm": 0.001
+     }
+    },
+    "ratio": {
+     "t2": 0.478,
+     "oracle": 0.85,
+     "ratio": 0.562,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.483,
+     "hi": 0.64,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "DIRECTIONAL (all SHORT, lookahead NS)": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "SHORT",
+     "NS",
+     false
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "SHORT",
+     "NS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 1 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 93,
+      "off_success": 75,
+      "b_t2_only": 18,
+      "c_off_only": 0,
+      "t2_rate": 0.517,
+      "off_rate": 0.417,
+      "delta": 0.1,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 6,
+      "off_success": 5,
+      "b_t2_only": 1,
+      "c_off_only": 0,
+      "t2_rate": 0.094,
+      "off_rate": 0.078,
+      "delta": 0.016,
+      "p_raw": 1.0,
+      "p_holm": 1.0
+     }
+    },
+    "ratio": {
+     "t2": 0.517,
+     "oracle": 0.85,
+     "ratio": 0.608,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.53,
+     "hi": 0.685,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "DIRECTIONAL (all NS, lookahead SHORT)": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "NS",
+     "SHORT",
+     false
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "NS",
+     "SHORT",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 2 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 74,
+      "off_success": 70,
+      "b_t2_only": 10,
+      "c_off_only": 6,
+      "t2_rate": 0.411,
+      "off_rate": 0.389,
+      "delta": 0.022,
+      "p_raw": 0.454,
+      "p_holm": 0.454
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 16,
+      "off_success": 6,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.25,
+      "off_rate": 0.094,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.411,
+     "oracle": 0.85,
+     "ratio": 0.484,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.405,
+     "hi": 0.564,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "NO (both NS)": {
+    "ok": true,
+    "want": [
+     "NO",
+     "NS",
+     "NS",
+     false
+    ],
+    "got": [
+     "NO",
+     "NS",
+     "NS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "NO: T2 IS NOT SHOWN TO PLAN BETTER THAN OFF",
+    "reading": "no",
+    "conclusion": "Neither co-primary is significant at Holm-adjusted p < 0.01: T2 is not shown to plan better than OFF.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 64,
+      "off_success": 61,
+      "b_t2_only": 64,
+      "c_off_only": 61,
+      "t2_rate": 0.356,
+      "off_rate": 0.339,
+      "delta": 0.017,
+      "p_raw": 0.858,
+      "p_holm": 1.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 6,
+      "off_success": 5,
+      "b_t2_only": 6,
+      "c_off_only": 5,
+      "t2_rate": 0.094,
+      "off_rate": 0.078,
+      "delta": 0.016,
+      "p_raw": 1.0,
+      "p_holm": 1.0
+     }
+    },
+    "ratio": {
+     "t2": 0.356,
+     "oracle": 0.85,
+     "ratio": 0.418,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.342,
+     "hi": 0.497,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "NO (both NS, ratio near: OFF also near the oracle)": {
+    "ok": true,
+    "want": [
+     "NO",
+     "NS",
+     "NS",
+     true
+    ],
+    "got": [
+     "NO",
+     "NS",
+     "NS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "NO: T2 IS NOT SHOWN TO PLAN BETTER THAN OFF",
+    "reading": "no",
+    "conclusion": "Neither co-primary is significant at Holm-adjusted p < 0.01: T2 is not shown to plan better than OFF.",
+    "qualifiers": [
+     "T2/ORACLE 0.94 (95% CI [0.9, 0.974]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 142,
+      "off_success": 140,
+      "b_t2_only": 39,
+      "c_off_only": 37,
+      "t2_rate": 0.789,
+      "off_rate": 0.778,
+      "delta": 0.011,
+      "p_raw": 0.909,
+      "p_holm": 1.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 32,
+      "off_success": 31,
+      "b_t2_only": 32,
+      "c_off_only": 31,
+      "t2_rate": 0.5,
+      "off_rate": 0.484,
+      "delta": 0.016,
+      "p_raw": 1.0,
+      "p_holm": 1.0
+     }
+    },
+    "ratio": {
+     "t2": 0.789,
+     "oracle": 0.839,
+     "ratio": 0.94,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.9,
+     "hi": 0.974,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "REVERSED (all instances)": {
+    "ok": true,
+    "want": [
+     "REVERSED",
+     "REVERSED",
+     "NS",
+     false
+    ],
+    "got": [
+     "REVERSED",
+     "REVERSED",
+     "NS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES",
+    "reading": "no",
+    "conclusion": "OFF plans significantly better than T2 over all instances: the adapter's one-step gain does not turn into goal-reaching plans here, and 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 41,
+      "off_success": 101,
+      "b_t2_only": 29,
+      "c_off_only": 89,
+      "t2_rate": 0.228,
+      "off_rate": 0.561,
+      "delta": -0.333,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 6,
+      "off_success": 8,
+      "b_t2_only": 6,
+      "c_off_only": 8,
+      "t2_rate": 0.094,
+      "off_rate": 0.125,
+      "delta": -0.031,
+      "p_raw": 0.791,
+      "p_holm": 0.791
+     }
+    },
+    "ratio": {
+     "t2": 0.228,
+     "oracle": 0.85,
+     "ratio": 0.268,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.2,
+     "hi": 0.338,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "REVERSED_LOOKAHEAD (lookahead only)": {
+    "ok": true,
+    "want": [
+     "REVERSED_LOOKAHEAD",
+     "NS",
+     "REVERSED",
+     false
+    ],
+    "got": [
+     "REVERSED_LOOKAHEAD",
+     "NS",
+     "REVERSED",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED WHERE LOOKAHEAD IS NEEDED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF WHERE LOOKAHEAD IS NEEDED",
+    "reading": "no",
+    "conclusion": "Where lookahead is needed OFF plans significantly better than T2, and over all instances T2's gain is not significant (Holm-adjusted p >= 0.01): 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 104,
+      "off_success": 107,
+      "b_t2_only": 35,
+      "c_off_only": 38,
+      "t2_rate": 0.578,
+      "off_rate": 0.594,
+      "delta": -0.017,
+      "p_raw": 0.815,
+      "p_holm": 0.815
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 26,
+      "b_t2_only": 0,
+      "c_off_only": 26,
+      "t2_rate": 0.0,
+      "off_rate": 0.406,
+      "delta": -0.406,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.578,
+     "oracle": 0.85,
+     "ratio": 0.68,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.603,
+     "hi": 0.753,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "REVERSED (both)": {
+    "ok": true,
+    "want": [
+     "REVERSED",
+     "REVERSED",
+     "REVERSED",
+     false
+    ],
+    "got": [
+     "REVERSED",
+     "REVERSED",
+     "REVERSED",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES",
+    "reading": "no",
+    "conclusion": "OFF plans significantly better than T2 over all instances and where lookahead is needed: the adapter's one-step gain does not turn into goal-reaching plans here, and 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 12,
+      "off_success": 136,
+      "b_t2_only": 12,
+      "c_off_only": 136,
+      "t2_rate": 0.067,
+      "off_rate": 0.756,
+      "delta": -0.689,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 32,
+      "b_t2_only": 0,
+      "c_off_only": 32,
+      "t2_rate": 0.0,
+      "off_rate": 0.5,
+      "delta": -0.5,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.067,
+     "oracle": 0.85,
+     "ratio": 0.078,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.039,
+     "hi": 0.123,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "MIXED_PASS (reviewer's case: PASS overall, REVERSED where lookahead is needed, NEAR)": {
+    "ok": true,
+    "want": [
+     "MIXED_PASS",
+     "PASS",
+     "REVERSED",
+     true
+    ],
+    "got": [
+     "MIXED_PASS",
+     "PASS",
+     "REVERSED",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 ENABLES PLANNING OVER ALL INSTANCES BUT PLANS SIGNIFICANTLY WORSE THAN OFF WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "enables planning, qualified: significantly worse than OFF where lookahead is needed",
+    "conclusion": "Over all instances T2 passes the pre-set bar (co-primary 1: 'T2 enables planning'), but where lookahead is needed OFF plans significantly better than T2: the gain over OFF is carried by the instances greedy descent already solves and reverses where lookahead is needed.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar over all instances, but 'near-oracle planning' is not read because OFF plans significantly better than T2 where lookahead is needed."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 122,
+      "off_success": 38,
+      "b_t2_only": 122,
+      "c_off_only": 38,
+      "t2_rate": 0.678,
+      "off_rate": 0.211,
+      "delta": 0.467,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 6,
+      "off_success": 38,
+      "b_t2_only": 6,
+      "c_off_only": 38,
+      "t2_rate": 0.094,
+      "off_rate": 0.594,
+      "delta": -0.5,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.678,
+     "oracle": 0.678,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination NS/NS/not near -> NO": {
+    "ok": true,
+    "want": [
+     "NO",
+     "NS",
+     "NS",
+     false
+    ],
+    "got": [
+     "NO",
+     "NS",
+     "NS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "NO: T2 IS NOT SHOWN TO PLAN BETTER THAN OFF",
+    "reading": "no",
+    "conclusion": "Neither co-primary is significant at Holm-adjusted p < 0.01: T2 is not shown to plan better than OFF.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 0,
+      "off_success": 0,
+      "b_t2_only": 0,
+      "c_off_only": 0,
+      "t2_rate": 0.0,
+      "off_rate": 0.0,
+      "delta": 0.0,
+      "p_raw": 1.0,
+      "p_holm": 1.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 0,
+      "b_t2_only": 0,
+      "c_off_only": 0,
+      "t2_rate": 0.0,
+      "off_rate": 0.0,
+      "delta": 0.0,
+      "p_raw": 1.0,
+      "p_holm": 1.0
+     }
+    },
+    "ratio": {
+     "t2": 0.0,
+     "oracle": 1.0,
+     "ratio": 0.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.0,
+     "hi": 0.0,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination NS/NS/NEAR -> NO": {
+    "ok": true,
+    "want": [
+     "NO",
+     "NS",
+     "NS",
+     true
+    ],
+    "got": [
+     "NO",
+     "NS",
+     "NS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "NO: T2 IS NOT SHOWN TO PLAN BETTER THAN OFF",
+    "reading": "no",
+    "conclusion": "Neither co-primary is significant at Holm-adjusted p < 0.01: T2 is not shown to plan better than OFF.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 3,
+      "off_success": 0,
+      "b_t2_only": 3,
+      "c_off_only": 0,
+      "t2_rate": 0.017,
+      "off_rate": 0.0,
+      "delta": 0.017,
+      "p_raw": 0.25,
+      "p_holm": 0.5
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 3,
+      "off_success": 0,
+      "b_t2_only": 3,
+      "c_off_only": 0,
+      "t2_rate": 0.047,
+      "off_rate": 0.0,
+      "delta": 0.047,
+      "p_raw": 0.25,
+      "p_holm": 0.5
+     }
+    },
+    "ratio": {
+     "t2": 0.017,
+     "oracle": 0.017,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 467,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination NS/PASS/not near -> LOOKAHEAD_ONLY": {
+    "ok": true,
+    "want": [
+     "LOOKAHEAD_ONLY",
+     "NS",
+     "PASS",
+     false
+    ],
+    "got": [
+     "LOOKAHEAD_ONLY",
+     "NS",
+     "PASS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 ENABLES PLANNING WHERE LOOKAHEAD IS NEEDED, BUT ITS GAIN OVER ALL INSTANCES IS NOT SHOWN AT THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "On the instances that need lookahead T2 passes the pre-set bar, but over all instances its gain is not significant (Holm-adjusted p >= 0.01), so 'T2 enables planning' (co-primary 1) is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 13,
+      "off_success": 6,
+      "b_t2_only": 13,
+      "c_off_only": 6,
+      "t2_rate": 0.072,
+      "off_rate": 0.033,
+      "delta": 0.039,
+      "p_raw": 0.167,
+      "p_holm": 0.167
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 13,
+      "off_success": 0,
+      "b_t2_only": 13,
+      "c_off_only": 0,
+      "t2_rate": 0.203,
+      "off_rate": 0.0,
+      "delta": 0.203,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.072,
+     "oracle": 1.0,
+     "ratio": 0.072,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.039,
+     "hi": 0.111,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination NS/PASS/NEAR -> LOOKAHEAD_ONLY": {
+    "ok": true,
+    "want": [
+     "LOOKAHEAD_ONLY",
+     "NS",
+     "PASS",
+     true
+    ],
+    "got": [
+     "LOOKAHEAD_ONLY",
+     "NS",
+     "PASS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 ENABLES PLANNING WHERE LOOKAHEAD IS NEEDED, BUT ITS GAIN OVER ALL INSTANCES IS NOT SHOWN AT THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "On the instances that need lookahead T2 passes the pre-set bar, but over all instances its gain is not significant (Holm-adjusted p >= 0.01), so 'T2 enables planning' (co-primary 1) is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 13,
+      "off_success": 6,
+      "b_t2_only": 13,
+      "c_off_only": 6,
+      "t2_rate": 0.072,
+      "off_rate": 0.033,
+      "delta": 0.039,
+      "p_raw": 0.167,
+      "p_holm": 0.167
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 13,
+      "off_success": 0,
+      "b_t2_only": 13,
+      "c_off_only": 0,
+      "t2_rate": 0.203,
+      "off_rate": 0.0,
+      "delta": 0.203,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.072,
+     "oracle": 0.072,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination NS/REVERSED/not near -> REVERSED_LOOKAHEAD": {
+    "ok": true,
+    "want": [
+     "REVERSED_LOOKAHEAD",
+     "NS",
+     "REVERSED",
+     false
+    ],
+    "got": [
+     "REVERSED_LOOKAHEAD",
+     "NS",
+     "REVERSED",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED WHERE LOOKAHEAD IS NEEDED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF WHERE LOOKAHEAD IS NEEDED",
+    "reading": "no",
+    "conclusion": "Where lookahead is needed OFF plans significantly better than T2, and over all instances T2's gain is not significant (Holm-adjusted p >= 0.01): 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 6,
+      "off_success": 10,
+      "b_t2_only": 6,
+      "c_off_only": 10,
+      "t2_rate": 0.033,
+      "off_rate": 0.056,
+      "delta": -0.022,
+      "p_raw": 0.454,
+      "p_holm": 0.454
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 10,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.0,
+      "off_rate": 0.156,
+      "delta": -0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.033,
+     "oracle": 1.0,
+     "ratio": 0.033,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.011,
+     "hi": 0.061,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination NS/REVERSED/NEAR -> REVERSED_LOOKAHEAD": {
+    "ok": true,
+    "want": [
+     "REVERSED_LOOKAHEAD",
+     "NS",
+     "REVERSED",
+     true
+    ],
+    "got": [
+     "REVERSED_LOOKAHEAD",
+     "NS",
+     "REVERSED",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED WHERE LOOKAHEAD IS NEEDED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF WHERE LOOKAHEAD IS NEEDED",
+    "reading": "no",
+    "conclusion": "Where lookahead is needed OFF plans significantly better than T2, and over all instances T2's gain is not significant (Holm-adjusted p >= 0.01): 'T2 enables planning' is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 6,
+      "off_success": 10,
+      "b_t2_only": 6,
+      "c_off_only": 10,
+      "t2_rate": 0.033,
+      "off_rate": 0.056,
+      "delta": -0.022,
+      "p_raw": 0.454,
+      "p_holm": 0.454
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 10,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.0,
+      "off_rate": 0.156,
+      "delta": -0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.033,
+     "oracle": 0.033,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 33,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination NS/SHORT/not near -> DIRECTIONAL": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "NS",
+     "SHORT",
+     false
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "NS",
+     "SHORT",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 2 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 10,
+      "off_success": 6,
+      "b_t2_only": 10,
+      "c_off_only": 6,
+      "t2_rate": 0.056,
+      "off_rate": 0.033,
+      "delta": 0.022,
+      "p_raw": 0.454,
+      "p_holm": 0.454
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.156,
+      "off_rate": 0.0,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.056,
+     "oracle": 1.0,
+     "ratio": 0.056,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.022,
+     "hi": 0.094,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination NS/SHORT/NEAR -> DIRECTIONAL": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "NS",
+     "SHORT",
+     true
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "NS",
+     "SHORT",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 2 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 10,
+      "off_success": 6,
+      "b_t2_only": 10,
+      "c_off_only": 6,
+      "t2_rate": 0.056,
+      "off_rate": 0.033,
+      "delta": 0.022,
+      "p_raw": 0.454,
+      "p_holm": 0.454
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.156,
+      "off_rate": 0.0,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.056,
+     "oracle": 0.056,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination PASS/NS/not near -> GREEDY_ONLY": {
+    "ok": true,
+    "want": [
+     "GREEDY_ONLY",
+     "PASS",
+     "NS",
+     false
+    ],
+    "got": [
+     "GREEDY_ONLY",
+     "PASS",
+     "NS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES PLANNING ON INSTANCES GREEDY DESCENT ALREADY SOLVES; NOT SHOWN WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "enables planning, qualified: not shown where lookahead is needed",
+    "conclusion": "T2 enables planning on instances greedy descent already solves; not shown where lookahead is needed (the needs-lookahead contrast is not significant (Holm-adjusted p >= 0.01)).",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 55,
+      "off_success": 19,
+      "b_t2_only": 55,
+      "c_off_only": 19,
+      "t2_rate": 0.306,
+      "off_rate": 0.106,
+      "delta": 0.2,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 38,
+      "off_success": 19,
+      "b_t2_only": 38,
+      "c_off_only": 19,
+      "t2_rate": 0.594,
+      "off_rate": 0.297,
+      "delta": 0.297,
+      "p_raw": 0.016,
+      "p_holm": 0.016
+     }
+    },
+    "ratio": {
+     "t2": 0.306,
+     "oracle": 1.0,
+     "ratio": 0.306,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.239,
+     "hi": 0.372,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination PASS/NS/NEAR -> GREEDY_ONLY_NEAR": {
+    "ok": true,
+    "want": [
+     "GREEDY_ONLY_NEAR",
+     "PASS",
+     "NS",
+     true
+    ],
+    "got": [
+     "GREEDY_ONLY_NEAR",
+     "PASS",
+     "NS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES NEAR-ORACLE PLANNING OVERALL (T2/ORACLE over all instances), BUT ITS GAIN OVER OFF IS NOT SHOWN WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "near-oracle planning, qualified: not shown where lookahead is needed",
+    "conclusion": "T2 enables planning and reaches the near-oracle bar over all instances (T2/ORACLE over all instances), but on the instances that need lookahead its gain over OFF is not significant (Holm-adjusted p >= 0.01), so the planning gain at the pre-set bar is not shown where lookahead is needed.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 55,
+      "off_success": 19,
+      "b_t2_only": 55,
+      "c_off_only": 19,
+      "t2_rate": 0.306,
+      "off_rate": 0.106,
+      "delta": 0.2,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 38,
+      "off_success": 19,
+      "b_t2_only": 38,
+      "c_off_only": 19,
+      "t2_rate": 0.594,
+      "off_rate": 0.297,
+      "delta": 0.297,
+      "p_raw": 0.016,
+      "p_holm": 0.016
+     }
+    },
+    "ratio": {
+     "t2": 0.306,
+     "oracle": 0.306,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination PASS/PASS/not near -> YES": {
+    "ok": true,
+    "want": [
+     "YES",
+     "PASS",
+     "PASS",
+     false
+    ],
+    "got": [
+     "YES",
+     "PASS",
+     "PASS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES PLANNING, BELOW THE NEAR-ORACLE BAR (on its training surface)",
+    "reading": "enables planning",
+    "conclusion": "T2 enables planning, including on the instances greedy descent on the true hook cannot solve, but it stays below the near-oracle bar (T2/ORACLE >= 0.80 with lower bound >= 0.70).",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 38,
+      "off_success": 0,
+      "b_t2_only": 38,
+      "c_off_only": 0,
+      "t2_rate": 0.211,
+      "off_rate": 0.0,
+      "delta": 0.211,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 38,
+      "off_success": 0,
+      "b_t2_only": 38,
+      "c_off_only": 0,
+      "t2_rate": 0.594,
+      "off_rate": 0.0,
+      "delta": 0.594,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.211,
+     "oracle": 1.0,
+     "ratio": 0.211,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.15,
+     "hi": 0.272,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination PASS/PASS/NEAR -> YES_NEAR": {
+    "ok": true,
+    "want": [
+     "YES_NEAR",
+     "PASS",
+     "PASS",
+     true
+    ],
+    "got": [
+     "YES_NEAR",
+     "PASS",
+     "PASS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES NEAR-ORACLE PLANNING (T2/ORACLE over all instances; on its training surface)",
+    "reading": "near-oracle planning",
+    "conclusion": "T2's one-step prediction turns into goal-reaching plans: T2 enables planning, including on the instances greedy descent on the true hook cannot solve, and reaches the near-oracle bar against the exact simulator over all instances (the T2/ORACLE ratio on the needs-lookahead instances is reported separately).",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 38,
+      "off_success": 0,
+      "b_t2_only": 38,
+      "c_off_only": 0,
+      "t2_rate": 0.211,
+      "off_rate": 0.0,
+      "delta": 0.211,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 38,
+      "off_success": 0,
+      "b_t2_only": 38,
+      "c_off_only": 0,
+      "t2_rate": 0.594,
+      "off_rate": 0.0,
+      "delta": 0.594,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.211,
+     "oracle": 0.211,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination PASS/REVERSED/not near -> MIXED_PASS": {
+    "ok": true,
+    "want": [
+     "MIXED_PASS",
+     "PASS",
+     "REVERSED",
+     false
+    ],
+    "got": [
+     "MIXED_PASS",
+     "PASS",
+     "REVERSED",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 ENABLES PLANNING OVER ALL INSTANCES BUT PLANS SIGNIFICANTLY WORSE THAN OFF WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "enables planning, qualified: significantly worse than OFF where lookahead is needed",
+    "conclusion": "Over all instances T2 passes the pre-set bar (co-primary 1: 'T2 enables planning'), but where lookahead is needed OFF plans significantly better than T2: the gain over OFF is carried by the instances greedy descent already solves and reverses where lookahead is needed.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 46,
+      "off_success": 10,
+      "b_t2_only": 46,
+      "c_off_only": 10,
+      "t2_rate": 0.256,
+      "off_rate": 0.056,
+      "delta": 0.2,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 10,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.0,
+      "off_rate": 0.156,
+      "delta": -0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.256,
+     "oracle": 1.0,
+     "ratio": 0.256,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.194,
+     "hi": 0.322,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination PASS/REVERSED/NEAR -> MIXED_PASS": {
+    "ok": true,
+    "want": [
+     "MIXED_PASS",
+     "PASS",
+     "REVERSED",
+     true
+    ],
+    "got": [
+     "MIXED_PASS",
+     "PASS",
+     "REVERSED",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 ENABLES PLANNING OVER ALL INSTANCES BUT PLANS SIGNIFICANTLY WORSE THAN OFF WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "enables planning, qualified: significantly worse than OFF where lookahead is needed",
+    "conclusion": "Over all instances T2 passes the pre-set bar (co-primary 1: 'T2 enables planning'), but where lookahead is needed OFF plans significantly better than T2: the gain over OFF is carried by the instances greedy descent already solves and reverses where lookahead is needed.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar over all instances, but 'near-oracle planning' is not read because OFF plans significantly better than T2 where lookahead is needed."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 46,
+      "off_success": 10,
+      "b_t2_only": 46,
+      "c_off_only": 10,
+      "t2_rate": 0.256,
+      "off_rate": 0.056,
+      "delta": 0.2,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 10,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.0,
+      "off_rate": 0.156,
+      "delta": -0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.256,
+     "oracle": 0.256,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination PASS/SHORT/not near -> GREEDY_ONLY": {
+    "ok": true,
+    "want": [
+     "GREEDY_ONLY",
+     "PASS",
+     "SHORT",
+     false
+    ],
+    "got": [
+     "GREEDY_ONLY",
+     "PASS",
+     "SHORT",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES PLANNING ON INSTANCES GREEDY DESCENT ALREADY SOLVES; NOT SHOWN WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "enables planning, qualified: not shown where lookahead is needed",
+    "conclusion": "T2 enables planning on instances greedy descent already solves; not shown where lookahead is needed (the needs-lookahead contrast is significant in T2's favour (Holm-adjusted p < 0.01) but below the pre-set +0.20).",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 45,
+      "off_success": 0,
+      "b_t2_only": 45,
+      "c_off_only": 0,
+      "t2_rate": 0.25,
+      "off_rate": 0.0,
+      "delta": 0.25,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.156,
+      "off_rate": 0.0,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.25,
+     "oracle": 1.0,
+     "ratio": 0.25,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.189,
+     "hi": 0.317,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination PASS/SHORT/NEAR -> GREEDY_ONLY_NEAR": {
+    "ok": true,
+    "want": [
+     "GREEDY_ONLY_NEAR",
+     "PASS",
+     "SHORT",
+     true
+    ],
+    "got": [
+     "GREEDY_ONLY_NEAR",
+     "PASS",
+     "SHORT",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "T2 ENABLES NEAR-ORACLE PLANNING OVERALL (T2/ORACLE over all instances), BUT ITS GAIN OVER OFF IS NOT SHOWN WHERE LOOKAHEAD IS NEEDED (on its training surface)",
+    "reading": "near-oracle planning, qualified: not shown where lookahead is needed",
+    "conclusion": "T2 enables planning and reaches the near-oracle bar over all instances (T2/ORACLE over all instances), but on the instances that need lookahead its gain over OFF is significant in T2's favour (Holm-adjusted p < 0.01) but below the pre-set +0.20, so the planning gain at the pre-set bar is not shown where lookahead is needed.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 45,
+      "off_success": 0,
+      "b_t2_only": 45,
+      "c_off_only": 0,
+      "t2_rate": 0.25,
+      "off_rate": 0.0,
+      "delta": 0.25,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.156,
+      "off_rate": 0.0,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.25,
+     "oracle": 0.25,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination REVERSED/NS/not near -> REVERSED": {
+    "ok": true,
+    "want": [
+     "REVERSED",
+     "REVERSED",
+     "NS",
+     false
+    ],
+    "got": [
+     "REVERSED",
+     "REVERSED",
+     "NS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES",
+    "reading": "no",
+    "conclusion": "OFF plans significantly better than T2 over all instances: the adapter's one-step gain does not turn into goal-reaching plans here, and 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 0,
+      "off_success": 9,
+      "b_t2_only": 0,
+      "c_off_only": 9,
+      "t2_rate": 0.0,
+      "off_rate": 0.05,
+      "delta": -0.05,
+      "p_raw": 0.004,
+      "p_holm": 0.008
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 3,
+      "b_t2_only": 0,
+      "c_off_only": 3,
+      "t2_rate": 0.0,
+      "off_rate": 0.047,
+      "delta": -0.047,
+      "p_raw": 0.25,
+      "p_holm": 0.25
+     }
+    },
+    "ratio": {
+     "t2": 0.0,
+     "oracle": 1.0,
+     "ratio": 0.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.0,
+     "hi": 0.0,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination REVERSED/NS/NEAR -> REVERSED": {
+    "ok": true,
+    "want": [
+     "REVERSED",
+     "REVERSED",
+     "NS",
+     true
+    ],
+    "got": [
+     "REVERSED",
+     "REVERSED",
+     "NS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES",
+    "reading": "no",
+    "conclusion": "OFF plans significantly better than T2 over all instances: the adapter's one-step gain does not turn into goal-reaching plans here, and 'T2 enables planning' is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 3,
+      "off_success": 12,
+      "b_t2_only": 0,
+      "c_off_only": 9,
+      "t2_rate": 0.017,
+      "off_rate": 0.067,
+      "delta": -0.05,
+      "p_raw": 0.004,
+      "p_holm": 0.008
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 3,
+      "off_success": 6,
+      "b_t2_only": 0,
+      "c_off_only": 3,
+      "t2_rate": 0.047,
+      "off_rate": 0.094,
+      "delta": -0.047,
+      "p_raw": 0.25,
+      "p_holm": 0.25
+     }
+    },
+    "ratio": {
+     "t2": 0.017,
+     "oracle": 0.017,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 467,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination REVERSED/PASS/not near -> MIXED_LOOKAHEAD_BETTER": {
+    "ok": true,
+    "want": [
+     "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED",
+     "PASS",
+     false
+    ],
+    "got": [
+     "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED",
+     "PASS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES BUT BETTER WHERE LOOKAHEAD IS NEEDED",
+    "reading": "partial (mixed)",
+    "conclusion": "Over all instances OFF plans significantly better than T2, but where lookahead is needed T2 plans better than OFF (co-primary 2: passes the pre-set bar (T2 - OFF >= +0.20 and Holm-adjusted p < 0.01)): 'T2 enables planning' is not shown, and T2's advantage where lookahead is needed is outweighed by its losses on the instances greedy descent already solves.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 13,
+      "off_success": 35,
+      "b_t2_only": 13,
+      "c_off_only": 35,
+      "t2_rate": 0.072,
+      "off_rate": 0.194,
+      "delta": -0.122,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 13,
+      "off_success": 0,
+      "b_t2_only": 13,
+      "c_off_only": 0,
+      "t2_rate": 0.203,
+      "off_rate": 0.0,
+      "delta": 0.203,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.072,
+     "oracle": 1.0,
+     "ratio": 0.072,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.039,
+     "hi": 0.111,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination REVERSED/PASS/NEAR -> MIXED_LOOKAHEAD_BETTER": {
+    "ok": true,
+    "want": [
+     "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED",
+     "PASS",
+     true
+    ],
+    "got": [
+     "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED",
+     "PASS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES BUT BETTER WHERE LOOKAHEAD IS NEEDED",
+    "reading": "partial (mixed)",
+    "conclusion": "Over all instances OFF plans significantly better than T2, but where lookahead is needed T2 plans better than OFF (co-primary 2: passes the pre-set bar (T2 - OFF >= +0.20 and Holm-adjusted p < 0.01)): 'T2 enables planning' is not shown, and T2's advantage where lookahead is needed is outweighed by its losses on the instances greedy descent already solves.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 13,
+      "off_success": 35,
+      "b_t2_only": 13,
+      "c_off_only": 35,
+      "t2_rate": 0.072,
+      "off_rate": 0.194,
+      "delta": -0.122,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 13,
+      "off_success": 0,
+      "b_t2_only": 13,
+      "c_off_only": 0,
+      "t2_rate": 0.203,
+      "off_rate": 0.0,
+      "delta": 0.203,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.072,
+     "oracle": 0.072,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination REVERSED/REVERSED/not near -> REVERSED": {
+    "ok": true,
+    "want": [
+     "REVERSED",
+     "REVERSED",
+     "REVERSED",
+     false
+    ],
+    "got": [
+     "REVERSED",
+     "REVERSED",
+     "REVERSED",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES",
+    "reading": "no",
+    "conclusion": "OFF plans significantly better than T2 over all instances and where lookahead is needed: the adapter's one-step gain does not turn into goal-reaching plans here, and 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 0,
+      "off_success": 10,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.0,
+      "off_rate": 0.056,
+      "delta": -0.056,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 10,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.0,
+      "off_rate": 0.156,
+      "delta": -0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.0,
+     "oracle": 1.0,
+     "ratio": 0.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.0,
+     "hi": 0.0,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination REVERSED/REVERSED/NEAR -> REVERSED": {
+    "ok": true,
+    "want": [
+     "REVERSED",
+     "REVERSED",
+     "REVERSED",
+     true
+    ],
+    "got": [
+     "REVERSED",
+     "REVERSED",
+     "REVERSED",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "NO (REVERSED): T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES",
+    "reading": "no",
+    "conclusion": "OFF plans significantly better than T2 over all instances and where lookahead is needed: the adapter's one-step gain does not turn into goal-reaching plans here, and 'T2 enables planning' is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 3,
+      "off_success": 13,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.017,
+      "off_rate": 0.072,
+      "delta": -0.056,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 3,
+      "off_success": 13,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.047,
+      "off_rate": 0.203,
+      "delta": -0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.017,
+     "oracle": 0.017,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 467,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination REVERSED/SHORT/not near -> MIXED_LOOKAHEAD_BETTER": {
+    "ok": true,
+    "want": [
+     "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED",
+     "SHORT",
+     false
+    ],
+    "got": [
+     "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED",
+     "SHORT",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES BUT BETTER WHERE LOOKAHEAD IS NEEDED",
+    "reading": "partial (mixed)",
+    "conclusion": "Over all instances OFF plans significantly better than T2, but where lookahead is needed T2 plans better than OFF (co-primary 2: significant in T2's favour (Holm-adjusted p < 0.01) but below the pre-set +0.20): 'T2 enables planning' is not shown, and T2's advantage where lookahead is needed is outweighed by its losses on the instances greedy descent already solves.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 10,
+      "off_success": 35,
+      "b_t2_only": 10,
+      "c_off_only": 35,
+      "t2_rate": 0.056,
+      "off_rate": 0.194,
+      "delta": -0.139,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.156,
+      "off_rate": 0.0,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.056,
+     "oracle": 1.0,
+     "ratio": 0.056,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.022,
+     "hi": 0.094,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination REVERSED/SHORT/NEAR -> MIXED_LOOKAHEAD_BETTER": {
+    "ok": true,
+    "want": [
+     "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED",
+     "SHORT",
+     true
+    ],
+    "got": [
+     "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED",
+     "SHORT",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 PLANS SIGNIFICANTLY WORSE THAN OFF OVER ALL INSTANCES BUT BETTER WHERE LOOKAHEAD IS NEEDED",
+    "reading": "partial (mixed)",
+    "conclusion": "Over all instances OFF plans significantly better than T2, but where lookahead is needed T2 plans better than OFF (co-primary 2: significant in T2's favour (Holm-adjusted p < 0.01) but below the pre-set +0.20): 'T2 enables planning' is not shown, and T2's advantage where lookahead is needed is outweighed by its losses on the instances greedy descent already solves.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 10,
+      "off_success": 35,
+      "b_t2_only": 10,
+      "c_off_only": 35,
+      "t2_rate": 0.056,
+      "off_rate": 0.194,
+      "delta": -0.139,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.156,
+      "off_rate": 0.0,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.056,
+     "oracle": 0.056,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination SHORT/NS/not near -> DIRECTIONAL": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "SHORT",
+     "NS",
+     false
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "SHORT",
+     "NS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 1 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 9,
+      "off_success": 0,
+      "b_t2_only": 9,
+      "c_off_only": 0,
+      "t2_rate": 0.05,
+      "off_rate": 0.0,
+      "delta": 0.05,
+      "p_raw": 0.004,
+      "p_holm": 0.008
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 3,
+      "off_success": 0,
+      "b_t2_only": 3,
+      "c_off_only": 0,
+      "t2_rate": 0.047,
+      "off_rate": 0.0,
+      "delta": 0.047,
+      "p_raw": 0.25,
+      "p_holm": 0.25
+     }
+    },
+    "ratio": {
+     "t2": 0.05,
+     "oracle": 1.0,
+     "ratio": 0.05,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.022,
+     "hi": 0.083,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination SHORT/NS/NEAR -> DIRECTIONAL": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "SHORT",
+     "NS",
+     true
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "SHORT",
+     "NS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 1 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 9,
+      "off_success": 0,
+      "b_t2_only": 9,
+      "c_off_only": 0,
+      "t2_rate": 0.05,
+      "off_rate": 0.0,
+      "delta": 0.05,
+      "p_raw": 0.004,
+      "p_holm": 0.008
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 3,
+      "off_success": 0,
+      "b_t2_only": 3,
+      "c_off_only": 0,
+      "t2_rate": 0.047,
+      "off_rate": 0.0,
+      "delta": 0.047,
+      "p_raw": 0.25,
+      "p_holm": 0.25
+     }
+    },
+    "ratio": {
+     "t2": 0.05,
+     "oracle": 0.05,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination SHORT/PASS/not near -> LOOKAHEAD_ONLY": {
+    "ok": true,
+    "want": [
+     "LOOKAHEAD_ONLY",
+     "SHORT",
+     "PASS",
+     false
+    ],
+    "got": [
+     "LOOKAHEAD_ONLY",
+     "SHORT",
+     "PASS",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 ENABLES PLANNING WHERE LOOKAHEAD IS NEEDED, BUT ITS GAIN OVER ALL INSTANCES IS NOT SHOWN AT THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "On the instances that need lookahead T2 passes the pre-set bar, but over all instances its gain is significant in T2's favour (Holm-adjusted p < 0.01) but below the pre-set +0.20, so 'T2 enables planning' (co-primary 1) is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 13,
+      "off_success": 0,
+      "b_t2_only": 13,
+      "c_off_only": 0,
+      "t2_rate": 0.072,
+      "off_rate": 0.0,
+      "delta": 0.072,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 13,
+      "off_success": 0,
+      "b_t2_only": 13,
+      "c_off_only": 0,
+      "t2_rate": 0.203,
+      "off_rate": 0.0,
+      "delta": 0.203,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.072,
+     "oracle": 1.0,
+     "ratio": 0.072,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.039,
+     "hi": 0.111,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination SHORT/PASS/NEAR -> LOOKAHEAD_ONLY": {
+    "ok": true,
+    "want": [
+     "LOOKAHEAD_ONLY",
+     "SHORT",
+     "PASS",
+     true
+    ],
+    "got": [
+     "LOOKAHEAD_ONLY",
+     "SHORT",
+     "PASS",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 ENABLES PLANNING WHERE LOOKAHEAD IS NEEDED, BUT ITS GAIN OVER ALL INSTANCES IS NOT SHOWN AT THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "On the instances that need lookahead T2 passes the pre-set bar, but over all instances its gain is significant in T2's favour (Holm-adjusted p < 0.01) but below the pre-set +0.20, so 'T2 enables planning' (co-primary 1) is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 13,
+      "off_success": 0,
+      "b_t2_only": 13,
+      "c_off_only": 0,
+      "t2_rate": 0.072,
+      "off_rate": 0.0,
+      "delta": 0.072,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 13,
+      "off_success": 0,
+      "b_t2_only": 13,
+      "c_off_only": 0,
+      "t2_rate": 0.203,
+      "off_rate": 0.0,
+      "delta": 0.203,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     }
+    },
+    "ratio": {
+     "t2": 0.072,
+     "oracle": 0.072,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination SHORT/REVERSED/not near -> MIXED_SHORT": {
+    "ok": true,
+    "want": [
+     "MIXED_SHORT",
+     "SHORT",
+     "REVERSED",
+     false
+    ],
+    "got": [
+     "MIXED_SHORT",
+     "SHORT",
+     "REVERSED",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 PLANS BETTER THAN OFF OVER ALL INSTANCES (BELOW THE PRE-SET BAR) BUT SIGNIFICANTLY WORSE WHERE LOOKAHEAD IS NEEDED",
+    "reading": "partial (mixed)",
+    "conclusion": "Over all instances T2 plans significantly better than OFF but below the pre-set +0.20, and where lookahead is needed OFF plans significantly better than T2: 'T2 enables planning' is not shown, and the gain reverses where lookahead is needed.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 35,
+      "off_success": 10,
+      "b_t2_only": 35,
+      "c_off_only": 10,
+      "t2_rate": 0.194,
+      "off_rate": 0.056,
+      "delta": 0.139,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 10,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.0,
+      "off_rate": 0.156,
+      "delta": -0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.194,
+     "oracle": 1.0,
+     "ratio": 0.194,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.139,
+     "hi": 0.256,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination SHORT/REVERSED/NEAR -> MIXED_SHORT": {
+    "ok": true,
+    "want": [
+     "MIXED_SHORT",
+     "SHORT",
+     "REVERSED",
+     true
+    ],
+    "got": [
+     "MIXED_SHORT",
+     "SHORT",
+     "REVERSED",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "MIXED: T2 PLANS BETTER THAN OFF OVER ALL INSTANCES (BELOW THE PRE-SET BAR) BUT SIGNIFICANTLY WORSE WHERE LOOKAHEAD IS NEEDED",
+    "reading": "partial (mixed)",
+    "conclusion": "Over all instances T2 plans significantly better than OFF but below the pre-set +0.20, and where lookahead is needed OFF plans significantly better than T2: 'T2 enables planning' is not shown, and the gain reverses where lookahead is needed.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 35,
+      "off_success": 10,
+      "b_t2_only": 35,
+      "c_off_only": 10,
+      "t2_rate": 0.194,
+      "off_rate": 0.056,
+      "delta": 0.139,
+      "p_raw": 0.0,
+      "p_holm": 0.0
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 0,
+      "off_success": 10,
+      "b_t2_only": 0,
+      "c_off_only": 10,
+      "t2_rate": 0.0,
+      "off_rate": 0.156,
+      "delta": -0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.002
+     }
+    },
+    "ratio": {
+     "t2": 0.194,
+     "oracle": 0.194,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "combination SHORT/SHORT/not near -> DIRECTIONAL": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "SHORT",
+     "SHORT",
+     false
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "SHORT",
+     "SHORT",
+     false
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 1 and co-primary 2 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.056,
+      "off_rate": 0.0,
+      "delta": 0.056,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.156,
+      "off_rate": 0.0,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.056,
+     "oracle": 1.0,
+     "ratio": 0.056,
+     "B": 10000,
+     "seed": 17,
+     "lo": 0.022,
+     "hi": 0.094,
+     "dropped_zero_oracle": 0,
+     "near": false,
+     "evaluable": true
+    }
+   },
+   "combination SHORT/SHORT/NEAR -> DIRECTIONAL": {
+    "ok": true,
+    "want": [
+     "DIRECTIONAL",
+     "SHORT",
+     "SHORT",
+     true
+    ],
+    "got": [
+     "DIRECTIONAL",
+     "SHORT",
+     "SHORT",
+     true
+    ],
+    "truth_errors": [],
+    "headline": "PARTIAL: T2 PLANS BETTER THAN OFF, BELOW THE PRE-SET BAR",
+    "reading": "partial",
+    "conclusion": "T2 plans better than OFF (co-primary 1 and co-primary 2 significant at Holm-adjusted p < 0.01), but no co-primary reaches the pre-set +0.20, so 'T2 enables planning' is not shown.",
+    "qualifiers": [
+     "T2/ORACLE 1.0 (95% CI [1.0, 1.0]) meets the near-oracle bar, but 'near-oracle planning' also requires co-primary 1 ('T2 enables planning'), which is not met."
+    ],
+    "cp": {
+     "cp1": {
+      "n": 180,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.056,
+      "off_rate": 0.0,
+      "delta": 0.056,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     },
+     "cp2": {
+      "n": 64,
+      "t2_success": 10,
+      "off_success": 0,
+      "b_t2_only": 10,
+      "c_off_only": 0,
+      "t2_rate": 0.156,
+      "off_rate": 0.0,
+      "delta": 0.156,
+      "p_raw": 0.002,
+      "p_holm": 0.004
+     }
+    },
+    "ratio": {
+     "t2": 0.056,
+     "oracle": 0.056,
+     "ratio": 1.0,
+     "B": 10000,
+     "seed": 17,
+     "lo": 1.0,
+     "hi": 1.0,
+     "dropped_zero_oracle": 0,
+     "near": true,
+     "evaluable": true
+    }
+   },
+   "refused-key flag above 1% only": {
+    "ok": true
+   },
+   "ratio not evaluable when ORACLE success is 0 (NEAR false)": {
+    "ok": true
+   },
+   "not-evaluable report-only stages are rendered mechanically (abandoned / stopped) and never change the branch": {
+    "ok": true,
+    "sentence": "Not evaluable (report-only stages that are not recorded; the branch needs only A0, G1 and C1): G3 (T2 at enum W4 E24), abandoned after 2 failed attempts (registered rule); G4 (the D-35 audit, T2 under heldout_combined), not run: the run ended by a deterministic stop after A0, G1 and C1 were recorded."
+   },
+   "exhaustive: every (status 1, status 2, NEAR) combination maps to the registered table (32) and is realised through decide() / wording() with truthful wording": {
+    "ok": true,
+    "table": {
+     "PASS/PASS/not near": "YES",
+     "PASS/PASS/NEAR": "YES_NEAR",
+     "PASS/SHORT/not near": "GREEDY_ONLY",
+     "PASS/SHORT/NEAR": "GREEDY_ONLY_NEAR",
+     "PASS/NS/not near": "GREEDY_ONLY",
+     "PASS/NS/NEAR": "GREEDY_ONLY_NEAR",
+     "PASS/REVERSED/not near": "MIXED_PASS",
+     "PASS/REVERSED/NEAR": "MIXED_PASS",
+     "SHORT/PASS/not near": "LOOKAHEAD_ONLY",
+     "SHORT/PASS/NEAR": "LOOKAHEAD_ONLY",
+     "SHORT/SHORT/not near": "DIRECTIONAL",
+     "SHORT/SHORT/NEAR": "DIRECTIONAL",
+     "SHORT/NS/not near": "DIRECTIONAL",
+     "SHORT/NS/NEAR": "DIRECTIONAL",
+     "SHORT/REVERSED/not near": "MIXED_SHORT",
+     "SHORT/REVERSED/NEAR": "MIXED_SHORT",
+     "NS/PASS/not near": "LOOKAHEAD_ONLY",
+     "NS/PASS/NEAR": "LOOKAHEAD_ONLY",
+     "NS/SHORT/not near": "DIRECTIONAL",
+     "NS/SHORT/NEAR": "DIRECTIONAL",
+     "NS/NS/not near": "NO",
+     "NS/NS/NEAR": "NO",
+     "NS/REVERSED/not near": "REVERSED_LOOKAHEAD",
+     "NS/REVERSED/NEAR": "REVERSED_LOOKAHEAD",
+     "REVERSED/PASS/not near": "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED/PASS/NEAR": "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED/SHORT/not near": "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED/SHORT/NEAR": "MIXED_LOOKAHEAD_BETTER",
+     "REVERSED/NS/not near": "REVERSED",
+     "REVERSED/NS/NEAR": "REVERSED",
+     "REVERSED/REVERSED/not near": "REVERSED",
+     "REVERSED/REVERSED/NEAR": "REVERSED"
+    }
+   }
+  }
+ },
+ "metrics_selftest": {
+  "ok": true,
+  "cases": {
+   "a failed plan with a void step: IGNORE_STATUS applies it as posted (exposure 1), ORACLE does not (0)": true,
+   "the stored optimal plan scores success 1, optimal length 1, precision 1": true,
+   "exposure read from a cache whose answer applied the void step": true,
+   "a void step applied with an arithmetic error: not 'applied as posted' (0) but 'not a no-op' (1)": true,
+   "a guard-refused key (absent from the cache) is counted, and select_fixed exposures are labelled": true
+  }
+ },
+ "registered_strings_missing_from_draft": [],
+ "code_sha256": {
+  "scripts/lbeam_analysis.py": "e3b0e9e0baaf23f183218fda57c1e4855d6db80deb9ca9db5a51d3753dafbf7e",
+  "scripts/lbeam_run.py": "55a0bd0fb8e2af0112b8485ae5f8fc858c56508f4293d456bc24802d0c1efa5c"
+ },
+ "draft_sha256": "26c62144d89dde15e7d18ad119f9361ce6f93562bd3d358f26808e7aefbd788d",
+ "hook_draft_sha256": "098cb1311bd9d5352b042a4e84dcabc606df6209fd9429a60ee4b543d27102ff",
+ "torch_imported": false,
+ "seconds": 0.8
+}

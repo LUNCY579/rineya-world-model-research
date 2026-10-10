@@ -33,6 +33,10 @@ same process; greedy FP32, rcwmt.generation.generate_texts (160-token cap, its b
       by the row's index within its stratum: t2bp_common.heldout_surface_of), adapter ON only, paired by row with E1.
       HS (the seven 8-bit strata) enters the screen's ranking. The adapter-OFF side and per-factor held-out renderings
       are not run: they do not fit the 2-turn planning budget (GEN_PLAN.json) and the rule does not use them.
+  E4  held-out-surface chains (revision 4, REPORT-ONLY): the 240 k=4 chains self-rolled out in the same combined
+      held-out surface, the held-out event order rotating by the chain's index in the dev bank's chain list
+      (t2bp_common.heldout_surface_of_chain; every step of a chain uses its chain's surface), adapter ON only. It reports
+      K4_HS and K4 - K4_HS per arm; it enters neither R nor eligibility (HS stays defined on E3's one-step strata).
 A0 anchor (once per turn, before the first evaluation stage of that turn): adapter disabled, pilot TEST prerequisite
 chain_m1 (224 chains, rcwmt.generation.chain) must reproduce runs/t2/t2_s0/gen_chain_m1_base.jsonl (sha pinned) with
 identical states on >= 99% of chains, else the job stops (persisted) before any evaluation output of that turn.
@@ -90,9 +94,11 @@ OUT_ROOT = ROOT / "runs" / "t2bp"
 RCWM_LABEL_PREFIX = "rcwm-t1:"
 CAP_H = 4.5
 STEPS, LR = 190, 1e-4
-STAGES = ("T", "E1", "E2", "E3")      # revision 3: every run is the surface-diversity build with the held-out stage E3
+STAGES = ("T", "E1", "E2", "E3", "E4")   # revision 3: the held-out stage E3; revision 4: the report-only stage E4
 STAGES_SD = STAGES
+EVAL_ORDER = STAGES[1:]
 E3_SIDES = ("on",)                   # the held-out-surface stage generates adapter ON only (the rule reads ON)
+E4_SIDES = ("on",)                   # the held-out-surface chains (report-only) generate adapter ON only
 FACTOR_ROWS = 750                    # per-factor held-out renderings (descriptive, NOT run): 3 factors x the 8-bit rows
 NATIVE_OFF_ARMS = ("dint",)          # base Titan's own frame (T2's prerequisite prompt): OFF planned at the gold length
 GEN_CAP_TOKENS = 160                 # rcwmt.generation.max_tokens
@@ -229,7 +235,8 @@ def estimates(cfg: Cfg, n_rows: int | None = None, n_steps: int | None = None, n
                           "E1": e1,
                           "E2": n_steps * (s_per_gen(off_tokens(a, d2, cfg.planning), cfg.planning) + s_per_gen(d2, cfg.planning)),
                           "E3": n_rows * s_per_gen(d1, cfg.planning),                     # ON only
-                          "gens": {"E1": 2 * n_rows, "E2": 2 * n_steps, "E3": n_rows},
+                          "E4": n_steps * s_per_gen(d2, cfg.planning),                    # ON only (report-only)
+                          "gens": {"E1": 2 * n_rows, "E2": 2 * n_steps, "E3": n_rows, "E4": n_steps},
                           "per_factor_not_run": 3 * FACTOR_ROWS * s_per_gen(d1, cfg.planning)}
     return out
 
@@ -244,7 +251,7 @@ def simulate_turns(cfg: Cfg, arms, est: dict | None = None) -> list:
         for a in arms:
             if not todo[a]:
                 continue
-            pair = sum(est["arms"][a][s] for s in todo[a]) + (LOAD_S if {"E1", "E2", "E3"} & set(todo[a]) else 0.0) + \
+            pair = sum(est["arms"][a][s] for s in todo[a]) + (LOAD_S if set(EVAL_ORDER) & set(todo[a]) else 0.0) + \
                 (0.0 if anchored else est["anchor"])
             if "T" in todo[a]:
                 if not G2.can_start(t, pair, 0.0, cap):
@@ -258,7 +265,7 @@ def simulate_turns(cfg: Cfg, arms, est: dict | None = None) -> list:
                 anchored = True
                 ran.append("A0")
             stop = False
-            for s in ("E1", "E2", "E3"):
+            for s in EVAL_ORDER:
                 if s in todo[a]:
                     if not G2.can_start(t, est["arms"][a][s], 0.0, cap):
                         stop = True
@@ -275,7 +282,8 @@ def simulate_turns(cfg: Cfg, arms, est: dict | None = None) -> list:
 
 
 def plan(verbose: bool = True) -> dict:
-    """Revision 3: every projection is the surface-diversity build (C1) with the held-out stage E3 (ON only)."""
+    """Revision 3: every projection is the surface-diversity build (C1) with the held-out stage E3 (ON only); revision 4
+    adds the report-only held-out-surface chains E4 (ON only)."""
     res = {"cap_h": CAP_H, "load_s_each": LOAD_S, "data_variant": C.DATA_VARIANT,
            "train_source": C.TRAIN_SOURCE_SD.name, "stages_per_arm": list(STAGES),
            "stage_rule": f"a stage (an arm's training: its whole remaining train+eval pair) starts only if "
@@ -290,6 +298,8 @@ def plan(verbose: bool = True) -> dict:
                                      "case); observed: the gold answer length (best case). The true screen time lies "
                                      "between the two."),
                "E3": "the held-out-surface stage: the 1,050 one-step rows, adapter ON only, at the gold answer length",
+               "E4": ("the report-only held-out-surface chains: the 240 k=4 chains (960 steps at most), adapter ON only, "
+                      "at the gold answer length of the chain steps"),
                "a_s": round(P_M1_S_PER_GEN - (L_ONE_S_PER_GEN - P_M1_S_PER_GEN) / (20.144 - 2.57) * 3.57, 4),
                "b_s_per_token": round((L_ONE_S_PER_GEN - P_M1_S_PER_GEN) / (20.144 - 2.57), 5)}}
     for mode in ("planning", "observed"):
@@ -298,6 +308,7 @@ def plan(verbose: bool = True) -> dict:
         res[mode] = {"anchor_s": round(est["anchor"], 1), "arms": {
             a: {"train_s": round(est["arms"][a]["T"], 1), "E1_s": round(est["arms"][a]["E1"], 1),
                 "E2_s": round(est["arms"][a]["E2"], 1), "E3_s": round(est["arms"][a]["E3"], 1),
+                "E4_s": round(est["arms"][a]["E4"], 1),
                 "generations": est["arms"][a]["gens"],
                 "pair_h": round((est["arms"][a]["T"] + LOAD_S + sum(est["arms"][a][s] for s in STAGES[1:])) / 3600, 2)}
             for a in C.ARMS},
@@ -322,8 +333,14 @@ def plan(verbose: bool = True) -> dict:
                    "descriptive only if they fit the budget, so they are omitted")}
     res["generations_total_screen"] = sum(res["planning"]["arms"][a]["generations"][s] for a in C.SCREEN_ARMS
                                           for s in STAGES[1:]) + 224 * 4 * len(res["planning"]["turns_screen"])
-    res["generations_note"] = ("E1 + E2 per screen arm (OFF + ON) + E3 (ON, held-out surface) + one 224-chain x 4-step "
+    res["generations_note"] = ("E1 + E2 per screen arm (OFF + ON) + E3 (ON, held-out surface) + E4 (ON, held-out-surface "
+                               "chains, report-only; at most 960 steps, fewer once chains break) + one 224-chain x 4-step "
                                "anchor per turn (planning turn count)")
+    res["E4_report_only"] = {
+        "added_h": {mode: round(sum(res[mode]["arms"][a]["E4_s"] for a in C.SCREEN_ARMS) / 3600, 2)
+                    for mode in ("planning", "observed")},
+        "note": ("stage E4 (revision 4) runs the 240 dev chains in the combined held-out surface, ON only; it enters "
+                 "neither R nor eligibility")}
     res["seeds_1_2_per_seed_h_planning"] = {a: res["planning"]["arms"][a]["pair_h"] for a in C.ARMS}
     if verbose:
         for mode in ("planning", "observed"):
@@ -332,8 +349,8 @@ def plan(verbose: bool = True) -> dict:
             for a in C.ARMS:
                 x = r["arms"][a]
                 print(f"  {C.ARM_LABEL[a]:<9} train {x['train_s'] / 60:5.1f} min  E1 {x['E1_s'] / 60:5.1f} min  "
-                      f"E2 {x['E2_s'] / 60:5.1f} min  E3 {x['E3_s'] / 60:5.1f} min  pair {x['pair_h']:.2f} h  "
-                      f"gens {x['generations']}")
+                      f"E2 {x['E2_s'] / 60:5.1f} min  E3 {x['E3_s'] / 60:5.1f} min  E4 {x['E4_s'] / 60:5.1f} min  "
+                      f"pair {x['pair_h']:.2f} h  gens {x['generations']}")
             for k in ("turns_screen", "turns_filler_control_run_if_strace_wins", "turns_screen_plus_filler_in_s0",
                       "turns_screen_if_per_factor_heldout_added"):
                 print(f"  {k}: " + "; ".join(f"turn {i + 1}: {t['stages']} {t['projected_h']} h" for i, t in enumerate(r[k]))
@@ -357,6 +374,8 @@ def stage_required(arm: str, st: str, out: Path) -> list:
         return [d / "chains_off.jsonl", d / "chains_on.jsonl"]
     if st == "E3":
         return [d / f"onestep_heldout_{side}.jsonl" for side in E3_SIDES]
+    if st == "E4":
+        return [d / f"chains_heldout_{side}.jsonl" for side in E4_SIDES]
     raise KeyError(st)
 
 
@@ -575,17 +594,21 @@ def gen_texts(model, tok, message_lists: list) -> list:
     return generation.generate_texts(model, tok, message_lists, generation.max_tokens(C.FAM))
 
 
-def t2bp_chain(model, tok, arm: str, chains: list) -> list:
+def t2bp_chain(model, tok, arm: str, chains: list, surfaces: list | None = None) -> list:
     """Self-rollout in the arm's frame: rcwmt.generation.chain's loop for one family; each step's prompt carries the
     previous PREDICTED state (rendered in the arm's representation), parsed by the arm's after-only parser (None once a
-    chain breaks). For D-int this is generation.chain(..., 'chain_m1') on prerequisite chains (tested)."""
+    chain breaks). For D-int this is generation.chain(..., 'chain_m1') on prerequisite chains (tested). surfaces: one
+    surface per chain, used at every step of that chain (stage E4: the held-out surface); None = the canonical surface."""
     states = [[c["s0"]] for c in chains]
     texts = [[] for _ in chains]
+    sfs = surfaces if surfaces is not None else [None] * len(chains)
+    if len(sfs) != len(chains):
+        raise ValueError("one surface per chain")
     H = max(len(c["events"]) for c in chains)
     for t in range(H):
         live = [i for i, c in enumerate(chains) if t < len(c["events"]) and states[i][-1] is not None]
         if live:
-            msgs = [C.messages(arm, states[i][-1], chains[i]["events"][t], chains[i]["width"]) for i in live]
+            msgs = [C.messages(arm, states[i][-1], chains[i]["events"][t], chains[i]["width"], sfs[i]) for i in live]
             txt = gen_texts(model, tok, msgs)
             for i, s in zip(live, txt):
                 texts[i].append(s)
@@ -864,6 +887,16 @@ def _run_locked(cfg, backend, out, shas, dev_rows, chains, anchor_chains, tok, n
                                 sides[side] = {"start_unix": ts, "end_unix": time.time()}
                             for side, p in zip(run_sides, stage_required(a, st, out)):
                                 write_jsonl(p, [{"id": r["id"], "text": t} for r, t in zip(dev_rows, tx[side])])
+                        elif st == "E4":         # the chains in the combined held-out surface (report-only); ON only
+                            rc = {}
+                            hs_chain = [C.heldout_surface_of_chain(j) for j in range(len(chains))]
+                            for side in E4_SIDES:
+                                ts = time.time()
+                                with side_ctx(model, side):
+                                    rc[side] = t2bp_chain(model, tok, a, chains, surfaces=hs_chain)
+                                sides[side] = {"start_unix": ts, "end_unix": time.time()}
+                            for side, p in zip(E4_SIDES, stage_required(a, st, out)):
+                                write_jsonl(p, chain_rows(chains, rc[side]))
                         else:
                             rc = {}
                             for side in ("off", "on"):
@@ -875,10 +908,13 @@ def _run_locked(cfg, backend, out, shas, dev_rows, chains, anchor_chains, tok, n
                                 write_jsonl(p, chain_rows(chains, rc[side]))
                         sec = time.time() - t0
                         corr["E"] = max(0.5, sec / e[st])
+                        extra = {}
+                        if st == "E3":
+                            extra = {"surface": C.HELDOUT_SURFACE, "sides_run": list(E3_SIDES)}
+                        elif st == "E4":
+                            extra = {"surface": C.HELDOUT_SURFACE_CHAINS, "sides_run": list(E4_SIDES), "report_only": True}
                         record(a, st, {"seconds": round(sec, 1), "planned_s": round(e[st], 1), "generations_planned_max": e["gens"][st],
-                                       "sides": sides, "pid": os.getpid(),
-                                       **({"surface": C.HELDOUT_SURFACE, "sides_run": list(E3_SIDES)}
-                                          if st == "E3" else {})})
+                                       "sides": sides, "pid": os.getpid(), **extra})
                         print(f"[t2bp] {a}:{st} done in {sec:.0f}s (planned {e[st]:.0f}s)", flush=True)
                 finally:
                     del model

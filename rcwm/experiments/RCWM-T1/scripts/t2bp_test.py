@@ -1,5 +1,5 @@
-"""CPU tests of the T2b prerequisite screen kit, revision 3 (data audit, surface proofs, amendment-4b filler, scorer,
-analysis rule, runner) with tiny random Qwen3 stand-ins. No real model is loaded (AutoModelForCausalLM.from_pretrained is
+"""CPU tests of the T2b prerequisite screen kit, revision 4 (data audit, surface proofs, amendment-4b filler, scorer,
+analysis rule, runner, the report-only held-out-surface chains E4) with tiny random Qwen3 stand-ins. No real model is loaded (AutoModelForCausalLM.from_pretrained is
 disabled; the vendored trainer's load_core returns the tiny model), no GPU is touched (CUDA_VISIBLE_DEVICES="" before
 torch, is_available/device_count patched), no lease is taken (a fake runtime stands in for rcwmt.runtime under the
 runner's own RealBackend code). Threads 2. One process. Runner outputs go to a temporary directory only.
@@ -23,18 +23,21 @@ Checks
   3 surface proofs (C2): the held-out key orders regenerate from ORDER_SEED (reversed + 2 random event orders; reversed
     only for the 2-key top object); every one of the 6,000 training prompts read back FROM ITS TEXT has no held-out
     factor and no held-out text fragment; the sd files keep the canonical rows and targets; diversity used; the E3
-    rendering rotates the 3 held-out event orders within every stratum and reads back as the held-out surface
+    rendering rotates the 3 held-out event orders within every stratum and reads back as the held-out surface; the E4
+    chain rendering rotates them by chain index (80/80/80) and every step reads back as the held-out surface
   4 scorer self-test and amendment 4b: golds, floors, negatives; FILL_K == the formula under the HF tokenizer; one fill
     string on every training and dev target; no filler shorter than its trace; the fill length carries zero
     information about the answer (lookup == majority share, mutual information 0), while the revision-2 row-matched
-    length would have revealed applicability
-  5 analysis dry run: every synthetic scenario (incl. the new held-out-surface ones), rule unit, close-call unit, R5
-    addendum unit and refusal gives the pre-stated result
-  6 full tiny run (3 arms, sd files): exit 0, DONE.json, stages T/E1/E2/E3, E3 ON only and in the held-out surface only,
-    one lease 'rcwm-t1:t2b-prereq', resource wait before every load, train before eval per arm, anchor pass recorded,
-    OFF != ON, analysis validators accept the outputs (HS present), a rerun is a no-op; an oracle-generator run on the
-    whole dev bank (HS 1.0); the R5 addendum path; frozen-rule stops; the canonical variant is refused by the runner
-    and by the analysis
+    FILL length (trace-head tokens - 3; it reproduces every row of the kept revision-2 file) would have revealed
+    applicability (0.749 train, 0.837 dev 8-bit, 0.813 dev OOR; the figures quoted in the rule and DESIGN.md)
+  5 analysis dry run: every synthetic scenario (incl. the held-out-surface ones), report-only unit (revision 4: the
+    verdict never depends on E4), rule unit, close-call unit, R5 addendum unit and refusal gives the pre-stated result
+  6 full tiny run (3 arms, sd files): exit 0, DONE.json, stages T/E1/E2/E3/E4, E3 and E4 ON only and in the held-out
+    surface only, one lease 'rcwm-t1:t2b-prereq', resource wait before every load, train before eval per arm, anchor
+    pass recorded, OFF != ON, analysis validators accept the outputs (HS and K4_HS present), a rerun is a no-op; an
+    oracle-generator run on the whole dev bank (HS 1.0, K4_HS 1.0); the R5 addendum path; frozen-rule stops; the
+    canonical variant is refused by the runner and by the analysis; a held-out chain file whose states differ from
+    parse(texts) is refused
   7 crash + resume: a crash inside training (partial train dir) and a crash inside E2 (stray .partial) are orphaned and
     redone; the lease is released by the crash; every output equals the uninterrupted run byte for byte
   8 deferral: nothing fits -> exit 5, no load, no training; an arm-level deferral (pair does not fit) and a stage-level
@@ -42,9 +45,10 @@ Checks
   9 stops: one-waiter rule (live RCWM marker / live RCWM holder refuse, not persisted; dead marker and live BWM holder
     pass); live run lock refuses, stale lock reclaimed; anchor failure (persisted; no evaluation output); fingerprint
     mismatch; runtime drift; a recorded output changed; a data file changed after recording
- 10 --plan logic: the sd screen takes 2 turns at the planning rate and 1 at the observed rate; per-factor held-out
-    renderings would need a third planning turn (omitted); the filler control run is one turn; every arm's whole pair
-    x 1.25 fits an empty 4.5 h turn; a 3.5 h cap splits the screen, a 3.0 h cap is refused (S-trace with E3 needs more)
+ 10 --plan logic (E4 included): the sd screen takes 2 turns at the planning rate and 1 at the observed rate; per-factor
+    held-out renderings would need a third planning turn (omitted); the filler control run is one turn; every arm's
+    whole pair x 1.25 fits an empty 4.5 h turn; a 3.5 h cap splits the screen, a 3.0 h cap is refused (S-trace with
+    E3/E4 needs more)
 
   python -B scripts/t2bp_test.py [--keep] [--no-record]       -> docs/t2b/prereq/TINY_TEST.json
 """
@@ -515,6 +519,22 @@ def main() -> int:
               "its held-out event order, encoding the row's own state and event",
               idx_ok and hs_ok and all(max(c.values()) - min(c.values()) <= 1 and len(c) == 3 for c in rot.values()),
               {s: dict(c) for s, c in list(rot.items())[:2]})
+        rot4 = Counter(j % 3 for j in range(len(dchains)))
+        hc_ok = True
+        for a in C.ARMS:
+            for j, c in enumerate(dchains):
+                sf = C.heldout_surface_of_chain(j)
+                hc_ok &= sf == C.heldout_surface(j)
+                for t, (stt, e) in enumerate(zip(C.chain_gold_states(c), c["events"])):
+                    x = C.read_prompt(C.messages(a, stt, e, c["width"], sf))
+                    hc_ok &= (x["surface"]["para"] == 4 and x["surface"]["names"] == 4 and
+                              tuple(x["surface"]["order"]["top"]) == C.HELDOUT_ORDERS["top"][0] and
+                              tuple(x["surface"]["order"]["event"]) == C.HELDOUT_ORDERS["event"][j % 3] and
+                              x["before"] == stt and x["event"] == e and x["arm"] == a)
+        check("E4 rendering (report-only held-out-surface chains): the 3 held-out event orders rotate by chain index over "
+              f"the {len(dchains)} dev chains ({dict(sorted(rot4.items()))}); every step of every chain (4 arms, gold "
+              "states) reads back as paraphrase 4 + names 4 + reversed top + its chain's held-out event order",
+              hc_ok and len(dchains) == 240 and sorted(rot4.values()) == [80, 80, 80], dict(rot4))
 
         # ------------------------------------------------------------ 4 scorer + amendment 4b
         print("4 scorer self-test and amendment 4b", flush=True)
@@ -543,18 +563,39 @@ def main() -> int:
               len(fills) == 1 and info["zero_information"] and
               all(v == 0 for v in info["mutual_information_bits"].values()),
               (len(fills), info["fill_length_lookup_accuracy"], info["mutual_information_bits"]))
+        rev2_rows = C.load_jsonl(MD.REV2_FILLER)
+        rev2_ok = len(rev2_rows) == 1500 and all(
+            MD.fill_units_of(r["target"]) == MD.rev2_fill_units(r["before"], r["event"], cnt) == cnt(C.trace_head(r["before"], r["event"])) - 3
+            and cnt(r["target"]) == cnt(C.trace_text(r["before"], r["event"])) for r in rev2_rows)
+        check("revision-2 fill length formula: rev2_fill_units (trace-head tokens - 3) reproduces the fill of every row of "
+              "the kept revision-2 row-matched file (1,500 rows), whose whole target has the trace target's token count",
+              rev2_ok and cnt(C.FILL_BASE_TEXT) == 3)
         rv = info["rev2_row_matched_length_would_reveal_descriptive"]
-        check("descriptive contrast: the revision-2 row-matched fill length (= the trace token count) would have revealed "
-              "applicability far above the majority share on the same rows; the 4b residual is >= 0 on every row",
-              rv["applicable_lookup_accuracy"] >= rv["applicable_majority_share"] + 0.3 and
-              info["residual_tokens_descriptive"]["min"] >= 0, (rv, info["residual_tokens_descriptive"]))
+        lk = {"train": rv, "dev_8bit": MD.rev2_length_leak([r for r in dev_rows if r["width"] == C.WIDTH_ID], cnt),
+              "dev_oor": MD.rev2_length_leak([r for r in dev_rows if r["width"] != C.WIDTH_ID], cnt)}
+        quoted = {"train": (0.749, 0.500), "dev_8bit": (0.837, 0.600), "dev_oor": (0.813, 0.667)}
+        quoted_ok = all(round(lk[k]["applicable_lookup_accuracy"], 3) == q[0] and round(lk[k]["applicable_majority_share"], 3) == q[1]
+                        for k, q in quoted.items())
+        rule_quotes = all(s_ in A.rule_text() for s_ in ("0.749", "0.500", "0.837", "0.813", "0.600", "0.667")) and \
+            all(s_ in A.RULE_PREFACE for s_ in ("0.749", "0.837", "0.813")) and "perfectly" not in A.rule_text().split(
+                "Revision 4 (")[0]
+        check("descriptive contrast: the revision-2 row-matched FILL length would have revealed applicability well above "
+              "the majority share (0.749 vs 0.500 on the training rows, 0.837 vs 0.600 on the 8-bit and 0.813 vs 0.667 on "
+              "the out-of-range dev rows), but not perfectly; the figures quoted in the rule text and its preface equal "
+              "the recomputed ones; the 4b residual is >= 0 on every row",
+              quoted_ok and rule_quotes and all(0.6 < lk[k]["applicable_lookup_accuracy"] < 0.95 for k in lk) and
+              info["residual_tokens_descriptive"]["min"] >= 0,
+              ({k: (v["applicable_lookup_accuracy"], v["applicable_majority_share"]) for k, v in lk.items()},
+               info["residual_tokens_descriptive"]))
 
         # ------------------------------------------------------------ 5 analysis dry run
         print("5 analysis dry run", flush=True)
         dr = A.dry_run(dev_rows, dchains)
-        check(f"analysis dry run: {dr['counts']['scenarios']} synthetic scenarios, {dr['counts']['rule_units']} rule units, "
+        check(f"analysis dry run: {dr['counts']['scenarios']} synthetic scenarios, {dr['counts']['report_only_units']} "
+              f"report-only units (E4 never changes the rule outcome), {dr['counts']['rule_units']} rule units, "
               f"{dr['counts']['close_call_units']} close-call units, {dr['counts']['filler_units']} R5 addendum units and "
-              f"{dr['counts']['refusals']} refusals give the pre-stated results", dr["ok"], dr["counts"])
+              f"{dr['counts']['refusals']} refusals give the pre-stated results",
+              dr["ok"] and dr["counts"]["passed"] == dr["counts"]["total"], dr["counts"])
         rev3 = {k: v for k, v in dr["scenarios"].items() if k.startswith("rev3: surface-locked")}
         check("the held-out-surface gate changes the outcome: in both surface-locked scenarios S-trace has the larger R "
               "under revision 2's formula (no HS) but B-bits wins under revision 3",
@@ -599,24 +640,39 @@ def main() -> int:
         check("tiny run on the sd files exits 0 and writes DONE.json", rc == 0 and (out / "DONE.json").is_file()
               and cfg.train_files == C.TRAIN_FILES_SD and cfg.data_variant == "sd", rc)
         prov = json.loads((out / "provenance.json").read_text(encoding="utf-8"))
-        check("every arm's stages T/E1/E2/E3 recorded with file hashes; E3 wrote the ON file only",
+        check("every arm's stages T/E1/E2/E3/E4 recorded with file hashes; E3 and E4 wrote the ON file only; E4 is "
+              "recorded as report-only with its chain surface",
+              R.STAGES == ("T", "E1", "E2", "E3", "E4") and
               all(set(prov["stages"][a]) == set(R.STAGES) for a in cfg.arms) and prov["data_variant"] == "sd" and
               all(list(prov["stages"][a]["E3"]["files"]) == [f"{a}/onestep_heldout_on.jsonl"] for a in cfg.arms) and
-              not any((out / a / "onestep_heldout_off.jsonl").exists() for a in cfg.arms))
+              all(list(prov["stages"][a]["E4"]["files"]) == [f"{a}/chains_heldout_on.jsonl"] for a in cfg.arms) and
+              all(prov["stages"][a]["E4"].get("report_only") is True and
+                  prov["stages"][a]["E4"].get("surface") == C.HELDOUT_SURFACE_CHAINS for a in cfg.arms) and
+              not any((out / a / "onestep_heldout_off.jsonl").exists() or (out / a / "chains_heldout_off.jsonl").exists()
+                      for a in cfg.arms))
         sub_rows, sub_ch = R.load_dev(cfg)
+        key = lambda m_: json.dumps(m_, sort_keys=True)   # noqa: E731
         held = [(s_, m_) for s_, m_ in seen if C.recover_surface(m_)["names"] == C.HELDOUT_SURFACE_IDX]
-        e3_ok = all(s_ == "on" and m_ == C.messages(C.read_prompt(m_)["arm"], C.read_prompt(m_)["before"],
-                                                    C.read_prompt(m_)["event"], C.read_prompt(m_)["width"],
-                                                    C.heldout_surface_of(next(r for r in sub_rows if r["before"] == C.read_prompt(m_)["before"]
-                                                                              and r["event"] == C.read_prompt(m_)["event"])))
-                    for s_, m_ in held)
+        want_held = Counter()
+        n_e4 = 0
+        for a in cfg.arms:
+            for r in sub_rows:                                              # E3: one prompt per row
+                want_held[key(C.messages(a, r["before"], r["event"], r["width"], C.heldout_surface_of(r)))] += 1
+            e4 = C.load_jsonl(out / a / "chains_heldout_on.jsonl")          # E4: one prompt per generated step
+            for j, (c, x) in enumerate(zip(sub_ch, e4)):
+                for t in range(len(x["texts"])):
+                    want_held[key(C.messages(a, json.loads(x["states"][t]), c["events"][t], c["width"],
+                                             C.heldout_surface_of_chain(j)))] += 1
+                    n_e4 += 1
         nonheld = [m_ for _, m_ in seen if C.recover_surface(m_)["names"] != C.HELDOUT_SURFACE_IDX]
-        check("held-out-surface prompts appear only in E3, adapter ON only (1 x rows x arms), each exactly its row's "
-              "combined held-out surface; every other evaluation prompt is the canonical surface",
-              len(held) == len(sub_rows) * len(cfg.arms) and e3_ok and
+        check("held-out-surface prompts appear only in E3 and E4, adapter ON only: exactly one per row (E3) and one per "
+              "generated chain step in its chain's held-out surface (E4), as a multiset; every other evaluation prompt is "
+              "the canonical surface",
+              all(s_ == "on" for s_, _ in held) and Counter(key(m_) for _, m_ in held) == want_held and n_e4 > 0 and
+              len(held) == len(sub_rows) * len(cfg.arms) + n_e4 and
               all(C.recover_surface(m_)["para"] == 0 and C.recover_surface(m_)["names"] == 0 and
                   C.recover_surface(m_)["order"] == {o: list(C.OBJ_SLOTS[o]) for o in C.OBJ_SLOTS} for m_ in nonheld),
-              (len(held), len(nonheld)))
+              (len(held), n_e4, len(nonheld)))
         leases = [c for c in rt.calls if c[0] == "lease"]
         check("one lease, label 'rcwm-t1:t2b-prereq'", leases == [("lease", R.LEASE_LABEL)], leases)
         seq = [c[0] if c[0] not in ("load", "train") else f"{c[0]}:{c[1]}" for c in rt.calls]
@@ -630,9 +686,12 @@ def main() -> int:
         diff = {a: sum(x != y for x, y in zip(outputs[a]["off"]["onestep"], outputs[a]["on"]["onestep"])) for a in cfg.arms}
         check("OFF != ON one-step texts in every arm (the trained adapter is active)", all(v > 0 for v in diff.values()), diff)
         res = A.analyse(outputs, sub_rows, sub_ch)
-        check("the analysis validators accept the run (E3 included) and the rule produces a verdict with HS for every arm",
+        check("the analysis validators accept the run (E3 and E4 included) and the rule produces a verdict with HS for "
+              "every arm; K4_HS is reported for every arm outside the rule's metrics (report-only)",
               bool(res["rule"]["verdict"]) and res["rule"]["verdict"] != "NO_VERDICT" and
-              all(res["rule"]["metrics"][a]["HS"] is not None for a in cfg.arms), res["rule"]["verdict"])
+              all(res["rule"]["metrics"][a]["HS"] is not None for a in cfg.arms) and
+              all(res["heldout_chains_report_only"]["arms"][a]["K4_HS"] is not None and
+                  "K4_HS" not in res["rule"]["metrics"][a] for a in cfg.arms), res["rule"]["verdict"])
         prov_a = json.loads((out / "provenance.json").read_text(encoding="utf-8"))
         check("provenance records the frozen code hashes and the screen-rule record at the first turn; anchors_ok",
               prov_a["code_sha256"] == R.code_hashes() and prov_a["screen_rule_sha256"] == sha(rule_path) and A.anchors_ok(prov_a))
@@ -674,9 +733,19 @@ def main() -> int:
               hso["OOR"] == 1.0 and len(hso["by_heldout_event_order"]) == 6 and
               all(v["acc"] == 1.0 for v in hso["by_heldout_event_order"].values()) and
               all(v["diff"] == 0.0 for v in hso["paired_heldout_minus_in_surface"].values()))
+        hk = res_o["heldout_chains_report_only"]["arms"]
+        hco = {a: res_o["arms"][a]["on"]["heldout_surface_chains"] for a in cfg_o.arms}
+        check("E4 under the oracle (all 240 chains in the held-out surface, every arm): K4_HS 1.0, K4 - K4_HS 0, no broken "
+              "chain, 80 chains per held-out event order at 1.0; reported outside the rule's metrics",
+              all(hk[a]["K4_HS"] == 1.0 and hk[a]["K4"] == 1.0 and hk[a]["K4_minus_K4_HS"] == 0.0 for a in cfg_o.arms) and
+              all(v["broken_by_k4"] == 0.0 and [x["n"] for x in v["k4_by_heldout_event_order"].values()] == [80, 80, 80]
+                  and all(x["acc"] == 1.0 for x in v["k4_by_heldout_event_order"].values()) for v in hco.values()) and
+              all("K4_HS" not in mo[a] for a in cfg_o.arms), {a: hk[a] for a in cfg_o.arms})
         md = A.render_md(res_o)
-        check("the markdown rendering carries the verdict, HS and every stratum (in-surface and held-out)",
-              "WINNER=dint" in md and "| HS |" in md and md.count("| D_int_add_wrong |") == 2 and all(s_ in md for s_ in C.DEV_STRATA))
+        check("the markdown rendering carries the verdict, HS, every stratum (in-surface and held-out) and the report-only "
+              "E4 table (K4 vs K4_HS per arm)",
+              "WINNER=dint" in md and "| HS |" in md and md.count("| D_int_add_wrong |") == 2 and all(s_ in md for s_ in C.DEV_STRATA)
+              and "| Arm | K4 (in-surface) | K4_HS (held-out surface) |" in md and "REPORT-ONLY" in md)
         one_arm = A.analyse({"bbits": outputs_o["bbits"]}, dev_rows, dchains, st)
         check("a single-arm (seed 1/2) run is analysed descriptively with NO_VERDICT", one_arm["rule"]["verdict"] == "NO_VERDICT")
         mech = {a: {k: res_o["arms"][a]["on"]["onestep"]["strata"]["D_int_add_wrong"].get(k) for k in ("cmp_ok", "calc_ok", "flag_ok")}
@@ -685,9 +754,9 @@ def main() -> int:
               mech["strace"]["cmp_ok"] == 1.0 and mech["strace"]["calc_ok"] == 1.0 and mech["bbits"]["flag_ok"] == 1.0, mech)
         rc_sm = A.screen_main(cfg_o.out, dev_rows, dchains, st)
         scr = json.loads((cfg_o.out / "analysis" / "T2BP_SCREEN.json").read_text(encoding="utf-8"))
-        check("analysis CLI path on the oracle run: T2BP_SCREEN.json/.md written (verdict WINNER=dint, rule revision 3), a "
+        check("analysis CLI path on the oracle run: T2BP_SCREEN.json/.md written (verdict WINNER=dint, rule revision 4), a "
               "second call refuses (create-only, exit 3)", rc_sm == 0 and scr["verdict"] == "WINNER=dint" and
-              scr["rule_revision"] == 3 and (cfg_o.out / "analysis" / "T2BP_SCREEN.md").is_file() and
+              scr["rule_revision"] == 4 and (cfg_o.out / "analysis" / "T2BP_SCREEN.md").is_file() and
               A.screen_main(cfg_o.out, dev_rows, dchains, st) == 3)
         generation.generate_texts = oracle_generate
         try:
@@ -748,6 +817,29 @@ def main() -> int:
         except A.Refuse:
             refused = True
         check("C1: the analysis refuses to score a run that is not the surface-diversity build", refused)
+        tam = tmp / "runs" / "e4_tamper"
+        shutil.copytree(cfg_o.out, tam, ignore=shutil.ignore_patterns("train", "analysis"))
+        f4 = tam / "dint" / "chains_heldout_on.jsonl"
+        rows4 = C.load_jsonl(f4)
+        rows4[0]["states"][1] = env.dumps(json.loads(rows4[0]["states"][1]) ^ 1)    # a state that its text does not give
+        f4.write_text("".join(json.dumps(x) + "\n" for x in rows4), encoding="utf-8", newline="\n")
+        pt = json.loads((tam / "provenance.json").read_text(encoding="utf-8"))
+        pt["stages"]["dint"]["E4"]["files"]["dint/chains_heldout_on.jsonl"] = sha(f4)
+        (tam / "provenance.json").write_text(json.dumps(pt), encoding="utf-8", newline="\n")
+        try:
+            A.validate_run(tam, dev_rows, dchains, list(cfg_o.arms))
+            refused4, why4 = False, ""
+        except A.Refuse as e_:
+            refused4, why4 = True, str(e_)
+        os.replace(f4, tam / "dint" / "moved_aside.jsonl")
+        try:
+            A.validate_run(tam, dev_rows, dchains, list(cfg_o.arms))
+            refused4b = False
+        except A.Refuse:
+            refused4b = True
+        check("the analysis validates E4 like E2: a held-out chain file whose recorded states differ from parse(texts) is "
+              "refused (hash re-recorded), and a complete run without its E4 file is refused",
+              refused4 and "held-out-surface chains (E4)" in why4 and "states != parse(texts)" in why4 and refused4b, why4)
         check("the analysis' frozen check: [] on the record, problems on a changed input hash and on a changed SCREEN_RULE.md",
               A.check_frozen(rule_path) == [] and A.check_frozen(bad_path) != [] and
               (lambda: ((rule_dir / C.SCREEN_RULE_MD).write_text("x", encoding="utf-8", newline="\n"), A.check_frozen(rule_path))[1])() != [])
@@ -796,12 +888,12 @@ def main() -> int:
         check("crash in training propagates; the lease is released", crashed and not rt_b.LOCK_PATH.exists()
               and rt_b.calls[-1] == ("release", R.LEASE_LABEL))
 
-        def crashing_chain(model, tok_, arm, chains):
+        def crashing_chain(model, tok_, arm, chains, **kw):
             state["chain"] += 1
             if arm == "strace" and state["chain"] == 2:            # inside strace E2, ON side
                 (cfg_b.out / "strace" / "chains_off.jsonl.partial").write_text("half", encoding="utf-8", newline="\n")
                 raise RuntimeError("simulated crash in E2")
-            return REAL_CHAIN(model, tok_, arm, chains)
+            return REAL_CHAIN(model, tok_, arm, chains, **kw)
         R.t2bp_chain = crashing_chain
         try:
             R.run(cfg_b, be_b)
@@ -819,8 +911,8 @@ def main() -> int:
         check("the second resume orphaned the partial E2, re-anchored and finished (exit 0)",
               rc_b == 0 and any(x.startswith("strace_E2_") for x in orph) and all("anchor" in t for t in prov_b["turns"] if t["stages_run"]),
               [t.get("stages_run") for t in prov_b["turns"]])
-        check("every output of the crashed-and-resumed run equals the uninterrupted run byte for byte (adapters and E3 included)",
-              tree_hashes(cfg_b.out, rels) == h_a)
+        check("every output of the crashed-and-resumed run equals the uninterrupted run byte for byte (adapters, E3 and E4 "
+              "included)", tree_hashes(cfg_b.out, rels) == h_a and any(r_.endswith("chains_heldout_on.jsonl") for r_ in rels))
 
         # ------------------------------------------------------------ 8 deferral
         print("8 deferral", flush=True)
@@ -829,9 +921,9 @@ def main() -> int:
         cfg_c = cfg_for("run_c", cap_h=0.5)
         rc_c = R.run(cfg_c, be_c)
         prov_c = json.loads((cfg_c.out / "provenance.json").read_text(encoding="utf-8"))
-        check("nothing fits (cap 0.5 h = the stage margin): exit 5, every stage deferred (3 arms x T/E1/E2/E3), no training, "
-              "no load", rc_c == 5 and not [c for c in rt_c.calls if c[0] in ("load", "train")] and
-              len(prov_c["turns"][0]["deferred"]) == 12, prov_c["turns"][0]["deferred"])
+        check("nothing fits (cap 0.5 h = the stage margin): exit 5, every stage deferred (3 arms x T/E1/E2/E3/E4), no "
+              "training, no load", rc_c == 5 and not [c for c in rt_c.calls if c[0] in ("load", "train")] and
+              len(prov_c["turns"][0]["deferred"]) == 15, prov_c["turns"][0]["deferred"])
         cfg_c2 = cfg_for("run_c")
         orig_est = R.estimates
 
@@ -846,7 +938,7 @@ def main() -> int:
             R.estimates = orig_est
         prov_c = json.loads((cfg_c.out / "provenance.json").read_text(encoding="utf-8"))
         check("arm-level deferral: D-int pair runs; S-trace (pair does not fit) and B-bits deferred; exit 5",
-              rc_c2 == 5 and prov_c["turns"][-1]["stages_run"] == ["dint:T", "dint:E1", "dint:E2", "dint:E3"]
+              rc_c2 == 5 and prov_c["turns"][-1]["stages_run"] == ["dint:T", "dint:E1", "dint:E2", "dint:E3", "dint:E4"]
               and prov_c["turns"][-1]["deferred"][:1] == ["strace:T"], prov_c["turns"][-1])
         orig_cs = R.G2.can_start
         calls = {"n": 0}
@@ -860,14 +952,14 @@ def main() -> int:
         finally:
             R.G2.can_start = orig_cs
         prov_c = json.loads((cfg_c.out / "provenance.json").read_text(encoding="utf-8"))
-        check("stage-level deferral: S-trace trained and E1 done, E2 deferred with E3 and B-bits; exit 5",
+        check("stage-level deferral: S-trace trained and E1 done, E2 deferred with E3, E4 and B-bits; exit 5",
               rc_c3 == 5 and prov_c["turns"][-1]["stages_run"] == ["strace:T", "strace:E1"]
-              and prov_c["turns"][-1]["deferred"][:2] == ["strace:E2", "strace:E3"], prov_c["turns"][-1])
+              and prov_c["turns"][-1]["deferred"][:3] == ["strace:E2", "strace:E3", "strace:E4"], prov_c["turns"][-1])
         rc_c4 = R.run(cfg_c2, be_c)
         prov_c = json.loads((cfg_c.out / "provenance.json").read_text(encoding="utf-8"))
-        check("the next call resumes (re-anchors, S-trace E2/E3 then B-bits) and completes; outputs == run 6 byte for byte",
-              rc_c4 == 0 and prov_c["turns"][-1]["stages_run"][:2] == ["strace:E2", "strace:E3"] and "anchor" in prov_c["turns"][-1]
-              and tree_hashes(cfg_c.out, rels) == h_a, prov_c["turns"][-1]["stages_run"])
+        check("the next call resumes (re-anchors, S-trace E2/E3/E4 then B-bits) and completes; outputs == run 6 byte for byte",
+              rc_c4 == 0 and prov_c["turns"][-1]["stages_run"][:3] == ["strace:E2", "strace:E3", "strace:E4"]
+              and "anchor" in prov_c["turns"][-1] and tree_hashes(cfg_c.out, rels) == h_a, prov_c["turns"][-1]["stages_run"])
 
         # ------------------------------------------------------------ 9 stops
         print("9 stops", flush=True)
@@ -934,13 +1026,16 @@ def main() -> int:
         print("10 plan", flush=True)
         pl = R.plan(verbose=False)
         tp, to = pl["planning"]["turns_screen"], pl["observed"]["turns_screen"]
-        check("plan (sd, E3 ON): the 3-arm screen takes 2 turns at the planning rate (OFF of non-native frames at the "
-              "160-token cap) and 1 at the observed rates; every turn within the cap; each arm's T/E1/E2/E3 in one turn; "
-              "the filler control run is one turn; per-factor held-out renderings would need a third planning turn",
+        check("plan (sd, E3 and E4 ON): the 3-arm screen takes 2 turns at the planning rate (OFF of non-native frames at "
+              "the 160-token cap) and 1 at the observed rates; every turn within the cap; each arm's T/E1/E2/E3/E4 in one "
+              "turn; the filler control run is one turn; per-factor held-out renderings would need a third planning turn",
               len(tp) == 2 and len(to) == 1 and all(t["projected_h"] <= R.CAP_H for t in tp + to) and
               all(sum(f"{a}:T" in t["stages"] for t in tp) == 1 and
-                  all([t_ for t_ in tp if f"{a}:T" in t_["stages"]][0]["stages"].count(f"{a}:{s}") == 1 for s in ("E1", "E2", "E3"))
+                  all([t_ for t_ in tp if f"{a}:T" in t_["stages"]][0]["stages"].count(f"{a}:{s}") == 1
+                      for s in ("E1", "E2", "E3", "E4"))
                   for a in C.SCREEN_ARMS) and
+              all(pl[m_]["arms"][a]["E4_s"] > 0 and pl[m_]["arms"][a]["generations"]["E4"] == 960
+                  for m_ in ("planning", "observed") for a in C.ARMS) and
               len(pl["planning"]["turns_filler_control_run_if_strace_wins"]) == 1 and
               len(pl["planning"]["turns_screen_if_per_factor_heldout_added"]) == 3 and
               pl["per_factor_heldout_renderings"]["run"] is False,
@@ -948,7 +1043,7 @@ def main() -> int:
         est_p = R.estimates(R.Cfg(planning=True))
         need_h = {a: round(R.G2.STAGE_SAFETY * (sum(est_p["arms"][a][s] for s in R.STAGES) + R.LOAD_S + est_p["anchor"]) / 3600, 2)
                   for a in C.ARMS}
-        check("plan: every arm's whole pair (T + E1 + E2 + E3 + load + anchor) x 1.25 fits an empty 4.5 h turn at the "
+        check("plan: every arm's whole pair (T + E1 + E2 + E3 + E4 + load + anchor) x 1.25 fits an empty 4.5 h turn at the "
               "planning rate, so no arm can be deferred for ever (the largest needs a turn of more than 3.0 h)",
               all(v <= R.CAP_H for v in need_h.values()) and max(need_h.values()) > 3.0, need_h)
         short = R.simulate_turns(R.Cfg(cap_h=3.5), C.SCREEN_ARMS)
@@ -959,10 +1054,10 @@ def main() -> int:
             too_small = False
         except RuntimeError:
             too_small = True
-        check("plan: a 3.0 h cap is too small for the S-trace pair with E3 (the simulator refuses instead of looping)",
+        check("plan: a 3.0 h cap is too small for the S-trace pair with E3 and E4 (the simulator refuses instead of looping)",
               too_small)
         gp = json.loads((C.DOCS / "GEN_PLAN.json").read_text(encoding="utf-8"))
-        check("docs/t2b/prereq/GEN_PLAN.json was written by --plan (sd, stages T/E1/E2/E3) without importing torch",
+        check("docs/t2b/prereq/GEN_PLAN.json was written by --plan (sd, stages T/E1/E2/E3/E4) without importing torch",
               gp.get("torch_imported") is False and gp.get("data_variant") == "sd" and gp.get("stages_per_arm") == list(R.STAGES)
               and gp.get("code_sha256", {}).get("scripts/t2bp_run.py") == sha(ROOT / "scripts" / "t2bp_run.py"))
     finally:

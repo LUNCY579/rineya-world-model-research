@@ -140,9 +140,17 @@
    "type": 0.0
   },
   "rev2_row_matched_length_would_reveal_descriptive": {
-   "applicable_lookup_accuracy": 1.0,
-   "changed_lookup_accuracy": 0.99,
-   "applicable_majority_share": 0.5
+   "rows": 1500,
+   "length": "revision-2 fill units = tokens(trace head) - tokens('{\"fill\":\"\"') (= 3): the fill decoded before 'after'",
+   "applicable_lookup_accuracy": 0.7487,
+   "applicable_majority_share": 0.5,
+   "changed_lookup_accuracy": 0.7387,
+   "changed_majority_share": 0.51,
+   "distinct_fill_lengths": 6,
+   "superseded_revision3_figure_from_the_full_trace_text_incl_after": {
+    "applicable_lookup_accuracy": 1.0,
+    "changed_lookup_accuracy": 0.99
+   }
   },
   "residual_tokens_descriptive": {
    "min": 2,
@@ -153,7 +161,36 @@
    "mean_inapplicable": 4.508
   },
   "zero_information": true,
-  "never_shorter_than_trace": true
+  "never_shorter_than_trace": true,
+  "rev2_row_matched_length_would_reveal_descriptive_dev": {
+   "dev_8bit": {
+    "rows": 750,
+    "length": "revision-2 fill units = tokens(trace head) - tokens('{\"fill\":\"\"') (= 3): the fill decoded before 'after'",
+    "applicable_lookup_accuracy": 0.8373,
+    "applicable_majority_share": 0.6,
+    "changed_lookup_accuracy": 0.704,
+    "changed_majority_share": 0.5333,
+    "distinct_fill_lengths": 6,
+    "superseded_revision3_figure_from_the_full_trace_text_incl_after": {
+     "applicable_lookup_accuracy": 1.0,
+     "changed_lookup_accuracy": 0.8667
+    }
+   },
+   "dev_out_of_range": {
+    "rows": 300,
+    "length": "revision-2 fill units = tokens(trace head) - tokens('{\"fill\":\"\"') (= 3): the fill decoded before 'after'",
+    "applicable_lookup_accuracy": 0.8133,
+    "applicable_majority_share": 0.6667,
+    "changed_lookup_accuracy": 0.6933,
+    "changed_majority_share": 0.5,
+    "distinct_fill_lengths": 8,
+    "superseded_revision3_figure_from_the_full_trace_text_incl_after": {
+     "applicable_lookup_accuracy": 0.9967,
+     "changed_lookup_accuracy": 0.83
+    }
+   },
+   "dev_sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54"
+  }
  },
  "surface": {
   "checks": {

@@ -1218,6 +1218,134 @@
   }
  },
  "ok": true,
+ "report_only_units": {
+  "rev4: K4_HS is report-only: perfect vs malformed held-out-surface chains give the identical rule outcome": {
+   "ok": true,
+   "verdict": "WINNER=strace",
+   "identical_rule_outcome": true,
+   "K4_HS_as_expected": true,
+   "gap_equals_K4_minus_K4_HS": true,
+   "no_E4_reports_none": true,
+   "R": {
+    "dint": 0.3002,
+    "strace": 1.0,
+    "bbits": 0.8712
+   },
+   "K4": {
+    "dint": 0.1292,
+    "strace": 1.0,
+    "bbits": 0.8375
+   },
+   "K4_HS": {
+    "a": {
+     "dint": 1.0,
+     "strace": 1.0,
+     "bbits": 1.0
+    },
+    "b": {
+     "dint": 0.0,
+     "strace": 0.0,
+     "bbits": 0.0
+    }
+   },
+   "heldout_chain_policies": {
+    "a": {
+     "dint": "perfect",
+     "strace": "perfect",
+     "bbits": "perfect"
+    },
+    "b": {
+     "dint": "malformed",
+     "strace": "malformed",
+     "bbits": "malformed"
+    }
+   }
+  },
+  "rev4: K4_HS is report-only in the surface-locked case: perfect vs copying held-out-surface chains, same outcome": {
+   "ok": true,
+   "verdict": "WINNER=bbits",
+   "identical_rule_outcome": true,
+   "K4_HS_as_expected": true,
+   "gap_equals_K4_minus_K4_HS": true,
+   "no_E4_reports_none": true,
+   "R": {
+    "dint": 0.5525,
+    "strace": 0.8929,
+    "bbits": 0.9167
+   },
+   "K4": {
+    "dint": 0.4083,
+    "strace": 1.0,
+    "bbits": 1.0
+   },
+   "K4_HS": {
+    "a": {
+     "dint": 1.0,
+     "strace": 1.0,
+     "bbits": 1.0
+    },
+    "b": {
+     "dint": 0.1292,
+     "strace": 0.1292,
+     "bbits": 0.1292
+    }
+   },
+   "heldout_chain_policies": {
+    "a": {
+     "dint": "perfect",
+     "strace": "perfect",
+     "bbits": "perfect"
+    },
+    "b": {
+     "dint": "copy",
+     "strace": "copy",
+     "bbits": "copy"
+    }
+   }
+  },
+  "rev4: K4_HS is report-only when it reverses the in-surface K4 order (the in-surface winner copies on held-out chains)": {
+   "ok": true,
+   "verdict": "WINNER=dint",
+   "identical_rule_outcome": true,
+   "K4_HS_as_expected": true,
+   "gap_equals_K4_minus_K4_HS": true,
+   "no_E4_reports_none": true,
+   "R": {
+    "dint": 1.0,
+    "strace": 0.8712,
+    "bbits": 0.3002
+   },
+   "K4": {
+    "dint": 1.0,
+    "strace": 0.8375,
+    "bbits": 0.1292
+   },
+   "K4_HS": {
+    "a": {
+     "dint": 0.1292,
+     "strace": 1.0,
+     "bbits": 1.0
+    },
+    "b": {
+     "dint": 1.0,
+     "strace": 1.0,
+     "bbits": 1.0
+    }
+   },
+   "heldout_chain_policies": {
+    "a": {
+     "dint": "copy",
+     "strace": "perfect",
+     "bbits": "perfect"
+    },
+    "b": {
+     "dint": "perfect",
+     "strace": "perfect",
+     "bbits": "perfect"
+    }
+   }
+  }
+ },
  "rule_units": {
   "ID non-inferiority excludes the best-R arm": {
    "expected": "WINNER=dint",
@@ -1593,18 +1721,20 @@
  },
  "counts": {
   "scenarios": 21,
+  "report_only_units": 3,
   "rule_units": 28,
   "close_call_units": 3,
   "filler_units": 4,
   "refusals": 5,
-  "passed": 61
+  "passed": 64,
+  "total": 64
  },
  "selftest_ok": true,
  "code_sha256": {
-  "scripts/t2bp_analysis.py": "5b605a4c3202d1c764c74e80b93964f626b0966d303f48d1977048086de0cd05",
-  "scripts/t2bp_common.py": "1175b758551ac0f01b7b38070dfbb5bf91e5a1b5f0dae12d142aa2c84b5f7ee7"
+  "scripts/t2bp_analysis.py": "5853c55d9473abc4d12ea127ccb3c85d3965a439538e8a1c30f67312ac6087ea",
+  "scripts/t2bp_common.py": "a913523a9a848dfaa01783fb6858c4e88b80aa7d3b783db924f9fcc99634017c"
  },
  "dev_sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
- "seconds": 12.3,
+ "seconds": 14.3,
  "torch_imported": false
 }

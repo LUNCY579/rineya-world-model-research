@@ -27,10 +27,16 @@ Arms: the SAME training rows rendered four ways (only D-int, S-trace and B-bits 
 In the canonical surface (paraphrase 0, field names 0, canonical key orders) every arm's system prompt keeps the rule
 sentences of T2's frame byte for byte; only the format sentence ("Return only ...") differs, and B-bits adds the
 bit-string convention to the state sentence (the surface-diversity build varies the rest: revision 3 below). The decision pipelines read only the
-state: D-int is parsed exactly like rcwmt.env.parse_state(..., lenient=True) (generalised to w bits); S-trace, B-bits
-and F-filler targets are parsed STRICTLY (literal key order, no extra or duplicate keys, typed values, in-range state;
-a malformed answer is a wrong answer). cmp_ok / calc_ok (S-trace) and flag_ok (B-bits) are scored separately;
-format_ok (the answer is in the arm's format, whatever its value) feeds the screen's instrument-validity gate WF.
+state: D-int is parsed exactly like rcwmt.env.parse_state(..., lenient=True) (generalised to w bits). S-trace, B-bits
+and F-filler answers are parsed STRICTLY AT THE TOP LEVEL (parse): the answer must be one JSON object whose top-level
+keys are exactly the arm's keys in their literal order (no extra or missing key); a duplicate key at any depth is
+rejected (loads_strict); 'after' must be an in-range integer (S-trace, F-filler) or a w-digit binary string next to a
+boolean 'applicable' (B-bits); F-filler's 'fill' must be a string (its content and length are not checked). The parser
+does NOT check S-trace's nested cmp object or its calc value (their key order, keys, types and values): a trace with a
+wrong or reordered cmp, or a wrong calc, still yields its 'after'. cmp is scored only by cmp_ok (the literal key order
+on_miss, off_hit, viol, ok, exact values and types) and calc only by calc_ok; flag_ok scores B-bits' flag. A malformed
+answer is a wrong answer. format_ok (the answer is in the arm's format, whatever its value; top level only, like the
+parser) feeds the screen's instrument-validity gate WF.
 
 Revision 2 (review, 2026-10-09, before any runs/t2bp output): training A4 rows 65 -> 150 (Ia 20 -> 35); the dev bank
 gains D_inapp_addset (100 inapplicable rows whose add bit is set and whose delete clears a set bit; the 950 revision-1
@@ -58,7 +64,15 @@ paraphrases and field names and the held-out key orders are reserved for the hel
 rows in the COMBINED held-out surface (paraphrase 4 + field names 4 + the reversed top-level order + one of the 3
 held-out event orders, rotating by the row's index within its stratum), adapter ON, paired by row with the in-surface
 stage E1; HS (the mean accuracy over the seven 8-bit strata there) enters the screen's ranking (revision 3 of the rule).
-Targets never change (literal cmp -> calc -> after order; the parsers reject other orders).
+Targets never change (literal cmp -> calc -> after order; the parsers reject other top-level orders, and a reordered
+cmp is caught by cmp_ok only).
+
+Revision 4 (operator-selected fixes from the independent verifier, 2026-10-09, before any runs/t2bp output). Stage E4,
+REPORT-ONLY: the dev bank's 240 k=4 chains self-rolled out in the same combined held-out surface, adapter ON only, the
+held-out event order rotating by the chain's index j in the dev bank's chain list (dev_chains order; heldout_surface_of_
+chain(j) == heldout_surface(j), the scheme E3 uses with the row's index within its stratum). It reports K4_HS and
+K4 - K4_HS per arm; it enters neither R nor eligibility (HS stays defined on E3's one-step strata). Every E3/E4 prompt
+also reverses the 2-key top-level object, an order never varied in training (a pure extrapolation factor).
 """
 from __future__ import annotations
 
@@ -289,6 +303,20 @@ def stratum_index(row: dict) -> int:
 
 def heldout_surface_of(row: dict) -> dict:
     return heldout_surface(stratum_index(row))
+
+
+def heldout_surface_of_chain(j: int) -> dict:
+    """Stage E4's (revision 4, report-only) combined held-out surface for the dev chain with index j in the dev bank's
+    chain list (dev_chains order: parent by parent, candidates in order; a tiny-test subset is a prefix, so j is the
+    same): E3's scheme with the chain's index in place of the row's index. Every step of the chain uses it."""
+    return heldout_surface(j)
+
+
+HELDOUT_SURFACE_CHAINS = {"stage": "E4", "report_only": True, "para": HELDOUT_SURFACE_IDX, "names": HELDOUT_SURFACE_IDX,
+                          "order_top": list(HELDOUT_ORDERS["top"][0]),
+                          "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the chain's index in the dev bank's chain "
+                                         "list (dev_chains order); every step of a chain uses its chain's surface",
+                          "held_out_event_orders": [list(p) for p in HELDOUT_ORDERS["event"]]}
 
 
 def heldout_factors(surface) -> list:
@@ -690,7 +718,9 @@ def loads_strict(text: str):
 
 
 def parse(arm: str, text: str, w: int) -> dict:
-    """{'after': int | None, 'well_formed': bool, + mechanism fields}. The decision pipelines read only 'after'."""
+    """{'after': int | None, 'well_formed': bool, + mechanism fields}. The decision pipelines read only 'after'.
+    Strict formats are checked at the TOP LEVEL only (literal key order, typed in-range 'after'); S-trace's 'cmp' and
+    'calc' are returned unchecked and scored separately by cmp_ok / calc_ok."""
     if arm == "dint":
         a = parse_dint(text, w)
         return {"after": a, "well_formed": a is not None}

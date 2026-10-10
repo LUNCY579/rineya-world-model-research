@@ -1,0 +1,112 @@
+{
+ "part": "hook",
+ "ok": true,
+ "n_checks": 17,
+ "n_failed": 0,
+ "checks": [
+  {
+   "check": "the simulation ran under bash (exit 0, every case reported)",
+   "ok": true,
+   "detail": "(0, '')"
+  },
+  {
+   "check": "hook: not frozen: calls '|'",
+   "ok": true,
+   "detail": "|"
+  },
+  {
+   "check": "hook: STOPPED.json (not verdict-eligible) exists: calls '|'",
+   "ok": true,
+   "detail": "|"
+  },
+  {
+   "check": "hook: STOPPED.json (verdict-eligible) exists: the analysis once: calls 'analysis | |'",
+   "ok": true,
+   "detail": "analysis | |"
+  },
+  {
+   "check": "hook: STOPPED.json (verdict-eligible) and the results exist: calls '|'",
+   "ok": true,
+   "detail": "|"
+  },
+  {
+   "check": "hook: exit 0: the analysis follows; a second pass makes no call (idempotent): calls 'run:0 analysis | |'",
+   "ok": true,
+   "detail": "run:0 analysis | |"
+  },
+  {
+   "check": "hook: exit 3 (not verdict-eligible): never retried, no analysis: calls 'run:3 | |'",
+   "ok": true,
+   "detail": "run:3 | |"
+  },
+  {
+   "check": "hook: exit 3 (verdict-eligible): never retried; the analysis once: calls 'run:3 analysis | |'",
+   "ok": true,
+   "detail": "run:3 analysis | |"
+  },
+  {
+   "check": "hook: exit 5 then 5: exactly one resume call per pass; the next pass resumes again: calls 'run:5 run:5 | run:0 analysis |'",
+   "ok": true,
+   "detail": "run:5 run:5 | run:0 analysis |"
+  },
+  {
+   "check": "hook: exit 5 then 0: one resume call, then the analysis: calls 'run:5 run:0 analysis |'",
+   "ok": true,
+   "detail": "run:5 run:0 analysis |"
+  },
+  {
+   "check": "hook: crash then crash: exactly one retry: calls 'run:1 run:1 |'",
+   "ok": true,
+   "detail": "run:1 run:1 |"
+  },
+  {
+   "check": "hook: crash then 3: one retry, no analysis: calls 'run:1 run:3 |'",
+   "ok": true,
+   "detail": "run:1 run:3 |"
+  },
+  {
+   "check": "hook: crash then 0: one retry, then the analysis: calls 'run:1 run:0 analysis |'",
+   "ok": true,
+   "detail": "run:1 run:0 analysis |"
+  },
+  {
+   "check": "hook: exit 5 then a verdict-eligible 3: the analysis once: calls 'run:5 run:3 analysis |'",
+   "ok": true,
+   "detail": "run:5 run:3 analysis |"
+  },
+  {
+   "check": "hook: DONE.json exists, no results: the analysis only: calls 'analysis |'",
+   "ok": true,
+   "detail": "analysis |"
+  },
+  {
+   "check": "hook: DONE.json and the results exist: nothing: calls '|'",
+   "ok": true,
+   "detail": "|"
+  },
+  {
+   "check": "the hook draft is LF-only, names the installed path 70_lbeam.sh, and is NOT installed",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "numbers": {
+  "hook_draft_sha256": "098cb1311bd9d5352b042a4e84dcabc606df6209fd9429a60ee4b543d27102ff"
+ },
+ "code_sha256": {
+  "scripts/lbeam_run.py": "55a0bd0fb8e2af0112b8485ae5f8fc858c56508f4293d456bc24802d0c1efa5c",
+  "scripts/lbeam_analysis.py": "e3b0e9e0baaf23f183218fda57c1e4855d6db80deb9ca9db5a51d3753dafbf7e",
+  "scripts/lbeam_test_run.py": "137c7e919b66ba603a3164fe9c3cadfae3ea2f1f2f7bc8cba4f9d2fe4c30e7aa",
+  "scripts/lbeam_f.py": "9a76562c2739df3254a650154acde41fe2052173b2f35556e5b75a7728680b6f",
+  "scripts/lbeam_problems.py": "2353e2fc846fac5ced11cfc5420bd60b6e9e50cf3399e9299974b3921a09465e",
+  "scripts/lbeam_proposer.py": "6c555d2e46db8a279541839a54b82d6e765f1e8bc438f735beb3ef30b9564881"
+ },
+ "bwm_blocks_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+ "draft_sha256": "26c62144d89dde15e7d18ad119f9361ce6f93562bd3d358f26808e7aefbd788d",
+ "hook_draft_sha256": "098cb1311bd9d5352b042a4e84dcabc606df6209fd9429a60ee4b543d27102ff",
+ "torch_imported": false,
+ "peak_rss_mb": 34.5,
+ "seconds": 2.8,
+ "written_utc": "2026-10-10T03:41:12Z",
+ "note": "CPU only; tiny random Qwen3 + LoRA stand-ins; no real model, no GPU, no lease"
+}

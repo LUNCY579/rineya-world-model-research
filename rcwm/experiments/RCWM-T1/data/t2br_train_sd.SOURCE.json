@@ -1,13 +1,13 @@
 {
- "schema": 3,
- "revision": 3,
+ "schema": 4,
+ "revision": 5,
  "experiment": "RCWM-T1 T2b-register screen (roadmap item 3; joint item 5b)",
- "built_utc": "2026-10-09T17:25:55Z",
+ "built_utc": "2026-10-10T03:31:28Z",
  "model_calls": 0,
  "torch_imported": false,
  "builder": "scripts/t2br_make_data.py",
- "builder_sha256_at_build": "b94886243ed607096d7b0cf23bbe21de8fab0919755eb2798fa6aff9d334b4a6",
- "common_sha256_at_build": "affa7d555c2924c7a587f55a13779315721b792c81b4f589c2a0f7519d783186",
+ "builder_sha256_at_build": "1c09db66b4c60277de233bd86aa63e52e95bbde57b713a586562d9f5b389e2e5",
+ "common_sha256_at_build": "453b3a985f256dc791fba5816d3fb3437783d5ab753a1f1641b2af03c46da999",
  "builder_note": "the files' provenance is the --verify rebuild check (AUDIT.json): the CURRENT builder must rebuild every data file byte for byte; the hashes above are the code at build time",
  "env_sha256": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
  "recorded_marginals_sha256": "45674251e38e574229f4ea98d04c30fe623ec6ac58ad308ad491661c84afab7e",
@@ -18,6 +18,28 @@
   "train_rows": "fd6710e20a5556708b296364718b6edb7275f7b3adac02a52b95700384302e42",
   "dev_rows": "1113af0fedb5d9e955445472d703799eac21403e37fbec7838c45cb2bc6d5648",
   "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
+ },
+ "revision_3_files_reconstructed": {
+  "ok": true,
+  "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
+  "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
+  "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
+  "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
+  "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
+  "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
+  "t2br_dev.jsonl": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+  "t2br_dev_hs.jsonl": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939"
+ },
+ "revision_4_files_reconstructed": {
+  "ok": true,
+  "t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+  "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+  "t2br_train_filler.jsonl": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+  "t2br_train_sd_plain.jsonl": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+  "t2br_train_sd_trace.jsonl": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+  "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+  "t2br_dev.jsonl": "9aac40deffd678a4bdefffbb290081872015c88ea38296001c671e4067f46102",
+  "t2br_dev_hs.jsonl": "61845fbfc8635423257fac7c52b3ed1c70d19dd799720ca5f0e79866af1764f8"
  },
  "exclusion_sources": {
   "historical": {
@@ -123,18 +145,18 @@
   "operative_contents": 301783
  },
  "freshness": "zero payload and zero operative-content overlap with every source; train / dev / chain units mutually disjoint (checked during the draw by Registry, re-checked by --verify)",
- "peak_rss_mb_at_write": 481.6,
+ "peak_rss_mb_at_write": 485.0,
  "record": "training rows, surface-diversity rendering (the screen's ONLY training data, C1 + C2): the SAME rows and targets, one seeded surface per row from the TRAIN subsets",
  "surface_seed": 20261112,
  "base_files": {
-  "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
-  "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
-  "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a"
+  "t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+  "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+  "t2br_train_filler.jsonl": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433"
  },
  "files": {
-  "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
-  "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
-  "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd"
+  "t2br_train_sd_plain.jsonl": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+  "t2br_train_sd_trace.jsonl": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+  "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011"
  },
  "surface_definition": {
   "paraphrases": [

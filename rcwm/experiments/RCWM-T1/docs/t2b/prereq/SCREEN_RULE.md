@@ -1,9 +1,30 @@
-# Pre-stated screen rule (revision 3): T2b prerequisite representation screen (seed 0, surface-diversity build)
+# Pre-stated screen rule (revision 4): T2b prerequisite representation screen (seed 0, surface-diversity build)
 
-## What changed and why (revision 3, 2026-10-09)
+## What changed and why (revision 4, 2026-10-09)
+
+Revision 4 was written before any `runs/t2bp/` output existed; no model was loaded and no model output was read to
+choose it. Revisions 1-3 are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*`, `SCREEN_RULE_rev3.*`). It makes exactly
+two changes to revision 3, both selected by the operator from the independent verifier's review:
+
+- **A corrected sentence (C4, amendment 4b).** Revision 3 said that revision 2's row-matched length "alone predicts
+  applicability perfectly" on the training rows. That figure was computed from the token count of the full trace
+  text, which contains the answer. Revision 2 actually used a fill of (trace-head tokens minus 3) units, decoded
+  before `after`. Computed from that fill length, the length predicts applicability with accuracy 0.749 on the
+  training rows (majority share 0.500), 0.837 on the 8-bit dev rows (0.600) and 0.813 on the out-of-range dev rows
+  (0.667). That is well above the majority share, so amendment 4b stands, but the prediction is not perfect. The
+  corrected sentence is in the C4 item below and in item (3) of the rule text.
+- **Held-out-surface chains, report-only (stage E4).** The 240 dev k=4 chains are also self-rolled out in the combined
+  held-out surface, adapter ON only. It is E3's surface, with the held-out event key order rotating by the chain's index
+  in the dev bank (E3 rotates by the row's index within its stratum). The analysis reports K4_HS and the gap K4 - K4_HS
+  per arm. E4 is descriptive: it enters neither R nor eligibility, and HS stays defined on E3's seven 8-bit one-step
+  strata. The screen still fits the 4.5 h turn cap (`GEN_PLAN.json`).
+- **Unchanged.** Everything else: R = (K4 + IAW + OOR + HS) / 4 with the in-surface K4, eligibility, R0-R5, the
+  tie-breaks, the close-call wording, the rows, the dev bank, the arms' answer formats and parsers, and the recipe.
+
+### Revision 3's changes (carried over; only the C4 sentence is corrected)
 
 Revision 3 was written before any `runs/t2bp/` output existed; no model was loaded and no model output was read to
-choose it. Revisions 1 and 2 are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*`).
+choose it.
 
 - **Why.** PREREG-3 returned STATUS: TRIGGER (DECISIONS R-PREREG-3, D-35, R16). The T2 ledger LoRA took the literal
   token 'void' as its no-op cue instead of the stated rule, and it failed on reordered JSON keys (0.37-0.47 vs 0.87-0.91
@@ -23,7 +44,8 @@ choose it. Revisions 1 and 2 are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*
   the close-call wording are unchanged. Per-factor held-out renderings are not run (they do not fit the planning budget).
 - **C4 / 5a (c) (amendment 4b).** The F-filler's fill length is a constant per action kind (26 units for the single
   prerequisite kind), at least the longest trace over the training and dev rows. Revision 2 matched the length to the
-  trace row by row, and on these training rows that length alone predicts applicability perfectly.
+  trace row by row, and on these training rows that fill length alone predicts applicability with accuracy 0.749,
+  against a majority share of 0.500.
 - **5a (b) (revision 2's open questions, answered by the operator; nothing changes).** Accepted as they were: the
   add=0 -> copy cue at 0.62 (descriptive; FC and FA guard it); strict A4 IAW for decision point 2 (the R11 union is
   reported); S-trace's cmp lists bit positions; B-bits writes the most significant bit first; out-of-range prompts change
@@ -36,21 +58,30 @@ choose it. Revisions 1 and 2 are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*
 Copied verbatim from the docstring of `scripts/t2bp_analysis.py`, which implements it (`apply_rule`, `apply_filler`). Hashes of every frozen input: `SCREEN_RULE.json`.
 
 ```
-PRE-STATED SCREEN RULE, revision 3 (T2b prerequisite representation screen, seed 0, surface-diversity build).
-What changed and why. Revisions 1 (2026-10-09 03:28) and 2 (07:34, after review) were written before any runs/t2bp
-output existed and are kept (docs/t2b/prereq/SCREEN_RULE_rev1.*, SCREEN_RULE_rev2.*). PREREG-3 then returned STATUS:
-TRIGGER (DECISIONS R-PREREG-3, D-35, R16): the T2 ledger LoRA took the literal token 'void' as its no-op cue instead of
-the stated rule and failed on reordered JSON keys, and BWM's delta world model is likewise locked to key order. A LoRA
-can learn a surface cue in place of a rule. Revision 3 applies the operator's decisions (DECISIONS D-36: C1-C6 and 5a
-(a)-(c)), again before any runs/t2bp output existed and without any model output being read:
+PRE-STATED SCREEN RULE, revision 4 (T2b prerequisite representation screen, seed 0, surface-diversity build).
+What changed and why. Revisions 1 (2026-10-09 03:28), 2 (07:34, after review) and 3 (12:24) were written before any
+runs/t2bp output existed and are kept (docs/t2b/prereq/SCREEN_RULE_rev1.*, SCREEN_RULE_rev2.*, SCREEN_RULE_rev3.*).
+PREREG-3 had returned STATUS: TRIGGER (DECISIONS R-PREREG-3, D-35, R16): the T2 ledger LoRA took the literal token
+'void' as its no-op cue instead of the stated rule and failed on reordered JSON keys, and BWM's delta world model is
+likewise locked to key order. A LoRA can learn a surface cue in place of a rule. Revision 3 applies the operator's
+decisions (DECISIONS D-36: C1-C6 and 5a (a)-(c)), again before any runs/t2bp output existed and without any model
+output being read:
   (1) decision point 1 has fired: the screen trains the surface-diversity build (the same canonical rows, each with a
       seeded rule-text paraphrase, a field-name variant and input key orders drawn from training subsets only); the
       canonical-only build is not run;
   (2) the ranking adds HS, accuracy on a combined held-out surface that no training prompt uses (R = the mean of K4,
       IAW, OOR and HS), so an arm that learned the rule only on its training surfaces cannot win on in-surface scores;
   (3) the F-filler control uses a constant fill length per action kind (amendment 4b), because a fill length matched
-      to the trace row by row reveals the answer (on these training rows the trace length alone predicts
-      applicability perfectly), which would give the control a hidden scratch channel.
+      to the trace row by row reveals the answer (on these training rows revision 2's fill length alone, trace-head
+      tokens - 3, predicts applicability with accuracy 0.749 against a majority share of 0.500), which would give the
+      control a hidden scratch channel.
+Revision 4 (fixes the operator selected from the independent verifier's review, 2026-10-09, again before any
+runs/t2bp output existed and without any model output being read) changes two things only: (a) it corrects the figure
+in (3), which revision 3 gave as "the trace length alone predicts applicability perfectly", computed from the full
+trace text (which contains the answer) instead of revision 2's fill length (on the dev rows that fill length predicts
+applicability with accuracy 0.837 on the 8-bit rows and 0.813 out of range, majority shares 0.600 and 0.667); (b) it
+adds stage E4, the 240 dev chains in the combined held-out surface (adapter ON), reported as K4_HS and K4 - K4_HS per
+arm; E4 is report-only: it enters neither R nor eligibility, and HS stays defined on E3's one-step strata.
 Eligibility, R0 (on the in-surface format rate), R1-R3, the tie-breaks, the close-call wording and R5's thresholds are
 unchanged. The rule text and the sha256 of every frozen input are recorded in docs/t2b/prereq/SCREEN_RULE.json; the
 runner and this analysis refuse when a frozen input differs. Verbatim in docs/t2b/prereq/SCREEN_RULE.md.
@@ -61,11 +92,12 @@ runner and this analysis refuse when a frozen input differs. Verbatim in docs/t2
   canonical surface: stages E1, E2); the one-step rows also in the COMBINED held-out-surface rendering (stage E3:
   paraphrase 4 with its state sentence, field names 4, the reversed top-level key order and one of the 3 held-out event
   key orders, rotating by the row's index within its stratum; no training prompt uses any of these; the same rows and
-  golds as E1, paired by row). All three arms must be complete with every stage (DONE.json; every output
-  hash-verified; the frozen inputs unchanged; the scorer self-test passes before any output is read); a run that is not
-  the surface-diversity build, or lacks stage E3, gets no verdict. Answers are scored by the arm's after-only parser
-  (t2bp_common.parse: D-int lenient exactly as rcwmt.env.parse_state; the others strict); an unparseable or malformed
-  answer is wrong.
+  golds as E1, paired by row). The chains are also rolled out in that combined held-out surface (stage E4, adapter ON;
+  the held-out event key order rotating by the chain's index in the dev bank; report-only, see the last paragraph).
+  All three arms must be complete with every stage (DONE.json; every output hash-verified; the frozen inputs
+  unchanged; the scorer self-test passes before any output is read); a run that is not the surface-diversity build, or
+  lacks stage E3, gets no verdict. Answers are scored by the arm's after-only parser (t2bp_common.parse: D-int lenient
+  exactly as rcwmt.env.parse_state; the others strict); an unparseable or malformed answer is wrong.
   Metrics (point estimates, adapter ON; "8-bit rows" = the 750 one-step rows outside D_ood10 and D_ood12; every metric
   except HS is in-surface):
     IAW(A)  accuracy on D_int_add_wrong (150 rows: applicable, the add bit is already set and the delete clears a set
@@ -116,8 +148,10 @@ runner and this analysis refuse when a frozen input differs. Verbatim in docs/t2
      the control is analysed, an S-trace win is stated with "decode-compute control pending".
   Everything else (OFF baselines, the other strata and subtypes, out-of-range false copy, the held-out-surface
   out-of-range strata, FC/FA/WF and ID in the held-out surface, the paired held-out minus in-surface contrasts,
-  accuracy by held-out key order, the filler's residual length (filler minus trace tokens) as a covariate, union
-  cells, shortcut agreement, cmp_ok / calc_ok / flag_ok, decision regret, paired contrasts) is descriptive and cannot
-  change the verdict. This is a screen on a dev bank: no confirmatory claim follows from it; a confirmatory claim needs
-  a sealed bank and a preregistration (roadmap item 2, "Confirm"), with held-out-surface primaries (D-35).
+  accuracy by held-out key order, the held-out-surface chains of stage E4 (K4_HS, the k=4 exact final-state accuracy
+  of the 240 chains in the combined held-out surface, and the gap K4 - K4_HS, per arm), the filler's residual length
+  (filler minus trace tokens) as a covariate, union cells, shortcut agreement, cmp_ok / calc_ok / flag_ok, decision
+  regret, paired contrasts) is descriptive and cannot change the verdict. This is a screen on a dev bank: no
+  confirmatory claim follows from it; a confirmatory claim needs a sealed bank and a preregistration (roadmap item 2,
+  "Confirm"), with held-out-surface primaries (D-35).
 ```

@@ -1,4 +1,4 @@
-"""T2b-register screen runner, revision 3 (RCWM roadmap item 3; joint item 5b): train the three R-only LoRA arms with the
+"""T2b-register screen runner, revision 5 (RCWM roadmap item 3; joint item 5b): train the three R-only LoRA arms with the
 T2 recipe on the surface-diversity build 'sd' (decision C1: the canonical-only variant is not run), then evaluate adapter
 OFF and every arm ON in ONE process, in-surface and on the held-out surface (C3), all under ONE GPU lease. Modelled on
 scripts/p3_run.py.
@@ -30,12 +30,14 @@ pushing it past the cap). One model at a time. Stages, in order:
   A0 anchor   adapter OFF (disable_adapter() = Titan-Sparse) chain_one on the 208 pilot TEST register chains must
               reproduce runs/t2/t2_s0/gen_chain_one_base.jsonl (identical states on >= 99% of chains), else stop before
               any dev-bank output. A resumed turn re-anchors before E1/E2 (recorded; a failure is persisted).
-  E1          the 1,100 one-step dev rows in Titan's verbatim frame (generation.generate_texts, 160-token cap) per side
+  E1          the 1,280 one-step dev rows in Titan's verbatim frame (generation.generate_texts, 160-token cap) per side
               OFF / plain / trace / filler
-  E1H         the 400 primary dev rows in the combined HELD-OUT surface (data/t2br_dev_hs.jsonl: paraphrase 4 + field
-              names 4 + held-out key orders rotating by row; C3) per side OFF / plain / trace / filler. plain and trace
-              gate G1 / G2 (revision 3); OFF and filler are reported. Runs before E2 so that every gating output is
-              produced first; per-factor held-out renderings are not run (GPU budget).
+  E1H         the 580 dev rows of the primary strata + the identification strata (cond_sametens, cond_oor_edge) in
+              the combined HELD-OUT surface
+              (data/t2br_dev_hs.jsonl: paraphrase 4 + field names 4 + held-out key orders rotating by row; C3) per side
+              OFF / plain / trace / filler. plain and trace gate G1 / G2; OFF and filler are reported. Runs before E2 so
+              that every gating output is produced first; per-factor held-out renderings are omitted by choice (a
+              GPU-budget choice, not a capacity limit).
   E2          the 384 k=4 dev chains (chain_one self-rollout in the one-step frame; each side's state = its own parser's
               'after': plain/OFF env.parse_state(lenient), trace/filler the strict joint parsers) per side
   Every eval stage generates ALL four sides in the same process and writes them only when all are done.
@@ -106,8 +108,10 @@ FREEZE_SCRIPTS = ("scripts/t2br_common.py", "scripts/t2br_make_data.py", "script
                   "vendor_bwm/scripts/train_generic.py", "vendor_bwm/bwmn/lm.py")
 HOOK_DRAFT_REL = "docs/t2b/register/queue_hook_t2br.sh.draft"
 GO_RULE_REL = "docs/t2b/register/GO_RULE.md"
-GO_RULE_REV_RELS = {1: "docs/t2b/register/GO_RULE_rev1.md", 2: "docs/t2b/register/GO_RULE_rev2.md"}
-DESIGN_REV_RELS = {1: "docs/t2b/register/DESIGN_rev1.md", 2: "docs/t2b/register/DESIGN_rev2.md"}
+GO_RULE_REV_RELS = {1: "docs/t2b/register/GO_RULE_rev1.md", 2: "docs/t2b/register/GO_RULE_rev2.md",
+                    3: "docs/t2b/register/GO_RULE_rev3.md", 4: "docs/t2b/register/GO_RULE_rev4.md"}
+DESIGN_REV_RELS = {1: "docs/t2b/register/DESIGN_rev1.md", 2: "docs/t2b/register/DESIGN_rev2.md",
+                   3: "docs/t2b/register/DESIGN_rev3.md", 4: "docs/t2b/register/DESIGN_rev4.md"}
 FREEZE_DOCS = ("docs/t2b/register/DESIGN.md", GO_RULE_REL, *GO_RULE_REV_RELS.values(), *DESIGN_REV_RELS.values(),
                "docs/t2b/register/AUDIT.json", "docs/t2b/register/SCORER_SELFTEST.json",
                "docs/t2b/register/DRYRUN.json", "docs/t2b/register/TINY_TEST.json", "docs/t2b/register/GEN_PLAN.json",
@@ -351,7 +355,8 @@ def plan(cfg: Cfg | None = None, verbose: bool = True) -> dict:
     what = {"T_plain": "train plain arm", "T_trace": "train trace arm", "T_filler": "train filler arm",
             "A0": f"load Sparse + 3 adapters; anchor OFF chain_one, {n['anchor_chains']} pilot TEST register chains",
             "E1": f"{n['rows']} one-step dev rows (verbatim frame) x OFF / plain / trace / filler",
-            "E1H": f"{n['rows_hs']} primary dev rows, combined HELD-OUT surface x OFF / plain / trace / filler",
+            "E1H": f"{n['rows_hs']} primary + identification dev rows, combined HELD-OUT surface x OFF / plain / "
+                   "trace / filler",
             "E2": f"{n['chains']} k={C.H} dev chains x OFF / plain / trace / filler"}
     gens = {"A0": n["A0"], **{st: sum(n[st].values()) for st in ("E1", "E1H", "E2")}}
     res = {"rate_gens_per_s": RATE_GENS_PER_S, "observed_rate_gens_per_s": OBSERVED_RATE, "load_s_each": LOAD_S,
@@ -371,15 +376,38 @@ def plan(cfg: Cfg | None = None, verbose: bool = True) -> dict:
            "turns_at_observed_rate": simulate_turns(OBSERVED_RATE, n)}
     res["projected_gpu_h_planning"] = round(sum(t["projected_h"] for t in res["turns_at_planning_rate"]), 2)
     res["projected_gpu_h_observed"] = round(sum(t["projected_h"] for t in res["turns_at_observed_rate"]), 2)
+    # total_generations_max counts A0 ONCE; every resumed turn that evaluates re-anchors first (another A0)
+    reanch = {k: sum(st == "A0 (re-anchor)" for t in res[k] for st in t["stages"])
+              for k in ("turns_at_planning_rate", "turns_at_observed_rate")}
+    res["generations_per_reanchor"] = n["A0"]
+    res["total_generations_max_note"] = (
+        "total_generations_max counts the anchor A0 once and EXCLUDES re-anchors: every resumed turn that evaluates "
+        "re-runs A0 first (generations_per_reanchor each)")
+    res["total_generations_max_with_reanchors"] = {
+        "planning_rate": res["total_generations_max"] + reanch["turns_at_planning_rate"] * n["A0"],
+        "observed_rate": res["total_generations_max"] + reanch["turns_at_observed_rate"] * n["A0"],
+        "hook_bound_3_calls": res["total_generations_max"] + 2 * n["A0"]}
+    res["reanchors_projected"] = {"planning_rate": reanch["turns_at_planning_rate"],
+                                  "observed_rate": reanch["turns_at_observed_rate"], "hook_bound_3_calls": 2}
     res["turn_split"] = (
         "The runner defers by its own gate (no stage starts within 0.5 h of the cap; 1.25 x the estimate must fit, "
         "re-checked after every resource wait): a stage that does not fit ends the turn with exit 5, the hook's second "
         "call waits for the next RCWM turn and resumes from the recorded stages, re-anchoring (A0 re-check) before any "
         "further evaluation. E1H (the held-out-surface stage, gating G1 / G2) runs before E2, so every gating output "
         "exists by the end of the first turn whenever E1H fits there.")
+    fit = {}
+    for k, rate in (("planning", RATE_GENS_PER_S), ("observed", OBSERVED_RATE)):
+        last_h = res[f"turns_at_{k}_rate"][-1]["projected_h"]
+        fit[k] = (f"would fit in the last turn ({last_h} h used of {CAP_H} h; the D-22 gate admits them)"
+                  if can_start(last_h * 3600, 3 * stage_est_s("E1H", rate, n), CAP_H * 3600)
+                  else f"would need one more turn and a re-anchor (the last turn already uses {last_h} h)")
     res["per_factor_heldout_renderings"] = (
-        "not run: 3 more renderings of the 400 primary rows x 4 sides would add about 3 x E1H to a plan that already "
-        "needs a second turn at the planning rate (C3: descriptive only if they fit the GPU budget)")
+        f"omitted by CHOICE (a GPU-budget choice, not a capacity limit): 3 more renderings (paraphrase only, names only, "
+        f"key order only) of the {n['rows_hs']} held-out-surface rows x 4 sides would cost about 3 x E1H = "
+        f"{3 * stage_est_s('E1H', RATE_GENS_PER_S, n) / 60:.0f} min at the planning rate "
+        f"({3 * 4 * n['rows_hs']:,} generations). At the planning rate they {fit['planning']}; at the observed rate "
+        f"they {fit['observed']}. The operator chose not to spend GPU time on descriptive renderings; consequence: a "
+        "held-out-surface loss cannot be attributed to paraphrase, names or key order")
     if verbose:
         print(f"T2b-register GPU plan, revision {C.GO_RULE_REVISION} (variant {cfg.train_variant}; no model loaded; {LOAD_S:.0f} s per "
               f"model load; decode factors E1 {n['side_factor']['E1']})")
@@ -393,6 +421,10 @@ def plan(cfg: Cfg | None = None, verbose: bool = True) -> dict:
             print(f"  turns at {rate} gens/s (cap {CAP_H} h): " +
                   "; ".join(f"turn {i + 1}: {t['stages']} {t['projected_h']} h" for i, t in enumerate(res[k])))
         print(f"  projected GPU-h: {res['projected_gpu_h_planning']} (planning) / {res['projected_gpu_h_observed']} (observed)")
+        g = res["total_generations_max_with_reanchors"]
+        print(f"  generations: {res['total_generations_max']:,} with A0 once; with the projected re-anchors "
+              f"{g['planning_rate']:,} (planning) / {g['observed_rate']:,} (observed); hook bound (3 calls, 2 re-anchors) "
+              f"{g['hook_bound_3_calls']:,}")
     return res
 
 
@@ -460,7 +492,8 @@ def prefreeze_checks(root: Path) -> dict:
     out[f"DESIGN.md and GO_RULE.md state the go rule (revision {C.GO_RULE_REVISION}) verbatim"] = all(
         (root / r).is_file() and C.GO_RULE_TEXT in (root / r).read_text(encoding="utf-8")
         for r in ("docs/t2b/register/DESIGN.md", GO_RULE_REL))
-    for k, txt in ((1, C.GO_RULE_TEXT_REV1), (2, C.GO_RULE_TEXT_REV2)):
+    for k, txt in ((1, C.GO_RULE_TEXT_REV1), (2, C.GO_RULE_TEXT_REV2), (3, C.GO_RULE_TEXT_REV3),
+                   (4, C.GO_RULE_TEXT_REV4)):
         out[f"GO_RULE_rev{k}.md and DESIGN_rev{k}.md keep the superseded revision {k} verbatim"] = all(
             (root / r).is_file() and txt in (root / r).read_text(encoding="utf-8")
             for r in (GO_RULE_REV_RELS[k], DESIGN_REV_RELS[k]))

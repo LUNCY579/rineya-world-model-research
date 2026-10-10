@@ -1,6 +1,6 @@
 {
  "ok": true,
- "revision": 3,
+ "revision": 5,
  "historical_harvest": true,
  "checks": [
   {
@@ -51,7 +51,7 @@
   {
    "check": "dev strata sizes as designed",
    "ok": true,
-   "detail": "{'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100, 'cond_mid': 100, 'cond_far': 100}"
+   "detail": "{'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100, 'cond_mid': 100, 'cond_far': 100, 'cond_sametens': 100, 'cond_oor_edge': 80}"
   },
   {
    "check": "every dev row satisfies its stratum definition (and C.is_oor agrees with its group)",
@@ -59,9 +59,9 @@
    "detail": "[]"
   },
   {
-   "check": "pairs / triplets differ in ONE number (the threshold; cond_mid pairs: the threshold or the other register, 25 pairs each; cond_far pairs: the other register); pair strata branch-balanced, one ok-true + one ok-false member per pair",
+   "check": "pairs / triplets / quadruples differ in ONE number (the threshold; cond_mid and cond_sametens pairs: the threshold or the other register, 25 pairs each; cond_far pairs: the other register; cond_oor_edge quadruples: the threshold or the other register, 10 each, at other - threshold = -1, 0, +1, +2); pair strata branch-balanced, one ok-true + one ok-false member per pair (cond_oor_edge: two of each per quadruple)",
    "ok": true,
-   "detail": "bad []; {'cond_mid': {True: 50, False: 50}, 'cond_oor_val': {False: 50, True: 50}, 'cond_oor_thr': {True: 50, False: 50}, 'cond_far': {True: 50, False: 50}}"
+   "detail": "bad []; {'cond_mid': {True: 50, False: 50}, 'cond_oor_val': {False: 50, True: 50}, 'cond_oor_thr': {True: 50, False: 50}, 'cond_far': {True: 50, False: 50}, 'cond_sametens': {True: 50, False: 50}, 'cond_oor_edge': {False: 40, True: 40}}"
   },
   {
    "check": "training conditionals: 150 core rows at x - thr = -1 / 0 / +1 (50 each) + 150 twins differing in ONE number (25 threshold / 25 other per offset), branch flipped, |x - thr| in 2..15",
@@ -84,7 +84,7 @@
    "detail": "{'CH_IN': 32, 'CH_X': 16}"
   },
   {
-   "check": "rows identical to revision 2 (never re-drawn): training rows + plain / trace targets + canonical prompts, dev rows, chain bank byte for byte",
+   "check": "rows identical to revision 2 (never re-drawn): training rows + plain / trace targets + canonical prompts, dev rows of the revision-2/3 strata, chain bank byte for byte",
    "ok": true,
    "detail": "{'train_rows': 'fd6710e20a5556708b296364718b6edb7275f7b3adac02a52b95700384302e42', 'dev_rows': '1113af0fedb5d9e955445472d703799eac21403e37fbec7838c45cb2bc6d5648', 'chains_sha256': 'fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62'}"
   },
@@ -94,9 +94,24 @@
    "detail": "{'t2br_train_plain.jsonl': '49067515714f', 't2br_train_trace.jsonl': '1bad81166f18', 't2br_train_filler.jsonl': '3102361dae2f', 't2br_dev.jsonl': '2c0250a2189e'}"
   },
   {
-   "check": "amendment 4b (C4): the constant fill per kind re-derived from train + dev + chain gold steps == the pre-stated FILL_UNITS; ONE fill string per kind (every filler target identical up to 'after'); fill length carries zero information about wrap / branch in every cell (best cut == majority); residual >= 0",
+   "check": "the eight revision-3 data files are reconstructed byte for byte from the current rows with revision 3's fill constants and strata (their recorded sha256): no row changed; revision 4 only appended cond_sametens and re-derived the 4b constants",
    "ok": true,
-   "detail": "{'swap': (5, 1, 0), 'add': (14, 1, 0), 'mix': (14, 1, 0), 'conditional': (26, 1, 0)}"
+   "detail": "{'t2br_train_plain.jsonl': '058acce806b2', 't2br_train_trace.jsonl': '81f4af025c25', 't2br_train_filler.jsonl': '726134cd2ed5', 't2br_train_sd_plain.jsonl': '4c679f359678', 't2br_train_sd_trace.jsonl': '941c14084708', 't2br_train_sd_filler.jsonl': 'e99f4f5f7015', 't2br_dev.jsonl': '503d7686a38d', 't2br_dev_hs.jsonl': '1ced9b71716a'}"
+  },
+  {
+   "check": "the eight revision-4 data files are reconstructed byte for byte from the current rows with revision 4's fill constants and strata (their recorded sha256): no row and no constant changed; revision 5 only appends cond_oor_edge",
+   "ok": true,
+   "detail": "{'t2br_train_plain.jsonl': '3540a991710b', 't2br_train_trace.jsonl': 'c9cb9238e12a', 't2br_train_filler.jsonl': '4e207129c97b', 't2br_train_sd_plain.jsonl': 'd3de9554d31c', 't2br_train_sd_trace.jsonl': 'cc9128c965c1', 't2br_train_sd_filler.jsonl': '01165efe0d1f', 't2br_dev.jsonl': '9aac40deffd6', 't2br_dev_hs.jsonl': '61845fbfc863'}"
+  },
+  {
+   "check": "the appends keep every earlier row in place: dev ids dv0000..dv1099 in revision-3 order, then cond_sametens (dv1100..dv1199, revision 4), then cond_oor_edge (dv1200..dv1279, revision 5); the held-out-surface bank's first 400 rows are revision 3's bank and its first 500 revision 4's (same ids, hs_index, prompts)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "amendment 4b (C4, revision-4 definition): the per-kind constant (smallest fill whose SHORTEST filler target is >= the kind's LONGEST trace target over train + dev + chain gold steps) re-derived == the pre-stated FILL_UNITS; ONE fill string per kind (every filler target identical up to 'after'); fill length carries zero information about wrap / branch in every cell (best cut == majority); residual >= 0",
+   "ok": true,
+   "detail": "{'swap': (7, 26, 26, 1), 'add': (17, 35, 35, 1), 'mix': (17, 35, 35, 1), 'conditional': (29, 47, 47, 1)}"
   },
   {
    "check": "C2: NO training prompt uses a held-out paraphrase, field name or key order (every sd prompt decoded by read_prompt to its row and recorded surface; raw-string check); every train paraphrase / name / state order used",
@@ -104,9 +119,9 @@
    "detail": "{'decode_failures': 0, 'rows_using_a_heldout_factor': 0, 'rows_with_a_heldout_name_or_paraphrase_string': 0}"
   },
   {
-   "check": "C3: the held-out-surface bank = the 400 primary dev rows in dev order (same ids and golds); every prompt decodes to its row and uses ONLY held-out factors (paraphrase 4, names 4, held-out orders rotating by row)",
+   "check": "C3: the held-out-surface bank = the 580 dev rows of the primary strata + the identification strata (cond_sametens, cond_oor_edge) in dev order (same ids and golds); every prompt decodes to its row and uses ONLY held-out factors (paraphrase 4, names 4, held-out orders rotating by row)",
    "ok": true,
-   "detail": "{'n_rows': 400, 'bad_rows': 0}"
+   "detail": "{'n_rows': 580, 'bad_rows': 0}"
   },
   {
    "check": "the CURRENT builder rebuilds every data file byte for byte (fresh name-skipping harvest)",
@@ -139,7 +154,7 @@
    "detail": ""
   },
   {
-   "check": "the dev SOURCE states the current go rule (revision 3)",
+   "check": "the dev SOURCE states the current go rule (revision 5)",
    "ok": true,
    "detail": ""
   }
@@ -148,14 +163,14 @@
   "identical": true,
   "differs": [],
   "files": {
-   "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
-   "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
-   "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
-   "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
-   "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
-   "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
-   "t2br_dev.jsonl": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
-   "t2br_dev_hs.jsonl": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
+   "t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+   "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+   "t2br_train_filler.jsonl": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+   "t2br_train_sd_plain.jsonl": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+   "t2br_train_sd_trace.jsonl": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+   "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+   "t2br_dev.jsonl": "8c1566b5c58df6fb373298e9b632f0acdb23931c02a5ff41dbf692420d2d3636",
+   "t2br_dev_hs.jsonl": "ee86bb12ffe84bd46267b49cc1eaa9a3c98c3120b42fcfe94c53f9685ae245a5",
    "t2br_chains.jsonl": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
   }
  },
@@ -537,86 +552,189 @@
    "ok_true": 150,
    "ok_false": 150
   },
+  "digit_shortcuts": {
+   "tens_or_eq_plus1|cond": {
+    "acc": 0.9167,
+    "contradicted_by": 25,
+    "n": 300,
+    "contradicting_rows": {
+     "twin d=5": 4,
+     "twin d=9": 1,
+     "twin d=4": 4,
+     "twin d=3": 7,
+     "twin d=2": 6,
+     "twin d=6": 3
+    }
+   },
+   "tens_ge_not_eq|cond": {
+    "acc": 0.8033,
+    "contradicted_by": 59,
+    "n": 300,
+    "contradicting_rows": {
+     "core d=-1": 44,
+     "twin d=-5": 3,
+     "twin d=-6": 2,
+     "twin d=-2": 4,
+     "twin d=-8": 1,
+     "twin d=-4": 3,
+     "twin d=-7": 1,
+     "twin d=-3": 1
+    }
+   }
+  },
+  "off_by_one": {
+   "obo_m1|cond": {
+    "form": "x > t or x == t-1",
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_0|cond": {
+    "form": "x >= t",
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_p1|cond": {
+    "form": "x > t+1",
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_m1_0|cond": {
+    "form": "x >= t-1",
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_m1_p1|cond": {
+    "form": "(x > t or x == t-1) and x != t+1",
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_0_p1|cond": {
+    "form": "x == t or x > t+1",
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_m1_0_p1|cond": {
+    "form": "x in {t-1, t} or x > t+1",
+    "acc": 0.5,
+    "contradicted_by": 150,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   }
+  },
+  "off_by_one_note": "Revision 5, reported, NOT gated: the off-by-one family (the branch flipped where other - threshold is in a non-empty subset of {-1, 0, +1}). The 150 core rows at -1 / 0 / +1 (50 each) contradict every single flip on exactly 50 of the 300 conditional rows (1/6); the dev bank identifies the family through G1 (cond_oor_val and cond_oor_edge).",
+  "digit_shortcut_note": "Revision 4, reported, NOT gated: the tens-digit shortcut 'add iff tens(other) > tens(threshold) or other == threshold + 1' and its mirror 'add iff tens(other) >= tens(threshold) and other != threshold' (derived for the env's strict '>'). On the training rows only the twins at |d| 2..9 inside one decade contradict them; the 750 rows are fixed (never re-drawn), so their identification is tested on the dev bank (G1's cond_sametens clause).",
   "ok": true
  },
  "fill_constant": {
   "constants": {
-   "swap": 5,
-   "add": 14,
-   "mix": 14,
-   "conditional": 26
+   "swap": 7,
+   "add": 17,
+   "mix": 17,
+   "conditional": 29
   },
   "per_kind": {
    "swap": {
     "n_rows": 475,
-    "derived_constant": 5,
-    "pre_stated": 5,
+    "derived_constant": 7,
+    "pre_stated": 7,
+    "revision3_per_row_derivation": 5,
+    "revision3_constant": 5,
     "distinct_fill_strings": 1,
     "longest_trace_tokens": 26,
     "longest_trace_cell": "dev swap",
-    "residual_min": 0,
-    "residual_mean": 0.0,
-    "residual_max": 0,
-    "residual_positive_share": 0.0
+    "shortest_filler_tokens": 26,
+    "longest_filler_tokens": 28,
+    "shortest_filler_ge_longest_trace": true,
+    "residual_min": 2,
+    "residual_mean": 2.0,
+    "residual_max": 2,
+    "residual_positive_share": 1.0
    },
    "add": {
     "n_rows": 724,
-    "derived_constant": 14,
-    "pre_stated": 14,
+    "derived_constant": 17,
+    "pre_stated": 17,
+    "revision3_per_row_derivation": 14,
+    "revision3_constant": 14,
     "distinct_fill_strings": 1,
     "longest_trace_tokens": 35,
     "longest_trace_cell": "train wrap",
-    "residual_min": 0,
-    "residual_mean": 1.3191,
-    "residual_max": 3,
-    "residual_positive_share": 0.953
+    "shortest_filler_tokens": 35,
+    "longest_filler_tokens": 38,
+    "shortest_filler_ge_longest_trace": true,
+    "residual_min": 3,
+    "residual_mean": 4.3191,
+    "residual_max": 6,
+    "residual_positive_share": 1.0
    },
    "mix": {
     "n_rows": 951,
-    "derived_constant": 14,
-    "pre_stated": 14,
+    "derived_constant": 17,
+    "pre_stated": 17,
+    "revision3_per_row_derivation": 14,
+    "revision3_constant": 14,
     "distinct_fill_strings": 1,
     "longest_trace_tokens": 35,
     "longest_trace_cell": "train mix",
-    "residual_min": 0,
-    "residual_mean": 0.4595,
-    "residual_max": 3,
-    "residual_positive_share": 0.4311
+    "shortest_filler_tokens": 35,
+    "longest_filler_tokens": 38,
+    "shortest_filler_ge_longest_trace": true,
+    "residual_min": 3,
+    "residual_mean": 3.4595,
+    "residual_max": 6,
+    "residual_positive_share": 1.0
    },
    "conditional": {
-    "n_rows": 1236,
-    "derived_constant": 26,
-    "pre_stated": 26,
+    "n_rows": 1416,
+    "derived_constant": 29,
+    "pre_stated": 29,
+    "revision3_per_row_derivation": 26,
+    "revision3_constant": 26,
     "distinct_fill_strings": 1,
     "longest_trace_tokens": 47,
     "longest_trace_cell": "dev cond_oor_val",
-    "residual_min": 0,
-    "residual_mean": 1.3665,
-    "residual_max": 5,
-    "residual_positive_share": 0.9579
+    "shortest_filler_tokens": 47,
+    "longest_filler_tokens": 50,
+    "shortest_filler_ge_longest_trace": true,
+    "residual_min": 3,
+    "residual_mean": 4.3814,
+    "residual_max": 8,
+    "residual_positive_share": 1.0
    }
   },
   "cells": {
    "chain CH_IN / swap": {
     "n": 262,
     "fill_units": [
-     5
+     7
     ],
-    "residual_mean": 0.0,
+    "residual_mean": 2.0,
     "residual_range": [
-     0,
-     0
+     2,
+     2
     ]
    },
    "chain CH_IN / add": {
     "n": 229,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 1.1397,
+    "residual_mean": 4.1397,
     "residual_range": [
-     1,
-     3
+     4,
+     6
     ],
     "label": "wrap",
     "majority": 0.9913,
@@ -627,12 +745,12 @@
    "chain CH_IN / mix": {
     "n": 298,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 0.3255,
+    "residual_mean": 3.3255,
     "residual_range": [
-     0,
-     2
+     3,
+     5
     ],
     "label": "wrap",
     "majority": 0.7651,
@@ -643,12 +761,12 @@
    "chain CH_IN / conditional": {
     "n": 235,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.2894,
+    "residual_mean": 4.2894,
     "residual_range": [
-     1,
-     4
+     4,
+     7
     ],
     "label": "branch",
     "majority": 0.5702,
@@ -659,23 +777,23 @@
    "chain CH_X / swap": {
     "n": 133,
     "fill_units": [
-     5
+     7
     ],
-    "residual_mean": 0.0,
+    "residual_mean": 2.0,
     "residual_range": [
-     0,
-     0
+     2,
+     2
     ]
    },
    "chain CH_X / add": {
     "n": 105,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 1.0095,
+    "residual_mean": 4.0095,
     "residual_range": [
-     0,
-     3
+     3,
+     6
     ],
     "label": "wrap",
     "majority": 0.7143,
@@ -686,12 +804,12 @@
    "chain CH_X / mix": {
     "n": 153,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 0.2876,
+    "residual_mean": 3.2876,
     "residual_range": [
-     0,
-     2
+     3,
+     5
     ],
     "label": "wrap",
     "majority": 0.7778,
@@ -702,12 +820,12 @@
    "chain CH_X / conditional": {
     "n": 121,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.281,
+    "residual_mean": 4.281,
     "residual_range": [
-     0,
-     4
+     3,
+     7
     ],
     "label": "branch",
     "majority": 0.6364,
@@ -718,12 +836,12 @@
    "dev add_nowrap / add": {
     "n": 80,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 1.2,
+    "residual_mean": 4.2,
     "residual_range": [
-     1,
-     3
+     4,
+     6
     ],
     "label": "wrap",
     "majority": 1.0,
@@ -734,12 +852,12 @@
    "dev cond_far / conditional": {
     "n": 100,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.38,
+    "residual_mean": 4.38,
     "residual_range": [
-     1,
-     4
+     4,
+     7
     ],
     "label": "branch",
     "majority": 0.5,
@@ -750,12 +868,12 @@
    "dev cond_mid / conditional": {
     "n": 100,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.34,
+    "residual_mean": 4.34,
     "residual_range": [
-     1,
-     4
+     4,
+     7
     ],
     "label": "branch",
     "majority": 0.5,
@@ -763,15 +881,31 @@
     "fill_length_zero_information": true,
     "residual_best_cut_descriptive": 0.53
    },
+   "dev cond_oor_edge / conditional": {
+    "n": 80,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.4875,
+    "residual_range": [
+     4,
+     8
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.5375
+   },
    "dev cond_oor_thr / conditional": {
     "n": 100,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 0.91,
+    "residual_mean": 3.91,
     "residual_range": [
-     0,
-     4
+     3,
+     7
     ],
     "label": "branch",
     "majority": 0.5,
@@ -782,12 +916,12 @@
    "dev cond_oor_val / conditional": {
     "n": 100,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.19,
+    "residual_mean": 4.19,
     "residual_range": [
-     0,
-     4
+     3,
+     7
     ],
     "label": "branch",
     "majority": 0.5,
@@ -795,15 +929,31 @@
     "fill_length_zero_information": true,
     "residual_best_cut_descriptive": 0.57
    },
+   "dev cond_sametens / conditional": {
+    "n": 100,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.48,
+    "residual_range": [
+     4,
+     6
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.56
+   },
    "dev cond_x0 / conditional": {
     "n": 60,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.2667,
+    "residual_mean": 4.2667,
     "residual_range": [
-     1,
-     3
+     4,
+     6
     ],
     "label": "branch",
     "majority": 1.0,
@@ -814,12 +964,12 @@
    "dev cond_xm1 / conditional": {
     "n": 60,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.2667,
+    "residual_mean": 4.2667,
     "residual_range": [
-     1,
-     3
+     4,
+     6
     ],
     "label": "branch",
     "majority": 1.0,
@@ -830,12 +980,12 @@
    "dev cond_xp1 / conditional": {
     "n": 60,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.3,
+    "residual_mean": 4.3,
     "residual_range": [
-     1,
-     3
+     4,
+     6
     ],
     "label": "branch",
     "majority": 1.0,
@@ -846,12 +996,12 @@
    "dev mix / mix": {
     "n": 100,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 0.62,
+    "residual_mean": 3.62,
     "residual_range": [
-     0,
-     3
+     3,
+     6
     ],
     "label": "wrap",
     "majority": 0.5,
@@ -862,12 +1012,12 @@
    "dev mix_oor / mix": {
     "n": 100,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 0.61,
+    "residual_mean": 3.61,
     "residual_range": [
-     0,
-     3
+     3,
+     6
     ],
     "label": "wrap",
     "majority": 0.5,
@@ -878,23 +1028,23 @@
    "dev swap / swap": {
     "n": 80,
     "fill_units": [
-     5
+     7
     ],
-    "residual_mean": 0.0,
+    "residual_mean": 2.0,
     "residual_range": [
-     0,
-     0
+     2,
+     2
     ]
    },
    "dev wrap / add": {
     "n": 80,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 1.825,
+    "residual_mean": 4.825,
     "residual_range": [
-     1,
-     2
+     4,
+     5
     ],
     "label": "wrap",
     "majority": 1.0,
@@ -905,12 +1055,12 @@
    "dev wrap_oor / add": {
     "n": 80,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 0.9375,
+    "residual_mean": 3.9375,
     "residual_range": [
-     0,
-     2
+     3,
+     5
     ],
     "label": "wrap",
     "majority": 1.0,
@@ -921,12 +1071,12 @@
    "train cond / conditional": {
     "n": 300,
     "fill_units": [
-     26
+     29
     ],
-    "residual_mean": 1.73,
+    "residual_mean": 4.73,
     "residual_range": [
-     1,
-     5
+     4,
+     8
     ],
     "label": "branch",
     "majority": 0.5,
@@ -937,12 +1087,12 @@
    "train mix / mix": {
     "n": 300,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 0.5767,
+    "residual_mean": 3.5767,
     "residual_range": [
-     0,
-     3
+     3,
+     6
     ],
     "label": "wrap",
     "majority": 0.5,
@@ -953,12 +1103,12 @@
    "train wrap / add": {
     "n": 150,
     "fill_units": [
-     14
+     17
     ],
-    "residual_mean": 1.8067,
+    "residual_mean": 4.8067,
     "residual_range": [
-     0,
-     2
+     3,
+     5
     ],
     "label": "wrap",
     "majority": 1.0,
@@ -968,6 +1118,7 @@
    }
   },
   "ok": true,
+  "definition": "per kind: the smallest run of ' .' units such that the filler target is at least as long (Titan tokens) as the LONGEST trace target of that kind over train + dev + the chains' gold steps, whatever its 'after' (the kind's shortest filler target vs its longest trace target); revision 3's code compared each row's filler with that row's trace (revision3_per_row_derivation)",
   "note": "fill length is a function of the action kind alone (prompt-derived): within a kind it is constant, so it carries zero information about the answer (fill_length_best_cut == majority in every cell). The residual (constant filler longer than the row's trace) is answer-dependent only through the TRACE's length; it is a descriptive covariate, not something the filler arm emits."
  },
  "surface": {
@@ -1044,35 +1195,37 @@
    "ok": true
   },
   "heldout_surface_bank": {
-   "n_rows": 400,
+   "n_rows": 580,
    "strata": {
     "mix_oor": 100,
     "cond_oor_val": 100,
     "cond_oor_thr": 100,
-    "cond_far": 100
+    "cond_far": 100,
+    "cond_sametens": 100,
+    "cond_oor_edge": 80
    },
    "bad_rows": 0,
    "same_ids_and_golds_as_in_surface": true,
    "order_rotation": {
     "top": {
-     "event/before": 400
+     "event/before": 580
     },
     "state": {
-     "X/Z/Y": 133,
-     "Y/X/Z": 133,
-     "Z/Y/X": 134
+     "X/Z/Y": 193,
+     "Y/X/Z": 193,
+     "Z/Y/X": 194
     },
     "event": {
-     "other/kind/tick/threshold/register/value": 133,
-     "threshold/kind/tick/other/value/register": 133,
-     "value/tick/threshold/register/other/kind": 134
+     "other/kind/tick/threshold/register/value": 193,
+     "threshold/kind/tick/other/value/register": 193,
+     "value/tick/threshold/register/other/kind": 194
     }
    },
    "mean_prompt_tokens": {
-    "held_out": 182.17,
-    "in_surface_same_rows": 143.17
+    "held_out": 182.31,
+    "in_surface_same_rows": 143.31
    },
-   "per_factor_renderings": "not built (C3: they do not fit the GPU budget; see DESIGN.md)",
+   "per_factor_renderings": "omitted by choice (a GPU-budget choice, not a capacity limit; see DESIGN.md)",
    "ok": true
   },
   "heldout": {
@@ -1170,7 +1323,16 @@
    "eq_plus1": 1.0,
    "units_eq_plus1": 1.0,
    "units_digit_gt": 0.85,
-   "tens_digit_gt": 1.0
+   "tens_digit_gt": 1.0,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 0.15,
+   "obo_m1": 0.0,
+   "obo_0": 1.0,
+   "obo_p1": 1.0,
+   "obo_m1_0": 0.0,
+   "obo_m1_p1": 0.0,
+   "obo_0_p1": 1.0,
+   "obo_m1_0_p1": 0.0
   },
   "cond_x0": {
    "always_add": 0.0,
@@ -1183,7 +1345,16 @@
    "eq_plus1": 1.0,
    "units_eq_plus1": 1.0,
    "units_digit_gt": 1.0,
-   "tens_digit_gt": 1.0
+   "tens_digit_gt": 1.0,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0,
+   "obo_m1": 1.0,
+   "obo_0": 0.0,
+   "obo_p1": 1.0,
+   "obo_m1_0": 0.0,
+   "obo_m1_p1": 1.0,
+   "obo_0_p1": 0.0,
+   "obo_m1_0_p1": 0.0
   },
   "cond_xp1": {
    "always_add": 1.0,
@@ -1196,7 +1367,16 @@
    "eq_plus1": 1.0,
    "units_eq_plus1": 1.0,
    "units_digit_gt": 0.9,
-   "tens_digit_gt": 0.1
+   "tens_digit_gt": 0.1,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0,
+   "obo_m1": 1.0,
+   "obo_0": 1.0,
+   "obo_p1": 0.0,
+   "obo_m1_0": 1.0,
+   "obo_m1_p1": 0.0,
+   "obo_0_p1": 0.0,
+   "obo_m1_0_p1": 0.0
   },
   "cond_mid": {
    "always_add": 0.5,
@@ -1209,7 +1389,16 @@
    "eq_plus1": 0.5,
    "units_eq_plus1": 0.54,
    "units_digit_gt": 0.62,
-   "tens_digit_gt": 0.86
+   "tens_digit_gt": 0.86,
+   "tens_or_eq_plus1": 0.86,
+   "tens_ge_not_eq": 0.88,
+   "obo_m1": 1.0,
+   "obo_0": 1.0,
+   "obo_p1": 1.0,
+   "obo_m1_0": 1.0,
+   "obo_m1_p1": 1.0,
+   "obo_0_p1": 1.0,
+   "obo_m1_0_p1": 1.0
   },
   "swap": {
    "copy": 0.0,
@@ -1242,7 +1431,16 @@
    "eq_plus1": 1.0,
    "units_eq_plus1": 1.0,
    "units_digit_gt": 0.97,
-   "tens_digit_gt": 0.53
+   "tens_digit_gt": 0.53,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0,
+   "obo_m1": 1.0,
+   "obo_0": 0.5,
+   "obo_p1": 0.5,
+   "obo_m1_0": 0.5,
+   "obo_m1_p1": 0.5,
+   "obo_0_p1": 0.0,
+   "obo_m1_0_p1": 0.0
   },
   "cond_oor_thr": {
    "always_add": 0.5,
@@ -1255,7 +1453,16 @@
    "eq_plus1": 0.5,
    "units_eq_plus1": 0.5,
    "units_digit_gt": 0.5,
-   "tens_digit_gt": 1.0
+   "tens_digit_gt": 1.0,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0,
+   "obo_m1": 1.0,
+   "obo_0": 1.0,
+   "obo_p1": 1.0,
+   "obo_m1_0": 1.0,
+   "obo_m1_p1": 1.0,
+   "obo_0_p1": 1.0,
+   "obo_m1_0_p1": 1.0
   },
   "cond_far": {
    "always_add": 0.5,
@@ -1268,7 +1475,60 @@
    "eq_plus1": 0.5,
    "units_eq_plus1": 0.54,
    "units_digit_gt": 0.56,
-   "tens_digit_gt": 1.0
+   "tens_digit_gt": 1.0,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0,
+   "obo_m1": 1.0,
+   "obo_0": 1.0,
+   "obo_p1": 1.0,
+   "obo_m1_0": 1.0,
+   "obo_m1_p1": 1.0,
+   "obo_0_p1": 1.0,
+   "obo_m1_0_p1": 1.0
+  },
+  "cond_sametens": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.52,
+   "x_hi": 0.5,
+   "thr_lo": 0.5,
+   "v_pos": 0.5,
+   "non_strict": 1.0,
+   "eq_plus1": 0.5,
+   "units_eq_plus1": 0.5,
+   "units_digit_gt": 1.0,
+   "tens_digit_gt": 0.5,
+   "tens_or_eq_plus1": 0.5,
+   "tens_ge_not_eq": 0.5,
+   "obo_m1": 1.0,
+   "obo_0": 1.0,
+   "obo_p1": 1.0,
+   "obo_m1_0": 1.0,
+   "obo_m1_p1": 1.0,
+   "obo_0_p1": 1.0,
+   "obo_m1_0_p1": 1.0
+  },
+  "cond_oor_edge": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.5,
+   "x_hi": 0.5,
+   "thr_lo": 0.5,
+   "v_pos": 0.5,
+   "non_strict": 0.75,
+   "eq_plus1": 0.75,
+   "units_eq_plus1": 0.75,
+   "units_digit_gt": 0.9,
+   "tens_digit_gt": 0.55,
+   "tens_or_eq_plus1": 0.7875,
+   "tens_ge_not_eq": 0.8,
+   "obo_m1": 0.75,
+   "obo_0": 0.75,
+   "obo_p1": 0.75,
+   "obo_m1_0": 0.5,
+   "obo_m1_p1": 0.5,
+   "obo_0_p1": 0.5,
+   "obo_m1_0_p1": 0.25
   },
   "primary_conditional": {
    "always_add": 0.5,
@@ -1281,7 +1541,16 @@
    "eq_plus1": 0.6667,
    "units_eq_plus1": 0.68,
    "units_digit_gt": 0.6767,
-   "tens_digit_gt": 0.8433
+   "tens_digit_gt": 0.8433,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0,
+   "obo_m1": 1.0,
+   "obo_0": 0.8333,
+   "obo_p1": 0.8333,
+   "obo_m1_0": 0.8333,
+   "obo_m1_p1": 0.8333,
+   "obo_0_p1": 0.6667,
+   "obo_m1_0_p1": 0.6667
   },
   "primary_mix": {
    "copy": 0.0,
@@ -1333,7 +1602,7 @@
   "mean_target_tokens": {
    "plain": 15.55,
    "trace": 38.06,
-   "filler": 39.35
+   "filler": 42.35
   }
  },
  "rows_identical_to_revision_2": {
@@ -1346,6 +1615,26 @@
   "t2br_train_trace.jsonl": "1bad81166f18494829b58a79e2c3cdaa34bb5b64f42f52068305d720b5658884",
   "t2br_train_filler.jsonl": "3102361dae2f6dddf8b643635409caf790b3ac0dc454fdda51d0d37a66b6721d",
   "t2br_dev.jsonl": "2c0250a2189e1b5a37ccdc6157f4b5f41d6a9c69eef4a4049472beff97070b43"
+ },
+ "revision_3_files_reconstructed": {
+  "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
+  "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
+  "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
+  "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
+  "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
+  "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
+  "t2br_dev.jsonl": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+  "t2br_dev_hs.jsonl": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939"
+ },
+ "revision_4_files_reconstructed": {
+  "t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+  "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+  "t2br_train_filler.jsonl": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+  "t2br_train_sd_plain.jsonl": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+  "t2br_train_sd_trace.jsonl": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+  "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+  "t2br_dev.jsonl": "9aac40deffd678a4bdefffbb290081872015c88ea38296001c671e4067f46102",
+  "t2br_dev_hs.jsonl": "61845fbfc8635423257fac7c52b3ed1c70d19dd799720ca5f0e79866af1764f8"
  },
  "dev_describe": {
   "by_stratum": {
@@ -1361,13 +1650,15 @@
    "cond_oor_val": 100,
    "cond_oor_thr": 100,
    "cond_mid": 100,
-   "cond_far": 100
+   "cond_far": 100,
+   "cond_sametens": 100,
+   "cond_oor_edge": 80
   },
   "chains": {
    "CH_IN": 32,
    "CH_X": 16
   },
-  "heldout_surface_rows": 400,
+  "heldout_surface_rows": 580,
   "branch_by_stratum": {
    "cond_xm1": {
     "False": 60
@@ -1393,28 +1684,36 @@
    "cond_far": {
     "True": 50,
     "False": 50
+   },
+   "cond_sametens": {
+    "True": 50,
+    "False": 50
+   },
+   "cond_oor_edge": {
+    "False": 40,
+    "True": 40
    }
   }
  },
  "files_sha256": {
-  "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
-  "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
-  "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
-  "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
-  "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
-  "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
-  "t2br_dev.jsonl": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
-  "t2br_dev_hs.jsonl": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
+  "t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+  "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+  "t2br_train_filler.jsonl": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+  "t2br_train_sd_plain.jsonl": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+  "t2br_train_sd_trace.jsonl": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+  "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+  "t2br_dev.jsonl": "8c1566b5c58df6fb373298e9b632f0acdb23931c02a5ff41dbf692420d2d3636",
+  "t2br_dev_hs.jsonl": "ee86bb12ffe84bd46267b49cc1eaa9a3c98c3120b42fcfe94c53f9685ae245a5",
   "t2br_chains.jsonl": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
-  "t2br_train.SOURCE.json": "7d58ea86baec2e11023afe21ed7f668dce0890495da669bed2e15637e2bc295b",
-  "t2br_train_sd.SOURCE.json": "1af89f5b2da6cbc0cf445dc78fc229a099268f1a762f9460a2d9062d03aa8b68",
-  "t2br_dev.SOURCE.json": "aab1f5554ffdcb7a0e4d2b8cc48c5d22e6eed3cf4108f878147efadf63ba0405"
+  "t2br_train.SOURCE.json": "18b8c8e0d8271ba565668f88aa2164cc7bf7bf9b33d51b557dc0fd6b4615516a",
+  "t2br_train_sd.SOURCE.json": "2f658fc60cea326b043bf0149b25eb4dc28097132a5ea98721958ef82c2a6df8",
+  "t2br_dev.SOURCE.json": "778623e075ce2dd39476908e0d3da0dcfe5a5b39e888dc5d581ab8f84d37379a"
  },
  "code_sha256": {
-  "scripts/t2br_make_data.py": "b94886243ed607096d7b0cf23bbe21de8fab0919755eb2798fa6aff9d334b4a6",
-  "scripts/t2br_common.py": "affa7d555c2924c7a587f55a13779315721b792c81b4f589c2a0f7519d783186"
+  "scripts/t2br_make_data.py": "1c09db66b4c60277de233bd86aa63e52e95bbde57b713a586562d9f5b389e2e5",
+  "scripts/t2br_common.py": "453b3a985f256dc791fba5816d3fb3437783d5ab753a1f1641b2af03c46da999"
  },
  "torch_imported": false,
- "peak_rss_mb": 564.0,
- "written_utc": "2026-10-09T17:28:17Z"
+ "peak_rss_mb": 566.7,
+ "written_utc": "2026-10-10T03:49:55Z"
 }

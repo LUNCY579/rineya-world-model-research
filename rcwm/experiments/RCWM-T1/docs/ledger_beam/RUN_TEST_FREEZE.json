@@ -1,0 +1,128 @@
+{
+ "part": "freeze",
+ "ok": true,
+ "n_checks": 20,
+ "n_failed": 0,
+ "checks": [
+  {
+   "check": "the fake root holds every required input except the draw (the real code, draft, hook draft, kit records; tiny adapter and references at their registered paths)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the job before any freeze refuses WITHOUT persisting (exit 3, no STOPPED.json, no output dir)",
+   "ok": true,
+   "detail": "3"
+  },
+  {
+   "check": "the freeze refuses (16 cases: no approval; an approval without a DECISIONS entry; no co-sign; a co-sign without the draft's sha256; a co-sign without a salt commitment; a salt that does not match the commitment; a salt shorter than 16 characters; BWM's draft is not the cited version; an lbeam output exists; a pre-freeze record failed; the draft changed after the pre-freeze records (a co-sign quoting the edited draft); a frozen input is missing; a source of the freshness union errs; data/ changes while the union is built; an interrupted freeze; a draw without a freeze); never persisted, nothing minted or renamed",
+   "ok": true,
+   "detail": "{}"
+  },
+  {
+   "check": "the freeze fills the REAL draft (status line with approval and co-sign, section 10 with the draw seed, the salt commitment, the data/ snapshot and the seal), writes PREREG_LB_FREEZE.json, and verifies",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the draw's seed follows the recorded rule (tag, draft sha256, union digest, BWM's revealed salt); another salt gives another seed (RCWM cannot compute the draw before BWM reveals the salt); not a spent seed; the draw re-mints byte for byte from the rule; 1 per d* (the patched size); fresh; the data/ snapshot recorded",
+   "ok": true,
+   "detail": "205480039620027"
+  },
+  {
+   "check": "the freeze never prints an instance (ids, init, goal or vocabulary): only the seal and the count",
+   "ok": true,
+   "detail": "58f47a64ae8cbb36395784d8bf40b3f84ef868f7a533; draw sealed sha 106db5407d68eda0ad6cce405b419c9d1f94d16ad9c743b773e17b98c08a44f4 (5 instances; contents not shown)"
+  },
+  {
+   "check": "a second freeze refuses",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "an interrupted last rename is diagnosed by --verify with the recovery step",
+   "ok": true,
+   "detail": "['the freeze was interrupted before its last rename: PREREG_LB.md is in place and PREREG_LB_FREEZE.json.partial records its sha256. Rename PREREG_LB_FREEZE.json.partial to PREREG_LB_FREEZE.json, run --verify, and log it in DECISIONS.md']"
+  },
+  {
+   "check": "a freeze record whose co-sign carries another salt commitment fails verification",
+   "ok": true,
+   "detail": "[\"BWM's revealed salt does not match the commitment in its co-sign\"]"
+  },
+  {
+   "check": "an installed 70_lbeam.sh that is not the frozen draft byte for byte refuses the run (exit 3, not persisted, nothing written)",
+   "ok": true,
+   "detail": "3"
+  },
+  {
+   "check": "a run under the (fake) freeze completes (5: C1 pending, then 0); provenance marks it registered under that freeze and draw",
+   "ok": true,
+   "detail": "[5, 0]"
+  },
+  {
+   "check": "the registered analysis accepts it (freeze verified, every registered provenance check) and writes PREREG_LB_RESULTS.{json,md} as one create-only set with a registered headline and the instrument record",
+   "ok": true,
+   "detail": "NO: T2 IS NOT SHOWN TO PLAN BETTER THAN OFF"
+  },
+  {
+   "check": "a second registered analysis refuses (create-only)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the registered analysis refuses a run made by a non-GPU backend (device label)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a changed frozen input fails verification, and the registered analysis then refuses",
+   "ok": true,
+   "detail": "['scripts/lbeam_analysis.py differs from the freeze (+ amendments)']"
+  },
+  {
+   "check": "an amendment without 'approved_by' does not verify; a logged amendment (old -> new hash chain, reason, approved_by) restores verification",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "a tampered draw fails verification, and run() then refuses",
+   "ok": true,
+   "detail": "['docs/ledger_beam/LB_CONFIRM_DRAW.jsonl differs from the freeze (+ amendments)']"
+  },
+  {
+   "check": "restoring the draw restores verification",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a changed BWM planner (a patched BWM_ROOT copy) fails verification; import_plan_beam, the job and the registered analysis refuse",
+   "ok": true,
+   "detail": "([\"BWM's bwmn/blocks_planner.py differs from the pinned sha256\"], \"[lbeam] BWM's bwmn/blocks_planner.py differs from the pinned sha256\", \"lbeam_analysis: the PREREG-LB freeze does not verify; no analysis\\n  BWM's bwmn/b\")"
+  },
+  {
+   "check": "restoring BWM_ROOT restores verification",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "numbers": {
+  "peak_rss_mb": 764.7,
+  "seconds": 16.7
+ },
+ "code_sha256": {
+  "scripts/lbeam_run.py": "55a0bd0fb8e2af0112b8485ae5f8fc858c56508f4293d456bc24802d0c1efa5c",
+  "scripts/lbeam_analysis.py": "e3b0e9e0baaf23f183218fda57c1e4855d6db80deb9ca9db5a51d3753dafbf7e",
+  "scripts/lbeam_test_run.py": "137c7e919b66ba603a3164fe9c3cadfae3ea2f1f2f7bc8cba4f9d2fe4c30e7aa",
+  "scripts/lbeam_f.py": "9a76562c2739df3254a650154acde41fe2052173b2f35556e5b75a7728680b6f",
+  "scripts/lbeam_problems.py": "2353e2fc846fac5ced11cfc5420bd60b6e9e50cf3399e9299974b3921a09465e",
+  "scripts/lbeam_proposer.py": "6c555d2e46db8a279541839a54b82d6e765f1e8bc438f735beb3ef30b9564881"
+ },
+ "bwm_blocks_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+ "draft_sha256": "26c62144d89dde15e7d18ad119f9361ce6f93562bd3d358f26808e7aefbd788d",
+ "hook_draft_sha256": "098cb1311bd9d5352b042a4e84dcabc606df6209fd9429a60ee4b543d27102ff",
+ "torch_imported": true,
+ "peak_rss_mb": 764.7,
+ "seconds": 37.6,
+ "written_utc": "2026-10-10T03:42:28Z",
+ "note": "CPU only; tiny random Qwen3 + LoRA stand-ins; no real model, no GPU, no lease"
+}

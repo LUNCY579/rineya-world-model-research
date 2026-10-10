@@ -382,12 +382,38 @@ def fill_units_of(target: str):
     return k if s == C.FILL_UNIT * k else ("non-unit", s)
 
 
+def rev2_fill_units(before: int, ev: dict, count) -> int:
+    """The revision-2 (superseded) row-matched fill length in units: the fill that made the whole filler target exactly
+    as long as the row's trace target, i.e. tokens(trace head '{"cmp":..,"calc":N') - tokens('{"fill":""') (= 3 under
+    Titan's tokenizer). It reproduces every row of the kept file data/t2bp_train_ffill.rev2_rowmatched.jsonl (tested).
+    This is the length the model decodes BEFORE 'after', so it is the quantity that could leak the answer."""
+    return max(1, count(C.trace_head(before, ev)) - count(C.FILL_BASE_TEXT))
+
+
+def rev2_length_leak(rows: list, count) -> dict:
+    """Descriptive: how well the revision-2 row-matched fill length (rev2_fill_units) predicts applicability and change
+    on the given rows (majority lookup per length value), next to each property's majority share. Revision 3 computed
+    this from the token count of the FULL trace text, which includes the answer ('after'); that superseded figure is
+    reported alongside, labelled, for the record."""
+    u = [rev2_fill_units(r["before"], r["event"], count) for r in rows]
+    full = [count(C.trace_text(r["before"], r["event"])) for r in rows]
+    app = [r["applicable"] for r in rows]
+    ch = [r["gold"] != r["before"] for r in rows]
+    return {"rows": len(rows),
+            "length": "revision-2 fill units = tokens(trace head) - tokens('{\"fill\":\"\"') (= 3): the fill decoded before 'after'",
+            "applicable_lookup_accuracy": _lookup_acc(u, app), "applicable_majority_share": _lookup_acc([0] * len(rows), app),
+            "changed_lookup_accuracy": _lookup_acc(u, ch), "changed_majority_share": _lookup_acc([0] * len(rows), ch),
+            "distinct_fill_lengths": len(set(u)),
+            "superseded_revision3_figure_from_the_full_trace_text_incl_after": {
+                "applicable_lookup_accuracy": _lookup_acc(full, app), "changed_lookup_accuracy": _lookup_acc(full, ch)}}
+
+
 def filler_information(ff_rows: list, count) -> dict:
     """Amendment 4b audit: the fill length must carry ZERO information about the answer (one value per action kind on
     every row, so predicting applicability / change / the after value / the row type from it is no better than the
-    majority class and the mutual information is 0). For contrast (descriptive): what the revision-2 row-matched fill
-    length, i.e. the trace target's token count, reveals on the same rows. The residual (filler tokens - trace tokens)
-    is reported as a descriptive covariate."""
+    majority class and the mutual information is 0). For contrast (descriptive): what the revision-2 row-matched FILL
+    length (rev2_fill_units: trace-head tokens - 3, the fill decoded before 'after') reveals on the same rows
+    (rev2_length_leak). The residual (filler tokens - trace tokens) is reported as a descriptive covariate."""
     k = [fill_units_of(r["target"]) for r in ff_rows]
     kind = [r["event"].get("kind", "action") for r in ff_rows]
     ys = {"applicable": [r["applicable"] for r in ff_rows], "changed": [r["gold"] != r["before"] for r in ff_rows],
@@ -403,10 +429,7 @@ def filler_information(ff_rows: list, count) -> dict:
            "fill_length_lookup_accuracy": {y: _lookup_acc([str(x) for x in k], v) for y, v in ys.items()},
            "majority_share": {y: _lookup_acc([0] * len(v), v) for y, v in ys.items()},
            "mutual_information_bits": {y: _mutual_info_bits([str(x) for x in k], v) for y, v in ys.items()},
-           "rev2_row_matched_length_would_reveal_descriptive": {
-               "applicable_lookup_accuracy": _lookup_acc(trace_len, ys["applicable"]),
-               "changed_lookup_accuracy": _lookup_acc(trace_len, ys["changed"]),
-               "applicable_majority_share": _lookup_acc([0] * len(ff_rows), ys["applicable"])},
+           "rev2_row_matched_length_would_reveal_descriptive": rev2_length_leak(ff_rows, count),
            "residual_tokens_descriptive": {
                "min": min(resid), "max": max(resid), "mean": round(sum(resid) / len(resid), 3),
                "share_positive": round(sum(x > 0 for x in resid) / len(resid), 4),
