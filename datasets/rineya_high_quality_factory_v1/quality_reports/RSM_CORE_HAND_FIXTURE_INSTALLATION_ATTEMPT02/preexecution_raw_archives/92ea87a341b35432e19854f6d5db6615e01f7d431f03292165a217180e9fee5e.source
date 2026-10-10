@@ -1,0 +1,420 @@
+"""Public-definition tests authored before observing any REM candidate."""
+
+from copy import deepcopy
+from itertools import product
+from pathlib import Path
+import json
+import sys
+import unittest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from oracles.memory_controls_independent import analyze, audit_probes, check, check_batch, KEY_GROUPS, ROLES
+
+
+def event(key, version, at, value=None, op="put"):
+    return {"key": key, "version": version, "at": at, "op": op, "value": value}
+
+
+def task(events, queries):
+    return {"kind": "episodic", "events": events, "queries": [
+        {"query_id": "q" + str(index), "key": key, "as_of": cutoff} for index, (key, cutoff) in enumerate(queries)]}
+
+
+def row(payload, *tags):
+    return {"semantic_task": payload, "skill_tags": list(tags)}
+
+
+def reverse_fields(value):
+    if type(value) is dict:
+        return {key: reverse_fields(child) for key, child in reversed(list(value.items()))}
+    if type(value) is list:
+        return [reverse_fields(child) for child in value]
+    return value
+
+
+def scheduled(history="baseline"):
+    key_strings = ["key0", "key1", "key2", "key3"]
+    group_events = [event("delayed", 0, 0, "old"), event("delayed", 2, 1, None),
+                    event("delayed", 1, 2, True), event("lifecycle", 0, 0, None),
+                    event("lifecycle", 2, 1, None, "delete"), event("lifecycle", 3, 2, None),
+                    event("index_tie", 1, 1, True), event("index_tie", 1, 1, 1)]
+    if history == "tombstone_to_put_null":
+        group_events[4]["op"] = "put"
+    if history == "index_tie_swap":
+        group_events[6], group_events[7] = group_events[7], group_events[6]
+    role_queries = [("delayed", 0), ("delayed", 1), ("delayed", 2), ("lifecycle", 0),
+                    ("lifecycle", 1), ("lifecycle", 2), ("index_tie", 1), ("absent", 1)]
+    rows = []
+    for rotation in range(8):
+        keys = {group: key_strings[(index + rotation % 4) % 4] for index, group in enumerate(KEY_GROUPS)}
+        events = [{**item, "key": keys[item["key"]]} for item in group_events]
+        queries, assignments = [], []
+        for position in range(8):
+            role_index = (position + rotation) % 8
+            group, cutoff = role_queries[role_index]
+            queries.append({"query_id": "id" + str(position), "key": keys[group], "as_of": cutoff})
+            assignments.append({"position": position, "query_id": "id" + str(position), "role": ROLES[role_index]})
+        payload = {"kind": "episodic", "events": events, "queries": queries}
+        for renderer in ("forward", "reverse"):
+            rendered_task = payload if renderer == "forward" else reverse_fields(payload)
+            rows.append({"sample_id": history + "-" + str(rotation) + "-" + renderer,
+                "semantic_task": deepcopy(payload), "skill_tags": ["versioned_retrieval", "finite_synthetic_proxy"],
+                "rendered_input": "Public episodic contract.\nTask JSON:\n" + json.dumps(rendered_task, ensure_ascii=False),
+                "source_provenance": {"source_family_key": "family", "source_family_index": 0,
+                    "controlled_variant": history, "counterfactual_baseline": "baseline", "query_rotation": rotation,
+                    "key_rotation": rotation % 4, "renderer": renderer, "query_role_assignments": deepcopy(assignments),
+                    "key_role_assignments": dict(keys), "tie_event_indices": [6, 7]}})
+    return rows
+
+
+def rerender(item):
+    visible = item["semantic_task"]
+    if item["source_provenance"]["renderer"] == "reverse":
+        visible = reverse_fields(visible)
+    item["rendered_input"] = "Public episodic contract.\nTask JSON:\n" + json.dumps(visible, ensure_ascii=False)
+
+
+def claims(rows, name, scope):
+    for item in rows:
+        item["family_control_claims"] = [{"property": name, "scope": scope}]
+    return rows
+
+
+class PerRecordMemoryProperties(unittest.TestCase):
+    def witnessed(self, payload, name):
+        return bool(analyze(payload)["properties"][name])
+
+    def test_boundary_needs_visible_pair_and_status_or_typed_value_change(self):
+        payload = task([event("k", 0, 0, True), event("k", 1, 1, 1)], [("k", 0), ("k", 1)])
+        self.assertTrue(self.witnessed(payload, "decisive_delayed_boundary"))
+        payload["events"][1]["value"] = True
+        self.assertFalse(self.witnessed(payload, "decisive_delayed_boundary"))
+        payload["queries"].pop(0)
+        self.assertFalse(self.witnessed(payload, "decisive_delayed_boundary"))
+
+    def test_version_over_recency_needs_observable_wrong_answer(self):
+        payload = task([event("k", 4, 1, True), event("k", 2, 5, 1)], [("k", 5)])
+        self.assertTrue(self.witnessed(payload, "version_over_recency"))
+        payload["events"][1]["value"] = True
+        self.assertFalse(self.witnessed(payload, "version_over_recency"))
+
+    def test_time_conflict_and_active_index_tie_are_separate(self):
+        payload = task([event("k", 2, 1, True), event("k", 2, 2, 1)], [("k", 2)])
+        self.assertTrue(self.witnessed(payload, "equal_version_time_conflict"))
+        self.assertFalse(self.witnessed(payload, "equal_version_time_input_conflict"))
+        payload["events"][1]["at"] = 1
+        self.assertFalse(self.witnessed(payload, "equal_version_time_conflict"))
+        self.assertTrue(self.witnessed(payload, "equal_version_time_input_conflict"))
+        payload["events"].append(event("k", 3, 2, "active higher"))
+        self.assertFalse(self.witnessed(payload, "equal_version_time_input_conflict"))
+
+    def test_tombstone_needs_lower_version_put_and_null_needs_distinct_status(self):
+        payload = task([event("k", 1, 0, None, "delete")], [("k", 0)])
+        self.assertFalse(self.witnessed(payload, "authoritative_tombstone"))
+        payload["events"].append(event("k", 0, 0, None))
+        self.assertTrue(self.witnessed(payload, "authoritative_tombstone"))
+        payload = task([event("k", 1, 0, None)], [("k", 0)])
+        self.assertFalse(self.witnessed(payload, "present_null_distinction"))
+        payload["queries"].append({"query_id": "absent", "key": "missing", "as_of": 0})
+        self.assertTrue(self.witnessed(payload, "present_null_distinction"))
+
+    def test_future_and_cross_key_controls_require_decisive_incorrect_resolver(self):
+        payload = task([event("k", 3, 0, True), event("k", 1, 9, 1)], [("k", 0)])
+        self.assertFalse(self.witnessed(payload, "future_event_filter_control"))
+        payload["events"][1]["version"] = 4
+        self.assertTrue(self.witnessed(payload, "future_event_filter_control"))
+        payload["events"][1]["value"] = True
+        self.assertFalse(self.witnessed(payload, "future_event_filter_control"))
+        payload["events"].append(event("other", 9, 0, 1))
+        self.assertTrue(self.witnessed(payload, "cross_key_filter_control"))
+        payload["events"][-1]["value"] = True
+        self.assertFalse(self.witnessed(payload, "cross_key_filter_control"))
+
+    def test_missing_key_and_future_only_absence_are_counted_separately(self):
+        payload = task([event("future", 1, 5, False)], [("future", 4), ("missing", 4)])
+        analysis = analyze(payload)
+        self.assertEqual(analysis["absence_classes"], {"future_only": 1, "missing_key": 1})
+        self.assertTrue(analysis["properties"]["future_event_filter_control"])
+
+    def test_temporary_winner_requires_queried_interval_and_both_decisive_boundaries(self):
+        payload = task([event("k", 0, 0, "old"), event("k", 1, 1, "temporary"), event("k", 2, 3, "next")],
+                       [("k", 0), ("k", 1), ("k", 2), ("k", 3)])
+        self.assertTrue(self.witnessed(payload, "temporary_delayed_winner"))
+        payload["queries"].pop(2)
+        self.assertFalse(self.witnessed(payload, "temporary_delayed_winner"))
+        payload = task([event("k", 0, 0, "old"), event("k", 1, 1, "temporary"), event("k", 2, 2, "next")],
+                       [("k", 0), ("k", 1), ("k", 2)])
+        self.assertFalse(self.witnessed(payload, "temporary_delayed_winner"))
+
+    def test_known_tags_checked_aliases_block_new_controls_only(self):
+        payload = task([event("k", 0, 0, True)], [("k", 0)])
+        self.assertTrue(check(row(payload, "decisive_delayed_boundary")))
+        plain = row(payload, "version_first")
+        self.assertEqual(check(plain), [])
+        plain["controlled_variant"] = "baseline"
+        self.assertEqual(check(plain), ["unresolved factual tag definition: version_first"])
+
+    def test_input_only_results_ignore_poisoned_targets_and_verdicts(self):
+        class Forbidden:
+            def __repr__(self): raise AssertionError("private evidence inspected")
+            def __eq__(self, other): raise AssertionError("private evidence compared")
+        item = scheduled()[0]
+        item["verified_target"] = Forbidden(); item["review_status"] = Forbidden()
+        self.assertEqual(check(item), [])
+
+    def test_rendered_boolean_integer_corruption_fails_typed_input_equality(self):
+        item = scheduled()[0]
+        parsed = json.loads(item["rendered_input"].split("Task JSON:\n")[1])
+        parsed["events"][2]["value"] = 1
+        item["rendered_input"] = "Public episodic contract.\nTask JSON:\n" + json.dumps(parsed)
+        self.assertTrue(any("typed JSON" in error for error in check(item)))
+
+
+class FamilyAndProbeProperties(unittest.TestCase):
+    def test_exact_crossings_actual_histograms_and_count_scope(self):
+        report = check_batch(scheduled())
+        self.assertEqual(report["errors"], [])
+        self.assertEqual(report["counts"], {"records": 16, "scheduled_records": 16, "source_families": 1,
+                         "base_controlled_histories": 1, "base_history_query_observations": 8,
+                         "rotation_level_observations": 64, "rendered_observations": 128})
+        self.assertEqual(len(report["properties"]["query_role_id_position_crossing"]["witnesses"]), 1)
+        self.assertEqual(len(report["properties"]["key_role_crossing"]["witnesses"]), 1)
+        self.assertEqual(len(report["properties"]["field_order_invariance"]["witnesses"]), 8)
+        crossing = report["family_crossings"][0]
+        self.assertEqual(len({json.dumps(value, sort_keys=True) for value in crossing["outcomes_by_key"].values()}), 1)
+        self.assertTrue(all(row["count"] == 1 for row in crossing["role_by_id"]))
+
+    def test_partial_schedule_and_wrong_id_declarations_fail(self):
+        report = check_batch(scheduled()[:-1])
+        self.assertTrue(any("incomplete" in error for error in report["errors"]))
+        rows = scheduled()
+        rows[0]["source_provenance"]["query_role_assignments"][0]["query_id"] = "invented"
+        self.assertTrue(any("visible query ID" in error for error in check_batch(rows)["errors"]))
+
+    def test_query_rotation_labels_without_rotating_queries_are_not_evidence(self):
+        rows = scheduled()
+        first = deepcopy(rows[0]["semantic_task"]["queries"])
+        assignments = deepcopy(rows[0]["source_provenance"]["query_role_assignments"])
+        for item in rows:
+            if item["source_provenance"]["query_rotation"] == 4:
+                item["semantic_task"]["queries"] = deepcopy(first)
+                item["source_provenance"]["query_role_assignments"] = deepcopy(assignments)
+                visible = item["semantic_task"] if item["source_provenance"]["renderer"] == "forward" else reverse_fields(item["semantic_task"])
+                item["rendered_input"] = "Public episodic contract.\nTask JSON:\n" + json.dumps(visible)
+        self.assertTrue(any("role-by-" in error for error in check_batch(rows)["errors"]))
+
+    def test_key_labels_without_event_rename_and_field_labels_without_order_change_fail(self):
+        rows = scheduled()
+        rows[2]["semantic_task"]["events"][0]["key"] = "undeclared_other"
+        visible = rows[2]["semantic_task"]
+        rows[2]["rendered_input"] = "Public episodic contract.\nTask JSON:\n" + json.dumps(visible)
+        self.assertTrue(any("isomorph" in error for error in check_batch(rows)["errors"]))
+        rows = scheduled()
+        rows[1]["rendered_input"] = rows[0]["rendered_input"]
+        self.assertTrue(any("identical actual object orders" in error for error in check_batch(rows)["errors"]))
+
+    def test_paired_controls_derived_from_actual_edits_not_variant_names(self):
+        rows = scheduled() + scheduled("tombstone_to_put_null") + scheduled("index_tie_swap")
+        report = check_batch(rows)
+        # The null variant loses deleted support, which must be reported.
+        self.assertTrue(any("lacks present/deleted/absent" in error for error in report["errors"]))
+        self.assertEqual(len(report["properties"]["null_lifecycle_counterfactual"]["witnesses"]), 16)
+        self.assertEqual(len(report["properties"]["active_input_tie_swap_counterfactual"]["witnesses"]), 16)
+        self.assertTrue(all(item["semantic_answer_changed"] for item in report["properties"]["active_input_tie_swap_counterfactual"]["witnesses"]))
+        unchanged = scheduled()
+        for item in unchanged: item["source_provenance"]["controlled_variant"] = "index_tie_swap"
+        report = check_batch(scheduled() + unchanged)
+        self.assertEqual(report["properties"]["active_input_tie_swap_counterfactual"]["witnesses"], [])
+
+    def test_instantiated_probes_are_scoped_and_preserve_protected_identity(self):
+        payload = scheduled()[0]["semantic_task"]
+        before = deepcopy(payload)
+        probes = audit_probes(payload)
+        self.assertEqual(payload, before)
+        self.assertTrue(all(item["satisfied"] for item in probes))
+        self.assertTrue(all(item["scope"] == "audit_probe" and item["added_source_families"] == 0 and item["added_training_records"] == 0 for item in probes))
+        names = {item["property"] for item in probes}
+        self.assertEqual(names, {"lower_version_append_invariance", "other_key_edit_invariance", "future_event_edit_invariance",
+                               "version_priority_counterfactual", "active_input_tie_swap_counterfactual",
+                               "null_lifecycle_counterfactual", "query_key_counterfactual"})
+        for item in probes:
+            if item["property"].endswith("invariance"):
+                self.assertTrue(item["semantic_answer_same"] and item["selected_event_identity_same"])
+            if item["property"] == "lower_version_append_invariance":
+                self.assertIsNotNone(item["before"]["chosen_event"])
+                self.assertEqual(item["before"]["chosen_event"], item["after"]["chosen_event"])
+                self.assertEqual(item["before"]["chosen_version"], item["after"]["chosen_version"])
+
+    def test_typed_tie_counterfactual_changes_true_to_one(self):
+        payload = task([event("k", 1, 1, True), event("k", 1, 1, 1)], [("k", 1)])
+        probe = next(item for item in audit_probes(payload) if item["property"] == "active_input_tie_swap_counterfactual")
+        self.assertIs(type(probe["before"]["value"]), int)
+        self.assertIs(type(probe["after"]["value"]), bool)
+        self.assertFalse(probe["semantic_answer_same"])
+
+    def test_batch_permutation_and_unresolved_alias_errors(self):
+        rows = scheduled()
+        original = check_batch(rows)
+        rows.reverse()
+        changed = check_batch(rows)
+        self.assertEqual(changed["errors"], original["errors"])
+        self.assertEqual(changed["counts"], original["counts"])
+        self.assertEqual(changed["family_crossings"], original["family_crossings"])
+        rows[0]["skill_tags"].append("same_time_index_tie")
+        self.assertTrue(any("unresolved factual tag definition" in error for error in check_batch(rows)["errors"]))
+
+    def test_lifecycle_slot_alias_preserves_identity_and_actual_declared_name(self):
+        rows = scheduled()
+        for item in rows:
+            for assignment in item["source_provenance"]["query_role_assignments"]:
+                if assignment["role"] == "lifecycle_at":
+                    assignment["role"] = "tombstone_at"
+        report = check_batch(rows)
+        self.assertEqual(report["errors"], [])
+        self.assertIn("tombstone_at", report["family_crossings"][0]["declared_role_names"])
+        self.assertEqual(len(report["properties"]["query_role_id_position_crossing"]["witnesses"]), 1)
+
+    def test_family_split_and_missing_declared_baseline_are_errors(self):
+        rows = scheduled()
+        for item in rows: item["split"] = "train"
+        rows[0]["split"] = "dev_challenge"
+        self.assertTrue(any("cross source-family splits" in error for error in check_batch(rows)["errors"]))
+        self.assertTrue(any("baseline is not supplied" in error for error in check_batch(scheduled("index_tie_swap"))["errors"]))
+
+    def test_declared_claim_scope_requires_actual_evidence_in_that_scope(self):
+        report = check_batch(claims(scheduled(), "lower_version_append_invariance", "audit_probe"))
+        self.assertEqual(report["errors"], [])
+        self.assertTrue(report["family_control_claim_checks"][0]["satisfied"])
+        self.assertGreater(report["family_control_claim_checks"][0]["matched_witness_count"], 0)
+        report = check_batch(claims(scheduled(), "lower_version_append_invariance", "corpus_variant"))
+        self.assertTrue(any("unwitnessed declared family control" in error for error in report["errors"]))
+        self.assertFalse(report["family_control_claim_checks"][0]["satisfied"])
+
+    def test_undefined_claim_scope_property_and_shape_are_metadata_errors(self):
+        for claim in [{"property": "invented", "scope": "audit_probe"},
+                      {"property": "key_role_crossing", "scope": "imagined"},
+                      {"property": "key_role_crossing", "scope": "corpus_variant", "extra": True}]:
+            item = scheduled()[0]; item["family_control_claims"] = [claim]
+            self.assertTrue(check(item))
+        item = scheduled()[0]; item["skill_tags"] = ["key_role_crossing"]
+        self.assertTrue(any("explicit scoped claim" in error for error in check(item)))
+
+    def test_same_family_claim_cannot_borrow_another_familys_probe(self):
+        first = scheduled()
+        second = scheduled()
+        for item in second:
+            item["source_provenance"]["source_family_key"] = "second_family"
+            item["source_provenance"]["source_family_index"] = 1
+            item["semantic_task"]["events"][7]["value"] = True
+            item["sample_id"] = "second-" + item["sample_id"]
+            rerender(item)
+        claims(second, "active_input_tie_swap_counterfactual", "audit_probe")
+        report = check_batch(first + second)
+        check_result = report["family_control_claim_checks"][0]
+        self.assertEqual(check_result["family"], "second_family")
+        self.assertFalse(check_result["satisfied"])
+        self.assertEqual(check_result["matched_witness_count"], 0)
+
+    def test_descriptive_name_encoding_uses_actual_same_family_witnesses(self):
+        rows = scheduled()
+        for item in rows:
+            item["family_control_claims"] = [{"name": "lower_version_append_invariance",
+                "scope": "audit_probe", "source_family_key": "family",
+                "evidence_manifest": "not-read/nonexistent-producer-coverage.json"}]
+        report = check_batch(rows)
+        self.assertEqual(report["errors"], [])
+        claim = report["family_control_claim_checks"][0]
+        self.assertTrue(claim["satisfied"])
+        self.assertEqual(claim["family"], "family")
+        self.assertGreater(claim["matched_witness_count"], 0)
+
+    def test_descriptive_pointer_cannot_rescue_an_unwitnessed_corpus_claim(self):
+        rows = scheduled()
+        for item in rows:
+            item["family_control_claims"] = [{"name": "lower_version_append_invariance",
+                "scope": "corpus_variant", "source_family_key": "family",
+                "evidence_manifest": "claims-all-controls-pass.json"}]
+        report = check_batch(rows)
+        self.assertTrue(any("unwitnessed declared family control" in error for error in report["errors"]))
+        self.assertFalse(report["family_control_claim_checks"][0]["satisfied"])
+
+    def test_descriptive_claim_rejects_ambiguous_names_and_conflicting_family(self):
+        for bad in [
+            {"name": "key_role_crossing", "property": "field_order_invariance", "scope": "corpus_variant"},
+            {"name": "key_role_crossing", "property": "key_role_crossing", "scope": "corpus_variant"},
+            {"name": "key_role_crossing", "scope": "corpus_variant", "source_family_key": "other-family"},
+            {"name": "key_role_crossing", "scope": "corpus_variant", "source_family_key": True},
+        ]:
+            item = scheduled()[0]; item["family_control_claims"] = [bad]
+            self.assertTrue(check(item), bad)
+
+    def test_descriptive_claim_rejects_unknown_scope_property_and_fields(self):
+        for bad in [
+            {"name": "key_role_crossing", "scope": "imagined"},
+            {"name": "invented", "scope": "audit_probe"},
+            {"name": "key_role_crossing", "scope": "corpus_variant", "approved": True},
+            {"name": "key_role_crossing", "scope": "corpus_variant", "evidence_manifest": True},
+            {"name": "key_role_crossing", "scope": "corpus_variant", "evidence_manifest": ""},
+            {"scope": "corpus_variant"},
+        ]:
+            item = scheduled()[0]; item["family_control_claims"] = [bad]
+            self.assertTrue(check(item), bad)
+
+    def test_one_field_version_raise_is_a_supplied_typed_counterfactual(self):
+        variant = scheduled("version_raise")
+        for item in variant:
+            item["semantic_task"]["events"][6]["version"] = 2
+            rerender(item)
+        rows = claims(scheduled() + variant, "version_priority_counterfactual", "corpus_variant")
+        report = check_batch(rows)
+        self.assertEqual(report["errors"], [])
+        witnesses = report["properties"]["version_priority_counterfactual"]["witnesses"]
+        self.assertEqual(len(witnesses), 16)
+        self.assertTrue(all(item["changed_fields"] == ["version"] for item in witnesses))
+        self.assertTrue(all(item["new_tuple"][0] > item["prior_max_eligible_version"] for item in witnesses))
+        self.assertTrue(report["family_control_claim_checks"][0]["satisfied"])
+
+    def test_supplied_future_insertion_recomputes_provenance_and_preserves_identity(self):
+        variant = scheduled("future_insert")
+        for item in variant:
+            key = item["source_provenance"]["key_role_assignments"]["index_tie"]
+            item["semantic_task"]["events"].insert(0, event(key, 0, 99, "future insertion"))
+            rerender(item)
+        rows = claims(scheduled() + variant, "future_event_edit_invariance", "corpus_variant")
+        report = check_batch(rows)
+        self.assertEqual(report["errors"], [])
+        self.assertTrue(report["family_control_claim_checks"][0]["satisfied"])
+        witnesses = report["properties"]["future_event_edit_invariance"]["witnesses"]
+        selected = [item for item in witnesses if item["role"] == "delayed_at"]
+        self.assertEqual(len(selected), 16)
+        self.assertTrue(all(item["before"]["chosen_event"] + 1 == item["after"]["chosen_event"] for item in selected))
+        self.assertTrue(all(item["selected_event_identity_same"] for item in selected))
+
+    def test_supplied_lower_append_requires_existing_protected_winner(self):
+        variant = scheduled("lower_append")
+        for item in variant:
+            key = item["source_provenance"]["key_role_assignments"]["delayed"]
+            item["semantic_task"]["events"].append(event(key, 1, 2, "eligible lower"))
+            rerender(item)
+        rows = claims(scheduled() + variant, "lower_version_append_invariance", "corpus_variant")
+        report = check_batch(rows)
+        self.assertEqual(report["errors"], [])
+        self.assertTrue(report["family_control_claim_checks"][0]["satisfied"])
+        witnesses = report["properties"]["lower_version_append_invariance"]["witnesses"]
+        self.assertTrue(all(item["role"] == "delayed_later" for item in witnesses))
+        self.assertTrue(all(item["selected_version_unchanged"] and item["selected_index_unchanged"] for item in witnesses))
+
+    def test_arbitrary_eight_slot_names_have_actual_signature_witnesses(self):
+        rows = scheduled()
+        names = {name: "slot_" + str(index) for index, name in enumerate(ROLES)}
+        for item in rows:
+            for assignment in item["source_provenance"]["query_role_assignments"]:
+                assignment["role"] = names[assignment["role"]]
+        report = check_batch(rows)
+        self.assertEqual(report["errors"], [])
+        self.assertEqual(report["family_crossings"][0]["declared_role_names"], sorted(names.values()))
+        self.assertEqual(len(report["properties"]["query_role_id_position_crossing"]["witnesses"]), 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

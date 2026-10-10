@@ -1,0 +1,90 @@
+{
+  "release": "v0001",
+  "batch": "extended-pilot-v3",
+  "track": "RMM-001",
+  "status": "QUALITY_APPROVED_LOCAL",
+  "records": 76,
+  "semantic_parents": 12,
+  "splits": {
+    "train": 60,
+    "dev_challenge": 16
+  },
+  "generator_versions": [
+    "1.1.0"
+  ],
+  "framework_version": "1.0.0",
+  "oracle_version": "independent-1.0.0",
+  "reproducibility_code_sha256": {
+    "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+    "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+    "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+    "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+    "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+    "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+    "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+    "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+    "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+    "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+    "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+    "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+    "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+    "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+    "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+    "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+    "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+    "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+    "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+    "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+  },
+  "batch_configuration": "manifests/extended-pilot-v3_GENERATION.json",
+  "source": "original synthetic; repository-private research; no third-party examples",
+  "research_effectiveness": "untested; no model training performed",
+  "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+  "data_custody": "exposed train/dev data; no sealed evaluation",
+  "files": {
+    "QUALITY_REPORT.md": {
+      "bytes": 435,
+      "sha256": "4f464921cbe0bbc092dd77fb474081bba135345e863a9c48cb31e0322b1e05bd"
+    },
+    "canonical.jsonl": {
+      "bytes": 401074,
+      "sha256": "bd150158faef6ba77673bcc1a7f500a6deedca063ba690ed75bc3bf236485356"
+    },
+    "dev_challenge-memory_updates.jsonl": {
+      "bytes": 55112,
+      "sha256": "18ccdb77af262bfc77a2d739227e879c97262124099f9562a4d1bacc93d54d28"
+    },
+    "dev_challenge-sft.jsonl": {
+      "bytes": 57160,
+      "sha256": "18ff85eb3b98eb38c36110bfa50cf40f6b9a39b750c01bdc6118a1641067cb17"
+    },
+    "dev_challenge-structured.jsonl": {
+      "bytes": 55112,
+      "sha256": "18ccdb77af262bfc77a2d739227e879c97262124099f9562a4d1bacc93d54d28"
+    },
+    "oracle_receipts.jsonl": {
+      "bytes": 23788,
+      "sha256": "a1733a318e1bf100f0d555409097fab447b9274a080699f918f810c3d4ba5711"
+    },
+    "review_receipts.jsonl": {
+      "bytes": 599166,
+      "sha256": "f25c26516e136bc9f116b1ca75486c97d832415ddb1c9e67ba2ead4f24ea05aa"
+    },
+    "train-memory_updates.jsonl": {
+      "bytes": 178920,
+      "sha256": "6b2f32a57234333c280efd27722da074938f88fb3ac08ac76d9039d85f7ed89a"
+    },
+    "train-sft.jsonl": {
+      "bytes": 185376,
+      "sha256": "41ba0e09fce8c8800f9c287ce645ec9a6df00d935288d850e0da0f9cc1055b2b"
+    },
+    "train-structured.jsonl": {
+      "bytes": 178920,
+      "sha256": "6b2f32a57234333c280efd27722da074938f88fb3ac08ac76d9039d85f7ed89a"
+    }
+  }
+}

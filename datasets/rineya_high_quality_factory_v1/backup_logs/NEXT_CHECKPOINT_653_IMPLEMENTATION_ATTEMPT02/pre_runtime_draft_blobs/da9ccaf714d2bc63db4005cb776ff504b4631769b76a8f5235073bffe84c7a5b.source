@@ -1,0 +1,47 @@
+{
+  "checkpoint_id": null,
+  "expected_parent": "653ba70f1f7035a5aed137102c14a1ff29d1cf99",
+  "grants_data_approval": false,
+  "package_execution_performed": false,
+  "raw_mappings": [],
+  "remove_template_fields_after_actual_authorized_pack_and_root_phase_grant": true,
+  "row_shape": {
+    "gzip": {
+      "path": "reproducibility/lossless_archives/<exact-new-name>.gz",
+      "sha256": "actual compressed SHA256",
+      "size": "actual capped compressed bytes"
+    },
+    "manifest": {
+      "path": "manifests/lossless_archives/<exact-new-name>.lossless.json",
+      "sha256": "actual manifest SHA256",
+      "size": "actual capped bytes"
+    },
+    "origin": {
+      "path": "exact original or raw archive in admitted closure, different from raw",
+      "sha256": "same complete SHA256",
+      "size": "same actual bytes"
+    },
+    "raw": {
+      "path": "NEW exact runtime raw archive factory path, not previously tracked",
+      "sha256": "actual complete SHA256",
+      "size": "actual integer <=25MiB"
+    },
+    "whitespace_evidence": [
+      {
+        "line": "actual positive integer",
+        "line_sha256": "exact opaque full line hash including LF if present",
+        "type": "trailing_whitespace or blank_line_at_eof"
+      }
+    ]
+  },
+  "schema": "next653-new-runtime-raw-binary-mapping-v2",
+  "standard_manifest_fields": [
+    "raw_path",
+    "raw_bytes",
+    "raw_sha256",
+    "gzip_path",
+    "gzip_bytes",
+    "gzip_sha256"
+  ],
+  "template_only_not_executable": true
+}

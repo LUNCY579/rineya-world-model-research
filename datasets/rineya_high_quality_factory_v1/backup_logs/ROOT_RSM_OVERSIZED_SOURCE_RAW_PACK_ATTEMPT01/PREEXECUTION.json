@@ -1,0 +1,68 @@
+{
+  "at_utc": "2026-10-10T20:42:56.248223+00:00",
+  "actual_authorizer_and_runner": "/root",
+  "phase": "EXACT_TWO_NEW_OVERSIZED_RAW_SOURCE_ARCHIVES_LOCAL_LOSSLESS_PACK",
+  "source": {
+    "path": "backup_logs/pack_frozen_large_evidence_v1.py",
+    "bytes": 5363,
+    "sha256": "8f1395d1c2b1de8bf206336ee3f4e150f62da78b18616520df9102febec1a2d3"
+  },
+  "raw_source": {
+    "path": "backup_logs/ROOT_RSM_OVERSIZED_SOURCE_RAW_PACK_ATTEMPT01/packer-source-before-execution.raw",
+    "bytes": 5363,
+    "sha256": "8f1395d1c2b1de8bf206336ee3f4e150f62da78b18616520df9102febec1a2d3"
+  },
+  "plan": {
+    "path": "backup_logs/NEXT_CHECKPOINT_653_EXECUTION_PREPARATION_ATTEMPT01/OVERSIZED_SOURCE_RAW_PACK_PLAN.json",
+    "bytes": 1780,
+    "sha256": "b76875d12ff05954399849fd15f7fde79a773a764893f0d3677dc33a55fe75d6"
+  },
+  "operative_stdlib_runtime_freeze_rehashed_current_and_raw": {
+    "path": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT03/RUNTIME_SOURCE_FREEZE.json",
+    "bytes": 136654,
+    "sha256": "f4f3783cd4ec7a99975e13aa34801264632d6c0a220c3cd2d1ee8af7d90eee78"
+  },
+  "runtime_pairs_rehashed": 206,
+  "exact_plan_outputs_absent": true,
+  "raw_inputs_verified": [
+    {
+      "gzip_path": "reproducibility/lossless_archives/rsm-installed-runtime-r1/da98e29be0c797e60da317ce176913dae4ca8ba24ddffab420342f2b5d89eb2f-38016627c8d43dbabaac5d9dfb279d7cdd55bc5ca49fdd65bcdb276d550a0a6c.gz",
+      "manifest_path": "manifests/lossless_archives/rsm-installed-runtime-r1/da98e29be0c797e60da317ce176913dae4ca8ba24ddffab420342f2b5d89eb2f-38016627c8d43dbabaac5d9dfb279d7cdd55bc5ca49fdd65bcdb276d550a0a6c.lossless.json",
+      "raw": {
+        "bytes": 41453404,
+        "sha256": "38016627c8d43dbabaac5d9dfb279d7cdd55bc5ca49fdd65bcdb276d550a0a6c"
+      },
+      "raw_path": "quality_reports/RSM_CORE_HAND_FIXTURE_INSTALLATION_ATTEMPT03/raw_source_archives/38016627c8d43dbabaac5d9dfb279d7cdd55bc5ca49fdd65bcdb276d550a0a6c.source"
+    },
+    {
+      "gzip_path": "reproducibility/lossless_archives/rsm-installed-runtime-r1/2210fe169d8802df280eab75e98dce63a4965a3becf3478b56082c6767fbc6a9-7284cb67509120efdc0f234f4bff026588f4926e5a72e0675eff7421cdf6a90c.gz",
+      "manifest_path": "manifests/lossless_archives/rsm-installed-runtime-r1/2210fe169d8802df280eab75e98dce63a4965a3becf3478b56082c6767fbc6a9-7284cb67509120efdc0f234f4bff026588f4926e5a72e0675eff7421cdf6a90c.lossless.json",
+      "raw": {
+        "bytes": 40541020,
+        "sha256": "7284cb67509120efdc0f234f4bff026588f4926e5a72e0675eff7421cdf6a90c"
+      },
+      "raw_path": "quality_reports/RSM_CORE_HAND_FIXTURE_INSTALLATION_ATTEMPT03/raw_source_archives/7284cb67509120efdc0f234f4bff026588f4926e5a72e0675eff7421cdf6a90c.source"
+    }
+  ],
+  "user_remote_backup_authorization_active": true,
+  "data_approval": false,
+  "Git_network_target_or_test_execution": false,
+  "resolved_python": "/opt/anaconda3/bin/python3.12",
+  "flags": [
+    "-I",
+    "-B",
+    "-S"
+  ],
+  "disk_free_bytes": 26982064128,
+  "command": [
+    "/opt/anaconda3/bin/python3",
+    "-I",
+    "-B",
+    "-S",
+    "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/pack_frozen_large_evidence_v1.py",
+    "--freeze",
+    "backup_logs/NEXT_CHECKPOINT_653_EXECUTION_PREPARATION_ATTEMPT01/OVERSIZED_SOURCE_RAW_PACK_PLAN.json",
+    "--expected-freeze-sha256",
+    "b76875d12ff05954399849fd15f7fde79a773a764893f0d3677dc33a55fe75d6"
+  ]
+}

@@ -1,0 +1,38 @@
+"""Prepared manual tests; not imported or executed during source preparation."""
+import importlib.util,json,pathlib,copy,unittest
+D=pathlib.Path(__file__).resolve().parent;B=D.parents[2]
+def load(name,path):
+ spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+# This file is imported ONLY after a separate execution grant and raw freeze.
+s=load('own_prepared_calibration_solver',B/'reviews/adjudication/RSM-option-resumption-public-preparation-20261010T1048Z/solver-r1.py')
+a=load('own_prepared_observables',D/'future-observables-r1.py');n=load('own_prepared_normalization',D/'novelty-r1.py');c=load('own_prepared_baseline_keys',D/'canonical-baseline-r1.py')
+f=json.loads((D/'calibrations-r1.json').read_text())
+class Calibration(unittest.TestCase):
+ def test_unused_surviving_binding_negative(self):
+  case=f['unused_surviving_binding'];result=a.activity(case['task'],case['snapshot'],case['locator'],s)
+  self.assertEqual(result['status'],'INACTIVE');self.assertFalse(result['future_observable_changed']);self.assertTrue(result['full_checkpoint_only_changed']);self.assertEqual(result['before']['observable_projection']['terminal_phase'],'success_failed')
+ def test_pending_binding_positive(self):
+  case=f['pending_saved_binding'];result=a.activity(case['task'],case['snapshot'],case['locator'],s)
+  self.assertEqual(result['status'],'ACTIVE');self.assertTrue(result['future_observable_changed']);self.assertEqual(result['before']['observable_projection']['effect_after_states'],[{'x':2,'y':0}]);self.assertEqual(result['after']['observable_projection']['effect_after_states'],[{'x':3,'y':0}])
+ def test_diagnostic_never_repairs_false_checkpoint(self):
+  case=copy.deepcopy(f['pending_saved_binding']);t=case['task'];m=s.Machine(t);enter=m.step();t.update(mode='resume',history=[enter],checkpoint=a.scalar_change(case['snapshot'],case['locator']));self.assertEqual(s.solve(t),s.invalid('invalid_checkpoint'))
+ def test_typed_locator_excludes_boolean(self):
+  case=f['pending_saved_binding']
+  with self.assertRaises(ValueError):a.scalar_change({'value':True},['value'])
+ def test_identifier_either_both_and_shared_id(self):
+  one={'control_id':' any / odd : α ','name':'uninterrupted_resume_suffix','pair_sample_ids':['a','b']};two=dict(one,property=one['name']);self.assertEqual(c.pairkey(one),c.pairkey(two));third=dict(one,name='resume_restart_replay');self.assertNotEqual(c.pairkey(one),c.pairkey(third))
+ def test_conflicting_or_empty_identifiers_fail(self):
+  one={'control_id':'x','name':'uninterrupted_resume_suffix','property':'resume_restart_replay','pair_sample_ids':['a','b']}
+  with self.assertRaises(ValueError):c.pairkey(one)
+  with self.assertRaises(ValueError):c.pairkey(dict(one,control_id=''))
+ def test_name_count_uses_identifier_keys(self):self.assertEqual(len(set(c.NAMES)),9);self.assertEqual(c.collections.Counter(c.NAMES.keys()),c.collections.Counter(list(c.NAMES)))
+ def test_normalization_erases_literals_initial_and_parameter_names(self):
+  t=copy.deepcopy(f['pending_saved_binding']['task']);u=copy.deepcopy(t);u['initial_state']={'x':99,'y':-10};u['entry']['args']={'renamed':{'const':100}};u['options']['root']['params']=['renamed'];u['options']['root']['body'][0]['value']={'param':'renamed'}
+  for view in ['full','all_coarse','reachable_coarse']:self.assertEqual(n.signature(t,view),n.signature(u,view))
+ def test_reachable_view_distinguishes_unused_padding_scope(self):
+  t=copy.deepcopy(f['pending_saved_binding']['task']);u=copy.deepcopy(t);u['options']['unused']={'params':[],'initiation':{'all':[]},'success':{'all':[]},'body':[{'op':'swap'}]}
+  self.assertEqual(n.signature(t,'reachable_coarse'),n.signature(u,'reachable_coarse'));self.assertNotEqual(n.signature(t,'all_coarse'),n.signature(u,'all_coarse'))
+ def test_primitive_order_is_preserved(self):
+  t=copy.deepcopy(f['pending_saved_binding']['task']);t['options']['root']['body'].append({'op':'swap'});u=copy.deepcopy(t);u['options']['root']['body'].reverse()
+  for view in ['full','all_coarse','reachable_coarse']:self.assertNotEqual(n.signature(t,view),n.signature(u,view))
+if __name__=='__main__':unittest.main(verbosity=2)

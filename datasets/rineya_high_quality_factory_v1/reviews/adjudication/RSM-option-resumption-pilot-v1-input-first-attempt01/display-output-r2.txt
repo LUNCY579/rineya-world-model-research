@@ -1,0 +1,348 @@
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0012 train initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 32, 'y': 24} events 19 effects 9
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 107, 'y': 225} events 19
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 33, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 4, 'before': 3, 'path': ['checkpoint', 'frames', 2, 'bindings', 'r']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0013 train initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ swap
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 26, 'y': 30} events 20 effects 10
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 95, 'y': 255} events 20
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 27, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 2, 'before': 1, 'path': ['checkpoint', 'frames', 2, 'next_index']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0014 train initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ scale x $p
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 62, 'y': 24} events 20 effects 10
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 515, 'y': 225} events 20
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 63, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 6, 'before': 5, 'path': ['checkpoint', 'state', 'x']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0015 train initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION multiply ['u'] INIT TRUE SUCCESS TRUE
+ scale x $u
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ call multiply(u=2)
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 62, 'y': 24} events 22 effects 10
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 209, 'y': 225} events 22
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 63, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 4, 'before': 3, 'path': ['checkpoint', 'frames', 2, 'bindings', 'r']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0016 train initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T add y $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 40, 'y': 32} events 20 effects 10
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 157, 'y': 350} events 20
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 41, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 2, 'before': 1, 'path': ['checkpoint', 'frames', 2, 'next_index']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0017 train initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  T if y ge $q
+  T  T add x $q
+  T  E scale x $q
+  E add y -1
+ add y $q
+F expected completed {'x': 36, 'y': 24} events 21 effects 10
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 117, 'y': 225} events 21
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 37, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 6, 'before': 5, 'path': ['checkpoint', 'state', 'x']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0018 dev_challenge initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ add x y
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 56, 'y': 24} events 20 effects 10
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 197, 'y': 225} events 20
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 57, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 4, 'before': 3, 'path': ['checkpoint', 'frames', 2, 'bindings', 'r']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0019 dev_challenge initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ scale y $p
+ call work(q=$p,r=x)
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 192, 'y': 80} events 30 effects 14
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 2877, 'y': 1385} events 30
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 193, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 2, 'before': 1, 'path': ['checkpoint', 'frames', 2, 'next_index']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4, 16], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0020 train initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION multiply ['u'] INIT TRUE SUCCESS TRUE
+ scale y $u
+ add x $u
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ call multiply(u=2)
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 36, 'y': 48} events 23 effects 11
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 111, 'y': 450} events 23
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 37, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 6, 'before': 5, 'path': ['checkpoint', 'state', 'x']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0021 train initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ scale y $p
+ swap
+ scale x $p
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 98, 'y': 30} events 22 effects 12
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 2255, 'y': 255} events 22
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 99, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 4, 'before': 3, 'path': ['checkpoint', 'frames', 2, 'bindings', 'r']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0028 dev_challenge initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ if y ge $p
+  T call finish(t=$p)
+  E add x $p
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  E add y -1
+ add y $q
+F expected completed {'x': 36, 'y': 24} events 23 effects 10
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 117, 'y': 225} events 23
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 37, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 2, 'before': 1, 'path': ['checkpoint', 'frames', 2, 'next_index']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]
+
+FAMILY RSM-001-option-resumption-pilot-v1-p0029 dev_challenge initial {'x': 2, 'y': 2} entry {'args': {'p': {'reg': 'x'}}, 'option': 'start'}
+OPTION finish ['t'] INIT $t ge 1 SUCCESS y ge 0
+ add x $t
+OPTION multiply ['u'] INIT TRUE SUCCESS TRUE
+ scale y $u
+OPTION start ['p'] INIT $p ge 1 & y ge 0 SUCCESS x ge 0 & y ge 0
+ add x 1
+ call work(q=$p,r=x)
+ scale y $p
+ call finish(t=x)
+ add x $p
+OPTION work ['q', 'r'] INIT x eq $r & y ge 0 SUCCESS y ge 0
+ if x eq $r
+  T add x $q
+  T add y $r
+  T if x ge $q
+  T  T scale y $q
+  T  E swap
+  T call finish(t=y)
+  T call multiply(u=2)
+  E add y -1
+ add y $q
+F expected completed {'x': 32, 'y': 44} events 22 effects 10
+R checkpoint {'frames': [{'bindings': {'p': 2}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 0, 'next_index': 2, 'option': 'start'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'frame_kind': 'option', 'instance_id': 1, 'next_index': 1, 'option': 'work'}, {'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'frame_kind': 'branch', 'instance_id': 1, 'next_index': 1, 'option': 'work'}], 'next_instance_id': 2, 'phase': 'running', 'root_pending': False, 'state': {'x': 5, 'y': 2}}
+T expected completed {'x': 107, 'y': 425} events 22
+CHANGED FIELDS {'F_A': [{'after': {'const': 3}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_I': [{'after': {'const': 0}, 'before': {'reg': 'x'}, 'path': ['entry', 'args', 'p']}], 'F_S': [{'after': 33, 'before': 0, 'path': ['options', 'start', 'success', 'all', 0, 'right', 'const']}], 'R_X': [{'after': 6, 'before': 5, 'path': ['checkpoint', 'state', 'x']}]}
+CHECKS {'F_A_one_root_argument_positive_behavior': True, 'F_I_one_root_argument_no_effects': True, 'F_R_prefix_suffix': True, 'F_S_one_success_literal_same_effects': True, 'P_U_exact_extended_history_snapshot': True, 'R_P_only_budget': True, 'R_T_only_mode': True, 'R_T_root_pass_and_actual_difference': True, 'R_X_one_checkpoint_scalar_rejected': True, 'R_binding_copy_pending_dependency': True, 'R_nonroot_entry_now_false': True, 'R_selected_branch_now_opposite': True, 'actual_nonidempotent_replay_witness': True}
+ACTIVE FRAMES [{'active_binding_probes': [{'changed_value': 3, 'parameter': 'p', 'trusted_pending_continuation_changes': True}], 'bindings': {'p': 2}, 'body_path': [], 'frame_index': 0, 'frame_kind': 'option', 'next_index': 2, 'option': 'start'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [], 'current_initiation_is_false': True, 'frame_index': 1, 'frame_kind': 'option', 'next_index': 1, 'option': 'work'}, {'active_binding_probes': [{'changed_value': 3, 'parameter': 'q', 'trusted_pending_continuation_changes': True}, {'changed_value': 4, 'parameter': 'r', 'trusted_pending_continuation_changes': True}], 'bindings': {'q': 2, 'r': 3}, 'body_path': [0, 'then'], 'current_condition': False, 'frame_index': 2, 'frame_kind': 'branch', 'next_index': 1, 'option': 'work', 'selected_branch_would_change_now': True}]
+REPLAY [{'T_event_indices': [1], 'body_path': [], 'index': 0, 'once': {'x': 3, 'y': 2}, 'option': 'start', 'original_instance': 0, 'original_prestate': {'x': 2, 'y': 2}, 'twice': {'x': 4, 'y': 2}}, {'T_event_indices': [4], 'body_path': [0, 'then'], 'index': 0, 'once': {'x': 5, 'y': 2}, 'option': 'work', 'original_instance': 1, 'original_prestate': {'x': 3, 'y': 2}, 'twice': {'x': 7, 'y': 2}}]

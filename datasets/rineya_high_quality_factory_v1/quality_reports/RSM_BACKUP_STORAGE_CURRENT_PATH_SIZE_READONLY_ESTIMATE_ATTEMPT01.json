@@ -1,0 +1,46 @@
+{
+  "actor": "/root",
+  "at_utc": "2026-10-10T20:09:32.108166+00:00",
+  "stage": "READONLY_PATH_SIZE_ESTIMATE_NOT_OPERATIVE_CHECKPOINT_INVENTORY",
+  "prior_expected_capped_count": 3158,
+  "current_observed_categories": {
+    "prior_capped": {
+      "count": 3158,
+      "logical_bytes": 1263199599,
+      "allocated_upper_bytes": 1270169600
+    },
+    "new_capped": {
+      "count": 5379,
+      "logical_bytes": 1182052543,
+      "allocated_upper_bytes": 1193656320
+    },
+    "oversized_raw": {
+      "count": 41,
+      "logical_bytes": 2134700696,
+      "allocated_upper_bytes": 2134769664
+    }
+  },
+  "new_capped_logical_bytes_by_top_folder": {
+    "audits": 180589,
+    "handoff": 8738775,
+    "backup_logs": 13328121,
+    "tests": 28630,
+    "feedback": 10113,
+    "quality_reports": 830076355,
+    "generators": 26677973,
+    "manifests": 47888,
+    "data": 6958614,
+    "factory": 19153,
+    "reviews": 295986332
+  },
+  "current_free_bytes": 1608323072,
+  "raw_archive_mapping_or_dedup_performed": false,
+  "all_writes_or_pack_copy_Git_network_payload_operations": 0,
+  "limitations": [
+    "Current active reviewer outputs may grow; no stable cut claim.",
+    "Path-size estimate does not certify hashes/secrets/source admission/representation or changed prior tuples.",
+    "Allocated sizes can double count APFS shared extents or hardlinks; no reclaim claim.",
+    "Oversized raw bytes require existing or separately reviewed new actual lossless representation."
+  ],
+  "inherited_full_scope_storage_minimum": 5427375196
+}

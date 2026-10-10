@@ -1,0 +1,155 @@
+{
+  "schema": "approved-release-custody-join-static-design-review-v1",
+  "status": "STATIC_SCHEMA_REVIEW_COMPLETE_ACTUAL_JOIN_PENDING",
+  "author_execution": "/root/backup_manager/approved_release_join_review",
+  "review_method": "Direct source and custody/schema/config metadata reads only; no imports, tests, network, Git commands or data-quality evaluation",
+  "grants_data_approval": false,
+  "join_success_claimed": false,
+  "actual_new_commit_provided": false,
+  "actual_new_stage_or_full_proof_provided": false,
+  "files_preserved": true,
+  "only_new_output": "backup_logs/APPROVED_RELEASE_JOIN_STATIC_REVIEW_approved_release_join_review.json",
+  "applicable_agents_found": false,
+  "bindings": {
+    "spec": {
+      "path": "backup_logs/belief-v4-approved-release-r1_SPEC.json",
+      "sha256": "6c21c64d1cff3ce38d548ed024f6bb9da9f9c8869463d7c4cbd5038240cd97f9"
+    },
+    "inventory_report": {
+      "path": "backup_logs/belief-v4-approved-release-r1_INVENTORY_REPORT.json",
+      "sha256": "e28d558b6fbc0a5427faf5ad1e114c27ad054718029f103ae9e0c02901e89a40"
+    },
+    "stage_source": {
+      "path": "backup_logs/run_provisional_archival_checkpoint_v4_attempt02.py",
+      "sha256": "f0561eb5f0e2ebe16bc46f51ed1fcbb1ad74236e90fba4d9b33da166c6767715",
+      "rehashed_at_static_review_finish": true
+    },
+    "stage_source_freeze": {
+      "path": "backup_logs/PROSPECTIVE_ARCHIVAL_V4_ATTEMPT02_SOURCE_FREEZE.json",
+      "sha256": "3c312ce1c2295b78b565191571e2103f4070f92694aeaae6d6953f80e34648ee"
+    },
+    "execution_config": {
+      "path": "backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_STAGE_V4_ATTEMPT02_EXECUTION_CONFIG.json",
+      "sha256": "85cfe47a1cabb952d2f00e03d5d3e10d37134a7510c7653fbc05366100a27a72"
+    },
+    "custody_adapter": {
+      "path": "backup_logs/PROSPECTIVE_ARCHIVAL_V3_CUSTODY_ADAPTER.json",
+      "sha256": "7978cab638a00c185a9d391259c6a5c77b8a5c97ea5fefdc79fa67a31e58e023"
+    },
+    "metadata_scanner_sha256": "a79963d367f47c54074714d24bc2a5f372f09bf725a4b2046006cbdb586e4b1d",
+    "metadata_exception_config_sha256": "2e18c2c156aaefcee75ad6ad92fe51c66abf864150924d5ac1cd26dbeed5aa05",
+    "six_warning_exception_config_sha256": "bd6639e10289bcbd7c27e3bf68241e83dbf7f0d9985400b7abf9df9ae9b9fa4b",
+    "reviewed_old_join_sha256": "1f5d4cded56a475fa7b754c7f5d8e5f1e4b15e5459a3ee97fe29ea5cb6817098",
+    "reviewed_old_join_tests_sha256": "79961b7e7cc3e6683e59f922d884a1c06f35aaf65c1f37e9dcb71bc3b356ab04",
+    "unchanged_recovery_sha256": "3f496d27e6fc36ecda3eabcff4593b13deaea03a04fee543e49674f843bf37b1",
+    "unchanged_gzip_verifier_sha256": "7bab2c46dd1e7a52520a90617a2d910b5d6987bad8ec2489b05097045505a0aa"
+  },
+  "exact_scope": {
+    "checkpoint_id": "belief-v4-approved-release-r1",
+    "expected_parent_sha": "4d0b5eff1af3184fedf7fa25ada729a6cc909268",
+    "frozen_capped_paths": 3158,
+    "frozen_capped_bytes": 1263090770,
+    "expected_actual_unique_blob_groups": 2474,
+    "unique_oversized_raw_paths": 31,
+    "unique_raw_bytes": 1724728576,
+    "lossless_representation_records": 32,
+    "unique_raw_gzip_representation_pairs": 31,
+    "expected_fresh_gzip_fetches_and_proof_rows": 31,
+    "actual_remote_decoded_bytes_including_planned_representation_pairs": 1724728576,
+    "local_all_representation_comparison_bytes": 1766951239,
+    "raw_with_two_representations": "reviews/expert/belief-gap-v1.post_freeze_comparison.json",
+    "immutable_release_capped_paths": 220,
+    "immutable_release_oversized_raw_paths": 2,
+    "immutable_release_capped_raw_union": 222,
+    "prior_required_tracked_paths": 2685,
+    "prior_immutable_release_files": 210,
+    "readonly_reference_files": 65,
+    "original_protected_git_baselines": 6,
+    "observed_historical_deferrals_at_cut": 26,
+    "deferred_prefix": "reviews/adjudication/RSM-option-resumption-public-preparation-20261010T1048Z/",
+    "catalog_metadata_records": 7204,
+    "catalog_metadata_source_families": 700
+  },
+  "concrete_findings": [
+    {
+      "id": "fresh_stage_schema",
+      "source_locations": ["join_belief_v4_r2_completed_backup_custody.py:64-117", "run_provisional_archival_checkpoint_v4_attempt02.py:892-988"],
+      "finding": "Old r2 join requires resumption-only fields and old commit/spec/parent/count bindings; these cannot validate the fresh v4 stage by count replacement.",
+      "required_change": "Create a new frozen join; bind completed root-provided actual commit, stage SHA, local-commit SHA and ledger SHA only after success. Bind fresh spec/report/source/freeze/config/adapter and exact exception dependencies separately because the stage does not echo all config hashes. Keep old source/tests/proofs immutable."
+    },
+    {
+      "id": "remote_scanner_compatibility_blocker",
+      "source_locations": ["recover_remote_checkpoint.py:66-87", "recover_remote_checkpoint.py:157-162", "recover_remote_checkpoint.py:320-347"],
+      "finding": "Unchanged recovery uses generic strict secret scanning for current sources, local Git blobs and remote blobs. It has no exact four-file metadata exception and rejects those known frozen regex matches.",
+      "required_change": "A new frozen recovery implementation or explicitly bound adaptation must preserve all existing byte/hash/path/no-cache guards while permitting only exact fullsize/SHA/pattern-index/span/digest/context matches for the four configured paths. Bind actual adapted source provenance and config in fresh proof; do not claim the old helper alone produced an adapted verification."
+    },
+    {
+      "id": "gzip_verifier_source_binding",
+      "source_locations": ["verify_archival_remote_lossless.py:21-22", "verify_archival_remote_lossless.py:81-91"],
+      "finding": "Unchanged gzip verifier requires verification_source_sha256 equal to the unchanged recovery DEPENDENCY_SHA. A new recovery proof source will require explicit truthful audited source-binding adaptation in fresh gzip/join helpers.",
+      "required_change": "Freeze new helper(s) and tests with exact recovery provenance before import/execution; preserve old dependencies and receipts. Retain bounded 65536-byte chunks and 8388608-byte spool."
+    },
+    {
+      "id": "representation_pairs",
+      "source_locations": ["verify_archival_remote_lossless.py:121-145", "verify_archival_remote_lossless.py:273-280", "join_belief_v4_r2_completed_backup_custody.py:150-167"],
+      "finding": "Fresh SPEC has31 unique raw paths,32 representation records and31 unique(raw_path,gzip_path) pairs. ExpertV1's two representation records share exactly the same gzip path/bytes and use different manifests. The unchanged planner deduplicates by(raw_path,gzip_path).",
+      "required_change": "Require exact unique representation-pair coverage and31 fresh gzip fetch/proof/ledger rows; require unique raw coverage/count31, recovered unique raw bytes1724728576 and actual remote decoded bytes1724728576. Locally validate all32 representation/manifest bindings; repeated local comparisons total1766951239 bytes. Cross-bind each fetched pair to its exact full remote blob and both frozen manifests when shared."
+    },
+    {
+      "id": "release_union_and_deferral_schema",
+      "source_locations": ["run_provisional_archival_checkpoint_v4_attempt02.py:499-506", "run_provisional_archival_checkpoint_v4_attempt02.py:597-609", "join_belief_v4_r2_completed_backup_custody.py:252", "join_belief_v4_r2_completed_backup_custody.py:285-287"],
+      "finding": "222 releases are the union of 220 capped release files and 2 oversized raw release files. Fresh historical deferrals are deferred_observed_pending_paths, not deferred_incomplete_new_v4_paths.",
+      "required_change": "Use capped/raw union and require old210 release byte bindings unchanged; only exact12 new RBM v0002 release paths may extend it. Preserve frozen26 point-in-time observations. Later29-file completion and all postinventory join/proof outputs remain LOCAL outside exact SPEC; do not rewrite the historical cut or data approvals."
+    }
+  ],
+  "fresh_stage_field_and_phase_mapping": {
+    "status": "PUSHED_REMOTE_BYTES_VERIFICATION_PENDING",
+    "roles": "runner_execution=/root; author_execution=/root/backup_manager; grants_data_approval=false",
+    "source_target_phase": "source_target_verified",
+    "source_target_phase_payload": "path,size,sha256,git_blob,copy_outcome",
+    "actual_index_phase": "actual_index_blob_verified",
+    "actual_index_phase_payload": "size,sha256,git_blob,paths",
+    "terminal_stage_ledger_phase": "PUSHED_REMOTE_BYTES_VERIFICATION_PENDING with exact new commit_sha",
+    "unique_actual_index_blob_groups": "Absent; derive2474 distinct git_blob groups from complete actual_index_blob_verified ledger",
+    "preserved_raw_bytes": "Absent; derive frozen31 raw bytes and verify raw_lossless_proofs coverage",
+    "old_full_index_flags": "whole_index_and_outside_parent_guard=PASS; independently compare complete parent/index/commit trees",
+    "old_protected_original_six_baselines_verified": "protected_original_baselines_verified=true; independently read exact6 baseline bytes",
+    "old_prior2303_and_immutable210_flags": "execution_scope_guards exactly prior_tracked_paths2685/prior_release_files210/all_release_files_including_oversized_raws222/prior_raw_paths_retained26/all_raw_paths31; prior_release_guard=PASS; actual_release_coverage_verified=222",
+    "readonly_references": "readonly_reference_count_verified=65 plus independent exact config-bound size/hash reads",
+    "source_target_index_guard": "all_source_target_index_sha256_and_sha1_verified=true",
+    "old_nested_actual_diff_and_precommit_diff": "Fresh source overwrites top-level exact diagnostic observation at stage and precommit; there are no separate nested old fields",
+    "warning_truth": "strict_diff_check=NONZERO_EXIT_2_NOT_AN_UNQUALIFIED_PASS; narrow_frozen_evidence_exception=EXACT_BOUND_SIX_WARNINGS_MATCH; actual_exit_code=2; exact stdout/base64/hash/length; empty stderr/base64/hash/length; warning_count=6; exact2 exception files",
+    "restricted_warning_check": "restricted_strict_diff_check=PASS; excluded_exact_path_count=2; restricted_changed_path_count=len(actual staged delta)-2",
+    "old_five_warning_payload_proofs": "Absent; independently reverify exact2 config-bound source/target/index/commit files and6 exact line bytes",
+    "private_repository_evidence": "Fresh stage has private_repository_evidence; no actual_prepush_private_repository_evidence field; independently recheck private ADMIN at join",
+    "local_commit": "LOCAL_COMMIT_PRESERVED; same new commit/spec/parent/source/freeze/inventory/raw/guards/diagnostics/staged_paths as pushed stage except push-only terminal fields",
+    "secret_scan": "PASS_WITH_EXACT_PUBLIC_METADATA_FALSE_POSITIVE_EXCEPTIONS; configSHA2e18; exactly4 unique canonical fullsize/SHA/span/digest rows; unbound0; existing_regexes_unchanged=true"
+  },
+  "strong_proposed_join_guards": [
+    "Validate strict types, lowercase complete SHA256/SHA1, normalized safe non-symlink artifact paths and fresh distinct exclusive outputs; bind all source/freezes/configs/evidence before and after execution.",
+    "Require all3158 source-target ledger records exactly once, all2474 distinct nonempty blob groups exactly once, no repeated/unrelated paths, full exact path coverage and complete size/SHA256/GitSHA1 cross-join with frozen inventory.",
+    "Derive staged delta from actual parent tree versus exact current inventory; never reuse r2 hardcoded393 staged/388 restricted counts. Preserve every prior2685 path and exact old210 release bytes; do not freeze all mutable prior reports to stale hashes.",
+    "Independently reverify source/target/index/committed Git bytes for every path and each actual2474 blob; compare whole index and whole commit tree to parent outside-prefix entries plus current exact dataset scope.",
+    "Require clean original main at frozen HEAD and6 exact protected Git-byte baselines, clean dedicated HEAD/branch/origin/fullindex/sparse scope, exact private ADMIN, exact65 read-only references, and sole local/remote parent4d0b5eff.",
+    "Recheck exact six-warning commit diff with actual exit2 and exact diagnostic bytes; exclude only the2 bound fixture paths for restricted PASS batches, reject extra/missing warnings and any unqualified unrestricted PASS.",
+    "For remote full proof require BACKED_UP, exact new commit/spec/stage SHA, no source evolution at start or finish, root runner,3158 paths/1263090770B,2474 distinct actual_remote_raw_GitHub_blob receipts, exact uncached raw transport/tree and full local-to-remote GitSHA1 and byte joins.",
+    "Cross-join full and gzip execution ledgers to complete receipt tuples and terminal success events; bind ledger final hashes and require31 exact unique representation-pair gzip rows plus terminal raw_count31/actual_fetches31; distinguish32 local manifest-representation records from31 remote fetch pairs.",
+    "For all31 raws require exact stage/full/local roundtrip coverage and local byte-for-byte lossless proof; retain all prior26 raw history including the exact mutable audit relocation and unchanged prior gzip/manifest bytes.",
+    "Keep actor/model disclosure truthful, grants_data_approval=false, catalog metadata tied to fresh SPEC7204/700 without new approval, and all historical pending/failure receipts unchanged.",
+    "Add fresh rejection coverage for missing/duplicate source/index/remote/pair rows; wrong source/config/commit/parent/actor/type; extra warning/secret exception; incomplete terminal event; wrong release union; omitted second local manifest; incorrectly counting duplicate gzip representations as extra fetches; outside-prefix tree or protected custody changes. Do not use synthetic fixtures as actual success authority."
+  ],
+  "review_correction_preserved": {
+    "initial_message_error": "The reviewer initially equated32 representation records with32 unique(raw,gzip) pairs/fetches.",
+    "correction": "Directjq inspection verified31 unique(raw,gzip) pairs; both expertV1 records share the same gzip path/SHA and differ only in manifest. Remote31 fetches decode1724728576 bytes; local32 comparisons total1766951239 bytes.",
+    "corrected_before_final_receipt_hash": true
+  },
+  "limits": {
+    "review_is_static_only": true,
+    "private_producer_or_reviewer_findings_read": false,
+    "network_or_actual_remote_verification_performed": false,
+    "imports_or_tests_performed": false,
+    "git_commands_or_mutation_performed": false,
+    "receipt_is_local_postinventory": true,
+    "pending_authority": "Only completed root stage/full proof and a fresh actual gzip proof, with explicit final hashes and completed ledgers, may authorize successful joined custody status."
+  }
+}

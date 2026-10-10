@@ -1,0 +1,19 @@
+setUpClass (frozen_rsm_core_hand_tests.RSMCoreIntegrationTests) ... ERROR
+test_cached_reference_rejects_source_corruption (frozen_root_rsm_reference_hand_tests.RSMReferenceRoutingTests.test_cached_reference_rejects_source_corruption) ... ok
+test_distinct_factory_routes_agree_on_all_hand_tasks (frozen_root_rsm_reference_hand_tests.RSMReferenceRoutingTests.test_distinct_factory_routes_agree_on_all_hand_tasks) ... ok
+test_parent_symlink_rejected_before_reference_load (frozen_root_rsm_reference_hand_tests.RSMReferenceRoutingTests.test_parent_symlink_rejected_before_reference_load) ... ok
+test_source_symlink_rejected_before_reference_load (frozen_root_rsm_reference_hand_tests.RSMReferenceRoutingTests.test_source_symlink_rejected_before_reference_load) ... ok
+
+======================================================================
+ERROR: setUpClass (frozen_rsm_core_hand_tests.RSMCoreIntegrationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/rsm_core_integration_test.py", line 73, in setUpClass
+    assert cls.manifest==(ROOT/DERIVED_MANIFEST).read_bytes()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.668s
+
+FAILED (errors=1)

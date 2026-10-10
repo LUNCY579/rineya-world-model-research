@@ -1,0 +1,141 @@
+--- attempt04/admission.py
++++ attempt05/admission.py
+@@ -20,0 +21,72 @@
++REGISTRY_LOGICAL='research/role_registry.json'
++REGISTRY_CANONICAL='research/ROLE_REGISTRY.json'
++REGISTRY_CURRENT_SHA='984d8676e8967c61af0d484851d25625d22339497187d3ce28209e12d25eea72'
++REGISTRY_POLICY_NAME='EXACT_ROLE_REGISTRY_PHYSICAL_PATH_POLICY.json'
++
++def validate_registry_policy(value):
++    expected={'schema':'next653-exact-current-role-registry-physical-path-policy-v1',
++              'logical_current':{'path':REGISTRY_LOGICAL,'size':19279,'sha256':REGISTRY_CURRENT_SHA},
++              'canonical_current':{'path':REGISTRY_CANONICAL,'size':19279,'sha256':REGISTRY_CURRENT_SHA},
++              'historical_parent653_canonical':{'path':REGISTRY_CANONICAL,'size':13913,'sha256':'ed0b314b07fa4bbaeffde8bc2233f713d139681e213a01e1781d69e9aeefe447'},
++              'historical_core507_logical':{'path':REGISTRY_LOGICAL,'size':16187,'sha256':'400789d3467ce6b33e7e134caa6645666a0bd58f586cbb2b2d8dff0bbce72a4f'},
++              'expected_parent':c.PARENT,'observed_registry_directory_entries':['ROLE_REGISTRY.json'],
++              'identity_rule':'Derive actual device/inode; both lookup spellings must identify the same file when the logical lookup exists. Only the canonical file may physically exist. Canonical-only case-sensitive restoration is allowed for this exact tuple.',
++              'grants_data_approval':False}
++    if not c.typed_equal(value,expected):raise ValueError('Only the exact bound registry logical/current/canonical/historical policy is allowed')
++    prior=c.fixed_json('prior')
++    inherited=[c.projection(r) for r in prior['files'] if r['path']==REGISTRY_CANONICAL]
++    if inherited!=[expected['historical_parent653_canonical']]:raise ValueError('Canonical registry path must equal its exact preserved parent653 tuple')
++    return value
++
++def registry_policy():
++    path=c.HERE/REGISTRY_POLICY_NAME
++    return validate_registry_policy(c.bound_json(c.file_binding(path)))
++
++def validate_registry_observation(row,observation,value):
++    validate_registry_policy(value)
++    if not c.typed_equal(row,value['logical_current']):raise ValueError('No generic case alias; only exact current lower registry tuple may project')
++    keys={'canonical_binding','logical_binding','canonical_identity','logical_identity','logical_lookup_present','observed_registry_directory_entries'}
++    if type(observation) is not dict or set(observation)!=keys:raise ValueError('Closed actual registry physical observation required')
++    if not c.typed_equal(observation['canonical_binding'],value['canonical_current']) or observation['observed_registry_directory_entries']!=value['observed_registry_directory_entries']:
++        raise ValueError('Exact canonical bytes and single physical uppercase registry name required')
++    def identity(v):
++        if type(v) is not dict or set(v)!={'device','inode'} or any(type(v[k]) is not int or v[k]<0 for k in v):raise ValueError('Derived typed file identity required')
++        return v
++    actual=identity(observation['canonical_identity'])
++    if type(observation['logical_lookup_present']) is not bool:raise ValueError('Logical lookup presence must be an actual boolean')
++    if observation['logical_lookup_present']:
++        if not c.typed_equal(observation['logical_binding'],row) or not c.typed_equal(identity(observation['logical_identity']),actual):
++            raise ValueError('Two lookup spellings must rehash exact same bytes and identify one actual file')
++    elif observation['logical_binding'] is not None or observation['logical_identity'] is not None:
++        raise ValueError('Canonical-only restoration cannot invent a lower physical file')
++    return observation
++
++def exact_registry_alias(row):
++    value=registry_policy()
++    if not c.typed_equal(row,value['logical_current']):raise ValueError('Wrong registry logical path/size/hash is not an admitted alias')
++    canonical=c.safe(c.FACTORY,REGISTRY_CANONICAL)
++    before=c.stat_key(canonical)
++    observed=sorted(p.name for p in canonical.parent.iterdir() if p.name in ('ROLE_REGISTRY.json','role_registry.json'))
++    c.validate_binding(value['canonical_current'])
++    current=canonical.stat()
++    logical=c.FACTORY/REGISTRY_LOGICAL
++    if logical.is_symlink():raise ValueError('Registry logical symlink is forbidden')
++    present=logical.exists();logical_binding=None;logical_identity=None
++    if present:
++        logical=c.safe(c.FACTORY,REGISTRY_LOGICAL);logical_before=c.stat_key(logical)
++        c.validate_binding(row);st=logical.stat()
++        logical_binding=row;logical_identity={'device':st.st_dev,'inode':st.st_ino}
++        if logical_before!=c.stat_key(logical):raise ValueError('Logical registry identity evolved during verification')
++    observation={'canonical_binding':value['canonical_current'],'logical_binding':logical_binding,
++                 'canonical_identity':{'device':current.st_dev,'inode':current.st_ino},'logical_identity':logical_identity,
++                 'logical_lookup_present':present,'observed_registry_directory_entries':observed}
++    validate_registry_observation(row,observation,value)
++    if before!=c.stat_key(canonical):raise ValueError('Canonical registry bytes/identity evolved during exact alias verification')
++    if observed!=sorted(p.name for p in canonical.parent.iterdir() if p.name in ('ROLE_REGISTRY.json','role_registry.json')):
++        raise ValueError('Physical registry directory spelling evolved during verification')
++    return {'schema':'next653-exact-registry-logical-physical-alias-witness-v1','policy':c.file_binding(c.HERE/REGISTRY_POLICY_NAME),
++            'logical_reference':row,'canonical_physical_binding':value['canonical_current'],
++            'historical_parent653_canonical':value['historical_parent653_canonical'],
++            'historical_core507_logical':value['historical_core507_logical'],'actual_physical_observation':observation,
++            'generic_case_normalization':False,'historical_logical_references_rewritten':False}
++
+@@ -23,0 +96,4 @@
++    if r['path']==REGISTRY_LOGICAL:
++        # Logical snapshots keep their exact old names. Only the current physical
++        # closure key projects to the one canonical path already in parent653.
++        r=exact_registry_alias(r)['canonical_physical_binding']
+@@ -312,0 +389 @@
++            'exact_physical_path_aliases':[exact_registry_alias(registry_policy()['logical_current'])],
+--- attempt04/bootstrap.py
++++ attempt05/bootstrap.py
+@@ -10 +10 @@
+-             'lossless.py', 'join.py', 'admission.py', 'archive_mapping.py', 'runtime_guard.py', 'collect_runtime.py', 'tests.py', 'ADMISSION_POLICY.json', 'ADMISSION_CONTRACT_TEMPLATE.json', 'ARCHIVE_MAPPING_CONTRACT_TEMPLATE.json', 'RUNTIME_SOURCE_FREEZE.json', 'RUNTIME_COLLECTOR_CONFIG.json', 'RUNTIME_COLLECTOR_PREEXECUTION.json', 'POLICY.json', 'EXECUTION_CONFIG_TEMPLATE.json', 'README.md', 'AUTHORING_NOTES.json'}
++             'lossless.py', 'join.py', 'admission.py', 'archive_mapping.py', 'runtime_guard.py', 'collect_runtime.py', 'tests.py', 'ADMISSION_POLICY.json', 'EXACT_ROLE_REGISTRY_PHYSICAL_PATH_POLICY.json', 'ADMISSION_CONTRACT_TEMPLATE.json', 'ARCHIVE_MAPPING_CONTRACT_TEMPLATE.json', 'RUNTIME_SOURCE_FREEZE.json', 'RUNTIME_COLLECTOR_CONFIG.json', 'RUNTIME_COLLECTOR_PREEXECUTION.json', 'POLICY.json', 'EXECUTION_CONFIG_TEMPLATE.json', 'README.md', 'AUTHORING_NOTES.json'}
+--- attempt04/tests.py
++++ attempt05/tests.py
+@@ -804,0 +805,51 @@
++class ExactRegistryPhysicalPathTests(unittest.TestCase):
++    def test_real_canonical_closure_preserves_exact_logical_and_historical_bindings(self):
++        value=admission.registry_policy();logical=value['logical_current']
++        witness=admission.exact_registry_alias(logical)
++        closure={};admission.add(closure,logical)
++        self.assertEqual(set(closure),{admission.REGISTRY_CANONICAL})
++        self.assertEqual(closure[admission.REGISTRY_CANONICAL],value['canonical_current'])
++        self.assertNotIn(admission.REGISTRY_LOGICAL,closure)
++        actual=admission.validate(TEST_CONFIG)
++        rows={r['path']:r for r in actual['required_factory_original_and_raw_closure']}
++        self.assertEqual(rows[admission.REGISTRY_CANONICAL],value['canonical_current'])
++        self.assertNotIn(admission.REGISTRY_LOGICAL,rows)
++        self.assertEqual(actual['exact_physical_path_aliases'],[witness])
++        transition=next(r for r in actual['later_living_or_catalog_evolution'] if r['current']['path']==admission.REGISTRY_LOGICAL)
++        self.assertEqual(transition['current'],logical)
++        self.assertEqual(transition['prior'],value['historical_core507_logical'])
++        self.assertEqual(witness['historical_parent653_canonical'],value['historical_parent653_canonical'])
++        observation=copy.deepcopy(witness['actual_physical_observation'])
++        # Canonical-only case-sensitive restoration is a distinct truthful state.
++        observation['logical_lookup_present']=False
++        observation['logical_binding']=None;observation['logical_identity']=None
++        admission.validate_registry_observation(logical,observation,value)
++
++    def test_registry_exact_tuple_policy_identity_and_two_physical_name_corruptions_rejected(self):
++        value=admission.registry_policy();logical=value['logical_current']
++        for key,replacement in [('path','research/Role_Registry.json'),('path','fixtures/role_registry.json'),
++                                ('path',admission.REGISTRY_CANONICAL),('size',19280),('size',True),('sha256','0'*64)]:
++            changed=dict(logical);changed[key]=replacement
++            with self.subTest(binding=key,value=replacement),self.assertRaises(ValueError):admission.exact_registry_alias(changed)
++        for role in ('logical_current','canonical_current','historical_parent653_canonical','historical_core507_logical'):
++            for field,replacement in [('path','research/Role_Registry.json'),('size',True),('sha256','0'*64)]:
++                changed=copy.deepcopy(value);changed[role][field]=replacement
++                with self.subTest(policy_role=role,field=field),self.assertRaises(ValueError):admission.validate_registry_policy(changed)
++        original=admission.exact_registry_alias(logical)['actual_physical_observation']
++        present=copy.deepcopy(original);present['logical_lookup_present']=True
++        present['logical_binding']=logical;present['logical_identity']=copy.deepcopy(present['canonical_identity'])
++        admission.validate_registry_observation(logical,present,value)
++        variants=[]
++        wrong=copy.deepcopy(present);wrong['logical_identity']['inode']+=1;variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['logical_identity']['device']+=1;variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['canonical_identity']['inode']=True;variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['observed_registry_directory_entries']=['ROLE_REGISTRY.json','role_registry.json'];variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['observed_registry_directory_entries']=['Role_Registry.json'];variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['canonical_binding']['sha256']='0'*64;variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['logical_binding']['size']=19280;variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['logical_lookup_present']=False;variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['logical_lookup_present']=1;variants.append(wrong)
++        wrong=copy.deepcopy(present);wrong['unexpected_alias']='fixtures/copied.json';variants.append(wrong)
++        for index,changed in enumerate(variants):
++            with self.subTest(observation=index),self.assertRaises(ValueError):admission.validate_registry_observation(logical,changed,value)
++

@@ -1,0 +1,146 @@
+"""Planning publication obligations survive removed tags and review filtering.
+
+All approval records here are synthetic fixtures in temporary workspaces.
+"""
+import copy
+import json
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+from factory.common import ROOT, canonical, record, record_hash, write_json, write_jsonl
+from factory.planning_controls import PUBLIC_BINDINGS, PRIOR_PATH, planning_control_rows, planning_control_report
+from oracles.rgm_planning_controls_independent import SEMANTICS_SHA256, solve
+
+
+def fixture_row(variant='base', plan=None):
+    task = {'kind': 'graph', 'nodes': ['a', 'b', 'c', 'd', 'e'],
+            'edges': [['a', 'b', 1], ['b', 'c', 1], ['c', 'd', 1], ['d', 'e', 1]],
+            'start': 'a', 'goal': 'e', 'fuel': 5, 'plan': ['b', 'c'] if plan is None else plan}
+    row = record('RGM-001', 'SYNTHETIC-PLANNING', 180, variant, task,
+                 'Public graph rules. Task JSON:\n' + canonical(task), solve(task), [], 4)
+    row['generator_version'] = 'rgm-planning-gap-1.0.0'
+    row['record_hash'] = record_hash(row)
+    return row
+
+
+def copy_bindings(root):
+    for name in list(PUBLIC_BINDINGS) + [PRIOR_PATH]:
+        dest = root / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes((ROOT / name).read_bytes())
+
+
+def empty_manifest(root, batch):
+    write_json(root / 'data/RGM-001/manifests' / (batch + '.family_controls.json'), {
+        'version': 'SYNTHETIC-EMPTY', 'track_id': 'RGM-001', 'batch_name': 'planning-gap-v1',
+        'semantics_sha256': SEMANTICS_SHA256, 'families': [],
+    })
+
+
+class PlanningControlGateTests(unittest.TestCase):
+    def test_hard_revision_survives_removed_tags_and_metadata(self):
+        row = fixture_row()
+        self.assertEqual(planning_control_rows([row]), [row])
+        with tempfile.TemporaryDirectory() as directory:
+            report = planning_control_report([row], 'SYNTHETIC', Path(directory))
+        self.assertTrue(report['errors'])
+        self.assertTrue(any('family manifest' in error for error in report['errors']))
+
+    def test_batch_identity_survives_removed_revision_and_tags(self):
+        row = fixture_row()
+        row['generator_version'] = '1.0.0'
+        self.assertEqual(planning_control_rows([row], 'planning-gap-v1'), [row])
+
+    def test_public_tag_recognized_inside_namespaced_tag(self):
+        row = fixture_row()
+        row['generator_version'] = '1.0.0'
+        row['skill_tags'] = ['property:legal_prefix_then_first_failure']
+        self.assertEqual(planning_control_rows([row]), [row])
+
+    def test_legacy_rows_have_no_new_prospective_obligations(self):
+        row = fixture_row()
+        row['generator_version'] = '1.0.0'
+        self.assertIsNone(planning_control_report([row], 'legacy', ROOT))
+
+    def test_missing_manifest_blocks_with_valid_frozen_sources(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_bindings(root)
+            report = planning_control_report([fixture_row()], 'SYNTHETIC', root)
+        self.assertEqual(len(report['errors']), 1)
+        self.assertIn('family manifest', report['errors'][0])
+
+    def test_changed_prior_inventory_blocks_novelty_claim(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_bindings(root)
+            empty_manifest(root, 'SYNTHETIC')
+            (root / PRIOR_PATH).write_text('[]\n')
+            report = planning_control_report([fixture_row()], 'SYNTHETIC', root)
+        self.assertIn('frozen prior planning input inventory binding mismatch', report['errors'])
+
+    def test_actual_independent_checker_rejects_incomplete_corpus(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_bindings(root)
+            empty_manifest(root, 'SYNTHETIC')
+            report = planning_control_report([fixture_row()], 'SYNTHETIC', root)
+        self.assertTrue(any('exactly 48 families' in error for error in report['errors']))
+        self.assertTrue(any('manifest does not cover every supplied row' in error for error in report['errors']))
+        self.assertEqual(report['counts']['complete_families'], 0)
+
+    def test_correct_targets_do_not_hide_failed_batch_controls(self):
+        from factory.pipeline import audit
+        row = fixture_row()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_bindings(root)
+            schema = root / 'schemas/canonical/v1.schema.json'
+            schema.parent.mkdir(parents=True, exist_ok=True)
+            schema.write_bytes((ROOT / 'schemas/canonical/v1.schema.json').read_bytes())
+            batch = 'SYNTHETIC-MACHINE-STATUS'
+            empty_manifest(root, batch)
+            path = root / 'data/RGM-001/candidate_renderings' / (batch + '.jsonl')
+            write_jsonl(path, [row])
+            with patch('factory.pipeline.ROOT', root), \
+                    patch('factory.pipeline.candidate_paths', return_value=[path]):
+                report = audit(batch)
+        self.assertEqual(report['oracle_failures'], 0)
+        self.assertEqual(report['metadata_failures'], 0)
+        self.assertEqual(report['validation_failures'], 0)
+        self.assertGreater(report['batch_control_failure_count'], 0)
+        self.assertFalse(report['all_machine_quality_gates_pass'])
+
+    def test_approval_filter_cannot_publish_incomplete_planning_controls(self):
+        from factory.pipeline import release
+        rows = [fixture_row(), fixture_row('second', ['b'])]
+        actors = {'expert': '/root/expert_reviewer', 'adversarial': '/root/adversarial_auditor',
+                  'adjudication': '/root/research_architect'}
+        evidence = {role: {rows[0]['sample_id']: [{
+            'sample_id': rows[0]['sample_id'], 'record_hash': rows[0]['record_hash'], 'decision': 'ACCEPT',
+            'reviewer_execution_id': actor, 'receipt_id': 'SYNTHETIC-' + role,
+            'critical_defects': [], 'issues': [],
+        }]} for role, actor in actors.items()}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_bindings(root)
+            batch = 'SYNTHETIC-PLANNING-FILTER'
+            empty_manifest(root, batch)
+            path = root / 'data/RGM-001/candidate_renderings' / (batch + '.jsonl')
+            write_jsonl(path, rows)
+            write_jsonl(root / 'reviews/oracle' / (batch + '.jsonl'), [
+                {'sample_id': r['sample_id'], 'record_hash': r['record_hash'], 'pass': True} for r in rows])
+            with patch('factory.pipeline.ROOT', root), \
+                    patch('factory.pipeline.candidate_paths', return_value=[path]), \
+                    patch('factory.pipeline.audit', return_value={
+                        'split_leakage': [], 'cross_parent_semantic_duplicates': [], 'exact_prompt_duplicates': 0}), \
+                    patch('factory.pipeline.load_receipts', side_effect=lambda role, name: evidence[role]):
+                with self.assertRaisesRegex(AssertionError, 'planning family controls incomplete or false'):
+                    release(batch, 'SYNTHETIC-NO-PUBLICATION', ['RGM-001'])
+            self.assertFalse((root / 'data/RGM-001/releases/SYNTHETIC-NO-PUBLICATION').exists())
+
+
+if __name__ == '__main__':
+    unittest.main()

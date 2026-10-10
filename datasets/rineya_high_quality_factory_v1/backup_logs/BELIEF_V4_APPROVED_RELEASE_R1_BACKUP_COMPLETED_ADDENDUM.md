@@ -1,0 +1,7 @@
+# BELIEF V4 approved-release archival checkpoint completed
+
+Commit `653ba70f1f7035a5aed137102c14a1ff29d1cf99` (sole parent `4d0b5eff1af3184fedf7fa25ada729a6cc909268`) preserves3158files/1,263,090,770bytes under spec `6c21c64d1cff3ce38d548ed024f6bb9da9f9c8869463d7c4cbd5038240cd97f9`. Root's separate actual full proof verified2474unique GitHub objects. Backup manager's separate actual31gzip fetches recovered1,724,728,576preservedrawbytes;32perraw manifestreferences cover31globalmanifestpaths. Local fullverification performed32decodeiterations/1,766,951,239bytes.
+
+Joined custody `backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_FINAL_JOINED_CUSTODY.json` SHA256 `cf621c9e6625de9ea2ff7af30437cb638e9b76964df1d342d3e003e5ebd8950e` rechecked all source/target/index/localGit payloads,222releasefiles via capped/rawunion,65readonlyreferences andsix originalGit byte/existence guards; bothcheckouts clean/privateADMIN. Unrestricted diff retains exit2/exact6frozenwhitespacewarnings;482otherchangedpaths pass strict checks. No Git mutation or dataapproval by this join. Root ran stage/push/fullverification; backup_manager authored and ran this join and separategzip proof. Same inheritedmodel.
+
+Only frozen3158scope is claimed.26observedarchitectpaths deferredatcut and29subsequentlycompletedfiles, newproofs/ledgers/helpers/thisaddendum and laterRSMpreparations remain local untila laterexactcheckpoint. Historical failure/pending receipts remain unchanged.

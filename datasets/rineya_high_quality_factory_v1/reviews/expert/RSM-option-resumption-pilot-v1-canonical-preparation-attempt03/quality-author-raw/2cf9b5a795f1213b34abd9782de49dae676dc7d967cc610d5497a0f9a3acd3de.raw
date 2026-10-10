@@ -1,0 +1,470 @@
+{
+  "actual_author_execution_id": "/root/expert_reviewer",
+  "checks": [
+    {
+      "evidence": {
+        "events": [
+          {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "event": "effect",
+            "index": 0,
+            "instance_id": 1,
+            "op": "add",
+            "option": "child",
+            "register": "x",
+            "state": {
+              "x": 4,
+              "y": 2
+            },
+            "value": 2
+          },
+          {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "event": "effect",
+            "index": 1,
+            "instance_id": 1,
+            "op": "add",
+            "option": "child",
+            "register": "y",
+            "state": {
+              "x": 4,
+              "y": 3
+            },
+            "value": 1
+          },
+          {
+            "event": "return",
+            "instance_id": 1,
+            "option": "child",
+            "success_ok": true
+          },
+          {
+            "body_path": [],
+            "event": "effect",
+            "index": 1,
+            "instance_id": 0,
+            "op": "add",
+            "option": "start",
+            "register": "y",
+            "state": {
+              "x": 4,
+              "y": 5
+            },
+            "value": 2
+          },
+          {
+            "event": "return",
+            "instance_id": 0,
+            "option": "start",
+            "success_ok": true
+          }
+        ],
+        "terminal_phase": "completed",
+        "terminal_state": {
+          "x": 4,
+          "y": 5
+        }
+      },
+      "name": "hand trusted continuation ends x4y5, five events",
+      "passed": true
+    },
+    {
+      "evidence": {
+        "after": 10,
+        "before": 9,
+        "future_differences": [],
+        "holds": false,
+        "locator": [
+          "frames",
+          2,
+          "bindings",
+          "unused"
+        ],
+        "starting_snapshot_omitted": true
+      },
+      "name": "NEGATIVE unused selected-frame binding not future dependency",
+      "passed": true
+    },
+    {
+      "evidence": {
+        "after": 3,
+        "before": 2,
+        "future_differences": [
+          {
+            "left": 2,
+            "path": [
+              "events",
+              0,
+              "value"
+            ],
+            "right": 3
+          },
+          {
+            "left": 4,
+            "path": [
+              "events",
+              0,
+              "state",
+              "x"
+            ],
+            "right": 5
+          },
+          {
+            "left": 4,
+            "path": [
+              "events",
+              1,
+              "state",
+              "x"
+            ],
+            "right": 5
+          },
+          {
+            "left": 4,
+            "path": [
+              "events",
+              3,
+              "state",
+              "x"
+            ],
+            "right": 5
+          },
+          {
+            "left": 4,
+            "path": [
+              "terminal_state",
+              "x"
+            ],
+            "right": 5
+          }
+        ],
+        "holds": true,
+        "locator": [
+          "frames",
+          2,
+          "bindings",
+          "used"
+        ],
+        "starting_snapshot_omitted": true
+      },
+      "name": "POSITIVE saved operand changes pending first add and terminal x",
+      "passed": true
+    },
+    {
+      "evidence": {
+        "events": [
+          {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "event": "effect",
+            "index": 0,
+            "instance_id": 1,
+            "op": "add",
+            "option": "child",
+            "register": "x",
+            "state": {
+              "x": 5,
+              "y": 2
+            },
+            "value": 3
+          },
+          {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "event": "effect",
+            "index": 1,
+            "instance_id": 1,
+            "op": "add",
+            "option": "child",
+            "register": "y",
+            "state": {
+              "x": 5,
+              "y": 3
+            },
+            "value": 1
+          },
+          {
+            "event": "return",
+            "instance_id": 1,
+            "option": "child",
+            "success_ok": true
+          },
+          {
+            "body_path": [],
+            "event": "effect",
+            "index": 1,
+            "instance_id": 0,
+            "op": "add",
+            "option": "start",
+            "register": "y",
+            "state": {
+              "x": 5,
+              "y": 5
+            },
+            "value": 2
+          },
+          {
+            "event": "return",
+            "instance_id": 0,
+            "option": "start",
+            "success_ok": true
+          }
+        ],
+        "terminal_phase": "completed",
+        "terminal_state": {
+          "x": 5,
+          "y": 5
+        }
+      },
+      "name": "hand changed used2to3 first effect value3 statex5 and terminalx5y5",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "negative demonstrably defeats old snapshot-inclusive comparator",
+      "passed": true
+    },
+    {
+      "evidence": {
+        "after": 3,
+        "before": 2,
+        "future_differences": [],
+        "holds": false,
+        "locator": [
+          "state",
+          "x"
+        ],
+        "starting_snapshot_omitted": true
+      },
+      "name": "NEGATIVE state overwritten before first observed event not dependency",
+      "passed": true
+    },
+    {
+      "evidence": {
+        "after": 1,
+        "before": 0,
+        "future_differences": [
+          {
+            "left": [
+              {
+                "body_path": [
+                  0,
+                  "then"
+                ],
+                "event": "effect",
+                "index": 0,
+                "instance_id": 1,
+                "op": "add",
+                "option": "child",
+                "register": "x",
+                "state": {
+                  "x": 4,
+                  "y": 2
+                },
+                "value": 2
+              },
+              {
+                "body_path": [
+                  0,
+                  "then"
+                ],
+                "event": "effect",
+                "index": 1,
+                "instance_id": 1,
+                "op": "add",
+                "option": "child",
+                "register": "y",
+                "state": {
+                  "x": 4,
+                  "y": 3
+                },
+                "value": 1
+              },
+              {
+                "event": "return",
+                "instance_id": 1,
+                "option": "child",
+                "success_ok": true
+              },
+              {
+                "body_path": [],
+                "event": "effect",
+                "index": 1,
+                "instance_id": 0,
+                "op": "add",
+                "option": "start",
+                "register": "y",
+                "state": {
+                  "x": 4,
+                  "y": 5
+                },
+                "value": 2
+              },
+              {
+                "event": "return",
+                "instance_id": 0,
+                "option": "start",
+                "success_ok": true
+              }
+            ],
+            "path": [
+              "events"
+            ],
+            "right": [
+              {
+                "body_path": [
+                  0,
+                  "then"
+                ],
+                "event": "effect",
+                "index": 1,
+                "instance_id": 1,
+                "op": "add",
+                "option": "child",
+                "register": "y",
+                "state": {
+                  "x": 2,
+                  "y": 3
+                },
+                "value": 1
+              },
+              {
+                "event": "return",
+                "instance_id": 1,
+                "option": "child",
+                "success_ok": true
+              },
+              {
+                "body_path": [],
+                "event": "effect",
+                "index": 1,
+                "instance_id": 0,
+                "op": "add",
+                "option": "start",
+                "register": "y",
+                "state": {
+                  "x": 2,
+                  "y": 5
+                },
+                "value": 2
+              },
+              {
+                "event": "return",
+                "instance_id": 0,
+                "option": "start",
+                "success_ok": true
+              }
+            ]
+          },
+          {
+            "left": 4,
+            "path": [
+              "terminal_state",
+              "x"
+            ],
+            "right": 2
+          }
+        ],
+        "holds": true,
+        "locator": [
+          "frames",
+          2,
+          "next_index"
+        ],
+        "starting_snapshot_omitted": true
+      },
+      "name": "POSITIVE advanced cursor omits pending primitive",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "boolean locator index is rejected",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "POSITIVE actual pending R r3to4 changes first add y5to6",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "shared descriptive ID across different names remains distinct resolver key",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "property-only identifier resolves equal key",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "equal name/property legal",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "negative boolean ID",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "negative unequal name/property",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "negative duplicate member",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "literal/state erasure full",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "literal/state erasure coarse_all",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "literal/state erasure coarse_reachable",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "reachable view ignores unused padding",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "all-declared view retains actual unused procedure graph",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "top-level record hash excluded",
+      "passed": true
+    },
+    {
+      "evidence": null,
+      "name": "nested hash is never excluded from full-record hash",
+      "passed": true
+    }
+  ],
+  "common_model_same_author": true,
+  "failed": 0,
+  "handmade_and_input_derived": true,
+  "passed": 22,
+  "production_targets_read": false
+}

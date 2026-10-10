@@ -1,0 +1,2018 @@
+{
+  "actor": "/root/adversarial_auditor",
+  "stage": "input-only numeric/coarse supplement after initial predictions freeze",
+  "gold_access": false,
+  "train_only": true,
+  "model_training": false,
+  "baselines": {
+    "student_root_success_max_literal": {
+      "train_keys": 7,
+      "dev_correct": 44,
+      "dev_rows": 72,
+      "dev_accuracy": 0.6111111111111112,
+      "dev_macro_accuracy": 0.3,
+      "dev_key_seen_rows": 68,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-forward",
+          "feature": 0,
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-reverse",
+          "feature": 0,
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-forward",
+          "feature": 0,
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-reverse",
+          "feature": 0,
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        }
+      ],
+      "feature_collision": {
+        "sample_ids": [
+          "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+          "RSM-001-option-resumption-pilot-v1-p0012-P-forward"
+        ],
+        "feature": 0,
+        "statuses": [
+          "completed",
+          "paused"
+        ]
+      }
+    },
+    "student_program_max_abs_integer": {
+      "train_keys": 8,
+      "dev_correct": 44,
+      "dev_rows": 72,
+      "dev_accuracy": 0.6111111111111112,
+      "dev_macro_accuracy": 0.3,
+      "dev_key_seen_rows": 68,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-forward",
+          "feature": 1,
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-reverse",
+          "feature": 1,
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-forward",
+          "feature": 1,
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-reverse",
+          "feature": 1,
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        }
+      ],
+      "feature_collision": {
+        "sample_ids": [
+          "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+          "RSM-001-option-resumption-pilot-v1-p0012-P-forward"
+        ],
+        "feature": 1,
+        "statuses": [
+          "completed",
+          "paused"
+        ]
+      }
+    },
+    "student_numeric_sign_count": {
+      "train_keys": 1,
+      "dev_correct": 40,
+      "dev_rows": 72,
+      "dev_accuracy": 0.5555555555555556,
+      "dev_macro_accuracy": 0.2,
+      "dev_key_seen_rows": 72,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-forward",
+          "feature": 1,
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-reverse",
+          "feature": 1,
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-forward",
+          "feature": 1,
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-reverse",
+          "feature": 1,
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        }
+      ],
+      "feature_collision": {
+        "sample_ids": [
+          "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+          "RSM-001-option-resumption-pilot-v1-p0012-P-forward"
+        ],
+        "feature": 1,
+        "statuses": [
+          "completed",
+          "paused"
+        ]
+      }
+    },
+    "student_mode_budget_rootargs_successmax": {
+      "train_keys": 13,
+      "dev_correct": 60,
+      "dev_rows": 72,
+      "dev_accuracy": 0.8333333333333334,
+      "dev_macro_accuracy": 0.7,
+      "dev_key_seen_rows": 68,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-S-forward",
+          "feature": [
+            "fresh",
+            0,
+            48,
+            [
+              "{\"reg\":\"x\"}"
+            ],
+            57
+          ],
+          "prediction": "completed",
+          "actual_own_status": "success_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-S-reverse",
+          "feature": [
+            "fresh",
+            0,
+            48,
+            [
+              "{\"reg\":\"x\"}"
+            ],
+            57
+          ],
+          "prediction": "completed",
+          "actual_own_status": "success_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-X-forward",
+          "feature": [
+            "resume",
+            5,
+            48,
+            [
+              "{\"reg\":\"x\"}"
+            ],
+            0
+          ],
+          "prediction": "completed",
+          "actual_own_status": "invalid"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-X-reverse",
+          "feature": [
+            "resume",
+            5,
+            48,
+            [
+              "{\"reg\":\"x\"}"
+            ],
+            0
+          ],
+          "prediction": "completed",
+          "actual_own_status": "invalid"
+        }
+      ],
+      "feature_collision": {
+        "sample_ids": [
+          "RSM-001-option-resumption-pilot-v1-p0012-R-forward",
+          "RSM-001-option-resumption-pilot-v1-p0012-X-forward"
+        ],
+        "feature": [
+          "resume",
+          5,
+          48,
+          [
+            "{\"reg\":\"x\"}"
+          ],
+          0
+        ],
+        "statuses": [
+          "completed",
+          "invalid"
+        ]
+      }
+    },
+    "student_coarse_plus_three_shallow_checkpoint_flags": {
+      "train_keys": 16,
+      "dev_correct": 68,
+      "dev_rows": 72,
+      "dev_accuracy": 0.9444444444444444,
+      "dev_macro_accuracy": 0.9,
+      "dev_key_seen_rows": 68,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-S-forward",
+          "feature": [
+            "fresh",
+            0,
+            48,
+            [
+              "{\"reg\":\"x\"}"
+            ],
+            57,
+            false,
+            false,
+            false
+          ],
+          "prediction": "completed",
+          "actual_own_status": "success_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-S-reverse",
+          "feature": [
+            "fresh",
+            0,
+            48,
+            [
+              "{\"reg\":\"x\"}"
+            ],
+            57,
+            false,
+            false,
+            false
+          ],
+          "prediction": "completed",
+          "actual_own_status": "success_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0019-S-forward",
+          "feature": [
+            "fresh",
+            0,
+            48,
+            [
+              "{\"reg\":\"x\"}"
+            ],
+            193,
+            false,
+            false,
+            false
+          ],
+          "prediction": "completed",
+          "actual_own_status": "success_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0019-S-reverse",
+          "feature": [
+            "fresh",
+            0,
+            48,
+            [
+              "{\"reg\":\"x\"}"
+            ],
+            193,
+            false,
+            false,
+            false
+          ],
+          "prediction": "completed",
+          "actual_own_status": "success_failed"
+        }
+      ],
+      "feature_collision": null
+    },
+    "student_shallow_checkpoint_flags": {
+      "train_keys": 4,
+      "dev_correct": 48,
+      "dev_rows": 72,
+      "dev_accuracy": 0.6666666666666667,
+      "dev_macro_accuracy": 0.4,
+      "dev_key_seen_rows": 72,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-forward",
+          "feature": [
+            false,
+            false,
+            false
+          ],
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-reverse",
+          "feature": [
+            false,
+            false,
+            false
+          ],
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-forward",
+          "feature": [
+            false,
+            false,
+            false
+          ],
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-reverse",
+          "feature": [
+            false,
+            false,
+            false
+          ],
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        }
+      ],
+      "feature_collision": {
+        "sample_ids": [
+          "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+          "RSM-001-option-resumption-pilot-v1-p0012-P-forward"
+        ],
+        "feature": [
+          false,
+          false,
+          false
+        ],
+        "statuses": [
+          "completed",
+          "paused"
+        ]
+      }
+    },
+    "student_rendered_top_first_key": {
+      "train_keys": 2,
+      "dev_correct": 40,
+      "dev_rows": 72,
+      "dev_accuracy": 0.5555555555555556,
+      "dev_macro_accuracy": 0.2,
+      "dev_key_seen_rows": 72,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-forward",
+          "feature": "checkpoint",
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-reverse",
+          "feature": "version",
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-forward",
+          "feature": "checkpoint",
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-reverse",
+          "feature": "version",
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        }
+      ],
+      "feature_collision": {
+        "sample_ids": [
+          "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+          "RSM-001-option-resumption-pilot-v1-p0012-P-forward"
+        ],
+        "feature": "checkpoint",
+        "statuses": [
+          "completed",
+          "paused"
+        ]
+      }
+    },
+    "student_rendered_top_key_order": {
+      "train_keys": 2,
+      "dev_correct": 40,
+      "dev_rows": 72,
+      "dev_accuracy": 0.5555555555555556,
+      "dev_macro_accuracy": 0.2,
+      "dev_key_seen_rows": 72,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-forward",
+          "feature": [
+            "checkpoint",
+            "entry",
+            "event_budget",
+            "history",
+            "initial_state",
+            "kind",
+            "mode",
+            "options",
+            "version"
+          ],
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-reverse",
+          "feature": [
+            "version",
+            "options",
+            "mode",
+            "kind",
+            "initial_state",
+            "history",
+            "event_budget",
+            "entry",
+            "checkpoint"
+          ],
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-forward",
+          "feature": [
+            "checkpoint",
+            "entry",
+            "event_budget",
+            "history",
+            "initial_state",
+            "kind",
+            "mode",
+            "options",
+            "version"
+          ],
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-reverse",
+          "feature": [
+            "version",
+            "options",
+            "mode",
+            "kind",
+            "initial_state",
+            "history",
+            "event_budget",
+            "entry",
+            "checkpoint"
+          ],
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        }
+      ],
+      "feature_collision": {
+        "sample_ids": [
+          "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+          "RSM-001-option-resumption-pilot-v1-p0012-P-forward"
+        ],
+        "feature": [
+          "checkpoint",
+          "entry",
+          "event_budget",
+          "history",
+          "initial_state",
+          "kind",
+          "mode",
+          "options",
+          "version"
+        ],
+        "statuses": [
+          "completed",
+          "paused"
+        ]
+      }
+    },
+    "student_program_declared_opcode_counts": {
+      "train_keys": 8,
+      "dev_correct": 40,
+      "dev_rows": 72,
+      "dev_accuracy": 0.5555555555555556,
+      "dev_macro_accuracy": 0.2,
+      "dev_key_seen_rows": 36,
+      "first_errors": [
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-forward",
+          "feature": {
+            "add": 8,
+            "call": 3,
+            "scale": 2,
+            "if": 2,
+            "swap": 1
+          },
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-P-reverse",
+          "feature": {
+            "add": 8,
+            "call": 3,
+            "scale": 2,
+            "if": 2,
+            "swap": 1
+          },
+          "prediction": "completed",
+          "actual_own_status": "paused"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-forward",
+          "feature": {
+            "add": 8,
+            "call": 3,
+            "scale": 2,
+            "if": 2,
+            "swap": 1
+          },
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        },
+        {
+          "sample_id": "RSM-001-option-resumption-pilot-v1-p0018-I-reverse",
+          "feature": {
+            "add": 8,
+            "call": 3,
+            "scale": 2,
+            "if": 2,
+            "swap": 1
+          },
+          "prediction": "completed",
+          "actual_own_status": "initiation_failed"
+        }
+      ],
+      "feature_collision": {
+        "sample_ids": [
+          "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+          "RSM-001-option-resumption-pilot-v1-p0012-P-forward"
+        ],
+        "feature": {
+          "add": 7,
+          "call": 3,
+          "scale": 2,
+          "if": 2,
+          "swap": 1
+        },
+        "statuses": [
+          "completed",
+          "paused"
+        ]
+      }
+    },
+    "external_join_row_context": {
+      "train_keys": 9,
+      "dev_correct": 72,
+      "dev_rows": 72,
+      "dev_accuracy": 1.0,
+      "dev_macro_accuracy": 1.0,
+      "dev_key_seen_rows": 72,
+      "first_errors": [],
+      "feature_collision": null
+    }
+  },
+  "actual_transform_checks": [
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0013-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0014-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0015-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0016-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0017-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0018-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0019-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0020-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0021-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0028-F-forward",
+      "passed": true
+    },
+    {
+      "name": "truthful_large_success_tautology_RSM-001-option-resumption-pilot-v1-p0029-F-forward",
+      "passed": true
+    }
+  ],
+  "minimal_counterexamples": [
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+      "parent_record_hash": "d990b3013f5b405bbffc7011baf84968dad215b9f9d8479088b64056efe74e33",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0012-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 33
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 33
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+      "parent_record_hash": "d990b3013f5b405bbffc7011baf84968dad215b9f9d8479088b64056efe74e33",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0012-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 33
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 33
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+      "parent_record_hash": "d990b3013f5b405bbffc7011baf84968dad215b9f9d8479088b64056efe74e33",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0012-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 33
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 33
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0012-F-forward",
+      "parent_record_hash": "d990b3013f5b405bbffc7011baf84968dad215b9f9d8479088b64056efe74e33",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0012-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 33
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 33
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0013-F-forward",
+      "parent_record_hash": "6f386c1fab1f57d0faf381df867e374abe680401447e6551f9dd1147d41cec44",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0013-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 27
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 27
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0013-F-forward",
+      "parent_record_hash": "6f386c1fab1f57d0faf381df867e374abe680401447e6551f9dd1147d41cec44",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0013-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 27
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 27
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0013-F-forward",
+      "parent_record_hash": "6f386c1fab1f57d0faf381df867e374abe680401447e6551f9dd1147d41cec44",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0013-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 27
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 27
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0013-F-forward",
+      "parent_record_hash": "6f386c1fab1f57d0faf381df867e374abe680401447e6551f9dd1147d41cec44",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0013-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 27
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 27
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0014-F-forward",
+      "parent_record_hash": "53df554f6bf707f1756c7cbcd7082dc3a9030abd6ab241965fae81676e27a402",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0014-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 63
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 63
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0014-F-forward",
+      "parent_record_hash": "53df554f6bf707f1756c7cbcd7082dc3a9030abd6ab241965fae81676e27a402",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0014-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 63
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 63
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0014-F-forward",
+      "parent_record_hash": "53df554f6bf707f1756c7cbcd7082dc3a9030abd6ab241965fae81676e27a402",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0014-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 63
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 63
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0014-F-forward",
+      "parent_record_hash": "53df554f6bf707f1756c7cbcd7082dc3a9030abd6ab241965fae81676e27a402",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0014-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 63
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 63
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0015-F-forward",
+      "parent_record_hash": "ddbc48534172ef78e265da91273ab2c2ea5d744618e6673740ce4ac097349e83",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0015-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 63
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 63
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0015-F-forward",
+      "parent_record_hash": "ddbc48534172ef78e265da91273ab2c2ea5d744618e6673740ce4ac097349e83",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0015-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 63
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 63
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0015-F-forward",
+      "parent_record_hash": "ddbc48534172ef78e265da91273ab2c2ea5d744618e6673740ce4ac097349e83",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0015-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 63
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 63
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0015-F-forward",
+      "parent_record_hash": "ddbc48534172ef78e265da91273ab2c2ea5d744618e6673740ce4ac097349e83",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0015-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 63
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 63
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0016-F-forward",
+      "parent_record_hash": "a60ee778e91e4e3e542f0f40ead82330ff3c89496f23fb7eb8f61f8b3b1aa1c8",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0016-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 41
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 41
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0016-F-forward",
+      "parent_record_hash": "a60ee778e91e4e3e542f0f40ead82330ff3c89496f23fb7eb8f61f8b3b1aa1c8",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0016-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 41
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 41
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0016-F-forward",
+      "parent_record_hash": "a60ee778e91e4e3e542f0f40ead82330ff3c89496f23fb7eb8f61f8b3b1aa1c8",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0016-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 41
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 41
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0016-F-forward",
+      "parent_record_hash": "a60ee778e91e4e3e542f0f40ead82330ff3c89496f23fb7eb8f61f8b3b1aa1c8",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0016-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 41
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 41
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0017-F-forward",
+      "parent_record_hash": "f19f1842b1b198d83f60838f881a2efdd7da18f4b59269fa60fa29aae39b5481",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0017-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0017-F-forward",
+      "parent_record_hash": "f19f1842b1b198d83f60838f881a2efdd7da18f4b59269fa60fa29aae39b5481",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0017-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0017-F-forward",
+      "parent_record_hash": "f19f1842b1b198d83f60838f881a2efdd7da18f4b59269fa60fa29aae39b5481",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0017-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0017-F-forward",
+      "parent_record_hash": "f19f1842b1b198d83f60838f881a2efdd7da18f4b59269fa60fa29aae39b5481",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0017-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0020-F-forward",
+      "parent_record_hash": "a9b66720afa1bf62eade38e2ccf009cccbb8ba70a89c34800c2b5df63668a27f",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0020-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0020-F-forward",
+      "parent_record_hash": "a9b66720afa1bf62eade38e2ccf009cccbb8ba70a89c34800c2b5df63668a27f",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0020-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0020-F-forward",
+      "parent_record_hash": "a9b66720afa1bf62eade38e2ccf009cccbb8ba70a89c34800c2b5df63668a27f",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0020-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0020-F-forward",
+      "parent_record_hash": "a9b66720afa1bf62eade38e2ccf009cccbb8ba70a89c34800c2b5df63668a27f",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0020-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0021-F-forward",
+      "parent_record_hash": "bdcdad261757503a9b70425e2642c02ac8b08d991a059afa38489ee7dee4c90b",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0021-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 99
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 99
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0021-F-forward",
+      "parent_record_hash": "bdcdad261757503a9b70425e2642c02ac8b08d991a059afa38489ee7dee4c90b",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0021-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 99
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 99
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0021-F-forward",
+      "parent_record_hash": "bdcdad261757503a9b70425e2642c02ac8b08d991a059afa38489ee7dee4c90b",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0021-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 99
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 99
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0021-F-forward",
+      "parent_record_hash": "bdcdad261757503a9b70425e2642c02ac8b08d991a059afa38489ee7dee4c90b",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0021-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 99
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 99
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0028-F-forward",
+      "parent_record_hash": "974ef7fbfe991fcc54e07638ad684b01cc17a57f24b2c3224102ad8289c0ec5d",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0028-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0028-F-forward",
+      "parent_record_hash": "974ef7fbfe991fcc54e07638ad684b01cc17a57f24b2c3224102ad8289c0ec5d",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0028-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0028-F-forward",
+      "parent_record_hash": "974ef7fbfe991fcc54e07638ad684b01cc17a57f24b2c3224102ad8289c0ec5d",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0028-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0028-F-forward",
+      "parent_record_hash": "974ef7fbfe991fcc54e07638ad684b01cc17a57f24b2c3224102ad8289c0ec5d",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0028-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 37
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 37
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0029-F-forward",
+      "parent_record_hash": "04798455b2cadb79e83a00dece8a7f0e869442a79ab77da0af9c6a6e66482b75",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0029-S-forward",
+      "baseline": "student_root_success_max_literal",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 33
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 33
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0029-F-forward",
+      "parent_record_hash": "04798455b2cadb79e83a00dece8a7f0e869442a79ab77da0af9c6a6e66482b75",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0029-S-forward",
+      "baseline": "student_program_max_abs_integer",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 33
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 33
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0029-F-forward",
+      "parent_record_hash": "04798455b2cadb79e83a00dece8a7f0e869442a79ab77da0af9c6a6e66482b75",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0029-S-forward",
+      "baseline": "student_mode_budget_rootargs_successmax",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 33
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 33
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    },
+    {
+      "parent_sample_id": "RSM-001-option-resumption-pilot-v1-p0029-F-forward",
+      "parent_record_hash": "04798455b2cadb79e83a00dece8a7f0e869442a79ab77da0af9c6a6e66482b75",
+      "matched_success_failure_sample": "RSM-001-option-resumption-pilot-v1-p0029-S-forward",
+      "baseline": "student_coarse_plus_three_shallow_checkpoint_flags",
+      "old_prediction": "completed",
+      "new_wrong_prediction": "success_failed",
+      "own_status": "completed",
+      "changed_path": [
+        "options",
+        "start",
+        "success",
+        "all",
+        "append"
+      ],
+      "added_atom": {
+        "left": {
+          "const": 33
+        },
+        "cmp": "eq",
+        "right": {
+          "const": 33
+        }
+      },
+      "full_typed_output_unchanged": true,
+      "mutation": "one always-true success atom; no events/body effects changed",
+      "descendant_is_new_source_family": false
+    }
+  ],
+  "input_status_distribution": {
+    "completed": 120,
+    "paused": 24,
+    "initiation_failed": 24,
+    "success_failed": 24,
+    "invalid": 24
+  },
+  "inferences": [
+    "Shallow checkpoint flags check visible local consistency without executing full program. Valid semantic preflight may be useful, but whole-cohort status transfer can bypass procedure execution.",
+    "Coarse status lookup success does not solve typed event traces/state. Tautology descendants are audit interventions, not new independent program families.",
+    "Only own predicted outputs supply labels; canonical correctness still UNKNOWN. No corpus control claims or release approval."
+  ],
+  "before_freeze": {
+    "actor": "/root/adversarial_auditor",
+    "phase": "before_first_numeric_supplement_import/execution",
+    "bindings": [
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/shortcut_supplement_r1.py",
+        "sha256": "eb93d8e931d757c70080719136477ca94cfe5e30d09e97b3c8ea6445755294cd",
+        "size_bytes": 8701,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/eb93d8e931d757c70080719136477ca94cfe5e30d09e97b3c8ea6445755294cd.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/frame_predictions.jsonl",
+        "sha256": "d67500ab37d1835d21511fe8cf6a9934cf8dd78cd019abddc5d13846567d466b",
+        "size_bytes": 518392,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/d67500ab37d1835d21511fe8cf6a9934cf8dd78cd019abddc5d13846567d466b.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/INITIAL_INPUT_JUDGMENTS.jsonl",
+        "sha256": "b1a15481b6170a53651a980059d18e8ed5493f3a49b217bb59629bc32f3b79cb",
+        "size_bytes": 308088,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/b1a15481b6170a53651a980059d18e8ed5493f3a49b217bb59629bc32f3b79cb.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/PREDICTION_FREEZE.json",
+        "sha256": "5a7fb5a887ee93c04d5b42fe37e5880e21b58857d68662b7929d963d12715027",
+        "size_bytes": 1395,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/5a7fb5a887ee93c04d5b42fe37e5880e21b58857d68662b7929d963d12715027.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/RUN_CONFIG.json",
+        "sha256": "0c1ef745284372f3da4a3b0f0986142a157b64a35f9933ee7cbe73e091ac61f2",
+        "size_bytes": 1319,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/0c1ef745284372f3da4a3b0f0986142a157b64a35f9933ee7cbe73e091ac61f2.source"
+      },
+      {
+        "path": "reviews/input_only/RSM-option-resumption-pilot-v1.jsonl",
+        "sha256": "d99074c6cd18d1bd9709a09f833bfe9fea50c0c3981ece532c3951aac220f6b1",
+        "size_bytes": 4512472,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/d99074c6cd18d1bd9709a09f833bfe9fea50c0c3981ece532c3951aac220f6b1.source"
+      },
+      {
+        "path": "schemas/RSM_OPTION_RESUMPTION_V1.md",
+        "sha256": "44652656ad18e60c98c96db14e0a96b4e46b0dad0bd57f257bca30384ab53b3f",
+        "size_bytes": 14849,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/44652656ad18e60c98c96db14e0a96b4e46b0dad0bd57f257bca30384ab53b3f.source"
+      },
+      {
+        "path": "research/curricula/RSM-OPTION-RESUMPTION-PROSPECTIVE-20261010.md",
+        "sha256": "8bda187009cc91756248ddd86792c28aabe0793a3f6be304bb9433bfdf48be34",
+        "size_bytes": 11872,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/8bda187009cc91756248ddd86792c28aabe0793a3f6be304bb9433bfdf48be34.source"
+      },
+      {
+        "path": "research/curricula/RSM-OPTION-RESUMPTION-CONFIG-20261010.json",
+        "sha256": "422f67c836639d0accbf411c3080ef4fc7695ad8630120a140488c90a19061fa",
+        "size_bytes": 5828,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/422f67c836639d0accbf411c3080ef4fc7695ad8630120a140488c90a19061fa.source"
+      },
+      {
+        "path": "schemas/RSM_OPTION_RESUMPTION_METADATA_V1.md",
+        "sha256": "1612b14d7549b7fb406cbef8e127440dcfddaf30548ef29d217bc49aefb6c854",
+        "size_bytes": 10453,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/1612b14d7549b7fb406cbef8e127440dcfddaf30548ef29d217bc49aefb6c854.source"
+      },
+      {
+        "path": "schemas/RSM_OPTION_RESUMPTION_METADATA_V1_AMENDMENT_R1.md",
+        "sha256": "5f7f6a2c45dd6a0b51c7a912b28fd49badd9aa3aa2eac8632e9b9781c201b57b",
+        "size_bytes": 12353,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/5f7f6a2c45dd6a0b51c7a912b28fd49badd9aa3aa2eac8632e9b9781c201b57b.source"
+      },
+      {
+        "path": "schemas/RSM_OPTION_RESUMPTION_METADATA_V1_AMENDMENT_R2.md",
+        "sha256": "b62663c3082c9e2ee2bf34aadc1fdd10f263a6497396b6768f1475b12f568fe4",
+        "size_bytes": 4733,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/b62663c3082c9e2ee2bf34aadc1fdd10f263a6497396b6768f1475b12f568fe4.source"
+      },
+      {
+        "path": "schemas/canonical/v1.schema.json",
+        "sha256": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+        "size_bytes": 1848,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f.source"
+      },
+      {
+        "path": "schemas/SEMANTICS.md",
+        "sha256": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "size_bytes": 4833,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd.source"
+      },
+      {
+        "path": "schemas/EXTENDED_SEMANTICS.md",
+        "sha256": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "size_bytes": 11509,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/frame_solver_r1.py",
+        "sha256": "407268916c35b10e36b18d7a7d3b7a37c880306237dafe3b12bd1f4942eeaf24",
+        "size_bytes": 11439,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/407268916c35b10e36b18d7a7d3b7a37c880306237dafe3b12bd1f4942eeaf24.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/recursive_simulator_r1.py",
+        "sha256": "032723d5db52e3a76a9583c02332aa7cf6fc22759bba0739eddc265e37f3db5a",
+        "size_bytes": 6053,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/032723d5db52e3a76a9583c02332aa7cf6fc22759bba0739eddc265e37f3db5a.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/hand_fixtures_r1.json",
+        "sha256": "e00b811a32be5a7f339c56ec8c93642b35e99dedd9eb22d106868835e54ba3ce",
+        "size_bytes": 72281,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/e00b811a32be5a7f339c56ec8c93642b35e99dedd9eb22d106868835e54ba3ce.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/test_preparation_r1.py",
+        "sha256": "f186a79442fcaac0d0758cb396cce005d4c6dc1250aed88e4916a31718a5c0cf",
+        "size_bytes": 21677,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/f186a79442fcaac0d0758cb396cce005d4c6dc1250aed88e4916a31718a5c0cf.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/RUN_CONFIG_R1.json",
+        "sha256": "7159ad18f2c4cb2b2e2ec99eccdb933ea050eadc9012727f726b8fbf8bb8dd38",
+        "size_bytes": 1798,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/7159ad18f2c4cb2b2e2ec99eccdb933ea050eadc9012727f726b8fbf8bb8dd38.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/INPUT_FIRST_PROTOCOL.md",
+        "sha256": "84f05185bf36542bbddbcf163ef003647400baf13aeb69099cf63eb61f679ab2",
+        "size_bytes": 5075,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/84f05185bf36542bbddbcf163ef003647400baf13aeb69099cf63eb61f679ab2.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/PREEXEC_R1.json",
+        "sha256": "91ba9bc3fb1a18b42c8aabfdb7d3d3453a6eb4693ebb6cb839b22ea2cbac5548",
+        "size_bytes": 15427,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/91ba9bc3fb1a18b42c8aabfdb7d3d3453a6eb4693ebb6cb839b22ea2cbac5548.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/FINAL_RECEIPT.json",
+        "sha256": "448e8c23e5a3e66976debfbc1a4294df7913441d4601540d707f9f85d63f974b",
+        "size_bytes": 9871,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/448e8c23e5a3e66976debfbc1a4294df7913441d4601540d707f9f85d63f974b.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/FINAL_COUNT_CLARIFICATION.json",
+        "sha256": "af0910abf1657e6040857f1221560369c9686e706794252fc256ecc4e7c6c508",
+        "size_bytes": 1127,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/af0910abf1657e6040857f1221560369c9686e706794252fc256ecc4e7c6c508.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-preparation-20261010T1112Z/FINAL_CUSTODY_R2.json",
+        "sha256": "022d3c39cf0039afa8d5fc035290754acb543a9f0b37e24c6b9c35323c36b795",
+        "size_bytes": 8046,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/022d3c39cf0039afa8d5fc035290754acb543a9f0b37e24c6b9c35323c36b795.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-interface-correction-20261010/attempt01/control_probes_r2.py",
+        "sha256": "75d4282375afbec8ed552bfa5f36da2d1b907f7ddd5a810b36b534def1c997a7",
+        "size_bytes": 18182,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/75d4282375afbec8ed552bfa5f36da2d1b907f7ddd5a810b36b534def1c997a7.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-interface-correction-20261010/attempt01/FINAL_REVIEW.json",
+        "sha256": "9b2f792d8e302c7f583a246f4697c65b4ae07ed55ef10bd626eccd09dc052be5",
+        "size_bytes": 5485,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/9b2f792d8e302c7f583a246f4697c65b4ae07ed55ef10bd626eccd09dc052be5.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-public-interface-correction-20261010/attempt01/FINAL_CUSTODY.json",
+        "sha256": "7684bed0bf0bc77884ed955018f8dfb2a5791e34712c637c1a276ad6fa086513",
+        "size_bytes": 6125,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/7684bed0bf0bc77884ed955018f8dfb2a5791e34712c637c1a276ad6fa086513.source"
+      },
+      {
+        "path": "reviews/input_only/RSM-option-resumption-pilot-v1.jsonl",
+        "sha256": "d99074c6cd18d1bd9709a09f833bfe9fea50c0c3981ece532c3951aac220f6b1",
+        "size_bytes": 4512472,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/d99074c6cd18d1bd9709a09f833bfe9fea50c0c3981ece532c3951aac220f6b1.source"
+      },
+      {
+        "path": "reviews/input_only/RSM-option-resumption-pilot-v1.INPUT_CUSTODY.json",
+        "sha256": "231250e9819e72608a9a34bc32b3efea22f2a7943b5e4a0eacf8560015457e76",
+        "size_bytes": 876,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/231250e9819e72608a9a34bc32b3efea22f2a7943b5e4a0eacf8560015457e76.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/freeze_sources_r1.py",
+        "sha256": "79020316b75cc70b1fb8a92bbc4afbdee4324d7a71aa5fd784f5495753b6b7c0",
+        "size_bytes": 3957,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/79020316b75cc70b1fb8a92bbc4afbdee4324d7a71aa5fd784f5495753b6b7c0.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/inspect_packet_r1.py",
+        "sha256": "cef22f8729e3344e26df5b5eb0cee56c9d35da614e111081bf3eb460dee123ca",
+        "size_bytes": 845,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/cef22f8729e3344e26df5b5eb0cee56c9d35da614e111081bf3eb460dee123ca.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/run_input_review_r1.py",
+        "sha256": "0b4756823f4183fa9fa9feac7dd575d44b81c0e6a551ce3f39ed664f09be89e7",
+        "size_bytes": 31601,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/0b4756823f4183fa9fa9feac7dd575d44b81c0e6a551ce3f39ed664f09be89e7.source"
+      },
+      {
+        "path": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/RUN_CONFIG.json",
+        "sha256": "0c1ef745284372f3da4a3b0f0986142a157b64a35f9933ee7cbe73e091ac61f2",
+        "size_bytes": 1319,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/0c1ef745284372f3da4a3b0f0986142a157b64a35f9933ee7cbe73e091ac61f2.source"
+      },
+      {
+        "path": "/opt/anaconda3/bin/python3.12",
+        "sha256": "57be19363e01437d5541c85ec5c3b3b2fab94870cdc94a344fef243daf63dde5",
+        "size_bytes": 6768736,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/57be19363e01437d5541c85ec5c3b3b2fab94870cdc94a344fef243daf63dde5.source"
+      },
+      {
+        "path": "/opt/anaconda3/lib/python3.12/json/__init__.py",
+        "sha256": "d5d41e2c29049515d295d81a6d40b4890fbec8d8482cfb401630f8ef2f77e4d5",
+        "size_bytes": 14020,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/d5d41e2c29049515d295d81a6d40b4890fbec8d8482cfb401630f8ef2f77e4d5.source"
+      },
+      {
+        "path": "/opt/anaconda3/lib/python3.12/hashlib.py",
+        "sha256": "6dbdebf270868b391080e21dc9687eddfaf321c965ad979f68d3f5c423c613ab",
+        "size_bytes": 9349,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/6dbdebf270868b391080e21dc9687eddfaf321c965ad979f68d3f5c423c613ab.source"
+      },
+      {
+        "path": "/opt/anaconda3/lib/python3.12/platform.py",
+        "sha256": "46fa1d84c53a226e97f3a10de7cfd831f11dcd7c64ccfd5d63c55c9045eb609d",
+        "size_bytes": 43380,
+        "archive": "reviews/adversarial/RSM-option-resumption-pilot-v1-input-first-attempt01/source_archives/46fa1d84c53a226e97f3a10de7cfd831f11dcd7c64ccfd5d63c55c9045eb609d.source"
+      }
+    ],
+    "gold_access": false
+  },
+  "all_bound_bytes_after_equal": true
+}

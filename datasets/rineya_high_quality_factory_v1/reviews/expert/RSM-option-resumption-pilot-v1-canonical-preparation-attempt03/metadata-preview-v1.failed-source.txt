@@ -1,0 +1,8 @@
+import json,collections
+from pathlib import Path
+r=Path.cwd();p=r/'reviews/expert/RSM-option-resumption-pilot-v1-canonical-preparation-attempt03'
+rows=[json.loads(x) for x in (r/'data/RSM-001/candidate_renderings/option-resumption-pilot-v1.jsonl').read_text().splitlines()]
+print('ALL216 METADATA COUNTS',json.dumps({'difficulty':dict(collections.Counter(x['difficulty'] for x in rows)),'context_difficulty':dict(collections.Counter((x['controlled_context']+str(x['difficulty'])) for x in rows)),'skill_tags':dict(collections.Counter(tuple(x['skill_tags']) for x in rows))},default=str))
+for row in rows:
+ if row['renderer']=='forward':
+  y=row['verified_target'];print(json.dumps({'id':row['sample_id'],'split':row['split'],'difficulty':row['difficulty'],'explanation':row['source_provenance']['curriculum_difficulty_explanation'],'status':y['status'],'events':len(y['new_events']),'new_effects':y['new_effects'],'previous_effects':y['previous_effects'],'end_state':None if y['checkpoint'] is None else y['checkpoint']['state'],'witnesses':row['property_witnesses'],'tags':row['skill_tags']},separators=(',',':')))

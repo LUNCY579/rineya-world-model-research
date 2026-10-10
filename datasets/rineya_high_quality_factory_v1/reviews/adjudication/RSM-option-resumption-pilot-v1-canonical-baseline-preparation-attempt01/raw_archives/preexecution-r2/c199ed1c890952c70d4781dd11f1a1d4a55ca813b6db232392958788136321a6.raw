@@ -1,0 +1,103 @@
+"""Raw-byte custody operation only. Never imports owned semantic code or tests.
+This tool does not parse targets, execute a solver, or produce quality votes.
+"""
+import argparse,collections,copy,datetime,gzip,hashlib,importlib.util,io,itertools,json,logging,os,pathlib,pkgutil,re,shutil,sys,sysconfig,time,traceback,typing,unittest
+
+D=pathlib.Path(__file__).resolve().parent
+B=D.parents[2]
+LIMIT=25*1024*1024
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def newjson(path,value):
+ with path.open('x',encoding='utf-8') as f:json.dump(value,f,sort_keys=True,indent=2);f.write('\n')
+def locator(path):
+ try:return str(path.relative_to(B))
+ except ValueError:return str(path)
+
+def main():
+ started=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ # Benign stdlib initialization precedes the raw runtime snapshot. No semantic
+ # source is imported, and no empty/mock test suite is executed here.
+ parser=argparse.ArgumentParser();parser.add_argument('--unused',default=None);parser.parse_args([])
+ cfg=json.loads((D/'config-r1.json').read_bytes())
+ manifest=json.loads((B/cfg['control_manifest']).read_bytes())
+ expected={cfg['candidate']:cfg['candidate_sha256'],cfg['semantic_parents']:cfg['semantic_parents_sha256'],cfg['control_manifest']:cfg['control_manifest_sha256'],cfg['legacy_inputs']:cfg['legacy_inputs_sha256'],cfg['input_first_root_readback']:cfg['root_readback_sha256']}
+ prior=B/cfg['immutable_input_first'];dep=B/cfg['own_public_preparation']
+ expected[str((prior/'FIRST.json').relative_to(B))]=cfg['input_first_sha256']
+ expected[str((prior/'predictions-r2.jsonl').relative_to(B))]=cfg['frozen_prediction_sha256']
+ expected[str((prior/'initial-judgments-r2.jsonl').relative_to(B))]=cfg['frozen_initial_sha256']
+ public=['schemas/RSM_OPTION_RESUMPTION_V1.md','research/curricula/RSM-OPTION-RESUMPTION-PROSPECTIVE-20261010.md','research/curricula/RSM-OPTION-RESUMPTION-CONFIG-20261010.json','schemas/RSM_OPTION_RESUMPTION_METADATA_V1.md','schemas/RSM_OPTION_RESUMPTION_METADATA_V1_AMENDMENT_R1.md','schemas/RSM_OPTION_RESUMPTION_METADATA_V1_AMENDMENT_R2.md']
+ scopes={}
+ def add(path,scope):scopes[str(path)]=scope
+ for path in sorted(D.rglob('*')):
+  if path.is_file():add(path,'own-prepared-source-fixture-or-draft')
+ for path in sorted(prior.rglob('*')):
+  if path.is_file():add(path,'own-immutable-input-first-evidence')
+ for path in sorted(dep.rglob('*')):
+  if path.is_file():add(path,'own-public-preparation-evidence')
+ for path in expected:add(B/path,'authorized-exact-custody-input')
+ add(B/'reviews/input_only/RSM-option-resumption-pilot-v1.jsonl','own-input-first-packet')
+ add(B/'reviews/input_only/RSM-option-resumption-pilot-v1.INPUT_CUSTODY.json','own-input-first-packet-custody')
+ add(B/'quality_reports/RSM_INPUT_ONLY_PACKET_ROOT_COMPLETION_ATTEMPT01.json','own-input-first-root-custody')
+ for path in public:add(B/path,'operative-public-source')
+ add(B/'research/curricula/RSM_OPTION_METADATA_V1_AMENDMENT_R2_ROOT_FREEZE.json','operative-public-root-freeze')
+ add(B/'schemas/canonical/v1.schema.json','canonical-public-schema')
+ for path in manifest['source_bindings']:
+  if path.startswith('generators/') or path=='factory/common.py':add(B/path,'opaque-source-custody')
+  elif path not in public and path!='schemas/canonical/v1.schema.json':add(B/path,'authorized-asserted-public-custody')
+ resolved=pathlib.Path(sys.executable).resolve()
+ library=pathlib.Path(sysconfig.get_config_var('LIBDIR'))/sysconfig.get_config_var('LDLIBRARY')
+ # Resolve lazy sysconfig platform state BEFORE the loaded-module snapshot.
+ runtime=[];non_file=[]
+ for name,module in sorted(sys.modules.items()):
+  source=getattr(module,'__file__',None)
+  if source is None:non_file.append({'module':name,'reason':'no file; builtin or namespace'});continue
+  path=pathlib.Path(source)
+  if path.suffix=='.pyc':
+   try:path=pathlib.Path(importlib.util.source_from_cache(str(path)))
+   except ValueError:pass
+  if not path.is_file():raise ValueError('loaded file-backed module not capturable '+name+':'+str(path))
+  path=path.resolve();runtime.append({'module':name,'path':str(path)})
+  if str(path) not in scopes:add(path,'loaded-stdlib-or-extension-runtime')
+ add(resolved,'resolved-python-executable')
+ if library.is_file():add(library.resolve(),'python-shared-runtime')
+ else:raise ValueError('cannot capture configured Python shared runtime')
+ archive_dir=D/'raw_archives'/'preexecution-r1';archive_dir.mkdir(parents=True,exist_ok=False)
+ bindings=[];missing=[]
+ for path,scope in sorted(scopes.items()):
+  p=pathlib.Path(path)
+  if not p.is_file():
+   if scope=='opaque-source-custody':missing.append({'path':locator(p),'scope':scope,'status':'MISSING_ORIGINAL_ASSERTED_PATH_NO_ALIAS_REPAIR'});continue
+   raise FileNotFoundError(path)
+  raw=p.read_bytes();digest=sha(raw)
+  if len(raw)>LIMIT:raise ValueError('individual raw binding exceeds25MiB '+path)
+  relative=locator(p)
+  if relative in expected and digest!=expected[relative]:raise ValueError('authorized exact input differs '+relative)
+  archive=archive_dir/(digest+'.raw')
+  if archive.exists():
+   if archive.read_bytes()!=raw:raise ValueError('archive collision '+digest)
+  else:archive.write_bytes(raw)
+  binding={'path':relative,'sha256':digest,'bytes':len(raw),'archive':locator(archive),'scope':scope}
+  if scope=='opaque-source-custody':binding['body_inspected_or_imported']=False
+  bindings.append(binding)
+ bypath={v['path']:v for v in bindings}
+ assertions=[]
+ for path,asserted in sorted(manifest['source_bindings'].items()):
+  bound=bypath.get(path)
+  assertions.append({'original_asserted_path':path,'original_asserted_sha256':asserted,'observed_sha256':bound['sha256'] if bound else None,'observed_bytes':bound['bytes'] if bound else None,'raw_custody_match':bound is not None and bound['sha256']==asserted,'scope':bound['scope'] if bound else 'missing-original-path','semantic_source_correctness':'UNASSESSED','body_inspected_or_imported':False if path.startswith('generators/') or path=='factory/common.py' else None,'alias_repair_performed':False})
+ for item in runtime:
+  bound=bypath.get(item['path'])
+  if bound is None:bound=bypath.get(locator(pathlib.Path(item['path'])))
+  if bound is None:raise ValueError('runtime closure missing '+item['module'])
+  item.update(sha256=bound['sha256'],bytes=bound['bytes'],archive=bound['archive'])
+ # Archive equality is re-read here; no semantic module is loaded or compared.
+ for binding in bindings:
+  p=pathlib.Path(binding['path']) if binding['path'].startswith('/') else B/binding['path']
+  if p.read_bytes()!=(B/binding['archive']).read_bytes():raise ValueError('byte drift before freeze '+binding['path'])
+ freeze={'actual_execution_id':'/root/research_architect','operation':'RAW_BYTE_SOURCE_PREPARATION_CUSTODY_ONLY','started_utc':started,'frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'resolved_python':str(resolved),'requested_python':'/opt/anaconda3/bin/python3','python_version':sys.version,'bindings':bindings,'loaded_runtime_modules':runtime,'builtin_or_nonfile_modules':non_file,'original_manifest_source_assertions':assertions,'missing_original_asserted_paths':missing,'owned_semantic_source_imported':False,'owned_semantic_source_compiled':False,'owned_semantic_source_executed':False,'tests_executed':0,'production_target_comparisons':0,'quality_votes_emitted':0,'data_approval':False,'publication_authority':False,'later_execution_requires_separate_grant':True,'all_original_asserted_coordinates_preserved':True,'private_source_bodies_inspected':False,'maximum_individual_bound_file_bytes':max(v['bytes'] for v in bindings),'same_model_and_design_adjudicator_overlap_disclosed':True}
+ newjson(D/'SOURCE_PREEXECUTION-r1.json',freeze)
+ raw=(D/'SOURCE_PREEXECUTION-r1.json').read_bytes()
+ summary={'source_freeze_sha256':sha(raw),'source_freeze_bytes':len(raw),'bindings':len(bindings),'loaded_file_backed_modules':len(runtime),'distinct_raw_archives':len(list(archive_dir.iterdir())),'opaque_source_bindings':sum(v['scope']=='opaque-source-custody' for v in bindings),'original_asserted_source_raw_mismatches':sum(not v['raw_custody_match'] for v in assertions),'missing_original_asserted_paths':len(missing),'maximum_individual_bound_file_bytes':freeze['maximum_individual_bound_file_bytes'],'semantic_imports':0,'semantic_tests':0,'production_target_comparisons':0,'quality_votes':0}
+ newjson(D/'CUSTODY_OPERATION-r1.json',{'completed_execution':True,'operation':'RAW_BYTE_CUSTODY_ONLY','actual_execution_id':'/root/research_architect','at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'summary':summary,'raw_source_custody_is_not_semantic_validation':True,'separate_execution_grant_required':True,'data_approval':False})
+ print(json.dumps(summary,sort_keys=True))
+
+if __name__=='__main__':main()

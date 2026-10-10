@@ -1,0 +1,15 @@
+# Next archival checkpoint from parent653 — source attempt05
+
+Actual source author: `/root/backup_manager`; same inherited model as ROOT. This is source preparation only. No new tests, inventory, stage, recovery, remote payloads or data approval have run.
+
+Attempt04 remains immutable, including its actual74-test PASS and held inventory config3d5e. ROOT detected the exact registry literal-path mismatch before inventory: historical core507/e929 references use `research/role_registry.json`, while the existing directory and parent653 tracked path use `research/ROLE_REGISTRY.json`. The narrow attempt05 policy fixes only current lower984d8676…/19279B to canonical upper with the same bytes, retaining distinct parent653 uppercase13913/ed0b314… and historical507 lowercase16187/400789… references and raw proof streams.
+
+Only admission.py, bootstrap.py and tests.py change. The central physical closure insertion projects only the exact current lower tuple after complete canonical bytes, literal directory spelling, non-symlink and derived device/inode checks. Both lookup spellings must identify one file when the lower lookup exists; canonical-only case-sensitive restoration is supported. There is no generic case conversion, renamed/duplicated actor file, fixed machine inode, broader byte evolution, secret exception or whitespace exception. The snapshot carries an explicit logical/physical witness, rederived and compared throughout SPEC validation.
+
+All74 preceding test-method bodies are byte-exact. Two new methods declare76 total; none has run. They cover the actual canonical closure and unchanged logical/historical metadata, exact tuple/policy corruptions, wrong file identity, two physical names, extra observation fields and canonical-only restoration.
+
+The twelve own Python sources plus six fixed archival primitives form the eighteen-source operative closure. The new exact path policy is a mandatory bootstrap preparation dependency. The unchanged stdlib-only collector d18f9406… may run once after fresh source/config/raw preexecution barriers; it imports no helper/test. Its actual runtime count is recorded after collection, never assumed from previous206.
+
+The immutable admission8f74d5… and already completed13-file gzip contracte26896… remain unchanged. Both ROOT oversized packages are preserved. Future phase configs must bind the fresh actual source/runtime freeze, the same two contracts and fresh actual preparation-test receipt. The parent remains653ba70f1f7035a5aed137102c14a1ff29d1cf99. New diff must be strict zero; the four fixed metadata exceptions retain their exact original paths/bytes. Capacity remains twice the whole capped scope plus512MiB. Future author/runner assignment: manager tests/inventory/lossless/join; ROOT stage/push/recovery.
+
+After SOURCE_READY, ROOT and a genuine separate formal source review are required before any new test grant. Correct future CLI uses absolute attempt05 bootstrap/source-freeze/execution-config paths, actual external SHAs and the separately granted phase. No template is an execution config.

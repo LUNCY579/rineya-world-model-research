@@ -1,0 +1,90 @@
+{
+  "release": "v0001",
+  "batch": "extended-pilot-v2",
+  "track": "ROM-001",
+  "status": "QUALITY_APPROVED_LOCAL",
+  "records": 24,
+  "semantic_parents": 12,
+  "splits": {
+    "train": 20,
+    "dev_challenge": 4
+  },
+  "generator_versions": [
+    "1.0.0"
+  ],
+  "framework_version": "1.0.0",
+  "oracle_version": "independent-1.0.0",
+  "reproducibility_code_sha256": {
+    "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+    "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+    "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+    "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+    "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+    "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+    "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+    "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+    "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+    "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+    "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+    "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+    "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+    "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+    "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+    "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+    "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+    "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+    "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+    "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+  },
+  "batch_configuration": "manifests/extended-pilot-v2_GENERATION.json",
+  "source": "original synthetic; repository-private research; no third-party examples",
+  "research_effectiveness": "untested; no model training performed",
+  "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+  "data_custody": "exposed train/dev data; no sealed evaluation",
+  "files": {
+    "QUALITY_REPORT.md": {
+      "bytes": 435,
+      "sha256": "6cc0c590ba39196994718d9c8cd8259f87ecc5aa486b1782e495fce76baa0717"
+    },
+    "canonical.jsonl": {
+      "bytes": 112378,
+      "sha256": "e8510bb86619f4070c4ed185a00cbaa33225afd54e42a819f4145517ef2b3114"
+    },
+    "dev_challenge-belief_updates.jsonl": {
+      "bytes": 13420,
+      "sha256": "931f46efa3243ccb232e4f96effd6927394cd0b4564996655ed2a6cc4196b0e0"
+    },
+    "dev_challenge-sft.jsonl": {
+      "bytes": 14136,
+      "sha256": "13fc9232da4aa6bedcef0b318ca966aacd55c8551b3391ba26a7d0b923555c64"
+    },
+    "dev_challenge-structured.jsonl": {
+      "bytes": 13420,
+      "sha256": "931f46efa3243ccb232e4f96effd6927394cd0b4564996655ed2a6cc4196b0e0"
+    },
+    "oracle_receipts.jsonl": {
+      "bytes": 7392,
+      "sha256": "9951884789810f919e751a7113f5a9ac81cc6575c7bc8b8b7a96f90e3697e7a6"
+    },
+    "review_receipts.jsonl": {
+      "bytes": 151714,
+      "sha256": "87b5bde8d79474fa10d640700076d2e23e5a93a93520b7a89c4f1a8a525b3862"
+    },
+    "train-belief_updates.jsonl": {
+      "bytes": 55272,
+      "sha256": "d306aa98defda8149ff04b8dd5a1c7a598fc5be2ce75af567faf4a53fee2c934"
+    },
+    "train-sft.jsonl": {
+      "bytes": 57852,
+      "sha256": "9fbea35c6f5d09c68aa6e7e70590b8a490d02789d6b17104be9189d1b488f663"
+    },
+    "train-structured.jsonl": {
+      "bytes": 55272,
+      "sha256": "d306aa98defda8149ff04b8dd5a1c7a598fc5be2ce75af567faf4a53fee2c934"
+    }
+  }
+}

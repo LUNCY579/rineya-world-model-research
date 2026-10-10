@@ -1,0 +1,2555 @@
+{
+  "accepted_corruptions": [],
+  "actual_proof_bindings": {
+    "full": {
+      "path": "backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFIED_RECEIPT.json",
+      "sha256": "9facf85590fc6fe1d86065b7927f92de7162fade0016469b7ca6f85123e491b7",
+      "size": 1315680
+    },
+    "full_ledger": {
+      "path": "backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFICATION_LEDGER.jsonl",
+      "sha256": "1fcc48129bef66a143457e1f623a2989026239bc2ec32a072808954ea4ab7974",
+      "size": 1505729
+    },
+    "gzip": {
+      "path": "quality_reports/BELIEF_V4_APPROVED_RELEASE_R1_REMOTE_LOSSLESS.json",
+      "sha256": "0ad1f63b5f322856d8abda203199ae142a6d5f18dd017d2aea199e77f8a846ea",
+      "size": 39879
+    },
+    "gzip_ledger": {
+      "path": "backup_logs/belief-v4-approved-release-r1_REMOTE_LOSSLESS_LEDGER.jsonl",
+      "sha256": "c58294b492bdc37359a0ec956b9b5406d84131c8c80fcc4cea58ee50eb6dd72a",
+      "size": 20936
+    }
+  },
+  "all_frozen_inputs_unchanged_at_finish": true,
+  "author_execution": "/root/backup_manager/approved_release_join_review",
+  "cases": 361,
+  "failed_positives": [],
+  "finished_at_utc": "2026-10-10T12:11:00.694092+00:00",
+  "forbidden_calls": [],
+  "grants_data_approval": false,
+  "main_Git_network_calls": 0,
+  "mandatory_paths_omission_replays": 53,
+  "metadata_fullcontents_copied_to_newpaths": 0,
+  "positive_cases": 11,
+  "rejected_corruptions": 350,
+  "results": [
+    {
+      "actual": "PASS",
+      "case": "complete55 preparation before dependency loading",
+      "expected": "PASS"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_HISTORICAL_RAW_CONFIG.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_INVENTORY_R4_SOURCE_FREEZE.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_EXECUTION_CONFIG.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_SCOPE_CONFIG.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_SOURCE_FREEZE.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_TEST_EXECUTION.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_TEST_OUTPUT.txt",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_TEST_PREEXECUTION.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_STAGE_V4_ATTEMPT02_EXECUTION_CONFIG.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_R2_RESUMPTION_FIXTURES/exact_diff_check_stdout.txt",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/BELIEF_V4_R2_RESUMPTION_FIXTURES/exact_official_test_13990.source",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/EXACT_FOUR_PUBLIC_ID_SECRET_EXCEPTION_CONFIG.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/PROSPECTIVE_ARCHIVAL_V3_CUSTODY_ADAPTER.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/PROSPECTIVE_ARCHIVAL_V3_EXACT_EXCEPTION.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/PROSPECTIVE_ARCHIVAL_V4_ATTEMPT02_SOURCE_FREEZE.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V2_CONFIG.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V2_GZIP_SOURCE_FREEZE.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V2_INDEPENDENT_REVIEW_FINAL.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V2_RECOVERY_SOURCE_FREEZE.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V2_TEST_EXECUTION.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_CONFIG.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_GZIP_SOURCE_FREEZE.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_RECOVERY_SOURCE_FREEZE.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_SOURCE_ARCHIVES/29e27b8d87facdc5afbc8df57c4259515977e7b65895b4134966ad153e99f3d4.source",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_SOURCE_ARCHIVES/3d4c58c2af170585da3ac8ad1a586a9aa024db793d9ad9ce9778ef6262d07de6.source",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_SOURCE_ARCHIVES/a9544fd6e18daffea15be3bc65d45a8ab83239aa7632ed65618d0e7eadcd3135.source",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_SOURCE_ARCHIVES/e3b06fc91241c9e8dea8c3322ef3c49b6b1ec34118dccd412e53b389d7926f39.source",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/author_remote_exact_v3_record.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFICATION_LEDGER.jsonl",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFIED_RECEIPT.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-approved-release-r1_INVENTORY_REPORT.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-approved-release-r1_LOCAL_COMMIT.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-approved-release-r1_REMOTE_LOSSLESS_LEDGER.jsonl",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-approved-release-r1_SPEC.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-approved-release-r1_STAGE.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-approved-release-r1_STAGE_LEDGER.jsonl",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/belief-v4-validated-code-candidate-r2_SPEC.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/exact_four_public_metadata_secret_scan_attempt02.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/finalize_remote_exact_v3_record.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/join_belief_v4_approved_release_r1_custody.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/join_belief_v4_approved_release_r1_custody_v2.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/prepare_belief_v4_approved_release_inventory_r4.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/recover_remote_checkpoint.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/recover_remote_checkpoint_exact_public_metadata_v3.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/run_provisional_archival_checkpoint_v4_attempt02.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/test_archival_remote_lossless_exact_public_metadata_v3.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/test_belief_v4_approved_release_r1_join_custody.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/test_belief_v4_approved_release_r1_join_custody_v2.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/test_remote_checkpoint_exact_public_metadata_v3.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/verify_archival_remote_lossless.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission backup_logs/verify_archival_remote_lossless_exact_public_metadata_v3.py",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission quality_reports/BELIEF_V4_APPROVED_RELEASE_R1_REMOTE_LOSSLESS.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "mandatory omission quality_reports/RGM_RENDERER_ARCHIVAL_BOUNDARY_PREFLIGHT.json",
+      "error": "Mandatory dependency/source/test/config omitted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "declared artifact omitted source",
+      "error": "Own source/test/scope bytes missing or substituted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "declared artifact SHA substituted source",
+      "error": "Own source/test/scope bytes missing or substituted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "declared artifact omitted tests",
+      "error": "Own source/test/scope bytes missing or substituted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "declared artifact SHA substituted tests",
+      "error": "Own source/test/scope bytes missing or substituted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "declared artifact omitted scope_config",
+      "error": "Own source/test/scope bytes missing or substituted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "declared artifact SHA substituted scope_config",
+      "error": "Own source/test/scope bytes missing or substituted",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation empty list",
+      "error": "Mandatory preparation list required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation duplicate row",
+      "error": "Duplicate preparation path forbidden",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation bool size",
+      "error": "Typed preparation row required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation wrong integer size",
+      "error": "Frozen preparation bytes differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation uppercase hash",
+      "error": "Typed preparation row required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation extra row field",
+      "error": "Typed preparation row required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation missing row hash",
+      "error": "Typed preparation row required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation wrong author",
+      "error": "Actual preparation freeze required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "preparation false preparation",
+      "error": "Actual preparation freeze required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "literal alias /outside",
+      "error": "Literal relative path required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "literal alias backup_logs/../outside",
+      "error": "Path aliases forbidden",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "literal alias backup_logs//outside",
+      "error": "Path aliases forbidden",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "literal alias backup_logs\\outside",
+      "error": "Literal relative path required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "literal alias backup_logs/./outside",
+      "error": "Path aliases forbidden",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "PASS",
+      "case": "exact stage/local3158 paths2474 IDs",
+      "expected": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "case": "actual full9fac gzip0ad1 complete crossjoin",
+      "expected": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "case": "stage/full3158 actual payload groups crossjoin",
+      "expected": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "case": "actual full/gzip ledgers complete",
+      "expected": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "case": "scope26 deferred29 local",
+      "expected": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "case": "execution four completed immutable bindings",
+      "expected": "PASS"
+    },
+    {
+      "actual": "PASS",
+      "case": "actual evidence file hash backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFIED_RECEIPT.json",
+      "expected": "PASS"
+    },
+    {
+      "actual": "REJECT",
+      "case": "actual evidence wrong expected hash backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFIED_RECEIPT.json",
+      "error": "Bound artifact SHA differs: backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFIED_RECEIPT.json",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "PASS",
+      "case": "actual evidence file hash backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFICATION_LEDGER.jsonl",
+      "expected": "PASS"
+    },
+    {
+      "actual": "REJECT",
+      "case": "actual evidence wrong expected hash backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFICATION_LEDGER.jsonl",
+      "error": "Bound artifact SHA differs: backup_logs/belief-v4-approved-release-r1_EXACT_METADATA_V3_RECOVERY_VERIFICATION_LEDGER.jsonl",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "PASS",
+      "case": "actual evidence file hash quality_reports/BELIEF_V4_APPROVED_RELEASE_R1_REMOTE_LOSSLESS.json",
+      "expected": "PASS"
+    },
+    {
+      "actual": "REJECT",
+      "case": "actual evidence wrong expected hash quality_reports/BELIEF_V4_APPROVED_RELEASE_R1_REMOTE_LOSSLESS.json",
+      "error": "Bound artifact SHA differs: quality_reports/BELIEF_V4_APPROVED_RELEASE_R1_REMOTE_LOSSLESS.json",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "PASS",
+      "case": "actual evidence file hash backup_logs/belief-v4-approved-release-r1_REMOTE_LOSSLESS_LEDGER.jsonl",
+      "expected": "PASS"
+    },
+    {
+      "actual": "REJECT",
+      "case": "actual evidence wrong expected hash backup_logs/belief-v4-approved-release-r1_REMOTE_LOSSLESS_LEDGER.jsonl",
+      "error": "Bound artifact SHA differs: backup_logs/belief-v4-approved-release-r1_REMOTE_LOSSLESS_LEDGER.jsonl",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage runner_execution",
+      "error": "Stage actual roles/boundary differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage expected_parent_sha",
+      "error": "Actual stage binding/guard differs: expected_parent_sha",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage commit_sha",
+      "error": "Actual stage binding/guard differs: commit_sha",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage spec_sha256",
+      "error": "Actual stage binding/guard differs: spec_sha256",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage actual_exit_code",
+      "error": "Unrestricted diff differs from the exact six-warning frozen exception",
+      "error_type": "DiffCheckRejected",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage warning_count",
+      "error": "Exact six-warning diagnostics differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage strict_diff_check",
+      "error": "Exact six-warning diagnostics differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage restricted_changed_path_count",
+      "error": "Actual stage binding/guard differs: restricted_changed_path_count",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage grants_data_approval",
+      "error": "Stage actual roles/boundary differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage ledger source omitted",
+      "error": "All actual source-target ledger paths required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage ledger source hash changed",
+      "error": "Actual source-target-index body crossjoin differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage ledger source duplicate",
+      "error": "All actual source-target ledger paths required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage ledger index omitted",
+      "error": "All actual2474 unique index blobs required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage ledger index duplicate ID",
+      "error": "All actual2474 unique index blobs required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage ledger index duplicate path",
+      "error": "Actual index group path/id schema differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage ledger terminal wrong commit",
+      "error": "Completed actual stage ledger required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "local preserved status",
+      "error": "Local commit preserved status differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "local preserved remote_commit_sha",
+      "error": "Local commit preserved status differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "local preserved actual_exit_code",
+      "error": "Actual local-stage common binding differs: actual_exit_code",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full status",
+      "error": "Completed actual remote inventory proof is not bound to this frozen checkpoint",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full files",
+      "error": "Completed actual remote inventory proof is not bound to this frozen checkpoint",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full local_git_verified_unique_blobs",
+      "error": "Full local proof/report truth differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full current_source_matching_files",
+      "error": "Full local proof/report truth differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full runner_execution",
+      "error": "Full actual runner/repository/branch differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full source_freeze_sha256",
+      "error": "Full actual source/scanner/freezes differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full verification_source_sha256",
+      "error": "Completed actual remote inventory proof is not bound to this frozen checkpoint",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full metadata_scanner_source_sha256",
+      "error": "Full actual source/scanner/freezes differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full metadata_exception_config_sha256",
+      "error": "Full actual source/scanner/freezes differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full current_source_evolution",
+      "error": "Held checkpoint does not permit evolving sources",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full current_source_evolution_at_finish",
+      "error": "Held checkpoint does not permit evolving sources",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full local_raw_representation_decode_iterations",
+      "error": "Full32 actual local representation coverage differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full local_raw_representation_decoded_bytes",
+      "error": "Full32 actual local representation coverage differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata whole report missing capped_source_secret_scan_before",
+      "error": "Metadata report truth/config/count differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata exact four list missing capped_source_secret_scan_before",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata exact four list empty capped_source_secret_scan_before",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/0/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/0/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/0/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/0/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/1/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/1/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/1/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/1/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/2/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/2/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/2/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/2/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/3/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/3/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/3/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_before/3/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata whole report missing capped_source_secret_scan_after",
+      "error": "Metadata report truth/config/count differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata exact four list missing capped_source_secret_scan_after",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata exact four list empty capped_source_secret_scan_after",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/0/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/0/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/0/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/0/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/1/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/1/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/1/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/1/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/2/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/2/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/2/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/2/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/3/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/3/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/3/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row capped_source_secret_scan_after/3/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata whole report missing actual_local_git_metadata_exception_scan",
+      "error": "Metadata report truth/config/count differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata exact four list missing actual_local_git_metadata_exception_scan",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata exact four list empty actual_local_git_metadata_exception_scan",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/0/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/0/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/0/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/0/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/0/git_blob/None",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/0/git_blob/False",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/0/git_blob/0000000000000000000000000000000000000000",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/0/full_size_sha256_gitsha1_verified_before_exception_acceptance/False",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream Git ID omitted actual_local_git_metadata_exception_scan/0",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/1/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/1/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/1/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/1/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/1/git_blob/None",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/1/git_blob/False",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/1/git_blob/0000000000000000000000000000000000000000",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/1/full_size_sha256_gitsha1_verified_before_exception_acceptance/False",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream Git ID omitted actual_local_git_metadata_exception_scan/1",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/2/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/2/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/2/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/2/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/2/git_blob/None",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/2/git_blob/False",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/2/git_blob/0000000000000000000000000000000000000000",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/2/full_size_sha256_gitsha1_verified_before_exception_acceptance/False",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream Git ID omitted actual_local_git_metadata_exception_scan/2",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/3/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/3/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/3/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_local_git_metadata_exception_scan/3/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/3/git_blob/None",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/3/git_blob/False",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/3/git_blob/0000000000000000000000000000000000000000",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_local_git_metadata_exception_scan/3/full_size_sha256_gitsha1_verified_before_exception_acceptance/False",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream Git ID omitted actual_local_git_metadata_exception_scan/3",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context actual_local_git_metadata_exception_scan/None",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context actual_local_git_metadata_exception_scan/False",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context actual_local_git_metadata_exception_scan/wrong",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context actual_local_git_metadata_exception_scan/actual_remote",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context omitted actual_local_git_metadata_exception_scan",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata whole report missing actual_remote_metadata_exception_scan",
+      "error": "Metadata report truth/config/count differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata exact four list missing actual_remote_metadata_exception_scan",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata exact four list empty actual_remote_metadata_exception_scan",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/0/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/0/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/0/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/0/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/0/git_blob/None",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/0/git_blob/False",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/0/git_blob/0000000000000000000000000000000000000000",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/0/full_size_sha256_gitsha1_verified_before_exception_acceptance/False",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream Git ID omitted actual_remote_metadata_exception_scan/0",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/1/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/1/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/1/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/1/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/1/git_blob/None",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/1/git_blob/False",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/1/git_blob/0000000000000000000000000000000000000000",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/1/full_size_sha256_gitsha1_verified_before_exception_acceptance/False",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream Git ID omitted actual_remote_metadata_exception_scan/1",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/2/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/2/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/2/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/2/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/2/git_blob/None",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/2/git_blob/False",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/2/git_blob/0000000000000000000000000000000000000000",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/2/full_size_sha256_gitsha1_verified_before_exception_acceptance/False",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream Git ID omitted actual_remote_metadata_exception_scan/2",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/3/path",
+      "error": "All four unique metadata reports required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/3/size",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/3/sha256",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata row actual_remote_metadata_exception_scan/3/matches",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/3/git_blob/None",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/3/git_blob/False",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/3/git_blob/0000000000000000000000000000000000000000",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream row actual_remote_metadata_exception_scan/3/full_size_sha256_gitsha1_verified_before_exception_acceptance/False",
+      "error": "Metadata report full-byte/span proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata stream Git ID omitted actual_remote_metadata_exception_scan/3",
+      "error": "Metadata report actual Git/source proof missing",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context actual_remote_metadata_exception_scan/None",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context actual_remote_metadata_exception_scan/False",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context actual_remote_metadata_exception_scan/wrong",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context actual_remote_metadata_exception_scan/local_git",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "metadata context omitted actual_remote_metadata_exception_scan",
+      "error": "Metadata report actual provenance context differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/all222_immutable_release_files",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/all2685_parent_paths_preserved",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/all3158_paths_full_tree_index",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/all65_readonly_reference_hashes",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/frozen_exact_trailing_whitespace_warnings",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/original_main_and_dedicated_clean",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/original_six_git_byte_guards",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/restricted_strict_paths",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/sole_parent_sha",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/stage_config_sha256",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/stage_source_sha256",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_before/unrestricted_diff_exit",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/all222_immutable_release_files",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/all2685_parent_paths_preserved",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/all3158_paths_full_tree_index",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/all65_readonly_reference_hashes",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/frozen_exact_trailing_whitespace_warnings",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/original_main_and_dedicated_clean",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/original_six_git_byte_guards",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/restricted_strict_paths",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/sole_parent_sha",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/stage_config_sha256",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/stage_source_sha256",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full custody guard omitted checkpoint_custody_guards_after/unrestricted_diff_exit",
+      "error": "Full before/after current custody guard differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full private ADMIN changed",
+      "error": "Full private ADMIN differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "prior evidence SHA 0",
+      "error": "Full proof actual stage/local/ledger evidence not bound",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "prior evidence SHA 1",
+      "error": "Full proof actual stage/local/ledger evidence not bound",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "prior evidence SHA 2",
+      "error": "Full proof actual stage/local/ledger evidence not bound",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full remote http_accept",
+      "error": "Actual raw/no-cache full transport differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full remote cache_policy",
+      "error": "Actual raw/no-cache full transport differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full remote remote_tree_sha",
+      "error": "Actual full2474 unique object proof/tree differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full remote verified_unique_blobs",
+      "error": "Actual remote proof counts differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full blob wrong provenance",
+      "error": "Remote proof is duplicated or lacks actual-fetch provenance",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full blob wrong SHA",
+      "error": "Actual remote proof hash/size differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full blob empty coverage",
+      "error": "Actual remote proof omits frozen paths",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full blob unowned path",
+      "error": "Actual remote proof path coverage differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full blob duplicate path",
+      "error": "Actual remote proof path coverage differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full blob duplicate group",
+      "error": "Remote proof is duplicated or lacks actual-fetch provenance",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip actual_remote_gzip_fetches",
+      "error": "Actual gzip binding/coverage differs: actual_remote_gzip_fetches",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip unique_manifest_path_count",
+      "error": "Actual gzip binding/coverage differs: unique_manifest_path_count",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip frozen_representation_reference_count",
+      "error": "Actual gzip binding/coverage differs: frozen_representation_reference_count",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip unique_raw_gzip_pair_count",
+      "error": "Actual gzip binding/coverage differs: unique_raw_gzip_pair_count",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip raw_bytes_exactly_recovered",
+      "error": "Actual gzip binding/coverage differs: raw_bytes_exactly_recovered",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip actual_decoded_bytes_including_multiple_representations",
+      "error": "Actual gzip binding/coverage differs: actual_decoded_bytes_including_multiple_representations",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip local_fullproof_decode_iterations",
+      "error": "Actual gzip binding/coverage differs: local_fullproof_decode_iterations",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip status",
+      "error": "Actual gzip binding/coverage differs: status",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip source_sha256",
+      "error": "Actual gzip binding/coverage differs: source_sha256",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip dependency_sha256",
+      "error": "Actual gzip binding/coverage differs: dependency_sha256",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip source_freeze_sha256",
+      "error": "Actual gzip binding/coverage differs: source_freeze_sha256",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip verified_inventory_receipt_sha256",
+      "error": "Actual gzip binding/coverage differs: verified_inventory_receipt_sha256",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip actual_runner_execution",
+      "error": "Actual gzip binding/coverage differs: actual_runner_execution",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip grants_data_approval",
+      "error": "Actual gzip binding/coverage differs: grants_data_approval",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip stream_chunk_bytes",
+      "error": "Actual gzip binding/coverage differs: stream_chunk_bytes",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip bounded_spool_memory_bytes",
+      "error": "Actual gzip binding/coverage differs: bounded_spool_memory_bytes",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip pair actual_remote_fetch_this_run",
+      "error": "New actual remote byte comparison required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip pair decoded_byte_for_byte_equal_to_preserved_raw",
+      "error": "New actual remote byte comparison required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip pair remote_git_blob",
+      "error": "Actual gzip/raw blob/byte binding differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip pair remote_gzip_sha256",
+      "error": "Actual gzip/raw blob/byte binding differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip pair raw_sha256",
+      "error": "Actual gzip/raw blob/byte binding differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip duplicate raw/gzip pair",
+      "error": "All exact31 unique raw-gzip pairs required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 0",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 1",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 2",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 3",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 4",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 5",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 6",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 7",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 8",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 9",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 10",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 11",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 12",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 13",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 14",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 15",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 16",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 17",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 18",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 19",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 20",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 21",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 22",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 23",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 24",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 25",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 26",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 27",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 28",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 29",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 30",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest perraw reference omitted 31",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "manifest actual Git ID crosswired",
+      "error": "All32 ordered perraw manifest references must crossjoin actual full proof",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "stage/full/current Git ID crosswired",
+      "error": "Stage/full/current source-target-index-commit exact payload groups differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full ledger no terminal",
+      "error": "Actual full ledger completion required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full ledger remote hash crosswired",
+      "error": "Full ledger actual group proof differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full ledger local omitted",
+      "error": "Full ledger actual local2474 payloads required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full ledger local duplicate replacing different ID",
+      "error": "Full ledger actual local2474 payloads required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "full ledger local extra duplicate",
+      "error": "Full ledger actual local2474 payloads required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip ledger no terminal",
+      "error": "Actual31gzip ledger completion required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip ledger Git ID crosswired",
+      "error": "Actual gzip ledger exact tuple coverage differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "gzip ledger duplicate pair",
+      "error": "Actual gzip ledger exact tuple coverage differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "scope postcut_completed_adjudication_files",
+      "error": "Frozen join scope/type differs: postcut_completed_adjudication_files",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "scope files",
+      "error": "Frozen join scope/type differs: files",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "scope grants_data_approval",
+      "error": "Frozen join scope/type differs: grants_data_approval",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "scope manifest_references",
+      "error": "Frozen join scope/type differs: manifest_references",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "scope remote_raw_gzip_pairs",
+      "error": "Frozen join scope/type differs: remote_raw_gzip_pairs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "scope historical26 omission",
+      "error": "Historical26 deferrals differ",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "scope postcut insertion into frozen inventory",
+      "error": "Postcut29 must remain outside exact checkpoint",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "execution config missing gzip ledger",
+      "error": "Exact four final evidence bindings required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "execution config bool size",
+      "error": "Actual final evidence row typing differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "execution config invalid hash",
+      "error": "Actual final evidence row typing differs",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "execution config false completion",
+      "error": "Separate actual final-proof config required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "execution config wrong runner",
+      "error": "Separate actual final-proof config required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    },
+    {
+      "actual": "REJECT",
+      "case": "execution config duplicate evidence path",
+      "error": "Distinct final proof/ledger paths required",
+      "error_type": "ValueError",
+      "expected": "REJECT"
+    }
+  ],
+  "reviewed_source_freeze_sha256": "2d24eb2a106bcf7cd3c9dcbab1564be92d75fde9227250d3a56f01f0ac621928",
+  "reviewed_source_sha256": "aa8237fc0dc771b843246e9dc712454543582a828071c846381a03c32deea76d",
+  "schema": "independent-approved-release3158-join-v2-direct-replay",
+  "source": {
+    "path": "backup_logs/APPROVED_RELEASE_3158_JOIN_INDEPENDENT_replay_v3.py",
+    "sha256": "016973e647b1a3a6a709c6d152714c9d71a13763b7028fffbde69cbdecd4a300",
+    "size": 20181
+  },
+  "source_freeze_sha256": "332aa702fc3273ec68c9d24afec253a468649cf732564e58e438f6cf85c87b8b",
+  "started_at_utc": "2026-10-10T12:10:53.470185+00:00",
+  "status": "PASS"
+}

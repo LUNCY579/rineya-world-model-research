@@ -1,0 +1,315 @@
+"""Closed actual-run admission and durable operative/raw custody, without data approval."""
+from __future__ import annotations
+import json, re
+from pathlib import Path
+import next653_common as c
+
+SCHEMA = 'next653-completed-core-producer-admission-v2'
+CONTRACT_KEYS = {'schema','expected_parent','checkpoint_id','core_execution','core_completion',
+                 'later_living_or_catalog_evolution','living_transition_root_completion','stable_root_hold','data_approval'}
+
+def policy():
+    p = c.HERE/'ADMISSION_POLICY.json'
+    # This policy is mandatory in the fully checked preparation freeze.
+    return json.loads(p.read_bytes())
+
+def native(row):
+    if type(row) is not dict or set(row)!={'path','bytes','sha256'}:
+        raise ValueError('Closed native artifact binding required')
+    return {'path':c.name(row['path']),'size':c.number(row['bytes']),'sha256':c.sha(row['sha256'])}
+
+def add(closure,row,verify=True):
+    c.entry(row)
+    r=c.projection(row)
+    if r['path'] in closure and not c.typed_equal(closure[r['path']],r):
+        raise ValueError('One operative/raw path has conflicting bytes')
+    if verify:c.validate_binding(r)
+    closure[r['path']]=r
+    return r
+
+def evolution_rows(rows,allowed):
+    if type(rows) is not list:raise ValueError('Explicit bounded later living/catalog evolution list required')
+    result={}
+    for row in rows:
+        if type(row) is not dict or set(row)!={'prior','current','archived_prior'}:
+            raise ValueError('Closed old/current/raw preservation row required')
+        a,b,z=(row[k] for k in ('prior','current','archived_prior'))
+        for r in (a,b,z):c.entry(r)
+        p=a['path']
+        if (p not in allowed or b['path']!=p or z['path']==p or p in result
+                or (z['size'],z['sha256'])!=(a['size'],a['sha256'])
+                or c.typed_equal(c.projection(a),c.projection(b))):
+            raise ValueError('Only exact living/catalog old/current bytes may evolve')
+        result[p]=row
+    return result
+
+def runtime_pair(path,metadata,archive,closure,evolution,used,verify=True):
+    if type(metadata) is not dict or type(path) is not str:
+        raise ValueError('Exact original runtime identity required')
+    size=c.number(metadata.get('bytes'));checksum=c.sha(metadata.get('sha256'))
+    old={'path':path,'size':size,'sha256':checksum}
+    arc={'path':c.name(archive),'size':size,'sha256':checksum}
+    add(closure,arc,verify)
+    if Path(path).is_absolute():
+        # Absolute identities come only from the hash-bound native runtime freezes.
+        p=Path(path)
+        if str(p)!=path or p.is_symlink() or not p.is_file():raise ValueError('External frozen runtime identity differs')
+        if verify:c.equal(old,c.hash_file(p))
+        return
+    c.name(path)
+    current=old
+    if path in evolution:
+        rule=evolution[path]
+        if not c.typed_equal(c.projection(old),c.projection(rule['prior'])):
+            raise ValueError('Evolution prior does not equal actual executed runtime bytes')
+        current=rule['current'];add(closure,rule['archived_prior'],verify);used.add(path)
+    add(closure,current,verify)
+
+def validate_living_transition(contract,evolution,closure,verify=True):
+    p=policy();fixed=p['living_transition_fixed']
+    if contract['living_transition_root_completion']!=fixed['completion']:
+        raise ValueError('Later ten living streams require the exact actual ROOT transition completion')
+    values={}
+    for role,row in fixed.items():
+        add(closure,row,verify)
+        if role!='source':values[role]=c.bound_json(row)
+    root=values['completion'];execution=values['execution']
+    if (root.get('status')!='ROOT_ALL10_TRANSITION_COMPLETE_EXACT_OLD_ARCHIVES_AND_NEW_STREAMS_VERIFIED'
+            or root.get('actual_author_execution_id')!='/root' or type(root.get('actual_process_exit_code')) is not int
+            or root['actual_process_exit_code']!=0 or root.get('data_approval') is not False
+            or root.get('catalog_unchanged') is not True or type(root.get('new_approved_records')) is not int
+            or root['new_approved_records']!=0 or root.get('other_497_runtime_current_raw_pairs_unchanged') is not True
+            or native(root.get('historical_runtime_freeze'))!=p['core_fixed']['runtime_freeze']
+            or execution.get('status')!='PASS_ALL10_CURRENT_TRANSITIONS_VERIFIED_497_OTHER_RUNTIME_BINDINGS_UNCHANGED'
+            or execution.get('actual_runner_execution_id')!='/root' or execution.get('data_approval') is not False
+            or execution.get('all10_prior_streams_archived_before_any_write') is not True):
+        raise ValueError('Actual no-approval ten-path living transition differs')
+    for role in ('execution','config','barrier','source'):
+        if native(root.get(role))!=fixed[role]:raise ValueError('ROOT transition source/config/barrier/execution substituted')
+    old,new=root.get('old'),root.get('new')
+    if (type(old) is not dict or type(new) is not dict or len(old)!=10 or set(old)!=set(new)
+            or set(old)!=set(evolution) or sorted(old)!=root.get('only_507_runtime_bindings_evolved')
+            or not c.typed_equal(old,execution.get('old')) or not c.typed_equal(new,execution.get('new'))):
+        raise ValueError('Only the ten actual old/current/archive transitions may evolve')
+    for path,rule in evolution.items():
+        r=old[path]
+        if type(r) is not dict or set(r)!={'path','bytes','sha256','archive'}:raise ValueError('Closed ROOT old/archive tuple required')
+        prior=native({k:r[k] for k in ('path','bytes','sha256')})
+        archived={'path':c.name(r['archive']),'size':prior['size'],'sha256':prior['sha256']}
+        if not c.typed_equal(rule,{'prior':prior,'current':native(new[path]),'archived_prior':archived}):
+            raise ValueError('Frozen507 old/current/archive transition cross-wired')
+    return fixed['completion']
+
+def derive_output(text,modules,measured):
+    """Derive actual full-suite counts from preserved verbose output, never nominal counts."""
+    if type(text) is not str or type(modules) is not list:raise ValueError('Actual verbose output required')
+    counts={m:0 for m in modules};seen=set();labels=[]
+    pattern=re.compile(r'^(test\S+) \((tests\.[A-Za-z0-9_]+)\.([A-Za-z0-9_]+)\.(test[A-Za-z0-9_]+)\) \.\.\. ok$')
+    for line in text.splitlines():
+        if ' ... ' not in line:continue
+        found=pattern.fullmatch(line)
+        if found is None:raise ValueError('Ambiguous/non-pass actual test label')
+        label,module,kind,method=found.groups()
+        if module not in counts or label!=method or (module,kind,method) in seen:
+            raise ValueError('Wrong/duplicate actual module/method label')
+        seen.add((module,kind,method));counts[module]+=1
+        labels.append({'actual_verbose_label':line,'method':method,'module':module,'status':'ok'})
+    summaries=re.findall(r'^Ran ([0-9]+) tests in [0-9.]+s$',text,re.M)
+    if summaries!=[str(measured)] or text.rstrip().splitlines()[-1:]!=['OK']:
+        raise ValueError('Measured full output summary differs')
+    if any(n<=0 for n in counts.values()) or sum(counts.values())!=measured:
+        raise ValueError('All forty actual executed module counts must sum to tests_run')
+    return counts,labels
+
+def validate_output(text,modules,measured):
+    return derive_output(text,modules,measured)[0]
+
+def validate_core_result(execution,completion,output,modules,runtime_binding,runtime_count,execution_binding,output_binding):
+    if (execution.get('status')!='PASS' or execution.get('mode')!='full'
+            or execution.get('actual_runner_execution_id')!='/root'
+            or execution.get('author_execution_id')!='/root/formal_oracle'
+            or not c.typed_equal(execution.get('actual_test_modules'),modules)
+            or not c.typed_equal(execution.get('actual_full_suite_module_inventory'),modules)
+            or execution.get('changed_runtime_bindings')!=[]
+            or execution.get('runtime_freeze_sha256')!=runtime_binding['sha256']):
+        raise ValueError('Actual full PASS runner/module/freeze contract differs')
+    measured=c.number(execution.get('tests_run'))
+    if measured<=0:raise ValueError('Actual measured tests_run must be positive')
+    for key in ('failures','errors','skipped'):
+        if type(execution.get(key)) is not int or execution[key]!=0:
+            raise ValueError('Actual full failures/errors/skips must all be zero')
+        if type(completion.get(key)) is not int or completion[key]!=0:
+            raise ValueError('Root completion failures/errors/skips differ')
+    if (type(execution.get('verified_preimport_bindings')) is not int
+            or execution['verified_preimport_bindings']!=runtime_count
+            or completion.get('actual_runner_execution_id')!='/root'
+            or type(completion.get('actual_process_exit_code')) is not int
+            or completion['actual_process_exit_code']!=0
+            or completion.get('full40_suite_ran') is not True
+            or completion.get('status')!=f'FULL40_ACTUAL{measured}_PASS_SOURCE_{runtime_count}_PAIRS_UNCHANGED'
+            or not c.typed_equal(completion.get('actual_test_modules'),modules)
+            or completion.get('data_approval') is not False
+            or completion.get('all_failed_attempts_preserved') is not True
+            or type(completion.get('tests_run')) is not int or completion['tests_run']!=measured
+            or type(completion.get('pass')) is not int or completion['pass']!=measured
+            or type(completion.get('verified_current_and_raw_runtime_pairs')) is not int
+            or completion['verified_current_and_raw_runtime_pairs']!=runtime_count
+            or native(completion.get('runtime_freeze'))!=runtime_binding):
+        raise ValueError('Actual root full completion/exit/runtime evidence differs')
+    outputs=completion.get('outputs')
+    if type(outputs) is not list or len({r.get('path') for r in outputs})!=len(outputs):
+        raise ValueError('Root full output bindings missing/duplicated')
+    bound={native(r)['path']:native(r) for r in outputs}
+    if bound.get(execution_binding['path'])!=execution_binding or bound.get(output_binding['path'])!=output_binding:
+        raise ValueError('Actual execution/output missing from root completion')
+    if (execution.get('full_output_sha256')!=output_binding['sha256']
+            or type(execution.get('full_output_bytes')) is not int
+            or execution['full_output_bytes']!=output_binding['size']):
+        raise ValueError('Preserved actual output bytes differ')
+    counts,labels=derive_output(output,modules,measured)
+    if (not c.typed_equal(completion.get('per_module_test_counts'),counts)
+            or not c.typed_equal(completion.get('actual_executed_labels'),labels)):
+        raise ValueError('Root output-derived module counts differ')
+    return {'actual_tests_run':measured,'actual_module_count':len(modules),'per_module_test_counts':counts,
+            'actual_exit_code':0,'status':'PASS','failures':0,'errors':0,'skipped':0}
+
+def core_contract(contract,closure,evolution,used,verify=True):
+    p=policy();fixed=p['core_fixed'];modules=p['actual_module_inventory']
+    if len(modules)!=40 or len(set(modules))!=40:raise ValueError('Literal forty-module policy corrupt')
+    values={k:c.bound_json(r) for k,r in fixed.items() if not k.endswith('source')}
+    for row in fixed.values():add(closure,row,verify)
+    runtime=values['runtime_freeze'];bindings=runtime.get('bindings')
+    if (runtime.get('status')!='INSTALLED_RUNTIME_FROZEN_BEFORE_FIRST_CORE_IMPORT'
+            or runtime.get('actual_author_execution')!='/root'
+            or runtime.get('data_approval') is not False or type(bindings) is not dict
+            or len(bindings)!=p['core_runtime_binding_count']
+            or runtime.get('suite_source_paths')!=sorted(bindings)
+            or runtime.get('legacy_modules',[])+runtime.get('new_modules',[])!=modules
+            or runtime.get('installation_config_sha256')!=fixed['installer_config']['sha256']):
+        raise ValueError('Installed current core/test/helper runtime closure differs')
+    for path,row in bindings.items():
+        if set(row)!={'bytes','sha256','archive'}:raise ValueError('Core original/raw binding shape differs')
+        runtime_pair(path,row,row['archive'],closure,evolution,used,verify)
+    # The frozen runner and its operative configuration/freezes must themselves be in closure.
+    for role in ('runner_source','prepared_config','prepared_freeze'):
+        if fixed[role]['path'] not in bindings or (bindings[fixed[role]['path']]['bytes'],bindings[fixed[role]['path']]['sha256'])!=(fixed[role]['size'],fixed[role]['sha256']):
+            raise ValueError('Operative core runner/config/freeze omitted')
+    prepared=values['prepared_config'];readback=values['installation_readback'];preexec=values['installer_preexecution']
+    if (native({k:prepared['future_runner'][k] for k in ('path','bytes','sha256')})!=fixed['runner_source']
+            or preexec.get('config')!={'bytes':fixed['installer_config']['size'],'path':fixed['installer_config']['path'],'sha256':fixed['installer_config']['sha256']}
+            or readback.get('actual_installer_exit_code')!=0 or type(readback.get('actual_installer_exit_code')) is not int
+            or readback.get('actual_reader_execution_id')!='/root'
+            or readback.get('all_originals_durable_before_replacement') is not True
+            or native(readback.get('runtime_freeze'))!=fixed['runtime_freeze']):
+        raise ValueError('Actual installation/source-preexecution link differs')
+    execution_binding=contract['core_execution'];completion_binding=contract['core_completion']
+    result_fixed=p['core_result_fixed']
+    if execution_binding!=result_fixed['execution'] or completion_binding!=result_fixed['completion']:
+        raise ValueError('Only the actual bound full completion can admit this current source version')
+    for row in result_fixed.values():add(closure,row,verify)
+    add(closure,execution_binding,verify);add(closure,completion_binding,verify)
+    execution=c.bound_json(execution_binding);completion=c.bound_json(completion_binding)
+    if (native(completion.get('runner'))!=fixed['runner_source']
+            or native(completion.get('installation_config'))!=fixed['installer_config']):
+        raise ValueError('Root actual completed runner/config source identity differs')
+    output_binding={'path':str(Path(execution_binding['path']).with_name('FULL_OUTPUT.txt')),
+                    'size':c.number(execution.get('full_output_bytes')),'sha256':c.sha(execution.get('full_output_sha256'))}
+    add(closure,output_binding,verify)
+    if output_binding!=result_fixed['full_output']:raise ValueError('Actual full output is cross-wired')
+    for row in completion['outputs']:add(closure,native(row),verify)
+    result=validate_core_result(execution,completion,c.safe(c.FACTORY,output_binding['path']).read_text(),
+                                modules,fixed['runtime_freeze'],len(bindings),execution_binding,output_binding)
+    return {'execution':execution_binding,'completion':completion_binding,'runtime_freeze':fixed['runtime_freeze'],
+            'full_output':output_binding,**result}
+
+def validate_producer_shape(final,prepared,runtime,execution,readback,p):
+    actor='/root/relational_critic_producer'
+    if (final.get('status')!='FINAL_FROZEN216_PENDING_PRODUCER_OUTPUTS_NO_APPROVAL_NO_REPLAY'
+            or final.get('writes_stop_after_this_receipt') is not True
+            or final.get('actual_author_execution_id')!=actor
+            or final.get('data_approval') is not False or final.get('approval_authority') is not False
+            or final.get('runtime_source_freeze_sha256')!=p['producer_fixed']['runtime_freeze']['sha256']
+            or final.get('source_prepared_freeze_sha256')!=p['producer_fixed']['prepared_freeze']['sha256']
+            or final.get('execution_sha256')!=p['producer_fixed']['execution']['sha256']
+            or type(final.get('artifact_count_excluding_this_receipt')) is not int
+            or final['artifact_count_excluding_this_receipt']!=240
+            or type(final.get('source_runtime_public_reference_legacy_archive_pairs_after_generation_verified')) is not int
+            or final['source_runtime_public_reference_legacy_archive_pairs_after_generation_verified']!=103):
+        raise ValueError('Stopped actual producer FINAL contract differs')
+    if (readback.get('status')!='VERIFIED_ACTUAL216_PENDING_PRODUCER_CUSTODY_NO_APPROVAL'
+            or readback.get('actual_execution')!='/root' or readback.get('data_approval') is not False
+            or readback.get('producer_final_sha256')!=p['producer_fixed']['final']['sha256']
+            or type(readback.get('verified_artifact_bindings')) is not int or readback['verified_artifact_bindings']!=240
+            or type(readback.get('verified_runtime_current_prepared_and_execution_raw_archive_pairs')) is not int
+            or readback['verified_runtime_current_prepared_and_execution_raw_archive_pairs']!=103
+            or type(readback.get('verified_core_outputs')) is not int or readback['verified_core_outputs']!=8):
+        raise ValueError('Genuine fixed root producer completion readback differs')
+    artifacts=final.get('all_owned_preparation_execution_output_inventory_excluding_this_receipt')
+    outputs=final.get('eight_core_artifacts');a={r['path']:native(r) for r in artifacts} if type(artifacts) is list else {}
+    o={r['path']:native(r) for r in outputs} if type(outputs) is list else {}
+    if len(a)!=240 or len(artifacts)!=240 or len(o)!=8 or len(outputs)!=8 or any(a.get(k)!=v for k,v in o.items()):
+        raise ValueError('Complete actual producer artifact/output membership required')
+    if (execution.get('status')!='GENERATED216_PENDING_NO_APPROVAL' or execution.get('error') is not None
+            or execution.get('actual_author_execution_id')!=actor or execution.get('no_approval') is not True
+            or execution.get('runtime_source_freeze_sha256')!=p['producer_fixed']['runtime_freeze']['sha256']
+            or not c.typed_equal(execution.get('completed_artifacts'),outputs)):
+        raise ValueError('Actual completed producer execution/output identity differs')
+    if (runtime.get('status')!='SOURCES_FROZEN_BEFORE_FIRST_GENERATOR_REFERENCE_COMMON_TEST_IMPORT'
+            or prepared.get('status')!='PREPARED_SOURCE_ONLY_FROZEN_BEFORE_ANY_NEW_IMPORT_TEST_GENERATION'
+            or runtime.get('approval_authority') is not False or prepared.get('approval_authority') is not False
+            or runtime.get('prepared_freeze_sha256')!=p['producer_fixed']['prepared_freeze']['sha256']
+            or prepared.get('actual_author_execution_id')!=actor or runtime.get('actual_author_execution_id')!=actor
+            or type(prepared.get('bindings')) is not list or len(prepared['bindings'])!=103
+            or type(runtime.get('bindings')) is not list or len(runtime['bindings'])!=103):
+        raise ValueError('Actual producer prepared/runtime 103-pair closure differs')
+    operative=prepared.get('mandatory_operative_source_paths')
+    if (type(operative) is not list or not operative or len(set(operative))!=len(operative)
+            or not c.typed_equal(operative,p['producer_operative_source_paths'])
+            or not c.typed_equal(prepared['bindings'],p['producer_prepared_runtime_membership'])):
+        raise ValueError('Nonempty operative code/config/reference closure mandatory')
+    old={r.get('path'):r for r in prepared['bindings']};new={r.get('path'):r for r in runtime['bindings']}
+    if len(old)!=103 or len(new)!=103 or set(old)!=set(new) or not set(operative).issubset(new):
+        raise ValueError('Producer operative/runtime membership missing or duplicated')
+    for path,r in new.items():
+        prior=old[path]
+        if set(r)!=set(prior)|{'runtime_archive'} or not c.typed_equal({k:r[k] for k in prior},prior):
+            raise ValueError('Producer original prepared/runtime bytes or roles cross-wired')
+    return a,o,new,operative
+
+def producer_contract(closure,evolution,used,verify=True):
+    p=policy();fixed=p['producer_fixed'];v={k:c.bound_json(r) for k,r in fixed.items()}
+    for row in fixed.values():add(closure,row,verify)
+    a,o,runtime,operative=validate_producer_shape(v['final'],v['prepared_freeze'],v['runtime_freeze'],v['execution'],v['completion_readback'],p)
+    for row in a.values():add(closure,row,verify)
+    for path,row in runtime.items():
+        runtime_pair(path,row,p['producer_base']+'/'+row['raw_archive'],closure,evolution,used,verify)
+        runtime_pair(path,row,p['producer_execution_base']+'/'+row['runtime_archive'],closure,evolution,used,verify)
+    if any(path in evolution for path in operative):raise ValueError('Producer operative code/config/reference bytes cannot evolve')
+    return {'actual_artifacts':240,'actual_runtime_pairs':103,'actual_outputs':8,'writes_stopped':True,
+            'final':fixed['final'],'completion_readback':fixed['completion_readback'],'operative_paths':operative}
+
+def validate(cfg,spec=None,verify=True):
+    binding=cfg['inputs']['admission_contract'];contract=c.bound_json(binding)
+    if (type(contract) is not dict or set(contract)!=CONTRACT_KEYS or contract['schema']!=SCHEMA
+            or contract['expected_parent']!=c.PARENT or contract['checkpoint_id']!=cfg['checkpoint_id']
+            or contract['stable_root_hold'] is not True or contract['data_approval'] is not False):
+        raise ValueError('Closed checkpoint-bound actual completion admission required')
+    for k in ('core_execution','core_completion'):c.validate_binding(contract[k])
+    evolution=evolution_rows(contract['later_living_or_catalog_evolution'],set(policy()['allowed_later_living_or_catalog_paths']))
+    closure={};used=set();add(closure,binding,verify)
+    transition=validate_living_transition(contract,evolution,closure,verify)
+    core=core_contract(contract,closure,evolution,used,verify)
+    producer=producer_contract(closure,evolution,used,verify)
+    if used!=set(evolution):raise ValueError('Unused/broad later byte-evolution exception rejected')
+    result={'schema':'next653-actual-admission-snapshot-v2','admission_contract':binding,'core':core,'producer':producer,
+            'later_living_or_catalog_evolution':contract['later_living_or_catalog_evolution'],
+            'actual_living_transition_root_completion':transition,
+            'required_factory_original_and_raw_closure':sorted(closure.values(),key=lambda r:r['path']),
+            'all_original_raw_archives_required':True,'grants_data_approval':False}
+    if spec is not None:
+        if not c.typed_equal(spec.get('actual_core_producer_admission'),result):raise ValueError('Actual admission changed after inventory')
+        files,raw=c.all_entries(spec);entries={**files,**raw}
+        for row in closure.values():
+            if row['path'] not in entries or c.projection(entries[row['path']])!=row:
+                raise ValueError('Mandatory operative/original raw admission bytes absent from frozen scope')
+    return result

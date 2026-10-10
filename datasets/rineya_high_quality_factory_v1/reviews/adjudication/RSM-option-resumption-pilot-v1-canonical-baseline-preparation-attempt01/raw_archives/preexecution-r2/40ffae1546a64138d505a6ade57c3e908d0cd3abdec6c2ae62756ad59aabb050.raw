@@ -1,0 +1,18 @@
+# Canonical-baseline source preparation: prepared for freeze
+
+Actual owner /root/research_architect. SOURCE PREPARATION ONLY: no new semantic-helper imports, tests, target comparison or judgments are executed. Previously completed FIRST/predictions/INITIALs remain immutable. No other expert/red predictions/verdicts/findings, root improvement tickets, installed new core or official private semantic bodies are read. Actual candidate/semantic-parent/control-manifest/public/legacy raw bytes and own previous evidence are authorized for source design and custody; producer/reference assertions are opaque hash/size/archive custody only, never imported or inspected as code.
+
+Prepare independent full FIRST-to-canonical joins, original full-record hash, descriptor/provenance/control/split/rendering/legacy novelty checks. Existing source metadata exceptions remain at their original asserted coordinates; no repair alias, generated replacement or silently changed source binding. Future dependency evidence must isolate actual future events, effect states or terminal status; a surviving changed binding in a checkpoint alone is not activity. Manual unused-binding negative and actual pending-use positive fixtures will be frozen before their later separate execution.
+
+Archive exact new source/config/fixtures and raw authorized inputs/own helpers/resolved runtime and loaded stdlib before any future import/test/comparison. Return prepared/freezed sources only; actual canonical-first execution needs a separate grant. Eventual adjudication of other reviewers requires a further grant after own baseline/judgments freeze. No final designated adjudication or publication file is written here.
+
+Disclose original public-design author/metadata reviewer, own legacy/multi-track exposure, prior input-first solver reuse, root guidance and same underlying model, possible later adjudicator overlap, finite supplied programs/correlated exposed dev; no data approval.
+
+
+The prepared CLI requires both external expected configuration and source-freeze SHA256 values before own semantic helper imports. It checks resolved Python and every file-backed loaded module against raw SHA/size archives before and after future execution. Missing closure coverage stops that future execution and preserves a failure; this preparation does not claim tested closure sufficiency.
+
+Member IDs are two distinct JSON strings; an empty string is valid when it resolves to an actual member. control_id is a nonempty literal string with no spelling grammar; whitespace remains legal. The manual parser/resolver fixture binds an actual empty-ID toy member and omits optional external pair hashes. Paths reject absolute/traversal/dot aliases, NUL, backslash and symlink ancestors. Name/property alternatives and shared IDs across names remain legal.
+
+Machine comparison will emit only factual recommendation and UNASSESSED_PENDING_ACTUAL_AGENT_INSPECTION, without scores, approval or an automatic quality vote. After separate execution authorization, the actual agent must inspect the completed baseline, limitations and any discrepancies, and separately freeze its own baseline assessment before any other-review evidence is read. Final adjudication and all eight user quality scores require a later evidence grant.
+
+Prepared normalization uses full option dependencies and all-declared/reachable shared-primitive graph views, with original numeric constants and names erased under explicit public rules. These are declared comparison methods, not currently established production novelty, mechanism independence or learning evidence. Configured counts remain expectations, not validated counts.

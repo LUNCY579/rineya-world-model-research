@@ -1,0 +1,13 @@
+{
+  "stage": "OWN_TECHNICAL_READBACK_VERIFIER_R2_FROZEN_BEFORE_FIRST_INVOCATION",
+  "verifier_source": "readback_verifier_r2.py",
+  "verifier_raw": "readback_verifier_r2.preexec.raw",
+  "verifier_size_bytes": 13528,
+  "verifier_sha256": "466f5764ad26945617652d42359cecf32e880d2504f08f3197d6d9140b23fe8f",
+  "preserved_prior_own_failure_sha256": "a7f6b75abca1c1e3c172d1f0b5e143d1c7e074d5ec23ce08827f6d8bc25c9bf6",
+  "reviewed_input_byte_anchors": "Exact16 fixed file SHA256 anchors are literal constants in the frozen source, obtained with shell metadata hashing before the r1 and r2 verifier invocations.",
+  "invocation": "/opt/anaconda3/bin/python3 -I -S -B readback_verifier_r2.py",
+  "scope": "Read metadata JSON and opaque current/archive bytes. Only create READBACK_R2.json in this owned remote_custody subprefix. FIRST rows without archive pointers must be exactly joined to archive-backed quality freeze rows. Never import, compile or execute reviewed targets/helpers/emitters/tests; never emit quality votes, designated receipts or data approval.",
+  "actual_verifier_r2_invocations_before_this_freeze": 0,
+  "same_model_disclosure": "Inherited same model; independent technical static custody review only."
+}

@@ -1,0 +1,157 @@
+{
+  "authorization": {
+    "authorizer_execution": "/root",
+    "phase_granted": null,
+    "source_only_preparation_is_not_grant": true
+  },
+  "binding_shape": {
+    "path": "literal relative factory path",
+    "sha256": "actual 64 lowercase hex",
+    "size": "actual integer bytes"
+  },
+  "checkpoint_id": null,
+  "expected_parent": "653ba70f1f7035a5aed137102c14a1ff29d1cf99",
+  "fields": {},
+  "fields_by_phase": {
+    "inventory": {
+      "byte_evolution": [],
+      "pending_observed": [],
+      "raw_relocations": [],
+      "stable_root_hold": true
+    },
+    "join": {
+      "commit_sha": null
+    },
+    "lossless": {
+      "commit_sha": null
+    },
+    "recovery": {
+      "allow_evolving_source": false,
+      "commit_sha": null,
+      "workers": 2
+    },
+    "stage": {
+      "allow_ignored_exact_paths": [],
+      "message": null
+    },
+    "test": {}
+  },
+  "fresh_outputs_by_phase": {
+    "inventory": [
+      "failure",
+      "receipt",
+      "report",
+      "spec"
+    ],
+    "join": [
+      "addendum",
+      "failure",
+      "receipt"
+    ],
+    "lossless": [
+      "failure",
+      "ledger",
+      "receipt"
+    ],
+    "recovery": [
+      "failure",
+      "ledger",
+      "receipt"
+    ],
+    "stage": [
+      "failure",
+      "ledger",
+      "local_commit",
+      "message",
+      "receipt"
+    ],
+    "test": [
+      "failure",
+      "receipt"
+    ]
+  },
+  "inputs": {},
+  "mandatory_inputs_by_phase": {
+    "inventory": [
+      "admission_contract",
+      "archive_mapping_contract",
+      "catalog",
+      "preparation_tests",
+      "runtime_freeze"
+    ],
+    "join": [
+      "admission_contract",
+      "archive_mapping_contract",
+      "full_ledger",
+      "full_proof",
+      "gzip_ledger",
+      "gzip_proof",
+      "inventory_execution_config",
+      "inventory_report",
+      "local_commit",
+      "lossless_execution_config",
+      "preparation_tests",
+      "recovery_execution_config",
+      "runtime_freeze",
+      "spec",
+      "stage",
+      "stage_execution_config",
+      "stage_ledger"
+    ],
+    "lossless": [
+      "admission_contract",
+      "archive_mapping_contract",
+      "full_ledger",
+      "full_proof",
+      "inventory_execution_config",
+      "inventory_report",
+      "local_commit",
+      "preparation_tests",
+      "recovery_execution_config",
+      "runtime_freeze",
+      "spec",
+      "stage",
+      "stage_execution_config",
+      "stage_ledger"
+    ],
+    "recovery": [
+      "admission_contract",
+      "archive_mapping_contract",
+      "inventory_execution_config",
+      "inventory_report",
+      "local_commit",
+      "preparation_tests",
+      "runtime_freeze",
+      "spec",
+      "stage",
+      "stage_execution_config",
+      "stage_ledger"
+    ],
+    "stage": [
+      "admission_contract",
+      "archive_mapping_contract",
+      "inventory_execution_config",
+      "inventory_report",
+      "preparation_tests",
+      "runtime_freeze",
+      "spec"
+    ],
+    "test": [
+      "admission_contract",
+      "archive_mapping_contract",
+      "runtime_freeze"
+    ]
+  },
+  "outputs": {},
+  "phase": null,
+  "remove_template_fields_and_bind_actual_bytes_only_after_root_phase_grant": true,
+  "runner_execution": null,
+  "runtime_freeze_binding_required": {
+    "path": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02/RUNTIME_SOURCE_FREEZE.json",
+    "sha256": "313d8666718b7104b620b3fd7ad5a52ee5cbe9034b7b33d6015093ea8041f4f0",
+    "size": 136664
+  },
+  "schema": "next-checkpoint-653-execution-v2",
+  "source_freeze": null,
+  "template_only_not_executable": true
+}

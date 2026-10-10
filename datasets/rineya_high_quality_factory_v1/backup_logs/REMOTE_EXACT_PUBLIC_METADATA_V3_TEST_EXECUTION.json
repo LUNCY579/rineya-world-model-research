@@ -1,0 +1,53 @@
+{
+  "author_execution": "/root/backup_manager",
+  "actual_runner_execution": "/root/backup_manager",
+  "started_at_utc": "2026-10-10T11:39:12.142572+00:00",
+  "finished_at_utc": "2026-10-10T11:39:14.131063+00:00",
+  "elapsed_seconds": 1.9883957920101238,
+  "executions": [
+    {
+      "test": {
+        "path": "backup_logs/test_remote_checkpoint_exact_public_metadata_v3.py",
+        "size": 14208,
+        "sha256": "e3b06fc91241c9e8dea8c3322ef3c49b6b1ec34118dccd412e53b389d7926f39"
+      },
+      "output": {
+        "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_RECOVERY_TEST_OUTPUT.txt",
+        "size": 3915,
+        "sha256": "7ffe456f2481b7e8ffa0c6134fd33adfcaa244948b647dc403552614463386f3"
+      },
+      "actual_exit_code": 0
+    },
+    {
+      "test": {
+        "path": "backup_logs/test_archival_remote_lossless_exact_public_metadata_v3.py",
+        "size": 15005,
+        "sha256": "3d4c58c2af170585da3ac8ad1a586a9aa024db793d9ad9ce9778ef6262d07de6"
+      },
+      "output": {
+        "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_GZIP_TEST_OUTPUT.txt",
+        "size": 2694,
+        "sha256": "09eff85063e9bf243ff2f94f60e9b88608c0f30f7e6a4d51be9168a635ee1745"
+      },
+      "actual_exit_code": 0
+    }
+  ],
+  "all_frozen_inputs_before_equal_after": true,
+  "frozen_before_first_import_test_execution": true,
+  "network_payload_fetches": 0,
+  "Git_mutations": 0,
+  "status": "PASS",
+  "preexecution_freezes": [
+    {
+      "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_RECOVERY_SOURCE_FREEZE.json",
+      "size": 8394,
+      "sha256": "325309feb9d0af45bdab6e6702e0c543a443fbb9044fa8c5d37de76a91fea6af"
+    },
+    {
+      "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_GZIP_SOURCE_FREEZE.json",
+      "size": 8407,
+      "sha256": "7918c9b153ac221dae7197be74c60e2480c8e19b84c92fc66cda312dc368dc28"
+    }
+  ],
+  "scope": "Only direct isolated function tests; no main/Git/network execution; no exact four metadata bytes copied to new paths"
+}

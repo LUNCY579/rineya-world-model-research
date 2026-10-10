@@ -1,0 +1,44 @@
+{
+  "template_only_not_executable": true,
+  "schema": "next-checkpoint-653-execution-v1",
+  "phase": null,
+  "checkpoint_id": null,
+  "runner_execution": null,
+  "expected_parent": "653ba70f1f7035a5aed137102c14a1ff29d1cf99",
+  "authorization": {"authorizer_execution": "/root", "phase_granted": null, "source_only_preparation_is_not_grant": true},
+  "inputs": {},
+  "fields": {},
+  "outputs": {},
+  "binding_shape": {"path": "literal relative factory path", "size": "actual integer bytes", "sha256": "actual 64 lowercase hex"},
+  "mandatory_inputs_by_phase": {
+    "test": [],
+    "inventory": ["preparation_tests", "integration_execution", "producer_freeze", "catalog"],
+    "stage": ["preparation_tests", "spec", "inventory_report", "inventory_execution_config"],
+    "recovery": ["preparation_tests", "spec", "inventory_report", "inventory_execution_config", "stage", "local_commit", "stage_ledger"],
+    "lossless": ["preparation_tests", "spec", "inventory_report", "inventory_execution_config", "stage", "local_commit", "stage_ledger", "full_proof", "full_ledger"],
+    "join": ["preparation_tests", "spec", "inventory_report", "inventory_execution_config", "stage", "local_commit", "stage_ledger", "full_proof", "full_ledger", "gzip_proof", "gzip_ledger", "all distinct completed proof execution_config/source_freeze bindings"]
+  },
+  "fields_by_phase": {
+    "test": {},
+    "inventory": {
+      "pending_observed": [], "required_closure": [], "byte_evolution": [], "raw_relocations": [],
+      "stable_root_hold": true, "producer_writes_stopped": true, "producer_generation_status": null,
+      "integration_predicates": [
+        {"field": ["ACTUAL_EXIT_FIELD_ENDING_exit_code_OR_actual_exit_code_OR_returncode"], "equals": 0},
+        {"field": ["ACTUAL_FAILURE_COUNT_FIELD_ENDING_failures_OR_failed_OR_tests_failed_OR_failure_count"], "equals": 0},
+        {"field": ["ACTUAL_STABILITY_FIELD_ENDING_bindings_unchanged_OR_sources_unchanged_OR_all_bindings_unchanged"], "equals": true}
+      ]
+    },
+    "stage": {"allow_ignored_exact_paths": [], "message": null},
+    "recovery": {"commit_sha": null, "workers": 2, "allow_evolving_source": false},
+    "lossless": {"commit_sha": null},
+    "join": {"commit_sha": null}
+  },
+  "fresh_outputs_by_phase": {
+    "test": ["receipt", "failure"], "inventory": ["spec", "report", "receipt", "failure"],
+    "stage": ["receipt", "local_commit", "ledger", "message", "failure"],
+    "recovery": ["receipt", "ledger", "failure"], "lossless": ["receipt", "ledger", "failure"],
+    "join": ["receipt", "addendum", "failure"]
+  },
+  "remove_template_fields_and_bind_actual_bytes_only_after_root_phase_grant": true
+}

@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+"""Source-gated entry point. Preparation is not authorization to execute any phase."""
+from __future__ import annotations
+import argparse, hashlib, importlib.util, json, os, re, sys
+from pathlib import Path
+
+HERE = Path(__file__).absolute().parent
+FACTORY = HERE.parent.parent
+OWN_NAMES = {'bootstrap.py', 'common.py', 'inventory.py', 'stage.py', 'recovery.py',
+             'lossless.py', 'join.py', 'admission.py', 'archive_mapping.py', 'runtime_guard.py', 'collect_runtime.py', 'tests.py', 'ADMISSION_POLICY.json', 'ADMISSION_CONTRACT_TEMPLATE.json', 'ARCHIVE_MAPPING_CONTRACT_TEMPLATE.json', 'RUNTIME_SOURCE_FREEZE.json', 'RUNTIME_COLLECTOR_CONFIG.json', 'RUNTIME_COLLECTOR_PREEXECUTION.json', 'POLICY.json', 'EXECUTION_CONFIG_TEMPLATE.json', 'README.md', 'AUTHORING_NOTES.json'}
+FIXED = {
+ 'quality_reports/NEXT_CHECKPOINT_653_STATIC_INDEPENDENT_REVIEW_20261010T1341Z/STATIC_REVIEW_ATTEMPT01.md':'604fb098101a19a79bd1ce8a96c3fe3ca216585ec50a550065503509ccbb4d79',
+ 'quality_reports/NEXT_CHECKPOINT_653_STATIC_INDEPENDENT_REVIEW_20261010T1341Z/READ_SOURCE_HASHES.txt':'b2de4ebaaddb0c28b11cbf830f8d1912213ec276ea6abb757630665d6916e6b9',
+ 'backup_logs/run_provisional_archival_checkpoint_v4_attempt02.py': 'f0561eb5f0e2ebe16bc46f51ed1fcbb1ad74236e90fba4d9b33da166c6767715',
+ 'backup_logs/prepare_belief_v4_approved_release_inventory_r4.py': '77abc32c421ad9677406158d95dca9a90c1227a5fcb84518abfe63b60efb82e9',
+ 'backup_logs/join_belief_v4_approved_release_r1_custody_v2.py': 'aa8237fc0dc771b843246e9dc712454543582a828071c846381a03c32deea76d',
+ 'backup_logs/recover_remote_checkpoint_exact_public_metadata_v3.py': 'a9544fd6e18daffea15be3bc65d45a8ab83239aa7632ed65618d0e7eadcd3135',
+ 'backup_logs/verify_archival_remote_lossless_exact_public_metadata_v3.py': '29e27b8d87facdc5afbc8df57c4259515977e7b65895b4134966ad153e99f3d4',
+ 'backup_logs/exact_four_public_metadata_secret_scan_attempt02.py': 'a79963d367f47c54074714d24bc2a5f372f09bf725a4b2046006cbdb586e4b1d',
+ 'backup_logs/EXACT_FOUR_PUBLIC_ID_SECRET_EXCEPTION_CONFIG.json': '2e18c2c156aaefcee75ad6ad92fe51c66abf864150924d5ac1cd26dbeed5aa05',
+ 'backup_logs/belief-v4-approved-release-r1_SPEC.json': '6c21c64d1cff3ce38d548ed024f6bb9da9f9c8869463d7c4cbd5038240cd97f9',
+ 'backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_FINAL_JOINED_CUSTODY.json': 'cf621c9e6625de9ea2ff7af30437cb638e9b76964df1d342d3e003e5ebd8950e',
+ 'backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_HISTORICAL_RAW_CONFIG.json': '3a563a5e9b816d120c688d425fa8b634f16baa3456633090c347c7caf11ea27d',
+ 'quality_reports/RGM_RENDERER_ARCHIVAL_BOUNDARY_PREFLIGHT.json': '03ec34f4f778698c9dc52b3bd4624f324abc525aaca1e33417d4c6042d8168a1',
+}
+
+def digest(path):
+    h = hashlib.sha256()
+    with path.open('rb') as stream:
+        while chunk := stream.read(65536): h.update(chunk)
+    return h.hexdigest()
+
+def literal(value):
+    if type(value) is not str or not value or any(v in value for v in ('\\','\x00','\n','\r')):
+        raise ValueError('Invalid literal factory path')
+    p = Path(value)
+    if p.is_absolute() or p.as_posix() != value or any(x in ('.', '..', '.git') for x in p.parts):
+        raise ValueError('Path alias or traversal rejected')
+    target = FACTORY / value
+    if any(FACTORY.joinpath(*p.parts[:i]).is_symlink() for i in range(1, len(p.parts)+1)):
+        raise ValueError('Symlink rejected')
+    return target
+
+def binding(row):
+    if type(row) is not dict or set(row) != {'path', 'size', 'sha256'}:
+        raise ValueError('Closed typed binding required')
+    if type(row['size']) is not int or row['size'] < 0 or type(row['sha256']) is not str or not re.fullmatch('[0-9a-f]{64}', row['sha256']):
+        raise ValueError('Binding size/hash type differs')
+    p = literal(row['path'])
+    if not p.is_file() or p.stat().st_size != row['size'] or digest(p) != row['sha256']:
+        raise ValueError('Frozen bytes changed: ' + row['path'])
+    return p
+
+def validate_freeze(path, expected):
+    if type(expected) is not str or not re.fullmatch('[0-9a-f]{64}', expected) or path.is_symlink() or digest(path) != expected:
+        raise ValueError('Externally bound source freeze differs')
+    f = json.loads(path.read_bytes())
+    if f.get('schema') != 'next-checkpoint-653-source-preparation-v2' or f.get('execution_authorized') is not False:
+        raise ValueError('Preparation freeze is not an execution grant')
+    rows = f.get('frozen_inputs')
+    admission_policy=json.loads((HERE/'ADMISSION_POLICY.json').read_bytes())
+    admission_dependencies={r['path']:r for r in [*admission_policy['core_fixed'].values(),*admission_policy['core_result_fixed'].values(),*admission_policy['producer_fixed'].values(),*admission_policy['living_transition_fixed'].values(),admission_policy['preserved_failed_full_execution'],admission_policy['preserved_focused_execution']]}
+    required = {str((HERE/n).relative_to(FACTORY)) for n in OWN_NAMES} | set(FIXED) | set(admission_dependencies)
+    operative={str((HERE/n).relative_to(FACTORY)) for n in OWN_NAMES if n.endswith('.py')}|{p for p in FIXED if p.endswith('.py')}
+    if f.get('operative_source_paths')!=sorted(operative):raise ValueError('Complete operative helper source membership required')
+    runtime=json.loads((HERE/'RUNTIME_SOURCE_FREEZE.json').read_bytes())
+    if runtime.get('schema')!='next653-operative-python-runtime-v2' or runtime.get('status')!='COLLECTED_STDLIB_RUNTIME_NO_HELPER_IMPORT':raise ValueError('Actual completed stdlib runtime collection required')
+    for row in runtime['runtime_bindings']:
+        raw=row['raw_archive'];binding(raw);required.add(raw['path'])
+    collector_preexec=json.loads((HERE/'RUNTIME_COLLECTOR_PREEXECUTION.json').read_bytes())
+    binding(collector_preexec['raw_collector_source']);required.add(collector_preexec['raw_collector_source']['path'])
+    archives=f.get('raw_source_archives')
+    if type(archives) is not list or len(archives)!=len([n for n in OWN_NAMES if n.endswith('.py')]):raise ValueError('Every own Python source/test raw archive required')
+    originals=set()
+    for row in archives:
+        if type(row) is not dict or set(row)!={'original_path','archive_path','sha256'}:raise ValueError('Closed raw-source archive mapping required')
+        original=row['original_path'];archive=row['archive_path'];checksum=row['sha256']
+        if original not in {str((HERE/n).relative_to(FACTORY)) for n in OWN_NAMES if n.endswith('.py')} or original in originals:raise ValueError('Missing/duplicate/unknown source archive origin')
+        originals.add(original)
+        if type(checksum) is not str or not re.fullmatch('[0-9a-f]{64}',checksum) or archive!=str((HERE/'source_blobs'/(checksum+'.source')).relative_to(FACTORY)):raise ValueError('Raw archive must use exact content address in own prefix')
+        if digest(literal(original))!=checksum or digest(literal(archive))!=checksum:raise ValueError('Raw source archive bytes differ')
+        required.add(archive)
+    if type(rows) is not list or len(rows) != len(required) or {r.get('path') for r in rows if type(r) is dict} != required:
+        raise ValueError('Every own source/test/policy and fixed dependency required exactly once')
+    for row in rows:
+        binding(row)
+        if row['path'] in admission_dependencies and row!=admission_dependencies[row['path']]:raise ValueError('Fixed actual admission metadata binding substituted')
+        if row['path'] in FIXED and row['sha256'] != FIXED[row['path']]:
+            raise ValueError('Fixed dependency hash substituted')
+    return f
+
+def load(name):
+    p = HERE / (name + '.py')
+    spec = importlib.util.spec_from_file_location('next653_' + name, p)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--source-freeze', type=Path, required=True)
+    p.add_argument('--expected-source-freeze-sha256', required=True)
+    p.add_argument('--execution-config', type=Path, required=True)
+    p.add_argument('--expected-execution-config-sha256', required=True)
+    p.add_argument('--phase', choices=['test', 'inventory', 'stage', 'recovery', 'lossless', 'join'], required=True)
+    a = p.parse_args(argv)
+    os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+    os.environ['GIT_OPTIONAL_LOCKS'] = '0'
+    sys.dont_write_bytecode = True
+    preparation = validate_freeze(a.source_freeze, a.expected_source_freeze_sha256)
+    sys.modules['next653_bootstrap']=sys.modules[__name__]
+    if a.execution_config.is_symlink() or digest(a.execution_config)!=a.expected_execution_config_sha256:raise ValueError('Bound configuration differs before any helper import')
+    early=json.loads(a.execution_config.read_bytes());early['_preparation']=preparation
+    guard=load('runtime_guard')
+    runtime_before=guard.validate(early,'preimport')
+    c = load('common')
+    config = c.load_execution_config(a, preparation)
+    config['_runtime_before']=runtime_before
+    try:
+        # All dependency imports occur only after complete preparation/config checks.
+        # These modules define functions; none runs a phase at import time.
+        load('admission')
+        load('archive_mapping')
+        if a.phase != 'test': c.validate_admission(config)
+        for dependency in ('inventory','stage','recovery','lossless','join'):
+            load(dependency)
+        if a.phase == 'test':
+            result = load('tests').execute(config)
+        else:
+            result = load(a.phase).execute(config)
+        validate_freeze(a.source_freeze, a.expected_source_freeze_sha256)
+        runtime_after=guard.validate(config,'post_phase')
+        c.recheck_inputs(config)
+        print(json.dumps(result, sort_keys=True), flush=True)
+        return 0
+    except BaseException as error:
+        # Each phase owns a fresh failure alias. No prior receipt is replaced.
+        if config['outputs'].get('failure'):
+            c.write_exclusive(c.safe_output(config['outputs']['failure']), {
+                'status': 'FAILED_ACTUAL_EVIDENCE_PRESERVED', 'phase': a.phase,
+                'author_execution': '/root/backup_manager', 'actual_runner_execution': config['runner_execution'],
+                'at_utc': c.now(), 'error_type': type(error).__name__, 'error': str(error),
+                'diff_diagnostics': getattr(error, 'observation', None),
+                'execution_config': c.file_binding(a.execution_config), 'source_freeze': c.file_binding(a.source_freeze),
+                'grants_data_approval': False})
+        raise
+
+if __name__ == '__main__': raise SystemExit(main())

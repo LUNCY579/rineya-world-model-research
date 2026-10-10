@@ -1,0 +1,1487 @@
+{
+  "actual_pair_input_differences": {
+    "active_checkpoint_tamper_rejection": [
+      [
+        [
+          "checkpoint",
+          "frames",
+          2,
+          "next_index"
+        ],
+        1,
+        2
+      ]
+    ],
+    "budget_pause_after_effect": [
+      [
+        [
+          "event_budget"
+        ],
+        48,
+        1
+      ]
+    ],
+    "initiation_argument_counterfactual": [
+      [
+        [
+          "entry",
+          "args",
+          "p"
+        ],
+        {
+          "reg": "x"
+        },
+        {
+          "const": 0
+        }
+      ]
+    ],
+    "positive_bound_argument_counterfactual": [
+      [
+        [
+          "entry",
+          "args",
+          "p"
+        ],
+        {
+          "reg": "x"
+        },
+        {
+          "const": 3
+        }
+      ]
+    ],
+    "resume_restart_replay": [
+      [
+        [
+          "mode"
+        ],
+        "resume",
+        "restart"
+      ]
+    ],
+    "second_checkpoint_suffix": [
+      [
+        [
+          "checkpoint",
+          "frames",
+          2,
+          "next_index"
+        ],
+        1,
+        2
+      ],
+      [
+        [
+          "checkpoint",
+          "state",
+          "y"
+        ],
+        2,
+        5
+      ],
+      [
+        [
+          "event_budget"
+        ],
+        1,
+        48
+      ],
+      [
+        [
+          "history"
+        ],
+        [
+          {
+            "bindings": {
+              "p": 2
+            },
+            "call_site": null,
+            "event": "enter",
+            "initiation_ok": true,
+            "instance_id": 0,
+            "option": "start"
+          },
+          {
+            "body_path": [],
+            "event": "effect",
+            "index": 0,
+            "instance_id": 0,
+            "op": "add",
+            "option": "start",
+            "register": "x",
+            "state": {
+              "x": 3,
+              "y": 2
+            },
+            "value": 1
+          },
+          {
+            "bindings": {
+              "q": 2,
+              "r": 3
+            },
+            "call_site": {
+              "body_path": [],
+              "caller_instance": 0,
+              "index": 1
+            },
+            "event": "enter",
+            "initiation_ok": true,
+            "instance_id": 1,
+            "option": "work"
+          },
+          {
+            "body_path": [],
+            "condition": true,
+            "event": "branch",
+            "index": 0,
+            "instance_id": 1,
+            "option": "work"
+          },
+          {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "event": "effect",
+            "index": 0,
+            "instance_id": 1,
+            "op": "add",
+            "option": "work",
+            "register": "x",
+            "state": {
+              "x": 5,
+              "y": 2
+            },
+            "value": 2
+          }
+        ],
+        [
+          {
+            "bindings": {
+              "p": 2
+            },
+            "call_site": null,
+            "event": "enter",
+            "initiation_ok": true,
+            "instance_id": 0,
+            "option": "start"
+          },
+          {
+            "body_path": [],
+            "event": "effect",
+            "index": 0,
+            "instance_id": 0,
+            "op": "add",
+            "option": "start",
+            "register": "x",
+            "state": {
+              "x": 3,
+              "y": 2
+            },
+            "value": 1
+          },
+          {
+            "bindings": {
+              "q": 2,
+              "r": 3
+            },
+            "call_site": {
+              "body_path": [],
+              "caller_instance": 0,
+              "index": 1
+            },
+            "event": "enter",
+            "initiation_ok": true,
+            "instance_id": 1,
+            "option": "work"
+          },
+          {
+            "body_path": [],
+            "condition": true,
+            "event": "branch",
+            "index": 0,
+            "instance_id": 1,
+            "option": "work"
+          },
+          {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "event": "effect",
+            "index": 0,
+            "instance_id": 1,
+            "op": "add",
+            "option": "work",
+            "register": "x",
+            "state": {
+              "x": 5,
+              "y": 2
+            },
+            "value": 2
+          },
+          {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "event": "effect",
+            "index": 1,
+            "instance_id": 1,
+            "op": "add",
+            "option": "work",
+            "register": "y",
+            "state": {
+              "x": 5,
+              "y": 5
+            },
+            "value": 3
+          }
+        ]
+      ]
+    ],
+    "success_contract_counterfactual": [
+      [
+        [
+          "options",
+          "start",
+          "success",
+          "all",
+          0,
+          "right",
+          "const"
+        ],
+        0,
+        193
+      ]
+    ],
+    "uninterrupted_resume_suffix": [
+      [
+        [
+          "checkpoint"
+        ],
+        null,
+        {
+          "frames": [
+            {
+              "bindings": {
+                "p": 2
+              },
+              "body_path": [],
+              "frame_kind": "option",
+              "instance_id": 0,
+              "next_index": 2,
+              "option": "start"
+            },
+            {
+              "bindings": {
+                "q": 2,
+                "r": 3
+              },
+              "body_path": [],
+              "frame_kind": "option",
+              "instance_id": 1,
+              "next_index": 1,
+              "option": "work"
+            },
+            {
+              "bindings": {
+                "q": 2,
+                "r": 3
+              },
+              "body_path": [
+                0,
+                "then"
+              ],
+              "frame_kind": "branch",
+              "instance_id": 1,
+              "next_index": 1,
+              "option": "work"
+            }
+          ],
+          "next_instance_id": 2,
+          "phase": "running",
+          "root_pending": false,
+          "state": {
+            "x": 5,
+            "y": 2
+          }
+        }
+      ],
+      [
+        [
+          "history"
+        ],
+        [],
+        [
+          {
+            "bindings": {
+              "p": 2
+            },
+            "call_site": null,
+            "event": "enter",
+            "initiation_ok": true,
+            "instance_id": 0,
+            "option": "start"
+          },
+          {
+            "body_path": [],
+            "event": "effect",
+            "index": 0,
+            "instance_id": 0,
+            "op": "add",
+            "option": "start",
+            "register": "x",
+            "state": {
+              "x": 3,
+              "y": 2
+            },
+            "value": 1
+          },
+          {
+            "bindings": {
+              "q": 2,
+              "r": 3
+            },
+            "call_site": {
+              "body_path": [],
+              "caller_instance": 0,
+              "index": 1
+            },
+            "event": "enter",
+            "initiation_ok": true,
+            "instance_id": 1,
+            "option": "work"
+          },
+          {
+            "body_path": [],
+            "condition": true,
+            "event": "branch",
+            "index": 0,
+            "instance_id": 1,
+            "option": "work"
+          },
+          {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "event": "effect",
+            "index": 0,
+            "instance_id": 1,
+            "op": "add",
+            "option": "work",
+            "register": "x",
+            "state": {
+              "x": 5,
+              "y": 2
+            },
+            "value": 2
+          }
+        ]
+      ],
+      [
+        [
+          "mode"
+        ],
+        "fresh",
+        "resume"
+      ]
+    ]
+  },
+  "argument_operand_counterfactual": {
+    "A_effect": {
+      "body_path": [
+        0,
+        "then"
+      ],
+      "event": "effect",
+      "index": 0,
+      "instance_id": 1,
+      "op": "add",
+      "option": "work",
+      "register": "x",
+      "state": {
+        "x": 6,
+        "y": 2
+      },
+      "value": 3
+    },
+    "F_effect": {
+      "body_path": [
+        0,
+        "then"
+      ],
+      "event": "effect",
+      "index": 0,
+      "instance_id": 1,
+      "op": "add",
+      "option": "work",
+      "register": "x",
+      "state": {
+        "x": 5,
+        "y": 2
+      },
+      "value": 2
+    }
+  },
+  "checkpoint_tamper_locator": [
+    "frames",
+    2,
+    "next_index"
+  ],
+  "dependency_metrics": {
+    "caller_frames_at_R": 1,
+    "declared_instructions": 16,
+    "history_effects_at_R": 2,
+    "maximum_option_depth": 3,
+    "maximum_selected_branch_depth": 2,
+    "selected_branch_frames_at_R": 1,
+    "total_F_effects": 14,
+    "total_F_events": 30
+  },
+  "first_cut_events": 5,
+  "initiation_atom_truth": {
+    "F": [
+      true,
+      true
+    ],
+    "I": [
+      false,
+      true
+    ]
+  },
+  "replay": {
+    "history_event_index": 1,
+    "original_once_state": {
+      "x": 3,
+      "y": 2
+    },
+    "original_pre_state": {
+      "x": 2,
+      "y": 2
+    },
+    "original_twice_state": {
+      "x": 4,
+      "y": 2
+    },
+    "replay_locator": {
+      "body_path": [],
+      "index": 0,
+      "option": "start"
+    },
+    "restart_actual_effect": {
+      "body_path": [],
+      "event": "effect",
+      "index": 0,
+      "instance_id": 0,
+      "op": "add",
+      "option": "start",
+      "register": "x",
+      "state": {
+        "x": 6,
+        "y": 2
+      },
+      "value": 1
+    },
+    "restart_event_index": 1
+  },
+  "retention": {
+    "active_binding_probe_differences": [
+      [
+        [
+          "checkpoint",
+          "state",
+          "x"
+        ],
+        192,
+        220
+      ],
+      [
+        [
+          "checkpoint",
+          "state",
+          "y"
+        ],
+        80,
+        92
+      ],
+      [
+        [
+          "events",
+          0,
+          "state",
+          "y"
+        ],
+        5,
+        6
+      ],
+      [
+        [
+          "events",
+          0,
+          "value"
+        ],
+        3,
+        4
+      ],
+      [
+        [
+          "events",
+          2,
+          "state",
+          "y"
+        ],
+        10,
+        12
+      ],
+      [
+        [
+          "events",
+          3,
+          "bindings",
+          "t"
+        ],
+        10,
+        12
+      ],
+      [
+        [
+          "events",
+          4,
+          "state",
+          "x"
+        ],
+        15,
+        17
+      ],
+      [
+        [
+          "events",
+          4,
+          "state",
+          "y"
+        ],
+        10,
+        12
+      ],
+      [
+        [
+          "events",
+          4,
+          "value"
+        ],
+        10,
+        12
+      ],
+      [
+        [
+          "events",
+          6,
+          "state",
+          "x"
+        ],
+        15,
+        17
+      ],
+      [
+        [
+          "events",
+          6,
+          "state",
+          "y"
+        ],
+        12,
+        14
+      ],
+      [
+        [
+          "events",
+          8,
+          "state",
+          "x"
+        ],
+        15,
+        17
+      ],
+      [
+        [
+          "events",
+          8,
+          "state",
+          "y"
+        ],
+        24,
+        28
+      ],
+      [
+        [
+          "events",
+          9,
+          "bindings",
+          "r"
+        ],
+        15,
+        17
+      ],
+      [
+        [
+          "events",
+          11,
+          "state",
+          "x"
+        ],
+        17,
+        19
+      ],
+      [
+        [
+          "events",
+          11,
+          "state",
+          "y"
+        ],
+        24,
+        28
+      ],
+      [
+        [
+          "events",
+          12,
+          "state",
+          "x"
+        ],
+        17,
+        19
+      ],
+      [
+        [
+          "events",
+          12,
+          "state",
+          "y"
+        ],
+        39,
+        45
+      ],
+      [
+        [
+          "events",
+          12,
+          "value"
+        ],
+        15,
+        17
+      ],
+      [
+        [
+          "events",
+          14,
+          "state",
+          "x"
+        ],
+        17,
+        19
+      ],
+      [
+        [
+          "events",
+          14,
+          "state",
+          "y"
+        ],
+        78,
+        90
+      ],
+      [
+        [
+          "events",
+          15,
+          "bindings",
+          "t"
+        ],
+        78,
+        90
+      ],
+      [
+        [
+          "events",
+          16,
+          "state",
+          "x"
+        ],
+        95,
+        109
+      ],
+      [
+        [
+          "events",
+          16,
+          "state",
+          "y"
+        ],
+        78,
+        90
+      ],
+      [
+        [
+          "events",
+          16,
+          "value"
+        ],
+        78,
+        90
+      ],
+      [
+        [
+          "events",
+          18,
+          "state",
+          "x"
+        ],
+        95,
+        109
+      ],
+      [
+        [
+          "events",
+          18,
+          "state",
+          "y"
+        ],
+        80,
+        92
+      ],
+      [
+        [
+          "events",
+          20,
+          "bindings",
+          "t"
+        ],
+        95,
+        109
+      ],
+      [
+        [
+          "events",
+          21,
+          "state",
+          "x"
+        ],
+        190,
+        218
+      ],
+      [
+        [
+          "events",
+          21,
+          "state",
+          "y"
+        ],
+        80,
+        92
+      ],
+      [
+        [
+          "events",
+          21,
+          "value"
+        ],
+        95,
+        109
+      ],
+      [
+        [
+          "events",
+          23,
+          "state",
+          "x"
+        ],
+        192,
+        220
+      ],
+      [
+        [
+          "events",
+          23,
+          "state",
+          "y"
+        ],
+        80,
+        92
+      ]
+    ],
+    "entered_child_current_initiation_false": [
+      1
+    ],
+    "saved_binding_locator": [
+      "frames",
+      2,
+      "bindings",
+      "r"
+    ],
+    "selected_branch_guard_now_false": {
+      "body_path": [
+        0,
+        "then"
+      ],
+      "frame_index": 2
+    }
+  },
+  "second_cut_events": 6,
+  "short_budget": 1,
+  "source_family_key": "RSM-seed20261009-p0019",
+  "split": "dev_challenge",
+  "success_atom_truth_S": [
+    false,
+    true
+  ],
+  "tamper_kind": "cursor",
+  "tamper_trusted_probe_differences": [
+    [
+      [
+        "checkpoint",
+        "state",
+        "x"
+      ],
+      192,
+      108
+    ],
+    [
+      [
+        "checkpoint",
+        "state",
+        "y"
+      ],
+      80,
+      44
+    ],
+    [
+      [
+        "events"
+      ],
+      [
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "event": "effect",
+          "index": 1,
+          "instance_id": 1,
+          "op": "add",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 5,
+            "y": 5
+          },
+          "value": 3
+        },
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "condition": true,
+          "event": "branch",
+          "index": 2,
+          "instance_id": 1,
+          "option": "work"
+        },
+        {
+          "body_path": [
+            0,
+            "then",
+            2,
+            "then"
+          ],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 1,
+          "op": "scale",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 5,
+            "y": 10
+          },
+          "value": 2
+        },
+        {
+          "bindings": {
+            "t": 10
+          },
+          "call_site": {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "caller_instance": 1,
+            "index": 3
+          },
+          "event": "enter",
+          "initiation_ok": true,
+          "instance_id": 2,
+          "option": "finish"
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 2,
+          "op": "add",
+          "option": "finish",
+          "register": "x",
+          "state": {
+            "x": 15,
+            "y": 10
+          },
+          "value": 10
+        },
+        {
+          "event": "return",
+          "instance_id": 2,
+          "option": "finish",
+          "success_ok": true
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 1,
+          "instance_id": 1,
+          "op": "add",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 15,
+            "y": 12
+          },
+          "value": 2
+        },
+        {
+          "event": "return",
+          "instance_id": 1,
+          "option": "work",
+          "success_ok": true
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 2,
+          "instance_id": 0,
+          "op": "scale",
+          "option": "start",
+          "register": "y",
+          "state": {
+            "x": 15,
+            "y": 24
+          },
+          "value": 2
+        },
+        {
+          "bindings": {
+            "q": 2,
+            "r": 15
+          },
+          "call_site": {
+            "body_path": [],
+            "caller_instance": 0,
+            "index": 3
+          },
+          "event": "enter",
+          "initiation_ok": true,
+          "instance_id": 3,
+          "option": "work"
+        },
+        {
+          "body_path": [],
+          "condition": true,
+          "event": "branch",
+          "index": 0,
+          "instance_id": 3,
+          "option": "work"
+        },
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 3,
+          "op": "add",
+          "option": "work",
+          "register": "x",
+          "state": {
+            "x": 17,
+            "y": 24
+          },
+          "value": 2
+        },
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "event": "effect",
+          "index": 1,
+          "instance_id": 3,
+          "op": "add",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 17,
+            "y": 39
+          },
+          "value": 15
+        },
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "condition": true,
+          "event": "branch",
+          "index": 2,
+          "instance_id": 3,
+          "option": "work"
+        },
+        {
+          "body_path": [
+            0,
+            "then",
+            2,
+            "then"
+          ],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 3,
+          "op": "scale",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 17,
+            "y": 78
+          },
+          "value": 2
+        },
+        {
+          "bindings": {
+            "t": 78
+          },
+          "call_site": {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "caller_instance": 3,
+            "index": 3
+          },
+          "event": "enter",
+          "initiation_ok": true,
+          "instance_id": 4,
+          "option": "finish"
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 4,
+          "op": "add",
+          "option": "finish",
+          "register": "x",
+          "state": {
+            "x": 95,
+            "y": 78
+          },
+          "value": 78
+        },
+        {
+          "event": "return",
+          "instance_id": 4,
+          "option": "finish",
+          "success_ok": true
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 1,
+          "instance_id": 3,
+          "op": "add",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 95,
+            "y": 80
+          },
+          "value": 2
+        },
+        {
+          "event": "return",
+          "instance_id": 3,
+          "option": "work",
+          "success_ok": true
+        },
+        {
+          "bindings": {
+            "t": 95
+          },
+          "call_site": {
+            "body_path": [],
+            "caller_instance": 0,
+            "index": 4
+          },
+          "event": "enter",
+          "initiation_ok": true,
+          "instance_id": 5,
+          "option": "finish"
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 5,
+          "op": "add",
+          "option": "finish",
+          "register": "x",
+          "state": {
+            "x": 190,
+            "y": 80
+          },
+          "value": 95
+        },
+        {
+          "event": "return",
+          "instance_id": 5,
+          "option": "finish",
+          "success_ok": true
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 5,
+          "instance_id": 0,
+          "op": "add",
+          "option": "start",
+          "register": "x",
+          "state": {
+            "x": 192,
+            "y": 80
+          },
+          "value": 2
+        },
+        {
+          "event": "return",
+          "instance_id": 0,
+          "option": "start",
+          "success_ok": true
+        }
+      ],
+      [
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "condition": true,
+          "event": "branch",
+          "index": 2,
+          "instance_id": 1,
+          "option": "work"
+        },
+        {
+          "body_path": [
+            0,
+            "then",
+            2,
+            "then"
+          ],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 1,
+          "op": "scale",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 5,
+            "y": 4
+          },
+          "value": 2
+        },
+        {
+          "bindings": {
+            "t": 4
+          },
+          "call_site": {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "caller_instance": 1,
+            "index": 3
+          },
+          "event": "enter",
+          "initiation_ok": true,
+          "instance_id": 2,
+          "option": "finish"
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 2,
+          "op": "add",
+          "option": "finish",
+          "register": "x",
+          "state": {
+            "x": 9,
+            "y": 4
+          },
+          "value": 4
+        },
+        {
+          "event": "return",
+          "instance_id": 2,
+          "option": "finish",
+          "success_ok": true
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 1,
+          "instance_id": 1,
+          "op": "add",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 9,
+            "y": 6
+          },
+          "value": 2
+        },
+        {
+          "event": "return",
+          "instance_id": 1,
+          "option": "work",
+          "success_ok": true
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 2,
+          "instance_id": 0,
+          "op": "scale",
+          "option": "start",
+          "register": "y",
+          "state": {
+            "x": 9,
+            "y": 12
+          },
+          "value": 2
+        },
+        {
+          "bindings": {
+            "q": 2,
+            "r": 9
+          },
+          "call_site": {
+            "body_path": [],
+            "caller_instance": 0,
+            "index": 3
+          },
+          "event": "enter",
+          "initiation_ok": true,
+          "instance_id": 3,
+          "option": "work"
+        },
+        {
+          "body_path": [],
+          "condition": true,
+          "event": "branch",
+          "index": 0,
+          "instance_id": 3,
+          "option": "work"
+        },
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 3,
+          "op": "add",
+          "option": "work",
+          "register": "x",
+          "state": {
+            "x": 11,
+            "y": 12
+          },
+          "value": 2
+        },
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "event": "effect",
+          "index": 1,
+          "instance_id": 3,
+          "op": "add",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 11,
+            "y": 21
+          },
+          "value": 9
+        },
+        {
+          "body_path": [
+            0,
+            "then"
+          ],
+          "condition": true,
+          "event": "branch",
+          "index": 2,
+          "instance_id": 3,
+          "option": "work"
+        },
+        {
+          "body_path": [
+            0,
+            "then",
+            2,
+            "then"
+          ],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 3,
+          "op": "scale",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 11,
+            "y": 42
+          },
+          "value": 2
+        },
+        {
+          "bindings": {
+            "t": 42
+          },
+          "call_site": {
+            "body_path": [
+              0,
+              "then"
+            ],
+            "caller_instance": 3,
+            "index": 3
+          },
+          "event": "enter",
+          "initiation_ok": true,
+          "instance_id": 4,
+          "option": "finish"
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 4,
+          "op": "add",
+          "option": "finish",
+          "register": "x",
+          "state": {
+            "x": 53,
+            "y": 42
+          },
+          "value": 42
+        },
+        {
+          "event": "return",
+          "instance_id": 4,
+          "option": "finish",
+          "success_ok": true
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 1,
+          "instance_id": 3,
+          "op": "add",
+          "option": "work",
+          "register": "y",
+          "state": {
+            "x": 53,
+            "y": 44
+          },
+          "value": 2
+        },
+        {
+          "event": "return",
+          "instance_id": 3,
+          "option": "work",
+          "success_ok": true
+        },
+        {
+          "bindings": {
+            "t": 53
+          },
+          "call_site": {
+            "body_path": [],
+            "caller_instance": 0,
+            "index": 4
+          },
+          "event": "enter",
+          "initiation_ok": true,
+          "instance_id": 5,
+          "option": "finish"
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 0,
+          "instance_id": 5,
+          "op": "add",
+          "option": "finish",
+          "register": "x",
+          "state": {
+            "x": 106,
+            "y": 44
+          },
+          "value": 53
+        },
+        {
+          "event": "return",
+          "instance_id": 5,
+          "option": "finish",
+          "success_ok": true
+        },
+        {
+          "body_path": [],
+          "event": "effect",
+          "index": 5,
+          "instance_id": 0,
+          "op": "add",
+          "option": "start",
+          "register": "x",
+          "state": {
+            "x": 108,
+            "y": 44
+          },
+          "value": 2
+        },
+        {
+          "event": "return",
+          "instance_id": 0,
+          "option": "start",
+          "success_ok": true
+        }
+      ]
+    ]
+  ]
+}

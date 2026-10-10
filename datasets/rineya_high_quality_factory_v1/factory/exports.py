@@ -1,11 +1,13 @@
 """Derived, separately typed exports from already verified canonical labels."""
 import collections
 from factory.common import canonical,digest,write_jsonl
+from factory.rsm_controls import require_rsm_controls
 
 PREFERENCE_RULES = """Select the better submitted candidate using the explicit ranking policy. Each candidate starts at world's start with world's initial fuel. A directed move is legal iff its edge exists and cost is at most remaining fuel. On an illegal action, stop and retain the prior state. A candidate is valid iff its entire plan is legal. A claim is correct iff claimed_after equals the executed final state. Goal achievement requires validity and terminal node=goal. remaining_moves is the minimum number of feasible moves to goal from terminal state/fuel, or null if unreachable. Initial distance is the same minimum from the initial state. progress is initial distance minus remaining distance for valid candidates with both finite, otherwise null. usefulness=-1 for invalid, 2 for valid goal-reaching, 1 for valid positive progress, 0 otherwise. Rank descending by (valid AND claim_correct, reaches_goal, usefulness, -remaining_moves, -full_submitted_plan_length). Null distance is worse than finite; true sorts above false. Return exactly the selected candidate object, including candidate_id, plan and claimed_after. Options have no quality order.\n"""
 
 
-def specialized(rows,split):
+def specialized(rows,split,batch=None):
+    require_rsm_controls(rows,batch)
     selected=[r for r in rows if r["split"]==split]
     result={}
     if not rows:return result
@@ -43,6 +45,8 @@ def specialized(rows,split):
     return result
 
 
-def write_specialized(path,rows):
+def write_specialized(path,rows,batch=None):
+    require_rsm_controls(rows,batch)
     for split in ["train","dev_challenge"]:
-        for name,records in specialized(rows,split).items():write_jsonl(path/name,records)
+        result=specialized(rows,split) if batch is None else specialized(rows,split,batch=batch)
+        for name,records in result.items():write_jsonl(path/name,records)

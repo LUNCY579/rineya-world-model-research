@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/expert/RSM-option-resumption-pilot-v1-canonical-preparation-attempt02/comparison_review.py", line 585, in <module>
+    if args.phase=='compare':execute_compare()
+                             ^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/expert/RSM-option-resumption-pilot-v1-canonical-preparation-attempt02/comparison_review.py", line 374, in execute_compare
+    cfg,freeze,custody_before=frozen_guard('COMPARE_BEFORE_HELPER_IMPORTS')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/expert/RSM-option-resumption-pilot-v1-canonical-preparation-attempt02/comparison_review.py", line 173, in frozen_guard
+    modules=verify_loaded_modules(freeze,bindings,runtime_bindings)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/expert/RSM-option-resumption-pilot-v1-canonical-preparation-attempt02/comparison_review.py", line 126, in verify_loaded_modules
+    raise ValueError('loaded file-backed runtime module escaped exact frozen membership: '+name+':'+p)
+ValueError: loaded file-backed runtime module escaped exact frozen membership: _bz2:/opt/anaconda3/lib/python3.12/lib-dynload/_bz2.cpython-312-darwin.so

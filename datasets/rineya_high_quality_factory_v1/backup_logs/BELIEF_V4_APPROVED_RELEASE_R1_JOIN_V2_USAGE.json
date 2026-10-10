@@ -1,0 +1,50 @@
+{
+  "status": "PREPARED_USAGE_NOT_JOIN_EXECUTION",
+  "author_execution": "/root/backup_manager",
+  "actual_runner_execution": "/root/backup_manager",
+  "at_utc": "2026-10-10T12:06:39.925552+00:00",
+  "argv": [
+    "/opt/anaconda3/bin/python3",
+    "-B",
+    "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/join_belief_v4_approved_release_r1_custody_v2.py",
+    "--source-freeze",
+    "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_V2_SOURCE_FREEZE.json",
+    "--expected-freeze-sha256",
+    "2d24eb2a106bcf7cd3c9dcbab1564be92d75fde9227250d3a56f01f0ac621928",
+    "--execution-config",
+    "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_EXECUTION_CONFIG.json",
+    "--expected-execution-config-sha256",
+    "84fd5932cf599e9f236f95975eb096159551082fc5305cbd5c46cbae84c60295",
+    "--output",
+    "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_FINAL_JOINED_CUSTODY.json",
+    "--handoff",
+    "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_BACKUP_COMPLETED_ADDENDUM.md"
+  ],
+  "source": {
+    "path": "backup_logs/join_belief_v4_approved_release_r1_custody_v2.py",
+    "size": 40744,
+    "sha256": "aa8237fc0dc771b843246e9dc712454543582a828071c846381a03c32deea76d"
+  },
+  "freeze": {
+    "path": "backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_V2_SOURCE_FREEZE.json",
+    "size": 12483,
+    "sha256": "2d24eb2a106bcf7cd3c9dcbab1564be92d75fde9227250d3a56f01f0ac621928"
+  },
+  "scope": {
+    "path": "backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_SCOPE_CONFIG.json",
+    "size": 24844,
+    "sha256": "44e73e8efbed8ac5485dd22ed12a17b0fc01dc35936cda553ece2361ab752d50"
+  },
+  "execution_config": {
+    "path": "backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_EXECUTION_CONFIG.json",
+    "size": 1613,
+    "sha256": "84fd5932cf599e9f236f95975eb096159551082fc5305cbd5c46cbae84c60295"
+  },
+  "tests_execution": {
+    "path": "backup_logs/BELIEF_V4_APPROVED_RELEASE_R1_JOIN_V2_TEST_EXECUTION.json",
+    "size": 12642,
+    "sha256": "d726faef89dadd41b8f18746dd72c3c4151336adc0f81c36f123560c6556a122"
+  },
+  "pending_before_join": "Actual independent replay FINAL and root readback; no main/Git mutation/dataapproval",
+  "self_inventory_boundary": "All NEWsource/tests/freeze/config/proofs/usage/join remainLOCAL post3158cut"
+}

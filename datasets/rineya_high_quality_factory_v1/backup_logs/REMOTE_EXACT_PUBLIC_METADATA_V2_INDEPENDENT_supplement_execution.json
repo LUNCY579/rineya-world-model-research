@@ -1,0 +1,92 @@
+{
+  "status": "BOUNDED_SUPPLEMENTAL_API_TRUTH_PROBES_COMPLETE",
+  "author_execution": "/root/backup_manager/approved_release_join_review",
+  "source_sha256": "f67b2bab0120805572c35d1635bdb6014971dbf97f442b01dd58c43b2b6ba1d0",
+  "source_freeze_sha256": "9bbde3f957aadd856cee6275c81784a363d4802e6271863917b62f14a5ec7fae",
+  "results": [
+    {
+      "case": "expected_git_blob_NoneType_None",
+      "result": "ACCEPTED"
+    },
+    {
+      "case": "expected_git_blob_bool_invalid",
+      "result": "REJECTED"
+    },
+    {
+      "case": "expected_git_blob_int_invalid",
+      "result": "REJECTED"
+    },
+    {
+      "case": "expected_git_blob_list_invalid",
+      "result": "REJECTED"
+    },
+    {
+      "case": "expected_git_blob_dict_invalid",
+      "result": "REJECTED"
+    },
+    {
+      "case": "expected_git_blob_str_invalid",
+      "result": "REJECTED"
+    },
+    {
+      "case": "expected_git_blob_str_invalid",
+      "result": "REJECTED"
+    },
+    {
+      "case": "expected_git_blob_str_invalid",
+      "result": "REJECTED"
+    },
+    {
+      "case": "complete_report_missing_three_paths",
+      "result": "REJECTED"
+    },
+    {
+      "case": "report_typed_allowed_exact_match_detections",
+      "result": "REJECTED"
+    },
+    {
+      "case": "report_typed_unbound_secret_detections",
+      "result": "REJECTED"
+    },
+    {
+      "case": "report_typed_scanner_source_sha256",
+      "result": "REJECTED"
+    },
+    {
+      "case": "report_typed_configuration_sha256",
+      "result": "REJECTED"
+    },
+    {
+      "case": "report_typed_existing_regexes_unchanged",
+      "result": "REJECTED"
+    },
+    {
+      "case": "report_missing_context",
+      "result": "ACCEPTED"
+    },
+    {
+      "case": "report_context_substitution",
+      "result": "ACCEPTED"
+    },
+    {
+      "case": "gzip_freeze_empty_dependencies",
+      "result": "ACCEPTED"
+    },
+    {
+      "case": "gzip_freeze_changed_dependency",
+      "result": "REJECTED"
+    },
+    {
+      "case": "recovery_freeze_empty_dependencies",
+      "result": "ACCEPTED"
+    }
+  ],
+  "missing_expected_git_id_recorded_verified_flag": true,
+  "target_mains_executed": false,
+  "git_commands": 0,
+  "network_calls": 0,
+  "actual_remote_payload_fetches": 0,
+  "metadata_content_copied_to_new_paths": false,
+  "grants_data_approval": false,
+  "interpretation": "Current main always supplies actual blob IDs and root-specified authentic freeze hashes. Accepted None and omitted dependency manifests are pure-API proof-truth/completeness gaps; altered report provenance is a downstream validator gap. No actual remote persistence conclusion follows."
+}

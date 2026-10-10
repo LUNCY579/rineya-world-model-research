@@ -1,0 +1,176 @@
+{
+  "schema": "rsm-next-checkpoint-attempt02-independent-static-source-review-final-v1",
+  "at_utc": "2026-10-10T20:19:28Z",
+  "actual_reviewer_execution": "/root/rsm_core_integration_auditor",
+  "reviewed_author_execution": "/root/backup_manager",
+  "reviewed_directory": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02",
+  "status": "STATIC_P2_CORRECTION_REQUIRED_BEFORE_ACTUAL_TESTS",
+  "same_model_disclosure": "Independently performed technical source/custody review using the inherited same underlying model; no model-diversity claim.",
+  "source_preparation_freeze": {
+    "path": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02/SOURCE_PREPARATION_FREEZE.json",
+    "size": 83919,
+    "sha256": "4d7bebfdb6e1d353504db18c6294735a1168a809fc88775bacc8c20984d02b00"
+  },
+  "source_ready": {
+    "path": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02/SOURCE_READY.json",
+    "size": 6300,
+    "sha256": "7fde44cbcceaaac4c887e4c322a2f0b3ec70afc1a83ca07815467885f4a66699"
+  },
+  "reviewed_python_count": 12,
+  "reviewed_python_bytes": 219099,
+  "declared_test_methods_read": 71,
+  "independently_hashed_named_preparation_bindings": 277,
+  "independently_hashed_external_runtime_current_raw_pairs": 206,
+  "independently_hashed_collected_source_bindings": 18,
+  "independently_hashed_own_original_raw_source_pairs": 12,
+  "operative_membership_matches_collected_source": true,
+  "metadata_byte_mismatches": [],
+  "historical_core_metadata_only": {
+    "actual_full_status": "FULL40_ACTUAL468_PASS_SOURCE_507_PAIRS_UNCHANGED",
+    "measured_tests_run": 468,
+    "module_count": 40,
+    "old_runtime_pairs": 507,
+    "independent_current_507_runtime_execution": false
+  },
+  "producer_metadata_only": {
+    "final_status": "FINAL_FROZEN216_PENDING_PRODUCER_OUTPUTS_NO_APPROVAL_NO_REPLAY",
+    "artifact_count": 240,
+    "prepared_source_pairs": 103,
+    "runtime_source_pairs": 103,
+    "core_output_count": 8,
+    "producer_source_or_sample_semantics_inspected": false
+  },
+  "prior_metadata_only": {
+    "capped_path_count": 3158,
+    "release_union_count": 222,
+    "current_full_inventory_or_checkpoint_validation": false
+  },
+  "living_transition_metadata_only": {
+    "status": "ROOT_ALL10_TRANSITION_COMPLETE_EXACT_OLD_ARCHIVES_AND_NEW_STREAMS_VERIFIED",
+    "old_count": 10,
+    "new_count": 10
+  },
+  "earlier_attempt01_findings_unchanged": {
+    "review_path": "quality_reports/NEXT_CHECKPOINT_653_STATIC_INDEPENDENT_REVIEW_20261010T1341Z/STATIC_REVIEW_ATTEMPT01.md",
+    "review_sha256": "604fb098101a19a79bd1ce8a96c3fe3ca216585ec50a550065503509ccbb4d79",
+    "B1_actual_full_core_current_raw_closure": "SUBSTANTIVE_FIX_PRESENT_IN_REVIEWED_SOURCE_UNEXECUTED",
+    "B2_real_stopped_producer_complete_closure": "SUBSTANTIVE_FIX_PRESENT_IN_REVIEWED_SOURCE_UNEXECUTED",
+    "B3_completed_phase_config_freeze_output_ledger_provenance": "SUBSTANTIVE_FIX_PRESENT_IN_REVIEWED_SOURCE_WITH_SEPARATE_NARROW_P2"
+  },
+  "findings": [
+    {
+      "id": "P2_COMPLETED_TEST_FIELDS_NOT_CLOSED",
+      "priority": 2,
+      "source": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02/common.py",
+      "source_sha256": "54a449b6e2898c3ffb66a3073c46abfd3218aea2adbbb7b85b71fc041a4e6f23",
+      "lines": [
+        295,
+        338
+      ],
+      "consumer_lines": [
+        290,
+        292
+      ],
+      "real_engine_source": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02/tests.py",
+      "real_engine_source_sha256": "3e0098899d3a37e2df4243d860fc273a2c7d2e58e86de459a9e77bca885826a2",
+      "real_engine_rejection_line": 726,
+      "finding": "Completed phase validator requires fields to be a dict and closes all production phase fields, but lacks phase=test requiring an empty dict. validate_test_receipt uses this validator, so it accepts a completed-test config that could not run through the actual test engine.",
+      "static_counterexample": "value, freeze, inputs = phase_fixture('test'); value['fields'] = {'unexpected_override': True}; c.validate_completed_config_value(value, 'test', 'isolated-fixture', freeze, inputs) reaches return value by source inspection.",
+      "counterexample_executed": false,
+      "impact_limit": "Real tests.execute rejects nonempty fields before loading the suite. This is receipt provenance weakness, not a demonstrated actual engine override or forged PASS.",
+      "minimal_correction": "Add elif phase == 'test' requiring value['fields'] == {}.",
+      "required_regression": "Unchanged completed-test fixture accepted; otherwise-identical nonempty-field config rejected; completed successful receipt bound to such config rejected by validate_test_receipt while role/freeze/runtime/output bindings remain valid.",
+      "existing_test_coverage_gap": true,
+      "correction_read_or_validated": false
+    }
+  ],
+  "source_contracts_reviewed": {
+    "strict_zero_warning_cached_and_commit_diff": true,
+    "four_original_metadata_exceptions_without_copied_aliases": true,
+    "prior3158_names_and_222_release_byte_preservation": true,
+    "bounded_living_evolution_and_original_raw_archives": true,
+    "whole_tree_object_mode_and_prefix_preservation": true,
+    "exact_phase_configuration_runtime_SPEC_output_ledger_chain": true,
+    "full_remote_fresh_full_byte_blob_scanner_verification": true,
+    "gzip_separate_fresh_payload_call_and_roundtrip_measurement": true,
+    "final_joined_custody_and_unique_complete_ledgers": true,
+    "specific_new_whitespace_raw_mapping_origin_gzip_manifest_line_scope": true,
+    "no_old_path_release_or_metadata_relocation": true,
+    "actual_preimport_and_postguard_runtime_membership_source_raw_custody": true,
+    "whole_two_times_capacity_plus512MiB_retained": true
+  },
+  "storage_limitation": {
+    "origin": "Root message, not independently measured by this reviewer",
+    "required_bytes_estimate_GB": 5.427,
+    "available_bytes_estimate_GB": 1.608,
+    "estimate_is_stable_production_inventory": false,
+    "referenced_root_estimate_sha256": "8d79a0cda98ca26f1a7a00034a200e368662dda8e354d408a4cb6919e3e75599",
+    "source_storage_waiver_present": false,
+    "storage_waiver_authorized": false,
+    "requirement": "Actual stable-root inventory and sufficient writable-volume capacity before actual staging; no execution grant from this receipt."
+  },
+  "own_evidence": {
+    "review": {
+      "path": "quality_reports/RSM_NEXT_CHECKPOINT_ATTEMPT02_INDEPENDENT_STATIC_REVIEW/STATIC_REVIEW.md",
+      "size": 15407,
+      "sha256": "d1283f01e3c6923d55ae28ad1949ac306bbe7ab8a69bf94ab1d0e0e39f471c5e"
+    },
+    "short_source_hash_ledger": {
+      "path": "quality_reports/RSM_NEXT_CHECKPOINT_ATTEMPT02_INDEPENDENT_STATIC_REVIEW/READ_SOURCE_HASHES.txt",
+      "size": 5591,
+      "sha256": "cd2bc396a0e0b3f9b7e7a8a1bf416fdc26d88aff63641e1be83783c2b391dd42"
+    },
+    "metadata_reader": {
+      "path": "quality_reports/RSM_NEXT_CHECKPOINT_ATTEMPT02_INDEPENDENT_STATIC_REVIEW/static_metadata_reader.py",
+      "size": 8309,
+      "sha256": "df2025f8f2302cc07cc9ffffc253363cf521b32f9f21044ed54e1986aa34253c"
+    },
+    "metadata_reader_identical_raw_archive": {
+      "path": "quality_reports/RSM_NEXT_CHECKPOINT_ATTEMPT02_INDEPENDENT_STATIC_REVIEW/source_blobs/df2025f8f2302cc07cc9ffffc253363cf521b32f9f21044ed54e1986aa34253c.source",
+      "size": 8309,
+      "sha256": "df2025f8f2302cc07cc9ffffc253363cf521b32f9f21044ed54e1986aa34253c"
+    },
+    "metadata_preexecution": {
+      "path": "quality_reports/RSM_NEXT_CHECKPOINT_ATTEMPT02_INDEPENDENT_STATIC_REVIEW/PRE_METADATA_EXECUTION.json",
+      "size": 1236,
+      "sha256": "efe9f95af80e1ade4dbad3c5a2b0772cf2f7fdab8281931c5f88f070cf4b1389"
+    },
+    "metadata_byte_readback": {
+      "path": "quality_reports/RSM_NEXT_CHECKPOINT_ATTEMPT02_INDEPENDENT_STATIC_REVIEW/STATIC_METADATA_BYTE_READBACK.json",
+      "size": 136463,
+      "sha256": "f1638675979ec1566101460141dab7e2175a897677a1e7a69930890a0cb020db"
+    },
+    "metadata_reader_actual_tool_chunk_id": "0fa415",
+    "metadata_reader_actual_exit_code": 0,
+    "metadata_reader_source_and_archive_preserved_before_metadata_execution": true
+  },
+  "authored_source_sha256": {
+    "admission.py": "56c61a28467acf3456e573c6ba5648161528829f2c049cbfc267522540dd3801",
+    "archive_mapping.py": "5ae33d9720ef0b9e68312d68e7b55b522475119756a46434943440b0d663d7fa",
+    "bootstrap.py": "27d5fe615b14ba94569a6882947597704d685b7d7cd4013b8d6cfe4a97e0f88a",
+    "collect_runtime.py": "d18f9406c86c08080fa2c42440e5d22e997849229ab6c1c1ebbe54d95d86a9b6",
+    "common.py": "54a449b6e2898c3ffb66a3073c46abfd3218aea2adbbb7b85b71fc041a4e6f23",
+    "inventory.py": "537833b4a1fd062e949d21d5ad8cc64ba6ae1809e5900ce7066e41801d431ba0",
+    "join.py": "7d6ba7471b711cb9d3db03c7f356bc12ddfaf959c28e65a2d91d1dc0291eced2",
+    "lossless.py": "c16f5522d4716b4582bd6ad1a18835f562235be9fd84c30b9d99e27761c743e6",
+    "recovery.py": "6665a63604ff6ba61c3e14be90b41db6593eb3c0b08470e6e2ed02ee3d1d5106",
+    "runtime_guard.py": "898f54627d0a71dfdcbdf9e02ae764372c63ff387eabbe7cfd05e2ffef27526c",
+    "stage.py": "c7f6c12639c8f59a8aeb0aa430a8c5b96f192f032bb15b30b93f480308897d8c",
+    "tests.py": "3e0098899d3a37e2df4243d860fc273a2c7d2e58e86de459a9e77bca885826a2"
+  },
+  "reviewer_target_imports": 0,
+  "reviewer_target_compilation": 0,
+  "reviewer_target_tests": 0,
+  "reviewer_target_phase_execution": 0,
+  "reviewer_production_inventory": 0,
+  "reviewer_git_operations": 0,
+  "reviewer_network_or_payload_fetch": 0,
+  "reviewer_packing": 0,
+  "reviewed_sources_mutated": false,
+  "old_receipts_mutated": false,
+  "actual_tests_pass_claimed": false,
+  "actual_checkpoint_or_data_approval": false,
+  "root_source_readback_claim_accepted_as_independent_pass": false,
+  "execution_or_verifier_grant": false,
+  "stop_after_frozen_static_review": true
+}

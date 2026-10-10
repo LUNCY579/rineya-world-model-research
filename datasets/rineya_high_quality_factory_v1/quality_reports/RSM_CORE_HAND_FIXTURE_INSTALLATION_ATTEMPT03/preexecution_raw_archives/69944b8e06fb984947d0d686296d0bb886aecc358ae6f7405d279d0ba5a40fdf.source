@@ -1,0 +1,603 @@
+"""Prospective public-only planning V2 audit, actual author /root/formal_oracle.
+
+Shares immutable V1 finite search/isomorphism/core control code deliberately.
+New guard-vector replay and V2 witness/mutation checks are authored here.
+Never reads stored targets or files. Inventories are explicitly supplied inputs.
+"""
+from collections import Counter
+from copy import deepcopy
+import hashlib
+import json
+from . import rgm_planning_controls_independent as v1
+
+OracleError = v1.OracleError
+VERSION = 'rgm-planning-controls-2.0.0'
+BATCH = 'planning-gap-v2'
+# Fixture/coordinator convention only: the public contract does not prescribe
+# an exact generator_version spelling. Actual versions are checked below.
+GENERATOR = 'rgm-planning-gap-2.0.0'
+PARENT_SHA256 = '2a6c9d785f9e2de47233de06bad3371e4a4f072e9be1133340913ceec30a6654'
+V1_DEPENDENCY_SHA256 = 'cd92cff9bb92eb38afd5a989109718cd600390a9609a13fc070f9cc1e1677bf3'
+SPECIFICATIONS = {
+ 'schemas/SEMANTICS.md':'718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd',
+ 'schemas/RGM_PLANNING_CONTROL_PROPERTIES.md':'f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a',
+ 'schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md':'02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe',
+ 'research/curricula/RGM-NEXT-GAP-PROSPECTIVE.md':'6100d43fe1cf83d798bb34799fac70569f54d33f66692150d188581d9c940761',
+ 'schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2.md':'d59ce14dd66c6ebd644580f7736e714fbceda32dd132d8c9cb5cf61e78a5a258',
+ 'research/curricula/RGM-PLANNING-GAP-V2-PROSPECTIVE.md':'34a3c89302d4b965ee784cd2f52207b6e9cb0b4299b52b82bf97c675c2d77d2c',
+ 'schemas/RGM_PLANNING_V2_RENDERER_CONTROL_ENCODING_ADDENDUM.md':'48e1ebbe954944d8b6569866fa102962607c4ecf27a1d7133f1259f815eac603'}
+NEW_PROPERTY = 'isolated_unchanged_support_failure_after_legal_prefix'
+CLEARANCE_PROPERTY = 'later_action_requires_changed_block_clearance'
+PROPERTIES = v1.PROPERTIES | {NEW_PROPERTY}
+GUARDS = ('source_exists','source_clear','destination_exists_or_table',
+          'source_destination_distinct','destination_clear_or_table','changed_support')
+MUTANTS = {'source_clear_ignored':'source_clear','destination_clear_ignored':'destination_clear_or_table',
+           'no_op_allowed':'changed_support'}
+DESTINATION_INDICES = frozenset((207,209,210,212,213,214))
+A_SIZES = (5,5,5,5,6,6,7,6,6,7,7,7)
+_need = v1._need
+_json = v1._json
+_hash = v1._hash
+
+
+def guard_truth(on, action):
+    """Every predicate independently evaluated, including co-failures."""
+    block, destination = action['block'], action['to']
+    occupied = set(on.values())
+    return {'source_exists':block in on, 'source_clear':block not in occupied,
+        'destination_exists_or_table':destination == 'TABLE' or destination in on,
+        'source_destination_distinct':block != destination,
+        'destination_clear_or_table':destination == 'TABLE' or destination not in occupied,
+        'changed_support':block in on and destination != on[block]}
+
+
+def _reason(guards):
+    for guard, reason in (('source_exists','unknown_source'),('source_clear','source_not_clear'),
+          ('source_destination_distinct','self_destination'),('destination_exists_or_table','unknown_destination'),
+          ('destination_clear_or_table','destination_not_clear'),('changed_support','unchanged_support')):
+        if not guards[guard]:
+            return reason
+    return None
+
+
+def replay(task, mutant='strict'):
+    """Separate strict/mutant replay; deliberately no post-transition validator.
+
+    Mutation removes exactly one named guard. Invalid physical states created by
+    a mutant remain available to subsequent guard evaluation. This replay does
+    not supply training labels or change the public task semantics.
+    """
+    v1._validate(task)
+    _need(task['kind'] == 'blocks', 'guard replay requires block task')
+    _need(mutant == 'strict' or mutant in MUTANTS, 'unknown transition mutant')
+    current = dict(task['on']); states = [dict(current)]; steps = []; vectors = []
+    first_error = None; failure_reason = None; executed = []
+    for i, action in enumerate(task['plan']):
+        guards = guard_truth(current, action); vectors.append(guards)
+        active = [name for name in GUARDS if name != MUTANTS.get(mutant)]
+        legal = all(guards[name] for name in active)
+        if legal:
+            # Existence/distinctness are never ablated. Only this direct update
+            # is the action transition; no validator restores omitted guards.
+            current = dict(current); current[action['block']] = action['to']; executed.append(i)
+        steps.append({'legal':legal,'after':dict(sorted(current.items()))})
+        states.append(dict(current))
+        if not legal:
+            first_error = i; failure_reason = _reason(guards); break
+    valid = first_error is None
+    return {'steps':steps,'after':dict(sorted(current.items())),'valid':valid,
+        'reaches_goal':valid and all(current[b] == d for b,d in task['goal_on'].items()),
+        'first_error':first_error,'first_error_reason':failure_reason,'guard_truth':vectors,
+        'states':states,'executed_action_indices':executed,'mutant':mutant,'completed':True}
+
+
+def clearance_witnesses(task, strict=None):
+    """Enumerate canonical initial blockers and continuously enabling moves."""
+    if task['kind'] != 'blocks': return []
+    strict = strict or replay(task)
+    _need(strict.get('completed') is True, 'UNKNOWN: incomplete prefix replay cannot witness clearance')
+    initial = task['on']; occupied = set(initial.values()); witnesses = []
+    for i, step in enumerate(strict['steps']):
+        if i < 1 or not step['legal']: continue
+        action = task['plan'][i]; block,destination = action['block'],action['to']
+        if block in occupied:
+            code, selected = 'source_not_clear', block
+        elif destination != 'TABLE' and destination in occupied:
+            code, selected = 'destination_not_clear', destination
+        else:
+            continue
+        obstruction = next(b for b,s in initial.items() if s == selected)
+        for j in range(i):
+            before, after = strict['states'][j], strict['states'][j+1]
+            if task['plan'][j]['block'] != obstruction: continue
+            if before[obstruction] != selected or selected not in before.values() or selected in after.values(): continue
+            if any(selected in strict['states'][k].values() for k in range(j+1,i+1)): continue
+            witnesses.append({'action_index':i,'precondition':code,'enabling_action_index':j,'obstructing_block':obstruction})
+    return witnesses
+
+
+def _isolated_noop(task, strict):
+    index = strict['first_error']
+    if index is None or index < 1: return False
+    false = {key for key, value in strict['guard_truth'][index].items() if not value}
+    action = task['plan'][index]; before = strict['states'][index]
+    return false == {'changed_support'} and action['to'] == 'TABLE' and before.get(action['block']) == 'TABLE'
+
+
+def analyze(task):
+    result = v1.analyze(task)
+    if result['search'].get('complete') is not True or (result['held_search'] is not None and result['held_search'].get('complete') is not True):
+        raise OracleError('UNKNOWN: incomplete finite search')
+    result['properties'][NEW_PROPERTY] = False
+    if task['kind'] == 'blocks':
+        strict = replay(task)
+        _need(strict.get('completed') is True, 'UNKNOWN: incomplete independent strict prefix replay')
+        for field in ('steps','after','valid','reaches_goal'):
+            _need(_json(strict[field]) == _json(result['target'][field]), 'UNKNOWN: independent strict transition disagreement')
+        result['clearance'] = clearance_witnesses(task, strict)
+        result['properties'][CLEARANCE_PROPERTY] = bool(result['clearance'])
+        result['properties'][NEW_PROPERTY] = _isolated_noop(task, strict)
+        result['first_error'] = strict['first_error']; result['first_error_reason'] = strict['first_error_reason']
+        result['guard_truth'] = strict['guard_truth']; result['prefix_states'] = strict['states']
+    else:
+        result['guard_truth'] = []; result['prefix_states'] = []
+    return result
+
+
+def solve(task): return analyze(task)['target']
+
+
+def check(row):
+    errors = list(v1.check(row))
+    try:
+        result = analyze(row.get('semantic_task'))
+        for tag in row.get('skill_tags', []):
+            for component in tag.split(':'):
+                if component in PROPERTIES and not result['properties'][component]:
+                    message = 'false V2 row property: ' + component
+                    if message not in errors: errors.append(message)
+        _need(type(row.get('generator_version')) is str and bool(row['generator_version']),
+              'row V2 generator_version must be nonempty string')
+        _need(type(row.get('sample_id')) is str and bool(row['sample_id']), 'sample_id must be nonempty string')
+    except (OracleError, TypeError, ValueError, KeyError, RecursionError) as exc:
+        errors.append(str(exc))
+    return errors
+
+
+def _typed_index(value, low, high, label):
+    _need(type(value) is int and low <= value < high, label + ' must be bounded integer excluding bool')
+
+
+def _witness(evidence, prop, task, result):
+    _need(type(evidence) is dict, 'V2 witness evidence must be object')
+    if prop == CLEARANCE_PROPERTY:
+        required = ('action_index','precondition','enabling_action_index','obstructing_block')
+        _need(set(required) <= set(evidence), 'canonical V2 clearance witness requires all four fields')
+        _typed_index(evidence['action_index'],1,len(task['plan']),'action_index')
+        _typed_index(evidence['enabling_action_index'],0,evidence['action_index'],'enabling_action_index')
+        _need(type(evidence['precondition']) is str and evidence['precondition'] in ('source_not_clear','destination_not_clear'), 'noncanonical V2 precondition')
+        _need(type(evidence['obstructing_block']) is str and evidence['obstructing_block'] in task.get('on',{}), 'obstructing_block must exist')
+        actual = {key:evidence[key] for key in required}
+        _need(any(_json(x) == _json(actual) for x in result['clearance']), 'false canonical clearance witness or enabling continuity')
+        extras = {k:v for k,v in evidence.items() if k not in required}
+        if extras: v1._witness(extras,prop,task,result)
+    elif prop == NEW_PROPERTY:
+        _need(set(('action_index','block','current_support')) <= set(evidence), 'isolated no-op witness fields missing')
+        _typed_index(evidence['action_index'],1,len(task['plan']),'action_index')
+        _need(type(evidence['block']) is str and evidence['block'] in task.get('on',{}) and evidence['current_support'] == 'TABLE'
+              and type(evidence['current_support']) is str, 'isolated no-op witness block/support invalid')
+        index = evidence['action_index']
+        _need(result['properties'][NEW_PROPERTY] and result['first_error'] == index
+              and task['plan'][index] == {'block':evidence['block'],'to':'TABLE'}, 'false isolated no-op witness')
+        extras = {k:v for k,v in evidence.items() if k not in ('action_index','block','current_support')}
+        if extras: v1._witness(extras,prop,task,result)
+    else:
+        v1._witness(evidence,prop,task,result)
+
+
+def mutation_audit(task):
+    strict = replay(task); audits = {}
+    _need(strict.get('completed') is True, 'UNKNOWN: incomplete strict mutation baseline')
+    def output(run): return {key:run[key] for key in ('steps','after','valid','reaches_goal')}
+    for name in MUTANTS:
+        changed = replay(task,name)
+        _need(changed.get('completed') is True, 'UNKNOWN: incomplete one-guard mutant execution')
+        first_difference = next((i for i,(a,b) in enumerate(zip(strict['steps'],changed['steps'])) if _json(a)!=_json(b)),None)
+        if first_difference is None and len(strict['steps']) != len(changed['steps']): first_difference = min(len(strict['steps']),len(changed['steps']))
+        index = strict['first_error']
+        audits[name] = {'mutant':name,'invoked':True,'completed':changed['completed'],
+            'input_sha256':_hash(task),'strict_output_sha256':_hash(output(strict)), 'mutant_output_sha256':_hash(output(changed)),
+            'output_differs':_json(output(strict)) != _json(output(changed)), 'first_differing_step':first_difference,
+            'strict_valid':strict['valid'],'mutant_valid':changed['valid'],
+            'mutant_legal_at_first_failure':index is not None and index < len(changed['steps']) and changed['steps'][index]['legal'],
+            'mutant_transition_executed_at_first_failure':index is not None and index in changed['executed_action_indices'],
+            'guard_truth_at_first_failure':None if index is None else strict['guard_truth'][index],
+            'strict_output':output(strict),'mutant_output':output(changed)}
+    return audits
+
+
+def _c1_control(control, first, second, ids):
+    _need(control.get('name') == 'adjacent_action_order_counterfactual', 'C1 control name mismatch')
+    _need(set(control.get('sample_ids',[])) <= set(ids) and len(control.get('sample_ids',[])) == 2, 'C1 actual ID pair mismatch')
+    evidence = control.get('evidence'); _need(type(evidence) is dict, 'C1 evidence missing')
+    _need(set(('swap_index','first_failure_index','first_failure_reason','guard_truth')) <= set(evidence), 'C1 evidence fields missing')
+    _typed_index(evidence['swap_index'],0,len(first['plan'])-1,'swap_index')
+    _typed_index(evidence['first_failure_index'],0,len(second['plan']),'first_failure_index')
+    swapped = deepcopy(first['plan']); i = evidence['swap_index']; swapped[i],swapped[i+1] = swapped[i+1],swapped[i]
+    _need(_json(swapped) == _json(second['plan']), 'false adjacent swap index')
+    result = analyze(second); index = result['first_error']; code = evidence['first_failure_reason']
+    _need(type(code) is str and code in ('source_not_clear','destination_not_clear') and index == evidence['first_failure_index']
+          and result['first_error_reason'] == code, 'false C1 first-failure code/index')
+    guards = evidence['guard_truth']
+    _need(type(guards) is dict and set(guards) == set(GUARDS) and all(type(x) is bool for x in guards.values()), 'C1 guard_truth requires exact six booleans')
+    actual = result['guard_truth'][index]
+    _need(_json(guards) == _json(actual), 'false C1 guard truth')
+    named_guard = 'source_clear' if code == 'source_not_clear' else 'destination_clear_or_table'
+    _need({k for k,v in actual.items() if not v} == {named_guard}, 'compound-invalid C1 is not selective')
+    mutants = mutation_audit(second); name = 'source_clear_ignored' if named_guard == 'source_clear' else 'destination_clear_ignored'
+    matched = mutants[name]
+    _need(matched['completed'] and matched['output_differs'] and matched['mutant_legal_at_first_failure']
+          and matched['mutant_transition_executed_at_first_failure'] and matched['first_differing_step'] == index, 'UNKNOWN: C1 matching mutant not killed/executed')
+    diagnostic = {'mutant':name,'mutant_legal_at_failure':matched['mutant_legal_at_first_failure'],
+                  'mutant_trace_differs':matched['output_differs'],'first_differing_step':matched['first_differing_step'],
+                  'mutant_valid':matched['mutant_valid']}
+    for key,value in evidence.items():
+        if key in diagnostic: _need(_json(value) == _json(diagnostic[key]), 'false C1 mutant evidence '+key)
+    return result,mutants
+
+
+def _c4_control(control, tasks, index):
+    base,prefix,noop = tasks; k = 1+(index-204)%3
+    _need(control.get('name') == 'isolated_noop_append_counterfactual', 'C4 control name mismatch')
+    evidence = control.get('evidence'); _need(type(evidence) is dict and set(('prefix_length','block','current_support')) <= set(evidence), 'C4 control evidence missing')
+    _typed_index(evidence['prefix_length'],1,4,'prefix_length')
+    _need(evidence['prefix_length'] == k and type(evidence['block']) is str and evidence['block'] in base['on']
+        and type(evidence['current_support']) is str and evidence['current_support'] == 'TABLE', 'C4 allocated prefix/block/support mismatch')
+    _need(v1._difference(base,prefix) == ['plan'] and prefix['plan'] == base['plan'][:k], 'C3 must be allocated canonical C0 prefix')
+    _need(v1._difference(prefix,noop) == ['plan'] and noop['plan'] == prefix['plan'] + [{'block':evidence['block'],'to':'TABLE'}], 'C4 must append exact isolated TABLE no-op')
+    prefix_result, result = analyze(prefix),analyze(noop)
+    _need(prefix_result['target']['valid'] and not prefix_result['target']['reaches_goal'] and result['properties'][NEW_PROPERTY]
+          and result['first_error'] == k and len(noop['plan']) == k+1, 'C4 lacks isolated no-op after non-goal legal prefix')
+    mutants = mutation_audit(noop)
+    for name in ('source_clear_ignored','destination_clear_ignored'):
+        _need(mutants[name]['completed'] and not mutants[name]['output_differs'], 'C4 falsely isolates unchanged support: clearance mutant differs')
+    changed = mutants['no_op_allowed']
+    _need(changed['completed'] and changed['output_differs'] and changed['mutant_legal_at_first_failure']
+          and changed['mutant_transition_executed_at_first_failure'] and not changed['strict_valid'] and changed['mutant_valid']
+          and changed['first_differing_step'] == k, 'UNKNOWN: C4 no-op mutant did not change executed transition/validity')
+    for field in ('mutant_valid','first_differing_step'):
+        if field in evidence: _need(_json(evidence[field]) == _json(changed[field]), 'false C4 mutant evidence '+field)
+    return result,mutants
+
+
+def _manifest(manifest):
+    _need(type(manifest) is dict, 'V2 manifest must be object')
+    _need(type(manifest.get('version')) is str and manifest['version'] == VERSION, 'exact V2 version required before evidence decoding')
+    _need(manifest.get('batch_name') == BATCH and manifest.get('track_id') == 'RGM-001'
+        and manifest.get('semantics_sha256') == SPECIFICATIONS['schemas/SEMANTICS.md'], 'V2 batch/track/semantics binding mismatch')
+    _need(manifest.get('revision_of_batch') == 'planning-gap-v1' and manifest.get('parent_input_view_sha256') == PARENT_SHA256, 'V2 parent input binding mismatch')
+    bindings = manifest.get('public_specification_bindings')
+    _need(type(bindings) is list, 'public specification bindings must be list')
+    parsed = {}
+    for binding in bindings:
+        _need(type(binding) is dict and set(('path','sha256')) <= set(binding), 'public binding shape invalid')
+        path,sha = binding['path'],binding['sha256']
+        _need(type(path) is str and path in SPECIFICATIONS and path not in parsed, 'duplicate/unknown public binding path')
+        _need(type(sha) is str and sha == SPECIFICATIONS[path], 'public binding hash mismatch')
+        parsed[path] = sha
+    _need(parsed == SPECIFICATIONS, 'missing public specification binding')
+    _need(type(manifest.get('families')) is list, 'families must be list')
+
+
+def _presentation(parsed, edge_set, goal_keys):
+    # Actual ordered JSON read-back, anchored to the two base views. Compare
+    # invariant collections and shared edges/goal keys, not ID spelling or a
+    # metadata renderer label. Plan values remain checked by task read-back.
+    result={'top_keys':list(parsed),'action_object_key_orders':sorted({tuple(x) for x in parsed['plan'] if type(x) is dict})}
+    if parsed['kind']=='graph':
+        result.update(nodes=parsed['nodes'],edge_order=[e for e in parsed['edges'] if tuple(e) in edge_set])
+    else:
+        result.update(on_key_order=list(parsed['on']),goal_key_order=[b for b in parsed['goal_on'] if b in goal_keys])
+    return result
+
+
+def _renderer_styles(mapping,by_id,stratum):
+    base_ids=mapping[stratum+'0'][2]
+    bases=[json.loads(v1._render_payload(by_id[s]['rendered_input'],by_id[s]['semantic_task'])) for s in base_ids]
+    styles={}
+    for context_id,(task,_,ids) in mapping.items():
+        common_edges={tuple(e) for e in bases[0].get('edges',[])} & {tuple(e) for e in task.get('edges',[])}
+        common_goal=set(bases[0].get('goal_on',{})) & set(task.get('goal_on',{}))
+        reference=[_json(_presentation(b,common_edges,common_goal)) for b in bases]
+        _need(reference[0]!=reference[1],'UNKNOWN: renderer styles not distinguishable on invariant actual presentation')
+        for sid in ids:
+            parsed=json.loads(v1._render_payload(by_id[sid]['rendered_input'],by_id[sid]['semantic_task']))
+            fingerprint=_json(_presentation(parsed,common_edges,common_goal))
+            matched=[i for i,x in enumerate(reference) if x==fingerprint]
+            _need(len(matched)==1,'UNKNOWN: actual renderer presentation not consistently bound to base styles')
+            styles[sid]=matched[0]
+        _need({styles[sid] for sid in ids}=={0,1},'both actual renderer styles required in each context')
+    return styles
+
+
+def _supplied_controls(family,mapping,by_id,seen_ids):
+    stratum=family['primary_stratum']; styles=_renderer_styles(mapping,by_id,stratum)
+    sid_context={sid:context for context,(_,_,ids) in mapping.items() for sid in ids}
+    definitions={'A':[('fuel_only_counterfactual','A0','A1')],
+        'B':[('directed_edge_deletion_counterfactual','B0','B1'),('same_world_valid_goal_detour','B0','B3')],
+        'C':[('adjacent_action_order_counterfactual','C0','C1'),('same_world_valid_goal_detour','C0','C2'),
+             ('isolated_noop_append_counterfactual','C3','C4')],
+        'D':[('partial_goal_extension_counterfactual','D0','D1'),('same_world_valid_goal_detour','D2','D3')]}[stratum]
+    requirements={(name,left,right,style) for name,left,right in definitions for style in (0,1)}
+    covered=set(); reports=[]; c1_results=[]; c4_results=[]
+    _need(type(family['controls']) is list,'controls must be list')
+    for control in family['controls']:
+        _need(type(control) is dict and set(('control_id','name','scope','sample_ids','changed_task_fields','provenance')) <= set(control),'supplied control fields missing')
+        identity=control['control_id']
+        _need(type(identity) is str and bool(identity) and identity not in seen_ids,'V2 control_id must be globally distinct nonempty string')
+        seen_ids.add(identity)
+        name=control['name']
+        _need(name in v1.CONTROLS | {'isolated_noop_append_counterfactual'} and control['scope']=='corpus_variant'
+              and control['provenance']=='supplied_tasks','unknown control name/scope/provenance')
+        pair=control['sample_ids']
+        _need(type(pair) is list and len(pair)==2 and len(set(pair))==2 and all(type(x) is str and bool(x) and x in sid_context for x in pair),'control requires exactly two actual same-family IDs')
+        _need(styles[pair[0]]==styles[pair[1]],'mixed actual renderer styles in control pair')
+        left,right=sid_context[pair[0]],sid_context[pair[1]]; style=styles[pair[0]]
+        opposite=(name,right,left,style)
+        _need(opposite not in requirements,'required control logical left/right context order reversed')
+        a,b=by_id[pair[0]]['semantic_task'],by_id[pair[1]]['semantic_task']
+        if name=='isolated_noop_append_counterfactual':
+            _need((left,right)==('C3','C4'),'no-op append must bind actual C3/C4')
+            result,mutants=_c4_control(control,[mapping['C0'][0],a,b],family['source_index']); c4_results.append((result,mutants))
+            changed=v1._difference(a,b)
+        elif name=='adjacent_action_order_counterfactual':
+            changed=v1._pair(name,a,b)
+            if (left,right)==('C0','C1'):
+                result,mutants=_c1_control(control,a,b,pair);c1_results.append((result,mutants))
+            else:
+                _need('evidence' not in control,'UNSUPPORTED_ENCODING/UNKNOWN: optional non-C1 order evidence')
+        else:
+            changed=v1._pair(name,a,b)
+        _need(type(control['changed_task_fields']) is list and sorted(control['changed_task_fields'])==changed,'false supplied changed_task_fields')
+        key=(name,left,right,style); required=key in requirements and key not in covered
+        if key in requirements:covered.add(key)
+        reports.append({'control_id':identity,'name':name,'sample_ids':pair,'left_context':left,'right_context':right,
+                       'actual_renderer_style':style,'changed_task_fields':changed,'required_representative':required})
+    _need(covered==requirements,'missing required supplied control declaration for an actual renderer style')
+    return reports,styles,c1_results,c4_results
+
+
+def _projection(rows,manifest):
+    """Pure local V1 obligation projection; never mutate/repair source metadata.
+
+    V2 witnesses are checked in their original form first. The old gate receives
+    an independently measured scalar compatible with its historical decoder.
+    """
+    projected = deepcopy(manifest); projected['version'] = 'rgm-planning-controls-1.0.0'; projected['batch_name'] = 'planning-gap-v1'
+    selected = set()
+    for family in projected['families']:
+        family['contexts'] = [x for x in family['contexts'] if x['context_id'] != 'C4']
+        family['controls'] = [x for x in family['controls'] if x['name'] != 'isolated_noop_append_counterfactual']
+        for context in family['contexts']:
+            selected.update(context['sample_ids'])
+            for witness in context['row_witnesses']:
+                if witness['property'] == CLEARANCE_PROPERTY:
+                    row = next(x for x in rows if x['sample_id'] == witness['sample_id'])
+                    witness['evidence'] = {'minimum_moves':analyze(row['semantic_task'])['search']['minimum_moves']}
+    projected_rows = []
+    for row in rows:
+        if row['sample_id'] in selected:
+            local = deepcopy(row); local['generator_version'] = 'rgm-planning-gap-1.0.0'; projected_rows.append(local)
+    return projected_rows,projected
+
+
+def _type_baselines(examples):
+    reports={}
+    for outcome in ('valid','reaches_goal','fresh_feasible'):
+        choices=[]
+        for feature in ('task_kind','plan_item_type','contains_integer_atom'):
+            values=sorted({_json(x[feature]) for x in examples})
+            for encoded in values:
+                value=json.loads(encoded)
+                for polarity in (False,True):
+                    correct=sum(((_json(x[feature])==encoded)==polarity)==x[outcome] for x in examples)
+                    choices.append((correct,feature,encoded,polarity))
+        if choices:
+            best=min(choices,key=lambda x:(-x[0],x[1],x[2],x[3]))
+            reports[outcome]={'correct':best[0],'total':len(examples),'feature':best[1],
+                'value':json.loads(best[2]),'predict_true_when_equal':best[3],
+                'accuracy':best[0]/len(examples),'perfect':best[0]==len(examples),
+                'input_features_only':True,'not_an_approval_gate':True}
+    return reports
+
+
+def check_batch(rows,manifest,prior_inputs=None,parent_inputs=None):
+    errors = []; results = []; mutant_reports = []; covered = set(); by_id = {}; parent_ids = set(); parent_versions=set(); versions=set(); control_ids=set(); control_reports=[]
+    def error(where,message): errors.append(str(where)+': '+str(message))
+    if type(rows) is not list:
+        return {'errors':['rows must be list'],'counts':{'rows':0,'complete_v2_families':0}}
+    try: _manifest(manifest)
+    except (OracleError,TypeError,ValueError,KeyError) as exc:
+        return {'errors':['manifest: '+str(exc)],'counts':{'rows':len(rows),'complete_v2_families':0},'scope':'V2 evidence not decoded after version/binding failure.'}
+    if parent_inputs is None: error('freshness','UNKNOWN: explicit stripped parent input inventory required')
+    elif type(parent_inputs) is not list: error('freshness','parent_inputs must be explicit public-input list')
+    else:
+        for row in parent_inputs:
+            if type(row) is not dict or type(row.get('sample_id')) is not str or not row['sample_id']:
+                error('freshness','parent inventory missing sample_id'); continue
+            parent_ids.add(row['sample_id'])
+            if 'generator_version' in row:
+                if type(row['generator_version']) is not str or not row['generator_version']:
+                    error('freshness','asserted parent generator_version must be nonempty string')
+                else: parent_versions.add(row['generator_version'])
+    for i,row in enumerate(rows):
+        if type(row) is not dict or type(row.get('sample_id')) is not str or not row['sample_id']:
+            error('row '+str(i),'sample_id must be nonempty string'); continue
+        sid = row['sample_id']
+        if sid in by_id: error(sid,'duplicate sample ID')
+        if sid in parent_ids: error(sid,'V2 sample ID reused from parent input inventory')
+        by_id[sid] = row
+        if type(row.get('generator_version')) is str and row['generator_version']:
+            versions.add(row['generator_version'])
+        for message in check(row): error(sid,message)
+    if len(versions)!=1: error('provenance','V2 cohort requires one coherent nonempty generator_version')
+    if versions.intersection(parent_versions):
+        error('freshness','V2 generator_version reused from supplied parent input metadata')
+    if len(rows)!=408: error('coverage','requires exactly 408 rows')
+    if len(manifest['families'])!=48: error('coverage','requires exactly 48 families')
+    semantic_inputs = set()
+    for row in rows:
+        try:
+            if type(row) is dict:
+                v1._validate(row.get('semantic_task'))
+                semantic_inputs.add(_json(v1._normal(row['semantic_task'])))
+        except (OracleError,TypeError,ValueError,KeyError,RecursionError) as exc:
+            error('semantic-input counting','UNKNOWN: '+str(exc))
+    semantic_count = len(semantic_inputs)
+    if semantic_count!=204: error('coverage','requires exactly 204 distinct visible semantic inputs')
+    split_counts = Counter(row.get('split') for row in rows if type(row) is dict)
+    if split_counts != Counter(train=340,dev_challenge=68): error('coverage','requires 340 train/68 exposed-dev rows')
+    for family in manifest['families']:
+        where = family.get('source_family_key','?') if type(family) is dict else '?'
+        try:
+            _need(type(family) is dict, 'family must be object')
+            index,stratum = family['source_index'],family['primary_stratum']; _typed_index(index,180,228,'source_index')
+            expected_stratum = 'ABCD'[(index-180)//12]
+            _need(stratum == expected_stratum, 'source index/stratum allocation mismatch')
+            size = A_SIZES[index-180] if stratum=='A' else (5+(index-192)%3 if stratum=='B' else 5+index%2)
+            contexts = family['contexts']; _need(type(contexts) is list, 'contexts must be list')
+            expected_contexts = {stratum+str(i) for i in range(5 if stratum=='C' else 4)}
+            _need(len(contexts)==len(expected_contexts) and {x['context_id'] for x in contexts}==expected_contexts, 'missing/extra V2 contexts')
+            mapping = {}; sid_context = {}; renderers = []
+            for context in contexts:
+                context_id = context['context_id']; ids=context['sample_ids']
+                _need(type(ids) is list and len(ids)==2 and len(set(ids))==2 and all(type(x) is str and x in by_id for x in ids), 'context requires both actual renderers')
+                _need(not covered.intersection(ids), 'row reused across V2 contexts/families'); covered.update(ids)
+                views=[by_id[x] for x in ids]; task=views[0]['semantic_task']; result=analyze(task)
+                _need(_json(v1._normal(task))==_json(v1._normal(views[1]['semantic_task'])), 'V2 renderer task mismatch')
+                measured_size = len(task['nodes']) if task['kind']=='graph' else len(task['on'])
+                _need(measured_size==size, 'exact V2 size allocation mismatch')
+                split='dev_challenge' if index%10 in (8,9) else 'train'
+                _need(family['split']==split and all(x.get('split')==split for x in views), 'V2 family split mismatch')
+                for view in views:
+                    _need(type(view.get('generator_version')) is str and bool(view['generator_version'])
+                          and view.get('track_id')=='RGM-001', 'V2 provenance/track mismatch')
+                    for source in (view,view.get('source_provenance',{})):
+                        if type(source) is dict:
+                            for field in ('source_index','source_family_index'):
+                                if field in source: _need(type(source[field]) is int and source[field]==index,'asserted V2 source index mismatch')
+                            if 'source_family_key' in source: _need(source['source_family_key']==where,'asserted V2 source key mismatch')
+                    for field in ('sample_id','semantic_family_id','semantic_parent_id'):
+                        value=view.get(field)
+                        if type(value) is str and value: _need(value not in view['rendered_input'],'internal V2 identifier leaked into prompt')
+                    _need(where not in view['rendered_input'],'internal V2 family key leaked into prompt')
+                rendered=[v1._render_payload(x['rendered_input'],x['semantic_task']) for x in views]
+                _need(json.dumps(json.loads(rendered[0]),separators=(',',':')) != json.dumps(json.loads(rendered[1]),separators=(',',':')), 'V2 renderer key/list orders identical')
+                props=context['row_properties']
+                _need(type(props) is list and len(set(props))==len(props) and all(type(p) is str and p in PROPERTIES for p in props), 'unknown/duplicate V2 row property')
+                for prop in props: _need(result['properties'][prop], 'false V2 context property '+prop)
+                bound=set()
+                _need(type(context['row_witnesses']) is list,'row_witnesses must be list')
+                for witness in context['row_witnesses']:
+                    _need(type(witness) is dict and set(('sample_id','property','scope','evidence')) <= set(witness), 'V2 row witness fields missing')
+                    prop,sid=witness['property'],witness['sample_id']
+                    _need(prop in PROPERTIES and sid in ids and witness['scope']=='row','V2 witness identity/property/scope mismatch')
+                    _need(result['properties'][prop], 'false V2 row witness property')
+                    _witness(witness['evidence'],prop,task,result); bound.add((sid,prop))
+                for view in views:
+                    tagged={p for tag in view.get('skill_tags',[]) for p in tag.split(':') if p in PROPERTIES}
+                    _need(tagged==set(props),'V2 row tag/context declaration mismatch')
+                    _need(all((view['sample_id'],p) in bound for p in props),'missing actual V2 sample/property witness')
+                if context_id=='C0':
+                    _need(_json(task['plan'])==_json(result['target']['shortest_plan']),'C0 must submit canonical full-sequence minimum')
+                    _need(all((sid,CLEARANCE_PROPERTY) in bound for sid in ids),'C0 requires bound canonical changed-clearance witnesses')
+                if context_id=='C4':
+                    _need({NEW_PROPERTY,'legal_prefix_then_first_failure'} <= set(props),'C4 required factual row properties missing')
+                mapping[context_id]=(task,result,ids); sid_context.update((x,context_id) for x in ids)
+                renderers.append({'context_id':context_id,'sample_ids':ids,'raw_task_sha256':[hashlib.sha256(x.encode()).hexdigest() for x in rendered]})
+            if stratum=='A':
+                a1=mapping['A1'][1]
+                expected='unreachable' if index%2==0 else 'lengthened'
+                actual='unreachable' if a1['properties']['fuel_blocks_topologically_reachable_goal'] else 'lengthened' if a1['properties']['fuel_lengthens_fresh_minimum_moves'] else None
+                _need(actual==expected,'exact V2 A subtype allocation mismatch')
+            actual_controls,actual_styles,c1_checks,c4_checks=_supplied_controls(family,mapping,by_id,control_ids)
+            control_reports.extend(dict(x,source_family_key=where,source_index=index) for x in actual_controls)
+            if stratum=='C':
+                _need(c1_checks and c4_checks,'required selective/no-op checks missing')
+                c1,mutants1=c1_checks[0];c4,mutants4=c4_checks[0]
+                expected_reason='destination_not_clear' if index in DESTINATION_INDICES else 'source_not_clear'
+                _need(c1['first_error_reason']==expected_reason,'exact C1 source/destination allocation mismatch')
+                for context_id,mutants in (('C1',mutants1),('C4',mutants4)):
+                    record={'source_family_key':where,'source_index':index,'context_id':context_id,'sample_ids':mapping[context_id][2],
+                            'size':size,'split':split,'first_error':mapping[context_id][1]['first_error'],
+                            'first_error_reason':mapping[context_id][1]['first_error_reason'],'mutants':mutants}
+                    mutant_reports.append(record)
+            contexts_result=[]
+            for context_id in sorted(mapping):
+                task,result,ids=mapping[context_id]
+                contexts_result.append({'context_id':context_id,'sample_ids':ids,'input_sha256':result['input_sha256'],
+                    'actual_renderer_styles':{sid:actual_styles[sid] for sid in ids},
+                    'size':size,'split':split,'valid':result['target']['valid'],'reaches_goal':result['target']['reaches_goal'],
+                    'minimum_moves':result['search']['minimum_moves'],'fresh_feasible':result['target']['shortest_plan'] is not None,
+                    'plan_length':len(task['plan']),'first_error':result['first_error'],'first_error_reason':result['first_error_reason'],
+                    'clearance':result['clearance'],'search':result['search'],'held_search':result['held_search'],
+                    'row_properties':next(x['row_properties'] for x in contexts if x['context_id']==context_id),
+                    'detour_length':None if result['search']['minimum_moves'] is None else len(task['plan'])-result['search']['minimum_moves'],
+                    'fuel':task.get('fuel'),'edge_count':len(task.get('edges',[])) if task['kind']=='graph' else None,
+                    'fuel_boundary':result['search'].get('cheapest_fuel'), 'guard_truth':result['guard_truth']})
+            results.append({'source_family_key':where,'source_index':index,'stratum':stratum,'split':split,'size':size,'contexts':contexts_result,'renderers':renderers})
+        except (OracleError,TypeError,ValueError,KeyError,RecursionError) as exc: error(where,exc)
+    if covered!=set(by_id): error('coverage','V2 manifest must bind every actual row exactly once')
+    # Run immutable old cohort/novelty obligations on original four contexts.
+    core_report=None
+    try:
+        projected_rows,projected_manifest=_projection(rows,manifest)
+        core_report=v1.check_batch(projected_rows,projected_manifest,prior_inputs)
+        for message in core_report['errors']: error('cumulative V1 gate',message)
+    except (OracleError,TypeError,ValueError,KeyError,RecursionError) as exc: error('cumulative V1 gate','UNKNOWN: '+str(exc))
+    c1=[x for x in mutant_reports if x['context_id']=='C1']; c4=[x for x in mutant_reports if x['context_id']=='C4']
+    if len(c1)!=12 or len(c4)!=12: error('C coverage','requires all twelve selective C1 and all twelve isolated C4 inputs')
+    for reason in ('source_not_clear','destination_not_clear'):
+        group=[x for x in c1 if x['first_error_reason']==reason]
+        if len(group)!=6 or Counter(x['size'] for x in group)!=Counter({5:3,6:3}) or Counter(x['split'] for x in group)!=Counter(train=5,dev_challenge=1):
+            error('C1 coverage',reason+' requires six cases, three of each size, five train/one dev')
+        if len({x['first_error'] for x in group})<2 or not any(x['first_error']>=1 for x in group): error('C1 coverage',reason+' requires varied indices including nonempty legal prefix')
+    if len({x['first_error'] for x in c1})<3: error('C1 coverage','requires three distinct first-failure indices')
+    if Counter(x['first_error'] for x in c4)!=Counter({1:4,2:4,3:4}): error('C4 coverage','requires four failures at each allocated prefix position')
+    histograms=Counter(); c1_hist=Counter(); c4_hist=Counter(); features=[]
+    for family in results:
+        for context in family['contexts']:
+            task=by_id[context['sample_ids'][0]]['semantic_task']
+            def scalar_values(value):
+                if type(value) is dict:return [x for v in value.values() for x in scalar_values(v)]
+                if type(value) is list:return [x for v in value for x in scalar_values(v)]
+                return [_json(value)]
+            features.append({'size':context['size'],'plan_length':context['plan_length'],'fuel':context['fuel'],
+                'edge_count':context['edge_count'],'tokens':scalar_values(task),'valid':context['valid'],
+                'reaches_goal':context['reaches_goal'],'fresh_feasible':context['fresh_feasible'],
+                'task_kind':task['kind'],'plan_item_type':'string' if task['kind']=='graph' else 'object',
+                'contains_integer_atom':task['kind']=='graph'})
+            for style in range(2):
+                key={k:context[k] for k in ('context_id','size','split','valid','reaches_goal','minimum_moves','fresh_feasible',
+                    'plan_length','first_error','first_error_reason','fuel','fuel_boundary','edge_count','detour_length','row_properties')}
+                key.update(source_family_key=family['source_family_key'],stratum=family['stratum'],renderer_position=style,
+                    enabling_positions=[x['enabling_action_index'] for x in context['clearance']],
+                    dependency_positions=[x['action_index'] for x in context['clearance']])
+                histograms[_json(key)]+=1
+    for item in c1:
+        c1_hist[_json({k:item[k] for k in ('first_error_reason','size','split')})]+=1
+    for item in c4:
+        c4_hist[_json({k:item[k] for k in ('first_error','split')})]+=1
+    return {'errors':errors,'counts':{'rows':len(rows),'distinct_semantic_inputs':semantic_count,'manifest_families':len(manifest['families']),
+        'complete_v2_families':len(results),'split_rows':dict(sorted(split_counts.items())),'C1_semantic_inputs':len(c1),'C4_semantic_inputs':len(c4),
+        'completed_mutant_executions':sum(len(x['mutants']) for x in mutant_reports),
+        'required_semantic_control_pairs':sum(x['required_representative'] for x in control_reports)//2,
+        'required_renderer_control_declarations':sum(x['required_representative'] for x in control_reports),
+        'optional_renderer_control_declarations':sum(not x['required_representative'] for x in control_reports),
+        'prior_inventory_supplied':prior_inputs is not None,'parent_inventory_supplied':parent_inputs is not None,
+        'generator_versions':sorted(versions),'asserted_parent_generator_versions':sorted(parent_versions)},
+        'families':results,'mutation_audits':mutant_reports,'supplied_control_declarations':control_reports,'cumulative_v1_report':core_report,
+        'conditional_histograms':dict(sorted(histograms.items())),'C1_reason_size_split':dict(sorted(c1_hist.items())),
+        'C4_position_split':dict(sorted(c4_hist.items())),'shortcut_diagnostics':v1._shortcut_diagnostics(features),
+        'type_baselines':_type_baselines(features),
+        'scope':'Independent input-only V2 public controls; shared immutable V1 mechanisms; no target approval.'}

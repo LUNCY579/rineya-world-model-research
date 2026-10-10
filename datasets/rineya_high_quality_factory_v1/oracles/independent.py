@@ -398,8 +398,11 @@ def solve(task):
     kind = task.get("kind")
     _require(type(kind) is str and kind in {"causal", "graph", "blocks", "critic", "skills", "modules",
                                           "episodic", "belief", "predictive_abstraction", "constraint_repair",
-                                          "agent_history"},
+                                          "agent_history", "option_resume"},
              "task.kind is unsupported or absent")
+    if kind == "option_resume":
+        from factory.rsm_controls import option_resume_solve
+        return option_resume_solve(task)
     original = {"causal": _causal, "graph": _graph, "blocks": _blocks, "critic": _critic}
     if kind in original:
         return original[kind](task)

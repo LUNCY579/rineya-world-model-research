@@ -1,0 +1,16 @@
+{
+  "schema": "own-rsm-input-first-execution-v1",
+  "actor": "/root/adversarial_auditor",
+  "input_only_packet": "reviews/input_only/RSM-option-resumption-pilot-v1.jsonl",
+  "expected_packet_sha256": "d99074c6cd18d1bd9709a09f833bfe9fea50c0c3981ece532c3951aac220f6b1",
+  "expected_rows": 216,
+  "prediction_methods": ["own explicit event machine", "own recursive complete trace plus prefix slicing"],
+  "shared_parser": "own public grammar validation",
+  "forbidden_access": ["canonical candidate gold", "producer implementation/config/diagnostics/control manifest", "formal/checker implementations and tests", "root crosschecks", "other reviewer or adjudicator verdicts"],
+  "decision_scope": "INITIAL_INPUT_ONLY; target correctness UNKNOWN; no release or canonical approval",
+  "train_only_baselines": "counts/majority/categorical lookup/nearest scalar; no model training",
+  "calibration": "reuse own frozen hand contexts and hand trace/checkpoint, two independent algorithms; original1568 and separate63 not rerun by this cohort program",
+  "correlation_disclosure": "same model/common public design/root-guided scope; own prior handmade and parser reuse; prior RSM backup exposure opaque bytes only",
+  "artifact_limit_bytes": 25000000,
+  "write_mode": "exclusive create, no old-file changes; failures preserved"
+}

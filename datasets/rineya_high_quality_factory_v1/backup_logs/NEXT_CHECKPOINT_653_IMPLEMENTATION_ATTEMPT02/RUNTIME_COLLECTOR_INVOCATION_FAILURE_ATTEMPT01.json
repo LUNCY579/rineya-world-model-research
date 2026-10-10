@@ -1,0 +1,33 @@
+{
+  "actual_exit_code": 1,
+  "actual_helper_imports_tests_inventory_git_network": 0,
+  "actual_runner_execution": "/root/backup_manager",
+  "at_utc": "2026-10-10T20:01:00.020692+00:00",
+  "collector_source": {
+    "path": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02/collect_runtime.py",
+    "sha256": "d18f9406c86c08080fa2c42440e5d22e997849229ab6c1c1ebbe54d95d86a9b6",
+    "size": 10168
+  },
+  "config": {
+    "path": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02/RUNTIME_COLLECTOR_CONFIG.json",
+    "sha256": "9000afaf27dcc76d2f8230b48dd892c6b64f74d038cec088a85bc45be9d6abbe",
+    "size": 5430
+  },
+  "diagnosis": "ValueError: relative CLI configuration Path cannot be made relative to absolute FACTORY in binding(args.config); collector stopped before stdlib preloads/raw archival",
+  "failure_kind": "RELATIVE_CLI_PATH_INTEGRATION",
+  "grants_data_approval": false,
+  "preexecution": {
+    "path": "backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT02/RUNTIME_COLLECTOR_PREEXECUTION.json",
+    "sha256": "5e5eedf94a9034ad1b509f38b514f6ad131b01af366d62256358ad7b455e9afe",
+    "size": 5261
+  },
+  "raw_runtime_bytes_archived_this_attempt": 0,
+  "status": "FAILED_ACTUAL_STDLIB_COLLECTOR_INVOCATION_PRESERVED",
+  "tool_chunk_id": "2a3bbb",
+  "traceback_frames": [
+    "collect_runtime.py:116 main",
+    "collect_runtime.py:45 binding(args.config)",
+    "collect_runtime.py:35 p.relative_to(FACTORY)",
+    "pathlib.py:682 ValueError"
+  ]
+}

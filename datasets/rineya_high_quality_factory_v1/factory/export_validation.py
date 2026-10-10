@@ -4,9 +4,11 @@ from collections import Counter
 from jsonschema import Draft202012Validator
 from factory.common import ROOT, canonical, digest, load_jsonl
 from oracles.independent import solve
+from factory.rsm_controls import validate_rsm_specialized
 
 
-def validate_specialized(path, rows):
+def validate_specialized(path, rows, batch=None):
+    validate_rsm_specialized(path,rows,batch=batch)
     counts = {}
     by_input = {r['rendered_input']: r for r in rows}
     for file in sorted(path.glob('*.jsonl')):

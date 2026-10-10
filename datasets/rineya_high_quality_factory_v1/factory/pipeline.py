@@ -10,6 +10,7 @@ from factory.common import ROOT, VERSION, canonical, digest, atomic, write_json,
 from factory.reference import solve as reference_solve
 from factory.planning_controls import planning_control_rows, planning_control_report, planning_checker
 from factory.belief_controls import is_v4_cohort, belief_v4_control_report, checker as belief_v4_checker
+from factory.rsm_controls import is_rsm_cohort, rsm_control_report, require_rsm_controls, check as rsm_row_check, preserve_rsm_bytes, validate_rsm_release_bindings
 
 REQUIRED = {"sample_id", "semantic_parent_id", "semantic_family_id", "track_id", "skill_tags", "difficulty", "generator_version", "oracle_version", "generation_seed", "source_provenance", "semantic_task", "rendered_input", "verified_target", "target_format", "split", "review_status", "review_receipt_ids", "record_hash"}
 APPROVAL_ACTORS = {'expert': '/root/expert_reviewer', 'adversarial': '/root/adversarial_auditor',
@@ -207,6 +208,8 @@ def audit(batch):
             metadata_errors.extend(belief_module.check(row))
         if planning_control_rows([row], batch):
             metadata_errors.extend(planning_module.check(row))
+        if is_rsm_cohort([row], batch):
+            metadata_errors.extend(rsm_row_check(row))
         errors.extend('Metadata: '+e for e in metadata_errors)
         lineage[row["semantic_family_id"]].add(row["split"])
         payloads[digest(row["semantic_task"])].append(row["sample_id"])
@@ -260,8 +263,20 @@ def audit(batch):
         content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
         preserve_prior_audit(control_path,content)
         atomic(control_path,content.decode('utf-8'))
+    rsm_controls=rsm_control_report(rows,batch,ROOT)
+    stats['rsm_control_error_count']=len(rsm_controls['errors']) if rsm_controls else 0
+    if rsm_controls:
+        stats['rsm_control_counts']=rsm_controls['counts']
+        stats['rsm_source_and_evidence']=rsm_controls['evidence']
+        control_path=ROOT/f'audits/diversity/{batch}-rsm-controls.json'
+        payload={'oracle_author_execution':'/root/formal_oracle','check_runner_execution':'/root',
+                 'batch':batch,'report':rsm_controls}
+        content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
+        preserve_prior_audit(control_path,content)
+        atomic(control_path,content.decode('utf-8'))
     stats['batch_control_failure_count']=sum(stats[name] for name in [
-        'memory_control_error_count','belief_control_error_count','planning_control_error_count'])
+        'memory_control_error_count','belief_control_error_count','planning_control_error_count',
+        'rsm_control_error_count'])
     stats['all_machine_quality_gates_pass']=not (
         stats['validation_failures'] or stats['batch_control_failure_count']
         or stats['split_leakage'] or stats['cross_parent_semantic_duplicates']
@@ -319,6 +334,8 @@ def exporter_approval():
 
 def release(batch,version,tracks=None,supersedes=None):
     stats=audit(batch)
+    # Closed RSM cohort: require original raw evidence before selection/writes.
+    require_rsm_controls([r for p in candidate_paths(batch) for r in load_jsonl(p)],batch,ROOT)
     # Failed diagnostic tracks in a mixed batch do not prevent a separately
     # approved selected track from release; validate each selected row below.
     selected_ids={r['sample_id'] for p in candidate_paths(batch) for r in load_jsonl(p) if not tracks or r['track_id'] in tracks}
@@ -357,6 +374,8 @@ def release(batch,version,tracks=None,supersedes=None):
             accepted.append(r)
         write_jsonl(ROOT/f"data/{track}/quarantine/{batch}.jsonl",quarantine)
         if supersedes:assert not quarantine,'Full supersession requires every replacement record accepted'
+        # Also catches a zero/partial approval cohort before creating a release.
+        rsm_release_controls=require_rsm_controls(accepted,batch,ROOT)
         if not accepted:continue
         # Complete reviewed family controls must survive approval filtering.
         # A missing approved rotation cannot silently break the release's claim.
@@ -376,14 +395,20 @@ def release(batch,version,tracks=None,supersedes=None):
             write_jsonl(dest/f"{split}-sft.jsonl",export)
             write_jsonl(dest/f"{split}-structured.jsonl",[{"input":r["rendered_input"],"target":r["verified_target"]} for r in subset])
         from factory.exports import write_specialized
-        write_specialized(dest,accepted)
+        if is_rsm_cohort(accepted,batch):write_specialized(dest,accepted,batch=batch)
+        else:write_specialized(dest,accepted)
         receipts=[x for role in evidence.values() for r in accepted for x in role[r["sample_id"]] ]
         write_jsonl(dest/"review_receipts.jsonl",receipts)
         write_jsonl(dest/"oracle_receipts.jsonl",[x for x in load_jsonl(ROOT/f"reviews/oracle/{batch}.jsonl") if x["sample_id"] in {r["sample_id"] for r in accepted}])
         code_files=sorted((ROOT/"factory").glob("*.py"))+sorted((ROOT/"oracles").glob("*.py"))+sorted((ROOT/"schemas").glob("*.md"))+sorted((ROOT/"schemas").rglob('*.schema.json'))+sorted((ROOT/"generators").rglob("*.py"))
         source_hashes=preserve_source_bytes(code_files)
+        rsm_source_ledger=preserve_rsm_bytes(rsm_release_controls,ROOT)
+        source_hashes.update({p:b['sha256'] for p,b in rsm_source_ledger.items()})
         manifest={"release":version,"batch":batch,"track":track,"status":"QUALITY_APPROVED_LOCAL", "records":len(accepted),"semantic_parents":len({r["semantic_parent_id"] for r in accepted}),"splits":dict(collections.Counter(r["split"] for r in accepted)),"generator_versions":sorted({r["generator_version"] for r in accepted}),"framework_version":VERSION,"oracle_version":"independent-1.0.0","reproducibility_code_sha256":source_hashes,"source_archive":"reproducibility/source_blobs/{sha256}.source","batch_configuration":f"manifests/{batch}_GENERATION.json","source":"original synthetic; repository-private research; no third-party examples","research_effectiveness":"untested; no model training performed","reviewer_correlation":"Independent executions use the same underlying model; correlated semantic errors remain possible.","data_custody":"exposed train/dev data; no sealed evaluation","files":{}}
         manifest['export_profile']='specialized-1.0.0'
+        if rsm_release_controls is not None:
+            manifest['rsm_source_and_evidence']=rsm_source_ledger
+            manifest['rsm_control_counts']=rsm_release_controls['counts']
         if supersedes:manifest['supersedes']=[supersedes]
         if track=='RVM-001':manifest['exporter_review']=exporter_evidence
         atomic(dest/"QUALITY_REPORT.md",f"# {track} {version}\n\n{len(accepted)} approved records from {manifest['semantic_parents']} semantic parents. {len(quarantine)} quarantined/pending records. Exact oracle, schema, family split and three independent evidence joins passed. Refer to review_receipts.jsonl for scope and limitations. Structural template overlap is intentionally disclosed; this is development data, not evidence of OOD efficacy. Model benefits are untested. Remote status is recorded separately after byte verification.\n")
@@ -414,6 +439,8 @@ def validate_release(path):
     rows=load_jsonl(path/"canonical.jsonl")
     planning_module=planning_checker(rows,manifest['batch'],ROOT) if planning_control_rows(rows,manifest['batch']) else None
     assert len(rows)==manifest["records"]
+    rsm_controls=require_rsm_controls(rows,manifest['batch'],ROOT)
+    validate_rsm_release_bindings(rsm_controls,manifest,ROOT)
     if manifest.get('export_profile'):
         expected_suffixes={'RGM-001':['trajectories'],'RVM-001':['preference','process_reward'],'RSM-001':['skill_demonstrations'],'REM-001':['memory_updates'],'RMM-001':['memory_updates'],'RBM-001':['belief_updates'],'ROM-001':['belief_updates']}.get(manifest['track'],[])
         assert all((path/f'{split}-{suffix}.jsonl').is_file() for split in ['train','dev_challenge'] for suffix in expected_suffixes),'missing declared specialized export'
@@ -430,6 +457,8 @@ def validate_release(path):
             metadata_failures.extend(belief_checker([r], manifest['batch']).check(r))
         if planning_control_rows([r],manifest['batch']):
             metadata_failures.extend(planning_module.check(r))
+        if is_rsm_cohort([r],manifest['batch']):
+            metadata_failures.extend(rsm_row_check(r))
         if metadata_failures:
             from factory.catalog import catalog
             active,_=catalog()
@@ -452,13 +481,15 @@ def validate_release(path):
         structured=load_jsonl(path/f'{split}-structured.jsonl')
         assert canonical(structured)==canonical([{'input':r['rendered_input'],'target':r['verified_target']} for r in expected]),'structured export mismatch'
     from factory.export_validation import validate_specialized
-    specialized_counts=validate_specialized(path,rows)
+    if is_rsm_cohort(rows,manifest['batch']):specialized_counts=validate_specialized(path,rows,batch=manifest['batch'])
+    else:specialized_counts=validate_specialized(path,rows)
     controls=memory_control_report(rows)
     assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
     belief_controls=belief_control_report(rows, manifest['batch'], ROOT)
     assert not belief_controls or not belief_controls['errors'],'Released belief family controls incomplete or false'
     planning_controls=planning_control_report(rows,manifest['batch'],ROOT)
     assert not planning_controls or not planning_controls['errors'],'Released planning family controls incomplete or false'
+    require_rsm_controls(rows,manifest['batch'],ROOT)
     return {"path":str(path.relative_to(ROOT)),"records":len(rows),"checksum_files":len(files),"specialized_exports":specialized_counts,"pass":True}
 
 

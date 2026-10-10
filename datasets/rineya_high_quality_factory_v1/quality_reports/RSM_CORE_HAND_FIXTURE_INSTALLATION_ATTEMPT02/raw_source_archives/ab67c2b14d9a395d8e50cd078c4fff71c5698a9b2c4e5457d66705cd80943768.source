@@ -1,0 +1,140 @@
+{
+  "release": "v0003",
+  "batch": "planning-gap-v2-renderer-r1",
+  "track": "RGM-001",
+  "status": "QUALITY_APPROVED_LOCAL",
+  "records": 408,
+  "semantic_parents": 48,
+  "splits": {
+    "train": 340,
+    "dev_challenge": 68
+  },
+  "generator_versions": [
+    "rgm-planning-gap-2.0.5"
+  ],
+  "framework_version": "1.0.0",
+  "oracle_version": "independent-1.0.0",
+  "reproducibility_code_sha256": {
+    "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "factory/catalog.py": "6a309e428c67ee653ab2fc5b5559b9dbabab82b9ed47479b481d0af9c97c7e58",
+    "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+    "factory/export_validation.py": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
+    "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+    "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+    "factory/pipeline.py": "d3d328e4b604f85fdd0c88d5f39aee2773689626412f72f7aeae9768429c5b62",
+    "factory/planning_controls.py": "352f5fc0247b339293206958144e25f7d4437477f4a60702d926b805f25c18c3",
+    "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+    "factory/status.py": "ea88618378e4919967bdcfa02d5341c3fe7957bc497fb657535511a5d7034a47",
+    "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+    "oracles/belief_controls_independent.py": "ec9f387485f2a2d58ab557db0a2a7d95c24e77cb3108afa503a80c575e04b03e",
+    "oracles/belief_controls_v2_independent.py": "5b97b73df0b9248b1ad155307e75e2a73b995dff64e81232382a6c05a2fe4984",
+    "oracles/belief_controls_v3_independent.py": "ff1a72153e985810d2771fecf299944b39cc8afa52effbd833feac056f143271",
+    "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+    "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "oracles/memory_controls_independent.py": "a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388",
+    "oracles/metadata_independent.py": "f218765cf0e67d4f813aea55a062b9f853b88eaaf8754619de09343de78c014e",
+    "oracles/rgm_planning_controls_independent.py": "cd92cff9bb92eb38afd5a989109718cd600390a9609a13fc070f9cc1e1677bf3",
+    "oracles/rgm_planning_controls_v2_independent.py": "69944b8e06fb984947d0d686296d0bb886aecc358ae6f7405d279d0ba5a40fdf",
+    "schemas/BELIEF_CONTROL_PROPERTIES.md": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+    "schemas/BELIEF_CONTROL_PROPERTIES_METADATA_V4.md": "40b552ecf47c11bfffb2669283640dda991d6dc6e7094ed3051fb9cad2489fce",
+    "schemas/BELIEF_CONTROL_PROPERTIES_METADATA_V4_ENCODING_ADDENDUM.md": "925ccae4e6fdc79fec2d0778d871e5d316257c3026b59c6e166556da71eb346c",
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md": "46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f",
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V3.md": "3a223952d9664577d7b637ddfb3e18d329863a3d5371a6c47cad233a1f50ff11",
+    "schemas/COMPETENCY_TAGS.md": "efbfc5755fa7dda2c388e621ca17ac5d96c99bc9f59115d62027e2247dd0e097",
+    "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "schemas/MEMORY_CONTROL_METADATA.md": "2a1e71c61b8773390cbd0789e9727cc30a006c517c7ca530a349de037f11e470",
+    "schemas/MEMORY_CONTROL_PROPERTIES.md": "9f05ff5c3c81ad042e2b98c7d7b3489bd03bbd48ea728770fa7a338773267ace",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES.md": "f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2.md": "d59ce14dd66c6ebd644580f7736e714fbceda32dd132d8c9cb5cf61e78a5a258",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2_BEFORE_SELECTIVE_CLARIFICATION_e6a22e6d026c2bc5d17de598f1a13bd18be95507b666d41ca2f9ab19c57750f0.md": "e6a22e6d026c2bc5d17de598f1a13bd18be95507b666d41ca2f9ab19c57750f0",
+    "schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+    "schemas/RGM_PLANNING_V2_RENDERER_CONTROL_ENCODING_ADDENDUM.md": "48e1ebbe954944d8b6569866fa102962607c4ecf27a1d7133f1259f815eac603",
+    "schemas/RGM_PLANNING_V2_RENDERER_REVISION_POLICY.md": "6e3759ebe9e3e1f801257d30df610b7dea091eb3324f0a76b59ad9520eac5e56",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+    "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+    "schemas/process_reward/v1.schema.json": "b4084f1a1b849e9fd91d54cb6d38fbdc26e97a0e5e035aa59bd6bcf6c1c636a4",
+    "schemas/sft/v1.schema.json": "dcad9e7b91b1c5eb1ae7cb3fd96c9fa77eee633032fd66b5e5b0107ab3430830",
+    "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+    "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+    "generators/critic/archive/expansion_v1_generate.py": "f88662fdfd7af26673c9003bac6c0a354c429d381e8174921965086788c1983c",
+    "generators/critic/claim_controls.py": "83fae00f2ef905d8bff74022fdb58a0d1af0fb3db1d97ae3a37104fb5ec499f2",
+    "generators/critic/generate.py": "131b559479e5608ce90b0989e34d687ef37a17821a0146a2fe68646106a0bd5a",
+    "generators/critic/route_facts.py": "527d2b36931681418a0b4db35d54dffea3840d0e911cb0734186a82443c541ae",
+    "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+    "generators/memory/history_gap.py": "ae2ab80fcf9363941e89baee1fcc0c42ff66b35967e1dba4698e5bdae50c507d",
+    "generators/memory/history_gap_v2.py": "e98e35ffbde97d5754ad577402ecc124a559fec3bfbaafcfea6d2a3e0b1a303b",
+    "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+    "generators/other_tracks/belief_gap.py": "f27373cd70b09d52880ab3c6f526347ccd440264f5b7918995c6ef8782694522",
+    "generators/other_tracks/belief_gap_v2.py": "dbfc7d23b4f57f9c61286b3e0f9046c1304445f1a4a706148a635eb9f26e33a1",
+    "generators/other_tracks/belief_gap_v3.py": "8e55d6d634524d8bac0e33a50fdaf3f24f51eaa1a92148246690dde1e3b4c083",
+    "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+    "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+    "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+    "generators/relational/archive/expansion_v1_diversity.py": "4b8f169621db336f208c727d2101c53f61d86d87be48574c786290a6e92f6d37",
+    "generators/relational/archive/expansion_v1_generate.py": "6a4a660ee89f0ce6d856042331d700db49f6320caddcc228c6c24f786aee25ea",
+    "generators/relational/archive/expansion_v2_diversity.py": "4636fd58168ff11ccdfa974be18e6943c6853af9718ee8b594acc661f8434f9a",
+    "generators/relational/archive/expansion_v2_generate.py": "826169eeece3fdb82d5e32ba10fbb8dcc343ec416b8d821c6b614a110f09df0c",
+    "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+    "generators/relational/expansion.py": "013d918ffd426e74690a9ffe5b054153eb76cbb38d4ba476cf562362de45218e",
+    "generators/relational/generate.py": "c85d6577b3ca2fef45ac7c0de8fa8b28553131dbe1300de9001b8a3f6049c1b4",
+    "generators/relational/planning_gap.py": "0ae4e24c841102cef06a9be22df1aafb4c4b77ca3f97be3efec1dc9e123a192a",
+    "generators/relational/planning_gap_v2.py": "ac0f71174d14a36ed602004731547d5b052df89c70d784e5eaaeb33e1f5ce562",
+    "generators/relational/planning_gap_v2_attempt02.py": "706e8f396e35930b4addbbbb412c6bb5f92c9d6a0aa853e04e6c91895791dcf7",
+    "generators/relational/planning_gap_v2_attempt03.py": "4aa2aee9f92a0b9eb3214f2c2d6c5b909097592c9c8a933ce4b401e202aace2c",
+    "generators/relational/planning_gap_v2_attempt04.py": "049ec9c9b06fa60811c9f96ddff181092524f8ff6d2eb45b9c276aabc58a28a0",
+    "generators/relational/planning_gap_v2_renderer_r1.py": "95b82ef4ff07b643fb4eec704933dcd1077c45a3f8d2d7f12ad030a73e63c542",
+    "generators/relational/planning_gap_v2_renderer_r1_attempt02.py": "abba20cbe3243c3f28c2fc2db7c57040c4cd43f3c256f89e650303c0806bc038",
+    "generators/relational/planning_gap_v2_renderer_r1_attempt03.py": "b80b92b6cc74f41e9d9e002eb75e7a214540c2178a54e6b088ee44adef482ac2",
+    "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+  },
+  "source_archive": "reproducibility/source_blobs/{sha256}.source",
+  "batch_configuration": "manifests/planning-gap-v2-renderer-r1_GENERATION.json",
+  "source": "original synthetic; repository-private research; no third-party examples",
+  "research_effectiveness": "untested; no model training performed",
+  "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+  "data_custody": "exposed train/dev data; no sealed evaluation",
+  "files": {
+    "QUALITY_REPORT.md": {
+      "bytes": 436,
+      "sha256": "514ab378bc6df329feb47e76f17d63739050c38ffd716158b6a340c18e855e8a"
+    },
+    "canonical.jsonl": {
+      "bytes": 1748764,
+      "sha256": "83c03ee0af0f4bb7301198a3edc6c9ec6321ecd5687088a51a7edbf09cb0ef0c"
+    },
+    "dev_challenge-sft.jsonl": {
+      "bytes": 195324,
+      "sha256": "661ee7667e27575fe1a99855f2b82ebdfdda3459962927b6c2af0deeb4dc4ad4"
+    },
+    "dev_challenge-structured.jsonl": {
+      "bytes": 182160,
+      "sha256": "e3703e0dd186703b8c2ba7b74344703f8e6e5ebd1b5cfd5c2a560b834d643c0b"
+    },
+    "dev_challenge-trajectories.jsonl": {
+      "bytes": 92626,
+      "sha256": "942663d3053d3a0ea2ce9944ed16ab26eed792c84299488be3cb301c82cd9029"
+    },
+    "oracle_receipts.jsonl": {
+      "bytes": 148512,
+      "sha256": "554e500582de903e5b727de2fee3d991763b89acbe4409e8edb78569308553d4"
+    },
+    "review_receipts.jsonl": {
+      "bytes": 4971320,
+      "sha256": "aaa6047c2b730f634b7b8fe8177dbcac9754907bdc3769ba556b32e337ec63e4"
+    },
+    "train-sft.jsonl": {
+      "bytes": 937396,
+      "sha256": "b85e545f53e1d06ec782a27a62be015fcc0fdff0a655143f533c1bd3fd947a34"
+    },
+    "train-structured.jsonl": {
+      "bytes": 878244,
+      "sha256": "8aedaeb5918271d5995420d3f52db79ad2d75ed52547d419efd0ebe9cf192d79"
+    },
+    "train-trajectories.jsonl": {
+      "bytes": 440026,
+      "sha256": "8ec33dbb36b6e179d6abe5c81425c10166191f60122e6fb30f4de124ce4fe1a7"
+    }
+  },
+  "export_profile": "specialized-1.0.0"
+}

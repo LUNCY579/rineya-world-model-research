@@ -1,0 +1,93 @@
+--- backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT03/archive_mapping.py
++++ backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT04/archive_mapping.py
+@@ -1 +1 @@
+-"""Exact new runtime raw text evidence preserved as binary gzip under strict-zero Git delta."""
++"""Exact NEW immutable archival text evidence preserved as binary gzip under strict-zero Git delta."""
+@@ -7,2 +7,2 @@
+-SCHEMA='next653-new-runtime-raw-binary-mapping-v2'
+-REASON='new_immutable_runtime_raw_preserved_as_binary_gzip_for_strict_zero_delta'
++SCHEMA='next653-new-immutable-archival-text-binary-mapping-v3'
++REASON='new_immutable_archival_text_preserved_as_binary_gzip_for_strict_zero_delta'
+@@ -11,0 +12,3 @@
++
++# Only these six fixed admitted originals may use the non-container raw class.
++EXACT_ORIGINAL_DIFF_EVIDENCE = {'quality_reports/RSM_CORE_HAND_FIXTURE_REPAIR_ATTEMPT01/FORMAL_TEST_SOURCE_DIFF_ATTEMPT01.patch': {'size': 10493, 'sha256': '759220c65a2818702f10391abfc55b3abd5183adef658c33f3e6078be4111418', 'archive_origin_path': 'quality_reports/RSM_CORE_HAND_FIXTURE_INSTALLATION_ATTEMPT03/raw_source_archives/759220c65a2818702f10391abfc55b3abd5183adef658c33f3e6078be4111418.source'}, 'quality_reports/RSM_CORE_HAND_FIXTURE_REPAIR_ATTEMPT01/FORMAL_TEST_SOURCE_DIFF_ATTEMPT02.patch': {'size': 10559, 'sha256': '46b8331ee666210b9b92c3c9b4020e3cb18fc8570e0ae1b5b8bf04f9f25aaae5', 'archive_origin_path': 'quality_reports/RSM_CORE_HAND_FIXTURE_INSTALLATION_ATTEMPT03/raw_source_archives/46b8331ee666210b9b92c3c9b4020e3cb18fc8570e0ae1b5b8bf04f9f25aaae5.source'}, 'quality_reports/RSM_CORE_HAND_FIXTURE_REPAIR_ATTEMPT01/FORMAL_TEST_SOURCE_DIFF_ATTEMPT03.patch': {'size': 705, 'sha256': '93a064a1f8a77d679d930894db26292ee1955c684d0cf5d9d02e548b0b74b671', 'archive_origin_path': 'quality_reports/RSM_CORE_HAND_FIXTURE_INSTALLATION_ATTEMPT03/raw_source_archives/93a064a1f8a77d679d930894db26292ee1955c684d0cf5d9d02e548b0b74b671.source'}, 'quality_reports/RSM_CORE_HAND_FIXTURE_REPAIR_ATTEMPT01/RUNNER_SOURCE_DIFF_ATTEMPT01.patch': {'size': 13090, 'sha256': '0d7488c56c362b5ab74da300d6c2436fefb1f40531250711075cef589ba3e8c0', 'archive_origin_path': 'quality_reports/RSM_CORE_HAND_FIXTURE_INSTALLATION_ATTEMPT03/raw_source_archives/0d7488c56c362b5ab74da300d6c2436fefb1f40531250711075cef589ba3e8c0.source'}, 'quality_reports/RSM_CORE_HAND_FIXTURE_REPAIR_ATTEMPT01/RUNNER_SOURCE_DIFF_ATTEMPT02.patch': {'size': 13110, 'sha256': '694a6b68cb61a3309661c4b7f950f0a1ec402199642d6a5806b289f9fad358ae', 'archive_origin_path': 'quality_reports/RSM_CORE_HAND_FIXTURE_INSTALLATION_ATTEMPT03/raw_source_archives/694a6b68cb61a3309661c4b7f950f0a1ec402199642d6a5806b289f9fad358ae.source'}, 'quality_reports/RSM_CORE_SOURCE_PREPARATION_20261010T1210Z/PROPOSED_CORE_PATCH_ATTEMPT02.diff': {'size': 47221, 'sha256': '43159dd018fcf05946f7c41800a0d13e64f7f1d8e3c99addb71df4941dcaad6e', 'archive_origin_path': 'quality_reports/RSM_CORE_HAND_FIXTURE_INSTALLATION_ATTEMPT03/raw_source_archives/43159dd018fcf05946f7c41800a0d13e64f7f1d8e3c99addb71df4941dcaad6e.source'}}
+@@ -40,0 +44,6 @@
++    exact=EXACT_ORIGINAL_DIFF_EVIDENCE.get(raw['path'])
++    if exact is not None:
++        expected_raw={'path':raw['path'],'size':exact['size'],'sha256':exact['sha256']}
++        expected_origin={'path':exact['archive_origin_path'],'size':exact['size'],'sha256':exact['sha256']}
++        if not c.typed_equal(raw,expected_raw) or not c.typed_equal(origin,expected_origin):
++            raise ValueError('Exact six original diff bytes and admitted archival counterpart required')
+@@ -42 +51 @@
+-            or not set(Path(raw['path']).parts)&ARCHIVE_COMPONENTS
++            or (exact is None and not set(Path(raw['path']).parts)&ARCHIVE_COMPONENTS)
+@@ -46 +55 @@
+-        raise ValueError('Only NEW exact raw runtime archive copies of admitted original bytes may map')
++        raise ValueError('Only NEW exact archival copies or fixed six admitted original diffs may map')
+@@ -71 +80 @@
+-        raise ValueError('Exact checkpoint-bound raw binary mapping contract required')
++        raise ValueError('Exact checkpoint-bound immutable archival text binary mapping contract required')
+--- backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT03/common.py
++++ backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT04/common.py
+@@ -392 +392 @@
+-    mapped_reason='new_immutable_runtime_raw_preserved_as_binary_gzip_for_strict_zero_delta'
++    mapped_reason='new_immutable_archival_text_preserved_as_binary_gzip_for_strict_zero_delta'
+--- backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT03/inventory.py
++++ backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT04/inventory.py
+@@ -147 +147 @@
+-        reason='new_immutable_runtime_raw_preserved_as_binary_gzip_for_strict_zero_delta' if p in binary_mappings else 'raw_exceeds_25MiB_preserved_local'
++        reason='new_immutable_archival_text_preserved_as_binary_gzip_for_strict_zero_delta' if p in binary_mappings else 'raw_exceeds_25MiB_preserved_local'
+--- backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT03/tests.py
++++ backup_logs/NEXT_CHECKPOINT_653_IMPLEMENTATION_ATTEMPT04/tests.py
+@@ -615,0 +616,50 @@
++    def test_exact_six_original_diff_shape_and_actual_binary_roundtrips(self):
++        self.assertEqual(len(archive_mapping.EXACT_ORIGINAL_DIFF_EVIDENCE),6)
++        for path,fixed in archive_mapping.EXACT_ORIGINAL_DIFF_EVIDENCE.items():
++            raw={'path':path,'size':fixed['size'],'sha256':fixed['sha256']}
++            origin={'path':fixed['archive_origin_path'],'size':fixed['size'],'sha256':fixed['sha256']}
++            self.assertEqual(c.projection(c.file_binding(c.FACTORY/path)),raw)
++            self.assertEqual(c.projection(c.file_binding(c.FACTORY/origin['path'])),origin)
++            with self.subTest(path=path),tempfile.TemporaryDirectory(dir=c.HERE) as a,tempfile.TemporaryDirectory(dir=c.FACTORY/'reproducibility/lossless_archives') as b,tempfile.TemporaryDirectory(dir=c.FACTORY/'manifests/lossless_archives') as d:
++                root=Path(a);packed=Path(b)/'exact-diff.gz';packed.write_bytes(gzip.compress((c.FACTORY/path).read_bytes(),mtime=0))
++                gz=c.file_binding(packed);manifest=Path(d)/'exact-diff.lossless.json'
++                manifest.write_text(json.dumps({'raw_path':path,'raw_bytes':raw['size'],'raw_sha256':raw['sha256'],
++                                                'gzip_path':gz['path'],'gzip_bytes':gz['size'],'gzip_sha256':gz['sha256']})+'\n')
++                m=c.file_binding(manifest);warnings=archive_mapping.whitespace_evidence(c.FACTORY/path)
++                row={'raw':raw,'origin':origin,'gzip':gz,'manifest':m,'whitespace_evidence':warnings}
++                archive_mapping.mapping_shape(row,set(),{origin['path']:origin,path:raw})
++                contract={'schema':archive_mapping.SCHEMA,'checkpoint_id':'isolated-fixture','expected_parent':c.PARENT,
++                          'raw_mappings':[row],'grants_data_approval':False}
++                contractpath=root/'mapping.json';contractpath.write_text(json.dumps(contract)+'\n')
++                config={'checkpoint_id':'isolated-fixture','inputs':{'archive_mapping_contract':c.file_binding(contractpath)}}
++                rep={'gzip':gz,'manifest':m,'exact_raw_roundtrip_verified':True,'uncompressed_secret_scan':'PASS'}
++                spec={'schema':'next-checkpoint-653-exact-inventory-v2','files':[{'path':p.relative_to(c.FACTORY).as_posix(),**c.hash_file(p)} for p in (packed,manifest)],
++                      'raw_size_exclusions':[dict(raw,reason=archive_mapping.REASON,lossless_representations=[rep])],
++                      'new_runtime_raw_binary_mapping_contract':config['inputs']['archive_mapping_contract'],'new_runtime_raw_binary_mappings':[row]}
++                actual=archive_mapping.validate(config,{'required_factory_original_and_raw_closure':[raw,origin]},spec)
++                self.assertEqual(set(actual),{path});self.assertEqual(c.scope(spec)['unique_raw_gzip_pairs'],1)
++                self.assertEqual(c.projection(c.file_binding(c.FACTORY/path)),raw)
++                self.assertEqual(c.projection(c.file_binding(c.FACTORY/origin['path'])),origin)
++    def test_exact_six_original_diff_corruptions_and_unconditional_protections(self):
++        for path,fixed in archive_mapping.EXACT_ORIGINAL_DIFF_EVIDENCE.items():
++            raw={'path':path,'size':fixed['size'],'sha256':fixed['sha256']}
++            origin={'path':fixed['archive_origin_path'],'size':fixed['size'],'sha256':fixed['sha256']}
++            row={'raw':raw,'origin':origin,'gzip':c.projection(fixture('reproducibility/lossless_archives/exact.gz')),
++                 'manifest':c.projection(fixture('manifests/lossless_archives/exact.lossless.json')),
++                 'whitespace_evidence':[{'line':1,'type':'trailing_whitespace','line_sha256':'1'*64}]}
++            archive_mapping.mapping_shape(row,set(),{origin['path']:origin})
++            for mutation in ('path','raw_hash','raw_size','origin_path','origin_hash','origin_size','unknown_diff','prior','release','opaque'):
++                changed=copy.deepcopy(row);previous=set()
++                if mutation=='path':changed['raw']['path']=path+'.alias'
++                elif mutation=='raw_hash':changed['raw']['sha256']='0'*64;changed['origin']['sha256']='0'*64
++                elif mutation=='raw_size':changed['raw']['size']+=1;changed['origin']['size']+=1
++                elif mutation=='origin_path':changed['origin']['path']='quality_reports/other/raw_source_archives/'+fixed['sha256']+'.source'
++                elif mutation=='origin_hash':changed['origin']['sha256']='0'*64
++                elif mutation=='origin_size':changed['origin']['size']+=1
++                elif mutation=='unknown_diff':changed['raw']['path']='quality_reports/ordinary/unknown.patch'
++                elif mutation=='prior':previous={path}
++                elif mutation=='release':changed['raw']['path']='data/RSM-001/releases/v9999/original.patch'
++                else:changed['raw']['path']=next(iter(c.METADATA_GIT_BLOBS))
++                admitted={changed['origin']['path']:changed['origin']}
++                with self.subTest(path=path,mutation=mutation),self.assertRaises(ValueError):
++                    archive_mapping.mapping_shape(changed,previous,admitted)

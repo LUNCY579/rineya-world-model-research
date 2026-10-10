@@ -1,0 +1,3356 @@
+{
+  "schema": "own-handmade-rsm-preparation-fixtures-v1",
+  "actual_author_execution": "/root/adversarial_auditor",
+  "contexts": {
+    "F": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "reg": "x"
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "fresh",
+      "history": [],
+      "checkpoint": null,
+      "event_budget": 48
+    },
+    "R": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "reg": "x"
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "resume",
+      "history": [
+        {
+          "event": "enter",
+          "instance_id": 0,
+          "option": "main",
+          "bindings": {
+            "p": 1,
+            "q": 2
+          },
+          "call_site": null,
+          "initiation_ok": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 0,
+          "option": "main",
+          "body_path": [],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 1,
+          "state": {
+            "x": 2,
+            "y": 2
+          }
+        },
+        {
+          "event": "enter",
+          "instance_id": 1,
+          "option": "child",
+          "bindings": {
+            "a": 2,
+            "b": 2
+          },
+          "call_site": {
+            "caller_instance": 0,
+            "body_path": [],
+            "index": 1
+          },
+          "initiation_ok": true
+        },
+        {
+          "event": "branch",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [],
+          "index": 0,
+          "condition": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [
+            0,
+            "then"
+          ],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 5,
+          "state": {
+            "x": 7,
+            "y": 2
+          }
+        }
+      ],
+      "checkpoint": {
+        "state": {
+          "x": 7,
+          "y": 2
+        },
+        "frames": [
+          {
+            "frame_kind": "option",
+            "instance_id": 0,
+            "option": "main",
+            "bindings": {
+              "p": 1,
+              "q": 2
+            },
+            "body_path": [],
+            "next_index": 2
+          },
+          {
+            "frame_kind": "option",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [],
+            "next_index": 1
+          },
+          {
+            "frame_kind": "branch",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [
+              0,
+              "then"
+            ],
+            "next_index": 1
+          }
+        ],
+        "next_instance_id": 2,
+        "root_pending": false,
+        "phase": "running"
+      },
+      "event_budget": 48
+    },
+    "T": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "reg": "x"
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "restart",
+      "history": [
+        {
+          "event": "enter",
+          "instance_id": 0,
+          "option": "main",
+          "bindings": {
+            "p": 1,
+            "q": 2
+          },
+          "call_site": null,
+          "initiation_ok": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 0,
+          "option": "main",
+          "body_path": [],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 1,
+          "state": {
+            "x": 2,
+            "y": 2
+          }
+        },
+        {
+          "event": "enter",
+          "instance_id": 1,
+          "option": "child",
+          "bindings": {
+            "a": 2,
+            "b": 2
+          },
+          "call_site": {
+            "caller_instance": 0,
+            "body_path": [],
+            "index": 1
+          },
+          "initiation_ok": true
+        },
+        {
+          "event": "branch",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [],
+          "index": 0,
+          "condition": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [
+            0,
+            "then"
+          ],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 5,
+          "state": {
+            "x": 7,
+            "y": 2
+          }
+        }
+      ],
+      "checkpoint": {
+        "state": {
+          "x": 7,
+          "y": 2
+        },
+        "frames": [
+          {
+            "frame_kind": "option",
+            "instance_id": 0,
+            "option": "main",
+            "bindings": {
+              "p": 1,
+              "q": 2
+            },
+            "body_path": [],
+            "next_index": 2
+          },
+          {
+            "frame_kind": "option",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [],
+            "next_index": 1
+          },
+          {
+            "frame_kind": "branch",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [
+              0,
+              "then"
+            ],
+            "next_index": 1
+          }
+        ],
+        "next_instance_id": 2,
+        "root_pending": false,
+        "phase": "running"
+      },
+      "event_budget": 48
+    },
+    "P": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "reg": "x"
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "resume",
+      "history": [
+        {
+          "event": "enter",
+          "instance_id": 0,
+          "option": "main",
+          "bindings": {
+            "p": 1,
+            "q": 2
+          },
+          "call_site": null,
+          "initiation_ok": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 0,
+          "option": "main",
+          "body_path": [],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 1,
+          "state": {
+            "x": 2,
+            "y": 2
+          }
+        },
+        {
+          "event": "enter",
+          "instance_id": 1,
+          "option": "child",
+          "bindings": {
+            "a": 2,
+            "b": 2
+          },
+          "call_site": {
+            "caller_instance": 0,
+            "body_path": [],
+            "index": 1
+          },
+          "initiation_ok": true
+        },
+        {
+          "event": "branch",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [],
+          "index": 0,
+          "condition": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [
+            0,
+            "then"
+          ],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 5,
+          "state": {
+            "x": 7,
+            "y": 2
+          }
+        }
+      ],
+      "checkpoint": {
+        "state": {
+          "x": 7,
+          "y": 2
+        },
+        "frames": [
+          {
+            "frame_kind": "option",
+            "instance_id": 0,
+            "option": "main",
+            "bindings": {
+              "p": 1,
+              "q": 2
+            },
+            "body_path": [],
+            "next_index": 2
+          },
+          {
+            "frame_kind": "option",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [],
+            "next_index": 1
+          },
+          {
+            "frame_kind": "branch",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [
+              0,
+              "then"
+            ],
+            "next_index": 1
+          }
+        ],
+        "next_instance_id": 2,
+        "root_pending": false,
+        "phase": "running"
+      },
+      "event_budget": 1
+    },
+    "U": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "reg": "x"
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "resume",
+      "history": [
+        {
+          "event": "enter",
+          "instance_id": 0,
+          "option": "main",
+          "bindings": {
+            "p": 1,
+            "q": 2
+          },
+          "call_site": null,
+          "initiation_ok": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 0,
+          "option": "main",
+          "body_path": [],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 1,
+          "state": {
+            "x": 2,
+            "y": 2
+          }
+        },
+        {
+          "event": "enter",
+          "instance_id": 1,
+          "option": "child",
+          "bindings": {
+            "a": 2,
+            "b": 2
+          },
+          "call_site": {
+            "caller_instance": 0,
+            "body_path": [],
+            "index": 1
+          },
+          "initiation_ok": true
+        },
+        {
+          "event": "branch",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [],
+          "index": 0,
+          "condition": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [
+            0,
+            "then"
+          ],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 5,
+          "state": {
+            "x": 7,
+            "y": 2
+          }
+        },
+        {
+          "event": "effect",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [
+            0,
+            "then"
+          ],
+          "index": 1,
+          "op": "add",
+          "register": "y",
+          "value": 2,
+          "state": {
+            "x": 7,
+            "y": 4
+          }
+        }
+      ],
+      "checkpoint": {
+        "state": {
+          "x": 7,
+          "y": 4
+        },
+        "frames": [
+          {
+            "frame_kind": "option",
+            "instance_id": 0,
+            "option": "main",
+            "bindings": {
+              "p": 1,
+              "q": 2
+            },
+            "body_path": [],
+            "next_index": 2
+          },
+          {
+            "frame_kind": "option",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [],
+            "next_index": 1
+          },
+          {
+            "frame_kind": "branch",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [
+              0,
+              "then"
+            ],
+            "next_index": 2
+          }
+        ],
+        "next_instance_id": 2,
+        "root_pending": false,
+        "phase": "running"
+      },
+      "event_budget": 48
+    },
+    "A": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "const": 2
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "fresh",
+      "history": [],
+      "checkpoint": null,
+      "event_budget": 48
+    },
+    "I": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "const": -1
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "fresh",
+      "history": [],
+      "checkpoint": null,
+      "event_budget": 48
+    },
+    "S": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 1000
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "reg": "x"
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "fresh",
+      "history": [],
+      "checkpoint": null,
+      "event_budget": 48
+    },
+    "X": {
+      "kind": "option_resume",
+      "version": 1,
+      "initial_state": {
+        "x": 1,
+        "y": 2
+      },
+      "options": {
+        "main": {
+          "params": [
+            "p",
+            "q"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "param": "p"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "q"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "reg": "y"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "add",
+              "register": "x",
+              "value": {
+                "const": 1
+              }
+            },
+            {
+              "op": "call",
+              "option": "child",
+              "args": {
+                "a": {
+                  "reg": "x"
+                },
+                "b": {
+                  "param": "q"
+                }
+              }
+            },
+            {
+              "op": "add",
+              "register": "y",
+              "value": {
+                "param": "p"
+              }
+            },
+            {
+              "op": "swap"
+            }
+          ]
+        },
+        "child": {
+          "params": [
+            "a",
+            "b"
+          ],
+          "initiation": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "lt",
+                "right": {
+                  "const": 3
+                }
+              },
+              {
+                "left": {
+                  "param": "a"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              },
+              {
+                "left": {
+                  "param": "b"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "success": {
+            "all": [
+              {
+                "left": {
+                  "reg": "x"
+                },
+                "cmp": "ge",
+                "right": {
+                  "const": 0
+                }
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "if",
+              "test": {
+                "all": [
+                  {
+                    "left": {
+                      "reg": "x"
+                    },
+                    "cmp": "lt",
+                    "right": {
+                      "const": 3
+                    }
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "add",
+                  "register": "x",
+                  "value": {
+                    "const": 5
+                  }
+                },
+                {
+                  "op": "add",
+                  "register": "y",
+                  "value": {
+                    "param": "a"
+                  }
+                },
+                {
+                  "op": "scale",
+                  "register": "x",
+                  "value": {
+                    "param": "b"
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "scale",
+                  "register": "y",
+                  "value": {
+                    "const": 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "entry": {
+        "option": "main",
+        "args": {
+          "p": {
+            "reg": "x"
+          },
+          "q": {
+            "const": 2
+          }
+        }
+      },
+      "mode": "resume",
+      "history": [
+        {
+          "event": "enter",
+          "instance_id": 0,
+          "option": "main",
+          "bindings": {
+            "p": 1,
+            "q": 2
+          },
+          "call_site": null,
+          "initiation_ok": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 0,
+          "option": "main",
+          "body_path": [],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 1,
+          "state": {
+            "x": 2,
+            "y": 2
+          }
+        },
+        {
+          "event": "enter",
+          "instance_id": 1,
+          "option": "child",
+          "bindings": {
+            "a": 2,
+            "b": 2
+          },
+          "call_site": {
+            "caller_instance": 0,
+            "body_path": [],
+            "index": 1
+          },
+          "initiation_ok": true
+        },
+        {
+          "event": "branch",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [],
+          "index": 0,
+          "condition": true
+        },
+        {
+          "event": "effect",
+          "instance_id": 1,
+          "option": "child",
+          "body_path": [
+            0,
+            "then"
+          ],
+          "index": 0,
+          "op": "add",
+          "register": "x",
+          "value": 5,
+          "state": {
+            "x": 7,
+            "y": 2
+          }
+        }
+      ],
+      "checkpoint": {
+        "state": {
+          "x": 7,
+          "y": 2
+        },
+        "frames": [
+          {
+            "frame_kind": "option",
+            "instance_id": 0,
+            "option": "main",
+            "bindings": {
+              "p": 1,
+              "q": 2
+            },
+            "body_path": [],
+            "next_index": 2
+          },
+          {
+            "frame_kind": "option",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 2,
+              "b": 2
+            },
+            "body_path": [],
+            "next_index": 1
+          },
+          {
+            "frame_kind": "branch",
+            "instance_id": 1,
+            "option": "child",
+            "bindings": {
+              "a": 3,
+              "b": 2
+            },
+            "body_path": [
+              0,
+              "then"
+            ],
+            "next_index": 1
+          }
+        ],
+        "next_instance_id": 2,
+        "root_pending": false,
+        "phase": "running"
+      },
+      "event_budget": 48
+    }
+  },
+  "hand_expected": {
+    "F": {
+      "status": "completed",
+      "state": {
+        "x": 5,
+        "y": 14
+      },
+      "new_effects": 6,
+      "previous_effects": 0,
+      "event_count": 11
+    },
+    "R": {
+      "status": "completed",
+      "state": {
+        "x": 5,
+        "y": 14
+      },
+      "new_effects": 4,
+      "previous_effects": 2,
+      "event_count": 6
+    },
+    "T": {
+      "status": "initiation_failed",
+      "state": {
+        "x": 8,
+        "y": 2
+      },
+      "new_effects": 1,
+      "previous_effects": 2,
+      "event_count": 3
+    },
+    "P": {
+      "status": "paused",
+      "state": {
+        "x": 7,
+        "y": 4
+      },
+      "new_effects": 1,
+      "previous_effects": 2,
+      "event_count": 1,
+      "next_event": {
+        "event": "effect",
+        "instance_id": 1,
+        "option": "child",
+        "body_path": [
+          0,
+          "then"
+        ],
+        "index": 2,
+        "op": "scale",
+        "register": "x",
+        "value": 2,
+        "state": {
+          "x": 14,
+          "y": 4
+        }
+      }
+    },
+    "U": {
+      "status": "completed",
+      "state": {
+        "x": 5,
+        "y": 14
+      },
+      "new_effects": 3,
+      "previous_effects": 3,
+      "event_count": 5
+    },
+    "A": {
+      "status": "completed",
+      "state": {
+        "x": 6,
+        "y": 14
+      },
+      "new_effects": 6,
+      "previous_effects": 0,
+      "event_count": 11
+    },
+    "I": {
+      "status": "initiation_failed",
+      "state": {
+        "x": 1,
+        "y": 2
+      },
+      "new_effects": 0,
+      "previous_effects": 0,
+      "event_count": 1
+    },
+    "S": {
+      "status": "success_failed",
+      "state": {
+        "x": 5,
+        "y": 14
+      },
+      "new_effects": 6,
+      "previous_effects": 0,
+      "event_count": 11
+    },
+    "X": {
+      "status": "invalid",
+      "error": "invalid_checkpoint",
+      "new_effects": 0,
+      "previous_effects": null,
+      "event_count": 0
+    }
+  },
+  "hand_F_trace": [
+    {
+      "event": "enter",
+      "instance_id": 0,
+      "option": "main",
+      "bindings": {
+        "p": 1,
+        "q": 2
+      },
+      "call_site": null,
+      "initiation_ok": true
+    },
+    {
+      "event": "effect",
+      "instance_id": 0,
+      "option": "main",
+      "body_path": [],
+      "index": 0,
+      "op": "add",
+      "register": "x",
+      "value": 1,
+      "state": {
+        "x": 2,
+        "y": 2
+      }
+    },
+    {
+      "event": "enter",
+      "instance_id": 1,
+      "option": "child",
+      "bindings": {
+        "a": 2,
+        "b": 2
+      },
+      "call_site": {
+        "caller_instance": 0,
+        "body_path": [],
+        "index": 1
+      },
+      "initiation_ok": true
+    },
+    {
+      "event": "branch",
+      "instance_id": 1,
+      "option": "child",
+      "body_path": [],
+      "index": 0,
+      "condition": true
+    },
+    {
+      "event": "effect",
+      "instance_id": 1,
+      "option": "child",
+      "body_path": [
+        0,
+        "then"
+      ],
+      "index": 0,
+      "op": "add",
+      "register": "x",
+      "value": 5,
+      "state": {
+        "x": 7,
+        "y": 2
+      }
+    },
+    {
+      "event": "effect",
+      "instance_id": 1,
+      "option": "child",
+      "body_path": [
+        0,
+        "then"
+      ],
+      "index": 1,
+      "op": "add",
+      "register": "y",
+      "value": 2,
+      "state": {
+        "x": 7,
+        "y": 4
+      }
+    },
+    {
+      "event": "effect",
+      "instance_id": 1,
+      "option": "child",
+      "body_path": [
+        0,
+        "then"
+      ],
+      "index": 2,
+      "op": "scale",
+      "register": "x",
+      "value": 2,
+      "state": {
+        "x": 14,
+        "y": 4
+      }
+    },
+    {
+      "event": "return",
+      "instance_id": 1,
+      "option": "child",
+      "success_ok": true
+    },
+    {
+      "event": "effect",
+      "instance_id": 0,
+      "option": "main",
+      "body_path": [],
+      "index": 2,
+      "op": "add",
+      "register": "y",
+      "value": 1,
+      "state": {
+        "x": 14,
+        "y": 5
+      }
+    },
+    {
+      "event": "effect",
+      "instance_id": 0,
+      "option": "main",
+      "body_path": [],
+      "index": 3,
+      "op": "swap",
+      "state": {
+        "x": 5,
+        "y": 14
+      }
+    },
+    {
+      "event": "return",
+      "instance_id": 0,
+      "option": "main",
+      "success_ok": true
+    }
+  ],
+  "hand_R_checkpoint": {
+    "state": {
+      "x": 7,
+      "y": 2
+    },
+    "frames": [
+      {
+        "frame_kind": "option",
+        "instance_id": 0,
+        "option": "main",
+        "bindings": {
+          "p": 1,
+          "q": 2
+        },
+        "body_path": [],
+        "next_index": 2
+      },
+      {
+        "frame_kind": "option",
+        "instance_id": 1,
+        "option": "child",
+        "bindings": {
+          "a": 2,
+          "b": 2
+        },
+        "body_path": [],
+        "next_index": 1
+      },
+      {
+        "frame_kind": "branch",
+        "instance_id": 1,
+        "option": "child",
+        "bindings": {
+          "a": 2,
+          "b": 2
+        },
+        "body_path": [
+          0,
+          "then"
+        ],
+        "next_index": 1
+      }
+    ],
+    "next_instance_id": 2,
+    "root_pending": false,
+    "phase": "running"
+  },
+  "families_represented": "one handmade simultaneous-control program; no production/source-novelty claim",
+  "boundaries": [
+    {
+      "name": "empty_body",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": 2,
+          "y": 3
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": []
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "completed",
+        "state": {
+          "x": 2,
+          "y": 3
+        },
+        "new_effects": 0,
+        "event_count": 2
+      }
+    },
+    {
+      "name": "empty_selected_branch",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": 2,
+          "y": 3
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "if",
+                "test": {
+                  "all": [
+                    {
+                      "left": {
+                        "const": 0
+                      },
+                      "cmp": "eq",
+                      "right": {
+                        "const": 1
+                      }
+                    }
+                  ]
+                },
+                "then": [
+                  {
+                    "op": "add",
+                    "register": "x",
+                    "value": {
+                      "const": 9
+                    }
+                  }
+                ],
+                "else": []
+              }
+            ]
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "completed",
+        "state": {
+          "x": 2,
+          "y": 3
+        },
+        "new_effects": 0,
+        "event_count": 3
+      }
+    },
+    {
+      "name": "failed_root_entry",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": 2,
+          "y": 3
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": [
+                {
+                  "left": {
+                    "const": 0
+                  },
+                  "cmp": "eq",
+                  "right": {
+                    "const": 1
+                  }
+                }
+              ]
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "swap"
+              }
+            ]
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "initiation_failed",
+        "state": {
+          "x": 2,
+          "y": 3
+        },
+        "new_effects": 0,
+        "event_count": 1
+      }
+    },
+    {
+      "name": "failed_root_exit_no_rollback",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": 2,
+          "y": 3
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": [
+                {
+                  "left": {
+                    "const": 0
+                  },
+                  "cmp": "eq",
+                  "right": {
+                    "const": 1
+                  }
+                }
+              ]
+            },
+            "body": [
+              {
+                "op": "add",
+                "register": "x",
+                "value": {
+                  "const": 4
+                }
+              }
+            ]
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "success_failed",
+        "state": {
+          "x": 6,
+          "y": 3
+        },
+        "new_effects": 1,
+        "event_count": 3
+      }
+    },
+    {
+      "name": "exact_large_negative_arithmetic_outside_cohort",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": -3,
+          "y": 5
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "scale",
+                "register": "x",
+                "value": {
+                  "const": 1208925819614629174706176
+                }
+              },
+              {
+                "op": "add",
+                "register": "x",
+                "value": {
+                  "const": -7
+                }
+              }
+            ]
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "completed",
+        "state": {
+          "x": -3626777458843887524118535,
+          "y": 5
+        },
+        "new_effects": 2,
+        "event_count": 4
+      }
+    },
+    {
+      "name": "failed_child_initiation",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": 2,
+          "y": 3
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "call",
+                "option": "leaf",
+                "args": {}
+              },
+              {
+                "op": "add",
+                "register": "y",
+                "value": {
+                  "const": 99
+                }
+              }
+            ]
+          },
+          "leaf": {
+            "params": [],
+            "initiation": {
+              "all": [
+                {
+                  "left": {
+                    "const": 0
+                  },
+                  "cmp": "eq",
+                  "right": {
+                    "const": 1
+                  }
+                }
+              ]
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "add",
+                "register": "x",
+                "value": {
+                  "const": 5
+                }
+              }
+            ]
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "initiation_failed",
+        "state": {
+          "x": 2,
+          "y": 3
+        },
+        "new_effects": 0,
+        "event_count": 2,
+        "retained_caller_next_index": 1
+      }
+    },
+    {
+      "name": "failed_child_success",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": 2,
+          "y": 3
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "call",
+                "option": "leaf",
+                "args": {}
+              },
+              {
+                "op": "add",
+                "register": "y",
+                "value": {
+                  "const": 99
+                }
+              }
+            ]
+          },
+          "leaf": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": [
+                {
+                  "left": {
+                    "const": 0
+                  },
+                  "cmp": "eq",
+                  "right": {
+                    "const": 1
+                  }
+                }
+              ]
+            },
+            "body": [
+              {
+                "op": "add",
+                "register": "x",
+                "value": {
+                  "const": 5
+                }
+              }
+            ]
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "success_failed",
+        "state": {
+          "x": 7,
+          "y": 3
+        },
+        "new_effects": 1,
+        "event_count": 4,
+        "retained_caller_next_index": 1
+      }
+    },
+    {
+      "name": "simultaneous_args_and_swap",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": 3,
+          "y": 5
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "call",
+                "option": "leaf",
+                "args": {
+                  "a": {
+                    "reg": "x"
+                  },
+                  "b": {
+                    "reg": "y"
+                  }
+                }
+              }
+            ]
+          },
+          "leaf": {
+            "params": [
+              "a",
+              "b"
+            ],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "swap"
+              },
+              {
+                "op": "add",
+                "register": "x",
+                "value": {
+                  "param": "a"
+                }
+              },
+              {
+                "op": "add",
+                "register": "y",
+                "value": {
+                  "param": "b"
+                }
+              }
+            ]
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "completed",
+        "state": {
+          "x": 8,
+          "y": 8
+        },
+        "new_effects": 3,
+        "event_count": 7,
+        "leaf_bindings": {
+          "a": 3,
+          "b": 5
+        }
+      }
+    },
+    {
+      "name": "three_options_two_selected_branch_levels",
+      "task": {
+        "kind": "option_resume",
+        "version": 1,
+        "initial_state": {
+          "x": 2,
+          "y": 3
+        },
+        "options": {
+          "root": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "if",
+                "test": {
+                  "all": []
+                },
+                "then": [
+                  {
+                    "op": "if",
+                    "test": {
+                      "all": []
+                    },
+                    "then": [
+                      {
+                        "op": "call",
+                        "option": "middle",
+                        "args": {}
+                      }
+                    ],
+                    "else": []
+                  }
+                ],
+                "else": []
+              }
+            ]
+          },
+          "middle": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "call",
+                "option": "leaf",
+                "args": {}
+              }
+            ]
+          },
+          "leaf": {
+            "params": [],
+            "initiation": {
+              "all": []
+            },
+            "success": {
+              "all": []
+            },
+            "body": [
+              {
+                "op": "add",
+                "register": "y",
+                "value": {
+                  "const": -2
+                }
+              }
+            ]
+          }
+        },
+        "entry": {
+          "option": "root",
+          "args": {}
+        },
+        "mode": "fresh",
+        "history": [],
+        "checkpoint": null,
+        "event_budget": 48
+      },
+      "expected": {
+        "status": "completed",
+        "state": {
+          "x": 2,
+          "y": 1
+        },
+        "new_effects": 1,
+        "event_count": 9
+      }
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "status": "BOUNDED_DIRECT_FUNCTION_REPLAY_COMPLETE_WITH_REPORT_VALIDATION_GAPS",
+  "author_execution": "/root/backup_manager/approved_release_join_review",
+  "source_sha256": "e92a7970c6087afedeb0105c0db242cd07eed571880c53683c1458dcfa3ce4f1",
+  "source_freeze_sha256": "afe975acd16250a4c4bde3488645b07b6ab09e1d873ca8e5f8af47716fa05b26",
+  "passed_cases": 33,
+  "results": [
+    {
+      "case": "all_four_source_exact_scans",
+      "status": "PASS"
+    },
+    {
+      "case": "both_complete_stream_contexts",
+      "status": "PASS"
+    },
+    {
+      "case": "metadata_truncated",
+      "status": "PASS"
+    },
+    {
+      "case": "metadata_overlong",
+      "status": "PASS"
+    },
+    {
+      "case": "metadata_full_hash_changed",
+      "status": "PASS"
+    },
+    {
+      "case": "wrong_git_sha1",
+      "status": "PASS"
+    },
+    {
+      "case": "duplicate_context_paths",
+      "status": "PASS"
+    },
+    {
+      "case": "mixed_known_unknown_paths",
+      "status": "PASS"
+    },
+    {
+      "case": "unknown_alias",
+      "status": "PASS"
+    },
+    {
+      "case": "invalid_stream_context",
+      "status": "PASS"
+    },
+    {
+      "case": "shared_exact_two_original_paths",
+      "status": "PASS"
+    },
+    {
+      "case": "ordinary_stream",
+      "status": "PASS"
+    },
+    {
+      "case": "ordinary_secret_rejected",
+      "status": "PASS"
+    },
+    {
+      "case": "stream_report_size",
+      "status": "PASS"
+    },
+    {
+      "case": "stream_report_sha256",
+      "status": "PASS"
+    },
+    {
+      "case": "stream_report_matches",
+      "status": "PASS"
+    },
+    {
+      "case": "stream_report_full_size_sha256_gitsha1_verified_before_exception_acceptance",
+      "status": "PASS"
+    },
+    {
+      "case": "typed_span_index",
+      "status": "PASS"
+    },
+    {
+      "case": "two_worker_complete_stream_reporting",
+      "status": "PASS"
+    },
+    {
+      "case": "actual_exact_scope_metadata",
+      "status": "PASS"
+    },
+    {
+      "case": "scope_missing_raw",
+      "status": "PASS"
+    },
+    {
+      "case": "actual_stage_diagnostics_schema",
+      "status": "PASS"
+    },
+    {
+      "case": "stage_unrestricted_false_pass",
+      "status": "PASS"
+    },
+    {
+      "case": "synthetic_full_binding_only_no_remote_authority",
+      "status": "PASS"
+    },
+    {
+      "case": "exact31_pairs32_refs31_manifest_paths",
+      "status": "PASS"
+    },
+    {
+      "case": "manifest_remote_mode_corruption",
+      "status": "PASS"
+    },
+    {
+      "case": "full_blob_cached_provenance_rejected",
+      "status": "PASS"
+    },
+    {
+      "case": "ordinary_gzip_direct_byte_compare",
+      "status": "PASS"
+    },
+    {
+      "case": "gzip_truncated",
+      "status": "PASS"
+    },
+    {
+      "case": "gzip_wrong_blob",
+      "status": "PASS"
+    },
+    {
+      "case": "gzip_crc_after_correct_compressed_binding",
+      "status": "PASS"
+    },
+    {
+      "case": "transport_corruption_has_no_local_fallback",
+      "status": "PASS"
+    },
+    {
+      "case": "transport_exact_raw_no_cache_command",
+      "status": "PASS"
+    }
+  ],
+  "accepted_corruptions": [
+    {
+      "case": "stream_report_unbound_valid_sha1",
+      "status": "ACCEPTED_CORRUPTION_REQUIRES_REVIEW"
+    },
+    {
+      "case": "stream_report_invalid_context",
+      "status": "ACCEPTED_CORRUPTION_REQUIRES_REVIEW"
+    },
+    {
+      "case": "gzip_accepts_local_report_as_remote_report",
+      "status": "ACCEPTED_CORRUPTION_REQUIRES_REVIEW"
+    },
+    {
+      "case": "gzip_accepts_metadata_sha1_not_bound_to_remote_blob",
+      "status": "ACCEPTED_CORRUPTION_REQUIRES_REVIEW"
+    }
+  ],
+  "target_mains_executed": false,
+  "git_commands": 0,
+  "network_calls": 0,
+  "actual_remote_payload_fetches": 0,
+  "metadata_content_copied_to_new_paths": false,
+  "synthetic_full_fixture_published": false,
+  "grants_data_approval": false,
+  "remote_pairs": 31,
+  "manifest_reference_records": 32,
+  "unique_manifest_paths": 31,
+  "unique_raw_bytes": 1724728576,
+  "local_all_representation_comparison_bytes": 1766951239
+}

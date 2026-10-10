@@ -1,0 +1,170 @@
+{
+  "active_prefix": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/quality_reports/RSM_FACTORY_BRIDGE_PREPARATION_20261010",
+  "api": {
+    "control_report": "control_report(rows,batch=None,root=ROOT,candidate_relative=None) -> None for legacy or report with errors/counts/evidence and no approval",
+    "gate": "gate(stage,rows,batch=None,root=ROOT,candidate_relative=None,exports=None) -> report; stage in audit,publish,validate_release,exports; no publication/directory writes",
+    "package_sources": "package_sources(destination) -> exact original-relative-path ledger; new isolated immutable destination only",
+    "specialized": "specialized(rows,split,batch=BATCH,root=ROOT,candidate_relative=None) -> split payload only after whole-cohort proof",
+    "validate_specialized": "validate_specialized(exports,rows,batch=BATCH,root=ROOT,candidate_relative=None) -> proof or GateError/ValueError; both derived split payloads checked",
+    "verify_package": "verify_package(destination) -> source_files/all_exact/no-approval",
+    "write_specialized": "write_specialized(destination,rows,batch=BATCH,root=ROOT,candidate_relative=None) -> proof; destinations only below isolated prefix, whole proof before mkdir"
+  },
+  "author_execution_id": "/root/formal_oracle",
+  "correlation": "Same formal author/model and own independently authored bdbc checker/427 task solver/bb628 graph mechanism reused. This is not separate-model/reference agreement or a blind production review.",
+  "created_at": "2026-10-10T12:02:36.379896+00:00",
+  "execution": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 /opt/anaconda3/bin/python3 quality_reports/RSM_FACTORY_BRIDGE_PREPARATION_20261010/run_attempt01.py",
+    "completion_tool_chunk_id": "f6543d",
+    "elapsed_seconds": 31.211191,
+    "errors": 0,
+    "failures": 0,
+    "finished_at": "2026-10-10T12:01:24.713247+00:00",
+    "initial_tool_chunk_id": "f36b67",
+    "initial_tool_session_id": 96816,
+    "path": "EXECUTION_ATTEMPT01.json",
+    "pid": 83836,
+    "python": "3.12.4 | packaged by Anaconda, Inc. | (main, Jun 18 2024, 10:07:17) [Clang 14.0.6 ]",
+    "python_executable": "/opt/anaconda3/bin/python3",
+    "sha256": "9ef62f32ac77c511d28c957f870cb6b0987ce6247d105cb0fe75a10c8c67580f",
+    "started_at": "2026-10-10T12:00:53.501913+00:00",
+    "status": "PASS",
+    "tests_run": 20
+  },
+  "failure_custody": {
+    "complete_stdout_stderr": "FULL_EXECUTION_OUTPUT_ATTEMPT01.txt",
+    "expected_corruption_failures_preserved_in": "ACTUAL_HAND_CASE_RESULTS_ATTEMPT01.json",
+    "full_output_sha256": "b81bde988c02ded6df87ab94d80d014119b6fc6bcf7d722a4173419b33bdd47a",
+    "no_superseding_source_revision": true,
+    "unexpected_import_or_test_failures": 0
+  },
+  "final_inventory": {
+    "all_current_bindings_unchanged": true,
+    "files_prior_to_inventory_receipt": 51,
+    "maximum_file_bytes": 5195632,
+    "path": "ARTIFACT_INVENTORY_ATTEMPT01.json",
+    "sha256": "0d509f4394e84ddf3890ae23730d2af8c8e868b89fcb3b3ee28e57f7c7b4eac9"
+  },
+  "fixed_dependency_hashes": {
+    "factory/belief_controls.py": "cdd1e95fdf11cffca13db243bbdee1a2010450f497773714f093db5899985967",
+    "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+    "factory/export_validation.py": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
+    "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+    "factory/pipeline.py": "1be38a6061c35d5239c51cc51b6881ac4c432c514ed5e071ea6e97f24af92752",
+    "factory/planning_controls.py": "352f5fc0247b339293206958144e25f7d4437477f4a60702d926b805f25c18c3",
+    "quality_reports/RSM_ROOT_PREINTEGRATION_FINDINGS_20261010.json": "5a5f0b02079b818c57a7f365059ed709d20c57f7118d9b81015baaaf39f04e9d",
+    "research/curricula/RSM-OPTION-RESUMPTION-CONFIG-20261010.json": "422f67c836639d0accbf411c3080ef4fc7695ad8630120a140488c90a19061fa",
+    "research/curricula/RSM-OPTION-RESUMPTION-PROSPECTIVE-20261010.md": "8bda187009cc91756248ddd86792c28aabe0793a3f6be304bb9433bfdf48be34",
+    "research/curricula/RSM_OPTION_METADATA_V1_AMENDMENT_R2_ROOT_FREEZE.json": "3d82da83535c6e8c0a0884d870945d064605e1f58ae2072153c5da8c8d8daeaa",
+    "reviews/input_only/RSM-legacy-v0001.jsonl": "ba62d973531521bfc57a5b52ee630a61f3384d9e8dfd41becea6a1eb63ca86c1",
+    "reviews/input_only/RSM-legacy-v0001.manifest.json": "fa2ca7b7b266b6478eaafa8399cdcdd1cb4f02bf01b0bce2e96b71aad9b19c42",
+    "reviews/input_only/RSM-legacy-v0001.source-freeze-attempt01.json": "b0d2fe73425f83667aa928def9db12f7e0bb59b43efc47c920be8b33e7389a60",
+    "reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/actual-hand-candidate-attempt04.jsonl": "742364bd1173a76d911a8b43bff70fb30541a46ce5ec637e2ee1477ff34a0bd5",
+    "reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_checker_attempt04.py": "bdbc7287d5a9167013c21665f4793457481db55612fc9e60fef11fa7157fb9a9",
+    "reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/hand-control-manifest.json": "bb01ac3d44a62ebdbb95750b9d5ad6721c020c5330cebc89e69252c8ad93817f",
+    "reviews/oracle/RSM-option-resumption-official-20261010T0932Z/legacy_contrast_v1.py": "bb628fd918aeb82c3422a029b6ca671ff694090749f9d23d85a8a1d473cdf566",
+    "reviews/oracle/RSM-option-resumption-official-20261010T0932Z/option_resume_solver_v1.py": "42726260ec8a1d713c257f09efdd0910a9f30a836058ab0d7f662e95d1112684",
+    "schemas/RSM_OPTION_RESUMPTION_METADATA_V1.md": "1612b14d7549b7fb406cbef8e127440dcfddaf30548ef29d217bc49aefb6c854",
+    "schemas/RSM_OPTION_RESUMPTION_METADATA_V1_AMENDMENT_R1.md": "5f7f6a2c45dd6a0b51c7a912b28fd49badd9aa3aa2eac8632e9b9781c201b57b",
+    "schemas/RSM_OPTION_RESUMPTION_METADATA_V1_AMENDMENT_R2.md": "b62663c3082c9e2ee2bf34aadc1fdd10f263a6497396b6768f1475b12f568fe4",
+    "schemas/RSM_OPTION_RESUMPTION_V1.md": "44652656ad18e60c98c96db14e0a96b4e46b0dad0bd57f257bca30384ab53b3f",
+    "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f"
+  },
+  "freeze": {
+    "exact_archived_raw_fixtures": true,
+    "largest_raw_bytes": 5195632,
+    "path": "SOURCE_FREEZE_ATTEMPT01.json",
+    "preimport_bound_files": 28,
+    "sha256": "e61987ed882f3f2d1cce215a0def8aa5fa2659ec1adfe01d30f80bf5253964e3"
+  },
+  "integration_proposal": {
+    "direct_export_prewrite_hooks_required": true,
+    "exact_public_task_fields": 9,
+    "future_root_authorization_required": true,
+    "no_unpublished_exact_generator_version_rule": true,
+    "path": "INTEGRATION_PROPOSAL_ATTEMPT01.md",
+    "separate_producer_reference_required": true,
+    "sha256": "47323647aff7f46978adbef59d8ab4fa017697af5aedfd231005882953e66a80",
+    "source_glob_gaps_explicitly_addressed": true
+  },
+  "new_source_bindings": {
+    "quality_reports/RSM_FACTORY_BRIDGE_PREPARATION_20261010/HAND_CONFIGURATION_ATTEMPT01.json": {
+      "archive": "preexecution_source_blobs/502ca204e90a23fc15990405347feac13cfba9c0a375e2949cf633a951266aff.source",
+      "bytes": 1072,
+      "scope": "new preparation",
+      "sha256": "502ca204e90a23fc15990405347feac13cfba9c0a375e2949cf633a951266aff"
+    },
+    "quality_reports/RSM_FACTORY_BRIDGE_PREPARATION_20261010/INTEGRATION_PROPOSAL_ATTEMPT01.md": {
+      "archive": "preexecution_source_blobs/47323647aff7f46978adbef59d8ab4fa017697af5aedfd231005882953e66a80.source",
+      "bytes": 5631,
+      "scope": "new preparation",
+      "sha256": "47323647aff7f46978adbef59d8ab4fa017697af5aedfd231005882953e66a80"
+    },
+    "quality_reports/RSM_FACTORY_BRIDGE_PREPARATION_20261010/bridge_tests_attempt01.py": {
+      "archive": "preexecution_source_blobs/9af0daa8be9313f40aa0fdd6aa64bdeb66bf466b55b0f6b87132be4e350b0eb6.source",
+      "bytes": 16651,
+      "scope": "new preparation",
+      "sha256": "9af0daa8be9313f40aa0fdd6aa64bdeb66bf466b55b0f6b87132be4e350b0eb6"
+    },
+    "quality_reports/RSM_FACTORY_BRIDGE_PREPARATION_20261010/rsm_bridge_attempt01.py": {
+      "archive": "preexecution_source_blobs/c27b73deb6c7f990584cca719ff7dc2e2c12f00bb7ba037b7d9271bc5d7e0b4a.source",
+      "bytes": 15519,
+      "scope": "new preparation",
+      "sha256": "c27b73deb6c7f990584cca719ff7dc2e2c12f00bb7ba037b7d9271bc5d7e0b4a"
+    },
+    "quality_reports/RSM_FACTORY_BRIDGE_PREPARATION_20261010/run_attempt01.py": {
+      "archive": "preexecution_source_blobs/00e9b2388097448d49f5cfbd507337bfc87576c1274b5fda9cda6383202f4a29.source",
+      "bytes": 3909,
+      "scope": "new preparation",
+      "sha256": "00e9b2388097448d49f5cfbd507337bfc87576c1274b5fda9cda6383202f4a29"
+    }
+  },
+  "not_run": [
+    "actual production216 and production novelty",
+    "separate producer reference agreement",
+    "shared-core integration and full pipeline/suite",
+    "actual publication/approval/release",
+    "remote-backup validation"
+  ],
+  "packaging": {
+    "actual_verify": {
+      "all_exact": true,
+      "production_data_approval": false,
+      "source_files": 13
+    },
+    "naive_checker_relocation_forbidden": true,
+    "original_checker_path": "reviews/oracle/RSM-option-resumption-corpus-20261010T0956Z/corpus_checker_attempt04.py",
+    "path": "actual-source-package-attempt01/SOURCE_PACKAGE.json",
+    "sha256": "82c01dbc254029b6802727f778687a094a2eeaadd40ca3ea9c728cd46b70145b"
+  },
+  "production_data_approval": false,
+  "recorded_positive_hand_counts": {
+    "dev_challenge_records": 72,
+    "nonmember_first8_claims": 1344,
+    "owner_claims": 1944,
+    "proved_named_pairs": 300,
+    "records": 216,
+    "semantic_tasks": 108,
+    "source_families": 12,
+    "train_records": 144
+  },
+  "role": "Independent Formal Oracle Engineer; isolated generic-factory bridge preparation",
+  "runner_execution_id": "/root/formal_oracle",
+  "scope": "Own original HAND216 cohort only. No core installation, producer reference read, actual production/candidate/control-manifest read, private reviewer/adjudication read, release approval, generation or backup proof.",
+  "shared_core_mutation": false,
+  "status": "COMPLETED_FROZEN_HAND_PREPARATION_ONLY",
+  "stop_writing_after_final": true,
+  "test_coverage": [
+    "full audit/publish/validate_release/export boundaries",
+    "legacy delegate routing only; no legacy runtime/reference evaluation",
+    "whole cohort retains all corrupted kind/version/track/claims/context/generator labels",
+    "current approval subset and original PENDING subset",
+    "typed boolean/integer target substitution",
+    "all six public sources, original checker/solver/graph/legacy and asserted raw evidence required",
+    "safe relative files: traversal, symlink and nonregular rejection",
+    "mid-proof raw manifest mutation",
+    "full accepted review projection versus exact raw PENDING bytes",
+    "direct specialized/write_specialized/validate_specialized before split/write",
+    "both split coverage, duplicate/missing exports and typed labels",
+    "13-file source package exact bytes/original review restore paths"
+  ]
+}

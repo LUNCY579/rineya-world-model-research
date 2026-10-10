@@ -1,0 +1,13 @@
+{
+  "actual_worker": "/root",
+  "at_utc": "2026-10-10T19:45:17.397575+00:00",
+  "candidate_mutation": false,
+  "diagnosis_tool": "94f70d",
+  "failure": "ROOT AST assertion allowed only execute_compare and emit_receipts, excluding deliberate load_module sys.modules registration required by the new runtime-origin check.",
+  "original_exit_code": 1,
+  "original_observed_tool": "1303e3",
+  "original_readback_at_utc": "2026-10-10T14:23:00Z approximate from retained session",
+  "receipt_created_by_failed_attempt": false,
+  "resolution": "Reread exact load_module delta; allow exactly these three changed existing functions, require all semantic comparison nodes unchanged; preserve this failure.",
+  "source_mutation": false
+}

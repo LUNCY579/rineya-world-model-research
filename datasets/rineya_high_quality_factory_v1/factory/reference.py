@@ -132,6 +132,9 @@ def critic(t):
 
 
 def solve(t):
+    if t["kind"]=="option_resume":
+        from factory.option_resume_reference import solve as option_resume_solve
+        return option_resume_solve(t)
     if t["kind"]=="causal":return causal(t)
     if t["kind"]=="graph":return {**graph_run(t),"shortest_plan":shortest_graph(t)}
     if t["kind"]=="blocks":return blocks(t)

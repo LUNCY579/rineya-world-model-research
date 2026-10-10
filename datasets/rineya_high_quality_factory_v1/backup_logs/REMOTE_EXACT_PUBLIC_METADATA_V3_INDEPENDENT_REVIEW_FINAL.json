@@ -1,0 +1,120 @@
+{
+  "schema": "bounded-independent-exact-metadata-remote-v3-review-v1",
+  "status": "INDEPENDENT_STATIC_AND_FROZEN_DIRECT_FUNCTION_REPLAY_PASS_NO_REMAINING_REVIEW_BLOCKER",
+  "author_execution": "/root/backup_manager/approved_release_join_review",
+  "same_model_disclosure": "Inherited same model; separate execution does not establish model diversity",
+  "grants_data_approval": false,
+  "actual_remote_persistence_claimed": false,
+  "target_mains_executed": false,
+  "git_commands": 0,
+  "network_calls": 0,
+  "actual_remote_payload_fetches": 0,
+  "original_metadata_full_contents_copied_to_new_paths": false,
+  "synthetic_full_proof_fixture_published": false,
+  "v2_sources_freezes_tests_failures_and_review_evidence_preserved": true,
+  "exact_review_bindings": {
+    "recovery_source": {
+      "path": "backup_logs/recover_remote_checkpoint_exact_public_metadata_v3.py",
+      "sha256": "a9544fd6e18daffea15be3bc65d45a8ab83239aa7632ed65618d0e7eadcd3135"
+    },
+    "gzip_source": {
+      "path": "backup_logs/verify_archival_remote_lossless_exact_public_metadata_v3.py",
+      "sha256": "29e27b8d87facdc5afbc8df57c4259515977e7b65895b4134966ad153e99f3d4"
+    },
+    "recovery_source_freeze": {
+      "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_RECOVERY_SOURCE_FREEZE.json",
+      "sha256": "325309feb9d0af45bdab6e6702e0c543a443fbb9044fa8c5d37de76a91fea6af"
+    },
+    "gzip_source_freeze": {
+      "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_GZIP_SOURCE_FREEZE.json",
+      "sha256": "7918c9b153ac221dae7197be74c60e2480c8e19b84c92fc66cda312dc368dc28"
+    },
+    "configuration_sha256": "168c5338000efb25e47969a28318da35dea29f8b054ac0146b98d8a8bc544680",
+    "metadata_scanner_source_sha256": "a79963d367f47c54074714d24bc2a5f372f09bf725a4b2046006cbdb586e4b1d",
+    "metadata_exception_config_sha256": "2e18c2c156aaefcee75ad6ad92fe51c66abf864150924d5ac1cd26dbeed5aa05",
+    "stage_source_sha256": "f0561eb5f0e2ebe16bc46f51ed1fcbb1ad74236e90fba4d9b33da166c6767715",
+    "spec_sha256": "6c21c64d1cff3ce38d548ed024f6bb9da9f9c8869463d7c4cbd5038240cd97f9",
+    "expected_commit": "653ba70f1f7035a5aed137102c14a1ff29d1cf99",
+    "expected_sole_parent": "4d0b5eff1af3184fedf7fa25ada729a6cc909268"
+  },
+  "own_frozen_independent_replay": {
+    "source": {
+      "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_INDEPENDENT_replay.py",
+      "size": 17848,
+      "sha256": "9a6c8d0e68cc8e586587f3c0e4deca8bce085f26b4771c4a08967014e8bff20e"
+    },
+    "preexecution_source_freeze": {
+      "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_INDEPENDENT_replay_freeze.json",
+      "sha256": "733776fddd17d89cc81af3488f7486d926330805ef1635a1ec82e652f682af91",
+      "frozen_inputs": 43,
+      "frozen_before_first_target_import_or_execution": true
+    },
+    "actual_execution": {
+      "path": "backup_logs/REMOTE_EXACT_PUBLIC_METADATA_V3_INDEPENDENT_replay_execution.json",
+      "sha256": "c01a88549c56a1f46d40a502d315ae9bfb2c4b077bce68521192ca87c15204cc",
+      "status": "BOUNDED_DIRECT_FUNCTION_REPLAY_PASS",
+      "passed_cases": 85,
+      "accepted_corruptions": []
+    },
+    "all_frozen_inputs_rehashed_at_execution_finish": true,
+    "four_metadata_files_read_as_opaque_original_bytes_only": true,
+    "synthetic_remote_fixtures_stayed_in_memory": true
+  },
+  "previous_v2_gap_closure": [
+    {
+      "gap": "missing_expected_git_id_truth_flag",
+      "v3_static_change": "exact_secret_stream now requires an explicit string matching lowercase GitSHA40 and an exact local_git/actual_remote context before scanning or recording exceptions.",
+      "actual_replay_result": "None, boolean, integer, list, dict, empty, malformed and wrong40 IDs all rejected. Positive actual opaque bytes matched all4 fixed known Git IDs."
+    },
+    {
+      "gap": "stream_report_provenance_and_blob_cross_binding",
+      "v3_static_change": "validate_metadata_report requires explicit expected context for streams and exact fixed known metadata Git IDs; source reports forbid stream-context substitution. Gzip validators cross-join metadata reports to exact actual remote path/blob coverage.",
+      "actual_replay_result": "Missing, invalid and swapped report context, missing explicit expected context, wrong valid-looking report GitSHA1, local report substituted for remote, and remote blob ID differing from valid reports all rejected."
+    },
+    {
+      "gap": "empty_freeze_dependency_acceptance",
+      "v3_static_change": "validate_frozen_inputs requires typed nonempty unique records, all14 known mandatory dependency paths with fixed hashes and all5 fresh source/test/config paths, plus actual file size/hash matching. Both recovery and gzip freeze validators invoke it.",
+      "actual_replay_result": "Authentic complete recovery/gzip freezes passed. Empty lists, omission of each of19 mandatory paths, duplicate records, boolean size, incorrect/non-string checksum and extra row key rejected. Former synthetic empty recovery/gzip freeze cases rejected."
+    }
+  ],
+  "additional_actual_replay_coverage": [
+    "Four original opaque metadata source scans and both complete stream contexts; exact two-path shared blob group; two-worker reporting; ordinary safe bytes; ordinary secret rejection.",
+    "Metadata changed full hash, truncation, overlong bytes, wrong Git ID, repeated/mixed/alias paths and invalid provenance; typed report size/span/count/config/source/verification truth corruption.",
+    "Frozen actual3158 scope metadata and actual stage diagnostic schema; changed raw coverage and unqualified unrestricted exit0 rejected.",
+    "Synthetic in-memory full inventory binding graph, exact31 deduplicated gzip pairs/32 manifest references/31 unique manifests; incorrect manifest mode and cached remote provenance rejected.",
+    "Any missing or nonempty current_source_evolution/current_source_evolution_at_finish rejected by gzip proof bindings.",
+    "Synthetic ordinary gzip compressed and decoded byte comparison, truncation, wrong compressed Git ID and CRC corruption; actual raw/no-cache command construction and no local fallback on corrupt transport."
+  ],
+  "static_transport_and_scope_review": {
+    "review_method": "Direct v2-to-v3 source diffs, literal new source/freeze/test bindings, and independent frozen direct function calls",
+    "raw_api_accept": "application/vnd.github.raw+json",
+    "cache_policy": "Cache-Control:no-cache; no gh --cache; each full blob/gzip is fetched by actual execution",
+    "gzip_chunk_bytes": 65536,
+    "gzip_spool_memory_bytes": 8388608,
+    "root_full_inventory_workers": 2,
+    "frozen_inventory_paths": 3158,
+    "frozen_inventory_bytes": 1263090770,
+    "expected_unique_full_remote_blobs": 2474,
+    "unique_raw_paths": 31,
+    "unique_raw_bytes": 1724728576,
+    "local_representation_iterations": 32,
+    "local_representation_comparison_bytes": 1766951239,
+    "remote_unique_raw_gzip_pairs": 31,
+    "remote_planned_decode_bytes": 1724728576,
+    "per_raw_manifest_reference_records": 32,
+    "globally_unique_manifest_paths": 31,
+    "all_original_secret_regexes_and_flags_unchanged": true,
+    "full_main_custody_checks_preserved_in_source": "Sole local/remote parent; exact private ADMIN; fullindex/whole tree/outside-prefix parent entries; clean original/dedicated branches;6 original Git-byte baselines;65 read-only references; all2685 prior paths and222 immutable capped/raw release files; exact6 whitespace warnings at unrestricted exit2 with482 restricted paths PASS",
+    "v3_diff_does_not_change_transport_or_gzip_byte_consumer": true,
+    "no_current_source_evolution_permitted": true,
+    "gzip_dependency_bound_to_exact_new_recovery_source": true
+  },
+  "disposition": "No remaining concrete blocker was found in the reviewed v3 source changes or85 bounded direct replay cases. Root may proceed within its existing authorization to actual full remote verification of653ba70f/6c21, then obtain fresh gzip proof and exact custody join. This review cannot replace actual remote payload proofs, complete ledgers or final hashes.",
+  "boundaries": {
+    "no_data_quality_or_release_approval_granted": true,
+    "no_private_RSM_source_semantics_or_findings_reviewed": true,
+    "new_v3_sources_tests_freezes_replay_and_review_receipts_remain_local_postinventory": true,
+    "26_historical_cut_observations_and_29_later_completion_files_remain_outside_exact_spec": true,
+    "all_v2_statuses_and_receipts_remain_historical_unchanged": true
+  }
+}

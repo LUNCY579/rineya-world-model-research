@@ -1,0 +1,79 @@
+{
+  "actor": "/root/adversarial_auditor",
+  "stage": "ACTUAL_BENIGN_STARTUP_METADATA_DIAGNOSIS",
+  "author_source_preexec_sha256": "96fa31c05611069bf769911b04713c394ee73a88d8472876b1e50c6cabb1a09f",
+  "actual_python_flags": [
+    "-I",
+    "-B",
+    "-S"
+  ],
+  "profile_source_sha256": "c17c16d30752fcdb2ff3c77d7c87833f8b83d9fffb738de84d8d582551aef23b",
+  "actual_profile_tool_results": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "85a749",
+        "wall_time_seconds": 0.000007458,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "52294c",
+        "wall_time_seconds": 0.000007417,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    }
+  ],
+  "actual_profile_counts": [
+    {
+      "shape": "old_comparator",
+      "modules": 81,
+      "resolved_python": "/opt/anaconda3/bin/python3.12",
+      "flags": "sys.flags(debug=0, inspect=0, interactive=0, optimize=0, dont_write_bytecode=1, no_user_site=1, no_site=1, ignore_environment=1, verbose=0, bytes_warning=0, quiet=0, hash_randomization=1, isolated=1, dev_mode=False, utf8_mode=1, warn_default_encoding=0, safe_path=True, int_max_str_digits=4300)"
+    },
+    {
+      "shape": "corrected_collector",
+      "modules": 87,
+      "resolved_python": "/opt/anaconda3/bin/python3.12",
+      "flags": "sys.flags(debug=0, inspect=0, interactive=0, optimize=0, dont_write_bytecode=1, no_user_site=1, no_site=1, ignore_environment=1, verbose=0, bytes_warning=0, quiet=0, hash_randomization=1, isolated=1, dev_mode=False, utf8_mode=1, warn_default_encoding=0, safe_path=True, int_max_str_digits=4300)"
+    }
+  ],
+  "all_shared_identity_changes": [
+    {
+      "module": "_frozen_importlib",
+      "old": {
+        "module": "_frozen_importlib",
+        "origin": "frozen",
+        "source_path": null,
+        "cache_path": null,
+        "namespace_paths": []
+      },
+      "corrected": {
+        "module": "_frozen_importlib",
+        "origin": "frozen",
+        "source_path": "/opt/anaconda3/lib/python3.12/importlib/_bootstrap.py",
+        "cache_path": null,
+        "namespace_paths": []
+      }
+    }
+  ],
+  "newly_observed_names": [
+    "importlib",
+    "importlib._abc",
+    "importlib._bootstrap",
+    "importlib._bootstrap_external",
+    "importlib.util",
+    "threading"
+  ],
+  "removed_names": [],
+  "meaning": "Actual old shape reports frozen importlib backing source absent; explicit benign importlib.util preload attaches reported concrete backing source metadata. Exact names/origin/source/cache checks remain, with identical startup flags for future collector/stages.",
+  "prior_failure_custody_sha256": "964adce2193b3df8cc11ffa58872bc6e89bc3c30eb555f727bace0949133ff29",
+  "semantic_helper_imports_tests_target_comparison_quality_votes": 0,
+  "disclosure": "Root-guided runtime repair, independently observed benign metadata only. No production semantic defect or future guard success is inferred."
+}
