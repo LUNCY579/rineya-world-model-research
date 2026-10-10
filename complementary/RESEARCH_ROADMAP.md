@@ -58,7 +58,8 @@ results, with retention, may be described as native improvements.
 - RCX-E11: option composition (AB / BA / conditional).
 - RCX-E12: DAgger on top of the B3 distilled policy.
 
-These start only when B3 artifacts exist. E10 is BWM's B3.
+These start only after BWM's B3 is analysed: **no B3 reads before `runs/BW_B3_EVAL/B3_REPORT.json` exists**. E10 is
+BWM's B3.
 
 ## Dependency graph
 

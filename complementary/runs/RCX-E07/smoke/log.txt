@@ -1,0 +1,35 @@
+10:02:33 run_e07 start phase=data smoke=True threads=2 out=C:\Users\clclc\BusinessProject\WorldModel\rineya-complementary-worktree\complementary\runs\RCX-E07\smoke
+10:02:34 data: goal classes per size {"4": {"test": 0, "val": 1, "train": 3}, "5": {"test": 2, "val": 1, "train": 3}, "6": {"test": 0, "val": 2, "train": 8}}
+10:02:34 data: instances train 6 val 3 test 8; generation {'train': {'draws': 39, 'generate_none': 6, 'rejected_class': 5, 'excluded_signature': 14, 'duplicate': 8, 'kept': 6}, 'val': {'draws': 9, 'rejected_class': 4, 'excluded_invariant': 2, 'kept': 3}, 'test': {'draws': 25, 'rejected_class': 14, 'generate_none': 3, 'kept': 8}}
+10:02:51 data: rows {'train': {4: 121, 5: 1713, 6: 471}, 'val': {4: 30, 5: 49, 6: 44}, 'test': {5: 12, 8: 11, 10: 10, 12: 14}} test labelling {'test_states_sampled': 56, 'test_states_deduped': 52, 'test_rows_missing': 1, 'test_rows_excluded_invariant': 5} in 17.6s
+10:02:51 run_e07 end; guard wait 0.0s; timings {'data': 18.03}
+10:03:00 run_e07 start phase=train smoke=True threads=2 out=C:\Users\clclc\BusinessProject\WorldModel\rineya-complementary-worktree\complementary\runs\RCX-E07\smoke
+10:03:00 10:03:00 [guard] PAUSE: pause flag (84)
+10:04:00 10:04:00 [guard] RESUME after 60.0s (total paused 60.0s)
+10:04:01 train: encoded 2305 train / 123 val rows for gnn in 0.0s
+10:04:04 train gnn s20261276 ep0 steps 37 loss 1.9795 val_mae 1.1924
+10:04:04 train gnn s20261276 ep1 steps 74 loss 0.6095 val_mae 1.7373
+10:04:04 train: gnn s20261276 params 123969 best ep 0 val_mae 1.1924 in 0.9s
+10:04:04 train: encoded 2305 train / 123 val rows for mlp in 0.1s
+10:04:05 train mlp s20261276 ep0 steps 37 loss 3.9066 val_mae 1.6833
+10:04:05 10:04:05 [guard] PAUSE: pause flag (83)
+10:04:25 10:04:25 [guard] RESUME after 20.0s (total paused 80.0s)
+10:04:25 train mlp s20261276 ep1 steps 74 loss 1.0477 val_mae 2.0447
+10:04:25 train: mlp s20261276 params 158721 best ep 0 val_mae 1.6833 in 20.2s
+10:04:25 run_e07 end; guard wait 80.0s; timings {'data': 18.03, 'train': 24.16}
+10:04:44 run_e07 start phase=e07 smoke=True threads=2 out=C:\Users\clclc\BusinessProject\WorldModel\rineya-complementary-worktree\complementary\runs\RCX-E07\smoke
+10:04:44 10:04:44 [guard] PAUSE: pause flag (82)
+10:05:24 10:05:24 [guard] RESUME after 40.0s (total paused 40.0s)
+10:05:24 e07: 47 test states, 256 states to score
+10:05:26 e07: done in 2.1s
+10:05:26 run_e07 end; guard wait 40.0s; timings {'data': 18.03, 'train': 24.16, 'e07': 2.09}
+10:05:34 run_e07 start phase=e08 smoke=True threads=2 out=C:\Users\clclc\BusinessProject\WorldModel\rineya-complementary-worktree\complementary\runs\RCX-E07\smoke
+10:05:34 e08: 4 instances {'draws': 7, 'excluded_invariant': 3, 'kept': 4}
+10:05:39 e08: done in 4.8s
+10:05:39 run_e07 end; guard wait 0.0s; timings {'data': 18.03, 'train': 24.16, 'e07': 2.09, 'e08': 4.81}
+10:05:46 run_e07 start phase=report smoke=True threads=2 out=C:\Users\clclc\BusinessProject\WorldModel\rineya-complementary-worktree\complementary\runs\RCX-E07\smoke
+10:05:46 10:05:46 [guard] PAUSE: pause flag (78)
+10:07:06 10:07:06 [guard] RESUME after 80.0s (total paused 80.0s)
+10:07:08 report: wrote REPORT.md and metrics.json
+10:07:08 estimate (full design): expected ~0.81 h, upper ~1.82 h CPU
+10:07:08 run_e07 end; guard wait 80.0s; timings {'data': 18.03, 'train': 24.16, 'e07': 2.09, 'e08': 4.81, 'report': 1.62}

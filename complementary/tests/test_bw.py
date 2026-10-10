@@ -131,6 +131,11 @@ class TestExclusions(unittest.TestCase):
         self.assertTrue(all(D.instance_key(i["objs"], i["init"], i["goal"]) not in keys for i in inst2))
         with self.assertRaises(ValueError):
             D.fresh_instances(20261010, [5])
+        want = {"chains:5:1,4", "chains:5:5"}  # class filter + goal-level dedupe
+        acc, st = D.fresh_instances(SEED + 9, [5, 5, 5], accept=want.__contains__, unique="goal", strict=False,
+                                    max_draws_per_item=300, prefix="test")
+        self.assertEqual({it["goal_key"] for it in acc}, want)
+        self.assertEqual((len(acc), st["exhausted"]), (2, 1))
 
 
 class TestSpace(unittest.TestCase):
@@ -209,6 +214,19 @@ class TestSpace(unittest.TestCase):
                 i, s = clean_state(rng, L)
                 self.assertEqual(SP.astar_hstar(objs, s, goal)[0], L.h_id(i))
                 self.assertLessEqual(H.misplaced_lb(s, goal), L.h(s))
+
+    def test_astar_optimal_matches_space_labels(self):
+        rng = random.Random(SEED + 9)
+        for k in range(16):
+            n = 4 + k % 4
+            objs, goal = random_goal(rng, n)
+            L = SP.GoalLabels(objs, goal)
+            for _ in range(4):
+                i, s = clean_state(rng, L)
+                h, acts, _ = SP.astar_optimal(objs, s, goal)
+                self.assertEqual(h, L.h_id(i))
+                self.assertEqual(acts, L.opt_actions_id(i))
+        self.assertEqual(SP.astar_optimal(objs, s, goal, max_expansions=0)[0] in (None, 0.0), True)
 
 
 class TestEncodings(unittest.TestCase):

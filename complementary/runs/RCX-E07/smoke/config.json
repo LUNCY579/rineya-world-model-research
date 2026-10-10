@@ -1,0 +1,59 @@
+{
+ "cfg": {
+  "train_sizes": [
+   4,
+   5,
+   6
+  ],
+  "train_per_size": 2,
+  "train_all_states_max_n": 5,
+  "train_states_large": 300,
+  "goal_frac": 0.5,
+  "val_sizes": [
+   4,
+   5,
+   6
+  ],
+  "val_per_size": 1,
+  "val_states": 50,
+  "id_sizes": [
+   5
+  ],
+  "ood_sizes": [
+   8,
+   10,
+   12
+  ],
+  "test_per_size": 2,
+  "k_states": 6,
+  "discovery_draws": 600,
+  "min_class_count": 5,
+  "val_class_frac": 0.2,
+  "test_class_frac": 0.25,
+  "space_max_n": 8,
+  "astar_budget": 60000,
+  "seeds": [
+   20261276
+  ],
+  "epochs": 2,
+  "batch_size": 64,
+  "lr": 0.002,
+  "time_cap_s": 25.0,
+  "e08_sizes": [
+   8,
+   10
+  ],
+  "e08_per_size": 2,
+  "budgets": [
+   100,
+   300
+  ],
+  "h0_budgets": [
+   100
+  ],
+  "opt_budget": 20000,
+  "tie_tol": 1e-05,
+  "bootstrap_resamples": 200
+ },
+ "smoke": true
+}

@@ -1,0 +1,48 @@
+{
+ "arch": "gnn",
+ "seed": 20261276,
+ "config": {
+  "kind": "gnn",
+  "node_in": 7,
+  "n_rel": 6,
+  "hidden": 48,
+  "rounds": 4,
+  "agg": "sum",
+  "readout": "node_sum",
+  "head_hidden": 64,
+  "share_rounds": false,
+  "n_params": 123969
+ },
+ "n_params": 123969,
+ "epochs_run": 2,
+ "steps": 74,
+ "best_epoch": 0,
+ "best_val_mae": 1.192431092262268,
+ "cap_hit": false,
+ "wall_s": 0.8950134000001526,
+ "guard_wait_s": 0.0,
+ "sec_per_step": 0.01179647567567593,
+ "history": [
+  {
+   "epoch": 0,
+   "steps": 37,
+   "train_loss": 1.9795010923533827,
+   "val_mae": 1.192431092262268,
+   "val_rmse": 1.7554353475570679,
+   "train_s": 0.447,
+   "sec_per_step": 0.012091002702704459
+  },
+  {
+   "epoch": 1,
+   "steps": 74,
+   "train_loss": 0.6094599704484682,
+   "val_mae": 1.7373279333114624,
+   "val_rmse": 2.3069584369659424,
+   "train_s": 0.426,
+   "sec_per_step": 0.011501948648647403
+  }
+ ],
+ "encode_s": 0.021173500000259082,
+ "train_rows": 2305,
+ "val_rows": 123
+}

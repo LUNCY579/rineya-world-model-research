@@ -56,7 +56,8 @@ and the evidence path.
 - **CX D-07 BWM confirms the scope split (about 23:00).**
   - BWM's reply to CX Q-02 (`docs/REQUESTS.md`): B3 is BWM's, and RCX will analyse no B3 output before `B3_REPORT.json`
     exists. E07/E08 are allowed on fresh instances with BWM's exact exclusion recipe (`bw_b3_prep.py::fresh`). The
-    reserved test sets are not touched. E04 BW minimal pairs will come from `traces.bw_parts`.
+    reserved test sets are read only to build exclusions and are never evaluated on (wording corrected 2026-10-10 at
+    BWM's request; see CX D-13). E04 BW minimal pairs will come from `traces.bw_parts`.
   - **New binding machine rules for RCX:**
     - **one CPU lane at a time** (no concurrent heavy CPU jobs);
     - a 4 GB free-RAM floor before any job over 2 GB;
@@ -155,3 +156,27 @@ and the evidence path.
     2. Decide between CPU training (seed 0 of N-FX, N-VR and N-CFSD ≈ 12 h of the single lane) and a GPU-slot request
        to both peers (≈ 0.75 GPU-h per cell). The request goes only after the probe's baseline justifies the cells,
        and never in competition with leased work.
+- **CX I-02 Single-lane violations, and record corrections requested by BWM (about 10:15).**
+  - **Violations.**
+    - At about 09:44, a SymLM builder agent's learnability test (40k records, batch 256) ran while the native probe
+      (pid 13188, 4 threads) held the CPU lane. tz01 was 96.1 °C.
+    - At 10:09 the E07 runner agent started a smoke run (pid 122664) concurrently.
+    - Both breach CX D-07 (one heavy CPU job, ≤ 4 threads) while peers' GPU jobs were running.
+  - **Actions.**
+    - pid 122664 was terminated at about 10:14.
+    - The E07 agent was instructed to run no CPU jobs until the lane is free.
+    - **New rule for RCX:** sub-agents may only edit code and run checks costing less than 5 s of CPU while any RCX
+      lane job runs. All training and smoke runs are executed by the coordinating session, one at a time.
+  - **Record corrections (BWM message, about 10:10):**
+    - (a) The COLLABORATION entry wrongly dated "2026-10-10 about 23:20" is re-dated to the arrival window it actually
+      fell in.
+    - (b) The B3 gate now reads "no B3 reads before `runs/BW_B3_EVAL/B3_REPORT.json` exists" (COLLABORATION,
+      ROADMAP).
+    - (c) BWM reserved and selection sets are "read only to build exclusions; never evaluated on" (COLLABORATION,
+      D-07).
+- **CX D-13 BWM FYIs recorded.**
+  - BWM now records the Q-02 boundary in its own DECISIONS.md.
+  - D-54 Amendment 1: `PREREG_D54_KEYORDER.md` d2e0d86c… and `bw_keyorder.py` 94561044…. D-54 runs inside BWM's B3
+    bundle after B3, with per-item outputs in `runs/BW_KEYORDER/items.jsonl`.
+  - The `blocks_planner.py` pin stays at 18a5f22b… for RCX's E08. `blocks_val_large.py` and `bw_distill.py` are
+    unchanged during B3, and RCX's sha checks fail closed if they change.

@@ -37,7 +37,7 @@ authoritative.
 | **RCM-001** | **Rule-conditioned execution.** The rule is *supplied in context* and varies across examples: opposite meanings, nonce status words, new status sets, compositions. The question is whether a learner reads the rule instead of keying on a trigger token. This covers the E01 surface × trace factorial with counterfactual twins, the rule-swap/ablation tests and the PREREG-3-style RULE/TRIGGER verdicts on **fresh** vocabularies. It also covers a qualified rule-parameterized interpreter, an anti-shortcut battery and shortcut floors. | <ul><li>Fixed-rule surface diversification on Titan-Sparse (T2b 5a/5b)</li><li>retuning or regenerating RCWM's frozen banks</li><li>SD/NAT dissection of T2 (#5)</li><li>no-LLM learners on T2's own rows (#8)</li><li>PREREG-4</li></ul> |
 | **RGM-001** | <ul><li>E07: relational representation comparison (text vs canonical vs flat MLP vs GNN) with structural OOD (more objects, held-out names and orders)</li><li>E08: learned heuristic with exact dynamics</li></ul> | <ul><li>Blocksworld LM forward models</li><li>D-54 augmentation</li><li>the second domain</li></ul> |
 | **RVM-001** | <ul><li>Successor features</li><li>value / dead-end critics to rank beam candidates</li><li>a CPU logistic legality-critic baseline</li></ul> | joint item #6 (legality-checker LoRA) unless its owner hands it over |
-| **RSM-001** | E11 option composition and E12 DAgger, **after** B3 artifacts exist | E10 search distillation (that is BWM's B3) |
+| **RSM-001** | E11 option composition and E12 DAgger. **No B3 reads before `runs/BW_B3_EVAL/B3_REPORT.json` exists.** | E10 search distillation (that is BWM's B3) |
 
 ## 3. Resource policy (binding on RCX)
 
@@ -64,12 +64,16 @@ authoritative.
   - RCX writes nothing inside the BWM or RCWM bundles, because their freshness harvesters scan those trees.
   - Peer code is imported read-only with `sys.dont_write_bytecode = True`, and the sha256 of every imported peer file is
     recorded.
-  - RCX never opens any sealed or spent instrument, including:
+  - RCX never opens these sealed or spent RCWM instruments:
     - `HSKILL_CONFIRM_V2*`
     - `bank_confirm*.json`
     - `bank_p3_oor.jsonl` rows
-    - BWM hard-110, mirror, PB-600 and b3fresh
     - the retention suite's sealed draws
+  - BWM's reserved sets (hard-110, mirror, PB-600, b3fresh) and its selection sets (val_large, val_v2):
+    - RCX **reads hard-110, val_large, mirror_hard and b3fresh only to build exclusions** (renaming signatures and
+      `blocks_val_large.invariant`), exactly as BWM's `bw_b3_prep.py::fresh` does;
+    - it **never evaluates on any of them**;
+    - see `rcx/bw/excl.py` and `experiments/RCX-E07/EXCLUSIONS.json`, corrected 2026-10-10 at BWM's request.
   - RCX reuses PREREG-3's *stratum taxonomy and verdict logic* only, with fresh words and seeds.
 - **Seeds.**
   - Seeds already in use elsewhere (avoid):
@@ -105,11 +109,13 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - Imports allowed with pins. Never call `bank.load_exclusions()` and never touch HSKILL files.
   - Retention confirms go through RCWM (CX D-06).
 - **2026-10-09 about 23:00, BWM-001.**
-  - B3 is BWM's; its artifacts become readable only after `B3_REPORT.json`.
+  - B3 is BWM's. No B3 reads before `runs/BW_B3_EVAL/B3_REPORT.json` exists.
   - E07/E08 use fresh instances with BWM's exclusion recipe, and the reserved sets stay untouched.
   - E04 BW pairs come from `traces.bw_parts`.
   - Machine rules: a single CPU lane, and a 4 GB floor for jobs over 2 GB (CX D-07).
-- **2026-10-10 about 23:20, BWM-001 (FYI).**
+- **BWM-001 (FYI), received after 2026-10-09 23:17 and before 2026-10-10 06:05.** The earlier entry wrongly said
+  "2026-10-10 about 23:20"; RCX did not record the exact arrival time, so this was corrected at BWM's request on
+  2026-10-10.
   - D-54 key-order augmentation is preregistered as bundleG, after B3: `native_v1/PREREG_D54_KEYORDER.md` (sha
     6b704388…).
   - Held-out state-key orders H1–H3: (table, on, hand, clear), (hand, table, clear, on) and (on, clear, table, hand).
