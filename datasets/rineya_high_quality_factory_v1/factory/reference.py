@@ -136,4 +136,5 @@ def solve(t):
     if t["kind"]=="graph":return {**graph_run(t),"shortest_plan":shortest_graph(t)}
     if t["kind"]=="blocks":return blocks(t)
     if t["kind"]=="critic":return critic(t)
-    raise ValueError(t["kind"])
+    from generators.other_tracks.reference import solve as extended_solve
+    return extended_solve(t)

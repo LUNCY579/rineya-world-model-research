@@ -1,0 +1,10 @@
+{
+  "ticket": "RCM-FIX-002",
+  "observed_problem": "Initial field order was confounded with answer-only vs explicit-trace target",
+  "evidence": "pilot-v1 causal forward always answer-only, reverse always trace",
+  "root_cause": "Two axes rendered together",
+  "change": "Cross both formats and both input orders per twin; counts stay parent30, rendering240",
+  "regression": "tests/test_causal_improvements.py::test_field_order_crossed_with_target_format",
+  "regenerated_batch": "pilot-v2",
+  "resolution": "structural generation fixed; no model efficacy claim"
+}

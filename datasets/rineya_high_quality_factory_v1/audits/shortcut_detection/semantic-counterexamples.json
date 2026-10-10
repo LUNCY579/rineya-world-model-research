@@ -1,0 +1,313 @@
+[
+  {
+    "attack": "boolean_integer_coercion",
+    "task": {
+      "kind": "causal",
+      "state": {
+        "x": 2,
+        "y": 3
+      },
+      "rule": {
+        "op": "eq",
+        "args": [
+          {
+            "var": "event.status"
+          },
+          {
+            "const": true
+          }
+        ]
+      },
+      "precondition": {
+        "const": true
+      },
+      "events": [
+        {
+          "status": 1,
+          "amount": 1,
+          "op": "add",
+          "source": "x",
+          "destination": "y"
+        }
+      ]
+    },
+    "correct": {
+      "after": {
+        "x": 2,
+        "y": 3
+      },
+      "steps": [
+        {
+          "cmp": {
+            "rule": false,
+            "precondition": true
+          },
+          "calc": {
+            "operation": "identity"
+          },
+          "after": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      ]
+    }
+  },
+  {
+    "attack": "malformed_branch_hidden_by_short_circuit",
+    "task": {
+      "kind": "causal",
+      "state": {
+        "x": 2,
+        "y": 3
+      },
+      "rule": {
+        "op": "any",
+        "args": [
+          {
+            "const": true
+          },
+          {
+            "op": "unknown",
+            "args": []
+          }
+        ]
+      },
+      "precondition": {
+        "const": true
+      },
+      "events": [
+        {
+          "status": 1,
+          "amount": 1,
+          "op": "add",
+          "source": "x",
+          "destination": "y"
+        }
+      ]
+    },
+    "correct": "malformed/reject"
+  },
+  {
+    "attack": "minimum_fuel_cost_wrong_objective_and_early_goal",
+    "task": {
+      "kind": "graph",
+      "nodes": [
+        "s",
+        "a",
+        "b",
+        "g"
+      ],
+      "edges": [
+        [
+          "s",
+          "g",
+          5
+        ],
+        [
+          "s",
+          "a",
+          1
+        ],
+        [
+          "a",
+          "g",
+          1
+        ],
+        [
+          "s",
+          "b",
+          1
+        ],
+        [
+          "b",
+          "g",
+          1
+        ]
+      ],
+      "start": "s",
+      "goal": "g",
+      "fuel": 5,
+      "plan": [
+        "g",
+        "a"
+      ]
+    },
+    "correct": {
+      "steps": [
+        {
+          "legal": true,
+          "after": {
+            "node": "g",
+            "fuel": 0
+          }
+        },
+        {
+          "legal": false,
+          "after": {
+            "node": "g",
+            "fuel": 0
+          }
+        }
+      ],
+      "after": {
+        "node": "g",
+        "fuel": 0
+      },
+      "valid": false,
+      "reaches_goal": false,
+      "shortest_plan": [
+        "g"
+      ]
+    }
+  },
+  {
+    "attack": "current_support_noop_and_first_failure",
+    "task": {
+      "kind": "blocks",
+      "on": {
+        "a": "TABLE",
+        "b": "TABLE"
+      },
+      "goal_on": {
+        "a": "TABLE"
+      },
+      "plan": [
+        {
+          "block": "a",
+          "to": "TABLE"
+        },
+        {
+          "block": "a",
+          "to": "b"
+        }
+      ]
+    },
+    "correct": {
+      "steps": [
+        {
+          "legal": false,
+          "after": {
+            "a": "TABLE",
+            "b": "TABLE"
+          }
+        }
+      ],
+      "after": {
+        "a": "TABLE",
+        "b": "TABLE"
+      },
+      "valid": false,
+      "reaches_goal": false,
+      "shortest_plan": []
+    }
+  },
+  {
+    "attack": "incorrect_claim_does_not_make_transition_invalid_and_claim_priority",
+    "task": {
+      "kind": "critic",
+      "world": {
+        "kind": "graph",
+        "nodes": [
+          "s",
+          "g"
+        ],
+        "edges": [
+          [
+            "s",
+            "g",
+            1
+          ]
+        ],
+        "start": "s",
+        "goal": "g",
+        "fuel": 1,
+        "plan": []
+      },
+      "candidates": [
+        {
+          "candidate_id": "A",
+          "plan": [
+            "g"
+          ],
+          "claimed_after": {
+            "node": "g",
+            "fuel": 1
+          }
+        },
+        {
+          "candidate_id": "B",
+          "plan": [],
+          "claimed_after": {
+            "node": "s",
+            "fuel": 1
+          }
+        },
+        {
+          "candidate_id": "C",
+          "plan": [
+            "s"
+          ],
+          "claimed_after": {
+            "node": "s",
+            "fuel": 1
+          }
+        }
+      ]
+    },
+    "correct": {
+      "evaluations": [
+        {
+          "candidate_id": "A",
+          "valid": true,
+          "claim_correct": false,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 1,
+          "usefulness": 2,
+          "first_error": "claim",
+          "repair_plan": [
+            "g"
+          ]
+        },
+        {
+          "candidate_id": "B",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "g"
+          ]
+        },
+        {
+          "candidate_id": "C",
+          "valid": false,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": null,
+          "usefulness": -1,
+          "first_error": 0,
+          "repair_plan": [
+            "g"
+          ]
+        }
+      ],
+      "ranking": [
+        [
+          "B"
+        ],
+        [
+          "A"
+        ],
+        [
+          "C"
+        ]
+      ]
+    }
+  }
+]

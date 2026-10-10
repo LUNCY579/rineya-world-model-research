@@ -2,7 +2,7 @@
 import copy
 import json
 import random
-from factory.common import ROOT, record, write_jsonl, write_json
+from factory.common import ROOT, record, record_hash, load_jsonl, write_jsonl, write_json
 from factory.reference import solve
 
 
@@ -20,7 +20,7 @@ def reorder(obj):
     return obj
 
 
-def generate(count=30,batch="pilot-v1",offset=0):
+def generate(count=30,batch="pilot-v2",offset=0):
     rng=random.Random(20261009+offset)
     rows,parents=[],[]
     statuses=["posted","void","pending","cancelled","draft","approved","unposted","voided","zunik","vosted"]
@@ -52,16 +52,26 @@ def generate(count=30,batch="pilot-v1",offset=0):
         parents.append(dict(semantic_parent_id=f"RCM-001-{batch}-p{i:04d}",split=split,mechanism=f"predicate-{mechanism}",tasks=tasks))
         for v,t in enumerate(tasks):
             gold=solve(t)
-            for rendering in range(2):
-                fmt="answer_only" if rendering==0 else "explicit_trace"
-                request=("Return JSON {after: final_state} only." if rendering==0 else "Return JSON {after: final_state, steps: [{cmp: {rule: boolean, precondition: boolean}, calc: {operation: executed_op_or_identity}, after: state_after_event}]}.")
-                body=json.dumps(t if rendering==0 else reorder(t),ensure_ascii=False,separators=(",",":"))
+            # Cross both output formats with both input key orders. Format and
+            # field order cannot be mistaken for one another in future A/Bs.
+            for rendering in range(4):
+                answer_only=rendering<2
+                reverse=rendering%2==1
+                fmt="answer_only" if answer_only else "explicit_trace"
+                request=("Return JSON {after: final_state} only." if answer_only else "Return JSON {after: final_state, steps: [{cmp: {rule: boolean, precondition: boolean}, calc: {operation: executed_op_or_identity}, after: state_after_event}]}.")
+                body=json.dumps(t if not reverse else reorder(t),ensure_ascii=False,separators=(",",":"))
                 prompt=CONTRACT+request+"\nTask JSON:\n"+body
-                target={"after":gold["after"]} if rendering==0 else gold
-                difficulty=7 if split=="dev_challenge" else 4 if length>1 else 3 if mechanism>=3 or pre!=const(True) else 1
-                rows.append(record("RCM-001",batch,i,f"twin{v}",t,prompt,target,["rule_conditioning","counterfactual","conditional_execution",f"predicate_{mechanism}"],difficulty,fmt,"forward" if rendering==0 else "reverse"))
-    write_jsonl(ROOT/f"data/RCM-001/semantic_parents/{batch}.jsonl",parents)
-    write_jsonl(ROOT/f"data/RCM-001/candidate_renderings/{batch}.jsonl",rows)
+                target={"after":gold["after"]} if answer_only else gold
+                difficulty=4 if length>1 else 3 if mechanism>=3 or pre!=const(True) else 1
+                r=record("RCM-001",batch,i,f"twin{v}-{fmt}",t,prompt,target,["rule_conditioning","counterfactual","conditional_execution",f"predicate_{mechanism}"],difficulty,fmt,"reverse" if reverse else "forward")
+                r.update(generator_version="1.1.0",structural_difficulty=difficulty,
+                         challenge_axes=["heldout_first_status","larger_magnitudes"] if split=="dev_challenge" else [],
+                         source_family_key=f"RCM-001-seed20261009-p{i:04d}")
+                r["record_hash"]=record_hash(r);rows.append(r)
+    outputs=[(ROOT/f"data/RCM-001/semantic_parents/{batch}.jsonl",parents),(ROOT/f"data/RCM-001/candidate_renderings/{batch}.jsonl",rows)]
+    for p,rs in outputs:
+        if p.exists() and load_jsonl(p)!=rs:raise ValueError("Immutable candidate batch differs; use a new batch name")
+        write_jsonl(p,rs)
     return rows
 
 

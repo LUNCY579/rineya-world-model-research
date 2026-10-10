@@ -1,0 +1,204 @@
+{
+  "approval": "provisional_checkpoint",
+  "approved_by": "/root",
+  "branch": "research/rineya-high-quality-dataset-v1",
+  "checkpoint_id": "foundation",
+  "diff_numstat": "4\t0\tdatasets/rineya_high_quality_factory_v1/.gitignore\n487\t0\tdatasets/rineya_high_quality_factory_v1/CURRICULUM.md\n1946\t0\tdatasets/rineya_high_quality_factory_v1/DATASET_BLUEPRINT.json\n20\t0\tdatasets/rineya_high_quality_factory_v1/README.md\n116\t0\tdatasets/rineya_high_quality_factory_v1/RESEARCH_GAPS.md\n18\t0\tdatasets/rineya_high_quality_factory_v1/backup_logs/HELPER_VALIDATION.json\n29\t0\tdatasets/rineya_high_quality_factory_v1/backup_logs/PREFLIGHT.json\n23\t0\tdatasets/rineya_high_quality_factory_v1/backup_logs/README.md\n278\t0\tdatasets/rineya_high_quality_factory_v1/backup_logs/checkpoint_backup.py\n90\t0\tdatasets/rineya_high_quality_factory_v1/backup_logs/test_checkpoint_backup.py\n120\t0\tdatasets/rineya_high_quality_factory_v1/data/RCM-001/candidate_renderings/pilot-v1.jsonl\n30\t0\tdatasets/rineya_high_quality_factory_v1/data/RCM-001/semantic_parents/pilot-v1.jsonl\n0\t0\tdatasets/rineya_high_quality_factory_v1/factory/__init__.py\n68\t0\tdatasets/rineya_high_quality_factory_v1/factory/common.py\n122\t0\tdatasets/rineya_high_quality_factory_v1/factory/pipeline.py\n139\t0\tdatasets/rineya_high_quality_factory_v1/factory/reference.py\n68\t0\tdatasets/rineya_high_quality_factory_v1/generators/causal/generate.py\n1\t0\tdatasets/rineya_high_quality_factory_v1/requirements.txt\n38\t0\tdatasets/rineya_high_quality_factory_v1/research/ARCHITECT_EXECUTION.json\n15\t0\tdatasets/rineya_high_quality_factory_v1/research/ROLE_REGISTRY.json\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RBM-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RCM-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RDP-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/REM-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RGM-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RJP-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RMM-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/ROM-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RSM-001.md\n40\t0\tdatasets/rineya_high_quality_factory_v1/research/curricula/RVM-001.md\n34\t0\tdatasets/rineya_high_quality_factory_v1/research/evidence_inventory/SHA256SUMS.sources.txt\n71\t0\tdatasets/rineya_high_quality_factory_v1/research/evidence_inventory/reference_tree_hashes.json\n402\t0\tdatasets/rineya_high_quality_factory_v1/research/evidence_inventory/source_inventory.json\n155\t0\tdatasets/rineya_high_quality_factory_v1/research/research_gap_analysis/gaps.json\n100\t0\tdatasets/rineya_high_quality_factory_v1/schemas/canonical/v1.schema.json\n42\t0\tdatasets/rineya_high_quality_factory_v1/tests/test_pipeline.py",
+  "diff_stat": "datasets/rineya_high_quality_factory_v1/.gitignore |    4 +\n .../rineya_high_quality_factory_v1/CURRICULUM.md   |  487 +++++\n .../DATASET_BLUEPRINT.json                         | 1946 ++++++++++++++++++++\n datasets/rineya_high_quality_factory_v1/README.md  |   20 +\n .../RESEARCH_GAPS.md                               |  116 ++\n .../backup_logs/HELPER_VALIDATION.json             |   18 +\n .../backup_logs/PREFLIGHT.json                     |   29 +\n .../backup_logs/README.md                          |   23 +\n .../backup_logs/checkpoint_backup.py               |  278 +++\n .../backup_logs/test_checkpoint_backup.py          |   90 +\n .../RCM-001/candidate_renderings/pilot-v1.jsonl    |  120 ++\n .../data/RCM-001/semantic_parents/pilot-v1.jsonl   |   30 +\n .../factory/__init__.py                            |    0\n .../factory/common.py                              |   68 +\n .../factory/pipeline.py                            |  122 ++\n .../factory/reference.py                           |  139 ++\n .../generators/causal/generate.py                  |   68 +\n .../requirements.txt                               |    1 +\n .../research/ARCHITECT_EXECUTION.json              |   38 +\n .../research/ROLE_REGISTRY.json                    |   15 +\n .../research/curricula/RBM-001.md                  |   40 +\n .../research/curricula/RCM-001.md                  |   40 +\n .../research/curricula/RDP-001.md                  |   40 +\n .../research/curricula/REM-001.md                  |   40 +\n .../research/curricula/RGM-001.md                  |   40 +\n .../research/curricula/RJP-001.md                  |   40 +\n .../research/curricula/RMM-001.md                  |   40 +\n .../research/curricula/ROM-001.md                  |   40 +\n .../research/curricula/RSM-001.md                  |   40 +\n .../research/curricula/RVM-001.md                  |   40 +\n .../evidence_inventory/SHA256SUMS.sources.txt      |   34 +\n .../evidence_inventory/reference_tree_hashes.json  |   71 +\n .../evidence_inventory/source_inventory.json       |  402 ++++\n .../research/research_gap_analysis/gaps.json       |  155 ++\n .../schemas/canonical/v1.schema.json               |  100 +\n .../tests/test_pipeline.py                         |   42 +\n 36 files changed, 4816 insertions(+)",
+  "error": "git diff --cached failed: ",
+  "execution_role": "GitHub Integrity and Backup Manager",
+  "files": 36,
+  "helper_author_execution": "/root/backup_manager",
+  "inventory": [
+    {
+      "path": ".gitignore",
+      "sha256": "19d1ea3861f3c1970b873ddf0497c20464fdda4ae836f3ba24724465259807b9",
+      "size": 35
+    },
+    {
+      "path": "CURRICULUM.md",
+      "sha256": "ffbd21107d6bdc076899244d43045ad85a7330cadd40704fc1b7bc6400605d84",
+      "size": 36627
+    },
+    {
+      "path": "DATASET_BLUEPRINT.json",
+      "sha256": "4da68428773c8dafefc93ef95c0e018befebd4ab56bd1922ba49099645f59a7a",
+      "size": 85571
+    },
+    {
+      "path": "README.md",
+      "sha256": "bc44c6328d237c32cf4f78591adde262992bf14e88837315787f3be5b0a59893",
+      "size": 1832
+    },
+    {
+      "path": "RESEARCH_GAPS.md",
+      "sha256": "0e28d461f9de245fc7cdd290d347d55711881cab406a50cdfa8066566a899d77",
+      "size": 5739
+    },
+    {
+      "path": "backup_logs/HELPER_VALIDATION.json",
+      "sha256": "d5f8e760f81f6a24837e899d402078cecef4efbdb875cfdb15d1d0b98aad2df2",
+      "size": 835
+    },
+    {
+      "path": "backup_logs/PREFLIGHT.json",
+      "sha256": "decf7800c72dbfd05d6366bed16eb28ce46cbf201cb5ac81638346b12cf00f24",
+      "size": 1523
+    },
+    {
+      "path": "backup_logs/README.md",
+      "sha256": "c7e0de39c6289dae4914298e1fc6cb00d28a2b0d2a02f6929dfecfb92f7e0bec",
+      "size": 2241
+    },
+    {
+      "path": "backup_logs/checkpoint_backup.py",
+      "sha256": "07ef424f92d903c265c6cc06622733dcdeabf5bd03d3c13d98f793c2ddcc2d4b",
+      "size": 15246
+    },
+    {
+      "path": "backup_logs/test_checkpoint_backup.py",
+      "sha256": "877f85e71fc1f7a8fffddab3719d474df30cec9897662bb0da46bc377eb14407",
+      "size": 3919
+    },
+    {
+      "path": "data/RCM-001/candidate_renderings/pilot-v1.jsonl",
+      "sha256": "0bbf7b0932ee5f1c82c475fd33f626a1980ba4ba745b6254cbae549cc306a008",
+      "size": 312344
+    },
+    {
+      "path": "data/RCM-001/semantic_parents/pilot-v1.jsonl",
+      "sha256": "44e61f434f9b651026aff0238ff456ca598824569b41ae3b2bdff67ab2642cef",
+      "size": 28544
+    },
+    {
+      "path": "factory/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "factory/common.py",
+      "sha256": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+      "size": 2271
+    },
+    {
+      "path": "factory/pipeline.py",
+      "sha256": "ba45b03d7ba8ad191de39ccead29e69d0a92f805a6836b039c8579f451821000",
+      "size": 8866
+    },
+    {
+      "path": "factory/reference.py",
+      "sha256": "2f171a484afe157a32b2bb5706d8724ec8f9b6e159e58ebcadb69599a609ca7b",
+      "size": 5549
+    },
+    {
+      "path": "generators/causal/generate.py",
+      "sha256": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+      "size": 4626
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "71d14b98c88ffed90a046f7c84afde6f4fe04771b0158b01b047a9e26a50c9f3",
+      "size": 19
+    },
+    {
+      "path": "research/ARCHITECT_EXECUTION.json",
+      "sha256": "52e68d3b10236cc11491acdf4787e9866edbb391d3a0008667b472cf669010b5",
+      "size": 1767
+    },
+    {
+      "path": "research/ROLE_REGISTRY.json",
+      "sha256": "7385ead17dab382faacb6fa50e723a4f81a2f08f49217c18defa0131114484d4",
+      "size": 673
+    },
+    {
+      "path": "research/curricula/RBM-001.md",
+      "sha256": "88cdab6a3dbb26ea1715793812f4cf62607f4f8bed0964ebc9c20975cc0b764e",
+      "size": 2325
+    },
+    {
+      "path": "research/curricula/RCM-001.md",
+      "sha256": "ad51e9e0f333e223d47758342504f36985f7c9f5c3bc7b06c1efe4011fadd1c3",
+      "size": 2686
+    },
+    {
+      "path": "research/curricula/RDP-001.md",
+      "sha256": "c23f69330c5fab82cea157274e979470a8e63985fad6a10e58b6aad592713fa0",
+      "size": 2182
+    },
+    {
+      "path": "research/curricula/REM-001.md",
+      "sha256": "902b2ff7630b778eb9a747e2c10de6228e222f011e1c86048e459760a5b898bb",
+      "size": 2424
+    },
+    {
+      "path": "research/curricula/RGM-001.md",
+      "sha256": "5ab0c580200a6992043e2c1720309da0fb4350e77b0a824cf62687d4c5510eb9",
+      "size": 2408
+    },
+    {
+      "path": "research/curricula/RJP-001.md",
+      "sha256": "9e23df2b2be91b30a645a343fc9a010c127ff036f2c216c08fe7c1e29e59d219",
+      "size": 2287
+    },
+    {
+      "path": "research/curricula/RMM-001.md",
+      "sha256": "1ca64cb3d33cb8c75f03aaca10b9d9d9705f1ab7511eb63ef7ab0a464e0ecd61",
+      "size": 2385
+    },
+    {
+      "path": "research/curricula/ROM-001.md",
+      "sha256": "4da5c66e2988ef85f762225bbfbcfe5eb46feabc802187e759c0b15892d13467",
+      "size": 2324
+    },
+    {
+      "path": "research/curricula/RSM-001.md",
+      "sha256": "2ffc33c59eaa5eeb0dfd8b0d7cb8915746b54cfe11e25f037f62fd2c9362cf7e",
+      "size": 2318
+    },
+    {
+      "path": "research/curricula/RVM-001.md",
+      "sha256": "62bc489237dbd06950795aaf994e186f5bf12ed71494074a89e9449884592080",
+      "size": 2372
+    },
+    {
+      "path": "research/evidence_inventory/SHA256SUMS.sources.txt",
+      "sha256": "8db1a0589bb17024919cdc5bf166fb4fa0d00b6b02de9e7182b868b81ddfa3bf",
+      "size": 4621
+    },
+    {
+      "path": "research/evidence_inventory/reference_tree_hashes.json",
+      "sha256": "5df949e3af3849e62bd301349b3581a27b837373687384fca59316df28815be4",
+      "size": 7209
+    },
+    {
+      "path": "research/evidence_inventory/source_inventory.json",
+      "sha256": "1e55fe8e01a1eee99d69c5509a9003b1048b8eadd2a21febc9b56248a0c907e6",
+      "size": 17195
+    },
+    {
+      "path": "research/research_gap_analysis/gaps.json",
+      "sha256": "b057814f9e25dc1170629dbb1ad655521d9bc3cb93794871437569d3413c9f33",
+      "size": 5057
+    },
+    {
+      "path": "schemas/canonical/v1.schema.json",
+      "sha256": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+      "size": 1848
+    },
+    {
+      "path": "tests/test_pipeline.py",
+      "sha256": "4d7ab32a5e68a3c5b1ba4bcb74569e1ebc6ae1f1ca1228d969d1a9fee1f1e0b3",
+      "size": 1793
+    }
+  ],
+  "private_repository_evidence": {
+    "isPrivate": true,
+    "nameWithOwner": "LUNCY579/rineya-world-model-research",
+    "viewerPermission": "ADMIN"
+  },
+  "repository": "LUNCY579/rineya-world-model-research",
+  "runner_execution": "/root",
+  "started_at_utc": "2026-10-09T23:48:02.232568+00:00",
+  "status": "FAILED_LOCAL_ARTIFACTS_PRESERVED",
+  "total_bytes": 579661
+}

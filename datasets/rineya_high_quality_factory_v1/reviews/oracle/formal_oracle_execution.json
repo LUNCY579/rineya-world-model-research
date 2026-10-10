@@ -1,0 +1,65 @@
+{
+  "receipt_type": "oracle_authorship_and_execution_evidence",
+  "author_execution_id": "/root/formal_oracle",
+  "author_role": "independent Formal Oracle Engineer",
+  "runner_execution_id": "/root/formal_oracle",
+  "identity_source": "collaboration.list_agents returned /root/formal_oracle as running; no opaque execution UUID is exposed",
+  "recorded_at_utc": "2026-10-09 23:48:38 UTC",
+  "contract": "High-Quality_Dataset/schemas/SEMANTICS.md",
+  "api": "oracles.independent.solve(task) -> target; malformed inputs raise OracleError(ValueError)",
+  "implementation_dependencies": [
+    "Python standard library"
+  ],
+  "independent_inputs": [
+    "Public SEMANTICS.md semantic contract",
+    "Parent-approved contract clarifications"
+  ],
+  "excluded_inputs": [
+    "Generator implementation",
+    "Stored expected targets",
+    "Historical datasets",
+    "Sealed evaluations"
+  ],
+  "methods": [
+    "Typed AST interpretation",
+    "Immutable graph (node,fuel) BFS states",
+    "Immutable support-tuple BFS states",
+    "Independent brute-force graph sequence enumeration in tests",
+    "Independent physical-stack BFS in tests"
+  ],
+  "test_command": "python3 -m unittest discover -s High-Quality_Dataset/tests -p 'oracle*.py' -v",
+  "test_chunk_id": "c76322",
+  "test_exit_code": 0,
+  "test_count": 31,
+  "property_counts": {
+    "exhaustive_three_node_graph_worlds": 2304,
+    "complete_three_block_initial_goal_pairs": 169,
+    "enumerated_valid_three_block_states": 13,
+    "enumerated_valid_four_block_states": 73,
+    "four_block_partial_goal_cases": 19
+  },
+  "covered_properties": [
+    "AST arity/type/shape/dead-branch rejection",
+    "Causal identity and coordinate renaming",
+    "Simultaneous swap and transfer conservation",
+    "Stop at first illegal action",
+    "Lexicographic shortest-plan ties",
+    "Fuel-limited unreachability",
+    "Distinct fuel states at one graph node",
+    "Block cycle/occupancy/goal validation",
+    "Block conservation",
+    "Node/edge/candidate permutations",
+    "Critic label separation, ranking tie groups, null progress and malformed candidates",
+    "Input immutability and output snapshot isolation"
+  ],
+  "files_sha256": {
+    "High-Quality_Dataset/oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+    "High-Quality_Dataset/oracles/independent.py": "d8aa83f509d9f16317b36dbab256b45ded423dfc0408ff89faf25eb5b0760742",
+    "High-Quality_Dataset/schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "High-Quality_Dataset/tests/oracle_test.py": "60e57b96b652055c3bdd2f99f031b4fbc768fec3e32da0af7343f2505223dfa3"
+  },
+  "test_output": "High-Quality_Dataset/reviews/oracle/formal_oracle_test_output.txt",
+  "canonical_dataset_comparison": "Not performed by this author; the parent runs any canonical comparisons under its own execution identity.",
+  "approval_verdict": null,
+  "approval_note": "Authorship and test evidence only. This execution has not approved records or issued a reviewer verdict."
+}

@@ -1,0 +1,35 @@
+{
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "record_count": 360,
+  "candidate_file_hashes": {
+    "data/RCM-001/candidate_renderings/pilot-v2.jsonl": "edd6f4b5efff19ba4badf5a3b8a92d6f84941f9c311270f094c251fa6a488838",
+    "data/RGM-001/candidate_renderings/pilot-v2.jsonl": "f60a1421de412a05bb6078d645de2621ae69fb68d6df70c7716b526b277dfd02",
+    "data/RVM-001/candidate_renderings/pilot-v2.jsonl": "896f22f5ffff3adbf36d025282930fecd1fa5d304f453fcd56f7c242bb717c2e"
+  },
+  "semantics_sha256": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+  "script_sha256": "4cc9af18b886e4c4f65dcd70785f15900ae9b8ac390c5110a1592adc0049d427",
+  "oracle_source": "This script implements public semantics independently; no generator imports or expected-output imports.",
+  "all_record_target_matches": true,
+  "metamorphic_checks": {
+    "object_key_order_invariance": 360,
+    "annotation_invariance": 240,
+    "status_vocabulary_renaming": 240,
+    "node_renaming_equivariance": 36,
+    "fact_order_invariance": 36,
+    "block_renaming_equivariance": 24,
+    "candidate_order_invariance": 60,
+    "candidate_id_renaming_equivariance": 60
+  },
+  "findings": {
+    "family_split_violations": 0,
+    "cross_split_exact_task_groups": 0,
+    "cross_split_structural_groups": 6,
+    "development_records_with_train_structure": 24
+  },
+  "decision_counts": {
+    "ACCEPT": 348,
+    "REVISE": 12
+  },
+  "minimal_semantic_attack_probes": 5,
+  "dataset_counterexamples_and_twin_checks": 31
+}

@@ -1,0 +1,11 @@
+{
+  "ticket": "RCM-FIX-001",
+  "observed_problem": "Exposed magnitude/vocabulary shifts labeled level7 while predicate trees and renderers overlap train",
+  "evidence": "reviews/expert/pilot-v1.jsonl, 24 REVISE initial causal records",
+  "root_cause": "Challenge partition confused with structural complexity",
+  "change": "Generator1.1.0 uses structural difficulty1-4 plus challenge_axes; original pilot-v1 retained",
+  "regression": "tests/test_causal_improvements.py::test_difficulty_is_structural_with_explicit_shift_axes",
+  "regenerated_batch": "pilot-v2",
+  "oracle_result": "240 causal records; zero independent oracle/schema/lineage errors",
+  "resolution": "generator regression passed; fresh independent review pending"
+}
