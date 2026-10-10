@@ -1,0 +1,94 @@
+{
+  "at_utc": "20261010T034749Z",
+  "actual_author_execution": "/root/formal_oracle",
+  "actual_runner_execution": "/root/formal_oracle",
+  "status": "PUBLIC_ONLY_V3_CHECKER_FROZEN_TESTED",
+  "api": {
+    "module": "oracles.belief_controls_v3_independent",
+    "check": "row -> list[str]",
+    "check_batch": "list[rows] -> dict with errors/counts and complete actual witnesses"
+  },
+  "files": {
+    "oracles/belief_controls_v3_independent.py": {
+      "sha256": "ff1a72153e985810d2771fecf299944b39cc8afa52effbd833feac056f143271",
+      "bytes": 29999
+    },
+    "tests/oracle_belief_controls_v3_test.py": {
+      "sha256": "9c4b6b44353056c4786c779a3d241529f5ac71ab548e29c08a3c9a528483033a",
+      "bytes": 16800
+    },
+    "oracles/belief_controls_v2_independent.py": {
+      "sha256": "5b97b73df0b9248b1ad155307e75e2a73b995dff64e81232382a6c05a2fe4984",
+      "bytes": 27311
+    },
+    "tests/oracle_belief_controls_v2_test.py": {
+      "sha256": "1369690da31e931ba9ee6ea5934db119fcbe662b0bcd5d0b74dfc0f763ff13d2",
+      "bytes": 14102
+    },
+    "oracles/belief_controls_independent.py": {
+      "sha256": "ec9f387485f2a2d58ab557db0a2a7d95c24e77cb3108afa503a80c575e04b03e",
+      "bytes": 51104
+    },
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V3.md": {
+      "sha256": "3a223952d9664577d7b637ddfb3e18d329863a3d5371a6c47cad233a1f50ff11",
+      "bytes": 17119
+    },
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V3.md": {
+      "sha256": "7e9c9f9160425ab7e455f57d72385e54f399835dfa351dcf75f6fc2842b1dc33",
+      "bytes": 4843
+    },
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V3-ROOT_FREEZE.json": {
+      "sha256": "56ea87bfb614360a9091d6c835f2a83fa918f1946de612f5b723548a02782769",
+      "bytes": 1499
+    },
+    "feedback/improvement_requests/ORACLE-REPRO-011.json": {
+      "sha256": "d7da03962cb068a974bab3c515afdafeb1fbc752c9cea4be2c229c982260f3f9",
+      "bytes": 1542
+    },
+    "reviews/oracle/RBM-v3-preexecution-20261010T033827Z.json": {
+      "sha256": "4af50b4c49857c581f79f11fdc1eda49949c61941d87792f7a232fd74b9fda07",
+      "bytes": 1858
+    },
+    "reviews/oracle/RBM-v3-first-execution-20261010T034122Z.json": {
+      "sha256": "81a59a4d43d3e4f16340799cddd9057d376af59431271f079737235f9a88739f",
+      "bytes": 9498
+    },
+    "reviews/oracle/RBM-v3-transpose-first-counterexample-20261010T034315Z.json": {
+      "sha256": "ddea0e1a6e9b11be1b5d9d1e8e29b360795b1306f65b68e0c8f203d7803e0a48",
+      "bytes": 3516
+    },
+    "reviews/oracle/RBM-v3-corrective-preexecution-20261010T034412Z.json": {
+      "sha256": "b47d186d8825ddd3a30f40582954fa067eede15c22c43da14d320b007ce031cf",
+      "bytes": 1831
+    },
+    "reviews/oracle/RBM-v3-corrective-execution-20261010T034643Z.json": {
+      "sha256": "e513098de7d68c99bc0e0d7d8d088cec25868420b659c13e84e0c299e6936da8",
+      "bytes": 6107
+    },
+    "reviews/oracle/RBM-v3-first-handmade-controls-20261010T034122Z.json.lossless.json": {
+      "sha256": "c810af187effaa5c51f8e1812b32c6f9545a61352ca487321a00f78a7e06fe8a",
+      "bytes": 396
+    },
+    "reviews/oracle/RBM-v3-corrective-handmade-controls-20261010T034643Z.json.lossless.json": {
+      "sha256": "caf982414e956b313576966eedb1c94a3b09c68276025f1374656c82fbde9b23",
+      "bytes": 406
+    }
+  },
+  "actual_tests_run": 20,
+  "actual_test_failures": 0,
+  "actual_test_errors": 0,
+  "actual_exhaustive_local_histories": 156,
+  "actual_two_process_replay": {
+    "pythonhashseeds": [
+      "1",
+      "987"
+    ],
+    "complete_handmade_diagnostic_bytes_each": 8706,
+    "sha256_each": "a32e29197545c4d5a05613e7425f18ce2adb5f1dcb1654d24a2bd57e2c57ebab"
+  },
+  "preserved_first_failures": "Own handmade C prefix witness invalid; NEW transposition alias bug detected and corrected occurrencewise with frozen counterexample. Stable solvers unchanged.",
+  "reproducibility_ticket": "ORACLE-REPRO-011 corrected only in NEW v3 diagnostic normalization, frozen v2 unchanged.",
+  "source_scope": "Public contracts and own handmade fixtures/immutable independently authored primitives; no actual candidate, producer, stored gold or private verdict reads.",
+  "independent_child_attempt": "Rejected by actual agent thread limit; no child execution/result attributed.",
+  "approval_verdict": null
+}

@@ -21,3 +21,10 @@ Detailed exact inventories and actual remote blob SHA256 evidence are in backup_
 `belief-first-review` is BACKED_UP at `7a7d055bda9a155b0480ebad5bfb8080133b7585`: 1,195 exact inventory files / 494,619,864 bytes. The private repository and dedicated branch were verified; every inventoried actual GitHub blob was checked. Both frozen candidates, the first batch whole-quarantine snapshot, completed independent first-batch reviews/adjudication, historical failures and frozen public revision evidence are included. Archival preservation grants no approval to either candidate.
 
 All ten oversized raw diagnostics were additionally reconstructed from actual remote gzip blobs, totaling 356,995,178 complete raw bytes, with exact byte/hash equality. See `quality_reports/BELIEF_FIRST_REVIEW_REMOTE_LOSSLESS.json`. The checkpoint own receipt/spec, subsequent v2 stripped review view/predictions, new checker/gate changes and reproduction failure diagnostics are local until a later checkpoint. The original research checkout remains protected.
+
+
+## Belief v2 final-review archival checkpoint — 2026-10-10 UTC
+
+`belief-v2-final-review` is BACKED_UP at `9a03758bf7343e911c9dbc618a7158e393e5f790`: 1,344 inventory files / 674,483,136 bytes; private ADMIN repository and every actual remote inventory blob verified. Root recovered the first helper whitespace-only rejection by proving all staged bytes exactly match the frozen inventory, preserving the exact expert source including its extra EOF blank line, committing the exact staged inventory and resuming unchanged helper verification. Failed receipts and independent staged recovery proof remain preserved.
+
+All 18 oversized evidence files additionally decode from actual remote gzip blobs to **735,726,123 exact raw bytes**. See `quality_reports/BELIEF_V2_FINAL_REVIEW_REMOTE_LOSSLESS.json`. This receipt/proof and later v3 reviews/supplements/gate work/RGM prospective design are local until a subsequent checkpoint. No archival checkpoint confers dataset approval.

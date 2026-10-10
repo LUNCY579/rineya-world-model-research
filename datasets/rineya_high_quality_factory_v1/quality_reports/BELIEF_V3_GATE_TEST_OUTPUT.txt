@@ -1,0 +1,19 @@
+F....................
+======================================================================
+FAIL: test_complete_old_projection_cannot_publish_without_transposed_variant (tests.test_belief_v3_control_gate.BeliefV3ControlGateTests.test_complete_old_projection_cannot_publish_without_transposed_variant)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/test_belief_v3_control_gate.py", line 43, in test_complete_old_projection_cannot_publish_without_transposed_variant
+    self.assertEqual(old_contract(rows)['errors'], [])
+AssertionError: Lists differ: ['RBM-001-belief-gap-v3-p0012-A-identity-s[276305 chars]th3'] != []
+
+First list contains 1744 additional elements.
+First extra element 0:
+'RBM-001-belief-gap-v3-p0012-A-identity-s00-forward: belief_control_v2_row: new control requires supplied length-specific pair/evidence or executed probe ID'
+
+Diff is 302421 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 21 tests in 49.954s
+
+FAILED (failures=1)

@@ -39,9 +39,21 @@ BELIEF_PROPERTY_TAGS = {
 BELIEF_V2_VERSION = 'rbm-belief-gap-2.0.0'
 BELIEF_V2_CLAIMS = {'same_prefix_empty_nonempty_counterfactual',
                     'contradiction_equals_mixed_outcomes'}
+BELIEF_V3_VERSION = 'rbm-belief-gap-3.0.0'
+BELIEF_V3_CLAIMS = {'auxiliary_scalar_transposition_invariance',
+                    'same_observations_auxiliary_table_counterfactual',
+                    'context_auxiliary_scalar_variant_crossing'}
 
 
 def belief_checker_name(rows):
+    is_v3 = any(row.get('generator_version') == BELIEF_V3_VERSION
+                or 'auxiliary_scalar_variant' in row or 'auxiliary_scalar_control' in row
+                or any(isinstance(claim, dict)
+                       and (claim.get('name') or claim.get('property')) in BELIEF_V3_CLAIMS
+                       for claim in row.get('family_control_claims', []))
+                for row in rows)
+    if is_v3:
+        return 'oracles.belief_controls_v3_independent'
     # Normal revision provenance survives filtering out all G/H rows.
     # The context/claim checks also prevent a changed version field from
     # hiding the published v2 obligations.
@@ -61,10 +73,11 @@ def belief_checker(rows):
 def belief_control_rows(rows):
     markers = {'controlled_context', 'structural_family_profile',
                'fact_role_assignments', 'query_role_assignments',
-               'property_witnesses', 'family_control_claims'}
+               'property_witnesses', 'family_control_claims',
+               'auxiliary_scalar_variant', 'auxiliary_scalar_control'}
     tags = BELIEF_PROPERTY_TAGS | {'finite_noiseless_filter', 'possible_value_partition'}
     return [row for row in rows if row.get('semantic_task', {}).get('kind') == 'belief'
-            and (row.get('generator_version') == BELIEF_V2_VERSION
+            and (row.get('generator_version') in {BELIEF_V2_VERSION, BELIEF_V3_VERSION}
                  or markers.intersection(row) or tags.intersection(row.get('skill_tags', [])))]
 
 
@@ -127,6 +140,10 @@ def audit(batch):
     if belief_module and belief_module.__name__.endswith('belief_controls_v2_independent'):
         source=ROOT/'oracles/belief_controls_independent.py'
         belief_dependencies[str(source.relative_to(ROOT))]=hashlib.sha256(source.read_bytes()).hexdigest()
+    elif belief_module and belief_module.__name__.endswith('belief_controls_v3_independent'):
+        for name in ['belief_controls_independent.py', 'belief_controls_v2_independent.py']:
+            source=ROOT/'oracles'/name
+            belief_dependencies[str(source.relative_to(ROOT))]=hashlib.sha256(source.read_bytes()).hexdigest()
     checks=[]
     lineage=collections.defaultdict(set)
     payloads=collections.defaultdict(list)

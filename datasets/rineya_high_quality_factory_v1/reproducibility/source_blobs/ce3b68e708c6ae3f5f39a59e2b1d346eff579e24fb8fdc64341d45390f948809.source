@@ -1,0 +1,738 @@
+"""Public-only prospective RGM planning audit; never reads stored targets.
+
+Author execution: /root/formal_oracle. Dependencies: Python stdlib only.
+check_batch requires an explicit prior_inputs inventory to establish novelty; None
+means UNKNOWN, whereas [] explicitly denotes a supplied empty inventory.
+"""
+from collections import Counter, deque
+from functools import lru_cache
+from heapq import heappop, heappush
+from itertools import permutations
+import hashlib
+import json
+
+SEMANTICS_SHA256 = '718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd'
+PROPERTIES = frozenset(('legal_prefix_then_first_failure', 'fuel_lengthens_fresh_minimum_moves',
+    'fuel_blocks_topologically_reachable_goal', 'valid_goal_detour',
+    'later_action_requires_changed_block_clearance', 'partial_block_goal',
+    'required_temporary_goal_displacement'))
+CONTROLS = frozenset(('fuel_only_counterfactual', 'directed_edge_deletion_counterfactual',
+    'adjacent_action_order_counterfactual', 'partial_goal_extension_counterfactual',
+    'same_world_valid_goal_detour'))
+
+class OracleError(ValueError):
+    pass
+
+def _need(condition, message):
+    if not condition:
+        raise OracleError(message)
+
+def _json(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False)
+
+def _hash(value):
+    return hashlib.sha256(_json(value).encode()).hexdigest()
+
+def _fields(value, names, label):
+    _need(type(value) is dict and set(value) == set(names), label + ' fields malformed')
+
+def _integer(value, low, high, label):
+    _need(type(value) is int and low <= value <= high, label + ' outside integer bounds')
+
+def _validate(task, pilot=True):
+    _need(type(task) is dict, 'task must be object')
+    kind = task.get('kind')
+    if kind == 'graph':
+        _fields(task, ('kind', 'nodes', 'edges', 'start', 'goal', 'fuel', 'plan'), 'graph')
+        names = task['nodes']
+        _need(type(names) is list and 1 <= len(names) <= (7 if pilot else 8) and all(type(x) is str for x in names)
+              and len(set(names)) == len(names), 'graph nodes malformed or outside pilot bound')
+        _need(type(task['start']) is str and task['start'] in names and type(task['goal']) is str
+              and task['goal'] in names, 'graph terminals invalid')
+        _integer(task['fuel'], 0, 30 if pilot else float('inf'), 'fuel')
+        _need(type(task['edges']) is list, 'edges must be list')
+        occupied = set()
+        for edge in task['edges']:
+            _need(type(edge) is list and len(edge) == 3, 'edge must be triple')
+            a, b, cost = edge
+            _need(type(a) is str and a in names and type(b) is str and b in names,
+                  'edge endpoints invalid')
+            _need(type(cost) is int and cost >= 1, 'edge cost must be positive integer')
+            _need((a, b) not in occupied, 'parallel directed edge')
+            occupied.add((a, b))
+        _need(type(task['plan']) is list and all(type(x) is str for x in task['plan']), 'graph plan malformed')
+    elif kind == 'blocks':
+        _fields(task, ('kind', 'on', 'goal_on', 'plan'), 'blocks')
+        on = task['on']
+        _need(type(on) is dict and (1 if pilot else 0) <= len(on) <= 6 and all(type(x) is str and x != 'TABLE' for x in on),
+              'block names malformed or outside pilot bound')
+        for label, relation in (('on', on), ('goal_on', task['goal_on'])):
+            _need(type(relation) is dict, label + ' must be object')
+            non_table = []
+            for block, support in relation.items():
+                _need(type(block) is str and block in on and type(support) is str
+                      and support in set(on) | {'TABLE'} and support != block, label + ' relation invalid')
+                if support != 'TABLE':
+                    non_table.append(support)
+            _need(len(set(non_table)) == len(non_table), label + ' assigns occupied support twice')
+            for block in relation:
+                seen = set()
+                while block in relation:
+                    _need(block not in seen, label + ' cycle')
+                    seen.add(block)
+                    block = relation[block]
+        _need(type(task['plan']) is list, 'block plan must be list')
+        for action in task['plan']:
+            _fields(action, ('block', 'to'), 'block action')
+            _need(type(action['block']) is str and type(action['to']) is str, 'block action names malformed')
+    else:
+        raise OracleError('only graph and blocks belong to planning pilot')
+    _need(not pilot or len(task['plan']) <= 12, 'submitted plan exceeds pilot bound')
+
+def _normal(task):
+    result = json.loads(_json(task))
+    if result.get('kind') == 'graph':
+        result['nodes'].sort()
+        result['edges'].sort()
+    return result
+
+def _block_step(state, action):
+    """Independent relation-set transition, with explicit failed preconditions."""
+    supports = dict(state)
+    block, dest = action['block'], action['to']
+    occupied = {support for _, support in state if support != 'TABLE'}
+    if block not in supports:
+        return None, 'unknown_source'
+    if block in occupied:
+        return None, 'source_not_clear'
+    if dest == block:
+        return None, 'self_destination'
+    if dest != 'TABLE' and dest not in supports:
+        return None, 'unknown_destination'
+    if dest in occupied:
+        return None, 'destination_not_clear'
+    if supports[block] == dest:
+        return None, 'unchanged_support'
+    return frozenset((b, dest if b == block else s) for b, s in state), None
+
+def _block_search(initial, goal, held=frozenset()):
+    names = sorted(dict(initial))
+    actions = [(b, d) for b in names for d in sorted(names + ['TABLE'])]
+    queue = deque([initial]); paths = {initial: ()}; maximum = 1
+    answer = None
+    while queue:
+        state = queue.popleft()
+        if goal <= state and answer is None:
+            answer = paths[state]
+        for b, d in actions:
+            next_state, _ = _block_step(state, {'block': b, 'to': d})
+            if next_state is not None and held <= next_state and next_state not in paths:
+                paths[next_state] = paths[state] + ((b, d),)
+                queue.append(next_state)
+        maximum = max(maximum, len(queue))
+    plan = None if answer is None else [{'block': b, 'to': d} for b, d in answer]
+    return plan, {'complete': True, 'states': len(paths), 'max_frontier': maximum}
+
+def _graph_search(task):
+    adjacent = {n: [] for n in task['nodes']}
+    for a, b, cost in task['edges']:
+        adjacent[a].append((b, cost))
+    for values in adjacent.values():
+        values.sort()
+    start, goal, budget = task['start'], task['goal'], task['fuel']
+    initial = (start, budget)
+    queue = deque([initial]); depth = {initial: 0}; paths = {initial: ()}; counts = {initial: 1}
+    best_depth = None; best_path = None; multiplicity = 0; maximum = 1
+    while queue:
+        state = queue.popleft(); node, fuel = state; length = depth[state]
+        if node == goal:
+            if best_depth is None:
+                best_depth = length; best_path = paths[state]
+            if length == best_depth:
+                multiplicity += counts[state]
+                best_path = min(best_path, paths[state])
+        for dest, cost in adjacent[node]:
+            if cost > fuel:
+                continue
+            following = (dest, fuel - cost); path = paths[state] + (dest,)
+            if following not in depth:
+                depth[following] = length + 1; paths[following] = path; counts[following] = counts[state]
+                queue.append(following)
+            elif depth[following] == length + 1:
+                counts[following] += counts[state]
+                paths[following] = min(paths[following], path)
+        maximum = max(maximum, len(queue))
+    # Topological BFS and cheapest positive-cost Dijkstra are separate objectives.
+    top_queue = deque([start]); top_depth = {start: 0}
+    while top_queue:
+        node = top_queue.popleft()
+        for dest, _ in adjacent[node]:
+            if dest not in top_depth:
+                top_depth[dest] = top_depth[node] + 1; top_queue.append(dest)
+    heap = [(0, start)]; costs = {start: 0}
+    while heap:
+        cost, node = heappop(heap)
+        if cost != costs[node]:
+            continue
+        for dest, edge_cost in adjacent[node]:
+            following = cost + edge_cost
+            if following < costs.get(dest, float('inf')):
+                costs[dest] = following; heappush(heap, (following, dest))
+    return None if best_path is None else list(best_path), {
+        'complete': True, 'states': len(depth), 'max_frontier': maximum,
+        'minimum_moves': best_depth, 'topology_distance': top_depth.get(goal),
+        'cheapest_fuel': costs.get(goal), 'minimum_route_count': multiplicity}
+
+@lru_cache(maxsize=1024)
+def _analyze_cached(encoded):
+    task = json.loads(encoded); _validate(task)
+    steps = []; states = []; reasons = []; first_error = None
+    if task['kind'] == 'graph':
+        edge_map = {(a, b): c for a, b, c in task['edges']}
+        state = {'node': task['start'], 'fuel': task['fuel']}; states.append(dict(state))
+        for i, dest in enumerate(task['plan']):
+            cost = edge_map.get((state['node'], dest))
+            reason = 'missing_edge' if cost is None else 'insufficient_fuel' if cost > state['fuel'] else None
+            if reason is None:
+                state = {'node': dest, 'fuel': state['fuel'] - cost}
+            steps.append({'legal': reason is None, 'after': dict(state)}); states.append(dict(state)); reasons.append(reason)
+            if reason is not None:
+                first_error = i; break
+        shortest, search = _graph_search(task)
+        reaches = first_error is None and state['node'] == task['goal']
+        clearance = []; held_search = None
+    else:
+        state = frozenset(task['on'].items()); states.append(dict(state)); clearance = []
+        initial = state; goal = frozenset(task['goal_on'].items())
+        for i, action in enumerate(task['plan']):
+            following, reason = _block_step(state, action)
+            if following is not None and i >= 1:
+                _, initial_reason = _block_step(initial, action)
+                if initial_reason in ('source_not_clear', 'destination_not_clear'):
+                    relevant = action['block'] if initial_reason == 'source_not_clear' else action['to']
+                    clearing = [j for j in range(i) if relevant in states[j].values() and relevant not in states[j + 1].values()]
+                    if clearing:
+                        clearance.append({'action_index': i, 'precondition': initial_reason,
+                                          'relevant_block': relevant, 'changed_by_action_index': clearing[-1]})
+            if following is not None:
+                state = following
+            steps.append({'legal': reason is None, 'after': dict(sorted(state))}); states.append(dict(state)); reasons.append(reason)
+            if reason is not None:
+                first_error = i; break
+        shortest, search = _block_search(initial, goal)
+        held = initial & goal
+        constrained, held_search = _block_search(initial, goal, held) if held else (shortest, None)
+        search['minimum_moves'] = None if shortest is None else len(shortest)
+        search['initially_true_goal_relations'] = dict(sorted(held))
+        search['held_goal_reachable'] = constrained is not None
+        reaches = first_error is None and goal <= state
+        state = dict(sorted(state))
+    valid = first_error is None
+    target = {'steps': steps, 'after': state, 'valid': valid, 'reaches_goal': reaches, 'shortest_plan': shortest}
+    truths = {
+        'legal_prefix_then_first_failure': first_error is not None and first_error >= 1,
+        'valid_goal_detour': reaches and shortest is not None and len(task['plan']) > len(shortest),
+        'fuel_lengthens_fresh_minimum_moves': task['kind'] == 'graph' and search['minimum_moves'] is not None
+            and search['topology_distance'] is not None and search['minimum_moves'] > search['topology_distance'],
+        'fuel_blocks_topologically_reachable_goal': task['kind'] == 'graph' and search['topology_distance'] is not None
+            and search['minimum_moves'] is None,
+        'later_action_requires_changed_block_clearance': bool(clearance),
+        'partial_block_goal': task['kind'] == 'blocks' and 0 < len(task['goal_on']) < len(task['on']),
+        'required_temporary_goal_displacement': task['kind'] == 'blocks' and bool(search.get('initially_true_goal_relations'))
+            and shortest is not None and not search['held_goal_reachable']}
+    return {'target': target, 'search': search, 'held_search': held_search, 'first_error': first_error,
+            'first_error_reason': None if first_error is None else reasons[-1], 'clearance': clearance,
+            'properties': truths, 'input_sha256': _hash(task)}
+
+def analyze(task):
+    """Independent input-derived target and complete finite diagnostics (snapshot)."""
+    return json.loads(_json(_analyze_cached(_json(task))))
+
+def solve(task):
+    return analyze(task)['target']
+
+def _render_payload(text, task):
+    _need(type(text) is str, 'rendered_input must be string')
+    decoder = json.JSONDecoder(); matches = []
+    for i, char in enumerate(text):
+        if char != '{':
+            continue
+        try:
+            value, end = decoder.raw_decode(text[i:])
+        except (ValueError, RecursionError):
+            continue
+        if type(value) is dict and value.get('kind') in ('graph', 'blocks'):
+            try:
+                equivalent = _json(_normal(value)) == _json(_normal(task))
+            except (KeyError, TypeError, ValueError):
+                equivalent = False
+            if equivalent:
+                matches.append((value, text[i:i + end]))
+    _need(len(matches) == 1, 'rendered input must contain exactly one equivalent complete task JSON')
+    return matches[0][1]
+
+def check(row):
+    errors = []
+    try:
+        _need(type(row) is dict, 'row must be object')
+        result = analyze(row.get('semantic_task'))
+        tags = row.get('skill_tags', [])
+        _need(type(tags) is list and all(type(x) is str for x in tags), 'skill_tags malformed')
+        for tag in tags:
+            for component in tag.split(':'):
+                if component in PROPERTIES and not result['properties'][component]:
+                    errors.append('false row property: ' + component)
+        if 'rendered_input' in row:
+            _render_payload(row['rendered_input'], row['semantic_task'])
+    except (OracleError, TypeError, ValueError, RecursionError) as exc:
+        errors.append(str(exc))
+    return errors
+
+def _difference(a, b):
+    a, b = _normal(a), _normal(b)
+    return sorted(k for k in set(a) | set(b) if _json(a.get(k)) != _json(b.get(k)))
+
+def _pair(name, a, b):
+    difference = _difference(a, b); aa, bb = analyze(a), analyze(b)
+    if name == 'fuel_only_counterfactual':
+        _need(a['kind'] == b['kind'] == 'graph' and difference == ['fuel'], 'fuel pair must change only fuel')
+    elif name == 'directed_edge_deletion_counterfactual':
+        _need(a['kind'] == b['kind'] == 'graph' and difference == ['edges'], 'edge pair must change only edges')
+        x, y = {tuple(e) for e in a['edges']}, {tuple(e) for e in b['edges']}
+        _need((y < x and len(x - y) == 1) or (x < y and len(y - x) == 1), 'edge pair not single deletion')
+    elif name == 'adjacent_action_order_counterfactual':
+        _need(a['kind'] == b['kind'] == 'blocks' and difference == ['plan'], 'order pair must change only plan')
+        possible = []
+        for i in range(len(a['plan']) - 1):
+            changed = list(a['plan']); changed[i], changed[i + 1] = changed[i + 1], changed[i]
+            if _json(changed) == _json(b['plan']):
+                possible.append(i)
+        _need(bool(possible), 'order pair not one adjacent swap')
+    elif name == 'partial_goal_extension_counterfactual':
+        _need(a['kind'] == b['kind'] == 'blocks' and difference == ['goal_on'], 'goal pair must change only goal_on')
+        x, y = set(a['goal_on'].items()), set(b['goal_on'].items())
+        _need(x < y or y < x, 'goal pair not strict valid extension')
+    elif name == 'same_world_valid_goal_detour':
+        _need(difference == ['plan'] and aa['target']['reaches_goal'] and bb['target']['reaches_goal'],
+              'detour pair must change only plan and both achieve goal')
+        _need(len(a['plan']) != len(b['plan']) and (aa['properties']['valid_goal_detour'] or bb['properties']['valid_goal_detour']),
+              'detour pair does not increase goal-reaching length')
+    else:
+        raise OracleError('unknown supplied control name')
+    return difference
+
+@lru_cache(maxsize=256)
+def _signature(encoded, weighted=True, roles=True):
+    task = json.loads(encoded)
+    if task['kind'] == 'blocks':
+        names = sorted(task['on']); best = None
+        for order in permutations(names):
+            rename = {n: i for i, n in enumerate(order)}
+            encode = lambda rel: tuple(sorted((rename[b], -1 if s == 'TABLE' else rename[s]) for b, s in rel.items()))
+            value = (encode(task['on']), encode(task['goal_on']) if roles else ())
+            best = value if best is None else min(best, value)
+    else:
+        names = sorted(task['nodes']); best = None
+        for order in permutations(names):
+            rename = {n: i for i, n in enumerate(order)}
+            edges = tuple(sorted((rename[a], rename[b], c if weighted else 1) for a, b, c in task['edges']))
+            value = (rename[task['start']], rename[task['goal']], edges) if roles else (edges,)
+            best = value if best is None else min(best, value)
+    return (task['kind'], len(names), best)
+
+def _row_properties(value, ids):
+    # The public field name has no frozen JSON container type. Accept both
+    # unambiguous common lists and sample-keyed per-row lists without inferring
+    # a property from family contrast or copying one row's optional tag.
+    if type(value) is list:
+        _need(all(type(x) is str and x in PROPERTIES for x in value) and len(set(value)) == len(value),
+              'unknown/duplicate row property')
+        return {sid: set(value) for sid in ids}
+    _need(type(value) is dict and set(value) == set(ids), 'row_properties must bind both actual renderer sample IDs')
+    result = {}
+    for sid, props in value.items():
+        _need(type(props) is list and all(type(x) is str and x in PROPERTIES for x in props)
+              and len(set(props)) == len(props), 'unknown/duplicate per-row property')
+        result[sid] = set(props)
+    return result
+
+
+def _witness(evidence, prop, task, result):
+    _need(type(evidence) is dict and bool(evidence), 'row witness evidence must be nonempty object')
+    measured = dict(result['search'])
+    measured.update(first_error=result['first_error'], first_error_index=result['first_error'],
+                    first_error_reason=result['first_error_reason'], plan_length=len(task['plan']),
+                    input_sha256=result['input_sha256'], shortest_plan=result['target']['shortest_plan'],
+                    valid=result['target']['valid'], reaches_goal=result['target']['reaches_goal'])
+    for key, value in evidence.items():
+        if key in measured:
+            _need(_json(value) == _json(measured[key]), 'incorrect witness measurement: ' + key)
+        elif key in ('action_index', 'changed_by_action_index', 'precondition', 'relevant_block'):
+            _need(any(_json(item.get(key)) == _json(value) for item in result['clearance']), 'incorrect clearance witness: ' + key)
+        elif key in ('input_fact', 'input_facts', 'fact_ids', 'obligation', 'note', 'description'):
+            _need(type(value) in (str, list, dict) and bool(value), 'empty input fact locator')
+        elif key.endswith('_index') or key.endswith('_indices'):
+            values = value if type(value) is list else [value]
+            _need(all(type(x) is int and 0 <= x < len(task['plan']) for x in values), 'invalid action locator: ' + key)
+        else:
+            # Public evidence dictionaries have no published closed key schema.
+            # Unknown descriptive measurements cannot stand in for a proof: truth
+            # is independently recomputed above, and an audit retains their keys.
+            _need(type(value) in (str, int, bool, list, dict) or value is None, 'non-JSON witness field')
+    if prop == 'later_action_requires_changed_block_clearance' and 'action_index' in evidence:
+        match = [x for x in result['clearance'] if x['action_index'] == evidence['action_index']]
+        _need(any(all(k not in evidence or _json(evidence[k]) == _json(x[k]) for k in x) for x in match),
+              'clearance locators do not identify one actual dependency')
+
+def _context_rules(stratum, tasks, audits):
+    a, b, c, d = tasks; aa, bb, cc, dd = audits
+    good = lambda x: x['target']['reaches_goal']
+    minimum = lambda t, x: good(x) and len(t['plan']) == x['search']['minimum_moves']
+    short = lambda t, x: bool(t['plan']) and x['target']['valid'] and not good(x)
+    if stratum == 'A':
+        _need(a['kind'] == 'graph' and good(aa), 'A0 must be legal goal reaching')
+        _pair('fuel_only_counterfactual', a, b)
+        _need(not bb['target']['valid'], 'A1 must block unchanged submitted route')
+        unreachable = bb['properties']['fuel_blocks_topologically_reachable_goal']
+        lengthened = bb['search']['minimum_moves'] is not None and bb['search']['minimum_moves'] > aa['search']['minimum_moves']
+        _need(unreachable or lengthened, 'A1 lacks required resource contrast')
+        if unreachable:
+            _need(a['fuel'] == aa['search']['cheapest_fuel'] and b['fuel'] == a['fuel'] - 1,
+                  'A infeasible pair must use exact minimum fuel and one below')
+        _need(_difference(a, c) == ['plan'] and short(c, cc),
+              'A2 must be nonempty legal non-goal A0-world prefix')
+        _need(_difference(a, d) == ['plan'] and dd['properties']['legal_prefix_then_first_failure']
+              and dd['first_error_reason'] == 'missing_edge', 'A3 must miss directed edge after legal prefix')
+        return 'unreachable' if unreachable else 'lengthened'
+    if stratum == 'B':
+        _need(a['kind'] == 'graph' and good(aa) and len(a['plan']) >= 3, 'B0 goal plan must have at least 3 moves')
+        _pair('directed_edge_deletion_counterfactual', a, b)
+        _need({tuple(x) for x in b['edges']} < {tuple(x) for x in a['edges']}, 'B1 must delete B0 edge')
+        _need(bb['properties']['legal_prefix_then_first_failure'] and bb['first_error_reason'] == 'missing_edge'
+              and aa['search']['minimum_moves'] is not None and bb['search']['minimum_moves'] is not None,
+              'B1 must fail after prefix while both goals feasible')
+        _need(_difference(a, c) == ['plan'] and cc['properties']['legal_prefix_then_first_failure']
+              and cc['first_error_reason'] == 'missing_edge', 'B2 must fail reverse traversal after prefix')
+        i = cc['first_error']; before = cc['target']['steps'][i - 1]['after']['node']; dest = c['plan'][i]
+        _need(any(x == dest and y == before for x, y, _ in a['edges']), 'B2 failure not reverse of actual existing edge')
+        _pair('same_world_valid_goal_detour', a, d)
+        _need(dd['properties']['valid_goal_detour'], 'B3 not a valid detour')
+    elif stratum == 'C':
+        _need(a['kind'] == 'blocks' and minimum(a, aa) and 4 <= len(a['plan']) <= 8
+              and aa['properties']['later_action_requires_changed_block_clearance'], 'C0 lacks minimum clearance-dependent horizon')
+        _pair('adjacent_action_order_counterfactual', a, b)
+        _need(not bb['target']['valid'] and bb['first_error_reason'] in ('source_not_clear', 'destination_not_clear'),
+              'C1 must fail clear-source/destination dependency')
+        _pair('same_world_valid_goal_detour', a, c)
+        _need(cc['properties']['valid_goal_detour'], 'C2 not a valid detour')
+        _need(_difference(a, d) == ['plan'] and short(d, dd),
+              'C3 must be nonempty legal non-goal prefix')
+    elif stratum == 'D':
+        _need(a['kind'] == 'blocks' and aa['properties']['partial_block_goal'] and minimum(a, aa)
+              and len(a['plan']) >= 2, 'D0 lacks proper partial goal minimum of at least 2')
+        _pair('partial_goal_extension_counterfactual', a, b)
+        _need(set(a['goal_on'].items()) < set(b['goal_on'].items()) and bb['target']['valid']
+              and not good(bb) and bb['search']['minimum_moves'] > aa['search']['minimum_moves'], 'D1 lacks strengthened obligation contrast')
+        _need(_difference(b, c) == ['plan'] and minimum(c, cc), 'D2 must submit minimum strengthened-goal plan')
+        _pair('same_world_valid_goal_detour', c, d)
+        _need(dd['properties']['valid_goal_detour'], 'D3 not a valid strengthened-goal detour')
+    else:
+        raise OracleError('unknown stratum')
+    return None
+
+def _executed_probes(task):
+    original = analyze(task)
+    reordered = json.loads(_json(task))
+    if task['kind'] == 'graph':
+        reordered['nodes'].reverse(); reordered['edges'].reverse()
+        names = sorted(task['nodes'])
+    else:
+        reordered['on'] = dict(reversed(list(task['on'].items())))
+        reordered['goal_on'] = dict(reversed(list(task['goal_on'].items())))
+        names = sorted(task['on'])
+    reordered = dict(reversed(list(reordered.items())))
+    order_result = analyze(reordered)
+    rename = {name: 'entity_' + str(len(names) - i) for i, name in enumerate(names)}
+    rename['TABLE'] = 'TABLE'
+    renamed = json.loads(_json(task))
+    if task['kind'] == 'graph':
+        renamed.update(nodes=[rename[n] for n in task['nodes']],
+            edges=[[rename[a], rename[b], c] for a, b, c in task['edges']],
+            start=rename[task['start']], goal=rename[task['goal']],
+            plan=[rename.get(n, 'outside_world_' + n) for n in task['plan']])
+    else:
+        renamed.update(on={rename[b]: rename[s] for b, s in task['on'].items()},
+            goal_on={rename[b]: rename[s] for b, s in task['goal_on'].items()},
+            plan=[{'block': rename.get(x['block'], 'outside_world_' + x['block']),
+                   'to': rename.get(x['to'], 'outside_world_' + x['to'])} for x in task['plan']])
+    rename_result = analyze(renamed)
+    probes = [{'name': 'key_list_order_readback', 'scope': 'audit_probe', 'invoked': True, 'completed': True,
+        'input_sha256': original['input_sha256'], 'transformed_input_sha256': order_result['input_sha256'],
+        'comparison': 'full typed target equality', 'passed': _json(original['target']) == _json(order_result['target'])},
+        {'name': 'entity_renaming', 'scope': 'audit_probe', 'invoked': True, 'completed': True,
+         'input_sha256': original['input_sha256'], 'transformed_input_sha256': rename_result['input_sha256'],
+         'comparison': 'properties, feasibility, minimum length and submitted legality invariance; lexical plan may change',
+         'passed': original['properties'] == rename_result['properties']
+            and original['search']['minimum_moves'] == rename_result['search']['minimum_moves']
+            and original['target']['valid'] == rename_result['target']['valid']}]
+    if original['first_error'] is not None and original['first_error'] + 1 < 12:
+        suffix = json.loads(_json(task))
+        suffix['plan'] = suffix['plan'][:original['first_error'] + 1]
+        suffix['plan'].append('outside_world' if task['kind'] == 'graph' else {'block': 'outside_world', 'to': 'TABLE'})
+        suffix_result = analyze(suffix)
+        probes.append({'name': 'first_failure_suffix_absorption', 'scope': 'audit_probe', 'invoked': True, 'completed': True,
+            'input_sha256': original['input_sha256'], 'transformed_input_sha256': suffix_result['input_sha256'],
+            'comparison': 'full typed target equality', 'passed': _json(original['target']) == _json(suffix_result['target'])})
+    return probes
+
+
+def _shortcut_diagnostics(examples):
+    # Public prospective size/length/fuel/edge and exact scalar-token baselines.
+    # These are diagnostics, never admission gates or target input features.
+    features = {'size', 'plan_length', 'fuel', 'edge_count'}
+    tokens = sorted({x for e in examples for x in e['tokens']})
+    outcomes = ('valid', 'reaches_goal', 'fresh_feasible')
+    reports = {}
+    for outcome in outcomes:
+        choices = []
+        for feature in sorted(features):
+            values = sorted({e[feature] for e in examples if e[feature] is not None})
+            for value in values:
+                for polarity in (False, True):
+                    matches = sum(((e[feature] == value) == polarity) == e[outcome] for e in examples)
+                    choices.append((matches, feature, _json(value), polarity))
+        for token in tokens:
+            for polarity in (False, True):
+                matches = sum(((token in e['tokens']) == polarity) == e[outcome] for e in examples)
+                choices.append((matches, 'scalar_token_present', _json(token), polarity))
+        if choices:
+            best = min(choices, key=lambda x: (-x[0], x[1], x[2], x[3]))
+            reports[outcome] = {'correct': best[0], 'total': len(examples), 'feature': best[1],
+                'value': json.loads(best[2]), 'predict_true_when_equal_or_present': best[3],
+                'accuracy': best[0] / len(examples), 'perfect': best[0] == len(examples),
+                'input_features_only': True, 'not_an_approval_gate': True}
+    return reports
+
+
+def check_batch(rows, manifest, prior_inputs=None):
+    """Audit supplied corpus/manifest. No stored gold, reports, or files are read."""
+    errors = []; diagnostics = []; by_id = {}; covered = set(); families = []; probes = []; examples = []
+    if type(rows) is not list:
+        return {'errors': ['rows must be list'], 'counts': {'rows': 0, 'complete_families': 0}}
+    def error(where, message):
+        errors.append(where + ': ' + str(message))
+    for i, row in enumerate(rows):
+        if type(row) is not dict or type(row.get('sample_id')) is not str:
+            error('row ' + str(i), 'missing string sample_id'); continue
+        identity = row['sample_id']
+        if identity in by_id:
+            error(identity, 'duplicate sample_id')
+        by_id[identity] = row
+        for message in check(row):
+            error(identity, message)
+    try:
+        _need(type(manifest) is dict, 'manifest must be object')
+        _need(set(('version', 'track_id', 'batch_name', 'semantics_sha256', 'families')) <= set(manifest), 'manifest fields missing')
+        _need((type(manifest['version']) is str and bool(manifest['version'])) or (type(manifest['version']) is int and manifest['version'] >= 1), 'manifest version missing')
+        _need(manifest['track_id'] == 'RGM-001' and manifest['batch_name'] == 'planning-gap-v1'
+              and manifest['semantics_sha256'] == SEMANTICS_SHA256, 'manifest identity/semantics mismatch')
+        _need(type(manifest['families']) is list and len(manifest['families']) == 48, 'requires exactly 48 families')
+        _need(len(rows) == 384, 'requires exactly 384 rows')
+    except (OracleError, TypeError, ValueError) as exc:
+        error('manifest', exc)
+    raw_families = manifest.get('families', []) if type(manifest) is dict else []
+    if type(raw_families) is not list:
+        raw_families = []
+    keys = set(); indices = set(); signatures = set(); unweighted = set(); six_shapes = set()
+    prior_signatures = set(); prior_unweighted = set(); prior_indices = set(); prior_keys = set()
+    if prior_inputs is None:
+        error('novelty', 'UNKNOWN: explicit prior input inventory required')
+    else:
+        try:
+            _need(type(prior_inputs) is list, 'prior_inputs must be list of public tasks or input-only rows')
+            for item in prior_inputs:
+                task = item.get('semantic_task', item) if type(item) is dict else item
+                # Prior corpus may exceed current pilot bounds (e.g. eight graph nodes).
+                # Signature does not replay prior tasks or use targets.
+                _need(type(task) is dict and task.get('kind') in ('graph', 'blocks'), 'prior input not graph/blocks')
+                _validate(task, pilot=False)
+                prior_signatures.add(_signature(_json(task)))
+                if task['kind'] == 'graph':
+                    prior_unweighted.add(_signature(_json(task), False, False))
+                source = item.get('source_provenance', {}) if type(item) is dict else {}
+                for container in (item, source):
+                    if type(container) is dict:
+                        if 'source_index' in container: prior_indices.add(container['source_index'])
+                        if 'source_family_index' in container: prior_indices.add(container['source_family_index'])
+                        if 'source_family_key' in container: prior_keys.add(container['source_family_key'])
+        except (OracleError, TypeError, ValueError, KeyError) as exc:
+            error('novelty', exc)
+    for raw in raw_families:
+        where = str(raw.get('source_family_key', '?')) if type(raw) is dict else '?'
+        try:
+            _need(type(raw) is dict and set(('source_family_key', 'source_index', 'split', 'primary_stratum',
+                  'base_sample_id', 'contexts', 'controls')) <= set(raw), 'family fields missing')
+            key, index, stratum = raw['source_family_key'], raw['source_index'], raw['primary_stratum']
+            _need(type(key) is str and bool(key) and key not in keys, 'family key missing or duplicated')
+            _integer(index, 180, 227, 'source_index')
+            _need(index not in indices and index not in prior_indices and key not in prior_keys, 'source lineage collision')
+            keys.add(key); indices.add(index)
+            split = 'train' if index % 10 < 8 else 'dev_challenge'
+            _need(raw['split'] == split and stratum in 'ABCD' and len(stratum) == 1, 'family stratum/split malformed')
+            contexts = raw['contexts']
+            _need(type(contexts) is list and len(contexts) == 4, 'family requires four contexts')
+            context_map = {}; ids_to_context = {}; tasks = []; audits = []; renderer_pairs = []
+            for context in contexts:
+                _need(type(context) is dict and set(('context_id', 'sample_ids', 'row_properties', 'row_witnesses')) <= set(context), 'context fields missing')
+                context_id = context['context_id']
+                _need(context_id in [stratum + str(i) for i in range(4)] and context_id not in context_map, 'context ID wrong/duplicated')
+                ids = context['sample_ids']
+                _need(type(ids) is list and len(ids) == 2 and len(set(ids)) == 2 and all(type(x) is str and x in by_id for x in ids),
+                      'context requires two actual distinct sample IDs')
+                _need(not covered.intersection(ids), 'row reused across contexts/families')
+                covered.update(ids)
+                views = [by_id[x] for x in ids]; task = views[0]['semantic_task']; result = analyze(task)
+                _need(_json(_normal(task)) == _json(_normal(views[1]['semantic_task'])), 'renderer semantic mismatch')
+                rendered = [_render_payload(x.get('rendered_input'), x['semantic_task']) for x in views]
+                _need(json.dumps(json.loads(rendered[0]), separators=(',', ':')) != json.dumps(json.loads(rendered[1]), separators=(',', ':')),
+                      'renderer payload key/list ordering identical')
+                for row in views:
+                    _need(row.get('track_id') == 'RGM-001' and row.get('split') == split, 'row track/split mismatch')
+                    _need(row.get('generator_version') == 'rgm-planning-gap-1.0.0', 'row revision provenance mismatch')
+                    for source in (row, row.get('source_provenance', {})):
+                        if type(source) is dict:
+                            for field in ('source_index', 'source_family_index'):
+                                if field in source: _need(type(source[field]) is int and source[field] == index, 'asserted source index mismatch')
+                            if 'source_family_key' in source: _need(source['source_family_key'] == key, 'asserted source key mismatch')
+                    _need(key not in row['rendered_input'], 'internal source family identifier leaked into prompt')
+                    for field in ('sample_id', 'semantic_family_id', 'semantic_parent_id'):
+                        value = row.get(field)
+                        if type(value) is str and value:
+                            _need(value not in row['rendered_input'], 'internal identifier leaked into prompt')
+                declared = _row_properties(context['row_properties'], ids)
+                for prop in set().union(*declared.values()):
+                    _need(result['properties'][prop], 'false declared context row property ' + prop)
+                witnesses = context['row_witnesses']; seen_witness = set()
+                _need(type(witnesses) is list, 'row_witnesses must be list')
+                for witness in witnesses:
+                    _need(type(witness) is dict and set(('sample_id', 'property', 'scope', 'evidence')) <= set(witness), 'row witness fields missing')
+                    prop, sid = witness['property'], witness['sample_id']
+                    _need(sid in ids and prop in PROPERTIES and witness['scope'] == 'row', 'row witness scope/property/identity mismatch')
+                    _need(result['properties'][prop], 'false row witness property')
+                    _witness(witness['evidence'], prop, task, result); seen_witness.add((sid, prop))
+                for row in views:
+                    tagged = {p for tag in row.get('skill_tags', []) for p in tag.split(':') if p in PROPERTIES}
+                    _need(tagged == declared[row['sample_id']], 'row tags/context row_properties mismatch')
+                    _need(all((row['sample_id'], p) in seen_witness for p in declared[row['sample_id']]), 'missing per-row property witness')
+                context_map[context_id] = (task, result, ids); ids_to_context.update((x, context_id) for x in ids)
+                renderer_pairs.append({'sample_ids': ids, 'task_json_sha256': [hashlib.sha256(x.encode()).hexdigest() for x in rendered],
+                    'task_field_orders': [list(json.loads(x)) for x in rendered]})
+            for i in range(4):
+                task, result, _ = context_map[stratum + str(i)]; tasks.append(task); audits.append(result)
+            _need(raw['base_sample_id'] in context_map[stratum + '0'][2], 'base_sample_id must name context 0')
+            subtype = _context_rules(stratum, tasks, audits)
+            for task in tasks:
+                actual = _executed_probes(task)
+                _need(all(x['passed'] for x in actual), 'executed metamorphic probe failed')
+                probes.extend(dict(x, source_family_key=key) for x in actual)
+            controls = raw['controls']; _need(type(controls) is list, 'controls must be list')
+            found = set(); control_diagnostics = []
+            for control in controls:
+                _need(type(control) is dict and set(('control_id', 'name', 'scope', 'sample_ids', 'changed_task_fields', 'provenance')) <= set(control), 'control fields missing')
+                _need(type(control['control_id']) is str and bool(control['control_id']), 'control_id missing')
+                name = control['name']; _need(name in CONTROLS and control['scope'] == 'corpus_variant'
+                    and control['provenance'] == 'supplied_tasks', 'control name/scope/provenance invalid')
+                pair = control['sample_ids']
+                _need(type(pair) is list and len(pair) == 2 and len(set(pair)) == 2 and all(x in ids_to_context for x in pair), 'control pair must be actual same-family rows')
+                changed = _pair(name, by_id[pair[0]]['semantic_task'], by_id[pair[1]]['semantic_task'])
+                _need(type(control['changed_task_fields']) is list and sorted(control['changed_task_fields']) == changed,
+                      'claimed changed_task_fields mismatch')
+                found.add((name, frozenset(ids_to_context[x] for x in pair)))
+                control_diagnostics.append({'control_id': control['control_id'], 'name': name, 'sample_ids': pair, 'changed_task_fields': changed})
+            required = {'A': [('fuel_only_counterfactual', '0', '1')],
+                'B': [('directed_edge_deletion_counterfactual', '0', '1'), ('same_world_valid_goal_detour', '0', '3')],
+                'C': [('adjacent_action_order_counterfactual', '0', '1'), ('same_world_valid_goal_detour', '0', '2')],
+                'D': [('partial_goal_extension_counterfactual', '0', '1'), ('same_world_valid_goal_detour', '2', '3')]}[stratum]
+            for name, i, j in required:
+                _need((name, frozenset((stratum + i, stratum + j))) in found, 'missing required actual supplied control ' + name)
+            base = tasks[0]; signature = _signature(_json(base)); _need(signature not in signatures and signature not in prior_signatures, 'base world isomorphism collision')
+            signatures.add(signature)
+            if base['kind'] == 'graph':
+                topology = _signature(_json(base), False, False)
+                if topology not in prior_unweighted: unweighted.add(topology)
+            elif len(base['on']) == 6:
+                six_shapes.add(_signature(_json(base), False, False))
+            size = len(base['nodes']) if base['kind'] == 'graph' else len(base['on'])
+            _need(size in ((5, 6, 7) if base['kind'] == 'graph' else (5, 6)), 'base size outside prospective allocation')
+            item = {'source_family_key': key, 'source_index': index, 'stratum': stratum, 'split': split,
+                    'size': size, 'A_subtype': subtype, 'base_input_sha256': audits[0]['input_sha256'],
+                    'base_signature_sha256': _hash(signature), 'controls': control_diagnostics, 'renderer_pairs': renderer_pairs,
+                    'contexts': [{'context_id': stratum + str(i), 'sample_ids': context_map[stratum + str(i)][2],
+                        'input_sha256': x['input_sha256'], 'valid': x['target']['valid'], 'reaches_goal': x['target']['reaches_goal'],
+                        'first_error': x['first_error'], 'first_error_reason': x['first_error_reason'],
+                        'plan_length': len(tasks[i]['plan']), 'fuel': tasks[i].get('fuel'),
+                        'edge_count': len(tasks[i].get('edges', [])) if tasks[i]['kind'] == 'graph' else None,
+                        'fuel_minus_cheapest': tasks[i]['fuel'] - x['search']['cheapest_fuel'] if tasks[i]['kind'] == 'graph' and x['search']['cheapest_fuel'] is not None else None,
+                        'search': x['search'], 'held_search': x['held_search'],
+                        'properties': x['properties'], 'clearance': x['clearance']} for i, x in enumerate(audits)]}
+            diagnostics.append(item); families.append((raw, tasks, audits, subtype))
+            for task, audit in zip(tasks, audits):
+                def scalars(value):
+                    if type(value) is dict:
+                        return [s for v in value.values() for s in scalars(v)]
+                    if type(value) is list:
+                        return [s for v in value for s in scalars(v)]
+                    return [_json(value)]
+                examples.append({'size': size, 'plan_length': len(task['plan']), 'fuel': task.get('fuel'),
+                    'edge_count': len(task['edges']) if task['kind'] == 'graph' else None,
+                    'tokens': scalars(task), 'valid': audit['target']['valid'], 'reaches_goal': audit['target']['reaches_goal'],
+                    'fresh_feasible': audit['search']['minimum_moves'] is not None})
+        except (OracleError, TypeError, ValueError, KeyError, RecursionError) as exc:
+            error(where, exc)
+    if covered != set(by_id): error('coverage', 'manifest does not cover every supplied row exactly once')
+    strata = Counter(x[0]['primary_stratum'] for x in families)
+    if strata != Counter({x: 12 for x in 'ABCD'}): error('coverage', 'requires 12 complete families in each stratum')
+    if indices != set(range(180, 228)): error('lineage', 'requires exact fresh source indices 180..227')
+    a_types = Counter(x[3] for x in families if x[0]['primary_stratum'] == 'A')
+    if a_types != Counter(unreachable=6, lengthened=6): error('A coverage', 'requires six infeasible and six feasible lengthening families')
+    if sum(x[2][0]['search'].get('minimum_route_count', 0) >= 2 for x in families if x[0]['primary_stratum'] == 'B') < 6:
+        error('B coverage', 'requires at least six minimum-route ties')
+    c_families = [x for x in families if x[0]['primary_stratum'] == 'C']
+    if len({x[2][1]['first_error'] for x in c_families}) < 2: error('C coverage', 'first-error indices must vary')
+    if sum(x[2][0]['properties']['required_temporary_goal_displacement'] for x in c_families) < 4:
+        error('C coverage', 'requires at least four temporary-goal displacement worlds')
+    if len(unweighted) < 16: error('novelty', 'requires 16 new unweighted graph topology classes')
+    if len(six_shapes) < 8: error('novelty', 'requires eight six-block initial support shapes')
+    sizes = Counter((x['stratum'], x['split'], x['size']) for x in diagnostics)
+    for stratum in 'CD':
+        for size in (5, 6):
+            if sizes[(stratum, 'train', size)] != 5 or sizes[(stratum, 'dev_challenge', size)] != 1:
+                error('size coverage', stratum + ' requires 5 train/1 dev per block size')
+    for stratum in 'AB':
+        if {x['size'] for x in diagnostics if x['stratum'] == stratum and x['split'] == 'train'} != {5, 6, 7}:
+            error('size coverage', stratum + ' train must cover graph sizes 5..7')
+        if len({x['size'] for x in diagnostics if x['stratum'] == stratum and x['split'] == 'dev_challenge'}) < 2:
+            error('size coverage', stratum + ' dev requires two distinct graph sizes')
+    if {x['size'] for x in diagnostics if x['stratum'] in 'AB' and x['split'] == 'dev_challenge'} != {5, 6, 7}:
+        error('size coverage', 'combined graph dev must cover sizes 5..7')
+    a_lengths = [(len(x[1][2]['plan']), len(x[1][3]['plan'])) for x in families if x[0]['primary_stratum'] == 'A']
+    if a_lengths and not set(a for a, _ in a_lengths).intersection(b for _, b in a_lengths):
+        error('A coverage', 'A2/A3 lengths lack actual matched support')
+    histograms = Counter()
+    for family in diagnostics:
+        for context in family['contexts']:
+            for renderer_position in range(2):
+                key = _json({'stratum': family['stratum'], 'split': family['split'], 'renderer_position': renderer_position,
+                             'size': family['size'], 'fuel': context['fuel'], 'edge_count': context['edge_count'],
+                             'fuel_minus_cheapest': context['fuel_minus_cheapest'], 'valid': context['valid'], 'reaches_goal': context['reaches_goal'],
+                             'minimum_moves': context['search']['minimum_moves'], 'plan_length': context['plan_length'],
+                             'first_error': context['first_error'], 'first_error_reason': context['first_error_reason']})
+                histograms[key] += 1
+    return {'errors': errors, 'counts': {'rows': len(rows), 'manifest_families': len(raw_families),
+        'complete_families': len(families), 'strata': dict(sorted(strata.items())), 'A_subtypes': dict(sorted(a_types.items())),
+        'distinct_base_signatures': len(signatures), 'new_unweighted_graph_classes': len(unweighted),
+        'six_block_initial_shapes': len(six_shapes), 'novelty_inventory_supplied': prior_inputs is not None,
+        'executed_audit_probes': len(probes), 'audit_probes_passed': sum(x['passed'] for x in probes)},
+        'families': diagnostics, 'conditional_histograms': dict(sorted(histograms.items())),
+        'executed_audit_probes': probes, 'shortcut_diagnostics': _shortcut_diagnostics(examples),
+        'scope': 'Input-only factual controls; no stored-target comparison or dataset approval.'}
