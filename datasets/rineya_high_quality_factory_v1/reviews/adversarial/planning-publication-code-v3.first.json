@@ -1,0 +1,59 @@
+{
+  "actual_counts": {
+    "roles": 13,
+    "routing": 32,
+    "schema": 687,
+    "schema_groups": {
+      "case_private_outer": 12,
+      "dynamic_private_lead": 30,
+      "dynamic_private_outer": 6,
+      "dynamic_unexposed": 6,
+      "known_private_outer": 68,
+      "legacy_strings": 5,
+      "legitimate": 2,
+      "ordinary_prose": 4,
+      "private_label": 476,
+      "public_names": 4,
+      "public_names_extended": 68,
+      "real_hash": 1,
+      "trailing_payload": 2,
+      "typed_readback": 1,
+      "typed_schema": 2
+    },
+    "unexpected": 0,
+    "unexpected_groups": {}
+  },
+  "code_sha256": {
+    "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+    "factory/pipeline.py": "86baffa9fbe23e726961315094de1441dbea73a31db7c67a2d9edd7e760d1926",
+    "factory/planning_controls.py": "be85989ef8480c01056a55f1329de80b47d2eec2d1496852218890d430165668"
+  },
+  "confidence": 0.99,
+  "corrective_reuse_disclosure": "All687 exact prior schema fixtures (including495 original and192 boundary probes),13 actor checks and32 routing checks replayed. Root guided corrected bytes. Both original v1 and v2 REVISE_CODE retained; common-model and fixture-reuse correlation disclosed. No novel adversarial population is implied.",
+  "dataset_approval": false,
+  "decision": "ACCEPT_CODE_WITH_LIMITS",
+  "execution_sha256": "a9e14dba211ee93d334a1fb1b0f78ec49962cf139ad13f4b4e7264a54bb50774",
+  "findings": [],
+  "fixture_custody_sha256": "c5839a0641108ed92cd1f647befe874cda3baa1bba4dc99d864082c82f226d0f",
+  "limits": [
+    "Guard inspection is bounded to explicit known field labels/styles and legacy strings; arbitrary encoded metadata and all publication paths are not certified.",
+    "Canonical schema allows additional metadata fields; privacy membership must cover actual internal fields rather than assume REQUIRED is exhaustive.",
+    "Root corrected code/test hashes guided this replay; root focused/full-suite results are not approval evidence. No expert corrective verdict read. Same underlying model/common-public-design correlation and reuse of prior own fixtures remain."
+  ],
+  "no_original_data_review_rewrites": true,
+  "preexec_sha256": "105dfb8291509a75091278a65ad21567afcc8fcfe089591e1a5c9425ab1315d4",
+  "previous_code_receipt_sha256": [
+    "68a18f0891ff5dda611e43d4d192769f5dd5f85fb82ce3560a6192508dd0b04e",
+    "24d25d8c1eea2ccfef50488d8186437b9c19503224fab97f24ef8a598d41f67b"
+  ],
+  "publication_scope": "Only these exact functions/code bytes and fixture controls assessed. No approval of entire pipeline or prospective v2.",
+  "receipt_id": "RED-PLANNING-PUBLICATION-CODE-8b2870069c26061cded3",
+  "release_approval": false,
+  "review_mode": "Guided root-requested final casefold correction replay of exact prior fixture expectations, after frozen original384 data and both earlier code reviews; not a new blind data review.",
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "reviewer_role": "adversarial_code_privacy",
+  "roles_and_routing_correct": true,
+  "schema_sha256": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+  "scope_findings": [],
+  "source_sha256": "8b2870069c26061cded39d93061ca13596c78fb7a86749bdc5cabdd9e2703a84"
+}

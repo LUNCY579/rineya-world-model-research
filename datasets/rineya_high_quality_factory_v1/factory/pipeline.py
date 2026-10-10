@@ -4,11 +4,31 @@ import collections
 import hashlib
 import importlib
 import json
+import re
 from pathlib import Path
 from factory.common import ROOT, VERSION, canonical, digest, atomic, write_json, write_jsonl, load_jsonl, record_hash, candidate_paths
 from factory.reference import solve as reference_solve
+from factory.planning_controls import planning_control_rows, planning_control_report
 
 REQUIRED = {"sample_id", "semantic_parent_id", "semantic_family_id", "track_id", "skill_tags", "difficulty", "generator_version", "oracle_version", "generation_seed", "source_provenance", "semantic_task", "rendered_input", "verified_target", "target_format", "split", "review_status", "review_receipt_ids", "record_hash"}
+APPROVAL_ACTORS = {'expert': '/root/expert_reviewer', 'adversarial': '/root/adversarial_auditor',
+                   'adjudication': '/root/research_architect'}
+PRIVATE_PROMPT_FIELDS = (REQUIRED - {'semantic_task', 'rendered_input'}) | {
+    'source_family_key', 'source_index', 'controlled_context', 'controlled_variant',
+    'primary_stratum', 'property_witnesses', 'family_control_claims',
+    'structural_family_profile', 'fact_role_assignments', 'query_role_assignments',
+    'auxiliary_scalar_variant', 'auxiliary_scalar_control', 'reviewed_candidate_hash', 'renderer',
+    'producer_agent_id', 'producer_role', 'source_family_index', 'structural_difficulty',
+}
+
+
+def private_prompt_label_pattern(fields):
+    return re.compile(
+        r'(?<![A-Za-z0-9_])(?:' + '|'.join(re.escape(key) for key in sorted(fields))
+        + r')(?![A-Za-z0-9_])[\"\x27`*_]*\s*[:=]', re.IGNORECASE)
+
+
+PRIVATE_PROMPT_LABEL = private_prompt_label_pattern(PRIVATE_PROMPT_FIELDS)
 
 
 def expected_target(row, oracle):
@@ -97,12 +117,20 @@ def schema_validate(row):
     assert row["track_id"] in [f"{t}-001" for t in ["RCM","RGM","RVM","RSM","RMM","REM","RBM","RJP","RDP","ROM"]]
     assert 1 <= row["difficulty"] <= 7 and row["split"] in ["train","dev_challenge"]
     assert row["source_provenance"]["sealed_evaluation_used"] is False
-    payload=row["rendered_input"].split("Task JSON:\n",1)[1]
+    lead,payload=row["rendered_input"].split("Task JSON:\n",1)
     # Python container equality conflates bools with integers (True == 1).
     # Evidence joins must preserve the exact public JSON scalar types.
-    assert canonical(json.loads(payload))==canonical(row["semantic_task"]), "rendering semantic mismatch"
+    task=json.loads(payload)
+    assert canonical(task)==canonical(row["semantic_task"]), "rendering semantic mismatch"
+    # Public object/fact names can equal metadata words inside the typed task.
+    # The contract lead and task's outer keys are the metadata boundary.
+    private_fields=PRIVATE_PROMPT_FIELDS | (set(row)-{'semantic_task','rendered_input'})
+    private_outer_keys={key.casefold() for key in private_fields}
+    assert not private_outer_keys.intersection(key.casefold() for key in task), 'privileged metadata key in student payload'
     for key in ["sample_id","semantic_parent_id","record_hash","review_receipt_ids","verified_target"]:
-        assert key not in payload, "privileged metadata in student payload"
+        assert key not in lead, "privileged metadata in student input"
+    pattern=PRIVATE_PROMPT_LABEL if private_fields==PRIVATE_PROMPT_FIELDS else private_prompt_label_pattern(private_fields)
+    assert not pattern.search(lead), 'privileged metadata label in student input'
 
 
 def preserve_prior_audit(path, new_bytes):
@@ -154,6 +182,9 @@ def audit(batch):
             gold=expected_target(row,independent_solve)
             assert canonical(gold)==canonical(row["verified_target"]), "independent oracle mismatch"
             assert canonical(expected_target(row,reference_solve))==canonical(gold), "reference mismatch"
+            if planning_control_rows([row], batch):
+                from oracles.rgm_planning_controls_independent import solve as planning_solve
+                assert canonical(expected_target(row,planning_solve))==canonical(gold), "planning independent exact oracle mismatch"
         except Exception as e: errors.append(f"{type(e).__name__}: {e}")
         from oracles.metadata_independent import check as metadata_check
         metadata_errors=metadata_check(row)
@@ -162,6 +193,9 @@ def audit(batch):
             metadata_errors.extend(memory_check(row))
         if belief_control_rows([row]):
             metadata_errors.extend(belief_module.check(row))
+        if planning_control_rows([row], batch):
+            from oracles.rgm_planning_controls_independent import check as planning_check
+            metadata_errors.extend(planning_check(row))
         errors.extend('Metadata: '+e for e in metadata_errors)
         lineage[row["semantic_family_id"]].add(row["split"])
         payloads[digest(row["semantic_task"])].append(row["sample_id"])
@@ -205,6 +239,22 @@ def audit(batch):
         content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
         preserve_prior_audit(control_path,content)
         atomic(control_path,content.decode('utf-8'))
+    planning_controls=planning_control_report(rows,batch,ROOT)
+    stats['planning_control_error_count']=len(planning_controls['errors']) if planning_controls else 0
+    if planning_controls:
+        stats['planning_control_counts']=planning_controls['counts']
+        control_path=ROOT/f'audits/diversity/{batch}-planning-controls.json'
+        payload={'oracle_author_execution':'/root/formal_oracle','check_runner_execution':'/root',
+                 'batch':batch,'report':planning_controls}
+        content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
+        preserve_prior_audit(control_path,content)
+        atomic(control_path,content.decode('utf-8'))
+    stats['batch_control_failure_count']=sum(stats[name] for name in [
+        'memory_control_error_count','belief_control_error_count','planning_control_error_count'])
+    stats['all_machine_quality_gates_pass']=not (
+        stats['validation_failures'] or stats['batch_control_failure_count']
+        or stats['split_leakage'] or stats['cross_parent_semantic_duplicates']
+        or stats['exact_prompt_duplicates'])
     receipt_path=ROOT/f"reviews/oracle/{batch}.jsonl"
     report_path=ROOT/f"audits/leakage/{batch}.json"
     preserve_prior_audit(receipt_path,(''.join(canonical(c)+'\n' for c in checks)).encode('utf-8'))
@@ -234,7 +284,10 @@ def approval_evidence(row,evidence):
         else:receipts.append(current)
     if fail:return receipts,fail
     ids={x["reviewer_execution_id"] for x in receipts}
-    if len(ids)!=3 or ids.intersection({"/root","/root/relational_critic_producer","/root/formal_oracle"}):fail.append("nonindependent_approval")
+    if (set(evidence)!=set(APPROVAL_ACTORS) or len(ids)!=3
+            or any(by[row['sample_id']][-1]['reviewer_execution_id']!=APPROVAL_ACTORS.get(role)
+                   for role,by in evidence.items())):
+        fail.append("nonindependent_approval")
     if any(x.get("critical_defects") or any(i.get("severity") in ["high","critical"] for i in x.get("issues",[])) for x in receipts):fail.append("unresolved_serious_issue")
     return receipts,fail
 
@@ -300,6 +353,8 @@ def release(batch,version,tracks=None,supersedes=None):
         assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
         belief_controls=belief_control_report(accepted)
         assert not belief_controls or not belief_controls['errors'],'Released belief family controls incomplete or false'
+        planning_controls=planning_control_report(accepted,batch,ROOT)
+        assert not planning_controls or not planning_controls['errors'],'Released planning family controls incomplete or false'
         dest=ROOT/f"data/{track}/releases/{version}"
         if dest.exists():raise FileExistsError(f"Immutable release already exists: {dest}")
         dest.mkdir(parents=True)
@@ -361,6 +416,9 @@ def validate_release(path):
             metadata_failures.extend(memory_check(r))
         if belief_control_rows([r]):
             metadata_failures.extend(belief_checker([r]).check(r))
+        if planning_control_rows([r],manifest['batch']):
+            from oracles.rgm_planning_controls_independent import check as planning_check
+            metadata_failures.extend(planning_check(r))
         if metadata_failures:
             from factory.catalog import catalog
             active,_=catalog()
@@ -370,7 +428,7 @@ def validate_release(path):
             assert receipt["record_hash"]==r["reviewed_candidate_hash"] and receipt["decision"]=="ACCEPT"
         receipts=[receipt_by[x] for x in r['review_receipt_ids']]
         assert len(receipts)==3 and len(set(r['review_receipt_ids']))==3
-        assert {x['reviewer_execution_id'] for x in receipts}=={'/root/expert_reviewer','/root/adversarial_auditor','/root/research_architect'},'Released approval identities are not independent'
+        assert {x['reviewer_execution_id'] for x in receipts}==set(APPROVAL_ACTORS.values()),'Released approval identities are not independent'
         assert not any(x.get('critical_defects') or any(i.get('severity') in ['high','critical'] for i in x.get('issues',[])) for x in receipts),'Serious release issue unresolved'
         candidate=dict(r);candidate.pop("reviewed_candidate_hash");candidate["review_status"]="PENDING";candidate["review_receipt_ids"]=[]
         assert record_hash(candidate)==r["reviewed_candidate_hash"],"candidate-to-release lineage mismatch"
@@ -388,6 +446,8 @@ def validate_release(path):
     assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
     belief_controls=belief_control_report(rows)
     assert not belief_controls or not belief_controls['errors'],'Released belief family controls incomplete or false'
+    planning_controls=planning_control_report(rows,manifest['batch'],ROOT)
+    assert not planning_controls or not planning_controls['errors'],'Released planning family controls incomplete or false'
     return {"path":str(path.relative_to(ROOT)),"records":len(rows),"checksum_files":len(files),"specialized_exports":specialized_counts,"pass":True}
 
 

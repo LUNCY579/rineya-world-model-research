@@ -1,0 +1,3126 @@
+{
+  "actual_author_execution": "/root/adversarial_auditor",
+  "actual_mutant_counterexamples": {
+    "blocks:continue_after_failure": {
+      "actual_task": {
+        "goal_on": {
+          "larch": "olive",
+          "olive": "umber",
+          "rivet": "TABLE",
+          "umber": "willow",
+          "willow": "rivet"
+        },
+        "kind": "blocks",
+        "on": {
+          "larch": "rivet",
+          "olive": "umber",
+          "rivet": "willow",
+          "umber": "TABLE",
+          "willow": "olive"
+        },
+        "plan": [
+          {
+            "block": "rivet",
+            "to": "TABLE"
+          },
+          {
+            "block": "larch",
+            "to": "TABLE"
+          },
+          {
+            "block": "willow",
+            "to": "rivet"
+          },
+          {
+            "block": "olive",
+            "to": "TABLE"
+          },
+          {
+            "block": "umber",
+            "to": "willow"
+          },
+          {
+            "block": "olive",
+            "to": "umber"
+          },
+          {
+            "block": "larch",
+            "to": "olive"
+          }
+        ]
+      },
+      "counterexample_scope": "actual input, no gold; first sample encountered, not claimed globally minimal",
+      "independent_expected_target": {
+        "after": {
+          "larch": "rivet",
+          "olive": "umber",
+          "rivet": "willow",
+          "umber": "TABLE",
+          "willow": "olive"
+        },
+        "reaches_goal": false,
+        "shortest_plan": [
+          {
+            "block": "larch",
+            "to": "TABLE"
+          },
+          {
+            "block": "rivet",
+            "to": "TABLE"
+          },
+          {
+            "block": "willow",
+            "to": "rivet"
+          },
+          {
+            "block": "olive",
+            "to": "TABLE"
+          },
+          {
+            "block": "umber",
+            "to": "willow"
+          },
+          {
+            "block": "olive",
+            "to": "umber"
+          },
+          {
+            "block": "larch",
+            "to": "olive"
+          }
+        ],
+        "steps": [
+          {
+            "after": {
+              "larch": "rivet",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": false
+          }
+        ],
+        "valid": false
+      },
+      "mutant_target": {
+        "after": {
+          "larch": "TABLE",
+          "olive": "umber",
+          "rivet": "willow",
+          "umber": "TABLE",
+          "willow": "olive"
+        },
+        "reaches_goal": false,
+        "shortest_plan": [
+          {
+            "block": "larch",
+            "to": "TABLE"
+          },
+          {
+            "block": "rivet",
+            "to": "TABLE"
+          },
+          {
+            "block": "willow",
+            "to": "rivet"
+          },
+          {
+            "block": "olive",
+            "to": "TABLE"
+          },
+          {
+            "block": "umber",
+            "to": "willow"
+          },
+          {
+            "block": "olive",
+            "to": "umber"
+          },
+          {
+            "block": "larch",
+            "to": "olive"
+          }
+        ],
+        "steps": [
+          {
+            "after": {
+              "larch": "rivet",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": false
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": false
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": false
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": false
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": false
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": false
+          }
+        ],
+        "valid": false
+      },
+      "record_hash": "bd5fce8d2eea684cc161cbda8e5e26b1159a208f27bafcc17c1887094ee56a52",
+      "sample_id": "RGM-001-planning-gap-v1-p0204-C1-forward"
+    },
+    "blocks:fresh_from_final": {
+      "actual_task": {
+        "goal_on": {
+          "larch": "olive",
+          "olive": "umber",
+          "rivet": "TABLE",
+          "umber": "willow",
+          "willow": "rivet"
+        },
+        "kind": "blocks",
+        "on": {
+          "larch": "rivet",
+          "olive": "umber",
+          "rivet": "willow",
+          "umber": "TABLE",
+          "willow": "olive"
+        },
+        "plan": [
+          {
+            "block": "larch",
+            "to": "TABLE"
+          },
+          {
+            "block": "rivet",
+            "to": "TABLE"
+          },
+          {
+            "block": "willow",
+            "to": "rivet"
+          },
+          {
+            "block": "olive",
+            "to": "TABLE"
+          },
+          {
+            "block": "umber",
+            "to": "willow"
+          },
+          {
+            "block": "olive",
+            "to": "umber"
+          },
+          {
+            "block": "larch",
+            "to": "olive"
+          }
+        ]
+      },
+      "counterexample_scope": "actual input, no gold; first sample encountered, not claimed globally minimal",
+      "independent_expected_target": {
+        "after": {
+          "larch": "olive",
+          "olive": "umber",
+          "rivet": "TABLE",
+          "umber": "willow",
+          "willow": "rivet"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [
+          {
+            "block": "larch",
+            "to": "TABLE"
+          },
+          {
+            "block": "rivet",
+            "to": "TABLE"
+          },
+          {
+            "block": "willow",
+            "to": "rivet"
+          },
+          {
+            "block": "olive",
+            "to": "TABLE"
+          },
+          {
+            "block": "umber",
+            "to": "willow"
+          },
+          {
+            "block": "olive",
+            "to": "umber"
+          },
+          {
+            "block": "larch",
+            "to": "olive"
+          }
+        ],
+        "steps": [
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "TABLE",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "TABLE",
+              "umber": "TABLE",
+              "willow": "rivet"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "TABLE",
+              "rivet": "TABLE",
+              "umber": "TABLE",
+              "willow": "rivet"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "TABLE",
+              "rivet": "TABLE",
+              "umber": "willow",
+              "willow": "rivet"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "TABLE",
+              "umber": "willow",
+              "willow": "rivet"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "olive",
+              "olive": "umber",
+              "rivet": "TABLE",
+              "umber": "willow",
+              "willow": "rivet"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "mutant_target": {
+        "after": {
+          "larch": "olive",
+          "olive": "umber",
+          "rivet": "TABLE",
+          "umber": "willow",
+          "willow": "rivet"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [],
+        "steps": [
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "willow",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "TABLE",
+              "umber": "TABLE",
+              "willow": "olive"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "TABLE",
+              "umber": "TABLE",
+              "willow": "rivet"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "TABLE",
+              "rivet": "TABLE",
+              "umber": "TABLE",
+              "willow": "rivet"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "TABLE",
+              "rivet": "TABLE",
+              "umber": "willow",
+              "willow": "rivet"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "TABLE",
+              "olive": "umber",
+              "rivet": "TABLE",
+              "umber": "willow",
+              "willow": "rivet"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "larch": "olive",
+              "olive": "umber",
+              "rivet": "TABLE",
+              "umber": "willow",
+              "willow": "rivet"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "record_hash": "499bcad6a7b05a8c0724e12966599f61fbdcf09086c4108b9569b9b0e124eb6e",
+      "sample_id": "RGM-001-planning-gap-v1-p0204-C0-forward"
+    },
+    "blocks:infer_unspecified_TABLE": {
+      "actual_task": {
+        "goal_on": {
+          "dune": "TABLE",
+          "jade": "yarrow",
+          "umber": "TABLE"
+        },
+        "kind": "blocks",
+        "on": {
+          "dune": "yarrow",
+          "jade": "TABLE",
+          "kelp": "jade",
+          "umber": "TABLE",
+          "yarrow": "umber"
+        },
+        "plan": [
+          {
+            "block": "dune",
+            "to": "TABLE"
+          },
+          {
+            "block": "kelp",
+            "to": "TABLE"
+          },
+          {
+            "block": "jade",
+            "to": "yarrow"
+          }
+        ]
+      },
+      "counterexample_scope": "actual input, no gold; first sample encountered, not claimed globally minimal",
+      "independent_expected_target": {
+        "after": {
+          "dune": "TABLE",
+          "jade": "yarrow",
+          "kelp": "TABLE",
+          "umber": "TABLE",
+          "yarrow": "umber"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [
+          {
+            "block": "dune",
+            "to": "TABLE"
+          },
+          {
+            "block": "kelp",
+            "to": "TABLE"
+          },
+          {
+            "block": "jade",
+            "to": "yarrow"
+          }
+        ],
+        "steps": [
+          {
+            "after": {
+              "dune": "TABLE",
+              "jade": "TABLE",
+              "kelp": "jade",
+              "umber": "TABLE",
+              "yarrow": "umber"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "dune": "TABLE",
+              "jade": "TABLE",
+              "kelp": "TABLE",
+              "umber": "TABLE",
+              "yarrow": "umber"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "dune": "TABLE",
+              "jade": "yarrow",
+              "kelp": "TABLE",
+              "umber": "TABLE",
+              "yarrow": "umber"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "mutant_target": {
+        "after": {
+          "dune": "TABLE",
+          "jade": "yarrow",
+          "kelp": "TABLE",
+          "umber": "TABLE",
+          "yarrow": "umber"
+        },
+        "reaches_goal": false,
+        "shortest_plan": [
+          {
+            "block": "dune",
+            "to": "TABLE"
+          },
+          {
+            "block": "kelp",
+            "to": "TABLE"
+          },
+          {
+            "block": "jade",
+            "to": "yarrow"
+          }
+        ],
+        "steps": [
+          {
+            "after": {
+              "dune": "TABLE",
+              "jade": "TABLE",
+              "kelp": "jade",
+              "umber": "TABLE",
+              "yarrow": "umber"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "dune": "TABLE",
+              "jade": "TABLE",
+              "kelp": "TABLE",
+              "umber": "TABLE",
+              "yarrow": "umber"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "dune": "TABLE",
+              "jade": "yarrow",
+              "kelp": "TABLE",
+              "umber": "TABLE",
+              "yarrow": "umber"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "record_hash": "f9dfdd4b2b8c11bd55a29b2d6eb96cc7970cddecded41e2049f3d68cd6e55f1f",
+      "sample_id": "RGM-001-planning-gap-v1-p0218-D0-forward"
+    },
+    "graph:cheapest_fuel_objective": {
+      "actual_task": {
+        "edges": [
+          [
+            "topaz",
+            "jade",
+            1
+          ],
+          [
+            "hazel",
+            "yarrow",
+            3
+          ],
+          [
+            "yarrow",
+            "topaz",
+            1
+          ],
+          [
+            "topaz",
+            "amber",
+            7
+          ],
+          [
+            "jade",
+            "amber",
+            1
+          ],
+          [
+            "yarrow",
+            "jade",
+            6
+          ],
+          [
+            "hazel",
+            "topaz",
+            7
+          ],
+          [
+            "amber",
+            "hazel",
+            2
+          ]
+        ],
+        "fuel": 14,
+        "goal": "amber",
+        "kind": "graph",
+        "nodes": [
+          "topaz",
+          "amber",
+          "yarrow",
+          "hazel",
+          "jade"
+        ],
+        "plan": [
+          "topaz",
+          "amber"
+        ],
+        "start": "hazel"
+      },
+      "counterexample_scope": "actual input, no gold; first sample encountered, not claimed globally minimal",
+      "independent_expected_target": {
+        "after": {
+          "fuel": 0,
+          "node": "amber"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [
+          "topaz",
+          "amber"
+        ],
+        "steps": [
+          {
+            "after": {
+              "fuel": 7,
+              "node": "topaz"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 0,
+              "node": "amber"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "mutant_target": {
+        "after": {
+          "fuel": 0,
+          "node": "amber"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [
+          "yarrow",
+          "topaz",
+          "jade",
+          "amber"
+        ],
+        "steps": [
+          {
+            "after": {
+              "fuel": 7,
+              "node": "topaz"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 0,
+              "node": "amber"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "record_hash": "4a0be8d4043cb463d1037f89acd2e0756c559be11a04eb65a0ff0bf51dda2b8c",
+      "sample_id": "RGM-001-planning-gap-v1-p0186-A0-forward"
+    },
+    "graph:continue_after_failure": {
+      "actual_task": {
+        "edges": [
+          [
+            "topaz",
+            "jade",
+            1
+          ],
+          [
+            "hazel",
+            "yarrow",
+            3
+          ],
+          [
+            "yarrow",
+            "topaz",
+            1
+          ],
+          [
+            "topaz",
+            "amber",
+            7
+          ],
+          [
+            "jade",
+            "amber",
+            1
+          ],
+          [
+            "yarrow",
+            "jade",
+            6
+          ],
+          [
+            "hazel",
+            "topaz",
+            7
+          ],
+          [
+            "amber",
+            "hazel",
+            2
+          ]
+        ],
+        "fuel": 6,
+        "goal": "amber",
+        "kind": "graph",
+        "nodes": [
+          "topaz",
+          "amber",
+          "yarrow",
+          "hazel",
+          "jade"
+        ],
+        "plan": [
+          "topaz",
+          "amber"
+        ],
+        "start": "hazel"
+      },
+      "counterexample_scope": "actual input, no gold; first sample encountered, not claimed globally minimal",
+      "independent_expected_target": {
+        "after": {
+          "fuel": 6,
+          "node": "hazel"
+        },
+        "reaches_goal": false,
+        "shortest_plan": [
+          "yarrow",
+          "topaz",
+          "jade",
+          "amber"
+        ],
+        "steps": [
+          {
+            "after": {
+              "fuel": 6,
+              "node": "hazel"
+            },
+            "legal": false
+          }
+        ],
+        "valid": false
+      },
+      "mutant_target": {
+        "after": {
+          "fuel": 6,
+          "node": "hazel"
+        },
+        "reaches_goal": false,
+        "shortest_plan": [
+          "yarrow",
+          "topaz",
+          "jade",
+          "amber"
+        ],
+        "steps": [
+          {
+            "after": {
+              "fuel": 6,
+              "node": "hazel"
+            },
+            "legal": false
+          },
+          {
+            "after": {
+              "fuel": 6,
+              "node": "hazel"
+            },
+            "legal": false
+          }
+        ],
+        "valid": false
+      },
+      "record_hash": "0343adf6151f867d6a8bfa9d8ceb539779ffca026c4ce3726245c8f01855215e",
+      "sample_id": "RGM-001-planning-gap-v1-p0186-A1-forward"
+    },
+    "graph:fresh_from_final": {
+      "actual_task": {
+        "edges": [
+          [
+            "larch",
+            "amber",
+            3
+          ],
+          [
+            "amber",
+            "topaz",
+            5
+          ],
+          [
+            "larch",
+            "vessel",
+            1
+          ],
+          [
+            "vessel",
+            "birch",
+            3
+          ],
+          [
+            "topaz",
+            "larch",
+            3
+          ],
+          [
+            "birch",
+            "topaz",
+            2
+          ]
+        ],
+        "fuel": 11,
+        "goal": "amber",
+        "kind": "graph",
+        "nodes": [
+          "topaz",
+          "amber",
+          "larch",
+          "vessel",
+          "birch"
+        ],
+        "plan": [
+          "birch",
+          "topaz",
+          "larch",
+          "amber"
+        ],
+        "start": "vessel"
+      },
+      "counterexample_scope": "actual input, no gold; first sample encountered, not claimed globally minimal",
+      "independent_expected_target": {
+        "after": {
+          "fuel": 0,
+          "node": "amber"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [
+          "birch",
+          "topaz",
+          "larch",
+          "amber"
+        ],
+        "steps": [
+          {
+            "after": {
+              "fuel": 8,
+              "node": "birch"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 6,
+              "node": "topaz"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 3,
+              "node": "larch"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 0,
+              "node": "amber"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "mutant_target": {
+        "after": {
+          "fuel": 0,
+          "node": "amber"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [],
+        "steps": [
+          {
+            "after": {
+              "fuel": 8,
+              "node": "birch"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 6,
+              "node": "topaz"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 3,
+              "node": "larch"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 0,
+              "node": "amber"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "record_hash": "8c368dcd241b2c3017fea841a9e0956bcd84c49314069bed6e7665672ebf458e",
+      "sample_id": "RGM-001-planning-gap-v1-p0180-A0-forward"
+    },
+    "graph:ignore_fuel": {
+      "actual_task": {
+        "edges": [
+          [
+            "larch",
+            "amber",
+            3
+          ],
+          [
+            "amber",
+            "topaz",
+            5
+          ],
+          [
+            "larch",
+            "vessel",
+            1
+          ],
+          [
+            "vessel",
+            "birch",
+            3
+          ],
+          [
+            "topaz",
+            "larch",
+            3
+          ],
+          [
+            "birch",
+            "topaz",
+            2
+          ]
+        ],
+        "fuel": 10,
+        "goal": "amber",
+        "kind": "graph",
+        "nodes": [
+          "topaz",
+          "amber",
+          "larch",
+          "vessel",
+          "birch"
+        ],
+        "plan": [
+          "birch",
+          "topaz",
+          "larch",
+          "amber"
+        ],
+        "start": "vessel"
+      },
+      "counterexample_scope": "actual input, no gold; first sample encountered, not claimed globally minimal",
+      "independent_expected_target": {
+        "after": {
+          "fuel": 2,
+          "node": "larch"
+        },
+        "reaches_goal": false,
+        "shortest_plan": null,
+        "steps": [
+          {
+            "after": {
+              "fuel": 7,
+              "node": "birch"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 5,
+              "node": "topaz"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 2,
+              "node": "larch"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 2,
+              "node": "larch"
+            },
+            "legal": false
+          }
+        ],
+        "valid": false
+      },
+      "mutant_target": {
+        "after": {
+          "fuel": -1,
+          "node": "amber"
+        },
+        "reaches_goal": true,
+        "shortest_plan": null,
+        "steps": [
+          {
+            "after": {
+              "fuel": 7,
+              "node": "birch"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 5,
+              "node": "topaz"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 2,
+              "node": "larch"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": -1,
+              "node": "amber"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "record_hash": "f39ff100af348a1d2a3eb7a2fcb3db5aabe62c90946d650c55ed4247460e9c89",
+      "sample_id": "RGM-001-planning-gap-v1-p0180-A1-forward"
+    },
+    "graph:undirected": {
+      "actual_task": {
+        "edges": [
+          [
+            "cedar",
+            "kelp",
+            2
+          ],
+          [
+            "vessel",
+            "dune",
+            1
+          ],
+          [
+            "dune",
+            "kelp",
+            4
+          ],
+          [
+            "kelp",
+            "vessel",
+            2
+          ],
+          [
+            "dune",
+            "quartz",
+            2
+          ],
+          [
+            "quartz",
+            "topaz",
+            2
+          ]
+        ],
+        "fuel": 9,
+        "goal": "topaz",
+        "kind": "graph",
+        "nodes": [
+          "vessel",
+          "dune",
+          "cedar",
+          "kelp",
+          "quartz",
+          "topaz"
+        ],
+        "plan": [
+          "kelp",
+          "cedar"
+        ],
+        "start": "cedar"
+      },
+      "counterexample_scope": "actual input, no gold; first sample encountered, not claimed globally minimal",
+      "independent_expected_target": {
+        "after": {
+          "fuel": 7,
+          "node": "kelp"
+        },
+        "reaches_goal": false,
+        "shortest_plan": [
+          "kelp",
+          "vessel",
+          "dune",
+          "quartz",
+          "topaz"
+        ],
+        "steps": [
+          {
+            "after": {
+              "fuel": 7,
+              "node": "kelp"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 7,
+              "node": "kelp"
+            },
+            "legal": false
+          }
+        ],
+        "valid": false
+      },
+      "mutant_target": {
+        "after": {
+          "fuel": 5,
+          "node": "cedar"
+        },
+        "reaches_goal": false,
+        "shortest_plan": [
+          "kelp",
+          "vessel",
+          "dune",
+          "quartz",
+          "topaz"
+        ],
+        "steps": [
+          {
+            "after": {
+              "fuel": 7,
+              "node": "kelp"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "fuel": 5,
+              "node": "cedar"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "record_hash": "5a78ecf7b8e63a95f92ae30ce3e1d11354a470b77a5480cbb6f93565b8892a30",
+      "sample_id": "RGM-001-planning-gap-v1-p0181-A3-forward"
+    }
+  },
+  "cross_split_exact_prompt_groups": 0,
+  "cross_split_exact_task_groups": 0,
+  "cross_split_family_groups": 0,
+  "cross_split_structural_signature_groups": {},
+  "current_structural_signature_counts": {
+    "initial_shape": 18,
+    "joint_initial_goal": 36,
+    "unweighted_start_goal": 35,
+    "unweighted_topology": 35,
+    "weighted_start_goal": 36
+  },
+  "exact_prompt_duplicate_groups": 0,
+  "exact_semantic_task_duplicate_groups": 192,
+  "families": 48,
+  "fresh_minimum_moves_distribution": {
+    "2": 40,
+    "3": 120,
+    "4": 70,
+    "5": 60,
+    "6": 42,
+    "7": 32,
+    "8": 8,
+    "None": 12
+  },
+  "independent_crosschecks": {
+    "block_relation_fresh_plan_comparisons": 96,
+    "block_relation_transition_comparisons": 439,
+    "graph_simple_path_comparisons": 96
+  },
+  "inferred_row_property_counts_views": {
+    "fuel_blocks_topologically_reachable_goal": 12,
+    "fuel_lengthens_fresh_minimum_moves": 18,
+    "later_action_requires_changed_block_clearance": 144,
+    "legal_prefix_then_first_failure": 108,
+    "partial_block_goal": 24,
+    "required_temporary_goal_displacement": 56,
+    "valid_goal_detour": 72
+  },
+  "initial_judgments_sha256": "57919815ecd74f047427e545a704a28bf490b9790ddd256a4847f31570988112",
+  "input_sha256": "2a6c9d785f9e2de47233de06bad3371e4a4f072e9be1133340913ceec30a6654",
+  "label_counts_views": {
+    "reaches_goal": {
+      "False": 192,
+      "True": 192
+    },
+    "valid": {
+      "False": 120,
+      "True": 264
+    }
+  },
+  "lookup_scope": "No model training; majority fallback on unseen keys; semantic unit dedup prevents field-renderer double weighting. Join IDs and oracle-derived replay/search properties excluded.",
+  "metamorphic_checks": {
+    "lexical_preserving_name_equivariance": 192,
+    "node_edge_or_map_order": 192,
+    "unevaluated_suffix_absorption": 60
+  },
+  "mutants": {
+    "blocks:continue_after_failure": {
+      "differs_from_correct": 12,
+      "executed": 96
+    },
+    "blocks:fresh_from_final": {
+      "differs_from_correct": 91,
+      "executed": 96
+    },
+    "blocks:ignore_destination_clear": {
+      "differs_from_correct": 0,
+      "executed": 96
+    },
+    "blocks:infer_unspecified_TABLE": {
+      "differs_from_correct": 4,
+      "executed": 96
+    },
+    "blocks:noop_allowed": {
+      "differs_from_correct": 0,
+      "executed": 96
+    },
+    "graph:cheapest_fuel_objective": {
+      "differs_from_correct": 32,
+      "executed": 96
+    },
+    "graph:continue_after_failure": {
+      "differs_from_correct": 14,
+      "executed": 96
+    },
+    "graph:fresh_from_final": {
+      "differs_from_correct": 84,
+      "executed": 96
+    },
+    "graph:ignore_fuel": {
+      "differs_from_correct": 12,
+      "executed": 96
+    },
+    "graph:undirected": {
+      "differs_from_correct": 17,
+      "executed": 96
+    }
+  },
+  "per_family_semantic_units": {
+    "4": 48
+  },
+  "prediction_sha256": "273fbdcc8005c034b1f443f5f4ff3309193c899edb461dfd33d69b2f8fda2ec3",
+  "same_signature_multifamily_groups": {
+    "initial_shape": 6,
+    "joint_initial_goal": 0,
+    "unweighted_start_goal": 1,
+    "unweighted_topology": 1,
+    "weighted_start_goal": 0
+  },
+  "scope_limits": [
+    "No comparison with earlier release inputs: public-only read boundary forbids them in this stage.",
+    "World/context structural overlap is measured honestly and may be intentional; field-order pairs are not independent source families.",
+    "Feature associations are input-only corpus diagnostics, not efficacy evidence; correct semantic features naturally determine answers.",
+    "Same-model/common-public-design and prior reviewer knowledge remain correlated review risks."
+  ],
+  "semantic_units": 192,
+  "split_semantic_units": {
+    "dev_challenge": 32,
+    "train": 160
+  },
+  "split_views": {
+    "dev_challenge": 64,
+    "train": 320
+  },
+  "stage": "INPUT_ONLY_AFTER_EXPECTATIONS_FROZEN",
+  "train_to_dev_lookup_tests_semantic_units": [
+    {
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "feature_keys": [
+        "TRAIN_MAJORITY"
+      ],
+      "label": "fresh_feasible",
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "cost_multiset"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 29,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 28,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "cost_sum"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 18,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "depth_multiset"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 16,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "edge_count"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 3,
+      "train_keys": 9,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 24,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "first_action"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 48,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "first_block_rank"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 6,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "first_destination_rank"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 4,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "goal_TABLE_count"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "goal_count"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "goal_rank"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 4,
+      "train_keys": 8,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 23,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "indegrees"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 24,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "initial_true_goal_count"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 2,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "depth_multiset",
+        "goal_count",
+        "plan_length"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 4,
+      "train_keys": 70,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "edge_count",
+        "cost_sum",
+        "fuel"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 0,
+      "train_keys": 37,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 25,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "goal_count",
+        "initial_true_goal_count",
+        "plan_length"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 4,
+      "train_keys": 45,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 4,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "name_lengths",
+        "plan_length"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 91,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 31,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 4,
+      "train_keys": 27,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length",
+        "fuel"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 0,
+      "train_keys": 46,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 5,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length",
+        "payload_length"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 126,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "stack_count",
+        "goal_count",
+        "plan_TABLE_count"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 41,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "kind",
+        "start_rank",
+        "goal_rank",
+        "first_destination_rank"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 29,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 18,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "last_action"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 55,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 0,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "name_initials"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 40,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "name_lengths"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 20,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "name_total_chars"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 5,
+      "train_keys": 14,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "outdegrees"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 22,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 12,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "payload_length"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 99,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "plan_TABLE_count"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 31,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "plan_length"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 4,
+      "train_keys": 8,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 11,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "prompt_length"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 6,
+      "train_keys": 104,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "size"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 3,
+      "train_keys": 3,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "stack_count"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 1,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 28,
+      "dev_correct": 32,
+      "dev_rows": 32,
+      "examples_wrong": [],
+      "feature_keys": [
+        "start_rank"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 3,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 31,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "fuel"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 4,
+      "train_keys": 11,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 25,
+      "dev_correct": 23,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "goal_count",
+        "initial_true_goal_count",
+        "plan_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 15,
+      "train_keys": 45,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 31,
+      "dev_correct": 23,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 19,
+      "train_keys": 27,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 31,
+      "dev_correct": 23,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "plan_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 6,
+      "train_keys": 8,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "depth_multiset",
+        "goal_count",
+        "plan_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 15,
+      "train_keys": 70,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 21,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length",
+        "fuel"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 16,
+      "train_keys": 46,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "depth_multiset"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 16,
+      "train_keys": 16,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "edge_count"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 8,
+      "train_keys": 9,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "first_block_rank"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 6,
+      "train_keys": 6,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "first_destination_rank"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 7,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B1-forward"
+      ],
+      "feature_keys": [
+        "fuel"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 8,
+      "train_keys": 11,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "goal_TABLE_count"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 4,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "goal_count"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 3,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "goal_rank"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 8,
+      "train_keys": 8,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "initial_true_goal_count"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 5,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "kind"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 2,
+      "train_keys": 2,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "plan_TABLE_count"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 6,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "stack_count"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 7,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 28,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B1-forward"
+      ],
+      "feature_keys": [
+        "start_rank"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 7,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 18,
+      "dev_correct": 19,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A3-forward"
+      ],
+      "feature_keys": [
+        "last_action"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 31,
+      "train_keys": 55,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 12,
+      "dev_correct": 19,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "payload_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 27,
+      "train_keys": 99,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 11,
+      "dev_correct": 19,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "prompt_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 25,
+      "train_keys": 104,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 24,
+      "dev_correct": 18,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward",
+        "RGM-001-planning-gap-v1-p0189-A2-forward"
+      ],
+      "feature_keys": [
+        "first_action"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 29,
+      "train_keys": 48,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 4,
+      "dev_correct": 18,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward",
+        "RGM-001-planning-gap-v1-p0189-A2-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "name_lengths",
+        "plan_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 38,
+      "train_keys": 91,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 18,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward",
+        "RGM-001-planning-gap-v1-p0189-A2-forward"
+      ],
+      "feature_keys": [
+        "name_lengths"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 20,
+      "train_keys": 20,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 18,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward",
+        "RGM-001-planning-gap-v1-p0189-A2-forward"
+      ],
+      "feature_keys": [
+        "name_total_chars"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 14,
+      "train_keys": 14,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 18,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "outdegrees"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 16,
+      "train_keys": 22,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 23,
+      "dev_correct": 17,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "indegrees"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 18,
+      "train_keys": 24,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 5,
+      "dev_correct": 17,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length",
+        "payload_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 19,
+      "train_keys": 126,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 17,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0198-B0-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "stack_count",
+        "goal_count",
+        "plan_TABLE_count"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 17,
+      "train_keys": 41,
+      "train_rows": 160
+    },
+    {
+      "dev_correct": 16,
+      "dev_rows": 32,
+      "feature_keys": [
+        "TRAIN_MAJORITY"
+      ],
+      "label": "reaches_goal",
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 16,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "cost_multiset"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 21,
+      "train_keys": 29,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 16,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "edge_count",
+        "cost_sum",
+        "fuel"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 19,
+      "train_keys": 37,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 16,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "start_rank",
+        "goal_rank",
+        "first_destination_rank"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 19,
+      "train_keys": 29,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 0,
+      "dev_correct": 16,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "name_initials"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 40,
+      "train_keys": 40,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 16,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "size"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 3,
+      "train_keys": 3,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 28,
+      "dev_correct": 15,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "cost_sum"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 15,
+      "train_keys": 18,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 24,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "depth_multiset",
+        "goal_count",
+        "plan_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 15,
+      "train_keys": 70,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 25,
+      "dev_correct": 24,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "goal_count",
+        "initial_true_goal_count",
+        "plan_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 14,
+      "train_keys": 45,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 31,
+      "dev_correct": 24,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 14,
+      "train_keys": 27,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 24,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length",
+        "fuel"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 16,
+      "train_keys": 46,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 23,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A3-forward"
+      ],
+      "feature_keys": [
+        "fuel"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 8,
+      "train_keys": 11,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 5,
+      "dev_correct": 23,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length",
+        "payload_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 23,
+      "train_keys": 126,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 12,
+      "dev_correct": 23,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "payload_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 28,
+      "train_keys": 99,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 31,
+      "dev_correct": 23,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward"
+      ],
+      "feature_keys": [
+        "plan_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 6,
+      "train_keys": 8,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 11,
+      "dev_correct": 23,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "prompt_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 26,
+      "train_keys": 104,
+      "train_rows": 160
+    },
+    {
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "feature_keys": [
+        "TRAIN_MAJORITY"
+      ],
+      "label": "valid",
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "cost_multiset"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 21,
+      "train_keys": 29,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 28,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "cost_sum"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 15,
+      "train_keys": 18,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "depth_multiset"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 11,
+      "train_keys": 16,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 24,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "first_action"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 20,
+      "train_keys": 48,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "first_block_rank"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 5,
+      "train_keys": 6,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "goal_TABLE_count"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 4,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "goal_count"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 3,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "goal_rank"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 8,
+      "train_keys": 8,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "initial_true_goal_count"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 4,
+      "train_keys": 5,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "kind"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 2,
+      "train_keys": 2,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "edge_count",
+        "cost_sum",
+        "fuel"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 19,
+      "train_keys": 37,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 4,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "name_lengths",
+        "plan_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 34,
+      "train_keys": 91,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "stack_count",
+        "goal_count",
+        "plan_TABLE_count"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 11,
+      "train_keys": 41,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "kind",
+        "start_rank",
+        "goal_rank",
+        "first_destination_rank"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 21,
+      "train_keys": 29,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 0,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "name_initials"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 30,
+      "train_keys": 40,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 16,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "name_lengths"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 19,
+      "train_keys": 20,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "name_total_chars"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 13,
+      "train_keys": 14,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 20,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A0-forward"
+      ],
+      "feature_keys": [
+        "outdegrees"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 16,
+      "train_keys": 22,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "plan_TABLE_count"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 6,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "size"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 3,
+      "train_keys": 3,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "stack_count"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 5,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 28,
+      "dev_correct": 22,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "start_rank"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 7,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 29,
+      "dev_correct": 21,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "edge_count"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 8,
+      "train_keys": 9,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 23,
+      "dev_correct": 21,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "indegrees"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 18,
+      "train_keys": 24,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 32,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "feature_keys": [
+        "first_destination_rank"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 7,
+      "train_keys": 7,
+      "train_rows": 160
+    },
+    {
+      "covered_dev_rows": 18,
+      "dev_correct": 20,
+      "dev_rows": 32,
+      "examples_wrong": [
+        "RGM-001-planning-gap-v1-p0188-A1-forward",
+        "RGM-001-planning-gap-v1-p0188-A2-forward",
+        "RGM-001-planning-gap-v1-p0188-A3-forward"
+      ],
+      "feature_keys": [
+        "last_action"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 22,
+      "train_keys": 55,
+      "train_rows": 160
+    }
+  ],
+  "views": 384
+}

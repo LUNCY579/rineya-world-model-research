@@ -1,0 +1,172 @@
+{
+  "API": {
+    "analyze": "analyze(task) -> target plus complete finite diagnostics",
+    "check": "check(row) -> list[str]",
+    "check_batch": "check_batch(rows, manifest, prior_inputs=None) -> dict with errors/counts/families/conditional_histograms/executed_audit_probes/shortcut_diagnostics",
+    "solve": "solve(task) -> independently derived target"
+  },
+  "actual_execution_id": "/root/formal_oracle",
+  "actual_tests": {
+    "actual_execution_id": "/root/formal_oracle",
+    "at_utc": "20261010T042606Z",
+    "counts": {
+      "block_transition_cases": 260,
+      "block_world_goal_pairs": 169,
+      "graph_histories": 320,
+      "hand_control_families": 4,
+      "held_goal_search_pairs": 169,
+      "malformed_cases": 18,
+      "mutations": 17,
+      "partial_goal_extension_pairs": 507
+    },
+    "elapsed_seconds": 0.6516149999952177,
+    "errors": 0,
+    "failures": 0,
+    "output": "test_controls_reject_hidden_changes_and_invalid_goals (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_controls_reject_hidden_changes_and_invalid_goals) ... ok\ntest_executed_probes_and_diagnostic_reproduction (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_executed_probes_and_diagnostic_reproduction) ... ok\ntest_exhaustive_small_graphs_vs_direct_path_enumeration (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_exhaustive_small_graphs_vs_direct_path_enumeration) ... ok\ntest_first_illegal_suffix_absorption_and_identity (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_first_illegal_suffix_absorption_and_identity) ... ok\ntest_graph_lex_full_sequence_and_multiplicity (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_graph_lex_full_sequence_and_multiplicity) ... ok\ntest_hand_derived_all_four_contexts (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_hand_derived_all_four_contexts) ... ok\ntest_hand_derived_resource_objectives_and_boundary (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_hand_derived_resource_objectives_and_boundary) ... ok\ntest_independent_stack_transition_and_small_goal_bfs (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_independent_stack_transition_and_small_goal_bfs) ... ok\ntest_manifest_mutations_actual_fields_and_scopes (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_manifest_mutations_actual_fields_and_scopes) ... ok\ntest_manifest_positive_family_binding_and_ignored_stored_target (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_manifest_positive_family_binding_and_ignored_stored_target) ... ok\ntest_name_key_order_equivariance_and_displacement (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_name_key_order_equivariance_and_displacement) ... ok\ntest_non_goal_prefix_need_not_copy_the_base_submitted_route (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_non_goal_prefix_need_not_copy_the_base_submitted_route) ... ok\ntest_novelty_inventory_and_isomorphism_collisions (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_novelty_inventory_and_isomorphism_collisions) ... ok\ntest_partial_goal_extension_and_held_relation_search_exhaustive (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_partial_goal_extension_and_held_relation_search_exhaustive) ... ok\ntest_published_property_list_encoding_and_integer_version (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_published_property_list_encoding_and_integer_version) ... ok\ntest_rendered_payload_type_identity_and_real_order_crossing (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_rendered_payload_type_identity_and_real_order_crossing) ... ok\ntest_type_and_world_malformed_fail_closed (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_type_and_world_malformed_fail_closed) ... ok\ntest_witness_scalar_and_input_locator_truth_fail_closed (oracle_rgm_planning_controls_test.RGMProspectiveTests.test_witness_scalar_and_input_locator_truth_fail_closed) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.652s\n\nOK\n",
+    "public_encoding_sha256": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+    "read_boundary": "Public contracts/canonical schema/encoding supplement and own existing independent oracle only; hand inputs, no producer/candidate/prior-inventory/gold/private judgments.",
+    "role": "independent formal author and actual test runner; no approval",
+    "source_sha256": {
+      "oracles/rgm_planning_controls_independent.py": "cd92cff9bb92eb38afd5a989109718cd600390a9609a13fc070f9cc1e1677bf3",
+      "tests/oracle_rgm_planning_controls_test.py": "f1514507b3074d3edad312d0dbbf680b44bd86fee4a0181c80825c24612574b7"
+    },
+    "source_unchanged_after_run": true,
+    "tests": 18
+  },
+  "at_utc": "20261010T042716Z",
+  "deterministic_equal_score_diagnostics": {
+    "actual_subprocess_runs": [
+      {
+        "PYTHONHASHSEED": "1",
+        "completed": true,
+        "diagnostic_json_bytes": 651,
+        "diagnostic_json_sha256": "24b20ecb1a85cf8d6f64fd5f8e923e193c3c9b6a4141a5b44d4035592024efb2",
+        "invoked": true
+      },
+      {
+        "PYTHONHASHSEED": "987",
+        "completed": true,
+        "diagnostic_json_bytes": 651,
+        "diagnostic_json_sha256": "24b20ecb1a85cf8d6f64fd5f8e923e193c3c9b6a4141a5b44d4035592024efb2",
+        "invoked": true
+      }
+    ],
+    "full_json_equal": true
+  },
+  "handmade_audit": {
+    "actual_families": 4,
+    "actual_rows": 32,
+    "bytes": 66184,
+    "executed_probes": 37,
+    "passed_probes": 37,
+    "path": "reviews/oracle/RGM-planning-handmade-audit-20261010T042716Z.json",
+    "production_cohort_coverage_errors_preserved": [
+      "manifest: requires exactly 48 families",
+      "coverage: requires 12 complete families in each stratum",
+      "lineage: requires exact fresh source indices 180..227",
+      "A coverage: requires six infeasible and six feasible lengthening families",
+      "B coverage: requires at least six minimum-route ties",
+      "C coverage: first-error indices must vary",
+      "C coverage: requires at least four temporary-goal displacement worlds",
+      "novelty: requires 16 new unweighted graph topology classes",
+      "novelty: requires eight six-block initial support shapes",
+      "size coverage: C requires 5 train/1 dev per block size",
+      "size coverage: C requires 5 train/1 dev per block size",
+      "size coverage: D requires 5 train/1 dev per block size",
+      "size coverage: D requires 5 train/1 dev per block size",
+      "size coverage: A train must cover graph sizes 5..7",
+      "size coverage: A dev requires two distinct graph sizes",
+      "size coverage: B train must cover graph sizes 5..7",
+      "size coverage: B dev requires two distinct graph sizes",
+      "size coverage: combined graph dev must cover sizes 5..7",
+      "A coverage: A2/A3 lengths lack actual matched support"
+    ],
+    "sha256": "79a966a78681db1194d8f6b857b5c9ed76d6966f98dae4f303779332002bc146"
+  },
+  "independence": {
+    "approvals": [],
+    "existing_frozen_files_edited": [],
+    "private_read_boundary": "No actual producer/reference implementation, candidate, prior active input inventory, stored gold, measured approved reports or other reviewer verdict was read. Own original independent.py was read/called on handmade fixtures only.",
+    "runtime_dependencies": "Python stdlib only; tests additionally call own frozen independent oracle for comparisons.",
+    "shared_underlying_model": "Shared underlying model and common public contract remain correlated error risks; separate actual execution does not establish independent error distributions."
+  },
+  "interface_interpretation": {
+    "encoding_supplement": "Published list[str] context.row_properties, sample/property row_witnesses; nonempty string or positive integer version accepted; bool rejected.",
+    "evidence": "Any supported actual locator/measurement alias is verified; unknown measurement/locator names yield UNSUPPORTED_ENCODING/UNKNOWN with field location rather than a false-property verdict. At least one verified locator/measurement is required.",
+    "evidence_identifiers": "No unpublished evidence/control ID uniqueness requirement; actual same-family sample pairs and factual differences are checked.",
+    "novelty": "None prior_inputs is explicit UNKNOWN/error; [] denotes a supplied empty inventory, used solely for handmade fixtures. Actual prior inventory must be passed by root.",
+    "prefixes": "A2/C3 non-goal prefixes need not copy base submitted trajectory.",
+    "source_lineage": "Manifest binds sample IDs and split; any asserted source index/family key in row/provenance must agree; fresh 180..227 coverage enforced."
+  },
+  "limitations": [
+    "No completed 384-row candidate was read or audited here. Full-cohort/novelty controls are tested through handmade per-family positives and corruptions; actual completed batch must independently execute the same frozen checker.",
+    "Student prose is not semantically certified by string matching; raw task read-back, internal ID exclusion and actual field/list-order crossing are checked."
+  ],
+  "preserved_execution_history": [
+    {
+      "bytes": 4168,
+      "path": "reviews/oracle/RGM-planning-final-encoding-tests-20261010T042454Z.json",
+      "sha256": "1fea417c30f65b1095a746914da9e0fdc82889d5e2a4c34c66a030d0cc442767"
+    },
+    {
+      "bytes": 3992,
+      "path": "reviews/oracle/RGM-planning-final-tests-20261010T042252Z.json",
+      "sha256": "f22bcb014b9df25ee9e4bb39896b5eb138c7bdc6b66699c0ad879aadc1aa4472"
+    },
+    {
+      "bytes": 970,
+      "path": "reviews/oracle/RGM-planning-first-invocation-20261010T041617Z.json",
+      "sha256": "fe00553354fd12497674224487d5affb66785ff04b895c53221aefc7da9f4871"
+    },
+    {
+      "bytes": 4276,
+      "path": "reviews/oracle/RGM-planning-frozen-execution-20261010T042606Z.json",
+      "sha256": "4aad4272a53497d1f9519c660bf988bc359e2e4ea8607c5315bb46c687652507"
+    },
+    {
+      "bytes": 66184,
+      "path": "reviews/oracle/RGM-planning-handmade-audit-20261010T042716Z.json",
+      "sha256": "79a966a78681db1194d8f6b857b5c9ed76d6966f98dae4f303779332002bc146"
+    },
+    {
+      "bytes": 2991,
+      "path": "reviews/oracle/RGM-planning-handmade-first-execution-20261010T041617Z.json",
+      "sha256": "7d410200e20a02bdeb3c833460e6d5cd85b4c879751feef30934317c4a8e6d9b"
+    },
+    {
+      "bytes": 790,
+      "path": "reviews/oracle/RGM-planning-intermediate-invocation-20261010T041946Z.json",
+      "sha256": "60b54a9d608c827885a34a9e465b75ba9dc384ee155212408e4309e0d9932c4f"
+    },
+    {
+      "bytes": 3520,
+      "path": "reviews/oracle/RGM-planning-preliminary-final-execution-20261010T041946Z.json",
+      "sha256": "af812b765db09ac01442e263db06c7b3a94dee7e91eb802151837bf5cc4effa4"
+    }
+  ],
+  "public_sources": {
+    "research/curricula/RGM-NEXT-GAP-PROSPECTIVE.md": "6100d43fe1cf83d798bb34799fac70569f54d33f66692150d188581d9c940761",
+    "research/curricula/RGM-NEXT-GAP-ROOT_FREEZE.json": "2a4af1615bd6e58a7ac71c97b615d405df3354235360c682486fb4f4c1f5f52f",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES.md": "f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a",
+    "schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f"
+  },
+  "role": "Independent formal oracle author and actual handmade-property runner",
+  "source_files": {
+    "oracles/independent.py": {
+      "bytes": 18109,
+      "sha256": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a"
+    },
+    "oracles/rgm_planning_controls_independent.py": {
+      "bytes": 50601,
+      "sha256": "cd92cff9bb92eb38afd5a989109718cd600390a9609a13fc070f9cc1e1677bf3"
+    },
+    "tests/oracle_rgm_planning_controls_test.py": {
+      "bytes": 26793,
+      "sha256": "f1514507b3074d3edad312d0dbbf680b44bd86fee4a0181c80825c24612574b7"
+    }
+  },
+  "source_unchanged_after_execution": true,
+  "status": "FROZEN_PRE_CANDIDATE_READ"
+}

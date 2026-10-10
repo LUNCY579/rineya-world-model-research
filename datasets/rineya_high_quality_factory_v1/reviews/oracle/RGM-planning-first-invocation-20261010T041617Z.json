@@ -1,0 +1,18 @@
+{
+  "actual_execution_id": "/root/formal_oracle",
+  "role": "independent formal author/runner; no approval",
+  "at_utc": "20261010T041617Z",
+  "source_sha256": {
+    "oracles/rgm_planning_controls_independent.py": "cb5b17f86da0f8bbf6381c865e6c3834601f66b1b2a84f725332b0ac34ad84a5",
+    "tests/oracle_rgm_planning_controls_test.py": "cf68fe21c5677447f6f3814299e25004dfa1fcb2912a0c19e1a71188546d7fa8"
+  },
+  "execution": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 /opt/anaconda3/bin/python3 -m unittest tests.oracle_rgm_planning_controls_test -v",
+    "cwd": "/Users/chengli/Downloads/Rineya_World_Model",
+    "exit_code": 1,
+    "tests_executed": 0,
+    "failure": "Wrong working directory: ModuleNotFoundError tests.oracle_rgm_planning_controls_test; test module not loaded.",
+    "source_defect_inferred": false
+  },
+  "read_boundary": "Public contracts, canonical schema, own existing independent oracle only; no candidate/producer/private gold/reviewer verdicts."
+}

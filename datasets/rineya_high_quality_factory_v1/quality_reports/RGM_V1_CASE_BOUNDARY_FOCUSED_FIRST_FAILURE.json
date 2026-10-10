@@ -1,0 +1,24 @@
+{
+  "actual_runner_execution": "/root",
+  "at_utc": "2026-10-10T05:38:43.246148+00:00",
+  "actual_command": [
+    "/opt/anaconda3/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_planning_review_corrections",
+    "tests.test_approval_gate",
+    "tests.test_schema_typed_rendering",
+    "-v"
+  ],
+  "actual_exit_code": 1,
+  "actual_ran": 15,
+  "actual_successful_existing_tests": 14,
+  "failure_kind": "Root guessed nonexistent test module; import error, not a semantic regression",
+  "actual_error": "ModuleNotFoundError: No module named 'tests.test_schema_typed_rendering'",
+  "exact_source_bindings": {
+    "factory/pipeline.py": "86baffa9fbe23e726961315094de1441dbea73a31db7c67a2d9edd7e760d1926",
+    "tests/test_planning_review_corrections.py": "19ea7ee2a30e2d99b03e1693645e2d379b3bbfe11856e7e24ffa32cadb652c9b",
+    "factory/planning_controls.py": "be85989ef8480c01056a55f1329de80b47d2eec2d1496852218890d430165668"
+  },
+  "next_action": "Read previous exact full-suite module command and rerun actual existing modules; preserve this failed invocation"
+}

@@ -1,0 +1,18 @@
+{
+  "actual_author": "/root/expert_reviewer",
+  "created_utc": "2026-10-10T04:56:25.142294+00:00",
+  "stage": "PRESERVED_OWN_FAILED_COMPARISON_EXECUTION",
+  "actual_argv": [
+    "/opt/anaconda3/bin/python3",
+    "reviews/expert/review_rgm_planning_gap_v1_comparison.py",
+    "derive"
+  ],
+  "exit_code": 1,
+  "source_sha256": "b24b8da68304ca5eecb273c4cfeb39bc41656a0201b9024a3278d1161b577dc0",
+  "exception": "AssertionError at line196: collections.Counter(claimed_sids)==collections.Counter(by)",
+  "cause": "Own Counter(mapping) misuse copied dictionary values rather than counting keys; corpus custody comparison was not completed. No receipts or analysis output written.",
+  "fix": "New archived comparison_v2 source counts by.keys(); original failed source preserved exactly.",
+  "new_source_sha256": "7d64ad2737cc1abc1ca5bb05d27b71181d4c09de4fd4747d7068527dd7e9f16c",
+  "new_preexecution_archive_sha256": "7d64ad2737cc1abc1ca5bb05d27b71181d4c09de4fd4747d7068527dd7e9f16c",
+  "new_source_bytes": 40149
+}

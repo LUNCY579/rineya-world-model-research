@@ -1,0 +1,116 @@
+{
+  "actual_author_execution": "/root/backup_manager",
+  "actual_runner_execution": "/root",
+  "all_release_artifacts_in_scope": true,
+  "all_v1_artifacts_in_scope": true,
+  "at_utc": "2026-10-10T05:44:00.560956+00:00",
+  "checkpoint_id": "rgm-v1-final-review",
+  "checkpoint_runner_execution": "/root",
+  "deferred_hash_boundary": "Per-file exact bytes observed during this inventory run; excluded V2 files may change later and acquire no checkpoint persistence or data approval",
+  "deferred_local_files": [
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:20.023929+00:00",
+      "path": "generators/relational/planning_gap_v2.py",
+      "reason": "New planning-gap-v2/planning_gap_v2 implementation, candidate or review artifact; deferred until its own frozen checkpoint",
+      "sha256": "06545a1ebe067a29ea2787908d820b791f5d15c11e73960b58800dc5be6bcf27",
+      "size": 24564
+    },
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:19.953132+00:00",
+      "path": "oracles/rgm_planning_controls_v2_independent.py",
+      "reason": "Unfinished independent V2 formal oracle",
+      "sha256": "69944b8e06fb984947d0d686296d0bb886aecc358ae6f7405d279d0ba5a40fdf",
+      "size": 43699
+    },
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:20.074807+00:00",
+      "path": "reviews/oracle/RGM-planning-v2-addendum-execution-20261010T052426Z.json",
+      "reason": "Unfinished V2 independent oracle execution/review evidence under the named prefix",
+      "sha256": "d0f0bc1986d3f034f8bdd8d157d24589391cd610808ad84f1707acc7af43e296",
+      "size": 5251
+    },
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:20.075117+00:00",
+      "path": "reviews/oracle/RGM-planning-v2-final-execution-20261010T052902Z.json",
+      "reason": "Unfinished V2 independent oracle execution/review evidence under the named prefix",
+      "sha256": "00ee39ea9714c08a41fe7e204e6b4e0173a428f0d59820aa8317a90a80ae549a",
+      "size": 8337
+    },
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:20.073306+00:00",
+      "path": "reviews/oracle/RGM-planning-v2-final-freeze-20261010T053030Z.json",
+      "reason": "Unfinished V2 independent oracle execution/review evidence under the named prefix",
+      "sha256": "d073605de2aa0a2ef86e8b698b9c31a09e5c5f9bc3106bc4d4293d0e222e00d8",
+      "size": 8122
+    },
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:20.070378+00:00",
+      "path": "reviews/oracle/RGM-planning-v2-final-runner-20261010T052902Z.py",
+      "reason": "Unfinished V2 independent oracle execution/review evidence under the named prefix",
+      "sha256": "1869942df1f7b14d9f09e13d273fd0144ac259cb0e9932eeeff87527cddad438",
+      "size": 4903
+    },
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:20.071685+00:00",
+      "path": "reviews/oracle/RGM-planning-v2-first-execution-20261010T051814Z.json",
+      "reason": "Unfinished V2 independent oracle execution/review evidence under the named prefix",
+      "sha256": "29e495c342e3e4ecb17cbcef5ed58a07af7a7ccaee37e8a6a157f5afadea8322",
+      "size": 4142
+    },
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:20.075961+00:00",
+      "path": "reviews/oracle/RGM-planning-v2-handmade-diagnostic-20261010T052902Z.json",
+      "reason": "Unfinished V2 independent oracle execution/review evidence under the named prefix",
+      "sha256": "7c494b6c839cc6980460e786332dde9b12e7487eb94e1d3cdcf96f75edcc759d",
+      "size": 42400
+    },
+    {
+      "hash_semantics": "Exact observed local bytes; excluded from this checkpoint and allowed to continue evolving",
+      "observed_at_utc": "2026-10-10T05:43:19.961823+00:00",
+      "path": "tests/oracle_rgm_planning_v2_test.py",
+      "reason": "Unfinished independent V2 formal oracle test (actual observed spelling)",
+      "sha256": "b21a64de06d58fba6711a704508bf31babab619f9c48821b2b0116e9f327ce85",
+      "size": 30694
+    }
+  ],
+  "future_deferral_policy": {
+    "always_included_public_roots": [
+      "handoff",
+      "research",
+      "schemas"
+    ],
+    "exact_paths": {
+      "oracles/rgm_planning_controls_v2_independent.py": "Unfinished independent V2 formal oracle",
+      "tests/oracle_rgm_planning_v2_test.py": "Unfinished independent V2 formal oracle test (actual observed spelling)"
+    },
+    "formal_test_prefix": "rgm_planning_controls_v2(?=$|[^A-Za-z0-9])",
+    "future_artifact_roots": [
+      "audits",
+      "candidates",
+      "data",
+      "generators",
+      "manifests",
+      "oracles",
+      "reviews",
+      "tests"
+    ],
+    "future_wave_token": "(?:^|[^A-Za-z0-9])planning[-_]gap[-_]v2(?=$|[^A-Za-z0-9])",
+    "oracle_review_prefix": "^RGM-(?:planning-)?v2(?=$|[-._/])"
+  },
+  "grants_data_approval": false,
+  "included_checks": "Unchanged existing inventory-builder byte, secret, cap, lossless, Git and source-stability checks retained",
+  "model_disclosure": "Same-model agent execution; separate execution does not imply model diversity",
+  "public_v2_design_and_root_freezes_in_scope": true,
+  "scope": "Completed RGM V1 quarantine/review/gate evidence, prior factory and public V2 design; only unfinished specifically named V2 implementation artifacts deferred",
+  "unchanged_inventory_builder_sha256": "c8d052c54797f0d6970715ba640d124313e1b8c945eb7a5e6bc42e45556b08f4",
+  "unchanged_original_belief_wrapper_sha256": "c65d5c60c8aca0b8408ba685a4b7c83df9a008f2404d6bf3ff6bb8870c5b9ff8",
+  "wrapper_sha256": "19a08217d92f76a216dc21de89e295d55f958a7d0eba614c6205fdfd5a998093"
+}

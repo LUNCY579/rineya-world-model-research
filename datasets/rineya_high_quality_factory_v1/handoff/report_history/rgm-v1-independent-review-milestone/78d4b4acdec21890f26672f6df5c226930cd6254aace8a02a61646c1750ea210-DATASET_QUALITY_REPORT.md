@@ -1,0 +1,557 @@
+# Dataset quality report
+
+Machine evidence: quality_reports/CURRENT.json. Candidate batches are retained even when superseded. Review decisions are bound to exact candidate hashes and independent execution identities.
+
+| Track | Batch | Candidate records | Source-family IDs |
+|---|---|---:|---:|
+| RBM-001 | extended-pilot-v1 | 24 | 12 |
+| RBM-001 | extended-pilot-v2 | 24 | 12 |
+| RCM-001 | expansion-v1 | 1200 | 150 |
+| RCM-001 | pilot-v1 | 120 | 30 |
+| RCM-001 | pilot-v2 | 240 | 30 |
+| RDP-001 | extended-pilot-v1 | 24 | 12 |
+| RDP-001 | extended-pilot-v2 | 24 | 12 |
+| REM-001 | extended-pilot-v1 | 24 | 12 |
+| REM-001 | extended-pilot-v2 | 24 | 12 |
+| REM-001 | extended-pilot-v3 | 120 | 12 |
+| REM-001 | memory-gap-v1 | 768 | 12 |
+| REM-001 | memory-gap-v2 | 768 | 12 |
+| RGM-001 | expansion-v1 | 360 | 150 |
+| RGM-001 | expansion-v2 | 360 | 150 |
+| RGM-001 | expansion-v3 | 360 | 150 |
+| RGM-001 | pilot-v1 | 60 | 30 |
+| RGM-001 | pilot-v2 | 60 | 30 |
+| RGM-001 | pilot-v3 | 72 | 30 |
+| RJP-001 | extended-pilot-v1 | 24 | 12 |
+| RJP-001 | extended-pilot-v2 | 24 | 12 |
+| RMM-001 | extended-pilot-v1 | 24 | 12 |
+| RMM-001 | extended-pilot-v2 | 24 | 12 |
+| RMM-001 | extended-pilot-v3 | 76 | 12 |
+| ROM-001 | extended-pilot-v1 | 24 | 12 |
+| ROM-001 | extended-pilot-v2 | 24 | 12 |
+| RSM-001 | extended-pilot-v1 | 24 | 12 |
+| RSM-001 | extended-pilot-v2 | 24 | 12 |
+| RVM-001 | claim-gap-v1 | 24 | 12 |
+| RVM-001 | claim-gap-v2 | 24 | 12 |
+| RVM-001 | expansion-v1 | 300 | 150 |
+| RVM-001 | expansion-v2 | 300 | 150 |
+| RVM-001 | pilot-v1 | 60 | 30 |
+| RVM-001 | pilot-v2 | 60 | 30 |
+| RVM-001 | pilot-v4 | 60 | 30 |
+
+
+Review decision counts:
+
+```json
+{
+  "expert": {
+    "records": 5176,
+    "decisions": {
+      "ACCEPT": 4294,
+      "REVISE": 882
+    }
+  },
+  "adversarial": {
+    "records": 4408,
+    "decisions": {
+      "ACCEPT": 4220,
+      "REVISE": 188
+    }
+  },
+  "adjudication": {
+    "records": 4168,
+    "decisions": {
+      "ACCEPT": 4028,
+      "REVISE": 140
+    }
+  }
+}
+```
+
+Exact oracle, schema, duplicates and family split audit summaries:
+
+```json
+[
+  {
+    "batch": "claim-gap-v1",
+    "records": 24,
+    "unique_parents": 12,
+    "distinct_parent_semantic_signatures": 12,
+    "oracle_failures": 12,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "4": 20,
+      "3": 4
+    },
+    "tracks": {
+      "RVM-001": 24
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "claim-gap-v2",
+    "records": 24,
+    "unique_parents": 12,
+    "distinct_parent_semantic_signatures": 12,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "4": 20,
+      "3": 4
+    },
+    "tracks": {
+      "RVM-001": 24
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 0,
+    "validation_failures": 0
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "expansion-v1",
+    "records": 1860,
+    "unique_parents": 450,
+    "distinct_parent_semantic_signatures": 450,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 454,
+      "1": 184,
+      "4": 1180,
+      "2": 42
+    },
+    "tracks": {
+      "RCM-001": 1200,
+      "RGM-001": 360,
+      "RVM-001": 300
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 80,
+    "validation_failures": 80
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "expansion-v2",
+    "records": 660,
+    "unique_parents": 300,
+    "distinct_parent_semantic_signatures": 300,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 134,
+      "4": 460,
+      "1": 24,
+      "2": 42
+    },
+    "tracks": {
+      "RGM-001": 360,
+      "RVM-001": 300
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 14,
+    "validation_failures": 14
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "expansion-v3",
+    "records": 360,
+    "unique_parents": 150,
+    "distinct_parent_semantic_signatures": 150,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 50,
+      "4": 244,
+      "1": 24,
+      "2": 42
+    },
+    "tracks": {
+      "RGM-001": 360
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 0,
+    "validation_failures": 0
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "extended-pilot-v1",
+    "records": 168,
+    "unique_parents": 84,
+    "distinct_parent_semantic_signatures": 74,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [
+      [
+        "RBM-001-extended-pilot-v1-p0000",
+        "RBM-001-extended-pilot-v1-p0006"
+      ],
+      [
+        "RBM-001-extended-pilot-v1-p0001",
+        "RBM-001-extended-pilot-v1-p0007"
+      ],
+      [
+        "RBM-001-extended-pilot-v1-p0004",
+        "RBM-001-extended-pilot-v1-p0010"
+      ],
+      [
+        "RBM-001-extended-pilot-v1-p0005",
+        "RBM-001-extended-pilot-v1-p0011"
+      ],
+      [
+        "RJP-001-extended-pilot-v1-p0004",
+        "RJP-001-extended-pilot-v1-p0010"
+      ],
+      [
+        "RMM-001-extended-pilot-v1-p0000",
+        "RMM-001-extended-pilot-v1-p0006"
+      ],
+      [
+        "RMM-001-extended-pilot-v1-p0001",
+        "RMM-001-extended-pilot-v1-p0007"
+      ],
+      [
+        "RMM-001-extended-pilot-v1-p0004",
+        "RMM-001-extended-pilot-v1-p0010"
+      ],
+      [
+        "RMM-001-extended-pilot-v1-p0005",
+        "RMM-001-extended-pilot-v1-p0011"
+      ],
+      [
+        "ROM-001-extended-pilot-v1-p0005",
+        "ROM-001-extended-pilot-v1-p0011"
+      ]
+    ],
+    "exact_prompt_duplicates": 20,
+    "difficulty": {
+      "2": 36,
+      "3": 128,
+      "4": 4
+    },
+    "tracks": {
+      "RBM-001": 24,
+      "RDP-001": 24,
+      "REM-001": 24,
+      "RJP-001": 24,
+      "RMM-001": 24,
+      "ROM-001": 24,
+      "RSM-001": 24
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "extended-pilot-v2",
+    "records": 168,
+    "unique_parents": 84,
+    "distinct_parent_semantic_signatures": 84,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "2": 36,
+      "3": 128,
+      "4": 4
+    },
+    "tracks": {
+      "RBM-001": 24,
+      "RDP-001": 24,
+      "REM-001": 24,
+      "RJP-001": 24,
+      "RMM-001": 24,
+      "ROM-001": 24,
+      "RSM-001": 24
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "extended-pilot-v3",
+    "records": 196,
+    "unique_parents": 24,
+    "distinct_parent_semantic_signatures": 24,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 196
+    },
+    "tracks": {
+      "REM-001": 120,
+      "RMM-001": 76
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "memory-gap-v1",
+    "records": 768,
+    "unique_parents": 12,
+    "distinct_parent_semantic_signatures": 12,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 768
+    },
+    "tracks": {
+      "REM-001": 768
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 768,
+    "validation_failures": 768,
+    "memory_control_error_count": 6156,
+    "memory_control_counts": {
+      "records": 768,
+      "scheduled_records": 768,
+      "source_families": 12,
+      "base_controlled_histories": 48,
+      "base_history_query_observations": 384,
+      "rotation_level_observations": 3072,
+      "rendered_observations": 6144
+    }
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "memory-gap-v2",
+    "records": 768,
+    "unique_parents": 12,
+    "distinct_parent_semantic_signatures": 12,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 768
+    },
+    "tracks": {
+      "REM-001": 768
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 0,
+    "validation_failures": 0,
+    "memory_control_error_count": 0,
+    "memory_control_counts": {
+      "records": 768,
+      "scheduled_records": 768,
+      "source_families": 12,
+      "base_controlled_histories": 48,
+      "base_history_query_observations": 384,
+      "rotation_level_observations": 3072,
+      "rendered_observations": 6144
+    }
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "pilot-v1",
+    "records": 240,
+    "unique_parents": 90,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 56,
+      "1": 16,
+      "4": 96,
+      "7": 48,
+      "5": 24
+    },
+    "tracks": {
+      "RCM-001": 120,
+      "RGM-001": 60,
+      "RVM-001": 60
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "pilot-v2",
+    "records": 360,
+    "unique_parents": 90,
+    "distinct_parent_semantic_signatures": 90,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 112,
+      "1": 36,
+      "4": 204,
+      "2": 8
+    },
+    "tracks": {
+      "RCM-001": 240,
+      "RGM-001": 60,
+      "RVM-001": 60
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "pilot-v3",
+    "records": 72,
+    "unique_parents": 30,
+    "distinct_parent_semantic_signatures": 30,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 14,
+      "4": 48,
+      "1": 4,
+      "2": 6
+    },
+    "tracks": {
+      "RGM-001": 72
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "pilot-v4",
+    "records": 60,
+    "unique_parents": 30,
+    "distinct_parent_semantic_signatures": 30,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "4": 40,
+      "3": 20
+    },
+    "tracks": {
+      "RVM-001": 60
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 0,
+    "validation_failures": 0
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  }
+]
+```
+
+Template overlap remains a known scope limitation. All three P0 task families require independent expert/adversarial assessment and adjudication before release. Oracle equivalence and mechanized review do not establish native model performance. Reviewers share the underlying model, with correlated-error risk. Generation uses local CPU arithmetic/BFS, no paid external generation service; agent-token costs are not metered per sample.
+
+Source bytes are preserved under reproducibility/source_blobs and indexed in reproducibility/SOURCE_ARCHIVE_INDEX.json. Three original broad source snapshots for historical RCM v0002 could not be recovered; v0003 supersedes it with identical reviewed data, independently reproduced generation and available source bytes. The historical limitation remains documented in quality_reports/reproducibility/RCM-001-v0002.json. Machine audit reruns preserve prior bytes when results change.
+
+
+## Belief evidence-gap first review milestone — 2026-10-10 UTC
+
+The first `belief-gap-v1` candidate contains 1,296 correlated records from four source families, 24 base contexts and 648 rotation-level tasks. Input-only expert and red predictions were frozen before gold/property comparisons. Expert final judgments are 1,296 ACCEPT; red final judgments are 864 ACCEPT and 432 REVISE. All exact typed targets agree. The red audit found that observation tokens `stone`/`unknown` predict emptiness perfectly on both 648-row splits, and a marker/world-count/observation-count lookup reproduces all 216 development empty-context target cores. This serious corpus defect remains unresolved; none of this candidate is approved or released. Independent final adjudication is being completed, including the full-family dependency hold.
+
+The initial checker audit rejected 216 absorption locators and eight arbitrary probe references due to unpublished interface assumptions. An independently authored public-only correction preserves the old evidence, executes probes under explicitly bound arbitrary IDs, and passes all 1,296 rows with zero oracle, metadata or control errors and 68 actual probes. The corrected checker has 26 focused tests; three actual publication corruption tests pass. All 231 current factory tests passed together, with source hashes unchanged, plus seven backup-helper tests. The first failed gate-test fixture and its exact source were preserved before repairing a public output field name. See `quality_reports/BELIEF_V1_REVIEW_FULL_SUITE_EXECUTION.json` and `quality_reports/BELIEF_GATE_TEST_EXECUTION.json`.
+
+New public revision-v2 design bytes are frozen separately in `schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md` and `research/curricula/RBM-EVIDENCE-GAP-REVISION-V2.md`. Prospective E/G and F/H pairs change only the second observation equality and match the first observation/prefix, at both observation lengths. F/H repeat their first observation. Planned counts are 1,728 correlated records/four existing families/32 contexts, with 75% nonempty class frequency; added contexts do not count as new source families. Production and independent pre-generation checks have started. Actual revised outputs still require new input-derived reviews, completed adjudication and verified release custody. Positive-only scalar and finite lookup risks remain explicit.
+
+Active approved counts remain 3,340 records/648 source families across all ten tracks; consult `manifests/ACTIVE_RELEASE_CATALOG.json`. No training, efficacy result or sealed evaluation was performed. Actual separate executions share an underlying model; the public design author later adjudicates, with that role overlap disclosed. Oversized first/current checker and expert diagnostics are preserved as exact raw bytes and verified lossless gzip representations. The most recent verified preparation checkpoint is `e65f3c2a07b3f09572584befdbd2925fcd108ee1`; completed first-candidate reviews and corrections await the next verified archival checkpoint.
+
+Final milestone update: independent adjudication is complete: all1,296 rows are REVISE (432 direct lexical defects and864 family dependency holds). The actual publication gate wrote the complete quarantine snapshot and created zero release directories; candidate bytes remain unchanged. See `quality_reports/BELIEF_GAP_V1_MILESTONE.json`, `reviews/adjudication/ADJUDICATION_BELIEF_GAP_V1.md` and `handoff/BELIEF_FIRST_REVIEW_FINAL.json`. The root froze a separate prospective marker-and-auxiliary-token diagnostic before v2 generation; its v2 result is unknown until actual execution.
+
+
+## Current revised belief batch — 2026-10-10 UTC
+
+`belief-gap-v2` is frozen at 1,728 PENDING records / 864 rotation tasks / four reused source families / 32 base contexts. Train and exposed development each contain 864 records; 1,296 rows are nonempty and 432 empty. Difficulty is measured at Level 3 for 1,242 rows and Level 2 for 486. Its exact candidate SHA is `589119d69290cf91f8cb00adf49d280f7499a6121e9064655ae523222e9e72df`. The original word marker now makes 432 status errors, but the separately frozen marker-and-`linen` rule remains perfect on both splits. Fresh expert and red input-only predictions are frozen before canonical comparisons; final reviews/adjudication are still pending. No revised record is approved.
+
+Actual revised checker invocation finds zero target failures but 1,728 repeated metadata errors due to its assumption that a corpus evidence ID must identify only one property. The public contract permits the same matched pair to support both new properties; independent public-only reconciliation is queued. First failing report bytes and source are preserved. This interface question cannot resolve the independent lexical corpus defect. Root routing by canonical revision provenance now protects the new obligations even if G/H rows or internal claims are removed. Fourteen related publication, memory and typed-evidence tests pass.
+
+Reproduction gives exact bytes for the candidate, parents and six of seven deterministic artifacts. One diagnostic JSON has different object key ordering from unsorted set iteration; parsed JSON is identical. The failed run and all outputs are preserved, and `RBM-REPRO-010.json` requires sorted iteration and separate-process byte checks for a fresh revision. Neither frozen producer nor candidate was edited. A new prospective scalar-transposition design is being developed; no future candidate or efficacy claim is made. See `handoff/BELIEF_V2_REVIEW_IN_PROGRESS.json`. The last verified archival checkpoint is `7a7d055bda9a155b0480ebad5bfb8080133b7585`; all 3,340 approved records / 648 source families remain unchanged.
+
+
+## Revised belief batch final review — 2026-10-10 UTC
+
+Current V2 status supersedes the earlier in-progress snapshots: all 1,728 records are REVISE and the actual publication gate quarantined the entire batch, creating zero releases. Expert and red each returned 1,296 ACCEPT / 432 REVISE with zero disagreement; the separate adjudicator applies 432 direct compound-token defects and 1,296 complete-family dependency holds. All exact targets, metadata and controls pass, with 84 actual executed probes. The compound marker-and-linen rule still predicts all 1,728 statuses and reconstructs all 432 empty-target cores without world facts. No new record is approved. Active approved counts remain 3,340 records / 648 source families across all ten tracks.
+
+All 267 then-present V1/V2 factory tests passed with tested sources unchanged. V2 candidate bytes reproduce exactly; one of seven deterministic artifacts differs only in diagnostic JSON key ordering. The later actual publication audit changes six equally scoring diagnostic feature/polarity representatives while preserving every semantic result, histogram and accuracy statistic. Both complete reports and their raw/gzip histories are retained. RBM-REPRO-010 and ORACLE-REPRO-011 require deterministic ordering/tie handling and separate-process checks in new V3 artifacts; frozen V2 sources are unchanged. These custody limitations are separate from the measured lexical defect.
+
+The NEW public V3 design/root freeze precede actual generation. Its complete product is 3,456 correlated rows from the same four families, 32 semantic contexts and 64 scalar-view cases. A fact-local swap of an unqueried auxiliary column must preserve full targets within each context, while 864 disjoint cross-table pairs require opposite statuses under identical observations/queries/first-prefix features. Actual producer core/archive reproduction and independently authored public-only checks are in progress; fresh prediction-before-gold reviews and adjudication remain required. Planned counts and bounds do not constitute approval, independent-family growth, sealed OOD or model efficacy. See `handoff/BELIEF_V2_FINAL.json` for exact hashes, history locations and next actions. The last verified archival commit is still `7a7d055bda9a155b0480ebad5bfb8080133b7585`; subsequent final V2 evidence and V3 work require the next actual-byte checkpoint.
+
+
+## Belief v3 review discrepancy and verified checkpoint — 2026-10-10 UTC
+
+Active approved corpus remains **3,340 records / 648 source families across ten tracks**. V3 has 3,456 pending rows: both initial independent reviews accepted the exact targets and controls, then separate supplements found 6,912 inherited claims without inline pair bindings and recommended metadata revision. All targets and underlying pairs still pass. The producer manifest contains actual length-specific pair evidence; the unresolved issue is the retained claim-binding interface, including an ambiguous optional-pair sentence in the v3 supplement. Frozen checker reports 3,456 metadata failures / 3,484 control errors. Actual separate adjudication is in progress; no v3 release is approved. First reviews, failed audit and test sources remain immutable.
+
+The corrected root publication fixture passed all 21 applicable tests; it adds inherited pair bindings only to synthetic temporary rows before testing missing v3 variants. Real candidate bytes remain frozen. RGM prospective design adds 48 proposed families / 384 rows for measured matched-input and block-arrangement gaps; its public specification is frozen and independent formal work has started. Producer dispatch encountered actual thread limits, so no new RGM data is claimed yet.
+
+Latest verified backup is `9a03758bf7343e911c9dbc618a7158e393e5f790` (1,344 files / 674,483,136 bytes). All 18 oversized archived files were additionally streamed from actual remote gzip blobs and matched 735,726,123 original raw bytes. New v3 final reviews/supplements, current gate code/tests, remote decode proof, RGM design and this handoff remain local until the next checkpoint. Storage is volatile due to system swap. Only redundant tracked research copies in the root-owned backup checkout were excluded by sparse checkout; full Git index and original research working files/main remain unchanged. Shared Git worktreeConfig metadata was intentionally enabled and exact before/after custody recorded.
+
+See `handoff/BELIEF_V3_REVIEW_DISCREPANCY.json` for exact stage hashes and remaining work.
+
+
+## Completed belief v3 adjudication — 2026-10-10 UTC
+
+Actual adjudicator assigned **all 3,456 REVISE** for unresolved inherited claim encoding under ambiguous public wording; all targets and 1,728 named manifest entries still pass. Root mechanically quarantined the whole unchanged batch, verified every original record/hash join and retained candidate bytes. No release was created. The full applicable suite passed **289 tests in 258.652 seconds**, with source hashes unchanged. Approved corpus stays 3,340 records / 648 source families.
+
+NEW prospective v4 clarification requires explicit inline inherited pair IDs and resolvable length-specific manifest/control bindings while retaining aggregate permission for the three v3 controls. It introduces no new semantic units and does not approve old or future candidates. RGM production has now actually started under its frozen 48-family/384-row design; independently authored formal handmade fixtures passed 12 tests and final source audit remains in progress. Reviewer preparation dispatch hit an actual thread limit and will resume after a completed worker frees capacity. Current RGM work remains local and provisional while the completed belief checkpoint is prepared. See `handoff/BELIEF_V3_FINAL.json`.

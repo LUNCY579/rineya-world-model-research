@@ -1,0 +1,49 @@
+{
+  "code_sha256": {
+    "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+    "factory/pipeline.py": "ae463574984fd150eafb1498c5641e3ac16ba487bb821bda19fb48c697666973",
+    "factory/planning_controls.py": "be85989ef8480c01056a55f1329de80b47d2eec2d1496852218890d430165668"
+  },
+  "confidence": 0.99,
+  "dataset_approval": false,
+  "decision": "REVISE_CODE",
+  "execution_sha256": "7c760f45d75a12505b7fd78c6b5f3fd7b06dc5305008fb86c08c8fd6189b2dda",
+  "findings": [
+    {
+      "actual_fields": [
+        "producer_agent_id",
+        "producer_role",
+        "source_family_index",
+        "structural_difficulty"
+      ],
+      "code": "recognized_internal_metadata_labels_missing_from_guard",
+      "evidence": "Independently authored valid hand rows were rehashed with explicit private labels in full contract text. Actual JSON Schema/hash/read-back passed and privacy guard accepted these labels. Fields are optional metadata observed in frozen v1 canonical records, not arbitrary encoded aliases.",
+      "fix": "Explicitly cover these actual private canonical metadata fields and rerun exact actual-function regressions; preserve current code receipt.",
+      "severity": "high"
+    }
+  ],
+  "no_original_data_review_rewrites": true,
+  "preexec_sha256": "68796ea8571bfce0c74a762c5e382ee756a9bfd6dc7ef249b3a6b177538cd36e",
+  "publication_scope": "Only these exact functions/code bytes and fixture controls assessed. No approval of entire pipeline or prospective v2.",
+  "receipt_id": "RED-PLANNING-PUBLICATION-CODE-08f954e018822a7684b2",
+  "release_approval": false,
+  "review_mode": "Guided root-requested code review, independent actual fixtures/execution, after frozen original384 data reviews; not a new blind data review.",
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "reviewer_role": "adversarial_code_privacy",
+  "roles_and_routing_correct": true,
+  "schema_sha256": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+  "scope_findings": [
+    {
+      "actual_cases": [
+        "public_names:graph:sample_id,ordinary",
+        "public_names:blocks:difficulty,split",
+        "public_names:blocks:sample_id,ordinary"
+      ],
+      "code": "public_name_false_positive",
+      "evidence": "SEMANTICS permits distinct block/node strings beyond reserved TABLE. The full-prompt text guard can reject legitimate payload names that coincide with private labels.",
+      "fix": "Keep public payload semantics distinct from actual metadata labels or state an explicit prospective naming boundary; measure rather than infer broad validity.",
+      "severity": "low"
+    }
+  ],
+  "source_sha256": "08f954e018822a7684b22640558c48d72b472bec716325a99a4e7508704c1213"
+}

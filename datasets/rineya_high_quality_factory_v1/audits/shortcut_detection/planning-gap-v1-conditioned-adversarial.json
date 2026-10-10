@@ -1,0 +1,4774 @@
+{
+  "actual_author_execution": "/root/adversarial_auditor",
+  "candidate_sha256": "a01f88e1e11f23478b65d9825c0850975f03f0ca8fffb1345c0af672ee7a5c27",
+  "conditional_histograms": {
+    "ALL": {
+      "edge_count": {
+        "10": 22,
+        "11": 38,
+        "12": 2,
+        "13": 16,
+        "14": 6,
+        "6": 18,
+        "7": 16,
+        "8": 64,
+        "9": 10,
+        "null": 192
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 24,
+        "[\"missing_directed_edge\"]": 72,
+        "[\"source_not_clear\"]": 24,
+        "[]": 264
+      },
+      "first_failure_index": {
+        "0": 12,
+        "1": 88,
+        "2": 10,
+        "3": 4,
+        "4": 4,
+        "5": 2,
+        "null": 264
+      },
+      "fresh_feasible": {
+        "false": 12,
+        "true": 372
+      },
+      "fresh_minimum_moves": {
+        "2": 40,
+        "3": 120,
+        "4": 70,
+        "5": 60,
+        "6": 42,
+        "7": 32,
+        "8": 8,
+        "null": 12
+      },
+      "goal_relation_count": {
+        "2": 6,
+        "3": 18,
+        "5": 84,
+        "6": 84,
+        "null": 192
+      },
+      "initial_fuel": {
+        "10": 4,
+        "11": 8,
+        "12": 8,
+        "13": 6,
+        "14": 36,
+        "30": 96,
+        "5": 4,
+        "6": 8,
+        "8": 6,
+        "9": 16,
+        "null": 192
+      },
+      "object_count": {
+        "5": 152,
+        "6": 168,
+        "7": 64
+      },
+      "reaches_goal": {
+        "false": 192,
+        "true": 192
+      },
+      "submitted_plan_length": {
+        "10": 2,
+        "2": 112,
+        "3": 88,
+        "4": 46,
+        "5": 52,
+        "6": 32,
+        "7": 30,
+        "8": 14,
+        "9": 8
+      },
+      "valid": {
+        "false": 120,
+        "true": 264
+      }
+    },
+    "context_split:[\"A0\",\"dev_challenge\"]": {
+      "edge_count": {
+        "7": 2,
+        "8": 2
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "2": 4
+      },
+      "goal_relation_count": {
+        "null": 4
+      },
+      "initial_fuel": {
+        "14": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 4
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"A0\",\"train\"]": {
+      "edge_count": {
+        "11": 2,
+        "13": 2,
+        "6": 4,
+        "8": 12
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "2": 8,
+        "3": 2,
+        "4": 4,
+        "5": 4,
+        "6": 2
+      },
+      "goal_relation_count": {
+        "null": 20
+      },
+      "initial_fuel": {
+        "11": 2,
+        "12": 2,
+        "13": 2,
+        "14": 8,
+        "6": 2,
+        "9": 4
+      },
+      "object_count": {
+        "5": 6,
+        "6": 8,
+        "7": 6
+      },
+      "reaches_goal": {
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "2": 8,
+        "3": 2,
+        "4": 4,
+        "5": 4,
+        "6": 2
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"A1\",\"dev_challenge\"]": {
+      "edge_count": {
+        "7": 2,
+        "8": 2
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 4
+      },
+      "first_failure_index": {
+        "1": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "4": 2,
+        "5": 2
+      },
+      "goal_relation_count": {
+        "null": 4
+      },
+      "initial_fuel": {
+        "10": 2,
+        "9": 2
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "false": 4
+      },
+      "submitted_plan_length": {
+        "2": 4
+      },
+      "valid": {
+        "false": 4
+      }
+    },
+    "context_split:[\"A1\",\"train\"]": {
+      "edge_count": {
+        "11": 2,
+        "13": 2,
+        "6": 4,
+        "8": 12
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 20
+      },
+      "first_failure_index": {
+        "0": 4,
+        "1": 4,
+        "2": 2,
+        "3": 4,
+        "4": 4,
+        "5": 2
+      },
+      "fresh_feasible": {
+        "false": 12,
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 6,
+        "null": 12
+      },
+      "goal_relation_count": {
+        "null": 20
+      },
+      "initial_fuel": {
+        "10": 2,
+        "11": 2,
+        "12": 2,
+        "5": 4,
+        "6": 2,
+        "8": 6,
+        "9": 2
+      },
+      "object_count": {
+        "5": 6,
+        "6": 8,
+        "7": 6
+      },
+      "reaches_goal": {
+        "false": 20
+      },
+      "submitted_plan_length": {
+        "2": 8,
+        "3": 2,
+        "4": 4,
+        "5": 4,
+        "6": 2
+      },
+      "valid": {
+        "false": 20
+      }
+    },
+    "context_split:[\"A2\",\"dev_challenge\"]": {
+      "edge_count": {
+        "7": 2,
+        "8": 2
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "2": 4
+      },
+      "goal_relation_count": {
+        "null": 4
+      },
+      "initial_fuel": {
+        "14": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "false": 4
+      },
+      "submitted_plan_length": {
+        "2": 4
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"A2\",\"train\"]": {
+      "edge_count": {
+        "11": 2,
+        "13": 2,
+        "6": 4,
+        "8": 12
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "2": 8,
+        "3": 2,
+        "4": 4,
+        "5": 4,
+        "6": 2
+      },
+      "goal_relation_count": {
+        "null": 20
+      },
+      "initial_fuel": {
+        "11": 2,
+        "12": 2,
+        "13": 2,
+        "14": 8,
+        "6": 2,
+        "9": 4
+      },
+      "object_count": {
+        "5": 6,
+        "6": 8,
+        "7": 6
+      },
+      "reaches_goal": {
+        "false": 20
+      },
+      "submitted_plan_length": {
+        "2": 20
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"A3\",\"dev_challenge\"]": {
+      "edge_count": {
+        "7": 2,
+        "8": 2
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4
+      },
+      "first_failure_index": {
+        "1": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "2": 4
+      },
+      "goal_relation_count": {
+        "null": 4
+      },
+      "initial_fuel": {
+        "14": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "false": 4
+      },
+      "submitted_plan_length": {
+        "2": 4
+      },
+      "valid": {
+        "false": 4
+      }
+    },
+    "context_split:[\"A3\",\"train\"]": {
+      "edge_count": {
+        "11": 2,
+        "13": 2,
+        "6": 4,
+        "8": 12
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 20
+      },
+      "first_failure_index": {
+        "1": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "2": 8,
+        "3": 2,
+        "4": 4,
+        "5": 4,
+        "6": 2
+      },
+      "goal_relation_count": {
+        "null": 20
+      },
+      "initial_fuel": {
+        "11": 2,
+        "12": 2,
+        "13": 2,
+        "14": 8,
+        "6": 2,
+        "9": 4
+      },
+      "object_count": {
+        "5": 6,
+        "6": 8,
+        "7": 6
+      },
+      "reaches_goal": {
+        "false": 20
+      },
+      "submitted_plan_length": {
+        "2": 20
+      },
+      "valid": {
+        "false": 20
+      }
+    },
+    "context_split:[\"B0\",\"dev_challenge\"]": {
+      "edge_count": {
+        "10": 2,
+        "14": 2
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "3": 4
+      },
+      "goal_relation_count": {
+        "null": 4
+      },
+      "initial_fuel": {
+        "30": 4
+      },
+      "object_count": {
+        "6": 2,
+        "7": 2
+      },
+      "reaches_goal": {
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 4
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"B0\",\"train\"]": {
+      "edge_count": {
+        "10": 2,
+        "11": 10,
+        "13": 2,
+        "7": 2,
+        "8": 2,
+        "9": 2
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "3": 20
+      },
+      "goal_relation_count": {
+        "null": 20
+      },
+      "initial_fuel": {
+        "30": 20
+      },
+      "object_count": {
+        "5": 6,
+        "6": 6,
+        "7": 8
+      },
+      "reaches_goal": {
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "3": 20
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"B1\",\"dev_challenge\"]": {
+      "edge_count": {
+        "13": 2,
+        "9": 2
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4
+      },
+      "first_failure_index": {
+        "1": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "3": 4
+      },
+      "goal_relation_count": {
+        "null": 4
+      },
+      "initial_fuel": {
+        "30": 4
+      },
+      "object_count": {
+        "6": 2,
+        "7": 2
+      },
+      "reaches_goal": {
+        "false": 4
+      },
+      "submitted_plan_length": {
+        "3": 4
+      },
+      "valid": {
+        "false": 4
+      }
+    },
+    "context_split:[\"B1\",\"train\"]": {
+      "edge_count": {
+        "10": 10,
+        "12": 2,
+        "6": 2,
+        "7": 2,
+        "8": 2,
+        "9": 2
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 20
+      },
+      "first_failure_index": {
+        "1": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "3": 20
+      },
+      "goal_relation_count": {
+        "null": 20
+      },
+      "initial_fuel": {
+        "30": 20
+      },
+      "object_count": {
+        "5": 6,
+        "6": 6,
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 20
+      },
+      "submitted_plan_length": {
+        "3": 20
+      },
+      "valid": {
+        "false": 20
+      }
+    },
+    "context_split:[\"B2\",\"dev_challenge\"]": {
+      "edge_count": {
+        "10": 2,
+        "14": 2
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4
+      },
+      "first_failure_index": {
+        "1": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "3": 4
+      },
+      "goal_relation_count": {
+        "null": 4
+      },
+      "initial_fuel": {
+        "30": 4
+      },
+      "object_count": {
+        "6": 2,
+        "7": 2
+      },
+      "reaches_goal": {
+        "false": 4
+      },
+      "submitted_plan_length": {
+        "2": 4
+      },
+      "valid": {
+        "false": 4
+      }
+    },
+    "context_split:[\"B2\",\"train\"]": {
+      "edge_count": {
+        "10": 2,
+        "11": 10,
+        "13": 2,
+        "7": 2,
+        "8": 2,
+        "9": 2
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 20
+      },
+      "first_failure_index": {
+        "1": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "3": 20
+      },
+      "goal_relation_count": {
+        "null": 20
+      },
+      "initial_fuel": {
+        "30": 20
+      },
+      "object_count": {
+        "5": 6,
+        "6": 6,
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 20
+      },
+      "submitted_plan_length": {
+        "2": 20
+      },
+      "valid": {
+        "false": 20
+      }
+    },
+    "context_split:[\"B3\",\"dev_challenge\"]": {
+      "edge_count": {
+        "10": 2,
+        "14": 2
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "3": 4
+      },
+      "goal_relation_count": {
+        "null": 4
+      },
+      "initial_fuel": {
+        "30": 4
+      },
+      "object_count": {
+        "6": 2,
+        "7": 2
+      },
+      "reaches_goal": {
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "5": 4
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"B3\",\"train\"]": {
+      "edge_count": {
+        "10": 2,
+        "11": 10,
+        "13": 2,
+        "7": 2,
+        "8": 2,
+        "9": 2
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "3": 20
+      },
+      "goal_relation_count": {
+        "null": 20
+      },
+      "initial_fuel": {
+        "30": 20
+      },
+      "object_count": {
+        "5": 6,
+        "6": 6,
+        "7": 8
+      },
+      "reaches_goal": {
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "5": 20
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"C0\",\"dev_challenge\"]": {
+      "edge_count": {
+        "null": 4
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "5": 2,
+        "8": 2
+      },
+      "goal_relation_count": {
+        "5": 2,
+        "6": 2
+      },
+      "initial_fuel": {
+        "null": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "5": 2,
+        "8": 2
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"C0\",\"train\"]": {
+      "edge_count": {
+        "null": 20
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "4": 4,
+        "5": 2,
+        "6": 6,
+        "7": 8
+      },
+      "goal_relation_count": {
+        "5": 10,
+        "6": 10
+      },
+      "initial_fuel": {
+        "null": 20
+      },
+      "object_count": {
+        "5": 10,
+        "6": 10
+      },
+      "reaches_goal": {
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "4": 4,
+        "5": 2,
+        "6": 6,
+        "7": 8
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"C1\",\"dev_challenge\"]": {
+      "edge_count": {
+        "null": 4
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 4
+      },
+      "first_failure_index": {
+        "1": 2,
+        "2": 2
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "5": 2,
+        "8": 2
+      },
+      "goal_relation_count": {
+        "5": 2,
+        "6": 2
+      },
+      "initial_fuel": {
+        "null": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "false": 4
+      },
+      "submitted_plan_length": {
+        "5": 2,
+        "8": 2
+      },
+      "valid": {
+        "false": 4
+      }
+    },
+    "context_split:[\"C1\",\"train\"]": {
+      "edge_count": {
+        "null": 20
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 20
+      },
+      "first_failure_index": {
+        "0": 8,
+        "1": 6,
+        "2": 6
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "4": 4,
+        "5": 2,
+        "6": 6,
+        "7": 8
+      },
+      "goal_relation_count": {
+        "5": 10,
+        "6": 10
+      },
+      "initial_fuel": {
+        "null": 20
+      },
+      "object_count": {
+        "5": 10,
+        "6": 10
+      },
+      "reaches_goal": {
+        "false": 20
+      },
+      "submitted_plan_length": {
+        "4": 4,
+        "5": 2,
+        "6": 6,
+        "7": 8
+      },
+      "valid": {
+        "false": 20
+      }
+    },
+    "context_split:[\"C2\",\"dev_challenge\"]": {
+      "edge_count": {
+        "null": 4
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "5": 2,
+        "8": 2
+      },
+      "goal_relation_count": {
+        "5": 2,
+        "6": 2
+      },
+      "initial_fuel": {
+        "null": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "10": 2,
+        "7": 2
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"C2\",\"train\"]": {
+      "edge_count": {
+        "null": 20
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "4": 4,
+        "5": 2,
+        "6": 6,
+        "7": 8
+      },
+      "goal_relation_count": {
+        "5": 10,
+        "6": 10
+      },
+      "initial_fuel": {
+        "null": 20
+      },
+      "object_count": {
+        "5": 10,
+        "6": 10
+      },
+      "reaches_goal": {
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "6": 4,
+        "7": 2,
+        "8": 6,
+        "9": 8
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"C3\",\"dev_challenge\"]": {
+      "edge_count": {
+        "null": 4
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "5": 2,
+        "8": 2
+      },
+      "goal_relation_count": {
+        "5": 2,
+        "6": 2
+      },
+      "initial_fuel": {
+        "null": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "false": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "4": 2
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"C3\",\"train\"]": {
+      "edge_count": {
+        "null": 20
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "4": 4,
+        "5": 2,
+        "6": 6,
+        "7": 8
+      },
+      "goal_relation_count": {
+        "5": 10,
+        "6": 10
+      },
+      "initial_fuel": {
+        "null": 20
+      },
+      "object_count": {
+        "5": 10,
+        "6": 10
+      },
+      "reaches_goal": {
+        "false": 20
+      },
+      "submitted_plan_length": {
+        "2": 6,
+        "3": 14
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"D0\",\"dev_challenge\"]": {
+      "edge_count": {
+        "null": 4
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "3": 4
+      },
+      "goal_relation_count": {
+        "2": 2,
+        "3": 2
+      },
+      "initial_fuel": {
+        "null": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 4
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"D0\",\"train\"]": {
+      "edge_count": {
+        "null": 20
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "2": 4,
+        "3": 6,
+        "4": 10
+      },
+      "goal_relation_count": {
+        "2": 4,
+        "3": 16
+      },
+      "initial_fuel": {
+        "null": 20
+      },
+      "object_count": {
+        "5": 10,
+        "6": 10
+      },
+      "reaches_goal": {
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "3": 6,
+        "4": 10
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"D1\",\"dev_challenge\"]": {
+      "edge_count": {
+        "null": 4
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "4": 4
+      },
+      "goal_relation_count": {
+        "5": 2,
+        "6": 2
+      },
+      "initial_fuel": {
+        "null": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "false": 4
+      },
+      "submitted_plan_length": {
+        "3": 4
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"D1\",\"train\"]": {
+      "edge_count": {
+        "null": 20
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 4,
+        "5": 10,
+        "6": 4
+      },
+      "goal_relation_count": {
+        "5": 10,
+        "6": 10
+      },
+      "initial_fuel": {
+        "null": 20
+      },
+      "object_count": {
+        "5": 10,
+        "6": 10
+      },
+      "reaches_goal": {
+        "false": 20
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "3": 6,
+        "4": 10
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"D2\",\"dev_challenge\"]": {
+      "edge_count": {
+        "null": 4
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "4": 4
+      },
+      "goal_relation_count": {
+        "5": 2,
+        "6": 2
+      },
+      "initial_fuel": {
+        "null": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "4": 4
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"D2\",\"train\"]": {
+      "edge_count": {
+        "null": 20
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 4,
+        "5": 10,
+        "6": 4
+      },
+      "goal_relation_count": {
+        "5": 10,
+        "6": 10
+      },
+      "initial_fuel": {
+        "null": 20
+      },
+      "object_count": {
+        "5": 10,
+        "6": 10
+      },
+      "reaches_goal": {
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "3": 2,
+        "4": 4,
+        "5": 10,
+        "6": 4
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "context_split:[\"D3\",\"dev_challenge\"]": {
+      "edge_count": {
+        "null": 4
+      },
+      "first_failure_all_reasons": {
+        "[]": 4
+      },
+      "first_failure_index": {
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 4
+      },
+      "fresh_minimum_moves": {
+        "4": 4
+      },
+      "goal_relation_count": {
+        "5": 2,
+        "6": 2
+      },
+      "initial_fuel": {
+        "null": 4
+      },
+      "object_count": {
+        "5": 2,
+        "6": 2
+      },
+      "reaches_goal": {
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "6": 4
+      },
+      "valid": {
+        "true": 4
+      }
+    },
+    "context_split:[\"D3\",\"train\"]": {
+      "edge_count": {
+        "null": 20
+      },
+      "first_failure_all_reasons": {
+        "[]": 20
+      },
+      "first_failure_index": {
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 20
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 4,
+        "5": 10,
+        "6": 4
+      },
+      "goal_relation_count": {
+        "5": 10,
+        "6": 10
+      },
+      "initial_fuel": {
+        "null": 20
+      },
+      "object_count": {
+        "5": 10,
+        "6": 10
+      },
+      "reaches_goal": {
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "5": 2,
+        "6": 4,
+        "7": 10,
+        "8": 4
+      },
+      "valid": {
+        "true": 20
+      }
+    },
+    "family:RGM-001-seed20261009-p0180": {
+      "edge_count": {
+        "6": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 2,
+        "3": 2,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "false": 2,
+        "true": 6
+      },
+      "fresh_minimum_moves": {
+        "4": 6,
+        "null": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "10": 2,
+        "11": 6
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "4": 4
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0181": {
+      "edge_count": {
+        "6": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 2,
+        "4": 2,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "false": 2,
+        "true": 6
+      },
+      "fresh_minimum_moves": {
+        "5": 6,
+        "null": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "8": 2,
+        "9": 6
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "5": 4
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0182": {
+      "edge_count": {
+        "11": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 2,
+        "2": 2,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "false": 2,
+        "true": 6
+      },
+      "fresh_minimum_moves": {
+        "3": 6,
+        "null": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "12": 2,
+        "13": 6
+      },
+      "object_count": {
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "3": 4
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0183": {
+      "edge_count": {
+        "8": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 2,
+        "3": 2,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "false": 2,
+        "true": 6
+      },
+      "fresh_minimum_moves": {
+        "4": 6,
+        "null": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "5": 2,
+        "6": 6
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "4": 4
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0184": {
+      "edge_count": {
+        "8": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 2,
+        "4": 2,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "false": 2,
+        "true": 6
+      },
+      "fresh_minimum_moves": {
+        "5": 6,
+        "null": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "8": 2,
+        "9": 6
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "5": 4
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0185": {
+      "edge_count": {
+        "8": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 2,
+        "5": 2,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "false": 2,
+        "true": 6
+      },
+      "fresh_minimum_moves": {
+        "6": 6,
+        "null": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "11": 2,
+        "12": 6
+      },
+      "object_count": {
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "6": 4
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0186": {
+      "edge_count": {
+        "8": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "0": 2,
+        "1": 2,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 6,
+        "4": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "14": 6,
+        "6": 2
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 8
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0187": {
+      "edge_count": {
+        "8": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "0": 2,
+        "1": 2,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 6,
+        "3": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "14": 6,
+        "5": 2
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 8
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0188": {
+      "edge_count": {
+        "7": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 6,
+        "4": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "14": 6,
+        "9": 2
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 8
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0189": {
+      "edge_count": {
+        "8": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 6,
+        "5": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "10": 2,
+        "14": 6
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 8
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0190": {
+      "edge_count": {
+        "8": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 6,
+        "4": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "14": 6,
+        "8": 2
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 8
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0191": {
+      "edge_count": {
+        "13": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 6,
+        "4": 2
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "14": 6,
+        "9": 2
+      },
+      "object_count": {
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 8
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0192": {
+      "edge_count": {
+        "7": 2,
+        "8": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0193": {
+      "edge_count": {
+        "8": 2,
+        "9": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0194": {
+      "edge_count": {
+        "10": 2,
+        "11": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0195": {
+      "edge_count": {
+        "6": 2,
+        "7": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0196": {
+      "edge_count": {
+        "12": 2,
+        "13": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0197": {
+      "edge_count": {
+        "10": 2,
+        "11": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0198": {
+      "edge_count": {
+        "10": 6,
+        "9": 2
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0199": {
+      "edge_count": {
+        "13": 2,
+        "14": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0200": {
+      "edge_count": {
+        "10": 2,
+        "11": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0201": {
+      "edge_count": {
+        "10": 6,
+        "9": 2
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0202": {
+      "edge_count": {
+        "10": 2,
+        "11": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0203": {
+      "edge_count": {
+        "10": 2,
+        "11": 6
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "family:RGM-001-seed20261009-p0204": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "0": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "7": 8
+      },
+      "goal_relation_count": {
+        "5": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 2,
+        "7": 4,
+        "9": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0205": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "1": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "6": 8
+      },
+      "goal_relation_count": {
+        "6": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 2,
+        "6": 4,
+        "8": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0206": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "2": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "7": 8
+      },
+      "goal_relation_count": {
+        "5": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 2,
+        "7": 4,
+        "9": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0207": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "0": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "7": 8
+      },
+      "goal_relation_count": {
+        "6": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 2,
+        "7": 4,
+        "9": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0208": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "1": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "5": 8
+      },
+      "goal_relation_count": {
+        "5": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "5": 4,
+        "7": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0209": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "2": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "8": 8
+      },
+      "goal_relation_count": {
+        "6": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "10": 2,
+        "4": 2,
+        "8": 4
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0210": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "0": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "4": 8
+      },
+      "goal_relation_count": {
+        "5": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "4": 4,
+        "6": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0211": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "1": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "6": 8
+      },
+      "goal_relation_count": {
+        "6": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 2,
+        "6": 4,
+        "8": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0212": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "2": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "5": 8
+      },
+      "goal_relation_count": {
+        "5": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "5": 4,
+        "7": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0213": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "0": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "6": 8
+      },
+      "goal_relation_count": {
+        "6": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 2,
+        "6": 4,
+        "8": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0214": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "1": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "4": 8
+      },
+      "goal_relation_count": {
+        "5": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "4": 4,
+        "6": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0215": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "2": 2,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "7": 8
+      },
+      "goal_relation_count": {
+        "6": 8
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "3": 2,
+        "7": 4,
+        "9": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "family:RGM-001-seed20261009-p0216": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "4": 2,
+        "6": 6
+      },
+      "goal_relation_count": {
+        "2": 2,
+        "5": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "4": 4,
+        "6": 2,
+        "8": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0217": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "5": 6
+      },
+      "goal_relation_count": {
+        "2": 2,
+        "6": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "3": 4,
+        "5": 2,
+        "7": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0218": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "5": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "3": 4,
+        "4": 2,
+        "6": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0219": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 6
+      },
+      "goal_relation_count": {
+        "2": 2,
+        "6": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "3": 4,
+        "4": 2,
+        "6": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0220": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "4": 2,
+        "5": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "5": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "4": 4,
+        "5": 2,
+        "7": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0221": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "4": 2,
+        "5": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "6": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "4": 4,
+        "5": 2,
+        "7": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0222": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "4": 2,
+        "5": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "5": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "4": 4,
+        "5": 2,
+        "7": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0223": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "4": 2,
+        "6": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "6": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "4": 4,
+        "6": 2,
+        "8": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0224": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 2,
+        "3": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "5": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "3": 2,
+        "5": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0225": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 2,
+        "5": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "6": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "5": 2,
+        "7": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0226": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "5": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "3": 4,
+        "4": 2,
+        "6": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "family:RGM-001-seed20261009-p0227": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 6
+      },
+      "goal_relation_count": {
+        "3": 2,
+        "6": 6
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "6": 8
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "3": 4,
+        "4": 2,
+        "6": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "renderer:forward": {
+      "edge_count": {
+        "10": 11,
+        "11": 19,
+        "12": 1,
+        "13": 8,
+        "14": 3,
+        "6": 9,
+        "7": 8,
+        "8": 32,
+        "9": 5,
+        "null": 96
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 12,
+        "[\"missing_directed_edge\"]": 36,
+        "[\"source_not_clear\"]": 12,
+        "[]": 132
+      },
+      "first_failure_index": {
+        "0": 6,
+        "1": 44,
+        "2": 5,
+        "3": 2,
+        "4": 2,
+        "5": 1,
+        "null": 132
+      },
+      "fresh_feasible": {
+        "false": 6,
+        "true": 186
+      },
+      "fresh_minimum_moves": {
+        "2": 20,
+        "3": 60,
+        "4": 35,
+        "5": 30,
+        "6": 21,
+        "7": 16,
+        "8": 4,
+        "null": 6
+      },
+      "goal_relation_count": {
+        "2": 3,
+        "3": 9,
+        "5": 42,
+        "6": 42,
+        "null": 96
+      },
+      "initial_fuel": {
+        "10": 2,
+        "11": 4,
+        "12": 4,
+        "13": 3,
+        "14": 18,
+        "30": 48,
+        "5": 2,
+        "6": 4,
+        "8": 3,
+        "9": 8,
+        "null": 96
+      },
+      "object_count": {
+        "5": 76,
+        "6": 84,
+        "7": 32
+      },
+      "reaches_goal": {
+        "false": 96,
+        "true": 96
+      },
+      "submitted_plan_length": {
+        "10": 1,
+        "2": 56,
+        "3": 44,
+        "4": 23,
+        "5": 26,
+        "6": 16,
+        "7": 15,
+        "8": 7,
+        "9": 4
+      },
+      "valid": {
+        "false": 60,
+        "true": 132
+      }
+    },
+    "renderer:reverse": {
+      "edge_count": {
+        "10": 11,
+        "11": 19,
+        "12": 1,
+        "13": 8,
+        "14": 3,
+        "6": 9,
+        "7": 8,
+        "8": 32,
+        "9": 5,
+        "null": 96
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 12,
+        "[\"missing_directed_edge\"]": 36,
+        "[\"source_not_clear\"]": 12,
+        "[]": 132
+      },
+      "first_failure_index": {
+        "0": 6,
+        "1": 44,
+        "2": 5,
+        "3": 2,
+        "4": 2,
+        "5": 1,
+        "null": 132
+      },
+      "fresh_feasible": {
+        "false": 6,
+        "true": 186
+      },
+      "fresh_minimum_moves": {
+        "2": 20,
+        "3": 60,
+        "4": 35,
+        "5": 30,
+        "6": 21,
+        "7": 16,
+        "8": 4,
+        "null": 6
+      },
+      "goal_relation_count": {
+        "2": 3,
+        "3": 9,
+        "5": 42,
+        "6": 42,
+        "null": 96
+      },
+      "initial_fuel": {
+        "10": 2,
+        "11": 4,
+        "12": 4,
+        "13": 3,
+        "14": 18,
+        "30": 48,
+        "5": 2,
+        "6": 4,
+        "8": 3,
+        "9": 8,
+        "null": 96
+      },
+      "object_count": {
+        "5": 76,
+        "6": 84,
+        "7": 32
+      },
+      "reaches_goal": {
+        "false": 96,
+        "true": 96
+      },
+      "submitted_plan_length": {
+        "10": 1,
+        "2": 56,
+        "3": 44,
+        "4": 23,
+        "5": 26,
+        "6": 16,
+        "7": 15,
+        "8": 7,
+        "9": 4
+      },
+      "valid": {
+        "false": 60,
+        "true": 132
+      }
+    },
+    "split:dev_challenge": {
+      "edge_count": {
+        "10": 6,
+        "13": 2,
+        "14": 6,
+        "7": 8,
+        "8": 8,
+        "9": 2,
+        "null": 32
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 4,
+        "[\"missing_directed_edge\"]": 12,
+        "[\"source_not_clear\"]": 4,
+        "[]": 44
+      },
+      "first_failure_index": {
+        "1": 18,
+        "2": 2,
+        "null": 44
+      },
+      "fresh_feasible": {
+        "true": 64
+      },
+      "fresh_minimum_moves": {
+        "2": 12,
+        "3": 20,
+        "4": 14,
+        "5": 10,
+        "8": 8
+      },
+      "goal_relation_count": {
+        "2": 2,
+        "3": 2,
+        "5": 14,
+        "6": 14,
+        "null": 32
+      },
+      "initial_fuel": {
+        "10": 2,
+        "14": 12,
+        "30": 16,
+        "9": 2,
+        "null": 32
+      },
+      "object_count": {
+        "5": 24,
+        "6": 32,
+        "7": 8
+      },
+      "reaches_goal": {
+        "false": 32,
+        "true": 32
+      },
+      "submitted_plan_length": {
+        "10": 2,
+        "2": 22,
+        "3": 16,
+        "4": 6,
+        "5": 8,
+        "6": 4,
+        "7": 2,
+        "8": 4
+      },
+      "valid": {
+        "false": 20,
+        "true": 44
+      }
+    },
+    "split:train": {
+      "edge_count": {
+        "10": 16,
+        "11": 38,
+        "12": 2,
+        "13": 14,
+        "6": 18,
+        "7": 8,
+        "8": 56,
+        "9": 8,
+        "null": 160
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 20,
+        "[\"missing_directed_edge\"]": 60,
+        "[\"source_not_clear\"]": 20,
+        "[]": 220
+      },
+      "first_failure_index": {
+        "0": 12,
+        "1": 70,
+        "2": 8,
+        "3": 4,
+        "4": 4,
+        "5": 2,
+        "null": 220
+      },
+      "fresh_feasible": {
+        "false": 12,
+        "true": 308
+      },
+      "fresh_minimum_moves": {
+        "2": 28,
+        "3": 100,
+        "4": 56,
+        "5": 50,
+        "6": 42,
+        "7": 32,
+        "null": 12
+      },
+      "goal_relation_count": {
+        "2": 4,
+        "3": 16,
+        "5": 70,
+        "6": 70,
+        "null": 160
+      },
+      "initial_fuel": {
+        "10": 2,
+        "11": 8,
+        "12": 8,
+        "13": 6,
+        "14": 24,
+        "30": 80,
+        "5": 4,
+        "6": 8,
+        "8": 6,
+        "9": 14,
+        "null": 160
+      },
+      "object_count": {
+        "5": 128,
+        "6": 136,
+        "7": 56
+      },
+      "reaches_goal": {
+        "false": 160,
+        "true": 160
+      },
+      "submitted_plan_length": {
+        "2": 90,
+        "3": 72,
+        "4": 40,
+        "5": 44,
+        "6": 28,
+        "7": 28,
+        "8": 10,
+        "9": 8
+      },
+      "valid": {
+        "false": 100,
+        "true": 220
+      }
+    },
+    "stratum:A": {
+      "edge_count": {
+        "11": 8,
+        "13": 8,
+        "6": 16,
+        "7": 8,
+        "8": 56
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 24,
+        "[\"missing_directed_edge\"]": 24,
+        "[]": 48
+      },
+      "first_failure_index": {
+        "0": 4,
+        "1": 32,
+        "2": 2,
+        "3": 4,
+        "4": 4,
+        "5": 2,
+        "null": 48
+      },
+      "fresh_feasible": {
+        "false": 12,
+        "true": 84
+      },
+      "fresh_minimum_moves": {
+        "2": 36,
+        "3": 8,
+        "4": 20,
+        "5": 14,
+        "6": 6,
+        "null": 12
+      },
+      "goal_relation_count": {
+        "null": 96
+      },
+      "initial_fuel": {
+        "10": 4,
+        "11": 8,
+        "12": 8,
+        "13": 6,
+        "14": 36,
+        "5": 4,
+        "6": 8,
+        "8": 6,
+        "9": 16
+      },
+      "object_count": {
+        "5": 32,
+        "6": 40,
+        "7": 24
+      },
+      "reaches_goal": {
+        "false": 72,
+        "true": 24
+      },
+      "submitted_plan_length": {
+        "2": 72,
+        "3": 4,
+        "4": 8,
+        "5": 8,
+        "6": 4
+      },
+      "valid": {
+        "false": 48,
+        "true": 48
+      }
+    },
+    "stratum:B": {
+      "edge_count": {
+        "10": 22,
+        "11": 30,
+        "12": 2,
+        "13": 8,
+        "14": 6,
+        "6": 2,
+        "7": 8,
+        "8": 8,
+        "9": 10
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 48,
+        "[]": 48
+      },
+      "first_failure_index": {
+        "1": 48,
+        "null": 48
+      },
+      "fresh_feasible": {
+        "true": 96
+      },
+      "fresh_minimum_moves": {
+        "3": 96
+      },
+      "goal_relation_count": {
+        "null": 96
+      },
+      "initial_fuel": {
+        "30": 96
+      },
+      "object_count": {
+        "5": 24,
+        "6": 32,
+        "7": 40
+      },
+      "reaches_goal": {
+        "false": 48,
+        "true": 48
+      },
+      "submitted_plan_length": {
+        "2": 24,
+        "3": 48,
+        "5": 24
+      },
+      "valid": {
+        "false": 48,
+        "true": 48
+      }
+    },
+    "stratum:C": {
+      "edge_count": {
+        "null": 96
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 24,
+        "[]": 72
+      },
+      "first_failure_index": {
+        "0": 8,
+        "1": 8,
+        "2": 8,
+        "null": 72
+      },
+      "fresh_feasible": {
+        "true": 96
+      },
+      "fresh_minimum_moves": {
+        "4": 16,
+        "5": 16,
+        "6": 24,
+        "7": 32,
+        "8": 8
+      },
+      "goal_relation_count": {
+        "5": 48,
+        "6": 48
+      },
+      "initial_fuel": {
+        "null": 96
+      },
+      "object_count": {
+        "5": 48,
+        "6": 48
+      },
+      "reaches_goal": {
+        "false": 48,
+        "true": 48
+      },
+      "submitted_plan_length": {
+        "10": 2,
+        "2": 8,
+        "3": 14,
+        "4": 10,
+        "5": 8,
+        "6": 16,
+        "7": 20,
+        "8": 10,
+        "9": 8
+      },
+      "valid": {
+        "false": 24,
+        "true": 72
+      }
+    },
+    "stratum:D": {
+      "edge_count": {
+        "null": 96
+      },
+      "first_failure_all_reasons": {
+        "[]": 96
+      },
+      "first_failure_index": {
+        "null": 96
+      },
+      "fresh_feasible": {
+        "true": 96
+      },
+      "fresh_minimum_moves": {
+        "2": 4,
+        "3": 16,
+        "4": 34,
+        "5": 30,
+        "6": 12
+      },
+      "goal_relation_count": {
+        "2": 6,
+        "3": 18,
+        "5": 36,
+        "6": 36
+      },
+      "initial_fuel": {
+        "null": 96
+      },
+      "object_count": {
+        "5": 48,
+        "6": 48
+      },
+      "reaches_goal": {
+        "false": 24,
+        "true": 72
+      },
+      "submitted_plan_length": {
+        "2": 8,
+        "3": 22,
+        "4": 28,
+        "5": 12,
+        "6": 12,
+        "7": 10,
+        "8": 4
+      },
+      "valid": {
+        "true": 96
+      }
+    },
+    "stratum_split_renderer:[\"A\",\"dev_challenge\",\"forward\"]": {
+      "edge_count": {
+        "7": 4,
+        "8": 4
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 6,
+        "4": 1,
+        "5": 1
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "10": 1,
+        "14": 6,
+        "9": 1
+      },
+      "object_count": {
+        "5": 4,
+        "6": 4
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 8
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "stratum_split_renderer:[\"A\",\"dev_challenge\",\"reverse\"]": {
+      "edge_count": {
+        "7": 4,
+        "8": 4
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 2,
+        "[\"missing_directed_edge\"]": 2,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "2": 6,
+        "4": 1,
+        "5": 1
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "10": 1,
+        "14": 6,
+        "9": 1
+      },
+      "object_count": {
+        "5": 4,
+        "6": 4
+      },
+      "reaches_goal": {
+        "false": 6,
+        "true": 2
+      },
+      "submitted_plan_length": {
+        "2": 8
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "stratum_split_renderer:[\"A\",\"train\",\"forward\"]": {
+      "edge_count": {
+        "11": 4,
+        "13": 4,
+        "6": 8,
+        "8": 24
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 10,
+        "[\"missing_directed_edge\"]": 10,
+        "[]": 20
+      },
+      "first_failure_index": {
+        "0": 2,
+        "1": 12,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 1,
+        "null": 20
+      },
+      "fresh_feasible": {
+        "false": 6,
+        "true": 34
+      },
+      "fresh_minimum_moves": {
+        "2": 12,
+        "3": 4,
+        "4": 9,
+        "5": 6,
+        "6": 3,
+        "null": 6
+      },
+      "goal_relation_count": {
+        "null": 40
+      },
+      "initial_fuel": {
+        "10": 1,
+        "11": 4,
+        "12": 4,
+        "13": 3,
+        "14": 12,
+        "5": 2,
+        "6": 4,
+        "8": 3,
+        "9": 7
+      },
+      "object_count": {
+        "5": 12,
+        "6": 16,
+        "7": 12
+      },
+      "reaches_goal": {
+        "false": 30,
+        "true": 10
+      },
+      "submitted_plan_length": {
+        "2": 28,
+        "3": 2,
+        "4": 4,
+        "5": 4,
+        "6": 2
+      },
+      "valid": {
+        "false": 20,
+        "true": 20
+      }
+    },
+    "stratum_split_renderer:[\"A\",\"train\",\"reverse\"]": {
+      "edge_count": {
+        "11": 4,
+        "13": 4,
+        "6": 8,
+        "8": 24
+      },
+      "first_failure_all_reasons": {
+        "[\"insufficient_fuel\"]": 10,
+        "[\"missing_directed_edge\"]": 10,
+        "[]": 20
+      },
+      "first_failure_index": {
+        "0": 2,
+        "1": 12,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 1,
+        "null": 20
+      },
+      "fresh_feasible": {
+        "false": 6,
+        "true": 34
+      },
+      "fresh_minimum_moves": {
+        "2": 12,
+        "3": 4,
+        "4": 9,
+        "5": 6,
+        "6": 3,
+        "null": 6
+      },
+      "goal_relation_count": {
+        "null": 40
+      },
+      "initial_fuel": {
+        "10": 1,
+        "11": 4,
+        "12": 4,
+        "13": 3,
+        "14": 12,
+        "5": 2,
+        "6": 4,
+        "8": 3,
+        "9": 7
+      },
+      "object_count": {
+        "5": 12,
+        "6": 16,
+        "7": 12
+      },
+      "reaches_goal": {
+        "false": 30,
+        "true": 10
+      },
+      "submitted_plan_length": {
+        "2": 28,
+        "3": 2,
+        "4": 4,
+        "5": 4,
+        "6": 2
+      },
+      "valid": {
+        "false": 20,
+        "true": 20
+      }
+    },
+    "stratum_split_renderer:[\"B\",\"dev_challenge\",\"forward\"]": {
+      "edge_count": {
+        "10": 3,
+        "13": 1,
+        "14": 3,
+        "9": 1
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "6": 4,
+        "7": 4
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "stratum_split_renderer:[\"B\",\"dev_challenge\",\"reverse\"]": {
+      "edge_count": {
+        "10": 3,
+        "13": 1,
+        "14": 3,
+        "9": 1
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 4,
+        "[]": 4
+      },
+      "first_failure_index": {
+        "1": 4,
+        "null": 4
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 8
+      },
+      "goal_relation_count": {
+        "null": 8
+      },
+      "initial_fuel": {
+        "30": 8
+      },
+      "object_count": {
+        "6": 4,
+        "7": 4
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "2": 2,
+        "3": 4,
+        "5": 2
+      },
+      "valid": {
+        "false": 4,
+        "true": 4
+      }
+    },
+    "stratum_split_renderer:[\"B\",\"train\",\"forward\"]": {
+      "edge_count": {
+        "10": 8,
+        "11": 15,
+        "12": 1,
+        "13": 3,
+        "6": 1,
+        "7": 4,
+        "8": 4,
+        "9": 4
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 20,
+        "[]": 20
+      },
+      "first_failure_index": {
+        "1": 20,
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 40
+      },
+      "fresh_minimum_moves": {
+        "3": 40
+      },
+      "goal_relation_count": {
+        "null": 40
+      },
+      "initial_fuel": {
+        "30": 40
+      },
+      "object_count": {
+        "5": 12,
+        "6": 12,
+        "7": 16
+      },
+      "reaches_goal": {
+        "false": 20,
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "2": 10,
+        "3": 20,
+        "5": 10
+      },
+      "valid": {
+        "false": 20,
+        "true": 20
+      }
+    },
+    "stratum_split_renderer:[\"B\",\"train\",\"reverse\"]": {
+      "edge_count": {
+        "10": 8,
+        "11": 15,
+        "12": 1,
+        "13": 3,
+        "6": 1,
+        "7": 4,
+        "8": 4,
+        "9": 4
+      },
+      "first_failure_all_reasons": {
+        "[\"missing_directed_edge\"]": 20,
+        "[]": 20
+      },
+      "first_failure_index": {
+        "1": 20,
+        "null": 20
+      },
+      "fresh_feasible": {
+        "true": 40
+      },
+      "fresh_minimum_moves": {
+        "3": 40
+      },
+      "goal_relation_count": {
+        "null": 40
+      },
+      "initial_fuel": {
+        "30": 40
+      },
+      "object_count": {
+        "5": 12,
+        "6": 12,
+        "7": 16
+      },
+      "reaches_goal": {
+        "false": 20,
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "2": 10,
+        "3": 20,
+        "5": 10
+      },
+      "valid": {
+        "false": 20,
+        "true": 20
+      }
+    },
+    "stratum_split_renderer:[\"C\",\"dev_challenge\",\"forward\"]": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "1": 1,
+        "2": 1,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "5": 4,
+        "8": 4
+      },
+      "goal_relation_count": {
+        "5": 4,
+        "6": 4
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 4,
+        "6": 4
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "10": 1,
+        "2": 1,
+        "4": 1,
+        "5": 2,
+        "7": 1,
+        "8": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "stratum_split_renderer:[\"C\",\"dev_challenge\",\"reverse\"]": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 2,
+        "[]": 6
+      },
+      "first_failure_index": {
+        "1": 1,
+        "2": 1,
+        "null": 6
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "5": 4,
+        "8": 4
+      },
+      "goal_relation_count": {
+        "5": 4,
+        "6": 4
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 4,
+        "6": 4
+      },
+      "reaches_goal": {
+        "false": 4,
+        "true": 4
+      },
+      "submitted_plan_length": {
+        "10": 1,
+        "2": 1,
+        "4": 1,
+        "5": 2,
+        "7": 1,
+        "8": 2
+      },
+      "valid": {
+        "false": 2,
+        "true": 6
+      }
+    },
+    "stratum_split_renderer:[\"C\",\"train\",\"forward\"]": {
+      "edge_count": {
+        "null": 40
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 10,
+        "[]": 30
+      },
+      "first_failure_index": {
+        "0": 4,
+        "1": 3,
+        "2": 3,
+        "null": 30
+      },
+      "fresh_feasible": {
+        "true": 40
+      },
+      "fresh_minimum_moves": {
+        "4": 8,
+        "5": 4,
+        "6": 12,
+        "7": 16
+      },
+      "goal_relation_count": {
+        "5": 20,
+        "6": 20
+      },
+      "initial_fuel": {
+        "null": 40
+      },
+      "object_count": {
+        "5": 20,
+        "6": 20
+      },
+      "reaches_goal": {
+        "false": 20,
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "2": 3,
+        "3": 7,
+        "4": 4,
+        "5": 2,
+        "6": 8,
+        "7": 9,
+        "8": 3,
+        "9": 4
+      },
+      "valid": {
+        "false": 10,
+        "true": 30
+      }
+    },
+    "stratum_split_renderer:[\"C\",\"train\",\"reverse\"]": {
+      "edge_count": {
+        "null": 40
+      },
+      "first_failure_all_reasons": {
+        "[\"source_not_clear\"]": 10,
+        "[]": 30
+      },
+      "first_failure_index": {
+        "0": 4,
+        "1": 3,
+        "2": 3,
+        "null": 30
+      },
+      "fresh_feasible": {
+        "true": 40
+      },
+      "fresh_minimum_moves": {
+        "4": 8,
+        "5": 4,
+        "6": 12,
+        "7": 16
+      },
+      "goal_relation_count": {
+        "5": 20,
+        "6": 20
+      },
+      "initial_fuel": {
+        "null": 40
+      },
+      "object_count": {
+        "5": 20,
+        "6": 20
+      },
+      "reaches_goal": {
+        "false": 20,
+        "true": 20
+      },
+      "submitted_plan_length": {
+        "2": 3,
+        "3": 7,
+        "4": 4,
+        "5": 2,
+        "6": 8,
+        "7": 9,
+        "8": 3,
+        "9": 4
+      },
+      "valid": {
+        "false": 10,
+        "true": 30
+      }
+    },
+    "stratum_split_renderer:[\"D\",\"dev_challenge\",\"forward\"]": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 6
+      },
+      "goal_relation_count": {
+        "2": 1,
+        "3": 1,
+        "5": 3,
+        "6": 3
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 4,
+        "6": 4
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "3": 4,
+        "4": 2,
+        "6": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "stratum_split_renderer:[\"D\",\"dev_challenge\",\"reverse\"]": {
+      "edge_count": {
+        "null": 8
+      },
+      "first_failure_all_reasons": {
+        "[]": 8
+      },
+      "first_failure_index": {
+        "null": 8
+      },
+      "fresh_feasible": {
+        "true": 8
+      },
+      "fresh_minimum_moves": {
+        "3": 2,
+        "4": 6
+      },
+      "goal_relation_count": {
+        "2": 1,
+        "3": 1,
+        "5": 3,
+        "6": 3
+      },
+      "initial_fuel": {
+        "null": 8
+      },
+      "object_count": {
+        "5": 4,
+        "6": 4
+      },
+      "reaches_goal": {
+        "false": 2,
+        "true": 6
+      },
+      "submitted_plan_length": {
+        "3": 4,
+        "4": 2,
+        "6": 2
+      },
+      "valid": {
+        "true": 8
+      }
+    },
+    "stratum_split_renderer:[\"D\",\"train\",\"forward\"]": {
+      "edge_count": {
+        "null": 40
+      },
+      "first_failure_all_reasons": {
+        "[]": 40
+      },
+      "first_failure_index": {
+        "null": 40
+      },
+      "fresh_feasible": {
+        "true": 40
+      },
+      "fresh_minimum_moves": {
+        "2": 2,
+        "3": 6,
+        "4": 11,
+        "5": 15,
+        "6": 6
+      },
+      "goal_relation_count": {
+        "2": 2,
+        "3": 8,
+        "5": 15,
+        "6": 15
+      },
+      "initial_fuel": {
+        "null": 40
+      },
+      "object_count": {
+        "5": 20,
+        "6": 20
+      },
+      "reaches_goal": {
+        "false": 10,
+        "true": 30
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "3": 7,
+        "4": 12,
+        "5": 6,
+        "6": 4,
+        "7": 5,
+        "8": 2
+      },
+      "valid": {
+        "true": 40
+      }
+    },
+    "stratum_split_renderer:[\"D\",\"train\",\"reverse\"]": {
+      "edge_count": {
+        "null": 40
+      },
+      "first_failure_all_reasons": {
+        "[]": 40
+      },
+      "first_failure_index": {
+        "null": 40
+      },
+      "fresh_feasible": {
+        "true": 40
+      },
+      "fresh_minimum_moves": {
+        "2": 2,
+        "3": 6,
+        "4": 11,
+        "5": 15,
+        "6": 6
+      },
+      "goal_relation_count": {
+        "2": 2,
+        "3": 8,
+        "5": 15,
+        "6": 15
+      },
+      "initial_fuel": {
+        "null": 40
+      },
+      "object_count": {
+        "5": 20,
+        "6": 20
+      },
+      "reaches_goal": {
+        "false": 10,
+        "true": 30
+      },
+      "submitted_plan_length": {
+        "2": 4,
+        "3": 7,
+        "4": 12,
+        "5": 6,
+        "6": 4,
+        "7": 5,
+        "8": 2
+      },
+      "valid": {
+        "true": 40
+      }
+    }
+  },
+  "prediction_sha256": "273fbdcc8005c034b1f443f5f4ff3309193c899edb461dfd33d69b2f8fda2ec3",
+  "scope": "All384 correlated views. Histograms distinguish family, stratum, split, renderer and context; no training. First error counts list all guards failing at that action, not a canonical precedence label."
+}

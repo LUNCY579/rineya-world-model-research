@@ -1,0 +1,55 @@
+{
+  "receipt_id": "expert-planning-gap-v1-gate-code-initial-29f35b2408b33bc0",
+  "review_type": "CODE_REVIEW",
+  "reviewer_role": "expert_reviewer",
+  "reviewer_execution_id": "/root/expert_reviewer",
+  "created_utc": "2026-10-10T05:04:52.496397+00:00",
+  "decision": "ACCEPT_SCOPED_CODE_WITH_MODERATE_FINDINGS",
+  "scope": "Wrapper and pipeline wiring for the exact frozen planning-gap-v1 routing, binding/TOCTOU checks and approval gates. Seventeen actual isolated AST/stub tests, not private checker semantic review or full publication execution. No release approval.",
+  "artifact_hashes": {
+    "factory/planning_controls.py": "ff9d904be78b428d0cd60e53c7e026318a6fd7ed62932487e2a2d22a1f8c5566",
+    "factory/pipeline.py": "703df4685c0e7e598d6bd4debc2932dd4fd04c84d50f61622ac375e3783d14dd"
+  },
+  "actual_test_execution": {
+    "path": "reviews/expert/planning-gap-v1.expert_gate_code.execution.json",
+    "sha256": "29f35b2408b33bc096130d5fed70ae2a760523078a09cd21218fe79abd6993d0",
+    "test_count": 17
+  },
+  "source": {
+    "path": "reviews/expert/review_planning_gate_code.py",
+    "sha256": "52ab25582a90b1f6f0d4b1579a36f0f5cad81e0f822c43553df118ca75196e67"
+  },
+  "dataset_first_final_sha256": "9b7ff4e888279ee152c065a978231f7ffd3a2c4cf46be3f6733477ce0d952d72",
+  "dataset_first_final_unchanged": true,
+  "critical_defects": [],
+  "findings": [
+    {
+      "category": "planning_selection_marker_coverage",
+      "severity": "medium",
+      "file": "factory/planning_controls.py",
+      "line": 31,
+      "evidence": "Own hypothetical tagless A0 row preserves controlled_context/primary_stratum/source family while version label becomes rgm-1.4.0 and invocation planning-gap-next. Selector returns zero. Actual frozen v1 and its version route both select all384; no actual dataset approval bypass demonstrated.",
+      "fix": "Use preserved public context/stratum/source-family markers or an explicitly mandatory manifest-backed batch registry as additional routing evidence; avoid relying only on naming/tag conventions."
+    },
+    {
+      "category": "release_validation_identity_inconsistency",
+      "severity": "medium",
+      "file": "factory/pipeline.py",
+      "line": 260,
+      "evidence": "approval_evidence accepts three distinct nonblacklisted IDs /root/other_expert,/root/other_red,/root/other_adjudicator, but validate_release later requires the exact three fixed identities. Current actual receipts use the intended identities.",
+      "fix": "Enforce the same role-specific intended identity set before writing immutable release files, or explicitly generalize both interfaces together."
+    },
+    {
+      "category": "prompt_lead_metadata_leak_check_incomplete",
+      "severity": "medium",
+      "file": "factory/pipeline.py",
+      "line": 104,
+      "evidence": "Local schema_validate checks only parsed Task JSON payload for privileged strings. With own no-op schema stub it accepts added sample_id/verified_target in pre-Task lead. Unread checker might add checks, so this is not a claimed full-pipeline bypass or actual candidate leak.",
+      "fix": "Check the complete rendered prompt/lead for privileged metadata and bind the full public contract; retain typed Task JSON comparison."
+    }
+  ],
+  "publication_blocker_for_exact_frozen_candidate_established_by_these_tests": false,
+  "provenance": "Test source/execution completed after dataset verdict freeze and before root checker-discrepancy message. This initial code receipt is written after that message was received, but before reading disclosed checker/diagnostic files. New guided checker supplement is separate; no claim of unexposed prospective blindness.",
+  "no_producer_reference_or_private_other_verdict_reads": true,
+  "no_release_source_or_status_edits": true
+}

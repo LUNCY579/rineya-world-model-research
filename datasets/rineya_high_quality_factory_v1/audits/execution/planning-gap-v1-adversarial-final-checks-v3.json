@@ -1,0 +1,323 @@
+{
+  "actual_author_execution": "/root/adversarial_auditor",
+  "allocation_policy_checks_completed": true,
+  "bounds_checks": 384,
+  "canonical_task_and_rendered_input_exactly_equal_frozen_inputs": true,
+  "completed": true,
+  "conditional_histograms_sha256": "977d2555d198569a5deb7c3281ec0c6ff9b624e04749a16247b49db3abbdd26a",
+  "cross_split_family_parent_semantic_family_groups": 0,
+  "decision_changes": 0,
+  "final_sha256": "404c54fc35dc86ab4670abd9ab4dc2d666a6912d2bf1962a6dce1109efbda557",
+  "first_and_final_verdicts_preserved": true,
+  "first_sha256": "404c54fc35dc86ab4670abd9ab4dc2d666a6912d2bf1962a6dce1109efbda557",
+  "fuel_submitted_route_and_exact_boundary_checks": [
+    {
+      "family": "RGM-001-seed20261009-p0180",
+      "kind": "exact_cost_boundary_and_one_lower",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0180-A0-forward",
+        "RGM-001-planning-gap-v1-p0180-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0181",
+      "kind": "exact_cost_boundary_and_one_lower",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0181-A0-forward",
+        "RGM-001-planning-gap-v1-p0181-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0182",
+      "kind": "exact_cost_boundary_and_one_lower",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0182-A0-forward",
+        "RGM-001-planning-gap-v1-p0182-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0183",
+      "kind": "exact_cost_boundary_and_one_lower",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0183-A0-forward",
+        "RGM-001-planning-gap-v1-p0183-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0184",
+      "kind": "exact_cost_boundary_and_one_lower",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0184-A0-forward",
+        "RGM-001-planning-gap-v1-p0184-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0185",
+      "kind": "exact_cost_boundary_and_one_lower",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0185-A0-forward",
+        "RGM-001-planning-gap-v1-p0185-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0186",
+      "kind": "blocked_submitted_route_but_longer_fresh_route",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0186-A0-forward",
+        "RGM-001-planning-gap-v1-p0186-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0187",
+      "kind": "blocked_submitted_route_but_longer_fresh_route",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0187-A0-forward",
+        "RGM-001-planning-gap-v1-p0187-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0188",
+      "kind": "blocked_submitted_route_but_longer_fresh_route",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0188-A0-forward",
+        "RGM-001-planning-gap-v1-p0188-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0189",
+      "kind": "blocked_submitted_route_but_longer_fresh_route",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0189-A0-forward",
+        "RGM-001-planning-gap-v1-p0189-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0190",
+      "kind": "blocked_submitted_route_but_longer_fresh_route",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0190-A0-forward",
+        "RGM-001-planning-gap-v1-p0190-A1-forward"
+      ],
+      "verified": true
+    },
+    {
+      "family": "RGM-001-seed20261009-p0191",
+      "kind": "blocked_submitted_route_but_longer_fresh_route",
+      "sample_ids": [
+        "RGM-001-planning-gap-v1-p0191-A0-forward",
+        "RGM-001-planning-gap-v1-p0191-A1-forward"
+      ],
+      "verified": true
+    }
+  ],
+  "guard_count_interpretation": "The original canonical audit reports all violated guards at first failure. Isolated counts require exactly one guard; neither uses producer/canonical reason precedence. Observed unchanged_support and destination_not_clear violations co-fail with another guard; this establishes observed violations, not selective single-guard ablation coverage. Actual isolated counts are reported without assumed positives.",
+  "input_matches": 384,
+  "no_other_reviewer_implementation_private_expectations_or_verdicts_read": true,
+  "old_guard_all_violated_counts": {
+    "destination_not_clear": 12,
+    "insufficient_fuel": 36,
+    "missing_directed_edge": 12,
+    "source_not_clear": 18,
+    "unchanged_support": 34
+  },
+  "old_guard_isolated_actual_examples": {
+    "insufficient_fuel": {
+      "independent_first_failure": {
+        "index": 0,
+        "reasons": [
+          "insufficient_fuel"
+        ]
+      },
+      "original_record_hash": "560474f23bbb5230fc3d45288db1a62d22e3da34cee6b1bffb252259ab91df01",
+      "sample_id": "RGM-001-pilot-v3-p0001-base-reverse",
+      "task": {
+        "edges": [
+          [
+            "Aster",
+            "Beryl",
+            4
+          ],
+          [
+            "Beryl",
+            "Ember",
+            1
+          ],
+          [
+            "Ember",
+            "Dune",
+            1
+          ],
+          [
+            "Aster",
+            "Dune",
+            7
+          ]
+        ],
+        "fuel": 6,
+        "goal": "Dune",
+        "kind": "graph",
+        "nodes": [
+          "Aster",
+          "Beryl",
+          "Ember",
+          "Dune"
+        ],
+        "plan": [
+          "Dune",
+          "Beryl",
+          "Dune"
+        ],
+        "start": "Aster"
+      }
+    },
+    "missing_directed_edge": {
+      "independent_first_failure": {
+        "index": 0,
+        "reasons": [
+          "missing_directed_edge"
+        ]
+      },
+      "original_record_hash": "ea3023d71052938fe3da686a45d4c873a2f62f10864e911d6d2e0587d6e7419e",
+      "sample_id": "RGM-001-pilot-v3-p0006-base-reverse",
+      "task": {
+        "edges": [
+          [
+            "Dune",
+            "Cedar",
+            2
+          ],
+          [
+            "Cedar",
+            "Ember",
+            4
+          ]
+        ],
+        "fuel": 6,
+        "goal": "Ember",
+        "kind": "graph",
+        "nodes": [
+          "Dune",
+          "Cedar",
+          "Ember"
+        ],
+        "plan": [
+          "Dune",
+          "Cedar",
+          "Ember"
+        ],
+        "start": "Dune"
+      }
+    },
+    "source_not_clear": {
+      "independent_first_failure": {
+        "index": 0,
+        "reasons": [
+          "source_not_clear"
+        ]
+      },
+      "original_record_hash": "e2caf05db22d35a94ca70de7c684357f476966a52046e417df2a802f7f7e1e08",
+      "sample_id": "RGM-001-pilot-v3-p0007-base-reverse",
+      "task": {
+        "goal_on": {
+          "dahlia": "cobalt"
+        },
+        "kind": "blocks",
+        "on": {
+          "amber": "dahlia",
+          "cobalt": "TABLE",
+          "dahlia": "TABLE"
+        },
+        "plan": [
+          {
+            "block": "dahlia",
+            "to": "cobalt"
+          },
+          {
+            "block": "amber",
+            "to": "TABLE"
+          },
+          {
+            "block": "dahlia",
+            "to": "cobalt"
+          }
+        ]
+      }
+    },
+    "unchanged_support": {
+      "independent_first_failure": {
+        "index": 1,
+        "reasons": [
+          "unchanged_support"
+        ]
+      },
+      "original_record_hash": "b652dae83386b49dc673b06adec4a1dd9f1f59b6ccf1c157b699afd3bb7fe3b0",
+      "sample_id": "RGM-001-pilot-v3-p0009-base-reverse",
+      "task": {
+        "goal_on": {
+          "ruby": "onyx"
+        },
+        "kind": "blocks",
+        "on": {
+          "onyx": "sapphire",
+          "pearl": "quartz",
+          "quartz": "ruby",
+          "ruby": "TABLE",
+          "sapphire": "pearl"
+        },
+        "plan": [
+          {
+            "block": "onyx",
+            "to": "TABLE"
+          },
+          {
+            "block": "onyx",
+            "to": "TABLE"
+          },
+          {
+            "block": "sapphire",
+            "to": "TABLE"
+          },
+          {
+            "block": "pearl",
+            "to": "TABLE"
+          },
+          {
+            "block": "quartz",
+            "to": "TABLE"
+          },
+          {
+            "block": "ruby",
+            "to": "onyx"
+          }
+        ]
+      }
+    }
+  },
+  "old_guard_isolated_failure_counts": {
+    "insufficient_fuel": 36,
+    "missing_directed_edge": 12,
+    "source_not_clear": 2,
+    "unchanged_support": 11
+  },
+  "preserved_failed_executions": [
+    "audits/execution/planning-gap-v1-adversarial-final-checks-first-failure.json",
+    "audits/execution/planning-gap-v1-adversarial-final-checks-second-failure.json"
+  ],
+  "prior_family_id_sample_id_exact_task_intersections": {
+    "families": 0,
+    "sample_ids": 0,
+    "semantic_tasks": 0
+  },
+  "scope": "Supplemental checks confirm frozen ACCEPT receipts; development infeasibility gap and bounded public-guided same-model review remain disclosed.",
+  "source_sha256": "3ec7c81ed32fb8020790ded68585d791d744d481140885b0fbcf5cca5e80eba2"
+}

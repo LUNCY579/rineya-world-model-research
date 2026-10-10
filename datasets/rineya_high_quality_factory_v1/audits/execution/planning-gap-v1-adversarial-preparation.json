@@ -1,0 +1,45 @@
+{
+  "actual_execution_id": "/root/adversarial_auditor",
+  "batch": "planning-gap-v1",
+  "block_calibration_cases": 9,
+  "calibration_exact_target_cases": 18,
+  "calibration_path": "reviews/adversarial/planning-gap-v1.preparation_calibration.jsonl",
+  "calibration_sha256": "47e818417e81c7549e3ea61a4e24b78c4c4629ee91ba575c1adf365cd02c6097",
+  "candidate_or_gold_or_private_implementation_or_other_verdict_read": false,
+  "dataset_approval_issued": false,
+  "graph_calibration_cases": 9,
+  "independent_enumeration": {
+    "all_complete": true,
+    "exact_search_comparison_digest": "e24c83aaed5d1d5b2dc0582b373d2ba484e414c53f76e49e270a099782a967d9",
+    "independent_map_relation_partial_goal_search_comparisons": 572,
+    "independent_map_relation_transition_comparisons": 1616,
+    "three_block_valid_partial_goals": 44,
+    "valid_states_by_size": {
+      "3": 13,
+      "4": 73
+    }
+  },
+  "input_domain_interpretations": {
+    "failure_reasons": "Own witness lists all violated block guards; canonical target has no reason-precedence field.",
+    "graph_budget": "nonnegative integer excluding bool; public pilot at most30, positive edge costs. No new action dynamics or resource replenishment.",
+    "scope": "Only two unchanged action grammars; all finite searches complete, no timeout equated with infeasible.",
+    "well_typed_unknown_actions": "Unknown graph destination/block source strings produce illegal actions; nonsyntactic shapes/types are rejected input."
+  },
+  "malformed_rejections": 19,
+  "metamorphic_checks": 28,
+  "public_sources_sha256": {
+    "research/curricula/RGM-NEXT-GAP-PROSPECTIVE.md": "6100d43fe1cf83d798bb34799fac70569f54d33f66692150d188581d9c940761",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES.md": "f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a",
+    "schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd"
+  },
+  "review_scope": "Fresh public-only standalone CPU solver/calibration authored in actual /root/adversarial_auditor execution. Prior task participation and same underlying model/shared public design remain disclosed. No new planning candidate,gold,producer/formal/expert code,prior verdicts,private expectations or release contents read. No efficacy,sealed evaluation or independent-model claim.",
+  "reviewer_role": "Adversarial Red-Team and diversity/leakage auditor preparation",
+  "search_completion": true,
+  "shortcut_attack_fixture_count": 6,
+  "source_sha256": "2330e383f2a8e1ec608435ee7eacfd647e072e8715bb35d583c12798eaaa1ad3",
+  "source_snapshot_path": "audits/history/rgm_planning_gap_adversarial_preparation-2330e383f2a8e1ec608435ee7eacfd647e072e8715bb35d583c12798eaaa1ad3.py",
+  "source_snapshot_sha256": "2330e383f2a8e1ec608435ee7eacfd647e072e8715bb35d583c12798eaaa1ad3",
+  "stage": "PUBLIC_ONLY_SOLVER_AND_CALIBRATION_FROZEN_BEFORE_ANY_CANDIDATE_ACCESS",
+  "status": "completed"
+}
