@@ -1,0 +1,46 @@
+{
+ "args": {
+  "set": "planbench",
+  "planner": "beam",
+  "W": 4,
+  "E": 24,
+  "max_depth": 80,
+  "step_cap": 24,
+  "R": 12,
+  "fwd_fmt": "delta",
+  "max_batch_tokens": 5000,
+  "M": 80,
+  "P": 1,
+  "prop_batch_tokens": 6000,
+  "freeze": "runs/FREEZE_B2_beam.json",
+  "shard": "2/4",
+  "n": 0,
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v2_s1/adapter",
+  "mode": "actions",
+  "fwd": "lm",
+  "fwd_adapter": "runs/BW_Fdelta_s0/adapter",
+  "K": 8,
+  "eval_seed": 0,
+  "val": true,
+  "out": "runs\\BW_TEST_B2\\planbench_beam\\shard_2of4"
+ },
+ "summary": {
+  "success": 1.0,
+  "n": 150,
+  "verified_rate": 1.0,
+  "verification_precision": 1.0,
+  "wall_s": 761.5,
+  "f_model_queries": 454,
+  "f_queries_per_instance": 3.0,
+  "proposer_tokens_per_instance": 284.7,
+  "expansions_per_instance": 1.03,
+  "val_success": 1.0,
+  "val_disagreements": 0,
+  "success_by_blocks": {
+   "3": 1.0,
+   "4": 1.0,
+   "5": 1.0
+  }
+ }
+}

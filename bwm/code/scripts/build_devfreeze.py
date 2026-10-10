@@ -92,15 +92,35 @@ def readme(meas, frz, sel_mean):
         "|---|---:|---:|---:|",
     ]
     for tset, label in (("hard", "PlanBench Blocksworld-hard (110; 6-15 blocks; 20-40-step plans)"),
-                        ("mirror", "Generated hard-style mirror (110)"), ("planbench", "PlanBench Blocksworld (600; 3-5 blocks)")):
+                        ("mirror", "Generated hard-style mirror (110)"), ("planbench", "PlanBench Blocksworld (the \"600\" set: 602 instances; 3-5 blocks)")):
         r = meas.get(tset, {})
         def cell(x):
             return "pending" if x is None else f"{x['solved']}/{x['n']} ({x['rate']:.1%}; 95% CI {x['clopper_pearson_95'][0]:.1%}-{x['clopper_pearson_95'][1]:.1%})"
         pr = r.get("paired_beam_vs_direct")
         ptxt = "-" if pr is None else f"+{pr['beam_only']} / -{pr['direct_only']}, p = {pr['exact_mcnemar_p']:.2g}"
         lines.append(f"| {label} | {cell(r.get('S_beam'))} | {cell(r.get('S_direct'))} | {ptxt} |")
-    lines += ["", "Published zero-shot references on Blocksworld-hard (different regime: general models, no domain training):", ""]
     from scipy.stats import fisher_exact
+    mb = meas.get("mirror", {}).get("S_beam")
+    if sb is not None and mb is not None:
+        gap = 100 * (sb["rate"] - mb["rate"])
+        pg = fisher_exact([[sb["solved"], sb["n"] - sb["solved"]], [mb["solved"], mb["n"] - mb["solved"]]])[1]
+        lines += ["", f"Contamination check (pre-registered): hard minus mirror, S-beam = {gap:+.1f} pp (unpaired Fisher p = "
+                  f"{pg:.2g}); the registered flag is a gap above +10 pp ({'FLAGGED' if gap > 10 else 'not flagged'}). The "
+                  "mirror's goals (tall-tower targets) are not distribution-matched to the hard set's goal structure, so part "
+                  "of any gap is difficulty rather than contamination."]
+        ga = ROOT / "runs/BW_TEST_B2/MIRROR_GAP_ANALYSIS.json"
+        if ga.exists():
+            g = json.loads(ga.read_text())
+            fmt = lambda d: ", ".join(f"{k}: {d[k]}" for k in ("<=6", "7-9", ">=10") if k in d)  # noqa: E731
+            lines += ["", f"Post-hoc, descriptive (`evidence/BW_TEST_B2/MIRROR_GAP_ANALYSIS.json`, `code/bw_mirror_gap.py`; the flag stands as computed): the "
+                      f"move lower bound is matched (hard {g['hard']['mean_move_lower_bound']:.1f} vs mirror "
+                      f"{g['mirror']['mean_move_lower_bound']:.1f}), but the mirror's tallest goal tower is taller "
+                      f"({g['mirror']['mean_max_goal_tower']:.1f} vs {g['hard']['mean_max_goal_tower']:.1f}) and success "
+                      f"falls with goal-tower height in both sets (tallest goal tower {fmt(g['hard']['success_by_max_goal_tower'])} "
+                      f"on hard; {fmt(g['mirror']['success_by_max_goal_tower'])} on the mirror). Reweighted to the hard set's goal-tower mix, the "
+                      f"mirror scores {g['mirror_standardized_to_hard_goal_tower_mix']:.1%} vs hard "
+                      f"{g['hard']['success']:.1%} (gap {g['gap_pp_standardized']:+.1f} pp)."]
+    lines += ["", "Published zero-shot references on Blocksworld-hard (different regime: general models, no domain training):", ""]
     for k, v in PUBLISHED_HARD.items():
         txt = f"- {k}: {v:.1%}"
         if sb is not None:
@@ -151,7 +171,7 @@ def main():
         if (ROOT / "bwmn" / f).exists():
             shutil.copy(ROOT / "bwmn" / f, out / "code/bwmn" / f)
     for f in ("blocks_eval.py", "bw_run_tests.py", "bw_freeze.py", "bw_select.py", "blocks_data.py", "bw_delta_data.py",
-              "blocks_val_large.py", "bw_forward_grade.py", "train_generic.py"):
+              "blocks_val_large.py", "bw_forward_grade.py", "train_generic.py", "bw_mirror_gap.py"):
         shutil.copy(ROOT / "scripts" / f, out / "code" / f)
     ev = out / "evidence"
     ev.mkdir()
@@ -184,7 +204,9 @@ def main():
         "published_reference_hard": PUBLISHED_HARD,
         "caveats": ["domain specialist with a learned simulator vs zero-shot generalists (different regime)",
                     "one training seed per adapter", "validation sets are generated, never PlanBench",
-                    "not comparable with verifier-in-the-loop systems"],
+                    "not comparable with verifier-in-the-loop systems",
+                    "pre-registered mirror flag raised (hard minus mirror > 10 pp); post-hoc analysis attributes it to the "
+                    "mirror's taller goal towers (evidence/BW_TEST_B2/MIRROR_GAP_ANALYSIS.json)"],
     }
     (out / "CORE.json").write_text(json.dumps(core, indent=1))
     (out / "PROMOTION.json").write_text(json.dumps({

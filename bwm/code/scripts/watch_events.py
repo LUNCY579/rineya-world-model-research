@@ -45,6 +45,8 @@ def main():
         ("orchestrator.log", "[gpu]", re.compile(r"start |done |FAILED|yielded|stop file|crashed")),
         ("orchestrator_cpu.log", "[cpu]", re.compile(r"start |done |FAILED|yielded|stop file|crashed")),
         ("BW_SELECT_v1.stdout", "[select]", re.compile(r"config_id|Traceback|Error")),
+        ("BW_TEST_B2.stdout", "[tests]", re.compile(r"^\[tests\]|Traceback|Error")),
+        ("BW_DISTILL_r1.search.stdout", "[distill]", re.compile(r"^chunk |Traceback|Error|verified")),
     ]
     stale = False
     while True:

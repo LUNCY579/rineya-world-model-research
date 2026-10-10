@@ -5,7 +5,9 @@ One JSON object with keys in FIXED order: {"cmp": <predicate inputs + "ok">, "ca
 any other key order, so the "compute before answering" order stays literal. Arms built from the same keys:
   plain   the existing answer only (= `after`)
   trace   cmp -> calc -> after
-  filler  cmp/calc replaced by a neutral token run matched per row to the trace's token count (extra-compute control)
+  filler  cmp/calc replaced by a neutral token run of CONSTANT length per (domain, action kind) (amendment 4b, RCWM
+          2026-10-09: a per-row matched length leaks the answer, e.g. legality changes the calc digits; the
+          constant is at least the longest trace of that kind in train+dev; the residual is reported as a covariate)
 Decision pipelines read only `after`; `cmp_ok` / `calc_ok` are scored separately as mechanism.
 """
 from __future__ import annotations
@@ -40,9 +42,13 @@ def rw2_parts(x: int, action: str, L: int):
     return cmp, calc, after
 
 
-def rw2_target(x: int, action: str, L: int, arm: str, tok=None) -> str:
+def rw2_kind(action: str) -> str:
+    return "move" if action in ("add1", "sub1", "double") else action
+
+
+def rw2_target(x: int, action: str, L: int, arm: str, fill_n: int | None = None) -> str:
     cmp, calc, after = rw2_parts(x, action, L)
-    return _target(cmp, calc, after, arm, tok)
+    return _target(cmp, calc, after, arm, fill_n)
 
 
 # ----------------------------------------------------------------------------- Blocksworld preconditions
@@ -67,27 +73,37 @@ def bw_parts(s: frozenset, a: tuple):
     return cmp, calc, after
 
 
-def bw_target(s: frozenset, a: tuple, arm: str, tok=None) -> str:
+def bw_kind(a: tuple) -> str:
+    return a[0]
+
+
+def bw_target(s: frozenset, a: tuple, arm: str, fill_n: int | None = None) -> str:
     cmp, calc, after = bw_parts(s, a)
-    return _target(cmp, calc, after, arm, tok)
+    return _target(cmp, calc, after, arm, fill_n)
 
 
 # ----------------------------------------------------------------------------- arms and parsing
 
-def _target(cmp, calc, after, arm: str, tok=None) -> str:
+def trace_head_tokens(cmp, calc, tok) -> int:
+    """Token count of the trace's cmp+calc part (used to set the per-kind constant filler length)."""
+    return len(tok('{"cmp":' + _dump(cmp) + ',"calc":' + _dump(calc), add_special_tokens=False).input_ids)
+
+
+def filler_length(heads_by_kind: dict, tok) -> dict:
+    """Constant filler unit count per kind = longest trace head of that kind (train+dev), in filler units."""
+    base = len(tok('{"fill":""', add_special_tokens=False).input_ids)
+    return {k: max(1, max(v) - base) for k, v in heads_by_kind.items()}
+
+
+def _target(cmp, calc, after, arm: str, fill_n: int | None = None) -> str:
     if arm == "plain":
         return _dump(after)
-    trace = '{"cmp":' + _dump(cmp) + ',"calc":' + _dump(calc) + ',"after":' + _dump(after) + "}"
     if arm == "trace":
-        return trace
+        return '{"cmp":' + _dump(cmp) + ',"calc":' + _dump(calc) + ',"after":' + _dump(after) + "}"
     if arm == "filler":
-        if tok is None:
-            raise ValueError("filler arm needs the tokenizer to match token counts")
-        head = '{"cmp":' + _dump(cmp) + ',"calc":' + _dump(calc)
-        n = len(tok(head, add_special_tokens=False).input_ids)
-        base = '{"fill":"'
-        k = max(1, n - len(tok(base + '"', add_special_tokens=False).input_ids))
-        return base + FILL * k + '","after":' + _dump(after) + "}"
+        if not fill_n:
+            raise ValueError("filler arm needs the per-kind constant fill_n (amendment 4b)")
+        return '{"fill":"' + FILL * fill_n + '","after":' + _dump(after) + "}"
     raise ValueError(arm)
 
 
