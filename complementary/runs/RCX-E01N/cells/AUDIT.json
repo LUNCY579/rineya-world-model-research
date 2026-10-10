@@ -1,0 +1,764 @@
+{
+ "ok": true,
+ "failures": [],
+ "out_dir": "runs\\RCX-E01N\\cells",
+ "battery": {
+  "split": "dev",
+  "seed": 20261240,
+  "n_parents": 40,
+  "surfaces": [
+   "in",
+   "ho_tpl"
+  ],
+  "n": 2240,
+  "n_full_all_surfaces": 6720,
+  "battery_sha256": "0f4b263c008dcbde03b1bd25152ab75130d64528c223917d2f9cd18c3fc89326",
+  "strata": {
+   "F1_void|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F1_void|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F2_unseen_real|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F2_unseen_real|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F3_unseen_nonce|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F3_unseen_nonce|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F4_nearmiss|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F4_nearmiss|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F5_postedlike|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "F5_postedlike|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V1_pos|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V1_pos|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V2_neg|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V2_neg|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V3_inverted|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V3_inverted|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V5_posted_override|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V5_posted_override|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V6_compose|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V6_compose|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V7_bigset|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "V7_bigset|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "M1_bal|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "M1_bal|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "M2_amt|in": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   },
+   "M2_amt|ho_tpl": {
+    "parents": 40,
+    "parents_with_apply_and_noop": 40
+   }
+  },
+  "n_accounts": {
+   "ho_tpl:4": 1120,
+   "in:4": 1120
+  },
+  "tids": {
+   "t0": 1120,
+   "h0": 564,
+   "h1": 556
+  },
+  "noop_share": 0.5,
+  "prereg3_words_by_stratum": {
+   "F4_nearmiss": 52
+  },
+  "train_pool_words_by_stratum": {}
+ },
+ "arms": {
+  "N-FX": {
+   "regime": "FX",
+   "rows": 1501,
+   "rows_sha256": "b320a24d2aa2bcd1e016416217ea588f16274ecf804f38e23b1d77aa8d0ee249",
+   "parents": 1501,
+   "variants": {
+    "base": 1501
+   },
+   "hard_check_rows": {
+    "frame": 0,
+    "gold": 0,
+    "readback_hash": 0,
+    "split_words": 0,
+    "probe_words": 0,
+    "excluded_words": 0,
+    "non_train_words": 0,
+    "rcwm_heldout_text": 0,
+    "heldout_template": 0,
+    "heldout_rule_factor": 0,
+    "heldout_magnitude": 0
+   },
+   "overlap": {
+    "semantic_eval_battery": 0,
+    "skeleton_eval_battery": 0,
+    "semantic_full_dev_battery": 0,
+    "skeleton_full_dev_battery": 0
+   },
+   "noop_share": 0.2578,
+   "decisions": {
+    "apply": 1114,
+    "noop": 387
+   },
+   "class_balance_by_rule_type": {
+    "S+{posted}": {
+     "n": 1501,
+     "noop": 387,
+     "noop_share": 0.2578
+    }
+   },
+   "class_balance_by_template": {
+    "S+:t0": {
+     "n": 1501,
+     "noop": 387,
+     "noop_share": 0.2578
+    }
+   },
+   "class_balance_by_n_accounts": {
+    "4": {
+     "n": 1501,
+     "noop": 387,
+     "noop_share": 0.2578
+    }
+   },
+   "anchor_status_counts": {
+    "posted": 1114,
+    "void": 387
+   },
+   "distinct_statuses": 2,
+   "tokens": {
+    "mean_supervised_per_row": 21.646235842771485,
+    "mean_processed_per_row": 148.44770153231178,
+    "max_processed_per_row": 151,
+    "per_seed": {
+     "0": {
+      "supervised_tokens": 65799,
+      "tokens_processed": 451269
+     },
+     "1": {
+      "supervised_tokens": 65809,
+      "tokens_processed": 451285
+     },
+     "2": {
+      "supervised_tokens": 65806,
+      "tokens_processed": 451281
+     }
+    }
+   }
+  },
+  "N-VR": {
+   "regime": "VR",
+   "rows": 1501,
+   "rows_sha256": "77555eccc4abcf4058f2059ce620bcc59894e7666ea30d9e74f2998fc650fed5",
+   "parents": 1501,
+   "variants": {
+    "base": 1501
+   },
+   "hard_check_rows": {
+    "frame": 0,
+    "gold": 0,
+    "readback_hash": 0,
+    "split_words": 0,
+    "probe_words": 0,
+    "excluded_words": 0,
+    "non_train_words": 0,
+    "rcwm_heldout_text": 0,
+    "heldout_template": 0,
+    "heldout_rule_factor": 0,
+    "heldout_magnitude": 0
+   },
+   "overlap": {
+    "semantic_eval_battery": 0,
+    "skeleton_eval_battery": 0,
+    "semantic_full_dev_battery": 0,
+    "skeleton_full_dev_battery": 0
+   },
+   "noop_share": 0.5083,
+   "decisions": {
+    "noop": 763,
+    "apply": 738
+   },
+   "class_balance_by_rule_type": {
+    "AND(S+,AGE)": {
+     "n": 63,
+     "noop": 43,
+     "noop_share": 0.6825
+    },
+    "AND(S+,K+)": {
+     "n": 77,
+     "noop": 53,
+     "noop_share": 0.6883
+    },
+    "AND(S-,AGE)": {
+     "n": 79,
+     "noop": 59,
+     "noop_share": 0.7468
+    },
+    "AND(S-,K+)": {
+     "n": 70,
+     "noop": 57,
+     "noop_share": 0.8143
+    },
+    "OR(S+,ALT)": {
+     "n": 65,
+     "noop": 15,
+     "noop_share": 0.2308
+    },
+    "OR(S-,ALT)": {
+     "n": 80,
+     "noop": 25,
+     "noop_share": 0.3125
+    },
+    "S+/size1": {
+     "n": 215,
+     "noop": 100,
+     "noop_share": 0.4651
+    },
+    "S+/size2": {
+     "n": 264,
+     "noop": 126,
+     "noop_share": 0.4773
+    },
+    "S+{posted}": {
+     "n": 20,
+     "noop": 10,
+     "noop_share": 0.5
+    },
+    "S-/size1": {
+     "n": 257,
+     "noop": 120,
+     "noop_share": 0.4669
+    },
+    "S-/size2": {
+     "n": 289,
+     "noop": 141,
+     "noop_share": 0.4879
+    },
+    "S-{posted}": {
+     "n": 22,
+     "noop": 14,
+     "noop_share": 0.6364
+    }
+   },
+   "class_balance_by_template": {
+    "AND:t0": {
+     "n": 289,
+     "noop": 212,
+     "noop_share": 0.7336
+    },
+    "OR:t0": {
+     "n": 145,
+     "noop": 40,
+     "noop_share": 0.2759
+    },
+    "S+:t0": {
+     "n": 499,
+     "noop": 236,
+     "noop_share": 0.4729
+    },
+    "S-:t0": {
+     "n": 568,
+     "noop": 275,
+     "noop_share": 0.4842
+    }
+   },
+   "class_balance_by_n_accounts": {
+    "4": {
+     "n": 1501,
+     "noop": 763,
+     "noop_share": 0.5083
+    }
+   },
+   "anchor_status_counts": {
+    "posted": 117,
+    "void": 97
+   },
+   "distinct_statuses": 26,
+   "tokens": {
+    "mean_supervised_per_row": 21.620253164556964,
+    "mean_processed_per_row": 153.545636242505,
+    "max_processed_per_row": 168,
+    "per_seed": {
+     "0": {
+      "supervised_tokens": 65726,
+      "tokens_processed": 466728
+     },
+     "1": {
+      "supervised_tokens": 65724,
+      "tokens_processed": 466802
+     },
+     "2": {
+      "supervised_tokens": 65727,
+      "tokens_processed": 466798
+     }
+    }
+   }
+  },
+  "N-CFSD": {
+   "regime": "CF_SD",
+   "rows": 1501,
+   "rows_sha256": "de23a9233785273b429d5debd311b6309fccedfc1964ed61f1d3faedcd72e401",
+   "parents": 376,
+   "variants": {
+    "base": 376,
+    "rule_flip": 375,
+    "status_swap": 375,
+    "set_swap": 375
+   },
+   "hard_check_rows": {
+    "frame": 0,
+    "gold": 0,
+    "readback_hash": 0,
+    "split_words": 0,
+    "probe_words": 0,
+    "excluded_words": 0,
+    "non_train_words": 0,
+    "rcwm_heldout_text": 0,
+    "heldout_template": 0,
+    "heldout_rule_factor": 0,
+    "heldout_magnitude": 0
+   },
+   "overlap": {
+    "semantic_eval_battery": 0,
+    "skeleton_eval_battery": 0,
+    "semantic_full_dev_battery": 0,
+    "skeleton_full_dev_battery": 0
+   },
+   "noop_share": 0.5057,
+   "decisions": {
+    "apply": 742,
+    "noop": 759
+   },
+   "class_balance_by_rule_type": {
+    "AND(S+,AGE)": {
+     "n": 83,
+     "noop": 61,
+     "noop_share": 0.7349
+    },
+    "AND(S+,K+)": {
+     "n": 59,
+     "noop": 44,
+     "noop_share": 0.7458
+    },
+    "AND(S-,AGE)": {
+     "n": 81,
+     "noop": 62,
+     "noop_share": 0.7654
+    },
+    "AND(S-,K+)": {
+     "n": 65,
+     "noop": 47,
+     "noop_share": 0.7231
+    },
+    "OR(S+,ALT)": {
+     "n": 65,
+     "noop": 13,
+     "noop_share": 0.2
+    },
+    "OR(S-,ALT)": {
+     "n": 91,
+     "noop": 18,
+     "noop_share": 0.1978
+    },
+    "S+/size1": {
+     "n": 228,
+     "noop": 115,
+     "noop_share": 0.5044
+    },
+    "S+/size2": {
+     "n": 285,
+     "noop": 133,
+     "noop_share": 0.4667
+    },
+    "S+{posted}": {
+     "n": 18,
+     "noop": 10,
+     "noop_share": 0.5556
+    },
+    "S-/size1": {
+     "n": 230,
+     "noop": 117,
+     "noop_share": 0.5087
+    },
+    "S-/size2": {
+     "n": 271,
+     "noop": 126,
+     "noop_share": 0.4649
+    },
+    "S-{posted}": {
+     "n": 25,
+     "noop": 13,
+     "noop_share": 0.52
+    }
+   },
+   "class_balance_by_template": {
+    "AND:t0": {
+     "n": 200,
+     "noop": 150,
+     "noop_share": 0.75
+    },
+    "AND:t1": {
+     "n": 88,
+     "noop": 64,
+     "noop_share": 0.7273
+    },
+    "OR:t0": {
+     "n": 112,
+     "noop": 25,
+     "noop_share": 0.2232
+    },
+    "OR:t1": {
+     "n": 44,
+     "noop": 6,
+     "noop_share": 0.1364
+    },
+    "S+:t0": {
+     "n": 151,
+     "noop": 76,
+     "noop_share": 0.5033
+    },
+    "S+:t1": {
+     "n": 129,
+     "noop": 60,
+     "noop_share": 0.4651
+    },
+    "S+:t2": {
+     "n": 120,
+     "noop": 57,
+     "noop_share": 0.475
+    },
+    "S+:t3": {
+     "n": 131,
+     "noop": 65,
+     "noop_share": 0.4962
+    },
+    "S-:t0": {
+     "n": 130,
+     "noop": 52,
+     "noop_share": 0.4
+    },
+    "S-:t1": {
+     "n": 139,
+     "noop": 67,
+     "noop_share": 0.482
+    },
+    "S-:t2": {
+     "n": 126,
+     "noop": 58,
+     "noop_share": 0.4603
+    },
+    "S-:t3": {
+     "n": 131,
+     "noop": 79,
+     "noop_share": 0.6031
+    }
+   },
+   "class_balance_by_n_accounts": {
+    "3": {
+     "n": 756,
+     "noop": 374,
+     "noop_share": 0.4947
+    },
+    "4": {
+     "n": 745,
+     "noop": 385,
+     "noop_share": 0.5168
+    }
+   },
+   "anchor_status_counts": {
+    "posted": 107,
+    "void": 104
+   },
+   "distinct_statuses": 262,
+   "tokens": {
+    "mean_supervised_per_row": 19.15589606928714,
+    "mean_processed_per_row": 150.11858760826115,
+    "max_processed_per_row": 172,
+    "per_seed": {
+     "0": {
+      "supervised_tokens": 58223,
+      "tokens_processed": 456330
+     },
+     "1": {
+      "supervised_tokens": 58267,
+      "tokens_processed": 456410
+     },
+     "2": {
+      "supervised_tokens": 58234,
+      "tokens_processed": 456380
+     }
+    }
+   }
+  }
+ },
+ "matched": {
+  "rows": {
+   "N-FX": 1501,
+   "N-VR": 1501,
+   "N-CFSD": 1501
+  },
+  "steps": 190,
+  "batch": 16,
+  "lr_peak": 0.0001,
+  "row_order": "lora_cpu.row_order_for(1501, 190, 16, seed): identical index sequence for every arm at a given seed",
+  "lora_init": "attach_lora(seed=seed) for every arm",
+  "frame_pre": "Apply one event to the supplied account balances. ",
+  "frame_post": " add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.",
+  "token_covariates_vs_N-FX": {
+   "N-FX": {
+    "0": {
+     "supervised_tokens": {
+      "diff": 0,
+      "ratio": 1.0
+     },
+     "tokens_processed": {
+      "diff": 0,
+      "ratio": 1.0
+     }
+    },
+    "1": {
+     "supervised_tokens": {
+      "diff": 0,
+      "ratio": 1.0
+     },
+     "tokens_processed": {
+      "diff": 0,
+      "ratio": 1.0
+     }
+    },
+    "2": {
+     "supervised_tokens": {
+      "diff": 0,
+      "ratio": 1.0
+     },
+     "tokens_processed": {
+      "diff": 0,
+      "ratio": 1.0
+     }
+    }
+   },
+   "N-VR": {
+    "0": {
+     "supervised_tokens": {
+      "diff": -73,
+      "ratio": 0.9989
+     },
+     "tokens_processed": {
+      "diff": 15459,
+      "ratio": 1.0343
+     }
+    },
+    "1": {
+     "supervised_tokens": {
+      "diff": -85,
+      "ratio": 0.9987
+     },
+     "tokens_processed": {
+      "diff": 15517,
+      "ratio": 1.0344
+     }
+    },
+    "2": {
+     "supervised_tokens": {
+      "diff": -79,
+      "ratio": 0.9988
+     },
+     "tokens_processed": {
+      "diff": 15517,
+      "ratio": 1.0344
+     }
+    }
+   },
+   "N-CFSD": {
+    "0": {
+     "supervised_tokens": {
+      "diff": -7576,
+      "ratio": 0.8849
+     },
+     "tokens_processed": {
+      "diff": 5061,
+      "ratio": 1.0112
+     }
+    },
+    "1": {
+     "supervised_tokens": {
+      "diff": -7542,
+      "ratio": 0.8854
+     },
+     "tokens_processed": {
+      "diff": 5125,
+      "ratio": 1.0114
+     }
+    },
+    "2": {
+     "supervised_tokens": {
+      "diff": -7572,
+      "ratio": 0.8849
+     },
+     "tokens_processed": {
+      "diff": 5099,
+      "ratio": 1.0113
+     }
+    }
+   }
+  }
+ },
+ "t2_ledger_reference": {
+  "rows": 501,
+  "of_total_rows": 1501,
+  "frames": {
+   "one": 501
+  },
+  "status_counts": {
+   "posted": 375,
+   "void": 126
+  },
+  "posted_share": 0.7485029940119761,
+  "noop_target_share": 0.3193612774451098,
+  "n_accounts": {
+   "4": 501
+  },
+  "kinds": {
+   "add": 167,
+   "transfer": 167,
+   "scale": 167
+  },
+  "tick_range": [
+   1,
+   99
+  ],
+  "balance_range": [
+   -98,
+   97
+  ]
+ },
+ "n_fx_vs_t2": {
+  "n_fx_posted_share": 0.7422,
+  "t2_posted_share": 0.7485,
+  "diff": -0.0063,
+  "material": false,
+  "threshold": 0.05,
+  "n_fx_noop_target_share": 0.2578,
+  "t2_noop_target_share": 0.3194,
+  "n_fx_ledger_rows": 1501,
+  "t2_ledger_rows": 501
+ },
+ "design_notes": [
+  "N-CFSD: 756/1501 rows (50.4%) have [3]-account states; the eval battery (in,ho_tpl) has only [4]-account states and Titan's frame uses accounts ['A', 'B', 'C', 'D']. Shorter targets also lower this arm's supervised tokens.",
+  "T2 ledger rows: ticks [1, 99], balances [-98, 97], kinds ['add', 'scale', 'transfer']; native rows: tick 1 always, balances [0, 98], kinds ['add', 'transfer'].",
+  "user_json sorts keys, so the SD regime's state/event key-order factors are erased in the native frame; N-CFSD's surface diversity is template wording (t0-t3) and account count only."
+ ],
+ "rows_sha256": {
+  "N-FX": "b320a24d2aa2bcd1e016416217ea588f16274ecf804f38e23b1d77aa8d0ee249",
+  "N-VR": "77555eccc4abcf4058f2059ce620bcc59894e7666ea30d9e74f2998fc650fed5",
+  "N-CFSD": "de23a9233785273b429d5debd311b6309fccedfc1964ed61f1d3faedcd72e401"
+ },
+ "rcwm_heldout_texts": {
+  "prereq paraphrase 4": "Apply the actions in order. Each action fires only when its ",
+  "prereq state sentence 4": "The state is a flag mask ",
+  "prereq state sentence 4 tail": " bits wide",
+  "prereq field name 4 (before)": "\"mask\":",
+  "prereq field name 4 (events)": "\"moves\":",
+  "prereq field name 4 (add)": "\"plus\":",
+  "prereq field name 4 (delete)": "\"minus\":",
+  "prereq field name 4 (pre_on)": "\"must_on\":",
+  "prereq field name 4 (pre_off)": "\"must_off\":",
+  "register paraphrase 4 fragment 0": "Update the registers by applying the single instruction below; every register holds an integer modulo 97. A swap instruction makes the ",
+  "register paraphrase 4 fragment 2": " registers exchange their values at once. An add instruction increases the ",
+  "register paraphrase 4 fragment 4": ". A mix instruction increases the ",
+  "register paraphrase 4 fragment 7": " register. A conditional instruction increases the ",
+  "register paraphrase 4 fragment 12": " when it does not. Every changed register is reduced modulo 97, and every other register stays the same. Respond with nothing but the full set of resulting registers as one JSON object.",
+  "register field name 4 (register)": "\"dest\":",
+  "register field name 4 (other)": "\"peer\":",
+  "register field name 4 (value)": "\"offset\":",
+  "register field name 4 (threshold)": "\"pivot\":",
+  "register field name 4 (kind)": "\"opcode\":",
+  "register field name 4 (before)": "\"memory\":",
+  "register field name 4 (event)": "\"operation\":"
+ },
+ "heldout_template_fragments": [
+  ", carry out the event; for any other status, do nothing.",
+  ", do nothing; for any other status, carry out the event.",
+  "An event takes effect when either ",
+  "Balances change only for ",
+  "Both conditions must hold for an event to take effect: ",
+  "Every event takes effect except ",
+  "If the status is "
+ ],
+ "tokenizer": "Qwen2Tokenizer",
+ "code_sha256": {
+  "native_e01.py": "f023c20193da2c957cc5e0f31cd07990b6bb7ddc44e35fc33d75a4e85baa16b6",
+  "native_probe.py": "e8e8723f50d8f1120047661cb9932a6e23d1a6310be9cb347a1909fe6096f8e0",
+  "gen.py": "fd89a80d90be4a66d4b0e875ec56e01993042d0e2d23de5f56f6508940fae744",
+  "world.py": "51e00a15c57e5ecfcaa53b8395b61d85118908378853d9e1d8cd5f3c56b7501d",
+  "vocab.py": "de9f1adbc0f4eec96939bf5037688ded0ef6f3ee75a7af4bcb3c5708505d8e55",
+  "templates.py": "c0d6f35544100d91bf2f0fec7095a4d7dba4b3dbb7fb79630450ce601eb5f642"
+ }
+}

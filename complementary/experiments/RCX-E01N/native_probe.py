@@ -42,6 +42,7 @@ PATHS = {"sparse": CORES / "Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze",
          "supa": CORES / "Rineya-Supa-1.7.0-devfreeze"}
 T2_DIR = REPO / "rcwm" / "experiments" / "RCWM-T1" / "runs" / "t2" / "t2_s0" / "adapter"
 T2_SHA = "92bc7c7497c3cb2fc0c7c917b4f3b6bb931f0ed108144d969b26b18b42670b8a"
+T2_CONFIG_SHA = "50d9a776e093a952ac440a77c9cd7cd8e51eb22a85eb93b383aee1eacc185d9d"  # PREREG-2 freeze (r/alpha/targets)
 EOS_IDS = [151645, 151643]
 PAD_ID = 151643
 RAM_FLOOR_GB = 12.0
@@ -65,14 +66,25 @@ def user_json(rec):
     return json.dumps({"before": rec["state"], "event": ev}, separators=(",", ":"), sort_keys=True)
 
 
+def _no_dup_keys(pairs):
+    d = {}
+    for k, v in pairs:
+        if k in d:
+            raise ValueError(f"duplicate key {k!r}")
+        d[k] = v
+    return d
+
+
 def parse_answer(text, keys):
     """RCWM-style lenient parse (PREREG-1 registered leniency subset): strip, drop trailing '.', JSON object,
-    unwrap {"after":...}; require exactly the state's keys with integer values. Returns dict or None."""
+    unwrap {"after":...}; require exactly the state's keys with integer values. Returns dict or None.
+    Duplicate JSON keys are malformed (json.loads would keep the last value, which can turn an answer that
+    states a wrong value into an exact one)."""
     t = text.strip()
     if t.endswith("."):
         t = t[:-1]
     try:
-        v = json.loads(t)
+        v = json.loads(t, object_pairs_hook=_no_dup_keys)
     except (json.JSONDecodeError, ValueError):
         return None
     if isinstance(v, dict) and "after" in v and isinstance(v["after"], dict):
@@ -103,6 +115,17 @@ def load_core(name):
                                              attn_implementation="sdpa").eval()
     assert all(p.dtype == torch.float32 for p in m.parameters())
     return m
+
+
+def load_t2(model, adapter_name="t2"):
+    """Attach the registered T2 s0 adapter, unmerged, after checking BOTH registered shas (weights and
+    adapter_config.json, which fixes r/alpha/targets and hence the effective delta). Raises, never asserts."""
+    for fn, want in (("adapter_model.safetensors", T2_SHA), ("adapter_config.json", T2_CONFIG_SHA)):
+        got = sha_file(T2_DIR / fn)
+        if got != want:
+            raise SystemExit(f"T2 {fn} sha mismatch {got} != {want}")
+    from peft import PeftModel
+    return PeftModel.from_pretrained(model, str(T2_DIR), adapter_name=adapter_name, is_trainable=False).eval()
 
 
 @torch.no_grad()
@@ -148,7 +171,7 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--arms", default="OFF,T2,SUPA")
     ap.add_argument("--n-parents", type=int, default=40)
-    ap.add_argument("--surfaces", default="in")
+    ap.add_argument("--surfaces", default="in,ho_tpl")
     ap.add_argument("--limit", type=int, default=0, help="debug: only the first N prompts")
     args = ap.parse_args()
     out = Path(args.out)
@@ -169,7 +192,7 @@ def main():
         return tok.apply_chat_template([{"role": "system", "content": system}, {"role": "user", "content": user}],
                                        tokenize=False, add_generation_prompt=True, enable_thinking=False)
 
-    prompts = [render(rcl_system(T.render_rule(r["rule_ast"], "t0")), user_json(r)) for r in battery]
+    prompts = [render(rcl_system(T.render_rule(r["rule_ast"], r["tid"])), user_json(r)) for r in battery]
     fixed_idx = [i for i, r in enumerate(battery) if r["group"].startswith("F")]
     prompts_verbatim = [render(VERBATIM_SYSTEM, user_json(battery[i])) for i in fixed_idx]
     guard = ThermalGuard(log=lambda m: print("guard:", m, flush=True))
@@ -181,10 +204,7 @@ def main():
     if "OFF" in arms or "T2" in arms:
         model = load_core("sparse")
         if "T2" in arms:
-            got = sha_file(T2_DIR / "adapter_model.safetensors")
-            assert got == T2_SHA, f"T2 adapter sha mismatch {got}"
-            from peft import PeftModel
-            model = PeftModel.from_pretrained(model, str(T2_DIR), adapter_name="t2", is_trainable=False).eval()
+            model = load_t2(model)
         for arm in [a for a in ("OFF", "T2") if a in arms]:
             t0 = time.time()
             print(f"[{arm}] generating {len(prompts)} + {len(prompts_verbatim)} verbatim", flush=True)
@@ -219,7 +239,9 @@ def write_arm(out, arm, battery, outs, fixed_idx, outs_v, manifest, wall):
         for k, (o, x) in enumerate(zip(outs_v, res_v)):
             f.write(json.dumps({"i": fixed_idx[k], "frame": "verbatim", "out": o, **x}) + "\n")
     comp = S.composite(summ, "in")
-    manifest["arms"][arm] = {"wall_s": wall, "composite_in": comp, "cells": summ, "verbatim_fixed_cells": summ_v}
+    comp_tpl = S.composite(summ, "ho_tpl")
+    manifest["arms"][arm] = {"wall_s": wall, "composite_in": comp, "composite_ho_tpl": comp_tpl, "cells": summ,
+                             "verbatim_fixed_cells": summ_v}
     (out / f"summary_{arm}.json").write_text(json.dumps(manifest["arms"][arm], indent=1), encoding="utf-8",
                                              newline="\n")
     print(f"[{arm}] done {wall:.0f}s composite_in {comp:.3f}", flush=True)

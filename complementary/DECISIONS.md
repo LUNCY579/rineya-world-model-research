@@ -108,3 +108,15 @@ and the evidence path.
     behaviour is byte-identical: qualification Q2/Q3 reproduced the same records.
   - **Next.** Learnability of `VR-ans` and `CFSD-ans` in the copy world, then the native tier-A/B probe
     (`experiments/RCX-E01N/native_probe.py`: OFF, T2 s0 and Supa on the arith battery, CPU inference with ≥ 12 GB RAM).
+- **CX D-10 The character-model mechanism tier is closed as non-informative for E01 (about 06:50). Outcomes known: yes
+  (DEV).**
+  - In the copy world (no arithmetic), at 4,000 steps:
+    - `VR-ans`: IID exact 0.531, decision 0.601;
+    - `CFSD-ans`: 0.505 and 0.545.
+  - In all five configurations the decision stays near chance, *including on each arm's own training distribution*.
+  - **Decision.** Do not run the 9-arm character factorial: any arm difference would reflect learnability noise, not
+    the data factor. Two replacement paths:
+    1. The **symbol-token learner** (SymLM), with identifier words as single tokens and frozen random embeddings.
+       Being built.
+    2. The **native tier**, Titan-Sparse LoRA cells on CPU with the D-03 recipe. This is the decisive test for Rineya.
+  - The kit is under adversarial review (wf_53c3f5a8-51d) before any 0.6B load.

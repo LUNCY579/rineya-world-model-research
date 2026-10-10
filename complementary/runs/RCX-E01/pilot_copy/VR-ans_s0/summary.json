@@ -1,0 +1,1735 @@
+{
+ "arm": "VR-ans",
+ "regime": "VR",
+ "fmt": "ans",
+ "seed": 0,
+ "train_seed": 20261600,
+ "world": "copy",
+ "n_train": 32000,
+ "train_parents": 32000,
+ "fill_units": null,
+ "battery": "dev",
+ "battery_sha256": "7b8d969bb144735c6a7dde3a5f2cd771be2b895f50451dc414373ca8b495da5f",
+ "model_config": {
+  "d_model": 128,
+  "n_layers": 3,
+  "n_heads": 4,
+  "d_ff": 512,
+  "dropout": 0.0,
+  "max_len": 640,
+  "rope_base": 10000.0,
+  "vocab_size": 100
+ },
+ "train_config": {
+  "steps": 4000,
+  "batch_size": 32,
+  "lr": 0.001,
+  "warmup": 150,
+  "weight_decay": 0.1,
+  "grad_clip": 1.0,
+  "min_lr_frac": 0.1,
+  "betas": [
+   0.9,
+   0.98
+  ],
+  "bucket": 8,
+  "log_every": 50,
+  "eval_every": 500,
+  "guard_every": 10,
+  "checkpoint_path": "runs\\RCX-E01\\pilot_copy\\VR-ans_s0\\ckpt.pt",
+  "checkpoint_every": 500
+ },
+ "params": 604416,
+ "tokens": 31773500,
+ "target_tokens": 5067756,
+ "train_wall_s": 804.3935916423798,
+ "eval_wall_s": 39.4679160118103,
+ "guard_wait_s": 0.2228576000488829,
+ "final_loss": 0.03775640688836575,
+ "iid": {
+  "n": 1500,
+  "exact": 0.5313333333333333,
+  "decision": 0.6006666666666667,
+  "errors": {
+   "applied_when_noop": 204,
+   "false_copy": 392,
+   "arith": 107,
+   "format": 0
+  }
+ },
+ "learning_curve": [
+  {
+   "step": 500,
+   "iid_exact": 0.5266666666666666,
+   "iid_decision": 0.5466666666666666,
+   "iid_format_err": 0.0
+  },
+  {
+   "step": 1000,
+   "iid_exact": 0.5466666666666666,
+   "iid_decision": 0.5466666666666666,
+   "iid_format_err": 0.02666666666666667
+  },
+  {
+   "step": 1500,
+   "iid_exact": 0.5766666666666667,
+   "iid_decision": 0.5866666666666667,
+   "iid_format_err": 0.0
+  },
+  {
+   "step": 2000,
+   "iid_exact": 0.54,
+   "iid_decision": 0.5766666666666667,
+   "iid_format_err": 0.0
+  },
+  {
+   "step": 2500,
+   "iid_exact": 0.5766666666666667,
+   "iid_decision": 0.5966666666666667,
+   "iid_format_err": 0.0
+  },
+  {
+   "step": 3000,
+   "iid_exact": 0.5633333333333334,
+   "iid_decision": 0.6066666666666667,
+   "iid_format_err": 0.0
+  },
+  {
+   "step": 3500,
+   "iid_exact": 0.5466666666666666,
+   "iid_decision": 0.5733333333333334,
+   "iid_format_err": 0.0
+  },
+  {
+   "step": 4000,
+   "iid_exact": 0.5433333333333333,
+   "iid_decision": 0.5966666666666667,
+   "iid_format_err": 0.0
+  }
+ ],
+ "composite_exact": {
+  "in": 0.42976190476190473,
+  "ho": 0.0,
+  "ho_tpl": 0.4636904761904762,
+  "ho_key": 0.0,
+  "ho_name": 0.0,
+  "ho_many": 0.0
+ },
+ "composite_decision": {
+  "in": 0.4714285714285714,
+  "ho": 0.0,
+  "ho_tpl": 0.4767857142857143,
+  "ho_key": 0.0,
+  "ho_name": 0.0,
+  "ho_many": 0.0
+ },
+ "cells": {
+  "F1_void|in": {
+   "exact": 0.4583333333333333,
+   "decision": 0.5166666666666667,
+   "parent_all_exact": 0.08333333333333333,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 35,
+    "applied_when_noop": 21,
+    "arith": 9
+   }
+  },
+  "F1_void|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F1_void|ho_tpl": {
+   "exact": 0.525,
+   "decision": 0.5166666666666667,
+   "parent_all_exact": 0.08333333333333333,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 41,
+    "applied_when_noop": 15,
+    "arith": 1
+   }
+  },
+  "F1_void|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F1_void|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F1_void|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F2_unseen_real|in": {
+   "exact": 0.4583333333333333,
+   "decision": 0.5083333333333333,
+   "parent_all_exact": 0.05,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 43,
+    "arith": 7,
+    "applied_when_noop": 15
+   }
+  },
+  "F2_unseen_real|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F2_unseen_real|ho_tpl": {
+   "exact": 0.5,
+   "decision": 0.5083333333333333,
+   "parent_all_exact": 0.03333333333333333,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 51,
+    "arith": 2,
+    "applied_when_noop": 7
+   }
+  },
+  "F2_unseen_real|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F2_unseen_real|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F2_unseen_real|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F3_unseen_nonce|in": {
+   "exact": 0.45,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.03333333333333333,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 41,
+    "applied_when_noop": 19,
+    "arith": 6
+   }
+  },
+  "F3_unseen_nonce|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F3_unseen_nonce|ho_tpl": {
+   "exact": 0.525,
+   "decision": 0.525,
+   "parent_all_exact": 0.06666666666666667,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 41,
+    "applied_when_noop": 15,
+    "arith": 1
+   }
+  },
+  "F3_unseen_nonce|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F3_unseen_nonce|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F3_unseen_nonce|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F4_nearmiss|in": {
+   "exact": 0.49166666666666664,
+   "decision": 0.5416666666666666,
+   "parent_all_exact": 0.06666666666666667,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 36,
+    "arith": 7,
+    "applied_when_noop": 18
+   }
+  },
+  "F4_nearmiss|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F4_nearmiss|ho_tpl": {
+   "exact": 0.5083333333333333,
+   "decision": 0.5083333333333333,
+   "parent_all_exact": 0.06666666666666667,
+   "n_parents": 60,
+   "errors": {
+    "applied_when_noop": 16,
+    "false_copy": 42,
+    "arith": 1
+   }
+  },
+  "F4_nearmiss|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F4_nearmiss|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F4_nearmiss|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F5_postedlike|in": {
+   "exact": 0.2833333333333333,
+   "decision": 0.31666666666666665,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 45,
+    "applied_when_noop": 26,
+    "format": 11,
+    "arith": 4
+   }
+  },
+  "F5_postedlike|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F5_postedlike|ho_tpl": {
+   "exact": 0.275,
+   "decision": 0.30833333333333335,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 48,
+    "applied_when_noop": 23,
+    "arith": 4,
+    "format": 12
+   }
+  },
+  "F5_postedlike|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F5_postedlike|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "F5_postedlike|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V1_pos|in": {
+   "exact": 0.425,
+   "decision": 0.5083333333333333,
+   "parent_all_exact": 0.016666666666666666,
+   "n_parents": 60,
+   "errors": {
+    "arith": 10,
+    "false_copy": 37,
+    "applied_when_noop": 22
+   }
+  },
+  "V1_pos|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V1_pos|ho_tpl": {
+   "exact": 0.475,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.016666666666666666,
+   "n_parents": 60,
+   "errors": {
+    "arith": 2,
+    "false_copy": 49,
+    "applied_when_noop": 12
+   }
+  },
+  "V1_pos|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V1_pos|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V1_pos|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V2_neg|in": {
+   "exact": 0.4583333333333333,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 37,
+    "applied_when_noop": 24,
+    "arith": 4
+   }
+  },
+  "V2_neg|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V2_neg|ho_tpl": {
+   "exact": 0.49166666666666664,
+   "decision": 0.5083333333333333,
+   "parent_all_exact": 0.03333333333333333,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 42,
+    "applied_when_noop": 17,
+    "arith": 2
+   }
+  },
+  "V2_neg|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V2_neg|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V2_neg|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V3_inverted|in": {
+   "exact": 0.44166666666666665,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 34,
+    "applied_when_noop": 27,
+    "arith": 6
+   }
+  },
+  "V3_inverted|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V3_inverted|ho_tpl": {
+   "exact": 0.4666666666666667,
+   "decision": 0.5,
+   "parent_all_exact": 0.03333333333333333,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 39,
+    "applied_when_noop": 21,
+    "arith": 4
+   }
+  },
+  "V3_inverted|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V3_inverted|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V3_inverted|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V5_posted_override|in": {
+   "exact": 0.49166666666666664,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.05,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 77,
+    "applied_when_noop": 39,
+    "arith": 6
+   }
+  },
+  "V5_posted_override|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 240
+   }
+  },
+  "V5_posted_override|ho_tpl": {
+   "exact": 0.5125,
+   "decision": 0.49583333333333335,
+   "parent_all_exact": 0.05,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 93,
+    "applied_when_noop": 22,
+    "arith": 2
+   }
+  },
+  "V5_posted_override|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 240
+   }
+  },
+  "V5_posted_override|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 240
+   }
+  },
+  "V5_posted_override|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 240
+   }
+  },
+  "V6_compose|in": {
+   "exact": 0.43333333333333335,
+   "decision": 0.5166666666666667,
+   "parent_all_exact": 0.06666666666666667,
+   "n_parents": 60,
+   "errors": {
+    "arith": 13,
+    "applied_when_noop": 22,
+    "false_copy": 33
+   }
+  },
+  "V6_compose|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V6_compose|ho_tpl": {
+   "exact": 0.4666666666666667,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.05,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 43,
+    "applied_when_noop": 15,
+    "arith": 6
+   }
+  },
+  "V6_compose|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V6_compose|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V6_compose|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V7_bigset|in": {
+   "exact": 0.45,
+   "decision": 0.525,
+   "parent_all_exact": 0.016666666666666666,
+   "n_parents": 60,
+   "errors": {
+    "applied_when_noop": 25,
+    "false_copy": 32,
+    "arith": 9
+   }
+  },
+  "V7_bigset|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V7_bigset|ho_tpl": {
+   "exact": 0.45,
+   "decision": 0.48333333333333334,
+   "parent_all_exact": 0.016666666666666666,
+   "n_parents": 60,
+   "errors": {
+    "applied_when_noop": 22,
+    "false_copy": 40,
+    "arith": 4
+   }
+  },
+  "V7_bigset|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V7_bigset|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "V7_bigset|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M1_bal|in": {
+   "exact": 0.0,
+   "decision": 0.5,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "applied_when_noop": 60,
+    "arith": 60
+   }
+  },
+  "M1_bal|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M1_bal|ho_tpl": {
+   "exact": 0.0,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "applied_when_noop": 58,
+    "arith": 59,
+    "format": 3
+   }
+  },
+  "M1_bal|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M1_bal|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M1_bal|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M2_amt|in": {
+   "exact": 0.25833333333333336,
+   "decision": 0.49166666666666664,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 32,
+    "arith": 28,
+    "applied_when_noop": 29
+   }
+  },
+  "M2_amt|ho": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M2_amt|ho_tpl": {
+   "exact": 0.3333333333333333,
+   "decision": 0.48333333333333334,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "false_copy": 42,
+    "arith": 18,
+    "applied_when_noop": 20
+   }
+  },
+  "M2_amt|ho_key": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M2_amt|ho_name": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  },
+  "M2_amt|ho_many": {
+   "exact": 0.0,
+   "decision": 0.0,
+   "parent_all_exact": 0.0,
+   "n_parents": 60,
+   "errors": {
+    "format": 120
+   }
+  }
+ },
+ "probe_in": {
+  "F1_void:twin_posted": 0.26666666666666666,
+  "F1_void:probe": 0.65,
+  "F2_unseen_real:twin_posted": 0.16666666666666666,
+  "F2_unseen_real:probe": 0.75,
+  "F3_unseen_nonce:twin_posted": 0.21666666666666667,
+  "F3_unseen_nonce:probe": 0.6833333333333333,
+  "F4_nearmiss:twin_posted": 0.2833333333333333,
+  "F4_nearmiss:probe": 0.7,
+  "F5_postedlike:twin_posted": 0.18333333333333332,
+  "F5_postedlike:probe": 0.38333333333333336
+ },
+ "probe_ho": {
+  "F1_void:twin_posted": 0.0,
+  "F1_void:probe": 0.0,
+  "F2_unseen_real:twin_posted": 0.0,
+  "F2_unseen_real:probe": 0.0,
+  "F3_unseen_nonce:twin_posted": 0.0,
+  "F3_unseen_nonce:probe": 0.0,
+  "F4_nearmiss:twin_posted": 0.0,
+  "F4_nearmiss:probe": 0.0,
+  "F5_postedlike:twin_posted": 0.0,
+  "F5_postedlike:probe": 0.0
+ },
+ "code_sha256": {
+  "rcx/rcl/world.py": "51e00a15c57e5ecfcaa53b8395b61d85118908378853d9e1d8cd5f3c56b7501d",
+  "rcx/rcl/gen.py": "fd89a80d90be4a66d4b0e875ec56e01993042d0e2d23de5f56f6508940fae744",
+  "rcx/rcl/score.py": "771fd12ca3755f054db23df974db753b2a12120da5c9d52d6134293b0477d22e",
+  "rcx/rcl/templates.py": "c0d6f35544100d91bf2f0fec7095a4d7dba4b3dbb7fb79630450ce601eb5f642",
+  "rcx/rcl/vocab.py": "de9f1adbc0f4eec96939bf5037688ded0ef6f3ee75a7af4bcb3c5708505d8e55",
+  "rcx/models/char_lm.py": "f3c109cd8838240904ab15003127f11e60e57430203037698ef71032b419ca8e",
+  "experiments/RCX-E01/run_e01.py": "e67700ff10ee45bd6a7cba19f33c8ec559630fa13b7e30b46714d5653fdd92d8"
+ },
+ "canon": {
+  "composite_exact": {
+   "in": 0.42976190476190473,
+   "ho": 0.0,
+   "ho_tpl": 0.42976190476190473,
+   "ho_key": 0.42976190476190473,
+   "ho_name": 0.42976190476190473,
+   "ho_many": 0.0
+  },
+  "cells": {
+   "F1_void|in": {
+    "exact": 0.4583333333333333,
+    "decision": 0.5166666666666667,
+    "parent_all_exact": 0.08333333333333333,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 35,
+     "applied_when_noop": 21,
+     "arith": 9
+    }
+   },
+   "F1_void|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F1_void|ho_tpl": {
+    "exact": 0.4583333333333333,
+    "decision": 0.5166666666666667,
+    "parent_all_exact": 0.08333333333333333,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 35,
+     "applied_when_noop": 21,
+     "arith": 9
+    }
+   },
+   "F1_void|ho_key": {
+    "exact": 0.48333333333333334,
+    "decision": 0.525,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "arith": 7,
+     "applied_when_noop": 13,
+     "false_copy": 42
+    }
+   },
+   "F1_void|ho_name": {
+    "exact": 0.4583333333333333,
+    "decision": 0.5166666666666667,
+    "parent_all_exact": 0.08333333333333333,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 35,
+     "applied_when_noop": 21,
+     "arith": 9
+    }
+   },
+   "F1_void|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F2_unseen_real|in": {
+    "exact": 0.4583333333333333,
+    "decision": 0.5083333333333333,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 43,
+     "arith": 7,
+     "applied_when_noop": 15
+    }
+   },
+   "F2_unseen_real|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F2_unseen_real|ho_tpl": {
+    "exact": 0.4583333333333333,
+    "decision": 0.5083333333333333,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 43,
+     "arith": 7,
+     "applied_when_noop": 15
+    }
+   },
+   "F2_unseen_real|ho_key": {
+    "exact": 0.45,
+    "decision": 0.5166666666666667,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 20,
+     "false_copy": 37,
+     "arith": 9
+    }
+   },
+   "F2_unseen_real|ho_name": {
+    "exact": 0.4583333333333333,
+    "decision": 0.5083333333333333,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 43,
+     "arith": 7,
+     "applied_when_noop": 15
+    }
+   },
+   "F2_unseen_real|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F3_unseen_nonce|in": {
+    "exact": 0.45,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.03333333333333333,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 41,
+     "applied_when_noop": 19,
+     "arith": 6
+    }
+   },
+   "F3_unseen_nonce|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F3_unseen_nonce|ho_tpl": {
+    "exact": 0.45,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.03333333333333333,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 41,
+     "applied_when_noop": 19,
+     "arith": 6
+    }
+   },
+   "F3_unseen_nonce|ho_key": {
+    "exact": 0.45,
+    "decision": 0.5166666666666667,
+    "parent_all_exact": 0.06666666666666667,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 35,
+     "applied_when_noop": 22,
+     "arith": 9
+    }
+   },
+   "F3_unseen_nonce|ho_name": {
+    "exact": 0.45,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.03333333333333333,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 41,
+     "applied_when_noop": 19,
+     "arith": 6
+    }
+   },
+   "F3_unseen_nonce|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F4_nearmiss|in": {
+    "exact": 0.49166666666666664,
+    "decision": 0.5416666666666666,
+    "parent_all_exact": 0.06666666666666667,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 36,
+     "arith": 7,
+     "applied_when_noop": 18
+    }
+   },
+   "F4_nearmiss|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F4_nearmiss|ho_tpl": {
+    "exact": 0.49166666666666664,
+    "decision": 0.5416666666666666,
+    "parent_all_exact": 0.06666666666666667,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 36,
+     "arith": 7,
+     "applied_when_noop": 18
+    }
+   },
+   "F4_nearmiss|ho_key": {
+    "exact": 0.45,
+    "decision": 0.5333333333333333,
+    "parent_all_exact": 0.08333333333333333,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 36,
+     "arith": 11,
+     "applied_when_noop": 19
+    }
+   },
+   "F4_nearmiss|ho_name": {
+    "exact": 0.49166666666666664,
+    "decision": 0.5416666666666666,
+    "parent_all_exact": 0.06666666666666667,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 36,
+     "arith": 7,
+     "applied_when_noop": 18
+    }
+   },
+   "F4_nearmiss|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F5_postedlike|in": {
+    "exact": 0.2833333333333333,
+    "decision": 0.31666666666666665,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 45,
+     "applied_when_noop": 26,
+     "format": 11,
+     "arith": 4
+    }
+   },
+   "F5_postedlike|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "F5_postedlike|ho_tpl": {
+    "exact": 0.2833333333333333,
+    "decision": 0.31666666666666665,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 45,
+     "applied_when_noop": 26,
+     "format": 11,
+     "arith": 4
+    }
+   },
+   "F5_postedlike|ho_key": {
+    "exact": 0.2916666666666667,
+    "decision": 0.375,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 38,
+     "applied_when_noop": 27,
+     "format": 10,
+     "arith": 10
+    }
+   },
+   "F5_postedlike|ho_name": {
+    "exact": 0.2833333333333333,
+    "decision": 0.31666666666666665,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 45,
+     "applied_when_noop": 26,
+     "format": 11,
+     "arith": 4
+    }
+   },
+   "F5_postedlike|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V1_pos|in": {
+    "exact": 0.425,
+    "decision": 0.5083333333333333,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "arith": 10,
+     "false_copy": 37,
+     "applied_when_noop": 22
+    }
+   },
+   "V1_pos|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V1_pos|ho_tpl": {
+    "exact": 0.425,
+    "decision": 0.5083333333333333,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "arith": 10,
+     "false_copy": 37,
+     "applied_when_noop": 22
+    }
+   },
+   "V1_pos|ho_key": {
+    "exact": 0.44166666666666665,
+    "decision": 0.475,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 45,
+     "arith": 4,
+     "applied_when_noop": 18
+    }
+   },
+   "V1_pos|ho_name": {
+    "exact": 0.425,
+    "decision": 0.5083333333333333,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "arith": 10,
+     "false_copy": 37,
+     "applied_when_noop": 22
+    }
+   },
+   "V1_pos|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V2_neg|in": {
+    "exact": 0.4583333333333333,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 37,
+     "applied_when_noop": 24,
+     "arith": 4
+    }
+   },
+   "V2_neg|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V2_neg|ho_tpl": {
+    "exact": 0.4583333333333333,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 37,
+     "applied_when_noop": 24,
+     "arith": 4
+    }
+   },
+   "V2_neg|ho_key": {
+    "exact": 0.45,
+    "decision": 0.48333333333333334,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 33,
+     "applied_when_noop": 29,
+     "arith": 4
+    }
+   },
+   "V2_neg|ho_name": {
+    "exact": 0.4583333333333333,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 37,
+     "applied_when_noop": 24,
+     "arith": 4
+    }
+   },
+   "V2_neg|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V3_inverted|in": {
+    "exact": 0.44166666666666665,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 34,
+     "applied_when_noop": 27,
+     "arith": 6
+    }
+   },
+   "V3_inverted|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V3_inverted|ho_tpl": {
+    "exact": 0.44166666666666665,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 34,
+     "applied_when_noop": 27,
+     "arith": 6
+    }
+   },
+   "V3_inverted|ho_key": {
+    "exact": 0.425,
+    "decision": 0.5,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "arith": 9,
+     "applied_when_noop": 27,
+     "false_copy": 33
+    }
+   },
+   "V3_inverted|ho_name": {
+    "exact": 0.44166666666666665,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 34,
+     "applied_when_noop": 27,
+     "arith": 6
+    }
+   },
+   "V3_inverted|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V5_posted_override|in": {
+    "exact": 0.49166666666666664,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 77,
+     "applied_when_noop": 39,
+     "arith": 6
+    }
+   },
+   "V5_posted_override|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 240
+    }
+   },
+   "V5_posted_override|ho_tpl": {
+    "exact": 0.49166666666666664,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 77,
+     "applied_when_noop": 39,
+     "arith": 6
+    }
+   },
+   "V5_posted_override|ho_key": {
+    "exact": 0.5,
+    "decision": 0.5125,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 85,
+     "applied_when_noop": 26,
+     "arith": 9
+    }
+   },
+   "V5_posted_override|ho_name": {
+    "exact": 0.49166666666666664,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 77,
+     "applied_when_noop": 39,
+     "arith": 6
+    }
+   },
+   "V5_posted_override|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 240
+    }
+   },
+   "V6_compose|in": {
+    "exact": 0.43333333333333335,
+    "decision": 0.5166666666666667,
+    "parent_all_exact": 0.06666666666666667,
+    "n_parents": 60,
+    "errors": {
+     "arith": 13,
+     "applied_when_noop": 22,
+     "false_copy": 33
+    }
+   },
+   "V6_compose|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V6_compose|ho_tpl": {
+    "exact": 0.43333333333333335,
+    "decision": 0.5166666666666667,
+    "parent_all_exact": 0.06666666666666667,
+    "n_parents": 60,
+    "errors": {
+     "arith": 13,
+     "applied_when_noop": 22,
+     "false_copy": 33
+    }
+   },
+   "V6_compose|ho_key": {
+    "exact": 0.43333333333333335,
+    "decision": 0.5,
+    "parent_all_exact": 0.05,
+    "n_parents": 60,
+    "errors": {
+     "arith": 11,
+     "applied_when_noop": 23,
+     "false_copy": 34
+    }
+   },
+   "V6_compose|ho_name": {
+    "exact": 0.43333333333333335,
+    "decision": 0.5166666666666667,
+    "parent_all_exact": 0.06666666666666667,
+    "n_parents": 60,
+    "errors": {
+     "arith": 13,
+     "applied_when_noop": 22,
+     "false_copy": 33
+    }
+   },
+   "V6_compose|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V7_bigset|in": {
+    "exact": 0.45,
+    "decision": 0.525,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 25,
+     "false_copy": 32,
+     "arith": 9
+    }
+   },
+   "V7_bigset|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "V7_bigset|ho_tpl": {
+    "exact": 0.45,
+    "decision": 0.525,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 25,
+     "false_copy": 32,
+     "arith": 9
+    }
+   },
+   "V7_bigset|ho_key": {
+    "exact": 0.4583333333333333,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 37,
+     "applied_when_noop": 24,
+     "arith": 4
+    }
+   },
+   "V7_bigset|ho_name": {
+    "exact": 0.45,
+    "decision": 0.525,
+    "parent_all_exact": 0.016666666666666666,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 25,
+     "false_copy": 32,
+     "arith": 9
+    }
+   },
+   "V7_bigset|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "M1_bal|in": {
+    "exact": 0.0,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 60,
+     "arith": 60
+    }
+   },
+   "M1_bal|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "M1_bal|ho_tpl": {
+    "exact": 0.0,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 60,
+     "arith": 60
+    }
+   },
+   "M1_bal|ho_key": {
+    "exact": 0.0,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 59,
+     "arith": 59,
+     "format": 2
+    }
+   },
+   "M1_bal|ho_name": {
+    "exact": 0.0,
+    "decision": 0.5,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "applied_when_noop": 60,
+     "arith": 60
+    }
+   },
+   "M1_bal|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "M2_amt|in": {
+    "exact": 0.25833333333333336,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 32,
+     "arith": 28,
+     "applied_when_noop": 29
+    }
+   },
+   "M2_amt|ho": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   },
+   "M2_amt|ho_tpl": {
+    "exact": 0.25833333333333336,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 32,
+     "arith": 28,
+     "applied_when_noop": 29
+    }
+   },
+   "M2_amt|ho_key": {
+    "exact": 0.31666666666666665,
+    "decision": 0.5083333333333333,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "arith": 23,
+     "applied_when_noop": 23,
+     "false_copy": 36
+    }
+   },
+   "M2_amt|ho_name": {
+    "exact": 0.25833333333333336,
+    "decision": 0.49166666666666664,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "false_copy": 32,
+     "arith": 28,
+     "applied_when_noop": 29
+    }
+   },
+   "M2_amt|ho_many": {
+    "exact": 0.0,
+    "decision": 0.0,
+    "parent_all_exact": 0.0,
+    "n_parents": 60,
+    "errors": {
+     "format": 120
+    }
+   }
+  }
+ }
+}
