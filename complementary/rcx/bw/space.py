@@ -388,3 +388,61 @@ def astar_hstar(objs, s, goal, max_expansions: int = 200_000):
                 tie += 1
                 heapq.heappush(heap, (ng + misplaced_compact(nxt, g)[1], -ng, tie, nxt))
     return math.inf, exp
+
+
+def astar_optimal(objs, s, goal, max_expansions: int = 300_000):
+    """Exact h*(s) AND the set of optimal first actions, by one A* search; returns (h*, actions, expansions).
+
+    After the first goal is popped at cost C = h*(s), every remaining node with f <= C is expanded too (reopening on
+    a shorter g), so each node on any optimal path ends with its exact depth g. Optimal-path nodes are then marked
+    backwards from the goal nodes at depth C: u precedes a marked v iff u is a neighbour of v with g(u) = g(v) - 1.
+    Blocksworld moves are invertible (pick-up/put-down, unstack/stack), so predecessors are the successors. An action
+    a is optimal iff step(s, a) is marked. Returns (None, None, expansions) over budget; (inf, [], n) if unreachable.
+    """
+    objs = list(objs)
+    g = CompiledGoal(objs, frozenset(goal))
+    start = from_facts(s, objs)
+    if not g.consistent:
+        return math.inf, [], 0
+    if g.met(start):
+        return 0.0, [], 0
+    best = {start: 0}
+    tie, exp, C = 0, 0, None
+    heap = [(misplaced_compact(start, g)[1], 0, tie, start)]
+    goals = []
+    while heap:
+        if C is not None and heap[0][0] > C:
+            break
+        f, neg_g, _, pos = heapq.heappop(heap)
+        gc = -neg_g
+        if gc > best[pos]:
+            continue
+        if g.met(pos):
+            if C is None:
+                C = gc
+            goals.append(pos)
+            continue
+        if exp >= max_expansions:
+            return None, None, exp
+        exp += 1
+        for _, nxt in successors(pos):
+            ng = gc + 1
+            if ng < best.get(nxt, math.inf):
+                best[nxt] = ng
+                tie += 1
+                heapq.heappush(heap, (ng + misplaced_compact(nxt, g)[1], -ng, tie, nxt))
+    if C is None:
+        return math.inf, [], exp
+    marked = {v for v in goals if best[v] == C}
+    frontier = list(marked)
+    while frontier:
+        nxt_frontier = []
+        for v in frontier:
+            dv = best[v]
+            for _, u in successors(v):
+                if u not in marked and best.get(u) == dv - 1:
+                    marked.add(u)
+                    nxt_frontier.append(u)
+        frontier = nxt_frontier
+    acts = sorted(action_tuple(code, objs) for code, v in successors(start) if v in marked and best[v] == 1)
+    return float(C), acts, exp

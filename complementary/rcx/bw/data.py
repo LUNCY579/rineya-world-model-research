@@ -70,8 +70,15 @@ def instance_key(objs, init, goal, sig: str | None = None) -> str:
 
 def fresh_instances(seed: int, sizes, full_goal_frac: float = FULL_GOAL_FRAC, seen: set | None = None,
                     ex: dict | None = None, prefix: str = "rcx", unique: str = "instance",
-                    max_draws_per_item: int = 2000):
-    """Return (instances, stats). instances: dicts(id, n, objs, init, goal, goal_key, seed). Raises if exhausted."""
+                    max_draws_per_item: int = 2000, accept=None, strict: bool = True):
+    """Return (instances, stats). instances: dicts(id, n, objs, init, goal, goal_key, seed).
+
+    accept(goal_key) -> bool optionally restricts goal classes (e.g. a class-level split); rejected draws are counted
+    as 'rejected_class'. An item that finds no instance within max_draws_per_item raises (strict) or is skipped and
+    counted as 'exhausted' (strict=False). Each rejected draw is counted under the first filter it fails, in the order
+    generate -> invariant -> class -> goal duplicate -> signature -> instance duplicate (the exclusion decision itself
+    is order-independent).
+    """
     if not SEED_RANGE[0] <= seed <= SEED_RANGE[1]:
         raise ValueError(f"seed {seed} is outside the RCX-E07/E08 range {SEED_RANGE}")
     if unique not in ("instance", "goal"):
@@ -93,11 +100,17 @@ def fresh_instances(seed: int, sizes, full_goal_frac: float = FULL_GOAL_FRAC, se
             if VL.invariant(objs, init, goal) in ex["invariants"]:
                 stats["excluded_invariant"] += 1
                 continue
+            gk = goal_key(objs, goal)  # cheap filters first: B.signature costs ~0.1 s at n = 7
+            if accept is not None and not accept(gk):
+                stats["rejected_class"] += 1
+                continue
+            if unique == "goal" and gk in seen:
+                stats["duplicate"] += 1
+                continue
             sig = B.signature(objs, init, goal) if n <= 7 else None
             if EX.exclusion_reason(objs, init, goal, ex, sig=sig):
                 stats["excluded_signature"] += 1
                 continue
-            gk = goal_key(objs, goal)
             key = instance_key(objs, init, goal, sig) if unique == "instance" else gk
             if key in seen:
                 stats["duplicate"] += 1
@@ -107,7 +120,9 @@ def fresh_instances(seed: int, sizes, full_goal_frac: float = FULL_GOAL_FRAC, se
                         "goal_key": gk, "seed": seed})
             break
         else:
-            raise RuntimeError(f"no fresh instance with n={n} after {max_draws_per_item} draws (pool exhausted?)")
+            if strict:
+                raise RuntimeError(f"no fresh instance with n={n} after {max_draws_per_item} draws (pool exhausted?)")
+            stats["exhausted"] += 1
     stats["kept"] = len(out)
     return out, dict(stats)
 
