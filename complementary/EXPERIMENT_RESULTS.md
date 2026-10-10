@@ -86,3 +86,60 @@ in about 100k examples. This makes the arm-vs-arm data-factor comparison uninfor
 2. Moving the decisive E01 test to the native tier, Titan-Sparse LoRA cells on CPU.
 
 **Limits.** One seed, one architecture, a fixed step budget. Longer training (grokking-like transitions) was not tested.
+
+---
+
+## R-03 Native tier-A/B rule-reading probe on frozen Rineya cores (tier: native-A / reference student; DEV, inference only), 2026-10-10
+
+**Evidence:**
+- `runs/RCX-E01N/probe1/summary_{OFF,T2}.json`, `preds_*.jsonl.gz`, `rule_sensitivity.json`;
+- code: `experiments/RCX-E01N/native_probe.py`, reviewed in wf_53c3f5a8-51d.
+
+### Setup
+
+- **Arms.**
+  - **OFF**: Titan-Sparse-Experimental 1.0.0, FP32, frozen.
+  - **T2**: the same core with RCWM's registered T2 s0 LoRA, unmerged, FP32, with the adapter and config sha-checked.
+  - **SUPA**: not yet run. The load was refused because 11.4 GB of RAM was free, below the 12 GB floor (D-39). It will
+    be run when RAM allows.
+- **Frame.** Titan's verbatim ledger one-step frame with only the status clause replaced by the supplied rule sentence.
+  The user turn is the compact sorted JSON exactly as Titan was trained. Decoding is greedy.
+- **Battery.** RCL arith-world DEV battery, seed 20261240: 13 strata × 40 parents, surfaces `in` and `ho_tpl` (held-out
+  rule paraphrases), 2,240 prompts per arm.
+- **Words.** DEV words are fresh (disjoint from RCX TRAIN and from PREREG-3).
+- **Verbatim-frame control.** 800 fixed-rule prompts per arm.
+- **CPU cost.** OFF 5,389 s; T2 4,155 s.
+
+### Results (`in` surface; `ho_tpl` within 0.03 everywhere)
+
+| | OFF | T2 s0 |
+|---|---|---|
+| Primary composite (exact) | 0.325 | 0.400 |
+| Decision accuracy, every varied-rule stratum (V1, V2, V3, V5, V6, V7) | 0.50 | 0.50 |
+| No-op produced when the supplied rule requires a no-op (V strata) | **1 / 280** (Wilson 95% [0.001, 0.020]) | **1 / 280** ([0.001, 0.020]) |
+| V3 rule sensitivity (output changes when the same item's rule polarity flips) | **0.00** | **0.00** |
+| V5: rule `S+{x}` or `S-{posted}` with status `posted` → no-op | 0.00 / 0.00 | 0.00 / 0.00 |
+| F1 `void` probe → no-op | 0.03 | **1.00** |
+| F4 near-miss (`Void`, `VOID`, `voided`, `void_`) → no-op | 0.03 | **0.97** |
+| F2 / F3 / F5 unseen real / nonce / posted-like → no-op | 0.03 / 0.00 / 0.00 | **0.00 / 0.00 / 0.00** |
+| Posted twins (apply), exact | 0.55–0.72 | 0.72–0.88 |
+| Verbatim Titan frame, F strata (exact) | 0.29–0.35 (same as the rule frame) | 0.39–0.93 (same as the rule frame) |
+| Format errors | 6 / 2,240 | 4 / 2,240 |
+
+### Reading
+
+1. **Neither model reads a supplied ledger rule.**
+   - Frozen Titan-Sparse applies every event regardless of the rule.
+   - T2 applies every event except `void` and its case and morphology near-misses.
+   - Rule sensitivity is 0.00 for both, even when the in-context rule names the event's own status as ignored.
+2. **T2 s0 shows PREREG-3's TRIGGER signature, replicated on an independent RCX instrument with fresh vocabulary.**
+   - The no-op fires for `void` and near-misses, which is the "trigger widened" pattern under the shared D-45/D-54
+     wording.
+   - It never fires for unseen non-posted words (0/40 per stratum), and nearly all such errors are applied-when-no-op.
+3. **The rephrased frame is not a confound.** Titan's own verbatim system prompt gives the same F-stratum results.
+
+### Limits
+
+- DEV battery, 40 parents per stratum, one decoding setting, two arms.
+- Exact accuracy on apply variants is limited by arithmetic errors, which the decision metric separates out.
+- This is *descriptive*: tiers A and B, no training, no confirmation claim.

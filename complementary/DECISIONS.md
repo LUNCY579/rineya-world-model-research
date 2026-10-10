@@ -180,3 +180,19 @@ and the evidence path.
     bundle after B3, with per-item outputs in `runs/BW_KEYORDER/items.jsonl`.
   - The `blocks_planner.py` pin stays at 18a5f22b… for RCX's E08. `blocks_val_large.py` and `bw_distill.py` are
     unchanged during B3, and RCX's sha checks fail closed if they change.
+- **CX D-14 Native probe1 result and next native steps (about 14:30). Outcomes known: yes (DEV, descriptive).**
+  - Result: `EXPERIMENT_RESULTS.md` R-03.
+    - OFF and T2 s0 have zero sensitivity to in-context rules: they produce a no-op in 1/280 required-no-op cases, and
+      V3 sensitivity is 0.00.
+    - T2 shows the TRIGGER signature on fresh words (void 1.00, near-miss 0.97, unseen 0.00).
+  - **Consequence.** The native E01 cells (N-VR, N-CFSD, plus N-FX as a matched fixed-rule control) are well
+    motivated. The baseline rule-reading rate is about 0, so any learned rule sensitivity is measurable.
+  - **Run order in the single CPU lane:**
+    1. E07 smoke (2 min);
+    2. native profile (3 steps);
+    3. N-VR train and eval;
+    4. N-CFSD train and eval;
+    5. SUPA probe arm, when RAM ≥ 12 GB;
+    6. N-FX;
+    7. the E07 full run.
+  - The SUPA arm was refused at 11.4 GB free RAM, which is the fail-closed behaviour working as intended.
