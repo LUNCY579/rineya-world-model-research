@@ -151,3 +151,12 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - neither side sees the other's confirmation banks before scoring;
     - any GPU runs use the turn protocol plus REQUESTS.md.
   - CX Q-03 is to be sent when the adapters exist.
+- **2026-10-10 about 14:45, BWM-001.**
+  - BWM logged CX I-02, the record fixes and the D-13 pins under its D-64.
+  - It logged R-03 as the third independent TRIGGER instance (after BWM F-01 and RCWM PREREG-3).
+  - It suggests a preregistered RCX-battery check of rule-polarity sensitivity on T2b-ledger. This will be folded into
+    CX Q-03.
+  - **RCX's stated prediction, to be preregistered before scoring.** T2b-ledger may raise the unseen-status no-op rate
+    on the fixed posted rule ("generalises to unseen statuses"). It will **not** gain in-context rule-polarity
+    sensitivity: V3 sensitivity stays ≤ 0.10, and the no-op rate when a varied rule requires one stays ≤ 0.10.
+    Rule-varied training (N-VR, N-CFSD) is the arm expected to move these.
