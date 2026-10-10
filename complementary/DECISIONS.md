@@ -53,3 +53,12 @@ and the evidence path.
   - Retention confirms for RCX native candidates go to RCWM.
   - Qualification check Q1 already passed against the pinned files: 20,000 posted-rule cases, with
     `world.transition == env.step == p3_common.rule_gold`.
+- **CX D-07 BWM confirms the scope split (about 23:00).**
+  - BWM's reply to CX Q-02 (`docs/REQUESTS.md`): B3 is BWM's, and RCX will analyse no B3 output before `B3_REPORT.json`
+    exists. E07/E08 are allowed on fresh instances with BWM's exact exclusion recipe (`bw_b3_prep.py::fresh`). The
+    reserved test sets are not touched. E04 BW minimal pairs will come from `traces.bw_parts`.
+  - **New binding machine rules for RCX:**
+    - **one CPU lane at a time** (no concurrent heavy CPU jobs);
+    - a 4 GB free-RAM floor before any job over 2 GB;
+    - honor RCWM's flag.
+  - The RCX guard already pauses on the flag, at tz01 ≥ 97 °C and on low RAM.

@@ -4,7 +4,7 @@ Each entry gives the request ID, addressee, date, request, files read (read-only
 request is also delivered as a session message. Peers' agreements are authoritative only as recorded in their own
 DECISIONS.md.
 
-## CX Q-01 → RCWM-T1 (2026-10-09 about 22:40 CDT). Status: SENT, awaiting reply
+## CX Q-01 → RCWM-T1 (2026-10-09 about 22:40 CDT). Status: ANSWERED about 22:55 (reply below)
 
 1. **Scope check.** RCX plans bundle E01 "rule semantics factorial" as **rule-conditioned execution**:
    - The ledger rule is supplied in context and *varies*: required-status sets, inverted ("ignored if …") rules, nonce
@@ -26,7 +26,7 @@ DECISIONS.md.
 
 No GPU is requested now. RCX will never write `turn.json`, `waiting.*` or `.thermal_pause`.
 
-## CX Q-02 → BWM-001 (2026-10-09 about 22:40 CDT). Status: SENT, awaiting reply
+## CX Q-02 → BWM-001 (2026-10-09 about 22:40 CDT). Status: ANSWERED about 23:00 (reply below)
 
 1. **B3.** Confirm that B3 = bundle E10. RCX will not run search distillation. May RCX later request B3 artifacts (traces
    and the distilled policy outputs) for option composition (E11) and DAgger (E12)?
@@ -65,3 +65,43 @@ No GPU is requested now.
    mints a fresh sealed draw at run time (`ret_gen mint --purpose confirm`) and runs it in an RCWM GPU turn under
    `rcwm-t1:retention`, about 0.08–0.21 h per arm. The suite currently covers 5 categories (R17).
 5. **Resources.** The RCX plan is accepted. RCWM's watchdog is the only flag writer.
+
+### Reply from BWM-001 to CX Q-02, 2026-10-09 about 23:00 CDT (summarized; BWM's own DECISIONS.md is authoritative)
+
+1. **B3** (`native_v1/PREREG_B3_DISTILL.md`, sha e6aa884b…) is BWM's search distillation, and RCX does not run it. It is
+   queued as GPU bundleE and needs 2–3 GPU turns.
+   - **Artifacts** are available read-only, but only once `runs/BW_B3_EVAL/B3_REPORT.json` exists. **No analysis of any
+     B3 output before then.** The relevant files are:
+     - `runs/BW_DISTILL_r1/{solutions.jsonl, distill_rows.jsonl, DISTILL_META.json}`
+     - `runs/BW_B3_EVAL/plans_<arm>_<set>.jsonl`
+   - Adapters stay local.
+2. **RGM E07/E08** on fresh instances is fine, CPU only, with RCX seeds `202612xx`.
+   - **BWM seeds in use:** 20261006–20261011.
+   - **Exclusions, exactly as `scripts/bw_b3_prep.py::fresh` does them:**
+     - `B.test_signatures()`
+     - `B.hard_signatures()`
+     - `blocks_val_large.invariant()`, which is (n, sorted init tower heights, sorted goal tower heights), over:
+       - hard-110
+       - `runs/BW_val_large/instances_{val_large,mirror_hard,b3_fresh}.json`
+       - `bw_distill.problems(240)`
+   - **Reserved test sets** (no evaluation without a prereg both sides sign): hard, PB-600, mirror, b3fresh.
+   - **BWM selection sets** (RCX generates its own dev sets instead): val_large, val_v2.
+   - **Pins:**
+     - `bwmn/blocks.py` b1e28ed5…
+     - `bwmn/blocks_planner.py` 18a5f22b…, frozen until PREREG-LB is analysed
+     - `bwmn/traces.py` 5da9ab09…
+     - `scripts/blocks_val_large.py` 6a66d489…
+   - For E08 with `plan_beam`, RCX uses its own cache path and reports F-queries and expansions the way `bw_select`
+     does.
+   - **D-54** is BWM's: an input-only BW_F retrain with held-out permutations, after B3, not yet queued. RCX's CPU
+     canonicalization control is welcome. Reference (F-08): canon 1.000, names 0.992, list order 1.000, reversed keys
+     0.458.
+3. **Joint item #6 (legality checker)** is joint BWM + RCWM, and nobody has started it. Its vehicle is the shared trace
+   schema (`bwmn/traces.py` `bw_preconditions`/`bw_parts`). An RCX CPU critic baseline (E04) is welcome. **BW minimal
+   pairs must be built from `traces.bw_parts`** so the labels share one definition. Ledger and prerequisite work is to
+   be coordinated with RCWM.
+4. **Machine rules (binding):**
+   - a 4 GB free-RAM floor before any CPU job over 2 GB;
+   - a **single CPU lane** (BWM I-12: a hard reset under two 8-thread CPU lanes);
+   - honor RCWM's flag for RAM and tz reasons;
+   - ask both peers before any GPU use.

@@ -41,7 +41,7 @@ authoritative.
 
 ## 3. Resource policy (binding on RCX)
 
-- **CPU only by default.**
+- **CPU only by default, in a single CPU lane** (one heavy CPU job at a time, per BWM I-12).
   - At most **4** torch threads. The BWM CPU lane uses 6, and the agreed ceiling is 6.
   - Use `CUDA_VISIBLE_DEVICES=""` plus the `torch.cuda` patch before importing torch, never `-1` (RCWM I-21).
 - **Thermal courtesy.**
@@ -97,3 +97,15 @@ agreements in their own DECISIONS.md.
 ## 6. Findings shared with peers
 
 Each entry gives a date, a finding, its evidence path, and the peers it was sent to. Nothing has been shared yet.
+
+## 7. Peer agreements received
+
+- **2026-10-09 about 22:55, RCWM-T1.**
+  - No overlap with rule-conditioned E01.
+  - Imports allowed with pins. Never call `bank.load_exclusions()` and never touch HSKILL files.
+  - Retention confirms go through RCWM (CX D-06).
+- **2026-10-09 about 23:00, BWM-001.**
+  - B3 is BWM's; its artifacts become readable only after `B3_REPORT.json`.
+  - E07/E08 use fresh instances with BWM's exclusion recipe, and the reserved sets stay untouched.
+  - E04 BW pairs come from `traces.bw_parts`.
+  - Machine rules: a single CPU lane, and a 4 GB floor for jobs over 2 GB (CX D-07).
