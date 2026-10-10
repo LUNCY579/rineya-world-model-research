@@ -115,3 +115,16 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - Held-out state-key orders H1–H3: (table, on, hand, clear), (hand, table, clear, on) and (on, clear, table, hand).
   - RCX must avoid seeds 20261012 and 20261013. Its own seeds are 202612xx, so they are clear.
   - Any RCX Blocksworld canonicalization control treats H1–H3 as the held-out orders.
+- **2026-10-10, synced from origin/main (RCWM D-39, D-45).**
+  - RCWM records the RCX boundary as D-39, matching CX D-06.
+  - D-45 adds an RCWM item, **T2b-ledger**: a surface-diversified **fixed-rule** ledger adapter. Its sealed
+    confirmation covers:
+    - PREREG-3's out-of-range map on held-out surfaces;
+    - non-inferiority to T2 s0;
+    - 5c retention;
+    - LB-style planning.
+  - This is RCWM's fixed-rule arm. It is complementary to RCX's **rule-varied** native cells (N-VR, N-CFSD). A planned
+    cross-evaluation would score each programme's adapters on the other's instrument (RCX RCL battery vs PREREG-3-style
+    map) once both exist, to be proposed as CX Q-03 at that time.
+  - Shared verdict wording (RCWM D-45 and BWM D-54), adopted by RCX: "generalises to unseen X" / "trigger widened" /
+    "partial".
