@@ -1,0 +1,443 @@
+{
+  "actual_author_execution_id": "/root/research_architect",
+  "cases": [
+    {
+      "case_id": "bool-integer-alias-and-entailed-null",
+      "expected": {
+        "belief_sizes": [
+          1
+        ],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 1,
+                "value": null
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": null,
+            "query_id": "q"
+          }
+        ],
+        "surviving_worlds": [
+          "a"
+        ]
+      },
+      "task": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": true,
+            "fact": "f"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "g",
+            "query_id": "q"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f": true,
+              "g": null
+            },
+            "world_id": "a"
+          },
+          {
+            "facts": {
+              "f": 1,
+              "g": "z"
+            },
+            "world_id": "b"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "ambiguous-null-zero-false",
+      "expected": {
+        "belief_sizes": [],
+        "queries": [
+          {
+            "can_reduce_uncertainty": true,
+            "counts": [
+              {
+                "count": 1,
+                "value": 0
+              },
+              {
+                "count": 1,
+                "value": false
+              },
+              {
+                "count": 1,
+                "value": null
+              }
+            ],
+            "distinct_values": 3,
+            "entailed": false,
+            "guaranteed": null,
+            "query_id": "q"
+          }
+        ],
+        "surviving_worlds": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "task": {
+        "kind": "belief",
+        "observations": [],
+        "queries": [
+          {
+            "fact": "f",
+            "query_id": "q"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f": null
+            },
+            "world_id": "a"
+          },
+          {
+            "facts": {
+              "f": 0
+            },
+            "world_id": "b"
+          },
+          {
+            "facts": {
+              "f": false
+            },
+            "world_id": "c"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "empty-absorption",
+      "expected": {
+        "belief_sizes": [
+          0,
+          0
+        ],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "guaranteed": null,
+            "query_id": "q"
+          }
+        ],
+        "surviving_worlds": []
+      },
+      "task": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": "absent",
+            "fact": "f"
+          },
+          {
+            "equals": 1,
+            "fact": "f"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "f",
+            "query_id": "q"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f": 1
+            },
+            "world_id": "a"
+          },
+          {
+            "facts": {
+              "f": 2
+            },
+            "world_id": "b"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "ordered-conjunction-prefix",
+      "expected": {
+        "belief_sizes": [
+          2,
+          1
+        ],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 1,
+                "value": 1
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": 1,
+            "query_id": "q"
+          }
+        ],
+        "surviving_worlds": [
+          "b"
+        ]
+      },
+      "task": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": 1,
+            "fact": "f"
+          },
+          {
+            "equals": 2,
+            "fact": "g"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "f",
+            "query_id": "q"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f": 1,
+              "g": 1
+            },
+            "world_id": "a"
+          },
+          {
+            "facts": {
+              "f": 1,
+              "g": 2
+            },
+            "world_id": "b"
+          },
+          {
+            "facts": {
+              "f": 2,
+              "g": 2
+            },
+            "world_id": "c"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "canonical-scalar-lexicographic-bins",
+      "expected": {
+        "belief_sizes": [],
+        "queries": [
+          {
+            "can_reduce_uncertainty": true,
+            "counts": [
+              {
+                "count": 1,
+                "value": "α"
+              },
+              {
+                "count": 1,
+                "value": -1
+              },
+              {
+                "count": 1,
+                "value": 10
+              },
+              {
+                "count": 1,
+                "value": 2
+              },
+              {
+                "count": 1,
+                "value": null
+              }
+            ],
+            "distinct_values": 5,
+            "entailed": false,
+            "guaranteed": null,
+            "query_id": "q"
+          }
+        ],
+        "surviving_worlds": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e"
+        ]
+      },
+      "task": {
+        "kind": "belief",
+        "observations": [],
+        "queries": [
+          {
+            "fact": "f",
+            "query_id": "q"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f": null
+            },
+            "world_id": "e"
+          },
+          {
+            "facts": {
+              "f": -1
+            },
+            "world_id": "b"
+          },
+          {
+            "facts": {
+              "f": 2
+            },
+            "world_id": "d"
+          },
+          {
+            "facts": {
+              "f": 10
+            },
+            "world_id": "c"
+          },
+          {
+            "facts": {
+              "f": "α"
+            },
+            "world_id": "a"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "query-order-false-guarantee",
+      "expected": {
+        "belief_sizes": [],
+        "queries": [
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 1,
+                "value": 1
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": 1,
+            "query_id": "second"
+          },
+          {
+            "can_reduce_uncertainty": false,
+            "counts": [
+              {
+                "count": 1,
+                "value": false
+              }
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "guaranteed": false,
+            "query_id": "first"
+          }
+        ],
+        "surviving_worlds": [
+          "a"
+        ]
+      },
+      "task": {
+        "kind": "belief",
+        "observations": [],
+        "queries": [
+          {
+            "fact": "g",
+            "query_id": "second"
+          },
+          {
+            "fact": "f",
+            "query_id": "first"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f": false,
+              "g": 1
+            },
+            "world_id": "a"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "malformed-float-is-not-scalar",
+      "invalid": true,
+      "task": {
+        "kind": "belief",
+        "observations": [],
+        "queries": [
+          {
+            "fact": "f",
+            "query_id": "q"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f": 1.0
+            },
+            "world_id": "a"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "malformed-duplicate-query-id",
+      "invalid": true,
+      "task": {
+        "kind": "belief",
+        "observations": [],
+        "queries": [
+          {
+            "fact": "f",
+            "query_id": "q"
+          },
+          {
+            "fact": "f",
+            "query_id": "q"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f": 1
+            },
+            "world_id": "a"
+          }
+        ]
+      }
+    }
+  ],
+  "scope": "HAND_PUBLIC_SEMANTICS_CASES_NO_PRODUCTION_LABELS"
+}

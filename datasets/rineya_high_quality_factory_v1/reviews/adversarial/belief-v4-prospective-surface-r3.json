@@ -1,0 +1,446 @@
+{
+  "actual864_raw_typed_prompt_and_fixture_style_checks": 864,
+  "actual_complete_group_crossings": {
+    "complete_conditional_groups": 32,
+    "field_order_pairs": 432,
+    "same_observations_opposite_status_pairs": 216,
+    "scalar_transposition_pairs": 432
+  },
+  "actual_execution_id": "/root/adversarial_auditor",
+  "actual_negative_tests": [
+    {
+      "error": "raw typed prompt payload differs from semantic record",
+      "name": "raw_observation_null",
+      "rejected": true
+    },
+    {
+      "error": "raw typed prompt payload differs from semantic record",
+      "name": "raw_world_boolean_to_integer",
+      "rejected": true
+    },
+    {
+      "error": "raw typed prompt payload differs from semantic record",
+      "name": "raw_query_fact_changed",
+      "rejected": true
+    },
+    {
+      "error": "hand-fixture actual field style disagrees with annotation",
+      "name": "coordinated_metadata_only_style_change_requires_actual_style_check",
+      "rejected": true
+    },
+    {
+      "error": "duplicate raw JSON key kind",
+      "name": "duplicate_outer_key",
+      "rejected": true
+    },
+    {
+      "error": "duplicate raw JSON key u",
+      "name": "duplicate_nested_fact",
+      "rejected": true
+    },
+    {
+      "error": "all27 actual schedules",
+      "name": "aggregate_pointer_cannot_credit_missing_schedule_member",
+      "rejected": true
+    },
+    {
+      "error": "actual field orders preserve typed tasks",
+      "name": "aggregate_scalar_annotation_cannot_substitute_for_actual_involution",
+      "rejected": true
+    },
+    {
+      "error": "all27 actual schedules",
+      "name": "legacy9_plane_cannot_credit_full27_conditional_crossing",
+      "rejected": true
+    },
+    {
+      "name": "unexecuted_probe_no_corpus_aggregate_credit",
+      "probe_execution_not_fabricated": true,
+      "rejected_for_corpus_credit": true
+    },
+    {
+      "error": "specialized inline pair/pointer/id required",
+      "name": "inherited_cannot_use_new_aggregate_inline_omission_permission",
+      "rejected": true
+    },
+    {
+      "error": "owner coordinate schedule_index",
+      "name": "valid_decoded_owner_with_foreign_schedule_pair",
+      "rejected": true
+    }
+  ],
+  "actual_seconds": 0.8999675000086427,
+  "aggregate_claim_shapes_without_inline_pairs": [
+    {
+      "control_id": "handmade-aggregate-group",
+      "evidence_manifest": "reviews/adversarial/belief-v4-prospective-handmade-manifest-r1.json",
+      "name": "auxiliary_scalar_transposition_invariance",
+      "scope": "corpus_variant",
+      "source_family_key": "reviewer-handmade-family"
+    },
+    {
+      "control_id": "handmade-aggregate-group",
+      "evidence_manifest": "reviews/adversarial/belief-v4-prospective-handmade-manifest-r1.json",
+      "name": "context_auxiliary_scalar_variant_crossing",
+      "scope": "corpus_variant",
+      "source_family_key": "reviewer-handmade-family"
+    },
+    {
+      "control_id": "handmade-aggregate-group",
+      "evidence_manifest": "reviews/adversarial/belief-v4-prospective-handmade-manifest-r1.json",
+      "name": "same_observations_auxiliary_table_counterfactual",
+      "scope": "corpus_variant",
+      "source_family_key": "reviewer-handmade-family"
+    }
+  ],
+  "bindings_before_after": {
+    "audits/belief_v4_adversarial_prospective_r1.py": "8b350f6ca9831d507e373e60884d02cbd21d498a993a5aa660bd4c2ca9f3cc6e",
+    "audits/execution/belief-v4-adversarial-prospective-r1.json": "c190f44a3d9e0837042161e761063c07885ca4a82dac6d27128103ae1f147317",
+    "reviews/adversarial/belief-v4-prospective-fixtures-r1.json": "27b5296bbe48be4f94a962a2ec5918811d25e285988e2672a8c3cd76bc96bcda",
+    "reviews/adversarial/belief-v4-prospective-preparation-r1.json": "4ec8d89b685decd9c4cb7202853089128fe13bd7a02bd1234b6d0a7d7cc3cc3e"
+  },
+  "completed": true,
+  "data_approval": false,
+  "disclosure": "Prospective public-guided handmade preparation only; prior original belief V1/V2/V3 gold/metadata exposure and own previous solver/toy reuse. Common model/design and directed revision context correlate this execution. No actual V4 dataset/gold/producer/formal/other reviewer inspection or approval.",
+  "no_actual_V3_V4_candidate_or_private_source_or_other_verdict_read": true,
+  "preexec_sha256": "1ccbdf90bdc97f238e69eb869e5ce32a9f79dd3495c1ca8a17aa9b4766ac6923",
+  "preserved_unexecuted_draft": {
+    "path": "audits/belief_v4_adversarial_prospective_surface_r2.py",
+    "reason": "Before execution, noticed proposed negative table edit was the already-present linen value; fresh r3 changes it to opal so the actual input changes. No failed test execution or successful r2 counts are claimed.",
+    "sha256": "de5bc10d432dfee25404ac875167e944ce64b71ef816d492268a910b6ab14e6d",
+    "status": "UNEXECUTED_RETAINED"
+  },
+  "public_scope_decisions": [
+    "Mandatory owner coordinates and actual observation length are accepted prospective requirements under the explicit new addendum.",
+    "ID+name+orderedpair exactlyone resolver; sameIDacrossnames allowed; no globaluniqueID or pair_record_hashes rule.",
+    "ThreeV3 aggregate identifier claim shapes may omit inline pairs; actual full group reconstruction is still required.",
+    "Both inherited identifiers must have inlinepairs for supplied corpus_variant claims; a new-control aggregate permission or executed probe cannot replace them.",
+    "The hand fixture raw style convention is an authored test convention, not a newly imposed exact production renderer layout.",
+    "This supplement adds independent raw input consistency checks outside the original focused r1 record-metadata resolver; it does not claim a production defect."
+  ],
+  "r1_scope_counterexamples": [
+    {
+      "name": "raw_observation_null",
+      "r1_focused_decode_accepts": true,
+      "raw_prompt": "{\"kind\":\"belief\",\"worlds\":[{\"facts\":{\"f_north\":null,\"f_west\":true,\"u\":0,\"f_east\":\"stone\",\"y\":\"opal\"},\"world_id\":\"w0\"},{\"facts\":{\"f_north\":null,\"f_west\":1,\"u\":1,\"f_east\":\"stone\",\"y\":\"opal\"},\"world_id\":\"w1\"},{\"facts\":{\"f_north\":null,\"f_west\":false,\"u\":2,\"f_east\":\"reed\",\"y\":\"linen\"},\"world_id\":\"w2\"},{\"facts\":{\"f_north\":null,\"f_west\":0,\"u\":3,\"f_east\":\"reed\",\"y\":\"linen\"},\"world_id\":\"w3\"},{\"facts\":{\"f_north\":\"known\",\"f_west\":\"red\",\"u\":4,\"f_east\":\"reed\",\"y\":\"opal\"},\"world_id\":\"w4\"},{\"facts\":{\"f_north\":\"known\",\"f_west\":\"red\",\"u\":5,\"f_east\":\"reed\",\"y\":\"opal\"},\"world_id\":\"w5\"},{\"facts\":{\"f_north\":\"away\",\"f_west\":\"blue\",\"u\":6,\"f_east\":\"birch\",\"y\":\"linen\"},\"world_id\":\"w6\"}],\"observations\":[{\"equals\":null,\"fact\":\"f_east\"},{\"equals\":\"linen\",\"fact\":\"y\"}],\"queries\":[{\"query_id\":\"zeta\",\"fact\":\"f_north\"},{\"query_id\":\"alpha\",\"fact\":\"f_west\"},{\"query_id\":\"mu\",\"fact\":\"f_east\"}]}",
+      "scope": "Expected outside r1 focused resolver; cannot certify prompt binding without this independent surface check.",
+      "unchanged_semantic_task": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": "reed",
+            "fact": "f_east"
+          },
+          {
+            "equals": "linen",
+            "fact": "y"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "f_north",
+            "query_id": "zeta"
+          },
+          {
+            "fact": "f_west",
+            "query_id": "alpha"
+          },
+          {
+            "fact": "f_east",
+            "query_id": "mu"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f_east": "stone",
+              "f_north": null,
+              "f_west": true,
+              "u": 0,
+              "y": "opal"
+            },
+            "world_id": "w0"
+          },
+          {
+            "facts": {
+              "f_east": "stone",
+              "f_north": null,
+              "f_west": 1,
+              "u": 1,
+              "y": "opal"
+            },
+            "world_id": "w1"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": null,
+              "f_west": false,
+              "u": 2,
+              "y": "linen"
+            },
+            "world_id": "w2"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": null,
+              "f_west": 0,
+              "u": 3,
+              "y": "linen"
+            },
+            "world_id": "w3"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": "known",
+              "f_west": "red",
+              "u": 4,
+              "y": "opal"
+            },
+            "world_id": "w4"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": "known",
+              "f_west": "red",
+              "u": 5,
+              "y": "opal"
+            },
+            "world_id": "w5"
+          },
+          {
+            "facts": {
+              "f_east": "birch",
+              "f_north": "away",
+              "f_west": "blue",
+              "u": 6,
+              "y": "linen"
+            },
+            "world_id": "w6"
+          }
+        ]
+      }
+    },
+    {
+      "name": "raw_world_boolean_to_integer",
+      "r1_focused_decode_accepts": true,
+      "raw_prompt": "{\"kind\":\"belief\",\"worlds\":[{\"facts\":{\"f_north\":null,\"f_west\":1,\"u\":0,\"f_east\":\"stone\",\"y\":\"opal\"},\"world_id\":\"w0\"},{\"facts\":{\"f_north\":null,\"f_west\":1,\"u\":1,\"f_east\":\"stone\",\"y\":\"opal\"},\"world_id\":\"w1\"},{\"facts\":{\"f_north\":null,\"f_west\":false,\"u\":2,\"f_east\":\"reed\",\"y\":\"linen\"},\"world_id\":\"w2\"},{\"facts\":{\"f_north\":null,\"f_west\":0,\"u\":3,\"f_east\":\"reed\",\"y\":\"linen\"},\"world_id\":\"w3\"},{\"facts\":{\"f_north\":\"known\",\"f_west\":\"red\",\"u\":4,\"f_east\":\"reed\",\"y\":\"opal\"},\"world_id\":\"w4\"},{\"facts\":{\"f_north\":\"known\",\"f_west\":\"red\",\"u\":5,\"f_east\":\"reed\",\"y\":\"opal\"},\"world_id\":\"w5\"},{\"facts\":{\"f_north\":\"away\",\"f_west\":\"blue\",\"u\":6,\"f_east\":\"birch\",\"y\":\"linen\"},\"world_id\":\"w6\"}],\"observations\":[{\"equals\":\"reed\",\"fact\":\"f_east\"},{\"equals\":\"linen\",\"fact\":\"y\"}],\"queries\":[{\"query_id\":\"zeta\",\"fact\":\"f_north\"},{\"query_id\":\"alpha\",\"fact\":\"f_west\"},{\"query_id\":\"mu\",\"fact\":\"f_east\"}]}",
+      "scope": "Expected outside r1 focused resolver; cannot certify prompt binding without this independent surface check.",
+      "unchanged_semantic_task": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": "reed",
+            "fact": "f_east"
+          },
+          {
+            "equals": "linen",
+            "fact": "y"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "f_north",
+            "query_id": "zeta"
+          },
+          {
+            "fact": "f_west",
+            "query_id": "alpha"
+          },
+          {
+            "fact": "f_east",
+            "query_id": "mu"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f_east": "stone",
+              "f_north": null,
+              "f_west": true,
+              "u": 0,
+              "y": "opal"
+            },
+            "world_id": "w0"
+          },
+          {
+            "facts": {
+              "f_east": "stone",
+              "f_north": null,
+              "f_west": 1,
+              "u": 1,
+              "y": "opal"
+            },
+            "world_id": "w1"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": null,
+              "f_west": false,
+              "u": 2,
+              "y": "linen"
+            },
+            "world_id": "w2"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": null,
+              "f_west": 0,
+              "u": 3,
+              "y": "linen"
+            },
+            "world_id": "w3"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": "known",
+              "f_west": "red",
+              "u": 4,
+              "y": "opal"
+            },
+            "world_id": "w4"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": "known",
+              "f_west": "red",
+              "u": 5,
+              "y": "opal"
+            },
+            "world_id": "w5"
+          },
+          {
+            "facts": {
+              "f_east": "birch",
+              "f_north": "away",
+              "f_west": "blue",
+              "u": 6,
+              "y": "linen"
+            },
+            "world_id": "w6"
+          }
+        ]
+      }
+    },
+    {
+      "name": "raw_query_fact_changed",
+      "r1_focused_decode_accepts": true,
+      "raw_prompt": "{\"kind\":\"belief\",\"worlds\":[{\"facts\":{\"f_north\":null,\"f_west\":true,\"u\":0,\"f_east\":\"stone\",\"y\":\"opal\"},\"world_id\":\"w0\"},{\"facts\":{\"f_north\":null,\"f_west\":1,\"u\":1,\"f_east\":\"stone\",\"y\":\"opal\"},\"world_id\":\"w1\"},{\"facts\":{\"f_north\":null,\"f_west\":false,\"u\":2,\"f_east\":\"reed\",\"y\":\"linen\"},\"world_id\":\"w2\"},{\"facts\":{\"f_north\":null,\"f_west\":0,\"u\":3,\"f_east\":\"reed\",\"y\":\"linen\"},\"world_id\":\"w3\"},{\"facts\":{\"f_north\":\"known\",\"f_west\":\"red\",\"u\":4,\"f_east\":\"reed\",\"y\":\"opal\"},\"world_id\":\"w4\"},{\"facts\":{\"f_north\":\"known\",\"f_west\":\"red\",\"u\":5,\"f_east\":\"reed\",\"y\":\"opal\"},\"world_id\":\"w5\"},{\"facts\":{\"f_north\":\"away\",\"f_west\":\"blue\",\"u\":6,\"f_east\":\"birch\",\"y\":\"linen\"},\"world_id\":\"w6\"}],\"observations\":[{\"equals\":\"reed\",\"fact\":\"f_east\"},{\"equals\":\"linen\",\"fact\":\"y\"}],\"queries\":[{\"query_id\":\"zeta\",\"fact\":\"u\"},{\"query_id\":\"alpha\",\"fact\":\"f_west\"},{\"query_id\":\"mu\",\"fact\":\"f_east\"}]}",
+      "scope": "Expected outside r1 focused resolver; cannot certify prompt binding without this independent surface check.",
+      "unchanged_semantic_task": {
+        "kind": "belief",
+        "observations": [
+          {
+            "equals": "reed",
+            "fact": "f_east"
+          },
+          {
+            "equals": "linen",
+            "fact": "y"
+          }
+        ],
+        "queries": [
+          {
+            "fact": "f_north",
+            "query_id": "zeta"
+          },
+          {
+            "fact": "f_west",
+            "query_id": "alpha"
+          },
+          {
+            "fact": "f_east",
+            "query_id": "mu"
+          }
+        ],
+        "worlds": [
+          {
+            "facts": {
+              "f_east": "stone",
+              "f_north": null,
+              "f_west": true,
+              "u": 0,
+              "y": "opal"
+            },
+            "world_id": "w0"
+          },
+          {
+            "facts": {
+              "f_east": "stone",
+              "f_north": null,
+              "f_west": 1,
+              "u": 1,
+              "y": "opal"
+            },
+            "world_id": "w1"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": null,
+              "f_west": false,
+              "u": 2,
+              "y": "linen"
+            },
+            "world_id": "w2"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": null,
+              "f_west": 0,
+              "u": 3,
+              "y": "linen"
+            },
+            "world_id": "w3"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": "known",
+              "f_west": "red",
+              "u": 4,
+              "y": "opal"
+            },
+            "world_id": "w4"
+          },
+          {
+            "facts": {
+              "f_east": "reed",
+              "f_north": "known",
+              "f_west": "red",
+              "u": 5,
+              "y": "opal"
+            },
+            "world_id": "w5"
+          },
+          {
+            "facts": {
+              "f_east": "birch",
+              "f_north": "away",
+              "f_west": "blue",
+              "u": 6,
+              "y": "linen"
+            },
+            "world_id": "w6"
+          }
+        ]
+      }
+    }
+  ],
+  "remaining_future_attacks": [
+    "Once authorized real inputs arrive, typed raw payload/semantic_task equality and actual presentation styles must be checked independently for allrows before prediction reuse.",
+    "Later current candidate comparison must test full canonical required fields/hash, exact source/split lineage, proper V3/V4 rowwise semantic preservation, every tag/locator and all actual claims.",
+    "Do not certify a diagnostic annotation or arbitrary fitted manifest representation as evidence; derive supports/prefixes/query partitions yourself.",
+    "Actual table/character/promptlength/observation-role/scalar patterns remain unmeasured for V4; future fullworld/cross-release and conditional nuisance analysis is required."
+  ],
+  "source_sha256": "baaa33546a85a00fbcbed4badd1c21dafde09e7c966df791afb3a7ee3eef4de9",
+  "stage": "PROSPECTIVE_PUBLIC_HANDMADE_SURFACE_AND_AGGREGATE_SUPPLEMENT"
+}

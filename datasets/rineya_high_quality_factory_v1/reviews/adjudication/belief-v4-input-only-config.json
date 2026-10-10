@@ -1,0 +1,33 @@
+{
+  "actual_execution_id": "/root/research_architect",
+  "allowed_reads": "Only frozen listed public/preparation/own solver/stripped views+viewmanifest+inputlineage. No file referenced by viewmanifest is implicitly authorized.",
+  "allowed_view_fields": [
+    "record_hash",
+    "rendered_input",
+    "sample_id",
+    "semantic_family_id",
+    "semantic_parent_id",
+    "semantic_task",
+    "split",
+    "track_id"
+  ],
+  "disclosures": [
+    "Previously read V3 canonical/gold and authored V1-V4 public design; no unseen blind semantics claim",
+    "Root-guided metadata repair and later design/adjudicator overlap",
+    "Own previously exposed V1/V3 solver reused after complete new source/dependency freeze; full fresh outputs recomputed, not copied",
+    "Shared underlying model/common guidance can correlate errors",
+    "Opaque full record_hash supplied by stripped view cannot be verified until later canonical access",
+    "Predictions/input-only judgments are not approval of unseen metadata or production cohort"
+  ],
+  "expected_records": 3456,
+  "fresh_view": "reviews/input_only/belief-gap-v4.jsonl",
+  "fresh_view_manifest": "reviews/input_only/belief-gap-v4.manifest.json",
+  "hand_fixtures": "reviews/adjudication/belief-v4-input-only-hand-fixtures.json",
+  "input_hash_recipe": "canonical JSON object with track_id,split,semantic_task,rendered_input; SHA256 UTF8. Separate semantic-task and exactprompt hashes. Supplier lineage hash recipe not inferred.",
+  "input_lineage": "reviews/input_only/belief-gap-v4.input_lineage.json",
+  "no_prior_predictions_or_targets_loaded": true,
+  "own_prior_solver_archive": "reviews/adjudication/belief-v4-input-only-own-prior-solver-archive.py",
+  "own_solver_main_not_called": true,
+  "prior_target_free_view": "reviews/input_only/belief-gap-v3.jsonl",
+  "production_approval": false
+}

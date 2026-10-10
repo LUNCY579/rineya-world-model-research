@@ -1,0 +1,3174 @@
+{
+  "actual_author_execution_id": "/root/research_architect",
+  "candidate_sha_is_hand_sentinel": true,
+  "cases": [
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "valid-nonmember-2-identity",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "valid-nonmember-2-transposed",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "transposed",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "transposed",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "transposed",
+        "controlled_context": "A",
+        "record_hash": "f5df9241f9dd29f8487616096a4b82d8dd0b5ddb33041e87a288c56f4a61c14d",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "transposed",
+          "controlled_context": "E",
+          "record_hash": "f772642dddf6e00003d3e9d044348a6d3741f9b20a04977784a434077442e7fe",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "transposed",
+          "controlled_context": "G",
+          "record_hash": "21b35e1dcd845cdf8a02e8e15147fd10cef1f9ba378c56a3b37feeb34c439ba2",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "valid-nonmember-3-identity",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 3,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 3,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "D",
+        "record_hash": "14cf360bafa1cca2eb40939d8ef8a3b16f9d185b97f9050be8e7b75618ae8415",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "F",
+          "record_hash": "2c8be8e52e43cdb98b0a89911a7fdff725474243bf0cc055788ef1ba58210ae7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "H",
+          "record_hash": "6acef6ea904c9af8a7349c9792fc5092276fbe6ee7e4e8c843150abe64631146",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "valid-nonmember-3-transposed",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "transposed",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 3,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "transposed",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 3,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "transposed",
+        "controlled_context": "D",
+        "record_hash": "189f76072f51240025f450b7097ef611f0b4ce3ce6971f6f0ef27666950d8ee1",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "transposed",
+          "controlled_context": "F",
+          "record_hash": "9a7b5737be05f6363669c04fc15bdd2f6740a94f43fc02f5ab1bfb975694eba0",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "transposed",
+          "controlled_context": "H",
+          "record_hash": "7424da94172fb6fcdd1ead7eed8c3b6eb851d441ab69742795429085183f0e6f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "shared-id-different-name-is-legal",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "contradiction_equals_mixed_outcomes",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "property-identifier-alias-is-legal",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "property": "same_prefix_empty_nonempty_counterfactual",
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "relative-path-no-extra-private-normalization",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "../hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "optional-manifest-diagnostics-not-authority",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_record_hashes": [
+              "extra",
+              "diagnostic"
+            ],
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "member-owner-also-legal",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "PASS_COMPONENT",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "E",
+        "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+        "renderer": "forward",
+        "sample_id": "hand-left",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "foreign-owner-source_family_key",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "owner_source_family_key",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "b334353a9bea302930485d82da34833ff8e4b9d6159bb991b8ee2d5bc3495f02",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "foreign-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "foreign-owner-auxiliary_scalar_variant",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "owner_auxiliary_scalar_variant",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "transposed",
+          "controlled_context": "E",
+          "record_hash": "f772642dddf6e00003d3e9d044348a6d3741f9b20a04977784a434077442e7fe",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "foreign-owner-schedule_index",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "owner_schedule_index",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "9afb0ddf563e7cd2320101dd464446fed24ac691a2521bfb174cabf83538beb6",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 1,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "foreign-owner-renderer",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "owner_renderer",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "889a3d7ae72e06f4c5e9a1d1d9152383cb534d58df94538545ed7423722ba4b9",
+          "renderer": "reverse",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "bool-does-not-alias-integer-coordinate",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "owner_schedule_index",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "5b9500f6f6751582e443a4e5733c77fef546988b8d7dddf4c7302b916becb16d",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": false,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "reversed-pair-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-right",
+          "hand-left"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "length_specific_order",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "actual-owner-length-over-annotation",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "length_specific_order",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 3,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 3,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "D",
+        "record_hash": "d3c19191d66d2dc42d6edb52b6514d52aa79a69e7a54f9b255f93a1b545fab42",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "F",
+          "record_hash": "2c8be8e52e43cdb98b0a89911a7fdff725474243bf0cc055788ef1ba58210ae7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "H",
+          "record_hash": "6acef6ea904c9af8a7349c9792fc5092276fbe6ee7e4e8c843150abe64631146",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "actual-member-length-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "actual_member_length",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "9ddcece77e51151151a6224c44a76f1185409acbb5e1c484b1364d22a4ba7733",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": null,
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "duplicate-identical-named-key-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "unique_named_ordered_resolver",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "other-name-cannot-substitute",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "unique_named_ordered_resolver",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "wrong-whole-candidate-sha-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "exact_candidate_sha",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "typed-entry-length-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "entry_actual_length",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": true,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "missing-public-entry-field-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "entry_minimum_fields",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "missing-inline-pair-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "ordered_two_distinct_ids",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "absent-actual-record-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "unknown-hand-id"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "actual_pair_members",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "bad-actual-full-record-hash-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "full_record_hash",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "probe-cannot-substitute-for-supplied-pair",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "probe_id": "unexecuted-hand-probe",
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "probe_substitution",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "two-identifiers-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "property": "same_prefix_empty_nonempty_counterfactual",
+        "scope": "corpus_variant"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "exactly_one_identifier",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    },
+    {
+      "candidate_sha": "1111111111111111111111111111111111111111111111111111111111111111",
+      "case_id": "unknown-claim-field-invalid",
+      "claim": {
+        "control_id": "shared-hand-id",
+        "evidence_manifest": "hand/path.json",
+        "name": "same_prefix_empty_nonempty_counterfactual",
+        "pair_sample_ids": [
+          "hand-left",
+          "hand-right"
+        ],
+        "scope": "corpus_variant",
+        "unpublished_key": "hand"
+      },
+      "expected": "FAIL_COMPONENT",
+      "expected_reason": "claim_vocabulary",
+      "manifest": {
+        "allowed_extra_diagnostic": true,
+        "supplied_same_table_v2_pairs": [
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "same_prefix_empty_nonempty_counterfactual",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          },
+          {
+            "auxiliary_scalar_variant": "identity",
+            "control_id": "shared-hand-id",
+            "exact_candidate_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "contradiction_equals_mixed_outcomes",
+            "observation_length": 2,
+            "pair_sample_ids": [
+              "hand-left",
+              "hand-right"
+            ],
+            "scope": "corpus_variant",
+            "source_family_key": "hand-family"
+          }
+        ]
+      },
+      "owner": {
+        "auxiliary_scalar_variant": "identity",
+        "controlled_context": "A",
+        "record_hash": "4d77bdec36e88eae3019bbebed7ab0f8f3ae47027f50cbc4f81d4474151977e7",
+        "renderer": "forward",
+        "sample_id": "hand-owner",
+        "schedule_index": 0,
+        "semantic_task": {
+          "observations": [
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            },
+            {
+              "equals": "hand-value",
+              "fact": "hand-x"
+            }
+          ]
+        },
+        "source_family_key": "hand-family"
+      },
+      "records": {
+        "hand-left": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "E",
+          "record_hash": "25a0d894e8ff686eeec8500856e0cc2b4b5c83ec7f2a131c010201c51f7ac7b7",
+          "renderer": "forward",
+          "sample_id": "hand-left",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        },
+        "hand-right": {
+          "auxiliary_scalar_variant": "identity",
+          "controlled_context": "G",
+          "record_hash": "eb164b519b336562be0e821b4c687f87fb38adba7c7f02ec1d5bd38867cb4f9f",
+          "renderer": "forward",
+          "sample_id": "hand-right",
+          "schedule_index": 0,
+          "semantic_task": {
+            "observations": [
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              },
+              {
+                "equals": "hand-value",
+                "fact": "hand-x"
+              }
+            ]
+          },
+          "source_family_key": "hand-family"
+        }
+      }
+    }
+  ],
+  "production_data": false,
+  "scope": "HAND_REFERENCE_ONLY_NO_TARGETS",
+  "semantic_pair_truth_not_asserted": true
+}

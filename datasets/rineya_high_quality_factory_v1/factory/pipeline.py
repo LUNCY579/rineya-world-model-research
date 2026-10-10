@@ -9,6 +9,7 @@ from pathlib import Path
 from factory.common import ROOT, VERSION, canonical, digest, atomic, write_json, write_jsonl, load_jsonl, record_hash, candidate_paths
 from factory.reference import solve as reference_solve
 from factory.planning_controls import planning_control_rows, planning_control_report, planning_checker
+from factory.belief_controls import is_v4_cohort, belief_v4_control_report, checker as belief_v4_checker
 
 REQUIRED = {"sample_id", "semantic_parent_id", "semantic_family_id", "track_id", "skill_tags", "difficulty", "generator_version", "oracle_version", "generation_seed", "source_provenance", "semantic_task", "rendered_input", "verified_target", "target_format", "split", "review_status", "review_receipt_ids", "record_hash"}
 APPROVAL_ACTORS = {'expert': '/root/expert_reviewer', 'adversarial': '/root/adversarial_auditor',
@@ -65,7 +66,9 @@ BELIEF_V3_CLAIMS = {'auxiliary_scalar_transposition_invariance',
                     'context_auxiliary_scalar_variant_crossing'}
 
 
-def belief_checker_name(rows):
+def belief_checker_name(rows, batch=None):
+    if is_v4_cohort(rows, batch):
+        return 'oracles.belief_controls_v4_independent'
     is_v3 = any(row.get('generator_version') == BELIEF_V3_VERSION
                 or 'auxiliary_scalar_variant' in row or 'auxiliary_scalar_control' in row
                 or any(isinstance(claim, dict)
@@ -86,11 +89,16 @@ def belief_checker_name(rows):
     return 'oracles.belief_controls_v2_independent' if is_v2 else 'oracles.belief_controls_independent'
 
 
-def belief_checker(rows):
-    return importlib.import_module(belief_checker_name(rows))
+def belief_checker(rows, batch=None):
+    name=belief_checker_name(rows, batch)
+    return belief_v4_checker() if name.endswith('belief_controls_v4_independent') else importlib.import_module(name)
 
 
-def belief_control_rows(rows):
+def belief_control_rows(rows, batch=None):
+    if is_v4_cohort(rows, batch):
+        # All rows in this closed public batch must remain in the custody join,
+        # even when kind/version/control metadata is corrupted or removed.
+        return list(rows)
     markers = {'controlled_context', 'structural_family_profile',
                'fact_role_assignments', 'query_role_assignments',
                'property_witnesses', 'family_control_claims',
@@ -101,11 +109,13 @@ def belief_control_rows(rows):
                  or markers.intersection(row) or tags.intersection(row.get('skill_tags', [])))]
 
 
-def belief_control_report(rows):
-    selected = belief_control_rows(rows)
+def belief_control_report(rows, batch=None, root=None):
+    if is_v4_cohort(rows, batch):
+        return belief_v4_control_report(rows, batch, ROOT if root is None else root)
+    selected = belief_control_rows(rows, batch)
     if not selected:
         return None
-    return belief_checker(selected).check_batch(selected)
+    return belief_checker(selected, batch).check_batch(selected)
 
 
 def schema_validate(row):
@@ -161,12 +171,14 @@ def audit(batch):
     planning_module=planning_checker(rows,batch,ROOT) if planning_control_rows(rows,batch) else None
     control_source=ROOT/'oracles/memory_controls_independent.py'
     control_source_sha=hashlib.sha256(control_source.read_bytes()).hexdigest() if memory_control_rows(rows) else None
-    selected_belief_rows=belief_control_rows(rows)
-    belief_module=belief_checker(selected_belief_rows) if selected_belief_rows else None
+    selected_belief_rows=belief_control_rows(rows, batch)
+    belief_module=belief_checker(selected_belief_rows, batch) if selected_belief_rows or is_v4_cohort(rows, batch) else None
     belief_source=Path(belief_module.__file__) if belief_module else None
     belief_source_sha=hashlib.sha256(belief_source.read_bytes()).hexdigest() if belief_source else None
     belief_dependencies={}
-    if belief_module and belief_module.__name__.endswith('belief_controls_v2_independent'):
+    if belief_module and belief_module.__name__.endswith('belief_controls_v4_independent'):
+        belief_dependencies=dict(belief_module.DEPENDENCIES)
+    elif belief_module and belief_module.__name__.endswith('belief_controls_v2_independent'):
         source=ROOT/'oracles/belief_controls_independent.py'
         belief_dependencies[str(source.relative_to(ROOT))]=hashlib.sha256(source.read_bytes()).hexdigest()
     elif belief_module and belief_module.__name__.endswith('belief_controls_v3_independent'):
@@ -191,7 +203,7 @@ def audit(batch):
         if memory_control_rows([row]):
             from oracles.memory_controls_independent import check as memory_check
             metadata_errors.extend(memory_check(row))
-        if belief_control_rows([row]):
+        if belief_control_rows([row], batch):
             metadata_errors.extend(belief_module.check(row))
         if planning_control_rows([row], batch):
             metadata_errors.extend(planning_module.check(row))
@@ -225,7 +237,7 @@ def audit(batch):
         content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
         preserve_prior_audit(control_path,content)
         atomic(control_path,content.decode('utf-8'))
-    belief_controls=belief_control_report(rows)
+    belief_controls=belief_control_report(rows, batch, ROOT)
     stats['belief_control_error_count']=len(belief_controls['errors']) if belief_controls else 0
     if belief_controls:
         assert hashlib.sha256(belief_source.read_bytes()).hexdigest()==belief_source_sha,'Belief checker source changed during audit; rerun after source is stable'
@@ -350,7 +362,7 @@ def release(batch,version,tracks=None,supersedes=None):
         # A missing approved rotation cannot silently break the release's claim.
         controls=memory_control_report(accepted)
         assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
-        belief_controls=belief_control_report(accepted)
+        belief_controls=belief_control_report(accepted, batch, ROOT)
         assert not belief_controls or not belief_controls['errors'],'Released belief family controls incomplete or false'
         planning_controls=planning_control_report(accepted,batch,ROOT)
         assert not planning_controls or not planning_controls['errors'],'Released planning family controls incomplete or false'
@@ -414,8 +426,8 @@ def validate_release(path):
         if memory_control_rows([r]):
             from oracles.memory_controls_independent import check as memory_check
             metadata_failures.extend(memory_check(r))
-        if belief_control_rows([r]):
-            metadata_failures.extend(belief_checker([r]).check(r))
+        if belief_control_rows([r], manifest['batch']):
+            metadata_failures.extend(belief_checker([r], manifest['batch']).check(r))
         if planning_control_rows([r],manifest['batch']):
             metadata_failures.extend(planning_module.check(r))
         if metadata_failures:
@@ -443,7 +455,7 @@ def validate_release(path):
     specialized_counts=validate_specialized(path,rows)
     controls=memory_control_report(rows)
     assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
-    belief_controls=belief_control_report(rows)
+    belief_controls=belief_control_report(rows, manifest['batch'], ROOT)
     assert not belief_controls or not belief_controls['errors'],'Released belief family controls incomplete or false'
     planning_controls=planning_control_report(rows,manifest['batch'],ROOT)
     assert not planning_controls or not planning_controls['errors'],'Released planning family controls incomplete or false'
