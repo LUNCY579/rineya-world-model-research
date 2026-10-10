@@ -1,0 +1,27 @@
+{
+  "ticket": "JSON-TYPE-GATE-001",
+  "observed_problem": "Python nested equality conflates true/1 and false/0, permitting type-changing rendered-input and gold-target corruptions despite rehashed evidence.",
+  "discovery_execution": "/root",
+  "independent_confirmation": "reviews/oracle/scalar_identity_probe_execution.json",
+  "evidence": "Synthetic public-contract probes only; no accepted data fault established.",
+  "root_cause": "Native Python equality at generic semantic evidence joins.",
+  "fix": "Canonical JSON comparison for rendered task, oracle/reference targets, structured and specialized exports, and canonical candidate membership.",
+  "regression_tests": "tests/test_typed_json_evidence.py",
+  "prior_releases_rechecked": 16,
+  "status": "FIXED_AND_ALL_HISTORICAL_RELEASES_PASS",
+  "remote_backup_status": "BACKED_UP",
+  "limits": "Supported public scalar domain is null, boolean, integer excluding boolean, and string; floats/coercion excluded.",
+  "typed_gate_new_regressions": 7,
+  "full_current_suite": 188,
+  "independent_generic_code_review": "Completed input/type probes and corrective export validator AST execution with own independent solvers; evidence in audits/execution/memory-gap-v2-integrity-adversarial.json and EXPORT_COMPLETENESS_CORRECTIVE_ADVERSARIAL.json",
+  "remote_backup": {
+    "checkpoint": "json-type-memory-provisional",
+    "commit_sha": "75934fb845af8c2e3a418a66cb2a812563e10f74",
+    "verified_files": 29,
+    "verified_bytes": 6007291,
+    "receipt": "backup_logs/json-type-memory-provisional_RECEIPT.json"
+  },
+  "receipt_boundary": "This post-push resolution summary is local until the next checkpoint; actual patch/probes/tests and original ticket bytes are already backed up.",
+  "latest_validator_sha256": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
+  "latest_remote_status": "New export-completeness extension local until imminent checkpoint; original typed-join patch already byte-verified in75934fb."
+}

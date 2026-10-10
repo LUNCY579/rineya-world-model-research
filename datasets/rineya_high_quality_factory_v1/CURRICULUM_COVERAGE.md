@@ -9,7 +9,7 @@ Active approved inventory:
 | RBM-001 | 24 | 12 |
 | RCM-001 | 1440 | 180 |
 | RDP-001 | 24 | 12 |
-| REM-001 | 120 | 12 |
+| REM-001 | 888 | 24 |
 | RGM-001 | 432 | 180 |
 | RJP-001 | 24 | 12 |
 | RMM-001 | 76 | 12 |
@@ -36,7 +36,7 @@ Active difficulty counts (canonical records, including render variants):
     "3": 20
   },
   "REM-001": {
-    "3": 120
+    "3": 888
   },
   "RGM-001": {
     "3": 64,
@@ -80,6 +80,8 @@ Historical candidate inventory; revisions and renderings must not be added to ac
 | REM-001 | extended-pilot-v1 | 24 | 12 |
 | REM-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v3 | 120 | 12 |
+| REM-001 | memory-gap-v1 | 768 | 12 |
+| REM-001 | memory-gap-v2 | 768 | 12 |
 | RGM-001 | expansion-v1 | 360 | 150 |
 | RGM-001 | expansion-v2 | 360 | 150 |
 | RGM-001 | expansion-v3 | 360 | 150 |
@@ -148,6 +150,12 @@ Difficulty counts by historical batch:
   },
   "REM-001/extended-pilot-v3": {
     "3": 120
+  },
+  "REM-001/memory-gap-v1": {
+    "3": 768
+  },
+  "REM-001/memory-gap-v2": {
+    "3": 768
   },
   "RGM-001/expansion-v1": {
     "3": 50,

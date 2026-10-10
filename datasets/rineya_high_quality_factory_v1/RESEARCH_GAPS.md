@@ -113,3 +113,9 @@ The 35 registry experiments and 13 bundle predictions are planned, unmeasured so
 ## Existing-work overlap
 
 RCWM T2b and joint cmp/calc/after kits, BWM planner/search-distillation interfaces and surface-audit controls are directly documented local reuse points. Preserve the registered T2 unmerged FP32 artifact and all frozen benchmark histories. IDR is implementation-only in the bundle; RHF/triadic memory/CSS/RHD/recurrence are candidates requiring an exact branch/interface audit before reuse. No existing protected dataset bytes are reused by this specification.
+
+## Executed memory checkpoint and measured next belief gap
+
+REM v0002 adds decisive history/version/op/index controls with 768 reviewed rows from 12 new source families. Its bounded scope and remaining joint correlations, shared motifs and future-only absence gap are documented in research/research_gap_analysis/MEMORY_HISTORY_MILESTONE.md. No model benefit was measured.
+
+A prospective expert audit confirms all 24 existing RBM rows are correct, but support-size/observed-fact shortcut rules match all 72 query flags. Unobserved invariants with multiple surviving worlds and useful queries after two or more observations are absent. Prioritize matched evidence and actual value partitions under the existing finite-world contract before more surface variants; see feedback/improvement_requests/RBM-GAP-007.json and its frozen measurement report. No new RBM samples or approvals exist for this proposed wave.

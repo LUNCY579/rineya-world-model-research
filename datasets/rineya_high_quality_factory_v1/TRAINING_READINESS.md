@@ -8,6 +8,7 @@ Authoritative active inventory: manifests/ACTIVE_RELEASE_CATALOG.json. Load thro
 - RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, BACKED_UP (session-final).
 - RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
 - REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (session-final).
+- REM-001 v0002: 768 historical records, 768 active; ACTIVE, LOCAL_ONLY (verification pending).
 - RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (session-final).
 - RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (session-final).
 - RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).

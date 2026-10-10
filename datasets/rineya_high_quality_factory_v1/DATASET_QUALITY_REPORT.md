@@ -14,6 +14,8 @@ Machine evidence: quality_reports/CURRENT.json. Candidate batches are retained e
 | REM-001 | extended-pilot-v1 | 24 | 12 |
 | REM-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v3 | 120 | 12 |
+| REM-001 | memory-gap-v1 | 768 | 12 |
+| REM-001 | memory-gap-v2 | 768 | 12 |
 | RGM-001 | expansion-v1 | 360 | 150 |
 | RGM-001 | expansion-v2 | 360 | 150 |
 | RGM-001 | expansion-v3 | 360 | 150 |
@@ -43,23 +45,23 @@ Review decision counts:
 ```json
 {
   "expert": {
-    "records": 3640,
+    "records": 5176,
     "decisions": {
-      "ACCEPT": 3526,
-      "REVISE": 114
+      "ACCEPT": 4294,
+      "REVISE": 882
     }
   },
   "adversarial": {
-    "records": 3640,
+    "records": 4408,
     "decisions": {
-      "ACCEPT": 3452,
+      "ACCEPT": 4220,
       "REVISE": 188
     }
   },
   "adjudication": {
-    "records": 3400,
+    "records": 4168,
     "decisions": {
-      "ACCEPT": 3260,
+      "ACCEPT": 4028,
       "REVISE": 140
     }
   }
@@ -325,6 +327,80 @@ Exact oracle, schema, duplicates and family split audit summaries:
     "structural_template_holdout": false,
     "protected_benchmark_inspected": false,
     "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "memory-gap-v1",
+    "records": 768,
+    "unique_parents": 12,
+    "distinct_parent_semantic_signatures": 12,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 768
+    },
+    "tracks": {
+      "REM-001": 768
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 768,
+    "validation_failures": 768,
+    "memory_control_error_count": 6156,
+    "memory_control_counts": {
+      "records": 768,
+      "scheduled_records": 768,
+      "source_families": 12,
+      "base_controlled_histories": 48,
+      "base_history_query_observations": 384,
+      "rotation_level_observations": 3072,
+      "rendered_observations": 6144
+    }
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "memory-gap-v2",
+    "records": 768,
+    "unique_parents": 12,
+    "distinct_parent_semantic_signatures": 12,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 768
+    },
+    "tracks": {
+      "REM-001": 768
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 0,
+    "validation_failures": 0,
+    "memory_control_error_count": 0,
+    "memory_control_counts": {
+      "records": 768,
+      "scheduled_records": 768,
+      "source_families": 12,
+      "base_controlled_histories": 48,
+      "base_history_query_observations": 384,
+      "rotation_level_observations": 3072,
+      "rendered_observations": 6144
+    }
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
   },
   {
     "batch": "pilot-v1",

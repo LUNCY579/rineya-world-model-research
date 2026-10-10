@@ -1,0 +1,54 @@
+{
+  "authorization_condition": "Run passed status only after completed reviews/adjudication, accepted release, applicable tests, updated source archive/documents, and final source freeze. New oversized outputs need verified gzip+manifest pairs; script blocks missing pairs.",
+  "changed_since_snapshot": [
+    {
+      "current_sha256": "f380f7579f2c08105b6b989ed4df2d4379212f201cb8bc77f3ece6a5b282582e",
+      "current_size": 2325,
+      "path": "audits/execution/memory-gap-v2-adversarial.json",
+      "snapshot_sha256": "2217631d5b6a7a23887aca69c58b75531364888efd25ac4c4707b7ad43ee03e8",
+      "snapshot_size": 2325
+    },
+    {
+      "current_sha256": "d4ac473712e184b7f3d56fe802e692d747a09e87fdf5efbfd120b41f837da1bd",
+      "current_size": 1193091,
+      "path": "audits/execution/memory-gap-v2-integrity-adversarial.json",
+      "snapshot_sha256": "0996f7c37e56bbc363c8f1bafafc72e71e63d35ae25e07788a34bb316e5f8a61",
+      "snapshot_size": 1192628
+    },
+    {
+      "current_sha256": "796e50813187a70987b2662a5a560ec37cb9c443f78f9f876992a349d3613446",
+      "current_size": 33743,
+      "path": "audits/memory_gap_adversarial_audit.py",
+      "snapshot_sha256": "4c5e672a7ea6b394ca0fad79b155ee9324ed2b56f6af7802abfefc0e8e93c1d9",
+      "snapshot_size": 33454
+    },
+    {
+      "current_sha256": "1297348e1f283fa5b8b6021735817ec8b5e862f23cc1329a0bd955e0734ac014",
+      "current_size": 24330,
+      "path": "audits/shortcut_detection/memory-gap-v2-adversarial.json",
+      "snapshot_sha256": "1e5894735654fd966416bc36b1c62e008d342f9cd02a54abdccef1b7f699a087",
+      "snapshot_size": 24308
+    },
+    {
+      "current_sha256": "72f357e2ef44c6f417d76f93cc2917251f53a190095f90bf598c5e2c84f8745b",
+      "current_size": 9982,
+      "path": "backup_logs/prepare_checkpoint_inventory.py",
+      "snapshot_sha256": "1a398390de0968a703de1be84bbe242b13967a6e232157df1b7bb744ea8bb221",
+      "snapshot_size": 9711
+    },
+    {
+      "current_sha256": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
+      "current_size": 6885,
+      "path": "factory/export_validation.py",
+      "snapshot_sha256": "fad35467e22cfffbd97b2962f7984cc4b2fafe8e55a4fcc05ef6785f69024666",
+      "snapshot_size": 4112
+    }
+  ],
+  "checked_at_utc": "2026-10-10T01:49:15.214049+00:00",
+  "execution": "/root/backup_manager",
+  "final_refresh_command": "PYTHONDONTWRITEBYTECODE=1 python3 backup_logs/prepare_checkpoint_inventory.py --checkpoint-id memory-gap-v2-final --approval reviewed_release --validation-status passed --preparer /root --runner /root",
+  "proposed_spec": "backup_logs/memory-gap-v2-review-proposal_SPEC.json",
+  "reason": "Source code and audit results are changing while root and red finish work; initial inventory cannot certify later bytes. Inventory preparation script now takes --preparer to record actual root execution on rerun.",
+  "source_artifact_changes": "No reviewer, raw evidence, immutable release, research reference, original checkout or dedicated-worktree artifact was changed by the preparer.",
+  "status": "DRAFT_REQUIRES_FINAL_SNAPSHOT_REFRESH"
+}

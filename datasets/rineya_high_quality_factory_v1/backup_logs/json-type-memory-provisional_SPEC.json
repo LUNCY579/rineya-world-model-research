@@ -1,0 +1,161 @@
+{
+  "checkpoint_id": "json-type-memory-provisional",
+  "approval": "provisional_checkpoint",
+  "approved_by": "/root",
+  "runner_execution": "/root",
+  "validation_status": "passed",
+  "scope": "Validated JSON-type gate correction and preserved PENDING memory batch; no new approved release or independent completed memory reviews claimed",
+  "validation_evidence": [
+    "quality_reports/JSON_TYPE_GATE_TEST_EXECUTION.json",
+    "quality_reports/JSON_TYPE_GATE_ALL_RELEASES.json"
+  ],
+  "candidate_status": "768 PENDING rows/12 source families; metadata-control checker and initial expert/adversarial/adjudication reviews pending",
+  "excluded_ongoing_artifacts": "Expert/formal in-progress files intentionally deferred to later complete checkpoint; prior approved releases inherited unchanged from byte-verified parent checkpoints",
+  "files": [
+    {
+      "path": "factory/pipeline.py",
+      "size": 19327,
+      "sha256": "2efeb24953a396f03db5185087755c9f5fd758dc3cff8b405d868dc28a841c28"
+    },
+    {
+      "path": "factory/export_validation.py",
+      "size": 4112,
+      "sha256": "fad35467e22cfffbd97b2962f7984cc4b2fafe8e55a4fcc05ef6785f69024666"
+    },
+    {
+      "path": "tests/test_typed_json_evidence.py",
+      "size": 5913,
+      "sha256": "086cf3bc7cea3b7eec7996b83e94b04b0cb32289c56f7a5a7a90ab9a3bba8a43"
+    },
+    {
+      "path": "tests/oracle_episodic_properties_test.py",
+      "size": 10212,
+      "sha256": "6090f66dffe6f5a39c0e236ca5b6c6f29be587463513ef0d8e83856d3f430992"
+    },
+    {
+      "path": "tests/oracle_scalar_identity_test.py",
+      "size": 5667,
+      "sha256": "956010a4d9285cdcbba55df8d251463b848c8757cab53aab9e6963bd1e4080e7"
+    },
+    {
+      "path": "reviews/oracle/episodic_pre_batch_property_execution.json",
+      "size": 3316,
+      "sha256": "b008a2346e5758b01a1982c2674a794df31ba3aa82d8d2afd3032f072b9d2de3"
+    },
+    {
+      "path": "reviews/oracle/episodic_pre_batch_property_test_output.txt",
+      "size": 13633,
+      "sha256": "e557d77655643b093e5629c02919507154ba2ca925d35db1464764e05b0ab7d6"
+    },
+    {
+      "path": "reviews/oracle/scalar_identity_probe_execution.json",
+      "size": 3278,
+      "sha256": "598740becb6e399b204429f87982f90a018e7fcede60ecb01e7560a0e6a62618"
+    },
+    {
+      "path": "reviews/oracle/scalar_identity_probe_test_output.txt",
+      "size": 14828,
+      "sha256": "833c6590492c334d04e18567fe41286a18a61afe387e6d0febdde246a617b841"
+    },
+    {
+      "path": "generators/memory/history_gap.py",
+      "size": 19389,
+      "sha256": "ae2ab80fcf9363941e89baee1fcc0c42ff66b35967e1dba4698e5bdae50c507d"
+    },
+    {
+      "path": "data/REM-001/semantic_parents/memory-gap-v1.jsonl",
+      "size": 415560,
+      "sha256": "aea6e40588440ccd2589db62fdf2561d76baad8a04cc9672cd4d92efccd73579"
+    },
+    {
+      "path": "data/REM-001/candidate_renderings/memory-gap-v1.jsonl",
+      "size": 5150560,
+      "sha256": "fc1eff23e182241ba6d7387eb6e4f6e48cc7e866ddeb450242ef5d07be770415"
+    },
+    {
+      "path": "data/REM-001/manifests/memory-gap-v1.generation.json",
+      "size": 1505,
+      "sha256": "63e00c4d92a2cd788366aace5f72ff88a763c3ee73eeadfff48730cd04de1a87"
+    },
+    {
+      "path": "data/REM-001/manifests/memory-gap-v1.producer_integrity.json",
+      "size": 1958,
+      "sha256": "e5bc3dabd66732f298d16c8525233515fafbb10eb099728599afc95aedd9e963"
+    },
+    {
+      "path": "schemas/MEMORY_CONTROL_PROPERTIES.md",
+      "size": 11643,
+      "sha256": "9f05ff5c3c81ad042e2b98c7d7b3489bd03bbd48ea728770fa7a338773267ace"
+    },
+    {
+      "path": "research/curricula/REM-DELAYED-HISTORY.md",
+      "size": 14339,
+      "sha256": "0946ab348cb3dd17753a8031a8ba058f7b6b6f32d31ebf102b70effc36869e5d"
+    },
+    {
+      "path": "research/curricula/REM-GAP-003-EXECUTION.json",
+      "size": 3015,
+      "sha256": "60ac8b00ab7e785c6fd43b5e882c9ec8ab235e66924d277b86b9fb23e662dc26"
+    },
+    {
+      "path": "feedback/improvement_requests/REM-GAP-003.json",
+      "size": 12006,
+      "sha256": "6248581ac5a1d66799b2dd834a6a79ed8378b0c1de5085ed07ffd157ee498355"
+    },
+    {
+      "path": "reviews/oracle/memory-gap-v1.jsonl",
+      "size": 273408,
+      "sha256": "7c5cc9a2cc09061c8468d4f55900d15b03b500fa187d90e40d27e3a1bd6c5ec2"
+    },
+    {
+      "path": "audits/leakage/memory-gap-v1.json",
+      "size": 536,
+      "sha256": "c710157b48a56ff971c4ee3abd511441155ce8d646721da305b311f2b0055ddd"
+    },
+    {
+      "path": "audits/leakage/memory-gap-v1_cross_release.json",
+      "size": 126,
+      "sha256": "478c831bf82487024fc2d30ea092ce16bee98cda5cd7e9a68a2a68233411412c"
+    },
+    {
+      "path": "quality_reports/JSON_TYPE_GATE_ALL_RELEASES.json",
+      "size": 4151,
+      "sha256": "d66128d726149a9ca8e0fb3608f206c7a6cd830341f29859a317da1acc15d371"
+    },
+    {
+      "path": "quality_reports/JSON_TYPE_GATE_TEST_EXECUTION.json",
+      "size": 305,
+      "sha256": "12cf5a7c465759573bbfe31104e95507a38651cb8aaa45a44d087aecd3c84a39"
+    },
+    {
+      "path": "quality_reports/JSON_TYPE_GATE_TEST_OUTPUT.txt",
+      "size": 248,
+      "sha256": "4da3ab483349a6b20b53968ff12b293b3fcbcb0cf11697c3b0ac18a272a4da5b"
+    },
+    {
+      "path": "feedback/generator_defects/JSON-TYPE-GATE-001.json",
+      "size": 970,
+      "sha256": "ddcd1512e1f93f1b3a3977a200c7bb21bd3dd85caa9a12c5fd08268c0988c35b"
+    },
+    {
+      "path": "GENERATOR_IMPROVEMENTS.md",
+      "size": 4134,
+      "sha256": "4b870ffc5e9d8e5c73418e953d1bcb4fe6ff0ddd37db36061c8cce93e651a080"
+    },
+    {
+      "path": "handoff/REM_GAP_WORK_IN_PROGRESS.json",
+      "size": 1913,
+      "sha256": "85e24f2e3677028f2f9b9b1394bc41dfb6e0658923cdcf77f974d2d2b4bc70d2"
+    },
+    {
+      "path": "backup_logs/session-handoff_SPEC.json",
+      "size": 2749,
+      "sha256": "2616ac99dd2f8d2e92e1c3802f705a6e0ca6e59a84bef72ecac0fcd1a05bac52"
+    },
+    {
+      "path": "backup_logs/session-handoff_RECEIPT.json",
+      "size": 8490,
+      "sha256": "7fb1de68cf6722862683aaf4e21cbcea81f0c02d4ba250ae4df72c3b967169c9"
+    }
+  ]
+}

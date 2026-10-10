@@ -2,14 +2,14 @@
 
 CPU-only dataset production is active. Existing research is read-only. No model loading, training or weights/architecture changes.
 
-2572 approved canonical records from 636 distinct source families. A family is one generated world/program instance, not a new mechanism class.
+3340 approved canonical records from 648 distinct source families. A family is one generated world/program instance, not a new mechanism class.
 
 | Track | Approved records | Distinct source families |
 |---|---:|---:|
 | RBM-001 | 24 | 12 |
 | RCM-001 | 1440 | 180 |
 | RDP-001 | 24 | 12 |
-| REM-001 | 120 | 12 |
+| REM-001 | 888 | 24 |
 | RGM-001 | 432 | 180 |
 | RJP-001 | 24 | 12 |
 | RMM-001 | 76 | 12 |
@@ -32,6 +32,8 @@ Historical candidate inventory (revisions must not be summed):
 | REM-001 | extended-pilot-v1 | 24 | 12 |
 | REM-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v3 | 120 | 12 |
+| REM-001 | memory-gap-v1 | 768 | 12 |
+| REM-001 | memory-gap-v2 | 768 | 12 |
 | RGM-001 | expansion-v1 | 360 | 150 |
 | RGM-001 | expansion-v2 | 360 | 150 |
 | RGM-001 | expansion-v3 | 360 | 150 |
@@ -64,6 +66,7 @@ Approved release inventory:
 - RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, BACKED_UP (session-final).
 - RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
 - REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (session-final).
+- REM-001 v0002: 768 historical records, 768 active; ACTIVE, LOCAL_ONLY (verification pending).
 - RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (session-final).
 - RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (session-final).
 - RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
@@ -81,8 +84,10 @@ Backups:
 - first-approved: BACKED_UP; commit 8c2571e51e43ed206d111321482367802b79600a.
 - foundation-r2: BACKED_UP; commit 517a51a60a00e6b7a625edeeb8e6bc126393856c.
 - foundation: FAILED_LOCAL_ARTIFACTS_PRESERVED; commit pending.
+- json-type-memory-provisional: BACKED_UP; commit 75934fb845af8c2e3a418a66cb2a812563e10f74.
 - production-milestone: BACKED_UP; commit ee7a91cf8cf4195238dafb0caa6f494a20c0b7ef.
 - review-milestone: BACKED_UP; commit 7decf8635f37a9e0e514b05dcd5dc7135a7eeb57.
 - session-final: BACKED_UP; commit eac47777c60387092bb10851b137adad36a6eb4b.
+- session-handoff: BACKED_UP; commit 61530fc87b64db1254cb9447ea800a23048a563e.
 
 All ten curricula exist. P0 pilot correctness/review precedes expansion. Counterfactual/rendering counts do not inflate parent counts. Exposed dev challenges are not sealed tests. Exact state correctness is a data property; model benefit remains untested.

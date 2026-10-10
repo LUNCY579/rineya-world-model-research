@@ -1,0 +1,32 @@
+{
+  "ticket": "REM-META-004",
+  "at_utc": "2026-10-10T01:53:04.537835+00:00",
+  "original_failure_batch": "memory-gap-v1",
+  "original_records": 768,
+  "original_gold_correct": 768,
+  "original_expert_REVISE": 768,
+  "original_scope_defect_rows": 192,
+  "original_evidence_preserved": true,
+  "original_status": "QUARANTINED_UNRELEASED",
+  "revised_batch": "memory-gap-v2",
+  "candidate_sha256": "ca17f8a460f9a8909522901d2ef39b5f096b27a2cc56e0e3fb49ca465c8e96b1",
+  "fix": "Public per-row property names with independent witnesses; earlier queried lifecycle tombstone remains in every controlled history while a different winning null op changes. Version priority, active tie and null-op counterfactual variants are supplied and balanced actual query/key crossings retained.",
+  "required_regression": "All nine in-row public properties and all-three-status support in every row; complete ID/position/key typed/provenance histograms; field-order and exact counterfactual tests.",
+  "evidence": [
+    "reviews/expert/memory-gap-v2.jsonl",
+    "audits/execution/memory-gap-v2-adversarial.json",
+    "reviews/oracle/memory-gap-v2.controls-interface-aligned.execution.json",
+    "quality_reports/EXPORT_COMPLETENESS_TEST_EXECUTION.json"
+  ],
+  "results": {
+    "expert_ACCEPT": 768,
+    "adversarial_ACCEPT": 768,
+    "formal_control_errors": 0,
+    "formal_scoped_family_claims": 108,
+    "full_suite_pass": 188
+  },
+  "status": "FIXED_FRESH_REVIEWED_RELEASE_LOCAL; REMOTE_PENDING",
+  "limits": "12 new source families,48 correlated base histories,finite visible exact retrieval,exposed two-family dev,same-model correlated reviewer error risk; no model efficacy evidence.",
+  "release": "data/REM-001/releases/v0002",
+  "adjudicator_ACCEPT": 768
+}

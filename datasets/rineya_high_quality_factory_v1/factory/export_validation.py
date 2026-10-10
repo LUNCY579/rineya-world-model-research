@@ -1,5 +1,6 @@
 """Validate derived formats against independently authored oracle semantics."""
 import json
+from collections import Counter
 from jsonschema import Draft202012Validator
 from factory.common import ROOT, canonical, digest, load_jsonl
 from oracles.independent import solve
@@ -56,5 +57,45 @@ def validate_specialized(path, rows):
         split = 'dev_challenge' if name.startswith('dev_challenge-') else 'train'
         for item in records:
             if 'input' in item: assert by_input[item['input']]['split'] == split
+        selected = [r for r in rows if r['split'] == split]
+        if any(name.endswith('-'+tag+'.jsonl') for tag in ['skill_demonstrations','memory_updates','belief_updates']):
+            assert Counter(item['input'] for item in records) == Counter(r['rendered_input'] for r in selected), 'specialized one-per-row coverage mismatch'
+        elif name.endswith('-process_reward.jsonl'):
+            observed = Counter(canonical({'input':item['input'],'candidate':item['candidate']}) for item in records)
+            expected = Counter(canonical({'input':r['rendered_input'],'candidate':candidate})
+                               for r in selected for candidate in r['semantic_task']['candidates'])
+            assert observed == expected, 'process candidate coverage mismatch'
+        elif name.endswith('-trajectories.jsonl'):
+            expected = []
+            for r in selected:
+                verdict = solve(r['semantic_task'])
+                if verdict['valid'] and verdict['reaches_goal']:
+                    expected.append(r['rendered_input'])
+            assert Counter(item['input'] for item in records) == Counter(expected), 'selected trajectory coverage mismatch'
+        elif name.endswith('-preference.jsonl'):
+            # The export samples one strict pair per submitted-plan length
+            # difference bucket in each canonical row; field-order twins cross
+            # the option positions. This checks coverage without choosing the
+            # exporter's particular representative pair.
+            expected = Counter()
+            for r in selected:
+                task = r['semantic_task']
+                verdict = solve(task)
+                rank = {cid:i for i,group in enumerate(verdict['ranking']) for cid in group}
+                buckets = set()
+                for chosen in task['candidates']:
+                    for rejected in task['candidates']:
+                        if rank[chosen['candidate_id']] < rank[rejected['candidate_id']]:
+                            delta = len(chosen['plan']) - len(rejected['plan'])
+                            buckets.add((delta > 0) - (delta < 0))
+                for bucket in buckets:
+                    expected[(canonical(task['world']), bucket)] += 1
+            observed = Counter()
+            for item in records:
+                data = json.loads(item['prompt'].split('World and response options JSON:\n', 1)[1])
+                chosen, rejected = json.loads(item['chosen']), json.loads(item['rejected'])
+                delta = len(chosen['plan']) - len(rejected['plan'])
+                observed[(canonical(data['world']), (delta > 0) - (delta < 0))] += 1
+            assert observed == expected, 'preference length-bucket coverage mismatch'
         counts[name] = len(records)
     return counts

@@ -1,0 +1,20 @@
+{
+  "ticket": "REM-META-004",
+  "at_utc": "2026-10-10T01:25:43.554944+00:00",
+  "observed_problem": "Correct-gold new memory batch uses undefined factual property aliases; 192 tombstone_to_put_null rows have no deleted answer despite per-history three-status support claim and tombstone_vs_put_null tag.",
+  "evidence": [
+    "reviews/expert/memory-gap-v1.first_judgments.jsonl",
+    "schemas/MEMORY_CONTROL_PROPERTIES.md"
+  ],
+  "first_reviewer_execution": "/root/expert_reviewer",
+  "batch": "memory-gap-v1",
+  "records": 768,
+  "correct_targets_per_expert": 768,
+  "REVISE": 768,
+  "scope_defect_rows": 192,
+  "status": "INITIAL_EXPERT_FINDING; independent adversarial/formal checks pending; no release",
+  "root_cause": "Producer chose legacy-style metadata aliases and pure lifecycle-op counterfactual removed the only tombstone from one history variant.",
+  "required_regression": "Use public named property definitions with per-row witnesses; each controlled history must actually supply present/deleted/absent outcomes while meaningful counterfactuals and exact ID/position/key crossings remain.",
+  "original_records_preserved": true,
+  "remote_original_candidate_bytes": "json-type-memory-provisional checkpoint 75934fb845af8c2e3a418a66cb2a812563e10f74"
+}

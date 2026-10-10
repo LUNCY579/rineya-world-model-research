@@ -1,0 +1,19 @@
+{
+  "ticket": "REM-CONTROL-INTERFACE-005",
+  "status": "PUBLIC_INTERFACE_ALIGNED_AND_INDEPENDENTLY_VERIFIED",
+  "public_interface": "schemas/MEMORY_CONTROL_METADATA.md",
+  "formal_author_execution": "/root/formal_oracle",
+  "checker_sha256": "a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388",
+  "independent_claim_checks": 108,
+  "errors": 0,
+  "focused_control_tests": 31,
+  "candidate_bytes_unchanged": true,
+  "failed_initial_reports_preserved": true,
+  "proof_rule": "Decode actual input and witnesses; metadata provenance pointers never substitute for proof. Unambiguous name OR property plus public scope; mismatches/unknown claims fail closed.",
+  "evidence": [
+    "reviews/oracle/memory-gap-v2.controls-interface-aligned.execution.json",
+    "reviews/expert/memory-gap-v2.post_first_metadata_interface.json",
+    "audits/execution/memory-gap-v2-integrity-adversarial.json"
+  ],
+  "root_runner_execution": "/root"
+}

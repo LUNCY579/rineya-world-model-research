@@ -1,7 +1,7 @@
 {
   "active_catalog_snapshot": {
-    "active_records": 2572,
-    "active_source_families": 636,
+    "active_records": 3340,
+    "active_source_families": 648,
     "errata": [
       "quality_reports/errata/RVM-001-v0001.json"
     ],
@@ -63,6 +63,16 @@
         "historical_records": 120,
         "path": "data/REM-001/releases/v0001",
         "release": "v0001",
+        "status": "ACTIVE",
+        "track": "REM-001"
+      },
+      {
+        "active_records": 768,
+        "canonical_sha256": "05b89fac8fbc15f54329be47d530f62b9244c7e64b65979147e89df8a1452f62",
+        "excluded_record_hashes": [],
+        "historical_records": 768,
+        "path": "data/REM-001/releases/v0002",
+        "release": "v0002",
         "status": "ACTIVE",
         "track": "REM-001"
       },
@@ -179,9 +189,9 @@
   "archive_script_author_execution": "/root/backup_manager",
   "archive_script_improvement_execution": "/root; reuse exact existing archives and report active source coverage",
   "archive_type": "actual_source_payloads_no_reconstruction",
-  "created_at_utc": "2026-10-10T00:54:52.476499+00:00",
+  "created_at_utc": "2026-10-10T01:57:41.661057+00:00",
   "custody": "Existing release files are read-only. Source blobs preserve exact hash-matching payloads. Index is a rerunnable snapshot; prior blobs are never deleted. Remote persistence requires a later exact-inventory checkpoint.",
-  "dedicated_history_head": "ee7a91cf8cf4195238dafb0caa6f494a20c0b7ef",
+  "dedicated_history_head": "75934fb845af8c2e3a418a66cb2a812563e10f74",
   "entries": [
     {
       "blob": "reproducibility/source_blobs/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.source",
@@ -199,6 +209,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -225,6 +236,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -250,6 +262,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -262,6 +275,22 @@
         "data/RVM-001/releases/v0004/MANIFEST.json"
       ],
       "sha256": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+      "status": "PRESERVED_EXACT_BYTES"
+    },
+    {
+      "blob": "reproducibility/source_blobs/b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038.source",
+      "bytes": 6885,
+      "origin": {
+        "captured_sha256": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
+        "kind": "existing_content_addressed_archive",
+        "path": "reproducibility/source_blobs/b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038.source"
+      },
+      "original_path": "factory/export_validation.py",
+      "referenced_by_active_release": true,
+      "release_manifests": [
+        "data/REM-001/releases/v0002/MANIFEST.json"
+      ],
+      "sha256": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
       "status": "PRESERVED_EXACT_BYTES"
     },
     {
@@ -306,6 +335,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -350,6 +380,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -406,6 +437,22 @@
         "data/RVM-001/releases/v0004/MANIFEST.json"
       ],
       "sha256": "62b8e7d6e499b45bd478bb0fc58930669f273ebfdd6851961a1028d56f10a1cf",
+      "status": "PRESERVED_EXACT_BYTES"
+    },
+    {
+      "blob": "reproducibility/source_blobs/6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b.source",
+      "bytes": 21602,
+      "origin": {
+        "captured_sha256": "6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b",
+        "kind": "existing_content_addressed_archive",
+        "path": "reproducibility/source_blobs/6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b.source"
+      },
+      "original_path": "factory/pipeline.py",
+      "referenced_by_active_release": true,
+      "release_manifests": [
+        "data/REM-001/releases/v0002/MANIFEST.json"
+      ],
+      "sha256": "6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b",
       "status": "PRESERVED_EXACT_BYTES"
     },
     {
@@ -476,6 +523,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -560,6 +608,22 @@
       "status": "PRESERVED_EXACT_BYTES"
     },
     {
+      "blob": "reproducibility/source_blobs/ea88618378e4919967bdcfa02d5341c3fe7957bc497fb657535511a5d7034a47.source",
+      "bytes": 14120,
+      "origin": {
+        "captured_sha256": "ea88618378e4919967bdcfa02d5341c3fe7957bc497fb657535511a5d7034a47",
+        "kind": "existing_content_addressed_archive",
+        "path": "reproducibility/source_blobs/ea88618378e4919967bdcfa02d5341c3fe7957bc497fb657535511a5d7034a47.source"
+      },
+      "original_path": "factory/status.py",
+      "referenced_by_active_release": true,
+      "release_manifests": [
+        "data/REM-001/releases/v0002/MANIFEST.json"
+      ],
+      "sha256": "ea88618378e4919967bdcfa02d5341c3fe7957bc497fb657535511a5d7034a47",
+      "status": "PRESERVED_EXACT_BYTES"
+    },
+    {
       "blob": "reproducibility/source_blobs/823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a.source",
       "bytes": 4626,
       "origin": {
@@ -576,6 +640,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -623,6 +688,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -649,6 +715,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -670,6 +737,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -701,6 +769,7 @@
       "referenced_by_active_release": true,
       "release_manifests": [
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -762,6 +831,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -787,6 +857,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -799,6 +870,38 @@
         "data/RVM-001/releases/v0004/MANIFEST.json"
       ],
       "sha256": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+      "status": "PRESERVED_EXACT_BYTES"
+    },
+    {
+      "blob": "reproducibility/source_blobs/ae2ab80fcf9363941e89baee1fcc0c42ff66b35967e1dba4698e5bdae50c507d.source",
+      "bytes": 19389,
+      "origin": {
+        "captured_sha256": "ae2ab80fcf9363941e89baee1fcc0c42ff66b35967e1dba4698e5bdae50c507d",
+        "kind": "existing_content_addressed_archive",
+        "path": "reproducibility/source_blobs/ae2ab80fcf9363941e89baee1fcc0c42ff66b35967e1dba4698e5bdae50c507d.source"
+      },
+      "original_path": "generators/memory/history_gap.py",
+      "referenced_by_active_release": true,
+      "release_manifests": [
+        "data/REM-001/releases/v0002/MANIFEST.json"
+      ],
+      "sha256": "ae2ab80fcf9363941e89baee1fcc0c42ff66b35967e1dba4698e5bdae50c507d",
+      "status": "PRESERVED_EXACT_BYTES"
+    },
+    {
+      "blob": "reproducibility/source_blobs/e98e35ffbde97d5754ad577402ecc124a559fec3bfbaafcfea6d2a3e0b1a303b.source",
+      "bytes": 29677,
+      "origin": {
+        "captured_sha256": "e98e35ffbde97d5754ad577402ecc124a559fec3bfbaafcfea6d2a3e0b1a303b",
+        "kind": "existing_content_addressed_archive",
+        "path": "reproducibility/source_blobs/e98e35ffbde97d5754ad577402ecc124a559fec3bfbaafcfea6d2a3e0b1a303b.source"
+      },
+      "original_path": "generators/memory/history_gap_v2.py",
+      "referenced_by_active_release": true,
+      "release_manifests": [
+        "data/REM-001/releases/v0002/MANIFEST.json"
+      ],
+      "sha256": "e98e35ffbde97d5754ad577402ecc124a559fec3bfbaafcfea6d2a3e0b1a303b",
       "status": "PRESERVED_EXACT_BYTES"
     },
     {
@@ -817,6 +920,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -847,6 +951,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -878,6 +983,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -909,6 +1015,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -936,6 +1043,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -957,6 +1065,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -978,6 +1087,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -999,6 +1109,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1024,6 +1135,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -1051,6 +1163,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1135,6 +1248,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1160,6 +1274,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -1191,6 +1306,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -1222,6 +1338,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -1253,6 +1370,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -1268,6 +1386,22 @@
       "status": "PRESERVED_EXACT_BYTES"
     },
     {
+      "blob": "reproducibility/source_blobs/a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388.source",
+      "bytes": 42446,
+      "origin": {
+        "captured_sha256": "a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388",
+        "kind": "existing_content_addressed_archive",
+        "path": "reproducibility/source_blobs/a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388.source"
+      },
+      "original_path": "oracles/memory_controls_independent.py",
+      "referenced_by_active_release": true,
+      "release_manifests": [
+        "data/REM-001/releases/v0002/MANIFEST.json"
+      ],
+      "sha256": "a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388",
+      "status": "PRESERVED_EXACT_BYTES"
+    },
+    {
       "blob": "reproducibility/source_blobs/f218765cf0e67d4f813aea55a062b9f853b88eaaf8754619de09343de78c014e.source",
       "bytes": 6254,
       "origin": {
@@ -1279,6 +1413,7 @@
       "referenced_by_active_release": true,
       "release_manifests": [
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1299,6 +1434,7 @@
       "referenced_by_active_release": true,
       "release_manifests": [
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1324,6 +1460,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -1336,6 +1473,38 @@
         "data/RVM-001/releases/v0004/MANIFEST.json"
       ],
       "sha256": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+      "status": "PRESERVED_EXACT_BYTES"
+    },
+    {
+      "blob": "reproducibility/source_blobs/2a1e71c61b8773390cbd0789e9727cc30a006c517c7ca530a349de037f11e470.source",
+      "bytes": 2184,
+      "origin": {
+        "captured_sha256": "2a1e71c61b8773390cbd0789e9727cc30a006c517c7ca530a349de037f11e470",
+        "kind": "existing_content_addressed_archive",
+        "path": "reproducibility/source_blobs/2a1e71c61b8773390cbd0789e9727cc30a006c517c7ca530a349de037f11e470.source"
+      },
+      "original_path": "schemas/MEMORY_CONTROL_METADATA.md",
+      "referenced_by_active_release": true,
+      "release_manifests": [
+        "data/REM-001/releases/v0002/MANIFEST.json"
+      ],
+      "sha256": "2a1e71c61b8773390cbd0789e9727cc30a006c517c7ca530a349de037f11e470",
+      "status": "PRESERVED_EXACT_BYTES"
+    },
+    {
+      "blob": "reproducibility/source_blobs/9f05ff5c3c81ad042e2b98c7d7b3489bd03bbd48ea728770fa7a338773267ace.source",
+      "bytes": 11643,
+      "origin": {
+        "captured_sha256": "9f05ff5c3c81ad042e2b98c7d7b3489bd03bbd48ea728770fa7a338773267ace",
+        "kind": "existing_content_addressed_archive",
+        "path": "reproducibility/source_blobs/9f05ff5c3c81ad042e2b98c7d7b3489bd03bbd48ea728770fa7a338773267ace.source"
+      },
+      "original_path": "schemas/MEMORY_CONTROL_PROPERTIES.md",
+      "referenced_by_active_release": true,
+      "release_manifests": [
+        "data/REM-001/releases/v0002/MANIFEST.json"
+      ],
+      "sha256": "9f05ff5c3c81ad042e2b98c7d7b3489bd03bbd48ea728770fa7a338773267ace",
       "status": "PRESERVED_EXACT_BYTES"
     },
     {
@@ -1355,6 +1524,7 @@
         "data/RCM-001/releases/v0003/MANIFEST.json",
         "data/RDP-001/releases/v0001/MANIFEST.json",
         "data/REM-001/releases/v0001/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0001/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RJP-001/releases/v0001/MANIFEST.json",
@@ -1382,6 +1552,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1403,6 +1574,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1424,6 +1596,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1445,6 +1618,7 @@
       "release_manifests": [
         "data/RCM-001/releases/v0002/MANIFEST.json",
         "data/RCM-001/releases/v0003/MANIFEST.json",
+        "data/REM-001/releases/v0002/MANIFEST.json",
         "data/RGM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0002/MANIFEST.json",
         "data/RVM-001/releases/v0003/MANIFEST.json",
@@ -1489,6 +1663,12 @@
       "path": "data/REM-001/releases/v0001/MANIFEST.json",
       "release": "v0001",
       "sha256": "0dde7cdf65e587077a386818b2ca1228c2332b25077f0de339bc291a98ec27dc",
+      "track": "REM-001"
+    },
+    {
+      "path": "data/REM-001/releases/v0002/MANIFEST.json",
+      "release": "v0002",
+      "sha256": "54009ae77edcd7aca4b4022e8c050e4f09aa42621e4448d7fbf499a5793beffd",
       "track": "REM-001"
     },
     {
@@ -1554,8 +1734,8 @@
   ],
   "missing_active_requirements": 0,
   "missing_requirements": 3,
-  "preserved_requirements": 52,
-  "requirements": 55,
+  "preserved_requirements": 60,
+  "requirements": 63,
   "runner_execution": "/root",
   "schema_version": "1.0"
 }

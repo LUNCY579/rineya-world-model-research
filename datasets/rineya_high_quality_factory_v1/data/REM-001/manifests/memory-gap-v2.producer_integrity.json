@@ -1,0 +1,61 @@
+{
+  "producer_checks_passed": true,
+  "source_family_count": 12,
+  "rendered_record_count": 768,
+  "controlled_histories": 48,
+  "unique_correlated_task_instances": 384,
+  "unique_prompts": 768,
+  "rendered_query_observations": 6144,
+  "observed_property_row_counts": {
+    "equal_version_time_conflict": 768,
+    "future_event_filter_control": 768,
+    "cross_key_filter_control": 768,
+    "version_over_recency": 768,
+    "authoritative_tombstone": 768,
+    "absence_control": 768,
+    "equal_version_time_input_conflict": 768,
+    "decisive_delayed_boundary": 768,
+    "present_null_distinction": 768
+  },
+  "rendered_status_counts_by_split": {
+    "train": {
+      "present": 3360,
+      "deleted": 1120,
+      "absent": 640
+    },
+    "dev_challenge": {
+      "present": 672,
+      "deleted": 224,
+      "absent": 128
+    }
+  },
+  "rows_with_present_deleted_absent": 768,
+  "exact_crossing_sets": 96,
+  "properties_from_in_row_witnesses_only": true,
+  "independent_review_or_approval_performed": false,
+  "supplied_counterfactual_pairs": {
+    "version_priority_counterfactual": 96,
+    "null_lifecycle_counterfactual": 96,
+    "active_input_tie_swap_counterfactual": 96
+  },
+  "audit_probe_counts": {
+    "lower_version_append_invariance": 12,
+    "other_key_edit_invariance": 12,
+    "future_event_edit_invariance": 12
+  },
+  "frozen_v1_sha256": {
+    "generators/memory/history_gap.py": "ae2ab80fcf9363941e89baee1fcc0c42ff66b35967e1dba4698e5bdae50c507d",
+    "data/REM-001/semantic_parents/memory-gap-v1.jsonl": "aea6e40588440ccd2589db62fdf2561d76baad8a04cc9672cd4d92efccd73579",
+    "data/REM-001/candidate_renderings/memory-gap-v1.jsonl": "fc1eff23e182241ba6d7387eb6e4f6e48cc7e866ddeb450242ef5d07be770415",
+    "data/REM-001/manifests/memory-gap-v1.generation.json": "63e00c4d92a2cd788366aace5f72ff88a763c3ee73eeadfff48730cd04de1a87",
+    "data/REM-001/manifests/memory-gap-v1.producer_integrity.json": "e5bc3dabd66732f298d16c8525233515fafbb10eb099728599afc95aedd9e963"
+  },
+  "exact_overlap_with_own_pre_gap_semantic_tasks": 0,
+  "correlated_views_not_additional_families": true,
+  "metadata_revision_guidance": "Public property names replace aliases; every control history retains deleted answers through a separately queried tombstone. v1 stays frozen.",
+  "limitations": [
+    "12 source families, 48 controlled histories, 384 query/key rotations and 768 renderings are correlated.",
+    "Each query is an independent finite argmax; eight queries and longer timestamps do not establish greater dependency depth.",
+    "Histories contain 12–14 events; persistent learned memory, long-context retention, semantic relevance and efficacy remain gaps."
+  ]
+}

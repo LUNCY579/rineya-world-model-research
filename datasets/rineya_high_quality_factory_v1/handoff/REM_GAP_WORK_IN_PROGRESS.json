@@ -1,33 +1,62 @@
 {
-  "at_utc": "2026-10-10T01:20:40.313952+00:00",
+  "at_utc": "2026-10-10T01:57:31.288326+00:00",
   "runner_execution": "/root",
-  "status": "INDEPENDENT_REVIEWS_PENDING",
-  "active_approved_records": 2572,
-  "active_source_families": 636,
-  "candidate_batch": "memory-gap-v1",
+  "status": "V2_QUALITY_APPROVED_LOCAL; VERIFIED_REMOTE_CHECKPOINT_PENDING",
+  "active_approved_records": 3340,
+  "active_source_families": 648,
+  "candidate_batch": "memory-gap-v2",
   "candidate_records": 768,
   "candidate_source_families": 12,
-  "candidate_machine_audit": "PASS state/type/schema/duplicate/split; new formal property checker pending",
+  "candidate_machine_audit": "PASS schema/typed state/metadata properties/family controls/duplicates/split; 108 scoped family claims independently witnessed",
   "expert_execution": "/root/expert_reviewer",
   "formal_control_author": "/root/formal_oracle",
-  "adversarial_execution": "not yet restarted due execution capacity; dispatch after slot opens",
-  "adjudication_execution": "/root/research_architect after first independent reviews",
-  "typed_gate_tests": 148,
+  "adversarial_execution": "/root/adversarial_auditor completed768ACCEPT; generic corrected code ACCEPT_CODE with81 corruption rejects",
+  "adjudication_execution": "/root/research_architect completed768ACCEPT",
+  "typed_gate_tests": 188,
   "typed_gate_rechecked_historical_releases": 16,
   "sha256": {
     "data/REM-001/candidate_renderings/memory-gap-v1.jsonl": "fc1eff23e182241ba6d7387eb6e4f6e48cc7e866ddeb450242ef5d07be770415",
     "data/REM-001/semantic_parents/memory-gap-v1.jsonl": "aea6e40588440ccd2589db62fdf2561d76baad8a04cc9672cd4d92efccd73579",
     "schemas/MEMORY_CONTROL_PROPERTIES.md": "9f05ff5c3c81ad042e2b98c7d7b3489bd03bbd48ea728770fa7a338773267ace",
     "research/curricula/REM-DELAYED-HISTORY.md": "0946ab348cb3dd17753a8031a8ba058f7b6b6f32d31ebf102b70effc36869e5d",
-    "factory/pipeline.py": "2efeb24953a396f03db5185087755c9f5fd758dc3cff8b405d868dc28a841c28",
-    "factory/export_validation.py": "fad35467e22cfffbd97b2962f7984cc4b2fafe8e55a4fcc05ef6785f69024666",
-    "tests/test_typed_json_evidence.py": "086cf3bc7cea3b7eec7996b83e94b04b0cb32289c56f7a5a7a90ab9a3bba8a43"
+    "factory/pipeline.py": "6cd24d706faa72b3c865750a54bdbd8dd2e87786ca25df3d5716d07ed2ff735b",
+    "factory/export_validation.py": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
+    "tests/test_typed_json_evidence.py": "086cf3bc7cea3b7eec7996b83e94b04b0cb32289c56f7a5a7a90ab9a3bba8a43",
+    "data/REM-001/candidate_renderings/memory-gap-v2.jsonl": "ca17f8a460f9a8909522901d2ef39b5f096b27a2cc56e0e3fb49ca465c8e96b1",
+    "oracles/memory_controls_independent.py": "a5145382da2ee610f36452d95f1c01e1398a7f8a71f6acd3dea83b098a21e388",
+    "schemas/MEMORY_CONTROL_METADATA.md": "2a1e71c61b8773390cbd0789e9727cc30a006c517c7ca530a349de037f11e470"
   },
-  "remote_status": "New files local-only until reviewed checkpoint; prior active releases remain byte-verified in session-final receipt",
+  "remote_status": "Latest checkpoint75934fb845af8c2e3a418a66cb2a812563e10f74 preserves v1 and typed gate; v2 and subsequent reports local until next checkpoint",
   "constraints": [
     "No accepted data/release mutations",
     "No model training",
     "Actual initial judgments must precede adjudication",
     "Pending candidates excluded from student exports"
-  ]
+  ],
+  "first_expert": {
+    "records": 768,
+    "REVISE": 768,
+    "gold_correct": 768,
+    "receipts": "reviews/expert/memory-gap-v1.first_judgments.jsonl"
+  },
+  "first_formal": {
+    "unresolved_alias_occurrences": 6144,
+    "histories_lacking_deleted_support": 12,
+    "evidence": "reviews/oracle/memory-gap-v1.controls.json"
+  },
+  "remote_original_batch_checkpoint": "75934fb845af8c2e3a418a66cb2a812563e10f74",
+  "pending": [
+    "Exact remote checkpoint including complete frozen reviews/code/release and six lossless diagnostic payloads",
+    "Actual GitHub gzip blob decompression verification",
+    "Next public RBM design then fresh production/oracle/reviews"
+  ],
+  "expert_v2": {
+    "ACCEPT": 768,
+    "mode": "Corrective guided by own v1 findings; actual separate execution; same underlying model correlation remains",
+    "first_final_identical": true,
+    "receipts": "reviews/expert/memory-gap-v2.jsonl"
+  },
+  "release": "data/REM-001/releases/v0002",
+  "next_gap_analysis": "reviews/expert/RBM-gap-analysis-20261010T015614Z.md",
+  "next_gap_ticket": "feedback/improvement_requests/RBM-GAP-007.json"
 }

@@ -1,0 +1,5223 @@
+{
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "reviewer_role": "Adversarial Red-Team",
+  "status": "completed",
+  "decision": "ACCEPT_CODE",
+  "validator_sha256": "b49bd008004eba998979aa380429f38a69e2b4ea2ef79d851676b2d09f06f038",
+  "validator_path": "factory/export_validation.py",
+  "root_regression_test_source_sha256": "089a8ebf445e68865e4be217b139355857a9d6871d46e09b27b778f27e179162",
+  "root_regression_tests_read_not_run": "These tests import private oracle/reference and read releases. Own independent shadow tests below provide the execution evidence.",
+  "script_sha256": "c236a879ceb447870e56d6a43df703ba660fcd98c765addbfa41ef963e419428",
+  "own_solver_sha256": {
+    "audits/adversarial_audit.py": "7f0f436bd921905b5ab01e10500e95e5be784ed1f71efe28bf2a426ad30285ef",
+    "audits/extended_adversarial_audit.py": "5dd2e8eb475794b5c3000391a401c0e852619ade852624e1e857c2684912353b"
+  },
+  "candidate_input_sha256": {
+    "data/REM-001/candidate_renderings/memory-gap-v2.jsonl": "ca17f8a460f9a8909522901d2ef39b5f096b27a2cc56e0e3fb49ca465c8e96b1",
+    "data/RMM-001/candidate_renderings/extended-pilot-v3.jsonl": "449d0ad580c88b422b90fee0bc458d81986947d8a200f7de1d563218a7549350",
+    "data/RSM-001/candidate_renderings/extended-pilot-v2.jsonl": "87075ee77f9b6c76f54d2405a99b381f57931ebf6b049b5ddc1ff67aa88268cd",
+    "data/RBM-001/candidate_renderings/extended-pilot-v2.jsonl": "03b36b2c0003b068a8da09ee60af6206b42fad5267b1f10456600b9fe8a6baf5",
+    "data/ROM-001/candidate_renderings/extended-pilot-v2.jsonl": "b701b7722cb942decbc530420023beddd1fcbc9d960b68f67e497836bae469e9",
+    "data/RVM-001/candidate_renderings/pilot-v4.jsonl": "7d7e824169adc8645b13d3f137ca8d090e7fb220fd9cddece391be8a0b7d9042",
+    "data/RVM-001/candidate_renderings/expansion-v2.jsonl": "4e2e6551e933d6823d67d7ff10bc3b569fe3cb13e6481bcfa217d7c2c96dd5ff",
+    "data/RVM-001/candidate_renderings/claim-gap-v2.jsonl": "aec066f150f66d13fe399360e230a8d4c1c545826de7183b3d3a5a734763dbda",
+    "data/RGM-001/candidate_renderings/expansion-v3.jsonl": "39a2acfdbffc27d5f99ec8baee7c2787dafc4e23d0d4fa3e91f9b73323c22719"
+  },
+  "preserved_initial_code_and_data_artifact_sha256": {
+    "reviews/adversarial/memory-gap-v2.input_predictions.jsonl": "78472a638667dcfec83cd603768275d51760c52ce0bb5c1bddaf4d71b4aecc94",
+    "reviews/adversarial/memory-gap-v2.first_judgments.jsonl": "d94f49946bd342650a09d9eb01117e1d7fc57caf0700637a36fd9e206c0cd593",
+    "reviews/adversarial/memory-gap-v2.jsonl": "4707c5160d3c45295b85ff453f4ec316661127d9098856d83d0a52bef83d1081",
+    "audits/execution/memory-gap-v2-export-completeness-adversarial.first.json": "c13ab0a09013f2802911e72daa1b78d2445d8a74433bc4816015bbaa62a94959",
+    "audits/execution/memory-gap-v2-export-completeness-adversarial.json": "343405c7c3b4030ab3b2571985fbd3b3f3d515c73984083d00311ca6e0eb6466"
+  },
+  "fixtures": [
+    {
+      "track": "REM-001",
+      "batch": "memory-gap-v2",
+      "split": "train",
+      "suffix": "memory_updates",
+      "canonical_rows": 640,
+      "legitimate_items": 640
+    },
+    {
+      "track": "REM-001",
+      "batch": "memory-gap-v2",
+      "split": "dev_challenge",
+      "suffix": "memory_updates",
+      "canonical_rows": 128,
+      "legitimate_items": 128
+    },
+    {
+      "track": "RMM-001",
+      "batch": "extended-pilot-v3",
+      "split": "train",
+      "suffix": "memory_updates",
+      "canonical_rows": 60,
+      "legitimate_items": 60
+    },
+    {
+      "track": "RMM-001",
+      "batch": "extended-pilot-v3",
+      "split": "dev_challenge",
+      "suffix": "memory_updates",
+      "canonical_rows": 16,
+      "legitimate_items": 16
+    },
+    {
+      "track": "RSM-001",
+      "batch": "extended-pilot-v2",
+      "split": "train",
+      "suffix": "skill_demonstrations",
+      "canonical_rows": 20,
+      "legitimate_items": 20
+    },
+    {
+      "track": "RSM-001",
+      "batch": "extended-pilot-v2",
+      "split": "dev_challenge",
+      "suffix": "skill_demonstrations",
+      "canonical_rows": 4,
+      "legitimate_items": 4
+    },
+    {
+      "track": "RBM-001",
+      "batch": "extended-pilot-v2",
+      "split": "train",
+      "suffix": "belief_updates",
+      "canonical_rows": 20,
+      "legitimate_items": 20
+    },
+    {
+      "track": "RBM-001",
+      "batch": "extended-pilot-v2",
+      "split": "dev_challenge",
+      "suffix": "belief_updates",
+      "canonical_rows": 4,
+      "legitimate_items": 4
+    },
+    {
+      "track": "ROM-001",
+      "batch": "extended-pilot-v2",
+      "split": "train",
+      "suffix": "belief_updates",
+      "canonical_rows": 20,
+      "legitimate_items": 20
+    },
+    {
+      "track": "ROM-001",
+      "batch": "extended-pilot-v2",
+      "split": "dev_challenge",
+      "suffix": "belief_updates",
+      "canonical_rows": 4,
+      "legitimate_items": 4
+    },
+    {
+      "track": "RVM-001",
+      "split": "train",
+      "suffix": "process_reward",
+      "canonical_rows": 308,
+      "canonical_input_candidate_pairs": 3322
+    },
+    {
+      "track": "RVM-001",
+      "split": "dev_challenge",
+      "suffix": "process_reward",
+      "canonical_rows": 76,
+      "canonical_input_candidate_pairs": 828
+    },
+    {
+      "track": "RGM-001",
+      "split": "train",
+      "suffix": "trajectories",
+      "canonical_rows": 240,
+      "own_selected_legal_goal_items": 94,
+      "excluded_submitted_plans": 146
+    },
+    {
+      "track": "RGM-001",
+      "split": "dev_challenge",
+      "suffix": "trajectories",
+      "canonical_rows": 120,
+      "own_selected_legal_goal_items": 60,
+      "excluded_submitted_plans": 60
+    }
+  ],
+  "tests": [
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-memory_updates.jsonl": 640
+      },
+      "items": 640,
+      "fixture": "REM-001"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "REM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 639,
+      "fixture": "REM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 641,
+      "fixture": "REM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 640,
+      "fixture": "REM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-memory_updates.jsonl": 128
+      },
+      "items": 128,
+      "fixture": "REM-001"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "REM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 127,
+      "fixture": "REM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 129,
+      "fixture": "REM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 128,
+      "fixture": "REM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-memory_updates.jsonl": 60
+      },
+      "items": 60,
+      "fixture": "RMM-001"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "RMM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 59,
+      "fixture": "RMM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 61,
+      "fixture": "RMM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 60,
+      "fixture": "RMM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-memory_updates.jsonl": 16
+      },
+      "items": 16,
+      "fixture": "RMM-001"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "RMM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 15,
+      "fixture": "RMM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 17,
+      "fixture": "RMM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "memory_updates/dev_challenge-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 16,
+      "fixture": "RMM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "skill_demonstrations/train-skill_demonstrations.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-skill_demonstrations.jsonl": 20
+      },
+      "items": 20,
+      "fixture": "RSM-001"
+    },
+    {
+      "test": "skill_demonstrations/train-skill_demonstrations.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "RSM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "skill_demonstrations/train-skill_demonstrations.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 19,
+      "fixture": "RSM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "skill_demonstrations/train-skill_demonstrations.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 21,
+      "fixture": "RSM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "skill_demonstrations/train-skill_demonstrations.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 20,
+      "fixture": "RSM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "skill_demonstrations/dev_challenge-skill_demonstrations.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-skill_demonstrations.jsonl": 4
+      },
+      "items": 4,
+      "fixture": "RSM-001"
+    },
+    {
+      "test": "skill_demonstrations/dev_challenge-skill_demonstrations.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "RSM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "skill_demonstrations/dev_challenge-skill_demonstrations.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 3,
+      "fixture": "RSM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "skill_demonstrations/dev_challenge-skill_demonstrations.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 5,
+      "fixture": "RSM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "skill_demonstrations/dev_challenge-skill_demonstrations.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 4,
+      "fixture": "RSM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-belief_updates.jsonl": 20
+      },
+      "items": 20,
+      "fixture": "RBM-001"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "RBM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 19,
+      "fixture": "RBM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 21,
+      "fixture": "RBM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 20,
+      "fixture": "RBM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-belief_updates.jsonl": 4
+      },
+      "items": 4,
+      "fixture": "RBM-001"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "RBM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 3,
+      "fixture": "RBM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 5,
+      "fixture": "RBM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 4,
+      "fixture": "RBM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-belief_updates.jsonl": 20
+      },
+      "items": 20,
+      "fixture": "ROM-001"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "ROM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 19,
+      "fixture": "ROM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 21,
+      "fixture": "ROM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "belief_updates/train-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 20,
+      "fixture": "ROM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-belief_updates.jsonl": 4
+      },
+      "items": 4,
+      "fixture": "ROM-001"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 0,
+      "fixture": "ROM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 3,
+      "fixture": "ROM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 5,
+      "fixture": "ROM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "belief_updates/dev_challenge-belief_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "specialized one-per-row coverage mismatch",
+      "items": 4,
+      "fixture": "ROM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "process_reward/train-process_reward.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-process_reward.jsonl": 3322
+      },
+      "items": 3322,
+      "fixture": "RVM-001"
+    },
+    {
+      "test": "process_reward/train-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 0,
+      "fixture": "RVM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "process_reward/train-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 3321,
+      "fixture": "RVM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "process_reward/train-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 3323,
+      "fixture": "RVM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "process_reward/train-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 3322,
+      "fixture": "RVM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "process_reward/train-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 3322,
+      "fixture": "RVM-001",
+      "mutation": "same_count_candidate_replaced_with_other_correctly_labeled_canonical_candidate"
+    },
+    {
+      "test": "process_reward/dev_challenge-process_reward.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-process_reward.jsonl": 828
+      },
+      "items": 828,
+      "fixture": "RVM-001"
+    },
+    {
+      "test": "process_reward/dev_challenge-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 0,
+      "fixture": "RVM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "process_reward/dev_challenge-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 827,
+      "fixture": "RVM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "process_reward/dev_challenge-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 829,
+      "fixture": "RVM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "process_reward/dev_challenge-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 828,
+      "fixture": "RVM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "process_reward/dev_challenge-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "process candidate coverage mismatch",
+      "items": 828,
+      "fixture": "RVM-001",
+      "mutation": "same_count_candidate_replaced_with_other_correctly_labeled_canonical_candidate"
+    },
+    {
+      "test": "trajectories/train-trajectories.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-trajectories.jsonl": 94
+      },
+      "items": 94,
+      "fixture": "RGM-001"
+    },
+    {
+      "test": "trajectories/train-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "selected trajectory coverage mismatch",
+      "items": 0,
+      "fixture": "RGM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "trajectories/train-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "selected trajectory coverage mismatch",
+      "items": 93,
+      "fixture": "RGM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "trajectories/train-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "selected trajectory coverage mismatch",
+      "items": 95,
+      "fixture": "RGM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "trajectories/train-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "selected trajectory coverage mismatch",
+      "items": 94,
+      "fixture": "RGM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "trajectories/train-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "trajectory must reach goal legally",
+      "items": 95,
+      "fixture": "RGM-001",
+      "mutation": "add_truthfully_described_nonselected_submitted_trajectory"
+    },
+    {
+      "test": "trajectories/dev_challenge-trajectories.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-trajectories.jsonl": 60
+      },
+      "items": 60,
+      "fixture": "RGM-001"
+    },
+    {
+      "test": "trajectories/dev_challenge-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "selected trajectory coverage mismatch",
+      "items": 0,
+      "fixture": "RGM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "trajectories/dev_challenge-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "selected trajectory coverage mismatch",
+      "items": 59,
+      "fixture": "RGM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "trajectories/dev_challenge-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "selected trajectory coverage mismatch",
+      "items": 61,
+      "fixture": "RGM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "trajectories/dev_challenge-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "selected trajectory coverage mismatch",
+      "items": 60,
+      "fixture": "RGM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "trajectories/dev_challenge-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "trajectory must reach goal legally",
+      "items": 61,
+      "fixture": "RGM-001",
+      "mutation": "add_truthfully_described_nonselected_submitted_trajectory"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-preference.jsonl": 924
+      },
+      "items": 924,
+      "fixture": "RVM-001",
+      "representative": "independent arbitrary first strict pair per bucket"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "train-preference.jsonl": 924
+      },
+      "items": 924,
+      "fixture": "RVM-001",
+      "representative": "independent alternative last strict pair per bucket"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference length-bucket coverage mismatch",
+      "items": 0,
+      "fixture": "RVM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference positions must be crossed",
+      "items": 923,
+      "fixture": "RVM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference positions must be crossed",
+      "items": 925,
+      "fixture": "RVM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference positions must be crossed",
+      "items": 924,
+      "fixture": "RVM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference length-bucket coverage mismatch",
+      "items": 922,
+      "fixture": "RVM-001",
+      "mutation": "omit_complete_crossed_pair"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference positions must be crossed",
+      "items": 924,
+      "fixture": "RVM-001",
+      "mutation": "same_count_missing_bucket_replaced_with_other_valid_crossed_pair"
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference must be strict",
+      "items": 924,
+      "fixture": "RVM-001",
+      "mutation": "strict_pair_reversed"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-preference.jsonl": 228
+      },
+      "items": 228,
+      "fixture": "RVM-001",
+      "representative": "independent arbitrary first strict pair per bucket"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "PASS",
+      "observed": "PASS",
+      "counts": {
+        "dev_challenge-preference.jsonl": 228
+      },
+      "items": 228,
+      "fixture": "RVM-001",
+      "representative": "independent alternative last strict pair per bucket"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference length-bucket coverage mismatch",
+      "items": 0,
+      "fixture": "RVM-001",
+      "mutation": "empty"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference positions must be crossed",
+      "items": 227,
+      "fixture": "RVM-001",
+      "mutation": "omitted"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference positions must be crossed",
+      "items": 229,
+      "fixture": "RVM-001",
+      "mutation": "duplicated"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference positions must be crossed",
+      "items": 228,
+      "fixture": "RVM-001",
+      "mutation": "same_count_replaced"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference length-bucket coverage mismatch",
+      "items": 226,
+      "fixture": "RVM-001",
+      "mutation": "omit_complete_crossed_pair"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference positions must be crossed",
+      "items": 228,
+      "fixture": "RVM-001",
+      "mutation": "same_count_missing_bucket_replaced_with_other_valid_crossed_pair"
+    },
+    {
+      "test": "preference/dev_challenge-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference must be strict",
+      "items": 228,
+      "fixture": "RVM-001",
+      "mutation": "strict_pair_reversed"
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "",
+      "items": 640,
+      "fixture": "REM-001",
+      "mutation": "boolean_value_to_equal_integer",
+      "typed_corruption": true
+    },
+    {
+      "test": "memory_updates/train-memory_updates.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "",
+      "items": 640,
+      "fixture": "REM-001",
+      "mutation": "chosen_version_to_equal_float",
+      "typed_corruption": true
+    },
+    {
+      "test": "process_reward/train-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "ValidationError",
+      "reason": "1 is not of type 'boolean'\n\nFailed validating 'type' in schema['properties']['labels']['properties']['valid']:\n    {'type': 'boolean'}\n\nOn instance['labels']['valid']:\n    1",
+      "items": 3322,
+      "fixture": "RVM-001",
+      "mutation": "process_valid_boolean_to_equal_integer",
+      "typed_corruption": true
+    },
+    {
+      "test": "process_reward/train-process_reward.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "",
+      "items": 3322,
+      "fixture": "RVM-001",
+      "mutation": "candidate_claimed_fuel_to_equal_float",
+      "typed_corruption": true
+    },
+    {
+      "test": "trajectories/train-trajectories.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "",
+      "items": 94,
+      "fixture": "RGM-001",
+      "mutation": "trajectory_after_fuel_to_equal_float",
+      "typed_corruption": true
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference outside canonical split",
+      "items": 924,
+      "fixture": "RVM-001",
+      "mutation": "preference_claimed_fuel_to_equal_float",
+      "typed_corruption": true
+    },
+    {
+      "test": "preference/train-preference.jsonl",
+      "expectation": "REJECT",
+      "observed": "REJECT",
+      "error_type": "AssertionError",
+      "reason": "preference outside canonical split",
+      "items": 924,
+      "fixture": "RVM-001",
+      "mutation": "preference_world_edge_cost_to_equal_float",
+      "typed_corruption": true
+    }
+  ],
+  "legitimate_fixture_tests": 18,
+  "corruption_rejections": 81,
+  "preferences": [
+    {
+      "split": "train",
+      "canonical_rows": 308,
+      "unique_worlds": 154,
+      "legitimate_preference_items": 924,
+      "world_bucket_groups": 462,
+      "bucket_counts": {
+        "-1": 154,
+        "0": 154,
+        "1": 154
+      },
+      "representative_identity_not_enforced": true,
+      "all_strict_pair_options_by_world_bucket": [
+        {
+          "world_hash": "e8b1f0d1b7b9eb07e50736a1ca567d21aa125cafe5704ee5817c96c13e0e543e",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c43672",
+          "rejected": "c82326"
+        },
+        {
+          "world_hash": "e8b1f0d1b7b9eb07e50736a1ca567d21aa125cafe5704ee5817c96c13e0e543e",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c43672",
+          "rejected": "c63788"
+        },
+        {
+          "world_hash": "e8b1f0d1b7b9eb07e50736a1ca567d21aa125cafe5704ee5817c96c13e0e543e",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c45322",
+          "rejected": "c43672"
+        },
+        {
+          "world_hash": "90bddc89275238c00461664095a06a069bc32f69fc7b1ab7645b5c5d4b0e5af1",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c35907",
+          "rejected": "c35976"
+        },
+        {
+          "world_hash": "90bddc89275238c00461664095a06a069bc32f69fc7b1ab7645b5c5d4b0e5af1",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c50827",
+          "rejected": "c35907"
+        },
+        {
+          "world_hash": "90bddc89275238c00461664095a06a069bc32f69fc7b1ab7645b5c5d4b0e5af1",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c97367",
+          "rejected": "c35907"
+        },
+        {
+          "world_hash": "7c88c41e34e3a8ff70b5737bbc3b492a47d305ececc6f0b27a927674bed4b50c",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c33720",
+          "rejected": "c63675"
+        },
+        {
+          "world_hash": "7c88c41e34e3a8ff70b5737bbc3b492a47d305ececc6f0b27a927674bed4b50c",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c33720",
+          "rejected": "c38661"
+        },
+        {
+          "world_hash": "7c88c41e34e3a8ff70b5737bbc3b492a47d305ececc6f0b27a927674bed4b50c",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c32833",
+          "rejected": "c33720"
+        },
+        {
+          "world_hash": "960b1dd1a210914dd725825f7a2cce68e74d0cf7bf671bb1cb4aa6a438d5ea15",
+          "bucket": -1,
+          "strict_pair_options": 32,
+          "chosen": "c13033",
+          "rejected": "c23254"
+        },
+        {
+          "world_hash": "960b1dd1a210914dd725825f7a2cce68e74d0cf7bf671bb1cb4aa6a438d5ea15",
+          "bucket": 0,
+          "strict_pair_options": 26,
+          "chosen": "c26267",
+          "rejected": "c83714"
+        },
+        {
+          "world_hash": "960b1dd1a210914dd725825f7a2cce68e74d0cf7bf671bb1cb4aa6a438d5ea15",
+          "bucket": 1,
+          "strict_pair_options": 67,
+          "chosen": "c26267",
+          "rejected": "c13033"
+        },
+        {
+          "world_hash": "7c4f35a593c3b820b1303bebe55ca2484bb6c1601c70826555907a5ac1c4f45e",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c22955",
+          "rejected": "c19808"
+        },
+        {
+          "world_hash": "7c4f35a593c3b820b1303bebe55ca2484bb6c1601c70826555907a5ac1c4f45e",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c22955",
+          "rejected": "c61161"
+        },
+        {
+          "world_hash": "7c4f35a593c3b820b1303bebe55ca2484bb6c1601c70826555907a5ac1c4f45e",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c19808",
+          "rejected": "c39419"
+        },
+        {
+          "world_hash": "22a47b9e23015e37de69dc25dc69e50f0908542a6cba33171fadfbe12cfe48d8",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c20095",
+          "rejected": "c27277"
+        },
+        {
+          "world_hash": "22a47b9e23015e37de69dc25dc69e50f0908542a6cba33171fadfbe12cfe48d8",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c30611",
+          "rejected": "c79590"
+        },
+        {
+          "world_hash": "22a47b9e23015e37de69dc25dc69e50f0908542a6cba33171fadfbe12cfe48d8",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c20095",
+          "rejected": "c79590"
+        },
+        {
+          "world_hash": "15d87d7c9198867b00fa36fbd05d664735fc69779a3c78e38aa988d282a12166",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c11384",
+          "rejected": "c34766"
+        },
+        {
+          "world_hash": "15d87d7c9198867b00fa36fbd05d664735fc69779a3c78e38aa988d282a12166",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c37513",
+          "rejected": "c47272"
+        },
+        {
+          "world_hash": "15d87d7c9198867b00fa36fbd05d664735fc69779a3c78e38aa988d282a12166",
+          "bucket": 1,
+          "strict_pair_options": 24,
+          "chosen": "c23667",
+          "rejected": "c11384"
+        },
+        {
+          "world_hash": "bf483209a48051289a31fdcf80d3eb3fddeab9e9a591b00b6c21535913e7b3eb",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c13846",
+          "rejected": "c23857"
+        },
+        {
+          "world_hash": "bf483209a48051289a31fdcf80d3eb3fddeab9e9a591b00b6c21535913e7b3eb",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c13846",
+          "rejected": "c22916"
+        },
+        {
+          "world_hash": "bf483209a48051289a31fdcf80d3eb3fddeab9e9a591b00b6c21535913e7b3eb",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c62736",
+          "rejected": "c13846"
+        },
+        {
+          "world_hash": "0dabf8f61546e8280eed16a7efc6ffecaf2b7f7068ea9f1a1bac57d608a88d97",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c19109",
+          "rejected": "c13328"
+        },
+        {
+          "world_hash": "0dabf8f61546e8280eed16a7efc6ffecaf2b7f7068ea9f1a1bac57d608a88d97",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c19109",
+          "rejected": "c36340"
+        },
+        {
+          "world_hash": "0dabf8f61546e8280eed16a7efc6ffecaf2b7f7068ea9f1a1bac57d608a88d97",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c13328",
+          "rejected": "c36340"
+        },
+        {
+          "world_hash": "c626f1c1753dd28c2ec926e0b96add938ee0a7dd3192303816dd46b20b6d0742",
+          "bucket": -1,
+          "strict_pair_options": 16,
+          "chosen": "c10221",
+          "rejected": "c23250"
+        },
+        {
+          "world_hash": "c626f1c1753dd28c2ec926e0b96add938ee0a7dd3192303816dd46b20b6d0742",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c10221",
+          "rejected": "c37785"
+        },
+        {
+          "world_hash": "c626f1c1753dd28c2ec926e0b96add938ee0a7dd3192303816dd46b20b6d0742",
+          "bucket": 1,
+          "strict_pair_options": 16,
+          "chosen": "c10221",
+          "rejected": "c18809"
+        },
+        {
+          "world_hash": "7b65b242505e21c70a67871a4873ed02bd80fe5da1ba7c4bd261e7475dd16489",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c12784",
+          "rejected": "c19396"
+        },
+        {
+          "world_hash": "7b65b242505e21c70a67871a4873ed02bd80fe5da1ba7c4bd261e7475dd16489",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c45666",
+          "rejected": "c84326"
+        },
+        {
+          "world_hash": "7b65b242505e21c70a67871a4873ed02bd80fe5da1ba7c4bd261e7475dd16489",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c12784",
+          "rejected": "c45666"
+        },
+        {
+          "world_hash": "c72000d9790f4d662835a7add5793e8c4e78b045c5adf48750fa9695fdd427ba",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c34955",
+          "rejected": "c94063"
+        },
+        {
+          "world_hash": "c72000d9790f4d662835a7add5793e8c4e78b045c5adf48750fa9695fdd427ba",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c34955",
+          "rejected": "c61621"
+        },
+        {
+          "world_hash": "c72000d9790f4d662835a7add5793e8c4e78b045c5adf48750fa9695fdd427ba",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c34955",
+          "rejected": "c14735"
+        },
+        {
+          "world_hash": "310514c97f3ccdd339bee79b5a139354e850132f42e0d607427ca9b0acba576a",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c12110",
+          "rejected": "c36929"
+        },
+        {
+          "world_hash": "310514c97f3ccdd339bee79b5a139354e850132f42e0d607427ca9b0acba576a",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c39010",
+          "rejected": "c37892"
+        },
+        {
+          "world_hash": "310514c97f3ccdd339bee79b5a139354e850132f42e0d607427ca9b0acba576a",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c12110",
+          "rejected": "c37892"
+        },
+        {
+          "world_hash": "4ac58a7953d200fc2375beb60b5aeb7bc41b50e868d9fbc3c534a225a8fb2444",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c22435",
+          "rejected": "c61021"
+        },
+        {
+          "world_hash": "4ac58a7953d200fc2375beb60b5aeb7bc41b50e868d9fbc3c534a225a8fb2444",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c20920",
+          "rejected": "c61021"
+        },
+        {
+          "world_hash": "4ac58a7953d200fc2375beb60b5aeb7bc41b50e868d9fbc3c534a225a8fb2444",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c20920",
+          "rejected": "c22435"
+        },
+        {
+          "world_hash": "8e199c03b5f1dad9f5932a8ae9b3b0e9673c5226223f93505ef864f1a7e59f08",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c12559",
+          "rejected": "c76087"
+        },
+        {
+          "world_hash": "8e199c03b5f1dad9f5932a8ae9b3b0e9673c5226223f93505ef864f1a7e59f08",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c12559",
+          "rejected": "c49395"
+        },
+        {
+          "world_hash": "8e199c03b5f1dad9f5932a8ae9b3b0e9673c5226223f93505ef864f1a7e59f08",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c12559",
+          "rejected": "c14198"
+        },
+        {
+          "world_hash": "78aac58a622c2d6c35a8852f77e7a738bb5f186cc64d8e1c4ca939bf69e3d9f6",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c15106",
+          "rejected": "c17113"
+        },
+        {
+          "world_hash": "78aac58a622c2d6c35a8852f77e7a738bb5f186cc64d8e1c4ca939bf69e3d9f6",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c31511",
+          "rejected": "c52329"
+        },
+        {
+          "world_hash": "78aac58a622c2d6c35a8852f77e7a738bb5f186cc64d8e1c4ca939bf69e3d9f6",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c17113",
+          "rejected": "c52329"
+        },
+        {
+          "world_hash": "fe71d54316af24358792c4cf0a9a8a53ec67d353d584ef6390969981e0b1754e",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c28990",
+          "rejected": "c10359"
+        },
+        {
+          "world_hash": "fe71d54316af24358792c4cf0a9a8a53ec67d353d584ef6390969981e0b1754e",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c28990",
+          "rejected": "c16154"
+        },
+        {
+          "world_hash": "fe71d54316af24358792c4cf0a9a8a53ec67d353d584ef6390969981e0b1754e",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c10359",
+          "rejected": "c16154"
+        },
+        {
+          "world_hash": "15372afc7dab83cf110e823ccbfebb71851c7364276e18d262520bb04efdb66b",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c13789",
+          "rejected": "c40215"
+        },
+        {
+          "world_hash": "15372afc7dab83cf110e823ccbfebb71851c7364276e18d262520bb04efdb66b",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c13789",
+          "rejected": "c67497"
+        },
+        {
+          "world_hash": "15372afc7dab83cf110e823ccbfebb71851c7364276e18d262520bb04efdb66b",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c40215",
+          "rejected": "c67497"
+        },
+        {
+          "world_hash": "27de1fa4778054a58187339109502f98b35f8cd66c6a3b459fef893f5e2b08fe",
+          "bucket": -1,
+          "strict_pair_options": 21,
+          "chosen": "c29316",
+          "rejected": "c24503"
+        },
+        {
+          "world_hash": "27de1fa4778054a58187339109502f98b35f8cd66c6a3b459fef893f5e2b08fe",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c37976",
+          "rejected": "c55403"
+        },
+        {
+          "world_hash": "27de1fa4778054a58187339109502f98b35f8cd66c6a3b459fef893f5e2b08fe",
+          "bucket": 1,
+          "strict_pair_options": 21,
+          "chosen": "c57797",
+          "rejected": "c29316"
+        },
+        {
+          "world_hash": "4ec8840ddcab97ed311ac4efb0c54071702a64cbbb7fca2d6b6cd246dc438bad",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c13611",
+          "rejected": "c11393"
+        },
+        {
+          "world_hash": "4ec8840ddcab97ed311ac4efb0c54071702a64cbbb7fca2d6b6cd246dc438bad",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c13611",
+          "rejected": "c26570"
+        },
+        {
+          "world_hash": "4ec8840ddcab97ed311ac4efb0c54071702a64cbbb7fca2d6b6cd246dc438bad",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c28212",
+          "rejected": "c73336"
+        },
+        {
+          "world_hash": "6e4686895657be89510859b91a089ce6fd7722cef588502a44d30d5774490c1f",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c25768",
+          "rejected": "c50627"
+        },
+        {
+          "world_hash": "6e4686895657be89510859b91a089ce6fd7722cef588502a44d30d5774490c1f",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c25768",
+          "rejected": "c85334"
+        },
+        {
+          "world_hash": "6e4686895657be89510859b91a089ce6fd7722cef588502a44d30d5774490c1f",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c25768",
+          "rejected": "c37124"
+        },
+        {
+          "world_hash": "6314c3ccf836497dccade8b1bc99bb89de363ca4cda914ea900177f5517703e4",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c32729",
+          "rejected": "c70930"
+        },
+        {
+          "world_hash": "6314c3ccf836497dccade8b1bc99bb89de363ca4cda914ea900177f5517703e4",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c32729",
+          "rejected": "c15509"
+        },
+        {
+          "world_hash": "6314c3ccf836497dccade8b1bc99bb89de363ca4cda914ea900177f5517703e4",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c43845",
+          "rejected": "c15509"
+        },
+        {
+          "world_hash": "f16f2eb4504509af7ed7a50e4a7b618fc7e1902fbb3c3b6b433e6b22c8467e8c",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c37262",
+          "rejected": "c88589"
+        },
+        {
+          "world_hash": "f16f2eb4504509af7ed7a50e4a7b618fc7e1902fbb3c3b6b433e6b22c8467e8c",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c37262",
+          "rejected": "c46817"
+        },
+        {
+          "world_hash": "f16f2eb4504509af7ed7a50e4a7b618fc7e1902fbb3c3b6b433e6b22c8467e8c",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c37262",
+          "rejected": "c12462"
+        },
+        {
+          "world_hash": "320afa3066bf2360b642e59ac3f334d8a67fb795104149eaf2cb15e7dff398af",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c11224",
+          "rejected": "c23676"
+        },
+        {
+          "world_hash": "320afa3066bf2360b642e59ac3f334d8a67fb795104149eaf2cb15e7dff398af",
+          "bucket": 0,
+          "strict_pair_options": 9,
+          "chosen": "c11224",
+          "rejected": "c20079"
+        },
+        {
+          "world_hash": "320afa3066bf2360b642e59ac3f334d8a67fb795104149eaf2cb15e7dff398af",
+          "bucket": 1,
+          "strict_pair_options": 19,
+          "chosen": "c23676",
+          "rejected": "c20079"
+        },
+        {
+          "world_hash": "82af0ebb4c7b5aa1314f51dbcad68e5af6975b614081bb96eae773aadafa5908",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c30329",
+          "rejected": "c84377"
+        },
+        {
+          "world_hash": "82af0ebb4c7b5aa1314f51dbcad68e5af6975b614081bb96eae773aadafa5908",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c30329",
+          "rejected": "c70713"
+        },
+        {
+          "world_hash": "82af0ebb4c7b5aa1314f51dbcad68e5af6975b614081bb96eae773aadafa5908",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c61281",
+          "rejected": "c30329"
+        },
+        {
+          "world_hash": "91d409c15e95a3b6bebaa6950d19e30a29398b79f1eabee70dc8c7cae328dcab",
+          "bucket": -1,
+          "strict_pair_options": 19,
+          "chosen": "c13983",
+          "rejected": "c13987"
+        },
+        {
+          "world_hash": "91d409c15e95a3b6bebaa6950d19e30a29398b79f1eabee70dc8c7cae328dcab",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c13983",
+          "rejected": "c48335"
+        },
+        {
+          "world_hash": "91d409c15e95a3b6bebaa6950d19e30a29398b79f1eabee70dc8c7cae328dcab",
+          "bucket": 1,
+          "strict_pair_options": 13,
+          "chosen": "c13987",
+          "rejected": "c48335"
+        },
+        {
+          "world_hash": "cf37ceb7ad85985ad3b5263ba0cf6b105272aee5b15c6273c3d65779a9a73721",
+          "bucket": -1,
+          "strict_pair_options": 42,
+          "chosen": "c10833",
+          "rejected": "c55501"
+        },
+        {
+          "world_hash": "cf37ceb7ad85985ad3b5263ba0cf6b105272aee5b15c6273c3d65779a9a73721",
+          "bucket": 0,
+          "strict_pair_options": 33,
+          "chosen": "c10833",
+          "rejected": "c22463"
+        },
+        {
+          "world_hash": "cf37ceb7ad85985ad3b5263ba0cf6b105272aee5b15c6273c3d65779a9a73721",
+          "bucket": 1,
+          "strict_pair_options": 35,
+          "chosen": "c10833",
+          "rejected": "c15651"
+        },
+        {
+          "world_hash": "825abcb3f0db179e2e1fdcd0dced4bada2b38e19973b365269a2e3a2b0d11d53",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c13256",
+          "rejected": "c91329"
+        },
+        {
+          "world_hash": "825abcb3f0db179e2e1fdcd0dced4bada2b38e19973b365269a2e3a2b0d11d53",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c29649",
+          "rejected": "c50189"
+        },
+        {
+          "world_hash": "825abcb3f0db179e2e1fdcd0dced4bada2b38e19973b365269a2e3a2b0d11d53",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c13256",
+          "rejected": "c19739"
+        },
+        {
+          "world_hash": "f2b3877b8c2c610c50cc0eb0a8745c19e1944b09fcc7055092e72be84cc4094d",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c17607",
+          "rejected": "c41444"
+        },
+        {
+          "world_hash": "f2b3877b8c2c610c50cc0eb0a8745c19e1944b09fcc7055092e72be84cc4094d",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c61425",
+          "rejected": "c59431"
+        },
+        {
+          "world_hash": "f2b3877b8c2c610c50cc0eb0a8745c19e1944b09fcc7055092e72be84cc4094d",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c85426",
+          "rejected": "c59431"
+        },
+        {
+          "world_hash": "6d7a9ac86213ed87bff83a0fae60ae2d2073dd0f5ebfbe3d6a266d6e1367e6a6",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c17704",
+          "rejected": "c90543"
+        },
+        {
+          "world_hash": "6d7a9ac86213ed87bff83a0fae60ae2d2073dd0f5ebfbe3d6a266d6e1367e6a6",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c17704",
+          "rejected": "c42264"
+        },
+        {
+          "world_hash": "6d7a9ac86213ed87bff83a0fae60ae2d2073dd0f5ebfbe3d6a266d6e1367e6a6",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c17704",
+          "rejected": "c32801"
+        },
+        {
+          "world_hash": "ce1f0fbdfde67ac1b2f3b9d5c451caaf588e851e634a1ae68a2a69af1f883056",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c17875",
+          "rejected": "c21414"
+        },
+        {
+          "world_hash": "ce1f0fbdfde67ac1b2f3b9d5c451caaf588e851e634a1ae68a2a69af1f883056",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c46991",
+          "rejected": "c81431"
+        },
+        {
+          "world_hash": "ce1f0fbdfde67ac1b2f3b9d5c451caaf588e851e634a1ae68a2a69af1f883056",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c21414",
+          "rejected": "c48860"
+        },
+        {
+          "world_hash": "f63a6291d6a7ac9383f80d4ec4e313f15cf24bd045746e4d81de4d7c78c5cfdc",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c20506",
+          "rejected": "c11196"
+        },
+        {
+          "world_hash": "f63a6291d6a7ac9383f80d4ec4e313f15cf24bd045746e4d81de4d7c78c5cfdc",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c20506",
+          "rejected": "c27941"
+        },
+        {
+          "world_hash": "f63a6291d6a7ac9383f80d4ec4e313f15cf24bd045746e4d81de4d7c78c5cfdc",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c11196",
+          "rejected": "c27941"
+        },
+        {
+          "world_hash": "d2f2a10ef05d34bfe4f1642471681e936e0c61419e7dae5b6cec82b3041d38dd",
+          "bucket": -1,
+          "strict_pair_options": 32,
+          "chosen": "c20443",
+          "rejected": "c56745"
+        },
+        {
+          "world_hash": "d2f2a10ef05d34bfe4f1642471681e936e0c61419e7dae5b6cec82b3041d38dd",
+          "bucket": 0,
+          "strict_pair_options": 26,
+          "chosen": "c20443",
+          "rejected": "c70745"
+        },
+        {
+          "world_hash": "d2f2a10ef05d34bfe4f1642471681e936e0c61419e7dae5b6cec82b3041d38dd",
+          "bucket": 1,
+          "strict_pair_options": 67,
+          "chosen": "c20443",
+          "rejected": "c38751"
+        },
+        {
+          "world_hash": "b119acf8e9663d444f6aae43b20a9c68a05a26b9c397d2d19b4b3220caa8b88b",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c30373",
+          "rejected": "c21522"
+        },
+        {
+          "world_hash": "b119acf8e9663d444f6aae43b20a9c68a05a26b9c397d2d19b4b3220caa8b88b",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c57959",
+          "rejected": "c82037"
+        },
+        {
+          "world_hash": "b119acf8e9663d444f6aae43b20a9c68a05a26b9c397d2d19b4b3220caa8b88b",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c30373",
+          "rejected": "c82037"
+        },
+        {
+          "world_hash": "251dc61f5308a724d94f9b67989e3889eb75a2c62dba6812e7fad36a10e1adfb",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c23164",
+          "rejected": "c27580"
+        },
+        {
+          "world_hash": "251dc61f5308a724d94f9b67989e3889eb75a2c62dba6812e7fad36a10e1adfb",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c24172",
+          "rejected": "c27580"
+        },
+        {
+          "world_hash": "251dc61f5308a724d94f9b67989e3889eb75a2c62dba6812e7fad36a10e1adfb",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c24172",
+          "rejected": "c23164"
+        },
+        {
+          "world_hash": "920da5fd3a0a3392576be21726841d10665c8b69287f34b52549d1dcbcb6421b",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c18080",
+          "rejected": "c39938"
+        },
+        {
+          "world_hash": "920da5fd3a0a3392576be21726841d10665c8b69287f34b52549d1dcbcb6421b",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c18080",
+          "rejected": "c23878"
+        },
+        {
+          "world_hash": "920da5fd3a0a3392576be21726841d10665c8b69287f34b52549d1dcbcb6421b",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c24607",
+          "rejected": "c98459"
+        },
+        {
+          "world_hash": "d4c672d54bf5b9d83a0b69534e4471315d98f06832d99b41659906276f3af9c6",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c15828",
+          "rejected": "c94611"
+        },
+        {
+          "world_hash": "d4c672d54bf5b9d83a0b69534e4471315d98f06832d99b41659906276f3af9c6",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c15828",
+          "rejected": "c88250"
+        },
+        {
+          "world_hash": "d4c672d54bf5b9d83a0b69534e4471315d98f06832d99b41659906276f3af9c6",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c14448",
+          "rejected": "c11155"
+        },
+        {
+          "world_hash": "aceb40fb7d328822130a8df67af1662f6dd34314b14317350ed225ac8061de65",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c17007",
+          "rejected": "c55739"
+        },
+        {
+          "world_hash": "aceb40fb7d328822130a8df67af1662f6dd34314b14317350ed225ac8061de65",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c31275",
+          "rejected": "c17007"
+        },
+        {
+          "world_hash": "aceb40fb7d328822130a8df67af1662f6dd34314b14317350ed225ac8061de65",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c31275",
+          "rejected": "c34508"
+        },
+        {
+          "world_hash": "9dfb6b5159bcd30f9932911322ec8cad35560546b7c33ca73dc0e490ae839fb2",
+          "bucket": -1,
+          "strict_pair_options": 16,
+          "chosen": "c14977",
+          "rejected": "c13766"
+        },
+        {
+          "world_hash": "9dfb6b5159bcd30f9932911322ec8cad35560546b7c33ca73dc0e490ae839fb2",
+          "bucket": 0,
+          "strict_pair_options": 9,
+          "chosen": "c14977",
+          "rejected": "c21380"
+        },
+        {
+          "world_hash": "9dfb6b5159bcd30f9932911322ec8cad35560546b7c33ca73dc0e490ae839fb2",
+          "bucket": 1,
+          "strict_pair_options": 28,
+          "chosen": "c13766",
+          "rejected": "c21380"
+        },
+        {
+          "world_hash": "a67d33d5f1aecf1e47bf0fc82acd012fe29d73542055da790137a44eec64a1bc",
+          "bucket": -1,
+          "strict_pair_options": 20,
+          "chosen": "c30880",
+          "rejected": "c17614"
+        },
+        {
+          "world_hash": "a67d33d5f1aecf1e47bf0fc82acd012fe29d73542055da790137a44eec64a1bc",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c30880",
+          "rejected": "c92296"
+        },
+        {
+          "world_hash": "a67d33d5f1aecf1e47bf0fc82acd012fe29d73542055da790137a44eec64a1bc",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c30880",
+          "rejected": "c35381"
+        },
+        {
+          "world_hash": "73d9af6bada9d8b1a56daa5864d4c9209a6890a8c404117647a40cad008657ad",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c24510",
+          "rejected": "c43299"
+        },
+        {
+          "world_hash": "73d9af6bada9d8b1a56daa5864d4c9209a6890a8c404117647a40cad008657ad",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c24510",
+          "rejected": "c14277"
+        },
+        {
+          "world_hash": "73d9af6bada9d8b1a56daa5864d4c9209a6890a8c404117647a40cad008657ad",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c24510",
+          "rejected": "c84111"
+        },
+        {
+          "world_hash": "fc4ab3239b273bb3cee0674217e590f91ecb6b095bb3b3e8824f4ca9cb539679",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c23919",
+          "rejected": "c28899"
+        },
+        {
+          "world_hash": "fc4ab3239b273bb3cee0674217e590f91ecb6b095bb3b3e8824f4ca9cb539679",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c23919",
+          "rejected": "c59903"
+        },
+        {
+          "world_hash": "fc4ab3239b273bb3cee0674217e590f91ecb6b095bb3b3e8824f4ca9cb539679",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c48111",
+          "rejected": "c59903"
+        },
+        {
+          "world_hash": "731221ff496e3a7dcb2bb71435d008e1b5409d96da6df438dbb1845badd3100a",
+          "bucket": -1,
+          "strict_pair_options": 32,
+          "chosen": "c10579",
+          "rejected": "c19069"
+        },
+        {
+          "world_hash": "731221ff496e3a7dcb2bb71435d008e1b5409d96da6df438dbb1845badd3100a",
+          "bucket": 0,
+          "strict_pair_options": 26,
+          "chosen": "c10579",
+          "rejected": "c18051"
+        },
+        {
+          "world_hash": "731221ff496e3a7dcb2bb71435d008e1b5409d96da6df438dbb1845badd3100a",
+          "bucket": 1,
+          "strict_pair_options": 67,
+          "chosen": "c10579",
+          "rejected": "c18710"
+        },
+        {
+          "world_hash": "f55a05d0ef0cb60ee4578b77ef9f0d271de23f3febfabf5dba1d48eed81ed666",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c37532",
+          "rejected": "c96828"
+        },
+        {
+          "world_hash": "f55a05d0ef0cb60ee4578b77ef9f0d271de23f3febfabf5dba1d48eed81ed666",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c37532",
+          "rejected": "c60349"
+        },
+        {
+          "world_hash": "f55a05d0ef0cb60ee4578b77ef9f0d271de23f3febfabf5dba1d48eed81ed666",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c37532",
+          "rejected": "c57413"
+        },
+        {
+          "world_hash": "860a16b4c72d39e58aeff5a534253f95bc2a7fce10ff2fc0a0c4eba6ed41275b",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c31379",
+          "rejected": "c15899"
+        },
+        {
+          "world_hash": "860a16b4c72d39e58aeff5a534253f95bc2a7fce10ff2fc0a0c4eba6ed41275b",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c24410",
+          "rejected": "c15899"
+        },
+        {
+          "world_hash": "860a16b4c72d39e58aeff5a534253f95bc2a7fce10ff2fc0a0c4eba6ed41275b",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c15899",
+          "rejected": "c18921"
+        },
+        {
+          "world_hash": "6a650279dd4e836c46786fb7ff40559281642a2e46272bfe2cb8cd2462c5d9fe",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c12369",
+          "rejected": "c75040"
+        },
+        {
+          "world_hash": "6a650279dd4e836c46786fb7ff40559281642a2e46272bfe2cb8cd2462c5d9fe",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c12369",
+          "rejected": "c34015"
+        },
+        {
+          "world_hash": "6a650279dd4e836c46786fb7ff40559281642a2e46272bfe2cb8cd2462c5d9fe",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c18753",
+          "rejected": "c12369"
+        },
+        {
+          "world_hash": "9a301b17719f3c5d3fed86af77ca8a82ccdbf143ea6addb93b4c5569a62c4144",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c24712",
+          "rejected": "c28758"
+        },
+        {
+          "world_hash": "9a301b17719f3c5d3fed86af77ca8a82ccdbf143ea6addb93b4c5569a62c4144",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c55806",
+          "rejected": "c30035"
+        },
+        {
+          "world_hash": "9a301b17719f3c5d3fed86af77ca8a82ccdbf143ea6addb93b4c5569a62c4144",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c28758",
+          "rejected": "c48245"
+        },
+        {
+          "world_hash": "04678f089733874c620c31b17a4179e6ebaf6339e4e736c7ff24de41076d5d5d",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c16685",
+          "rejected": "c52864"
+        },
+        {
+          "world_hash": "04678f089733874c620c31b17a4179e6ebaf6339e4e736c7ff24de41076d5d5d",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c16685",
+          "rejected": "c15113"
+        },
+        {
+          "world_hash": "04678f089733874c620c31b17a4179e6ebaf6339e4e736c7ff24de41076d5d5d",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c18326",
+          "rejected": "c15113"
+        },
+        {
+          "world_hash": "4184e918a5e2c07704cda2462e09d19fd01b3fc248526344352d64d2b11e9b5c",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c23764",
+          "rejected": "c17405"
+        },
+        {
+          "world_hash": "4184e918a5e2c07704cda2462e09d19fd01b3fc248526344352d64d2b11e9b5c",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c27354",
+          "rejected": "c83838"
+        },
+        {
+          "world_hash": "4184e918a5e2c07704cda2462e09d19fd01b3fc248526344352d64d2b11e9b5c",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c27354",
+          "rejected": "c17405"
+        },
+        {
+          "world_hash": "06ab0dcc2a6bd88343089e8be20c58075571ca37a133e7afcb4ce99b6ed0900a",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c42716",
+          "rejected": "c59378"
+        },
+        {
+          "world_hash": "06ab0dcc2a6bd88343089e8be20c58075571ca37a133e7afcb4ce99b6ed0900a",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c56263",
+          "rejected": "c43515"
+        },
+        {
+          "world_hash": "06ab0dcc2a6bd88343089e8be20c58075571ca37a133e7afcb4ce99b6ed0900a",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c42034",
+          "rejected": "c42716"
+        },
+        {
+          "world_hash": "7dadc9157ac8669762bf699a56e3c8733e3a570b3f4df6c0ae105c2f8e1a7db0",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c27191",
+          "rejected": "c11876"
+        },
+        {
+          "world_hash": "7dadc9157ac8669762bf699a56e3c8733e3a570b3f4df6c0ae105c2f8e1a7db0",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c27191",
+          "rejected": "c59592"
+        },
+        {
+          "world_hash": "7dadc9157ac8669762bf699a56e3c8733e3a570b3f4df6c0ae105c2f8e1a7db0",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c11876",
+          "rejected": "c59147"
+        },
+        {
+          "world_hash": "ffd54ea2a45ac55b3712709f9b2c046a411bcfdbeced8257f86e2d4eb2eda460",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c16496",
+          "rejected": "c16820"
+        },
+        {
+          "world_hash": "ffd54ea2a45ac55b3712709f9b2c046a411bcfdbeced8257f86e2d4eb2eda460",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c16496",
+          "rejected": "c45866"
+        },
+        {
+          "world_hash": "ffd54ea2a45ac55b3712709f9b2c046a411bcfdbeced8257f86e2d4eb2eda460",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c16820",
+          "rejected": "c45866"
+        },
+        {
+          "world_hash": "3ae116a5e3b4cce9160b099ac69f67f6c725c24dcc8acddebd7ea7367ec36dff",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c10708",
+          "rejected": "c27096"
+        },
+        {
+          "world_hash": "3ae116a5e3b4cce9160b099ac69f67f6c725c24dcc8acddebd7ea7367ec36dff",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c10708",
+          "rejected": "c87147"
+        },
+        {
+          "world_hash": "3ae116a5e3b4cce9160b099ac69f67f6c725c24dcc8acddebd7ea7367ec36dff",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c27096",
+          "rejected": "c87147"
+        },
+        {
+          "world_hash": "e00e1d80701f5ec10fb6ac7fe55699cf6434a379a10ffce3e295458b1afa670f",
+          "bucket": -1,
+          "strict_pair_options": 31,
+          "chosen": "c22571",
+          "rejected": "c10725"
+        },
+        {
+          "world_hash": "e00e1d80701f5ec10fb6ac7fe55699cf6434a379a10ffce3e295458b1afa670f",
+          "bucket": 0,
+          "strict_pair_options": 26,
+          "chosen": "c24273",
+          "rejected": "c22110"
+        },
+        {
+          "world_hash": "e00e1d80701f5ec10fb6ac7fe55699cf6434a379a10ffce3e295458b1afa670f",
+          "bucket": 1,
+          "strict_pair_options": 68,
+          "chosen": "c10725",
+          "rejected": "c22110"
+        },
+        {
+          "world_hash": "e278c416394dda2108c14be0012109076a1828ee9021b09490edf1966453f730",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c23491",
+          "rejected": "c20841"
+        },
+        {
+          "world_hash": "e278c416394dda2108c14be0012109076a1828ee9021b09490edf1966453f730",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c29276",
+          "rejected": "c31186"
+        },
+        {
+          "world_hash": "e278c416394dda2108c14be0012109076a1828ee9021b09490edf1966453f730",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c20841",
+          "rejected": "c31186"
+        },
+        {
+          "world_hash": "e75b099747d2620d2a2f8d732fc2ee7d65b37d5a2e647bf9fbf4b87f4f278828",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c14463",
+          "rejected": "c16123"
+        },
+        {
+          "world_hash": "e75b099747d2620d2a2f8d732fc2ee7d65b37d5a2e647bf9fbf4b87f4f278828",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c14463",
+          "rejected": "c38103"
+        },
+        {
+          "world_hash": "e75b099747d2620d2a2f8d732fc2ee7d65b37d5a2e647bf9fbf4b87f4f278828",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c14463",
+          "rejected": "c17130"
+        },
+        {
+          "world_hash": "f16823633cf3d6d09d737656e750d8915ec5cf66b243d9a530da5fb788a8235d",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c17588",
+          "rejected": "c56033"
+        },
+        {
+          "world_hash": "f16823633cf3d6d09d737656e750d8915ec5cf66b243d9a530da5fb788a8235d",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c17588",
+          "rejected": "c96383"
+        },
+        {
+          "world_hash": "f16823633cf3d6d09d737656e750d8915ec5cf66b243d9a530da5fb788a8235d",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c17588",
+          "rejected": "c24955"
+        },
+        {
+          "world_hash": "e0fb6e3266673fbb81a4bfac9640a5cecb6bdfa4bf6628cc994cb34e04d48e59",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c15458",
+          "rejected": "c41276"
+        },
+        {
+          "world_hash": "e0fb6e3266673fbb81a4bfac9640a5cecb6bdfa4bf6628cc994cb34e04d48e59",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c15458",
+          "rejected": "c22410"
+        },
+        {
+          "world_hash": "e0fb6e3266673fbb81a4bfac9640a5cecb6bdfa4bf6628cc994cb34e04d48e59",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c15458",
+          "rejected": "c21539"
+        },
+        {
+          "world_hash": "e1193b54acffbf2342b2cb46a3b91688b6d30de468485f19f3907a2503e8fe03",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c50772",
+          "rejected": "c57907"
+        },
+        {
+          "world_hash": "e1193b54acffbf2342b2cb46a3b91688b6d30de468485f19f3907a2503e8fe03",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c43573",
+          "rejected": "c57907"
+        },
+        {
+          "world_hash": "e1193b54acffbf2342b2cb46a3b91688b6d30de468485f19f3907a2503e8fe03",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c43573",
+          "rejected": "c27686"
+        },
+        {
+          "world_hash": "83f0c581ca9bb8976cc3090a2c7f294f38ea9b85c5a8c78b546f0a9c51371bbc",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c24751",
+          "rejected": "c52316"
+        },
+        {
+          "world_hash": "83f0c581ca9bb8976cc3090a2c7f294f38ea9b85c5a8c78b546f0a9c51371bbc",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c24751",
+          "rejected": "c55901"
+        },
+        {
+          "world_hash": "83f0c581ca9bb8976cc3090a2c7f294f38ea9b85c5a8c78b546f0a9c51371bbc",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c24751",
+          "rejected": "c29264"
+        },
+        {
+          "world_hash": "8b4c714ae3733d6666fa829432f73d55bc56318dd406aea2d10d2c82362c6d27",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c10921",
+          "rejected": "c14864"
+        },
+        {
+          "world_hash": "8b4c714ae3733d6666fa829432f73d55bc56318dd406aea2d10d2c82362c6d27",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c10921",
+          "rejected": "c29052"
+        },
+        {
+          "world_hash": "8b4c714ae3733d6666fa829432f73d55bc56318dd406aea2d10d2c82362c6d27",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c14864",
+          "rejected": "c21496"
+        },
+        {
+          "world_hash": "c485a6274eac75f4e43c57c841335fe0330437689111c0b1a3785d79a77f46aa",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c17236",
+          "rejected": "c32224"
+        },
+        {
+          "world_hash": "c485a6274eac75f4e43c57c841335fe0330437689111c0b1a3785d79a77f46aa",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c26667",
+          "rejected": "c32224"
+        },
+        {
+          "world_hash": "c485a6274eac75f4e43c57c841335fe0330437689111c0b1a3785d79a77f46aa",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c26667",
+          "rejected": "c17236"
+        },
+        {
+          "world_hash": "119d6882a134bbd38555ceeafd2fde1c56189a2c8c6532e5c586e688054e8a71",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c43185",
+          "rejected": "c80784"
+        },
+        {
+          "world_hash": "119d6882a134bbd38555ceeafd2fde1c56189a2c8c6532e5c586e688054e8a71",
+          "bucket": 0,
+          "strict_pair_options": 9,
+          "chosen": "c49516",
+          "rejected": "c92331"
+        },
+        {
+          "world_hash": "119d6882a134bbd38555ceeafd2fde1c56189a2c8c6532e5c586e688054e8a71",
+          "bucket": 1,
+          "strict_pair_options": 19,
+          "chosen": "c43185",
+          "rejected": "c46109"
+        },
+        {
+          "world_hash": "c4fc29cda6b811a8d7a2fa5ec40851f0e48f1b74663f599f275e43fed09caa31",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c41747",
+          "rejected": "c20867"
+        },
+        {
+          "world_hash": "c4fc29cda6b811a8d7a2fa5ec40851f0e48f1b74663f599f275e43fed09caa31",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c41747",
+          "rejected": "c24503"
+        },
+        {
+          "world_hash": "c4fc29cda6b811a8d7a2fa5ec40851f0e48f1b74663f599f275e43fed09caa31",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c20867",
+          "rejected": "c24503"
+        },
+        {
+          "world_hash": "bbc559b331bc1aa91c1c51c21a09ec4245c4e2da836f7b505798cb6bfa9d47b8",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c10074",
+          "rejected": "c28631"
+        },
+        {
+          "world_hash": "bbc559b331bc1aa91c1c51c21a09ec4245c4e2da836f7b505798cb6bfa9d47b8",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c10074",
+          "rejected": "c65825"
+        },
+        {
+          "world_hash": "bbc559b331bc1aa91c1c51c21a09ec4245c4e2da836f7b505798cb6bfa9d47b8",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c28631",
+          "rejected": "c65825"
+        },
+        {
+          "world_hash": "4fe3acff342cfbd373942ba498acd34061b01dd6f74426e91069e98124c2d31b",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c13354",
+          "rejected": "c97801"
+        },
+        {
+          "world_hash": "4fe3acff342cfbd373942ba498acd34061b01dd6f74426e91069e98124c2d31b",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c29488",
+          "rejected": "c47952"
+        },
+        {
+          "world_hash": "4fe3acff342cfbd373942ba498acd34061b01dd6f74426e91069e98124c2d31b",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c13354",
+          "rejected": "c29488"
+        },
+        {
+          "world_hash": "77f08de38deb72d0209271d9e250785797051e7effced4c3aea5637fba11461f",
+          "bucket": -1,
+          "strict_pair_options": 16,
+          "chosen": "c12714",
+          "rejected": "c83166"
+        },
+        {
+          "world_hash": "77f08de38deb72d0209271d9e250785797051e7effced4c3aea5637fba11461f",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c25388",
+          "rejected": "c12714"
+        },
+        {
+          "world_hash": "77f08de38deb72d0209271d9e250785797051e7effced4c3aea5637fba11461f",
+          "bucket": 1,
+          "strict_pair_options": 16,
+          "chosen": "c12714",
+          "rejected": "c29628"
+        },
+        {
+          "world_hash": "1c939a9e6ae6520ff23b963b225c82ec02e942dfa9016c7af4244c5f96746013",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c19222",
+          "rejected": "c26188"
+        },
+        {
+          "world_hash": "1c939a9e6ae6520ff23b963b225c82ec02e942dfa9016c7af4244c5f96746013",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c20603",
+          "rejected": "c42001"
+        },
+        {
+          "world_hash": "1c939a9e6ae6520ff23b963b225c82ec02e942dfa9016c7af4244c5f96746013",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c19222",
+          "rejected": "c20603"
+        },
+        {
+          "world_hash": "b0689b982bed56d9d20a3b576f7193a73e98fae2f7085c18345193d8824ac6e9",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c17002",
+          "rejected": "c17492"
+        },
+        {
+          "world_hash": "b0689b982bed56d9d20a3b576f7193a73e98fae2f7085c18345193d8824ac6e9",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c17002",
+          "rejected": "c37075"
+        },
+        {
+          "world_hash": "b0689b982bed56d9d20a3b576f7193a73e98fae2f7085c18345193d8824ac6e9",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c17002",
+          "rejected": "c91501"
+        },
+        {
+          "world_hash": "ded90fc25eebbdb5c27a0d4b8af406a95a452c822207112d2f67cc09f6aad81d",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c27023",
+          "rejected": "c28712"
+        },
+        {
+          "world_hash": "ded90fc25eebbdb5c27a0d4b8af406a95a452c822207112d2f67cc09f6aad81d",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c27023",
+          "rejected": "c87688"
+        },
+        {
+          "world_hash": "ded90fc25eebbdb5c27a0d4b8af406a95a452c822207112d2f67cc09f6aad81d",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c28712",
+          "rejected": "c31082"
+        },
+        {
+          "world_hash": "529ecf4ca1b8b7861055fe9e91c72530ae6d7606a1bac7b1da7fb5d79288bab5",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c10008",
+          "rejected": "c16835"
+        },
+        {
+          "world_hash": "529ecf4ca1b8b7861055fe9e91c72530ae6d7606a1bac7b1da7fb5d79288bab5",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c27372",
+          "rejected": "c16835"
+        },
+        {
+          "world_hash": "529ecf4ca1b8b7861055fe9e91c72530ae6d7606a1bac7b1da7fb5d79288bab5",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c22069",
+          "rejected": "c16835"
+        },
+        {
+          "world_hash": "c17ed240981f55c02baba44a02e54e65e3910330f5971cd337202b925d355e24",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c30523",
+          "rejected": "c22281"
+        },
+        {
+          "world_hash": "c17ed240981f55c02baba44a02e54e65e3910330f5971cd337202b925d355e24",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c31166",
+          "rejected": "c56269"
+        },
+        {
+          "world_hash": "c17ed240981f55c02baba44a02e54e65e3910330f5971cd337202b925d355e24",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c30523",
+          "rejected": "c56269"
+        },
+        {
+          "world_hash": "5b67137e11f58159ff4457a558c1ce19048460d13ef30dfaf1a5b18f1705a302",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c44813",
+          "rejected": "c27561"
+        },
+        {
+          "world_hash": "5b67137e11f58159ff4457a558c1ce19048460d13ef30dfaf1a5b18f1705a302",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c15256",
+          "rejected": "c27561"
+        },
+        {
+          "world_hash": "5b67137e11f58159ff4457a558c1ce19048460d13ef30dfaf1a5b18f1705a302",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c15256",
+          "rejected": "c44813"
+        },
+        {
+          "world_hash": "ced4e3122f94a608506a8f4a51cde43b5048febf55c402724d95c79a7ad6651b",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c29109",
+          "rejected": "c75420"
+        },
+        {
+          "world_hash": "ced4e3122f94a608506a8f4a51cde43b5048febf55c402724d95c79a7ad6651b",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c29109",
+          "rejected": "c66928"
+        },
+        {
+          "world_hash": "ced4e3122f94a608506a8f4a51cde43b5048febf55c402724d95c79a7ad6651b",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c29109",
+          "rejected": "c99064"
+        },
+        {
+          "world_hash": "43b3399f5ccd570aaa2e5019fbbd557004a42c498357deaffb0cc20f3a82a96c",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c12313",
+          "rejected": "c93787"
+        },
+        {
+          "world_hash": "43b3399f5ccd570aaa2e5019fbbd557004a42c498357deaffb0cc20f3a82a96c",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c12313",
+          "rejected": "c83822"
+        },
+        {
+          "world_hash": "43b3399f5ccd570aaa2e5019fbbd557004a42c498357deaffb0cc20f3a82a96c",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c12313",
+          "rejected": "c12257"
+        },
+        {
+          "world_hash": "7e526fd6c6cf8524ff92e12579ab48ba041c73b8edb7b1b3eea5d972285f9d25",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c20974",
+          "rejected": "c43191"
+        },
+        {
+          "world_hash": "7e526fd6c6cf8524ff92e12579ab48ba041c73b8edb7b1b3eea5d972285f9d25",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c66483",
+          "rejected": "c61703"
+        },
+        {
+          "world_hash": "7e526fd6c6cf8524ff92e12579ab48ba041c73b8edb7b1b3eea5d972285f9d25",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c20974",
+          "rejected": "c61703"
+        },
+        {
+          "world_hash": "60e276ac02f5db37aefadc27c3554e974b514c0334b66b6fe6540ffce4b6ed65",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c30125",
+          "rejected": "c21847"
+        },
+        {
+          "world_hash": "60e276ac02f5db37aefadc27c3554e974b514c0334b66b6fe6540ffce4b6ed65",
+          "bucket": 0,
+          "strict_pair_options": 9,
+          "chosen": "c33623",
+          "rejected": "c36558"
+        },
+        {
+          "world_hash": "60e276ac02f5db37aefadc27c3554e974b514c0334b66b6fe6540ffce4b6ed65",
+          "bucket": 1,
+          "strict_pair_options": 19,
+          "chosen": "c21847",
+          "rejected": "c36558"
+        },
+        {
+          "world_hash": "5211082254dac30e5d5a93105fd5d7f4529362ae0c315fc0f3488b558edb89c8",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c25555",
+          "rejected": "c60113"
+        },
+        {
+          "world_hash": "5211082254dac30e5d5a93105fd5d7f4529362ae0c315fc0f3488b558edb89c8",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c25555",
+          "rejected": "c99607"
+        },
+        {
+          "world_hash": "5211082254dac30e5d5a93105fd5d7f4529362ae0c315fc0f3488b558edb89c8",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c27002",
+          "rejected": "c64897"
+        },
+        {
+          "world_hash": "1bde63c5cc59fe517a178ed9bd0481b76a7d76ef2687cc5c10571e8fe143ed30",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c15525",
+          "rejected": "c67963"
+        },
+        {
+          "world_hash": "1bde63c5cc59fe517a178ed9bd0481b76a7d76ef2687cc5c10571e8fe143ed30",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c15525",
+          "rejected": "c39522"
+        },
+        {
+          "world_hash": "1bde63c5cc59fe517a178ed9bd0481b76a7d76ef2687cc5c10571e8fe143ed30",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c15525",
+          "rejected": "c28626"
+        },
+        {
+          "world_hash": "8e1b862fd2c11a5c75f1c32b3a1c9225f9d20da79f9d817abf07288102955385",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c44168",
+          "rejected": "c25481"
+        },
+        {
+          "world_hash": "8e1b862fd2c11a5c75f1c32b3a1c9225f9d20da79f9d817abf07288102955385",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c44168",
+          "rejected": "c56388"
+        },
+        {
+          "world_hash": "8e1b862fd2c11a5c75f1c32b3a1c9225f9d20da79f9d817abf07288102955385",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c44168",
+          "rejected": "c47676"
+        },
+        {
+          "world_hash": "12adeee38636b75d8c85a2a04b0d7abfd813e6c2dec9df47d3a59118438d14bd",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c13611",
+          "rejected": "c17089"
+        },
+        {
+          "world_hash": "12adeee38636b75d8c85a2a04b0d7abfd813e6c2dec9df47d3a59118438d14bd",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c48931",
+          "rejected": "c63632"
+        },
+        {
+          "world_hash": "12adeee38636b75d8c85a2a04b0d7abfd813e6c2dec9df47d3a59118438d14bd",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c13611",
+          "rejected": "c48931"
+        },
+        {
+          "world_hash": "131d2688058d93fb618fb0242e39f00a0f6b4bccf3e93b733c5821cd03376a38",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c12018",
+          "rejected": "c31518"
+        },
+        {
+          "world_hash": "131d2688058d93fb618fb0242e39f00a0f6b4bccf3e93b733c5821cd03376a38",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c12018",
+          "rejected": "c20631"
+        },
+        {
+          "world_hash": "131d2688058d93fb618fb0242e39f00a0f6b4bccf3e93b733c5821cd03376a38",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c12018",
+          "rejected": "c15209"
+        },
+        {
+          "world_hash": "fef7921f794854b8186585539e50687afc2f9ffbbc55d8aef1d41573860ccecc",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c11485",
+          "rejected": "c22238"
+        },
+        {
+          "world_hash": "fef7921f794854b8186585539e50687afc2f9ffbbc55d8aef1d41573860ccecc",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c11485",
+          "rejected": "c32549"
+        },
+        {
+          "world_hash": "fef7921f794854b8186585539e50687afc2f9ffbbc55d8aef1d41573860ccecc",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c22238",
+          "rejected": "c32549"
+        },
+        {
+          "world_hash": "b030cccc9c059fad9098d121b0b1c60af575e41f9773f2986059231902172f1a",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c41265",
+          "rejected": "c54041"
+        },
+        {
+          "world_hash": "b030cccc9c059fad9098d121b0b1c60af575e41f9773f2986059231902172f1a",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c41265",
+          "rejected": "c45589"
+        },
+        {
+          "world_hash": "b030cccc9c059fad9098d121b0b1c60af575e41f9773f2986059231902172f1a",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c75273",
+          "rejected": "c45589"
+        },
+        {
+          "world_hash": "3dbaf131af7fdc40bea9be9f33a439c97a923fbda7a0d63752ca0325fbf2eded",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c11713",
+          "rejected": "c19628"
+        },
+        {
+          "world_hash": "3dbaf131af7fdc40bea9be9f33a439c97a923fbda7a0d63752ca0325fbf2eded",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c11713",
+          "rejected": "c75844"
+        },
+        {
+          "world_hash": "3dbaf131af7fdc40bea9be9f33a439c97a923fbda7a0d63752ca0325fbf2eded",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c19628",
+          "rejected": "c39017"
+        },
+        {
+          "world_hash": "b655856cac965f678572311f622a426069c9eb372f1f40a8e51466b89ea44ba3",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c23864",
+          "rejected": "c42625"
+        },
+        {
+          "world_hash": "b655856cac965f678572311f622a426069c9eb372f1f40a8e51466b89ea44ba3",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c23864",
+          "rejected": "c58910"
+        },
+        {
+          "world_hash": "b655856cac965f678572311f622a426069c9eb372f1f40a8e51466b89ea44ba3",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c23864",
+          "rejected": "c33992"
+        },
+        {
+          "world_hash": "fb64338b983432561261baba9a398ecd920b0983264e992e2b5f37dceea93264",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c37185",
+          "rejected": "c19879"
+        },
+        {
+          "world_hash": "fb64338b983432561261baba9a398ecd920b0983264e992e2b5f37dceea93264",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c37185",
+          "rejected": "c46764"
+        },
+        {
+          "world_hash": "fb64338b983432561261baba9a398ecd920b0983264e992e2b5f37dceea93264",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c19879",
+          "rejected": "c46764"
+        },
+        {
+          "world_hash": "38af0ce048e0a79b591e1b9838d91529f821498e700f4e49d666edb4f6e8eabc",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c17222",
+          "rejected": "c99941"
+        },
+        {
+          "world_hash": "38af0ce048e0a79b591e1b9838d91529f821498e700f4e49d666edb4f6e8eabc",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c25083",
+          "rejected": "c57009"
+        },
+        {
+          "world_hash": "38af0ce048e0a79b591e1b9838d91529f821498e700f4e49d666edb4f6e8eabc",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c17222",
+          "rejected": "c25083"
+        },
+        {
+          "world_hash": "e5012797624134f9879c439e636a2a36317d5bd47ac81d4b5a000596a3e651cf",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c33949",
+          "rejected": "c55139"
+        },
+        {
+          "world_hash": "e5012797624134f9879c439e636a2a36317d5bd47ac81d4b5a000596a3e651cf",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c33949",
+          "rejected": "c48915"
+        },
+        {
+          "world_hash": "e5012797624134f9879c439e636a2a36317d5bd47ac81d4b5a000596a3e651cf",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c33949",
+          "rejected": "c36713"
+        },
+        {
+          "world_hash": "622c32d53cd82d3c6561483b2a7e222823ed5fa9190070bcd3a21906309850fd",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c11404",
+          "rejected": "c35768"
+        },
+        {
+          "world_hash": "622c32d53cd82d3c6561483b2a7e222823ed5fa9190070bcd3a21906309850fd",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c11404",
+          "rejected": "c29540"
+        },
+        {
+          "world_hash": "622c32d53cd82d3c6561483b2a7e222823ed5fa9190070bcd3a21906309850fd",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c11404",
+          "rejected": "c98883"
+        },
+        {
+          "world_hash": "718ade5f7859d3240b4b2be3d8dfc1454182c5d63c0280669fea919417ce55e9",
+          "bucket": -1,
+          "strict_pair_options": 53,
+          "chosen": "c10834",
+          "rejected": "c15984"
+        },
+        {
+          "world_hash": "718ade5f7859d3240b4b2be3d8dfc1454182c5d63c0280669fea919417ce55e9",
+          "bucket": 0,
+          "strict_pair_options": 22,
+          "chosen": "c10994",
+          "rejected": "c10834"
+        },
+        {
+          "world_hash": "718ade5f7859d3240b4b2be3d8dfc1454182c5d63c0280669fea919417ce55e9",
+          "bucket": 1,
+          "strict_pair_options": 30,
+          "chosen": "c41531",
+          "rejected": "c10834"
+        },
+        {
+          "world_hash": "eb31ab6d0b19e4a3d74c67e2e823dbcb894798b0ed4c2665c5130b094732f450",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c41108",
+          "rejected": "c46146"
+        },
+        {
+          "world_hash": "eb31ab6d0b19e4a3d74c67e2e823dbcb894798b0ed4c2665c5130b094732f450",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c41108",
+          "rejected": "c84979"
+        },
+        {
+          "world_hash": "eb31ab6d0b19e4a3d74c67e2e823dbcb894798b0ed4c2665c5130b094732f450",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c27458",
+          "rejected": "c41108"
+        },
+        {
+          "world_hash": "bef45d9984fde6eec46cdd4976a15383f1d5c3e7d2bc2d5a509a5a0c23874e70",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c20713",
+          "rejected": "c28740"
+        },
+        {
+          "world_hash": "bef45d9984fde6eec46cdd4976a15383f1d5c3e7d2bc2d5a509a5a0c23874e70",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c24731",
+          "rejected": "c78182"
+        },
+        {
+          "world_hash": "bef45d9984fde6eec46cdd4976a15383f1d5c3e7d2bc2d5a509a5a0c23874e70",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c20713",
+          "rejected": "c78182"
+        },
+        {
+          "world_hash": "47321bcd3405632669e2e3d15af0b712ecab7679ef2e3664588fa41ea711abfa",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c13925",
+          "rejected": "c94884"
+        },
+        {
+          "world_hash": "47321bcd3405632669e2e3d15af0b712ecab7679ef2e3664588fa41ea711abfa",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c13925",
+          "rejected": "c25007"
+        },
+        {
+          "world_hash": "47321bcd3405632669e2e3d15af0b712ecab7679ef2e3664588fa41ea711abfa",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c22669",
+          "rejected": "c13925"
+        },
+        {
+          "world_hash": "a5cebd9ac04c4fab8998839556a88535427e838c730b19b11c4557a62e177fad",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c34406",
+          "rejected": "c63407"
+        },
+        {
+          "world_hash": "a5cebd9ac04c4fab8998839556a88535427e838c730b19b11c4557a62e177fad",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c34406",
+          "rejected": "c35267"
+        },
+        {
+          "world_hash": "a5cebd9ac04c4fab8998839556a88535427e838c730b19b11c4557a62e177fad",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c71194",
+          "rejected": "c35267"
+        },
+        {
+          "world_hash": "720292ffff48edb74d9b697b7188ea2e208924388d66e5c16b42cc9ab5c56694",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c23875",
+          "rejected": "c42911"
+        },
+        {
+          "world_hash": "720292ffff48edb74d9b697b7188ea2e208924388d66e5c16b42cc9ab5c56694",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c23875",
+          "rejected": "c26308"
+        },
+        {
+          "world_hash": "720292ffff48edb74d9b697b7188ea2e208924388d66e5c16b42cc9ab5c56694",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c23875",
+          "rejected": "c47692"
+        },
+        {
+          "world_hash": "25507a010cb609886fb7b1b449c86f0e3f9b69212aa8971b6cf1ed7c8d756fb8",
+          "bucket": -1,
+          "strict_pair_options": 30,
+          "chosen": "c22407",
+          "rejected": "c16650"
+        },
+        {
+          "world_hash": "25507a010cb609886fb7b1b449c86f0e3f9b69212aa8971b6cf1ed7c8d756fb8",
+          "bucket": 0,
+          "strict_pair_options": 26,
+          "chosen": "c16650",
+          "rejected": "c82734"
+        },
+        {
+          "world_hash": "25507a010cb609886fb7b1b449c86f0e3f9b69212aa8971b6cf1ed7c8d756fb8",
+          "bucket": 1,
+          "strict_pair_options": 53,
+          "chosen": "c16650",
+          "rejected": "c41388"
+        },
+        {
+          "world_hash": "1086b2bec2359258ef57ecf9b658630582cccdb14e3fb5a3dcc666f90ca6c142",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c11833",
+          "rejected": "c68461"
+        },
+        {
+          "world_hash": "1086b2bec2359258ef57ecf9b658630582cccdb14e3fb5a3dcc666f90ca6c142",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c11833",
+          "rejected": "c44895"
+        },
+        {
+          "world_hash": "1086b2bec2359258ef57ecf9b658630582cccdb14e3fb5a3dcc666f90ca6c142",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c42499",
+          "rejected": "c11833"
+        },
+        {
+          "world_hash": "79e15ed91b3020a7a1b7d9ce9010a9a842a533bf9a63cbeae40d0ce1f9d448f1",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c62470",
+          "rejected": "c46448"
+        },
+        {
+          "world_hash": "79e15ed91b3020a7a1b7d9ce9010a9a842a533bf9a63cbeae40d0ce1f9d448f1",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c35793",
+          "rejected": "c46448"
+        },
+        {
+          "world_hash": "79e15ed91b3020a7a1b7d9ce9010a9a842a533bf9a63cbeae40d0ce1f9d448f1",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c35793",
+          "rejected": "c38915"
+        },
+        {
+          "world_hash": "7c767de94e53105cb0f921cb08f9c4047556746e3fcb965724691186faea038a",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c14807",
+          "rejected": "c88120"
+        },
+        {
+          "world_hash": "7c767de94e53105cb0f921cb08f9c4047556746e3fcb965724691186faea038a",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c14807",
+          "rejected": "c30467"
+        },
+        {
+          "world_hash": "7c767de94e53105cb0f921cb08f9c4047556746e3fcb965724691186faea038a",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c14807",
+          "rejected": "c18290"
+        },
+        {
+          "world_hash": "f916ebcffb7280bc27c3af44ab30ead2f9a81e944b1ee4d3a947fcb02911ff84",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c18038",
+          "rejected": "c98186"
+        },
+        {
+          "world_hash": "f916ebcffb7280bc27c3af44ab30ead2f9a81e944b1ee4d3a947fcb02911ff84",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c28712",
+          "rejected": "c18038"
+        },
+        {
+          "world_hash": "f916ebcffb7280bc27c3af44ab30ead2f9a81e944b1ee4d3a947fcb02911ff84",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c30951",
+          "rejected": "c70581"
+        },
+        {
+          "world_hash": "ff8649dffa9be1c8c44864ff4d8455bb3ba21a8b20cec03dfd9fe919ee669a36",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c32922",
+          "rejected": "c63423"
+        },
+        {
+          "world_hash": "ff8649dffa9be1c8c44864ff4d8455bb3ba21a8b20cec03dfd9fe919ee669a36",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c32922",
+          "rejected": "c83546"
+        },
+        {
+          "world_hash": "ff8649dffa9be1c8c44864ff4d8455bb3ba21a8b20cec03dfd9fe919ee669a36",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c32922",
+          "rejected": "c21718"
+        },
+        {
+          "world_hash": "8342e534632989a67c9797f4833431f62172b4907285f570f140edb1588d14cf",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c15057",
+          "rejected": "c29599"
+        },
+        {
+          "world_hash": "8342e534632989a67c9797f4833431f62172b4907285f570f140edb1588d14cf",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c33078",
+          "rejected": "c60885"
+        },
+        {
+          "world_hash": "8342e534632989a67c9797f4833431f62172b4907285f570f140edb1588d14cf",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c15057",
+          "rejected": "c60885"
+        },
+        {
+          "world_hash": "584e409cac89190618f82609191f582000d5884b08f9ebbd74d12beb10d9aef3",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c15994",
+          "rejected": "c21644"
+        },
+        {
+          "world_hash": "584e409cac89190618f82609191f582000d5884b08f9ebbd74d12beb10d9aef3",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c15994",
+          "rejected": "c21520"
+        },
+        {
+          "world_hash": "584e409cac89190618f82609191f582000d5884b08f9ebbd74d12beb10d9aef3",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c21644",
+          "rejected": "c21520"
+        },
+        {
+          "world_hash": "fdb7357ac7861215d7663c5628dd7e4797ad845c839927ea49513a9f4dcbce9e",
+          "bucket": -1,
+          "strict_pair_options": 19,
+          "chosen": "c19886",
+          "rejected": "c57379"
+        },
+        {
+          "world_hash": "fdb7357ac7861215d7663c5628dd7e4797ad845c839927ea49513a9f4dcbce9e",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c27737",
+          "rejected": "c89233"
+        },
+        {
+          "world_hash": "fdb7357ac7861215d7663c5628dd7e4797ad845c839927ea49513a9f4dcbce9e",
+          "bucket": 1,
+          "strict_pair_options": 23,
+          "chosen": "c27512",
+          "rejected": "c19886"
+        },
+        {
+          "world_hash": "b3aa6c3fcefe72c0e8bd1c6326a95015ce749cf908efe595a64c7c41cbf71cce",
+          "bucket": -1,
+          "strict_pair_options": 32,
+          "chosen": "c13130",
+          "rejected": "c10765"
+        },
+        {
+          "world_hash": "b3aa6c3fcefe72c0e8bd1c6326a95015ce749cf908efe595a64c7c41cbf71cce",
+          "bucket": 0,
+          "strict_pair_options": 26,
+          "chosen": "c16479",
+          "rejected": "c13130"
+        },
+        {
+          "world_hash": "b3aa6c3fcefe72c0e8bd1c6326a95015ce749cf908efe595a64c7c41cbf71cce",
+          "bucket": 1,
+          "strict_pair_options": 67,
+          "chosen": "c10765",
+          "rejected": "c26312"
+        },
+        {
+          "world_hash": "deb0b91ab4dd0b0471cfac28e65aac81009d947381a3a45ebbef39d187275c12",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c24884",
+          "rejected": "c85138"
+        },
+        {
+          "world_hash": "deb0b91ab4dd0b0471cfac28e65aac81009d947381a3a45ebbef39d187275c12",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c24884",
+          "rejected": "c38855"
+        },
+        {
+          "world_hash": "deb0b91ab4dd0b0471cfac28e65aac81009d947381a3a45ebbef39d187275c12",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c24884",
+          "rejected": "c19130"
+        },
+        {
+          "world_hash": "b89b90e8e5559e10271b05dc24b929768b0efd8157c25415d7b36cf1a0faca79",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c21235",
+          "rejected": "c25548"
+        },
+        {
+          "world_hash": "b89b90e8e5559e10271b05dc24b929768b0efd8157c25415d7b36cf1a0faca79",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c21235",
+          "rejected": "c32601"
+        },
+        {
+          "world_hash": "b89b90e8e5559e10271b05dc24b929768b0efd8157c25415d7b36cf1a0faca79",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c21235",
+          "rejected": "c50834"
+        },
+        {
+          "world_hash": "9d1a41846d0288f6f01a16981703731cc0400fd34783a361d4e6e33599c5905f",
+          "bucket": -1,
+          "strict_pair_options": 19,
+          "chosen": "c18432",
+          "rejected": "c67059"
+        },
+        {
+          "world_hash": "9d1a41846d0288f6f01a16981703731cc0400fd34783a361d4e6e33599c5905f",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c61736",
+          "rejected": "c94045"
+        },
+        {
+          "world_hash": "9d1a41846d0288f6f01a16981703731cc0400fd34783a361d4e6e33599c5905f",
+          "bucket": 1,
+          "strict_pair_options": 23,
+          "chosen": "c61736",
+          "rejected": "c18432"
+        },
+        {
+          "world_hash": "02e72112c74b9eca8d83ad50e35515d5f5477ba069374ad45ec95d84534f0f94",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c14731",
+          "rejected": "c24583"
+        },
+        {
+          "world_hash": "02e72112c74b9eca8d83ad50e35515d5f5477ba069374ad45ec95d84534f0f94",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c24583",
+          "rejected": "c84294"
+        },
+        {
+          "world_hash": "02e72112c74b9eca8d83ad50e35515d5f5477ba069374ad45ec95d84534f0f94",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c24583",
+          "rejected": "c39946"
+        },
+        {
+          "world_hash": "cb98ccdcb40acc1b20b6cc2e47227b6475bd05602b2ec5d0e6c68bbb0673cb92",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c12876",
+          "rejected": "c23803"
+        },
+        {
+          "world_hash": "cb98ccdcb40acc1b20b6cc2e47227b6475bd05602b2ec5d0e6c68bbb0673cb92",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c12876",
+          "rejected": "c36344"
+        },
+        {
+          "world_hash": "cb98ccdcb40acc1b20b6cc2e47227b6475bd05602b2ec5d0e6c68bbb0673cb92",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c12876",
+          "rejected": "c71869"
+        },
+        {
+          "world_hash": "c497fe38f560b8491e8fb6109d4d84b89a088491efc24307dd21139013bd90d4",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c10125",
+          "rejected": "c74360"
+        },
+        {
+          "world_hash": "c497fe38f560b8491e8fb6109d4d84b89a088491efc24307dd21139013bd90d4",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c10125",
+          "rejected": "c36494"
+        },
+        {
+          "world_hash": "c497fe38f560b8491e8fb6109d4d84b89a088491efc24307dd21139013bd90d4",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c10125",
+          "rejected": "c97215"
+        },
+        {
+          "world_hash": "bc3efc234aff3868381d5c69196e879aea5927370de938c8bcbd01e932c9aa7b",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c16373",
+          "rejected": "c41454"
+        },
+        {
+          "world_hash": "bc3efc234aff3868381d5c69196e879aea5927370de938c8bcbd01e932c9aa7b",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c36033",
+          "rejected": "c62459"
+        },
+        {
+          "world_hash": "bc3efc234aff3868381d5c69196e879aea5927370de938c8bcbd01e932c9aa7b",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c16373",
+          "rejected": "c62459"
+        },
+        {
+          "world_hash": "36363c009f85060e33eb6f5539869a6cac1a77c6351c8aa49f601d98e6317370",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c23901",
+          "rejected": "c39644"
+        },
+        {
+          "world_hash": "36363c009f85060e33eb6f5539869a6cac1a77c6351c8aa49f601d98e6317370",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c23901",
+          "rejected": "c30702"
+        },
+        {
+          "world_hash": "36363c009f85060e33eb6f5539869a6cac1a77c6351c8aa49f601d98e6317370",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c99888",
+          "rejected": "c30702"
+        },
+        {
+          "world_hash": "e6aa0d9b0267f1612faaf87ebcd798e0a8ff658f658d5ebec4c85484b7411b3c",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c12027",
+          "rejected": "c20237"
+        },
+        {
+          "world_hash": "e6aa0d9b0267f1612faaf87ebcd798e0a8ff658f658d5ebec4c85484b7411b3c",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c12027",
+          "rejected": "c87674"
+        },
+        {
+          "world_hash": "e6aa0d9b0267f1612faaf87ebcd798e0a8ff658f658d5ebec4c85484b7411b3c",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c63792",
+          "rejected": "c20237"
+        },
+        {
+          "world_hash": "78bbabc459f7183b94066eb404ebd613f2624caf0ab38d7edb57d289a405683b",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c29038",
+          "rejected": "c81623"
+        },
+        {
+          "world_hash": "78bbabc459f7183b94066eb404ebd613f2624caf0ab38d7edb57d289a405683b",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c29038",
+          "rejected": "c16121"
+        },
+        {
+          "world_hash": "78bbabc459f7183b94066eb404ebd613f2624caf0ab38d7edb57d289a405683b",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c19270",
+          "rejected": "c16121"
+        },
+        {
+          "world_hash": "35d1b23f0224c7ff5e5baec3f8ed9b2ae627962d2e07e788603a2c7a12cf8896",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c20574",
+          "rejected": "c14860"
+        },
+        {
+          "world_hash": "35d1b23f0224c7ff5e5baec3f8ed9b2ae627962d2e07e788603a2c7a12cf8896",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c20574",
+          "rejected": "c34838"
+        },
+        {
+          "world_hash": "35d1b23f0224c7ff5e5baec3f8ed9b2ae627962d2e07e788603a2c7a12cf8896",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c14860",
+          "rejected": "c34838"
+        },
+        {
+          "world_hash": "0d7d982421987aff4f41a2b2c5512beba8f43bd3e6c77074b49fe817ce054dd8",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c11446",
+          "rejected": "c79268"
+        },
+        {
+          "world_hash": "0d7d982421987aff4f41a2b2c5512beba8f43bd3e6c77074b49fe817ce054dd8",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c14691",
+          "rejected": "c29619"
+        },
+        {
+          "world_hash": "0d7d982421987aff4f41a2b2c5512beba8f43bd3e6c77074b49fe817ce054dd8",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c11446",
+          "rejected": "c29619"
+        },
+        {
+          "world_hash": "d08a7c2cba920b5ade146ec1c0b7696910b909116ed88c1ad68658ce1ecfee30",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c16754",
+          "rejected": "c72808"
+        },
+        {
+          "world_hash": "d08a7c2cba920b5ade146ec1c0b7696910b909116ed88c1ad68658ce1ecfee30",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c16754",
+          "rejected": "c57583"
+        },
+        {
+          "world_hash": "d08a7c2cba920b5ade146ec1c0b7696910b909116ed88c1ad68658ce1ecfee30",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c16754",
+          "rejected": "c96544"
+        },
+        {
+          "world_hash": "3707cbd0977edca5b00c92211d3c41c6fb6e23ed9b8eddedcf7282c7523b436c",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c15323",
+          "rejected": "c16220"
+        },
+        {
+          "world_hash": "3707cbd0977edca5b00c92211d3c41c6fb6e23ed9b8eddedcf7282c7523b436c",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c15323",
+          "rejected": "c62606"
+        },
+        {
+          "world_hash": "3707cbd0977edca5b00c92211d3c41c6fb6e23ed9b8eddedcf7282c7523b436c",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c20663",
+          "rejected": "c16220"
+        },
+        {
+          "world_hash": "d31c7392cbb055aef3d730bee2971e6f76a35e0af4eecf2adb859b7c070c90c8",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c15373",
+          "rejected": "c13723"
+        },
+        {
+          "world_hash": "d31c7392cbb055aef3d730bee2971e6f76a35e0af4eecf2adb859b7c070c90c8",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c15373",
+          "rejected": "c45417"
+        },
+        {
+          "world_hash": "d31c7392cbb055aef3d730bee2971e6f76a35e0af4eecf2adb859b7c070c90c8",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c13723",
+          "rejected": "c45417"
+        },
+        {
+          "world_hash": "4f74b819a9315f53b3d34d015efa97db4b38f54063d97b0328c14f6887417bd1",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c27189",
+          "rejected": "c29647"
+        },
+        {
+          "world_hash": "4f74b819a9315f53b3d34d015efa97db4b38f54063d97b0328c14f6887417bd1",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c27189",
+          "rejected": "c38465"
+        },
+        {
+          "world_hash": "4f74b819a9315f53b3d34d015efa97db4b38f54063d97b0328c14f6887417bd1",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c38098",
+          "rejected": "c97544"
+        },
+        {
+          "world_hash": "b94c7f9aa3c4e77554cb209813774dc0319a58ae84f5b15c5a84ae749180778a",
+          "bucket": -1,
+          "strict_pair_options": 32,
+          "chosen": "c27781",
+          "rejected": "c14271"
+        },
+        {
+          "world_hash": "b94c7f9aa3c4e77554cb209813774dc0319a58ae84f5b15c5a84ae749180778a",
+          "bucket": 0,
+          "strict_pair_options": 26,
+          "chosen": "c27781",
+          "rejected": "c11458"
+        },
+        {
+          "world_hash": "b94c7f9aa3c4e77554cb209813774dc0319a58ae84f5b15c5a84ae749180778a",
+          "bucket": 1,
+          "strict_pair_options": 67,
+          "chosen": "c14271",
+          "rejected": "c11458"
+        },
+        {
+          "world_hash": "cbb08e00ad40f6add4ce807c04bf8886954fe9976bd863b1aaba3c7dc74599ac",
+          "bucket": -1,
+          "strict_pair_options": 53,
+          "chosen": "c11241",
+          "rejected": "c41018"
+        },
+        {
+          "world_hash": "cbb08e00ad40f6add4ce807c04bf8886954fe9976bd863b1aaba3c7dc74599ac",
+          "bucket": 0,
+          "strict_pair_options": 22,
+          "chosen": "c11241",
+          "rejected": "c13522"
+        },
+        {
+          "world_hash": "cbb08e00ad40f6add4ce807c04bf8886954fe9976bd863b1aaba3c7dc74599ac",
+          "bucket": 1,
+          "strict_pair_options": 30,
+          "chosen": "c57818",
+          "rejected": "c29619"
+        },
+        {
+          "world_hash": "ac479e8d624cfe981882db9346cda5b798e5ff24f6ce25858eeb48a7d84ff185",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c12724",
+          "rejected": "c24838"
+        },
+        {
+          "world_hash": "ac479e8d624cfe981882db9346cda5b798e5ff24f6ce25858eeb48a7d84ff185",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c12724",
+          "rejected": "c38084"
+        },
+        {
+          "world_hash": "ac479e8d624cfe981882db9346cda5b798e5ff24f6ce25858eeb48a7d84ff185",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c24838",
+          "rejected": "c38084"
+        },
+        {
+          "world_hash": "414379a6c3b043e9617c28c3d21038a7b82aef4d3e7621f87ec2abcb1347a602",
+          "bucket": -1,
+          "strict_pair_options": 16,
+          "chosen": "c40836",
+          "rejected": "c13970"
+        },
+        {
+          "world_hash": "414379a6c3b043e9617c28c3d21038a7b82aef4d3e7621f87ec2abcb1347a602",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c13970",
+          "rejected": "c67537"
+        },
+        {
+          "world_hash": "414379a6c3b043e9617c28c3d21038a7b82aef4d3e7621f87ec2abcb1347a602",
+          "bucket": 1,
+          "strict_pair_options": 26,
+          "chosen": "c13970",
+          "rejected": "c60975"
+        },
+        {
+          "world_hash": "3a108ce4709af584dc83dffa7c9c7a27f30543087311b618722db3e95b4c3f99",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c19224",
+          "rejected": "c18685"
+        },
+        {
+          "world_hash": "3a108ce4709af584dc83dffa7c9c7a27f30543087311b618722db3e95b4c3f99",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c19224",
+          "rejected": "c55650"
+        },
+        {
+          "world_hash": "3a108ce4709af584dc83dffa7c9c7a27f30543087311b618722db3e95b4c3f99",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c18685",
+          "rejected": "c56171"
+        },
+        {
+          "world_hash": "d913a9fc3d67e58aca6c204fa71cce3bdd8350e7d1d56047efb4dabb84c5dfaa",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c20995",
+          "rejected": "c22428"
+        },
+        {
+          "world_hash": "d913a9fc3d67e58aca6c204fa71cce3bdd8350e7d1d56047efb4dabb84c5dfaa",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c35263",
+          "rejected": "c80251"
+        },
+        {
+          "world_hash": "d913a9fc3d67e58aca6c204fa71cce3bdd8350e7d1d56047efb4dabb84c5dfaa",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c22428",
+          "rejected": "c80251"
+        },
+        {
+          "world_hash": "43b56a1268b3518269a2b3bf8fc91d0a0a3cba2b6b8ec8fb143f5ad63d68daf1",
+          "bucket": -1,
+          "strict_pair_options": 21,
+          "chosen": "c17214",
+          "rejected": "c74906"
+        },
+        {
+          "world_hash": "43b56a1268b3518269a2b3bf8fc91d0a0a3cba2b6b8ec8fb143f5ad63d68daf1",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c17214",
+          "rejected": "c98628"
+        },
+        {
+          "world_hash": "43b56a1268b3518269a2b3bf8fc91d0a0a3cba2b6b8ec8fb143f5ad63d68daf1",
+          "bucket": 1,
+          "strict_pair_options": 21,
+          "chosen": "c17214",
+          "rejected": "c42042"
+        },
+        {
+          "world_hash": "8f2c7749b9107aec6f8d7eaa5cf78f30b6a067c8b05e8b029d8aa2934461bbec",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c10762",
+          "rejected": "c11763"
+        },
+        {
+          "world_hash": "8f2c7749b9107aec6f8d7eaa5cf78f30b6a067c8b05e8b029d8aa2934461bbec",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c10762",
+          "rejected": "c41027"
+        },
+        {
+          "world_hash": "8f2c7749b9107aec6f8d7eaa5cf78f30b6a067c8b05e8b029d8aa2934461bbec",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c10762",
+          "rejected": "c12520"
+        },
+        {
+          "world_hash": "d536598161ad413f037134c31f65249dd1acd31b0990f3c8c3fee007d87001f4",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c29060",
+          "rejected": "c73635"
+        },
+        {
+          "world_hash": "d536598161ad413f037134c31f65249dd1acd31b0990f3c8c3fee007d87001f4",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c45305",
+          "rejected": "c29060"
+        },
+        {
+          "world_hash": "d536598161ad413f037134c31f65249dd1acd31b0990f3c8c3fee007d87001f4",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c12452",
+          "rejected": "c25182"
+        },
+        {
+          "world_hash": "880cc7fa75b47a75436437b98b38109102ab414e1b9496c022abfb124c85ae28",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c33417",
+          "rejected": "c29935"
+        },
+        {
+          "world_hash": "880cc7fa75b47a75436437b98b38109102ab414e1b9496c022abfb124c85ae28",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c33417",
+          "rejected": "c16656"
+        },
+        {
+          "world_hash": "880cc7fa75b47a75436437b98b38109102ab414e1b9496c022abfb124c85ae28",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c29935",
+          "rejected": "c16656"
+        },
+        {
+          "world_hash": "c4ea73e4c3b57d8e2fffa4a66be826fc25b3505d5a668328d7386052c609d37a",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c57407",
+          "rejected": "c11810"
+        },
+        {
+          "world_hash": "c4ea73e4c3b57d8e2fffa4a66be826fc25b3505d5a668328d7386052c609d37a",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c81520",
+          "rejected": "c11810"
+        },
+        {
+          "world_hash": "c4ea73e4c3b57d8e2fffa4a66be826fc25b3505d5a668328d7386052c609d37a",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c63117",
+          "rejected": "c11810"
+        },
+        {
+          "world_hash": "62f9b59de07909e9d260dfa555ae09974ad9c43e167f051b5227257a130a4a41",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c12792",
+          "rejected": "c25195"
+        },
+        {
+          "world_hash": "62f9b59de07909e9d260dfa555ae09974ad9c43e167f051b5227257a130a4a41",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c12792",
+          "rejected": "c25455"
+        },
+        {
+          "world_hash": "62f9b59de07909e9d260dfa555ae09974ad9c43e167f051b5227257a130a4a41",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c25195",
+          "rejected": "c25455"
+        },
+        {
+          "world_hash": "89175f1c7fad6b079148c3113b2301c7e8d649940f3311aea148e6e57e8f6778",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c14811",
+          "rejected": "c27277"
+        },
+        {
+          "world_hash": "89175f1c7fad6b079148c3113b2301c7e8d649940f3311aea148e6e57e8f6778",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c14811",
+          "rejected": "c52827"
+        },
+        {
+          "world_hash": "89175f1c7fad6b079148c3113b2301c7e8d649940f3311aea148e6e57e8f6778",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c14811",
+          "rejected": "c54525"
+        },
+        {
+          "world_hash": "b986b32f650dd5da7a4e870ffb7d01bd1a57ada1ff9c56dcd84f48d0d9bef78e",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c16211",
+          "rejected": "c39369"
+        },
+        {
+          "world_hash": "b986b32f650dd5da7a4e870ffb7d01bd1a57ada1ff9c56dcd84f48d0d9bef78e",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c16211",
+          "rejected": "c54626"
+        },
+        {
+          "world_hash": "b986b32f650dd5da7a4e870ffb7d01bd1a57ada1ff9c56dcd84f48d0d9bef78e",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c16211",
+          "rejected": "c59657"
+        },
+        {
+          "world_hash": "fc01175ebc8c8bc31e2c95bb621cc00d677ae647ffe2d88d682dcbc1fcec14c1",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c15785",
+          "rejected": "c11927"
+        },
+        {
+          "world_hash": "fc01175ebc8c8bc31e2c95bb621cc00d677ae647ffe2d88d682dcbc1fcec14c1",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c15785",
+          "rejected": "c47607"
+        },
+        {
+          "world_hash": "fc01175ebc8c8bc31e2c95bb621cc00d677ae647ffe2d88d682dcbc1fcec14c1",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c11927",
+          "rejected": "c20764"
+        },
+        {
+          "world_hash": "143e497e372ab1ba40ee5903fc5ace7e9c61102ed325e685bf6dd3e320f0c4d1",
+          "bucket": -1,
+          "strict_pair_options": 19,
+          "chosen": "c20059",
+          "rejected": "c48078"
+        },
+        {
+          "world_hash": "143e497e372ab1ba40ee5903fc5ace7e9c61102ed325e685bf6dd3e320f0c4d1",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c20059",
+          "rejected": "c37782"
+        },
+        {
+          "world_hash": "143e497e372ab1ba40ee5903fc5ace7e9c61102ed325e685bf6dd3e320f0c4d1",
+          "bucket": 1,
+          "strict_pair_options": 13,
+          "chosen": "c40269",
+          "rejected": "c20059"
+        },
+        {
+          "world_hash": "575c0259deae6dca47c884bc8a56008aaa62535064ac58a03d7ce0ed90803d0d",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c16310",
+          "rejected": "c17844"
+        },
+        {
+          "world_hash": "575c0259deae6dca47c884bc8a56008aaa62535064ac58a03d7ce0ed90803d0d",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c16310",
+          "rejected": "c41509"
+        },
+        {
+          "world_hash": "575c0259deae6dca47c884bc8a56008aaa62535064ac58a03d7ce0ed90803d0d",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c16310",
+          "rejected": "c44471"
+        },
+        {
+          "world_hash": "da1a8d0ecea6b37f1c44be7598143f297a705f6b948e45c1a4af2ddbd38ce4fe",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c18438",
+          "rejected": "c31830"
+        },
+        {
+          "world_hash": "da1a8d0ecea6b37f1c44be7598143f297a705f6b948e45c1a4af2ddbd38ce4fe",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c37858",
+          "rejected": "c31830"
+        },
+        {
+          "world_hash": "da1a8d0ecea6b37f1c44be7598143f297a705f6b948e45c1a4af2ddbd38ce4fe",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c31830",
+          "rejected": "c76836"
+        },
+        {
+          "world_hash": "9634791e7f44ab3fb7e55ae3d5443183ceca8052c2e22cbefb8b7913df39ab6d",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c29318",
+          "rejected": "c47616"
+        },
+        {
+          "world_hash": "9634791e7f44ab3fb7e55ae3d5443183ceca8052c2e22cbefb8b7913df39ab6d",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c31495",
+          "rejected": "c60988"
+        },
+        {
+          "world_hash": "9634791e7f44ab3fb7e55ae3d5443183ceca8052c2e22cbefb8b7913df39ab6d",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c29318",
+          "rejected": "c43932"
+        },
+        {
+          "world_hash": "3227a68d48f4b49ed6b6772ef57731ef614fa1dc517f4e9510e7186e2d8489b2",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c54257",
+          "rejected": "c30936"
+        },
+        {
+          "world_hash": "3227a68d48f4b49ed6b6772ef57731ef614fa1dc517f4e9510e7186e2d8489b2",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c54257",
+          "rejected": "c58365"
+        },
+        {
+          "world_hash": "3227a68d48f4b49ed6b6772ef57731ef614fa1dc517f4e9510e7186e2d8489b2",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c77009",
+          "rejected": "c54257"
+        },
+        {
+          "world_hash": "f6cca3c6a220f6d3f2d72f1f320350a9b6c66c6359d8960836512a3e3f8697d3",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c18670",
+          "rejected": "c43498"
+        },
+        {
+          "world_hash": "f6cca3c6a220f6d3f2d72f1f320350a9b6c66c6359d8960836512a3e3f8697d3",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c18670",
+          "rejected": "c96805"
+        },
+        {
+          "world_hash": "f6cca3c6a220f6d3f2d72f1f320350a9b6c66c6359d8960836512a3e3f8697d3",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c49280",
+          "rejected": "c96805"
+        },
+        {
+          "world_hash": "ee515c7d278098fa212c1e943cb5ad7d9080d31a09900a2163b6eafd0677ef43",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c29896",
+          "rejected": "c34342"
+        },
+        {
+          "world_hash": "ee515c7d278098fa212c1e943cb5ad7d9080d31a09900a2163b6eafd0677ef43",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c29896",
+          "rejected": "c65971"
+        },
+        {
+          "world_hash": "ee515c7d278098fa212c1e943cb5ad7d9080d31a09900a2163b6eafd0677ef43",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c29896",
+          "rejected": "c65845"
+        },
+        {
+          "world_hash": "d01f57d7880199fef2d5abf74786c8ad7a3e8c210190a4046eef09ed03f47498",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c19935",
+          "rejected": "c34702"
+        },
+        {
+          "world_hash": "d01f57d7880199fef2d5abf74786c8ad7a3e8c210190a4046eef09ed03f47498",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c19935",
+          "rejected": "c23866"
+        },
+        {
+          "world_hash": "d01f57d7880199fef2d5abf74786c8ad7a3e8c210190a4046eef09ed03f47498",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c19935",
+          "rejected": "c78688"
+        },
+        {
+          "world_hash": "1043d398efd05a529c71686e4d0687871fe48c23bf0689b49f6c3a5828bbd654",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c15006",
+          "rejected": "c28715"
+        },
+        {
+          "world_hash": "1043d398efd05a529c71686e4d0687871fe48c23bf0689b49f6c3a5828bbd654",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c15006",
+          "rejected": "c18504"
+        },
+        {
+          "world_hash": "1043d398efd05a529c71686e4d0687871fe48c23bf0689b49f6c3a5828bbd654",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c28715",
+          "rejected": "c18504"
+        },
+        {
+          "world_hash": "d8de5a5e5884d512f29c7afebcba8db38f09d7b37ed21f1fbf06bb296f8feba6",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c15616",
+          "rejected": "c37553"
+        },
+        {
+          "world_hash": "d8de5a5e5884d512f29c7afebcba8db38f09d7b37ed21f1fbf06bb296f8feba6",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c15616",
+          "rejected": "c90225"
+        },
+        {
+          "world_hash": "d8de5a5e5884d512f29c7afebcba8db38f09d7b37ed21f1fbf06bb296f8feba6",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c14603",
+          "rejected": "c15616"
+        },
+        {
+          "world_hash": "3b710c3e89f6df3d928069afabe9b8f7598b9f3a77b26dacb106f1e2bf99d886",
+          "bucket": -1,
+          "strict_pair_options": 22,
+          "chosen": "c26108",
+          "rejected": "c20304"
+        },
+        {
+          "world_hash": "3b710c3e89f6df3d928069afabe9b8f7598b9f3a77b26dacb106f1e2bf99d886",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c26108",
+          "rejected": "c56679"
+        },
+        {
+          "world_hash": "3b710c3e89f6df3d928069afabe9b8f7598b9f3a77b26dacb106f1e2bf99d886",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c62172",
+          "rejected": "c26108"
+        },
+        {
+          "world_hash": "c1c96edb76c78fd745535cb2f375f5e8c6c794b383c5e6702896113de4df29dc",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c19566",
+          "rejected": "c28195"
+        },
+        {
+          "world_hash": "c1c96edb76c78fd745535cb2f375f5e8c6c794b383c5e6702896113de4df29dc",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c19566",
+          "rejected": "c26116"
+        },
+        {
+          "world_hash": "c1c96edb76c78fd745535cb2f375f5e8c6c794b383c5e6702896113de4df29dc",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c19566",
+          "rejected": "c22103"
+        },
+        {
+          "world_hash": "ec4cc3e4ebbb4ae5011f078626686a9d885b6bb9495ed640fdc1e64acaeb0e25",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c34157",
+          "rejected": "c38013"
+        },
+        {
+          "world_hash": "ec4cc3e4ebbb4ae5011f078626686a9d885b6bb9495ed640fdc1e64acaeb0e25",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c34157",
+          "rejected": "c43624"
+        },
+        {
+          "world_hash": "ec4cc3e4ebbb4ae5011f078626686a9d885b6bb9495ed640fdc1e64acaeb0e25",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c16812",
+          "rejected": "c34157"
+        },
+        {
+          "world_hash": "1fe9df52f434e9fffcc704b725be1db731d641b1c4566bb143b2c993fbf3cf27",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c42792",
+          "rejected": "c64576"
+        },
+        {
+          "world_hash": "1fe9df52f434e9fffcc704b725be1db731d641b1c4566bb143b2c993fbf3cf27",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c61026",
+          "rejected": "c74728"
+        },
+        {
+          "world_hash": "1fe9df52f434e9fffcc704b725be1db731d641b1c4566bb143b2c993fbf3cf27",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c42792",
+          "rejected": "c74728"
+        },
+        {
+          "world_hash": "b521ff75d4ea0d25f7a2dc1e0af250730c1d8b1b568b7b882f9fe6bc9dc1931f",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c12802",
+          "rejected": "c33382"
+        },
+        {
+          "world_hash": "b521ff75d4ea0d25f7a2dc1e0af250730c1d8b1b568b7b882f9fe6bc9dc1931f",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c46474",
+          "rejected": "c40402"
+        },
+        {
+          "world_hash": "b521ff75d4ea0d25f7a2dc1e0af250730c1d8b1b568b7b882f9fe6bc9dc1931f",
+          "bucket": 1,
+          "strict_pair_options": 17,
+          "chosen": "c40402",
+          "rejected": "c33382"
+        },
+        {
+          "world_hash": "a615149dccf938563affbbb08e2d73b0bb78e9e4a6f441d93d323b6be7f7b377",
+          "bucket": -1,
+          "strict_pair_options": 19,
+          "chosen": "c12077",
+          "rejected": "c52712"
+        },
+        {
+          "world_hash": "a615149dccf938563affbbb08e2d73b0bb78e9e4a6f441d93d323b6be7f7b377",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c13280",
+          "rejected": "c12077"
+        },
+        {
+          "world_hash": "a615149dccf938563affbbb08e2d73b0bb78e9e4a6f441d93d323b6be7f7b377",
+          "bucket": 1,
+          "strict_pair_options": 23,
+          "chosen": "c46096",
+          "rejected": "c12077"
+        },
+        {
+          "world_hash": "62a180964aa65b32de390ef8aaa7102e1738a6c6eb86a89b23f0c5accc6fa746",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c29463",
+          "rejected": "c19645"
+        },
+        {
+          "world_hash": "62a180964aa65b32de390ef8aaa7102e1738a6c6eb86a89b23f0c5accc6fa746",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c47794",
+          "rejected": "c34354"
+        },
+        {
+          "world_hash": "62a180964aa65b32de390ef8aaa7102e1738a6c6eb86a89b23f0c5accc6fa746",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c19645",
+          "rejected": "c34354"
+        }
+      ]
+    },
+    {
+      "split": "dev_challenge",
+      "canonical_rows": 76,
+      "unique_worlds": 38,
+      "legitimate_preference_items": 228,
+      "world_bucket_groups": 114,
+      "bucket_counts": {
+        "-1": 38,
+        "0": 38,
+        "1": 38
+      },
+      "representative_identity_not_enforced": true,
+      "all_strict_pair_options_by_world_bucket": [
+        {
+          "world_hash": "f56cbc855f29616e0bb018baca39d151aa568a889a5e38739ae8d2cef8165cbb",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c33338",
+          "rejected": "c16097"
+        },
+        {
+          "world_hash": "f56cbc855f29616e0bb018baca39d151aa568a889a5e38739ae8d2cef8165cbb",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c33338",
+          "rejected": "c90953"
+        },
+        {
+          "world_hash": "f56cbc855f29616e0bb018baca39d151aa568a889a5e38739ae8d2cef8165cbb",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c54722",
+          "rejected": "c33338"
+        },
+        {
+          "world_hash": "002e88d67c152454ba003adfc781aad4874f0a5049ec8fbecc7a601f7b1b304c",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c12354",
+          "rejected": "c17688"
+        },
+        {
+          "world_hash": "002e88d67c152454ba003adfc781aad4874f0a5049ec8fbecc7a601f7b1b304c",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c12354",
+          "rejected": "c12491"
+        },
+        {
+          "world_hash": "002e88d67c152454ba003adfc781aad4874f0a5049ec8fbecc7a601f7b1b304c",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c12354",
+          "rejected": "c94900"
+        },
+        {
+          "world_hash": "7b434ec96826a860309b691ec24013089dc77e7b3c61919f6c69f17017d19288",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c10356",
+          "rejected": "c46477"
+        },
+        {
+          "world_hash": "7b434ec96826a860309b691ec24013089dc77e7b3c61919f6c69f17017d19288",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c10356",
+          "rejected": "c71732"
+        },
+        {
+          "world_hash": "7b434ec96826a860309b691ec24013089dc77e7b3c61919f6c69f17017d19288",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c33899",
+          "rejected": "c44508"
+        },
+        {
+          "world_hash": "a11305539982d3d67b7c83acefb2f10bef523fdea5d65bdbaf5ece43ede032b1",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c10328",
+          "rejected": "c21854"
+        },
+        {
+          "world_hash": "a11305539982d3d67b7c83acefb2f10bef523fdea5d65bdbaf5ece43ede032b1",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c10328",
+          "rejected": "c63438"
+        },
+        {
+          "world_hash": "a11305539982d3d67b7c83acefb2f10bef523fdea5d65bdbaf5ece43ede032b1",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c10328",
+          "rejected": "c29633"
+        },
+        {
+          "world_hash": "2ae6f001c57db4d88f7a393aef5ddb31a9c2b192638d31e5ac57ef1b5c049bc0",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c25637",
+          "rejected": "c73955"
+        },
+        {
+          "world_hash": "2ae6f001c57db4d88f7a393aef5ddb31a9c2b192638d31e5ac57ef1b5c049bc0",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c25637",
+          "rejected": "c29275"
+        },
+        {
+          "world_hash": "2ae6f001c57db4d88f7a393aef5ddb31a9c2b192638d31e5ac57ef1b5c049bc0",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c25637",
+          "rejected": "c26659"
+        },
+        {
+          "world_hash": "986647e76b4ce93cb9549570e1e2e40e696692e16d3151d598faf3a76f920efd",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c16766",
+          "rejected": "c35697"
+        },
+        {
+          "world_hash": "986647e76b4ce93cb9549570e1e2e40e696692e16d3151d598faf3a76f920efd",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c16766",
+          "rejected": "c64733"
+        },
+        {
+          "world_hash": "986647e76b4ce93cb9549570e1e2e40e696692e16d3151d598faf3a76f920efd",
+          "bucket": 1,
+          "strict_pair_options": 24,
+          "chosen": "c28407",
+          "rejected": "c16766"
+        },
+        {
+          "world_hash": "07d36f3491c941bd9cf7f78c801fea4f7af5ecc788fcf9b6f30ead4de05b79a0",
+          "bucket": -1,
+          "strict_pair_options": 31,
+          "chosen": "c16197",
+          "rejected": "c16209"
+        },
+        {
+          "world_hash": "07d36f3491c941bd9cf7f78c801fea4f7af5ecc788fcf9b6f30ead4de05b79a0",
+          "bucket": 0,
+          "strict_pair_options": 26,
+          "chosen": "c16197",
+          "rejected": "c24078"
+        },
+        {
+          "world_hash": "07d36f3491c941bd9cf7f78c801fea4f7af5ecc788fcf9b6f30ead4de05b79a0",
+          "bucket": 1,
+          "strict_pair_options": 68,
+          "chosen": "c16197",
+          "rejected": "c23794"
+        },
+        {
+          "world_hash": "e1482ba0fb36dbbcc0a9092bc1d002b968a1c5df4506508e602d03232b09126f",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c15498",
+          "rejected": "c72465"
+        },
+        {
+          "world_hash": "e1482ba0fb36dbbcc0a9092bc1d002b968a1c5df4506508e602d03232b09126f",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c15498",
+          "rejected": "c37084"
+        },
+        {
+          "world_hash": "e1482ba0fb36dbbcc0a9092bc1d002b968a1c5df4506508e602d03232b09126f",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c19712",
+          "rejected": "c15498"
+        },
+        {
+          "world_hash": "4ad9ad354398fae277780ae73293f3dd4781cad9d413755e5a770234b3d6385e",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c23061",
+          "rejected": "c28516"
+        },
+        {
+          "world_hash": "4ad9ad354398fae277780ae73293f3dd4781cad9d413755e5a770234b3d6385e",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c34415",
+          "rejected": "c28516"
+        },
+        {
+          "world_hash": "4ad9ad354398fae277780ae73293f3dd4781cad9d413755e5a770234b3d6385e",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c21087",
+          "rejected": "c23061"
+        },
+        {
+          "world_hash": "ed10221d37825372e5afda995c4a5cbf52ef9dd617d16bb5a5c1d42a1fdab986",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c17992",
+          "rejected": "c83272"
+        },
+        {
+          "world_hash": "ed10221d37825372e5afda995c4a5cbf52ef9dd617d16bb5a5c1d42a1fdab986",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c17992",
+          "rejected": "c94220"
+        },
+        {
+          "world_hash": "ed10221d37825372e5afda995c4a5cbf52ef9dd617d16bb5a5c1d42a1fdab986",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c17992",
+          "rejected": "c53192"
+        },
+        {
+          "world_hash": "1e3dde883108826513dc25984f78b2aa5d6164760a8104495f56e484ca1fb688",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c12826",
+          "rejected": "c10229"
+        },
+        {
+          "world_hash": "1e3dde883108826513dc25984f78b2aa5d6164760a8104495f56e484ca1fb688",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c12826",
+          "rejected": "c27736"
+        },
+        {
+          "world_hash": "1e3dde883108826513dc25984f78b2aa5d6164760a8104495f56e484ca1fb688",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c26783",
+          "rejected": "c27736"
+        },
+        {
+          "world_hash": "ffbab9d9b99c586d74605f9431c9fd5666bc48295f5c2767f705a2e22da49764",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c17569",
+          "rejected": "c61383"
+        },
+        {
+          "world_hash": "ffbab9d9b99c586d74605f9431c9fd5666bc48295f5c2767f705a2e22da49764",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c63982",
+          "rejected": "c17569"
+        },
+        {
+          "world_hash": "ffbab9d9b99c586d74605f9431c9fd5666bc48295f5c2767f705a2e22da49764",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c36678",
+          "rejected": "c17569"
+        },
+        {
+          "world_hash": "7d30b2c2ab97683164212107879258b08f658c4f8bb7bdfbb051adfc0cd2b94c",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c11400",
+          "rejected": "c40136"
+        },
+        {
+          "world_hash": "7d30b2c2ab97683164212107879258b08f658c4f8bb7bdfbb051adfc0cd2b94c",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c11400",
+          "rejected": "c37906"
+        },
+        {
+          "world_hash": "7d30b2c2ab97683164212107879258b08f658c4f8bb7bdfbb051adfc0cd2b94c",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c23354",
+          "rejected": "c30791"
+        },
+        {
+          "world_hash": "be2831d5f2764d563c360cd8c48006ab6c627bc72676097eb5f7c695924c5ffc",
+          "bucket": -1,
+          "strict_pair_options": 42,
+          "chosen": "c10419",
+          "rejected": "c96023"
+        },
+        {
+          "world_hash": "be2831d5f2764d563c360cd8c48006ab6c627bc72676097eb5f7c695924c5ffc",
+          "bucket": 0,
+          "strict_pair_options": 33,
+          "chosen": "c10419",
+          "rejected": "c34871"
+        },
+        {
+          "world_hash": "be2831d5f2764d563c360cd8c48006ab6c627bc72676097eb5f7c695924c5ffc",
+          "bucket": 1,
+          "strict_pair_options": 35,
+          "chosen": "c31066",
+          "rejected": "c51862"
+        },
+        {
+          "world_hash": "22d69f504a6188976445224a5707c71caae0ad0333be54fa282ef28899902737",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c25640",
+          "rejected": "c61271"
+        },
+        {
+          "world_hash": "22d69f504a6188976445224a5707c71caae0ad0333be54fa282ef28899902737",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c25640",
+          "rejected": "c52466"
+        },
+        {
+          "world_hash": "22d69f504a6188976445224a5707c71caae0ad0333be54fa282ef28899902737",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c26671",
+          "rejected": "c79237"
+        },
+        {
+          "world_hash": "524e2f636651c2e70859d434dd7921c4132b51ce2c3f162722d94911b012225c",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c14683",
+          "rejected": "c42528"
+        },
+        {
+          "world_hash": "524e2f636651c2e70859d434dd7921c4132b51ce2c3f162722d94911b012225c",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c14683",
+          "rejected": "c75158"
+        },
+        {
+          "world_hash": "524e2f636651c2e70859d434dd7921c4132b51ce2c3f162722d94911b012225c",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c14683",
+          "rejected": "c23879"
+        },
+        {
+          "world_hash": "46fa57feeb2369400d5f10f1301ec02d7b6b2e48c09ca7c3426d8d25b6ff276b",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c21555",
+          "rejected": "c43255"
+        },
+        {
+          "world_hash": "46fa57feeb2369400d5f10f1301ec02d7b6b2e48c09ca7c3426d8d25b6ff276b",
+          "bucket": 0,
+          "strict_pair_options": 8,
+          "chosen": "c56390",
+          "rejected": "c21555"
+        },
+        {
+          "world_hash": "46fa57feeb2369400d5f10f1301ec02d7b6b2e48c09ca7c3426d8d25b6ff276b",
+          "bucket": 1,
+          "strict_pair_options": 3,
+          "chosen": "c50110",
+          "rejected": "c21555"
+        },
+        {
+          "world_hash": "d855e6fd976bb32ac76ed4e3f3e77b44a659a47b3119d1c52889fc67a89df628",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c26404",
+          "rejected": "c81510"
+        },
+        {
+          "world_hash": "d855e6fd976bb32ac76ed4e3f3e77b44a659a47b3119d1c52889fc67a89df628",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c26404",
+          "rejected": "c72280"
+        },
+        {
+          "world_hash": "d855e6fd976bb32ac76ed4e3f3e77b44a659a47b3119d1c52889fc67a89df628",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c40094",
+          "rejected": "c79471"
+        },
+        {
+          "world_hash": "a12f8dd18706e92dce53fb0e6c1cdc9c8e7cf7bdea7a410504f4096e6b815ca2",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c11296",
+          "rejected": "c50557"
+        },
+        {
+          "world_hash": "a12f8dd18706e92dce53fb0e6c1cdc9c8e7cf7bdea7a410504f4096e6b815ca2",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c11296",
+          "rejected": "c74684"
+        },
+        {
+          "world_hash": "a12f8dd18706e92dce53fb0e6c1cdc9c8e7cf7bdea7a410504f4096e6b815ca2",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c11296",
+          "rejected": "c32107"
+        },
+        {
+          "world_hash": "ed8388a07fd6893e917e1442810026be8f4030c4a8b9a7a28695b6bb95eaa587",
+          "bucket": -1,
+          "strict_pair_options": 19,
+          "chosen": "c16897",
+          "rejected": "c14253"
+        },
+        {
+          "world_hash": "ed8388a07fd6893e917e1442810026be8f4030c4a8b9a7a28695b6bb95eaa587",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c16897",
+          "rejected": "c94335"
+        },
+        {
+          "world_hash": "ed8388a07fd6893e917e1442810026be8f4030c4a8b9a7a28695b6bb95eaa587",
+          "bucket": 1,
+          "strict_pair_options": 23,
+          "chosen": "c16897",
+          "rejected": "c24328"
+        },
+        {
+          "world_hash": "94cf78bff726e1b8c81871fd86e094100f76f32cc5a5c45d5c8ef9ed0ea1d0b3",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c13598",
+          "rejected": "c76738"
+        },
+        {
+          "world_hash": "94cf78bff726e1b8c81871fd86e094100f76f32cc5a5c45d5c8ef9ed0ea1d0b3",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c13598",
+          "rejected": "c14790"
+        },
+        {
+          "world_hash": "94cf78bff726e1b8c81871fd86e094100f76f32cc5a5c45d5c8ef9ed0ea1d0b3",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c28239",
+          "rejected": "c43045"
+        },
+        {
+          "world_hash": "08ba443f201e9b692022b4d33fcf8337d07cc172394e36e77e6a61964e356a15",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c18950",
+          "rejected": "c83846"
+        },
+        {
+          "world_hash": "08ba443f201e9b692022b4d33fcf8337d07cc172394e36e77e6a61964e356a15",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c18950",
+          "rejected": "c83053"
+        },
+        {
+          "world_hash": "08ba443f201e9b692022b4d33fcf8337d07cc172394e36e77e6a61964e356a15",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c51861",
+          "rejected": "c18950"
+        },
+        {
+          "world_hash": "2cb99bf108f3cad9dd8642dee14b52cdcc84ce4abf8fe9f58aa1cc7f0aa783dd",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c18778",
+          "rejected": "c46447"
+        },
+        {
+          "world_hash": "2cb99bf108f3cad9dd8642dee14b52cdcc84ce4abf8fe9f58aa1cc7f0aa783dd",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c18778",
+          "rejected": "c15075"
+        },
+        {
+          "world_hash": "2cb99bf108f3cad9dd8642dee14b52cdcc84ce4abf8fe9f58aa1cc7f0aa783dd",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c18778",
+          "rejected": "c43247"
+        },
+        {
+          "world_hash": "16430051637d58e721a3f870124a8258cea55b3baf5649c0fb61cf56a33a0119",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c10648",
+          "rejected": "c71814"
+        },
+        {
+          "world_hash": "16430051637d58e721a3f870124a8258cea55b3baf5649c0fb61cf56a33a0119",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c16191",
+          "rejected": "c10648"
+        },
+        {
+          "world_hash": "16430051637d58e721a3f870124a8258cea55b3baf5649c0fb61cf56a33a0119",
+          "bucket": 1,
+          "strict_pair_options": 24,
+          "chosen": "c13876",
+          "rejected": "c10648"
+        },
+        {
+          "world_hash": "5a0f9b23ecae5fcc123e8aefe81f31375c5d16248876e8b6c8cbb0a64bf9006e",
+          "bucket": -1,
+          "strict_pair_options": 21,
+          "chosen": "c18263",
+          "rejected": "c86157"
+        },
+        {
+          "world_hash": "5a0f9b23ecae5fcc123e8aefe81f31375c5d16248876e8b6c8cbb0a64bf9006e",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c33011",
+          "rejected": "c86280"
+        },
+        {
+          "world_hash": "5a0f9b23ecae5fcc123e8aefe81f31375c5d16248876e8b6c8cbb0a64bf9006e",
+          "bucket": 1,
+          "strict_pair_options": 21,
+          "chosen": "c31342",
+          "rejected": "c18263"
+        },
+        {
+          "world_hash": "c8fcb789694c5c6a7969a9b1680c407d0eb606cc69472fe099761f97478f6e58",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c11965",
+          "rejected": "c42201"
+        },
+        {
+          "world_hash": "c8fcb789694c5c6a7969a9b1680c407d0eb606cc69472fe099761f97478f6e58",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c11965",
+          "rejected": "c17391"
+        },
+        {
+          "world_hash": "c8fcb789694c5c6a7969a9b1680c407d0eb606cc69472fe099761f97478f6e58",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c11965",
+          "rejected": "c55378"
+        },
+        {
+          "world_hash": "8a940367d0c07d5cc2290a56ba6b76c5fb02a2cd98079a7d3334aaf8bc39d905",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c23496",
+          "rejected": "c74776"
+        },
+        {
+          "world_hash": "8a940367d0c07d5cc2290a56ba6b76c5fb02a2cd98079a7d3334aaf8bc39d905",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c23496",
+          "rejected": "c28267"
+        },
+        {
+          "world_hash": "8a940367d0c07d5cc2290a56ba6b76c5fb02a2cd98079a7d3334aaf8bc39d905",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c43520",
+          "rejected": "c59243"
+        },
+        {
+          "world_hash": "7de0c4da447035d526ca68027eacd60eadf1908e63ab6cc15854fae3ac1c809c",
+          "bucket": -1,
+          "strict_pair_options": 23,
+          "chosen": "c13133",
+          "rejected": "c61255"
+        },
+        {
+          "world_hash": "7de0c4da447035d526ca68027eacd60eadf1908e63ab6cc15854fae3ac1c809c",
+          "bucket": 0,
+          "strict_pair_options": 7,
+          "chosen": "c24741",
+          "rejected": "c54643"
+        },
+        {
+          "world_hash": "7de0c4da447035d526ca68027eacd60eadf1908e63ab6cc15854fae3ac1c809c",
+          "bucket": 1,
+          "strict_pair_options": 12,
+          "chosen": "c13133",
+          "rejected": "c24741"
+        },
+        {
+          "world_hash": "65a6c9c3687f4ac1f786dfb8cf67e35e6168d9d2d22ae65b6a0fbe13bfaf6f4a",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c25205",
+          "rejected": "c17965"
+        },
+        {
+          "world_hash": "65a6c9c3687f4ac1f786dfb8cf67e35e6168d9d2d22ae65b6a0fbe13bfaf6f4a",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c25205",
+          "rejected": "c35796"
+        },
+        {
+          "world_hash": "65a6c9c3687f4ac1f786dfb8cf67e35e6168d9d2d22ae65b6a0fbe13bfaf6f4a",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c17965",
+          "rejected": "c23008"
+        },
+        {
+          "world_hash": "7e8ef9190581b67155d663aaccfde9cc927f59bc34031456bd51fe95aac01cad",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c24113",
+          "rejected": "c21711"
+        },
+        {
+          "world_hash": "7e8ef9190581b67155d663aaccfde9cc927f59bc34031456bd51fe95aac01cad",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c40893",
+          "rejected": "c24113"
+        },
+        {
+          "world_hash": "7e8ef9190581b67155d663aaccfde9cc927f59bc34031456bd51fe95aac01cad",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c21711",
+          "rejected": "c15753"
+        },
+        {
+          "world_hash": "17d3f386f17f4a538b95269ce7a68dfbdf787607ccf4576d3f4347c3a8ee8a8b",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c22326",
+          "rejected": "c72775"
+        },
+        {
+          "world_hash": "17d3f386f17f4a538b95269ce7a68dfbdf787607ccf4576d3f4347c3a8ee8a8b",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c22326",
+          "rejected": "c70273"
+        },
+        {
+          "world_hash": "17d3f386f17f4a538b95269ce7a68dfbdf787607ccf4576d3f4347c3a8ee8a8b",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c10427",
+          "rejected": "c22326"
+        },
+        {
+          "world_hash": "d17e1cf02b93b93fbf1a4eaa89893eae94a0f7b4605864b1c1b4aa95877dce19",
+          "bucket": -1,
+          "strict_pair_options": 18,
+          "chosen": "c12564",
+          "rejected": "c20595"
+        },
+        {
+          "world_hash": "d17e1cf02b93b93fbf1a4eaa89893eae94a0f7b4605864b1c1b4aa95877dce19",
+          "bucket": 0,
+          "strict_pair_options": 15,
+          "chosen": "c20595",
+          "rejected": "c32373"
+        },
+        {
+          "world_hash": "d17e1cf02b93b93fbf1a4eaa89893eae94a0f7b4605864b1c1b4aa95877dce19",
+          "bucket": 1,
+          "strict_pair_options": 11,
+          "chosen": "c42405",
+          "rejected": "c12564"
+        },
+        {
+          "world_hash": "cb753a6c254de96e23bb8acc0f7b01675498bb9bf66fb50edab4fe9f502d9dec",
+          "bucket": -1,
+          "strict_pair_options": 16,
+          "chosen": "c13692",
+          "rejected": "c24600"
+        },
+        {
+          "world_hash": "cb753a6c254de96e23bb8acc0f7b01675498bb9bf66fb50edab4fe9f502d9dec",
+          "bucket": 0,
+          "strict_pair_options": 9,
+          "chosen": "c24597",
+          "rejected": "c24600"
+        },
+        {
+          "world_hash": "cb753a6c254de96e23bb8acc0f7b01675498bb9bf66fb50edab4fe9f502d9dec",
+          "bucket": 1,
+          "strict_pair_options": 28,
+          "chosen": "c24597",
+          "rejected": "c13692"
+        },
+        {
+          "world_hash": "c07bae33e628e79359e149877cd952a45e103cc7690597daa49446ea3f784d9b",
+          "bucket": -1,
+          "strict_pair_options": 16,
+          "chosen": "c12971",
+          "rejected": "c64741"
+        },
+        {
+          "world_hash": "c07bae33e628e79359e149877cd952a45e103cc7690597daa49446ea3f784d9b",
+          "bucket": 0,
+          "strict_pair_options": 9,
+          "chosen": "c12971",
+          "rejected": "c30797"
+        },
+        {
+          "world_hash": "c07bae33e628e79359e149877cd952a45e103cc7690597daa49446ea3f784d9b",
+          "bucket": 1,
+          "strict_pair_options": 28,
+          "chosen": "c12971",
+          "rejected": "c20292"
+        },
+        {
+          "world_hash": "7f7950e971ac664808dafa3ee1c539032e8ef2aeb358cd8e751f1381a174fe16",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c13459",
+          "rejected": "c52274"
+        },
+        {
+          "world_hash": "7f7950e971ac664808dafa3ee1c539032e8ef2aeb358cd8e751f1381a174fe16",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c22351",
+          "rejected": "c17173"
+        },
+        {
+          "world_hash": "7f7950e971ac664808dafa3ee1c539032e8ef2aeb358cd8e751f1381a174fe16",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c13459",
+          "rejected": "c17173"
+        },
+        {
+          "world_hash": "9e60ec1b2679b00379bc5dc7dde533fd51315715e052c016a5ed24efc3b94796",
+          "bucket": -1,
+          "strict_pair_options": 17,
+          "chosen": "c16117",
+          "rejected": "c86108"
+        },
+        {
+          "world_hash": "9e60ec1b2679b00379bc5dc7dde533fd51315715e052c016a5ed24efc3b94796",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c22865",
+          "rejected": "c16117"
+        },
+        {
+          "world_hash": "9e60ec1b2679b00379bc5dc7dde533fd51315715e052c016a5ed24efc3b94796",
+          "bucket": 1,
+          "strict_pair_options": 25,
+          "chosen": "c16117",
+          "rejected": "c73795"
+        },
+        {
+          "world_hash": "aded4da71750ce3fbf8a78068f178cf0e636f2bfd18919602545df04b9ccccad",
+          "bucket": -1,
+          "strict_pair_options": 15,
+          "chosen": "c12141",
+          "rejected": "c12894"
+        },
+        {
+          "world_hash": "aded4da71750ce3fbf8a78068f178cf0e636f2bfd18919602545df04b9ccccad",
+          "bucket": 0,
+          "strict_pair_options": 9,
+          "chosen": "c33849",
+          "rejected": "c12894"
+        },
+        {
+          "world_hash": "aded4da71750ce3fbf8a78068f178cf0e636f2bfd18919602545df04b9ccccad",
+          "bucket": 1,
+          "strict_pair_options": 19,
+          "chosen": "c26503",
+          "rejected": "c12894"
+        },
+        {
+          "world_hash": "217e7d44180b9e3e79988e71a07065066d86bdd9cf96aade3fce26f49c2b9362",
+          "bucket": -1,
+          "strict_pair_options": 21,
+          "chosen": "c10360",
+          "rejected": "c79533"
+        },
+        {
+          "world_hash": "217e7d44180b9e3e79988e71a07065066d86bdd9cf96aade3fce26f49c2b9362",
+          "bucket": 0,
+          "strict_pair_options": 11,
+          "chosen": "c13365",
+          "rejected": "c10360"
+        },
+        {
+          "world_hash": "217e7d44180b9e3e79988e71a07065066d86bdd9cf96aade3fce26f49c2b9362",
+          "bucket": 1,
+          "strict_pair_options": 21,
+          "chosen": "c22665",
+          "rejected": "c10360"
+        }
+      ]
+    }
+  ],
+  "material_blockers": [],
+  "method": "Only requested validate_specialized function AST-executed with own typed solvers. Every fixture constructed independently from prompt-derived candidate inputs; own strict critic ranking, submitted legal-goal trajectory simulation, complete input/candidate coverage. No exporter representative-selection logic, producer/reference/oracle code, other reviewer verdicts or release files read.",
+  "scope_limits": [
+    "This approves exact-hash generic coverage/type/semantic join code, not new dataset releases or efficacy.",
+    "Preference completeness is per exact world/submitted-plan length-sign bucket, as declared; it permits any strict representative pair with crossed positions. All canonical worlds in exercised fixtures have exactly two field-order views.",
+    "Submitted trajectory selection tests legality and actual goal attainment; it does not require shortest plans.",
+    "Per-file missing-file presence is delegated to the existing release validator; this entry point checks completeness of supplied named files. No release validator or private oracle executed.",
+    "Separate execution still shares the underlying model; independence is an execution/custody claim, not independent model-error evidence."
+  ]
+}

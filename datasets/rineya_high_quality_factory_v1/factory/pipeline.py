@@ -15,6 +15,18 @@ def expected_target(row, oracle):
     return {"after": result["after"]} if row["target_format"] == "answer_only" else result
 
 
+def memory_control_rows(rows):
+    return [row for row in rows if row.get('semantic_task',{}).get('kind')=='episodic'
+            and (row.get('controlled_variant') is not None or row.get('query_role_assignments') is not None)]
+
+
+def memory_control_report(rows):
+    selected=memory_control_rows(rows)
+    if not selected:return None
+    from oracles.memory_controls_independent import check_batch
+    return check_batch(selected)
+
+
 def schema_validate(row):
     from jsonschema import Draft202012Validator
     schema=json.loads((ROOT/"schemas/canonical/v1.schema.json").read_text())
@@ -57,6 +69,8 @@ def preserve_source_bytes(paths):
 def audit(batch):
     from oracles.independent import solve as independent_solve
     rows=[r for p in candidate_paths(batch) for r in load_jsonl(p)]
+    control_source=ROOT/'oracles/memory_controls_independent.py'
+    control_source_sha=hashlib.sha256(control_source.read_bytes()).hexdigest() if memory_control_rows(rows) else None
     checks=[]
     lineage=collections.defaultdict(set)
     payloads=collections.defaultdict(list)
@@ -70,6 +84,9 @@ def audit(batch):
         except Exception as e: errors.append(f"{type(e).__name__}: {e}")
         from oracles.metadata_independent import check as metadata_check
         metadata_errors=metadata_check(row)
+        if memory_control_rows([row]):
+            from oracles.memory_controls_independent import check as memory_check
+            metadata_errors.extend(memory_check(row))
         errors.extend('Metadata: '+e for e in metadata_errors)
         lineage[row["semantic_family_id"]].add(row["split"])
         payloads[digest(row["semantic_task"])].append(row["sample_id"])
@@ -87,6 +104,19 @@ def audit(batch):
     stats['metadata_failures']=sum(bool(c['metadata_errors']) for c in checks)
     stats['validation_failures']=stats['oracle_failures']
     stats['oracle_failures']=sum(any(not e.startswith('Metadata: ') for e in c['errors']) for c in checks)
+    controls=memory_control_report(rows)
+    if controls:
+        assert hashlib.sha256(control_source.read_bytes()).hexdigest()==control_source_sha,'Memory checker source changed during audit; rerun after source is stable'
+    stats['memory_control_error_count']=len(controls['errors']) if controls else 0
+    if controls:
+        stats['memory_control_counts']=controls['counts']
+        control_path=ROOT/f'audits/diversity/{batch}-memory-controls.json'
+        payload={'oracle_author_execution':'/root/formal_oracle','check_runner_execution':'/root',
+                 'checker_sha256':control_source_sha,
+                 'batch':batch,'report':controls}
+        content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
+        preserve_prior_audit(control_path,content)
+        atomic(control_path,content.decode('utf-8'))
     receipt_path=ROOT/f"reviews/oracle/{batch}.jsonl"
     report_path=ROOT/f"audits/leakage/{batch}.json"
     preserve_prior_audit(receipt_path,(''.join(canonical(c)+'\n' for c in checks)).encode('utf-8'))
@@ -176,6 +206,10 @@ def release(batch,version,tracks=None,supersedes=None):
         write_jsonl(ROOT/f"data/{track}/quarantine/{batch}.jsonl",quarantine)
         if supersedes:assert not quarantine,'Full supersession requires every replacement record accepted'
         if not accepted:continue
+        # Complete reviewed family controls must survive approval filtering.
+        # A missing approved rotation cannot silently break the release's claim.
+        controls=memory_control_report(accepted)
+        assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
         dest=ROOT/f"data/{track}/releases/{version}"
         if dest.exists():raise FileExistsError(f"Immutable release already exists: {dest}")
         dest.mkdir(parents=True)
@@ -232,6 +266,9 @@ def validate_release(path):
         assert canonical(expected_target(r,oracle))==canonical(r["verified_target"]),"released target mismatch"
         from oracles.metadata_independent import check as metadata_check
         metadata_failures=metadata_check(r)
+        if memory_control_rows([r]):
+            from oracles.memory_controls_independent import check as memory_check
+            metadata_failures.extend(memory_check(r))
         if metadata_failures:
             from factory.catalog import catalog
             active,_=catalog()
@@ -255,6 +292,8 @@ def validate_release(path):
         assert canonical(structured)==canonical([{'input':r['rendered_input'],'target':r['verified_target']} for r in expected]),'structured export mismatch'
     from factory.export_validation import validate_specialized
     specialized_counts=validate_specialized(path,rows)
+    controls=memory_control_report(rows)
+    assert not controls or not controls['errors'],'Released memory family controls incomplete or false'
     return {"path":str(path.relative_to(ROOT)),"records":len(rows),"checksum_files":len(files),"specialized_exports":specialized_counts,"pass":True}
 
 
