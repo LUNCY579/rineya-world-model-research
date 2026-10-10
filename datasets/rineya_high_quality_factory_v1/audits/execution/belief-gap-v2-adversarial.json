@@ -1,0 +1,67 @@
+{
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "batch": "belief-gap-v2",
+  "status": "completed",
+  "records": 1728,
+  "input_only_sha256": "378007b6afe442764db7a1696cad217fa357959d97be50c603946d2251a25af6",
+  "candidate_sha256": "589119d69290cf91f8cb00adf49d280f7499a6121e9064655ae523222e9e72df",
+  "predictions_sha256": "47884d7e5680e40d1b889db7e6218e9610b2b2343534b39f629f96cf4f2161c4",
+  "toy_expectations_sha256": "95036ed59977f8a794b3251ac3305f52eebd5b1e654f33f941db46a47d2f7948",
+  "first_judgments_sha256": "8478dceea2acecc6151a5480d570984e8e0340bc2999dc282be91e83ba98304a",
+  "final_receipts_sha256": "21ec9d792759d6f793eb346c893b25b44bb9e27ede560028d46ffb7397fbdde0",
+  "script_sha256": "0272df0fbffae3b80df6622c3770da9f9ed5d9a190d747416630b40986158afb",
+  "public_read_scope_hashes": {
+    "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "schemas/BELIEF_CONTROL_PROPERTIES.md": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+    "research/curricula/RBM-EVIDENCE-GAP.md": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120",
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md": "46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f",
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V2.md": "c2eb841ed546848088db4e0499e8e8f7087aa3d213af333ff39237ae6558bd33",
+    "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json": "611656b37d7fe917d64eeb191d901d272a32d8d3c72c9f8865476c6889a3e51a"
+  },
+  "diversity_sha256": "049ac6ad000282da04a9e39dcf1d517a738386886b3d1c7879cd1deff74061fe",
+  "shortcut_sha256": "526bfef00b95cac6a35ea01cd8564d3a46ed7b700cfe6cf2f39a672cdf4285c4",
+  "decisions": {
+    "ACCEPT": 1296,
+    "REVISE": 432
+  },
+  "target_and_attached_property_errors": 0,
+  "metadata_control_errors": 0,
+  "metamorphic_counts": {
+    "object_field_order": 1728,
+    "world_order_invariance": 1728,
+    "world_id_rename_equivariance": 1728,
+    "query_order_equivariance": 1728,
+    "query_id_rename_equivariance": 1728,
+    "consistent_fact_rename": 1728,
+    "observation_reorder_final_with_recomputed_prefix": 1728,
+    "nonempty_repeat_append": 1296,
+    "post_empty_supported_append": 432
+  },
+  "scalar_bijection_checks": 1728,
+  "aux_rename_counterexamples": 8,
+  "family_matched_control_pairs": 432,
+  "findings": [
+    {
+      "code": "residual_observation_scalar_conjunction_empty_shortcut",
+      "severity": "high",
+      "evidence": {
+        "literal_rule": "any string equals in {stone,unknown} AND any string equals==linen",
+        "derived_from": "Public root prospective freeze, implemented independently before candidate access",
+        "status_correct_train": 864,
+        "status_total_train": 864,
+        "status_correct_dev": 864,
+        "status_total_dev": 864,
+        "conditional_full_empty_target_correct_dev": 216,
+        "conditional_full_empty_target_total_dev": 216,
+        "affected_empty_rows": 432,
+        "mutated_counterexample_count": 8
+      },
+      "fix": "Create a fresh prospective batch with supported marker+linen positive siblings and contradictory marker+other auxiliary-value siblings within each family/length; preserve source lineage, truthful tags, original core controls and exact first-prefix matches. Freeze and re-evaluate independent scalar/position/fact/conjunction baselines before claiming shortcut repair."
+    }
+  ],
+  "forbidden_sources_read": false,
+  "predictions_frozen_before_gold_property_metadata": true,
+  "first_judgments_preserved": true,
+  "prior_v1_evidence_unchanged": true,
+  "scope": "Actual separate same-model guided corrective execution; own fresh sequential typed solver and reused own factual property/meta functions; all public inputs/controls tested independently, no producer/reference/oracle/test/checker/other verdict/manifests read. No publication, sealed evaluation or efficacy claim."
+}

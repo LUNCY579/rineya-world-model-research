@@ -1,0 +1,40 @@
+{
+  "actual_author_execution": "/root/formal_oracle",
+  "at_utc": "20261010T034412Z",
+  "status": "CORRECTIVE_PUBLIC_ONLY_SOURCE_FROZEN_BEFORE_RERUN",
+  "sources": {
+    "oracles/belief_controls_v3_independent.py": {
+      "sha256": "ff1a72153e985810d2771fecf299944b39cc8afa52effbd833feac056f143271",
+      "bytes": 29999
+    },
+    "tests/oracle_belief_controls_v3_test.py": {
+      "sha256": "9c4b6b44353056c4786c779a3d241529f5ac71ab548e29c08a3c9a528483033a",
+      "bytes": 16800
+    },
+    "oracles/belief_controls_v2_independent.py": {
+      "sha256": "5b97b73df0b9248b1ad155307e75e2a73b995dff64e81232382a6c05a2fe4984",
+      "bytes": 27311
+    },
+    "tests/oracle_belief_controls_v2_test.py": {
+      "sha256": "1369690da31e931ba9ee6ea5934db119fcbe662b0bcd5d0b74dfc0f763ff13d2",
+      "bytes": 14102
+    },
+    "oracles/belief_controls_independent.py": {
+      "sha256": "ec9f387485f2a2d58ab557db0a2a7d95c24e77cb3108afa503a80c575e04b03e",
+      "bytes": 51104
+    },
+    "feedback/improvement_requests/ORACLE-REPRO-011.json": {
+      "sha256": "d7da03962cb068a974bab3c515afdafeb1fbc752c9cea4be2c229c982260f3f9",
+      "bytes": 1542
+    }
+  },
+  "first_execution": "reviews/oracle/RBM-v3-first-execution-20261010T034122Z.json",
+  "first_counterexample": "reviews/oracle/RBM-v3-transpose-first-counterexample-20261010T034315Z.json",
+  "changes": [
+    "NEW transform reconstructs JSON occurrences from original values to avoid repeated aliased dict swap.",
+    "Own cyclic_uniform hand fixture adds a uniform leaf so A/C ordered prefix sizes differ as required.",
+    "NEW v3 diagnostics tie policy sorts feature then False/True polarity; two hashseed process regression."
+  ],
+  "input_scope": "No actual candidates/producer/gold/private reviews read. Stable v1/v2 source/test bytes unchanged.",
+  "approval_verdict": null
+}

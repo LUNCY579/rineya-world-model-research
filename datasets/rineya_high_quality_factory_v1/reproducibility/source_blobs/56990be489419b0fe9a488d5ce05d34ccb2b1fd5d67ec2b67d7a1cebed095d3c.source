@@ -1,0 +1,280 @@
+"""Input-only v2 public belief controls, independently authored by formal_oracle.
+
+Reuses the author's frozen v1 set/partition implementation, never producer code
+or stored targets. v1 is not changed or monkey-patched. Diagnostics fit only
+visible-input features; fitted lookup accuracy is explicitly in-sample.
+"""
+from collections import Counter, defaultdict
+from copy import deepcopy
+import hashlib
+import itertools
+import json
+import re
+from . import belief_controls_independent as v1
+
+DEPENDENCY_SHA256 = 'ec9f387485f2a2d58ab557db0a2a7d95c24e77cb3108afa503a80c575e04b03e'
+PUBLIC_V2_SHA256 = '46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f'
+NEW_FAMILY = frozenset(['same_prefix_empty_nonempty_counterfactual', 'contradiction_equals_mixed_outcomes'])
+FAMILY = v1.FAMILY | NEW_FAMILY
+CONTEXTS = 'ABCDEFGH'
+BeliefControlError = v1.BeliefControlError
+_json, _need, _meta = v1._json, v1._need, v1._meta
+
+
+def _setmeta(row, key, value):
+    row[key] = value
+    if type(row.get('source_provenance')) is dict and key in row['source_provenance']:
+        row['source_provenance'][key] = value
+
+
+def _projection(row):
+    result = deepcopy(row)
+    context = _meta(row, 'controlled_context')
+    _setmeta(result, 'controlled_context', {'G': 'A', 'H': 'D'}.get(context, context))
+    _setmeta(result, 'family_control_claims', [])
+    return result
+
+
+def _claims(row):
+    claims = _meta(row, 'family_control_claims')
+    _need(type(claims) is list, 'family_control_claims list required')
+    output, identifiers = [], {}
+    allowed = {'name', 'property', 'scope', 'source_family_key', 'evidence_manifest', 'control_id', 'pair_sample_ids', 'probe_id'}
+    for claim in claims:
+        _need(type(claim) is dict, 'claim object required')
+        names = set(claim) & {'name', 'property'}
+        _need(len(names) == 1 and 'scope' in claim and not set(claim) - allowed, 'claim encoding fields invalid')
+        name, scope = claim[next(iter(names))], claim['scope']
+        _need(type(name) is str and name in FAMILY and scope in ('corpus_variant', 'audit_probe'), 'undefined family property or scope')
+        if 'source_family_key' in claim:
+            _need(type(claim['source_family_key']) is str and claim['source_family_key'] == _meta(row, 'source_family_key'), 'claim source family mismatch')
+        for key in ('evidence_manifest', 'control_id', 'probe_id'):
+            if key in claim: _need(type(claim[key]) is str and bool(claim[key]), 'nonempty descriptive ' + key + ' required')
+        if 'evidence_manifest' in claim:
+            path = claim['evidence_manifest']
+            _need(not path.startswith(('/', '\\')) and not re.match(r'^[A-Za-z]:', path) and '..' not in path.replace('\\', '/').split('/'), 'evidence_manifest must be relative provenance')
+        if 'pair_sample_ids' in claim:
+            pair = claim['pair_sample_ids']
+            _need(scope == 'corpus_variant' and type(pair) is list and len(pair) == 2 and all(type(item) is str and item for item in pair) and pair[0] != pair[1], 'pair_sample_ids require two distinct corpus IDs')
+        if 'probe_id' in claim: _need(scope == 'audit_probe', 'probe_id requires audit_probe scope')
+        if name in NEW_FAMILY:
+            _need(('pair_sample_ids' in claim and 'evidence_manifest' in claim) if scope == 'corpus_variant' else 'probe_id' in claim, 'new control requires supplied length-specific pair/evidence or executed probe ID')
+        identifier = claim.get('control_id', name)
+        _need(identifier not in identifiers or identifiers[identifier] == (name, scope), 'duplicate claim identifier has inconsistent property/scope')
+        identifiers[identifier] = name, scope
+        output.append({**claim, 'property': name, 'scope': scope})
+    return output
+
+
+def check(row):
+    """Validate one v2 selected row, truthful old tags and closed claim encoding."""
+    try:
+        _need(type(row) is dict and _meta(row, 'controlled_context') in CONTEXTS, 'v2 controlled_context must be A-H')
+        _claims(row)
+        return v1.check(_projection(row))
+    except (BeliefControlError, KeyError, TypeError, ValueError) as error:
+        return ['belief_control_v2_row: ' + str(error)]
+
+
+def matched_pair(left, right):
+    """Exact E/G or F/H proof, with typed diffs and all independently run traces."""
+    a, b = v1.derive(left), v1.derive(right)
+    ao, bo = left['observations'], right['observations']
+    _need(len(ao) == len(bo) and len(ao) in (2, 3), 'matched pair requires length 2 or 3')
+    _need(_json(left['worlds']) == _json(right['worlds']) and _json(left['queries']) == _json(right['queries']), 'pair world table/ordered queries differ')
+    _need(_json(ao[0]) == _json(bo[0]) and a['support_ids'][1] == b['support_ids'][1] and bool(a['support_ids'][1]), 'pair first observation/prefix IDs differ or empty')
+    _need([item['fact'] for item in ao] == [item['fact'] for item in bo], 'pair ordered observation facts differ')
+    changes = [i for i in range(len(ao)) if _json(ao[i]) != _json(bo[i])]
+    _need(changes == [1] and ao[1]['fact'] == bo[1]['fact'], 'pair must change only observation index1 equals')
+    _need(not a['supports'][-1] and bool(b['supports'][-1]), 'pair must be empty then nonempty')
+    _need(ao[0]['fact'] != ao[1]['fact'], 'nominated contradiction needs distinct facts')
+    individual = [[world['world_id'] for world in left['worlds'] if v1._atom(world['facts'][item['fact']]) == v1._atom(item['equals'])] for item in ao[:2]]
+    _need(all(individual), 'empty constraints must each be individually supported')
+    if len(ao) == 3:
+        _need(_json(ao[2]) == _json(ao[0]) and _json(bo[2]) == _json(bo[0]), 'F/H third observation must repeat first exactly')
+    detail = {'observation_length': len(ao), 'changed_observation': 1, 'changed_field': 'equals', 'typed_old_equals': list(v1._atom(ao[1]['equals'])), 'typed_new_equals': list(v1._atom(bo[1]['equals'])), 'nominated_first_observation': ao[0], 'individually_supporting_world_ids': [sorted(ids) for ids in individual], 'left_prefix_supports': a['support_ids'], 'right_prefix_supports': b['support_ids'], 'left': a['target'], 'right': b['target'], 'satisfied': True}
+    return detail
+
+
+def _crossing(members, rows):
+    pools = members[0]['pools']
+    counts = {role: {key: Counter() for key in ('id', 'position', 'name', 'id_position', 'id_name', 'position_name', 'triple')} for role in v1.QUERY_ROLES}
+    outcomes = {key: defaultdict(Counter) for key in next(iter(counts.values()))}
+    for member in members:
+        for assignment in member['assignments']:
+            role, pos = assignment['role'], assignment['position']
+            query = rows[member['row_index']]['semantic_task']['queries'][pos]
+            i, p, n = pools[0].index(query['query_id']), pos, pools[1].index(query['fact'])
+            buckets = {'id': str(i), 'position': str(p), 'name': str(n), 'id_position': str((i,p)), 'id_name': str((i,n)), 'position_name': str((p,n)), 'triple': str((i,p,n))}
+            audit = _json(v1._audit_answer(member['analysis']['target']['queries'][pos], member['analysis']))
+            for key, bucket in buckets.items(): counts[role][key][bucket] += 1; outcomes[key][bucket][audit] += 1
+    valid = True
+    for role_counts in counts.values():
+        for key, counter in role_counts.items():
+            dimensions = 3 if key == 'triple' else 2 if '_' in key else 1
+            valid &= len(counter) == 3**dimensions and set(counter.values()) == {27 // 3**dimensions}
+    for hist in outcomes.values(): valid &= len({_json(dict(value)) for value in hist.values()}) == 1
+    return {'role_counts': {role: {key: dict(value) for key,value in items.items()} for role,items in counts.items()}, 'actual_outcome_histograms': {key:{bucket:dict(value) for bucket,value in hist.items()} for key,hist in outcomes.items()}, 'satisfied': bool(valid)}
+
+
+def _features(task, derived):
+    """All diagnostic inputs are visible facts/observations or prefix1 only."""
+    obs = task['observations']; first = derived['support_ids'][1]
+    coarse = [len(task['worlds']), len(task['worlds'][0]['facts']), len(task['queries']), len(obs)]
+    return {'first_prefix': _json(first), 'first_prefix_count': str(len(first)), 'coarse': _json(coarse), 'coarse_first_prefix': _json(coarse + [first]), 'joint_observations': _json(obs), 'joint_input_lookup': _json([sorted(task['worlds'], key=lambda w:w['world_id']), obs])}
+
+
+def _diagnostics(members, rows):
+    strata = defaultdict(list)
+    for member in members:
+        task = rows[member['row_index']]['semantic_task']; length = len(task['observations'])
+        for label in ('family:'+member['family'], 'split:'+rows[member['row_index']]['split']): strata[(label,length)].append(member)
+    result = {}
+    for (label,length), subset in sorted(strata.items()):
+        hist = defaultdict(lambda: defaultdict(Counter)); entries = []
+        for member in subset:
+            task = rows[member['row_index']]['semantic_task']; d = member['analysis']; status = 'nonempty' if d['target']['surviving_worlds'] else 'empty'
+            values = {_json(list(v1._atom(o['equals']))) for o in task['observations']}
+            features = _features(task,d); reverse = {fact:role for role,fact in member['roles'].items()}
+            for atom in values: hist['typed_scalar_anywhere'][atom][status] += 1
+            for i,o in enumerate(task['observations']):
+                atom = list(v1._atom(o['equals'])); role = reverse[o['fact']]
+                for key,bucket in [('typed_scalar_position',[i,atom]), ('fact_role',role), ('fact_name',o['fact']), ('fact_role_position_value',[role,i,atom]), ('fact_name_position_value',[o['fact'],i,atom])]: hist[key][_json(bucket)][status] += 1
+            for key,value in features.items(): hist[key][value][status] += 1
+            repeated = any(_json(o) in {_json(previous) for previous in task['observations'][:i]} for i,o in enumerate(task['observations']))
+            strict = sum(0 < len(b) < len(a) for a,b in zip(d['supports'],d['supports'][1:]))
+            payloads = len({_json(task['worlds'][i]['facts']) for i in d['supports'][-1]})
+            for key,value in [('repeated_observation',repeated),('strict_nonempty_filter_count',strict),('final_support_count',len(d['supports'][-1])),('final_distinct_payload_count',payloads)]: hist[key][_json(value)][status] += 1
+            marker = any(type(o['equals']) is str and o['equals'] in {'stone','unknown'} for o in task['observations'])
+            conjunction = marker and any(type(o['equals']) is str and o['equals']=='linen' for o in task['observations'])
+            entries.append({'member':member,'task':task,'empty':status=='empty','values':values,'features':features,'marker':marker,'conjunction':conjunction})
+        baselines = {}
+        for rule,field in [('v1_original_scalar_marker_empty','marker'),('prospective_marker_and_auxiliary_token_empty','conjunction')]:
+            failed = [e['member']['sample_id'] for e in entries if e[field] != e['empty']]
+            baselines[rule] = {'records':len(entries),'errors':len(failed),'error_sample_ids':failed,'status_accuracy':(len(entries)-len(failed))/len(entries)}
+        for feature in ('first_prefix','first_prefix_count','coarse','coarse_first_prefix','joint_observations','joint_input_lookup'):
+            groups=hist[feature]; correct=sum(max(c.values()) for c in groups.values())
+            baselines[feature+'_lookup']={'fitting':'In-sample majority per visible-input bucket; no generalization claim.','records':len(entries),'correct':correct,'errors':len(entries)-correct,'accuracy':correct/len(entries),'buckets':len(groups)}
+        for field in ('typed_scalar_anywhere','typed_scalar_position'):
+            best = None
+            for token in hist[field]:
+                predictions = []
+                for entry in entries:
+                    present = token in entry['values'] if field=='typed_scalar_anywhere' else any(_json([i,list(v1._atom(o['equals']))])==token for i,o in enumerate(entry['task']['observations']))
+                    predictions.append((present,entry['empty']))
+                for polarity in (True,False):
+                    correct = sum((present if polarity else not present)==empty for present,empty in predictions)
+                    candidate={'feature':token,'present_predicts_empty':polarity,'correct':correct,'errors':len(entries)-correct,'accuracy':correct/len(entries),'fitting':'Strongest tested in-sample one-token binary predicate, both polarities.'}
+                    if best is None or correct>best['correct']: best=candidate
+            baselines['strongest_'+field] = best
+        covered=[e for e in entries if e['marker'] and len(e['task']['worlds']) in (8,12)]
+        core_ok=queries_ok=query_total=0; core_errors=[]
+        for e in covered:
+            task=e['task']; n=len(task['worlds']); m=len(task['observations'])
+            target={'surviving_worlds':[],'belief_sizes':[n,(1 if n==8 else 2)]+[0]*(m-1),'queries':[{'query_id':q['query_id'],'counts':[],'distinct_values':0,'entailed':False,'guaranteed':None,'can_reduce_uncertainty':False} for q in task['queries']]}
+            actual=e['member']['analysis']['target']; valid=_json(target)==_json(actual); core_ok+=valid
+            if not valid: core_errors.append(e['member']['sample_id'])
+            queries_ok+=sum(_json(a)==_json(b) for a,b in zip(target['queries'],actual['queries'])); query_total+=len(actual['queries'])
+        baselines['frozen_v1_empty_core']={'records':len(entries),'covered_records':len(covered),'coverage':len(covered)/len(entries),'conditional_complete_task_accuracy':core_ok/len(covered) if covered else None,'whole_batch_complete_task_accuracy_with_abstentions_incorrect':core_ok/len(entries),'conditional_query_accuracy':queries_ok/query_total if query_total else None,'error_sample_ids':core_errors,'formula_preserved_exactly':'[N,(1 if N==8 else 2)]+[0]*(M-1), including its initial-count entry; not silently repaired.'}
+        result[label+'/length'+str(length)]={'records':len(entries),'outcomes':dict(Counter('empty' if e['empty'] else 'nonempty' for e in entries)),'histograms':{key:{bucket:dict(c) for bucket,c in value.items()} for key,value in hist.items()},'baselines':baselines,'mixed_coarse_first_prefix_buckets':sum(len(c)==2 for c in hist['coarse_first_prefix'].values())}
+    return result
+
+
+def check_batch(rows):
+    """Exact full A-H schedule, independently executed controls and diagnostics."""
+    errors=[]; groups=defaultdict(list); families=defaultdict(list); ids={}; summaries=[]
+    # Reuse frozen author's A-F mandatory proofs on a claim-free projection. All
+    # original/new scoped claims are validated independently against full A-H.
+    core = v1.check_batch([_projection(row) for row in rows if type(row) is dict and _meta(row,'controlled_context') in 'ABCDEF'])
+    errors.extend('v1_core: '+error for error in core['errors'])
+    properties={name:deepcopy(core['corpus_controls'].get(name,[])) for name in FAMILY}
+    properties['query_id_position_fact_crossing']=[]; properties['field_order_invariance']=[]
+    for i,row in enumerate(rows):
+        label=row.get('sample_id',str(i)) if type(row) is dict else str(i)
+        errors.extend(label+': '+message for message in check(row))
+        try:
+            _need(type(row) is dict,'row object required'); a=v1.analyze(row['semantic_task']); e=v1._encoding(_projection(row),a); e['context']=_meta(row,'controlled_context')
+            member={'row_index':i,'sample_id':label,**e,'analysis':a,'decoded':v1._decode(row,e)}
+            _need(label not in ids,'duplicate sample_id'); ids[label]=member
+            groups[e['family'],e['context'],e['renderer']].append(member); families[e['family']].append(member)
+            summaries.append({'sample_id':label,'family':e['family'],'context':e['context'],'supports':a['support_ids'],'derived_target':a['target'],'properties':a['properties'],'graph':e['graph']})
+        except (BeliefControlError,KeyError,TypeError,ValueError) as error: errors.append(str(label)+': v2 batch row: '+str(error))
+    crossings=[]; pairings={}; bases={}
+    for coordinate,members in sorted(groups.items()):
+        family,context,renderer=coordinate
+        if sorted(m['schedule'] for m in members)!=list(range(27)): errors.append('/'.join(coordinate)+': exact 27 schedules missing/duplicated')
+        if any(_json(m['decoded'])!=_json(members[0]['decoded']) or m['pools']!=members[0]['pools'] for m in members): errors.append(family+'/'+context+': decoded task/pools change across views')
+        crossing={'family':family,'context':context,'renderer':renderer,'sample_ids':[m['sample_id'] for m in members],**_crossing(members,rows)}; crossings.append(crossing)
+        if not crossing['satisfied']: errors.append('/'.join(coordinate)+': actual crossing/outcome histograms fail')
+        else: properties['query_id_position_fact_crossing'].append(crossing)
+        for m in members: pairings[(family,context,m['schedule'],renderer)]=m
+    for family,members in sorted(families.items()):
+        if len(members)!=432 or {m['context'] for m in members}!=set(CONTEXTS) or len({m['index'] for m in members})!=1: errors.append(family+': full one-index 8-context x27 x2 family required')
+        if len({_json(m['pools']) for m in members})!=1: errors.append(family+': pools differ across contexts')
+        bases[family]={context:next(m['decoded'] for m in members if m['context']==context) for context in sorted({m['context'] for m in members})}
+        if len({_json(t['worlds']) for t in bases[family].values()})!=1 or len({_json(t['queries']) for t in bases[family].values()})!=1: errors.append(family+': full A-H world table/base queries differ')
+        for schedule in range(27):
+            for renderer in ('forward','reverse'):
+                for lc,rc in [('E','G'),('F','H')]:
+                    left=pairings.get((family,lc,schedule,renderer)); right=pairings.get((family,rc,schedule,renderer))
+                    if not left or not right: errors.append(family+': missing matched '+lc+'/'+rc+' view'); continue
+                    try:
+                        detail=matched_pair(rows[left['row_index']]['semantic_task'],rows[right['row_index']]['semantic_task'])
+                        proof={'family':family,'scope':'corpus_variant','sample_ids':[left['sample_id'],right['sample_id']],'evidence_id':family+':'+lc+rc+':'+str(schedule)+':'+renderer,'input_sha256':[hashlib.sha256(_json(rows[m['row_index']]['semantic_task']).encode()).hexdigest() for m in (left,right)],**detail}
+                        for name in NEW_FAMILY: properties[name].append(proof)
+                    except BeliefControlError as error: errors.append(family+': '+lc+'/'+rc+' '+str(error))
+                for lc,rc,name in [('G','H','nonempty_repetition_final_invariance')]:
+                    left=pairings.get((family,lc,schedule,renderer));right=pairings.get((family,rc,schedule,renderer))
+                    if left and right:
+                        relations=[d for n,d in v1._relations(left['decoded'],right['decoded']) if n==name]
+                        if not relations: errors.append(family+': G/H final repetition invariance fails')
+                        else: properties[name].append({'family':family,'scope':'corpus_variant','sample_ids':[left['sample_id'],right['sample_id']],**relations[0]})
+    for coordinate,left in sorted(pairings.items()):
+        family,context,schedule,renderer=coordinate
+        if renderer!='forward': continue
+        right=pairings.get((family,context,schedule,'reverse'))
+        if not right: errors.append(family+': missing paired renderer'); continue
+        lp,lr=v1._visible(rows[left['row_index']]); rp,rr=v1._visible(rows[right['row_index']])
+        if _json(rows[left['row_index']]['semantic_task'])!=_json(rows[right['row_index']]['semantic_task']) or lp!=rp or json.dumps(json.loads(lr),ensure_ascii=False)==json.dumps(json.loads(rr),ensure_ascii=False): errors.append(family+': renderer not pure actual object-order change')
+        else: properties['field_order_invariance'].append({'family':family,'scope':'corpus_variant','sample_ids':[left['sample_id'],right['sample_id']],'context':context,'schedule':schedule})
+    probes=[probe for family,base in sorted(bases.items()) for probe in v1._probes(family,base)]
+    declarations=defaultdict(list); identity={}
+    for family,members in families.items():
+        for member in members:
+            try:
+                for claim in _claims(rows[member['row_index']]):
+                    identifier=(family,claim.get('control_id',claim['property'])); pair=(claim['property'],claim['scope'])
+                    if identifier in identity and identity[identifier]!=pair: errors.append(family+': conflicting family claim identifier')
+                    identity[identifier]=pair; declarations[family,_json(claim)].append(member['sample_id'])
+            except BeliefControlError: pass
+    ledger={(p['family'],p['probe_id']):p for p in probes}; claim_checks=[]
+    for (family,encoded),sources in sorted(declarations.items()):
+        claim=json.loads(encoded); name,scope=claim['property'],claim['scope']
+        if scope=='audit_probe' and 'probe_id' in claim and (family,claim['probe_id']) not in ledger:
+            templates=[p for p in probes if p['family']==family and p['property']==name]
+            bound=None
+            if templates: bound=v1._execute_declared_probe(templates[0],claim['probe_id'])
+            elif name in NEW_FAMILY and properties[name]:
+                witnessed=next((p for p in properties[name] if p['family']==family),None)
+                if witnessed:
+                    tasks=[deepcopy(rows[ids[s]['row_index']]['semantic_task']) for s in witnessed['sample_ids']]; detail=matched_pair(*tasks)
+                    bound={'family':family,'property':name,'scope':'audit_probe','probe_id':claim['probe_id'],'tasks':tasks,'relation':detail,'executed_targets':[v1.derive(t)['target'] for t in tasks],'executed_under_declared_id':True,'execution_binding':'Actual independently reconstructed matched pair executed under declared ID.','satisfied':True,'added_corpus_records':0,'added_source_families':0}
+            if bound: probes.append(bound);ledger[family,claim['probe_id']]=bound
+        if scope=='audit_probe' and 'probe_id' in claim and (family,claim['probe_id']) in ledger and ledger[family,claim['probe_id']]['property']!=name: errors.append(family+': declared probe ID conflicts with executed property')
+        witnesses=[p for p in (properties[name] if scope=='corpus_variant' else probes) if p['family']==family and (scope!='audit_probe' or p['property']==name)]
+        if 'pair_sample_ids' in claim:
+            pair=set(claim['pair_sample_ids'])
+            if any(s not in ids or ids[s]['family']!=family for s in pair): errors.append(family+': declared pair IDs not actual same family')
+            witnesses=[p for p in witnesses if pair<=set(p.get('sample_ids',[]))]
+        if 'probe_id' in claim: witnesses=[p for p in witnesses if p['probe_id']==claim['probe_id']]
+        valid=bool(witnesses);claim_checks.append({'family':family,'claim':claim,'declaring_sample_ids':sorted(set(sources)),'matched_witness_count':len(witnesses),'satisfied':valid})
+        if not valid: errors.append(family+': missing actual scoped claim witness '+name+'/'+scope)
+    diagnostics=_diagnostics(list(ids.values()),rows)
+    for label,detail in diagnostics.items():
+        if not detail['mixed_coarse_first_prefix_buckets']: errors.append(label+': no mixed exact coarse/first-prefix bucket')
+    for family in families:
+        for length in (2,3):
+            for name in NEW_FAMILY:
+                if not any(p['family']==family and p['observation_length']==length for p in properties[name]): errors.append(family+': missing supplied '+name+' length'+str(length))
+    count=len(ids); world_tables={_json(sorted([w['facts'] for w in m['decoded']['worlds']],key=_json)) for m in ids.values()}
+    return {'errors':errors,'counts':{'records':len(rows),'controlled_records':count,'source_families':len(families),'base_contexts':len({(f,c) for f,c,r in groups}),'base_context_query_observations':3*len({(f,c) for f,c,r in groups}),'rotation_level_query_observations':3*sum(len(m) for (f,c,r),m in groups.items() if r=='forward'),'rendered_query_observations':3*count,'crossing_histograms':len(crossings),'distinct_decoded_world_tables':len(world_tables),'distinct_parsed_tasks':len({_json(rows[m['row_index']]['semantic_task']) for m in ids.values()}),'distinct_renderings':len({rows[m['row_index']]['rendered_input'] for m in ids.values()}),'executed_probes':len(probes),'added_probe_corpus_records':0,'added_probe_source_families':0},'rows':summaries,'crossings':crossings,'corpus_controls':properties,'audit_probes':probes,'claim_checks':claim_checks,'structural_signatures':core['structural_signatures'],'source_index_mapping':core['source_index_mapping'],'shortcut_diagnostics':diagnostics,'input_hash_encoding':'SHA256 canonical JSON, sorted keys, UTF8, compact separators.','dependency_sha256':DEPENDENCY_SHA256,'approval_verdict':None}

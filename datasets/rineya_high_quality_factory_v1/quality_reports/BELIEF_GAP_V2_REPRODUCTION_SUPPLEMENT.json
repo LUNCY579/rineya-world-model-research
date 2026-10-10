@@ -1,0 +1,21 @@
+{
+  "at_utc": "2026-10-10T03:12:20.364291+00:00",
+  "runner_execution": "/root",
+  "original_execution": "quality_reports/BELIEF_GAP_V2_REPRODUCTION.json",
+  "whole_artifact_byte_reproduction_pass": false,
+  "exact_artifacts": 6,
+  "total_artifacts": 7,
+  "candidate_and_parents_byte_identical": true,
+  "differing_diagnostic": {
+    "original": "data/RBM-001/manifests/belief-gap-v2.shortcut_audit.json",
+    "reproduced_failure_snapshot": "reproducibility/failed_belief_gap_v2/data/RBM-001/manifests/belief-gap-v2.shortcut_audit.json",
+    "original_sha256": "3990815f282938db69d7cda1c90794219322357e6c473c34639a024523cc218f",
+    "actual_sha256": "bb4b864357ffdad55c8eb9af8fc9b72eb41b031f676238652ce26f1e867c39db",
+    "canonical_parsed_json_equal": true
+  },
+  "source_sha256": "dbfc7d23b4f57f9c61286b3e0f9046c1304445f1a4a706148a635eb9f26e33a1",
+  "root_cause": "Producer scalar histogram iterates seen_values/seen_facts/seen_roles sets without sorting, yielding process-dependent JSON object insertion ordering; no parsed evidence value differed.",
+  "evidence_source_location": "generators/other_tracks/belief_gap_v2.py scalar_and_lookup_audit sets/for value in values",
+  "required_future_fix": "Sort these typed string feature-key sets before insertion and re-run fresh artifact production in separate Python processes with different PYTHONHASHSEED. Preserve frozen v2 source/results.",
+  "scope": "Byte reproducibility limitation of one diagnostic, not a target discrepancy; no approval implied. First failed reproduction and all outputs preserved."
+}

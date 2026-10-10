@@ -1,0 +1,16 @@
+{
+  "actual_author_execution_id": "/root",
+  "after_report_sha256": "1bd7d07a1bb69db6a7d6efb5fb58c9e7c921d4bcc31273a41cf8e4c722e08700",
+  "before_report_sha256": "0b5fc58730ce02f7c2319735fe52a86cdc1a724a4930fe15b0cb34b51042c338",
+  "evidence_report": "quality_reports/BELIEF_GAP_V2_AUDIT_REPLAY_DIFFERENCE.json",
+  "frozen_checker_sha256": "5b97b73df0b9248b1ad155307e75e2a73b995dff64e81232382a6c05a2fe4984",
+  "likely_root_cause": "Unordered set/dictionary feature iteration plus first-win max-score tie. Requires source verification by actual author; root did not infer a target defect.",
+  "observed_problem": "Best stripped-feature diagnostic tie is selected from unordered feature iteration, so separate Python processes can choose different equally scoring feature and polarity representatives. Exact report bytes differ; metrics and semantic checks are unchanged.",
+  "proposed_change": "In a NEW revision diagnostic, sort feature/polarity traversal or select maximum with explicit deterministic tie key; retain frozen v2 code/reports.",
+  "public_correction_guidance": "No actual candidate, targets or private review reads required; deterministic tie policy can be tested on independently handmade public finite tasks.",
+  "required_regression": "Public handmade equal-score feature fixture; separate Python processes with distinct PYTHONHASHSEED must yield exact identical complete diagnostic JSON.",
+  "resolved": false,
+  "result_after_regeneration": null,
+  "status": "OPEN_FOR_NEW_V3_CHECKER",
+  "ticket_id": "ORACLE-REPRO-011"
+}

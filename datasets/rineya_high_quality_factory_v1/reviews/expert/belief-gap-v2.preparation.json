@@ -1,0 +1,2245 @@
+{
+  "report_type": "CORRECTIVE_V2_EXPERT_PREPARATION",
+  "actual_author": "/root/expert_reviewer",
+  "created_utc": "2026-10-10T03:13:09.623756+00:00",
+  "public_inputs": {
+    "schemas/EXTENDED_SEMANTICS.md": {
+      "sha256": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+      "length": 11509
+    },
+    "schemas/BELIEF_CONTROL_PROPERTIES.md": {
+      "sha256": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+      "length": 19798
+    },
+    "research/curricula/RBM-EVIDENCE-GAP.md": {
+      "sha256": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120",
+      "length": 14594
+    },
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md": {
+      "sha256": "46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f",
+      "length": 12981
+    },
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V2.md": {
+      "sha256": "c2eb841ed546848088db4e0499e8e8f7087aa3d213af333ff39237ae6558bd33",
+      "length": 5126
+    },
+    "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json": {
+      "sha256": "611656b37d7fe917d64eeb191d901d272a32d8d3c72c9f8865476c6889a3e51a",
+      "length": 2448
+    }
+  },
+  "source_sha256": "f006982dc07024d7da433b2ac13ed58509389bc9d9d4c4cbc4eb98ff31b8daf1",
+  "own_support_source_sha256": "54324adf2332c7d85651f6217dc51d1ac6f6610ddd68d1819f43416f9f1d9e84",
+  "guidance": "Disclosed v1 marker defect and root prospective marker+linen diagnostic; corrective guided mode, not fully blind.",
+  "new_solver_methods": [
+    "direct per-world prefix conjunction using scalar encodings",
+    "sequential explicit type-and-value filtering with list-based bins"
+  ],
+  "own_v1_public_derived_utility_reuse": "Property/locator/incidence/probe routines adapted into new support file; no private producer/oracle code.",
+  "future_candidate_reads": 0,
+  "future_gold_reads": 0,
+  "dataset_verdicts": 0,
+  "new_toy_fixtures": 6,
+  "executed_toy_probes": 42,
+  "fixtures": [
+    {
+      "fixture_index": 0,
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "u1",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": false,
+              "control": "unknown",
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u2",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": 0,
+              "control": "unknown",
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u3",
+            "facts": {
+              "x": "reed",
+              "y": "linen",
+              "latent": null,
+              "control": true,
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u4",
+            "facts": {
+              "x": "reed",
+              "y": "cotton",
+              "latent": true,
+              "control": null,
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u5",
+            "facts": {
+              "x": "fern",
+              "y": "linen",
+              "latent": "opal",
+              "control": "unknown",
+              "extra": "east"
+            }
+          }
+        ],
+        "observations": [],
+        "queries": [
+          {
+            "query_id": "qa",
+            "fact": "latent"
+          },
+          {
+            "query_id": "qb",
+            "fact": "control"
+          },
+          {
+            "query_id": "qc",
+            "fact": "x"
+          }
+        ]
+      },
+      "facts": {
+        "expected": {
+          "surviving_worlds": [
+            "u1",
+            "u2",
+            "u3",
+            "u4",
+            "u5"
+          ],
+          "belief_sizes": [],
+          "queries": [
+            {
+              "query_id": "qa",
+              "counts": [
+                {
+                  "value": "opal",
+                  "count": 1
+                },
+                {
+                  "value": 0,
+                  "count": 1
+                },
+                {
+                  "value": false,
+                  "count": 1
+                },
+                {
+                  "value": null,
+                  "count": 1
+                },
+                {
+                  "value": true,
+                  "count": 1
+                }
+              ],
+              "distinct_values": 5,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": true
+            },
+            {
+              "query_id": "qb",
+              "counts": [
+                {
+                  "value": "unknown",
+                  "count": 3
+                },
+                {
+                  "value": null,
+                  "count": 1
+                },
+                {
+                  "value": true,
+                  "count": 1
+                }
+              ],
+              "distinct_values": 3,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": true
+            },
+            {
+              "query_id": "qc",
+              "counts": [
+                {
+                  "value": "fern",
+                  "count": 1
+                },
+                {
+                  "value": "reed",
+                  "count": 2
+                },
+                {
+                  "value": "stone",
+                  "count": 2
+                }
+              ],
+              "distinct_values": 3,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": true
+            }
+          ]
+        },
+        "prefix_survivors": [
+          [
+            "u1",
+            "u2",
+            "u3",
+            "u4",
+            "u5"
+          ]
+        ],
+        "properties": {
+          "typed_query_partition_separator": [
+            {
+              "query_ids": [
+                "qa"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                0
+              ],
+              "aliases": [
+                [
+                  false,
+                  0
+                ]
+              ],
+              "fact": "latent",
+              "surviving_worlds": [
+                "u1",
+                "u2",
+                "u3",
+                "u4",
+                "u5"
+              ],
+              "counts": [
+                {
+                  "value": "opal",
+                  "count": 1
+                },
+                {
+                  "value": 0,
+                  "count": 1
+                },
+                {
+                  "value": false,
+                  "count": 1
+                },
+                {
+                  "value": null,
+                  "count": 1
+                },
+                {
+                  "value": true,
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "ambiguous_null_partition": [
+            {
+              "query_ids": [
+                "qa"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                0
+              ],
+              "fact": "latent",
+              "surviving_worlds": [
+                "u1",
+                "u2",
+                "u3",
+                "u4",
+                "u5"
+              ],
+              "counts": [
+                {
+                  "value": "opal",
+                  "count": 1
+                },
+                {
+                  "value": 0,
+                  "count": 1
+                },
+                {
+                  "value": false,
+                  "count": 1
+                },
+                {
+                  "value": null,
+                  "count": 1
+                },
+                {
+                  "value": true,
+                  "count": 1
+                }
+              ]
+            },
+            {
+              "query_ids": [
+                "qb"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                0
+              ],
+              "fact": "control",
+              "surviving_worlds": [
+                "u1",
+                "u2",
+                "u3",
+                "u4",
+                "u5"
+              ],
+              "counts": [
+                {
+                  "value": "unknown",
+                  "count": 3
+                },
+                {
+                  "value": null,
+                  "count": 1
+                },
+                {
+                  "value": true,
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "multiworld_unobserved_invariant": [],
+          "typed_observation_separator": [],
+          "conjunction_required_invariant": [],
+          "multiworld_all_queries_redundant": [],
+          "post_empty_absorption": [],
+          "skewed_possible_value_partition": [
+            {
+              "query_ids": [
+                "qb"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                0
+              ],
+              "fact": "control",
+              "surviving_worlds": [
+                "u1",
+                "u2",
+                "u3",
+                "u4",
+                "u5"
+              ],
+              "counts": [
+                {
+                  "value": "unknown",
+                  "count": 3
+                },
+                {
+                  "value": null,
+                  "count": 1
+                },
+                {
+                  "value": true,
+                  "count": 1
+                }
+              ]
+            },
+            {
+              "query_ids": [
+                "qc"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                0
+              ],
+              "fact": "x",
+              "surviving_worlds": [
+                "u1",
+                "u2",
+                "u3",
+                "u4",
+                "u5"
+              ],
+              "counts": [
+                {
+                  "value": "fern",
+                  "count": 1
+                },
+                {
+                  "value": "reed",
+                  "count": 2
+                },
+                {
+                  "value": "stone",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "useful_after_conjunctive_evidence": [],
+          "nonempty_repeated_observation": [],
+          "multiworld_entailed_null": [],
+          "cross_fact_inconsistent_conjunction": []
+        },
+        "metrics": {
+          "worlds": 5,
+          "facts": 5,
+          "queries": 3,
+          "observations": 0,
+          "strict_nonempty_reduction_indices": [],
+          "final_support": 5,
+          "distinct_surviving_payloads": 5,
+          "duplicate_visible_payloads": 0,
+          "first_empty_prefix": null,
+          "steps_after_first_empty": 0,
+          "conjunction_essential_constraint_counts": [],
+          "active_typed_observation_separators": 0,
+          "query_partition_bin_counts": [
+            5,
+            3,
+            3
+          ],
+          "query_partition_count_vectors": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              3,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              2
+            ]
+          ]
+        },
+        "incomplete_heuristic_error_query_ids": {
+          "useful": [],
+          "entailed": []
+        }
+      },
+      "probes": {
+        "invariance_probes": [
+          {
+            "name": "world_order_invariance",
+            "pass": true,
+            "task_hash": "333af99bc66f29e3ae3e4b3e2e26a1da81668331b33ceede8b052d3e15c63014"
+          },
+          {
+            "name": "world_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "ae42e451735610f81879977542456ca5d956693256efae559b9d1404a5c7cbc5"
+          },
+          {
+            "name": "query_order_equivariance",
+            "pass": true,
+            "task_hash": "32b812f3a185cd7eb1b422d5b746ffbc7f3c5970d0bf9d6f7fe7929de427ea13"
+          },
+          {
+            "name": "query_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "95788fdfcd19fd0b6ba2bd3acf0a4cd3bb5b690588a08bcb52ceee7442e92bb2"
+          },
+          {
+            "name": "consistent_fact_name_invariance",
+            "pass": true,
+            "task_hash": "38e1fc535d932905f50a4f3578f67d8a07aec26c65d492c321df0d663c917667"
+          },
+          {
+            "name": "observation_order_final_invariance_recomputed_trace",
+            "pass": true,
+            "task_hash": "ac080abb3b7ddfb126fb1ce6cb89d5f67c6d4cc1b1af7d207f596fb1e30bfd44"
+          }
+        ],
+        "typed_equals_counterfactual_probes": []
+      },
+      "frozen_diagnostic_predictions": {
+        "empty_predictions": {
+          "v1_original_scalar_marker_empty": false,
+          "prospective_marker_and_auxiliary_token_empty": false
+        },
+        "abstaining_full_output_predictions": {
+          "v1_original_scalar_marker_empty": null,
+          "prospective_marker_and_auxiliary_token_empty": null
+        },
+        "input_features": {
+          "scalar_occurrences": [],
+          "position_values": [],
+          "position_fact_values": [],
+          "world_count": 5,
+          "fact_count": 5,
+          "query_count": 3,
+          "observation_length": 0,
+          "first_prefix_survivors": [
+            "u1",
+            "u2",
+            "u3",
+            "u4",
+            "u5"
+          ],
+          "first_prefix_count": 5
+        },
+        "source": "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json",
+        "final_gold_or_final_support_used_as_predictor": false
+      }
+    },
+    {
+      "fixture_index": 1,
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "u1",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": false,
+              "control": "unknown",
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u2",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": 0,
+              "control": "unknown",
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u3",
+            "facts": {
+              "x": "reed",
+              "y": "linen",
+              "latent": null,
+              "control": true,
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u4",
+            "facts": {
+              "x": "reed",
+              "y": "cotton",
+              "latent": true,
+              "control": null,
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u5",
+            "facts": {
+              "x": "fern",
+              "y": "linen",
+              "latent": "opal",
+              "control": "unknown",
+              "extra": "east"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "latent",
+            "equals": false
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "qa",
+            "fact": "latent"
+          },
+          {
+            "query_id": "qb",
+            "fact": "control"
+          },
+          {
+            "query_id": "qc",
+            "fact": "x"
+          }
+        ]
+      },
+      "facts": {
+        "expected": {
+          "surviving_worlds": [
+            "u1"
+          ],
+          "belief_sizes": [
+            1
+          ],
+          "queries": [
+            {
+              "query_id": "qa",
+              "counts": [
+                {
+                  "value": false,
+                  "count": 1
+                }
+              ],
+              "distinct_values": 1,
+              "entailed": true,
+              "guaranteed": false,
+              "can_reduce_uncertainty": false
+            },
+            {
+              "query_id": "qb",
+              "counts": [
+                {
+                  "value": "unknown",
+                  "count": 1
+                }
+              ],
+              "distinct_values": 1,
+              "entailed": true,
+              "guaranteed": "unknown",
+              "can_reduce_uncertainty": false
+            },
+            {
+              "query_id": "qc",
+              "counts": [
+                {
+                  "value": "stone",
+                  "count": 1
+                }
+              ],
+              "distinct_values": 1,
+              "entailed": true,
+              "guaranteed": "stone",
+              "can_reduce_uncertainty": false
+            }
+          ]
+        },
+        "prefix_survivors": [
+          [
+            "u1",
+            "u2",
+            "u3",
+            "u4",
+            "u5"
+          ],
+          [
+            "u1"
+          ]
+        ],
+        "properties": {
+          "typed_query_partition_separator": [],
+          "ambiguous_null_partition": [],
+          "multiworld_unobserved_invariant": [],
+          "typed_observation_separator": [
+            {
+              "query_ids": [],
+              "observation_indices": [
+                0
+              ],
+              "prefix_indices": [
+                0,
+                1
+              ],
+              "fact": "latent",
+              "exact_value": false,
+              "alias": 0,
+              "exact_survivors": [
+                "u1"
+              ],
+              "excluded_alias_survivors": [
+                "u2"
+              ]
+            }
+          ],
+          "conjunction_required_invariant": [],
+          "multiworld_all_queries_redundant": [],
+          "post_empty_absorption": [],
+          "skewed_possible_value_partition": [],
+          "useful_after_conjunctive_evidence": [],
+          "nonempty_repeated_observation": [],
+          "multiworld_entailed_null": [],
+          "cross_fact_inconsistent_conjunction": []
+        },
+        "metrics": {
+          "worlds": 5,
+          "facts": 5,
+          "queries": 3,
+          "observations": 1,
+          "strict_nonempty_reduction_indices": [
+            0
+          ],
+          "final_support": 1,
+          "distinct_surviving_payloads": 1,
+          "duplicate_visible_payloads": 0,
+          "first_empty_prefix": null,
+          "steps_after_first_empty": 0,
+          "conjunction_essential_constraint_counts": [],
+          "active_typed_observation_separators": 1,
+          "query_partition_bin_counts": [
+            1,
+            1,
+            1
+          ],
+          "query_partition_count_vectors": [
+            [
+              1
+            ],
+            [
+              1
+            ],
+            [
+              1
+            ]
+          ]
+        },
+        "incomplete_heuristic_error_query_ids": {
+          "useful": [],
+          "entailed": []
+        }
+      },
+      "probes": {
+        "invariance_probes": [
+          {
+            "name": "world_order_invariance",
+            "pass": true,
+            "task_hash": "117f2e428b66b4efea482498f3dd37b39539030e80943d6bdea1590d178fecdc"
+          },
+          {
+            "name": "world_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "062ca15f2e7a078f2b7d8fef5d4c07f05aa29e74ed3bb31e6ebdf6688503984b"
+          },
+          {
+            "name": "query_order_equivariance",
+            "pass": true,
+            "task_hash": "1b55830d4033e4f40b2d52c080cf148af7345cb5a5b2e6b54aebb5cd8c9044bf"
+          },
+          {
+            "name": "query_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "97b53560ce77cd65289041957aeb65671525e3fcb87047baea431dba9f893bbe"
+          },
+          {
+            "name": "consistent_fact_name_invariance",
+            "pass": true,
+            "task_hash": "f1de5d0895c58fb98a63fb4a4389bc4c10880fa5672ce95e260f0794c77aa9ec"
+          },
+          {
+            "name": "observation_order_final_invariance_recomputed_trace",
+            "pass": true,
+            "task_hash": "0034e892e81336d4819fe88a16dd304a80fc3d38133e0b53a76b1a2a37638e1c"
+          },
+          {
+            "name": "repeat_observation_final_invariance",
+            "pass": true,
+            "task_hash": "b55db5869f22a69d407abbae88bcc1d79c691ce38debf51d102d72544f13f12e"
+          }
+        ],
+        "typed_equals_counterfactual_probes": [
+          {
+            "observation_index": 0,
+            "old": false,
+            "new": 0,
+            "qualifying_changed_prefix": true,
+            "old_prefix_survivors": [
+              "u1"
+            ],
+            "new_prefix_survivors": [
+              "u2"
+            ],
+            "old_final_support": [
+              "u1"
+            ],
+            "new_final_support": [
+              "u2"
+            ],
+            "new_expected": {
+              "surviving_worlds": [
+                "u2"
+              ],
+              "belief_sizes": [
+                1
+              ],
+              "queries": [
+                {
+                  "query_id": "qa",
+                  "counts": [
+                    {
+                      "value": 0,
+                      "count": 1
+                    }
+                  ],
+                  "distinct_values": 1,
+                  "entailed": true,
+                  "guaranteed": 0,
+                  "can_reduce_uncertainty": false
+                },
+                {
+                  "query_id": "qb",
+                  "counts": [
+                    {
+                      "value": "unknown",
+                      "count": 1
+                    }
+                  ],
+                  "distinct_values": 1,
+                  "entailed": true,
+                  "guaranteed": "unknown",
+                  "can_reduce_uncertainty": false
+                },
+                {
+                  "query_id": "qc",
+                  "counts": [
+                    {
+                      "value": "stone",
+                      "count": 1
+                    }
+                  ],
+                  "distinct_values": 1,
+                  "entailed": true,
+                  "guaranteed": "stone",
+                  "can_reduce_uncertainty": false
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "frozen_diagnostic_predictions": {
+        "empty_predictions": {
+          "v1_original_scalar_marker_empty": false,
+          "prospective_marker_and_auxiliary_token_empty": false
+        },
+        "abstaining_full_output_predictions": {
+          "v1_original_scalar_marker_empty": null,
+          "prospective_marker_and_auxiliary_token_empty": null
+        },
+        "input_features": {
+          "scalar_occurrences": [
+            "false"
+          ],
+          "position_values": [
+            [
+              0,
+              "false"
+            ]
+          ],
+          "position_fact_values": [
+            [
+              0,
+              "latent",
+              "false"
+            ]
+          ],
+          "world_count": 5,
+          "fact_count": 5,
+          "query_count": 3,
+          "observation_length": 1,
+          "first_prefix_survivors": [
+            "u1"
+          ],
+          "first_prefix_count": 1
+        },
+        "source": "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json",
+        "final_gold_or_final_support_used_as_predictor": false
+      }
+    },
+    {
+      "fixture_index": 2,
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "u1",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": false,
+              "control": "unknown",
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u2",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": 0,
+              "control": "unknown",
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u3",
+            "facts": {
+              "x": "reed",
+              "y": "linen",
+              "latent": null,
+              "control": true,
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u4",
+            "facts": {
+              "x": "reed",
+              "y": "cotton",
+              "latent": true,
+              "control": null,
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u5",
+            "facts": {
+              "x": "fern",
+              "y": "linen",
+              "latent": "opal",
+              "control": "unknown",
+              "extra": "east"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "x",
+            "equals": "stone"
+          },
+          {
+            "fact": "y",
+            "equals": "linen"
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "qa",
+            "fact": "latent"
+          },
+          {
+            "query_id": "qb",
+            "fact": "control"
+          },
+          {
+            "query_id": "qc",
+            "fact": "x"
+          }
+        ]
+      },
+      "facts": {
+        "expected": {
+          "surviving_worlds": [],
+          "belief_sizes": [
+            2,
+            0
+          ],
+          "queries": [
+            {
+              "query_id": "qa",
+              "counts": [],
+              "distinct_values": 0,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": false
+            },
+            {
+              "query_id": "qb",
+              "counts": [],
+              "distinct_values": 0,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": false
+            },
+            {
+              "query_id": "qc",
+              "counts": [],
+              "distinct_values": 0,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": false
+            }
+          ]
+        },
+        "prefix_survivors": [
+          [
+            "u1",
+            "u2",
+            "u3",
+            "u4",
+            "u5"
+          ],
+          [
+            "u1",
+            "u2"
+          ],
+          []
+        ],
+        "properties": {
+          "typed_query_partition_separator": [],
+          "ambiguous_null_partition": [],
+          "multiworld_unobserved_invariant": [],
+          "typed_observation_separator": [],
+          "conjunction_required_invariant": [],
+          "multiworld_all_queries_redundant": [],
+          "post_empty_absorption": [],
+          "skewed_possible_value_partition": [],
+          "useful_after_conjunctive_evidence": [],
+          "nonempty_repeated_observation": [],
+          "multiworld_entailed_null": [],
+          "cross_fact_inconsistent_conjunction": [
+            {
+              "query_ids": [],
+              "observation_indices": [
+                0,
+                1
+              ],
+              "prefix_indices": [
+                2
+              ],
+              "individual_supports": [
+                [
+                  "u1",
+                  "u2"
+                ],
+                [
+                  "u3",
+                  "u5"
+                ]
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "worlds": 5,
+          "facts": 5,
+          "queries": 3,
+          "observations": 2,
+          "strict_nonempty_reduction_indices": [
+            0
+          ],
+          "final_support": 0,
+          "distinct_surviving_payloads": 0,
+          "duplicate_visible_payloads": 0,
+          "first_empty_prefix": 2,
+          "steps_after_first_empty": 0,
+          "conjunction_essential_constraint_counts": [],
+          "active_typed_observation_separators": 0,
+          "query_partition_bin_counts": [
+            0,
+            0,
+            0
+          ],
+          "query_partition_count_vectors": [
+            [],
+            [],
+            []
+          ]
+        },
+        "incomplete_heuristic_error_query_ids": {
+          "useful": [],
+          "entailed": []
+        }
+      },
+      "probes": {
+        "invariance_probes": [
+          {
+            "name": "world_order_invariance",
+            "pass": true,
+            "task_hash": "6ae14cf048333ba0c0218c5373e9a5fc92a18488c14d6620aa9968dd593087e5"
+          },
+          {
+            "name": "world_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "e9891ca03197d6d4291956e97dfc761e2cacc73c95b165441aff26edb096ba88"
+          },
+          {
+            "name": "query_order_equivariance",
+            "pass": true,
+            "task_hash": "1e6fddae9a981c22e4ec5afe2b8969c3f0b462808c3d7aaec6c364c8db1dda7b"
+          },
+          {
+            "name": "query_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "4905013a7bbfb959083184d35da79075f8118b9125fbcacefa7d676dfd16ccd2"
+          },
+          {
+            "name": "consistent_fact_name_invariance",
+            "pass": true,
+            "task_hash": "0f010737371280f4cedfd74470c47e52ca56115875ed726f61596145476af160"
+          },
+          {
+            "name": "observation_order_final_invariance_recomputed_trace",
+            "pass": true,
+            "task_hash": "0710d825ec0e2690a0fcd5b1259a295d46f90c4f857b93f1ef047d6182868e03"
+          },
+          {
+            "name": "repeat_observation_final_invariance",
+            "pass": true,
+            "task_hash": "489c3fd77871e139601130c829dfa358e96b57f7ee190c7503c115ef4c97b2a7"
+          }
+        ],
+        "typed_equals_counterfactual_probes": []
+      },
+      "frozen_diagnostic_predictions": {
+        "empty_predictions": {
+          "v1_original_scalar_marker_empty": true,
+          "prospective_marker_and_auxiliary_token_empty": true
+        },
+        "abstaining_full_output_predictions": {
+          "v1_original_scalar_marker_empty": null,
+          "prospective_marker_and_auxiliary_token_empty": null
+        },
+        "input_features": {
+          "scalar_occurrences": [
+            "\"linen\"",
+            "\"stone\""
+          ],
+          "position_values": [
+            [
+              0,
+              "\"stone\""
+            ],
+            [
+              1,
+              "\"linen\""
+            ]
+          ],
+          "position_fact_values": [
+            [
+              0,
+              "x",
+              "\"stone\""
+            ],
+            [
+              1,
+              "y",
+              "\"linen\""
+            ]
+          ],
+          "world_count": 5,
+          "fact_count": 5,
+          "query_count": 3,
+          "observation_length": 2,
+          "first_prefix_survivors": [
+            "u1",
+            "u2"
+          ],
+          "first_prefix_count": 2
+        },
+        "source": "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json",
+        "final_gold_or_final_support_used_as_predictor": false
+      }
+    },
+    {
+      "fixture_index": 3,
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "u1",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": false,
+              "control": "unknown",
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u2",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": 0,
+              "control": "unknown",
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u3",
+            "facts": {
+              "x": "reed",
+              "y": "linen",
+              "latent": null,
+              "control": true,
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u4",
+            "facts": {
+              "x": "reed",
+              "y": "cotton",
+              "latent": true,
+              "control": null,
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u5",
+            "facts": {
+              "x": "fern",
+              "y": "linen",
+              "latent": "opal",
+              "control": "unknown",
+              "extra": "east"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "x",
+            "equals": "stone"
+          },
+          {
+            "fact": "y",
+            "equals": "silk"
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "qa",
+            "fact": "latent"
+          },
+          {
+            "query_id": "qb",
+            "fact": "control"
+          },
+          {
+            "query_id": "qc",
+            "fact": "x"
+          }
+        ]
+      },
+      "facts": {
+        "expected": {
+          "surviving_worlds": [
+            "u1",
+            "u2"
+          ],
+          "belief_sizes": [
+            2,
+            2
+          ],
+          "queries": [
+            {
+              "query_id": "qa",
+              "counts": [
+                {
+                  "value": 0,
+                  "count": 1
+                },
+                {
+                  "value": false,
+                  "count": 1
+                }
+              ],
+              "distinct_values": 2,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": true
+            },
+            {
+              "query_id": "qb",
+              "counts": [
+                {
+                  "value": "unknown",
+                  "count": 2
+                }
+              ],
+              "distinct_values": 1,
+              "entailed": true,
+              "guaranteed": "unknown",
+              "can_reduce_uncertainty": false
+            },
+            {
+              "query_id": "qc",
+              "counts": [
+                {
+                  "value": "stone",
+                  "count": 2
+                }
+              ],
+              "distinct_values": 1,
+              "entailed": true,
+              "guaranteed": "stone",
+              "can_reduce_uncertainty": false
+            }
+          ]
+        },
+        "prefix_survivors": [
+          [
+            "u1",
+            "u2",
+            "u3",
+            "u4",
+            "u5"
+          ],
+          [
+            "u1",
+            "u2"
+          ],
+          [
+            "u1",
+            "u2"
+          ]
+        ],
+        "properties": {
+          "typed_query_partition_separator": [
+            {
+              "query_ids": [
+                "qa"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                2
+              ],
+              "aliases": [
+                [
+                  false,
+                  0
+                ]
+              ],
+              "fact": "latent",
+              "surviving_worlds": [
+                "u1",
+                "u2"
+              ],
+              "counts": [
+                {
+                  "value": 0,
+                  "count": 1
+                },
+                {
+                  "value": false,
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "ambiguous_null_partition": [],
+          "multiworld_unobserved_invariant": [
+            {
+              "query_ids": [
+                "qb"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                2
+              ],
+              "fact": "control",
+              "surviving_worlds": [
+                "u1",
+                "u2"
+              ],
+              "counts": [
+                {
+                  "value": "unknown",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "typed_observation_separator": [],
+          "conjunction_required_invariant": [],
+          "multiworld_all_queries_redundant": [],
+          "post_empty_absorption": [],
+          "skewed_possible_value_partition": [],
+          "useful_after_conjunctive_evidence": [],
+          "nonempty_repeated_observation": [],
+          "multiworld_entailed_null": [],
+          "cross_fact_inconsistent_conjunction": []
+        },
+        "metrics": {
+          "worlds": 5,
+          "facts": 5,
+          "queries": 3,
+          "observations": 2,
+          "strict_nonempty_reduction_indices": [
+            0
+          ],
+          "final_support": 2,
+          "distinct_surviving_payloads": 2,
+          "duplicate_visible_payloads": 0,
+          "first_empty_prefix": null,
+          "steps_after_first_empty": 0,
+          "conjunction_essential_constraint_counts": [],
+          "active_typed_observation_separators": 0,
+          "query_partition_bin_counts": [
+            2,
+            1,
+            1
+          ],
+          "query_partition_count_vectors": [
+            [
+              1,
+              1
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ]
+          ]
+        },
+        "incomplete_heuristic_error_query_ids": {
+          "useful": [
+            "qb"
+          ],
+          "entailed": [
+            "qb"
+          ]
+        }
+      },
+      "probes": {
+        "invariance_probes": [
+          {
+            "name": "world_order_invariance",
+            "pass": true,
+            "task_hash": "aa787e6e509117327c910a95502d4e23a0ca09f02060c3d3bf3a1d39657e740f"
+          },
+          {
+            "name": "world_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "699fcbbf2dbf250f2049226c6b262fb1811c5adc7f9d683021704fc794d3fba7"
+          },
+          {
+            "name": "query_order_equivariance",
+            "pass": true,
+            "task_hash": "236d556b22b2670057a5b68c20d7682c22a8287dbd76e075440d5477b49daafb"
+          },
+          {
+            "name": "query_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "c222fbf471ac3a6468f75c6d2916b6574b1e68032b0c3fa314995a05f2683686"
+          },
+          {
+            "name": "consistent_fact_name_invariance",
+            "pass": true,
+            "task_hash": "3c26a3d137ea34b63577ba6db5c2c8138b02bf9fedf66950df1faecdf4f3bb57"
+          },
+          {
+            "name": "observation_order_final_invariance_recomputed_trace",
+            "pass": true,
+            "task_hash": "703837be9444ed1aea866bf8ca53cb95e0cdb07008f3e0a8a693ce1193d8591e"
+          },
+          {
+            "name": "repeat_observation_final_invariance",
+            "pass": true,
+            "task_hash": "42ba96828ec204b4c9d24348f2f68fd811bf31896e74183c2d64a60c957dc016"
+          }
+        ],
+        "typed_equals_counterfactual_probes": []
+      },
+      "frozen_diagnostic_predictions": {
+        "empty_predictions": {
+          "v1_original_scalar_marker_empty": true,
+          "prospective_marker_and_auxiliary_token_empty": false
+        },
+        "abstaining_full_output_predictions": {
+          "v1_original_scalar_marker_empty": null,
+          "prospective_marker_and_auxiliary_token_empty": null
+        },
+        "input_features": {
+          "scalar_occurrences": [
+            "\"silk\"",
+            "\"stone\""
+          ],
+          "position_values": [
+            [
+              0,
+              "\"stone\""
+            ],
+            [
+              1,
+              "\"silk\""
+            ]
+          ],
+          "position_fact_values": [
+            [
+              0,
+              "x",
+              "\"stone\""
+            ],
+            [
+              1,
+              "y",
+              "\"silk\""
+            ]
+          ],
+          "world_count": 5,
+          "fact_count": 5,
+          "query_count": 3,
+          "observation_length": 2,
+          "first_prefix_survivors": [
+            "u1",
+            "u2"
+          ],
+          "first_prefix_count": 2
+        },
+        "source": "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json",
+        "final_gold_or_final_support_used_as_predictor": false
+      }
+    },
+    {
+      "fixture_index": 4,
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "u1",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": false,
+              "control": "unknown",
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u2",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": 0,
+              "control": "unknown",
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u3",
+            "facts": {
+              "x": "reed",
+              "y": "linen",
+              "latent": null,
+              "control": true,
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u4",
+            "facts": {
+              "x": "reed",
+              "y": "cotton",
+              "latent": true,
+              "control": null,
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u5",
+            "facts": {
+              "x": "fern",
+              "y": "linen",
+              "latent": "opal",
+              "control": "unknown",
+              "extra": "east"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "x",
+            "equals": "stone"
+          },
+          {
+            "fact": "y",
+            "equals": "linen"
+          },
+          {
+            "fact": "x",
+            "equals": "stone"
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "qa",
+            "fact": "latent"
+          },
+          {
+            "query_id": "qb",
+            "fact": "control"
+          },
+          {
+            "query_id": "qc",
+            "fact": "x"
+          }
+        ]
+      },
+      "facts": {
+        "expected": {
+          "surviving_worlds": [],
+          "belief_sizes": [
+            2,
+            0,
+            0
+          ],
+          "queries": [
+            {
+              "query_id": "qa",
+              "counts": [],
+              "distinct_values": 0,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": false
+            },
+            {
+              "query_id": "qb",
+              "counts": [],
+              "distinct_values": 0,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": false
+            },
+            {
+              "query_id": "qc",
+              "counts": [],
+              "distinct_values": 0,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": false
+            }
+          ]
+        },
+        "prefix_survivors": [
+          [
+            "u1",
+            "u2",
+            "u3",
+            "u4",
+            "u5"
+          ],
+          [
+            "u1",
+            "u2"
+          ],
+          [],
+          []
+        ],
+        "properties": {
+          "typed_query_partition_separator": [],
+          "ambiguous_null_partition": [],
+          "multiworld_unobserved_invariant": [],
+          "typed_observation_separator": [],
+          "conjunction_required_invariant": [],
+          "multiworld_all_queries_redundant": [],
+          "post_empty_absorption": [
+            {
+              "query_ids": [],
+              "observation_indices": [
+                1,
+                2
+              ],
+              "prefix_indices": [
+                2,
+                3
+              ],
+              "first_empty_prefix": 2,
+              "later_individual_support": [
+                "u1",
+                "u2"
+              ]
+            }
+          ],
+          "skewed_possible_value_partition": [],
+          "useful_after_conjunctive_evidence": [],
+          "nonempty_repeated_observation": [],
+          "multiworld_entailed_null": [],
+          "cross_fact_inconsistent_conjunction": [
+            {
+              "query_ids": [],
+              "observation_indices": [
+                0,
+                1
+              ],
+              "prefix_indices": [
+                3
+              ],
+              "individual_supports": [
+                [
+                  "u1",
+                  "u2"
+                ],
+                [
+                  "u3",
+                  "u5"
+                ]
+              ]
+            },
+            {
+              "query_ids": [],
+              "observation_indices": [
+                1,
+                2
+              ],
+              "prefix_indices": [
+                3
+              ],
+              "individual_supports": [
+                [
+                  "u3",
+                  "u5"
+                ],
+                [
+                  "u1",
+                  "u2"
+                ]
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "worlds": 5,
+          "facts": 5,
+          "queries": 3,
+          "observations": 3,
+          "strict_nonempty_reduction_indices": [
+            0
+          ],
+          "final_support": 0,
+          "distinct_surviving_payloads": 0,
+          "duplicate_visible_payloads": 0,
+          "first_empty_prefix": 2,
+          "steps_after_first_empty": 1,
+          "conjunction_essential_constraint_counts": [],
+          "active_typed_observation_separators": 0,
+          "query_partition_bin_counts": [
+            0,
+            0,
+            0
+          ],
+          "query_partition_count_vectors": [
+            [],
+            [],
+            []
+          ]
+        },
+        "incomplete_heuristic_error_query_ids": {
+          "useful": [],
+          "entailed": []
+        }
+      },
+      "probes": {
+        "invariance_probes": [
+          {
+            "name": "world_order_invariance",
+            "pass": true,
+            "task_hash": "6e6260d4d1f3c6b4df918af2c813658659ad6c8288617a59db5788ad376dccbb"
+          },
+          {
+            "name": "world_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "c55ed3023d5c0c73ff8dbd7b881b575a8249e182a8fc5bac6f5d549919ad6430"
+          },
+          {
+            "name": "query_order_equivariance",
+            "pass": true,
+            "task_hash": "6cffa448a4f4ac5a080f81f0762b497b20209dce8cc095550d87d71b4f65135d"
+          },
+          {
+            "name": "query_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "cfbb299f2848d513bbf04696408829625790eed98380c4a1e02dbc7189f82c2a"
+          },
+          {
+            "name": "consistent_fact_name_invariance",
+            "pass": true,
+            "task_hash": "8b185cc511d298619e67965210f1b26e43b72e7e6985bffff3ce6adb5377dc12"
+          },
+          {
+            "name": "observation_order_final_invariance_recomputed_trace",
+            "pass": true,
+            "task_hash": "489c3fd77871e139601130c829dfa358e96b57f7ee190c7503c115ef4c97b2a7"
+          },
+          {
+            "name": "repeat_observation_final_invariance",
+            "pass": true,
+            "task_hash": "b5948cc91f6154da938fc88c96dbdd0f71d13782bd3b23bf499178c298e3b96f"
+          }
+        ],
+        "typed_equals_counterfactual_probes": []
+      },
+      "frozen_diagnostic_predictions": {
+        "empty_predictions": {
+          "v1_original_scalar_marker_empty": true,
+          "prospective_marker_and_auxiliary_token_empty": true
+        },
+        "abstaining_full_output_predictions": {
+          "v1_original_scalar_marker_empty": null,
+          "prospective_marker_and_auxiliary_token_empty": null
+        },
+        "input_features": {
+          "scalar_occurrences": [
+            "\"linen\"",
+            "\"stone\""
+          ],
+          "position_values": [
+            [
+              0,
+              "\"stone\""
+            ],
+            [
+              1,
+              "\"linen\""
+            ],
+            [
+              2,
+              "\"stone\""
+            ]
+          ],
+          "position_fact_values": [
+            [
+              0,
+              "x",
+              "\"stone\""
+            ],
+            [
+              1,
+              "y",
+              "\"linen\""
+            ],
+            [
+              2,
+              "x",
+              "\"stone\""
+            ]
+          ],
+          "world_count": 5,
+          "fact_count": 5,
+          "query_count": 3,
+          "observation_length": 3,
+          "first_prefix_survivors": [
+            "u1",
+            "u2"
+          ],
+          "first_prefix_count": 2
+        },
+        "source": "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json",
+        "final_gold_or_final_support_used_as_predictor": false
+      }
+    },
+    {
+      "fixture_index": 5,
+      "task": {
+        "kind": "belief",
+        "worlds": [
+          {
+            "world_id": "u1",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": false,
+              "control": "unknown",
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u2",
+            "facts": {
+              "x": "stone",
+              "y": "silk",
+              "latent": 0,
+              "control": "unknown",
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u3",
+            "facts": {
+              "x": "reed",
+              "y": "linen",
+              "latent": null,
+              "control": true,
+              "extra": "east"
+            }
+          },
+          {
+            "world_id": "u4",
+            "facts": {
+              "x": "reed",
+              "y": "cotton",
+              "latent": true,
+              "control": null,
+              "extra": "west"
+            }
+          },
+          {
+            "world_id": "u5",
+            "facts": {
+              "x": "fern",
+              "y": "linen",
+              "latent": "opal",
+              "control": "unknown",
+              "extra": "east"
+            }
+          }
+        ],
+        "observations": [
+          {
+            "fact": "x",
+            "equals": "stone"
+          },
+          {
+            "fact": "y",
+            "equals": "silk"
+          },
+          {
+            "fact": "x",
+            "equals": "stone"
+          }
+        ],
+        "queries": [
+          {
+            "query_id": "qa",
+            "fact": "latent"
+          },
+          {
+            "query_id": "qb",
+            "fact": "control"
+          },
+          {
+            "query_id": "qc",
+            "fact": "x"
+          }
+        ]
+      },
+      "facts": {
+        "expected": {
+          "surviving_worlds": [
+            "u1",
+            "u2"
+          ],
+          "belief_sizes": [
+            2,
+            2,
+            2
+          ],
+          "queries": [
+            {
+              "query_id": "qa",
+              "counts": [
+                {
+                  "value": 0,
+                  "count": 1
+                },
+                {
+                  "value": false,
+                  "count": 1
+                }
+              ],
+              "distinct_values": 2,
+              "entailed": false,
+              "guaranteed": null,
+              "can_reduce_uncertainty": true
+            },
+            {
+              "query_id": "qb",
+              "counts": [
+                {
+                  "value": "unknown",
+                  "count": 2
+                }
+              ],
+              "distinct_values": 1,
+              "entailed": true,
+              "guaranteed": "unknown",
+              "can_reduce_uncertainty": false
+            },
+            {
+              "query_id": "qc",
+              "counts": [
+                {
+                  "value": "stone",
+                  "count": 2
+                }
+              ],
+              "distinct_values": 1,
+              "entailed": true,
+              "guaranteed": "stone",
+              "can_reduce_uncertainty": false
+            }
+          ]
+        },
+        "prefix_survivors": [
+          [
+            "u1",
+            "u2",
+            "u3",
+            "u4",
+            "u5"
+          ],
+          [
+            "u1",
+            "u2"
+          ],
+          [
+            "u1",
+            "u2"
+          ],
+          [
+            "u1",
+            "u2"
+          ]
+        ],
+        "properties": {
+          "typed_query_partition_separator": [
+            {
+              "query_ids": [
+                "qa"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                3
+              ],
+              "aliases": [
+                [
+                  false,
+                  0
+                ]
+              ],
+              "fact": "latent",
+              "surviving_worlds": [
+                "u1",
+                "u2"
+              ],
+              "counts": [
+                {
+                  "value": 0,
+                  "count": 1
+                },
+                {
+                  "value": false,
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "ambiguous_null_partition": [],
+          "multiworld_unobserved_invariant": [
+            {
+              "query_ids": [
+                "qb"
+              ],
+              "observation_indices": [],
+              "prefix_indices": [
+                3
+              ],
+              "fact": "control",
+              "surviving_worlds": [
+                "u1",
+                "u2"
+              ],
+              "counts": [
+                {
+                  "value": "unknown",
+                  "count": 2
+                }
+              ]
+            }
+          ],
+          "typed_observation_separator": [],
+          "conjunction_required_invariant": [],
+          "multiworld_all_queries_redundant": [],
+          "post_empty_absorption": [],
+          "skewed_possible_value_partition": [],
+          "useful_after_conjunctive_evidence": [],
+          "nonempty_repeated_observation": [
+            {
+              "query_ids": [],
+              "observation_indices": [
+                0,
+                2
+              ],
+              "prefix_indices": [
+                2,
+                3
+              ],
+              "unchanged_survivors": [
+                "u1",
+                "u2"
+              ]
+            }
+          ],
+          "multiworld_entailed_null": [],
+          "cross_fact_inconsistent_conjunction": []
+        },
+        "metrics": {
+          "worlds": 5,
+          "facts": 5,
+          "queries": 3,
+          "observations": 3,
+          "strict_nonempty_reduction_indices": [
+            0
+          ],
+          "final_support": 2,
+          "distinct_surviving_payloads": 2,
+          "duplicate_visible_payloads": 0,
+          "first_empty_prefix": null,
+          "steps_after_first_empty": 0,
+          "conjunction_essential_constraint_counts": [],
+          "active_typed_observation_separators": 0,
+          "query_partition_bin_counts": [
+            2,
+            1,
+            1
+          ],
+          "query_partition_count_vectors": [
+            [
+              1,
+              1
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ]
+          ]
+        },
+        "incomplete_heuristic_error_query_ids": {
+          "useful": [
+            "qb"
+          ],
+          "entailed": [
+            "qb"
+          ]
+        }
+      },
+      "probes": {
+        "invariance_probes": [
+          {
+            "name": "world_order_invariance",
+            "pass": true,
+            "task_hash": "6fa6b4523f16d173def28b321c9b0cc23fc220368aecf019be759caeaf74358f"
+          },
+          {
+            "name": "world_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "834420613d2802b068a7bd2508f73bd55d12f71378ad30d9e357d988ad12c32e"
+          },
+          {
+            "name": "query_order_equivariance",
+            "pass": true,
+            "task_hash": "d9cf8f76625c4fd731865ecf6adda7671fb0ece8966aad9ca8a7196bd1c4b20b"
+          },
+          {
+            "name": "query_id_rename_equivariance",
+            "pass": true,
+            "task_hash": "3c76915c9fd206fef35da03d9380bbeadd35d826b62e11488f0fc5cd40142f11"
+          },
+          {
+            "name": "consistent_fact_name_invariance",
+            "pass": true,
+            "task_hash": "f7d9d1893038f365885adcf2ac640bcde5d37fc4294643e579a5145dff6cdd05"
+          },
+          {
+            "name": "observation_order_final_invariance_recomputed_trace",
+            "pass": true,
+            "task_hash": "42ba96828ec204b4c9d24348f2f68fd811bf31896e74183c2d64a60c957dc016"
+          },
+          {
+            "name": "repeat_observation_final_invariance",
+            "pass": true,
+            "task_hash": "61f1ead492ec1f70a6b93bb24a0cece6d642b6d88cf81c6f1a23fa4328a75570"
+          }
+        ],
+        "typed_equals_counterfactual_probes": []
+      },
+      "frozen_diagnostic_predictions": {
+        "empty_predictions": {
+          "v1_original_scalar_marker_empty": true,
+          "prospective_marker_and_auxiliary_token_empty": false
+        },
+        "abstaining_full_output_predictions": {
+          "v1_original_scalar_marker_empty": null,
+          "prospective_marker_and_auxiliary_token_empty": null
+        },
+        "input_features": {
+          "scalar_occurrences": [
+            "\"silk\"",
+            "\"stone\""
+          ],
+          "position_values": [
+            [
+              0,
+              "\"stone\""
+            ],
+            [
+              1,
+              "\"silk\""
+            ],
+            [
+              2,
+              "\"stone\""
+            ]
+          ],
+          "position_fact_values": [
+            [
+              0,
+              "x",
+              "\"stone\""
+            ],
+            [
+              1,
+              "y",
+              "\"silk\""
+            ],
+            [
+              2,
+              "x",
+              "\"stone\""
+            ]
+          ],
+          "world_count": 5,
+          "fact_count": 5,
+          "query_count": 3,
+          "observation_length": 3,
+          "first_prefix_survivors": [
+            "u1",
+            "u2"
+          ],
+          "first_prefix_count": 2
+        },
+        "source": "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json",
+        "final_gold_or_final_support_used_as_predictor": false
+      }
+    }
+  ],
+  "planned_records_not_measured": 1728,
+  "stage_sequence": [
+    "new program/toy preparation freeze",
+    "eight-field input-only full typed predictions/supports/prefixes and frozen diagnostics",
+    "prediction SHA freeze",
+    "separate original target/property/locator/control/profile/crossing comparison",
+    "actual first judgments freeze before private cross-review"
+  ],
+  "required_additional_checks": [
+    "E/G andF/H exact same first-prefix IDs, different final emptiness, only equals[1] changed",
+    "F repeats first observation after empty;H after nonempty;G/H truthful component difficulty",
+    "all scalar/position/name/first-prefix/coarse buckets byfamily/length/split",
+    "frozen marker and prospectivejointmarker rules evaluated unchanged",
+    "new perfect shortcut must be reported rather than call this complete shortcut removal"
+  ]
+}

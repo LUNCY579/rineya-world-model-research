@@ -1,0 +1,76 @@
+{
+  "at_utc": "20261010T031351Z",
+  "actual_author_execution": "/root/formal_oracle",
+  "actual_runner_execution": "/root/formal_oracle",
+  "status": "PREGEN_PUBLIC_CONTRACT_CHECKER_FROZEN_TESTED",
+  "api": {
+    "module": "oracles.belief_controls_v2_independent",
+    "check": "row -> list[str]",
+    "check_batch": "list[rows] -> dict with errors/counts and actual input-derived evidence"
+  },
+  "files": {
+    "oracles/belief_controls_v2_independent.py": {
+      "sha256": "898779ad2a82764b2871e999b8b0cd5f03e65accc2899b8a0a921204ed356140",
+      "bytes": 27122
+    },
+    "tests/oracle_belief_controls_v2_test.py": {
+      "sha256": "1369690da31e931ba9ee6ea5934db119fcbe662b0bcd5d0b74dfc0f763ff13d2",
+      "bytes": 14102
+    },
+    "oracles/belief_controls_independent.py": {
+      "sha256": "ec9f387485f2a2d58ab557db0a2a7d95c24e77cb3108afa503a80c575e04b03e",
+      "bytes": 51104
+    },
+    "tests/oracle_belief_controls_test.py": {
+      "sha256": "9332d3a9b23fc054c5dbeaaaa29c3e652f505f99932d032c6b221cc5cef3d29b",
+      "bytes": 23452
+    },
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md": {
+      "sha256": "46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f",
+      "bytes": 12981
+    },
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V2.md": {
+      "sha256": "c2eb841ed546848088db4e0499e8e8f7087aa3d213af333ff39237ae6558bd33",
+      "bytes": 5126
+    },
+    "schemas/BELIEF_SHORTCUT_DIAGNOSTICS.json": {
+      "sha256": "611656b37d7fe917d64eeb191d901d272a32d8d3c72c9f8865476c6889a3e51a",
+      "bytes": 2448
+    },
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V2-ROOT_FREEZE.json": {
+      "sha256": "a90cf0c6af1d11ca706a9be436f3c0010ae71a73195dec9b053863b7ff69a7c4",
+      "bytes": 1049
+    },
+    "reviews/oracle/RBM-v2-preexecution-20261010T030836Z.json": {
+      "sha256": "9a073deffc01fa4280f9ceb7aca35290eba48c90ae007da4a5f8ac4133c6d89f",
+      "bytes": 1543
+    },
+    "reviews/oracle/RBM-v2-first-execution-20261010T030938Z.json": {
+      "sha256": "c9b573f1f0614d76555d9c020c49a41a470051270386214ce903f6275f706341",
+      "bytes": 4564
+    },
+    "reviews/oracle/RBM-v2-corrective-preexecution-20261010T031124Z.json": {
+      "sha256": "8ea0c5a791aa9066358bdb7a9374007ec82f405d32962ab24334ce4e5e04cfed",
+      "bytes": 1314
+    },
+    "reviews/oracle/RBM-v2-corrective-execution-20261010T031241Z.json": {
+      "sha256": "9991adfc86a5cfd3d33988b41194f096535a4370fcea632c104765d89c113256",
+      "bytes": 5916
+    },
+    "reviews/oracle/RBM-v2-handmade-controls-20261010T031241Z.json.lossless.json": {
+      "sha256": "091250ea5fe73fdc005e1e4182b390d5841285af1042ec884cda6a9ea6563a07",
+      "bytes": 383
+    }
+  },
+  "actual_tests_run": 26,
+  "actual_test_failures": 0,
+  "actual_test_errors": 0,
+  "first_failed_test_preserved": {
+    "path": "reviews/oracle/RBM-v2-first-execution-20261010T030938Z.json",
+    "classification": "Hand-count assertion 12 was wrong; exhaustive supported-cell count 8. No oracle semantics defect."
+  },
+  "independent_public_fixture_advice_execution": "/root/formal_oracle/v2_public_fixture_audit",
+  "source_scope": "Frozen public contracts plus own independently authored v1 primitives and handmade fixtures. No actual v2 candidate, producer, stored target or private verdict read.",
+  "shortcut_limit": "Diagnostics report fitted in-sample visible-input lookup accuracy; finite joint lookup can be perfect. Targeted mixed controls do not claim universal shortcut removal. Original status rules and the literal disclosed old complete-core prefix formula evaluated separately; no silent formula repair.",
+  "approval_verdict": null
+}

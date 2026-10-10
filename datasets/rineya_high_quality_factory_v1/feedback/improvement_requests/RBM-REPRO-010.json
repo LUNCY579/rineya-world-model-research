@@ -1,0 +1,13 @@
+{
+  "issue_id": "RBM-REPRO-010",
+  "status": "OPEN_FOR_FRESH_REVISION",
+  "author_execution": "/root",
+  "observed_problem": "One frozen diagnostic JSON does not reproduce byte-identically across actual Python processes; candidate/parents and five other artifact sources/controls reproduce exactly.",
+  "supporting_evidence": "quality_reports/BELIEF_GAP_V2_REPRODUCTION_SUPPLEMENT.json",
+  "likely_root_cause": "Producer scalar histogram iterates seen_values/seen_facts/seen_roles sets without sorting, yielding process-dependent JSON object insertion ordering; no parsed evidence value differed.",
+  "proposed_change": "Sort these typed string feature-key sets before insertion and re-run fresh artifact production in separate Python processes with different PYTHONHASHSEED. Preserve frozen v2 source/results.",
+  "required_regression": "Run the fresh producer twice in isolated scratch trees with distinct Python hash seeds, compare all deterministic artifact bytes; exclude measured wall-time manifest explicitly.",
+  "result_after_regeneration": "PENDING_FRESH_PUBLIC_REVISION",
+  "resolved": false,
+  "original_evidence_preserved": true
+}

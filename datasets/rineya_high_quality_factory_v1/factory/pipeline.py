@@ -2,6 +2,7 @@
 import argparse
 import collections
 import hashlib
+import importlib
 import json
 from pathlib import Path
 from factory.common import ROOT, VERSION, canonical, digest, atomic, write_json, write_jsonl, load_jsonl, record_hash, candidate_paths
@@ -35,6 +36,26 @@ BELIEF_PROPERTY_TAGS = {
     'nonempty_repeated_observation', 'typed_observation_separator',
     'typed_query_partition_separator', 'skewed_possible_value_partition',
 }
+BELIEF_V2_VERSION = 'rbm-belief-gap-2.0.0'
+BELIEF_V2_CLAIMS = {'same_prefix_empty_nonempty_counterfactual',
+                    'contradiction_equals_mixed_outcomes'}
+
+
+def belief_checker_name(rows):
+    # Normal revision provenance survives filtering out all G/H rows.
+    # The context/claim checks also prevent a changed version field from
+    # hiding the published v2 obligations.
+    is_v2 = any(row.get('generator_version') == BELIEF_V2_VERSION
+                or row.get('controlled_context') in {'G', 'H'}
+                or any(isinstance(claim, dict)
+                       and (claim.get('name') or claim.get('property')) in BELIEF_V2_CLAIMS
+                       for claim in row.get('family_control_claims', []))
+                for row in rows)
+    return 'oracles.belief_controls_v2_independent' if is_v2 else 'oracles.belief_controls_independent'
+
+
+def belief_checker(rows):
+    return importlib.import_module(belief_checker_name(rows))
 
 
 def belief_control_rows(rows):
@@ -43,15 +64,15 @@ def belief_control_rows(rows):
                'property_witnesses', 'family_control_claims'}
     tags = BELIEF_PROPERTY_TAGS | {'finite_noiseless_filter', 'possible_value_partition'}
     return [row for row in rows if row.get('semantic_task', {}).get('kind') == 'belief'
-            and (markers.intersection(row) or tags.intersection(row.get('skill_tags', [])))]
+            and (row.get('generator_version') == BELIEF_V2_VERSION
+                 or markers.intersection(row) or tags.intersection(row.get('skill_tags', [])))]
 
 
 def belief_control_report(rows):
     selected = belief_control_rows(rows)
     if not selected:
         return None
-    from oracles.belief_controls_independent import check_batch
-    return check_batch(selected)
+    return belief_checker(selected).check_batch(selected)
 
 
 def schema_validate(row):
@@ -98,8 +119,14 @@ def audit(batch):
     rows=[r for p in candidate_paths(batch) for r in load_jsonl(p)]
     control_source=ROOT/'oracles/memory_controls_independent.py'
     control_source_sha=hashlib.sha256(control_source.read_bytes()).hexdigest() if memory_control_rows(rows) else None
-    belief_source=ROOT/'oracles/belief_controls_independent.py'
-    belief_source_sha=hashlib.sha256(belief_source.read_bytes()).hexdigest() if belief_control_rows(rows) else None
+    selected_belief_rows=belief_control_rows(rows)
+    belief_module=belief_checker(selected_belief_rows) if selected_belief_rows else None
+    belief_source=Path(belief_module.__file__) if belief_module else None
+    belief_source_sha=hashlib.sha256(belief_source.read_bytes()).hexdigest() if belief_source else None
+    belief_dependencies={}
+    if belief_module and belief_module.__name__.endswith('belief_controls_v2_independent'):
+        source=ROOT/'oracles/belief_controls_independent.py'
+        belief_dependencies[str(source.relative_to(ROOT))]=hashlib.sha256(source.read_bytes()).hexdigest()
     checks=[]
     lineage=collections.defaultdict(set)
     payloads=collections.defaultdict(list)
@@ -117,8 +144,7 @@ def audit(batch):
             from oracles.memory_controls_independent import check as memory_check
             metadata_errors.extend(memory_check(row))
         if belief_control_rows([row]):
-            from oracles.belief_controls_independent import check as belief_check
-            metadata_errors.extend(belief_check(row))
+            metadata_errors.extend(belief_module.check(row))
         errors.extend('Metadata: '+e for e in metadata_errors)
         lineage[row["semantic_family_id"]].add(row["split"])
         payloads[digest(row["semantic_task"])].append(row["sample_id"])
@@ -153,10 +179,12 @@ def audit(batch):
     stats['belief_control_error_count']=len(belief_controls['errors']) if belief_controls else 0
     if belief_controls:
         assert hashlib.sha256(belief_source.read_bytes()).hexdigest()==belief_source_sha,'Belief checker source changed during audit; rerun after source is stable'
+        assert all(hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==sha for path,sha in belief_dependencies.items()),'Belief checker dependency changed during audit'
         stats['belief_control_counts']=belief_controls['counts']
         control_path=ROOT/f'audits/diversity/{batch}-belief-controls.json'
         payload={'oracle_author_execution':'/root/formal_oracle','check_runner_execution':'/root',
                  'checker_sha256':belief_source_sha,'batch':batch,'report':belief_controls}
+        if belief_dependencies:payload['checker_dependency_sha256']=belief_dependencies
         content=(json.dumps(payload,indent=2,ensure_ascii=False)+'\n').encode('utf-8')
         preserve_prior_audit(control_path,content)
         atomic(control_path,content.decode('utf-8'))
@@ -315,8 +343,7 @@ def validate_release(path):
             from oracles.memory_controls_independent import check as memory_check
             metadata_failures.extend(memory_check(r))
         if belief_control_rows([r]):
-            from oracles.belief_controls_independent import check as belief_check
-            metadata_failures.extend(belief_check(r))
+            metadata_failures.extend(belief_checker([r]).check(r))
         if metadata_failures:
             from factory.catalog import catalog
             active,_=catalog()

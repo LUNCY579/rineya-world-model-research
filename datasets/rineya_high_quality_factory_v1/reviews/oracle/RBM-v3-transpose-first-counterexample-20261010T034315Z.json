@@ -1,0 +1,192 @@
+{
+  "actual_execution_id": "/root/formal_oracle",
+  "at_utc": "20261010T034315Z",
+  "source_sha256": "6a05853a1fd7590ccad6b5c96e6ed7292e81585d00d7e46b61d78adfaf297106",
+  "task": {
+    "kind": "belief",
+    "worlds": [
+      {
+        "world_id": "a",
+        "facts": {
+          "y": "linen",
+          "q": null
+        }
+      },
+      {
+        "world_id": "b",
+        "facts": {
+          "y": "linen",
+          "q": true
+        }
+      },
+      {
+        "world_id": "c",
+        "facts": {
+          "y": "opal",
+          "q": 1
+        }
+      }
+    ],
+    "observations": [
+      {
+        "fact": "y",
+        "equals": "linen"
+      },
+      {
+        "fact": "y",
+        "equals": "linen"
+      }
+    ],
+    "queries": [
+      {
+        "query_id": "q",
+        "fact": "q"
+      }
+    ]
+  },
+  "control": {
+    "fact": "y",
+    "baseline_value": "linen",
+    "supported_value": "opal"
+  },
+  "shared_python_observation_alias": true,
+  "actual_transposition": {
+    "kind": "belief",
+    "worlds": [
+      {
+        "world_id": "a",
+        "facts": {
+          "y": "opal",
+          "q": null
+        }
+      },
+      {
+        "world_id": "b",
+        "facts": {
+          "y": "opal",
+          "q": true
+        }
+      },
+      {
+        "world_id": "c",
+        "facts": {
+          "y": "linen",
+          "q": 1
+        }
+      }
+    ],
+    "observations": [
+      {
+        "fact": "y",
+        "equals": "linen"
+      },
+      {
+        "fact": "y",
+        "equals": "linen"
+      }
+    ],
+    "queries": [
+      {
+        "query_id": "q",
+        "fact": "q"
+      }
+    ]
+  },
+  "independently_constructed_occurrencewise_expected_transposition": {
+    "kind": "belief",
+    "worlds": [
+      {
+        "world_id": "a",
+        "facts": {
+          "y": "opal",
+          "q": null
+        }
+      },
+      {
+        "world_id": "b",
+        "facts": {
+          "y": "opal",
+          "q": true
+        }
+      },
+      {
+        "world_id": "c",
+        "facts": {
+          "y": "linen",
+          "q": 1
+        }
+      }
+    ],
+    "observations": [
+      {
+        "fact": "y",
+        "equals": "opal"
+      },
+      {
+        "fact": "y",
+        "equals": "opal"
+      }
+    ],
+    "queries": [
+      {
+        "query_id": "q",
+        "fact": "q"
+      }
+    ]
+  },
+  "original_derived_target": {
+    "surviving_worlds": [
+      "a",
+      "b"
+    ],
+    "belief_sizes": [
+      2,
+      2
+    ],
+    "queries": [
+      {
+        "query_id": "q",
+        "counts": [
+          {
+            "value": null,
+            "count": 1
+          },
+          {
+            "value": true,
+            "count": 1
+          }
+        ],
+        "distinct_values": 2,
+        "entailed": false,
+        "guaranteed": null,
+        "can_reduce_uncertainty": true
+      }
+    ]
+  },
+  "bad_transposition_derived_target": {
+    "surviving_worlds": [
+      "c"
+    ],
+    "belief_sizes": [
+      1,
+      1
+    ],
+    "queries": [
+      {
+        "query_id": "q",
+        "counts": [
+          {
+            "value": 1,
+            "count": 1
+          }
+        ],
+        "distinct_values": 1,
+        "entailed": true,
+        "guaranteed": 1,
+        "can_reduce_uncertainty": false
+      }
+    ]
+  },
+  "classification": "NEW transpose transformation bug: deepcopy preserves aliases and in-place swapping applies twice to one referenced observation. Public JSON occurrence semantics require reconstruction from original values. Stable solvers unchanged.",
+  "approval_verdict": null
+}
