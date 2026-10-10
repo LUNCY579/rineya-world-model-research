@@ -1,5 +1,6 @@
 """Structural diversity beyond pilot towers and chain graphs; generator only."""
 from factory.reference import solve
+import collections
 
 
 def stack_state(names,rng):
@@ -17,7 +18,8 @@ def diversify(task,index,rng):
             for b in task["nodes"]:
                 if a!=b and (a,b) not in edges and rng.random()<0.18:edges[a,b]=rng.randint(1,6)
         task["edges"]=[[a,b,c] for (a,b),c in edges.items()]
-        return task,"branched_resource_graph"
+        successors=collections.Counter(a for a,b,c in task['edges'])
+        return task,"branched_resource_graph" if any(n>1 for n in successors.values()) else "single_successor_resource_graph"
     names=list(task["on"])
     task["on"]=stack_state(names,rng)
     goal=stack_state(names,rng)
@@ -32,4 +34,9 @@ def diversify(task,index,rng):
     else:
         after=solve({**task,"plan":optimal})["after"]
         task["plan"]=optimal+[{"block":min(names),"to":after[min(names)]}]
-    return task,"multi_stack_goal_composition"
+    initial_roots=sum(support=='TABLE' for support in task['on'].values())
+    explicit_goal_roots=sum(support=='TABLE' for support in task['goal_on'].values())
+    if initial_roots>=2:mechanism='multiple_initial_table_stacks'
+    elif explicit_goal_roots>=2:mechanism='multiple_explicit_goal_table_roots'
+    else:mechanism='block_goal_composition'
+    return task,mechanism

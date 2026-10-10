@@ -1,0 +1,8 @@
+{
+  "ticket": "RVM-FIX-005",
+  "observed_problem": "Claim-gap-v1 has12 forward record hash failures outof24 rows.",
+  "root_cause": "In-place list append to skill_tags aliases both renderer rows; second render modifies first after its hash is stored.",
+  "change": "Assign a fresh tag list per rendering, gen1.2.1; new claim-gap-v2 preserves original failedbatch.",
+  "scope": "Gold targets are unchanged. No faulty batch was reviewed, accepted or exported.",
+  "regression_required": "Each renderer row recomputes to storedhash, tagsunique, full independent oracle/schema and signed claim controls."
+}

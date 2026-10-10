@@ -117,7 +117,16 @@ def generate(count=30, batch="pilot-v2", offset=0):
             from generators.relational.expansion import diversify
             world, topology = diversify(world, index, rng)
             mechanism = topology + ":" + mechanism
-        task = dict(kind="critic", world=world, candidates=candidates_for(world, rng))
+            if mechanism.endswith(':initially_unreachable'):
+                mechanism=mechanism.rsplit(':',1)[0]+(':'+'initial_goal_unreachable' if shortest_graph(world) is None else ':'+'initial_goal_reachable')
+        if mechanism.endswith('equal_length_routes'):
+            from generators.critic.route_facts import equal_length_goal_routes
+            mechanism=mechanism[:-len('equal_length_routes')]+('equal_length_goal_routes' if equal_length_goal_routes(world) else 'no_equal_length_goal_routes')
+        candidates=candidates_for(world,rng)
+        if index>=180:
+            from generators.critic.claim_controls import augment
+            candidates=augment(world,candidates,rng)
+        task = dict(kind="critic", world=world, candidates=candidates)
         target = solve(task)
         tags = ["value_critic", "legality", "claim_arithmetic", "progress", "usefulness", "rank_with_ties",
                 "minimal_fresh_plan_replacement", "equal_length_good_bad", "longer_valid_shorter_invalid", mechanism]
@@ -134,8 +143,10 @@ def generate(count=30, batch="pilot-v2", offset=0):
             row = record("RVM-001", batch, index, "base", task, prompt, target, tags,
                          structural_difficulty, "structured", renderer)
             row.update(structural_difficulty=structural_difficulty, challenge_axes=challenge_axes)
-            if index >= 30:
-                row.update(generator_version="1.1.0",source_family_key=f"RVM-001-seed20261009-p{index:04d}")
+            row.update(generator_version="1.1.2",source_family_key=f"RVM-001-seed20261009-p{index:04d}")
+            if index>=180:
+                row['generator_version']='1.2.1'
+                row['skill_tags']=row['skill_tags']+['fuel_underclaim','fuel_overclaim','wrong_location_claim','matched_equal_plan_claims']
             row["record_hash"] = record_hash(row)
             rows.append(row)
     output = [(ROOT / f"data/RVM-001/semantic_parents/{batch}.jsonl", parents),

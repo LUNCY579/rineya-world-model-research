@@ -1,0 +1,1284 @@
+{
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "batch": "RVM-001-v0001",
+  "records": 60,
+  "logical_variants": 30,
+  "decision_counts": {
+    "REVISE": 6,
+    "ACCEPT": 54
+  },
+  "defect_record_counts": {
+    "false_equal_length_routes_tag": 6
+  },
+  "defect_logical_variant_counts": {
+    "false_equal_length_routes_tag": 3
+  },
+  "input_file_sha256": {
+    "data/RVM-001/releases/v0001/canonical.jsonl": "262d9bc470353c3aacb105b1bde2bb5b87f1e9771472966ab7f1c53ac672bac3"
+  },
+  "audit_script_sha256": "34fc7baa362cd708430279a788658b61969de1b7384a57ea8393c30504e5d225",
+  "findings": [
+    {
+      "sample_id": "RVM-001-pilot-v2-p0000-base-forward",
+      "record_hash": "4ad3340e297ab2fd5658b8759785edcded6ceea74190b5c5d4399978f105b80b",
+      "semantic_family_id": "RVM-001-pilot-v2-p0000",
+      "track_id": "RVM-001",
+      "issues": [
+        {
+          "code": "false_equal_length_routes_tag",
+          "severity": "high",
+          "evidence": {
+            "all_feasible_simple_goal_routes": [
+              [
+                "Beryl",
+                "Dune"
+              ]
+            ],
+            "route_length_counts": {
+              "2": 1
+            }
+          },
+          "fix": "Tag only actual distinct feasible equal-length goal routes; if shortest-route ties are claimed, verify two minimum-length routes."
+        }
+      ],
+      "semantic_task": {
+        "candidates": [
+          {
+            "candidate_id": "c97139",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Beryl",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c98913",
+            "claimed_after": {
+              "fuel": 0,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c35263",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          },
+          {
+            "candidate_id": "c97404",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c20995",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": []
+          },
+          {
+            "candidate_id": "c22428",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c95029",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c40279",
+            "claimed_after": {
+              "fuel": 7,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c70519",
+            "claimed_after": {
+              "fuel": 4,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Fjord",
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c80251",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          },
+          {
+            "candidate_id": "c70439",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          }
+        ],
+        "kind": "critic",
+        "world": {
+          "edges": [
+            [
+              "Fjord",
+              "Beryl",
+              2
+            ],
+            [
+              "Beryl",
+              "Dune",
+              3
+            ],
+            [
+              "Beryl",
+              "Fjord",
+              1
+            ]
+          ],
+          "fuel": 12,
+          "goal": "Dune",
+          "kind": "graph",
+          "nodes": [
+            "Fjord",
+            "Beryl",
+            "Dune"
+          ],
+          "plan": [],
+          "start": "Fjord"
+        }
+      }
+    },
+    {
+      "sample_id": "RVM-001-pilot-v2-p0000-base-reverse",
+      "record_hash": "bc3b11a2dba31891823c70e50dc5f82a87632230d6de38e47e18f592584d46a4",
+      "semantic_family_id": "RVM-001-pilot-v2-p0000",
+      "track_id": "RVM-001",
+      "issues": [
+        {
+          "code": "false_equal_length_routes_tag",
+          "severity": "high",
+          "evidence": {
+            "all_feasible_simple_goal_routes": [
+              [
+                "Beryl",
+                "Dune"
+              ]
+            ],
+            "route_length_counts": {
+              "2": 1
+            }
+          },
+          "fix": "Tag only actual distinct feasible equal-length goal routes; if shortest-route ties are claimed, verify two minimum-length routes."
+        }
+      ],
+      "semantic_task": {
+        "candidates": [
+          {
+            "candidate_id": "c97139",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Beryl",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c98913",
+            "claimed_after": {
+              "fuel": 0,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c35263",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          },
+          {
+            "candidate_id": "c97404",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c20995",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": []
+          },
+          {
+            "candidate_id": "c22428",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c95029",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c40279",
+            "claimed_after": {
+              "fuel": 7,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c70519",
+            "claimed_after": {
+              "fuel": 4,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Fjord",
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c80251",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          },
+          {
+            "candidate_id": "c70439",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          }
+        ],
+        "kind": "critic",
+        "world": {
+          "edges": [
+            [
+              "Fjord",
+              "Beryl",
+              2
+            ],
+            [
+              "Beryl",
+              "Dune",
+              3
+            ],
+            [
+              "Beryl",
+              "Fjord",
+              1
+            ]
+          ],
+          "fuel": 12,
+          "goal": "Dune",
+          "kind": "graph",
+          "nodes": [
+            "Fjord",
+            "Beryl",
+            "Dune"
+          ],
+          "plan": [],
+          "start": "Fjord"
+        }
+      }
+    },
+    {
+      "sample_id": "RVM-001-pilot-v2-p0012-base-forward",
+      "record_hash": "dbb3f99820a2a953c44a3b3c42d134122872ad3e72c7ceaa131c4f87524f1bed",
+      "semantic_family_id": "RVM-001-pilot-v2-p0012",
+      "track_id": "RVM-001",
+      "issues": [
+        {
+          "code": "false_equal_length_routes_tag",
+          "severity": "high",
+          "evidence": {
+            "all_feasible_simple_goal_routes": [
+              [
+                "Fjord",
+                "Dune"
+              ]
+            ],
+            "route_length_counts": {
+              "2": 1
+            }
+          },
+          "fix": "Tag only actual distinct feasible equal-length goal routes; if shortest-route ties are claimed, verify two minimum-length routes."
+        }
+      ],
+      "semantic_task": {
+        "candidates": [
+          {
+            "candidate_id": "c52744",
+            "claimed_after": {
+              "fuel": 8,
+              "node": "Dune"
+            },
+            "plan": [
+              "Fjord",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c37075",
+            "claimed_after": {
+              "fuel": 14,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Cedar"
+            ]
+          },
+          {
+            "candidate_id": "c61426",
+            "claimed_after": {
+              "fuel": 7,
+              "node": "Dune"
+            },
+            "plan": [
+              "Fjord",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c62745",
+            "claimed_after": {
+              "fuel": 11,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c26330",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Fjord",
+              "Cedar"
+            ]
+          },
+          {
+            "candidate_id": "c17002",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c91501",
+            "claimed_after": {
+              "fuel": 14,
+              "node": "Cedar"
+            },
+            "plan": []
+          },
+          {
+            "candidate_id": "c90895",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c17492",
+            "claimed_after": {
+              "fuel": 0,
+              "node": "Dune"
+            },
+            "plan": [
+              "Fjord",
+              "Fjord",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c55415",
+            "claimed_after": {
+              "fuel": 2,
+              "node": "Dune"
+            },
+            "plan": [
+              "Fjord",
+              "Cedar",
+              "Fjord",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c64495",
+            "claimed_after": {
+              "fuel": 14,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Dune"
+            ]
+          }
+        ],
+        "kind": "critic",
+        "world": {
+          "edges": [
+            [
+              "Cedar",
+              "Fjord",
+              4
+            ],
+            [
+              "Fjord",
+              "Dune",
+              3
+            ],
+            [
+              "Fjord",
+              "Cedar",
+              1
+            ]
+          ],
+          "fuel": 14,
+          "goal": "Dune",
+          "kind": "graph",
+          "nodes": [
+            "Cedar",
+            "Fjord",
+            "Dune"
+          ],
+          "plan": [],
+          "start": "Cedar"
+        }
+      }
+    },
+    {
+      "sample_id": "RVM-001-pilot-v2-p0012-base-reverse",
+      "record_hash": "5721c3599d9a2de559f0b2fd85dda69598893d34da9f035ebdbbf0a2aa6a12de",
+      "semantic_family_id": "RVM-001-pilot-v2-p0012",
+      "track_id": "RVM-001",
+      "issues": [
+        {
+          "code": "false_equal_length_routes_tag",
+          "severity": "high",
+          "evidence": {
+            "all_feasible_simple_goal_routes": [
+              [
+                "Fjord",
+                "Dune"
+              ]
+            ],
+            "route_length_counts": {
+              "2": 1
+            }
+          },
+          "fix": "Tag only actual distinct feasible equal-length goal routes; if shortest-route ties are claimed, verify two minimum-length routes."
+        }
+      ],
+      "semantic_task": {
+        "candidates": [
+          {
+            "candidate_id": "c52744",
+            "claimed_after": {
+              "fuel": 8,
+              "node": "Dune"
+            },
+            "plan": [
+              "Fjord",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c37075",
+            "claimed_after": {
+              "fuel": 14,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Cedar"
+            ]
+          },
+          {
+            "candidate_id": "c61426",
+            "claimed_after": {
+              "fuel": 7,
+              "node": "Dune"
+            },
+            "plan": [
+              "Fjord",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c62745",
+            "claimed_after": {
+              "fuel": 11,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c26330",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Fjord",
+              "Cedar"
+            ]
+          },
+          {
+            "candidate_id": "c17002",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c91501",
+            "claimed_after": {
+              "fuel": 14,
+              "node": "Cedar"
+            },
+            "plan": []
+          },
+          {
+            "candidate_id": "c90895",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c17492",
+            "claimed_after": {
+              "fuel": 0,
+              "node": "Dune"
+            },
+            "plan": [
+              "Fjord",
+              "Fjord",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c55415",
+            "claimed_after": {
+              "fuel": 2,
+              "node": "Dune"
+            },
+            "plan": [
+              "Fjord",
+              "Cedar",
+              "Fjord",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c64495",
+            "claimed_after": {
+              "fuel": 14,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Dune"
+            ]
+          }
+        ],
+        "kind": "critic",
+        "world": {
+          "edges": [
+            [
+              "Cedar",
+              "Fjord",
+              4
+            ],
+            [
+              "Fjord",
+              "Dune",
+              3
+            ],
+            [
+              "Fjord",
+              "Cedar",
+              1
+            ]
+          ],
+          "fuel": 14,
+          "goal": "Dune",
+          "kind": "graph",
+          "nodes": [
+            "Cedar",
+            "Fjord",
+            "Dune"
+          ],
+          "plan": [],
+          "start": "Cedar"
+        }
+      }
+    },
+    {
+      "sample_id": "RVM-001-pilot-v2-p0024-base-forward",
+      "record_hash": "f5ced1d5d0d98f0c420c11a8048af318aa3f882c362812d66fa84636b17f94b6",
+      "semantic_family_id": "RVM-001-pilot-v2-p0024",
+      "track_id": "RVM-001",
+      "issues": [
+        {
+          "code": "false_equal_length_routes_tag",
+          "severity": "high",
+          "evidence": {
+            "all_feasible_simple_goal_routes": [
+              [
+                "Aster",
+                "Fjord"
+              ]
+            ],
+            "route_length_counts": {
+              "2": 1
+            }
+          },
+          "fix": "Tag only actual distinct feasible equal-length goal routes; if shortest-route ties are claimed, verify two minimum-length routes."
+        }
+      ],
+      "semantic_task": {
+        "candidates": [
+          {
+            "candidate_id": "c78715",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c17405",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Cedar"
+            ]
+          },
+          {
+            "candidate_id": "c94471",
+            "claimed_after": {
+              "fuel": 3,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Aster",
+              "Cedar",
+              "Aster",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c86755",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Aster"
+            },
+            "plan": [
+              "Aster"
+            ]
+          },
+          {
+            "candidate_id": "c74980",
+            "claimed_after": {
+              "fuel": 7,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Aster",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c63038",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Aster"
+            },
+            "plan": [
+              "Aster"
+            ]
+          },
+          {
+            "candidate_id": "c23764",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Cedar"
+            },
+            "plan": []
+          },
+          {
+            "candidate_id": "c27354",
+            "claimed_after": {
+              "fuel": 8,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Aster",
+              "Cedar"
+            ]
+          },
+          {
+            "candidate_id": "c59650",
+            "claimed_after": {
+              "fuel": 0,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Aster",
+              "Aster",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c41827",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Aster"
+            },
+            "plan": [
+              "Aster"
+            ]
+          },
+          {
+            "candidate_id": "c83838",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Aster",
+              "Fjord"
+            ]
+          }
+        ],
+        "kind": "critic",
+        "world": {
+          "edges": [
+            [
+              "Cedar",
+              "Aster",
+              3
+            ],
+            [
+              "Aster",
+              "Fjord",
+              2
+            ],
+            [
+              "Aster",
+              "Cedar",
+              1
+            ]
+          ],
+          "fuel": 12,
+          "goal": "Fjord",
+          "kind": "graph",
+          "nodes": [
+            "Cedar",
+            "Aster",
+            "Fjord"
+          ],
+          "plan": [],
+          "start": "Cedar"
+        }
+      }
+    },
+    {
+      "sample_id": "RVM-001-pilot-v2-p0024-base-reverse",
+      "record_hash": "59128e3a8cd050d9813ff1d21d203cc2b6686b557ae15d09f1f8d5c360ae4c5c",
+      "semantic_family_id": "RVM-001-pilot-v2-p0024",
+      "track_id": "RVM-001",
+      "issues": [
+        {
+          "code": "false_equal_length_routes_tag",
+          "severity": "high",
+          "evidence": {
+            "all_feasible_simple_goal_routes": [
+              [
+                "Aster",
+                "Fjord"
+              ]
+            ],
+            "route_length_counts": {
+              "2": 1
+            }
+          },
+          "fix": "Tag only actual distinct feasible equal-length goal routes; if shortest-route ties are claimed, verify two minimum-length routes."
+        }
+      ],
+      "semantic_task": {
+        "candidates": [
+          {
+            "candidate_id": "c78715",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c17405",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Cedar"
+            ]
+          },
+          {
+            "candidate_id": "c94471",
+            "claimed_after": {
+              "fuel": 3,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Aster",
+              "Cedar",
+              "Aster",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c86755",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Aster"
+            },
+            "plan": [
+              "Aster"
+            ]
+          },
+          {
+            "candidate_id": "c74980",
+            "claimed_after": {
+              "fuel": 7,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Aster",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c63038",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Aster"
+            },
+            "plan": [
+              "Aster"
+            ]
+          },
+          {
+            "candidate_id": "c23764",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Cedar"
+            },
+            "plan": []
+          },
+          {
+            "candidate_id": "c27354",
+            "claimed_after": {
+              "fuel": 8,
+              "node": "Cedar"
+            },
+            "plan": [
+              "Aster",
+              "Cedar"
+            ]
+          },
+          {
+            "candidate_id": "c59650",
+            "claimed_after": {
+              "fuel": 0,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Aster",
+              "Aster",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c41827",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Aster"
+            },
+            "plan": [
+              "Aster"
+            ]
+          },
+          {
+            "candidate_id": "c83838",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Aster",
+              "Fjord"
+            ]
+          }
+        ],
+        "kind": "critic",
+        "world": {
+          "edges": [
+            [
+              "Cedar",
+              "Aster",
+              3
+            ],
+            [
+              "Aster",
+              "Fjord",
+              2
+            ],
+            [
+              "Aster",
+              "Cedar",
+              1
+            ]
+          ],
+          "fuel": 12,
+          "goal": "Fjord",
+          "kind": "graph",
+          "nodes": [
+            "Cedar",
+            "Aster",
+            "Fjord"
+          ],
+          "plan": [],
+          "start": "Cedar"
+        }
+      }
+    }
+  ],
+  "scope": [
+    "Tags are checked against final constructed tasks, not original template intent. Semantic target values continue to be checked independently.",
+    "All equal-route checks enumerate feasible simple routes. Positive costs ensure shortest routes are simple; arbitrary cyclic equal-length walks are excluded.",
+    "The ordinal predicate tags are opaque producer strata and are not assigned an invented meaning.",
+    "The immutable pilot release is read only; errata live in separate review/audit files.",
+    "Initial blind verdicts were frozen before another reviewer finding topic was disclosed. This supplemental tag audit is independently reproduced but informed by that challenge."
+  ],
+  "private_reference_producer_or_reviewer_files_read": false,
+  "small_counterexamples": {
+    "false_equal_length_routes_tag": {
+      "sample_id": "RVM-001-pilot-v2-p0000-base-forward",
+      "record_hash": "4ad3340e297ab2fd5658b8759785edcded6ceea74190b5c5d4399978f105b80b",
+      "semantic_family_id": "RVM-001-pilot-v2-p0000",
+      "track_id": "RVM-001",
+      "issues": [
+        {
+          "code": "false_equal_length_routes_tag",
+          "severity": "high",
+          "evidence": {
+            "all_feasible_simple_goal_routes": [
+              [
+                "Beryl",
+                "Dune"
+              ]
+            ],
+            "route_length_counts": {
+              "2": 1
+            }
+          },
+          "fix": "Tag only actual distinct feasible equal-length goal routes; if shortest-route ties are claimed, verify two minimum-length routes."
+        }
+      ],
+      "semantic_task": {
+        "candidates": [
+          {
+            "candidate_id": "c97139",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Beryl",
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c98913",
+            "claimed_after": {
+              "fuel": 0,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c35263",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          },
+          {
+            "candidate_id": "c97404",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c20995",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": []
+          },
+          {
+            "candidate_id": "c22428",
+            "claimed_after": {
+              "fuel": 9,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c95029",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Fjord"
+            },
+            "plan": [
+              "Fjord"
+            ]
+          },
+          {
+            "candidate_id": "c40279",
+            "claimed_after": {
+              "fuel": 7,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c70519",
+            "claimed_after": {
+              "fuel": 4,
+              "node": "Dune"
+            },
+            "plan": [
+              "Beryl",
+              "Fjord",
+              "Beryl",
+              "Dune"
+            ]
+          },
+          {
+            "candidate_id": "c80251",
+            "claimed_after": {
+              "fuel": 12,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          },
+          {
+            "candidate_id": "c70439",
+            "claimed_after": {
+              "fuel": 10,
+              "node": "Beryl"
+            },
+            "plan": [
+              "Beryl"
+            ]
+          }
+        ],
+        "kind": "critic",
+        "world": {
+          "edges": [
+            [
+              "Fjord",
+              "Beryl",
+              2
+            ],
+            [
+              "Beryl",
+              "Dune",
+              3
+            ],
+            [
+              "Beryl",
+              "Fjord",
+              1
+            ]
+          ],
+          "fuel": 12,
+          "goal": "Dune",
+          "kind": "graph",
+          "nodes": [
+            "Fjord",
+            "Beryl",
+            "Dune"
+          ],
+          "plan": [],
+          "start": "Fjord"
+        }
+      }
+    }
+  },
+  "minimal_semantic_counterexamples": {
+    "false_equal_length_routes_tag": {
+      "task": {
+        "kind": "graph",
+        "nodes": [
+          "a",
+          "b",
+          "g"
+        ],
+        "edges": [
+          [
+            "a",
+            "b",
+            1
+          ],
+          [
+            "b",
+            "g",
+            1
+          ]
+        ],
+        "start": "a",
+        "goal": "g",
+        "fuel": 2,
+        "plan": []
+      },
+      "exhaustive_feasible_simple_routes": [
+        [
+          "b",
+          "g"
+        ]
+      ]
+    }
+  }
+}

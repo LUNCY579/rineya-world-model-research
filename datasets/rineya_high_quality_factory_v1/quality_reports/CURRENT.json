@@ -21,6 +21,17 @@
       }
     },
     {
+      "batch": "expansion-v1",
+      "track": "RCM-001",
+      "records": 1200,
+      "parents": 150,
+      "difficulty": {
+        "3": 320,
+        "1": 160,
+        "4": 720
+      }
+    },
+    {
       "batch": "pilot-v1",
       "track": "RCM-001",
       "records": 120,
@@ -88,6 +99,42 @@
       "parents": 12,
       "difficulty": {
         "3": 120
+      }
+    },
+    {
+      "batch": "expansion-v1",
+      "track": "RGM-001",
+      "records": 360,
+      "parents": 150,
+      "difficulty": {
+        "3": 50,
+        "4": 244,
+        "1": 24,
+        "2": 42
+      }
+    },
+    {
+      "batch": "expansion-v2",
+      "track": "RGM-001",
+      "records": 360,
+      "parents": 150,
+      "difficulty": {
+        "3": 50,
+        "4": 244,
+        "1": 24,
+        "2": 42
+      }
+    },
+    {
+      "batch": "expansion-v3",
+      "track": "RGM-001",
+      "records": 360,
+      "parents": 150,
+      "difficulty": {
+        "3": 50,
+        "4": 244,
+        "1": 24,
+        "2": 42
       }
     },
     {
@@ -213,6 +260,46 @@
       }
     },
     {
+      "batch": "claim-gap-v1",
+      "track": "RVM-001",
+      "records": 24,
+      "parents": 12,
+      "difficulty": {
+        "4": 20,
+        "3": 4
+      }
+    },
+    {
+      "batch": "claim-gap-v2",
+      "track": "RVM-001",
+      "records": 24,
+      "parents": 12,
+      "difficulty": {
+        "4": 20,
+        "3": 4
+      }
+    },
+    {
+      "batch": "expansion-v1",
+      "track": "RVM-001",
+      "records": 300,
+      "parents": 150,
+      "difficulty": {
+        "4": 216,
+        "3": 84
+      }
+    },
+    {
+      "batch": "expansion-v2",
+      "track": "RVM-001",
+      "records": 300,
+      "parents": 150,
+      "difficulty": {
+        "4": 216,
+        "3": 84
+      }
+    },
+    {
       "batch": "pilot-v1",
       "track": "RVM-001",
       "records": 60,
@@ -225,6 +312,16 @@
     },
     {
       "batch": "pilot-v2",
+      "track": "RVM-001",
+      "records": 60,
+      "parents": 30,
+      "difficulty": {
+        "4": 40,
+        "3": 20
+      }
+    },
+    {
+      "batch": "pilot-v4",
       "track": "RVM-001",
       "records": 60,
       "parents": 30,
@@ -324,7 +421,11 @@
           "sha256": "5604aa0be7ad14c22032a413f12a7ca48a0f62a473c9de572bcf87e2c828c74b"
         }
       },
-      "path": "data/RBM-001/releases/v0001"
+      "path": "data/RBM-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 24,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "all-pilots"
     },
     {
       "release": "v0001",
@@ -401,7 +502,112 @@
           "sha256": "574d36f46ba38455da66baaeb4518678eef2def676af85a36dcf35655adf3d0d"
         }
       },
-      "path": "data/RCM-001/releases/v0001"
+      "path": "data/RCM-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 240,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "first-approved"
+    },
+    {
+      "release": "v0002",
+      "batch": "expansion-v1",
+      "track": "RCM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 1200,
+      "semantic_parents": 150,
+      "splits": {
+        "train": 960,
+        "dev_challenge": 240
+      },
+      "generator_versions": [
+        "1.2.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/catalog.py": "6a309e428c67ee653ab2fc5b5559b9dbabab82b9ed47479b481d0af9c97c7e58",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+        "factory/pipeline.py": "1cc0220d8d2c9da40795e464b9ff37622215cbe793b58dc8c92feb18d3139b29",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "2d0a33babbbcca64893393124bc0c10f27c6fcbb699d582e0010413d5db341ea",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+        "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+        "schemas/process_reward/v1.schema.json": "b4084f1a1b849e9fd91d54cb6d38fbdc26e97a0e5e035aa59bd6bcf6c1c636a4",
+        "schemas/sft/v1.schema.json": "dcad9e7b91b1c5eb1ae7cb3fd96c9fa77eee633032fd66b5e5b0107ab3430830",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/archive/expansion_v1_generate.py": "f88662fdfd7af26673c9003bac6c0a354c429d381e8174921965086788c1983c",
+        "generators/critic/claim_controls.py": "83fae00f2ef905d8bff74022fdb58a0d1af0fb3db1d97ae3a37104fb5ec499f2",
+        "generators/critic/generate.py": "0bf9f125678b4a7995fc489fe572be0b543cf829805b7d990668f6293c6fe04e",
+        "generators/critic/route_facts.py": "527d2b36931681418a0b4db35d54dffea3840d0e911cb0734186a82443c541ae",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/expansion_v1_diversity.py": "4b8f169621db336f208c727d2101c53f61d86d87be48574c786290a6e92f6d37",
+        "generators/relational/archive/expansion_v1_generate.py": "6a4a660ee89f0ce6d856042331d700db49f6320caddcc228c6c24f786aee25ea",
+        "generators/relational/archive/expansion_v2_diversity.py": "4636fd58168ff11ccdfa974be18e6943c6853af9718ee8b594acc661f8434f9a",
+        "generators/relational/archive/expansion_v2_generate.py": "826169eeece3fdb82d5e32ba10fbb8dcc343ec416b8d821c6b614a110f09df0c",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "013d918ffd426e74690a9ffe5b054153eb76cbb38d4ba476cf562362de45218e",
+        "generators/relational/generate.py": "c85d6577b3ca2fef45ac7c0de8fa8b28553131dbe1300de9001b8a3f6049c1b4",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/expansion-v1_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 438,
+          "sha256": "7bf09236d90094e9b89ca613232c0a4bfef28c628b7d562c8f841b25a0200530"
+        },
+        "canonical.jsonl": {
+          "bytes": 3660504,
+          "sha256": "4744be7c5b23de7549124a237a044b03b8766c7875ef665af1024594486463b7"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 447460,
+          "sha256": "6a79c5e95672bc1b5b22a19e2689568bd8ea582a2515c105afaf981bf23f25e3"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 426100,
+          "sha256": "3c86b434d32cdbefd4a8cfa470fe33f2a24118bb8725c26a662ad2855af6fb18"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 381000,
+          "sha256": "f60eabb309e5d75a122cadf9702c8001ebc93585a419a07cd800084353709cae"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 11434122,
+          "sha256": "99e8279f6b315d7533d52f2ceddd900de7b2df47c1bedd095826a7934624beda"
+        },
+        "train-sft.jsonl": {
+          "bytes": 1445244,
+          "sha256": "d5d4dcdb9622bd01c6d9aab55e0ebbbb569f1e6fd3f140fa5004700d8b2d4388"
+        },
+        "train-structured.jsonl": {
+          "bytes": 1368444,
+          "sha256": "c4e631935dfb3f6bc273fbf7a2cbfb6632d12e2eb3ade15f9b214622a0aa10ca"
+        }
+      },
+      "export_profile": "specialized-1.0.0",
+      "path": "data/RCM-001/releases/v0002",
+      "active_status": "ACTIVE",
+      "active_records": 1200,
+      "remote_backup_status": "LOCAL_ONLY",
+      "remote_checkpoint": null
     },
     {
       "release": "v0001",
@@ -484,7 +690,11 @@
           "sha256": "81584b475a19bd00afbf08e99450bb677871bf847450cca26e4f592cefaa36b8"
         }
       },
-      "path": "data/RDP-001/releases/v0001"
+      "path": "data/RDP-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 24,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "all-pilots"
     },
     {
       "release": "v0001",
@@ -575,7 +785,11 @@
           "sha256": "a4c6a07d6a3354b0b97c457b5e64259691f31f9b1be93c9a2f53520f42b016bd"
         }
       },
-      "path": "data/REM-001/releases/v0001"
+      "path": "data/REM-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 120,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "all-pilots"
     },
     {
       "release": "v0001",
@@ -666,7 +880,122 @@
           "sha256": "b6ce8995dace6bb3332ab424315e4803ddb4f557f474cfd7beb8e57d31440580"
         }
       },
-      "path": "data/RGM-001/releases/v0001"
+      "path": "data/RGM-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 72,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "all-pilots"
+    },
+    {
+      "release": "v0002",
+      "batch": "expansion-v3",
+      "track": "RGM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 360,
+      "semantic_parents": 150,
+      "splits": {
+        "train": 240,
+        "dev_challenge": 120
+      },
+      "generator_versions": [
+        "1.3.2"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/catalog.py": "6a309e428c67ee653ab2fc5b5559b9dbabab82b9ed47479b481d0af9c97c7e58",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+        "factory/pipeline.py": "90c8fc6c30f04465b325df702837fd57cb189b847cc98e258240958e5a4806d6",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "e71005020608fa7a5388e1b4146e7c69ef30dcdf207832110b9d9ea3dd8e9d7a",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "oracles/metadata_independent.py": "f218765cf0e67d4f813aea55a062b9f853b88eaaf8754619de09343de78c014e",
+        "schemas/COMPETENCY_TAGS.md": "efbfc5755fa7dda2c388e621ca17ac5d96c99bc9f59115d62027e2247dd0e097",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+        "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+        "schemas/process_reward/v1.schema.json": "b4084f1a1b849e9fd91d54cb6d38fbdc26e97a0e5e035aa59bd6bcf6c1c636a4",
+        "schemas/sft/v1.schema.json": "dcad9e7b91b1c5eb1ae7cb3fd96c9fa77eee633032fd66b5e5b0107ab3430830",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/archive/expansion_v1_generate.py": "f88662fdfd7af26673c9003bac6c0a354c429d381e8174921965086788c1983c",
+        "generators/critic/claim_controls.py": "83fae00f2ef905d8bff74022fdb58a0d1af0fb3db1d97ae3a37104fb5ec499f2",
+        "generators/critic/generate.py": "131b559479e5608ce90b0989e34d687ef37a17821a0146a2fe68646106a0bd5a",
+        "generators/critic/route_facts.py": "527d2b36931681418a0b4db35d54dffea3840d0e911cb0734186a82443c541ae",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/expansion_v1_diversity.py": "4b8f169621db336f208c727d2101c53f61d86d87be48574c786290a6e92f6d37",
+        "generators/relational/archive/expansion_v1_generate.py": "6a4a660ee89f0ce6d856042331d700db49f6320caddcc228c6c24f786aee25ea",
+        "generators/relational/archive/expansion_v2_diversity.py": "4636fd58168ff11ccdfa974be18e6943c6853af9718ee8b594acc661f8434f9a",
+        "generators/relational/archive/expansion_v2_generate.py": "826169eeece3fdb82d5e32ba10fbb8dcc343ec416b8d821c6b614a110f09df0c",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "013d918ffd426e74690a9ffe5b054153eb76cbb38d4ba476cf562362de45218e",
+        "generators/relational/generate.py": "c85d6577b3ca2fef45ac7c0de8fa8b28553131dbe1300de9001b8a3f6049c1b4",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/expansion-v3_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 437,
+          "sha256": "f0a5ab2580336d8a302d3f3d127d38dd6a5fd00cc93e942c9ee10635859bb35d"
+        },
+        "canonical.jsonl": {
+          "bytes": 1343694,
+          "sha256": "ead8cb798dc5216b4a4a3260a698078b54fe267114edb41b69cfb084ce1eb2bc"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 327542,
+          "sha256": "d0fd69b4c5eb6dfd6455acb104fc7240a6a3c39e9695467b96544d2d79f6e6be"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 308502,
+          "sha256": "995ff610fc70ae3c81fd06d0f27366ee2f12dc426df20951a292f7377f5e7b4b"
+        },
+        "dev_challenge-trajectories.jsonl": {
+          "bytes": 152612,
+          "sha256": "86a9645548c34d4f08ddf20e0e5126ec769e970d6b18428e4107b57f21391cbe"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 126540,
+          "sha256": "bfbeddecb068a45a3578f7730344e804031a1804e3a1938c24f506c23b9d25c2"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 2844296,
+          "sha256": "a5ba30ed5a09fd27c3e043f46cc1edab919d24b606c1ecff07d09ebd0e107587"
+        },
+        "train-sft.jsonl": {
+          "bytes": 539550,
+          "sha256": "862a581a1fc405cd9890c80a2f3ae8ec895ffe45e2956b7caf3d644eb7c06edc"
+        },
+        "train-structured.jsonl": {
+          "bytes": 513462,
+          "sha256": "9fc51d59cdc780423831a18b59bd903c11e986608c4e98d184afe83de75842a2"
+        },
+        "train-trajectories.jsonl": {
+          "bytes": 195190,
+          "sha256": "69755f01c1316fc8dc384cf6b6e0ace1a8ff80f88cf0c314839199d1833f0745"
+        }
+      },
+      "export_profile": "specialized-1.0.0",
+      "path": "data/RGM-001/releases/v0002",
+      "active_status": "ACTIVE",
+      "active_records": 360,
+      "remote_backup_status": "LOCAL_ONLY",
+      "remote_checkpoint": null
     },
     {
       "release": "v0001",
@@ -749,7 +1078,11 @@
           "sha256": "11e4ea79a266e88a182a6e3ae3c94036130e3f9bcb23a8d5a769d1eee94c3db6"
         }
       },
-      "path": "data/RJP-001/releases/v0001"
+      "path": "data/RJP-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 24,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "all-pilots"
     },
     {
       "release": "v0001",
@@ -840,7 +1173,11 @@
           "sha256": "6b2f32a57234333c280efd27722da074938f88fb3ac08ac76d9039d85f7ed89a"
         }
       },
-      "path": "data/RMM-001/releases/v0001"
+      "path": "data/RMM-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 76,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "all-pilots"
     },
     {
       "release": "v0001",
@@ -931,7 +1268,11 @@
           "sha256": "d306aa98defda8149ff04b8dd5a1c7a598fc5be2ce75af567faf4a53fee2c934"
         }
       },
-      "path": "data/ROM-001/releases/v0001"
+      "path": "data/ROM-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 24,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "all-pilots"
     },
     {
       "release": "v0001",
@@ -1022,7 +1363,11 @@
           "sha256": "75e8c2ab9cf0bc8620cb91e68921bea6636084d8a0f7efb1f8db5d154df7d1b3"
         }
       },
-      "path": "data/RSM-001/releases/v0001"
+      "path": "data/RSM-001/releases/v0001",
+      "active_status": "ACTIVE",
+      "active_records": 24,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "all-pilots"
     },
     {
       "release": "v0001",
@@ -1099,10 +1444,356 @@
           "sha256": "9b2f69572bc26a0f3d271ad44b0e989d9adfc82c86bf7035c93be17ce173abf5"
         }
       },
-      "path": "data/RVM-001/releases/v0001"
+      "path": "data/RVM-001/releases/v0001",
+      "active_status": "SUPERSEDED",
+      "active_records": 0,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "first-approved"
+    },
+    {
+      "release": "v0002",
+      "batch": "expansion-v2",
+      "track": "RVM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 300,
+      "semantic_parents": 150,
+      "splits": {
+        "train": 240,
+        "dev_challenge": 60
+      },
+      "generator_versions": [
+        "1.1.2"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/catalog.py": "6a309e428c67ee653ab2fc5b5559b9dbabab82b9ed47479b481d0af9c97c7e58",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+        "factory/pipeline.py": "90c8fc6c30f04465b325df702837fd57cb189b847cc98e258240958e5a4806d6",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "e71005020608fa7a5388e1b4146e7c69ef30dcdf207832110b9d9ea3dd8e9d7a",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "oracles/metadata_independent.py": "f218765cf0e67d4f813aea55a062b9f853b88eaaf8754619de09343de78c014e",
+        "schemas/COMPETENCY_TAGS.md": "efbfc5755fa7dda2c388e621ca17ac5d96c99bc9f59115d62027e2247dd0e097",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+        "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+        "schemas/process_reward/v1.schema.json": "b4084f1a1b849e9fd91d54cb6d38fbdc26e97a0e5e035aa59bd6bcf6c1c636a4",
+        "schemas/sft/v1.schema.json": "dcad9e7b91b1c5eb1ae7cb3fd96c9fa77eee633032fd66b5e5b0107ab3430830",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/archive/expansion_v1_generate.py": "f88662fdfd7af26673c9003bac6c0a354c429d381e8174921965086788c1983c",
+        "generators/critic/claim_controls.py": "83fae00f2ef905d8bff74022fdb58a0d1af0fb3db1d97ae3a37104fb5ec499f2",
+        "generators/critic/generate.py": "131b559479e5608ce90b0989e34d687ef37a17821a0146a2fe68646106a0bd5a",
+        "generators/critic/route_facts.py": "527d2b36931681418a0b4db35d54dffea3840d0e911cb0734186a82443c541ae",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/expansion_v1_diversity.py": "4b8f169621db336f208c727d2101c53f61d86d87be48574c786290a6e92f6d37",
+        "generators/relational/archive/expansion_v1_generate.py": "6a4a660ee89f0ce6d856042331d700db49f6320caddcc228c6c24f786aee25ea",
+        "generators/relational/archive/expansion_v2_diversity.py": "4636fd58168ff11ccdfa974be18e6943c6853af9718ee8b594acc661f8434f9a",
+        "generators/relational/archive/expansion_v2_generate.py": "826169eeece3fdb82d5e32ba10fbb8dcc343ec416b8d821c6b614a110f09df0c",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "013d918ffd426e74690a9ffe5b054153eb76cbb38d4ba476cf562362de45218e",
+        "generators/relational/generate.py": "c85d6577b3ca2fef45ac7c0de8fa8b28553131dbe1300de9001b8a3f6049c1b4",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/expansion-v2_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 437,
+          "sha256": "d0b9327ee895afc86e592923f9599bd5ebc1da73bbd1cfda51993c67755c63dd"
+        },
+        "canonical.jsonl": {
+          "bytes": 2727552,
+          "sha256": "0e23a3393e9a63d043e694aac13df2846e50b3c77ca02159cf609a1c6820c0f1"
+        },
+        "dev_challenge-preference.jsonl": {
+          "bytes": 412774,
+          "sha256": "5a359c7afd1ea09652e39162e0e4776767a05afe4a43f3b0db2a8cde113aad4e"
+        },
+        "dev_challenge-process_reward.jsonl": {
+          "bytes": 3271210,
+          "sha256": "2801ef028172c92fbc254d95a05d282e595627aa625599539c478d601b71cd38"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 434440,
+          "sha256": "e1ab220a2c450c1de8c4eb2e6942f4fcb857d55aff15cd67d63f1c890e7e0ce4"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 414444,
+          "sha256": "a6f1c229e311def31a8f50a7267fe50783a7d08add38c9004b6ef4b49611add3"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 105300,
+          "sha256": "e7d35d4cc0ff0b03a8430dc2ff657a42402a1dcc147bc4f325699f70bbbfbd91"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 3424488,
+          "sha256": "ff2a6e7c1533203e9472dfec660d12661c1a6f12b4902ccc6c21a0d06d04912d"
+        },
+        "train-preference.jsonl": {
+          "bytes": 1443392,
+          "sha256": "a44bae9b80e8f5982a7a5f729b43870a4d0a91f0699047834e9cbf9024cad458"
+        },
+        "train-process_reward.jsonl": {
+          "bytes": 11928960,
+          "sha256": "f6f84b18c6f573f35ea1b0321a9d9a546154d8568fae84d5da3f4d81a49344a4"
+        },
+        "train-sft.jsonl": {
+          "bytes": 1635052,
+          "sha256": "80400638c9d2e2918850b76810d9e4ce8f272f908e629810ecb345a025a76b08"
+        },
+        "train-structured.jsonl": {
+          "bytes": 1557340,
+          "sha256": "bf334dbbbf5b6c46f21cc10cc508197832e4d7543a99ae8a3be4a16f6c4bb56a"
+        }
+      },
+      "export_profile": "specialized-1.0.0",
+      "exporter_review": {
+        "exporter_sha256": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "expert_receipt": "expert-exporter-revised-3ca80e926583",
+        "adversarial_evidence": "reviews/adversarial/exports-code-review.json"
+      },
+      "path": "data/RVM-001/releases/v0002",
+      "active_status": "ACTIVE",
+      "active_records": 300,
+      "remote_backup_status": "LOCAL_ONLY",
+      "remote_checkpoint": null
+    },
+    {
+      "release": "v0003",
+      "batch": "pilot-v4",
+      "track": "RVM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 60,
+      "semantic_parents": 30,
+      "splits": {
+        "train": 48,
+        "dev_challenge": 12
+      },
+      "generator_versions": [
+        "1.1.2"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/catalog.py": "6a309e428c67ee653ab2fc5b5559b9dbabab82b9ed47479b481d0af9c97c7e58",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+        "factory/pipeline.py": "90c8fc6c30f04465b325df702837fd57cb189b847cc98e258240958e5a4806d6",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "e71005020608fa7a5388e1b4146e7c69ef30dcdf207832110b9d9ea3dd8e9d7a",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "oracles/metadata_independent.py": "f218765cf0e67d4f813aea55a062b9f853b88eaaf8754619de09343de78c014e",
+        "schemas/COMPETENCY_TAGS.md": "efbfc5755fa7dda2c388e621ca17ac5d96c99bc9f59115d62027e2247dd0e097",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+        "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+        "schemas/process_reward/v1.schema.json": "b4084f1a1b849e9fd91d54cb6d38fbdc26e97a0e5e035aa59bd6bcf6c1c636a4",
+        "schemas/sft/v1.schema.json": "dcad9e7b91b1c5eb1ae7cb3fd96c9fa77eee633032fd66b5e5b0107ab3430830",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/archive/expansion_v1_generate.py": "f88662fdfd7af26673c9003bac6c0a354c429d381e8174921965086788c1983c",
+        "generators/critic/claim_controls.py": "83fae00f2ef905d8bff74022fdb58a0d1af0fb3db1d97ae3a37104fb5ec499f2",
+        "generators/critic/generate.py": "131b559479e5608ce90b0989e34d687ef37a17821a0146a2fe68646106a0bd5a",
+        "generators/critic/route_facts.py": "527d2b36931681418a0b4db35d54dffea3840d0e911cb0734186a82443c541ae",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/expansion_v1_diversity.py": "4b8f169621db336f208c727d2101c53f61d86d87be48574c786290a6e92f6d37",
+        "generators/relational/archive/expansion_v1_generate.py": "6a4a660ee89f0ce6d856042331d700db49f6320caddcc228c6c24f786aee25ea",
+        "generators/relational/archive/expansion_v2_diversity.py": "4636fd58168ff11ccdfa974be18e6943c6853af9718ee8b594acc661f8434f9a",
+        "generators/relational/archive/expansion_v2_generate.py": "826169eeece3fdb82d5e32ba10fbb8dcc343ec416b8d821c6b614a110f09df0c",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "013d918ffd426e74690a9ffe5b054153eb76cbb38d4ba476cf562362de45218e",
+        "generators/relational/generate.py": "c85d6577b3ca2fef45ac7c0de8fa8b28553131dbe1300de9001b8a3f6049c1b4",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/pilot-v4_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "beb57be50144d89aa1b9e74fd968a79a58af7b5b105634d582b54314f164ccd5"
+        },
+        "canonical.jsonl": {
+          "bytes": 533464,
+          "sha256": "4bb29efeb4e4f8df69ddc5d3f05dd336e442a1d6fc1fa0b3009635b7c9bfb76e"
+        },
+        "dev_challenge-preference.jsonl": {
+          "bytes": 76376,
+          "sha256": "7726855acf2e55d7d85a0a073a52092174c8483631236beb4ff117804ebed18d"
+        },
+        "dev_challenge-process_reward.jsonl": {
+          "bytes": 612782,
+          "sha256": "75ee7e2766c24f4a7928240fc0deec8253dbea5a953a42bca66114139b3df367"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 84496,
+          "sha256": "1996f2f2b823a95a531f70720549bc99fab88870c395096ef7f4828f6ba8d851"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 80472,
+          "sha256": "d5fe3787ccdf8089d354a96dc20fd3283e551e624ddcc0f8128fdcb8c6031369"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 20820,
+          "sha256": "92e1ef8f7cd938c543740db6a7a58c77f54bf49fc13766e0cef4c2602299f928"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 661300,
+          "sha256": "e1cfba82e0825f5c70d65080a738794dbc4f19833138c026e4e844ef508d8859"
+        },
+        "train-preference.jsonl": {
+          "bytes": 280900,
+          "sha256": "ac04d96d8370be9742563cb227356ae69dd1303c65c541faaad1e4bfd1b8fd86"
+        },
+        "train-process_reward.jsonl": {
+          "bytes": 2344700,
+          "sha256": "56d3dabcb5a22ea6407ef8ec1a3f8e9a06eb267f461f7b46a266f6339c001908"
+        },
+        "train-sft.jsonl": {
+          "bytes": 324234,
+          "sha256": "644fdec208e336807eb8b7d355b350b248a4e65ff4261fc271c96937baa8f94c"
+        },
+        "train-structured.jsonl": {
+          "bytes": 308698,
+          "sha256": "9b2f69572bc26a0f3d271ad44b0e989d9adfc82c86bf7035c93be17ce173abf5"
+        }
+      },
+      "export_profile": "specialized-1.0.0",
+      "supersedes": [
+        "v0001"
+      ],
+      "exporter_review": {
+        "exporter_sha256": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "expert_receipt": "expert-exporter-revised-3ca80e926583",
+        "adversarial_evidence": "reviews/adversarial/exports-code-review.json"
+      },
+      "path": "data/RVM-001/releases/v0003",
+      "active_status": "ACTIVE",
+      "active_records": 60,
+      "remote_backup_status": "LOCAL_ONLY",
+      "remote_checkpoint": null
     }
   ],
+  "accepted_totals": {
+    "RBM-001": {
+      "records": 24,
+      "source_families": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      }
+    },
+    "RCM-001": {
+      "records": 1440,
+      "source_families": 180,
+      "splits": {
+        "train": 1152,
+        "dev_challenge": 288
+      }
+    },
+    "RDP-001": {
+      "records": 24,
+      "source_families": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      }
+    },
+    "REM-001": {
+      "records": 120,
+      "source_families": 12,
+      "splits": {
+        "train": 100,
+        "dev_challenge": 20
+      }
+    },
+    "RGM-001": {
+      "records": 432,
+      "source_families": 180,
+      "splits": {
+        "train": 288,
+        "dev_challenge": 144
+      }
+    },
+    "RJP-001": {
+      "records": 24,
+      "source_families": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      }
+    },
+    "RMM-001": {
+      "records": 76,
+      "source_families": 12,
+      "splits": {
+        "train": 60,
+        "dev_challenge": 16
+      }
+    },
+    "ROM-001": {
+      "records": 24,
+      "source_families": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      }
+    },
+    "RSM-001": {
+      "records": 24,
+      "source_families": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      }
+    },
+    "RVM-001": {
+      "records": 360,
+      "source_families": 180,
+      "splits": {
+        "train": 288,
+        "dev_challenge": 72
+      }
+    }
+  },
+  "accepted_records": 2548,
+  "accepted_source_families": 624,
   "backups": [
+    {
+      "checkpoint_id": "all-pilots",
+      "status": "BACKED_UP",
+      "commit_sha": "265f768f0658942b0004130eef626cdb122eddbd",
+      "remote_commit_sha": "265f768f0658942b0004130eef626cdb122eddbd",
+      "approval": "reviewed_release"
+    },
     {
       "checkpoint_id": "first-approved",
       "status": "BACKED_UP",
@@ -1134,28 +1825,159 @@
   ],
   "reviews": {
     "expert": {
-      "records": 1276,
+      "records": 3616,
       "decisions": {
-        "ACCEPT": 1204,
-        "REVISE": 72
+        "ACCEPT": 3502,
+        "REVISE": 114
       }
     },
     "adversarial": {
-      "records": 2072,
+      "records": 3640,
       "decisions": {
-        "ACCEPT": 1964,
-        "REVISE": 108
+        "ACCEPT": 3452,
+        "REVISE": 188
       }
     },
     "adjudication": {
-      "records": 796,
+      "records": 3376,
       "decisions": {
-        "ACCEPT": 736,
-        "REVISE": 60
+        "ACCEPT": 3236,
+        "REVISE": 140
       }
     }
   },
   "audits": [
+    {
+      "batch": "claim-gap-v1",
+      "records": 24,
+      "unique_parents": 12,
+      "distinct_parent_semantic_signatures": 12,
+      "oracle_failures": 12,
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "exact_prompt_duplicates": 0,
+      "difficulty": {
+        "4": 20,
+        "3": 4
+      },
+      "tracks": {
+        "RVM-001": 24
+      },
+      "structural_template_holdout": false,
+      "protected_benchmark_inspected": false,
+      "scope": "fresh generated development data; not a sealed generalization instrument"
+    },
+    {
+      "batch": "claim-gap-v2",
+      "records": 24,
+      "unique_parents": 12,
+      "distinct_parent_semantic_signatures": 12,
+      "oracle_failures": 0,
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "exact_prompt_duplicates": 0,
+      "difficulty": {
+        "4": 20,
+        "3": 4
+      },
+      "tracks": {
+        "RVM-001": 24
+      },
+      "structural_template_holdout": false,
+      "protected_benchmark_inspected": false,
+      "scope": "fresh generated development data; not a sealed generalization instrument"
+    },
+    {
+      "batch": "expansion-v1",
+      "records": 1860,
+      "unique_parents": 450,
+      "distinct_parent_semantic_signatures": 450,
+      "oracle_failures": 0,
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "exact_prompt_duplicates": 0,
+      "difficulty": {
+        "3": 454,
+        "1": 184,
+        "4": 1180,
+        "2": 42
+      },
+      "tracks": {
+        "RCM-001": 1200,
+        "RGM-001": 360,
+        "RVM-001": 300
+      },
+      "structural_template_holdout": false,
+      "protected_benchmark_inspected": false,
+      "scope": "fresh generated development data; not a sealed generalization instrument"
+    },
+    {
+      "family_overlap": [],
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "already_released_samples": []
+    },
+    {
+      "batch": "expansion-v2",
+      "records": 660,
+      "unique_parents": 300,
+      "distinct_parent_semantic_signatures": 300,
+      "oracle_failures": 0,
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "exact_prompt_duplicates": 0,
+      "difficulty": {
+        "3": 134,
+        "4": 460,
+        "1": 24,
+        "2": 42
+      },
+      "tracks": {
+        "RGM-001": 360,
+        "RVM-001": 300
+      },
+      "structural_template_holdout": false,
+      "protected_benchmark_inspected": false,
+      "scope": "fresh generated development data; not a sealed generalization instrument",
+      "metadata_failures": 14,
+      "validation_failures": 14
+    },
+    {
+      "family_overlap": [],
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "already_released_samples": []
+    },
+    {
+      "batch": "expansion-v3",
+      "records": 360,
+      "unique_parents": 150,
+      "distinct_parent_semantic_signatures": 150,
+      "oracle_failures": 0,
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "exact_prompt_duplicates": 0,
+      "difficulty": {
+        "3": 50,
+        "4": 244,
+        "1": 24,
+        "2": 42
+      },
+      "tracks": {
+        "RGM-001": 360
+      },
+      "structural_template_holdout": false,
+      "protected_benchmark_inspected": false,
+      "scope": "fresh generated development data; not a sealed generalization instrument",
+      "metadata_failures": 0,
+      "validation_failures": 0
+    },
+    {
+      "family_overlap": [],
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "already_released_samples": []
+    },
     {
       "batch": "extended-pilot-v1",
       "records": 168,
@@ -1340,6 +2162,35 @@
       "structural_template_holdout": false,
       "protected_benchmark_inspected": false,
       "scope": "fresh generated development data; not a sealed generalization instrument"
+    },
+    {
+      "batch": "pilot-v4",
+      "records": 60,
+      "unique_parents": 30,
+      "distinct_parent_semantic_signatures": 30,
+      "oracle_failures": 0,
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "exact_prompt_duplicates": 0,
+      "difficulty": {
+        "4": 40,
+        "3": 20
+      },
+      "tracks": {
+        "RVM-001": 60
+      },
+      "structural_template_holdout": false,
+      "protected_benchmark_inspected": false,
+      "scope": "fresh generated development data; not a sealed generalization instrument",
+      "metadata_failures": 0,
+      "validation_failures": 0
+    },
+    {
+      "family_overlap": [],
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "already_released_samples": []
     }
-  ]
+  ],
+  "review_count_scope": "Designated completed batch judgments only; preserved first judgments excluded. Counts span historical revisions and must not be added to accepted totals."
 }

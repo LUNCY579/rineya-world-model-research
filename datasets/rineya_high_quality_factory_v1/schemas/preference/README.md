@@ -1,1 +1,5 @@
-Version 1 exports are produced only from accepted records. Student-visible data excludes provenance, split, reviewer receipts and internal IDs. Preference and process reward extraction remains gated by independently reviewed objective labels.
+# Strict candidate preferences v1
+
+Each export contains an explicit world and two complete response options, chosen and rejected as JSON strings. Strict preferences follow the public critic ranking policy; exact ties are excluded. Chosen is strictly better than rejected under that policy and may itself have an invalid plan or incorrect claim. Up to one equal submitted-plan length, one longer-chosen and one shorter-chosen comparison is emitted per rendering where such pairs exist. Length means the number of submitted moves; serialized byte or token length is not matched. Forward/reverse renderings cross chosen option positions. These pairs are correlated views of existing families and add no independent parents.
+
+Opaque candidate IDs identify response options. Dataset sample/parent IDs, provenance, split, reviewer receipts and privileged gold metadata do not appear in the prompt. Labels are training targets and remain separately identifiable. World/candidate claims require evaluation, and a claim can be false. Same-model reviewer correlation and synthetic graph scope remain limitations.

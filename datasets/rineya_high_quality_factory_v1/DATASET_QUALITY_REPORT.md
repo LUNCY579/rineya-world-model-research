@@ -2,10 +2,11 @@
 
 Machine evidence: quality_reports/CURRENT.json. Candidate batches are retained even when superseded. Review decisions are bound to exact candidate hashes and independent execution identities.
 
-| Track | Batch | Candidate records | Independent semantic parents |
+| Track | Batch | Candidate records | Source-family IDs |
 |---|---|---:|---:|
 | RBM-001 | extended-pilot-v1 | 24 | 12 |
 | RBM-001 | extended-pilot-v2 | 24 | 12 |
+| RCM-001 | expansion-v1 | 1200 | 150 |
 | RCM-001 | pilot-v1 | 120 | 30 |
 | RCM-001 | pilot-v2 | 240 | 30 |
 | RDP-001 | extended-pilot-v1 | 24 | 12 |
@@ -13,6 +14,9 @@ Machine evidence: quality_reports/CURRENT.json. Candidate batches are retained e
 | REM-001 | extended-pilot-v1 | 24 | 12 |
 | REM-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v3 | 120 | 12 |
+| RGM-001 | expansion-v1 | 360 | 150 |
+| RGM-001 | expansion-v2 | 360 | 150 |
+| RGM-001 | expansion-v3 | 360 | 150 |
 | RGM-001 | pilot-v1 | 60 | 30 |
 | RGM-001 | pilot-v2 | 60 | 30 |
 | RGM-001 | pilot-v3 | 72 | 30 |
@@ -25,8 +29,13 @@ Machine evidence: quality_reports/CURRENT.json. Candidate batches are retained e
 | ROM-001 | extended-pilot-v2 | 24 | 12 |
 | RSM-001 | extended-pilot-v1 | 24 | 12 |
 | RSM-001 | extended-pilot-v2 | 24 | 12 |
+| RVM-001 | claim-gap-v1 | 24 | 12 |
+| RVM-001 | claim-gap-v2 | 24 | 12 |
+| RVM-001 | expansion-v1 | 300 | 150 |
+| RVM-001 | expansion-v2 | 300 | 150 |
 | RVM-001 | pilot-v1 | 60 | 30 |
 | RVM-001 | pilot-v2 | 60 | 30 |
+| RVM-001 | pilot-v4 | 60 | 30 |
 
 
 Review decision counts:
@@ -34,24 +43,24 @@ Review decision counts:
 ```json
 {
   "expert": {
-    "records": 1276,
+    "records": 3616,
     "decisions": {
-      "ACCEPT": 1204,
-      "REVISE": 72
+      "ACCEPT": 3502,
+      "REVISE": 114
     }
   },
   "adversarial": {
-    "records": 2072,
+    "records": 3640,
     "decisions": {
-      "ACCEPT": 1964,
-      "REVISE": 108
+      "ACCEPT": 3452,
+      "REVISE": 188
     }
   },
   "adjudication": {
-    "records": 796,
+    "records": 3376,
     "decisions": {
-      "ACCEPT": 736,
-      "REVISE": 60
+      "ACCEPT": 3236,
+      "REVISE": 140
     }
   }
 }
@@ -61,6 +70,137 @@ Exact oracle, schema, duplicates and family split audit summaries:
 
 ```json
 [
+  {
+    "batch": "claim-gap-v1",
+    "records": 24,
+    "unique_parents": 12,
+    "distinct_parent_semantic_signatures": 12,
+    "oracle_failures": 12,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "4": 20,
+      "3": 4
+    },
+    "tracks": {
+      "RVM-001": 24
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "claim-gap-v2",
+    "records": 24,
+    "unique_parents": 12,
+    "distinct_parent_semantic_signatures": 12,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "4": 20,
+      "3": 4
+    },
+    "tracks": {
+      "RVM-001": 24
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "expansion-v1",
+    "records": 1860,
+    "unique_parents": 450,
+    "distinct_parent_semantic_signatures": 450,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 454,
+      "1": 184,
+      "4": 1180,
+      "2": 42
+    },
+    "tracks": {
+      "RCM-001": 1200,
+      "RGM-001": 360,
+      "RVM-001": 300
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "expansion-v2",
+    "records": 660,
+    "unique_parents": 300,
+    "distinct_parent_semantic_signatures": 300,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 134,
+      "4": 460,
+      "1": 24,
+      "2": 42
+    },
+    "tracks": {
+      "RGM-001": 360,
+      "RVM-001": 300
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 14,
+    "validation_failures": 14
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
+  {
+    "batch": "expansion-v3",
+    "records": 360,
+    "unique_parents": 150,
+    "distinct_parent_semantic_signatures": 150,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 50,
+      "4": 244,
+      "1": 24,
+      "2": 42
+    },
+    "tracks": {
+      "RGM-001": 360
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 0,
+    "validation_failures": 0
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
+  },
   {
     "batch": "extended-pilot-v1",
     "records": 168,
@@ -245,6 +385,34 @@ Exact oracle, schema, duplicates and family split audit summaries:
     "structural_template_holdout": false,
     "protected_benchmark_inspected": false,
     "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
+    "batch": "pilot-v4",
+    "records": 60,
+    "unique_parents": 30,
+    "distinct_parent_semantic_signatures": 30,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "4": 40,
+      "3": 20
+    },
+    "tracks": {
+      "RVM-001": 60
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 0,
+    "validation_failures": 0
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
   }
 ]
 ```

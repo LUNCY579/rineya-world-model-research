@@ -2,6 +2,7 @@
 
 Repository LUNCY579/rineya-world-model-research is private; dedicated branch research/rineya-high-quality-dataset-v1; tracked prefix datasets/rineya_high_quality_factory_v1. Original checkout remains on main.
 
+- all-pilots: BACKED_UP; commit 265f768f0658942b0004130eef626cdb122eddbd.
 - first-approved: BACKED_UP; commit 8c2571e51e43ed206d111321482367802b79600a.
 - foundation-r2: BACKED_UP; commit 517a51a60a00e6b7a625edeeb8e6bc126393856c.
 - foundation: FAILED_LOCAL_ARTIFACTS_PRESERVED; commit pending.

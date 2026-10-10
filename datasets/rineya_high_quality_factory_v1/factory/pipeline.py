@@ -44,9 +44,12 @@ def audit(batch):
             assert gold==row["verified_target"], "independent oracle mismatch"
             assert expected_target(row,reference_solve)==gold, "reference mismatch"
         except Exception as e: errors.append(f"{type(e).__name__}: {e}")
+        from oracles.metadata_independent import check as metadata_check
+        metadata_errors=metadata_check(row)
+        errors.extend('Metadata: '+e for e in metadata_errors)
         lineage[row["semantic_family_id"]].add(row["split"])
         payloads[digest(row["semantic_task"])].append(row["sample_id"])
-        checks.append({"sample_id":row["sample_id"],"record_hash":row["record_hash"],"pass":not errors,"errors":errors,"oracle_author_execution":"/root/formal_oracle","check_runner_execution":"/root","verification":"independently authored oracle recomputation"})
+        checks.append({"sample_id":row["sample_id"],"record_hash":row["record_hash"],"pass":not errors,"errors":errors,'metadata_errors':metadata_errors,"oracle_author_execution":"/root/formal_oracle","check_runner_execution":"/root","verification":"independently authored state and factual metadata oracle recomputation"})
     leakage=[k for k,v in lineage.items() if len(v)>1]
     exact_prompts=collections.Counter(r["rendered_input"] for r in rows)
     # Semantic repeats across renderers are intentional; cross-parent repeats are defects.
@@ -57,6 +60,9 @@ def audit(batch):
     for r in rows:parent_tasks[r["semantic_parent_id"]].add(digest(r["semantic_task"]))
     distinct_parent_signatures={digest(sorted(tasks)) for tasks in parent_tasks.values()}
     stats={"batch":batch,"records":len(rows),"unique_parents":len(lineage),"distinct_parent_semantic_signatures":len(distinct_parent_signatures),"oracle_failures":sum(not c["pass"] for c in checks),"split_leakage":leakage,"cross_parent_semantic_duplicates":duplicates,"exact_prompt_duplicates":sum(n-1 for n in exact_prompts.values() if n>1),"difficulty":dict(collections.Counter(str(r["difficulty"]) for r in rows)),"tracks":dict(collections.Counter(r["track_id"] for r in rows)),"structural_template_holdout":False,"protected_benchmark_inspected":False,"scope":"fresh generated development data; not a sealed generalization instrument"}
+    stats['metadata_failures']=sum(bool(c['metadata_errors']) for c in checks)
+    stats['validation_failures']=stats['oracle_failures']
+    stats['oracle_failures']=sum(any(not e.startswith('Metadata: ') for e in c['errors']) for c in checks)
     write_jsonl(ROOT/f"reviews/oracle/{batch}.jsonl",checks)
     write_json(ROOT/f"audits/leakage/{batch}.json",stats)
     return stats
@@ -87,9 +93,43 @@ def approval_evidence(row,evidence):
     return receipts,fail
 
 
-def release(batch,version,tracks=None):
+def exporter_approval():
+    expert=json.loads((ROOT/'reviews/expert/exporter_revised_CODE_REVIEW.json').read_text())
+    red=json.loads((ROOT/'reviews/adversarial/exports-code-review.json').read_text())
+    sha=hashlib.sha256((ROOT/'factory/exports.py').read_bytes()).hexdigest()
+    assert expert['decision']=='ACCEPT' and red['decision']=='ACCEPT_CODE'
+    assert expert['reviewer_execution_id']=='/root/expert_reviewer' and red['reviewer_execution_id']=='/root/adversarial_auditor'
+    assert expert['artifact_sha256']==sha==red['source_sha256'],'stale exporter code review'
+    for evidence in [expert['artifact_hashes'],red['schema_sha256']]:
+        for relative,expected in evidence.items():
+            assert hashlib.sha256((ROOT/relative).read_bytes()).hexdigest()==expected,('stale exporter artifact',relative)
+    assert not expert.get('critical_defects') and not any(i.get('severity') in ['high','critical'] for r in [expert,red] for i in r.get('issues',[]))
+    return {'exporter_sha256':sha,'expert_receipt':expert['receipt_id'],'adversarial_evidence':'reviews/adversarial/exports-code-review.json'}
+
+
+def release(batch,version,tracks=None,supersedes=None):
     stats=audit(batch)
-    assert stats["oracle_failures"]==0 and not stats["split_leakage"] and not stats["cross_parent_semantic_duplicates"] and stats["exact_prompt_duplicates"]==0,stats
+    # Failed diagnostic tracks in a mixed batch do not prevent a separately
+    # approved selected track from release; validate each selected row below.
+    selected_checks=[c for c in load_jsonl(ROOT/f'reviews/oracle/{batch}.jsonl') if not tracks or c['sample_id'].split('-')[0]+'-001' in tracks]
+    assert all(c['pass'] for c in selected_checks) and not stats["split_leakage"] and not stats["cross_parent_semantic_duplicates"] and stats["exact_prompt_duplicates"]==0,stats
+    from factory.lineage import cross_release
+    new_rows=[r for p in candidate_paths(batch) for r in load_jsonl(p) if not tracks or r['track_id'] in tracks]
+    prior=[]
+    from factory.lineage import source_key
+    if supersedes:
+        assert tracks and len(tracks)==1,'Supersession must name exactly one track'
+        replaced=ROOT/f'data/{tracks[0]}/releases/{supersedes}/canonical.jsonl'
+        assert replaced.is_file() and supersedes!=version
+        assert {source_key(r) for r in load_jsonl(replaced)}=={source_key(r) for r in new_rows},'Supersession must cover exactly the same source families'
+    for p in ROOT.glob('data/*/releases/*/canonical.jsonl'):
+        if supersedes and p==replaced:continue
+        prior.extend(load_jsonl(p))
+    lineage=cross_release(new_rows,prior)
+    write_json(ROOT/f'audits/leakage/{batch}_cross_release.json',lineage)
+    assert not any(lineage.values()), 'Cross-release duplicate family or split reuse: '+str(lineage)
+    if any(r['track_id']=='RVM-001' for r in new_rows):exporter_evidence=exporter_approval()
+    else:exporter_evidence=None
     evidence={role:load_receipts(role,batch) for role in ["expert","adversarial","adjudication"]}
     created=[]
     for path in candidate_paths(batch):
@@ -104,6 +144,7 @@ def release(batch,version,tracks=None):
             r=dict(r);r["reviewed_candidate_hash"]=r["record_hash"];r["review_status"]="ACCEPTED";r["review_receipt_ids"]=[x["receipt_id"] for x in receipts];r["record_hash"]=record_hash(r)
             accepted.append(r)
         write_jsonl(ROOT/f"data/{track}/quarantine/{batch}.jsonl",quarantine)
+        if supersedes:assert not quarantine,'Full supersession requires every replacement record accepted'
         if not accepted:continue
         dest=ROOT/f"data/{track}/releases/{version}"
         if dest.exists():raise FileExistsError(f"Immutable release already exists: {dest}")
@@ -119,8 +160,11 @@ def release(batch,version,tracks=None):
         receipts=[x for role in evidence.values() for r in accepted for x in role[r["sample_id"]] ]
         write_jsonl(dest/"review_receipts.jsonl",receipts)
         write_jsonl(dest/"oracle_receipts.jsonl",[x for x in load_jsonl(ROOT/f"reviews/oracle/{batch}.jsonl") if x["sample_id"] in {r["sample_id"] for r in accepted}])
-        code_files=sorted((ROOT/"factory").glob("*.py"))+sorted((ROOT/"oracles").glob("*.py"))+sorted((ROOT/"schemas").glob("*SEMANTICS.md"))+sorted((ROOT/"generators").rglob("*.py"))
+        code_files=sorted((ROOT/"factory").glob("*.py"))+sorted((ROOT/"oracles").glob("*.py"))+sorted((ROOT/"schemas").glob("*.md"))+sorted((ROOT/"schemas").rglob('*.schema.json'))+sorted((ROOT/"generators").rglob("*.py"))
         manifest={"release":version,"batch":batch,"track":track,"status":"QUALITY_APPROVED_LOCAL", "records":len(accepted),"semantic_parents":len({r["semantic_parent_id"] for r in accepted}),"splits":dict(collections.Counter(r["split"] for r in accepted)),"generator_versions":sorted({r["generator_version"] for r in accepted}),"framework_version":VERSION,"oracle_version":"independent-1.0.0","reproducibility_code_sha256":{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in code_files},"batch_configuration":f"manifests/{batch}_GENERATION.json","source":"original synthetic; repository-private research; no third-party examples","research_effectiveness":"untested; no model training performed","reviewer_correlation":"Independent executions use the same underlying model; correlated semantic errors remain possible.","data_custody":"exposed train/dev data; no sealed evaluation","files":{}}
+        manifest['export_profile']='specialized-1.0.0'
+        if supersedes:manifest['supersedes']=[supersedes]
+        if track=='RVM-001':manifest['exporter_review']=exporter_evidence
         atomic(dest/"QUALITY_REPORT.md",f"# {track} {version}\n\n{len(accepted)} approved records from {manifest['semantic_parents']} semantic parents. {len(quarantine)} quarantined/pending records. Exact oracle, schema, family split and three independent evidence joins passed. Refer to review_receipts.jsonl for scope and limitations. Structural template overlap is intentionally disclosed; this is development data, not evidence of OOD efficacy. Model benefits are untested. Remote status is recorded separately after byte verification.\n")
         for f in sorted(dest.iterdir()):manifest["files"][f.name]={"bytes":f.stat().st_size,"sha256":hashlib.sha256(f.read_bytes()).hexdigest()}
         write_json(dest/"MANIFEST.json",manifest)
@@ -144,10 +188,19 @@ def validate_release(path):
         assert f.stat().st_size==meta["bytes"] and hashlib.sha256(f.read_bytes()).hexdigest()==meta["sha256"],name
     rows=load_jsonl(path/"canonical.jsonl")
     assert len(rows)==manifest["records"]
+    if manifest.get('export_profile'):
+        expected_suffixes={'RGM-001':['trajectories'],'RVM-001':['preference','process_reward'],'RSM-001':['skill_demonstrations'],'REM-001':['memory_updates'],'RMM-001':['memory_updates'],'RBM-001':['belief_updates'],'ROM-001':['belief_updates']}.get(manifest['track'],[])
+        assert all((path/f'{split}-{suffix}.jsonl').is_file() for split in ['train','dev_challenge'] for suffix in expected_suffixes),'missing declared specialized export'
     receipt_by={r["receipt_id"]:r for r in load_jsonl(path/"review_receipts.jsonl")}
     for r in rows:
         schema_validate(r)
         assert expected_target(r,oracle)==r["verified_target"],"released target mismatch"
+        from oracles.metadata_independent import check as metadata_check
+        metadata_failures=metadata_check(r)
+        if metadata_failures:
+            from factory.catalog import catalog
+            active,_=catalog()
+            assert r['record_hash'] not in {x['record_hash'] for x in active},'Factual metadata defect remains active'
         for receipt_id in r["review_receipt_ids"]:
             receipt=receipt_by[receipt_id]
             assert receipt["record_hash"]==r["reviewed_candidate_hash"] and receipt["decision"]=="ACCEPT"
@@ -159,6 +212,8 @@ def validate_release(path):
         assert len(export)==len(expected)
         for item,r in zip(export,expected):
             assert item=={"messages":[{"role":"user","content":r["rendered_input"]},{"role":"assistant","content":canonical(r["verified_target"])}]}
+        structured=load_jsonl(path/f'{split}-structured.jsonl')
+        assert structured==[{'input':r['rendered_input'],'target':r['verified_target']} for r in expected],'structured export mismatch'
     from factory.export_validation import validate_specialized
     specialized_counts=validate_specialized(path,rows)
     return {"path":str(path.relative_to(ROOT)),"records":len(rows),"checksum_files":len(files),"specialized_exports":specialized_counts,"pass":True}

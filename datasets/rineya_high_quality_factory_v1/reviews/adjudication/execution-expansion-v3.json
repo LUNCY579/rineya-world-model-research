@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "reviewer_execution_id": "/root/research_architect",
+  "role": "independent Quality Adjudicator",
+  "batch": "expansion-v3",
+  "track_id": "RGM-001",
+  "completed_at_utc": "2026-10-10T00:36:05.047552+00:00",
+  "records": 360,
+  "source_families": 150,
+  "new_source_families_relative_to_prior_batch": 0,
+  "prior_batch": "expansion-v1",
+  "tag_changed_records": 176,
+  "changed_canonical_keys": {
+    "generator_version": 360,
+    "record_hash": 360,
+    "sample_id": 360,
+    "semantic_family_id": 360,
+    "semantic_parent_id": 360,
+    "skill_tags": 176
+  },
+  "decision_counts": {
+    "ACCEPT": 360
+  },
+  "reviewer_disagreements_preserved": 0,
+  "independently_verified_factual_tag_counts": {
+    "branched_resource_graph": 184,
+    "multiple_initial_table_stacks": 118,
+    "unreachable": 12,
+    "block_goal_composition": 14,
+    "single_successor_resource_graph": 26,
+    "multiple_explicit_goal_table_roots": 18
+  },
+  "verification_failures": [],
+  "all_final_receipts_complete": true,
+  "typed_prior_task_prompt_target_split_unchanged": true,
+  "inputs_sha256": {
+    "data/RGM-001/candidate_renderings/expansion-v3.jsonl": "39a2acfdbffc27d5f99ec8baee7c2787dafc4e23d0d4fa3e91f9b73323c22719",
+    "data/RGM-001/candidate_renderings/expansion-v1.jsonl": "9f7eae7373374c5af1eb2b64b9c34522ca1aa5665e4393ed543c5c94caa5895a",
+    "reviews/expert/expansion-v3.jsonl": "94b7facd05afcea3183b34efab500d861625eddc7a07bd752768194a57b6bca6",
+    "reviews/adversarial/expansion-v3.jsonl": "8695d044a87dbafa098007a5c34faf30d8814f612e9f3245a226c3404d6599c9",
+    "reviews/oracle/expansion-v3.jsonl": "a67f813fde32cfee3e298409a5dc247dff18cd586c51a3d9bf02d32302c706bc",
+    "reviews/expert/semantic_inspection_metadata_revisions.md": "b4421e7c1ef04ff9ff13e779b90476dca93f76d0d18a571a6a7b83ea8d79f5d9",
+    "reviews/expert/verification_summary_expansion-v3.json": "e139f2c73a065a7a559feae5176af5d43d1ac5368bcab65bc1fd668b0a8d074e",
+    "reviews/adversarial/execution-expansion-v3.json": "a657a666b1d5b6ad6faa6d236a2d0d9e081aa0f47d6907c842735f53573f7ed2",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "schemas/COMPETENCY_TAGS.md": "e287ec1768bf99f7e9e92cbd2adfd0b52c345b3bacbce848ffb1c06b85449421",
+    "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a"
+  },
+  "output_sha256": {
+    "reviews/adjudication/expansion-v3.jsonl": "0fde5feaf79f23d5227ace2da9fa5f5c691c6760791f9f334a7413450617ff46"
+  },
+  "producer_or_release_files_modified": false,
+  "previous_reviews_preserved": true,
+  "review_context_disclosure": "Fresh review independently recomputes facts, but is not fully blind: root disclosed prior tag topics; adjudicator sent finalized v1 aggregate counts after initial v1 reviewers completed. No reviewer verdict files were provided. This limits independence beyond separate actual executions.",
+  "role_reuse_disclosure": "Actual /root/research_architect authored research specifications, not candidates; separate from producers and both reviewers. Same underlying model correlation remains."
+}

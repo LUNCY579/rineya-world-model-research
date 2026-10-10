@@ -1,0 +1,144 @@
+[
+  {
+    "defect": "development_goal_label_collapse",
+    "source_sample_id": "RGM-001-expansion-v3-p0038-base-forward",
+    "source_record_hash": "271cc1e56780b5f30a9c4c7fb900bea53ace28192187cbd9a33b14d4c67311f9",
+    "minimal_intervention": {
+      "plan": [
+        "Obsidian",
+        "Nacre",
+        "Sirocco"
+      ]
+    },
+    "new_task": {
+      "edges": [
+        [
+          "Vesper",
+          "Obsidian",
+          4
+        ],
+        [
+          "Obsidian",
+          "Tundra",
+          1
+        ],
+        [
+          "Tundra",
+          "Umber",
+          4
+        ],
+        [
+          "Umber",
+          "Zephyr",
+          1
+        ],
+        [
+          "Zephyr",
+          "Quasar",
+          1
+        ],
+        [
+          "Quasar",
+          "Nacre",
+          1
+        ],
+        [
+          "Nacre",
+          "Sirocco",
+          3
+        ],
+        [
+          "Obsidian",
+          "Vesper",
+          1
+        ],
+        [
+          "Obsidian",
+          "Nacre",
+          5
+        ],
+        [
+          "Tundra",
+          "Vesper",
+          4
+        ],
+        [
+          "Zephyr",
+          "Tundra",
+          4
+        ],
+        [
+          "Zephyr",
+          "Umber",
+          3
+        ],
+        [
+          "Quasar",
+          "Umber",
+          1
+        ],
+        [
+          "Sirocco",
+          "Nacre",
+          5
+        ]
+      ],
+      "fuel": 19,
+      "goal": "Sirocco",
+      "kind": "graph",
+      "nodes": [
+        "Vesper",
+        "Obsidian",
+        "Tundra",
+        "Umber",
+        "Zephyr",
+        "Quasar",
+        "Nacre",
+        "Sirocco"
+      ],
+      "plan": [
+        "Obsidian",
+        "Nacre",
+        "Sirocco"
+      ],
+      "start": "Vesper"
+    },
+    "new_target": {
+      "steps": [
+        {
+          "legal": true,
+          "after": {
+            "node": "Obsidian",
+            "fuel": 15
+          }
+        },
+        {
+          "legal": true,
+          "after": {
+            "node": "Nacre",
+            "fuel": 10
+          }
+        },
+        {
+          "legal": true,
+          "after": {
+            "node": "Sirocco",
+            "fuel": 7
+          }
+        }
+      ],
+      "after": {
+        "node": "Sirocco",
+        "fuel": 7
+      },
+      "valid": true,
+      "reaches_goal": true,
+      "shortest_plan": [
+        "Obsidian",
+        "Nacre",
+        "Sirocco"
+      ]
+    },
+    "explanation": "Same names, node count, graph, fuel, start and goal support a positive goal label by changing only the submitted plan."
+  }
+]

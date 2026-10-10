@@ -1,0 +1,2066 @@
+{
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "batch": "expansion-v1",
+  "records": 1860,
+  "families": 450,
+  "logical_variants": 630,
+  "candidate_file_hashes": {
+    "data/RCM-001/candidate_renderings/expansion-v1.jsonl": "51d96bbd97162614d9408737da0eb3f76c6bce41c347411839a987fe51a8b601",
+    "data/RGM-001/candidate_renderings/expansion-v1.jsonl": "9f7eae7373374c5af1eb2b64b9c34522ca1aa5665e4393ed543c5c94caa5895a",
+    "data/RVM-001/candidate_renderings/expansion-v1.jsonl": "cb165a004dd121461e3ffcaadb711e14f25f736a9729afe4b22e47c01a560e41"
+  },
+  "prior_release_file_hashes": {
+    "data/RBM-001/releases/v0001/canonical.jsonl": "b5845f8303ee8e89d644de2ccea20f21f61507ce515723d83c1fa297e6c51f38",
+    "data/RCM-001/releases/v0001/canonical.jsonl": "e8f10d2b297b602200427a159fa67e6fcb763875603d1a1cd211795d2cadca2a",
+    "data/RDP-001/releases/v0001/canonical.jsonl": "9a850a1312406ce7a68a060fa2f5e26ec5dfd4417d63129705678ce69926aa1c",
+    "data/REM-001/releases/v0001/canonical.jsonl": "f05717db521ae9fcfa325874a9dd523666d5009992e965eebdc1e91b4c82aeee",
+    "data/RGM-001/releases/v0001/canonical.jsonl": "bc0a821670884bc0ccf9a42c22a53ade3654718c797946d445f0266ae8ee6990",
+    "data/RJP-001/releases/v0001/canonical.jsonl": "d5c83b79b78eeea4dd0d4ae8df1d9a7e4e4adf020428a43bf97a341a7ed9f1be",
+    "data/RMM-001/releases/v0001/canonical.jsonl": "bd150158faef6ba77673bcc1a7f500a6deedca063ba690ed75bc3bf236485356",
+    "data/ROM-001/releases/v0001/canonical.jsonl": "e8510bb86619f4070c4ed185a00cbaa33225afd54e42a819f4145517ef2b3114",
+    "data/RSM-001/releases/v0001/canonical.jsonl": "443a2f260ae174c93fa82a9854f4074665e1538a0a588f5b35652cc56975de37",
+    "data/RVM-001/releases/v0001/canonical.jsonl": "262d9bc470353c3aacb105b1bde2bb5b87f1e9771472966ab7f1c53ac672bac3"
+  },
+  "source_family_key_overlap_with_prior_releases": [],
+  "prior_lineage_evidence_counts": {
+    "inferred_from_family_index": 180,
+    "declared": 508
+  },
+  "tracks": {
+    "RCM-001": {
+      "families": 150,
+      "logical_variants": 300,
+      "distinct_world_or_AST_motifs": 32,
+      "train_motifs": 16,
+      "dev_motifs": 16,
+      "train_dev_motif_overlap": 0,
+      "motifs_new_relative_to_prior_releases": 16,
+      "structural_difficulty_counts": {
+        "3": 80,
+        "1": 40,
+        "4": 180
+      },
+      "difficulty_matches_structural_field": true,
+      "AST_depth_counts": {
+        "2": 60,
+        "3": 100,
+        "4": 85,
+        "5": 50,
+        "6": 5
+      },
+      "train_AST_shapes": 16,
+      "dev_AST_shapes": 16,
+      "heldout_composition_shape_overlap": [],
+      "heldout_first_status_overlap": []
+    },
+    "RGM-001": {
+      "families": 150,
+      "logical_variants": 180,
+      "distinct_world_or_AST_motifs": 131,
+      "train_motifs": 101,
+      "dev_motifs": 30,
+      "train_dev_motif_overlap": 0,
+      "motifs_new_relative_to_prior_releases": 127,
+      "structural_difficulty_counts": {
+        "3": 25,
+        "4": 122,
+        "1": 12,
+        "2": 21
+      },
+      "difficulty_matches_structural_field": true,
+      "blocks": {
+        "train_entity_counts": {
+          "3": 30,
+          "4": 15
+        },
+        "dev_entity_counts": {
+          "5": 30
+        },
+        "train_dev_entity_name_overlap": [],
+        "train_dev_entity_count_overlap": [],
+        "partial_goal_worlds": 25,
+        "multiple_initial_table_stacks": 59
+      },
+      "graph": {
+        "train_entity_counts": {
+          "5": 23,
+          "6": 15,
+          "3": 22,
+          "4": 15
+        },
+        "dev_entity_counts": {
+          "8": 16,
+          "7": 14
+        },
+        "train_dev_entity_name_overlap": [],
+        "train_dev_entity_count_overlap": [],
+        "worlds_with_branching_outdegree_at_least_two": 92
+      }
+    },
+    "RVM-001": {
+      "families": 150,
+      "logical_variants": 150,
+      "distinct_world_or_AST_motifs": 110,
+      "train_motifs": 80,
+      "dev_motifs": 30,
+      "train_dev_motif_overlap": 0,
+      "motifs_new_relative_to_prior_releases": 106,
+      "structural_difficulty_counts": {
+        "4": 108,
+        "3": 42
+      },
+      "difficulty_matches_structural_field": true,
+      "critic": {
+        "train_entity_counts": {
+          "5": 30,
+          "6": 30,
+          "3": 30,
+          "4": 30
+        },
+        "dev_entity_counts": {
+          "8": 16,
+          "7": 14
+        },
+        "train_dev_entity_name_overlap": [],
+        "train_dev_entity_count_overlap": [],
+        "worlds_with_branching_outdegree_at_least_two": 150
+      }
+    }
+  },
+  "issues": [],
+  "limitations": [
+    "A numerical world instance is not a new mechanism. AST shapes strip scalar magnitudes/vocabulary; graph motifs strip fuel/costs and names; block motifs retain support/goal relations after canonical entity renaming.",
+    "Prior family keys are inferred from track/seed/index only when no declared key exists; this is explicitly weaker provenance evidence.",
+    "Prior releases and current development are exposed. Structure overlap is reported, not interpreted as sealed evaluation leakage.",
+    "No model training, benchmark retuning, publication or sealed evaluation access occurs."
+  ],
+  "exact_semantic_task_overlap_with_prior_releases": [],
+  "current_train_with_prior_development_world_motif": [
+    {
+      "sample_id": "RCM-001-expansion-v1-p0030-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0030-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0031-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0031-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0032-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0032-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0034-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0034-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0035-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0035-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0036-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0036-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0037-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0037-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0040-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0040-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0041-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0041-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0043-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0043-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0044-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0044-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0045-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0045-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0046-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0046-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0047-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0047-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0050-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0050-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0052-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0052-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0053-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0053-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0054-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0054-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0055-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0055-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0056-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0056-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0057-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0057-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0061-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0061-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0062-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0062-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0063-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0063-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0064-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0064-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0065-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0065-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0066-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0066-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0067-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0067-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0070-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0070-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0071-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0071-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0072-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0072-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0073-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0073-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0074-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0074-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0075-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0075-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0076-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0076-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0077-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0077-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0080-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0080-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0081-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0081-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0082-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0082-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0083-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0083-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0084-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0084-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0085-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0085-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0086-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0086-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0090-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0090-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0091-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0091-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0092-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0092-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0093-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0093-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0094-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0094-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0095-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0095-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0097-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0097-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0100-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0100-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0101-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0101-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0102-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0102-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0103-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0103-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0104-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0104-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0106-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0106-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0107-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0107-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0110-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0110-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0111-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0111-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0112-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0112-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0113-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0113-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0115-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0115-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0116-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0116-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0117-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0117-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0120-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0120-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0121-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0121-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0122-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0122-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0124-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0124-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0125-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0125-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0126-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0126-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0127-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0127-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0130-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0130-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0131-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0131-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0133-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0133-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0134-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0134-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0135-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0135-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0136-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0136-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0137-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0137-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0140-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0140-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0142-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0142-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0143-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0143-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0144-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0144-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0145-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0145-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0146-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0146-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0147-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0147-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0151-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0151-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0152-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0152-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0153-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0153-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0154-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0154-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0155-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0155-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0156-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0156-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0157-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0157-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0160-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0160-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0161-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0161-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0162-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0162-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0163-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0163-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0164-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0164-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0165-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0165-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0166-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0166-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0167-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0167-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0170-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0170-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0171-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0171-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0009-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0009-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0172-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0172-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0028-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0028-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0173-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0173-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0029-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0029-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0174-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0174-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0018-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0018-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0175-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0175-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0019-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0019-twin1-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0176-twin0-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin0-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin0-explicit_trace-reverse"
+      ]
+    },
+    {
+      "sample_id": "RCM-001-expansion-v1-p0176-twin1-explicit_trace-reverse",
+      "prior_dev_samples": [
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-forward",
+        "RCM-001-pilot-v2-p0008-twin1-answer_only-reverse",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-forward",
+        "RCM-001-pilot-v2-p0008-twin1-explicit_trace-reverse"
+      ]
+    }
+  ]
+}

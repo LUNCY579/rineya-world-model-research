@@ -1,9 +1,10 @@
 # Actual curriculum coverage
 
-| Track | Batch | Candidate records | Independent semantic parents |
+| Track | Batch | Candidate records | Source-family IDs |
 |---|---|---:|---:|
 | RBM-001 | extended-pilot-v1 | 24 | 12 |
 | RBM-001 | extended-pilot-v2 | 24 | 12 |
+| RCM-001 | expansion-v1 | 1200 | 150 |
 | RCM-001 | pilot-v1 | 120 | 30 |
 | RCM-001 | pilot-v2 | 240 | 30 |
 | RDP-001 | extended-pilot-v1 | 24 | 12 |
@@ -11,6 +12,9 @@
 | REM-001 | extended-pilot-v1 | 24 | 12 |
 | REM-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v3 | 120 | 12 |
+| RGM-001 | expansion-v1 | 360 | 150 |
+| RGM-001 | expansion-v2 | 360 | 150 |
+| RGM-001 | expansion-v3 | 360 | 150 |
 | RGM-001 | pilot-v1 | 60 | 30 |
 | RGM-001 | pilot-v2 | 60 | 30 |
 | RGM-001 | pilot-v3 | 72 | 30 |
@@ -23,8 +27,13 @@
 | ROM-001 | extended-pilot-v2 | 24 | 12 |
 | RSM-001 | extended-pilot-v1 | 24 | 12 |
 | RSM-001 | extended-pilot-v2 | 24 | 12 |
+| RVM-001 | claim-gap-v1 | 24 | 12 |
+| RVM-001 | claim-gap-v2 | 24 | 12 |
+| RVM-001 | expansion-v1 | 300 | 150 |
+| RVM-001 | expansion-v2 | 300 | 150 |
 | RVM-001 | pilot-v1 | 60 | 30 |
 | RVM-001 | pilot-v2 | 60 | 30 |
+| RVM-001 | pilot-v4 | 60 | 30 |
 
 
 Difficulty counts by batch:
@@ -38,6 +47,11 @@ Difficulty counts by batch:
   "RBM-001/extended-pilot-v2": {
     "2": 16,
     "3": 8
+  },
+  "RCM-001/expansion-v1": {
+    "3": 320,
+    "1": 160,
+    "4": 720
   },
   "RCM-001/pilot-v1": {
     "3": 32,
@@ -66,6 +80,24 @@ Difficulty counts by batch:
   },
   "REM-001/extended-pilot-v3": {
     "3": 120
+  },
+  "RGM-001/expansion-v1": {
+    "3": 50,
+    "4": 244,
+    "1": 24,
+    "2": 42
+  },
+  "RGM-001/expansion-v2": {
+    "3": 50,
+    "4": 244,
+    "1": 24,
+    "2": 42
+  },
+  "RGM-001/expansion-v3": {
+    "3": 50,
+    "4": 244,
+    "1": 24,
+    "2": 42
   },
   "RGM-001/pilot-v1": {
     "3": 24,
@@ -117,12 +149,32 @@ Difficulty counts by batch:
     "3": 16,
     "4": 4
   },
+  "RVM-001/claim-gap-v1": {
+    "4": 20,
+    "3": 4
+  },
+  "RVM-001/claim-gap-v2": {
+    "4": 20,
+    "3": 4
+  },
+  "RVM-001/expansion-v1": {
+    "4": 216,
+    "3": 84
+  },
+  "RVM-001/expansion-v2": {
+    "4": 216,
+    "3": 84
+  },
   "RVM-001/pilot-v1": {
     "4": 24,
     "5": 24,
     "7": 12
   },
   "RVM-001/pilot-v2": {
+    "4": 40,
+    "3": 20
+  },
+  "RVM-001/pilot-v4": {
     "4": 40,
     "3": 20
   }

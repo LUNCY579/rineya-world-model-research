@@ -1,0 +1,710 @@
+[
+  {
+    "batch": "pilot-v2",
+    "source_sha256": "896f22f5ffff3adbf36d025282930fecd1fa5d304f453fcd56f7c242bb717c2e",
+    "rows": 60,
+    "counts": {
+      "process_labels": 620,
+      "pairs": 180,
+      "plan_diff_-1": 60,
+      "char_diff_-1": 72,
+      "position_0": 90,
+      "lower_id_chosen": 78,
+      "chosen_invalid": 8,
+      "chosen_wrong_claim": 36,
+      "plan_diff_0": 60,
+      "char_diff_0": 38,
+      "plan_diff_1": 60,
+      "char_diff_1": 70,
+      "rename_and_order_invariance": 60,
+      "position_1": 90
+    },
+    "position_crossings": {
+      "[0, 1]": 90
+    },
+    "examples": [
+      {
+        "source": "RVM-001-pilot-v2-p0000-base-forward",
+        "chosen": {
+          "candidate_id": "c20995",
+          "claimed_after": {
+            "fuel": 12,
+            "node": "Fjord"
+          },
+          "plan": []
+        },
+        "rejected": {
+          "candidate_id": "c80251",
+          "claimed_after": {
+            "fuel": 12,
+            "node": "Beryl"
+          },
+          "plan": [
+            "Beryl"
+          ]
+        },
+        "ranking_groups": [
+          3,
+          6
+        ],
+        "chosen_labels": {
+          "candidate_id": "c20995",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 2,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c80251",
+          "valid": true,
+          "claim_correct": false,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 1,
+          "usefulness": 1,
+          "first_error": "claim",
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-pilot-v2-p0000-base-forward",
+        "chosen": {
+          "candidate_id": "c80251",
+          "claimed_after": {
+            "fuel": 12,
+            "node": "Beryl"
+          },
+          "plan": [
+            "Beryl"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c95029",
+          "claimed_after": {
+            "fuel": 12,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Fjord"
+          ]
+        },
+        "ranking_groups": [
+          6,
+          8
+        ],
+        "chosen_labels": {
+          "candidate_id": "c80251",
+          "valid": true,
+          "claim_correct": false,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 1,
+          "usefulness": 1,
+          "first_error": "claim",
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c95029",
+          "valid": false,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 2,
+          "progress": null,
+          "usefulness": -1,
+          "first_error": 0,
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-pilot-v2-p0000-base-forward",
+        "chosen": {
+          "candidate_id": "c70519",
+          "claimed_after": {
+            "fuel": 4,
+            "node": "Dune"
+          },
+          "plan": [
+            "Beryl",
+            "Fjord",
+            "Beryl",
+            "Dune"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c97139",
+          "claimed_after": {
+            "fuel": 9,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Beryl",
+            "Fjord"
+          ]
+        },
+        "ranking_groups": [
+          1,
+          4
+        ],
+        "chosen_labels": {
+          "candidate_id": "c70519",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 2,
+          "usefulness": 2,
+          "first_error": null,
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c97139",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 2,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-pilot-v2-p0000-base-reverse",
+        "chosen": {
+          "candidate_id": "c20995",
+          "claimed_after": {
+            "fuel": 12,
+            "node": "Fjord"
+          },
+          "plan": []
+        },
+        "rejected": {
+          "candidate_id": "c80251",
+          "claimed_after": {
+            "fuel": 12,
+            "node": "Beryl"
+          },
+          "plan": [
+            "Beryl"
+          ]
+        },
+        "ranking_groups": [
+          3,
+          6
+        ],
+        "chosen_labels": {
+          "candidate_id": "c20995",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 2,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c80251",
+          "valid": true,
+          "claim_correct": false,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 1,
+          "usefulness": 1,
+          "first_error": "claim",
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-pilot-v2-p0000-base-reverse",
+        "chosen": {
+          "candidate_id": "c80251",
+          "claimed_after": {
+            "fuel": 12,
+            "node": "Beryl"
+          },
+          "plan": [
+            "Beryl"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c95029",
+          "claimed_after": {
+            "fuel": 12,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Fjord"
+          ]
+        },
+        "ranking_groups": [
+          6,
+          8
+        ],
+        "chosen_labels": {
+          "candidate_id": "c80251",
+          "valid": true,
+          "claim_correct": false,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 1,
+          "usefulness": 1,
+          "first_error": "claim",
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c95029",
+          "valid": false,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 2,
+          "progress": null,
+          "usefulness": -1,
+          "first_error": 0,
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-pilot-v2-p0000-base-reverse",
+        "chosen": {
+          "candidate_id": "c70519",
+          "claimed_after": {
+            "fuel": 4,
+            "node": "Dune"
+          },
+          "plan": [
+            "Beryl",
+            "Fjord",
+            "Beryl",
+            "Dune"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c97139",
+          "claimed_after": {
+            "fuel": 9,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Beryl",
+            "Fjord"
+          ]
+        },
+        "ranking_groups": [
+          1,
+          4
+        ],
+        "chosen_labels": {
+          "candidate_id": "c70519",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 2,
+          "usefulness": 2,
+          "first_error": null,
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c97139",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 2,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "Beryl",
+            "Dune"
+          ]
+        }
+      }
+    ],
+    "typed_schema_mutations_rejected": 11
+  },
+  {
+    "batch": "expansion-v1",
+    "source_sha256": "cb165a004dd121461e3ffcaadb711e14f25f736a9729afe4b22e47c01a560e41",
+    "rows": 300,
+    "counts": {
+      "process_labels": 3132,
+      "pairs": 900,
+      "plan_diff_-1": 300,
+      "char_diff_-1": 346,
+      "position_1": 450,
+      "lower_id_chosen": 454,
+      "chosen_invalid": 24,
+      "chosen_wrong_claim": 200,
+      "plan_diff_0": 300,
+      "char_diff_0": 184,
+      "position_0": 450,
+      "plan_diff_1": 300,
+      "char_diff_1": 370,
+      "rename_and_order_invariance": 300
+    },
+    "position_crossings": {
+      "[0, 1]": 450
+    },
+    "examples": [
+      {
+        "source": "RVM-001-expansion-v1-p0030-base-forward",
+        "chosen": {
+          "candidate_id": "c71008",
+          "claimed_after": {
+            "fuel": 11,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Fjord"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c17113",
+          "claimed_after": {
+            "fuel": 13,
+            "node": "Aster"
+          },
+          "plan": [
+            "Ember",
+            "Aster"
+          ]
+        },
+        "ranking_groups": [
+          0,
+          4
+        ],
+        "chosen_labels": {
+          "candidate_id": "c71008",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 1,
+          "usefulness": 2,
+          "first_error": null,
+          "repair_plan": [
+            "Fjord"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c17113",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "Fjord"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-expansion-v1-p0030-base-forward",
+        "chosen": {
+          "candidate_id": "c52329",
+          "claimed_after": {
+            "fuel": 13,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Fjord"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c87947",
+          "claimed_after": {
+            "fuel": 17,
+            "node": "Aster"
+          },
+          "plan": [
+            "Aster"
+          ]
+        },
+        "ranking_groups": [
+          5,
+          7
+        ],
+        "chosen_labels": {
+          "candidate_id": "c52329",
+          "valid": true,
+          "claim_correct": false,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 1,
+          "usefulness": 2,
+          "first_error": "claim",
+          "repair_plan": [
+            "Fjord"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c87947",
+          "valid": false,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": null,
+          "usefulness": -1,
+          "first_error": 0,
+          "repair_plan": [
+            "Fjord"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-expansion-v1-p0030-base-forward",
+        "chosen": {
+          "candidate_id": "c78282",
+          "claimed_after": {
+            "fuel": 7,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Ember",
+            "Aster",
+            "Fjord"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c15106",
+          "claimed_after": {
+            "fuel": 17,
+            "node": "Aster"
+          },
+          "plan": []
+        },
+        "ranking_groups": [
+          1,
+          2
+        ],
+        "chosen_labels": {
+          "candidate_id": "c78282",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 1,
+          "usefulness": 2,
+          "first_error": null,
+          "repair_plan": [
+            "Fjord"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c15106",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "Fjord"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-expansion-v1-p0030-base-reverse",
+        "chosen": {
+          "candidate_id": "c71008",
+          "claimed_after": {
+            "fuel": 11,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Fjord"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c17113",
+          "claimed_after": {
+            "fuel": 13,
+            "node": "Aster"
+          },
+          "plan": [
+            "Ember",
+            "Aster"
+          ]
+        },
+        "ranking_groups": [
+          0,
+          4
+        ],
+        "chosen_labels": {
+          "candidate_id": "c71008",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 1,
+          "usefulness": 2,
+          "first_error": null,
+          "repair_plan": [
+            "Fjord"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c17113",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "Fjord"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-expansion-v1-p0030-base-reverse",
+        "chosen": {
+          "candidate_id": "c52329",
+          "claimed_after": {
+            "fuel": 13,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Fjord"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c87947",
+          "claimed_after": {
+            "fuel": 17,
+            "node": "Aster"
+          },
+          "plan": [
+            "Aster"
+          ]
+        },
+        "ranking_groups": [
+          5,
+          7
+        ],
+        "chosen_labels": {
+          "candidate_id": "c52329",
+          "valid": true,
+          "claim_correct": false,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 1,
+          "usefulness": 2,
+          "first_error": "claim",
+          "repair_plan": [
+            "Fjord"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c87947",
+          "valid": false,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": null,
+          "usefulness": -1,
+          "first_error": 0,
+          "repair_plan": [
+            "Fjord"
+          ]
+        }
+      },
+      {
+        "source": "RVM-001-expansion-v1-p0030-base-reverse",
+        "chosen": {
+          "candidate_id": "c78282",
+          "claimed_after": {
+            "fuel": 7,
+            "node": "Fjord"
+          },
+          "plan": [
+            "Ember",
+            "Aster",
+            "Fjord"
+          ]
+        },
+        "rejected": {
+          "candidate_id": "c15106",
+          "claimed_after": {
+            "fuel": 17,
+            "node": "Aster"
+          },
+          "plan": []
+        },
+        "ranking_groups": [
+          1,
+          2
+        ],
+        "chosen_labels": {
+          "candidate_id": "c78282",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": true,
+          "remaining_moves": 0,
+          "progress": 1,
+          "usefulness": 2,
+          "first_error": null,
+          "repair_plan": [
+            "Fjord"
+          ]
+        },
+        "rejected_labels": {
+          "candidate_id": "c15106",
+          "valid": true,
+          "claim_correct": true,
+          "reaches_goal": false,
+          "remaining_moves": 1,
+          "progress": 0,
+          "usefulness": 0,
+          "first_error": null,
+          "repair_plan": [
+            "Fjord"
+          ]
+        }
+      }
+    ],
+    "typed_schema_mutations_rejected": 11
+  }
+]

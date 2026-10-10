@@ -1,0 +1,201 @@
+{
+  "actor": "/root/research_architect",
+  "role": "Quality Adjudicator: preliminary scope/lineage inspection only",
+  "created_at_utc": "2026-10-10T00:18:54.997443+00:00",
+  "batch": "expansion-v1",
+  "records": 1860,
+  "independent_source_families": 450,
+  "prior_release_lineage": "v0001 current accepted records, not superseded candidate revisions",
+  "tracks": {
+    "RCM-001": {
+      "records": 1200,
+      "independent_source_families": 150,
+      "prior_release_records": 240,
+      "new_source_indices": [
+        30,
+        179
+      ],
+      "source_key_overlap": 0,
+      "prior_source_index_overlap": 0,
+      "exact_task_overlap": 0,
+      "annotation_stripped_exact_overlap": 0,
+      "split_counts": {
+        "train": 960,
+        "dev_challenge": 240
+      },
+      "structural_difficulty": {
+        "3": 320,
+        "1": 160,
+        "4": 720
+      },
+      "skill_tag_family_counts": {
+        "rule_conditioning": 150,
+        "counterfactual": 150,
+        "conditional_execution": 150,
+        "predicate_0": 25,
+        "predicate_1": 25,
+        "predicate_2": 25,
+        "predicate_3": 25,
+        "predicate_4": 25,
+        "predicate_5": 25
+      },
+      "challenge_axis_family_counts": {
+        "heldout_first_status": 30,
+        "larger_magnitudes": 30,
+        "heldout_predicate_composition": 30
+      },
+      "all_family_variants_same_parent_and_split": true,
+      "challenge_claim": "Exposed development axes; no sealed evaluation or broad structural-template holdout.",
+      "source_key_caveat": "Family IDs certify generator lineage;150 source worlds do not imply150 distinct mechanism classes.",
+      "nested_dev_wrapper": {
+        "dev_twin_tasks": 60,
+        "task_counts": {
+          "all_amount_true": 32,
+          "amount_varies": 28,
+          "final_changed": 21,
+          "rule_trace_changed": 25
+        },
+        "affected_family_counts": {
+          "all_amount_true": 16,
+          "amount_varies": 14,
+          "final_changed": 12,
+          "rule_trace_changed": 14
+        },
+        "conclusion": "Nested wrapper is meaningful in a subset:14 families have varying added amount gates;16 have always-true added gates and serve as redundant-shape controls. 12 families change final state under wrapper removal. This is a bounded nested-control challenge, not broad predicate discovery."
+      }
+    },
+    "RGM-001": {
+      "records": 360,
+      "independent_source_families": 150,
+      "prior_release_records": 72,
+      "new_source_indices": [
+        30,
+        179
+      ],
+      "source_key_overlap": 0,
+      "prior_source_index_overlap": 0,
+      "exact_task_overlap": 0,
+      "annotation_stripped_exact_overlap": 0,
+      "split_counts": {
+        "train": 240,
+        "dev_challenge": 120
+      },
+      "structural_difficulty": {
+        "3": 50,
+        "4": 244,
+        "1": 24,
+        "2": 42
+      },
+      "skill_tag_family_counts": {
+        "relational_planning": 150,
+        "state_transition": 150,
+        "preconditions": 150,
+        "canonical_shortest_plan": 150,
+        "branched_resource_graph": 90,
+        "graph": 90,
+        "valid_plan": 80,
+        "goal_satisfaction": 47,
+        "invalid_plan": 70,
+        "multi_stack_goal_composition": 60,
+        "blocks": 60,
+        "unreachable": 6
+      },
+      "challenge_axis_family_counts": {
+        "heldout_names": 30,
+        "larger_graph_or_block_count": 30
+      },
+      "all_family_variants_same_parent_and_split": true,
+      "challenge_claim": "Exposed development axes; no sealed evaluation or broad structural-template holdout.",
+      "source_key_caveat": "Family IDs certify generator lineage;150 source worlds do not imply150 distinct mechanism classes.",
+      "graph_family_scope": {
+        "graph_families": 90,
+        "actual_outdegree_branch_families": 77,
+        "node_count_distribution": {
+          "5": 23,
+          "6": 15,
+          "3": 22,
+          "4": 15,
+          "8": 8,
+          "7": 7
+        },
+        "limitation": "Branched_resource_graph labels name the generator family; not every generated world has an actual branch."
+      },
+      "block_family_scope": {
+        "block_families": 60,
+        "initial_root_counts": {
+          "2": 26,
+          "1": 16,
+          "3": 14,
+          "4": 3,
+          "5": 1
+        },
+        "goal_types": {
+          "full": 40,
+          "partial": 20
+        },
+        "limitation": "Multi-stack task family includes initially single-stack and trivial/satisfied goal controls; these are not all equally compositional."
+      },
+      "development_goal_labels": {
+        "False": 60,
+        "True": 60
+      }
+    },
+    "RVM-001": {
+      "records": 300,
+      "independent_source_families": 150,
+      "prior_release_records": 60,
+      "new_source_indices": [
+        30,
+        179
+      ],
+      "source_key_overlap": 0,
+      "prior_source_index_overlap": 0,
+      "exact_task_overlap": 0,
+      "annotation_stripped_exact_overlap": 0,
+      "split_counts": {
+        "train": 240,
+        "dev_challenge": 60
+      },
+      "structural_difficulty": {
+        "4": 216,
+        "3": 84
+      },
+      "skill_tag_family_counts": {
+        "value_critic": 150,
+        "legality": 150,
+        "claim_arithmetic": 150,
+        "progress": 150,
+        "usefulness": 150,
+        "rank_with_ties": 150,
+        "minimal_fresh_plan_replacement": 150,
+        "equal_length_good_bad": 150,
+        "longer_valid_shorter_invalid": 150,
+        "branched_resource_graph:equal_length_routes": 25,
+        "branched_resource_graph:fuel_precondition": 25,
+        "branched_resource_graph:legal_detour": 25,
+        "branched_resource_graph:initially_unreachable": 25,
+        "branched_resource_graph:initial_goal": 25,
+        "branched_resource_graph:fresh_replacement_counterexample": 25
+      },
+      "challenge_axis_family_counts": {
+        "heldout_names": 30,
+        "larger_graph_or_block_count": 30
+      },
+      "all_family_variants_same_parent_and_split": true,
+      "challenge_claim": "Exposed development axes; no sealed evaluation or broad structural-template holdout.",
+      "source_key_caveat": "Family IDs certify generator lineage;150 source worlds do not imply150 distinct mechanism classes.",
+      "critic_goal_scope": "Same explicit validity/progress/usefulness ranking objective and recurring corruption families. Branched worlds vary candidate behavior, but no held-out goal functions or error-producer family claim is supported."
+    }
+  },
+  "inputs_sha256": {
+    "data/RCM-001/candidate_renderings/expansion-v1.jsonl": "51d96bbd97162614d9408737da0eb3f76c6bce41c347411839a987fe51a8b601",
+    "data/RCM-001/releases/v0001/canonical.jsonl": "e8f10d2b297b602200427a159fa67e6fcb763875603d1a1cd211795d2cadca2a",
+    "data/RGM-001/candidate_renderings/expansion-v1.jsonl": "9f7eae7373374c5af1eb2b64b9c34522ca1aa5665e4393ed543c5c94caa5895a",
+    "data/RGM-001/releases/v0001/canonical.jsonl": "bc0a821670884bc0ccf9a42c22a53ade3654718c797946d445f0266ae8ee6990",
+    "data/RVM-001/candidate_renderings/expansion-v1.jsonl": "cb165a004dd121461e3ffcaadb711e14f25f736a9729afe4b22e47c01a560e41",
+    "data/RVM-001/releases/v0001/canonical.jsonl": "262d9bc470353c3aacb105b1bde2bb5b87f1e9771472966ab7f1c53ac672bac3"
+  },
+  "approval_status": "PENDING until both independent final reviewer receipts are complete; this scope inspection issues no sample approvals.",
+  "producer_or_release_writes": false,
+  "protected_evaluations_opened": false
+}

@@ -1,0 +1,77 @@
+{
+  "receipt_id": "expert-exporter-initial-c8d034c4f1c7",
+  "review_type": "CODE_REVIEW",
+  "artifact": "factory/exports.py",
+  "record_hash": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+  "artifact_sha256": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+  "artifact_hashes": {
+    "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+    "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+    "schemas/preference/README.md": "f1a3e1047d5ab0f111b8b766aa8df431a54f78d5937b4d440f227fdce8a2c193",
+    "schemas/process_reward/v1.schema.json": "778beccb84f734405f37df5edc151016bceb9ec35467936bdf8cdb28f7ac41b2",
+    "schemas/process_reward/README.md": "f1a3e1047d5ab0f111b8b766aa8df431a54f78d5937b4d440f227fdce8a2c193"
+  },
+  "reviewer_role": "expert_reviewer",
+  "reviewer_execution_id": "/root/expert_reviewer",
+  "review_status": "REVISE",
+  "decision": "REVISE",
+  "scores": {
+    "semantic_correctness": 5,
+    "target_correctness": 5,
+    "instruction_clarity": 3,
+    "reasoning_validity": 5,
+    "generalization_value": 3,
+    "difficulty_quality": 3,
+    "diversity": 3,
+    "shortcut_resistance": 3
+  },
+  "critical_defects": [],
+  "issues": [
+    {
+      "category": "schema_validity",
+      "severity": "moderate",
+      "evidence": "Process schema accepts candidate={} and labels valid=\"yes\",claim_correct=null,progress=[],usefulness={}; all value types and candidate shape absent.",
+      "fix": "Require exact typed public candidate and complete evaluation label shapes; reject unexpected fields."
+    },
+    {
+      "category": "supervision_interpretation",
+      "severity": "moderate",
+      "evidence": "Process output is a whole-candidate evaluation, not per-step rewards; READMEs do not define this. Preference chosen can itself be invalid (10/180) or claim-incorrect (44/180), still strictly better.",
+      "fix": "Document candidate-level labels, first_error interpretation, and strict relative preference semantics including both-bad pairs."
+    },
+    {
+      "category": "shortcut_control_scope",
+      "severity": "low",
+      "evidence": "Plan-count differences 60/60/60; response character differences 70/40/70; equal-plan-length is not exact byte/token matching. All90 pair groups occupy both positions.",
+      "fix": "Describe plan-count controls accurately and avoid exact response-length control claims."
+    },
+    {
+      "category": "trajectory_scope",
+      "severity": "low",
+      "evidence": "Filter is valid AND reaches_goal for submitted plan; no shortest-plan predicate. All28 pilot-v3 outputs exact, six empty.",
+      "fix": "Describe successful verified submitted trajectories; do not imply shortest fresh plans or nonempty optimal rollouts."
+    }
+  ],
+  "confidence": 0.97,
+  "review_method": "Independent prompt-derived recomputation of every existing RVM pilot-v2 candidate and every emitted pair using my own independent_review.py; actual agent inspection of exporter, public contracts and derived schema/docs. No reference/oracle or other verdicts read.",
+  "evidence": {
+    "source_rvm_rows": 60,
+    "process_labels_checked": 620,
+    "strict_pairs_checked": 180,
+    "target_mismatches": 0,
+    "tied_pairs": 0,
+    "position_crossed_pairs": 90,
+    "rgm_rows_checked": 72,
+    "trajectories_checked": 28,
+    "substantive_examples": [
+      "RVM-001-pilot-v2-p0000-base-forward",
+      "RVM-001-pilot-v2-p0005-base-forward",
+      "RVM-001-pilot-v2-p0009-base-forward",
+      "RVM-001-pilot-v2-p0011-base-forward",
+      "RGM-001-pilot-v3-p0029-matched-forward"
+    ],
+    "report": "reviews/expert/exporter_code_review.md",
+    "recomputation_report": "reviews/expert/exporter_recomputation.json"
+  },
+  "scope_limitation": "Code review only; no dataset acceptance for expansion; no release authorization."
+}

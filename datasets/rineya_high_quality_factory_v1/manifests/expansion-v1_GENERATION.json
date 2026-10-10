@@ -1,0 +1,20 @@
+{
+  "batch": "expansion-v1",
+  "count_per_track": 150,
+  "offset": 30,
+  "new_semantic_parents": 450,
+  "records": 1860,
+  "split_assignment": "index%10>=8 is exposed development; assigned before rendering",
+  "base_seed": 20261009,
+  "causal_rng": "base_seed+offset",
+  "relational_rng": "base_seed+17*index",
+  "critic_rng": "base_seed+31*index",
+  "producer_execution": "/root",
+  "scope": "CPU-only original synthetic development corpus. 150 new source families per P0 track, prior pilots unchanged. No model efficacy claim.",
+  "new_mechanisms": [
+    "branched resource graphs",
+    "multi-stack partial/full goals",
+    "heldout nested predicate composition"
+  ],
+  "repro_command": "causal(150, expansion-v1, 30); relational(150, expansion-v1, 30); critic(150, expansion-v1, 30)"
+}
