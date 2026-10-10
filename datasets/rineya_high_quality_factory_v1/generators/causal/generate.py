@@ -38,6 +38,9 @@ def generate(count=30,batch="pilot-v2",offset=0):
         elif mechanism==3: rule=expr("all",expr("eq",var("event.status"),const(status)),expr("ge",var("event.amount"),const(amount)))
         elif mechanism==4: rule=expr("any",expr("ne",var("event.status"),const(status)),expr("lt",var("state.y"),const(state["y"]+1)))
         else: rule=expr("not",expr("all",expr("ne",var("event.status"),const(status)),expr("gt",var("state.x"),const(state["x"]))))
+        if i>=30 and split=="dev_challenge":
+            boundary=amount+(1 if i%4<2 else -1)
+            rule=expr("all",rule,expr("any",expr("gt",var("event.amount"),const(boundary)),expr("lt",var("state.x"),const(state["x"]))))
         # Preconditions have true/false boundary cases independently of rule truth.
         pre=expr("ge",var("state.x"),var("event.amount")) if i%3==0 else const(True)
         if i%9==6: pre=expr("gt",var("state.x"),const(state["x"]))
@@ -64,8 +67,10 @@ def generate(count=30,batch="pilot-v2",offset=0):
                 target={"after":gold["after"]} if answer_only else gold
                 difficulty=4 if length>1 else 3 if mechanism>=3 or pre!=const(True) else 1
                 r=record("RCM-001",batch,i,f"twin{v}-{fmt}",t,prompt,target,["rule_conditioning","counterfactual","conditional_execution",f"predicate_{mechanism}"],difficulty,fmt,"reverse" if reverse else "forward")
-                r.update(generator_version="1.1.0",structural_difficulty=difficulty,
-                         challenge_axes=["heldout_first_status","larger_magnitudes"] if split=="dev_challenge" else [],
+                axes=["heldout_first_status","larger_magnitudes"] if split=="dev_challenge" else []
+                if i>=30 and split=="dev_challenge":axes.append("heldout_predicate_composition")
+                r.update(generator_version="1.2.0" if i>=30 else "1.1.0",structural_difficulty=difficulty,
+                         challenge_axes=axes,
                          source_family_key=f"RCM-001-seed20261009-p{i:04d}")
                 r["record_hash"]=record_hash(r);rows.append(r)
     outputs=[(ROOT/f"data/RCM-001/semantic_parents/{batch}.jsonl",parents),(ROOT/f"data/RCM-001/candidate_renderings/{batch}.jsonl",rows)]

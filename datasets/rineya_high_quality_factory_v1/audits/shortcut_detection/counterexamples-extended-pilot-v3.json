@@ -1,0 +1,737 @@
+[
+  {
+    "attack": "module_empty_needs_tie_and_abstention_no_writes",
+    "task": {
+      "kind": "modules",
+      "modules": [
+        {
+          "module_id": "b",
+          "priority": 0,
+          "capabilities": [
+            "known"
+          ]
+        },
+        {
+          "module_id": "a",
+          "priority": 0,
+          "capabilities": [
+            "known"
+          ]
+        }
+      ],
+      "memory": {
+        "protected": null
+      },
+      "protected": [
+        "protected"
+      ],
+      "requests": [
+        {
+          "request_id": "opaque",
+          "needs": [],
+          "writes": [
+            {
+              "key": "protected",
+              "value": 1
+            },
+            {
+              "key": "new",
+              "value": true
+            }
+          ]
+        },
+        {
+          "request_id": "another",
+          "needs": [
+            "unknown"
+          ],
+          "writes": [
+            {
+              "key": "protected",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    "correct": {
+      "routes": [
+        {
+          "request_id": "opaque",
+          "selected_module": "a",
+          "eligible_modules": [
+            "a",
+            "b"
+          ],
+          "blocked_writes": [
+            0
+          ]
+        },
+        {
+          "request_id": "another",
+          "selected_module": null,
+          "eligible_modules": [],
+          "blocked_writes": []
+        }
+      ],
+      "memory": {
+        "protected": null,
+        "new": true
+      }
+    }
+  },
+  {
+    "attack": "type_sensitive_beliefs_and_empty_entailment",
+    "task": {
+      "kind": "belief",
+      "worlds": [
+        {
+          "world_id": "a",
+          "facts": {
+            "f": true
+          }
+        },
+        {
+          "world_id": "b",
+          "facts": {
+            "f": 1
+          }
+        }
+      ],
+      "observations": [
+        {
+          "fact": "f",
+          "equals": true
+        },
+        {
+          "fact": "f",
+          "equals": 1
+        }
+      ],
+      "queries": [
+        {
+          "query_id": "q",
+          "fact": "f"
+        }
+      ]
+    },
+    "correct": {
+      "surviving_worlds": [],
+      "belief_sizes": [
+        1,
+        0
+      ],
+      "queries": [
+        {
+          "query_id": "q",
+          "counts": [],
+          "distinct_values": 0,
+          "entailed": false,
+          "guaranteed": null,
+          "can_reduce_uncertainty": false
+        }
+      ]
+    },
+    "unfiltered_correct": {
+      "surviving_worlds": [
+        "a",
+        "b"
+      ],
+      "belief_sizes": [],
+      "queries": [
+        {
+          "query_id": "q",
+          "counts": [
+            {
+              "value": 1,
+              "count": 1
+            },
+            {
+              "value": true,
+              "count": 1
+            }
+          ],
+          "distinct_values": 2,
+          "entailed": false,
+          "guaranteed": null,
+          "can_reduce_uncertainty": true
+        }
+      ]
+    }
+  },
+  {
+    "attack": "same_version_time_input_index_and_authoritative_tombstone",
+    "task": {
+      "kind": "episodic",
+      "events": [
+        {
+          "key": "k",
+          "version": 3,
+          "at": 5,
+          "op": "put",
+          "value": null
+        },
+        {
+          "key": "k",
+          "version": 2,
+          "at": 9,
+          "op": "put",
+          "value": "older"
+        },
+        {
+          "key": "k",
+          "version": 3,
+          "at": 5,
+          "op": "delete",
+          "value": null
+        }
+      ],
+      "queries": [
+        {
+          "query_id": "q",
+          "key": "k",
+          "as_of": 9
+        }
+      ]
+    },
+    "correct": {
+      "results": [
+        {
+          "query_id": "q",
+          "key": "k",
+          "status": "deleted",
+          "value": null,
+          "chosen_version": 3,
+          "chosen_event": 2
+        }
+      ]
+    },
+    "opposite_tie_order_correct": {
+      "results": [
+        {
+          "query_id": "q",
+          "key": "k",
+          "status": "present",
+          "value": null,
+          "chosen_version": 3,
+          "chosen_event": 2
+        }
+      ]
+    }
+  },
+  {
+    "attack": "transition_distinguishes_equal_observables",
+    "task": {
+      "kind": "predictive_abstraction",
+      "states": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "actions": [
+        "step"
+      ],
+      "observable": {
+        "a": 0,
+        "b": 0,
+        "c": 1,
+        "d": 0
+      },
+      "transition": {
+        "a": {
+          "step": "c"
+        },
+        "b": {
+          "step": "b"
+        },
+        "c": {
+          "step": "c"
+        },
+        "d": {
+          "step": "c"
+        }
+      }
+    },
+    "correct": {
+      "classes": [
+        [
+          "a",
+          "d"
+        ],
+        [
+          "b"
+        ],
+        [
+          "c"
+        ]
+      ],
+      "state_to_class": {
+        "a": 0,
+        "d": 0,
+        "b": 1,
+        "c": 2
+      },
+      "abstract_transitions": [
+        {
+          "class_id": 0,
+          "action": "step",
+          "next_class": 2
+        },
+        {
+          "class_id": 1,
+          "action": "step",
+          "next_class": 1
+        },
+        {
+          "class_id": 2,
+          "action": "step",
+          "next_class": 2
+        }
+      ],
+      "abstract_observable": [
+        {
+          "class_id": 0,
+          "value": 0
+        },
+        {
+          "class_id": 1,
+          "value": 0
+        },
+        {
+          "class_id": 2,
+          "value": 1
+        }
+      ]
+    }
+  },
+  {
+    "attack": "greedy_selection_is_not_maximum_packing",
+    "task": {
+      "kind": "constraint_repair",
+      "alphabet": [
+        "a",
+        "b"
+      ],
+      "slots": 3,
+      "constraints": [],
+      "min_distance": 2,
+      "candidates": [
+        {
+          "candidate_id": "A",
+          "assignment": [
+            "a",
+            "a",
+            "a"
+          ]
+        },
+        {
+          "candidate_id": "B",
+          "assignment": [
+            "a",
+            "a",
+            "b"
+          ]
+        },
+        {
+          "candidate_id": "C",
+          "assignment": [
+            "a",
+            "b",
+            "a"
+          ]
+        }
+      ]
+    },
+    "correct": {
+      "feasible_count": 8,
+      "repairs": [
+        {
+          "candidate_id": "A",
+          "original_valid": true,
+          "edit_distance": 0,
+          "repaired": [
+            "a",
+            "a",
+            "a"
+          ]
+        },
+        {
+          "candidate_id": "B",
+          "original_valid": true,
+          "edit_distance": 0,
+          "repaired": [
+            "a",
+            "a",
+            "b"
+          ]
+        },
+        {
+          "candidate_id": "C",
+          "original_valid": true,
+          "edit_distance": 0,
+          "repaired": [
+            "a",
+            "b",
+            "a"
+          ]
+        }
+      ],
+      "diverse_selection": [
+        "A"
+      ]
+    },
+    "larger_feasible_packing": [
+      "B",
+      "C"
+    ]
+  },
+  {
+    "attack": "explicit_false_initial_belief_and_empty_policy",
+    "task": {
+      "kind": "agent_history",
+      "objects": [
+        "book"
+      ],
+      "places": [
+        "drawer",
+        "shelf"
+      ],
+      "initial_locations": {
+        "book": "shelf"
+      },
+      "agents": [
+        {
+          "agent_id": "A",
+          "initial_beliefs": {
+            "book": "drawer"
+          },
+          "object_priority": [
+            "book"
+          ]
+        },
+        {
+          "agent_id": "B",
+          "initial_beliefs": {
+            "book": "shelf"
+          },
+          "object_priority": []
+        }
+      ],
+      "events": []
+    },
+    "correct": {
+      "actual_locations": {
+        "book": "shelf"
+      },
+      "agents": [
+        {
+          "agent_id": "A",
+          "beliefs": {
+            "book": "drawer"
+          },
+          "false_belief_objects": [
+            "book"
+          ],
+          "unknown_objects": [],
+          "action": {
+            "type": "search",
+            "object": "book",
+            "place": "drawer"
+          }
+        },
+        {
+          "agent_id": "B",
+          "beliefs": {
+            "book": "shelf"
+          },
+          "false_belief_objects": [],
+          "unknown_objects": [],
+          "action": {
+            "type": "abstain"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "attack": "identifier_only_status_or_abstention_baseline",
+    "source_sample_id": "RMM-001-extended-pilot-v3-p0000-rotation0-forward",
+    "source_record_hash": "e95c3fe87aa2a86d87c05659a0330cfefb2da4a5a093e8db1bcc133db0c2cba7",
+    "intervention": "Swap only the first two row identifiers, retaining all world/needs/as-of/write information.",
+    "task": {
+      "kind": "modules",
+      "memory": {
+        "budget": 7,
+        "note": null,
+        "seal": 1000
+      },
+      "modules": [
+        {
+          "capabilities": [
+            "arithmetic"
+          ],
+          "module_id": "alpha",
+          "priority": 1
+        },
+        {
+          "capabilities": [
+            "arithmetic",
+            "search"
+          ],
+          "module_id": "beta",
+          "priority": 1
+        },
+        {
+          "capabilities": [
+            "vision"
+          ],
+          "module_id": "gamma",
+          "priority": 0
+        }
+      ],
+      "protected": [
+        "seal",
+        "budget"
+      ],
+      "requests": [
+        {
+          "needs": [
+            "arithmetic"
+          ],
+          "request_id": "r1",
+          "writes": [
+            {
+              "key": "seal",
+              "value": "overwrite"
+            },
+            {
+              "key": "note",
+              "value": 0
+            },
+            {
+              "key": "budget",
+              "value": 100
+            },
+            {
+              "key": "seal",
+              "value": null
+            }
+          ]
+        },
+        {
+          "needs": [
+            "ocean"
+          ],
+          "request_id": "r0",
+          "writes": [
+            {
+              "key": "seal",
+              "value": "overwrite"
+            },
+            {
+              "key": "note",
+              "value": 1
+            },
+            {
+              "key": "budget",
+              "value": 101
+            },
+            {
+              "key": "seal",
+              "value": null
+            }
+          ]
+        },
+        {
+          "needs": [],
+          "request_id": "r2",
+          "writes": [
+            {
+              "key": "seal",
+              "value": "overwrite"
+            },
+            {
+              "key": "note",
+              "value": 2
+            },
+            {
+              "key": "budget",
+              "value": 102
+            },
+            {
+              "key": "seal",
+              "value": null
+            }
+          ]
+        }
+      ]
+    },
+    "correct": {
+      "routes": [
+        {
+          "request_id": "r1",
+          "selected_module": "alpha",
+          "eligible_modules": [
+            "alpha",
+            "beta"
+          ],
+          "blocked_writes": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "request_id": "r0",
+          "selected_module": null,
+          "eligible_modules": [],
+          "blocked_writes": []
+        },
+        {
+          "request_id": "r2",
+          "selected_module": "gamma",
+          "eligible_modules": [
+            "alpha",
+            "beta",
+            "gamma"
+          ],
+          "blocked_writes": [
+            0,
+            2,
+            3
+          ]
+        }
+      ],
+      "memory": {
+        "budget": 7,
+        "note": 2,
+        "seal": 1000
+      }
+    }
+  },
+  {
+    "attack": "identifier_only_status_or_abstention_baseline",
+    "source_sample_id": "REM-001-extended-pilot-v3-p0000-rotation0-forward",
+    "source_record_hash": "f609e266213933ddd70907b75043021493c2f0c6d455479dd01499926ca79842",
+    "intervention": "Swap only the first two row identifiers, retaining all world/needs/as-of/write information.",
+    "task": {
+      "events": [
+        {
+          "at": 4,
+          "key": "weather",
+          "op": "put",
+          "value": "irrelevant",
+          "version": 99
+        },
+        {
+          "at": 20,
+          "key": "ticket",
+          "op": "put",
+          "value": "future",
+          "version": 4
+        },
+        {
+          "at": 12,
+          "key": "ticket",
+          "op": "put",
+          "value": "conflict",
+          "version": 3
+        },
+        {
+          "at": 5,
+          "key": "ticket",
+          "op": "put",
+          "value": "stable",
+          "version": 2
+        },
+        {
+          "at": 12,
+          "key": "ticket",
+          "op": "delete",
+          "value": null,
+          "version": 3
+        },
+        {
+          "at": 9,
+          "key": "ticket",
+          "op": "put",
+          "value": "late_older",
+          "version": 1
+        }
+      ],
+      "kind": "episodic",
+      "queries": [
+        {
+          "as_of": 4,
+          "key": "ticket",
+          "query_id": "q1"
+        },
+        {
+          "as_of": 10,
+          "key": "ticket",
+          "query_id": "q0"
+        },
+        {
+          "as_of": 14,
+          "key": "ticket",
+          "query_id": "q2"
+        },
+        {
+          "as_of": 21,
+          "key": "ticket",
+          "query_id": "q3"
+        },
+        {
+          "as_of": 50,
+          "key": "missing",
+          "query_id": "q4"
+        }
+      ]
+    },
+    "correct": {
+      "results": [
+        {
+          "query_id": "q1",
+          "key": "ticket",
+          "status": "absent",
+          "value": null,
+          "chosen_version": null,
+          "chosen_event": null
+        },
+        {
+          "query_id": "q0",
+          "key": "ticket",
+          "status": "present",
+          "value": "stable",
+          "chosen_version": 2,
+          "chosen_event": 3
+        },
+        {
+          "query_id": "q2",
+          "key": "ticket",
+          "status": "deleted",
+          "value": null,
+          "chosen_version": 3,
+          "chosen_event": 4
+        },
+        {
+          "query_id": "q3",
+          "key": "ticket",
+          "status": "present",
+          "value": "future",
+          "chosen_version": 4,
+          "chosen_event": 1
+        },
+        {
+          "query_id": "q4",
+          "key": "missing",
+          "status": "absent",
+          "value": null,
+          "chosen_version": null,
+          "chosen_event": null
+        }
+      ]
+    }
+  }
+]

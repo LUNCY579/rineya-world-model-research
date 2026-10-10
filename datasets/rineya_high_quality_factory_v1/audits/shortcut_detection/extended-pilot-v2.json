@@ -1,0 +1,1257 @@
+{
+  "scope": "Independent CPU count/lookups and exhaustive finite solvers; no training or producer/reference imports.",
+  "tracks": {
+    "RBM-001": {
+      "families": 12,
+      "logical_variants": 12,
+      "coverage_counts": {
+        "surviving_4": 2,
+        "uncertainty_reducing_queries": 10,
+        "surviving_1": 6,
+        "surviving_0": 2,
+        "surviving_2": 1,
+        "surviving_3": 1
+      },
+      "label_counts": {
+        "true": 10,
+        "false": 2
+      },
+      "length_bucket_baseline": {
+        "train_examples": 10,
+        "dev_examples": 2,
+        "dev_accuracy": 0.5,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 0,
+        "train_feature_table": {
+          "8": {
+            "true": 2
+          },
+          "9": {
+            "true": 5
+          },
+          "10": {
+            "false": 1,
+            "true": 2
+          }
+        }
+      },
+      "stripped_feature_baseline": {
+        "train_examples": 10,
+        "dev_examples": 2,
+        "dev_accuracy": 0.5,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 2,
+        "train_feature_table": {
+          "0": {
+            "true": 2
+          },
+          "1": {
+            "true": 5
+          },
+          "2": {
+            "false": 1,
+            "true": 2
+          }
+        }
+      },
+      "limitations": "Twelve finite families, two exposed development families. Row labels within one world are dependent. No trained baseline or sealed evaluation."
+    },
+    "RDP-001": {
+      "families": 12,
+      "logical_variants": 12,
+      "coverage_counts": {
+        "feasible_count_8": 2,
+        "diverse_selection_size_4": 2,
+        "null_repairs": 9,
+        "feasible_count_3": 2,
+        "diverse_selection_size_2": 2,
+        "feasible_count_2": 3,
+        "diverse_selection_size_1": 5,
+        "feasible_count_0": 2,
+        "diverse_selection_size_0": 2,
+        "feasible_count_1": 2,
+        "feasible_count_18": 1,
+        "diverse_selection_size_3": 1
+      },
+      "label_counts": {
+        "true": 10,
+        "false": 2
+      },
+      "length_bucket_baseline": {
+        "train_examples": 10,
+        "dev_examples": 2,
+        "dev_accuracy": 0.5,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 1,
+        "train_feature_table": {
+          "7": {
+            "true": 2
+          },
+          "8": {
+            "true": 5,
+            "false": 1
+          },
+          "9": {
+            "true": 2
+          }
+        }
+      },
+      "stripped_feature_baseline": {
+        "train_examples": 10,
+        "dev_examples": 2,
+        "dev_accuracy": 1.0,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 2,
+        "train_feature_table": {
+          "0": {
+            "true": 2
+          },
+          "2": {
+            "true": 5
+          },
+          "1": {
+            "false": 1
+          },
+          "3": {
+            "true": 2
+          }
+        }
+      },
+      "limitations": "Twelve finite families, two exposed development families. Row labels within one world are dependent. No trained baseline or sealed evaluation."
+    },
+    "REM-001": {
+      "families": 12,
+      "logical_variants": 12,
+      "coverage_counts": {
+        "absent": 24,
+        "present": 31,
+        "deleted": 5,
+        "present_null": 2
+      },
+      "label_counts": {
+        "absent": 24,
+        "present": 31,
+        "deleted": 5
+      },
+      "length_bucket_baseline": {
+        "train_examples": 50,
+        "dev_examples": 10,
+        "dev_accuracy": 0.5,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 0,
+        "train_feature_table": {
+          "13": {
+            "absent": 12,
+            "present": 17,
+            "deleted": 1
+          },
+          "11": {
+            "absent": 6,
+            "present": 6,
+            "deleted": 3
+          },
+          "14": {
+            "absent": 2,
+            "present": 3
+          }
+        }
+      },
+      "stripped_feature_baseline": {
+        "train_examples": 50,
+        "dev_examples": 10,
+        "dev_accuracy": 0.9,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 10,
+        "train_feature_table": {
+          "0": {
+            "absent": 10
+          },
+          "1": {
+            "present": 10
+          },
+          "2": {
+            "deleted": 4,
+            "present": 6
+          },
+          "3": {
+            "present": 10
+          },
+          "4": {
+            "absent": 10
+          }
+        }
+      },
+      "query_id_status_baseline": {
+        "train_examples": 50,
+        "dev_examples": 10,
+        "dev_accuracy": 0.9,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 10,
+        "train_feature_table": {
+          "\"q0\"": {
+            "absent": 10
+          },
+          "\"q1\"": {
+            "present": 10
+          },
+          "\"q2\"": {
+            "deleted": 4,
+            "present": 6
+          },
+          "\"q3\"": {
+            "present": 10
+          },
+          "\"q4\"": {
+            "absent": 10
+          }
+        }
+      },
+      "query_id_status_support": {
+        "q0": {
+          "absent": 12
+        },
+        "q1": {
+          "present": 12
+        },
+        "q2": {
+          "deleted": 5,
+          "present": 7
+        },
+        "q3": {
+          "present": 12
+        },
+        "q4": {
+          "absent": 12
+        }
+      },
+      "within_family_query_id_status_support": {
+        "REM-001-extended-pilot-v2-p0000": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "deleted": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0001": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "present": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0002": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "deleted": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0003": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "present": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0004": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "deleted": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0005": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "present": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0006": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "present": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0007": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "present": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0008": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "deleted": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0009": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "present": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0010": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "deleted": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0011": {
+          "q0": {
+            "absent": 1
+          },
+          "q1": {
+            "present": 1
+          },
+          "q2": {
+            "present": 1
+          },
+          "q3": {
+            "present": 1
+          },
+          "q4": {
+            "absent": 1
+          }
+        }
+      },
+      "within_family_query_position_status_support": {
+        "REM-001-extended-pilot-v2-p0000": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "deleted": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0001": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "present": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0002": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "deleted": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0003": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "present": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0004": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "deleted": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0005": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "present": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0006": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "present": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0007": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "present": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0008": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "deleted": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0009": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "present": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0010": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "deleted": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        },
+        "REM-001-extended-pilot-v2-p0011": {
+          "0": {
+            "absent": 1
+          },
+          "1": {
+            "present": 1
+          },
+          "2": {
+            "present": 1
+          },
+          "3": {
+            "present": 1
+          },
+          "4": {
+            "absent": 1
+          }
+        }
+      },
+      "every_family_ID_and_position_has_identical_status_distribution": false,
+      "joint_ID_position_baseline": {
+        "train_examples": 50,
+        "dev_examples": 10,
+        "dev_accuracy": 0.9,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 10,
+        "train_feature_table": {
+          "[\"q0\",0]": {
+            "absent": 10
+          },
+          "[\"q1\",1]": {
+            "present": 10
+          },
+          "[\"q2\",2]": {
+            "deleted": 4,
+            "present": 6
+          },
+          "[\"q3\",3]": {
+            "present": 10
+          },
+          "[\"q4\",4]": {
+            "absent": 10
+          }
+        }
+      },
+      "limitations": "Twelve finite families, two exposed development families. Row labels within one world are dependent. No trained baseline or sealed evaluation."
+    },
+    "RJP-001": {
+      "families": 12,
+      "logical_variants": 12,
+      "coverage_counts": {
+        "class_count_1": 2,
+        "needs_transition_refinement": 5,
+        "class_count_2": 5,
+        "class_count_4": 3,
+        "class_count_6": 1,
+        "class_count_3": 1
+      },
+      "label_counts": {
+        "1": 2,
+        "2": 5,
+        "4": 3,
+        "6": 1,
+        "3": 1
+      },
+      "length_bucket_baseline": {
+        "train_examples": 10,
+        "dev_examples": 2,
+        "dev_accuracy": 0.0,
+        "train_majority_dev_accuracy": 0.0,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 0,
+        "train_feature_table": {
+          "5": {
+            "1": 2,
+            "2": 5,
+            "4": 3
+          }
+        }
+      },
+      "stripped_feature_baseline": {
+        "train_examples": 10,
+        "dev_examples": 2,
+        "dev_accuracy": 0.0,
+        "train_majority_dev_accuracy": 0.0,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 2,
+        "train_feature_table": {
+          "1": {
+            "1": 2
+          },
+          "2": {
+            "2": 5,
+            "4": 3
+          }
+        }
+      },
+      "observable_only_partition_exact_fraction": 0.5833333333333334,
+      "observation_count_to_final_class_counts": {
+        "1": {
+          "1": 2
+        },
+        "2": {
+          "2": 5,
+          "4": 3,
+          "6": 1,
+          "3": 1
+        }
+      },
+      "limitations": "Twelve finite families, two exposed development families. Row labels within one world are dependent. No trained baseline or sealed evaluation."
+    },
+    "RMM-001": {
+      "families": 12,
+      "logical_variants": 12,
+      "coverage_counts": {
+        "abstaining_routes": 12,
+        "blocked_writes": 65
+      },
+      "label_counts": {
+        "false": 26,
+        "true": 12
+      },
+      "length_bucket_baseline": {
+        "train_examples": 30,
+        "dev_examples": 8,
+        "dev_accuracy": 0.75,
+        "train_majority_dev_accuracy": 0.75,
+        "development_majority_descriptive_accuracy": 0.75,
+        "covered_dev_examples": 0,
+        "train_feature_table": {
+          "16": {
+            "false": 20,
+            "true": 10
+          }
+        }
+      },
+      "stripped_feature_baseline": {
+        "train_examples": 30,
+        "dev_examples": 8,
+        "dev_accuracy": 1.0,
+        "train_majority_dev_accuracy": 0.75,
+        "development_majority_descriptive_accuracy": 0.75,
+        "covered_dev_examples": 6,
+        "train_feature_table": {
+          "0": {
+            "false": 10
+          },
+          "1": {
+            "true": 10
+          },
+          "2": {
+            "false": 10
+          }
+        }
+      },
+      "request_id_to_abstention_values": {
+        "r0": [
+          false
+        ],
+        "r1": [
+          true
+        ],
+        "r2": [
+          false
+        ],
+        "r3": [
+          false
+        ]
+      },
+      "within_family_request_id_support": {
+        "RMM-001-extended-pilot-v2-p0000": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0001": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0002": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0003": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0004": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0005": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0006": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0007": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0008": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ],
+          "r3": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0009": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ],
+          "r3": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0010": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0011": {
+          "r0": [
+            false
+          ],
+          "r1": [
+            true
+          ],
+          "r2": [
+            false
+          ]
+        }
+      },
+      "within_family_position_support": {
+        "RMM-001-extended-pilot-v2-p0000": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0001": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0002": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0003": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0004": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0005": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0006": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0007": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0008": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ],
+          "3": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0009": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ],
+          "3": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0010": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        },
+        "RMM-001-extended-pilot-v2-p0011": {
+          "0": [
+            false
+          ],
+          "1": [
+            true
+          ],
+          "2": [
+            false
+          ]
+        }
+      },
+      "every_family_ID_and_position_crosses_abstention": false,
+      "joint_ID_position_baseline": {
+        "train_examples": 30,
+        "dev_examples": 8,
+        "dev_accuracy": 1.0,
+        "train_majority_dev_accuracy": 0.75,
+        "development_majority_descriptive_accuracy": 0.75,
+        "covered_dev_examples": 6,
+        "train_feature_table": {
+          "[\"r0\",0]": {
+            "false": 10
+          },
+          "[\"r1\",1]": {
+            "true": 10
+          },
+          "[\"r2\",2]": {
+            "false": 10
+          }
+        }
+      },
+      "limitations": "Twelve finite families, two exposed development families. Row labels within one world are dependent. No trained baseline or sealed evaluation."
+    },
+    "ROM-001": {
+      "families": 12,
+      "logical_variants": 12,
+      "coverage_counts": {
+        "abstaining_agents": 6,
+        "false_belief_objects": 14,
+        "unknown_objects": 17
+      },
+      "label_counts": {
+        "false": 20,
+        "true": 6
+      },
+      "length_bucket_baseline": {
+        "train_examples": 20,
+        "dev_examples": 6,
+        "dev_accuracy": 0.6666666666666666,
+        "train_majority_dev_accuracy": 0.6666666666666666,
+        "development_majority_descriptive_accuracy": 0.6666666666666666,
+        "covered_dev_examples": 0,
+        "train_feature_table": {
+          "10": {
+            "false": 13,
+            "true": 1
+          },
+          "9": {
+            "false": 3,
+            "true": 3
+          }
+        }
+      },
+      "stripped_feature_baseline": {
+        "train_examples": 20,
+        "dev_examples": 6,
+        "dev_accuracy": 0.6666666666666666,
+        "train_majority_dev_accuracy": 0.6666666666666666,
+        "development_majority_descriptive_accuracy": 0.6666666666666666,
+        "covered_dev_examples": 4,
+        "train_feature_table": {
+          "0": {
+            "false": 8,
+            "true": 2
+          },
+          "1": {
+            "true": 2,
+            "false": 8
+          }
+        }
+      },
+      "limitations": "Twelve finite families, two exposed development families. Row labels within one world are dependent. No trained baseline or sealed evaluation."
+    },
+    "RSM-001": {
+      "families": 12,
+      "logical_variants": 12,
+      "coverage_counts": {
+        "primitive_count_2": 2,
+        "condition_count_0": 4,
+        "primitive_count_1": 2,
+        "condition_count_1": 2,
+        "primitive_count_4": 1,
+        "condition_count_2": 4,
+        "primitive_count_3": 3,
+        "primitive_count_5": 2,
+        "primitive_count_7": 1,
+        "condition_count_3": 2,
+        "primitive_count_6": 1
+      },
+      "label_counts": {
+        "false": 7,
+        "true": 5
+      },
+      "length_bucket_baseline": {
+        "train_examples": 10,
+        "dev_examples": 2,
+        "dev_accuracy": 0.0,
+        "train_majority_dev_accuracy": 0.0,
+        "development_majority_descriptive_accuracy": 1.0,
+        "covered_dev_examples": 0,
+        "train_feature_table": {
+          "7": {
+            "false": 4
+          },
+          "8": {
+            "false": 3,
+            "true": 2
+          },
+          "9": {
+            "true": 1
+          }
+        }
+      },
+      "stripped_feature_baseline": {
+        "train_examples": 10,
+        "dev_examples": 2,
+        "dev_accuracy": 0.0,
+        "train_majority_dev_accuracy": 0.0,
+        "development_majority_descriptive_accuracy": 1.0,
+        "covered_dev_examples": 1,
+        "train_feature_table": {
+          "2": {
+            "false": 2,
+            "true": 1
+          },
+          "1": {
+            "false": 2
+          },
+          "3": {
+            "false": 3,
+            "true": 2
+          }
+        }
+      },
+      "limitations": "Twelve finite families, two exposed development families. Row labels within one world are dependent. No trained baseline or sealed evaluation."
+    }
+  },
+  "findings": [
+    {
+      "code": "fixed_query_id_retrieval_status",
+      "track": "REM-001",
+      "severity": "high",
+      "evidence": {
+        "q0": {
+          "absent": 12
+        },
+        "q1": {
+          "present": 12
+        },
+        "q2": {
+          "deleted": 5,
+          "present": 7
+        },
+        "q3": {
+          "present": 12
+        },
+        "q4": {
+          "absent": 12
+        }
+      }
+    },
+    {
+      "code": "fixed_request_id_abstention",
+      "track": "RMM-001",
+      "severity": "high",
+      "evidence": {
+        "r0": [
+          false
+        ],
+        "r1": [
+          true
+        ],
+        "r2": [
+          false
+        ],
+        "r3": [
+          false
+        ]
+      }
+    }
+  ]
+}

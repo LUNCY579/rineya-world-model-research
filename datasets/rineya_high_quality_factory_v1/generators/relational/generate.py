@@ -148,6 +148,9 @@ def generate(count=30, batch="pilot-v3", offset=0):
             ordinal = (index // 5) * 2 + (position == 4)
             task, mechanism = block_parent(index, ordinal, split, rng)
             contract = BLOCK_CONTRACT
+        if index >= 30:
+            from generators.relational.expansion import diversify
+            task,mechanism=diversify(task,index,rng)
         target = solve(task)
         tags = ["relational_planning", "state_transition", "preconditions", "canonical_shortest_plan", mechanism,
                 task["kind"], "valid_plan" if target["valid"] else "invalid_plan"]
@@ -170,7 +173,7 @@ def generate(count=30, batch="pilot-v3", offset=0):
             prompt = contract + "Task JSON:\n" + body
             row = record("RGM-001", batch, index, "base", task, prompt, target, tags,
                          structural_difficulty, "structured", renderer)
-            row.update(generator_version="1.2.0",structural_difficulty=structural_difficulty, challenge_axes=challenge_axes,
+            row.update(generator_version="1.3.0" if index>=30 else "1.2.0",structural_difficulty=structural_difficulty, challenge_axes=challenge_axes,
                        source_family_key=f"RGM-001-seed20261009-p{index:04d}")
             row["record_hash"] = record_hash(row)
             rows.append(row)
@@ -195,7 +198,7 @@ def generate(count=30, batch="pilot-v3", offset=0):
             for renderer in ("forward","reverse"):
                 body=json.dumps(matched if renderer=="forward" else reorder(matched),ensure_ascii=False,separators=(",",":"))
                 row=record("RGM-001",batch,index,"matched",matched,contract+"Task JSON:\n"+body,matched_target,mtags,level,"structured",renderer)
-                row.update(generator_version="1.2.0",structural_difficulty=level,challenge_axes=challenge_axes,
+                row.update(generator_version="1.3.0" if index>=30 else "1.2.0",structural_difficulty=level,challenge_axes=challenge_axes,
                            source_family_key=f"RGM-001-seed20261009-p{index:04d}")
                 row["record_hash"]=record_hash(row);rows.append(row)
     preserve_batch([(ROOT / f"data/RGM-001/semantic_parents/{batch}.jsonl", parents),

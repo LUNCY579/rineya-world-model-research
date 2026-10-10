@@ -10,6 +10,7 @@
 | RDP-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v1 | 24 | 12 |
 | REM-001 | extended-pilot-v2 | 24 | 12 |
+| REM-001 | extended-pilot-v3 | 120 | 12 |
 | RGM-001 | pilot-v1 | 60 | 30 |
 | RGM-001 | pilot-v2 | 60 | 30 |
 | RGM-001 | pilot-v3 | 72 | 30 |
@@ -17,6 +18,7 @@
 | RJP-001 | extended-pilot-v2 | 24 | 12 |
 | RMM-001 | extended-pilot-v1 | 24 | 12 |
 | RMM-001 | extended-pilot-v2 | 24 | 12 |
+| RMM-001 | extended-pilot-v3 | 76 | 12 |
 | ROM-001 | extended-pilot-v1 | 24 | 12 |
 | ROM-001 | extended-pilot-v2 | 24 | 12 |
 | RSM-001 | extended-pilot-v1 | 24 | 12 |
@@ -62,6 +64,9 @@ Difficulty counts by batch:
   "REM-001/extended-pilot-v2": {
     "3": 24
   },
+  "REM-001/extended-pilot-v3": {
+    "3": 120
+  },
   "RGM-001/pilot-v1": {
     "3": 24,
     "4": 24,
@@ -92,6 +97,9 @@ Difficulty counts by batch:
   },
   "RMM-001/extended-pilot-v2": {
     "3": 24
+  },
+  "RMM-001/extended-pilot-v3": {
+    "3": 76
   },
   "ROM-001/extended-pilot-v1": {
     "3": 24

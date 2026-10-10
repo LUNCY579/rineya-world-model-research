@@ -105,7 +105,7 @@ def candidates_for(world, rng):
     return candidates
 
 
-def generate(count=30, batch="pilot-v1", offset=0):
+def generate(count=30, batch="pilot-v2", offset=0):
     if count < 0 or offset < 0 or not batch or "/" in batch or "\\" in batch:
         raise ValueError("Use nonnegative count/offset and a filename-safe batch")
     rows, parents = [], []
@@ -113,6 +113,10 @@ def generate(count=30, batch="pilot-v1", offset=0):
         split = split_for(index)
         rng = random.Random(20261009 + 31 * index)
         world, mechanism = world_parent(index, split, rng)
+        if index >= 30:
+            from generators.relational.expansion import diversify
+            world, topology = diversify(world, index, rng)
+            mechanism = topology + ":" + mechanism
         task = dict(kind="critic", world=world, candidates=candidates_for(world, rng))
         target = solve(task)
         tags = ["value_critic", "legality", "claim_arithmetic", "progress", "usefulness", "rank_with_ties",
@@ -130,6 +134,8 @@ def generate(count=30, batch="pilot-v1", offset=0):
             row = record("RVM-001", batch, index, "base", task, prompt, target, tags,
                          structural_difficulty, "structured", renderer)
             row.update(structural_difficulty=structural_difficulty, challenge_axes=challenge_axes)
+            if index >= 30:
+                row.update(generator_version="1.1.0",source_family_key=f"RVM-001-seed20261009-p{index:04d}")
             row["record_hash"] = record_hash(row)
             rows.append(row)
     output = [(ROOT / f"data/RVM-001/semantic_parents/{batch}.jsonl", parents),
@@ -145,7 +151,7 @@ def generate(count=30, batch="pilot-v1", offset=0):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--count", type=int, default=30)
-    parser.add_argument("--batch", default="pilot-v1")
+    parser.add_argument("--batch", default="pilot-v2")
     parser.add_argument("--offset", type=int, default=0)
     arguments = parser.parse_args()
     generate(arguments.count, arguments.batch, arguments.offset)

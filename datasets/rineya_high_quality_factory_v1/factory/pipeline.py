@@ -114,10 +114,12 @@ def release(batch,version,tracks=None):
             export=[{"messages":[{"role":"user","content":r["rendered_input"]},{"role":"assistant","content":canonical(r["verified_target"])}]} for r in subset]
             write_jsonl(dest/f"{split}-sft.jsonl",export)
             write_jsonl(dest/f"{split}-structured.jsonl",[{"input":r["rendered_input"],"target":r["verified_target"]} for r in subset])
+        from factory.exports import write_specialized
+        write_specialized(dest,accepted)
         receipts=[x for role in evidence.values() for r in accepted for x in role[r["sample_id"]] ]
         write_jsonl(dest/"review_receipts.jsonl",receipts)
         write_jsonl(dest/"oracle_receipts.jsonl",[x for x in load_jsonl(ROOT/f"reviews/oracle/{batch}.jsonl") if x["sample_id"] in {r["sample_id"] for r in accepted}])
-        code_files=[ROOT/"factory/common.py",ROOT/"factory/reference.py",ROOT/"factory/pipeline.py"]+sorted((ROOT/"oracles").glob("*.py"))+sorted((ROOT/"schemas").glob("*SEMANTICS.md"))+sorted((ROOT/"generators").rglob("*.py"))
+        code_files=sorted((ROOT/"factory").glob("*.py"))+sorted((ROOT/"oracles").glob("*.py"))+sorted((ROOT/"schemas").glob("*SEMANTICS.md"))+sorted((ROOT/"generators").rglob("*.py"))
         manifest={"release":version,"batch":batch,"track":track,"status":"QUALITY_APPROVED_LOCAL", "records":len(accepted),"semantic_parents":len({r["semantic_parent_id"] for r in accepted}),"splits":dict(collections.Counter(r["split"] for r in accepted)),"generator_versions":sorted({r["generator_version"] for r in accepted}),"framework_version":VERSION,"oracle_version":"independent-1.0.0","reproducibility_code_sha256":{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in code_files},"batch_configuration":f"manifests/{batch}_GENERATION.json","source":"original synthetic; repository-private research; no third-party examples","research_effectiveness":"untested; no model training performed","reviewer_correlation":"Independent executions use the same underlying model; correlated semantic errors remain possible.","data_custody":"exposed train/dev data; no sealed evaluation","files":{}}
         atomic(dest/"QUALITY_REPORT.md",f"# {track} {version}\n\n{len(accepted)} approved records from {manifest['semantic_parents']} semantic parents. {len(quarantine)} quarantined/pending records. Exact oracle, schema, family split and three independent evidence joins passed. Refer to review_receipts.jsonl for scope and limitations. Structural template overlap is intentionally disclosed; this is development data, not evidence of OOD efficacy. Model benefits are untested. Remote status is recorded separately after byte verification.\n")
         for f in sorted(dest.iterdir()):manifest["files"][f.name]={"bytes":f.stat().st_size,"sha256":hashlib.sha256(f.read_bytes()).hexdigest()}
@@ -157,7 +159,9 @@ def validate_release(path):
         assert len(export)==len(expected)
         for item,r in zip(export,expected):
             assert item=={"messages":[{"role":"user","content":r["rendered_input"]},{"role":"assistant","content":canonical(r["verified_target"])}]}
-    return {"path":str(path.relative_to(ROOT)),"records":len(rows),"checksum_files":len(files),"pass":True}
+    from factory.export_validation import validate_specialized
+    specialized_counts=validate_specialized(path,rows)
+    return {"path":str(path.relative_to(ROOT)),"records":len(rows),"checksum_files":len(files),"specialized_exports":specialized_counts,"pass":True}
 
 
 def main():

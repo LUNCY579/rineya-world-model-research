@@ -12,6 +12,7 @@ Machine evidence: quality_reports/CURRENT.json. Candidate batches are retained e
 | RDP-001 | extended-pilot-v2 | 24 | 12 |
 | REM-001 | extended-pilot-v1 | 24 | 12 |
 | REM-001 | extended-pilot-v2 | 24 | 12 |
+| REM-001 | extended-pilot-v3 | 120 | 12 |
 | RGM-001 | pilot-v1 | 60 | 30 |
 | RGM-001 | pilot-v2 | 60 | 30 |
 | RGM-001 | pilot-v3 | 72 | 30 |
@@ -19,6 +20,7 @@ Machine evidence: quality_reports/CURRENT.json. Candidate batches are retained e
 | RJP-001 | extended-pilot-v2 | 24 | 12 |
 | RMM-001 | extended-pilot-v1 | 24 | 12 |
 | RMM-001 | extended-pilot-v2 | 24 | 12 |
+| RMM-001 | extended-pilot-v3 | 76 | 12 |
 | ROM-001 | extended-pilot-v1 | 24 | 12 |
 | ROM-001 | extended-pilot-v2 | 24 | 12 |
 | RSM-001 | extended-pilot-v1 | 24 | 12 |
@@ -32,24 +34,24 @@ Review decision counts:
 ```json
 {
   "expert": {
-    "records": 840,
+    "records": 1276,
     "decisions": {
-      "ACCEPT": 768,
+      "ACCEPT": 1204,
       "REVISE": 72
     }
   },
   "adversarial": {
-    "records": 1344,
+    "records": 2072,
     "decisions": {
-      "ACCEPT": 1284,
-      "REVISE": 60
+      "ACCEPT": 1964,
+      "REVISE": 108
     }
   },
   "adjudication": {
-    "records": 360,
+    "records": 796,
     "decisions": {
-      "ACCEPT": 348,
-      "REVISE": 12
+      "ACCEPT": 736,
+      "REVISE": 60
     }
   }
 }
@@ -155,6 +157,26 @@ Exact oracle, schema, duplicates and family split audit summaries:
     "scope": "fresh generated development data; not a sealed generalization instrument"
   },
   {
+    "batch": "extended-pilot-v3",
+    "records": 196,
+    "unique_parents": 24,
+    "distinct_parent_semantic_signatures": 24,
+    "oracle_failures": 0,
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "exact_prompt_duplicates": 0,
+    "difficulty": {
+      "3": 196
+    },
+    "tracks": {
+      "REM-001": 120,
+      "RMM-001": 76
+    },
+    "structural_template_holdout": false,
+    "protected_benchmark_inspected": false,
+    "scope": "fresh generated development data; not a sealed generalization instrument"
+  },
+  {
     "batch": "pilot-v1",
     "records": 240,
     "unique_parents": 90,
@@ -206,6 +228,7 @@ Exact oracle, schema, duplicates and family split audit summaries:
     "batch": "pilot-v3",
     "records": 72,
     "unique_parents": 30,
+    "distinct_parent_semantic_signatures": 30,
     "oracle_failures": 0,
     "split_leakage": [],
     "cross_parent_semantic_duplicates": [],

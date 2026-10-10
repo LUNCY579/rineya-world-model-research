@@ -1,0 +1,33 @@
+# Independent expert review: affected extended-pilot-v3 tracks
+
+Execution `/root/expert_reviewer` independently reviewed all196 candidate records:76 RMM and120 REM. The actual underlying scope is24 semantic families,12 per track; cyclic and field-order variants are kept within those families. Decisions are196 ACCEPT, with no critical defects and moderate diversity/generalization/shortcut scores. Exact hash-bound receipts are in `extended-pilot-v3.jsonl`.
+
+I used my own prompt-derived module router/protected-write simulator and versioned as-of resolver, implemented from the public extended contract. Every record's visible JSON was parsed and compared with its canonical task; every full target was recomputed with type-sensitive equality. Every visible prompt contains the complete public mechanism contract and scalar-typing rule. No producer reference, external oracle, adversarial judgment, adjudication decision or calibration expectation was read. Prior v2 and relational v3 receipts/documents are preserved, and the v2 verifier source is snapshotted as `independent_extended_v2.py` with its original recorded hash.
+
+I independently checked all24 families for the new crossing: a family has exactly one forward/reverse pair per semantic rotation, every underlying request/query signature (ignoring its assigned ID) occupies every position and every ID once, and every variant shares one split. Module train families have3 rotations and development families4; each retrieval family has5 rotations. Request/query IDs still label their displayed positions, but outcome-bearing semantic cases now occupy all those IDs/positions. This removes the prior association between a fixed ID/position and unsupported routing or retrieval status. It does not claim that IDs and positions themselves are independently randomized.
+
+I inspected the complete p0000 and p0008 module variants, plus p0009's unprotected reserve chronology, and all p0000/p0008/p0009 retrieval variant query/result summaries. Earlier detailed checks of capability ties, abstention, repeated protected writes, same-version conflicts, version-before-time precedence, tombstones, present-null and missing/future keys remain applicable because those underlying registries/ledgers are unchanged. Every new target is nevertheless recomputed, including changed chronology and IDs.
+
+Exact module representatives and findings:
+
+- `RMM-001-extended-pilot-v3-p0000-rotation0-forward` routes arithmetic→alpha, ocean→null, empty→gamma. The final note is2; seal1000/budget7 remain protected.
+- `RMM-001-extended-pilot-v3-p0000-rotation1-forward` moves unsupported ocean to r0, empty to r1 and arithmetic to r2. The later successful arithmetic request writes note0; no unsupported write is attempted. Final note0 is a real chronological change from rotation0.
+- `RMM-001-extended-pilot-v3-p0000-rotation2-forward` puts the unsupported request last. It preserves the preceding note0, and blocked_writes remains[] for that request despite its proposed protected writes.
+- `RMM-001-extended-pilot-v3-p0008-rotation0-forward` selects nova/null/lumen/meridian for pixels/cinder/empty/ledger+index, ending memo3 with anchor1008/reserve7 protected.
+- `RMM-001-extended-pilot-v3-p0008-rotation1-forward` ends with pixels→nova and memo0. `RMM-001-extended-pilot-v3-p0008-rotation2-forward` also ends memo0 because the last cinder request abstains. `RMM-001-extended-pilot-v3-p0008-rotation3-forward` ends with empty-needs→lumen and memo2. These four targets correctly reflect execution order rather than sorted request IDs or the original fixture order.
+- `RMM-001-extended-pilot-v3-p0009-rotation1-forward` has an unprotected reserve. Its final ledger write gives reserve100/memo0, while rotation0 gives reserve103/memo3 and rotation3 gives reserve102/memo2. Protection remains permanent only for anchor1009.
+
+Exact retrieval representatives and findings:
+
+- `REM-001-extended-pilot-v3-p0000-rotation0-forward` resolves as_of4→absent,10→stable/version2/index3,14→deleted/version3/index4,21→future/version4/index1 and missing→absent.
+- `REM-001-extended-pilot-v3-p0000-rotation1-forward` assigns q0 to as_of10 and correctly returns present stable first, with q1 deleted and q2 future. `...-rotation2-forward` puts the deleted query at q0. `...-rotation3-forward` puts future/version4 at q0. `...-rotation4-forward` puts missing at q0 and leaves the earlier no-event as_of4 query at q1. Exact event indices remain attached to the semantic query, not the old query ID.
+- `REM-001-extended-pilot-v3-p0008-rotation2-forward` begins with keystone/as_of14→deleted/version3/index6 and then as_of21→future/version4/index4. Moving these queries does not change their independent eligible event sets.
+- `REM-001-extended-pilot-v3-p0009-rotation2-forward` begins with keystone/as_of14→present null/version3/index6. The same null scalar in a deleted or absent result would have a different status/evidence; rotation does not erase that distinction.
+
+Across every family, I additionally checked that removing query IDs from results and indexing by exact (key,as_of) yields identical retrieval resolution across rotations. All module protected values equal their supplied initial values; all abstaining routes have no eligible modules and no blocked writes. These checks assess the revision's intended invariants beyond a single representative.
+
+The complete contract makes all answer choices unique: module priorities/ID tie-breaks, sequential writes and permanent protection are explicit; episodic event choice uses (version,time,input-index) and each query is independent. Alternative eligible modules/events are resolved by those visible rules. Structural difficulty remains3; no level7 claim or broadened proxy claim is present.
+
+The position shortcut is addressed, so shortcut_resistance rises from2 to3 for these revised rows. Diversity remains2: underlying registries/write patterns and temporal/version/value fixtures still recur. Development retrieval generalization_value remains2 because the added at19/version2 update never affects the supplied query resolutions (excluded at14, superseded at21), and other added-key events are irrelevant. A new as_of19 query would test a more decisive longer-history case. Protection/routing is declared competence, not empirical retention; retrieval is a visible finite ledger, not learned persistent memory. Rotation count must not be presented as an independent-family expansion.
+
+The same underlying model family as other agents leaves correlated-error risk; a separate execution and own implementations improve independence without eliminating that limitation. This review supplies individual ACCEPT decisions, not root release approval.

@@ -1,0 +1,161 @@
+{
+  "scope": "stripped-feature count/lookups; no model training; exposed dev only",
+  "units": 36,
+  "tracks": {
+    "RGM-001": {
+      "examples": 36,
+      "label_counts": {
+        "true": 22,
+        "false": 14
+      },
+      "length_only": {
+        "train_examples": 24,
+        "dev_examples": 12,
+        "dev_accuracy": 0.6666666666666666,
+        "train_majority_dev_accuracy": 0.75,
+        "development_majority_descriptive_accuracy": 0.75,
+        "covered_dev_examples": 8,
+        "train_feature_table": {
+          "3": {
+            "true": 8,
+            "false": 1
+          },
+          "4": {
+            "false": 4,
+            "true": 4
+          },
+          "5": {
+            "false": 4,
+            "true": 1
+          },
+          "6": {
+            "false": 1
+          },
+          "8": {
+            "false": 1
+          }
+        }
+      },
+      "plan_length_only": {
+        "train_examples": 24,
+        "dev_examples": 12,
+        "dev_accuracy": 0.5833333333333334,
+        "train_majority_dev_accuracy": 0.75,
+        "development_majority_descriptive_accuracy": 0.75,
+        "covered_dev_examples": 7,
+        "train_feature_table": {
+          "2": {
+            "true": 8
+          },
+          "3": {
+            "false": 5
+          },
+          "4": {
+            "false": 2
+          },
+          "5": {
+            "false": 2,
+            "true": 1
+          },
+          "19": {
+            "false": 1
+          },
+          "0": {
+            "true": 2
+          },
+          "1": {
+            "true": 2
+          },
+          "11": {
+            "false": 1
+          }
+        }
+      },
+      "kind_only": {
+        "train_examples": 24,
+        "dev_examples": 12,
+        "dev_accuracy": 0.75,
+        "train_majority_dev_accuracy": 0.75,
+        "development_majority_descriptive_accuracy": 0.75,
+        "covered_dev_examples": 12,
+        "train_feature_table": {
+          "\"graph\"": {
+            "true": 8,
+            "false": 7
+          },
+          "\"blocks\"": {
+            "true": 5,
+            "false": 4
+          }
+        }
+      },
+      "reaches_goal_counts": {
+        "true": 14,
+        "false": 22
+      },
+      "development_reaches_goal_counts": {
+        "false": 6,
+        "true": 6
+      },
+      "goal_label_by_plan_length": {
+        "train_examples": 24,
+        "dev_examples": 12,
+        "dev_accuracy": 0.5,
+        "train_majority_dev_accuracy": 0.5,
+        "development_majority_descriptive_accuracy": 0.5,
+        "covered_dev_examples": 7,
+        "train_feature_table": {
+          "2": {
+            "true": 5,
+            "false": 3
+          },
+          "3": {
+            "false": 5
+          },
+          "4": {
+            "false": 2
+          },
+          "5": {
+            "false": 2,
+            "true": 1
+          },
+          "19": {
+            "false": 1
+          },
+          "0": {
+            "true": 2
+          },
+          "1": {
+            "false": 2
+          },
+          "11": {
+            "false": 1
+          }
+        }
+      },
+      "always_false_goal_label_development_accuracy": 0.5
+    }
+  },
+  "shortcut_counterexamples": [],
+  "length_interpretation": "RCM target-format choices intentionally change target length, not a hidden outcome label. Outcome leakage tests collapse siblings and use Task JSON length; full prompt lengths are stratified by output format. In v1 renderer and target format are confounded; v2 crosses both. Plan length is a contract-defined ranking tiebreak, so association alone is not leakage.",
+  "length_distributions_stratified_by_target_format_and_outcome": {
+    "[\"RGM-001\",\"structured\",true]": {
+      "records": 44,
+      "input_mean": 1774.2727272727273,
+      "input_min": 1654,
+      "input_max": 1962,
+      "target_mean": 306.72727272727275
+    },
+    "[\"RGM-001\",\"structured\",false]": {
+      "records": 28,
+      "input_mean": 1819.642857142857,
+      "input_min": 1666,
+      "input_max": 1995,
+      "target_mean": 380.7857142857143
+    }
+  },
+  "format_renderer_counts": {
+    "[\"RGM-001\",\"structured\",\"forward\"]": 36,
+    "[\"RGM-001\",\"structured\",\"reverse\"]": 36
+  }
+}

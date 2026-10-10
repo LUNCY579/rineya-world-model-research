@@ -82,6 +82,15 @@
       }
     },
     {
+      "batch": "extended-pilot-v3",
+      "track": "REM-001",
+      "records": 120,
+      "parents": 12,
+      "difficulty": {
+        "3": 120
+      }
+    },
+    {
       "batch": "pilot-v1",
       "track": "RGM-001",
       "records": 60,
@@ -155,6 +164,15 @@
       }
     },
     {
+      "batch": "extended-pilot-v3",
+      "track": "RMM-001",
+      "records": 76,
+      "parents": 12,
+      "difficulty": {
+        "3": 76
+      }
+    },
+    {
       "batch": "extended-pilot-v1",
       "track": "ROM-001",
       "records": 24,
@@ -217,6 +235,97 @@
     }
   ],
   "releases": [
+    {
+      "release": "v0001",
+      "batch": "extended-pilot-v2",
+      "track": "RBM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 24,
+      "semantic_parents": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      },
+      "generator_versions": [
+        "1.0.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+        "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+        "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/extended-pilot-v2_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "cd04f894b47a290dcf3c3c320803cf86661f67b42a46edd12d9c61a36c0e438f"
+        },
+        "canonical.jsonl": {
+          "bytes": 114290,
+          "sha256": "b5845f8303ee8e89d644de2ccea20f21f61507ce515723d83c1fa297e6c51f38"
+        },
+        "dev_challenge-belief_updates.jsonl": {
+          "bytes": 12698,
+          "sha256": "f43a4a9ec5016d1c576e865cd1f9f161e64e9a19e5b9627d144f6241ec3376d7"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 13178,
+          "sha256": "3d14dd6f3728f0710937b8eb669c269caba38a590f8294825e2d01adbb3240a8"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 12698,
+          "sha256": "f43a4a9ec5016d1c576e865cd1f9f161e64e9a19e5b9627d144f6241ec3376d7"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 7392,
+          "sha256": "6638d1af9f54ea9ec51891457447d6e6613a0539a647e32d143c3f73e0e1f3b2"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 152350,
+          "sha256": "2a0ecd5e9605a90857472e2d6740031d365682d4e609eb3e4ee15a25ae394eef"
+        },
+        "train-belief_updates.jsonl": {
+          "bytes": 59376,
+          "sha256": "5604aa0be7ad14c22032a413f12a7ca48a0f62a473c9de572bcf87e2c828c74b"
+        },
+        "train-sft.jsonl": {
+          "bytes": 61968,
+          "sha256": "46fba3239ae8c46514d761add632389b275cf904e6ebe53ca08c5148b3fa45dc"
+        },
+        "train-structured.jsonl": {
+          "bytes": 59376,
+          "sha256": "5604aa0be7ad14c22032a413f12a7ca48a0f62a473c9de572bcf87e2c828c74b"
+        }
+      },
+      "path": "data/RBM-001/releases/v0001"
+    },
     {
       "release": "v0001",
       "batch": "pilot-v2",
@@ -293,6 +402,627 @@
         }
       },
       "path": "data/RCM-001/releases/v0001"
+    },
+    {
+      "release": "v0001",
+      "batch": "extended-pilot-v2",
+      "track": "RDP-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 24,
+      "semantic_parents": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      },
+      "generator_versions": [
+        "1.0.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+        "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+        "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/extended-pilot-v2_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "75a42d7b7f67cc77d2024cf228b5e6151c96485b59df7e7782fd31efaba3a96c"
+        },
+        "canonical.jsonl": {
+          "bytes": 119066,
+          "sha256": "9a850a1312406ce7a68a060fa2f5e26ec5dfd4417d63129705678ce69926aa1c"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 14194,
+          "sha256": "7be24151c3e6e4fa67075c809844e8e13094d55f66abc98245ffb3e0d163adad"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 13658,
+          "sha256": "751fb55f6de9c2a66c84bf26339f60f236b5db05f5156b5c710b0b09a4fa41d3"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 7392,
+          "sha256": "509d5faa9be7197ecefed8dd99bfe652e5bf58835e7dc2eda45b2c7dd5510a53"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 163266,
+          "sha256": "78878645cbbfbfd5b3d3843dbc4891eae2e63cc58bf35dcba96957b7f0a2e407"
+        },
+        "train-sft.jsonl": {
+          "bytes": 66772,
+          "sha256": "ad425a3278cf058c064d09887db1c96a38b5d600964d7883006dd4ad331291fa"
+        },
+        "train-structured.jsonl": {
+          "bytes": 64252,
+          "sha256": "81584b475a19bd00afbf08e99450bb677871bf847450cca26e4f592cefaa36b8"
+        }
+      },
+      "path": "data/RDP-001/releases/v0001"
+    },
+    {
+      "release": "v0001",
+      "batch": "extended-pilot-v3",
+      "track": "REM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 120,
+      "semantic_parents": 12,
+      "splits": {
+        "train": 100,
+        "dev_challenge": 20
+      },
+      "generator_versions": [
+        "1.1.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+        "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+        "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/extended-pilot-v3_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 436,
+          "sha256": "a64243d591e23979bebcfa7e43788a3d5f6ba251dc80173f829906b9d5a9075c"
+        },
+        "canonical.jsonl": {
+          "bytes": 595640,
+          "sha256": "f05717db521ae9fcfa325874a9dd523666d5009992e965eebdc1e91b4c82aeee"
+        },
+        "dev_challenge-memory_updates.jsonl": {
+          "bytes": 63740,
+          "sha256": "fb0bb3f73966ee496686fb2858aa433d842203777a0a20f7dc2a61bd34799b64"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 66760,
+          "sha256": "c8a6941cb6d1a7f5f17b949f68dccca95f53d6f40fd0ae407de4f4af6cc5dd3c"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 63740,
+          "sha256": "fb0bb3f73966ee496686fb2858aa433d842203777a0a20f7dc2a61bd34799b64"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 37560,
+          "sha256": "77f30ab41e62bf9fe53bfd14b5a15a3ad6ea759665a8ea1cb161f338e1845e51"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 992300,
+          "sha256": "50c8f9ae5837e1003ac809a03bbd3261324201687d830717264e21e8695dd0f3"
+        },
+        "train-memory_updates.jsonl": {
+          "bytes": 290560,
+          "sha256": "a4c6a07d6a3354b0b97c457b5e64259691f31f9b1be93c9a2f53520f42b016bd"
+        },
+        "train-sft.jsonl": {
+          "bytes": 305760,
+          "sha256": "a8f8d594fffabed2246af16bfedfe91ea2ee81f52e656e437a33bc6c579642cf"
+        },
+        "train-structured.jsonl": {
+          "bytes": 290560,
+          "sha256": "a4c6a07d6a3354b0b97c457b5e64259691f31f9b1be93c9a2f53520f42b016bd"
+        }
+      },
+      "path": "data/REM-001/releases/v0001"
+    },
+    {
+      "release": "v0001",
+      "batch": "pilot-v3",
+      "track": "RGM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 72,
+      "semantic_parents": 30,
+      "splits": {
+        "train": 48,
+        "dev_challenge": 24
+      },
+      "generator_versions": [
+        "1.2.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+        "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+        "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/pilot-v3_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "340d90076b6245512e8cd42dcef67e7b3f53f59abd31331e44e033bd27287595"
+        },
+        "canonical.jsonl": {
+          "bytes": 257456,
+          "sha256": "bc0a821670884bc0ccf9a42c22a53ade3654718c797946d445f0266ae8ee6990"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 61784,
+          "sha256": "5be2e8436995765a826c45020c33b99246cd14b69414f346b9949d2f9ce0ad83"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 58120,
+          "sha256": "1b24d38506ad0fa08e15ecba52fcd6553d4c44e16e14227ebafac301f6a341ca"
+        },
+        "dev_challenge-trajectories.jsonl": {
+          "bytes": 28622,
+          "sha256": "c4fdc083729f6404b58831b271d5dd58242e327e06066e5b84c9cb20bc60a210"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 21564,
+          "sha256": "03b592ab2e03cf9d9cedbed1169988202df1d3fd26d5d89a11f2c482b8a8880e"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 453002,
+          "sha256": "14e48528abdcba4fc1530e9704e6d3532c5b8048896d44c590331ea051982737"
+        },
+        "train-sft.jsonl": {
+          "bytes": 106272,
+          "sha256": "1cc9ad6c4d58ab62be5a8e89b4af11f436947a9782cb2f2346c49c4a853c9189"
+        },
+        "train-structured.jsonl": {
+          "bytes": 101040,
+          "sha256": "4282daa6cf933ea8935899657f2732cd9d440a50c1fce802635176260f09ce25"
+        },
+        "train-trajectories.jsonl": {
+          "bytes": 31782,
+          "sha256": "b6ce8995dace6bb3332ab424315e4803ddb4f557f474cfd7beb8e57d31440580"
+        }
+      },
+      "path": "data/RGM-001/releases/v0001"
+    },
+    {
+      "release": "v0001",
+      "batch": "extended-pilot-v2",
+      "track": "RJP-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 24,
+      "semantic_parents": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      },
+      "generator_versions": [
+        "1.0.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+        "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+        "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/extended-pilot-v2_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "1fc038d914b2083720a47f20681bf81498f6b5f1e558dd6fcafb427dd8671e80"
+        },
+        "canonical.jsonl": {
+          "bytes": 99456,
+          "sha256": "d5c83b79b78eeea4dd0d4ae8df1d9a7e4e4adf020428a43bf97a341a7ed9f1be"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 13452,
+          "sha256": "4af60426d076fef3df050245c984d7133e02f23f46f0980e81fa4255af69d8f8"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 12600,
+          "sha256": "3fcbad932893584aa138d776631541701c3dbd93436ab77a2f3999845537aa41"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 7392,
+          "sha256": "8a203f6ffb78095fd38c5d27038656fd72883ab967bc8cf3e65355b7363b65dd"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 153964,
+          "sha256": "14a56729739b43679b0ad7e3f7a163da516325eb3c90a13cfeb403d9dbbf35a0"
+        },
+        "train-sft.jsonl": {
+          "bytes": 52004,
+          "sha256": "e91c2ece5067429e20654c93510829e962c4ad4cd5e53ffd0a6f2e5bae52d37a"
+        },
+        "train-structured.jsonl": {
+          "bytes": 49432,
+          "sha256": "11e4ea79a266e88a182a6e3ae3c94036130e3f9bcb23a8d5a769d1eee94c3db6"
+        }
+      },
+      "path": "data/RJP-001/releases/v0001"
+    },
+    {
+      "release": "v0001",
+      "batch": "extended-pilot-v3",
+      "track": "RMM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 76,
+      "semantic_parents": 12,
+      "splits": {
+        "train": 60,
+        "dev_challenge": 16
+      },
+      "generator_versions": [
+        "1.1.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+        "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+        "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/extended-pilot-v3_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "4f464921cbe0bbc092dd77fb474081bba135345e863a9c48cb31e0322b1e05bd"
+        },
+        "canonical.jsonl": {
+          "bytes": 401074,
+          "sha256": "bd150158faef6ba77673bcc1a7f500a6deedca063ba690ed75bc3bf236485356"
+        },
+        "dev_challenge-memory_updates.jsonl": {
+          "bytes": 55112,
+          "sha256": "18ccdb77af262bfc77a2d739227e879c97262124099f9562a4d1bacc93d54d28"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 57160,
+          "sha256": "18ff85eb3b98eb38c36110bfa50cf40f6b9a39b750c01bdc6118a1641067cb17"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 55112,
+          "sha256": "18ccdb77af262bfc77a2d739227e879c97262124099f9562a4d1bacc93d54d28"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 23788,
+          "sha256": "a1733a318e1bf100f0d555409097fab447b9274a080699f918f810c3d4ba5711"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 599166,
+          "sha256": "f25c26516e136bc9f116b1ca75486c97d832415ddb1c9e67ba2ead4f24ea05aa"
+        },
+        "train-memory_updates.jsonl": {
+          "bytes": 178920,
+          "sha256": "6b2f32a57234333c280efd27722da074938f88fb3ac08ac76d9039d85f7ed89a"
+        },
+        "train-sft.jsonl": {
+          "bytes": 185376,
+          "sha256": "41ba0e09fce8c8800f9c287ce645ec9a6df00d935288d850e0da0f9cc1055b2b"
+        },
+        "train-structured.jsonl": {
+          "bytes": 178920,
+          "sha256": "6b2f32a57234333c280efd27722da074938f88fb3ac08ac76d9039d85f7ed89a"
+        }
+      },
+      "path": "data/RMM-001/releases/v0001"
+    },
+    {
+      "release": "v0001",
+      "batch": "extended-pilot-v2",
+      "track": "ROM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 24,
+      "semantic_parents": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      },
+      "generator_versions": [
+        "1.0.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+        "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+        "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/extended-pilot-v2_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "6cc0c590ba39196994718d9c8cd8259f87ecc5aa486b1782e495fce76baa0717"
+        },
+        "canonical.jsonl": {
+          "bytes": 112378,
+          "sha256": "e8510bb86619f4070c4ed185a00cbaa33225afd54e42a819f4145517ef2b3114"
+        },
+        "dev_challenge-belief_updates.jsonl": {
+          "bytes": 13420,
+          "sha256": "931f46efa3243ccb232e4f96effd6927394cd0b4564996655ed2a6cc4196b0e0"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 14136,
+          "sha256": "13fc9232da4aa6bedcef0b318ca966aacd55c8551b3391ba26a7d0b923555c64"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 13420,
+          "sha256": "931f46efa3243ccb232e4f96effd6927394cd0b4564996655ed2a6cc4196b0e0"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 7392,
+          "sha256": "9951884789810f919e751a7113f5a9ac81cc6575c7bc8b8b7a96f90e3697e7a6"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 151714,
+          "sha256": "87b5bde8d79474fa10d640700076d2e23e5a93a93520b7a89c4f1a8a525b3862"
+        },
+        "train-belief_updates.jsonl": {
+          "bytes": 55272,
+          "sha256": "d306aa98defda8149ff04b8dd5a1c7a598fc5be2ce75af567faf4a53fee2c934"
+        },
+        "train-sft.jsonl": {
+          "bytes": 57852,
+          "sha256": "9fbea35c6f5d09c68aa6e7e70590b8a490d02789d6b17104be9189d1b488f663"
+        },
+        "train-structured.jsonl": {
+          "bytes": 55272,
+          "sha256": "d306aa98defda8149ff04b8dd5a1c7a598fc5be2ce75af567faf4a53fee2c934"
+        }
+      },
+      "path": "data/ROM-001/releases/v0001"
+    },
+    {
+      "release": "v0001",
+      "batch": "extended-pilot-v2",
+      "track": "RSM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 24,
+      "semantic_parents": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      },
+      "generator_versions": [
+        "1.0.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "c8d034c4f1c7692e362724e6054c82baec1ed92f306eb31e07e42004648ca66e",
+        "factory/pipeline.py": "5a35ff548f5f31ec98d808d5f2782b24424b307b3f2d67a75770e82de280eb9b",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "5115d8a0d94a6908f9137891cea54d1e80f519e3f38160c4c871328f2af3df51",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/generate.py": "3a4d9e431f1610a43d866620090c80ef04d931e15610783cc43fc14a3e91da7f",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "ce6883ddac409a3c586b8a8ce18c1d1bca10d3a3bb07ca066748db7c8acea13d",
+        "generators/relational/generate.py": "c70d5671f857f2811ddd2ac5f1ee1f350679969c10b31a437a4dafceb4aeaab0",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/extended-pilot-v2_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "1be6aee84beae6d99725138a5b9f01e857a1aab50b2733c5932505db4aebb97f"
+        },
+        "canonical.jsonl": {
+          "bytes": 96032,
+          "sha256": "443a2f260ae174c93fa82a9854f4074665e1538a0a588f5b35652cc56975de37"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 10608,
+          "sha256": "c7da247859efca79060191a924c9a51a4b01f5bde78bbcff6423e89fd1228104"
+        },
+        "dev_challenge-skill_demonstrations.jsonl": {
+          "bytes": 10292,
+          "sha256": "6fcdbf32de4646a1d6039d5b4b92557ffb5f5848c2ad4f65ffad2abbcb37c029"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 10292,
+          "sha256": "6fcdbf32de4646a1d6039d5b4b92557ffb5f5848c2ad4f65ffad2abbcb37c029"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 7392,
+          "sha256": "34d43020edde2141884688e9e170589e050983485fa0560265d58577b0e71249"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 150324,
+          "sha256": "2a761d616bb69a2213fca2428de5233172bdbafa5b910312b0c012e1786d7ac8"
+        },
+        "train-sft.jsonl": {
+          "bytes": 47676,
+          "sha256": "e2b3e7779dbe2c73907e047c058ea1e16350c07350c76c8ef0e439ca587adf10"
+        },
+        "train-skill_demonstrations.jsonl": {
+          "bytes": 46224,
+          "sha256": "75e8c2ab9cf0bc8620cb91e68921bea6636084d8a0f7efb1f8db5d154df7d1b3"
+        },
+        "train-structured.jsonl": {
+          "bytes": 46224,
+          "sha256": "75e8c2ab9cf0bc8620cb91e68921bea6636084d8a0f7efb1f8db5d154df7d1b3"
+        }
+      },
+      "path": "data/RSM-001/releases/v0001"
     },
     {
       "release": "v0001",
@@ -374,6 +1104,13 @@
   ],
   "backups": [
     {
+      "checkpoint_id": "first-approved",
+      "status": "BACKED_UP",
+      "commit_sha": "8c2571e51e43ed206d111321482367802b79600a",
+      "remote_commit_sha": "8c2571e51e43ed206d111321482367802b79600a",
+      "approval": "reviewed_release"
+    },
+    {
       "checkpoint_id": "foundation-r2",
       "status": "BACKED_UP",
       "commit_sha": "517a51a60a00e6b7a625edeeb8e6bc126393856c",
@@ -397,24 +1134,24 @@
   ],
   "reviews": {
     "expert": {
-      "records": 840,
+      "records": 1276,
       "decisions": {
-        "ACCEPT": 768,
+        "ACCEPT": 1204,
         "REVISE": 72
       }
     },
     "adversarial": {
-      "records": 1344,
+      "records": 2072,
       "decisions": {
-        "ACCEPT": 1284,
-        "REVISE": 60
+        "ACCEPT": 1964,
+        "REVISE": 108
       }
     },
     "adjudication": {
-      "records": 360,
+      "records": 796,
       "decisions": {
-        "ACCEPT": 348,
-        "REVISE": 12
+        "ACCEPT": 736,
+        "REVISE": 60
       }
     }
   },
@@ -515,6 +1252,26 @@
       "scope": "fresh generated development data; not a sealed generalization instrument"
     },
     {
+      "batch": "extended-pilot-v3",
+      "records": 196,
+      "unique_parents": 24,
+      "distinct_parent_semantic_signatures": 24,
+      "oracle_failures": 0,
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "exact_prompt_duplicates": 0,
+      "difficulty": {
+        "3": 196
+      },
+      "tracks": {
+        "REM-001": 120,
+        "RMM-001": 76
+      },
+      "structural_template_holdout": false,
+      "protected_benchmark_inspected": false,
+      "scope": "fresh generated development data; not a sealed generalization instrument"
+    },
+    {
       "batch": "pilot-v1",
       "records": 240,
       "unique_parents": 90,
@@ -566,6 +1323,7 @@
       "batch": "pilot-v3",
       "records": 72,
       "unique_parents": 30,
+      "distinct_parent_semantic_signatures": 30,
       "oracle_failures": 0,
       "split_leakage": [],
       "cross_parent_semantic_duplicates": [],

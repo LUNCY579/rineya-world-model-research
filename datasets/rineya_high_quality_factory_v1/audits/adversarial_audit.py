@@ -738,12 +738,12 @@ def main(batch):
             answer = solve(r["semantic_task"])
             answers[r["sample_id"]] = answer
             projected = {"after": answer["after"]} if r["target_format"] == "answer_only" else answer
-            if projected != r["verified_target"]:
+            if canon(projected) != canon(r["verified_target"]):
                 critical.append("independently_recomputed_target_mismatch")
                 issues.append(issue("target_mismatch", "critical", {"expected": projected, "observed": r["verified_target"]}, "Recompute target and add regression."))
                 scores["target_correctness"] = scores["reasoning_validity"] = 1
             payload = json.loads(r["rendered_input"].split("Task JSON:\n", 1)[1])
-            if payload != r["semantic_task"]:
+            if canon(payload) != canon(r["semantic_task"]):
                 critical.append("rendered_payload_semantic_mismatch")
                 issues.append(issue("payload_mismatch", "critical", {"payload": payload}, "Render canonical semantic task exactly."))
                 scores["instruction_clarity"] = 1

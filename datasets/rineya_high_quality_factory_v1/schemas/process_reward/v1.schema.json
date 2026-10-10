@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "required": [
+    "input",
+    "candidate",
+    "labels"
+  ],
+  "properties": {
+    "input": {
+      "type": "string"
+    },
+    "candidate": {
+      "type": "object"
+    },
+    "labels": {
+      "type": "object",
+      "required": [
+        "valid",
+        "claim_correct",
+        "progress",
+        "usefulness"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
