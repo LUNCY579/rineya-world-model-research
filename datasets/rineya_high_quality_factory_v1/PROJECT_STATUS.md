@@ -58,22 +58,22 @@ Historical candidate inventory (revisions must not be summed):
 
 Approved release inventory:
 
-- RBM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RCM-001 v0001: 240 historical records, 240 active; ACTIVE, BACKED_UP (production-milestone).
-- RCM-001 v0002: 1200 historical records, 0 active; SUPERSEDED, BACKED_UP (production-milestone).
-- RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, LOCAL_ONLY (verification pending).
-- RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (production-milestone).
-- RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (production-milestone).
-- RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (production-milestone).
-- RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RMM-001 v0001: 76 historical records, 76 active; ACTIVE, BACKED_UP (production-milestone).
-- ROM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RSM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0001: 60 historical records, 0 active; SUPERSEDED, BACKED_UP (production-milestone).
-- RVM-001 v0002: 300 historical records, 300 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0003: 60 historical records, 60 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0004: 24 historical records, 24 active; ACTIVE, LOCAL_ONLY (verification pending).
+- RBM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RCM-001 v0001: 240 historical records, 240 active; ACTIVE, BACKED_UP (session-final).
+- RCM-001 v0002: 1200 historical records, 0 active; SUPERSEDED, BACKED_UP (session-final).
+- RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, BACKED_UP (session-final).
+- RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (session-final).
+- RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (session-final).
+- RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (session-final).
+- RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RMM-001 v0001: 76 historical records, 76 active; ACTIVE, BACKED_UP (session-final).
+- ROM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RSM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0001: 60 historical records, 0 active; SUPERSEDED, BACKED_UP (session-final).
+- RVM-001 v0002: 300 historical records, 300 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0003: 60 historical records, 60 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0004: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
 
 Backups:
 
@@ -83,5 +83,6 @@ Backups:
 - foundation: FAILED_LOCAL_ARTIFACTS_PRESERVED; commit pending.
 - production-milestone: BACKED_UP; commit ee7a91cf8cf4195238dafb0caa6f494a20c0b7ef.
 - review-milestone: BACKED_UP; commit 7decf8635f37a9e0e514b05dcd5dc7135a7eeb57.
+- session-final: BACKED_UP; commit eac47777c60387092bb10851b137adad36a6eb4b.
 
 All ten curricula exist. P0 pilot correctness/review precedes expansion. Counterfactual/rendering counts do not inflate parent counts. Exposed dev challenges are not sealed tests. Exact state correctness is a data property; model benefit remains untested.

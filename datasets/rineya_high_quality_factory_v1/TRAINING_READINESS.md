@@ -2,22 +2,22 @@
 
 Authoritative active inventory: manifests/ACTIVE_RELEASE_CATALOG.json. Load through factory.catalog.catalog(), which excludes exact-hash errata and superseded versions; do not concatenate historical release directories. Original release bytes remain preserved.
 
-- RBM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RCM-001 v0001: 240 historical records, 240 active; ACTIVE, BACKED_UP (production-milestone).
-- RCM-001 v0002: 1200 historical records, 0 active; SUPERSEDED, BACKED_UP (production-milestone).
-- RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, LOCAL_ONLY (verification pending).
-- RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (production-milestone).
-- RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (production-milestone).
-- RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (production-milestone).
-- RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RMM-001 v0001: 76 historical records, 76 active; ACTIVE, BACKED_UP (production-milestone).
-- ROM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RSM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0001: 60 historical records, 0 active; SUPERSEDED, BACKED_UP (production-milestone).
-- RVM-001 v0002: 300 historical records, 300 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0003: 60 historical records, 60 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0004: 24 historical records, 24 active; ACTIVE, LOCAL_ONLY (verification pending).
+- RBM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RCM-001 v0001: 240 historical records, 240 active; ACTIVE, BACKED_UP (session-final).
+- RCM-001 v0002: 1200 historical records, 0 active; SUPERSEDED, BACKED_UP (session-final).
+- RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, BACKED_UP (session-final).
+- RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (session-final).
+- RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (session-final).
+- RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (session-final).
+- RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RMM-001 v0001: 76 historical records, 76 active; ACTIVE, BACKED_UP (session-final).
+- ROM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RSM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0001: 60 historical records, 0 active; SUPERSEDED, BACKED_UP (session-final).
+- RVM-001 v0002: 300 historical records, 300 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0003: 60 historical records, 60 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0004: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
 
 Source bytes are preserved under reproducibility/source_blobs and indexed in reproducibility/SOURCE_ARCHIVE_INDEX.json. Three original broad source snapshots for historical RCM v0002 could not be recovered; v0003 supersedes it with identical reviewed data, independently reproduced generation and available source bytes. The historical limitation remains documented in quality_reports/reproducibility/RCM-001-v0002.json. Machine audit reruns preserve prior bytes when results change.
 

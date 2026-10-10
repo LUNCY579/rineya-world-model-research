@@ -18,22 +18,22 @@ The first P0 production milestone is reached: each priority track has at least 1
 
 Read PROJECT_STATUS.md, manifests/ACTIVE_RELEASE_CATALOG.json, quality_reports/CURRENT.json and backup_logs receipts first. Inspect original repo/worktree status; never switch or clean the research checkout. Load approved rows through factory.catalog.catalog(); the old RVM pilot is superseded and retained solely as historical evidence.
 
-- RBM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RCM-001 v0001: 240 historical records, 240 active; ACTIVE, BACKED_UP (production-milestone).
-- RCM-001 v0002: 1200 historical records, 0 active; SUPERSEDED, BACKED_UP (production-milestone).
-- RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, LOCAL_ONLY (verification pending).
-- RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (production-milestone).
-- RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (production-milestone).
-- RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (production-milestone).
-- RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RMM-001 v0001: 76 historical records, 76 active; ACTIVE, BACKED_UP (production-milestone).
-- ROM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RSM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0001: 60 historical records, 0 active; SUPERSEDED, BACKED_UP (production-milestone).
-- RVM-001 v0002: 300 historical records, 300 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0003: 60 historical records, 60 active; ACTIVE, BACKED_UP (production-milestone).
-- RVM-001 v0004: 24 historical records, 24 active; ACTIVE, LOCAL_ONLY (verification pending).
+- RBM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RCM-001 v0001: 240 historical records, 240 active; ACTIVE, BACKED_UP (session-final).
+- RCM-001 v0002: 1200 historical records, 0 active; SUPERSEDED, BACKED_UP (session-final).
+- RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, BACKED_UP (session-final).
+- RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (session-final).
+- RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (session-final).
+- RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (session-final).
+- RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RMM-001 v0001: 76 historical records, 76 active; ACTIVE, BACKED_UP (session-final).
+- ROM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RSM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0001: 60 historical records, 0 active; SUPERSEDED, BACKED_UP (session-final).
+- RVM-001 v0002: 300 historical records, 300 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0003: 60 historical records, 60 active; ACTIVE, BACKED_UP (session-final).
+- RVM-001 v0004: 24 historical records, 24 active; ACTIVE, BACKED_UP (session-final).
 
 - all-pilots: BACKED_UP; commit 265f768f0658942b0004130eef626cdb122eddbd.
 - first-approved: BACKED_UP; commit 8c2571e51e43ed206d111321482367802b79600a.
@@ -41,6 +41,7 @@ Read PROJECT_STATUS.md, manifests/ACTIVE_RELEASE_CATALOG.json, quality_reports/C
 - foundation: FAILED_LOCAL_ARTIFACTS_PRESERVED; commit pending.
 - production-milestone: BACKED_UP; commit ee7a91cf8cf4195238dafb0caa6f494a20c0b7ef.
 - review-milestone: BACKED_UP; commit 7decf8635f37a9e0e514b05dcd5dc7135a7eeb57.
+- session-final: BACKED_UP; commit eac47777c60387092bb10851b137adad36a6eb4b.
 
 Run `/opt/anaconda3/bin/python3 -m unittest discover -s tests -p '*.py'` from the factory, and `/opt/anaconda3/bin/python3 backup_logs/test_checkpoint_backup.py`. Audit fresh candidate batches with `-m factory.pipeline audit --batch NAME`. Full state and independent factual metadata checks must pass. Reviewers must see no prior verdict before their first judgement. New hashes require new review receipts. Assemble only ACCEPT-gated immutable releases with `-m factory.pipeline release --batch NAME --version vNNNN`. Corrections require fresh batches and an explicit supersedes argument through factory.pipeline.release; do not rewrite existing releases.
 

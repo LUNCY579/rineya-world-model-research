@@ -5,10 +5,19 @@
   "change": "Assign a fresh tag list per rendering, gen1.2.1; new claim-gap-v2 preserves original failedbatch.",
   "scope": "Gold targets are unchanged. No faulty batch was reviewed, accepted or exported.",
   "regression_required": "Each renderer row recomputes to storedhash, tagsunique, full independent oracle/schema and signed claim controls.",
-  "status": "RESOLVED:claim-gap-v2 has 24 correct hashes, unique tags and independent state/metadata validation;24 exact-hash ACCEPT by expert, adversarial and adjudicator. Released as RVM-001/v0004; remote backup pending next checkpoint.",
+  "status": "RESOLVED:claim-gap-v2 has 24 correct hashes, unique tags and independent state/metadata validation;24 exact-hash ACCEPT by expert, adversarial and adjudicator. Released as RVM-001/v0004; actual bytes remotely verified in session-final.",
   "regression_evidence": [
     "tests/test_claim_gap_integrity.py",
     "tests/test_critic_claim_controls.py",
     "quality_reports/CLAIM_GAP_RELEASE_VALIDATION.json"
-  ]
+  ],
+  "remote_backup_status": "BACKED_UP",
+  "remote_backup": {
+    "checkpoint": "session-final",
+    "commit_sha": "eac47777c60387092bb10851b137adad36a6eb4b",
+    "verified_files": 778,
+    "verified_bytes": 191806213,
+    "verification": "Actual GitHub blob bytes decoded and SHA256 matched, with remote tree and branch SHA checks",
+    "receipt": "backup_logs/session-final_RECEIPT.json"
+  }
 }
