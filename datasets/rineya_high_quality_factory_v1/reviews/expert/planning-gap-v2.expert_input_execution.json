@@ -1,0 +1,68 @@
+{
+  "actual_author": "/root/expert_reviewer",
+  "created_utc": "2026-10-10T06:08:09.259927+00:00",
+  "stage": "INPUT_ONLY_PREDICTIONS_FIRST_JUDGMENTS_FROZEN_BEFORE_GOLD",
+  "actual_command": [
+    "/opt/anaconda3/bin/python3",
+    "-B",
+    "reviews/expert/review_rgm_planning_gap_v2_input_stage.py"
+  ],
+  "actual_exit_code": 0,
+  "source_before_after_unchanged": true,
+  "bound_source": {
+    "path": "reviews/expert/review_rgm_planning_gap_v2_input_stage.py",
+    "sha256": "c85157b7920d3b6070bc8059f73f1c1d7184f7e09bea2df564dbd3306b39e102",
+    "bytes": 29805
+  },
+  "bound_preparation_source": {
+    "path": "reviews/expert/prepare_rgm_planning_gap_v2.py",
+    "sha256": "7c74fcebba1057bcdb0313c7c658b57a0752d041558f82534fb44a573d98fc53",
+    "bytes": 28062
+  },
+  "bound_own_V1_solver": {
+    "path": "reviews/expert/prepare_rgm_planning_gap_v1.py",
+    "sha256": "82ae6d000d5289bf439599579eb6437de5a09468388ead4fb1cef95f9dd3a987",
+    "bytes": 22169
+  },
+  "input_view_before": {
+    "path": "reviews/input_only/planning-gap-v2.jsonl",
+    "sha256": "00bd1c2de5d0d4719957bb2ded44e2342940de4d368c65b646817474fe79b73c",
+    "bytes": 1070144
+  },
+  "input_view_after": {
+    "path": "reviews/input_only/planning-gap-v2.jsonl",
+    "sha256": "00bd1c2de5d0d4719957bb2ded44e2342940de4d368c65b646817474fe79b73c",
+    "bytes": 1070144
+  },
+  "input_view_custody_freeze": {
+    "path": "reviews/input_only/planning-gap-v2.freeze.json",
+    "sha256": "11843c6fe93fc3b6547082ee7f49c0eecd65aff04151103980c1e5783401e5aa",
+    "bytes": 1416
+  },
+  "artifacts": [
+    {
+      "path": "reviews/expert/planning-gap-v2.expert_input_predictions.jsonl",
+      "sha256": "ef9f9dc812f68eaa1442a17cbb7c957f74fe0adebc68e3ea569cdc54c83d2255",
+      "bytes": 2112542
+    },
+    {
+      "path": "reviews/expert/planning-gap-v2.expert_first_input_judgments.jsonl",
+      "sha256": "16717fe11f20d4ad5c797ad99d792621094193685ddd9797d51f410396fef77f",
+      "bytes": 758090
+    },
+    {
+      "path": "reviews/expert/planning-gap-v2.expert_input_analysis.json",
+      "sha256": "81e1d89190270b9b6fa8c041d31ea18fda201a7e276ca430deac22fe1be0dbc1",
+      "bytes": 245111
+    }
+  ],
+  "actual_rows": 408,
+  "predictions": 408,
+  "typed_expectation_rows": 408,
+  "first_input_judgments": 408,
+  "all_input_requirements_pass": true,
+  "actual_failure": null,
+  "gold_control_private_code_other_reviews_read": false,
+  "elapsed_seconds": 4.911369875000673,
+  "source_and_prediction_order": "Source was frozen before actual execution; predictions and first input judgments are now frozen, before any gold or private control comparison."
+}

@@ -1,0 +1,52 @@
+{
+  "runner_execution": "/root",
+  "at_utc": "2026-10-10T06:29:59.585540+00:00",
+  "review_roles": {
+    "expert": {
+      "rows": 408,
+      "author_execution": "/root/expert_reviewer",
+      "decisions": {
+        "ACCEPT": 408
+      },
+      "critical_defects_count": 0,
+      "serious_issue_count": 0,
+      "first_final_bytes_identical": true
+    },
+    "adversarial": {
+      "rows": 408,
+      "author_execution": "/root/adversarial_auditor",
+      "decisions": {
+        "ACCEPT": 408
+      },
+      "critical_defects_count": 0,
+      "serious_issue_count": 0,
+      "first_final_bytes_identical": true
+    }
+  },
+  "exact408joins_per_role": true,
+  "cross_role_receipt_ID_unique": true,
+  "reviewer_disagreement_count": 0,
+  "evidence_sha256": {
+    "reviews/expert/planning-gap-v2.jsonl": "86b78d2eafff250629b0b2074cd4bf058259d079835df0af1ca30c1c23aba884",
+    "reviews/expert/planning-gap-v2.first.jsonl": "86b78d2eafff250629b0b2074cd4bf058259d079835df0af1ca30c1c23aba884",
+    "reviews/adversarial/planning-gap-v2.jsonl": "a1e3867be69eb816d3a82c0c1bacc5903ece38513072d2a18e82755bfa15e882",
+    "reviews/adversarial/planning-gap-v2.first.jsonl": "a1e3867be69eb816d3a82c0c1bacc5903ece38513072d2a18e82755bfa15e882",
+    "reviews/expert/planning-gap-v2.expert_input.freeze.json": "86ce199557ccb7b8353a51964e892f10569ddb94814c19f4c411f035a426804e",
+    "reviews/adversarial/planning-gap-v2.input_freeze.json": "bb2ce8a01e524d1cc138c06f189a25dbb2651601087aaf243298d3a3a4e57910",
+    "data/RGM-001/candidate_renderings/planning-gap-v2.jsonl": "57dfa90e3946fbb657d03c33388e2d67fb3fa9107e4b4de4ffddef0b16289c23",
+    "data/RGM-001/manifests/planning-gap-v2.family_controls.json": "9c4497cf61e1d77cea24d808eca965c00e10e975cf235bd7d1aa2667e259da17",
+    "reviews/input_only/planning-gap-v2.jsonl": "00bd1c2de5d0d4719957bb2ded44e2342940de4d368c65b646817474fe79b73c",
+    "reviews/input_only/planning-gap-v2.freeze.json": "11843c6fe93fc3b6547082ee7f49c0eecd65aff04151103980c1e5783401e5aa",
+    "quality_reports/RGM_V2_FULL_EXECUTION.json": "c95e3bc15dd6d3f1b01e0b718f127bf23dd444f690efc3eac69c71e9abeac506",
+    "quality_reports/RGM_V2_AUDIT_EXECUTION.json": "51a1ac88b38fd322cec3285667057b8dc4cd55cef25bf61d3edc11cc2f617759",
+    "audits/leakage/planning-gap-v2.json": "38eee2ad025e5ec5e68495a408135fc6abcb451dadcfd1044d65612012876d53",
+    "audits/diversity/planning-gap-v2-planning-controls.json": "20212a488c949b4f5d9cbc920399eec444c976d335d5aca637d302cb4527ba26",
+    "quality_reports/RGM_V2_RENDERER_CONTROL_FAILURE_DIAGNOSTIC.json": "b3578cbc2a41f8bc2a33e1a23902b16d806606fc2c1bfe7f7c2f9a720be39e74"
+  },
+  "candidate_pending_unchanged": true,
+  "machine_family_control_failure_count": 11,
+  "independent_adjudication": "PENDING",
+  "publication_allowed": false,
+  "new_releases": 0,
+  "scope": "Actual frozen review custody join only; root cannot approve candidate or override failing control gate. Formal interpretation assessment pending."
+}

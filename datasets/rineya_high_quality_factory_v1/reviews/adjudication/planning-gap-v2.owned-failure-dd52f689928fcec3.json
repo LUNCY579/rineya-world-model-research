@@ -1,0 +1,44 @@
+{
+  "actual_command": [
+    "reviews/adjudication/audit_and_adjudicate_planning_gap_v2.py",
+    "finalize",
+    "audits/execution/planning-gap-v2-adversarial.json"
+  ],
+  "actual_execution_id": "/root/research_architect",
+  "at_utc": "2026-10-10T06:49:08.681579+00:00",
+  "bindings_observed_before_failure": {
+    "audits/execution/planning-gap-v2-adversarial.json": {
+      "bytes": 4087,
+      "path": "audits/execution/planning-gap-v2-adversarial.json",
+      "sha256": "ecf3795076f8ecb53493ea5b09d3fdff2aea2040069e50af5cf81690c7262ca3"
+    },
+    "data/RGM-001/candidate_renderings/planning-gap-v2.jsonl": {
+      "bytes": 1624324,
+      "path": "data/RGM-001/candidate_renderings/planning-gap-v2.jsonl",
+      "sha256": "57dfa90e3946fbb657d03c33388e2d67fb3fa9107e4b4de4ffddef0b16289c23"
+    },
+    "reviews/adjudication/audit_and_adjudicate_planning_gap_v2.py": {
+      "bytes": 52524,
+      "path": "reviews/adjudication/audit_and_adjudicate_planning_gap_v2.py",
+      "sha256": "da2b2af07a419c01551d37dcc90515645e6655cdf83d57c2327bc6d04ad45a8f"
+    },
+    "reviews/adjudication/planning-gap-v2.audit.json": {
+      "bytes": 656041,
+      "path": "reviews/adjudication/planning-gap-v2.audit.json",
+      "sha256": "1132df81bb6e4c884fecaf53136b2dea7a31595b55550e4420a4e3bb2b42677e"
+    },
+    "reviews/adversarial/planning-gap-v2.jsonl": {
+      "bytes": 865252,
+      "path": "reviews/adversarial/planning-gap-v2.jsonl",
+      "sha256": "a1e3867be69eb816d3a82c0c1bacc5903ece38513072d2a18e82755bfa15e882"
+    },
+    "reviews/expert/planning-gap-v2.jsonl": {
+      "bytes": 2056746,
+      "path": "reviews/expert/planning-gap-v2.jsonl",
+      "sha256": "86b78d2eafff250629b0b2074cd4bf058259d079835df0af1ca30c1c23aba884"
+    }
+  },
+  "exception": "Traceback (most recent call last):\n  File \"/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/adjudication/audit_and_adjudicate_planning_gap_v2.py\", line 649, in <module>\n    {\"audit\":audit,\"finalize\":finalize}[sys.argv[1]]()\n  File \"/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/reviews/adjudication/audit_and_adjudicate_planning_gap_v2.py\", line 625, in finalize\n    \"candidate\":BINDINGS[CANDIDATE],\"manifest\":BINDINGS[MANIFEST],\"audit\":a_binding,\"verdicts\":verdict_binding,\n                                               ~~~~~~~~^^^^^^^^^^\nKeyError: 'data/RGM-001/manifests/planning-gap-v2.family_controls.json'\n",
+  "no_approval_from_failure": true,
+  "source_sha256": "da2b2af07a419c01551d37dcc90515645e6655cdf83d57c2327bc6d04ad45a8f"
+}

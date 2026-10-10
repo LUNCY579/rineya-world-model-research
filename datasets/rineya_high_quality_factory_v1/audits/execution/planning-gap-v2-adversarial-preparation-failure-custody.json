@@ -1,0 +1,428 @@
+{
+  "actual_execution_id": "/root/adversarial_auditor",
+  "actual_reproduced_failure_count": 3,
+  "completed": true,
+  "dataset_approval": false,
+  "evidence": [
+    {
+      "actual_exact_replay": {
+        "after": {
+          "A": "B",
+          "B": "C",
+          "C": "TABLE",
+          "D": "A"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [
+          {
+            "block": "A",
+            "to": "D"
+          },
+          {
+            "block": "B",
+            "to": "C"
+          },
+          {
+            "block": "A",
+            "to": "B"
+          },
+          {
+            "block": "D",
+            "to": "A"
+          }
+        ],
+        "steps": [
+          {
+            "after": {
+              "A": "TABLE",
+              "B": "TABLE",
+              "C": "TABLE",
+              "D": "TABLE"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "A": "TABLE",
+              "B": "C",
+              "C": "TABLE",
+              "D": "TABLE"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "A": "B",
+              "B": "C",
+              "C": "TABLE",
+              "D": "TABLE"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "A": "B",
+              "B": "C",
+              "C": "TABLE",
+              "D": "A"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "alternate_relation_minimum": [
+        {
+          "block": "A",
+          "to": "D"
+        },
+        {
+          "block": "B",
+          "to": "C"
+        },
+        {
+          "block": "A",
+          "to": "B"
+        },
+        {
+          "block": "D",
+          "to": "A"
+        }
+      ],
+      "failure_reproduced": true,
+      "meaning": "Own expected lexical minimum missed an equally short lexically earlier parking sequence; no future candidate issue.",
+      "original_binding": {
+        "case": "four_move_base",
+        "failure": "audits/execution/planning-gap-v2-adversarial-preparation.failure-9b3951ccd4ae76ca.json",
+        "failure_sha256": "2a56baac0f3f1850e1829e46a1f8b527f6ea2e4c1b15f5662bd3e28931764c93",
+        "preexec": "audits/execution/planning-gap-v2-adversarial-preparation.preexec.json",
+        "preexec_sha256": "01e79c772af0a8841f2ad813ec206e3d5918ce01453b35fca54254686273d2e5",
+        "source": "audits/rgm_planning_gap_v2_adversarial_preparation.py",
+        "source_sha256": "9b3951ccd4ae76caec4e60e64d77f3a8588909d08cb9f179d002027235787dce"
+      },
+      "original_hand_case": {
+        "hand_derived_exact_target": {
+          "after": {
+            "A": "B",
+            "B": "C",
+            "C": "TABLE",
+            "D": "A"
+          },
+          "reaches_goal": true,
+          "shortest_plan": [
+            {
+              "block": "A",
+              "to": "TABLE"
+            },
+            {
+              "block": "B",
+              "to": "C"
+            },
+            {
+              "block": "A",
+              "to": "B"
+            },
+            {
+              "block": "D",
+              "to": "A"
+            }
+          ],
+          "steps": [
+            {
+              "after": {
+                "A": "TABLE",
+                "B": "TABLE",
+                "C": "TABLE",
+                "D": "TABLE"
+              },
+              "legal": true
+            },
+            {
+              "after": {
+                "A": "TABLE",
+                "B": "C",
+                "C": "TABLE",
+                "D": "TABLE"
+              },
+              "legal": true
+            },
+            {
+              "after": {
+                "A": "B",
+                "B": "C",
+                "C": "TABLE",
+                "D": "TABLE"
+              },
+              "legal": true
+            },
+            {
+              "after": {
+                "A": "B",
+                "B": "C",
+                "C": "TABLE",
+                "D": "A"
+              },
+              "legal": true
+            }
+          ],
+          "valid": true
+        },
+        "hand_proof": "A needs2 moves; B and D need1 each. Canonical legal dependency order A,B,A,D yields4.",
+        "name": "four_move_base",
+        "task": {
+          "goal_on": {
+            "A": "B",
+            "B": "C",
+            "D": "A"
+          },
+          "kind": "blocks",
+          "on": {
+            "A": "B",
+            "B": "TABLE",
+            "C": "TABLE",
+            "D": "TABLE"
+          },
+          "plan": [
+            {
+              "block": "A",
+              "to": "TABLE"
+            },
+            {
+              "block": "B",
+              "to": "C"
+            },
+            {
+              "block": "A",
+              "to": "B"
+            },
+            {
+              "block": "D",
+              "to": "A"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "actual_exact_replay": {
+        "after": {
+          "A": "TABLE",
+          "B": "TABLE",
+          "X": "Y",
+          "Y": "TABLE"
+        },
+        "reaches_goal": true,
+        "shortest_plan": [
+          {
+            "block": "A",
+            "to": "TABLE"
+          },
+          {
+            "block": "B",
+            "to": "A"
+          },
+          {
+            "block": "X",
+            "to": "Y"
+          }
+        ],
+        "steps": [
+          {
+            "after": {
+              "A": "TABLE",
+              "B": "Y",
+              "X": "TABLE",
+              "Y": "TABLE"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "A": "TABLE",
+              "B": "TABLE",
+              "X": "TABLE",
+              "Y": "TABLE"
+            },
+            "legal": true
+          },
+          {
+            "after": {
+              "A": "TABLE",
+              "B": "TABLE",
+              "X": "Y",
+              "Y": "TABLE"
+            },
+            "legal": true
+          }
+        ],
+        "valid": true
+      },
+      "alternate_relation_minimum": [
+        {
+          "block": "A",
+          "to": "TABLE"
+        },
+        {
+          "block": "B",
+          "to": "A"
+        },
+        {
+          "block": "X",
+          "to": "Y"
+        }
+      ],
+      "failure_reproduced": true,
+      "meaning": "Own expected lexical minimum missed an equally short lexically earlier parking sequence; no future candidate issue.",
+      "original_binding": {
+        "case": "both_initial_clearance_false_source_priority",
+        "failure": "audits/execution/planning-gap-v2-adversarial-preparation.failure-24f57fdc25029aea.json",
+        "failure_sha256": "69c02da26cccd784f75929413ae104d6d0182c645c2fd1e6069619db0cfed6dd",
+        "preexec": "audits/execution/planning-gap-v2-adversarial-preparation-r2.preexec.json",
+        "preexec_sha256": "837da6705522da166bd69f1394237d5e126669cb22b2e528e3d04c5024709351",
+        "source": "audits/rgm_planning_gap_v2_adversarial_preparation_r2.py",
+        "source_sha256": "24f57fdc25029aea066db6f4c7ba3c340e73249461dc62898a8c5fe5be1cfe21"
+      },
+      "original_hand_case": {
+        "hand_derived_exact_target": {
+          "after": {
+            "A": "TABLE",
+            "B": "TABLE",
+            "X": "Y",
+            "Y": "TABLE"
+          },
+          "reaches_goal": true,
+          "shortest_plan": [
+            {
+              "block": "A",
+              "to": "TABLE"
+            },
+            {
+              "block": "B",
+              "to": "TABLE"
+            },
+            {
+              "block": "X",
+              "to": "Y"
+            }
+          ],
+          "steps": [
+            {
+              "after": {
+                "A": "TABLE",
+                "B": "Y",
+                "X": "TABLE",
+                "Y": "TABLE"
+              },
+              "legal": true
+            },
+            {
+              "after": {
+                "A": "TABLE",
+                "B": "TABLE",
+                "X": "TABLE",
+                "Y": "TABLE"
+              },
+              "legal": true
+            },
+            {
+              "after": {
+                "A": "TABLE",
+                "B": "TABLE",
+                "X": "Y",
+                "Y": "TABLE"
+              },
+              "legal": true
+            }
+          ],
+          "valid": true
+        },
+        "hand_proof": "A and B must clear X and Y; initial both-blocked action X\u2192Y canonically selects source. Three moves forced; A then B is lexical.",
+        "name": "both_initial_clearance_false_source_priority",
+        "task": {
+          "goal_on": {
+            "X": "Y"
+          },
+          "kind": "blocks",
+          "on": {
+            "A": "X",
+            "B": "Y",
+            "X": "TABLE",
+            "Y": "TABLE"
+          },
+          "plan": [
+            {
+              "block": "A",
+              "to": "TABLE"
+            },
+            {
+              "block": "B",
+              "to": "TABLE"
+            },
+            {
+              "block": "X",
+              "to": "Y"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "actual_valid": true,
+      "failure_reproduced": true,
+      "meaning": "Own intended TABLE negative accidentally selected a true non-TABLE destination-clearance witness; corrected toy changes selected action, not validator or public meaning.",
+      "original_binding": {
+        "case": "TABLE_cannot_supply_destination_obstruction",
+        "failure": "audits/execution/planning-gap-v2-adversarial-preparation.failure-7d4a400965e1e3e9.json",
+        "failure_sha256": "85cac7206b2cac169cf2d0a879df48b3cf7b21ef125e1a827a758fd65df2db93",
+        "preexec": "audits/execution/planning-gap-v2-adversarial-preparation-r3.preexec.json",
+        "preexec_sha256": "241180f740dfc21d26293334dc6d754012457b2fa81cbee4de1031820f383a43",
+        "source": "audits/rgm_planning_gap_v2_adversarial_preparation_r3.py",
+        "source_sha256": "7d4a400965e1e3e95a0555433c2776cbebea5112f6160f7323be488f15ce4a6f"
+      },
+      "original_hand_case": {
+        "evidence": {
+          "action_index": 2,
+          "enabling_action_index": 0,
+          "obstructing_block": "A",
+          "precondition": "destination_not_clear"
+        },
+        "expected_valid": false,
+        "name": "TABLE_cannot_supply_destination_obstruction",
+        "task": {
+          "goal_on": {
+            "A": "B",
+            "B": "C"
+          },
+          "kind": "blocks",
+          "on": {
+            "A": "B",
+            "B": "TABLE",
+            "C": "TABLE"
+          },
+          "plan": [
+            {
+              "block": "A",
+              "to": "TABLE"
+            },
+            {
+              "block": "B",
+              "to": "C"
+            },
+            {
+              "block": "A",
+              "to": "B"
+            }
+          ]
+        }
+      },
+      "selected_actual_action": {
+        "block": "A",
+        "to": "B"
+      }
+    }
+  ],
+  "preexec_sha256": "e0a9afe17cac5f673a504f82dc5a9fd79b9660df52a6b21d776c008405921827",
+  "prior_artifacts_unchanged": true,
+  "review_mode": "Own fixture-error replay; common-model/public-guided preparation history retained.",
+  "source_sha256": "3bb7872c4fbf680408a6f56a8ddb3b05e10f0585f88fb4319d236674b8369793"
+}

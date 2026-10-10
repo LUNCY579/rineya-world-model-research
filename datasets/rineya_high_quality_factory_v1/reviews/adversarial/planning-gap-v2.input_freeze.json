@@ -1,0 +1,230 @@
+{
+  "B_minimum_route_tie_families": 12,
+  "C_required_temporary_displacement_families": 6,
+  "actual_execution_id": "/root/adversarial_auditor",
+  "actual_mutation_test_count": 1128,
+  "all_artifacts_sha256": {
+    "audits/diversity/planning-gap-v2-input-derived-controls.json": "d80a84bc20104b557668b43aab752c5d6a346c18a33f59612cfd117086d35032",
+    "audits/diversity/planning-gap-v2-input-only-cohort.json": "2d9392b2643d7fafe2dffc6039422aabd4688415eff553760d9e68ab2dbc3f30",
+    "audits/diversity/planning-gap-v2-input-only.json": "9242cedca73681460644babdde565bc221d19b9a26c42f53a11deb37f521d8fa",
+    "audits/execution/planning-gap-v2-adversarial-input-cohort.json": "8cd5e337b2b75412199969e7a70beee165729630e1f0ce0c8c3c3b4bb8be14a1",
+    "audits/execution/planning-gap-v2-adversarial-input-cohort.preexec.json": "3381a29f9d3ce129594c5e36d7980c78d8170b818411caae4a2a51b86a2e303f",
+    "audits/execution/planning-gap-v2-adversarial-input-freeze.json": "23d2ed7d7e7185e01aa270f8ed0a72636148393e0e537a9b99c61278b2205abb",
+    "audits/execution/planning-gap-v2-adversarial-input.preexec.json": "21efb333207e88472309d1d7ca7aed334dec4d54ec2562a276b5f23fc4525dc9",
+    "audits/rgm_planning_gap_v2_adversarial_input.py": "c1f27c9f2aeddfa0b30b77e3e55afa4e96a23d4137df228fccb9b44b7d0778e0",
+    "audits/rgm_planning_gap_v2_adversarial_input_cohort.py": "ce4fccaaeee9a502da53600192709d69561bd66960d7079a9bdc76b80ec76e1d",
+    "audits/shortcut_detection/planning-gap-v2-input-only.json": "0a9e9fbcb9e6e55ecf6f8db5e339effbc279fecff3b784cdb08cf893b1f9d9ae",
+    "reviews/adversarial/planning-gap-v2.input_first_judgments.jsonl": "5b66ecfd1b48c82aebadd4c1e1f3be89537384ec06c0ab04ca7ea752703ec18a",
+    "reviews/adversarial/planning-gap-v2.input_predictions.jsonl": "ee63bdc9f62c1780326969cb05dbb8410897b176d6fe24fa67b72f257c480c1b"
+  },
+  "candidate_metadata_and_gold_not_observed": true,
+  "dataset_approval": false,
+  "independent_crosschecks": {
+    "block_relation_fresh_plan_comparisons": 108,
+    "block_relation_transition_comparisons": 472,
+    "graph_simple_path_fresh_plan_topology_fuel_multiplicity_comparisons": 96
+  },
+  "input_sha256_before_after": "00bd1c2de5d0d4719957bb2ded44e2342940de4d368c65b646817474fe79b73c",
+  "metamorphic_counts": {
+    "field_or_list_order_invariance": 204,
+    "first_failure_suffix_absorption": 72,
+    "lexical_preserving_name_equivariance": 204
+  },
+  "normalized_semantic_inputs": 204,
+  "prior_frozen_files_changed": false,
+  "public_cohort_input_obligation_errors": [],
+  "raw_typed_task_variants": 300,
+  "receipt_id": "RED-PLANNING-GAP-V2-INPUT-FREEZE-c1f27c9f2aeddfa0",
+  "release_approval": false,
+  "remaining_comparison_obligations": [
+    "Every exact canonical record target/hash/schema and factual property/witness locator.",
+    "Actual192 per-renderer control declarations, global control_ID uniqueness and exact bound public interfaces.",
+    "Source/difficulty/provenance and revision/crossrelease lineage scope as separately authorized."
+  ],
+  "residual_scope_feedback": [
+    {
+      "actual_same_fuel_opposite_outcome_pairs": [
+        {
+          "input_derived_fresh_feasibility": [
+            false,
+            true
+          ],
+          "record_hashes": [
+            "1a999d4faf3bd46f1c9951f69679cfc9ed6c99937322ec3dc28134d79eab4a54",
+            "6eb39d10c268b7f4bbc51005f6f4ed0fe24a6e535fe3f86f503b08adce28cd94"
+          ],
+          "same_fuel": 6,
+          "sample_ids": [
+            "RGM-001-planning-gap-v2-p0180-A1-forward",
+            "RGM-001-planning-gap-v2-p0185-A1-forward"
+          ]
+        },
+        {
+          "input_derived_fresh_feasibility": [
+            false,
+            true
+          ],
+          "record_hashes": [
+            "0a727ddd8c44d6b1a6d0d71b2e322ac769a57a31bb40757b0f21707024e05150",
+            "989739834fa1ee37a6b696f7f07f39c88c7a282473a75b96dadd6caa3a8000cd"
+          ],
+          "same_fuel": 8,
+          "sample_ids": [
+            "RGM-001-planning-gap-v2-p0182-A1-forward",
+            "RGM-001-planning-gap-v2-p0181-A1-forward"
+          ]
+        }
+      ],
+      "code": "small_exposed_development_feasibility_association",
+      "evidence": "Fuel-only train-majority lookup matches all34 dev feasibility labels while majority alone matches33. Only1 dev infeasible semantic input; all6 infeasible tasks are in decisive-fuel interventions. Training fuel keys6 and8 have opposite outcomes, so perfect small-dev lookup is not a universal semantic rule.",
+      "fix_or_scope": "Disclose association and small negative count; future independently held custody and broader feasibility controls needed for efficacy/generalization claims.",
+      "severity": "low"
+    },
+    {
+      "code": "bounded_structural_and_review_independence",
+      "evidence": "Current inferred24 graph bases span24 weighted and24 unweighted topology classes;24 block bases span24 joint initial/goal classes but18 initial shapes. Six multifamily initial-shape groups exist and crosssplit signatures measured0. These are48 revised lineages with two action grammars, not204/408 independent mechanisms.",
+      "fix_or_scope": "Keep family/context/presentation units separate; disclose public-guided correction, own V1 solver/fixture reuse and common-model risk.",
+      "severity": "low"
+    }
+  ],
+  "review_mode": "Public-guided prospective V2 input-only stage with same-model/common-public-design and own V1/V2 solver/fixture reuse; other reviewer predictions/verdicts and all V2 private sources remain unread.",
+  "reviewer_role": "adversarial_dataset_input_only_and_diversity",
+  "rows": 408,
+  "source_destination_failure_positions": {
+    "destination_not_clear": [
+      0,
+      1,
+      2
+    ],
+    "source_not_clear": [
+      0,
+      1,
+      2
+    ]
+  },
+  "source_destination_noop_mutant_affected_tasks": [
+    6,
+    6,
+    12
+  ],
+  "source_families": 48,
+  "status": "COMPLETED_FIRST_PREDICTIONS_AND_INPUT_AUDITS_FROZEN_WAITING_COMPARISON_AUTHORIZATION",
+  "strongest_tested_train_dev_feature_lookups": {
+    "first_error_index": {
+      "actual_wrong_ids": [
+        "RGM-001-planning-gap-v2-p0188-A1-forward",
+        "RGM-001-planning-gap-v2-p0188-A2-forward",
+        "RGM-001-planning-gap-v2-p0189-A0-forward"
+      ],
+      "covered_dev_rows": 32,
+      "dev_correct": 25,
+      "dev_rows": 34,
+      "feature_keys": [
+        "kind",
+        "last_to_TABLE",
+        "last_noop_against_initial",
+        "plan_length"
+      ],
+      "label": "first_error_index",
+      "mixed_train_keys": 11,
+      "train_keys": 24,
+      "train_rows": 170
+    },
+    "first_error_reason": {
+      "actual_wrong_ids": [
+        "RGM-001-planning-gap-v2-p0188-A1-forward",
+        "RGM-001-planning-gap-v2-p0189-A1-forward",
+        "RGM-001-planning-gap-v2-p0198-B1-forward"
+      ],
+      "covered_dev_rows": 16,
+      "dev_correct": 25,
+      "dev_rows": 34,
+      "feature_keys": [
+        "last_action"
+      ],
+      "label": "first_error_reason",
+      "mixed_train_keys": 30,
+      "train_keys": 58,
+      "train_rows": 170
+    },
+    "fresh_feasible": {
+      "actual_wrong_ids": [],
+      "covered_dev_rows": 33,
+      "dev_correct": 34,
+      "dev_rows": 34,
+      "feature_keys": [
+        "fuel"
+      ],
+      "label": "fresh_feasible",
+      "mixed_train_keys": 2,
+      "train_keys": 10,
+      "train_rows": 170
+    },
+    "minimum_moves": {
+      "actual_wrong_ids": [
+        "RGM-001-planning-gap-v2-p0188-A0-forward",
+        "RGM-001-planning-gap-v2-p0188-A1-forward",
+        "RGM-001-planning-gap-v2-p0188-A2-forward"
+      ],
+      "covered_dev_rows": 34,
+      "dev_correct": 19,
+      "dev_rows": 34,
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length"
+      ],
+      "label": "minimum_moves",
+      "mixed_train_keys": 20,
+      "train_keys": 29,
+      "train_rows": 170
+    },
+    "reaches_goal": {
+      "actual_wrong_ids": [
+        "RGM-001-planning-gap-v2-p0188-A1-forward",
+        "RGM-001-planning-gap-v2-p0189-A0-forward",
+        "RGM-001-planning-gap-v2-p0198-B1-forward"
+      ],
+      "covered_dev_rows": 34,
+      "dev_correct": 25,
+      "dev_rows": 34,
+      "feature_keys": [
+        "kind",
+        "size",
+        "plan_length"
+      ],
+      "label": "reaches_goal",
+      "mixed_train_keys": 19,
+      "train_keys": 29,
+      "train_rows": 170
+    },
+    "valid": {
+      "actual_wrong_ids": [
+        "RGM-001-planning-gap-v2-p0188-A1-forward",
+        "RGM-001-planning-gap-v2-p0188-A2-forward",
+        "RGM-001-planning-gap-v2-p0189-A0-forward"
+      ],
+      "covered_dev_rows": 32,
+      "dev_correct": 25,
+      "dev_rows": 34,
+      "feature_keys": [
+        "kind",
+        "last_to_TABLE",
+        "last_noop_against_initial",
+        "plan_length"
+      ],
+      "label": "valid",
+      "mixed_train_keys": 11,
+      "train_keys": 24,
+      "train_rows": 170
+    }
+  },
+  "train_dev_semantic_inputs": [
+    170,
+    34
+  ],
+  "train_dev_views": [
+    340,
+    68
+  ]
+}

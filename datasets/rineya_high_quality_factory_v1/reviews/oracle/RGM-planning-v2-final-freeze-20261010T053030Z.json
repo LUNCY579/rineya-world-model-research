@@ -1,0 +1,159 @@
+{
+  "actual_execution_id": "/root/formal_oracle",
+  "role": "Independent formal author and runner; no data approval",
+  "at_utc": "2026-10-10T05:30:30.698043+00:00",
+  "status": "FROZEN_PUBLIC_ONLY_PROSPECTIVE_IMPLEMENTATION",
+  "api": {
+    "module": "oracles.rgm_planning_controls_v2_independent",
+    "analyze": "analyze(task) -> independent input-derived target/search/properties/guard prefix evidence",
+    "solve": "solve(task) -> target",
+    "check": "check(row) -> list[str]",
+    "check_batch": "check_batch(rows, manifest, prior_inputs=None, parent_inputs=None) -> report with errors/counts; missing explicit inventory is UNKNOWN"
+  },
+  "bindings": [
+    {
+      "path": "oracles/rgm_planning_controls_v2_independent.py",
+      "sha256": "69944b8e06fb984947d0d686296d0bb886aecc358ae6f7405d279d0ba5a40fdf",
+      "bytes": 43699
+    },
+    {
+      "path": "tests/oracle_rgm_planning_v2_test.py",
+      "sha256": "b21a64de06d58fba6711a704508bf31babab619f9c48821b2b0116e9f327ce85",
+      "bytes": 30694
+    },
+    {
+      "path": "oracles/rgm_planning_controls_independent.py",
+      "sha256": "cd92cff9bb92eb38afd5a989109718cd600390a9609a13fc070f9cc1e1677bf3",
+      "bytes": 50601
+    },
+    {
+      "path": "tests/oracle_rgm_planning_controls_test.py",
+      "sha256": "f1514507b3074d3edad312d0dbbf680b44bd86fee4a0181c80825c24612574b7",
+      "bytes": 26793
+    },
+    {
+      "path": "oracles/independent.py",
+      "sha256": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+      "bytes": 18109
+    },
+    {
+      "path": "oracles/__init__.py",
+      "sha256": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+      "bytes": 159
+    },
+    {
+      "path": "reviews/oracle/RGM-planning-v2-final-runner-20261010T052902Z.py",
+      "sha256": "1869942df1f7b14d9f09e13d273fd0144ac259cb0e9932eeeff87527cddad438",
+      "bytes": 4903
+    }
+  ],
+  "public_bindings": [
+    {
+      "path": "schemas/SEMANTICS.md",
+      "sha256": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+      "bytes": 4833
+    },
+    {
+      "path": "schemas/RGM_PLANNING_CONTROL_PROPERTIES.md",
+      "sha256": "f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a",
+      "bytes": 10450
+    },
+    {
+      "path": "schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md",
+      "sha256": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+      "bytes": 1641
+    },
+    {
+      "path": "research/curricula/RGM-NEXT-GAP-PROSPECTIVE.md",
+      "sha256": "6100d43fe1cf83d798bb34799fac70569f54d33f66692150d188581d9c940761",
+      "bytes": 11251
+    },
+    {
+      "path": "schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2.md",
+      "sha256": "d59ce14dd66c6ebd644580f7736e714fbceda32dd132d8c9cb5cf61e78a5a258",
+      "bytes": 13956
+    },
+    {
+      "path": "research/curricula/RGM-PLANNING-GAP-V2-PROSPECTIVE.md",
+      "sha256": "34a3c89302d4b965ee784cd2f52207b6e9cb0b4299b52b82bf97c675c2d77d2c",
+      "bytes": 12086
+    },
+    {
+      "path": "schemas/RGM_PLANNING_V2_RENDERER_CONTROL_ENCODING_ADDENDUM.md",
+      "sha256": "48e1ebbe954944d8b6569866fa102962607c4ecf27a1d7133f1259f815eac603",
+      "bytes": 4951
+    },
+    {
+      "path": "research/curricula/RGM-PLANNING-GAP-V2-ROOT_FREEZE.json",
+      "sha256": "35259b023c0fa70cf4d044a4d7e1a0d5143f26ed5bab5c1f6646ce1ce49402b9",
+      "bytes": 8661
+    },
+    {
+      "path": "research/curricula/RGM-PLANNING-GAP-V2-RENDERER-ROOT_FREEZE.json",
+      "sha256": "7759940fcb0412f67f02c620cc40f52216ca7cbfb695e4f2f5690e99b12f2dbd",
+      "bytes": 1851
+    }
+  ],
+  "actual_execution": {
+    "path": "reviews/oracle/RGM-planning-v2-final-execution-20261010T052902Z.json",
+    "sha256": "00ee39ea9714c08a41fe7e204e6b4e0173a428f0d59820aa8317a90a80ae549a",
+    "bytes": 8337
+  },
+  "actual_test_summary": {
+    "tests": 25,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 3.0096038329938892,
+    "counts": {
+      "hand_families": 9,
+      "guard_transition_cases": 260,
+      "mutant_transition_cases": 780,
+      "clearance_mutations": 21,
+      "metadata_mutations": 32,
+      "small_world_goal_pairs": 169,
+      "typed_malformed_cases": 11
+    },
+    "diagnostic_replays": {
+      "seeds": [
+        "1",
+        "987"
+      ],
+      "full_json_byte_equal": true,
+      "raw_path": "reviews/oracle/RGM-planning-v2-handmade-diagnostic-20261010T052902Z.json",
+      "raw_sha256": "7c494b6c839cc6980460e786332dde9b12e7487eb94e1d3cdcf96f75edcc759d",
+      "raw_bytes": 42400
+    }
+  },
+  "previous_immutable_execution_history": [
+    {
+      "path": "reviews/oracle/RGM-planning-v2-first-execution-20261010T051814Z.json",
+      "sha256": "29e495c342e3e4ecb17cbcef5ed58a07af7a7ccaee37e8a6a157f5afadea8322",
+      "bytes": 4142
+    },
+    {
+      "path": "reviews/oracle/RGM-planning-v2-addendum-execution-20261010T052426Z.json",
+      "sha256": "d0f0bc1986d3f034f8bdd8d157d24589391cd610808ad84f1707acc7af43e296",
+      "bytes": 5251
+    }
+  ],
+  "history_statement": "Initial18-test and renderer-addendum24-test executions passed. Their exact source/test bytes remain archived; generator-version boundary adjustment is additive prospective correction, not a semantic failure or retrospective reinterpretation. No observed test failures discarded. Partial hand fixture cohort errors remain in frozen full diagnostic JSON.",
+  "public_generator_boundary": {
+    "prescribed_exact_manifest_version": "rgm-planning-controls-2.0.0",
+    "prescribed_exact_batch": "planning-gap-v2",
+    "generator_version": "Nonempty strict string and one coherent candidate cohort version; no public exact spelling. Rejects reuse when asserted version is present in explicit parent metadata. Source/checker/producer and inventory-byte custody require actual external execution receipts, not version text alone.",
+    "historical_projection": "Deep-copied input-only V1 projection may set historical generator/version to run unchanged frozen V1 gates. Original supplied rows/manifest remain untouched."
+  },
+  "renderer_public_interpretation": {
+    "public_location": "schemas/RGM_PLANNING_V2_RENDERER_CONTROL_ENCODING_ADDENDUM.md paragraphs3-6",
+    "document_bindings": 7,
+    "required_semantic_pairs": 96,
+    "required_renderer_declarations": 192,
+    "each_declaration": "Exactly2actual distinct sample IDs, ordered actual logical left/right contexts, same actual renderer style/family/split. Both styles required. Actual read-back identifies styles, not ID spelling or context sample ordering.",
+    "control_ids": "Every declaration has its own globally distinct nonempty string, as explicitly published in NEW addendum. Repeated true names/pairs allowed and extra truthful declarations separately reported. No additional closed witness/control object shape beyond published required fields."
+  },
+  "shared_implementation": "V1 finite search, validation, isomorphism, control and novelty gates; internal immutable input-only V1 projection. New V2 guard replay, clearance, selective mutants, no-op controls and actual renderer pair checks.",
+  "independence_boundaries": "Frozen public V1/V2 docs/addendum and own frozen V1 source/tests only. No producer/candidate/gold/root gates/private verdicts or actual parent/prior input views read.",
+  "model_and_role_disclosure": "This formal role uses the same underlying model as coordinating team agents. V2 deliberately shares its own frozen independently authored V1 search/validation/isomorphism and handmade fixtures; separate producer/reviewer roles and actual IDs do not imply model independence. No producer code, candidate inputs, stored gold, private verdicts or root gates used. No training/model calls or production approval.",
+  "limitations": "Handmade partial family batches retain global cohort/novelty failures. These executions establish tested mechanics and fail-closed controls; they do not establish production408/204/48 closure, actual novelty, actual input custody or approve data.",
+  "pipeline_ownership": "Root integrates and executes on future frozen candidate/explicit parent/prior input inventories; this author did not edit or run pipeline."
+}

@@ -1,0 +1,14 @@
+{
+  "runner_execution": "/root",
+  "at_utc": "2026-10-10T06:14:38.806845+00:00",
+  "source_sha256": "0b72764f5703e45ca2fe26e9b86eae61b42e8384ff8c91116f79a7dada129652",
+  "command": [
+    "/opt/anaconda3/bin/python3",
+    "quality_reports/run_rgm_v2_validation.py",
+    "focused"
+  ],
+  "exit_code": 1,
+  "observed_error": "ModuleNotFoundError: No module named oracles at runner public SPECIFICATIONS import",
+  "phase": "Before PREEXECUTION/OUTPUT/EXECUTION writes or any validation run",
+  "correction": "Supply PYTHONPATH=.:tests for runner invocation and its child processes; source unchanged"
+}

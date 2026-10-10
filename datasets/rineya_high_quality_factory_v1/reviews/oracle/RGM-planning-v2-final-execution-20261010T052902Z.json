@@ -1,0 +1,58 @@
+{
+  "actual_execution_id": "/root/formal_oracle",
+  "role": "Independent prospective formal author/runner; no data approval",
+  "at_utc": "2026-10-10T05:29:43.544755+00:00",
+  "python_executable": "/opt/anaconda3/bin/python3",
+  "python_version": "3.12.4 | packaged by Anaconda, Inc. | (main, Jun 18 2024, 10:07:17) [Clang 14.0.6 ]",
+  "runner_path": "reviews/oracle/RGM-planning-v2-final-runner-20261010T052902Z.py",
+  "source_sha256": {
+    "oracles/rgm_planning_controls_v2_independent.py": "69944b8e06fb984947d0d686296d0bb886aecc358ae6f7405d279d0ba5a40fdf",
+    "tests/oracle_rgm_planning_v2_test.py": "b21a64de06d58fba6711a704508bf31babab619f9c48821b2b0116e9f327ce85",
+    "oracles/rgm_planning_controls_independent.py": "cd92cff9bb92eb38afd5a989109718cd600390a9609a13fc070f9cc1e1677bf3",
+    "tests/oracle_rgm_planning_controls_test.py": "f1514507b3074d3edad312d0dbbf680b44bd86fee4a0181c80825c24612574b7",
+    "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+    "reviews/oracle/RGM-planning-v2-final-runner-20261010T052902Z.py": "1869942df1f7b14d9f09e13d273fd0144ac259cb0e9932eeeff87527cddad438"
+  },
+  "public_sha256": {
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES.md": "f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a",
+    "schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+    "research/curricula/RGM-NEXT-GAP-PROSPECTIVE.md": "6100d43fe1cf83d798bb34799fac70569f54d33f66692150d188581d9c940761",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2.md": "d59ce14dd66c6ebd644580f7736e714fbceda32dd132d8c9cb5cf61e78a5a258",
+    "research/curricula/RGM-PLANNING-GAP-V2-PROSPECTIVE.md": "34a3c89302d4b965ee784cd2f52207b6e9cb0b4299b52b82bf97c675c2d77d2c",
+    "schemas/RGM_PLANNING_V2_RENDERER_CONTROL_ENCODING_ADDENDUM.md": "48e1ebbe954944d8b6569866fa102962607c4ecf27a1d7133f1259f815eac603",
+    "research/curricula/RGM-PLANNING-GAP-V2-ROOT_FREEZE.json": "35259b023c0fa70cf4d044a4d7e1a0d5143f26ed5bab5c1f6646ce1ce49402b9",
+    "research/curricula/RGM-PLANNING-GAP-V2-RENDERER-ROOT_FREEZE.json": "7759940fcb0412f67f02c620cc40f52216ca7cbfb695e4f2f5690e99b12f2dbd"
+  },
+  "tests": 25,
+  "failures": 0,
+  "errors": 0,
+  "elapsed_seconds": 3.0096038329938892,
+  "counts": {
+    "hand_families": 9,
+    "guard_transition_cases": 260,
+    "mutant_transition_cases": 780,
+    "clearance_mutations": 21,
+    "metadata_mutations": 32,
+    "small_world_goal_pairs": 169,
+    "typed_malformed_cases": 11
+  },
+  "output": "test_actual_renderer_presentation_inconsistency_rejected (oracle_rgm_planning_v2_test.PlanningV2Tests.test_actual_renderer_presentation_inconsistency_rejected) ... ok\ntest_canonical_witness_initial_precedence (oracle_rgm_planning_v2_test.PlanningV2Tests.test_canonical_witness_initial_precedence) ... ok\ntest_clearance_must_remain_clear_after_enabling (oracle_rgm_planning_v2_test.PlanningV2Tests.test_clearance_must_remain_clear_after_enabling) ... ok\ntest_clearance_types_missing_fields_codes_and_wrong_actions (oracle_rgm_planning_v2_test.PlanningV2Tests.test_clearance_types_missing_fields_codes_and_wrong_actions) ... ok\ntest_complete_diagnostic_json_replays_under_distinct_hash_seeds (oracle_rgm_planning_v2_test.PlanningV2Tests.test_complete_diagnostic_json_replays_under_distinct_hash_seeds) ... ok\ntest_compound_invalid_guard_vector_rejected (oracle_rgm_planning_v2_test.PlanningV2Tests.test_compound_invalid_guard_vector_rejected) ... ok\ntest_exhaustive_guard_transitions_and_each_mutant (oracle_rgm_planning_v2_test.PlanningV2Tests.test_exhaustive_guard_transitions_and_each_mutant) ... ok\ntest_false_mutant_claim_and_restore_guard_closure_fail (oracle_rgm_planning_v2_test.PlanningV2Tests.test_false_mutant_claim_and_restore_guard_closure_fail) ... ok\ntest_fresh_generator_spelling_is_public_not_private_constant (oracle_rgm_planning_v2_test.PlanningV2Tests.test_fresh_generator_spelling_is_public_not_private_constant) ... ok\ntest_global_control_id_collision_across_families (oracle_rgm_planning_v2_test.PlanningV2Tests.test_global_control_id_collision_across_families) ... ok\ntest_guard_values_are_exact_bool_and_indices_exclude_bool (oracle_rgm_planning_v2_test.PlanningV2Tests.test_guard_values_are_exact_bool_and_indices_exclude_bool) ... ok\ntest_hand_source_and_destination_selectivity (oracle_rgm_planning_v2_test.PlanningV2Tests.test_hand_source_and_destination_selectivity) ... ok\ntest_illegal_prefix_cannot_supply_clearance_witness (oracle_rgm_planning_v2_test.PlanningV2Tests.test_illegal_prefix_cannot_supply_clearance_witness) ... ok\ntest_incomplete_prefix_or_mutant_execution_is_unknown (oracle_rgm_planning_v2_test.PlanningV2Tests.test_incomplete_prefix_or_mutant_execution_is_unknown) ... ok\ntest_isolated_table_noop_all_allocated_k (oracle_rgm_planning_v2_test.PlanningV2Tests.test_isolated_table_noop_all_allocated_k) ... ok\ntest_manifest_dispatch_and_exact_hashes_before_values (oracle_rgm_planning_v2_test.PlanningV2Tests.test_manifest_dispatch_and_exact_hashes_before_values) ... ok\ntest_manifest_positive_families_immutable_source_ignored_gold (oracle_rgm_planning_v2_test.PlanningV2Tests.test_manifest_positive_families_immutable_source_ignored_gold) ... ok\ntest_missing_mixed_reversed_combined_or_wrong_style_control (oracle_rgm_planning_v2_test.PlanningV2Tests.test_missing_mixed_reversed_combined_or_wrong_style_control) ... ok\ntest_missing_rows_contexts_controls_or_witness_fail_closed (oracle_rgm_planning_v2_test.PlanningV2Tests.test_missing_rows_contexts_controls_or_witness_fail_closed) ... ok\ntest_mutants_have_no_compensating_post_transition_validator (oracle_rgm_planning_v2_test.PlanningV2Tests.test_mutants_have_no_compensating_post_transition_validator) ... ok\ntest_name_permutation_and_illegal_suffix_absorption (oracle_rgm_planning_v2_test.PlanningV2Tests.test_name_permutation_and_illegal_suffix_absorption) ... ok\ntest_noop_compound_invalid_and_wrong_prefix_not_control (oracle_rgm_planning_v2_test.PlanningV2Tests.test_noop_compound_invalid_and_wrong_prefix_not_control) ... ok\ntest_renderer_control_addendum_exact_seven_bindings (oracle_rgm_planning_v2_test.PlanningV2Tests.test_renderer_control_addendum_exact_seven_bindings) ... ok\ntest_search_incompletion_is_unknown_not_infeasible (oracle_rgm_planning_v2_test.PlanningV2Tests.test_search_incompletion_is_unknown_not_infeasible) ... ok\ntest_wrong_typed_world_and_generator (oracle_rgm_planning_v2_test.PlanningV2Tests.test_wrong_typed_world_and_generator) ... ok\n\n----------------------------------------------------------------------\nRan 25 tests in 3.009s\n\nOK\n",
+  "source_unchanged_after_run": true,
+  "diagnostic_replays": {
+    "seeds": [
+      "1",
+      "987"
+    ],
+    "full_json_byte_equal": true,
+    "raw_path": "reviews/oracle/RGM-planning-v2-handmade-diagnostic-20261010T052902Z.json",
+    "raw_sha256": "7c494b6c839cc6980460e786332dde9b12e7487eb94e1d3cdcf96f75edcc759d",
+    "raw_bytes": 42400
+  },
+  "generator_version_interface": "Nonempty strict string, one coherent cohort version; no prescribed spelling. Compare freshness against parent generator_version only when present in supplied public parent metadata. Explicit source/version/hash custody belongs in caller execution receipts.",
+  "shared_implementation": "V1 finite search, validation, isomorphism, control and novelty gates; internal immutable input-only V1 projection. New V2 guard replay, clearance, selective mutants, no-op controls and actual renderer pair checks.",
+  "read_boundary": "Frozen public V1/V2 docs/addendum and own frozen V1 source/tests only. No producer/candidate/gold/root gates/private verdicts or actual parent/prior input views read.",
+  "limitations": "Handmade partial family batches retain global cohort/novelty failures. These executions establish tested mechanics and fail-closed controls; they do not establish production408/204/48 closure, actual novelty, actual input custody or approve data.",
+  "history": "Prior18-test and24-test sources/execution receipts remain immutable; version-string boundary correction is new final prospective source."
+}

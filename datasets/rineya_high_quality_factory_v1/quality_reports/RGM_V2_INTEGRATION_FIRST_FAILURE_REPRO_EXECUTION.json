@@ -1,0 +1,43 @@
+{
+  "at_utc": "2026-10-10T06:13:44.646063+00:00",
+  "runner_execution": "/root",
+  "source_sha256_before": {
+    "factory/planning_controls.py": "64c93549ffd0fe074b59ba371e23e36ca414ed2729b0c44031dd8a86b5f1318c",
+    "factory/pipeline.py": "d3d328e4b604f85fdd0c88d5f39aee2773689626412f72f7aeae9768429c5b62",
+    "tests/test_planning_gap_v2_gate.py": "c47ee50104f643462fb353d852c2afc17eb8d229969cff6be315845cea5856ee"
+  },
+  "command": [
+    "/opt/anaconda3/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_planning_gap_v2_gate",
+    "tests.test_planning_control_gate",
+    "tests.test_planning_review_corrections",
+    "tests.oracle_rgm_planning_v2_test",
+    "-v"
+  ],
+  "scope": "Faithful re-execution of previously observed session72663 first integration failure, before correcting current sources; original raw session output not fabricated",
+  "returncode": 1,
+  "wall_seconds": 17.958549165996374,
+  "source_sha256_after": {
+    "factory/planning_controls.py": "64c93549ffd0fe074b59ba371e23e36ca414ed2729b0c44031dd8a86b5f1318c",
+    "factory/pipeline.py": "d3d328e4b604f85fdd0c88d5f39aee2773689626412f72f7aeae9768429c5b62",
+    "tests/test_planning_gap_v2_gate.py": "c47ee50104f643462fb353d852c2afc17eb8d229969cff6be315845cea5856ee"
+  },
+  "source_bytes_unchanged": true,
+  "output_sha256": "c2656d628c5f222fad0564c7f1cb4a2bf2a17300f2646ae8d1216b6a0284a0ec",
+  "output_path": "quality_reports/RGM_V2_INTEGRATION_FIRST_FAILURE_REPRO_OUTPUT.txt",
+  "original_observation": {
+    "session": 72663,
+    "returncode": 1,
+    "test_count": 27,
+    "errors": 7,
+    "passed": 20,
+    "reported_runtime_seconds": 17.73
+  },
+  "reproduced_causes": [
+    "V1 frozen module has no VERSION: report-only integration AttributeError in six legacy gate tests",
+    "Formal frozen V2 test imports old fixture as top-level module: root package invocation needs tests directory on PYTHONPATH"
+  ],
+  "frozen_formal_source_and_tests_will_not_be_modified": true
+}

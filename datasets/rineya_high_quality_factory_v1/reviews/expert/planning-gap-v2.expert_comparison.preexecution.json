@@ -1,0 +1,82 @@
+{
+  "actual_author": "/root/expert_reviewer",
+  "stage": "CANONICAL_COMPARISON_SOURCE_BEFORE_EXECUTION",
+  "created_utc": "2026-10-10T06:20:26.002918+00:00",
+  "source": {
+    "path": "reviews/expert/review_rgm_planning_gap_v2_comparison.py",
+    "sha256": "6f0f10709514ec02335c41cdd5bcd63854538e1822edaecb1f9b9214277e9414",
+    "bytes": 29457
+  },
+  "archive": {
+    "path": "reviews/expert/planning-gap-v2.expert_comparison.preexecution_source.py",
+    "sha256": "6f0f10709514ec02335c41cdd5bcd63854538e1822edaecb1f9b9214277e9414",
+    "bytes": 29457
+  },
+  "inputs_before": [
+    {
+      "path": "data/RGM-001/candidate_renderings/planning-gap-v2.jsonl",
+      "sha256": "57dfa90e3946fbb657d03c33388e2d67fb3fa9107e4b4de4ffddef0b16289c23",
+      "bytes": 1624324
+    },
+    {
+      "path": "data/RGM-001/manifests/planning-gap-v2.family_controls.json",
+      "sha256": "9c4497cf61e1d77cea24d808eca965c00e10e975cf235bd7d1aa2667e259da17",
+      "bytes": 210628
+    },
+    {
+      "path": "reviews/expert/planning-gap-v2.expert_input.freeze.json",
+      "sha256": "86ce199557ccb7b8353a51964e892f10569ddb94814c19f4c411f035a426804e",
+      "bytes": 2875
+    },
+    {
+      "path": "reviews/expert/planning-gap-v2.expert_input_predictions.jsonl",
+      "sha256": "ef9f9dc812f68eaa1442a17cbb7c957f74fe0adebc68e3ea569cdc54c83d2255",
+      "bytes": 2112542
+    },
+    {
+      "path": "reviews/expert/planning-gap-v2.expert_first_input_judgments.jsonl",
+      "sha256": "16717fe11f20d4ad5c797ad99d792621094193685ddd9797d51f410396fef77f",
+      "bytes": 758090
+    },
+    {
+      "path": "reviews/expert/planning-gap-v2.expert_input_analysis.json",
+      "sha256": "81e1d89190270b9b6fa8c041d31ea18fda201a7e276ca430deac22fe1be0dbc1",
+      "bytes": 245111
+    },
+    {
+      "path": "reviews/expert/prepare_rgm_planning_gap_v2.py",
+      "sha256": "7c74fcebba1057bcdb0313c7c658b57a0752d041558f82534fb44a573d98fc53",
+      "bytes": 28062
+    },
+    {
+      "path": "reviews/expert/review_rgm_planning_gap_v2_input_stage.py",
+      "sha256": "c85157b7920d3b6070bc8059f73f1c1d7184f7e09bea2df564dbd3306b39e102",
+      "bytes": 29805
+    },
+    {
+      "path": "research/research_gap_analysis/RGM_PRIOR_ACTIVE_INPUTS.jsonl",
+      "sha256": "896e6b1b994dad33f2288680d633afc0b50572140d2bd3aaa2169687529caf5d",
+      "bytes": 229042
+    },
+    {
+      "path": "reviews/input_only/planning-gap-v1.jsonl",
+      "sha256": "2a6c9d785f9e2de47233de06bad3371e4a4f072e9be1133340913ceec30a6654",
+      "bytes": 1008984
+    },
+    {
+      "path": "reviews/input_only/planning-gap-v2.jsonl",
+      "sha256": "00bd1c2de5d0d4719957bb2ded44e2342940de4d368c65b646817474fe79b73c",
+      "bytes": 1070144
+    }
+  ],
+  "prior_input_stage_predictions_and_judgments_already_frozen": true,
+  "canonical_access_only_after_input_prediction_freeze": true,
+  "planned_command": [
+    "/opt/anaconda3/bin/python3",
+    "-B",
+    "reviews/expert/review_rgm_planning_gap_v2_comparison.py",
+    "derive"
+  ],
+  "guidance": "Public-guided corrective same48-family cohort, own V1 solver reuse and shared underlying model disclosed. No producer/formal/root private diagnostics or other reviewer verdict reads.",
+  "no_publication_authority": true
+}

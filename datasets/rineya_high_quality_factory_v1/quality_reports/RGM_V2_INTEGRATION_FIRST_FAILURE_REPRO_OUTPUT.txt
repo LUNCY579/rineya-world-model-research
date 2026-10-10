@@ -1,0 +1,122 @@
+test_actual_both_frozen_sources_and_seven_public_docs_are_bound (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_actual_both_frozen_sources_and_seven_public_docs_are_bound) ... ok
+test_c4_and_namespaced_new_property_route_without_version_convention (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_c4_and_namespaced_new_property_route_without_version_convention) ... ok
+test_changed_checker_binding_blocks_before_family_evidence (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_changed_checker_binding_blocks_before_family_evidence) ... ok
+test_changed_parent_bytes_block_freshness_evidence (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_changed_parent_bytes_block_freshness_evidence) ... ok
+test_marker_presence_cannot_hide_obligations_with_invalid_marker_value (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_marker_presence_cannot_hide_obligations_with_invalid_marker_value) ... ok
+test_missing_parent_blocks_before_cohort_audit (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_missing_parent_blocks_before_cohort_audit) ... ok
+test_new_row_property_cannot_use_v1_metadata_checker (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_new_row_property_cannot_use_v1_metadata_checker) ... ok
+test_public_manifest_routes_arbitrary_fresh_generator_spelling (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_public_manifest_routes_arbitrary_fresh_generator_spelling) ... ok
+test_unknown_manifest_version_fails_without_decoding_family_evidence (tests.test_planning_gap_v2_gate.PlanningV2PublicationTests.test_unknown_manifest_version_fails_without_decoding_family_evidence) ... ok
+test_actual_independent_checker_rejects_incomplete_corpus (tests.test_planning_control_gate.PlanningControlGateTests.test_actual_independent_checker_rejects_incomplete_corpus) ... ERROR
+test_approval_filter_cannot_publish_incomplete_planning_controls (tests.test_planning_control_gate.PlanningControlGateTests.test_approval_filter_cannot_publish_incomplete_planning_controls) ... ERROR
+test_batch_identity_survives_removed_revision_and_tags (tests.test_planning_control_gate.PlanningControlGateTests.test_batch_identity_survives_removed_revision_and_tags) ... ok
+test_changed_prior_inventory_blocks_novelty_claim (tests.test_planning_control_gate.PlanningControlGateTests.test_changed_prior_inventory_blocks_novelty_claim) ... ERROR
+test_correct_targets_do_not_hide_failed_batch_controls (tests.test_planning_control_gate.PlanningControlGateTests.test_correct_targets_do_not_hide_failed_batch_controls) ... ERROR
+test_hard_revision_survives_removed_tags_and_metadata (tests.test_planning_control_gate.PlanningControlGateTests.test_hard_revision_survives_removed_tags_and_metadata) ... ERROR
+test_legacy_rows_have_no_new_prospective_obligations (tests.test_planning_control_gate.PlanningControlGateTests.test_legacy_rows_have_no_new_prospective_obligations) ... ok
+test_missing_manifest_blocks_with_valid_frozen_sources (tests.test_planning_control_gate.PlanningControlGateTests.test_missing_manifest_blocks_with_valid_frozen_sources) ... ERROR
+test_public_tag_recognized_inside_namespaced_tag (tests.test_planning_control_gate.PlanningControlGateTests.test_public_tag_recognized_inside_namespaced_tag) ... ok
+test_context_and_stratum_each_retain_planning_obligations_after_version_change (tests.test_planning_review_corrections.PlanningReviewCorrectionTests.test_context_and_stratum_each_retain_planning_obligations_after_version_change) ... ok
+test_exact_role_identities_required_before_release (tests.test_planning_review_corrections.PlanningReviewCorrectionTests.test_exact_role_identities_required_before_release) ... ok
+test_optional_row_metadata_and_outer_task_metadata_fail_closed (tests.test_planning_review_corrections.PlanningReviewCorrectionTests.test_optional_row_metadata_and_outer_task_metadata_fail_closed) ... ok
+test_private_metadata_labels_in_full_prompt_rejected_without_banning_prose (tests.test_planning_review_corrections.PlanningReviewCorrectionTests.test_private_metadata_labels_in_full_prompt_rejected_without_banning_prose) ... ok
+test_private_outer_task_key_casing_matches_prompt_boundary (tests.test_planning_review_corrections.PlanningReviewCorrectionTests.test_private_outer_task_key_casing_matches_prompt_boundary) ... ok
+test_prospective_batch_cannot_skip_planning_gate_with_removed_metadata (tests.test_planning_review_corrections.PlanningReviewCorrectionTests.test_prospective_batch_cannot_skip_planning_gate_with_removed_metadata) ... ok
+test_public_payload_names_equal_to_metadata_words_remain_valid (tests.test_planning_review_corrections.PlanningReviewCorrectionTests.test_public_payload_names_equal_to_metadata_words_remain_valid) ... ok
+test_rehashed_privileged_metadata_in_contract_lead_rejected_by_actual_schema (tests.test_planning_review_corrections.PlanningReviewCorrectionTests.test_rehashed_privileged_metadata_in_contract_lead_rejected_by_actual_schema) ... ok
+oracle_rgm_planning_v2_test (unittest.loader._FailedTest.oracle_rgm_planning_v2_test) ... ERROR
+
+======================================================================
+ERROR: test_actual_independent_checker_rejects_incomplete_corpus (tests.test_planning_control_gate.PlanningControlGateTests.test_actual_independent_checker_rejects_incomplete_corpus)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/test_planning_control_gate.py", line 89, in test_actual_independent_checker_rejects_incomplete_corpus
+    report = planning_control_report([fixture_row()], 'SYNTHETIC', root)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/factory/planning_controls.py", line 133, in planning_control_report
+    report['checker_revision'] = module.VERSION
+                                 ^^^^^^^^^^^^^^
+AttributeError: module 'oracles.rgm_planning_controls_independent' has no attribute 'VERSION'
+
+======================================================================
+ERROR: test_approval_filter_cannot_publish_incomplete_planning_controls (tests.test_planning_control_gate.PlanningControlGateTests.test_approval_filter_cannot_publish_incomplete_planning_controls)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/test_planning_control_gate.py", line 141, in test_approval_filter_cannot_publish_incomplete_planning_controls
+    release(batch, 'SYNTHETIC-NO-PUBLICATION', ['RGM-001'])
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/factory/pipeline.py", line 355, in release
+    planning_controls=planning_control_report(accepted,batch,ROOT)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/factory/planning_controls.py", line 133, in planning_control_report
+    report['checker_revision'] = module.VERSION
+                                 ^^^^^^^^^^^^^^
+AttributeError: module 'oracles.rgm_planning_controls_independent' has no attribute 'VERSION'
+
+======================================================================
+ERROR: test_changed_prior_inventory_blocks_novelty_claim (tests.test_planning_control_gate.PlanningControlGateTests.test_changed_prior_inventory_blocks_novelty_claim)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/test_planning_control_gate.py", line 81, in test_changed_prior_inventory_blocks_novelty_claim
+    report = planning_control_report([fixture_row()], 'SYNTHETIC', root)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/factory/planning_controls.py", line 133, in planning_control_report
+    report['checker_revision'] = module.VERSION
+                                 ^^^^^^^^^^^^^^
+AttributeError: module 'oracles.rgm_planning_controls_independent' has no attribute 'VERSION'
+
+======================================================================
+ERROR: test_correct_targets_do_not_hide_failed_batch_controls (tests.test_planning_control_gate.PlanningControlGateTests.test_correct_targets_do_not_hide_failed_batch_controls)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/test_planning_control_gate.py", line 109, in test_correct_targets_do_not_hide_failed_batch_controls
+    report = audit(batch)
+             ^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/factory/pipeline.py", line 241, in audit
+    planning_controls=planning_control_report(rows,batch,ROOT)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/factory/planning_controls.py", line 133, in planning_control_report
+    report['checker_revision'] = module.VERSION
+                                 ^^^^^^^^^^^^^^
+AttributeError: module 'oracles.rgm_planning_controls_independent' has no attribute 'VERSION'
+
+======================================================================
+ERROR: test_hard_revision_survives_removed_tags_and_metadata (tests.test_planning_control_gate.PlanningControlGateTests.test_hard_revision_survives_removed_tags_and_metadata)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/test_planning_control_gate.py", line 47, in test_hard_revision_survives_removed_tags_and_metadata
+    report = planning_control_report([row], 'SYNTHETIC', Path(directory))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/factory/planning_controls.py", line 133, in planning_control_report
+    report['checker_revision'] = module.VERSION
+                                 ^^^^^^^^^^^^^^
+AttributeError: module 'oracles.rgm_planning_controls_independent' has no attribute 'VERSION'
+
+======================================================================
+ERROR: test_missing_manifest_blocks_with_valid_frozen_sources (tests.test_planning_control_gate.PlanningControlGateTests.test_missing_manifest_blocks_with_valid_frozen_sources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/test_planning_control_gate.py", line 71, in test_missing_manifest_blocks_with_valid_frozen_sources
+    report = planning_control_report([fixture_row()], 'SYNTHETIC', root)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/factory/planning_controls.py", line 133, in planning_control_report
+    report['checker_revision'] = module.VERSION
+                                 ^^^^^^^^^^^^^^
+AttributeError: module 'oracles.rgm_planning_controls_independent' has no attribute 'VERSION'
+
+======================================================================
+ERROR: oracle_rgm_planning_v2_test (unittest.loader._FailedTest.oracle_rgm_planning_v2_test)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: oracle_rgm_planning_v2_test
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.12/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/tests/oracle_rgm_planning_v2_test.py", line 11, in <module>
+    import oracle_rgm_planning_controls_test as old
+ModuleNotFoundError: No module named 'oracle_rgm_planning_controls_test'
+
+
+----------------------------------------------------------------------
+Ran 27 tests in 17.832s
+
+FAILED (errors=7)

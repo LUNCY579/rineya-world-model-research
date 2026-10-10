@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 from factory.common import ROOT, VERSION, canonical, digest, atomic, write_json, write_jsonl, load_jsonl, record_hash, candidate_paths
 from factory.reference import solve as reference_solve
-from factory.planning_controls import planning_control_rows, planning_control_report
+from factory.planning_controls import planning_control_rows, planning_control_report, planning_checker
 
 REQUIRED = {"sample_id", "semantic_parent_id", "semantic_family_id", "track_id", "skill_tags", "difficulty", "generator_version", "oracle_version", "generation_seed", "source_provenance", "semantic_task", "rendered_input", "verified_target", "target_format", "split", "review_status", "review_receipt_ids", "record_hash"}
 APPROVAL_ACTORS = {'expert': '/root/expert_reviewer', 'adversarial': '/root/adversarial_auditor',
@@ -158,6 +158,7 @@ def preserve_source_bytes(paths):
 def audit(batch):
     from oracles.independent import solve as independent_solve
     rows=[r for p in candidate_paths(batch) for r in load_jsonl(p)]
+    planning_module=planning_checker(rows,batch,ROOT) if planning_control_rows(rows,batch) else None
     control_source=ROOT/'oracles/memory_controls_independent.py'
     control_source_sha=hashlib.sha256(control_source.read_bytes()).hexdigest() if memory_control_rows(rows) else None
     selected_belief_rows=belief_control_rows(rows)
@@ -183,8 +184,7 @@ def audit(batch):
             assert canonical(gold)==canonical(row["verified_target"]), "independent oracle mismatch"
             assert canonical(expected_target(row,reference_solve))==canonical(gold), "reference mismatch"
             if planning_control_rows([row], batch):
-                from oracles.rgm_planning_controls_independent import solve as planning_solve
-                assert canonical(expected_target(row,planning_solve))==canonical(gold), "planning independent exact oracle mismatch"
+                assert canonical(expected_target(row,planning_module.solve))==canonical(gold), "planning independent exact oracle mismatch"
         except Exception as e: errors.append(f"{type(e).__name__}: {e}")
         from oracles.metadata_independent import check as metadata_check
         metadata_errors=metadata_check(row)
@@ -194,8 +194,7 @@ def audit(batch):
         if belief_control_rows([row]):
             metadata_errors.extend(belief_module.check(row))
         if planning_control_rows([row], batch):
-            from oracles.rgm_planning_controls_independent import check as planning_check
-            metadata_errors.extend(planning_check(row))
+            metadata_errors.extend(planning_module.check(row))
         errors.extend('Metadata: '+e for e in metadata_errors)
         lineage[row["semantic_family_id"]].add(row["split"])
         payloads[digest(row["semantic_task"])].append(row["sample_id"])
@@ -401,6 +400,7 @@ def validate_release(path):
             blob=ROOT/'reproducibility/source_blobs'/f'{sha}.source'
             assert blob.is_file() and hashlib.sha256(blob.read_bytes()).hexdigest()==sha,'Missing exact release source bytes'
     rows=load_jsonl(path/"canonical.jsonl")
+    planning_module=planning_checker(rows,manifest['batch'],ROOT) if planning_control_rows(rows,manifest['batch']) else None
     assert len(rows)==manifest["records"]
     if manifest.get('export_profile'):
         expected_suffixes={'RGM-001':['trajectories'],'RVM-001':['preference','process_reward'],'RSM-001':['skill_demonstrations'],'REM-001':['memory_updates'],'RMM-001':['memory_updates'],'RBM-001':['belief_updates'],'ROM-001':['belief_updates']}.get(manifest['track'],[])
@@ -417,8 +417,7 @@ def validate_release(path):
         if belief_control_rows([r]):
             metadata_failures.extend(belief_checker([r]).check(r))
         if planning_control_rows([r],manifest['batch']):
-            from oracles.rgm_planning_controls_independent import check as planning_check
-            metadata_failures.extend(planning_check(r))
+            metadata_failures.extend(planning_module.check(r))
         if metadata_failures:
             from factory.catalog import catalog
             active,_=catalog()

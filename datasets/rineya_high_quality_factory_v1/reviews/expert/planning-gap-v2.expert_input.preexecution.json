@@ -1,0 +1,78 @@
+{
+  "actual_author": "/root/expert_reviewer",
+  "stage": "V2_INPUT_STAGE_SOURCE_FROZEN_BEFORE_EXECUTION",
+  "created_utc": "2026-10-10T06:08:00.834113+00:00",
+  "source": {
+    "path": "reviews/expert/review_rgm_planning_gap_v2_input_stage.py",
+    "sha256": "c85157b7920d3b6070bc8059f73f1c1d7184f7e09bea2df564dbd3306b39e102",
+    "bytes": 29805
+  },
+  "archive": {
+    "path": "reviews/expert/planning-gap-v2.expert_input.preexecution_source.py",
+    "sha256": "c85157b7920d3b6070bc8059f73f1c1d7184f7e09bea2df564dbd3306b39e102",
+    "bytes": 29805
+  },
+  "input_only_view_before": {
+    "path": "reviews/input_only/planning-gap-v2.jsonl",
+    "sha256": "00bd1c2de5d0d4719957bb2ded44e2342940de4d368c65b646817474fe79b73c",
+    "bytes": 1070144
+  },
+  "input_view_custody_freeze": {
+    "path": "reviews/input_only/planning-gap-v2.freeze.json",
+    "sha256": "11843c6fe93fc3b6547082ee7f49c0eecd65aff04151103980c1e5783401e5aa",
+    "bytes": 1416
+  },
+  "public_own_preparation_source": {
+    "path": "reviews/expert/prepare_rgm_planning_gap_v2.py",
+    "sha256": "7c74fcebba1057bcdb0313c7c658b57a0752d041558f82534fb44a573d98fc53",
+    "bytes": 28062
+  },
+  "public_own_preparation_freeze": {
+    "path": "reviews/expert/planning-gap-v2.expert_preparation.freeze.json",
+    "sha256": "34f3c47f54a2f2593aa978e15677bed2d42e1ac01fc635e445652f1c4cc8e31c",
+    "bytes": 4385
+  },
+  "own_V1_solver": {
+    "path": "reviews/expert/prepare_rgm_planning_gap_v1.py",
+    "sha256": "82ae6d000d5289bf439599579eb6437de5a09468388ead4fb1cef95f9dd3a987",
+    "bytes": 22169
+  },
+  "public_specifications": {
+    "research/curricula/RGM-NEXT-GAP-PROSPECTIVE.md": {
+      "sha256": "6100d43fe1cf83d798bb34799fac70569f54d33f66692150d188581d9c940761",
+      "bytes": 11251
+    },
+    "research/curricula/RGM-PLANNING-GAP-V2-PROSPECTIVE.md": {
+      "sha256": "34a3c89302d4b965ee784cd2f52207b6e9cb0b4299b52b82bf97c675c2d77d2c",
+      "bytes": 12086
+    },
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES.md": {
+      "sha256": "f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a",
+      "bytes": 10450
+    },
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2.md": {
+      "sha256": "d59ce14dd66c6ebd644580f7736e714fbceda32dd132d8c9cb5cf61e78a5a258",
+      "bytes": 13956
+    },
+    "schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md": {
+      "sha256": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+      "bytes": 1641
+    },
+    "schemas/RGM_PLANNING_V2_RENDERER_CONTROL_ENCODING_ADDENDUM.md": {
+      "sha256": "48e1ebbe954944d8b6569866fa102962607c4ecf27a1d7133f1259f815eac603",
+      "bytes": 4951
+    },
+    "schemas/SEMANTICS.md": {
+      "sha256": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+      "bytes": 4833
+    }
+  },
+  "planned_command": [
+    "/opt/anaconda3/bin/python3",
+    "-B",
+    "reviews/expert/review_rgm_planning_gap_v2_input_stage.py"
+  ],
+  "no_gold_private_controls_other_verdicts_read": true,
+  "same_model_public_guided_corrective_own_V1_reuse": true,
+  "no_dataset_approval": true
+}

@@ -1,0 +1,85 @@
+{
+  "status": "GENERIC_REMOTE_LOSSLESS_RUNNER_PREPARED_SOURCE_FROZEN_TESTED_ACTUAL_NETWORK_PENDING",
+  "author_execution": "/root/backup_manager",
+  "actual_preparation_test_runner_execution": "/root/backup_manager",
+  "at_utc": "2026-10-10T06:55:33.190880+00:00",
+  "source_freeze": {
+    "path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/ARCHIVAL_REMOTE_LOSSLESS_SOURCE_FREEZE.json",
+    "size": 2243,
+    "sha256": "ad9e0d0c8b27df84f2e113f4fe2777c2fc48ec3958e6cf2789eaebe85c85fa29"
+  },
+  "runner_source": {
+    "path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/verify_archival_remote_lossless.py",
+    "size": 18363,
+    "sha256": "7bab2c46dd1e7a52520a90617a2d910b5d6987bad8ec2489b05097045505a0aa"
+  },
+  "actual_tests": {
+    "count": 10,
+    "exit_code": 0,
+    "output": {
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/ARCHIVAL_REMOTE_LOSSLESS_TEST_OUTPUT_20261010T065406Z.txt",
+      "size": 1531,
+      "sha256": "c26ccfdfdda1aff763217ddc1a75ce9770d0dd054834f78e386606ba2a280b3c"
+    },
+    "source_freeze_before_actual_tests": {
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/ARCHIVAL_REMOTE_LOSSLESS_TEST_SOURCE_FREEZE_20261010T065406Z.json",
+      "size": 1237,
+      "sha256": "92700d13134d4306a2d9d4f20b0c3d85aadb74ba62d302a56cfbe8108c769ba7"
+    },
+    "actual_network_payload_fetches": 0
+  },
+  "actual_network_payload_fetches": 0,
+  "source_binding_required": true,
+  "old_helpers_and_proofs_unchanged": true,
+  "private_admin": {
+    "isPrivate": true,
+    "nameWithOwner": "LUNCY579/rineya-world-model-research",
+    "viewerPermission": "ADMIN"
+  },
+  "original_head": "a223884d55ff47baf3890c7d4a82054d07223215",
+  "dedicated_current_parent": "448c36af9370460782da3c0a4ba7c5ca4d8ba71a",
+  "both_statuses_clean": true,
+  "six_protected_original_common_git_byte_baselines_match": true,
+  "free_bytes": 8471908352,
+  "proof_guardrails": [
+    "Explicit exact spec, stage, full BACKED_UP inventory receipt, newcommit and sourcefreeze SHA256 bindings before actual fetches",
+    "Completed full proof must come from frozen boundedhelper3f, cover all exact inventory paths and actualraw blob provenance, and bind all raw lossless records",
+    "Fresh privateADMIN/actualbranch/commit/tree and complete dataset path coverage before remote gzip fetches",
+    "Each declared unique raw/gzip representation fetched anew via raw Accept/no-cache gh API; no local Git/gzip fallback",
+    "Every compressed payload checked for size/SHA256/GitSHA1; every decoded byte compared directly to preserved raw plus exact raw SHA256/size and stable file identity",
+    "64KiB stream chunks and8MiB spool; disk spool only own temporary bytes under backup_logs",
+    "New proof and ledger written exclusively; failures preserved; no old proof rewrite or independent overall current-factory BACKED_UP/data approval claim"
+  ],
+  "usage_after_final_root_freeze_push_and_full_inventory_verification": [
+    "python3",
+    "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/verify_archival_remote_lossless.py",
+    "--spec",
+    "FINAL_SPEC_ABSOLUTE_PATH",
+    "--expected-spec-sha256",
+    "FINAL_SPEC_SHA256",
+    "--commit",
+    "NEW_FULL_40_CHARACTER_COMMIT_SHA",
+    "--stage-receipt",
+    "NEW_PUSH_PENDING_STAGE_RECEIPT_ABSOLUTE_PATH",
+    "--expected-stage-sha256",
+    "EXACT_STAGE_RECEIPT_SHA256",
+    "--verified-receipt",
+    "NEW_BACKED_UP_FULL_INVENTORY_RECEIPT_ABSOLUTE_PATH",
+    "--expected-verified-sha256",
+    "EXACT_FULL_INVENTORY_RECEIPT_SHA256",
+    "--source-freeze",
+    "/Users/chengli/Downloads/Rineya_World_Model/High-Quality_Dataset/backup_logs/ARCHIVAL_REMOTE_LOSSLESS_SOURCE_FREEZE.json",
+    "--expected-freeze-sha256",
+    "ad9e0d0c8b27df84f2e113f4fe2777c2fc48ec3958e6cf2789eaebe85c85fa29",
+    "--output",
+    "NEW_PROOF_ABSOLUTE_PATH_IN_QUALITY_REPORTS_OR_BACKUP_LOGS",
+    "--ledger",
+    "NEW_LEDGER_ABSOLUTE_PATH_IN_BACKUP_LOGS",
+    "--runner",
+    "ACTUAL_EXECUTION_ID",
+    "--expected-raw-count",
+    "24"
+  ],
+  "scope_boundary": "This preparation created only new backup source/tests/freeze/readiness/output files. No final inventory, copy, stage, commit, push or actual network payload fetch occurred. New readiness/source files should enter upcoming exact inventory; future execution proof/ledger will be post-inventory local until another checkpoint.",
+  "same_model_disclosure": "Inherited same model; separate actual execution roles do not imply model diversity"
+}

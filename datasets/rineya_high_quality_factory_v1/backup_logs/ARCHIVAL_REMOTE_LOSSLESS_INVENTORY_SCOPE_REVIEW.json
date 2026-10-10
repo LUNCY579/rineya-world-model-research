@@ -1,0 +1,44 @@
+{
+  "author_execution": "/root/backup_manager",
+  "actual_read_only_runner_execution": "/root/backup_manager",
+  "at_utc": "2026-10-10T06:56:29.922039+00:00",
+  "source_sha256": "2b989083d39898dc51ee66dd4fabc5522e73aa896b3c4f625135a3c9590ef24f",
+  "status": "READ_ONLY_CURRENT_DEFERRAL_SCOPE_AND_PRIOR_COVERAGE_PASS",
+  "patterns": [
+    "reviews/expert/*renderer*r1*",
+    "reviews/adversarial/*renderer*r1*",
+    "audits/rgm_planning_gap_v2_renderer_r1_adversarial*",
+    "audits/execution/*renderer*r1*",
+    "audits/diversity/planning-gap-v2-renderer-r1-input*",
+    "audits/diversity/planning-gap-v2-renderer-r1-adversarial*",
+    "audits/shortcut_detection/*renderer*r1*",
+    "reproducibility/source_history/*renderer*r1*expert*/*",
+    "reproducibility/source_history/*renderer*r1*adversarial*/*"
+  ],
+  "previous_tracked_paths_checked": 1801,
+  "previous_paths_matching_deferrals": [],
+  "all_nine_prior_v2_deferred_paths_now_included_by_filter": true,
+  "required_scope_positive_inclusion_tests": [
+    "data/RGM-001/candidate_renderings/planning-gap-v2.jsonl",
+    "data/RGM-001/quarantine/planning-gap-v2.jsonl",
+    "reviews/expert/planning-gap-v2.expert_final.jsonl",
+    "reviews/adjudication/planning-gap-v2.jsonl",
+    "generators/relational/planning_gap_v2_renderer_r1.py",
+    "audits/diversity/planning-gap-v2-renderer-r1-rgm-planning-controls.json",
+    "quality_reports/RGM_V2_RENDERER_R1_AUDIT_EXECUTION.json",
+    "factory/pipeline.py",
+    "README.md",
+    "reproducibility/source_blobs/a.source"
+  ],
+  "currently_observed_new_deferred_names_only": [
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial-input.preexec.json",
+    "audits/rgm_planning_gap_v2_renderer_r1_adversarial_input.py",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.input_first_judgments.jsonl",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.input_predictions.jsonl",
+    "reviews/expert/review_rgm_planning_gap_v2_renderer_r1_input.py"
+  ],
+  "active_new_review_hashes_not_frozen": true,
+  "runtime_guard": "New archival runner guard_previous rejects absence of any previously tracked path before copying",
+  "concrete_scope_blockers": [],
+  "boundary": "Names only; no reviewer or producer expectations/payloads read and no inventory/spec executed. Broad audits/execution and shortcut_detection renderer-r1 patterns should be reserved for new reviewer-owned artifacts; root must include any later completed root gate evidence by its actual nondeferred path."
+}
