@@ -25,7 +25,9 @@ def schema_validate(row):
     assert 1 <= row["difficulty"] <= 7 and row["split"] in ["train","dev_challenge"]
     assert row["source_provenance"]["sealed_evaluation_used"] is False
     payload=row["rendered_input"].split("Task JSON:\n",1)[1]
-    assert json.loads(payload)==row["semantic_task"], "rendering semantic mismatch"
+    # Python container equality conflates bools with integers (True == 1).
+    # Evidence joins must preserve the exact public JSON scalar types.
+    assert canonical(json.loads(payload))==canonical(row["semantic_task"]), "rendering semantic mismatch"
     for key in ["sample_id","semantic_parent_id","record_hash","review_receipt_ids","verified_target"]:
         assert key not in payload, "privileged metadata in student payload"
 
@@ -63,8 +65,8 @@ def audit(batch):
         try:
             schema_validate(row)
             gold=expected_target(row,independent_solve)
-            assert gold==row["verified_target"], "independent oracle mismatch"
-            assert expected_target(row,reference_solve)==gold, "reference mismatch"
+            assert canonical(gold)==canonical(row["verified_target"]), "independent oracle mismatch"
+            assert canonical(expected_target(row,reference_solve))==canonical(gold), "reference mismatch"
         except Exception as e: errors.append(f"{type(e).__name__}: {e}")
         from oracles.metadata_independent import check as metadata_check
         metadata_errors=metadata_check(row)
@@ -227,7 +229,7 @@ def validate_release(path):
     receipt_by={r["receipt_id"]:r for r in load_jsonl(path/"review_receipts.jsonl")}
     for r in rows:
         schema_validate(r)
-        assert expected_target(r,oracle)==r["verified_target"],"released target mismatch"
+        assert canonical(expected_target(r,oracle))==canonical(r["verified_target"]),"released target mismatch"
         from oracles.metadata_independent import check as metadata_check
         metadata_failures=metadata_check(r)
         if metadata_failures:
@@ -248,9 +250,9 @@ def validate_release(path):
         expected=[r for r in rows if r["split"]==split]
         assert len(export)==len(expected)
         for item,r in zip(export,expected):
-            assert item=={"messages":[{"role":"user","content":r["rendered_input"]},{"role":"assistant","content":canonical(r["verified_target"])}]}
+            assert canonical(item)==canonical({"messages":[{"role":"user","content":r["rendered_input"]},{"role":"assistant","content":canonical(r["verified_target"])}]})
         structured=load_jsonl(path/f'{split}-structured.jsonl')
-        assert structured==[{'input':r['rendered_input'],'target':r['verified_target']} for r in expected],'structured export mismatch'
+        assert canonical(structured)==canonical([{'input':r['rendered_input'],'target':r['verified_target']} for r in expected]),'structured export mismatch'
     from factory.export_validation import validate_specialized
     specialized_counts=validate_specialized(path,rows)
     return {"path":str(path.relative_to(ROOT)),"records":len(rows),"checksum_files":len(files),"specialized_exports":specialized_counts,"pass":True}

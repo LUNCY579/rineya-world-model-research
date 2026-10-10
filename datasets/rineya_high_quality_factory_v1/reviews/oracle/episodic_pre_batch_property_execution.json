@@ -1,0 +1,69 @@
+{
+  "receipt_type": "episodic_pre_batch_independent_property_evidence",
+  "author_execution_id": "/root/formal_oracle",
+  "author_role": "Independent Formal Oracle Engineer",
+  "runner_execution_id": "/root/formal_oracle",
+  "recorded_at_utc": "2026-10-10 01:08:18 UTC",
+  "public_contract": "High-Quality_Dataset/schemas/EXTENDED_SEMANTICS.md (episodic section)",
+  "producer_source_read": false,
+  "gold_labels_read": false,
+  "reviewer_verdicts_read": false,
+  "batch_available_or_checked": false,
+  "stable_oracle_before_sha256": {
+    "High-Quality_Dataset/oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+    "High-Quality_Dataset/oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a"
+  },
+  "stable_oracle_unchanged": true,
+  "stable_oracle_modified": false,
+  "defects_found": [],
+  "new_test_file": "High-Quality_Dataset/tests/oracle_episodic_properties_test.py",
+  "test_command": "/opt/anaconda3/bin/python3 -m unittest discover -s High-Quality_Dataset/tests -p 'oracle*.py' -v",
+  "test_chunk_id": "d93652",
+  "test_exit_code": 0,
+  "tests": {
+    "new_episodic": 13,
+    "prior_regressions": 82,
+    "total": 95
+  },
+  "exhaustive_properties": {
+    "history_lengths": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "event_variants": 9,
+    "histories": 820,
+    "keys_queried_per_history": 3,
+    "as_of_values_per_key": 5,
+    "total_query_checks": 12300
+  },
+  "independent_expected_answer_method": "For each query, construct eligible events and identify the unique event not dominated by any other eligible event by version, then time, then input index. Compare complete output through canonical JSON to preserve scalar types.",
+  "checked_properties": [
+    "Delayed event becomes eligible exactly at as_of",
+    "Filter future events before version priority",
+    "Highest version beats later lower version",
+    "Same-version time beats later input index",
+    "Equal version/time uses input index",
+    "Tombstone wins over later lower-version put",
+    "Present null differs from deleted and absent",
+    "Exact-key suppression and irrelevant append invariance",
+    "Irrelevant insertion changes chosen_event index only",
+    "Arbitrary unique query IDs and query-order preservation",
+    "Unsorted histories and nonconflicting event reorder semantics",
+    "JSON scalar type preservation",
+    "Chosen versions cannot decrease as as_of increases",
+    "Selected event always has exact key and eligible time",
+    "Input immutability"
+  ],
+  "files_sha256": {
+    "High-Quality_Dataset/oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+    "High-Quality_Dataset/oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "High-Quality_Dataset/schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+    "High-Quality_Dataset/tests/oracle_episodic_properties_test.py": "6090f66dffe6f5a39c0e236ca5b6c6f29be587463513ef0d8e83856d3f430992"
+  },
+  "test_output": "High-Quality_Dataset/reviews/oracle/episodic_pre_batch_property_test_output.txt",
+  "approval_verdict": null,
+  "approvals_issued": 0,
+  "mutations": "New property test and independent evidence files only."
+}
