@@ -1,162 +1,122 @@
-# T2b-register screen go rule, REVISION 5 (current; pre-stated)
+# T2b-register screen go rule, REVISION 7 (current; pre-stated; wording only)
 
 Applied by `scripts/t2br_analysis.verdict` (exact rationals). The same text is `scripts/t2br_common.GO_RULE_TEXT`, is
-written into `data/t2br_dev.SOURCE.json`, and is a frozen input (`scripts/t2br_run.py --freeze`). Stated 2026-10-09
-(about 22:50) before any `runs/t2b_register` output existed (none exists) and before any model output of this screen
+written into `data/t2br_dev.SOURCE.json`, and is a frozen input (`scripts/t2br_run.py --freeze`). Stated 2026-10-10
+(about 05:00) before any `runs/t2b_register` output existed (none exists) and before any model output of this screen
 was produced.
 
 Earlier revisions are kept verbatim:
-- `GO_RULE_rev1.md`: the first build, about 03:04.
+- `GO_RULE_rev1.md`: the first build, about 03:04 (2026-10-09).
 - `GO_RULE_rev2.md`: after the review, about 07:54.
 - `GO_RULE_rev3.md`: the operator decisions after PREREG-3, about 12:24.
-- `GO_RULE_rev4.md`: the operator-selected verifier fixes, about 17:45. This is the former `GO_RULE.md`, renamed byte
-  for byte (sha256 `e602f63dcae339f750d7d0e74210d2ce21fd7a92725e16d1abc0d4ded3f0c454`).
+- `GO_RULE_rev4.md`: the operator-selected verifier fixes, about 17:45.
+- `GO_RULE_rev5.md`: the operator decisions on the checker's two identification gaps, about 22:50.
+- `GO_RULE_rev6.md`: the operator decisions D-42 (1) to (5), about 03:55 (2026-10-10). This is the former
+  `GO_RULE.md`, renamed byte for byte (sha256 `3da4e491244ae9892ea958a6e7ae33b9e7cf014e6c3cc3ba0e6b5b94a6244c97`;
+  rule text `61888db4b1ec7bf6c18d29c30a7413f29b7e4d5f70efcee7fdf737c7a36a5c84`). Its preface explains revision 6's design.
 
-sha256 of the rule text (one line, UTF-8, no trailing newline): `241befabca5352b07b7d20c97c017654ad57ef3c40d476ab6d4897dcfe6f9abf`
+sha256 of the rule text (one line, UTF-8, no trailing newline): `1458d54d9e01cbaf699dfcc03866ce83aba1d050b43a75aad82ce05295221d9c`
 
-## What changed from revision 4, and why
+## What changed from revision 6, and why
 
-The independent checker found two remaining identification gaps. The operator decided (1) and (2) and asked for (3).
-They are applied as decided. One design choice was mine and is marked as such (2b); the operator can reverse it.
+**The operator's decision (DECISIONS D-43).** Revision 6's DESIGN is approved as is. That includes the documented
+infeasibility of the 40-row cond_adv target (its closest-feasible design is accepted) and the one survivor of G1 in H,
+the isolated exception at d = -4. Revision 7 changes WORDING ONLY:
+1. The always-quoted limits are broadened, so that a reader of a GO cannot think more is excluded than is.
+2. The OVERALL headline carries the report-only `SHORTCUT_CONSISTENT` flag, with a pointer to the limits, whenever the
+   flag is set.
 
-### 1. An absolute, arithmetic-independent predicate clause on cond_sametens
+**Nothing else changed.**
+- No gate, threshold, stratum, data row, stage or computation. The 24 components, their bars, `verdict()`, the
+  scorer, `shortcut_agreement` and its flag are revision 6's.
+- The nine data row files are byte-identical to revision 6. The three SOURCE records were rewritten by the unchanged
+  builder, only because the dev SOURCE embeds the rule text (DESIGN.md section 13).
+- The dry run's 54 verdicts, exact values, failed parts and flags, the enumeration over H and the boundary checks
+  equal revision 6's record. The scorer self-test equals revision 6's record except its code hashes.
 
-**The gap.** Revision 4's cond_sametens clause is relative: trace - plain >= +0.25. cond_sametens has an out-of-range
-|value| (12..40). If the plain arm is weak on that arithmetic, a branch shortcut at 1/2 clears the clause: against a
-plain arm at 0 it needs only 1/4.
+### 1. The always-quoted limits (`t2br_common.ALWAYS_QUOTED_LIMITS`)
 
-**Shown in the dry run (`weak_plain_tens_or_eq_plus1`).** The plain arm answers every out-of-range row wrong. The
-verifier's shortcut 'add iff tens(other) > tens(threshold) or other == threshold + 1' then holds every relative G1 part
-and every revision-4 component, so revision 4's rule would say GO. The mirror ('tens(other) >= tens(threshold) and
-other != threshold') behaves the same.
+**Why.** Revision 6 named only the one survivor in H, and said that G1 "cannot exclude every conceivable
+heuristic". The independent check of revision 6 found natural heuristics OUTSIDE H that pass every G1 part. It also
+found that cond_adv catches its targets only at narrow margins. Revision 6's wording told a reader of a GO neither.
 
-**The fix (as decided).**
-- **Predicate accuracy, defined.** The share of a stratum's rows whose trace answer:
-  - the strict joint parser accepts (keys cmp, calc, after in that order; no extra, missing or duplicate key);
-  - has a cmp object with exactly the keys x, thr, ok, in that literal order;
-  - has an ok that is a JSON boolean equal to the env's predicate (other > threshold) for that row.
+**Revision 6 (old), verbatim:**
 
-  x and thr are not scored. A malformed trace or a wrong key order counts as wrong.
-- **The clause.** The trace side's predicate accuracy on cond_sametens must be >= 0.80, in-surface AND on the
-  held-out-surface rendering. It is decided exactly on counts (>= 80 of 100 rows) and has no plain-arm term.
-- **Kept.** The trace - plain >= +0.25 clause on cond_sametens is unchanged.
-- **Interpretation, stated.** "Wrong key order" is read as covering both the top level and the cmp object, because the
-  joint format fixes both. It can only lower the trace side's score.
+1. G1 identifies the comparison only against the extended shortcut family H (scripts/t2br_shortcuts.py; DESIGN.md section 15): it excludes the members of H, documented by the enumeration over H (DRYRUN.json), and it cannot exclude every conceivable heuristic.
+2. One member of H passes every G1 part: the isolated exception 'other > threshold or other == threshold - 4' (on any 100-row branch-balanced stratum one of the exceptions at other - threshold = -4, -3, -2 passes the 0.80 predicate bar; cond_adv catches -3 and -2).
+3. Per-factor held-out renderings (paraphrase only, names only, key order only) are omitted by choice: a held-out-surface loss cannot be attributed to one factor.
+4. A GO is a seed-0 screen result: the roadmap's confirmation requires the same rule in all 3 seeds before a sealed R bank is built.
 
-A balanced 50/50 stratum gives any branch-blind or tens-digit shortcut about 0.50, so the 0.80 bar separates them. The
-shortcut and its mirror score exactly 1/2 on cond_sametens, in-surface and held out.
+**Revision 7 (new), verbatim:**
 
-### 2. Rows at other = threshold - 1, threshold and threshold + 1: the new stratum cond_oor_edge
+1. G1 excludes the members of the enumerated extended shortcut family H (3,519 predicates of other and threshold; scripts/t2br_shortcuts.py, DESIGN.md section 15) that differ from the comparison, as the enumeration over H against three plain baselines documents (DRYRUN.json shortcut_enumeration), EXCEPT the isolated exception 'other > threshold or other == threshold - 4', which passes every G1 part (on any 100-row branch-balanced stratum one of the exceptions at other - threshold = -4, -3, -2 passes the 0.80 predicate bar; cond_adv catches -3 and -2).
+2. Heuristics OUTSIDE H are NOT excluded, and natural ones pass every G1 part (the revision-6 independent check, confirmed with verdict() on exact counts, both surfaces; DESIGN.md section 14): isolated single-distance exceptions at |other - threshold| >= 5 (H has them only at 2..4; e.g. 'other > threshold except at other - threshold = +5') and flipped distance bands (e.g. 5..9); three-digit-threshold slips (the hundreds digit dropped, only the first two digits read, a threshold above 96 reduced modulo 97, string comparison only against three-digit thresholds, always adding when the threshold is above 96); a register of 0 never counted above a negative threshold; the sign of a threshold at or below -10 dropped; a circular comparison ((other - threshold) mod 97 in 1..48); string comparison only for one-digit thresholds or one-digit registers; guessing on the far rows (|other - threshold| > 15) by string comparison or a prior (other > 48, threshold < 48), and, against a plain arm well below chance on the pooled conditional (the dry run's coin-flip plain at 5/12, or a weak plain arm), also by always adding, always subtracting or the units digit; and any rule that departs from the comparison only on cells that no G1 stratum contains (e.g. in-range cross-decade cells at |other - threshold| 5..15, decided by the units digit or with the branch flipped). The report-only shortcut-agreement flag compares the members of H only, so its absence does not rule these out.
+3. cond_adv catches its targets only at narrow margins: the exceptions at other - threshold = -3, -2, +3 and +4 are wrong on exactly 21 of its 100 rows (79/100, one row below the 0.80 bar), and the signed string comparison, the magnitude comparison and the sign+length-aware digit-sum and units comparisons on exactly 33 (67/100). A trace that follows a caught member on only part of its rows can pass: following it everywhere except on any 1 of those 21 rows, or any 13 of those 33, passes G1; and a trace that departs from the comparison on at most 1/5 of each predicate-gated stratum's rows passes the predicate clauses.
+4. Per-factor held-out renderings (paraphrase only, names only, key order only) are omitted by choice: a held-out-surface loss cannot be attributed to one factor.
+5. A GO is a seed-0 screen result: the roadmap's confirmation requires the same rule in all 3 seeds before a sealed R bank is built.
 
-**The gap.** 'true rule OR other == threshold - 1' scored 1 on every revision-4 G1 part:
-- no G1 stratum had a row at other = threshold - 1;
-- cond_oor_val has only the pair (threshold: ok false; threshold + 1: ok true);
-- cond_sametens has |other - threshold| >= 2, cond_far >= 16, and cond_oor_thr has out-of-range thresholds.
+**The evidence** (DESIGN.md sections 14.1 and 14.2; not part of any gate, and no kit code computes it).
+- **Limit 2.** The revision-6 independent check's search was rerun read-only on the unchanged dev bank. Every result
+  was confirmed with the kit's own `verdict()` on exact counts, both surfaces, through the enumeration harness of
+  `shortcut_enumeration`.
+  - 45 natural heuristics outside H were tested. None equals the comparison or any member of H on the domain.
+  - 42 pass every G1 part under all three plain baselines.
+  - 3 pass against the coin-flip and the weak plain arm only: always add, always subtract and the units digit on the
+    far rows.
+- **Limit 3.** With the same harness, under all three baselines:
+  - a trace that follows the signed string, magnitude, sign+length-aware digit-sum or sign+length-aware units
+    comparison everywhere except on 13 of its 33 wrong cond_adv rows passes G1, and with 12 it fails;
+  - a trace that follows the exception at -3, -2, +3 or +4 everywhere except on 1 of its 21 wrong rows passes G1.
 
-**The fix: a new small boundary stratum, `cond_oor_edge` (80 rows, appended as dv1200..dv1279).**
-- **Quadruples.** 20 branch-balanced minimal quadruples at the boundary of the env's strict `>`: other - threshold =
-  -1 and 0 (ok false), +1 and +2 (ok true).
-- **Pair types.** 10 quadruples share the row and move the threshold (threshold = x + 1, x, x - 1, x - 2). 10 share the
-  event and move the other register (other = threshold - 1 .. threshold + 2).
-- **Out of range.** |value| is 12..40, so the stratum is out of range like cond_oor_val.
-- **In range otherwise.** Registers and thresholds are in range (thresholds realized 3..80).
-- **No wraps.** Neither branch wraps, so a row's 'after' is right iff its branch is right (given the in-branch
-  arithmetic).
-- **Decades.** The decade of the boundary is drawn, not chosen: 8 of the 80 members lie across a decade boundary, in 7
-  quadruples.
-- **Freshness.** It is drawn after cond_sametens, with its own seed (20261115), against the full registry: PREREG-3's
-  exclusion union (the name-skipping harvest), training, dev, chains and cond_sametens. So it is fresh and disjoint from
-  every training payload.
-- **Not pooled.** It is not pooled into 'conditional', so the primary is unchanged.
-- **Byte-identical elsewhere.** Every other data file is byte-identical to revision 4: the six training files and the
-  chain bank. The dev bank's first 1,200 rows and the held-out-surface bank's first 500 rows are revision 4's, byte for
-  byte. `--verify` reconstructs all eight revision-4 data files from the current rows. The 4b fill constants are
-  unchanged (the new traces are 40..46 tokens; the longest conditional trace is still 47).
+### 2. The overall headline (`t2br_analysis.overall_headline`)
 
-**Why every off-by-one variant fails.**
-- **Every variant is contradicted on >= 1/4 of cond_oor_edge.** An off-by-one variant differs from the comparison only
-  at other - threshold in a non-empty set S of {-1, 0, +1}. Every quadruple has one member at each of these distances.
-- **So its predicate accuracy there is at most 3/4 < 0.80.**
+- **Revision 6.** `SCREEN (seed 0): <verdict>` for seed 0 alone; otherwise `GO in every analysed seed` or `NOT GO in
+  every analysed seed`. The flag appeared only in the per-seed section and in the verdict statements.
+- **Revision 7.** The same headline when no analysed seed is flagged. When one is, the headline continues with the
+  flag, marked report-only, and a pointer to the limits.
+- **Example** (the dry run's GO of the exception at -4):
 
-**2b. My design choice: cond_oor_edge carries cond_sametens' two clauses.** That is trace - plain >= +0.25 AND
-predicate accuracy >= 0.80, both surfaces. The reason: a relative clause alone cannot meet decision (2).
-- Against a plain arm exactly at chance (1/2), a single-offset flip scores 3/4 on cond_oor_edge. That is exactly on the
-  +0.25 bar, so the relative clause holds.
-- Against a weak plain arm, it holds by a wide margin.
-- Only the predicate clause fails it, and it does so whatever the plain arm does.
-- Without 2b, 'true rule OR x == t-1' would pass G1 again. A pair design (t-1 false, t+1 true) under a relative clause
-  alone would fail it against a chance plain, but not against a weak plain: the gap of decision (1).
+  `SCREEN (seed 0): GO | SHORTCUT_CONSISTENT in s0 (report-only shortcut-agreement flag; it never changes the verdict: a member of H agrees with the trace's stated cmp.ok at least as well as the true predicate) | read the LIMITS quoted with the verdict (G1 excludes only the members of H, and not the exception 'other > threshold or other == threshold - 4'; heuristics outside H are not excluded)`
 
-**Shown in the dry run** (full pipeline; the expected verdicts are derived from the bank's design, not from a run):
+- **Properties.**
+  - It is a pure function of the per-seed verdicts and flags.
+  - It never changes a verdict: every headline starts with revision 6's headline.
+  - It appears in the results JSON (`overall`), in the report's Overall line and in the analysis' printed line.
 
-| variant | form | contradicted share: conditional / cond_oor_val / cond_oor_edge / cond_sametens | verdict, plain exactly at chance | verdict, plain weak out of range |
-|---|---|---|---|---|
-| obo_m1 | `x > t or x == t-1` | 0 / 0 / 1/4 / 0 | NO-GO (failed: G1 [cond_oor_edge predicate, cond_oor_edge predicate HS]) | the same |
-| obo_0 | `x >= t` | 1/6 / 1/2 / 1/4 / 0 | NO-GO (failed: G1 [cond_oor_val, cond_oor_edge predicate, + HS]) | NO-GO (failed: G1 [cond_oor_edge predicate, + HS]) |
-| obo_p1 | `x > t+1` | 1/6 / 1/2 / 1/4 / 0 | the same as obo_0 | the same as obo_0 |
-| obo_m1_0 | `x >= t-1` | 1/6 / 1/2 / 1/2 / 0 | NO-GO (failed: G1 [cond_oor_val, cond_oor_edge, cond_oor_edge predicate, + HS]) | NO-GO (failed: G1 [cond_oor_edge predicate, + HS]) |
-| obo_m1_p1 | `(x > t or x == t-1) and x != t+1` | 1/6 / 1/2 / 1/2 / 0 | the same as obo_m1_0 | the same |
-| obo_0_p1 | `x == t or x > t+1` | 1/3 / 1 / 1/2 / 0 | NO-GO (failed: G1 [conditional, cond_oor_val, cond_oor_edge, cond_oor_edge predicate, + HS]) | NO-GO (failed: G1 [cond_oor_val, cond_oor_edge predicate, + HS]) |
-| obo_m1_0_p1 | `x in {t-1, t} or x > t+1` | 1/3 / 1 / 3/4 / 0 | as obo_0_p1, and G5 [conditional_in] | as obo_0_p1 (weak), and G5 [conditional_in] |
+### 3. The rule text: the four changed passages (old, then new; verbatim, with three words of context)
 
-"+ HS" means the same parts on the held-out surface. Each variant is contradicted on at least 1/6 of a G1-gated
-stratum (1/4 to 3/4 of cond_oor_edge; 1/2 or 1 of cond_oor_val for the six that touch it). The training rows contradict every single flip on
-exactly 50 of their 300 conditional rows (the core rows at -1 / 0 / +1); this is reported, not gated.
+**Header.**
 
-### 3. The enumeration, again (reported)
+- Revision 6: "GO RULE, REVISION 6 (T2b-register; supersedes revisions 1-5, stated before any"
+- Revision 7: "GO RULE, REVISION 7 (T2b-register; supersedes revisions 1-6, stated before any"
 
-**The family.** 3,483 predicates (972 distinct on the dev conditional rows):
-- 122 tens / units digit bases, plus the off-by-one family bases 'x > t + c' for c = -3..+3;
-- each combined with every modifier at x == t-1, x == t and x == t+1 (each point unchanged, forced true or forced
-  false: 27 modifiers).
+**G1: the predicate-clause scope.**
 
-**How G1 is decided.** By `verdict()` on exact counts, against three plain baselines:
-- chance (exactly 1/2);
-- the dry run's coin-flip plain;
-- a weak plain (0 on every relative G1 part).
+- Revision 6: "the members of H, documented by the enumeration over H against three plain baselines (DRYRUN.json shortcut_enumeration: every member of H that differs from the comparison, except the isolated exception 'other > threshold or other == threshold - 4', which passes every G1 part); it cannot exclude every conceivable heuristic); (G2) trace -"
+- Revision 7: "the members of the enumerated family H that differ from the comparison, except the isolated exception 'other > threshold or other == threshold - 4', which passes every G1 part, as documented by the enumeration over H against three plain baselines (DRYRUN.json shortcut_enumeration); it does NOT exclude heuristics outside H, and natural ones pass every G1 part (LIMITS)); (G2) trace -"
 
-**Results.**
-- **The off-by-one family.** No member passes under any baseline: target met.
-- **Digit shortcuts, chance plain.** 26 predicates in 9 classes still pass. Target not met. Eight classes are
-  non-lexicographic digit-wise comparisons:
-  - `tens(x)>tens(t) or units(x)>units(t)`, and the same with `and x!=t-1`;
-  - `tens(x)>tens(t) or units(x)>=units(t)` with `and x!=t`, and with `and x!=t-1, and x!=t`;
-  - `tens(x)>=tens(t) and units(x)>units(t)`, and the same with `or x==t+1`;
-  - `tens(x)>=tens(t) and units(x)>=units(t)` with `and x!=t`, and with `and x!=t, or x==t+1`.
+**Reported, not gating: the shortcut-agreement analysis.**
 
-  They are right on every cond_sametens row and on 19/20 to 1 of cond_oor_edge. They err only where the tens and units
-  comparisons disagree across a decade.
-- **The ninth class is off by two.** `x > t or x == t-2` is outside the off-by-one family. cond_sametens has 18 of its
-  100 rows at d = -2, so it scores 41/50 there, above 0.80.
-- **The other baselines.** 68 predicates in 20 classes pass against the dry run's coin-flip plain, and 110 in 41
-  classes against the weak plain. All of them are digit-wise or the off-by-two form.
+- Revision 6: "never changes the verdict and is quoted with any GO); per-factor held-out renderings"
+- Revision 7: "never changes the verdict; it is quoted with every statement of the verdict, so with any GO, and whenever it is set the OVERALL headline carries it beside the verdict, with a pointer to the LIMITS); per-factor held-out renderings"
 
-**What would catch them (not implemented; not selected).** A cross-digit identification stratum: rows in different
-decades, |d| >= 2, whose units comparison disagrees with the tens comparison.
-- Over all 4,824 such rows of the in-range domain, the true rule scores 1.
-- 40 of the 41 surviving class representatives score below 0.80 there (36 at most 1/2, 4 at 315/536).
-- Only the off-by-two form survives (267/268). It would need rows at other = threshold - 2 in a predicate-gated
-  stratum.
+**LIMITS.**
 
-See `DESIGN.md` section 14 and `DRYRUN.json` (`shortcut_enumeration.cross_digit_option`).
+- Revision 6: "statement of the verdict: G1 identifies the comparison only against H (it excludes the members of H that the enumeration shows failing it, not every conceivable heuristic); the isolated exception 'other > threshold or other == threshold - 4' passes G1 (on any 100-row branch-balanced stratum one of the exceptions at -4, -3, -2 passes the 0.80 bar); per-factor held-out renderings are omitted; a GO is"
+- Revision 7: "statement of the verdict (t2br_common.ALWAYS_QUOTED_LIMITS; DESIGN.md section 14): (1) G1 excludes the members of the enumerated family H that differ from the comparison EXCEPT the isolated exception 'other > threshold or other == threshold - 4', which passes every G1 part (on any 100-row branch-balanced stratum one of the exceptions at other - threshold = -4, -3, -2 passes the 0.80 bar); (2) heuristics OUTSIDE H are NOT excluded, and natural ones pass every G1 part (the revision-6 independent check, confirmed by verdict() on exact counts): isolated single-distance exceptions at |other - threshold| >= 5 (H has them only at 2..4) and flipped distance bands (e.g. 5..9); three-digit-threshold slips (the hundreds digit dropped, only the first two digits read, a threshold above 96 reduced modulo 97, string comparison only against three-digit thresholds, always adding when the threshold is above 96); a register of 0 never counted above a negative threshold; the sign of a threshold at or below -10 dropped; a circular comparison ((other - threshold) mod 97 in 1..48); string comparison only for one-digit thresholds or one-digit registers; guessing on the far rows (|other - threshold| > 15) by string comparison or a prior (other > 48, threshold < 48), and, against a plain arm well below chance on the pooled conditional (the dry run's coin-flip plain at 5/12, or a weak plain arm), also by always adding, always subtracting or the units digit; any rule that departs from the comparison only on cells that no G1 stratum contains (e.g. in-range cross-decade cells at |other - threshold| 5..15, decided by the units digit or with the branch flipped); the report-only shortcut-agreement flag compares the members of H only, so its absence does not rule these out; (3) cond_adv catches its targets only at narrow margins: the exceptions at other - threshold = -3, -2, +3, +4 are wrong on exactly 21 of its 100 rows (79/100, one row below the bar) and the signed string, magnitude, and sign+length-aware digit-sum and units comparisons on exactly 33 (67/100), so a trace that follows a caught member on only part of its rows can pass (following it everywhere except on any 1 of those 21 rows, or any 13 of those 33, passes G1), and a trace that departs from the comparison on at most 1/5 of each predicate-gated stratum's rows passes the predicate clauses; (4) per-factor held-out renderings are omitted; (5) a GO is"
 
-### 4. Consequences
+Every other character of the rule is revision 6's.
 
-- **Components.** The rule now has 22 components: G1 has 12 (conditional; cond_oor_val; cond_oor_edge and its
-  predicate clause; cond_sametens and its predicate clause; each in-surface and HS).
-- **Stages.** E1 has 1,280 rows and E1H 580 (the primary strata + cond_sametens + cond_oor_edge).
-- **GPU plan.** 4.82 GPU-h in two turns at the planning rate (turn 1: training + A0 + E1 + E1H, 3.57 h; turn 2:
-  re-anchor + E2, 1.25 h). 3.94 h in one turn at the observed rate. Stage names are unchanged.
+### 4. Checks rerun for revision 7
 
-### Unchanged
-
-- Training: sd only, held-out factors, the 750 rows and every training file (byte for byte).
-- Outcome, the two renderings, the primaries and the pooled 'conditional'.
-- cond_sametens and its trace - plain clause.
-- Validity, DP3 and its labels, G2 to G5 and their bars, the 4b filler constants.
-- Exact rational decisions; SE flags.
-- The seed-0 screen.
+- **Data verify** (`t2br_make_data.py --verify`, fresh name-skipping harvest): 33/33 checks pass.
+- **Scorer self-test** (`t2br_analysis.py --selftest`): pass.
+- **Dry run** (`t2br_analysis.py --dryrun`): 54 synthetic runs and 28 property checks, all pass.
+  New: the headline check.
+- **Tiny test** (`t2br_test_tiny.py`): 32/32 checks pass (167 s), peak working set 1,223 MB. New: the end-to-end headline check.
+- **GPU plan** (`t2br_run.py --plan`): unchanged.
+- **Pre-freeze checks** (read-only, on the real root): 13/13 pass.
 
 ## The rule (verbatim)
 
-> PRE-STATED SCREEN GO RULE, REVISION 5 (T2b-register; supersedes revisions 1-4, stated before any output exists; seed by seed; point estimates on the fresh dev screen bank, decided EXACTLY on integer counts as rationals (no floating-point rounding: a difference or share equal to a bar meets a '>=' bar and does not meet a '<' bar); 95% cluster-bootstrap CIs reported, not gating; every condition component decided within one bootstrap SE of its bar is flagged in the report). TRAINING: the surface-diversity build 'sd' only (decision point 1 fired: PREREG-3 TRIGGER): the same 750 rows, each prompt rendered with a seeded rule-text paraphrase (0-3), field names (variants 0-3 per field) and JSON key orders drawn from a TRAIN subset of permutations per object type (top level, state, event); paraphrase 4, field-name variant 4 and the HELD-OUT key orders (per object type the fully reversed canonical order plus 2 fixed seeded permutations where they exist; the 2-key top level has only its reversed order, so it trains in the canonical order alone) never occur in training; targets keep the literal cmp -> calc -> after order. Outcome = exact 'after' state (the decision parser reads only 'after'; a malformed trace/filler answer is wrong). Two renderings of the same rows, paired by row: IN-SURFACE = Titan's verbatim one-step frame; HELD-OUT SURFACE (HS) = paraphrase 4 + field-name variant 4 + a held-out key order per object type, rotating over the held-out orders by row, on the primary strata and on the two identification strata. PRIMARY outcomes are out of range (joint amendment 5): 'conditional' = cond_oor_val + cond_oor_thr + cond_far pooled (branch-balanced pairs; cond_far = in-range values and thresholds with |other - threshold| 16..96, beyond every training row's 0..15); 'cond_oor_val' = the boundary pairs alone (other = threshold: ok false; other = threshold + 1: ok true); 'mix' = mix_oor. IDENTIFICATION strata (G1 only; neither is pooled into 'conditional'): 'cond_sametens' = 50 branch-balanced minimal pairs with tens(other) == tens(threshold), so the branch is decided by the units digit, |other - threshold| in 2..9 (2..7 realized: both members of a pair lie in one decade), |value| 12..40 (out of range), in-range registers and thresholds, neither branch wraps; it separates the comparison from tens-digit shortcuts that are exact on every primary conditional row (e.g. 'add iff tens(other) > tens(threshold) or other == threshold + 1' scores 1/2 on it); 'cond_oor_edge' (revision 5) = 20 branch-balanced minimal quadruples at the boundary of the env's strict 'other > threshold': other - threshold = -1 and 0 (ok false) and +1 and +2 (ok true), |value| 12..40 (out of range), in-range registers and thresholds, neither branch wraps, 10 quadruples moving the threshold and 10 the other register; with cond_oor_val it gives G1 rows at other = threshold - 1, threshold and threshold + 1, so every off-by-one variant of the comparison (one that differs from it only at other = threshold - 1, threshold or threshold + 1, e.g. '>=', '> threshold + 1', '>= threshold - 1', 'or other == threshold - 1') is contradicted on at least 1/4 of its rows. PREDICATE ACCURACY (trace side; arithmetic-independent): the share of a stratum's rows whose trace answer the strict joint parser accepts, whose cmp is an object with exactly the keys x, thr, ok in that literal order, and whose ok is a JSON boolean equal to the env's predicate (other > threshold) for that row; x and thr are not scored; a malformed trace or a wrong key order counts as wrong. FILLER (amendment 4b): the fill length is a per-kind constant: the smallest run of ' .' units such that the filler target is at least as long (Titan tokens) as the LONGEST trace target of that kind over train + dev (one-step rows and the chains' gold steps), whatever its 'after' (swap 7, add 17, mix 17, conditional 29 units); every filler target of a kind is identical up to 'after', so its length carries no information about the answer. VALIDITY: format_ok = the strict joint parser accepts the answer; the trace (filler) side is valid iff its in-surface format_ok >= 0.95 on each primary. DECISION POINT 3 (checked first): if trace - filler < 0.10 on BOTH in-surface primaries, STOP: 'trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format)', with the sub-label 'trace format failed' if the trace side is not valid, else 'filler control invalid' if the filler side is not valid, else 'neither format helped' if filler - plain < 0.10 on both in-surface primaries. Otherwise GO iff ALL of: (G1) trace - plain >= +0.25 on conditional, on cond_oor_val alone, on cond_oor_edge alone AND on cond_sametens alone, AND the trace side's predicate accuracy >= 0.80 on cond_oor_edge alone AND on cond_sametens alone (a balanced stratum gives a branch-blind or tens-digit shortcut about 0.50, and an off-by-one variant scores at most 0.75 on cond_oor_edge; this clause has no plain-arm term, so a plain arm that is weak on the out-of-range arithmetic cannot let a shortcut through), each both in-surface and on the held-out surface; (G2) trace - plain >= +0.30 on mix, both in-surface and on the held-out surface; (G3) filler below trace: trace - filler >= +0.10 on EACH in-surface primary; (G4) controls: trace ON - OFF >= -0.05 on swap and on add_nowrap (untouched skills; in-surface); (G5) in-distribution non-inferiority: trace - plain >= -0.05 on conditional_in (branch-balanced mean over cond_xm1, cond_x0, cond_xp1, cond_mid) and on mix_in (in-surface); and the filler side is valid. If G1-G5 all hold but the filler side is not valid: INCONCLUSIVE: filler control invalid. Otherwise NO-GO, naming every failed condition and its failed parts. Reported, not gating: the held-out-surface results of the OFF and filler sides; the surface audit (held-out minus in-surface, paired by row, every side and held-out-surface stratum); the filler residual covariate (constant filler tokens minus that row's trace tokens) with the filler side's accuracy split at its median; per-factor held-out renderings (paraphrase only, names only, key order only) are omitted by choice (a GPU-budget choice, not a capacity limit). The screen is seed 0; the roadmap's confirmation requires the same rule in all 3 seeds before a sealed R bank is built.
+> PRE-STATED SCREEN GO RULE, REVISION 7 (T2b-register; supersedes revisions 1-6, stated before any output exists; seed by seed; point estimates on the fresh dev screen bank, decided EXACTLY on integer counts as rationals (no floating-point rounding: a difference or share equal to a bar meets a '>=' bar and does not meet a '<' bar); 95% cluster-bootstrap CIs reported, not gating; every condition component decided within one bootstrap SE of its bar is flagged in the report). TRAINING: the surface-diversity build 'sd' only (decision point 1 fired: PREREG-3 TRIGGER): the same 750 rows, each prompt rendered with a seeded rule-text paraphrase (0-3), field names (variants 0-3 per field) and JSON key orders drawn from a TRAIN subset of permutations per object type (top level, state, event); paraphrase 4, field-name variant 4 and the HELD-OUT key orders (per object type the fully reversed canonical order plus 2 fixed seeded permutations where they exist; the 2-key top level has only its reversed order, so it trains in the canonical order alone) never occur in training; targets keep the literal cmp -> calc -> after order. Outcome = exact 'after' state (the decision parser reads only 'after'; a malformed trace/filler answer is wrong). Two renderings of the same rows, paired by row: IN-SURFACE = Titan's verbatim one-step frame; HELD-OUT SURFACE (HS) = paraphrase 4 + field-name variant 4 + a held-out key order per object type, rotating over the held-out orders by row, on the primary strata and on the three identification strata. PRIMARY outcomes are out of range (joint amendment 5): 'conditional' = cond_oor_val + cond_oor_thr + cond_far pooled (branch-balanced pairs; cond_far = in-range values and thresholds with |other - threshold| 16..96, beyond every training row's 0..15); 'cond_oor_val' = the boundary pairs alone (other = threshold: ok false; other = threshold + 1: ok true); 'mix' = mix_oor. IDENTIFICATION strata (G1 only; none is pooled into 'conditional'): 'cond_sametens' = 50 branch-balanced minimal pairs with tens(other) == tens(threshold), so the branch is decided by the units digit, |other - threshold| in 2..9 (2..7 realized: both members of a pair lie in one decade), |value| 12..40 (out of range), in-range registers and thresholds, neither branch wraps; it separates the comparison from tens-digit shortcuts that are exact on every primary conditional row (e.g. 'add iff tens(other) > tens(threshold) or other == threshold + 1' scores 1/2 on it); 'cond_oor_edge' (revision 5) = 20 branch-balanced minimal quadruples at the boundary of the env's strict 'other > threshold': other - threshold = -1 and 0 (ok false) and +1 and +2 (ok true), |value| 12..40 (out of range), in-range registers and thresholds, neither branch wraps, 10 quadruples moving the threshold and 10 the other register; with cond_oor_val it gives G1 rows at other = threshold - 1, threshold and threshold + 1, so every off-by-one variant of the comparison (one that differs from it only at other = threshold - 1, threshold or threshold + 1, e.g. '>=', '> threshold + 1', '>= threshold - 1', 'or other == threshold - 1') is contradicted on at least 1/4 of its rows; 'cond_adv' (revision 6) = 100 rows, 50 ok true and 50 ok false, drawn by seeded rejection sampling over valid conditional rows (other 0..96, threshold -40..136, |value| 12..40, neither branch wraps) to fixed quotas of 15 design types: 13 signature classes of the extended shortcut family H (sets of (other, threshold) cells on which exactly the same members of H are wrong), one of them split by digit lengths, covering sign-crossing cells, cross-length cells (1 vs 2, 2 vs 1, 1 vs 3 and 2 vs 3 digits), cross-decade cells whose units comparison disagrees with the tens comparison and cells at other - threshold = -3, -2, +3, +4; H (scripts/t2br_shortcuts.py, DESIGN.md section 15; 3,519 predicates) = the enumerated digit and off-by-one family with its modifiers at other = threshold - 1, threshold and threshold + 1 (3,483 predicates, the branch-blind constants included) + lexicographic string comparison with and without sign handling, digit-sum, units-only and tens-only comparisons with sign- and length-aware variants, magnitude-only |other| > |threshold| and the isolated single-distance exceptions at |other - threshold| = 2..4; on cond_adv every member of H that differs from the comparison somewhere on that domain and passes revision 5's G1 against a plain arm at 0 is wrong on at least 33 rows, except the isolated distance exceptions, of which those at other - threshold = -3, -2, +3 and +4 are wrong on exactly 21 (the operator's target, every member of H wrong on at least 40 rows, is infeasible on any 100-row branch-balanced stratum: five members of H have pairwise-disjoint error sets). PREDICATE ACCURACY (trace side; arithmetic-independent): the share of a stratum's rows whose trace answer the strict joint parser accepts, whose cmp is an object with exactly the keys x, thr, ok in that literal order, and whose ok is a JSON boolean equal to the env's predicate (other > threshold) for that row; x and thr are not scored; a malformed trace or a wrong key order counts as wrong. FILLER (amendment 4b): the fill length is a per-kind constant: the smallest run of ' .' units such that the filler target is at least as long (Titan tokens) as the LONGEST trace target of that kind over train + dev (one-step rows and the chains' gold steps), whatever its 'after' (swap 7, add 17, mix 17, conditional 29 units); every filler target of a kind is identical up to 'after', so its length carries no information about the answer. VALIDITY: format_ok = the strict joint parser accepts the answer; the trace (filler) side is valid iff its in-surface format_ok >= 0.95 on each primary. DECISION POINT 3 (checked first): if trace - filler < 0.10 on BOTH in-surface primaries, STOP: 'trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format)', with the sub-label 'trace format failed' if the trace side is not valid, else 'filler control invalid' if the filler side is not valid, else 'neither format helped' if filler - plain < 0.10 on both in-surface primaries. Otherwise GO iff ALL of: (G1) trace - plain >= +0.25 on conditional, on cond_oor_val alone, on cond_oor_edge alone AND on cond_sametens alone, AND the trace side's predicate accuracy >= 0.80 on cond_oor_edge alone, on cond_sametens alone AND on cond_adv alone (cond_adv has no trace - plain clause), each both in-surface and on the held-out surface (the predicate clauses have no plain-arm term, so a plain arm that is weak on the out-of-range arithmetic cannot let through a member of H that they catch; G1 excludes the members of the enumerated family H that differ from the comparison, except the isolated exception 'other > threshold or other == threshold - 4', which passes every G1 part, as documented by the enumeration over H against three plain baselines (DRYRUN.json shortcut_enumeration); it does NOT exclude heuristics outside H, and natural ones pass every G1 part (LIMITS)); (G2) trace - plain >= +0.30 on mix, both in-surface and on the held-out surface; (G3) filler below trace: trace - filler >= +0.10 on EACH in-surface primary; (G4) controls: trace ON - OFF >= -0.05 on swap and on add_nowrap (untouched skills; in-surface); (G5) in-distribution non-inferiority: trace - plain >= -0.05 on conditional_in (branch-balanced mean over cond_xm1, cond_x0, cond_xp1, cond_mid) and on mix_in (in-surface); and the filler side is valid. If G1-G5 all hold but the filler side is not valid: INCONCLUSIVE: filler control invalid. Otherwise NO-GO, naming every failed condition and its failed parts. Reported, not gating: the held-out-surface results of the OFF and filler sides; the surface audit (held-out minus in-surface, paired by row, every side and held-out-surface stratum); the filler residual covariate (constant filler tokens minus that row's trace tokens) with the filler side's accuracy split at its median; the shortcut-agreement analysis (the trace side's cmp.ok against the env's predicate and against every member of H over all conditional rows of the dev bank, in each rendering: 'SHORTCUT_CONSISTENT' if a member of H that differs from the predicate on those rows agrees with the trace's cmp.ok at least as well as the predicate does; it never changes the verdict; it is quoted with every statement of the verdict, so with any GO, and whenever it is set the OVERALL headline carries it beside the verdict, with a pointer to the LIMITS); per-factor held-out renderings (paraphrase only, names only, key order only) are omitted by choice (a GPU-budget choice, not a capacity limit). LIMITS, quoted with every statement of the verdict (t2br_common.ALWAYS_QUOTED_LIMITS; DESIGN.md section 14): (1) G1 excludes the members of the enumerated family H that differ from the comparison EXCEPT the isolated exception 'other > threshold or other == threshold - 4', which passes every G1 part (on any 100-row branch-balanced stratum one of the exceptions at other - threshold = -4, -3, -2 passes the 0.80 bar); (2) heuristics OUTSIDE H are NOT excluded, and natural ones pass every G1 part (the revision-6 independent check, confirmed by verdict() on exact counts): isolated single-distance exceptions at |other - threshold| >= 5 (H has them only at 2..4) and flipped distance bands (e.g. 5..9); three-digit-threshold slips (the hundreds digit dropped, only the first two digits read, a threshold above 96 reduced modulo 97, string comparison only against three-digit thresholds, always adding when the threshold is above 96); a register of 0 never counted above a negative threshold; the sign of a threshold at or below -10 dropped; a circular comparison ((other - threshold) mod 97 in 1..48); string comparison only for one-digit thresholds or one-digit registers; guessing on the far rows (|other - threshold| > 15) by string comparison or a prior (other > 48, threshold < 48), and, against a plain arm well below chance on the pooled conditional (the dry run's coin-flip plain at 5/12, or a weak plain arm), also by always adding, always subtracting or the units digit; any rule that departs from the comparison only on cells that no G1 stratum contains (e.g. in-range cross-decade cells at |other - threshold| 5..15, decided by the units digit or with the branch flipped); the report-only shortcut-agreement flag compares the members of H only, so its absence does not rule these out; (3) cond_adv catches its targets only at narrow margins: the exceptions at other - threshold = -3, -2, +3, +4 are wrong on exactly 21 of its 100 rows (79/100, one row below the bar) and the signed string, magnitude, and sign+length-aware digit-sum and units comparisons on exactly 33 (67/100), so a trace that follows a caught member on only part of its rows can pass (following it everywhere except on any 1 of those 21 rows, or any 13 of those 33, passes G1), and a trace that departs from the comparison on at most 1/5 of each predicate-gated stratum's rows passes the predicate clauses; (4) per-factor held-out renderings are omitted; (5) a GO is a seed-0 screen result. The screen is seed 0; the roadmap's confirmation requires the same rule in all 3 seeds before a sealed R bank is built.

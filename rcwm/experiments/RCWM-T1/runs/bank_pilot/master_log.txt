@@ -3211,3 +3211,29 @@ verdict: STATUS: TRIGGER; magnitude_at: DOES NOT GENERALISE, with a partial gain
 === 2026-10-09T23:13:01-05:00 start scripts/lbeam_run.py
 [lbeam] stages to run: ['A0', 'G1', 'G2', 'G3', 'G4', 'C1']
   [gpu-lease] waiting: foreign python pid 100672 (5.15 GiB dedicated GPU memory)
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:lbeam token=bfe3b111
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<02:23,  2.16it/s]Loading weights:  16%|#5        | 49/310 [00:00<00:02, 111.11it/s]Loading weights:  31%|###1      | 97/310 [00:00<00:01, 197.18it/s]Loading weights:  47%|####7     | 146/310 [00:00<00:00, 268.04it/s]Loading weights:  61%|######    | 189/310 [00:00<00:00, 307.07it/s]Loading weights:  76%|#######6  | 236/310 [00:01<00:00, 345.81it/s]Loading weights:  92%|#########1| 284/310 [00:01<00:00, 379.49it/s]Loading weights: 100%|##########| 310/310 [00:01<00:00, 267.76it/s]
+[lbeam] Titan-Sparse 818be9c6b6a3 + T2 s0 adapter loaded in 19.1s
+[lbeam] A0 done in 1219s (planned ~2688 generations)
+[lbeam] G1 done in 4411s (planned ~27121 generations)
+[lbeam] G2 done in 809s (planned ~5681 generations)
+[lbeam] G3 done in 1766s (planned ~10001 generations)
+[lbeam] G4 done in 3318s (planned ~14537 generations)
+  [gpu-lease] released rineya-gpu-0.lock
+[lbeam] C1 (CPU) runs at the start of the next invocation, before the lease and before any CUDA use
+[lbeam] remaining stages ['C1'] resume next turn
+=== 2026-10-10T05:18:56-05:00 exit rc=5 scripts/lbeam_run.py
+=== 2026-10-10T05:18:56-05:00 start scripts/lbeam_run.py
+[lbeam] stages to run: ['C1']
+[lbeam] C1 (CPU: ORACLE / IGNORE_STATUS) done in 1s
+[lbeam] all stages complete; DONE.json written
+=== 2026-10-10T05:19:00-05:00 exit rc=0 scripts/lbeam_run.py
+=== 2026-10-10T05:19:00-05:00 start scripts/lbeam_analysis.py
+wrote C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\runs\lbeam\analysis\PREREG_LB_RESULTS.json (+ .md)
+verdict: T2 ENABLES PLANNING, BELOW THE NEAR-ORACLE BAR (on its training surface) (reading: enables planning)
+=== 2026-10-10T05:19:03-05:00 exit rc=0 scripts/lbeam_analysis.py
+=== 2026-10-10T05:19:03-05:00 start scripts/t2bp_run.py
+[t2bp] reclaiming a stale run lock {'pid': 42092, 'create_time': 1791601376.957238, 'started_utc': '2026-10-10T03:03:30Z'}
+[t2bp] stages to run: {'dint': ['T', 'E1', 'E2', 'E3', 'E4'], 'strace': ['T', 'E1', 'E2', 'E3', 'E4'], 'bbits': ['T', 'E1', 'E2', 'E3', 'E4']}
+[turn] last turn was ours and the peer is waiting (bwm:bundleE); yielding
+  [gpu-lease] waiting: foreign python pid 260516 (4.70 GiB dedicated GPU memory)

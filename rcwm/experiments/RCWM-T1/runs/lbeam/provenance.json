@@ -3,10 +3,259 @@
  "freeze_prereg_sha256": "0f414cbc59dfa45af4e1a42f3284ba1ebe87110c147a59229e1c96ec32cf0286",
  "registered": true,
  "lease_label": "rcwm-t1:lbeam",
- "stages": {},
- "turns": [],
- "cpu_runs": [],
- "attempts": {},
+ "stages": {
+  "A0": {
+   "name": "A0",
+   "turn": 0,
+   "seconds": 1219.3,
+   "pid": 234772,
+   "generations": 2688,
+   "sides": {
+    "off": {
+     "pid": 234772,
+     "start_unix": 1791616010.9629638,
+     "end_unix": 1791616123.540672
+    },
+    "on": {
+     "pid": 234772,
+     "start_unix": 1791616123.540672,
+     "end_unix": 1791616252.0437927
+    }
+   },
+   "files": {
+    "anchor/chain_one_L_off.jsonl": "725d9770f9704d41b330294e0382b95bb4a333daa68ee5d5c3a6b94d68ea6be2",
+    "anchor/chain_one_L_on.jsonl": "e1873fce55dddcb707872a56e9ebca5cc1e0b2c61305905ff70460eec41e9b8e",
+    "anchor/anchor.json": "485b0b8f6e2c380669eb6bf0a0e62d7ff0fbdd4ea5ca4f88b42fcc124824599b",
+    "anchor/batch_invariance.jsonl": "3b26b9cf6063771adc15d0fbcdbf646bb8144192d2969a53d140d2061b38bffa",
+    "anchor/batch_invariance.json": "be2668463c001d41307cc3b6a312505e8fdfdadadaa4928bd621b9467b5c2eb4"
+   },
+   "finished_unix": 1791617230.303525
+  },
+  "G1": {
+   "name": "G1",
+   "turn": 0,
+   "seconds": 4411.2,
+   "pid": 234772,
+   "sides": {
+    "T2:W2E12": {
+     "pid": 234772,
+     "start_unix": 1791617230.3075912,
+     "end_unix": 1791619077.498583
+    },
+    "OFF:W2E12": {
+     "pid": 234772,
+     "start_unix": 1791619077.498583,
+     "end_unix": 1791621641.4833047
+    }
+   },
+   "generations_planned_expected": 27121,
+   "generations_planned_ceiling": 37440,
+   "files": {
+    "primary/episodes_T2_W2E12.jsonl": "726b5fbdd9a6cb7c3316bbc6b5e76f98b69039949f130288297c30427c5eeaf3",
+    "primary/episodes_OFF_W2E12.jsonl": "3c8bfaca56f6f69da8325e307fd756b7ecf3adc96ed3f707593ddbf51946bad2",
+    "primary/fcache_T2.jsonl": "193580785d154f38cb9557fad42b003053019b7cbba84525ca54ccd3b489d33d",
+    "primary/fcache_OFF.jsonl": "96d61bb2ca9d97ca7e0fdd3f972f21812b85fffc1d5ad394e8576a4f4dff3c1b",
+    "primary/accounting.json": "d270af2e96cd7f4ab5c88f7da7ab4036bb52eb7fb0b7c347381cf0c6772986bb"
+   },
+   "finished_unix": 1791621641.5407186
+  },
+  "G2": {
+   "name": "G2",
+   "turn": 0,
+   "seconds": 809.0,
+   "pid": 234772,
+   "sides": {
+    "T2:fixed": {
+     "pid": 234772,
+     "start_unix": 1791621641.5459566,
+     "end_unix": 1791622020.4342377
+    },
+    "OFF:fixed": {
+     "pid": 234772,
+     "start_unix": 1791622020.4342377,
+     "end_unix": 1791622450.5416512
+    }
+   },
+   "generations_planned_expected": 5681,
+   "generations_planned_ceiling": 17280,
+   "files": {
+    "fixed/fixed_T2.jsonl": "cab3643623a45ce675e850bd0afb0c954104c4d9dc58179a9d35b805b110b042",
+    "fixed/fixed_OFF.jsonl": "bb87c28572e0ba46ed05d99392be208bdc0d6073b389b559a5d45a829743a99f",
+    "fixed/fcache_T2.jsonl": "18b48e4483b3f446db725eda3cd518e1d93da5edec36f0515fa8e04c63ca0fab",
+    "fixed/fcache_OFF.jsonl": "847c18f3e434fd5aab962dbb16760433826cae306398cd794a15d1175834d2d1",
+    "fixed/accounting.json": "84034f0fad287d1bd636a67020292715afcd64e74cdfe21f992031b86dca52ba"
+   },
+   "finished_unix": 1791622450.601258
+  },
+  "G3": {
+   "name": "G3",
+   "turn": 0,
+   "seconds": 1766.3,
+   "pid": 234772,
+   "sides": {
+    "T2:W4E24": {
+     "pid": 234772,
+     "start_unix": 1791622450.6063025,
+     "end_unix": 1791624216.8359506
+    }
+   },
+   "generations_planned_expected": 10001,
+   "generations_planned_ceiling": 38880,
+   "files": {
+    "w4e24/episodes_T2_W4E24.jsonl": "b4a30eb8f9dd16c8175e17fa2ce0c87081272d05c8627fb81b23fa61da9d9efd",
+    "w4e24/fcache_T2.jsonl": "90189e4b567530031b06872561208254bf3cdae1b8cf8d4fc4616aa1d50b973e",
+    "w4e24/accounting.json": "0e877bb1ffceb3724e2cec3581b3b1a9b08bf874c640200620fc95de34dad666"
+   },
+   "finished_unix": 1791624216.881164
+  },
+  "G4": {
+   "name": "G4",
+   "turn": 0,
+   "seconds": 3318.3,
+   "pid": 234772,
+   "sides": {
+    "T2@heldout_combined:W2E12": {
+     "pid": 234772,
+     "start_unix": 1791624216.8851674,
+     "end_unix": 1791627535.1192832
+    }
+   },
+   "generations_planned_expected": 14537,
+   "generations_planned_ceiling": 18720,
+   "files": {
+    "audit/episodes_T2_heldout_combined_W2E12.jsonl": "7e3ccc095e858756bb5689affd2c91773496807c78479ccc9761e54b0201fd8e",
+    "audit/fcache_T2_heldout_combined.jsonl": "5af1422de05f619aba3f19f84d6d6e276d45ecb8f4b1a77c61a6041e866ba52a",
+    "audit/accounting.json": "a23aec772ed5c15c092064cdfb0b6ac0fc6433ce70f15361dbf945fd1e4358f7"
+   },
+   "finished_unix": 1791627535.15942
+  },
+  "C1": {
+   "name": "C1",
+   "turn": 0,
+   "seconds": 0.8,
+   "pid": 262040,
+   "after_a0": true,
+   "lease_held": false,
+   "files": {
+    "cpu/episodes_ORACLE_W2E12.jsonl": "b91ba81a704aa2990f0d4cfc84c8c0394dcedd359337fd8e9ec566cee496b04f",
+    "cpu/episodes_ORACLE_W4E24.jsonl": "93045152341b8d4b446f1a2e050c6bb7f557e85ec9c5cf45a6b372d6511dbc12",
+    "cpu/episodes_IGNORE_STATUS_W2E12.jsonl": "2fdd2756e2ce205b84bce6faa93ecd5f7cc6254bc26d774d7cd6f2206056a9df",
+    "cpu/fixed_ORACLE.jsonl": "993ed363bd08485bbdb93b9ec70835d6a1eca8c9ed7f2dfae2aa172c3cd2f5b7",
+    "cpu/fixed_IGNORE_STATUS.jsonl": "1f8c58ff6c15696a43f7627d6c7873f4e6671f914dd11b381abdb2fb54602442",
+    "cpu/accounting.json": "502fd7614c1e3a32253fd190025abe92c5b53cf3d364000fe737ecf42d4e1bce"
+   },
+   "finished_unix": 1791627539.718093
+  }
+ },
+ "turns": [
+  {
+   "pid": 234772,
+   "acquired_unix": 1791615991.7929704,
+   "acquired_source": "lock record",
+   "entered_unix": 1791615991.902242,
+   "code_sha256": {
+    "scripts/lbeam_run.py": "55a0bd0fb8e2af0112b8485ae5f8fc858c56508f4293d456bc24802d0c1efa5c",
+    "scripts/lbeam_f.py": "9a76562c2739df3254a650154acde41fe2052173b2f35556e5b75a7728680b6f",
+    "scripts/lbeam_problems.py": "2353e2fc846fac5ced11cfc5420bd60b6e9e50cf3399e9299974b3921a09465e",
+    "scripts/lbeam_proposer.py": "6c555d2e46db8a279541839a54b82d6e765f1e8bc438f735beb3ef30b9564881",
+    "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+    "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+    "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+    "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+    "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a"
+   },
+   "bwm_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+   "bwm_modules_sha256": {
+    "bwmn/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+    "bwmn/blocks_planner.py": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+    "bwmn/lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac"
+   },
+   "cap_h": 4.5,
+   "rate_gens_per_s": 2.7,
+   "stages_run": [
+    "A0",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "deferred": [],
+   "device": "cuda",
+   "start_check": {
+    "load_s": 120.0,
+    "a0_s": 0.0,
+    "first_stage": "A0"
+   },
+   "adapter_sha256_at_load": {
+    "adapter_model.safetensors": "92bc7c7497c3cb2fc0c7c917b4f3b6bb931f0ed108144d969b26b18b42670b8a",
+    "adapter_config.json": "50d9a776e093a952ac440a77c9cd7cd8e51eb22a85eb93b383aee1eacc185d9d"
+   },
+   "versions": {
+    "peft": "0.20.0"
+   },
+   "runtime": {
+    "python": "3.11.15",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.14.1",
+    "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+    "tf32": false,
+    "use_cache": false,
+    "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+   },
+   "load_s": 19.1,
+   "released_unix": 1791627535.706458,
+   "no_progress": false
+  }
+ ],
+ "cpu_runs": [
+  {
+   "pid": 262040,
+   "start_unix": 1791627538.8757992,
+   "end_unix": 1791627539.6750865,
+   "code_sha256": {
+    "scripts/lbeam_run.py": "55a0bd0fb8e2af0112b8485ae5f8fc858c56508f4293d456bc24802d0c1efa5c",
+    "scripts/lbeam_f.py": "9a76562c2739df3254a650154acde41fe2052173b2f35556e5b75a7728680b6f",
+    "scripts/lbeam_problems.py": "2353e2fc846fac5ced11cfc5420bd60b6e9e50cf3399e9299974b3921a09465e",
+    "scripts/lbeam_proposer.py": "6c555d2e46db8a279541839a54b82d6e765f1e8bc438f735beb3ef30b9564881",
+    "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+    "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+    "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+    "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+    "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a"
+   },
+   "bwm_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+   "bwm_modules_sha256": {
+    "bwmn/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+    "bwmn/blocks_planner.py": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+    "bwmn/lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac"
+   },
+   "lease_held": false,
+   "cuda_initialized_before": false,
+   "cuda_initialized_after": false
+  }
+ ],
+ "attempts": {
+  "A0": [
+   0
+  ],
+  "G1": [
+   0
+  ],
+  "G2": [
+   0
+  ],
+  "G3": [
+   0
+  ],
+  "G4": [
+   0
+  ],
+  "C1": [
+   "cpu"
+  ]
+ },
  "abandoned": {},
  "orphaned": [],
  "no_progress_turns": 0,
@@ -29,5 +278,59 @@
   "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
   "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a"
  },
- "bwm_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960"
+ "bwm_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+ "sparse_fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+ "anchor": {
+  "pid": 234772,
+  "unix": 1791616252.0437927,
+  "sides": {
+   "off": {
+    "pid": 234772,
+    "start_unix": 1791616010.9629638,
+    "end_unix": 1791616123.540672
+   },
+   "on": {
+    "pid": 234772,
+    "start_unix": 1791616123.540672,
+    "end_unix": 1791616252.0437927
+   }
+  },
+  "off": {
+   "n": 208,
+   "identical_states": 1.0,
+   "identical_texts": 1.0
+  },
+  "on": {
+   "n": 208,
+   "identical_states": 1.0,
+   "identical_texts": 1.0
+  },
+  "pass": true
+ },
+ "batch_invariance": {
+  "pid": 234772,
+  "unix": 1791616252.0786817,
+  "n_keys": 256,
+  "arms": {
+   "T2": {
+    "identical_states": 1.0,
+    "identical_texts": 1.0,
+    "generation_calls_batched": 1,
+    "generation_calls_batch1": 256,
+    "model_generate_calls_batched": 10,
+    "model_generate_calls_batch1": 256,
+    "max_prompts_per_model_generate_batch1": 1
+   },
+   "OFF": {
+    "identical_states": 1.0,
+    "identical_texts": 1.0,
+    "generation_calls_batched": 1,
+    "generation_calls_batch1": 256,
+    "model_generate_calls_batched": 10,
+    "model_generate_calls_batch1": 256,
+    "max_prompts_per_model_generate_batch1": 1
+   }
+  },
+  "pass": true
+ }
 }

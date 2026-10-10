@@ -35,7 +35,8 @@
    "primary_mix": 1.0,
    "mix_oor": 1.0,
    "cond_sametens": 1.0,
-   "cond_oor_edge": 1.0
+   "cond_oor_edge": 1.0,
+   "cond_adv": 1.0
   },
   "plain": {
    "primary_conditional": 1.0,
@@ -45,7 +46,8 @@
    "primary_mix": 1.0,
    "mix_oor": 1.0,
    "cond_sametens": 1.0,
-   "cond_oor_edge": 1.0
+   "cond_oor_edge": 1.0,
+   "cond_adv": 1.0
   },
   "trace": {
    "primary_conditional": 1.0,
@@ -56,8 +58,10 @@
    "mix_oor": 1.0,
    "cond_sametens": 1.0,
    "cond_oor_edge": 1.0,
+   "cond_adv": 1.0,
    "cond_oor_edge_pred": 1.0,
-   "cond_sametens_pred": 1.0
+   "cond_sametens_pred": 1.0,
+   "cond_adv_pred": 1.0
   },
   "filler": {
    "primary_conditional": 1.0,
@@ -67,100 +71,101 @@
    "primary_mix": 1.0,
    "mix_oor": 1.0,
    "cond_sametens": 1.0,
-   "cond_oor_edge": 1.0
+   "cond_oor_edge": 1.0,
+   "cond_adv": 1.0
   }
  },
  "negatives": {
   "filler duplicate fill": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "filler extra key": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "filler keys reversed": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "filler text to trace parser": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "filler unterminated fill (repetition loop)": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "filler with a copied after": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "plain text to trace parser": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace + trailing text": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace calc keys reordered": {
-   "n": 1200,
+   "n": 1300,
    "wrongly_accepted": 0
   },
   "trace cmp extra key": {
-   "n": 760,
+   "n": 860,
    "wrongly_accepted": 0
   },
   "trace cmp keys reordered": {
-   "n": 760,
+   "n": 860,
    "wrongly_accepted": 0
   },
   "trace cmp without ok": {
-   "n": 760,
+   "n": 860,
    "wrongly_accepted": 0
   },
   "trace duplicate after": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace extra key": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace flipped ok": {
-   "n": 760,
+   "n": 860,
    "wrongly_accepted": 0
   },
   "trace missing after": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace ok as 1/0": {
-   "n": 760,
+   "n": 860,
    "wrongly_accepted": 0
   },
   "trace order calc,cmp,after": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace sorted keys": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace text to filler parser": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace truncated": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace with copied after": {
-   "n": 1280,
+   "n": 1380,
    "wrongly_accepted": 0
   },
   "trace wrong calc": {
-   "n": 1200,
+   "n": 1300,
    "wrongly_accepted": 0
   }
  },
@@ -240,6 +245,11 @@
     "scored": 0.0,
     "expected": 0.0,
     "exact": true
+   },
+   "cond_adv": {
+    "scored": 0.0,
+    "expected": 0.0,
+    "exact": true
    }
   },
   "always_add": {
@@ -287,6 +297,11 @@
     "scored": 0.5,
     "expected": 0.5,
     "exact": true
+   },
+   "cond_adv": {
+    "scored": 0.5,
+    "expected": 0.5,
+    "exact": true
    }
   },
   "always_sub": {
@@ -331,6 +346,11 @@
     "exact": true
    },
    "cond_oor_edge": {
+    "scored": 0.5,
+    "expected": 0.5,
+    "exact": true
+   },
+   "cond_adv": {
     "scored": 0.5,
     "expected": 0.5,
     "exact": true
@@ -411,6 +431,11 @@
     "scored": 1.0,
     "expected": 1.0,
     "exact": true
+   },
+   "cond_adv": {
+    "scored": 1.0,
+    "expected": 1.0,
+    "exact": true
    }
   }
  },
@@ -429,13 +454,15 @@
    "conditional_in": "1/2",
    "cond_oor_val": "1/2",
    "cond_oor_edge": "1/2",
-   "cond_sametens": "1/2"
+   "cond_sametens": "1/2",
+   "cond_adv": "1/2"
   },
   "always_sub_heldout_index": {
    "primary_conditional": "1/2",
    "cond_oor_val": "1/2",
    "cond_oor_edge": "1/2",
-   "cond_sametens": "1/2"
+   "cond_sametens": "1/2",
+   "cond_adv": "1/2"
   },
   "boot_identical_sides": [
    0.0,
@@ -462,7 +489,7 @@
   "n_parents": 48
  },
  "heldout_bank": {
-  "n": 580,
+  "n": 680,
   "bad_rows": 0,
   "primary_rows_in_dev_order": true,
   "ok": true
@@ -519,23 +546,55 @@
     "majority": 0.5,
     "fill_length_best_cut": 0.5,
     "zero_information": true
+   },
+   "cond_adv": {
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "zero_information": true
    }
   }
  },
+ "stated_ok_identity": {
+  "n": 15480,
+  "mismatches": 0,
+  "ok": true
+ },
+ "shortcut_agreement_gold": {
+  "flag": null,
+  "surfaces": {
+   "in": {
+    "conditional_rows": 860,
+    "agree_true_predicate": 860,
+    "best_member": "exception d=-4: x>t or x==t-4",
+    "best_member_agreement": 846,
+    "members_equal_to_the_predicate_on_these_rows": 0
+   },
+   "hs": {
+    "conditional_rows": 580,
+    "agree_true_predicate": 580,
+    "best_member": "exception d=-4: x>t or x==t-4",
+    "best_member_agreement": 568,
+    "members_equal_to_the_predicate_on_these_rows": 0
+   }
+  },
+  "ok": true
+ },
  "negative_failures": [],
  "filler_other_lengths_accepted": {
-  "n": 3840,
-  "accepted": 3840
+  "n": 4140,
+  "accepted": 4140
  },
  "ok": true,
- "n_rows": 1280,
- "n_rows_heldout_surface": 580,
- "n_negatives": 26680,
- "dev_sha256": "8c1566b5c58df6fb373298e9b632f0acdb23931c02a5ff41dbf692420d2d3636",
- "dev_hs_sha256": "ee86bb12ffe84bd46267b49cc1eaa9a3c98c3120b42fcfe94c53f9685ae245a5",
+ "n_rows": 1380,
+ "n_rows_heldout_surface": 680,
+ "n_negatives": 28980,
+ "dev_sha256": "bd6189f6cc860741ac497c5828f5c3c40f674e6926fab2bb9bf83edddc39e43f",
+ "dev_hs_sha256": "0c68e7f58891fa7794dea561981a985ac69c99d37bd0321f64b219257dc22e44",
  "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
  "code_sha256": {
-  "scripts/t2br_analysis.py": "7a80a87eaed9cf585b72ce82d86d6a240e5181eaba0fa2c722af67d98543b80b",
-  "scripts/t2br_common.py": "453b3a985f256dc791fba5816d3fb3437783d5ab753a1f1641b2af03c46da999"
+  "scripts/t2br_analysis.py": "29808c553dc90b14f0d0bda2457e4eef0d1c88bdc1b4e0c85d382bd17bdf94f4",
+  "scripts/t2br_common.py": "f47c6dc15fb9df3ebb7d8f06bcc41fd458ccd3dcaeedf29fab87b0b502f297c9",
+  "scripts/t2br_shortcuts.py": "20ebf1814267eeeffcfe5aa99db749438a4fa03f4bf1672b293bd3d64d22b611"
  }
 }

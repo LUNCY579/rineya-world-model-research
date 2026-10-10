@@ -1,4 +1,4 @@
-"""T2b-register screen data, revision 5: fresh oracle register rows rendered three ways (plain / trace / filler), in two
+"""T2b-register screen data, revision 6: fresh oracle register rows rendered three ways (plain / trace / filler), in two
 prompt renderings (canonical 'base' = the rows' source of truth; surface-diversity 'sd' = the screen's ONLY training
 data, decision C1), the dev screen bank (one-step strata + k=4 chains) and its held-out-surface rendering (C3). Built
 WITHOUT any model call and without torch (Titan's tokenizer is read through the `tokenizers` library only, to count
@@ -45,8 +45,8 @@ target of that kind over train + dev (one-step rows and the chains' gold steps),
 the data and asserted equal to the pre-stated constants. Revision 3's code compared each row's filler with that row's
 trace (FILL_UNITS_REV3 5 / 14 / 14 / 26); --verify reconstructs the revision-3 files from the current rows with those.
 
-DEV SCREEN BANK (t2br_common.DEV_STRATA; 1,280 one-step rows + 48 chain parents x 8 candidates x 4 steps; the first
-1,100 rows unchanged from revision 2, the first 1,200 byte for byte as in revision 4). In range: mix 100, wrap 80, cond_xm1 / cond_x0 / cond_xp1 60 each (60 TRIPLETS:
+DEV SCREEN BANK (t2br_common.DEV_STRATA; 1,380 one-step rows + 48 chain parents x 8 candidates x 4 steps; the first
+1,100 rows unchanged from revision 2, the first 1,200 byte for byte as in revision 4, the first 1,280 as in revision 5). In range: mix 100, wrap 80, cond_xm1 / cond_x0 / cond_xp1 60 each (60 TRIPLETS:
 same row, threshold = x + 1 / x / x - 1), cond_mid 100 (50 pairs at |x - thr| 2..15), swap 80, add_nowrap 80. Out of
 range (PRIMARY): mix_oor 100 and wrap_oor 80 (|value| 12..40), cond_oor_val 100 (50 boundary pairs, |value| 12..40),
 cond_oor_thr 100 (50 pairs, threshold -40..-1 vs 97..136), cond_far 100 (50 pairs at |x - thr| 16..96, in-range values
@@ -61,13 +61,23 @@ stratum; |value| 12..40; neither branch wraps; in-range registers and thresholds
 the other register). It is drawn AFTER cond_sametens with its own seed (SEED_EDGE) against the full registry, so every
 earlier row (dv0000..dv1199), the chain bank and every training file are unchanged; its rows are appended
 (dv1200..dv1279). --verify reconstructs the eight revision-4 data files byte for byte from the current rows.
+IDENTIFICATION (revision 6, G1's predicate clause alone): cond_adv 100 (50 ok true / 50 ok false), drawn by SEEDED
+REJECTION SAMPLING over valid conditional rows (other 0..96, threshold -40..136, |value| 12..40, neither branch wraps)
+to the fixed quotas of the 15 design types of t2br_shortcuts.ADV_TYPES (13 signature classes of the extended shortcut
+family H, one split by digit lengths: sign-crossing, cross-length (1 vs 2, 2 vs 1, 1 vs 3, 2 vs 3 digits) and
+cross-decade cells, cells at other - threshold = -3, -2, +3, +4), so that every member
+of H that passes revision 5's G1 against a weak plain arm is wrong on >= 33 rows, except the isolated distance
+exceptions, of which those at -3, -2, +3, +4 are wrong on 21 (t2br_shortcuts.adv_target_report; the build fails
+otherwise). It is drawn AFTER cond_oor_edge with its own seed (SEED_ADV) against the full registry, so every earlier
+row (dv0000..dv1279), the chain bank and every training file are unchanged; its rows are appended (dv1280..dv1379).
+--verify reconstructs the eight revision-5 data files byte for byte from the current rows.
 Chains: CH_IN 32 parents (env.gen_event's recorded marginals) and CH_X 16 parents (the same, every add / mix /
 conditional value replaced by |v| 12..40); each parent needs >= 4 distinct final states among its 8 candidates.
-HELD-OUT-SURFACE BANK data/t2br_dev_hs.jsonl (C3): the 580 rows of the primary strata (mix_oor, cond_oor_val,
-cond_oor_thr, cond_far) and of the identification strata (cond_sametens, cond_oor_edge) in dev order, the j-th rendered
-in t2br_common.heldout_surface(j) (paraphrase 4 + names 4 + held-out key orders rotating by row); same ids and golds as
-the in-surface rows (paired by row). Its first 400 rows are revision 3's bank and its first 500 revision 4's, byte for
-byte.
+HELD-OUT-SURFACE BANK data/t2br_dev_hs.jsonl (C3): the 680 rows of the primary strata (mix_oor, cond_oor_val,
+cond_oor_thr, cond_far) and of the identification strata (cond_sametens, cond_oor_edge, cond_adv) in dev order, the j-th
+rendered in t2br_common.heldout_surface(j) (paraphrase 4 + names 4 + held-out key orders rotating by row); same ids and
+golds as the in-surface rows (paired by row). Its first 400 rows are revision 3's bank, its first 500 revision 4's and
+its first 580 revision 5's, byte for byte.
 
 --verify also REBUILDS every data file in memory with the current builder (the same fresh union) and requires byte
 equality with the files on disk, so the provenance of the data never depends on a stale builder hash.
@@ -108,6 +118,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import t2br_common as C  # noqa: E402
+import t2br_shortcuts as S  # noqa: E402  (revision 6: the extended shortcut family H and the cond_adv design)
 from rcwmt import env  # noqa: E402
 
 FAM = C.FAM
@@ -117,6 +128,7 @@ SEED_CHAINS = 20261111
 SEED_SD = 20261112
 SEED_SAMETENS = 20261114         # revision 4: cond_sametens (20261113 is t2br_common.HELDOUT_ORDER_SEED)
 SEED_EDGE = 20261115             # revision 5: cond_oor_edge
+SEED_ADV = 20261116              # revision 6: cond_adv (not used by any earlier builder, analysis or bootstrap of RCWM-T1)
 SHUFFLE_SEED = 7                 # as make_t2_data.py
 MAX_DRAWS = 5_000_000
 TRAIN_QUOTA = OrderedDict([("mix/wrap", 150), ("mix/nowrap", 150), ("add/wrap_over", 75), ("add/wrap_under", 75)])
@@ -687,6 +699,103 @@ def build_edge(d: Draw, reg: Registry, lines: list, start: int) -> list:
     return rows
 
 
+def adv_problem(b: dict, ev: dict) -> str | None:
+    """Why a conditional is NOT a cond_adv row (None = it is one): its (other, threshold) cell lies in a design type of
+    t2br_shortcuts.ADV_TYPES (inside the domain other 0..96, threshold -40..136), |value| in OOR_V_ABS, registers in
+    range, neither branch wraps."""
+    x, t, v, r = b[ev["other"]], ev["threshold"], ev["value"], b[ev["register"]]
+    if ev["kind"] != "conditional" or S.adv_type_of(x, t) is None:
+        return "cell outside every design type"
+    if not C.OOR_V_ABS[0] <= abs(v) <= C.OOR_V_ABS[1]:
+        return "value"
+    if not all(C.THR_IN[0] <= y <= C.THR_IN[1] for y in b.values()):
+        return "register range"
+    if not (0 <= r - abs(v) and r + abs(v) <= C.MOD - 1):
+        return "a branch wraps"
+    return None
+
+
+def build_adv(d: Draw, reg: Registry, lines: list, start: int) -> list:
+    """Revision 6: the adversarial identification stratum cond_adv (G1: the trace side's predicate accuracy alone, in-surface
+    and held out; no trace - plain clause). SEEDED REJECTION SAMPLING over valid conditional rows of the domain: a
+    proposal draws its cell first (other uniform in 0..96, threshold uniform in -40..136), then an out-of-range value
+    (|v| 12..40, either sign), the event (register, other, tick) and the other two registers (the recorded marginals);
+    it is ACCEPTED iff (a) its cell lies in a design type of t2br_shortcuts.ADV_TYPES whose quota is not yet filled, (b)
+    the cell is one of that type's least-used cells (every cell of a type is used once before any is used twice), (c)
+    neither branch wraps and (d) the row is fresh against the full registry (exclusion union + training + dev + chains +
+    cond_sametens + cond_oor_edge; each row its own unit). The quotas fix every member of H's number of wrong rows; the
+    build checks the targets (t2br_shortcuts.adv_target_report) and --verify re-checks them. Rows are appended to the dev
+    bank in acceptance order (uids from dv{start}); a cluster is one (other, threshold) cell (the bootstrap resamples the
+    rows of a cell together)."""
+    cells = S.adv_type_cells()
+    left = {k: v[1] for k, v in S.ADV_TYPES.items()}
+    used = {k: {c: 0 for c in cs} for k, cs in cells.items()}
+    rows, rej, cid = [], Counter(), {}
+    (lo_x, hi_x), (lo_t, hi_t) = S.DOMAIN["other"], S.DOMAIN["threshold"]
+    proposals = 0
+    for _ in range(MAX_DRAWS):
+        if not any(left.values()):
+            break
+        proposals += 1
+        x, t = d.rng.randint(lo_x, hi_x), d.rng.randint(lo_t, hi_t)
+        ty = S.adv_type_of(x, t)
+        if ty is None:
+            rej["cell outside every design type"] += 1
+            continue
+        if not left[ty]:
+            rej["type quota filled"] += 1
+            continue
+        if used[ty][(x, t)] > min(used[ty].values()):
+            rej["cell used more often than the type's least-used cell"] += 1
+            continue
+        ev = d.event("conditional", d.oor_value(), t)
+        b = d.before()
+        b[ev["other"]] = x
+        why = adv_problem(b, ev)
+        if why:
+            rej[why] += 1
+            continue
+        uid = f"dv{start + len(rows):04d}"
+        pr = reg.problem([(b, ev)], uid)
+        if pr:
+            rej[pr] += 1
+            continue
+        reg.add([(b, ev)], uid)
+        left[ty] -= 1
+        used[ty][(x, t)] += 1
+        cid.setdefault((x, t), f"dad{len(cid):03d}")
+        rows.append({"uid": uid, "stratum": "cond_adv", "group": C.DEV_STRATA["cond_adv"][0], "cluster": cid[(x, t)],
+                     "role": "adversarial", "before": dict(b), "event": ev, "adv_type": ty, "offset": x - t})
+    if any(left.values()):
+        raise SystemExit(f"cond_adv not filled: {left}")
+    log(lines, f"dev cond_adv (revision 6, seed {SEED_ADV}): {len(rows)} rows on {len(cid)} cells by rejection sampling, "
+               f"{proposals} proposals; rejected {dict(rej)}")
+    return rows
+
+
+def adv_describe(rows: list) -> dict:
+    """cond_adv (descriptive): types, cells, branch, value signs, threshold / other ranges, offsets at |d| <= 4."""
+    xs = [(r["before"][r["event"]["other"]], r["event"]["threshold"]) for r in rows]
+    per_cell = Counter(xs)
+    return {"n": len(rows), "branch": dict(Counter(str(r["gold_ok"]) for r in rows)),
+            "types": {k: sum(r["adv_type"] == k for r in rows) for k in S.ADV_TYPES},
+            "distinct_cells": len(per_cell), "max_rows_on_a_cell": max(per_cell.values()),
+            "value_sign": dict(Counter("+" if r["event"]["value"] > 0 else "-" for r in rows)),
+            "threshold_range": [min(t for _, t in xs), max(t for _, t in xs)],
+            "other_range": [min(x for x, _ in xs), max(x for x, _ in xs)],
+            "sign_crossing_rows": sum(t < 0 <= x for x, t in xs),
+            "three_digit_threshold_rows": sum(t >= 100 for _, t in xs),
+            "cross_length_rows": sum(len(str(abs(x))) != len(str(abs(t))) for x, t in xs),
+            "offset_counts_abs_le_4": {str(k): v for k, v in sorted(Counter(x - t for x, t in xs).items()) if abs(k) <= 4},
+            "seed": SEED_ADV}
+
+
+def adv_record(dev: list) -> dict:
+    """The cond_adv target report without the per-member counts (recorded in the dev SOURCE; AUDIT.json has it all)."""
+    rep_ = S.adv_target_report(dev)
+    return {k: v for k, v in rep_.items() if k != "wrong_counts"}
+
+
 def build_chains(rng: random.Random, m, reg: Registry, lines: list) -> list:
     parents, rej = [], Counter()
     d = Draw(rng, m)
@@ -768,7 +877,7 @@ REV3_FILE_SHA256 = {"t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80
 # longest), so --verify reconstructs these eight files byte for byte from the CURRENT rows (rev4_reconstruction: the
 # revision-4 strata and held-out-surface strata). The superseded files themselves are kept, renamed, under
 # data/t2br_superseded/rev4/. (The chain bank is unchanged: REV2_CHAINS_SHA256.)
-REV4_STRATA = tuple(s for s in C.DEV_STRATA if s != "cond_oor_edge")          # the 1,200 rows of revision 4
+REV4_STRATA = tuple(s for s in C.DEV_STRATA if s not in ("cond_oor_edge", "cond_adv"))   # revision 4's 1,200 rows
 FILL_UNITS_REV4 = {"swap": 7, "add": 17, "mix": 17, "conditional": 29}        # revision 4's constants (== FILL_UNITS)
 REV4_FILE_SHA256 = {"t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
                     "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
@@ -778,6 +887,18 @@ REV4_FILE_SHA256 = {"t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d810
                     "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
                     "t2br_dev.jsonl": "9aac40deffd678a4bdefffbb290081872015c88ea38296001c671e4067f46102",
                     "t2br_dev_hs.jsonl": "61845fbfc8635423257fac7c52b3ed1c70d19dd799720ca5f0e79866af1764f8"}
+
+
+# Revision 5's data files (built 2026-10-09 about 22:31; AUDIT.json of revision 5, files_sha256). Revision 6 only
+# appends the cond_adv rows (the 4b constants are unchanged: the new rows' traces are not longer than the kind's
+# longest), so --verify reconstructs these eight files byte for byte from the CURRENT rows (rev5_reconstruction: the
+# revision-5 strata and held-out-surface strata). The superseded files themselves are kept, renamed, under
+# data/t2br_superseded/rev5/. (The chain bank is unchanged: REV2_CHAINS_SHA256.)
+REV5_STRATA = tuple(s for s in C.DEV_STRATA if s != "cond_adv")               # the 1,280 rows of revision 5
+FILL_UNITS_REV5 = {"swap": 7, "add": 17, "mix": 17, "conditional": 29}        # revision 5's constants (== FILL_UNITS)
+REV5_FILE_SHA256 = {**{k: v for k, v in REV4_FILE_SHA256.items() if k.startswith("t2br_train")},
+                    "t2br_dev.jsonl": "8c1566b5c58df6fb373298e9b632f0acdb23931c02a5ff41dbf692420d2d3636",
+                    "t2br_dev_hs.jsonl": "ee86bb12ffe84bd46267b49cc1eaa9a3c98c3120b42fcfe94c53f9685ae245a5"}
 
 
 def rev2_matched_fill(trace: str, after: dict, count) -> tuple[str, int]:
@@ -880,12 +1001,13 @@ def dev_row_out(r: dict, count) -> dict:
             "gold_after": r["gold_after"], "gold_cmp": r["gold_cmp"], "gold_calc": r["gold_calc"], "gold_ok": r["gold_ok"],
             "fill_units": r["fill_units"], "fill_residual": r["fill_residual"], "targets": r["targets"],
             "n_target_tokens": r["n_target_tokens"], "n_prompt_tokens": count(C.render_prompt(msgs)),
-            **{k: r[k] for k in ("offset", "wrap", "direction", "thr_band", "pair_type") if k in r}}
+            **{k: r[k] for k in DEV_EXTRA_KEYS if k in r}}
 
 
 def hs_rows(dev_out: list, count, strata: tuple = C.HS_STRATA) -> list:
-    """C3: the held-out-surface strata's dev rows (the primaries + cond_sametens) in dev order, the j-th in the combined
-    held-out surface heldout_surface(j). strata = C.HS_STRATA_REV3 only for the revision-3 reconstruction."""
+    """C3: the held-out-surface strata's dev rows (the primaries + the identification strata) in dev order, the j-th in
+    the combined held-out surface heldout_surface(j). strata = an earlier revision's HS strata only for the
+    reconstructions of revisions 3-5."""
     out = []
     for j, r in enumerate([r for r in dev_out if r["stratum"] in strata]):
         sf = C.heldout_surface(j)
@@ -898,7 +1020,7 @@ def hs_rows(dev_out: list, count, strata: tuple = C.HS_STRATA) -> list:
 
 
 TRAIN_ROW_KEYS = ("category", "stratum", "cluster", "role", "offset", "pattern", "twin_type", "before", "event")
-DEV_EXTRA_KEYS = ("offset", "wrap", "direction", "thr_band", "pair_type")
+DEV_EXTRA_KEYS = ("offset", "wrap", "direction", "thr_band", "pair_type", "adv_type")      # adv_type: revision 6, cond_adv
 
 
 def internal_train_rows(base_rows: list) -> list:
@@ -933,6 +1055,18 @@ def rev4_reconstruction(train_rows: list, surfaces: list, dev_rows: list, count)
     texts = {**{C.train_path(a, "base").name: _jsonl_text(train_rows_for_arm(tr4, a, None, count)) for a in C.ARMS},
              **{C.train_path(a, "sd").name: _jsonl_text(train_rows_for_arm(tr4, a, surfaces, count)) for a in C.ARMS},
              C.DEV.name: _jsonl_text(dv4), C.DEV_HS.name: _jsonl_text(hs_rows(dv4, count, C.HS_STRATA_REV4))}
+    return {k: hashlib.sha256(v.encode("utf-8")).hexdigest() for k, v in texts.items()}
+
+
+def rev5_reconstruction(train_rows: list, surfaces: list, dev_rows: list, count) -> dict:
+    """Revision 5's eight data files rebuilt from the CURRENT rows (the builder's row records) with revision 5's fill
+    constants and strata (no cond_adv; the held-out-surface bank of the primary strata + cond_sametens + cond_oor_edge):
+    sha256 of each. Equal to REV5_FILE_SHA256 iff no row and no constant changed."""
+    tr5 = [finish_row(r, count, FILL_UNITS_REV5) for r in train_rows]
+    dv5 = [dev_row_out(finish_row(r, count, FILL_UNITS_REV5), count) for r in dev_rows if r["stratum"] in REV5_STRATA]
+    texts = {**{C.train_path(a, "base").name: _jsonl_text(train_rows_for_arm(tr5, a, None, count)) for a in C.ARMS},
+             **{C.train_path(a, "sd").name: _jsonl_text(train_rows_for_arm(tr5, a, surfaces, count)) for a in C.ARMS},
+             C.DEV.name: _jsonl_text(dv5), C.DEV_HS.name: _jsonl_text(hs_rows(dv5, count, C.HS_STRATA_REV5))}
     return {k: hashlib.sha256(v.encode("utf-8")).hexdigest() for k, v in texts.items()}
 
 
@@ -1357,6 +1491,14 @@ def build_content(lines: list, historical: bool = True) -> dict:
     dev += [finish_row(r, count) for r in st_rows]
     eg_rows = build_edge(Draw(random.Random(SEED_EDGE), m), reg, lines, len(dev))           # revision 5, appended
     dev += [finish_row(r, count) for r in eg_rows]
+    ad_rows = build_adv(Draw(random.Random(SEED_ADV), m), reg, lines, len(dev))             # revision 6, appended
+    dev += [finish_row(r, count) for r in ad_rows]
+    adv_rep = S.adv_target_report(dev)
+    log(lines, f"cond_adv targets (t2br_shortcuts.adv_target_report): {'MET' if adv_rep['ok'] else 'NOT MET'}; broad "
+               f"revision-5 survivors wrong on >= {adv_rep['target_1_broad_survivors']['wrong_min']} rows; exceptions "
+               f"caught {sorted({v['flip_distances'][0] for v in adv_rep['target_2_exceptions']['caught'].values()})}, "
+               f"not caught {sorted({v['flip_distances'][0] for v in adv_rep['target_2_exceptions']['not_caught'].values()})}; "
+               f"{adv_rep['distinct_cells']} cells")
     base = {a: train_rows_for_arm(train, a, None, count) for a in C.ARMS}
     rng_sd = random.Random(SEED_SD)
     surfaces = [C.draw_train_surface(rng_sd) for _ in train]
@@ -1379,17 +1521,25 @@ def build_content(lines: list, historical: bool = True) -> dict:
     same_rev4 = rev4 == REV4_FILE_SHA256
     log(lines, f"revision-4 data files reconstructed byte for byte from these rows (FILL_UNITS_REV4, no cond_oor_edge): "
                f"{same_rev4}")
+    rev5 = rev5_reconstruction(train, surfaces, dev, count)
+    same_rev5 = rev5 == REV5_FILE_SHA256
+    log(lines, f"revision-5 data files reconstructed byte for byte from these rows (FILL_UNITS_REV5, no cond_adv): "
+               f"{same_rev5}")
     return {"n_tpl": n_tpl, "src": src, "excl_pay": excl_pay, "excl_ops": excl_ops, "train": train, "dev": dev,
             "parents": parents, "base": base, "sd": sd, "surfaces": surfaces, "dev_out": dev_out, "hs": hs,
             "texts": texts, "count": count, "digests": digests, "same_rows_as_rev2": same_rows,
             "rev3_reconstruction": rev3, "same_rows_as_rev3": same_rev3, "rev4_reconstruction": rev4,
-            "same_rows_as_rev4": same_rev4}
+            "same_rows_as_rev4": same_rev4, "rev5_reconstruction": rev5, "same_rows_as_rev5": same_rev5,
+            "adv_report": adv_rep}
 
 
 DESIGN = {"quota": TRAIN_QUOTA, "cond_offsets": COND_OFFSETS, "twin_dist": C.TWIN_DIST, "twin_types": TWIN_TYPES,
           "twin_type_quota_per_offset": TWIN_TYPE_QUOTA, "cond_pattern_quota": COND_PATTERN_QUOTA,
           "dev_pair_type_quota": DEV_PAIR_TYPE_QUOTA, "far_dist": C.FAR_DIST, "sametens_dist": C.SAMETENS_DIST,
-          "edge_offsets": C.EDGE_OFFSETS, "edge_type_quota": EDGE_TYPE_QUOTA}
+          "edge_offsets": C.EDGE_OFFSETS, "edge_type_quota": EDGE_TYPE_QUOTA,
+          "adv_types": {k: {"representative": list(v[0]), "rows": v[1], "gold_ok": v[2], "what": v[3], "digits": v[4]}
+                        for k, v in S.ADV_TYPES.items()},
+          "adv_domain": S.DOMAIN}
 OUTPUTS = [C.train_path(a, "base") for a in C.ARMS] + [C.train_path(a, "sd") for a in C.ARMS] + \
     [C.train_source("base"), C.train_source("sd"), C.DEV, C.DEV_HS, C.CHAINS, C.DEV_SOURCE]
 
@@ -1411,8 +1561,8 @@ def build(historical: bool = True) -> int:
     t0 = time.time()
     lines: list = []
     log(lines, f"T2b-register data (revision {C.GO_RULE_REVISION}): seeds train {SEED_TRAIN} / dev {SEED_DEV} / chains "
-               f"{SEED_CHAINS} / surfaces {SEED_SD} / cond_sametens {SEED_SAMETENS} / cond_oor_edge {SEED_EDGE}; no "
-               "model call")
+               f"{SEED_CHAINS} / surfaces {SEED_SD} / cond_sametens {SEED_SAMETENS} / cond_oor_edge {SEED_EDGE} / cond_adv "
+               f"{SEED_ADV}; no model call")
     bc = build_content(lines, historical)
     train, dev, parents, count = bc["train"], bc["dev"], bc["parents"], bc["count"]
     if not bc["same_rows_as_rev2"]:
@@ -1421,6 +1571,10 @@ def build(historical: bool = True) -> int:
         raise SystemExit(f"the revision-3 files are not reconstructed from these rows: {bc['rev3_reconstruction']}")
     if not bc["same_rows_as_rev4"]:
         raise SystemExit(f"the revision-4 files are not reconstructed from these rows: {bc['rev4_reconstruction']}")
+    if not bc["same_rows_as_rev5"]:
+        raise SystemExit(f"the revision-5 files are not reconstructed from these rows: {bc['rev5_reconstruction']}")
+    if not bc["adv_report"]["ok"]:
+        raise SystemExit("cond_adv does not meet its targets against the shortcut family H; nothing written")
     aud = audit(train)
     log(lines, f"audit: {'PASS' if aud['ok'] else 'FAIL'} " + ", ".join(
         f"{k} {v['acc']:.3f}" for k, v in {**aud["gated"], **aud["rule_variants"]}.items()))
@@ -1449,6 +1603,7 @@ def build(historical: bool = True) -> int:
               "torch_imported": "torch" in sys.modules, "builder": "scripts/t2br_make_data.py",
               "builder_sha256_at_build": C.sha256(Path(__file__)),
               "common_sha256_at_build": C.sha256(ROOT / "scripts" / "t2br_common.py"),
+              "shortcuts_sha256_at_build": C.sha256(ROOT / "scripts" / "t2br_shortcuts.py"),
               "builder_note": "the files' provenance is the --verify rebuild check (AUDIT.json): the CURRENT builder "
                               "must rebuild every data file byte for byte; the hashes above are the code at build time",
               "env_sha256": C.sha256(ROOT / "rcwmt" / "env.py"),
@@ -1457,6 +1612,7 @@ def build(historical: bool = True) -> int:
               "rows_identical_to_revision_2": {"ok": bc["same_rows_as_rev2"], **bc["digests"]},
               "revision_3_files_reconstructed": {"ok": bc["same_rows_as_rev3"], **bc["rev3_reconstruction"]},
               "revision_4_files_reconstructed": {"ok": bc["same_rows_as_rev4"], **bc["rev4_reconstruction"]},
+              "revision_5_files_reconstructed": {"ok": bc["same_rows_as_rev5"], **bc["rev5_reconstruction"]},
               "exclusion_sources": excl, "exclusion_union": {"payloads": len(excl_pay), "operative_contents": len(excl_ops)},
               "freshness": "zero payload and zero operative-content overlap with every source; train / dev / chain units "
                            "mutually disjoint (checked during the draw by Registry, re-checked by --verify)",
@@ -1491,6 +1647,7 @@ def build(historical: bool = True) -> int:
                                                                 if r["stratum"] == "cond_sametens").items())),
                                  "seed": SEED_SAMETENS},
                "cond_oor_edge": edge_describe([r for r in dev if r["stratum"] == "cond_oor_edge"]),
+               "cond_adv": adv_describe([r for r in dev if r["stratum"] == "cond_adv"]),
                "chains": {s: sum(p["stratum"] == s for p in parents) for s in C.CHAIN_STRATA},
                "chain_candidates": sum(len(p["candidates"]) for p in parents),
                "heldout_surface_rows": len(bc["hs"])}
@@ -1499,8 +1656,8 @@ def build(historical: bool = True) -> int:
                                "strata": {k: list(v) for k, v in C.DEV_STRATA.items()},
                                "files": {C.DEV.name: C.sha256(C.DEV), C.DEV_HS.name: C.sha256(C.DEV_HS),
                                          C.CHAINS.name: C.sha256(C.CHAINS)},
-                               "sametens_seed": SEED_SAMETENS, "edge_seed": SEED_EDGE, "describe": dv_desc,
-                               "dev_heuristics": dheur,
+                               "sametens_seed": SEED_SAMETENS, "edge_seed": SEED_EDGE, "adv_seed": SEED_ADV,
+                               "describe": dv_desc, "dev_heuristics": dheur, "cond_adv_targets": adv_record(dev),
                                "surface_audit_heldout": sfa["heldout_surface_bank"],
                                "surface_definition": surface_definition(), "go_rule": C.GO_RULE_TEXT,
                                "go_rule_revision": C.GO_RULE_REVISION, "build_log": lines})
@@ -1602,7 +1759,9 @@ def verify(historical: bool = True, write_record: bool = True, quiet: bool = Fal
                   C.OOR_THR[0][0] <= ev["threshold"] <= C.OOR_THR[0][1] or C.OOR_THR[1][0] <= ev["threshold"] <= C.OOR_THR[1][1]),
               "cond_far": cond and inr and v % C.MOD != 0 and thr_in and C.FAR_DIST[0] <= dist <= C.FAR_DIST[1],
               "cond_sametens": cond and sametens_problem(b, ev) is None,
-              "cond_oor_edge": cond and edge_problem(b, ev) is None}[s]
+              "cond_oor_edge": cond and edge_problem(b, ev) is None,
+              "cond_adv": cond and adv_problem(b, ev) is None and r.get("adv_type") == S.adv_type_of(x, ev["threshold"])
+              and r["role"] == "adversarial"}[s]
         ok = ok and (C.is_oor(b, ev) == (C.DEV_STRATA[s][0] == "oor"))
         if not ok:
             sp.append(r["id"])
@@ -1613,6 +1772,11 @@ def verify(historical: bool = True, write_record: bool = True, quiet: bool = Fal
     multi = {c: rs for c, rs in clus.items() if len(rs) > 1}
     pair_bad = []
     for c, rs in multi.items():
+        if rs[0]["stratum"] == "cond_adv":                 # revision 6: a cond_adv cluster = the rows of ONE cell
+            if len({(q["before"][q["event"]["other"]], q["event"]["threshold"]) for q in rs}) != 1 or \
+                    any(q["stratum"] != "cond_adv" for q in rs):
+                pair_bad.append(c)
+            continue
         want = rs[0].get("pair_type", "threshold")
         if not all(C.single_diff((rs[0]["before"], rs[0]["event"]), (q["before"], q["event"])) == want for q in rs[1:]):
             pair_bad.append(c)
@@ -1625,15 +1789,20 @@ def verify(historical: bool = True, write_record: bool = True, quiet: bool = Fal
             pair_bad.append(c)
     bal = {s: Counter(r["gold_ok"] for r in dev if r["stratum"] == s) for s in ("cond_mid", "cond_oor_val", "cond_oor_thr",
                                                                                  "cond_far", "cond_sametens",
-                                                                                 "cond_oor_edge")}
+                                                                                 "cond_oor_edge", "cond_adv")}
+    adv_cells_ok = all(len({(q["before"][q["event"]["other"]], q["event"]["threshold"]) for q in dev
+                            if q["cluster"] == c}) == 1 for c in {q["cluster"] for q in dev if q["stratum"] == "cond_adv"}) \
+        and len({q["cluster"] for q in dev if q["stratum"] == "cond_adv"}) == \
+        len({(q["before"][q["event"]["other"]], q["event"]["threshold"]) for q in dev if q["stratum"] == "cond_adv"})
     ptypes = {s: Counter(r.get("pair_type") for r in dev if r["stratum"] == s) for s in ("cond_mid", "cond_far",
                                                                                           "cond_sametens",
                                                                                           "cond_oor_edge")}
     chk("pairs / triplets / quadruples differ in ONE number (the threshold; cond_mid and cond_sametens pairs: the "
         "threshold or the other register, 25 pairs each; cond_far pairs: the other register; cond_oor_edge quadruples: "
         "the threshold or the other register, 10 each, at other - threshold = -1, 0, +1, +2); pair strata "
-        "branch-balanced, one ok-true + one ok-false member per pair (cond_oor_edge: two of each per quadruple)",
-        not pair_bad and all(v[True] == v[False] for v in bal.values())
+        "branch-balanced, one ok-true + one ok-false member per pair (cond_oor_edge: two of each per quadruple); cond_adv "
+        "(revision 6) 50 / 50, one cluster per (other, threshold) cell",
+        not pair_bad and all(v[True] == v[False] for v in bal.values()) and adv_cells_ok
         and ptypes == {"cond_mid": Counter({"threshold": 50, "other": 50}), "cond_far": Counter({"other": 100}),
                        "cond_sametens": Counter({"threshold": 50, "other": 50}),
                        "cond_oor_edge": Counter({"threshold": 40, "other": 40})},
@@ -1700,19 +1869,36 @@ def verify(historical: bool = True, write_record: bool = True, quiet: bool = Fal
     r4 = rev4_reconstruction(internal_train_rows(tr["plain"]), [x["surface"] for x in sdr["plain"]],
                              internal_dev_rows(dev), count)
     chk("the eight revision-4 data files are reconstructed byte for byte from the current rows with revision 4's fill "
-        "constants and strata (their recorded sha256): no row and no constant changed; revision 5 only appends "
+        "constants and strata (their recorded sha256): no row and no constant changed; revision 5 only appended "
         "cond_oor_edge", r4 == REV4_FILE_SHA256, {k: v[:12] for k, v in r4.items()})
+    r5 = rev5_reconstruction(internal_train_rows(tr["plain"]), [x["surface"] for x in sdr["plain"]],
+                             internal_dev_rows(dev), count)
+    chk("the eight revision-5 data files are reconstructed byte for byte from the current rows with revision 5's fill "
+        "constants and strata (their recorded sha256): no row and no constant changed; revision 6 only appends "
+        "cond_adv", r5 == REV5_FILE_SHA256, {k: v[:12] for k, v in r5.items()})
     first = [r for r in dev if r["stratum"] in REV3_STRATA]
     first4 = [r for r in dev if r["stratum"] in REV4_STRATA]
+    first5 = [r for r in dev if r["stratum"] in REV5_STRATA]
     chk("the appends keep every earlier row in place: dev ids dv0000..dv1099 in revision-3 order, then cond_sametens "
-        "(dv1100..dv1199, revision 4), then cond_oor_edge (dv1200..dv1279, revision 5); the held-out-surface bank's first "
-        "400 rows are revision 3's bank and its first 500 revision 4's (same ids, hs_index, prompts)",
-        dev[:len(first)] == first and dev[:len(first4)] == first4
+        "(dv1100..dv1199, revision 4), then cond_oor_edge (dv1200..dv1279, revision 5), then cond_adv (dv1280..dv1379, "
+        "revision 6); the held-out-surface bank's first 400 rows are revision 3's bank, its first 500 revision 4's and "
+        "its first 580 revision 5's (same ids, hs_index, prompts)",
+        dev[:len(first)] == first and dev[:len(first4)] == first4 and dev[:len(first5)] == first5
         and [r["id"] for r in dev] == [f"dv{i:04d}" for i in range(len(dev))]
         and all(r["stratum"] == "cond_sametens" for r in dev[len(first):len(first4)])
-        and all(r["stratum"] == "cond_oor_edge" for r in dev[len(first4):])
+        and all(r["stratum"] == "cond_oor_edge" for r in dev[len(first4):len(first5)])
+        and all(r["stratum"] == "cond_adv" for r in dev[len(first5):])
         and hashlib.sha256(_jsonl_text(hs[:400]).encode("utf-8")).hexdigest() == REV3_FILE_SHA256[C.DEV_HS.name]
-        and hashlib.sha256(_jsonl_text(hs[:500]).encode("utf-8")).hexdigest() == REV4_FILE_SHA256[C.DEV_HS.name])
+        and hashlib.sha256(_jsonl_text(hs[:500]).encode("utf-8")).hexdigest() == REV4_FILE_SHA256[C.DEV_HS.name]
+        and hashlib.sha256(_jsonl_text(hs[:580]).encode("utf-8")).hexdigest() == REV5_FILE_SHA256[C.DEV_HS.name])
+    adv_rep = S.adv_target_report(dev)
+    chk("cond_adv (revision 6) against the extended shortcut family H: 100 rows, 50 / 50, every row in a design type, "
+        "the type quotas, cells balanced inside each type; every member of H that passes revision 5's G1 against a weak "
+        "plain arm is wrong on >= 33 rows, except the isolated distance exceptions, of which those at -3, -2, +3, +4 are "
+        "wrong on >= 21 and only the one at -4 is not caught; the infeasibility certificates of the 40-row target hold",
+        adv_rep["ok"], {"broad_min": adv_rep["target_1_broad_survivors"]["wrong_min"],
+                        "exceptions": {k: v["wrong"] for k, v in adv_rep["target_2_exceptions"]["caught"].items()},
+                        "cells": adv_rep["distinct_cells"]})
     # amendment 4b and the surface proof (data only)
     trc_full = [{**r, "targets": {a: tr[a][i]["target"] for a in C.ARMS},
                  "n_target_tokens": {a: tr[a][i]["n_target_tokens"] for a in C.ARMS}} for i, r in enumerate(trc)]
@@ -1730,7 +1916,8 @@ def verify(historical: bool = True, write_record: bool = True, quiet: bool = Fal
         {k: sfa["train_sd"][k] for k in ("decode_failures", "rows_using_a_heldout_factor",
                                          "rows_with_a_heldout_name_or_paraphrase_string")})
     chk(f"C3: the held-out-surface bank = the {sum(C.DEV_N[s] for s in C.HS_STRATA)} dev rows of the primary strata + "
-        "the identification strata (cond_sametens, cond_oor_edge) in dev order (same ids and golds); every prompt decodes "
+        "the identification strata (cond_sametens, cond_oor_edge, cond_adv) in dev order (same ids and golds); every "
+        "prompt decodes "
         "to its row and uses ONLY held-out factors (paraphrase 4, names 4, held-out orders rotating by row)",
         sfa["heldout_surface_bank"]["ok"], {k: sfa["heldout_surface_bank"][k] for k in ("n_rows", "bad_rows")})
     # rebuild with the CURRENT builder (fresh union) and compare bytes; then freshness on the same union
@@ -1784,7 +1971,9 @@ def verify(historical: bool = True, write_record: bool = True, quiet: bool = Fal
         and json.dumps(sfa["train_sd"], sort_keys=True) == json.dumps(ssrc.get("surface_audit_train"), sort_keys=True)
         and json.dumps(sfa["heldout_surface_bank"], sort_keys=True) == json.dumps(dsrc.get("surface_audit_heldout"),
                                                                                     sort_keys=True)
-        and json.dumps(dheur, sort_keys=True) == json.dumps(dsrc.get("dev_heuristics"), sort_keys=True))
+        and json.dumps(dheur, sort_keys=True) == json.dumps(dsrc.get("dev_heuristics"), sort_keys=True)
+        and json.dumps({k: v for k, v in adv_rep.items() if k != "wrong_counts"}, sort_keys=True) ==
+        json.dumps(dsrc.get("cond_adv_targets"), sort_keys=True))
     chk(f"the dev SOURCE states the current go rule (revision {C.GO_RULE_REVISION})", dsrc.get("go_rule") == C.GO_RULE_TEXT
         and dsrc.get("go_rule_revision") == C.GO_RULE_REVISION)
     ok = all(c[1] for c in checks)
@@ -1802,12 +1991,14 @@ def verify(historical: bool = True, write_record: bool = True, quiet: bool = Fal
                    "surface": sfa, "dev_heuristics": dheur, "train_describe": describe_train(trc_full),
                    "rows_identical_to_revision_2": dg, "revision_2_files_reconstructed": r2,
                    "revision_3_files_reconstructed": r3, "revision_4_files_reconstructed": r4,
+                   "revision_5_files_reconstructed": r5, "cond_adv": adv_rep,
                    "dev_describe": {"by_stratum": dict(cnt), "chains": dict(Counter(p["stratum"] for p in parents)),
                                     "heldout_surface_rows": len(hs),
                                     "branch_by_stratum": {s: dict(Counter(str(r["gold_ok"]) for r in dev if r["stratum"] == s))
                                                           for s in C.DEV_STRATA if s.startswith("cond")}},
                    "files_sha256": {p.name: C.sha256(p) for p in files},
-                   "code_sha256": {r: C.sha256(ROOT / r) for r in ("scripts/t2br_make_data.py", "scripts/t2br_common.py")},
+                   "code_sha256": {r: C.sha256(ROOT / r) for r in ("scripts/t2br_make_data.py", "scripts/t2br_common.py",
+                                                                   "scripts/t2br_shortcuts.py")},
                    "torch_imported": "torch" in sys.modules, "peak_rss_mb": _rss_mb(),
                    "written_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
             with (C.DOCS / "AUDIT.json").open("w", encoding="utf-8", newline="\n") as fh:

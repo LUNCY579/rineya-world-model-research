@@ -1,6 +1,8 @@
-"""T2b-register screen analysis, revision 5 (RCWM roadmap item 3; joint item 5b). CPU only: numpy / json; never
-imports torch, never loads a model. Applies the PRE-STATED go rule (t2br_common.GO_RULE_TEXT, revision 5; verbatim in
-docs/t2b/register/GO_RULE.md and DESIGN.md section 7).
+"""T2b-register screen analysis, revision 7 (RCWM roadmap item 3; joint item 5b). CPU only: numpy / json; never
+imports torch, never loads a model. Applies the PRE-STATED go rule (t2br_common.GO_RULE_TEXT, revision 7; verbatim in
+docs/t2b/register/GO_RULE.md and DESIGN.md section 7). Revision 7 is wording only: the always-quoted limits are broader
+and the OVERALL headline (overall_headline) carries the report-only SHORTCUT_CONSISTENT flag and a pointer to the LIMITS
+whenever the flag is set; no gate, threshold, stratum, data row, stage or computation changed.
 
   python -B scripts/t2br_analysis.py --selftest    # scorer self-test on the dev bank and its held-out-surface rendering
                                                    # (golds 100%, negatives 0%, floors exact, the 4b constant-fill check,
@@ -14,8 +16,11 @@ docs/t2b/register/GO_RULE.md and DESIGN.md section 7).
                                                    # chance and against a plain arm that is weak on every out-of-range
                                                    # row, engineered exact-boundary runs incl. the held-out surface and
                                                    # the predicate clause) + exhaustive exact-boundary checks of
-                                                   # verdict() + the enumeration of digit shortcuts and of the
-                                                   # off-by-one family against G1; writes DRYRUN.json + .md
+                                                   # verdict() + the enumeration of the extended shortcut family H
+                                                   # (revision 6: digit, off-by-one, lexicographic, digit-sum,
+                                                   # units / tens / magnitude-only, distance exceptions) against G1
+                                                   # under three plain baselines + members of H as full scenarios
+                                                   # (weak plain); writes DRYRUN.json + .md
   python -B scripts/t2br_analysis.py --run-dir runs/t2b_register/s0_sd [--run-dir ...s1_sd ...]
                                                    # the screen analysis (registered: freeze + provenance verified);
                                                    # writes runs/t2b_register/analysis/T2BR_RESULTS_<seeds>_<variant>
@@ -29,13 +34,14 @@ the fill is a constant per action kind, so the emitted fill length is not an out
 diagnostics are dropped in favour of the data-level constant-length check, verified before any output is read). Every
 side's branch choice on conditional rows is also read from its 'after' (correct branch / wrong branch / neither).
 Two renderings of the same rows, paired by row: IN-SURFACE (E1: Titan's verbatim frame, every dev row) and HELD-OUT
-SURFACE (E1H: the primary rows and the identification strata cond_sametens + cond_oor_edge in the combined held-out
-surface, data/t2br_dev_hs.jsonl).
+SURFACE (E1H: the primary rows and the identification strata cond_sametens + cond_oor_edge + cond_adv in the combined
+held-out surface, data/t2br_dev_hs.jsonl).
 Metrics. 'conditional' (PRIMARY) = mean exact over cond_oor_val + cond_oor_thr + cond_far (branch-balanced pairs);
 'cond_oor_val' = the boundary pairs alone (G1's second clause); 'cond_oor_edge' = the boundary quadruples alone
 (revision 5) and 'cond_sametens' = the same-tens identification pairs alone (revision 4), neither pooled into
 'conditional'; the trace side's PREDICATE ACCURACY on cond_oor_edge and on cond_sametens (revision 5: t2br_common.pred_ok,
-the pseudo-metrics '<stratum>_pred', G1's absolute clause >= 0.80 with no plain-arm term); 'mix' (PRIMARY) = mix_oor;
+the pseudo-metrics '<stratum>_pred', G1's absolute clause >= 0.80 with no plain-arm term; revision 6 adds the
+adversarial stratum cond_adv, gated by this clause alone); 'mix' (PRIMARY) = mix_oor;
 'conditional_in' =
 branch-balanced mean over cond_xm1 / cond_x0 / cond_xp1 / cond_mid (0.5 x ok-false rows + 0.5 x ok-true rows); 'mix_in'
 = mix; controls swap / add_nowrap. The RULE is decided on exact rationals (metric_exact: integer counts,
@@ -45,7 +51,12 @@ lies within one bootstrap SE ((hi - lo) / 3.92) of its bar is flagged (reported,
 Reported, not gating: the held-out-surface results of every side (OFF and filler included); the surface audit
 (held-out minus in-surface per side and primary stratum, paired by row, with the discordant row counts); the filler
 residual covariate (the constant filler's tokens minus that row's trace tokens, a property of the data) with the filler
-side's accuracy split at its median.
+side's accuracy split at its median; revision 6: the SHORTCUT-AGREEMENT analysis (shortcut_agreement: the trace side's
+stated cmp.ok against the env's predicate and against every member of the extended shortcut family H over all
+conditional rows, each rendering; flag 'SHORTCUT_CONSISTENT' if a member of H that differs from the predicate on those
+rows agrees at least as well as the predicate; it never changes the verdict and is quoted with it, as are the
+always-quoted limits t2br_common.ALWAYS_QUOTED_LIMITS; revision 7: whenever it is set, the OVERALL headline carries it
+too, with a pointer to the LIMITS).
 Chains (k = 4 self-rollouts, chain_one frame): exact state at k, normalised regret at k = 1, 2, 4 through the frozen
 decision pipeline (rcwmt.data.candidate_table -> rcwmt.decisions.g_only: 256 Gaussian goals seed 1001, tie seed 17,
 unparseable -> parent-mean utility), per stratum (CH_IN, CH_X, ALL), parent-paired bootstrap contrasts, the copy-s0
@@ -89,6 +100,7 @@ if "rcwmt.heads" not in sys.modules:          # decisions / fidelity import head
     _m.__doc__ = "placeholder installed by t2br_analysis.py (as t2_analysis.py does): keeps torch out"
     sys.modules["rcwmt.heads"] = _m
 import t2br_common as C  # noqa: E402
+import t2br_shortcuts as S  # noqa: E402  (revision 6: the extended shortcut family H; numpy only)
 from rcwmt import data, decide, decisions, env, fidelity  # noqa: E402,F401
 
 if "torch" in sys.modules:
@@ -140,13 +152,14 @@ METRICS = {**{s: ("mean", (s,)) for s in C.DEV_STRATA},
 assert len(METRICS) == len(C.DEV_STRATA) + len(GROUPS), "outcome key collision"
 # metrics available on the held-out surface (every one lies inside the held-out-surface strata)
 HS_METRICS = ("primary_conditional", "cond_oor_val", "cond_oor_thr", "cond_far", "primary_mix", "mix_oor",
-              "cond_sametens", "cond_oor_edge")
+              "cond_sametens", "cond_oor_edge", "cond_adv")
 assert all(set(METRICS[m][1]) <= set(C.HS_STRATA) for m in HS_METRICS)
 # Revision 5: G1's predicate-accuracy clause as pseudo-metrics of the TRACE side only (key -> its stratum), decided
 # exactly like every metric (metric_exact on the per-row pred_ok vector), with no plain-arm term
 PRED_METRICS = {f"{s}_pred": s for s in C.PRED_STRATA}
 PART_LABEL = {"primary_conditional": "conditional", "cond_oor_val": "cond_oor_val", "cond_sametens": "cond_sametens",
-              "cond_oor_edge": "cond_oor_edge", **{pm: f"{s} predicate" for pm, s in PRED_METRICS.items()},
+              "cond_oor_edge": "cond_oor_edge", "cond_adv": "cond_adv",
+              **{pm: f"{s} predicate" for pm, s in PRED_METRICS.items()},
               "primary_mix": "mix",
               "swap": "swap", "add_nowrap": "add_nowrap", "conditional_in": "conditional_in", "mix_in": "mix_in"}
 
@@ -467,12 +480,14 @@ COMPONENTS = (
     ("G1", "trace", None, "cond_oor_edge_pred", C.PRED_MIN, ">=", "in"),             # revision 5 (absolute)
     ("G1", "trace", "plain", "cond_sametens", C.GAIN_CONDITIONAL, ">=", "in"),        # revision 4
     ("G1", "trace", None, "cond_sametens_pred", C.PRED_MIN, ">=", "in"),             # revision 5 (absolute)
+    ("G1", "trace", None, "cond_adv_pred", C.PRED_MIN, ">=", "in"),                  # revision 6 (absolute only)
     ("G1", "trace", "plain", "primary_conditional", C.GAIN_CONDITIONAL, ">=", "hs"),
     ("G1", "trace", "plain", "cond_oor_val", C.GAIN_CONDITIONAL, ">=", "hs"),
     ("G1", "trace", "plain", "cond_oor_edge", C.GAIN_CONDITIONAL, ">=", "hs"),        # revision 5
     ("G1", "trace", None, "cond_oor_edge_pred", C.PRED_MIN, ">=", "hs"),             # revision 5 (absolute)
     ("G1", "trace", "plain", "cond_sametens", C.GAIN_CONDITIONAL, ">=", "hs"),        # revision 4
     ("G1", "trace", None, "cond_sametens_pred", C.PRED_MIN, ">=", "hs"),             # revision 5 (absolute)
+    ("G1", "trace", None, "cond_adv_pred", C.PRED_MIN, ">=", "hs"),                  # revision 6 (absolute only)
     ("G2", "trace", "plain", "primary_mix", C.GAIN_MIX, ">=", "in"),
     ("G2", "trace", "plain", "primary_mix", C.GAIN_MIX, ">=", "hs"),
     ("G3", "trace", "filler", "primary_conditional", C.FILLER_STOP, ">=", "in"),
@@ -487,8 +502,8 @@ COMPONENTS = (
 G_NAMES = ("G1", "G2", "G3", "G4", "G5")
 CONDITION_NAMES = {
     "G1": "G1 trace-plain >= +0.25 on conditional (OOR pooled), on cond_oor_val, cond_oor_edge and cond_sametens "
-          "alone, and trace predicate accuracy >= 0.80 on cond_oor_edge and cond_sametens, in-surface and held-out "
-          "surface",
+          "alone, and trace predicate accuracy >= 0.80 on cond_oor_edge, cond_sametens and cond_adv, in-surface and "
+          "held-out surface",
     "G2": "G2 trace-plain >= +0.30 on mix (OOR), in-surface and held-out surface",
     "G3": "G3 filler below trace: trace-filler >= +0.10 on each in-surface primary (4b filler)",
     "G4": "G4 controls: trace ON-OFF >= -0.05 on swap and add_nowrap",
@@ -589,6 +604,86 @@ def flag_near_bar(rule: dict, contr: dict, contr_hs: dict) -> list:
     return flagged
 
 
+AGREE_FLAG = "SHORTCUT_CONSISTENT"
+
+
+def shortcut_agreement(dev: list, hs: list, trace_texts: list, hs_trace_texts: list) -> dict:
+    """Revision 6, REPORT ONLY (it never changes the verdict; it is quoted with it): how well the trained trace side's
+    STATED predicate (t2br_common.stated_ok: cmp.ok read as strictly as the predicate clause reads it) agrees with the
+    env's predicate 'other > threshold' and with every member of the extended shortcut family H, over ALL conditional
+    rows of the dev bank, separately in-surface and on the held-out surface. A row whose trace states no readable ok
+    agrees with nothing. Members equal to the comparison on the whole domain are not candidates; members that equal the
+    predicate on every evaluated row of a surface cannot be told from it there and are counted, not compared. Flag
+    'SHORTCUT_CONSISTENT' (per surface, and overall if on either) iff some candidate agrees at least as often as the
+    predicate."""
+    trivial = set(S.true_rule_equivalents())
+    pos = {r["id"]: r for r in dev}
+    sets = {"in": [(r, tx) for r, tx in zip(dev, trace_texts) if r["event"]["kind"] == "conditional"],
+            "hs": [(pos[h["id"]], tx) for h, tx in zip(hs, hs_trace_texts) if pos[h["id"]]["event"]["kind"] == "conditional"]}
+    out = {"surfaces": {}}
+    for surf, pairs in sets.items():
+        x = np.array([r["before"][r["event"]["other"]] for r, _ in pairs])
+        t = np.array([r["event"]["threshold"] for r, _ in pairs])
+        ok = [C.stated_ok(tx) for _, tx in pairs]
+        stated = np.array([o is not None for o in ok], bool)
+        val = np.array([bool(o) for o in ok], bool)
+        truth = x > t
+        a_truth = int((stated & (val == truth)).sum())
+        cand, same = {}, 0
+        for n, v in S.family(x, t).items():
+            if n in trivial:
+                continue
+            if bool((v == truth).all()):
+                same += 1
+                continue
+            cand[n] = int((stated & (val == v)).sum())
+        ranked = sorted(cand.items(), key=lambda kv: (-kv[1], kv[0]))
+        flagged = [n for n, a in ranked if a >= a_truth]
+        out["surfaces"][surf] = {"conditional_rows": len(pairs), "rows_with_a_stated_ok": int(stated.sum()),
+                                 "agree_true_predicate": a_truth, "best_member": ranked[0][0] if ranked else None,
+                                 "best_member_agreement": ranked[0][1] if ranked else None,
+                                 "top_members": [[n, a] for n, a in ranked[:8]],
+                                 "n_members_at_least_as_good": len(flagged),
+                                 "members_at_least_as_good": flagged[:20],
+                                 "members_compared": len(cand),
+                                 "members_equal_to_the_predicate_on_these_rows": same,
+                                 "flag": AGREE_FLAG if flagged else None}
+    out["flag"] = AGREE_FLAG if any(v["flag"] for v in out["surfaces"].values()) else None
+    parts = []
+    for surf, v in out["surfaces"].items():
+        name = "in-surface" if surf == "in" else "held-out surface"
+        parts.append(f"{name}: true predicate {v['agree_true_predicate']}/{v['conditional_rows']}, best member of H "
+                     f"'{v['best_member']}' {v['best_member_agreement']}/{v['conditional_rows']}"
+                     + (f" ({v['n_members_at_least_as_good']} members at least as good)" if v["flag"] else ""))
+    out["statement"] = ("shortcut agreement (report-only; never changes the verdict): "
+                        + (AGREE_FLAG if out["flag"] else "no member of H agrees with the trace's cmp.ok as well as the "
+                           "true predicate") + " - " + "; ".join(parts))
+    return out
+
+
+def verdict_statement(v: str, agreement: dict) -> str:
+    """The verdict as it must be quoted (revision 6): the verdict, the report-only shortcut-agreement statement and the
+    always-quoted limits."""
+    return v + " | " + agreement["statement"] + " | LIMITS: " + " ".join(C.ALWAYS_QUOTED_LIMITS)
+
+
+def overall_headline(verdicts: dict, flags: dict) -> str:
+    """The OVERALL headline (a pure function of the per-seed verdicts and the report-only shortcut-agreement flags).
+    Revision 7 (wording only): whenever the flag is set in any analysed seed, the headline carries it beside the verdict,
+    marked report-only, with a pointer to the LIMITS; otherwise it is revision 6's headline, unchanged."""
+    seeds = sorted(verdicts)
+    head = ("GO in every analysed seed" if all(v == "GO" for v in verdicts.values()) else "NOT GO in every analysed seed")
+    if seeds == ["s0"]:
+        head = f"SCREEN (seed 0): {verdicts['s0']}"
+    flagged = [s for s in seeds if flags.get(s)]
+    if flagged:
+        head += (f" | {AGREE_FLAG} in {', '.join(flagged)} (report-only shortcut-agreement flag; it never changes the "
+                 "verdict: a member of H agrees with the trace's stated cmp.ok at least as well as the true predicate) | "
+                 "read the LIMITS quoted with the verdict (G1 excludes only the members of H, and not the exception "
+                 "'other > threshold or other == threshold - 4'; heuristics outside H are not excluded)")
+    return head
+
+
 def analyse_seed(dev: list, parents: list, texts: dict, gens: dict, hs: list, hs_texts: dict,
                  n_boot: int = N_BOOT) -> dict:
     D = DevIndex(dev)
@@ -638,6 +733,9 @@ def analyse_seed(dev: list, parents: list, texts: dict, gens: dict, hs: list, hs
            "exact_metrics": {s: {m: str(v) for m, v in acc[s].items()
                                  if m in GROUPS + C.CONTROLS + C.G1_ALONE + tuple(PRED_METRICS)} for s in C.SIDES},
            "exact_metrics_heldout_surface": {s: {m: str(v) for m, v in acc_hs[s].items()} for s in C.SIDES}}
+    res["shortcut_agreement"] = shortcut_agreement(dev, hs, texts["trace"], hs_texts["trace"])
+    res["statement"] = verdict_statement(rule["verdict"], res["shortcut_agreement"])
+    res["always_quoted_limits"] = list(C.ALWAYS_QUOTED_LIMITS)
     res["chains"] = chain_block(parents, gens)
     return res
 
@@ -738,15 +836,17 @@ def analyse_runs(run_dirs: list, registered: bool = True, out_dir: Path | None =
     variant = variants.pop()
     seeds = sorted(per_seed)
     vs = {s: per_seed[s]["rule"]["verdict"] for s in seeds}
-    overall = ("GO in every analysed seed" if all(v == "GO" for v in vs.values()) else "NOT GO in every analysed seed")
-    if seeds == ["s0"]:
-        overall = f"SCREEN (seed 0): {vs['s0']}"
+    overall = overall_headline(vs, {s: per_seed[s]["shortcut_agreement"]["flag"] for s in seeds})   # revision 7
     res = {"experiment": "RCWM-T1 T2b-register screen", "go_rule": C.GO_RULE_TEXT, "go_rule_revision": C.GO_RULE_REVISION,
            "registered": registered, "train_variant": variant, "seeds": seeds, "verdicts": vs, "overall": overall,
+           "statements": {s: per_seed[s]["statement"] for s in seeds},
+           "shortcut_agreement_flags": {s: per_seed[s]["shortcut_agreement"]["flag"] for s in seeds},
+           "always_quoted_limits": list(C.ALWAYS_QUOTED_LIMITS),
            "confirmation_note": "the roadmap's confirmation applies the same rule in all 3 seeds, then a sealed R bank",
            "fill_constant_check": fcc, "per_seed": per_seed, "dev_sha256": C.sha256(dev_path),
            "dev_hs_sha256": C.sha256(dev_hs_path), "chains_sha256": C.sha256(chains_path),
-           "code_sha256": {r: C.sha256(ROOT / r) for r in ("scripts/t2br_analysis.py", "scripts/t2br_common.py")},
+           "code_sha256": {r: C.sha256(ROOT / r) for r in ("scripts/t2br_analysis.py", "scripts/t2br_common.py",
+                                                           "scripts/t2br_shortcuts.py")},
            "torch_imported": "torch" in sys.modules, "written_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     if write:
         out_dir = Path(out_dir or (ROOT / "runs" / "t2b_register" / "analysis"))
@@ -783,12 +883,26 @@ def _ci(c):
 def render(res: dict) -> str:
     L = [f"# T2b-register screen results ({', '.join(res['seeds'])}; training variant "
          f"{res.get('train_variant', 'sd')})", "", f"**Overall:** {res['overall']}", "",
+         "**Limits (quoted with every statement of the verdict):**", "",
+         *[f"- {x}" for x in res.get("always_quoted_limits", C.ALWAYS_QUOTED_LIMITS)], "",
          f"Pre-stated rule, revision {res.get('go_rule_revision', C.GO_RULE_REVISION)} (verbatim):", "",
          "> " + res["go_rule"], ""]
     for s in res["seeds"]:
         r = res["per_seed"][s]
         rule = r["rule"]
-        L += [f"## Seed {s}: {rule['verdict']}", "", "| condition | holds | failed parts |", "|---|---|---|"]
+        L += [f"## Seed {s}: {rule['verdict']}", ""]
+        sa = r.get("shortcut_agreement")
+        if sa:
+            L += [f"**Quoted with the verdict** ({'a GO' if rule['verdict'] == 'GO' else 'every verdict'}): "
+                  f"{sa['statement']}.", ""]
+            for surf, v in sa["surfaces"].items():
+                L.append(f"- {surf}: rows {v['conditional_rows']}, stated ok {v['rows_with_a_stated_ok']}, true "
+                         f"predicate {v['agree_true_predicate']}, top members of H: "
+                         + "; ".join(f"`{n}` {a}" for n, a in v["top_members"][:5])
+                         + f" ({v['members_equal_to_the_predicate_on_these_rows']} members equal the predicate on "
+                           f"these rows; flag: {v['flag'] or 'none'})")
+            L.append("")
+        L += ["| condition | holds | failed parts |", "|---|---|---|"]
         for k, v in rule["conditions"].items():
             g = k.split(" ", 1)[0]
             L.append(f"| {k} | {'yes' if v else 'NO'} | {', '.join(rule['failed_parts'].get(g, [])) or '-'} |")
@@ -1010,6 +1124,24 @@ def scorer_selftest(dev_path: Path = C.DEV, chains_path: Path = C.CHAINS, dev_hs
             other_len_n += 1
             other_len_ok += bool(s["format_ok"] and s["after_ok"])
     res["negatives"] = {k: {"n": neg_n[k], "wrongly_accepted": neg[k]} for k in sorted(neg_n)}
+    # revision 6: stated_ok (the shortcut-agreement reading of cmp.ok) is exactly pred_ok's reading on every gold trace
+    # and every negative variant of every conditional row
+    sid_n = sid_bad = 0
+    for r in dev:
+        if r["event"]["kind"] != "conditional":
+            continue
+        for text in [r["targets"]["trace"]] + [v[0] for v in _neg_variants(r).values()]:
+            sid_n += 1
+            sid_bad += C.pred_ok(text, r) != (C.stated_ok(text) is not None and C.stated_ok(text) == r["gold_ok"])
+    res["stated_ok_identity"] = {"n": sid_n, "mismatches": sid_bad, "ok": sid_bad == 0 and sid_n > 0}
+    # revision 6: the shortcut-agreement analysis on gold traces flags nothing (the true predicate agrees on every row)
+    sa = shortcut_agreement(dev, hs, [r["targets"]["trace"] for r in dev],
+                            [dev[D.pos[h["id"]]]["targets"]["trace"] for h in hs])
+    res["shortcut_agreement_gold"] = {"flag": sa["flag"], "surfaces": {k: {kk: v[kk] for kk in (
+        "conditional_rows", "agree_true_predicate", "best_member", "best_member_agreement",
+        "members_equal_to_the_predicate_on_these_rows")} for k, v in sa["surfaces"].items()},
+        "ok": sa["flag"] is None and all(v["agree_true_predicate"] == v["conditional_rows"]
+                                         for v in sa["surfaces"].values())}
     res["negative_failures"] = neg_fail
     res["filler_other_lengths_accepted"] = {"n": other_len_n, "accepted": other_len_ok}
     # floors: copy (never correct: every dev row changes the state) and branch heuristics on conditional strata
@@ -1040,9 +1172,9 @@ def scorer_selftest(dev_path: Path = C.DEV, chains_path: Path = C.CHAINS, dev_hs
     sub_hs[D.hs_rows] = sub[D.hs_rows]
     res["metrics"] = {"perfect": {m: str(metric_exact(ones, D, m)) for m in GROUPS + C.G1_ALONE},
                       "always_sub": {m: str(metric_exact(sub, D, m)) for m in ("primary_conditional", "conditional_in")
-                                     + C.G1_ALONE},
+                                     + C.G1_ALONE + ("cond_adv",)},
                       "always_sub_heldout_index": {m: str(metric_exact(sub_hs, D, m)) for m in ("primary_conditional",)
-                                                   + C.G1_ALONE},
+                                                   + C.G1_ALONE + ("cond_adv",)},
                       "boot_identical_sides": metric_boot_diff(ones, ones, D, "primary_conditional", 2000),
                       "n": {m: int(len(D.idx[m])) for m in GROUPS + C.G1_ALONE}}
     # chain pipeline identities: gold chains -> regret 0, exact 1, product law 1; copy chains -> the copy floor
@@ -1069,9 +1201,11 @@ def scorer_selftest(dev_path: Path = C.DEV, chains_path: Path = C.CHAINS, dev_hs
         and all(c["exact"] for fl in res["floors"].values() for c in fl.values()) \
         and all(v == "1" for v in res["metrics"]["perfect"].values()) \
         and res["metrics"]["always_sub"] == {"primary_conditional": "1/2", "conditional_in": "1/2", "cond_oor_val": "1/2",
-                                             "cond_oor_edge": "1/2", "cond_sametens": "1/2"} \
+                                             "cond_oor_edge": "1/2", "cond_sametens": "1/2", "cond_adv": "1/2"} \
         and res["metrics"]["always_sub_heldout_index"] == {"primary_conditional": "1/2", "cond_oor_val": "1/2",
-                                                           "cond_oor_edge": "1/2", "cond_sametens": "1/2"} \
+                                                           "cond_oor_edge": "1/2", "cond_sametens": "1/2",
+                                                           "cond_adv": "1/2"} \
+        and res["stated_ok_identity"]["ok"] and res["shortcut_agreement_gold"]["ok"] \
         and res["metrics"]["boot_identical_sides"] == [0.0, 0.0] \
         and res["chains"]["gold_regret_k4_mean"] == 0.0 and res["chains"]["gold_exact_k4"] == 1.0 \
         and res["chains"]["copy_regret_equals_floor"] \
@@ -1083,7 +1217,8 @@ def scorer_selftest(dev_path: Path = C.DEV, chains_path: Path = C.CHAINS, dev_hs
     res["dev_sha256"] = C.sha256(dev_path)
     res["dev_hs_sha256"] = C.sha256(dev_hs_path)
     res["chains_sha256"] = C.sha256(chains_path)
-    res["code_sha256"] = {r: C.sha256(ROOT / r) for r in ("scripts/t2br_analysis.py", "scripts/t2br_common.py")}
+    res["code_sha256"] = {r: C.sha256(ROOT / r) for r in ("scripts/t2br_analysis.py", "scripts/t2br_common.py",
+                                                          "scripts/t2br_shortcuts.py")}
     return res
 
 
@@ -1153,12 +1288,32 @@ def _answer(before: dict, ev: dict, how: str, salt: str) -> dict:
 # the env's strict predicate computed digit-wise (tens first, units on a tie); it equals other > threshold everywhere.
 # Revision 5: the off-by-one family t2br_common.OFF_BY_ONE (the env's 'x > t' with the branch flipped exactly where
 # x - t lies in the named subset of {-1, 0, +1}).
+# Revision 6: members of the extended shortcut family H run as full scenarios (scenario key -> member name); each is
+# looked up on t2br_shortcuts' domain table (every (other, threshold) of the bank and of the chains lies in the domain).
+H_SCENARIO_RULES = {"lex_signed": "lex signed: str(x)>str(t)", "magnitude": "magnitude: |x|>|t|",
+                    "digitsum_sl": "digitsum sign+length-aware: >", "units": "units(x)>units(t)",
+                    "exc_m3": "exception d=-3: x>t or x==t-3", "exc_m2": "exception d=-2: x>t or x==t-2",
+                    "exc_p3": "exception d=+3: x>t and x!=t+3", "exc_p4": "exception d=+4: x>t and x!=t+4",
+                    "exc_m4": "exception d=-4: x>t or x==t-4"}
+_H_LUT = {}
+
+
+def _h_rule(name: str):
+    def rule(x, t, name=name):
+        if name not in _H_LUT:
+            Xr, Tr, _, H, _, _ = S.domain_family()
+            _H_LUT[name] = {(int(a), int(b)): bool(c) for a, b, c in zip(Xr, Tr, H[name])}
+        return _H_LUT[name][(int(x), int(t))]
+    return rule
+
+
 DRY_RULES = {
     "tens_digit_gt": lambda x, t: x // 10 > t // 10,
     "tens_or_eq_plus1": lambda x, t: x // 10 > t // 10 or x == t + 1,          # the verifier's shortcut
     "tens_ge_not_eq": lambda x, t: x // 10 >= t // 10 and x != t,              # its mirror (strict '>')
     "true_rule_digitwise": lambda x, t: x // 10 > t // 10 or (x // 10 == t // 10 and x % 10 > t % 10),
     **{n: (lambda x, t, s=s: (x > t) != (x - t in s)) for n, s in C.OFF_BY_ONE.items()},
+    **{k: _h_rule(n) for k, n in H_SCENARIO_RULES.items()},
 }
 
 
@@ -1271,11 +1426,12 @@ SCENARIOS = {
     "malformed_traces": ({"off": _OFF, "plain": _PLAIN, "trace": ("gold", "trace_sorted"), "filler": _FILLER},
                          ("exact", C.DP3_LABEL + " - " + C.DP3_SUB["trace_format"])),
     # revision 3: a trace arm that is right in Titan's frame but falls back to the plain arm's behaviour on the held-out
-    # surface (the PREREG-3 / BWM key-order failure): G1 and G2 fail on the held-out surface only (revision 5: its
-    # held-out cmp.ok is the coin's, so both predicate clauses fail there too)
+    # surface (the PREREG-3 / BWM key-order failure): G1 and G2 fail on the held-out surface only (revisions 5-6: its
+    # held-out cmp.ok is the coin's, so every predicate clause fails there too)
     "surface_locked": ({"off": _OFF, "plain": _PLAIN, "trace": ("gold", "trace", "plainlike"), "filler": _FILLER},
                        ("exact", "NO-GO (failed: G1 [conditional HS, cond_oor_val HS, cond_oor_edge HS, cond_oor_edge "
-                                 "predicate HS, cond_sametens HS, cond_sametens predicate HS]; G2 [mix HS])")),
+                                 "predicate HS, cond_sametens HS, cond_sametens predicate HS, cond_adv predicate HS]; "
+                                 "G2 [mix HS])")),
     # revision 3: a coarse tens-digit comparison passes the pooled conditional (far and out-of-range-threshold pairs are
     # always right) but no single boundary / identification stratum (revision 5: plain exactly at chance)
     "coarse_comparison": ({"off": _OFF, "plain": _CHANCE, "trace": ("tens", "trace"), "filler": _CHANCE_FILLER},
@@ -1314,10 +1470,24 @@ SCENARIOS = {
            ("exact", _obo_expected(n, "chance"))) for n in C.OFF_BY_ONE},
     **{f"weak_plain_{n}": ({"off": _OFF, "plain": _WEAK, "trace": (f"rule:{n}", "trace"), "filler": _WEAK_FILLER},
                            ("exact", _obo_expected(n, "weak"))) for n in C.OFF_BY_ONE},
+    # revision 6, decisions (1)-(2): members of the extended shortcut family H that pass revision 5's G1 against a weak
+    # plain arm (0 on every out-of-range row); their expected verdicts follow from the bank's design (the counts are fixed
+    # by cond_adv's type quotas, t2br_shortcuts.adv_target_report): each is caught by the cond_adv predicate clause alone
+    # on both surfaces (lex signed, magnitude, digit sum sign+length-aware: 33 wrong rows; units: 99; the exceptions at
+    # -3, -2, +3, +4: 21), except the exception at -4, which cond_adv cannot also catch: GO (the documented limit), with
+    # the report-only shortcut-agreement flag
+    **{f"weak_plain_{k}": ({"off": _OFF, "plain": _WEAK, "trace": (f"rule:{k}", "trace"), "filler": _WEAK_FILLER},
+                           ("exact", "GO" if k == "exc_m4" else
+                            "NO-GO (failed: G1 [cond_adv predicate, cond_adv predicate HS])"))
+       for k in H_SCENARIO_RULES},
+    # the lexicographic comparison also passed revision 5's G1 against the plain arm exactly at chance
+    "lex_signed": ({"off": _OFF, "plain": _CHANCE, "trace": ("rule:lex_signed", "trace"), "filler": _CHANCE_FILLER},
+                   ("exact", "NO-GO (failed: G1 [cond_adv predicate, cond_adv predicate HS])")),
 }
 RULE_SCENARIOS = ("go", "true_rule_digitwise", "tens_or_eq_plus1", "tens_ge_not_eq", "coarse_comparison",
                   "weak_plain_tens_or_eq_plus1", "weak_plain_tens_ge_not_eq", "weak_plain_go",
-                  *C.OFF_BY_ONE, *(f"weak_plain_{n}" for n in C.OFF_BY_ONE))
+                  *C.OFF_BY_ONE, *(f"weak_plain_{n}" for n in C.OFF_BY_ONE), "lex_signed",
+                  *(f"weak_plain_{k}" for k in H_SCENARIO_RULES))
 
 # Engineered exact-boundary runs: per side, the number of WRONG answers per dev stratum (the first rows of the stratum
 # in bank order; cond_xm1 rows are all ok-false), in-surface; '_hs' gives the held-out-surface counts (default: the
@@ -1328,16 +1498,17 @@ _BASE_PLAIN = {"cond_oor_val": 50, "cond_oor_thr": 50, "cond_far": 50, "mix_oor"
                "cond_oor_edge": 40}
 _BASE_TRACE = {"cond_oor_val": 25, "cond_oor_thr": 25, "cond_far": 25, "mix_oor": 40, "swap": 4, "add_nowrap": 4,
                "cond_xm1": 17, "mix": 5, "cond_sametens": 25, "cond_oor_edge": 20,
-               "_pred": {"cond_sametens": 20, "cond_oor_edge": 16}}
+               "_pred": {"cond_sametens": 20, "cond_oor_edge": 16, "cond_adv": 20}}
 _BASE_FILLER = {"cond_oor_val": 35, "cond_oor_thr": 35, "cond_far": 35, "mix_oor": 50, "cond_sametens": 35,
                 "cond_oor_edge": 28}
 _BELOW_TRACE = {**_BASE_TRACE, "cond_oor_val": 26, "mix_oor": 41, "swap": 5, "cond_xm1": 18, "mix": 6, "cond_sametens": 26,
-                "cond_oor_edge": 21, "_pred": {"cond_sametens": 21, "cond_oor_edge": 17}}
-_HS_AT_BAR = {s: _BASE_TRACE[s] for s in C.HS_STRATA}
+                "cond_oor_edge": 21, "_pred": {"cond_sametens": 21, "cond_oor_edge": 17, "cond_adv": 21}}
+_HS_AT_BAR = {s: _BASE_TRACE.get(s, 0) for s in C.HS_STRATA}       # cond_adv (revision 6): no wrong after answers
 _PRED_AT_BAR = dict(_BASE_TRACE["_pred"])
 ENGINEERED = {
     # every component exactly ON its bar on both surfaces: G1 +0.25 (conditional, cond_oor_val, cond_oor_edge and
-    # cond_sametens) and predicate accuracy 4/5 (cond_oor_edge 64/80, cond_sametens 80/100), G2 +0.30, G3 +0.10 / +0.10,
+    # cond_sametens) and predicate accuracy 4/5 (cond_oor_edge 64/80, cond_sametens 80/100, cond_adv 80/100), G2 +0.30,
+    # G3 +0.10 / +0.10,
     # G4 -0.05 / -0.05, G5 -0.05 / -0.05; DP3 does not fire (0.10 is not < 0.10). A float implementation fails G2 here
     # (0.6 - 0.3 < 0.3).
     "boundary_go": ({"plain": _BASE_PLAIN, "trace": _BASE_TRACE, "filler": _BASE_FILLER}, "GO"),
@@ -1345,9 +1516,10 @@ ENGINEERED = {
     # fire); the cond_oor_val count also moves the pooled conditional past its bar
     "boundary_below": ({"plain": _BASE_PLAIN, "trace": _BELOW_TRACE, "filler": {**_BASE_FILLER, "mix_oor": 51}},
                        "NO-GO (failed: G1 [conditional, cond_oor_val, cond_oor_edge, cond_oor_edge predicate, "
-                       "cond_sametens, cond_sametens predicate, conditional HS, cond_oor_val HS, cond_oor_edge HS, "
-                       "cond_oor_edge predicate HS, cond_sametens HS, cond_sametens predicate HS]; G2 [mix, mix HS]; "
-                       "G3 [conditional]; G4 [swap]; G5 [conditional_in, mix_in])"),
+                       "cond_sametens, cond_sametens predicate, cond_adv predicate, conditional HS, cond_oor_val HS, "
+                       "cond_oor_edge HS, cond_oor_edge predicate HS, cond_sametens HS, cond_sametens predicate HS, "
+                       "cond_adv predicate HS]; G2 [mix, mix HS]; G3 [conditional]; G4 [swap]; G5 [conditional_in, "
+                       "mix_in])"),
     # in-surface exactly on every bar; on the held-out surface cond_oor_val is one count past its bar while the pooled
     # conditional stays exactly on it (one more wrong on cond_oor_val, one fewer on cond_far)
     "boundary_hs_cond_oor_val": ({"plain": _BASE_PLAIN, "trace": {**_BASE_TRACE, "_hs": {**_HS_AT_BAR, "cond_oor_val": 26,
@@ -1377,6 +1549,13 @@ ENGINEERED = {
     "boundary_hs_pred_cond_sametens": ({"plain": _BASE_PLAIN, "trace": {**_BASE_TRACE,
                                                                         "_pred_hs": {**_PRED_AT_BAR, "cond_sametens": 21}},
                                         "filler": _BASE_FILLER}, "NO-GO (failed: G1 [cond_sametens predicate HS])"),
+    # revision 6: the cond_adv predicate clause one count below 4/5 (79/100) on one surface only
+    "boundary_in_pred_cond_adv": ({"plain": _BASE_PLAIN, "trace": {**_BASE_TRACE, "_pred": {**_PRED_AT_BAR, "cond_adv": 21},
+                                                                   "_pred_hs": _PRED_AT_BAR},
+                                   "filler": _BASE_FILLER}, "NO-GO (failed: G1 [cond_adv predicate])"),
+    "boundary_hs_pred_cond_adv": ({"plain": _BASE_PLAIN, "trace": {**_BASE_TRACE,
+                                                                   "_pred_hs": {**_PRED_AT_BAR, "cond_adv": 21}},
+                                   "filler": _BASE_FILLER}, "NO-GO (failed: G1 [cond_adv predicate HS])"),
     # trace - filler one count below 0.10 on both primaries: decision point 3 (filler - plain >= 0.10: no sub-label)
     "boundary_dp3": ({"plain": _BASE_PLAIN, "trace": _BASE_TRACE,
                       "filler": {"cond_oor_val": 35, "cond_oor_thr": 35, "cond_far": 34, "mix_oor": 49}}, C.DP3_LABEL),
@@ -1557,94 +1736,58 @@ def boundary_checks(dev: list) -> dict:
     return out
 
 
-# ---------------------------------------------------------------- shortcut enumeration (revisions 4-5)
-_CMP = {">": np.greater, ">=": np.greater_equal, "<": np.less, "<=": np.less_equal, "==": np.equal, "!=": np.not_equal}
-G1_ENUM_METRICS = ("primary_conditional",) + C.G1_ALONE
-ENUM_DOMAIN = {"other": [0, 96], "threshold": [C.OOR_THR[0][0], C.OOR_THR[1][1]]}   # every (other, threshold) of the bank
-OBO_SHIFTS = tuple(range(-3, 4))                    # off-by-one family bases 'x > t + c'
-POINTS = (("t-1", -1), ("t", 0), ("t+1", 1))       # the modifier points x == t - 1 / t / t + 1
-
-
-def _modifier_name(states) -> str:
-    return ", ".join(("or x==" if s == 1 else "and x!=") + p for (p, _), s in zip(POINTS, states) if s)
-
-
-def digit_predicates(x, t) -> dict:
-    """Every predicate of the enumerated family, as a boolean array over the (other, threshold) arrays x, t ('add iff
-    ...'). Digits use floor semantics (numpy // and % equal Python's, also for negative thresholds). Family:
-      atoms        TRUE, FALSE, tens(x) OP tens(t), units(x) OP units(t)         OP in > >= < <= == !=   (14)
-      bases        every atom; tens(x) OP1 tens(t) AND/OR units(x) OP2 units(t) (72); the lexicographic form
-                   tens(x) OP1 tens(t) or (tens(x) == tens(t) and units(x) OP2 units(t)) (36); the off-by-one family
-                   x > t + c for c = -3..+3 (7: x>t-2 = x >= t-1, x>t-1 = x >= t, x>t, x>t+1, and the off-by-two /
-                   -three shifts)
-      modifiers    at each of x == t-1, x == t, x == t+1 independently: unchanged / forced true ('or x==p') / forced
-                   false ('and x!=p'): 3^3 = 27 (revision 4 had the 9 on t and t+1 only)
-    3,483 predicates in all (many coincide). With the base x>t the modifiers give the env's rule and every off-by-one
-    variant (each non-empty flip set of x - t in {-1, 0, +1})."""
-    x, t = np.asarray(x), np.asarray(t)
-    tx, tt, ux, ut = x // 10, t // 10, x % 10, t % 10
-    atoms = {"TRUE": np.ones(x.shape, bool), "FALSE": np.zeros(x.shape, bool)}
-    for o, f in _CMP.items():
-        atoms[f"tens(x){o}tens(t)"] = f(tx, tt)
-    for o, f in _CMP.items():
-        atoms[f"units(x){o}units(t)"] = f(ux, ut)
-    bases = dict(atoms)
-    for o1, f1 in _CMP.items():
-        for o2, f2 in _CMP.items():
-            bases[f"tens(x){o1}tens(t) and units(x){o2}units(t)"] = f1(tx, tt) & f2(ux, ut)
-            bases[f"tens(x){o1}tens(t) or units(x){o2}units(t)"] = f1(tx, tt) | f2(ux, ut)
-    for o1, f1 in _CMP.items():
-        for o2, f2 in _CMP.items():
-            bases[f"tens(x){o1}tens(t) or (tens(x)==tens(t) and units(x){o2}units(t))"] = f1(tx, tt) | ((tx == tt) & f2(ux, ut))
-    for c in OBO_SHIFTS:
-        bases["x>t" + (f"{c:+d}" if c else "")] = x > t + c
-    eq = {p: x == t + k for p, k in POINTS}
-    out = {}
-    for states in itertools.product((0, 1, 2), repeat=3):          # 0 unchanged, 1 forced true, 2 forced false
-        mn = _modifier_name(states)
-        for bn, b in bases.items():
-            v = b.copy()
-            for (p, _), s in zip(POINTS, states):
-                if s == 1:
-                    v = v | eq[p]
-                elif s == 2:
-                    v = v & ~eq[p]
-            out[bn + (" | " + mn if mn else "")] = v
-    return out
+# ---------------------------------------------------------------- shortcut enumeration over H (revisions 4-6)
+G1_ENUM_METRICS = ("primary_conditional",) + C.G1_ALONE      # the relative G1 parts (trace - plain)
+ENUM_DOMAIN = {"other": list(S.DOMAIN["other"]), "threshold": list(S.DOMAIN["threshold"])}   # every (other, threshold)
+POINTS = S.POINTS
+digit_predicates = S.enumerated_family                        # revision 5's enumerated family (unchanged; now in H)
 
 
 def obo_enum_name(n: str) -> str:
     """The enumeration's name of an off-by-one variant: base x>t, each flipped point forced to the opposite of the
     env's value there (t-1, t: forced true; t+1: forced false)."""
     s = C.OFF_BY_ONE[n]
-    return "x>t | " + _modifier_name(tuple((1 if k <= 0 else 2) if k in s else 0 for _, k in POINTS))
+    return "x>t | " + S._modifier_name(tuple((1 if k <= 0 else 2) if k in s else 0 for _, k in POINTS))
+
+
+def _survivor_reason(rec: dict, dev: list) -> str:
+    """Why a member of H that passes G1 is not caught (stated from the bank's rows, not from a run)."""
+    fd = rec["flip_distances"]
+    if fd and len(fd) == 1:
+        d = fd[0]
+        cnt = {s: sum(r["before"][r["event"]["other"]] - r["event"]["threshold"] == d for r in dev if r["stratum"] == s)
+               for s in C.PRED_STRATA}
+        return (f"an isolated exception at other - threshold = {d:+d}: it is wrong only on rows at that distance; the "
+                f"predicate-gated strata have {cnt} such rows (it needs > 1/5 of a stratum's rows there to fail the 0.80 "
+                f"bar); no 100-row branch-balanced stratum can catch the exceptions at -4, -3 and -2 together (3 x 21 = "
+                f"63 > 50 ok-false rows), and cond_adv catches -3 and -2 (21 rows each); no relative clause catches it")
+    return "not an isolated distance exception: see its exact G1 values"
 
 
 def shortcut_enumeration(dev: list, hs: list) -> dict:
-    """Which simple digit shortcuts and which variants of the comparison would still pass G1 (revision 5), and which
-    passed revision 4's G1 but are now caught. A synthetic trace side answers every conditional with the predicate's
-    branch and exact arithmetic, and states that predicate in cmp.ok (so after_ok == pred_ok == the branch is right:
-    value != 0 mod 97 makes the two branches differ); the G1 components (relative AND predicate clauses) are then
-    decided by verdict() itself, exactly, with every G2-G5 component held at a passing value. Three plain baselines:
-    'chance' = exactly 1/2 on every relative G1 part (a relative part holds iff the shortcut reaches 3/4),
-    'dryrun_plainlike' = the dry run's coin-flip plain (unreduced outside the training ranges; lower on cond_oor_val,
-    so more permissive) and 'weak_plain' = 0 on every relative G1 part (the most permissive: a relative part holds iff
-    the shortcut reaches 1/4, so only the predicate clauses can catch it). The held-out surface uses the same rows
-    (paired by row), so its parts equal the in-surface ones; both are decided. Predicates equal to the true rule on the
-    whole domain (other 0..96, threshold -40..136) compute the comparison and are listed apart. For every predicate
-    the set of distances d = other - threshold at which it differs from the rule on the domain is recorded when it is
-    a function of d (the comparison family)."""
+    """Which members of the EXTENDED SHORTCUT FAMILY H (revision 6: t2br_shortcuts.family = the enumerated digit /
+    off-by-one family + the extension) still pass G1, and which passed revision 5's G1 but are caught by revision 6's
+    cond_adv clause. A synthetic trace side answers every conditional with the member's branch and exact arithmetic, and
+    states that member in cmp.ok (so after_ok == pred_ok == the branch is right: value != 0 mod 97 makes the two branches
+    differ); the G1 components (relative AND predicate clauses, incl. cond_adv) are then decided by verdict() itself,
+    exactly, with every G2-G5 component held at a passing value. Three plain baselines: 'chance' = exactly 1/2 on every
+    relative G1 part (a relative part holds iff the member reaches 3/4), 'dryrun_plainlike' = the dry run's coin-flip
+    plain (unreduced outside the training ranges; lower on cond_oor_val, so more permissive) and 'weak_plain' = 0 on
+    every relative G1 part (the most permissive: a relative part holds iff the member reaches 1/4, so only the predicate
+    clauses can catch it). The held-out surface uses the same rows (paired by row), so its parts equal the in-surface
+    ones; both are decided. Members equal to the true rule on the whole domain (other 0..96, threshold -40..136)
+    compute the comparison and are listed apart. For every member the set of distances d = other - threshold at which
+    it differs from the rule on the domain is recorded when it is a function of d."""
     D = DevIndex(dev)
     cond_rows = np.array([j for j, r in enumerate(dev) if r["event"]["kind"] == "conditional"])
     x = np.array([dev[j]["before"][dev[j]["event"]["other"]] for j in cond_rows])
     t = np.array([dev[j]["event"]["threshold"] for j in cond_rows])
     gold = np.array([bool(dev[j]["gold_ok"]) for j in cond_rows])
-    preds = digit_predicates(x, t)
-    X, T = np.meshgrid(np.arange(ENUM_DOMAIN["other"][0], ENUM_DOMAIN["other"][1] + 1),
-                       np.arange(ENUM_DOMAIN["threshold"][0], ENUM_DOMAIN["threshold"][1] + 1), indexing="ij")
-    Xr, Tr = X.ravel(), T.ravel()
-    dom = digit_predicates(Xr, Tr)
-    truth_dom = Xr > Tr
+    adv_mask = np.array([dev[j]["stratum"] == "cond_adv" for j in cond_rows])
+    preds = S.family(x, t)
+    ext_names = set(S.extension(np.array([0]), np.array([0])))
+    Xr, Tr, truth_dom, _, E, dom_names = S.domain_family()
+    dom_index = {n: i for i, n in enumerate(dom_names)}
     dist_dom = Xr - Tr
     hs_pos = np.array([D.pos[h["id"]] for h in hs])
     # baselines (exact Fractions per relative G1 part; in-surface and held-out surface)
@@ -1676,8 +1819,9 @@ def shortcut_enumeration(dev: list, hs: list) -> dict:
             raise AssertionError(f"enumeration harness: {others} should hold")
         return v["failed_parts"]["G1"]
 
-    rev5_only = {p + sfx for p in ("cond_oor_edge", "cond_oor_edge predicate", "cond_sametens predicate")
-                 for sfx in ("", " HS")}
+    rev6_only = {"cond_adv predicate", "cond_adv predicate HS"}
+    rev5_new = {p + sfx for p in ("cond_oor_edge", "cond_oor_edge predicate", "cond_sametens predicate")
+                for sfx in ("", " HS")}
     rev4_new = {"cond_sametens", "cond_sametens HS"}
     rows_out, classes = [], {}
     for name, b in preds.items():
@@ -1689,19 +1833,22 @@ def shortcut_enumeration(dev: list, hs: list) -> dict:
         tr_in = {m: metric_exact(xv, D, m) for m in G1_ENUM_METRICS}
         tr_hs = {m: metric_exact(xh, D, m) for m in G1_ENUM_METRICS}
         for pm, s in PRED_METRICS.items():
-            tr_in[pm], tr_hs[pm] = tr_in[s], tr_hs[s]
-        wrong_d = dom[name] != truth_dom
+            tr_in[pm], tr_hs[pm] = metric_exact(xv, D, s), metric_exact(xh, D, s)
+        wrong_d = E[dom_index[name]]
         flips = sorted({int(d) for d in np.unique(dist_dom[wrong_d])}) if wrong_d.any() else []
         # a function of d alone iff, at every flipped distance, it is wrong on the WHOLE domain row of that distance
         d_only = all(bool(wrong_d[dist_dom == d].all()) for d in flips)
-        rec = {"name": name, "acc": {m: str(v) for m, v in tr_in.items()}, "acc_hs": {m: str(v) for m, v in tr_hs.items()},
+        rec = {"name": name, "part_of_h": "extension" if name in ext_names else "enumerated",
+               "acc": {m: str(v) for m, v in tr_in.items()}, "acc_hs": {m: str(v) for m, v in tr_hs.items()},
+               "cond_adv_wrong": int((b != gold)[adv_mask].sum()),
                "true_rule_on_domain": not wrong_d.any(), "flip_distances": flips if d_only else None}
         for bl in base:
             f = g1_failed(tr_in, tr_hs, bl)
             rec[f"g1_failed_{bl}"] = f
-            rec[f"passes_g1_rev5_{bl}"] = not f
-            rec[f"passed_g1_rev4_{bl}"] = set(f) <= rev5_only
-            rec[f"passed_g1_rev3_{bl}"] = set(f) <= rev5_only | rev4_new
+            rec[f"passes_g1_rev6_{bl}"] = not f
+            rec[f"passed_g1_rev5_{bl}"] = set(f) <= rev6_only
+            rec[f"passed_g1_rev4_{bl}"] = set(f) <= rev6_only | rev5_new
+            rec[f"passed_g1_rev3_{bl}"] = set(f) <= rev6_only | rev5_new | rev4_new
         rows_out.append(rec)
         classes.setdefault((b.tobytes(), rec["true_rule_on_domain"]), []).append(rec)
 
@@ -1710,71 +1857,99 @@ def shortcut_enumeration(dev: list, hs: list) -> dict:
         for (_, eq), recs in classes.items():
             hit = [r for r in recs if sel(r)]
             if hit:
-                rep = min(hit, key=lambda r: (len(r["name"]), r["name"]))
+                rep = min(hit, key=lambda r: (r["part_of_h"] != "extension", len(r["name"]), r["name"]))
                 out.append({"representative": rep["name"], "n_equivalent_on_dev_rows": len(hit),
                             "aliases": sorted(r["name"] for r in hit if r is not rep)[:6], "acc": rep["acc"],
-                            "acc_hs": rep["acc_hs"], "true_rule_on_domain": eq,
+                            "acc_hs": rep["acc_hs"], "cond_adv_wrong": rep["cond_adv_wrong"], "true_rule_on_domain": eq,
                             "flip_distances": rep["flip_distances"]})
         return sorted(out, key=lambda c: (c["true_rule_on_domain"], c["representative"]))
-    res = {"family": digit_predicates.__doc__.split("Family:", 1)[1].strip(), "n_predicates": len(preds),
+    res = {"family": "H = " + S.__doc__.split("H = ", 1)[1].split("Members equal to", 1)[0].strip(),
+           "n_predicates": len(preds), "n_enumerated": len(preds) - len(ext_names), "n_extension": len(ext_names),
            "n_distinct_on_dev_conditional_rows": len({k[0] for k in classes}), "domain": ENUM_DOMAIN,
            "baselines": {"chance": {m: "1/2" for m in G1_ENUM_METRICS},
                          "dryrun_plainlike": {"in": {m: str(v) for m, v in base["dryrun_plainlike"][0].items()},
                                               "hs": {m: str(v) for m, v in base["dryrun_plainlike"][1].items()}},
                          "weak_plain": {m: "0" for m in G1_ENUM_METRICS}},
            "decision": "verdict() on exact counts; G1 parts conditional / cond_oor_val / cond_oor_edge / cond_sametens "
-                       "(trace - plain) and the predicate accuracy on cond_oor_edge / cond_sametens, both surfaces"}
+                       "(trace - plain) and the predicate accuracy on cond_oor_edge / cond_sametens / cond_adv, both "
+                       "surfaces",
+           "target": "no member of H that differs from the comparison passes G1 on either surface, under any baseline"}
     for bl in base:
-        res[f"passes_g1_rev5_{bl}"] = {
-            "shortcuts": summarize(lambda r, bl=bl: r[f"passes_g1_rev5_{bl}"] and not r["true_rule_on_domain"]),
-            "true_rule_equivalents": summarize(lambda r, bl=bl: r[f"passes_g1_rev5_{bl}"] and r["true_rule_on_domain"])}
-        res[f"caught_by_rev5_{bl}"] = summarize(
-            lambda r, bl=bl: r[f"passed_g1_rev4_{bl}"] and not r[f"passes_g1_rev5_{bl}"])
+        res[f"passes_g1_rev6_{bl}"] = {
+            "shortcuts": summarize(lambda r, bl=bl: r[f"passes_g1_rev6_{bl}"] and not r["true_rule_on_domain"]),
+            "true_rule_equivalents": summarize(lambda r, bl=bl: r[f"passes_g1_rev6_{bl}"] and r["true_rule_on_domain"])}
+        res[f"caught_by_rev6_{bl}"] = summarize(
+            lambda r, bl=bl: r[f"passed_g1_rev5_{bl}"] and not r[f"passes_g1_rev6_{bl}"])
         res[f"counts_{bl}"] = {
             "passed_rev3_g1": sum(r[f"passed_g1_rev3_{bl}"] for r in rows_out),
             "passed_rev4_g1": sum(r[f"passed_g1_rev4_{bl}"] for r in rows_out),
-            "passed_rev4_g1_not_true_rule": sum(r[f"passed_g1_rev4_{bl}"] and not r["true_rule_on_domain"]
+            "passed_rev5_g1": sum(r[f"passed_g1_rev5_{bl}"] for r in rows_out),
+            "passed_rev5_g1_not_true_rule": sum(r[f"passed_g1_rev5_{bl}"] and not r["true_rule_on_domain"]
                                                 for r in rows_out),
-            "pass_rev5_g1": sum(r[f"passes_g1_rev5_{bl}"] for r in rows_out),
-            "pass_rev5_g1_not_true_rule": sum(r[f"passes_g1_rev5_{bl}"] and not r["true_rule_on_domain"]
+            "passed_rev5_g1_not_true_rule_extension": sum(r[f"passed_g1_rev5_{bl}"] and not r["true_rule_on_domain"]
+                                                          and r["part_of_h"] == "extension" for r in rows_out),
+            "pass_rev6_g1": sum(r[f"passes_g1_rev6_{bl}"] for r in rows_out),
+            "pass_rev6_g1_not_true_rule": sum(r[f"passes_g1_rev6_{bl}"] and not r["true_rule_on_domain"]
                                               for r in rows_out),
-            "pass_rev5_g1_not_true_rule_classes": len(res[f"passes_g1_rev5_{bl}"]["shortcuts"]),
-            "caught_by_rev5": sum(r[f"passed_g1_rev4_{bl}"] and not r[f"passes_g1_rev5_{bl}"] for r in rows_out),
-            "off_by_one_family_passing": sum(r[f"passes_g1_rev5_{bl}"] and not r["true_rule_on_domain"]
+            "pass_rev6_g1_not_true_rule_classes": len(res[f"passes_g1_rev6_{bl}"]["shortcuts"]),
+            "caught_by_rev6": sum(r[f"passed_g1_rev5_{bl}"] and not r[f"passes_g1_rev6_{bl}"] for r in rows_out),
+            "off_by_one_family_passing": sum(r[f"passes_g1_rev6_{bl}"] and not r["true_rule_on_domain"]
                                              and r["flip_distances"] is not None
-                                             and set(r["flip_distances"]) <= {-1, 0, 1} for r in rows_out)}
-    # reported, NOT gating and NOT in the bank (DESIGN.md section 14): what a cross-digit identification stratum would
-    # add. Its rows: the in-range domain (other and threshold 0..96) in DIFFERENT decades, |other - threshold| >= 2,
-    # whose units comparison disagrees with the tens comparison (sign of the units difference != sign of the tens
-    # difference); a survivor's branch-balanced accuracy there (the true rule scores 1)
+                                             and set(r["flip_distances"]) <= {-1, 0, 1} for r in rows_out),
+            "extension_passing": sum(r[f"passes_g1_rev6_{bl}"] and not r["true_rule_on_domain"]
+                                     and r["part_of_h"] == "extension" for r in rows_out)}
+    by_name = {r["name"]: r for r in rows_out}
+    surv = {}
+    for bl in base:
+        for c in res[f"passes_g1_rev6_{bl}"]["shortcuts"]:
+            surv.setdefault(c["representative"], []).append(bl)
+    res["survivors"] = {n: {"baselines": bls, "flip_distances": by_name[n]["flip_distances"],
+                            "acc": by_name[n]["acc"], "cond_adv_wrong": by_name[n]["cond_adv_wrong"],
+                            "aliases_on_dev_rows": sorted(r["name"] for (k, eq), recs in classes.items()
+                                                          for r in recs if not eq and by_name[n] in recs
+                                                          and r["name"] != n),
+                            "why": _survivor_reason(by_name[n], dev)} for n, bls in sorted(surv.items())}
+    res["target_met"] = not surv
+    res["only_survivor_is_the_documented_exception"] = sorted(
+        tuple(v["flip_distances"] or ()) for v in res["survivors"].values()) == [(S.ADV_EXCEPTION_NOT_CAUGHT,)]
+    # the extension of revision 6, member by member (the rows the operator listed)
+    res["extension"] = {n: {k: by_name[n][k] for k in ("acc", "cond_adv_wrong", "flip_distances", "true_rule_on_domain",
+                                                         "g1_failed_chance", "g1_failed_dryrun_plainlike",
+                                                         "g1_failed_weak_plain", "passed_g1_rev5_weak_plain")}
+                        for n in preds if n in ext_names}
+    # reported, NOT gating (revision 5's option, superseded by cond_adv in revision 6): what a cross-digit
+    # identification stratum would add over the in-range domain (other and threshold 0..96 in DIFFERENT decades,
+    # |other - threshold| >= 2, sign of the units difference != sign of the tens difference); a revision-5 survivor's
+    # branch-balanced accuracy there (the true rule scores 1)
     tdx, tdt = Xr // 10, Tr // 10
     cross = (Tr >= 0) & (Tr <= 96) & (tdx != tdt) & (np.abs(Xr - Tr) >= 2) & \
         (np.sign(Xr % 10 - Tr % 10) != np.sign(tdx - tdt))
     c_t, c_f = cross & truth_dom, cross & ~truth_dom
 
     def cross_acc(name: str) -> Fraction:
-        w = dom[name] == truth_dom
+        w = ~E[dom_index[name]]
         return Fraction(int(w[c_t].sum()), 2 * int(c_t.sum())) + Fraction(int(w[c_f].sum()), 2 * int(c_f.sum()))
-    surv = sorted({c["representative"] for bl in base for c in res[f"passes_g1_rev5_{bl}"]["shortcuts"]})
-    sacc = {n: cross_acc(n) for n in surv}
-    res["cross_digit_option"] = {
+    surv5 = sorted({c["representative"] for bl in base for c in summarize(
+        lambda r, bl=bl: r[f"passed_g1_rev5_{bl}"] and not r["true_rule_on_domain"])})
+    sacc = {n: cross_acc(n) for n in surv5}
+    res["cross_digit_option_rev5"] = {
+        "note": "revision 5's reported option (not implemented); revision 6 implements cond_adv instead",
         "definition": "other, threshold 0..96; tens(other) != tens(threshold); |other - threshold| >= 2; sign(units(other) "
                       "- units(threshold)) != sign(tens(other) - tens(threshold)); branch-balanced accuracy",
         "rows": int(cross.sum()), "ok_true": int(c_t.sum()), "ok_false": int(c_f.sum()),
         "true_rule_acc": str(cross_acc("tens(x)>tens(t) or (tens(x)==tens(t) and units(x)>units(t))")),
-        "survivor_acc": {n: str(v) for n, v in sacc.items()},
-        "survivors": len(surv), "survivors_below_4/5": sum(v < C.PRED_MIN for v in sacc.values()),
-        "survivors_at_most_1/2": sum(v <= Fraction(1, 2) for v in sacc.values()),
-        "survivors_not_caught": sorted(n for n, v in sacc.items() if v >= C.PRED_MIN)}
-    by_name = {r["name"]: r for r in rows_out}
+        "rev5_survivors_of_h": len(surv5), "rev5_survivors_below_4/5": sum(v < C.PRED_MIN for v in sacc.values()),
+        "rev5_survivors_not_caught_there": sorted(n for n, v in sacc.items() if v >= C.PRED_MIN)}
     res["named"] = {k: by_name[v] for k, v in (("tens_or_eq_plus1", "tens(x)>tens(t) | or x==t+1"),
                                                ("tens_ge_not_eq", "tens(x)>=tens(t) | and x!=t"),
                                                ("tens_digit_gt", "tens(x)>tens(t)"),
                                                ("true_rule_digitwise",
                                                 "tens(x)>tens(t) or (tens(x)==tens(t) and units(x)>units(t))"))}
-    # the off-by-one family (decision 2): per variant, the share of each G1-gated stratum's rows that contradicts it,
-    # its G1 failures under every baseline
-    G1_STRATA = {"conditional": C.PRIMARY["conditional"], **{s: (s,) for s in C.G1_ALONE}}
+    for k, n in H_SCENARIO_RULES.items():
+        res["named"][k] = by_name[n]
+    # the off-by-one family (decision 2 of revision 5): per variant, the share of each G1-gated stratum's rows that
+    # contradicts it, its G1 failures under every baseline
+    G1_STRATA = {"conditional": C.PRIMARY["conditional"], **{s: (s,) for s in C.G1_ALONE}, "cond_adv": ("cond_adv",)}
     obo = {}
     for n in C.OFF_BY_ONE:
         r = by_name[obo_enum_name(n)]
@@ -1792,6 +1967,11 @@ def shortcut_enumeration(dev: list, hs: list) -> dict:
                   "fails_g1_under_every_baseline": all(r[f"g1_failed_{bl}"] for bl in base)}
         res["named"][n] = r
     res["off_by_one"] = obo
+    # the data's own cond_adv target check (t2br_shortcuts.adv_target_report, as --verify)
+    rep = S.adv_target_report(dev)
+    res["cond_adv_targets"] = {k: rep[k] for k in ("ok", "distinct_cells", "max_rows_on_a_cell",
+                                                   "target_1_broad_survivors", "target_2_exceptions")}
+    res["cond_adv_targets"]["operator_target_40"] = {k: v for k, v in rep["operator_target_40"].items()}
     return res
 
 
@@ -1800,7 +1980,7 @@ def dryrun(n_boot: int = 2000) -> dict:
     hs = C.load_dev_hs()
     parents = C.load_chain_bank()
     out = {"scenarios": {}, "engineered": {}, "n_boot": n_boot}
-    go_res = None
+    go_res = m4_res = None
     comps_of = {}
     g1_keys = G1_ENUM_METRICS + tuple(PRED_METRICS)
     for name, (spec, want) in SCENARIOS.items():
@@ -1827,10 +2007,15 @@ def dryrun(n_boot: int = 2000) -> dict:
                                                         for m in g1_keys},
                                   "exact_g1_plain": {m: res["exact_metrics"]["plain"][m] for m in G1_ENUM_METRICS},
                                   "exact_g1_plain_hs": {m: res["exact_metrics_heldout_surface"]["plain"][m]
-                                                        for m in G1_ENUM_METRICS}}
+                                                        for m in G1_ENUM_METRICS},
+                                  "shortcut_agreement": {"flag": res["shortcut_agreement"]["flag"],
+                                                         "statement": res["shortcut_agreement"]["statement"]},
+                                  "statement": res["statement"]}
         print(f"  [{'PASS' if hit else 'FAIL'}] {name}: {v}", flush=True)
         if name == "go":
             go_res = res
+        if name == "weak_plain_exc_m4":                     # revision 7: the flagged GO, for the headline check
+            m4_res = res
     for name, (plan, want) in ENGINEERED.items():
         t0 = time.time()
         texts, gens, hs_texts = engineered_outputs(dev, parents, hs, plan)
@@ -1856,6 +2041,8 @@ def dryrun(n_boot: int = 2000) -> dict:
     for n in C.OFF_BY_ONE:                                   # the full-pipeline verdicts of the off-by-one scenarios
         enum["off_by_one"][n]["dryrun_verdict_chance_plain"] = sc[n]["verdict"]
         enum["off_by_one"][n]["dryrun_verdict_weak_plain"] = sc[f"weak_plain_{n}"]["verdict"]
+    for k in H_SCENARIO_RULES:                               # revision 6: the members of H run as scenarios
+        enum["named"][k]["dryrun_verdict_weak_plain"] = sc[f"weak_plain_{k}"]["verdict"]
     out["shortcut_enumeration"] = enum
     rev3_parts = [("G1", p) for p in ("conditional", "cond_oor_val", "conditional HS", "cond_oor_val HS")]
     rev4_parts = rev3_parts + [("G1", "cond_sametens"), ("G1", "cond_sametens HS")]
@@ -1870,7 +2057,8 @@ def dryrun(n_boot: int = 2000) -> dict:
         return all(comps_of[name][p] for p in rev4_parts)
     rule_map = (("tens_or_eq_plus1", "tens_or_eq_plus1"), ("tens_ge_not_eq", "tens_ge_not_eq"),
                 ("tens_digit_gt", "coarse_comparison"), ("true_rule_digitwise", "true_rule_digitwise"),
-                *((n, n) for n in C.OFF_BY_ONE))
+                *((n, n) for n in C.OFF_BY_ONE), *((k, f"weak_plain_{k}") for k in H_SCENARIO_RULES),
+                ("lex_signed", "lex_signed"))
     fast_ok = all(enum["named"][k]["acc"] == sc[s]["exact_g1_trace"] and enum["named"][k]["acc_hs"] == sc[s]["exact_g1_trace_hs"]
                   for k, s in rule_map)
     obo = enum["off_by_one"]
@@ -1908,16 +2096,51 @@ def dryrun(n_boot: int = 2000) -> dict:
             all(obo[n]["fails_g1_under_every_baseline"] for n in C.OFF_BY_ONE)
             and all(enum[f"counts_{bl}"]["off_by_one_family_passing"] == 0 for bl in ("chance", "dryrun_plainlike",
                                                                                          "weak_plain")),
-        "the true rule (gold, and computed digit-wise) passes every G1 part incl. both identification strata and both "
-        "predicate clauses on both surfaces (GO)":
+        "revision 6 (5): the enumeration over H (3,519 predicates) under the three plain baselines: no member of H that "
+        "differs from the comparison passes G1 on either surface, except the isolated exception at other - threshold = "
+        "-4 (and its aliases), which passes under every baseline (the documented limit); every other member that passed "
+        "revision 5's G1 is caught by the cond_adv predicate clause":
+            enum["only_survivor_is_the_documented_exception"]
+            and all(v["baselines"] == ["chance", "dryrun_plainlike", "weak_plain"] for v in enum["survivors"].values())
+            and all(enum[f"counts_{bl}"]["passed_rev5_g1_not_true_rule"] ==
+                    enum[f"counts_{bl}"]["caught_by_rev6"] + enum[f"counts_{bl}"]["pass_rev6_g1_not_true_rule"]
+                    for bl in ("chance", "dryrun_plainlike", "weak_plain")),
+        "revision 6 (2): cond_adv meets its targets on the data (t2br_shortcuts.adv_target_report: broad revision-5 "
+        "survivors wrong on >= 33 rows, the exceptions at -3, -2, +3, +4 on 21, 50 / 50)": enum["cond_adv_targets"]["ok"],
+        "revision 6 (1)-(2), full pipeline: every member of H run as a scenario against the weak plain arm (lex signed, "
+        "magnitude, digit sum sign+length-aware, units, the exceptions at -3, -2, +3, +4) is NO-GO through exactly the "
+        "cond_adv predicate clause on both surfaces (every other G1 part holds); the exception at -4 is GO":
+            all(sc[f"weak_plain_{k}"]["ok"] for k in H_SCENARIO_RULES) and sc["lex_signed"]["ok"]
+            and all(comps_of[f"weak_plain_{k}"][("G1", p)] for k in H_SCENARIO_RULES if k != "exc_m4"
+                    for p in ("conditional", "cond_oor_val", "cond_oor_edge", "cond_sametens", "cond_oor_edge predicate",
+                              "cond_sametens predicate", "conditional HS", "cond_oor_val HS", "cond_oor_edge HS",
+                              "cond_sametens HS", "cond_oor_edge predicate HS", "cond_sametens predicate HS"))
+            and sc["weak_plain_exc_m4"]["verdict"] == "GO",
+        "revision 6 (3), report-only: the shortcut-agreement analysis flags no gold trace side ('go', 'weak_plain_go', "
+        "'true_rule_digitwise'), flags every scenario whose trace states a member of H (the digit shortcuts, the "
+        "off-by-one family, the members of H run as scenarios), including the GO of the exception at -4, and never "
+        "changes a verdict (every scenario's verdict equals its expected string)":
+            all(sc[n]["shortcut_agreement"]["flag"] is None for n in ("go", "weak_plain_go", "true_rule_digitwise"))
+            and all(sc[n]["shortcut_agreement"]["flag"] == AGREE_FLAG
+                    for n in ("tens_or_eq_plus1", "tens_ge_not_eq", "coarse_comparison", "weak_plain_tens_or_eq_plus1",
+                              "weak_plain_tens_ge_not_eq", "lex_signed", *C.OFF_BY_ONE,
+                              *(f"weak_plain_{n}" for n in C.OFF_BY_ONE), *(f"weak_plain_{k}" for k in H_SCENARIO_RULES)))
+            and sc["weak_plain_exc_m4"]["statement"].startswith("GO | shortcut agreement (report-only; never changes "
+                                                                "the verdict): " + AGREE_FLAG)
+            and all(s_["ok"] for s_ in sc.values()),
+        "the true rule (gold, and computed digit-wise) passes every G1 part incl. the three identification strata and "
+        "the three predicate clauses on both surfaces (GO)":
             all(comps_of[n][p] for n in ("go", "true_rule_digitwise") for p in rev5_parts)
             and sc["go"]["verdict"] == sc["true_rule_digitwise"]["verdict"] == "GO",
         "shortcut enumeration: the fast path (branch right <=> after right <=> predicate right) equals the analysis' "
-        "exact metrics of the rule scenarios (incl. the 7 off-by-one variants) on every G1 part, both surfaces": fast_ok,
-        "shortcut enumeration: the verifier's shortcut and its mirror passed revision 3's G1 and fail revision 5's under "
-        "every plain baseline": all(enum["named"][k][f"passed_g1_rev3_{bl}"] and not enum["named"][k][f"passes_g1_rev5_{bl}"]
-                                    for k in ("tens_or_eq_plus1", "tens_ge_not_eq")
-                                    for bl in ("chance", "dryrun_plainlike", "weak_plain")),
+        "exact metrics of the rule scenarios (incl. the 7 off-by-one variants and the members of H run as scenarios) on "
+        "every G1 part, both surfaces": fast_ok,
+        "shortcut enumeration: the verifier's shortcut and its mirror passed revision 3's G1 and fail revisions 5 and "
+        "6's under every plain baseline": all(enum["named"][k][f"passed_g1_rev3_{bl}"]
+                                              and not enum["named"][k][f"passed_g1_rev5_{bl}"]
+                                              and not enum["named"][k][f"passes_g1_rev6_{bl}"]
+                                              for k in ("tens_or_eq_plus1", "tens_ge_not_eq")
+                                              for bl in ("chance", "dryrun_plainlike", "weak_plain")),
         "go: gold trace side product law predicted == observed == 1": go["product_law_ALL_trace"] ==
         {"predicted_k4_exact_product": 1.0, "observed_k4_exact": 1.0},
         "go: gold trace side regret k4 == 0": go["regret_k4_ALL"]["trace"] == 0.0,
@@ -1933,14 +2156,14 @@ def dryrun(n_boot: int = 2000) -> dict:
             and not any(cc[("G1", p + s)] for p in ("cond_oor_val", "cond_oor_edge", "cond_oor_edge predicate",
                                                      "cond_sametens", "cond_sametens predicate") for s in ("", " HS"))
             and out["scenarios"]["coarse_comparison"]["values"]["trace-plain|conditional"] >= 0.25,
-        "surface_locked: every in-surface G1 / G2 part holds; every held-out-surface part fails (incl. both predicate "
-        "clauses); the trace side's surface audit shows the loss": all(sl[p] for p in rev5_parts if not p[1].endswith(" HS"))
+        "surface_locked: every in-surface G1 / G2 part holds; every held-out-surface part fails (incl. every predicate "
+        "clause); the trace side's surface audit shows the loss": all(sl[p] for p in rev5_parts if not p[1].endswith(" HS"))
             and sl[("G2", "mix")]
             and not any(sl[p] for p in rev5_parts + [("G2", "mix HS")] if p[1].endswith(" HS"))
             and all(v < 0 for v in out["scenarios"]["surface_locked"]["surface_audit_trace"].values()),
         "go: a gold trace side has zero surface-audit loss": all(
             v == 0.0 for v in out["scenarios"]["go"]["surface_audit_trace"].values()),
-        "boundary_go: every component value equals its bar exactly (both surfaces, incl. both predicate clauses)": all(
+        "boundary_go: every component value equals its bar exactly (both surfaces, incl. the three predicate clauses)": all(
             Fraction(c["value"]) == Fraction(c["bar"]) for c in eg["components"]) and len(eg["components"]) == len(COMPONENTS),
         "boundary_go: every component (all at their bar) is flagged within 1 SE": all(
             c["within_1se"] for c in eg["components"]) and len(eg["within_1se_of_bar"]) == len(COMPONENTS),
@@ -1952,6 +2175,37 @@ def dryrun(n_boot: int = 2000) -> dict:
         "amendment 4b: the dev bank's fills are one constant per kind with zero information about the answer":
             fill_constant_check(dev)["ok"],
     }
+    # revision 7 (wording only): the OVERALL headline carries the report-only flag and the LIMITS pointer whenever the
+    # flag is set (seed 0 and multi-seed), and is revision 6's headline otherwise; it never changes the verdict
+    hl = {n: overall_headline({"s0": v["verdict"]}, {"s0": v["shortcut_agreement"]["flag"]}) for n, v in sc.items()}
+    pointer = "read the LIMITS quoted with the verdict"
+    m4_md = render({"seeds": ["s0"], "train_variant": C.TRAIN_VARIANT, "overall": hl["weak_plain_exc_m4"],
+                    "go_rule": C.GO_RULE_TEXT, "go_rule_revision": C.GO_RULE_REVISION, "per_seed": {"s0": clean(m4_res)},
+                    "always_quoted_limits": list(C.ALWAYS_QUOTED_LIMITS)})
+    multi = {"flag in s1 only": overall_headline({"s0": "GO", "s1": "GO"}, {"s0": None, "s1": AGREE_FLAG}),
+             "no flag": overall_headline({"s0": "GO", "s1": "GO"}, {"s0": None, "s1": None}),
+             "flag in both, one NO-GO": overall_headline({"s0": "GO", "s1": "NO-GO (failed: G1 [conditional])"},
+                                                         {"s0": AGREE_FLAG, "s1": AGREE_FLAG})}
+    out["headline_examples"] = {"weak_plain_exc_m4": hl["weak_plain_exc_m4"], "lex_signed": hl["lex_signed"],
+                                "go": hl["go"], **{f"multi-seed, {k}": v for k, v in multi.items()}}
+    out["checks"]["revision 7: the OVERALL headline carries the report-only SHORTCUT_CONSISTENT flag and the LIMITS "
+                  "pointer whenever the flag is set, and only then: the GO of the exception at -4 (flagged) reads 'SCREEN "
+                  "(seed 0): GO | SHORTCUT_CONSISTENT in s0 (report-only ...) | read the LIMITS ...', also in the rendered "
+                  "report's Overall line beside every always-quoted limit; a flagged NO-GO (lex signed) carries it too; "
+                  "every unflagged scenario (gold GO included) keeps revision 6's headline; every headline starts with "
+                  "revision 6's (the verdict is unchanged); multi-seed: a flag in any seed is carried and names its seeds"] = (
+        hl["weak_plain_exc_m4"].startswith(f"SCREEN (seed 0): GO | {AGREE_FLAG} in s0 (report-only") and pointer in
+        hl["weak_plain_exc_m4"]
+        and f"**Overall:** {hl['weak_plain_exc_m4']}" in m4_md and all(x in m4_md for x in C.ALWAYS_QUOTED_LIMITS)
+        and hl["lex_signed"].startswith(f"SCREEN (seed 0): {sc['lex_signed']['verdict']} | {AGREE_FLAG} in s0")
+        and all(hl[n] == "SCREEN (seed 0): GO" for n in ("go", "weak_plain_go", "true_rule_digitwise"))
+        and all(hl[n].startswith(f"SCREEN (seed 0): {v['verdict']}")
+                and ((AGREE_FLAG in hl[n]) == (pointer in hl[n]) == (v["shortcut_agreement"]["flag"] is not None))
+                and (v["shortcut_agreement"]["flag"] is not None or hl[n] == f"SCREEN (seed 0): {v['verdict']}")
+                for n, v in sc.items())
+        and multi["flag in s1 only"].startswith(f"GO in every analysed seed | {AGREE_FLAG} in s1 (report-only")
+        and pointer in multi["flag in s1 only"] and multi["no flag"] == "GO in every analysed seed"
+        and multi["flag in both, one NO-GO"].startswith(f"NOT GO in every analysed seed | {AGREE_FLAG} in s0, s1 ("))
     for k, v in out["checks"].items():
         print(f"  [{'PASS' if v else 'FAIL'}] {k}", flush=True)
     # multi-seed overall label (pure function of verdicts)
@@ -1960,20 +2214,23 @@ def dryrun(n_boot: int = 2000) -> dict:
     out["ok"] = all(s["ok"] for s in out["scenarios"].values()) and all(s["ok"] for s in out["engineered"].values()) \
         and all(out["checks"].values())
     out["n_scenarios"] = len(out["scenarios"]) + len(out["engineered"])
-    out["code_sha256"] = {r: C.sha256(ROOT / r) for r in ("scripts/t2br_analysis.py", "scripts/t2br_common.py")}
+    out["code_sha256"] = {r: C.sha256(ROOT / r) for r in ("scripts/t2br_analysis.py", "scripts/t2br_common.py",
+                                                          "scripts/t2br_shortcuts.py")}
     out["dev_sha256"] = C.sha256(C.DEV)
     out["dev_hs_sha256"] = C.sha256(C.DEV_HS)
     out["go_rule_revision"] = C.GO_RULE_REVISION
     out["example_report_md"] = render_dryrun_summary(out) + "\n" + render(
         {"seeds": ["s0"], "train_variant": C.TRAIN_VARIANT,
-         "overall": "SCREEN (seed 0): " + go_res["rule"]["verdict"] + " [SYNTHETIC DRY RUN]",
-         "go_rule": C.GO_RULE_TEXT, "go_rule_revision": C.GO_RULE_REVISION, "per_seed": {"s0": clean(go_res)}})
+         "overall": overall_headline({"s0": go_res["rule"]["verdict"]}, {"s0": go_res["shortcut_agreement"]["flag"]})
+         + " [SYNTHETIC DRY RUN]",
+         "go_rule": C.GO_RULE_TEXT, "go_rule_revision": C.GO_RULE_REVISION, "per_seed": {"s0": clean(go_res)},
+         "always_quoted_limits": list(C.ALWAYS_QUOTED_LIMITS)})
     return out
 
 
 def render_dryrun_summary(out: dict) -> str:
-    """The dry run's own summary (scenario verdicts, engineered boundary runs, the off-by-one family, the shortcut
-    enumeration)."""
+    """The dry run's own summary (scenario verdicts, engineered boundary runs, the off-by-one family, the enumeration
+    over the extended shortcut family H)."""
     L = [f"# T2b-register dry run, rule revision {C.GO_RULE_REVISION} (synthetic sides; NOT model output)", "",
          "| scenario | expected | verdict | ok |", "|---|---|---|---|"]
     for k, v in out["scenarios"].items():
@@ -1983,12 +2240,14 @@ def render_dryrun_summary(out: dict) -> str:
     L += ["", "G1 parts of the rule scenarios (exact; plain = the scenario's plain side: 'chance' = exactly 1/2 on every "
               "G1 part, 'weak_plain' = 0 on every out-of-range row, 'go' = the coin-flip plain):", "",
           "| scenario | trace conditional | cond_oor_val | cond_oor_edge | cond_oor_edge predicate | cond_sametens | "
-          "cond_sametens predicate | plain cond_oor_val / cond_oor_edge / cond_sametens |", "|---|---|---|---|---|---|---|---|"]
+          "cond_sametens predicate | cond_adv predicate | plain cond_oor_val / cond_oor_edge / cond_sametens | "
+          "shortcut agreement |", "|---|---|---|---|---|---|---|---|---|---|"]
     for k in RULE_SCENARIOS:
         e, p = out["scenarios"][k]["exact_g1_trace"], out["scenarios"][k]["exact_g1_plain"]
         L.append(f"| {k} | {e['primary_conditional']} | {e['cond_oor_val']} | {e['cond_oor_edge']} | "
-                 f"{e['cond_oor_edge_pred']} | {e['cond_sametens']} | {e['cond_sametens_pred']} | "
-                 f"{p['cond_oor_val']} / {p['cond_oor_edge']} / {p['cond_sametens']} |")
+                 f"{e['cond_oor_edge_pred']} | {e['cond_sametens']} | {e['cond_sametens_pred']} | {e['cond_adv_pred']} | "
+                 f"{p['cond_oor_val']} / {p['cond_oor_edge']} / {p['cond_sametens']} | "
+                 f"{out['scenarios'][k]['shortcut_agreement']['flag'] or '-'} |")
     en = out["shortcut_enumeration"]
     L += ["", "Off-by-one family (decision 2): share of each G1-gated stratum's rows that contradicts the variant, and "
               "its verdict in the full dry run:", "",
@@ -1998,23 +2257,43 @@ def render_dryrun_summary(out: dict) -> str:
         s = o["contradicted_share"]
         L.append(f"| {n} | `{o['form']}` | {s['conditional']} | {s['cond_oor_val']} | {s['cond_oor_edge']} | "
                  f"{s['cond_sametens']} | {o['dryrun_verdict_chance_plain']} | {o['dryrun_verdict_weak_plain']} |")
-    L += ["", f"Shortcut enumeration: {en['n_predicates']} predicates ({en['n_distinct_on_dev_conditional_rows']} "
-              "distinct on the dev conditional rows), G1 decided by verdict() on exact counts, both surfaces.", ""]
+    L += ["", f"Enumeration over the extended shortcut family H: {en['n_predicates']} predicates ({en['n_enumerated']} "
+              f"enumerated + {en['n_extension']} extension; {en['n_distinct_on_dev_conditional_rows']} distinct on the dev "
+              "conditional rows), G1 decided by verdict() on exact counts, both surfaces. Target: "
+              f"{en['target']}; met: {en['target_met']}.", ""]
     for bl in ("chance", "dryrun_plainlike", "weak_plain"):
         c = en[f"counts_{bl}"]
-        L += [f"- plain baseline `{bl}`: passed revision-4 G1 {c['passed_rev4_g1']} ({c['passed_rev4_g1_not_true_rule']} "
-              f"not the true rule); pass revision-5 G1 {c['pass_rev5_g1']}, of which NOT the true rule on the domain "
-              f"{c['pass_rev5_g1_not_true_rule']} in {c['pass_rev5_g1_not_true_rule_classes']} classes; caught by "
-              f"revision 5 {c['caught_by_rev5']}; off-by-one family members passing {c['off_by_one_family_passing']}."]
-        for x in en[f"passes_g1_rev5_{bl}"]["shortcuts"]:
+        L += [f"- plain baseline `{bl}`: passed revision-5 G1 {c['passed_rev5_g1']} ({c['passed_rev5_g1_not_true_rule']} "
+              f"not the true rule, {c['passed_rev5_g1_not_true_rule_extension']} of them in the extension); pass "
+              f"revision-6 G1 {c['pass_rev6_g1']}, of which NOT the true rule on the domain "
+              f"{c['pass_rev6_g1_not_true_rule']} in {c['pass_rev6_g1_not_true_rule_classes']} classes; caught by "
+              f"revision 6 (cond_adv) {c['caught_by_rev6']}; off-by-one family members passing "
+              f"{c['off_by_one_family_passing']}; extension members passing {c['extension_passing']}."]
+        for x in en[f"passes_g1_rev6_{bl}"]["shortcuts"]:
             L.append(f"  - still passes: `{x['representative']}` (+{x['n_equivalent_on_dev_rows'] - 1} equivalent on the "
-                     f"dev rows; flips at d = {x['flip_distances']}); acc {x['acc']}")
-    co = en["cross_digit_option"]
-    L += ["", f"Cross-digit option (reported, NOT in the bank, NOT gating): on the {co['rows']} cross-digit rows of the "
-              f"in-range domain ({co['ok_true']} ok-true / {co['ok_false']} ok-false; {co['definition']}) the true rule "
-              f"scores {co['true_rule_acc']}; of the {co['survivors']} surviving class representatives (all baselines) "
-              f"{co['survivors_below_4/5']} score below 4/5 and {co['survivors_at_most_1/2']} at most 1/2; not caught "
-              f"there: {co['survivors_not_caught']}."]
+                     f"dev rows; flips at d = {x['flip_distances']}; wrong on {x['cond_adv_wrong']} cond_adv rows); acc "
+                     f"{x['acc']}")
+    for n, v in en["survivors"].items():
+        L.append(f"- survivor `{n}`: {v['why']}.")
+    L += ["", "Members of the extension (revision 6): wrong rows on cond_adv and G1 failures against the weak plain arm:",
+          "", "| member | cond_adv wrong | passed revision 5's G1 (weak plain) | G1 failed parts (weak plain) |",
+          "|---|---|---|---|"]
+    for n, v in en["extension"].items():
+        L.append(f"| `{n.replace('|', chr(92) + '|')}` | {v['cond_adv_wrong']} | "
+                 f"{'yes' if v['passed_g1_rev5_weak_plain'] else 'no'} | "
+                 f"{', '.join(v['g1_failed_weak_plain']) or '- (passes)'} |")
+    ct = en["cond_adv_targets"]
+    L += ["", f"cond_adv targets: ok {ct['ok']}; broad revision-5 survivors {ct['target_1_broad_survivors']['n']} wrong on "
+              f">= {ct['target_1_broad_survivors']['wrong_min']} rows; exceptions caught: "
+              + ", ".join(f"`{k}` {v['wrong']}" for k, v in ct["target_2_exceptions"]["caught"].items())
+              + "; not caught: " + ", ".join(f"`{k}` {v['wrong']}" for k, v in ct["target_2_exceptions"]["not_caught"].items())
+              + f"; the operator's 40-row target met by {ct['operator_target_40']['predicates_meeting_it']} of "
+                f"{ct['operator_target_40']['predicates']} predicates (infeasible for all: five members with pairwise-"
+                "disjoint error sets)."]
+    if out.get("headline_examples"):                        # revision 7 (wording only): the OVERALL headline
+        L += ["", "OVERALL headline (revision 7: it carries the report-only flag and the LIMITS pointer whenever the flag "
+                  "is set; otherwise revision 6's headline):", ""]
+        L += [f"- {k}: `{v}`" for k, v in out["headline_examples"].items()]
     L.append("")
     return "\n".join(L) + "\n"
 

@@ -1,13 +1,14 @@
 {
  "schema": 4,
- "revision": 5,
+ "revision": 7,
  "experiment": "RCWM-T1 T2b-register screen (roadmap item 3; joint item 5b)",
- "built_utc": "2026-10-10T03:31:28Z",
+ "built_utc": "2026-10-10T09:57:54Z",
  "model_calls": 0,
  "torch_imported": false,
  "builder": "scripts/t2br_make_data.py",
- "builder_sha256_at_build": "1c09db66b4c60277de233bd86aa63e52e95bbde57b713a586562d9f5b389e2e5",
- "common_sha256_at_build": "453b3a985f256dc791fba5816d3fb3437783d5ab753a1f1641b2af03c46da999",
+ "builder_sha256_at_build": "c7ba1cfa247b59f7bb99a71c8898e38bb49d873e746208d3b7a70a811bc146ac",
+ "common_sha256_at_build": "f47c6dc15fb9df3ebb7d8f06bcc41fd458ccd3dcaeedf29fab87b0b502f297c9",
+ "shortcuts_sha256_at_build": "20ebf1814267eeeffcfe5aa99db749438a4fa03f4bf1672b293bd3d64d22b611",
  "builder_note": "the files' provenance is the --verify rebuild check (AUDIT.json): the CURRENT builder must rebuild every data file byte for byte; the hashes above are the code at build time",
  "env_sha256": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
  "recorded_marginals_sha256": "45674251e38e574229f4ea98d04c30fe623ec6ac58ad308ad491661c84afab7e",
@@ -40,6 +41,17 @@
   "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
   "t2br_dev.jsonl": "9aac40deffd678a4bdefffbb290081872015c88ea38296001c671e4067f46102",
   "t2br_dev_hs.jsonl": "61845fbfc8635423257fac7c52b3ed1c70d19dd799720ca5f0e79866af1764f8"
+ },
+ "revision_5_files_reconstructed": {
+  "ok": true,
+  "t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+  "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+  "t2br_train_filler.jsonl": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+  "t2br_train_sd_plain.jsonl": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+  "t2br_train_sd_trace.jsonl": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+  "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+  "t2br_dev.jsonl": "8c1566b5c58df6fb373298e9b632f0acdb23931c02a5ff41dbf692420d2d3636",
+  "t2br_dev_hs.jsonl": "ee86bb12ffe84bd46267b49cc1eaa9a3c98c3120b42fcfe94c53f9685ae245a5"
  },
  "exclusion_sources": {
   "historical": {
@@ -145,7 +157,7 @@
   "operative_contents": 301783
  },
  "freshness": "zero payload and zero operative-content overlap with every source; train / dev / chain units mutually disjoint (checked during the draw by Registry, re-checked by --verify)",
- "peak_rss_mb_at_write": 485.0,
+ "peak_rss_mb_at_write": 491.8,
  "record": "training rows, canonical rendering (the rows' source of truth; NOT trained, C1)",
  "seed": 20261109,
  "shuffle_seed": 7,
@@ -718,7 +730,7 @@
     "residual_positive_share": 1.0
    },
    "conditional": {
-    "n_rows": 1416,
+    "n_rows": 1516,
     "derived_constant": 29,
     "pre_stated": 29,
     "revision3_per_row_derivation": 26,
@@ -730,7 +742,7 @@
     "longest_filler_tokens": 50,
     "shortest_filler_ge_longest_trace": true,
     "residual_min": 3,
-    "residual_mean": 4.3814,
+    "residual_mean": 4.4189,
     "residual_max": 8,
     "residual_positive_share": 1.0
    }
@@ -869,6 +881,22 @@
     "fill_length_best_cut": 1.0,
     "fill_length_zero_information": true,
     "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_adv / conditional": {
+    "n": 100,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.95,
+    "residual_range": [
+     3,
+     8
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.74
    },
    "dev cond_far / conditional": {
     "n": 100,
@@ -1195,42 +1223,216 @@
    1,
    2
   ],
-  "edge_type_quota": 10
+  "edge_type_quota": 10,
+  "adv_types": {
+   "sc_far": {
+    "representative": [
+     0,
+     -9
+    ],
+    "rows": 8,
+    "gold_ok": true,
+    "what": "sign-crossing (t < 0 <= x), x and |t| in one decade, units(x) < units(|t|), units(x) + units(|t|) <= 9 (i.e. units(x) < t % 10 under floor semantics), x - t >= 5",
+    "digits": null
+   },
+   "sc_d4": {
+    "representative": [
+     0,
+     -4
+    ],
+    "rows": 10,
+    "gold_ok": true,
+    "what": "sign-crossing at x - t = +4 with x < |t|: (0, -4), (1, -3)",
+    "digits": null
+   },
+   "sc_d3": {
+    "representative": [
+     0,
+     -3
+    ],
+    "rows": 10,
+    "gold_ok": true,
+    "what": "sign-crossing at x - t = +3 with x < |t|: (0, -3), (1, -2)",
+    "digits": null
+   },
+   "sc_d4_eq": {
+    "representative": [
+     2,
+     -2
+    ],
+    "rows": 5,
+    "gold_ok": true,
+    "what": "sign-crossing at x - t = +4 with x = |t|: (2, -2)",
+    "digits": null
+   },
+   "len21_d4": {
+    "representative": [
+     10,
+     6
+    ],
+    "rows": 6,
+    "gold_ok": true,
+    "what": "two-digit x, one-digit t, x - t = +4: (10, 6) .. (13, 9)",
+    "digits": null
+   },
+   "len21_d3": {
+    "representative": [
+     10,
+     7
+    ],
+    "rows": 6,
+    "gold_ok": true,
+    "what": "two-digit x, one-digit t, x - t = +3: (10, 7) .. (12, 9)",
+    "digits": null
+   },
+   "dec_d3": {
+    "representative": [
+     20,
+     17
+    ],
+    "rows": 5,
+    "gold_ok": true,
+    "what": "across a decade at x - t = +3 with units(x) < units(t): x = 10k + 0..2, k = 2..9",
+    "digits": null
+   },
+   "dec0_m2": {
+    "representative": [
+     0,
+     2
+    ],
+    "rows": 1,
+    "gold_ok": false,
+    "what": "x - t = -2 inside one decade: x = 10k + 0..7 (x <= 96)",
+    "digits": null
+   },
+   "len_lead_12": {
+    "representative": [
+     3,
+     22
+    ],
+    "rows": 3,
+    "gold_ok": false,
+    "what": "one-digit x, two-digit t, str(x) > str(t), units(x) > units(t) and digitsum(x) < digitsum(t) (the class of len_lead_13 / _23)",
+    "digits": [
+     1,
+     2
+    ]
+   },
+   "len_lead_13": {
+    "representative": [
+     2,
+     111
+    ],
+    "rows": 2,
+    "gold_ok": false,
+    "what": "one-digit x, three-digit t, the same class",
+    "digits": [
+     1,
+     3
+    ]
+   },
+   "len_lead_23": {
+    "representative": [
+     13,
+     122
+    ],
+    "rows": 3,
+    "gold_ok": false,
+    "what": "two-digit x, three-digit t, the same class",
+    "digits": [
+     2,
+     3
+    ]
+   },
+   "len12_m3": {
+    "representative": [
+     7,
+     10
+    ],
+    "rows": 3,
+    "gold_ok": false,
+    "what": "one-digit x, two-digit t, x - t = -3: (7, 10), (8, 11), (9, 12)",
+    "digits": null
+   },
+   "len12_m2": {
+    "representative": [
+     8,
+     10
+    ],
+    "rows": 10,
+    "gold_ok": false,
+    "what": "one-digit x, two-digit t, x - t = -2: (8, 10), (9, 11)",
+    "digits": null
+   },
+   "dec_m3": {
+    "representative": [
+     17,
+     20
+    ],
+    "rows": 18,
+    "gold_ok": false,
+    "what": "across a decade at x - t = -3: x = 10k + 7..9, k = 1..8",
+    "digits": null
+   },
+   "dec_m2": {
+    "representative": [
+     18,
+     20
+    ],
+    "rows": 10,
+    "gold_ok": false,
+    "what": "across a decade at x - t = -2: x = 10k + 8..9, k = 1..8",
+    "digits": null
+   }
+  },
+  "adv_domain": {
+   "other": [
+    0,
+    96
+   ],
+   "threshold": [
+    -40,
+    136
+   ]
+  }
  },
  "build_log": [
-  "[22:28:51] T2b-register data (revision 5): seeds train 20261109 / dev 20261110 / chains 20261111 / surfaces 20261112 / cond_sametens 20261114 / cond_oor_edge 20261115; no model call",
-  "[22:28:51] render_prompt == real chat template on 500 t2_train register prompts",
-  "[22:29:51] historical set: 6464 payloads (61s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
-  "[22:29:52] bank_pilot.json: 15629 payloads, 15278 operative contents",
-  "[22:29:52] bank_confirm.json: 13552 payloads, 13247 operative contents",
-  "[22:29:52] bank_confirm2.json: 12163 payloads, 11903 operative contents",
-  "[22:29:56] bank_s4000.json: 255745 payloads, 250614 operative contents",
-  "[22:29:56] t2_train.jsonl: 1501 payloads",
-  "[22:29:56] t2_eval.jsonl: 600 payloads",
-  "[22:29:56] t2_eval_xframe.jsonl: 600 payloads",
-  "[22:29:56] t2_eval_supp.jsonl: 360 payloads",
-  "[22:29:56] SELECT-VIEWS-001: 384 payloads",
-  "[22:29:56] l1_ood_bank.jsonl: 600 payloads",
-  "[22:29:56] fds/T_BANK.json: 192 payloads",
-  "[22:29:56] fds/T_BANK_V2.json: 192 payloads",
-  "[22:29:56] cc1/T_BANK_V3X.json: 864 payloads",
-  "[22:29:56] cc2/STAGE_A_T_V3X.json: 15 payloads",
-  "[22:29:56] cc2/T_BANK_V4.json: 864 payloads",
-  "[22:31:14] multi-event register prompts: 280 transitions from 1 files (14161 scanned); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
-  "[22:31:14] exclusion union: 308726 payloads, 301783 operative contents (17 sources)",
-  "[22:31:15] train mix/wrap: 450 rows from 4984 draws; rejected {'state unchanged': 4, 'operative content in an exclusion source': 1, 'stratum full / not a wrap': 4529}",
-  "[22:31:15] train conditional: 150 pairs (300 rows) from 1317 draws; rejected {'twin threshold / other outside 0..96': 103, 'wrap pattern / twin type full, or both wrap': 1055, 'x outside 0..96': 9}",
-  "[22:31:15] dev: 1100 rows {'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100, 'cond_mid': 100, 'cond_far': 100}; rejected {'wrap status / unchanged': 282, 'no wrap': 1745, 'operative content in an exclusion source': 1, 'equal registers': 1, 'wraps': 3, 'cond_far: threshold leaves no room': 15}",
-  "[22:31:15] chains CH_IN: 32 parents x 8 candidates from 34 draws",
-  "[22:31:15] chains CH_X: 16 parents x 8 candidates from 18 draws",
-  "[22:31:15] chains rejected {'operative content in an exclusion source': 3, 'CH_X candidate without an out-of-range value': 1}",
-  "[22:31:15] dev cond_sametens (revision 4, seed 20261114): 100 rows, 50 pairs; rejected {'a branch would wrap': 100, 'x leaves no same-tens room': 11, 'threshold leaves no same-tens room': 20}",
-  "[22:31:15] dev cond_oor_edge (revision 5, seed 20261115): 80 rows, 20 quadruples; rejected {'a branch would wrap': 28, 'threshold leaves no room': 1}",
-  "[22:31:18] rows identical to revision 2 (never re-drawn): True",
-  "[22:31:20] revision-3 data files reconstructed byte for byte from these rows (FILL_UNITS_REV3, no cond_sametens): True",
-  "[22:31:23] revision-4 data files reconstructed byte for byte from these rows (FILL_UNITS_REV4, no cond_oor_edge): True",
-  "[22:31:23] audit: PASS copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500, wrong_register|cond 0.527, x_hi|cond 0.527, thr_lo|cond 0.540, v_pos|cond 0.500, non_strict|cond 0.833, eq_plus1|cond 0.667, units_eq_plus1|cond 0.680, units_digit_gt|cond 0.717, tens_digit_gt|cond 0.757",
-  "[22:31:28] amendment 4b: swap derived 7 (pre-stated 7), 1 fill string(s), add derived 17 (pre-stated 17), 1 fill string(s), mix derived 17 (pre-stated 17), 1 fill string(s), conditional derived 29 (pre-stated 29), 1 fill string(s)",
-  "[22:31:28] surface audit: training rows using a held-out factor 0; held-out-surface bank ok True"
+  "[04:56:37] T2b-register data (revision 7): seeds train 20261109 / dev 20261110 / chains 20261111 / surfaces 20261112 / cond_sametens 20261114 / cond_oor_edge 20261115 / cond_adv 20261116; no model call",
+  "[04:56:37] render_prompt == real chat template on 500 t2_train register prompts",
+  "[04:57:10] historical set: 6464 payloads (33s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[04:57:10] bank_pilot.json: 15629 payloads, 15278 operative contents",
+  "[04:57:10] bank_confirm.json: 13552 payloads, 13247 operative contents",
+  "[04:57:10] bank_confirm2.json: 12163 payloads, 11903 operative contents",
+  "[04:57:13] bank_s4000.json: 255745 payloads, 250614 operative contents",
+  "[04:57:13] t2_train.jsonl: 1501 payloads",
+  "[04:57:13] t2_eval.jsonl: 600 payloads",
+  "[04:57:13] t2_eval_xframe.jsonl: 600 payloads",
+  "[04:57:13] t2_eval_supp.jsonl: 360 payloads",
+  "[04:57:13] SELECT-VIEWS-001: 384 payloads",
+  "[04:57:13] l1_ood_bank.jsonl: 600 payloads",
+  "[04:57:13] fds/T_BANK.json: 192 payloads",
+  "[04:57:13] fds/T_BANK_V2.json: 192 payloads",
+  "[04:57:13] cc1/T_BANK_V3X.json: 864 payloads",
+  "[04:57:13] cc2/STAGE_A_T_V3X.json: 15 payloads",
+  "[04:57:13] cc2/T_BANK_V4.json: 864 payloads",
+  "[04:57:43] multi-event register prompts: 280 transitions from 1 files (14161 scanned); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[04:57:43] exclusion union: 308726 payloads, 301783 operative contents (17 sources)",
+  "[04:57:43] train mix/wrap: 450 rows from 4984 draws; rejected {'state unchanged': 4, 'operative content in an exclusion source': 1, 'stratum full / not a wrap': 4529}",
+  "[04:57:43] train conditional: 150 pairs (300 rows) from 1317 draws; rejected {'twin threshold / other outside 0..96': 103, 'wrap pattern / twin type full, or both wrap': 1055, 'x outside 0..96': 9}",
+  "[04:57:43] dev: 1100 rows {'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100, 'cond_mid': 100, 'cond_far': 100}; rejected {'wrap status / unchanged': 282, 'no wrap': 1745, 'operative content in an exclusion source': 1, 'equal registers': 1, 'wraps': 3, 'cond_far: threshold leaves no room': 15}",
+  "[04:57:44] chains CH_IN: 32 parents x 8 candidates from 34 draws",
+  "[04:57:44] chains CH_X: 16 parents x 8 candidates from 18 draws",
+  "[04:57:44] chains rejected {'operative content in an exclusion source': 3, 'CH_X candidate without an out-of-range value': 1}",
+  "[04:57:44] dev cond_sametens (revision 4, seed 20261114): 100 rows, 50 pairs; rejected {'a branch would wrap': 100, 'x leaves no same-tens room': 11, 'threshold leaves no same-tens room': 20}",
+  "[04:57:44] dev cond_oor_edge (revision 5, seed 20261115): 80 rows, 20 quadruples; rejected {'a branch would wrap': 28, 'threshold leaves no room': 1}",
+  "[04:57:44] dev cond_adv (revision 6, seed 20261116): 100 rows on 67 cells by rejection sampling, 484756 proposals; rejected {'cell outside every design type': 473337, 'a branch wraps': 120, 'type quota filled': 11075, \"cell used more often than the type's least-used cell\": 124}",
+  "[04:57:45] cond_adv targets (t2br_shortcuts.adv_target_report): MET; broad revision-5 survivors wrong on >= 33 rows; exceptions caught [-3, -2, 3, 4], not caught [-4]; 67 cells",
+  "[04:57:46] rows identical to revision 2 (never re-drawn): True",
+  "[04:57:48] revision-3 data files reconstructed byte for byte from these rows (FILL_UNITS_REV3, no cond_sametens): True",
+  "[04:57:49] revision-4 data files reconstructed byte for byte from these rows (FILL_UNITS_REV4, no cond_oor_edge): True",
+  "[04:57:51] revision-5 data files reconstructed byte for byte from these rows (FILL_UNITS_REV5, no cond_adv): True",
+  "[04:57:51] audit: PASS copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500, wrong_register|cond 0.527, x_hi|cond 0.527, thr_lo|cond 0.540, v_pos|cond 0.500, non_strict|cond 0.833, eq_plus1|cond 0.667, units_eq_plus1|cond 0.680, units_digit_gt|cond 0.717, tens_digit_gt|cond 0.757",
+  "[04:57:54] amendment 4b: swap derived 7 (pre-stated 7), 1 fill string(s), add derived 17 (pre-stated 17), 1 fill string(s), mix derived 17 (pre-stated 17), 1 fill string(s), conditional derived 29 (pre-stated 29), 1 fill string(s)",
+  "[04:57:54] surface audit: training rows using a held-out factor 0; held-out-surface bank ok True"
  ]
 }

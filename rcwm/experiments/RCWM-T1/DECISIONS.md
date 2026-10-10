@@ -755,3 +755,51 @@ Times are local (CDT). Entries are append-only.
     - **(3) A report-only shortcut-agreement analysis.** It flags `SHORTCUT_CONSISTENT` if any member of H matches the trained trace's decisions as well as the true rule does.
     - **(4) Scoped rule text.** It states that G1 excludes H, not every conceivable heuristic, and this limit is always quoted.
   - **Reason:** identification against every possible heuristic is impossible on a finite bank. The honest design names the family it excludes and reports agreement afterwards.
+- **R18 BWM roadmap item #1 final (BWM P-10, reported 2026-10-10 about 03:10); RCWM records only.**
+  - **Frozen Blocksworld B2 results, each set run once and VAL-checked, S-beam vs S-direct:**
+    - hard: 73/110 vs 5/110 (+68/−0, p 7e-21);
+    - mirror: 61/110 vs 6/110 (+55/−0, p 6e-17);
+    - PlanBench-602: 602/602 vs 584/602 (+18/−0, p 8e-6).
+  - **Mirror flag:** raised. Hard − mirror = +10.9 pp against a registered limit of 10 pp. BWM's reweighting to explain it is post-hoc.
+  - **Vault:** BWM added a new folder `Rineya_Published_Cores/Rineya-Titan-Sparse-BWM-Blocksworld-0.1.0-devfreeze` (10-10 03:05), with no CATALOG or REGISTRY edits and no Hugging Face.
+    - RCWM verified that its pinned cores are unchanged: Titan-Sparse model.safetensors a28629c9…, CATALOG.json and MODEL_REGISTRY.md untouched.
+    - RCWM asked BWM which user approval covers the vault copy, and will report the folder to the user.
+  - **Vault copy reverted (BWM D-60).** BWM confirmed the user had not explicitly approved the vault copy; its D-49 covers a local devfreeze package only.
+    - BWM checked with `diff -r` that the vault folder was byte-identical to its local release folder, then deleted the vault folder.
+    - RCWM verified that no BWM folder remains in `Rineya_Published_Cores`.
+    - BWM is asking the user directly whether the package should go into the vault.
+- **D-43 5b design approved at revision 6, with a wording-only revision 7 before the freeze (2026-10-10 about 05:00).**
+  - **Revision 6** (workflow wf_c9e8b88d-426; independent check: minor issues):
+    - Extended shortcut family H: 3,519 predicates, in the new `scripts/t2br_shortcuts.py`.
+    - Adversarially sampled stratum `cond_adv` (n = 100, seed 20261116) with an absolute trace-predicate clause (≥ 0.80, both surfaces).
+    - Report-only `SHORTCUT_CONSISTENT` agreement analysis.
+  - **Approved deviation:** the target "every member of H wrong on ≥ 40 of 100 rows" is provably infeasible. Five members of H have pairwise-disjoint error sets, and the exceptions at d = −4…−2 need more ok-false rows than a balanced 100-row stratum has. The closest-feasible design is accepted.
+  - **Enumeration result:** exactly one member of H passes G1 under every plain baseline, the isolated exception "x > t or x == t − 4". It is flagged by the agreement analysis whenever it matches.
+  - **Revision 7 (workflow running), wording only:**
+    - The always-quoted limits will name the natural survivors outside H, and say that cond_adv catches its targets only at narrow margins.
+    - The overall headline will carry the SHORTCUT_CONSISTENT flag.
+  - **GPU:** 4.06 h observed (one turn) or 4.99 h at the planning rate (2 turns). Every gating stage runs in turn 1.
+- **R-PREREG-LB (05:19, 2026-10-10): T2 ENABLES PLANNING, BELOW THE NEAR-ORACLE BAR (on its training surface). Branch YES.**
+  - **Run:** one RCWM turn, lease acquired 02:06:31, stages A0, G1, G2, G3, G4 in 3.2 h. C1 (CPU) ran at the start of the next call, at 05:19:00, and wrote DONE.json. `lbeam_analysis.py` ran once at 05:19:03. Outputs: `PREREG_LB_RESULTS.json` sha 887b4c88…, `.md` sha a563ddea….
+  - **Instrument:**
+    - The A0 anchor passed with states and texts 1.0 for OFF and ON.
+    - Batch invariance was 1.0.
+    - 0 refused keys in every arm, no orphaned stages, and no drift in BWM's modules.
+  - **Co-primaries:**
+    - Co-primary 1 (all 180): T2 127/180 = 0.706 vs OFF 14/180 = 0.078. Difference +0.628, discordant 113/0, Holm p < 1e-4. PASS.
+    - Co-primary 2 (52 needs-lookahead): T2 23/52 = 0.442 vs OFF 3/52 = 0.058. Difference +0.385, discordant 20/0, Holm p < 1e-4. PASS.
+  - **Key secondary:** T2/ORACLE = 0.794 [0.73, 0.855] (ORACLE 0.889). The near-oracle bar (≥ 0.80 with lower bound ≥ 0.70) is NOT met, just short.
+  - **Report-only:**
+    - T2/ORACLE on needs-lookahead instances: 0.719 [0.55, 0.87].
+    - W4E24 point: T2 0.744 vs ORACLE 0.928 (ratio 0.802).
+    - T2 vs IGNORE_STATUS (exact arithmetic without the status rule): 0.706 vs 0.350, discordant 80/16. T2's status handling, not its arithmetic alone, carries the planning.
+    - Verified-plan precision: T2 0.952 vs ORACLE 1.000. About 5% of T2-verified plans fail under env.step, which is imagination error.
+    - Void-twin exposure: T2 0/53 failures applied a void as posted, OFF 50/166.
+    - Fixed-candidate selection: T2 0.867, OFF 0.233.
+    - Success falls with optimal depth for T2: 0.83 at d* = 2 down to 0.58 at d* = 6. ORACLE: 0.94 to 0.86.
+  - **D-35 surface audit:** with held-out combined rendering, T2 solves 5/180 = 0.028 vs 127/180 canonical (difference −0.678). Planning is surface-dependent. This matches PREREG-3: the planning gain exists only on T2's training surface.
+  - **Consequence:**
+    - A near-oracle one-step world model (PREREG-2) does turn into goal-reaching planning under search. That includes instances where greedy descent fails: T2 gains +0.385 there over OFF, with no instance going the other way.
+    - The gap to ORACLE (0.794) and the depth decay quantify how imagination error compounds.
+    - Surface diversification (T2b, D-34/D-35) is the precondition for any claim beyond the canonical frame.
+    - BWM re-scores from the per-instance arrays and co-signs the report.

@@ -1,0 +1,1236 @@
+{
+ "schema": 4,
+ "revision": 5,
+ "experiment": "RCWM-T1 T2b-register screen (roadmap item 3; joint item 5b)",
+ "built_utc": "2026-10-10T03:31:28Z",
+ "model_calls": 0,
+ "torch_imported": false,
+ "builder": "scripts/t2br_make_data.py",
+ "builder_sha256_at_build": "1c09db66b4c60277de233bd86aa63e52e95bbde57b713a586562d9f5b389e2e5",
+ "common_sha256_at_build": "453b3a985f256dc791fba5816d3fb3437783d5ab753a1f1641b2af03c46da999",
+ "builder_note": "the files' provenance is the --verify rebuild check (AUDIT.json): the CURRENT builder must rebuild every data file byte for byte; the hashes above are the code at build time",
+ "env_sha256": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+ "recorded_marginals_sha256": "45674251e38e574229f4ea98d04c30fe623ec6ac58ad308ad491661c84afab7e",
+ "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+ "chat_template_check": "render_prompt == real template on 500 t2_train register prompts",
+ "rows_identical_to_revision_2": {
+  "ok": true,
+  "train_rows": "fd6710e20a5556708b296364718b6edb7275f7b3adac02a52b95700384302e42",
+  "dev_rows": "1113af0fedb5d9e955445472d703799eac21403e37fbec7838c45cb2bc6d5648",
+  "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
+ },
+ "revision_3_files_reconstructed": {
+  "ok": true,
+  "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
+  "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
+  "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
+  "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
+  "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
+  "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
+  "t2br_dev.jsonl": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+  "t2br_dev_hs.jsonl": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939"
+ },
+ "revision_4_files_reconstructed": {
+  "ok": true,
+  "t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+  "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+  "t2br_train_filler.jsonl": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+  "t2br_train_sd_plain.jsonl": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+  "t2br_train_sd_trace.jsonl": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+  "t2br_train_sd_filler.jsonl": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+  "t2br_dev.jsonl": "9aac40deffd678a4bdefffbb290081872015c88ea38296001c671e4067f46102",
+  "t2br_dev_hs.jsonl": "61845fbfc8635423257fac7c52b3ed1c70d19dd799720ca5f0e79866af1764f8"
+ },
+ "exclusion_sources": {
+  "historical": {
+   "payloads": 6464,
+   "operative_contents": 6258,
+   "sha256": null,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ]
+  },
+  "bank_pilot.json": {
+   "payloads": 15629,
+   "operative_contents": 15278,
+   "sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+  },
+  "bank_confirm.json": {
+   "payloads": 13552,
+   "operative_contents": 13247,
+   "sha256": "8bc6e2f8a8c7cae5b7b66293ef12b0efc440c281f820eca9d384a659b26a6a16"
+  },
+  "bank_confirm2.json": {
+   "payloads": 12163,
+   "operative_contents": 11903,
+   "sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea"
+  },
+  "bank_s4000.json": {
+   "payloads": 255745,
+   "operative_contents": 250614,
+   "sha256": "af1336c261375524a4a6eaf92cc48dc76b1159df093ce2705d279688f22bb4ce"
+  },
+  "t2_train.jsonl": {
+   "payloads": 1501,
+   "operative_contents": 1496,
+   "sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744"
+  },
+  "t2_eval.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59"
+  },
+  "t2_eval_xframe.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de"
+  },
+  "t2_eval_supp.jsonl": {
+   "payloads": 360,
+   "operative_contents": 360,
+   "sha256": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086"
+  },
+  "SELECT-VIEWS-001": {
+   "payloads": 384,
+   "operative_contents": 383,
+   "sha256": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3"
+  },
+  "l1_ood_bank.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c"
+  },
+  "fds/T_BANK.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "26c01effe9610230f7876bbe118792f85094605fe3dde5f873c78c67e1c493ba"
+  },
+  "fds/T_BANK_V2.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "fc094136a5b581cb9cc03393b1e5959ed8f69247638c81e37cf7f68fbf132e01"
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "173aa372466d5e3cc8efbebe4cc7e7ba09a8eb34de4598ce8f9d96a2b8e6557c"
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payloads": 15,
+   "operative_contents": 15,
+   "sha256": "635c9c7ea6851d4a0147a299ecd158a880b91fa5b9046b0af787d2ebbd6eb0d4"
+  },
+  "cc2/T_BANK_V4.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "82f0a6423dd6b58b81319708e7fbda7c5880b9734742323ea11574ff354c93c0"
+  },
+  "multi_event_register_prompts": {
+   "payloads": 280,
+   "operative_contents": 280,
+   "sha256": null,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ]
+  }
+ },
+ "exclusion_union": {
+  "payloads": 308726,
+  "operative_contents": 301783
+ },
+ "freshness": "zero payload and zero operative-content overlap with every source; train / dev / chain units mutually disjoint (checked during the draw by Registry, re-checked by --verify)",
+ "peak_rss_mb_at_write": 485.0,
+ "record": "training rows, canonical rendering (the rows' source of truth; NOT trained, C1)",
+ "seed": 20261109,
+ "shuffle_seed": 7,
+ "files": {
+  "t2br_train_plain.jsonl": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+  "t2br_train_trace.jsonl": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+  "t2br_train_filler.jsonl": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433"
+ },
+ "describe": {
+  "n": 750,
+  "by_stratum": {
+   "cond/twin_gt": 100,
+   "mix/nowrap": 150,
+   "cond/xp1": 50,
+   "cond/x0": 50,
+   "add/wrap_under": 75,
+   "mix/wrap": 150,
+   "cond/xm1": 50,
+   "add/wrap_over": 75,
+   "cond/twin_le": 50
+  },
+  "by_category": {
+   "cond": 300,
+   "mix": 300,
+   "wrap": 150
+  },
+  "branch": {
+   "True": 150,
+   "False": 150
+  },
+  "cond_patterns_pairs": {
+   "none": 50,
+   "sub_wraps": 50,
+   "add_wraps": 50
+  },
+  "cond_twin_types": {
+   "threshold": 75,
+   "other": 75
+  },
+  "wrap_rows": 400,
+  "value_range": [
+   -8,
+   11
+  ],
+  "threshold_range_cond": [
+   1,
+   96
+  ],
+  "mean_target_tokens": {
+   "plain": 15.55,
+   "trace": 38.06,
+   "filler": 42.35
+  }
+ },
+ "audit": {
+  "n": {
+   "all": 750,
+   "mix": 300,
+   "wrap": 150,
+   "cond": 300
+  },
+  "max": 0.55,
+  "acc": {
+   "copy": {
+    "all": {
+     "n": 750,
+     "correct": 0,
+     "acc": 0.0
+    },
+    "mix": {
+     "n": 300,
+     "correct": 0,
+     "acc": 0.0
+    },
+    "wrap": {
+     "n": 150,
+     "correct": 0,
+     "acc": 0.0
+    },
+    "cond": {
+     "n": 300,
+     "correct": 0,
+     "acc": 0.0
+    }
+   },
+   "unreduced": {
+    "all": {
+     "n": 750,
+     "correct": 350,
+     "acc": 0.4667
+    },
+    "mix": {
+     "n": 300,
+     "correct": 150,
+     "acc": 0.5
+    },
+    "wrap": {
+     "n": 150,
+     "correct": 0,
+     "acc": 0.0
+    },
+    "cond": {
+     "n": 300,
+     "correct": 200,
+     "acc": 0.6667
+    }
+   },
+   "always_add": {
+    "all": {
+     "n": 300,
+     "correct": 150,
+     "acc": 0.5
+    },
+    "cond": {
+     "n": 300,
+     "correct": 150,
+     "acc": 0.5
+    }
+   },
+   "always_sub": {
+    "all": {
+     "n": 300,
+     "correct": 150,
+     "acc": 0.5
+    },
+    "cond": {
+     "n": 300,
+     "correct": 150,
+     "acc": 0.5
+    }
+   },
+   "wrong_register": {
+    "all": {
+     "n": 300,
+     "correct": 158,
+     "acc": 0.5267
+    },
+    "cond": {
+     "n": 300,
+     "correct": 158,
+     "acc": 0.5267
+    }
+   },
+   "x_hi": {
+    "all": {
+     "n": 300,
+     "correct": 158,
+     "acc": 0.5267
+    },
+    "cond": {
+     "n": 300,
+     "correct": 158,
+     "acc": 0.5267
+    }
+   },
+   "thr_lo": {
+    "all": {
+     "n": 300,
+     "correct": 162,
+     "acc": 0.54
+    },
+    "cond": {
+     "n": 300,
+     "correct": 162,
+     "acc": 0.54
+    }
+   },
+   "v_pos": {
+    "all": {
+     "n": 300,
+     "correct": 150,
+     "acc": 0.5
+    },
+    "cond": {
+     "n": 300,
+     "correct": 150,
+     "acc": 0.5
+    }
+   },
+   "non_strict": {
+    "all": {
+     "n": 300,
+     "correct": 250,
+     "acc": 0.8333
+    },
+    "cond": {
+     "n": 300,
+     "correct": 250,
+     "acc": 0.8333
+    }
+   },
+   "eq_plus1": {
+    "all": {
+     "n": 300,
+     "correct": 200,
+     "acc": 0.6667
+    },
+    "cond": {
+     "n": 300,
+     "correct": 200,
+     "acc": 0.6667
+    }
+   },
+   "units_eq_plus1": {
+    "all": {
+     "n": 300,
+     "correct": 204,
+     "acc": 0.68
+    },
+    "cond": {
+     "n": 300,
+     "correct": 204,
+     "acc": 0.68
+    }
+   },
+   "units_digit_gt": {
+    "all": {
+     "n": 300,
+     "correct": 215,
+     "acc": 0.7167
+    },
+    "cond": {
+     "n": 300,
+     "correct": 215,
+     "acc": 0.7167
+    }
+   },
+   "tens_digit_gt": {
+    "all": {
+     "n": 300,
+     "correct": 227,
+     "acc": 0.7567
+    },
+    "cond": {
+     "n": 300,
+     "correct": 227,
+     "acc": 0.7567
+    }
+   },
+   "mix_1x": {
+    "all": {
+     "n": 300,
+     "correct": 9,
+     "acc": 0.03
+    },
+    "mix": {
+     "n": 300,
+     "correct": 9,
+     "acc": 0.03
+    }
+   },
+   "mix_no_v": {
+    "all": {
+     "n": 300,
+     "correct": 33,
+     "acc": 0.11
+    },
+    "mix": {
+     "n": 300,
+     "correct": 33,
+     "acc": 0.11
+    }
+   },
+   "always_wrap": {
+    "all": {
+     "n": 150,
+     "correct": 150,
+     "acc": 1.0
+    },
+    "wrap": {
+     "n": 150,
+     "correct": 150,
+     "acc": 1.0
+    }
+   }
+  },
+  "gated": {
+   "copy|all": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "copy|mix": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "copy|wrap": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "copy|cond": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "unreduced|all": {
+    "acc": 0.4667,
+    "ok": true
+   },
+   "unreduced|mix": {
+    "acc": 0.5,
+    "ok": true
+   },
+   "unreduced|wrap": {
+    "acc": 0.0,
+    "ok": true
+   },
+   "always_add|cond": {
+    "acc": 0.5,
+    "ok": true
+   },
+   "always_sub|cond": {
+    "acc": 0.5,
+    "ok": true
+   },
+   "wrong_register|cond": {
+    "acc": 0.5267,
+    "ok": true
+   },
+   "x_hi|cond": {
+    "acc": 0.5267,
+    "ok": true
+   },
+   "thr_lo|cond": {
+    "acc": 0.54,
+    "ok": true
+   },
+   "v_pos|cond": {
+    "acc": 0.5,
+    "ok": true
+   }
+  },
+  "rule_variants": {
+   "non_strict|cond": {
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "ok": true
+   },
+   "eq_plus1|cond": {
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "ok": true
+   },
+   "units_eq_plus1|cond": {
+    "acc": 0.68,
+    "contradicted_by": 96,
+    "n": 300,
+    "ok": true
+   },
+   "units_digit_gt|cond": {
+    "acc": 0.7167,
+    "contradicted_by": 85,
+    "n": 300,
+    "ok": true
+   },
+   "tens_digit_gt|cond": {
+    "acc": 0.7567,
+    "contradicted_by": 73,
+    "n": 300,
+    "ok": true
+   }
+  },
+  "diagnostic": {
+   "unreduced|cond": {
+    "acc": 0.6667,
+    "above_0.55": true
+   },
+   "mix_1x|mix": {
+    "acc": 0.03,
+    "above_0.55": false
+   },
+   "mix_no_v|mix": {
+    "acc": 0.11,
+    "above_0.55": false
+   },
+   "always_wrap|wrap": {
+    "acc": 1.0,
+    "above_0.55": true
+   }
+  },
+  "rule_variant_bar": {
+   "max_acc": 0.8333,
+   "min_contradicting_share": "1/6"
+  },
+  "diagnostic_note": "Not gated. unreduced on cond rows is reported (the conditional shortcut of interest is the branch). always_wrap ('add => wrap by 97') is 1.0 on the training adds BY DESIGN (every training add wraps; add without a wrap is the untouched add_nowrap control), so a G4 loss on add_nowrap shared by every trained arm is a property of the data, not of the trace format (the analysis reports trace - plain beside trace - OFF).",
+  "rule_variant_note": "eq_plus1 = P(ok false) + P(other = threshold + 1) >= 0.5 + 50/300; non_strict = 1 - P(other = threshold) = 1 - 50/300 by construction; a 0.55 bar would need >= 1,000 conditional rows. The twins (distance 2..15, on the other side of the threshold) contradict every near-only rule; the core rows contradict coarse comparisons.",
+  "distance": {
+   "core": {
+    "-1": 50,
+    "0": 50,
+    "1": 50
+   },
+   "twin_abs": [
+    2,
+    15
+   ],
+   "twin_type": {
+    "threshold": 75,
+    "other": 75
+   },
+   "twin_side": {
+    "ok_true": 100,
+    "ok_false": 50
+   }
+  },
+  "branch_stump": {
+   "best_single_feature_accuracy": 0.5467,
+   "permutation_null_p95": 0.5933,
+   "within_null": true,
+   "features": [
+    "X",
+    "Y",
+    "Z",
+    "reg_val",
+    "other_val",
+    "threshold",
+    "value",
+    "tick",
+    "register_id",
+    "other_id"
+   ],
+   "gated": false
+  },
+  "branch_balance": {
+   "ok_true": 150,
+   "ok_false": 150
+  },
+  "digit_shortcuts": {
+   "tens_or_eq_plus1|cond": {
+    "acc": 0.9167,
+    "contradicted_by": 25,
+    "n": 300,
+    "contradicting_rows": {
+     "twin d=5": 4,
+     "twin d=9": 1,
+     "twin d=4": 4,
+     "twin d=3": 7,
+     "twin d=2": 6,
+     "twin d=6": 3
+    }
+   },
+   "tens_ge_not_eq|cond": {
+    "acc": 0.8033,
+    "contradicted_by": 59,
+    "n": 300,
+    "contradicting_rows": {
+     "core d=-1": 44,
+     "twin d=-5": 3,
+     "twin d=-6": 2,
+     "twin d=-2": 4,
+     "twin d=-8": 1,
+     "twin d=-4": 3,
+     "twin d=-7": 1,
+     "twin d=-3": 1
+    }
+   }
+  },
+  "off_by_one": {
+   "obo_m1|cond": {
+    "form": "x > t or x == t-1",
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_0|cond": {
+    "form": "x >= t",
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_p1|cond": {
+    "form": "x > t+1",
+    "acc": 0.8333,
+    "contradicted_by": 50,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_m1_0|cond": {
+    "form": "x >= t-1",
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_m1_p1|cond": {
+    "form": "(x > t or x == t-1) and x != t+1",
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_0_p1|cond": {
+    "form": "x == t or x > t+1",
+    "acc": 0.6667,
+    "contradicted_by": 100,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   },
+   "obo_m1_0_p1|cond": {
+    "form": "x in {t-1, t} or x > t+1",
+    "acc": 0.5,
+    "contradicted_by": 150,
+    "n": 300,
+    "contradicted_share_ge_1/6": true
+   }
+  },
+  "off_by_one_note": "Revision 5, reported, NOT gated: the off-by-one family (the branch flipped where other - threshold is in a non-empty subset of {-1, 0, +1}). The 150 core rows at -1 / 0 / +1 (50 each) contradict every single flip on exactly 50 of the 300 conditional rows (1/6); the dev bank identifies the family through G1 (cond_oor_val and cond_oor_edge).",
+  "digit_shortcut_note": "Revision 4, reported, NOT gated: the tens-digit shortcut 'add iff tens(other) > tens(threshold) or other == threshold + 1' and its mirror 'add iff tens(other) >= tens(threshold) and other != threshold' (derived for the env's strict '>'). On the training rows only the twins at |d| 2..9 inside one decade contradict them; the 750 rows are fixed (never re-drawn), so their identification is tested on the dev bank (G1's cond_sametens clause).",
+  "ok": true
+ },
+ "fill_constant": {
+  "constants": {
+   "swap": 7,
+   "add": 17,
+   "mix": 17,
+   "conditional": 29
+  },
+  "per_kind": {
+   "swap": {
+    "n_rows": 475,
+    "derived_constant": 7,
+    "pre_stated": 7,
+    "revision3_per_row_derivation": 5,
+    "revision3_constant": 5,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 26,
+    "longest_trace_cell": "dev swap",
+    "shortest_filler_tokens": 26,
+    "longest_filler_tokens": 28,
+    "shortest_filler_ge_longest_trace": true,
+    "residual_min": 2,
+    "residual_mean": 2.0,
+    "residual_max": 2,
+    "residual_positive_share": 1.0
+   },
+   "add": {
+    "n_rows": 724,
+    "derived_constant": 17,
+    "pre_stated": 17,
+    "revision3_per_row_derivation": 14,
+    "revision3_constant": 14,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 35,
+    "longest_trace_cell": "train wrap",
+    "shortest_filler_tokens": 35,
+    "longest_filler_tokens": 38,
+    "shortest_filler_ge_longest_trace": true,
+    "residual_min": 3,
+    "residual_mean": 4.3191,
+    "residual_max": 6,
+    "residual_positive_share": 1.0
+   },
+   "mix": {
+    "n_rows": 951,
+    "derived_constant": 17,
+    "pre_stated": 17,
+    "revision3_per_row_derivation": 14,
+    "revision3_constant": 14,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 35,
+    "longest_trace_cell": "train mix",
+    "shortest_filler_tokens": 35,
+    "longest_filler_tokens": 38,
+    "shortest_filler_ge_longest_trace": true,
+    "residual_min": 3,
+    "residual_mean": 3.4595,
+    "residual_max": 6,
+    "residual_positive_share": 1.0
+   },
+   "conditional": {
+    "n_rows": 1416,
+    "derived_constant": 29,
+    "pre_stated": 29,
+    "revision3_per_row_derivation": 26,
+    "revision3_constant": 26,
+    "distinct_fill_strings": 1,
+    "longest_trace_tokens": 47,
+    "longest_trace_cell": "dev cond_oor_val",
+    "shortest_filler_tokens": 47,
+    "longest_filler_tokens": 50,
+    "shortest_filler_ge_longest_trace": true,
+    "residual_min": 3,
+    "residual_mean": 4.3814,
+    "residual_max": 8,
+    "residual_positive_share": 1.0
+   }
+  },
+  "cells": {
+   "chain CH_IN / swap": {
+    "n": 262,
+    "fill_units": [
+     7
+    ],
+    "residual_mean": 2.0,
+    "residual_range": [
+     2,
+     2
+    ]
+   },
+   "chain CH_IN / add": {
+    "n": 229,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 4.1397,
+    "residual_range": [
+     4,
+     6
+    ],
+    "label": "wrap",
+    "majority": 0.9913,
+    "fill_length_best_cut": 0.9913,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9913
+   },
+   "chain CH_IN / mix": {
+    "n": 298,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 3.3255,
+    "residual_range": [
+     3,
+     5
+    ],
+    "label": "wrap",
+    "majority": 0.7651,
+    "fill_length_best_cut": 0.7651,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9161
+   },
+   "chain CH_IN / conditional": {
+    "n": 235,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.2894,
+    "residual_range": [
+     4,
+     7
+    ],
+    "label": "branch",
+    "majority": 0.5702,
+    "fill_length_best_cut": 0.5702,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.5702
+   },
+   "chain CH_X / swap": {
+    "n": 133,
+    "fill_units": [
+     7
+    ],
+    "residual_mean": 2.0,
+    "residual_range": [
+     2,
+     2
+    ]
+   },
+   "chain CH_X / add": {
+    "n": 105,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 4.0095,
+    "residual_range": [
+     3,
+     6
+    ],
+    "label": "wrap",
+    "majority": 0.7143,
+    "fill_length_best_cut": 0.7143,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.8
+   },
+   "chain CH_X / mix": {
+    "n": 153,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 3.2876,
+    "residual_range": [
+     3,
+     5
+    ],
+    "label": "wrap",
+    "majority": 0.7778,
+    "fill_length_best_cut": 0.7778,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9412
+   },
+   "chain CH_X / conditional": {
+    "n": 121,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.281,
+    "residual_range": [
+     3,
+     7
+    ],
+    "label": "branch",
+    "majority": 0.6364,
+    "fill_length_best_cut": 0.6364,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.6364
+   },
+   "dev add_nowrap / add": {
+    "n": 80,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 4.2,
+    "residual_range": [
+     4,
+     6
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_far / conditional": {
+    "n": 100,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.38,
+    "residual_range": [
+     4,
+     7
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.72
+   },
+   "dev cond_mid / conditional": {
+    "n": 100,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.34,
+    "residual_range": [
+     4,
+     7
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.53
+   },
+   "dev cond_oor_edge / conditional": {
+    "n": 80,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.4875,
+    "residual_range": [
+     4,
+     8
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.5375
+   },
+   "dev cond_oor_thr / conditional": {
+    "n": 100,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 3.91,
+    "residual_range": [
+     3,
+     7
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.85
+   },
+   "dev cond_oor_val / conditional": {
+    "n": 100,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.19,
+    "residual_range": [
+     3,
+     7
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.57
+   },
+   "dev cond_sametens / conditional": {
+    "n": 100,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.48,
+    "residual_range": [
+     4,
+     6
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.56
+   },
+   "dev cond_x0 / conditional": {
+    "n": 60,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.2667,
+    "residual_range": [
+     4,
+     6
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_xm1 / conditional": {
+    "n": 60,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.2667,
+    "residual_range": [
+     4,
+     6
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev cond_xp1 / conditional": {
+    "n": 60,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.3,
+    "residual_range": [
+     4,
+     6
+    ],
+    "label": "branch",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev mix / mix": {
+    "n": 100,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 3.62,
+    "residual_range": [
+     3,
+     6
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.94
+   },
+   "dev mix_oor / mix": {
+    "n": 100,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 3.61,
+    "residual_range": [
+     3,
+     6
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.97
+   },
+   "dev swap / swap": {
+    "n": 80,
+    "fill_units": [
+     7
+    ],
+    "residual_mean": 2.0,
+    "residual_range": [
+     2,
+     2
+    ]
+   },
+   "dev wrap / add": {
+    "n": 80,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 4.825,
+    "residual_range": [
+     4,
+     5
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "dev wrap_oor / add": {
+    "n": 80,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 3.9375,
+    "residual_range": [
+     3,
+     5
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   },
+   "train cond / conditional": {
+    "n": 300,
+    "fill_units": [
+     29
+    ],
+    "residual_mean": 4.73,
+    "residual_range": [
+     4,
+     8
+    ],
+    "label": "branch",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.5267
+   },
+   "train mix / mix": {
+    "n": 300,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 3.5767,
+    "residual_range": [
+     3,
+     6
+    ],
+    "label": "wrap",
+    "majority": 0.5,
+    "fill_length_best_cut": 0.5,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 0.9567
+   },
+   "train wrap / add": {
+    "n": 150,
+    "fill_units": [
+     17
+    ],
+    "residual_mean": 4.8067,
+    "residual_range": [
+     3,
+     5
+    ],
+    "label": "wrap",
+    "majority": 1.0,
+    "fill_length_best_cut": 1.0,
+    "fill_length_zero_information": true,
+    "residual_best_cut_descriptive": 1.0
+   }
+  },
+  "ok": true,
+  "definition": "per kind: the smallest run of ' .' units such that the filler target is at least as long (Titan tokens) as the LONGEST trace target of that kind over train + dev + the chains' gold steps, whatever its 'after' (the kind's shortest filler target vs its longest trace target); revision 3's code compared each row's filler with that row's trace (revision3_per_row_derivation)",
+  "note": "fill length is a function of the action kind alone (prompt-derived): within a kind it is constant, so it carries zero information about the answer (fill_length_best_cut == majority in every cell). The residual (constant filler longer than the row's trace) is answer-dependent only through the TRACE's length; it is a descriptive covariate, not something the filler arm emits."
+ },
+ "design": {
+  "quota": {
+   "mix/wrap": 150,
+   "mix/nowrap": 150,
+   "add/wrap_over": 75,
+   "add/wrap_under": 75
+  },
+  "cond_offsets": [
+   -1,
+   0,
+   1
+  ],
+  "twin_dist": [
+   2,
+   15
+  ],
+  "twin_types": [
+   "threshold",
+   "other"
+  ],
+  "twin_type_quota_per_offset": 25,
+  "cond_pattern_quota": {
+   "-1": [
+    17,
+    17,
+    16
+   ],
+   "0": [
+    17,
+    16,
+    17
+   ],
+   "1": [
+    16,
+    17,
+    17
+   ]
+  },
+  "dev_pair_type_quota": 25,
+  "far_dist": [
+   16,
+   96
+  ],
+  "sametens_dist": [
+   2,
+   9
+  ],
+  "edge_offsets": [
+   -1,
+   0,
+   1,
+   2
+  ],
+  "edge_type_quota": 10
+ },
+ "build_log": [
+  "[22:28:51] T2b-register data (revision 5): seeds train 20261109 / dev 20261110 / chains 20261111 / surfaces 20261112 / cond_sametens 20261114 / cond_oor_edge 20261115; no model call",
+  "[22:28:51] render_prompt == real chat template on 500 t2_train register prompts",
+  "[22:29:51] historical set: 6464 payloads (61s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[22:29:52] bank_pilot.json: 15629 payloads, 15278 operative contents",
+  "[22:29:52] bank_confirm.json: 13552 payloads, 13247 operative contents",
+  "[22:29:52] bank_confirm2.json: 12163 payloads, 11903 operative contents",
+  "[22:29:56] bank_s4000.json: 255745 payloads, 250614 operative contents",
+  "[22:29:56] t2_train.jsonl: 1501 payloads",
+  "[22:29:56] t2_eval.jsonl: 600 payloads",
+  "[22:29:56] t2_eval_xframe.jsonl: 600 payloads",
+  "[22:29:56] t2_eval_supp.jsonl: 360 payloads",
+  "[22:29:56] SELECT-VIEWS-001: 384 payloads",
+  "[22:29:56] l1_ood_bank.jsonl: 600 payloads",
+  "[22:29:56] fds/T_BANK.json: 192 payloads",
+  "[22:29:56] fds/T_BANK_V2.json: 192 payloads",
+  "[22:29:56] cc1/T_BANK_V3X.json: 864 payloads",
+  "[22:29:56] cc2/STAGE_A_T_V3X.json: 15 payloads",
+  "[22:29:56] cc2/T_BANK_V4.json: 864 payloads",
+  "[22:31:14] multi-event register prompts: 280 transitions from 1 files (14161 scanned); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[22:31:14] exclusion union: 308726 payloads, 301783 operative contents (17 sources)",
+  "[22:31:15] train mix/wrap: 450 rows from 4984 draws; rejected {'state unchanged': 4, 'operative content in an exclusion source': 1, 'stratum full / not a wrap': 4529}",
+  "[22:31:15] train conditional: 150 pairs (300 rows) from 1317 draws; rejected {'twin threshold / other outside 0..96': 103, 'wrap pattern / twin type full, or both wrap': 1055, 'x outside 0..96': 9}",
+  "[22:31:15] dev: 1100 rows {'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100, 'cond_mid': 100, 'cond_far': 100}; rejected {'wrap status / unchanged': 282, 'no wrap': 1745, 'operative content in an exclusion source': 1, 'equal registers': 1, 'wraps': 3, 'cond_far: threshold leaves no room': 15}",
+  "[22:31:15] chains CH_IN: 32 parents x 8 candidates from 34 draws",
+  "[22:31:15] chains CH_X: 16 parents x 8 candidates from 18 draws",
+  "[22:31:15] chains rejected {'operative content in an exclusion source': 3, 'CH_X candidate without an out-of-range value': 1}",
+  "[22:31:15] dev cond_sametens (revision 4, seed 20261114): 100 rows, 50 pairs; rejected {'a branch would wrap': 100, 'x leaves no same-tens room': 11, 'threshold leaves no same-tens room': 20}",
+  "[22:31:15] dev cond_oor_edge (revision 5, seed 20261115): 80 rows, 20 quadruples; rejected {'a branch would wrap': 28, 'threshold leaves no room': 1}",
+  "[22:31:18] rows identical to revision 2 (never re-drawn): True",
+  "[22:31:20] revision-3 data files reconstructed byte for byte from these rows (FILL_UNITS_REV3, no cond_sametens): True",
+  "[22:31:23] revision-4 data files reconstructed byte for byte from these rows (FILL_UNITS_REV4, no cond_oor_edge): True",
+  "[22:31:23] audit: PASS copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500, wrong_register|cond 0.527, x_hi|cond 0.527, thr_lo|cond 0.540, v_pos|cond 0.500, non_strict|cond 0.833, eq_plus1|cond 0.667, units_eq_plus1|cond 0.680, units_digit_gt|cond 0.717, tens_digit_gt|cond 0.757",
+  "[22:31:28] amendment 4b: swap derived 7 (pre-stated 7), 1 fill string(s), add derived 17 (pre-stated 17), 1 fill string(s), mix derived 17 (pre-stated 17), 1 fill string(s), conditional derived 29 (pre-stated 29), 1 fill string(s)",
+  "[22:31:28] surface audit: training rows using a held-out factor 0; held-out-surface bank ok True"
+ ]
+}

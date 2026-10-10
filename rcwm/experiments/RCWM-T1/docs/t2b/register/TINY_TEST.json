@@ -1,17 +1,17 @@
 {
  "ok": true,
- "n_checks": 30,
- "n_pass": 30,
+ "n_checks": 32,
+ "n_pass": 32,
  "checks": [
   {
    "check": "1 render_prompt == apply_chat_template on every training prompt (canonical + surface-diversity), dev prompt and held-out-surface prompt",
    "ok": true,
-   "detail": "3360 prompts"
+   "detail": "3560 prompts"
   },
   {
    "check": "1 tokenizers counts == AutoTokenizer on every target (and the recorded prompt / target token counts)",
    "ok": true,
-   "detail": "6090 targets"
+   "detail": "6390 targets"
   },
   {
    "check": "1 amendment 4b (AutoTokenizer): ONE fill string per action kind over train + dev (fill length identical on every row of a kind); every filler target >= its row's trace target; recorded residuals exact",
@@ -29,9 +29,9 @@
    "detail": "750 prompts; event orders used 464"
   },
   {
-   "check": "2 C3 proof: every held-out-surface prompt decodes to its dev row (primary strata + cond_sametens + cond_oor_edge; same id, gold; dev order) and uses ONLY held-out factors (paraphrase 4, names 4, held-out key orders)",
+   "check": "2 C3 proof: every held-out-surface prompt decodes to its dev row (primary strata + cond_sametens + cond_oor_edge + cond_adv; same id, gold; dev order) and uses ONLY held-out factors (paraphrase 4, names 4, held-out key orders)",
    "ok": true,
-   "detail": "{'n': 580, 'bad_rows': 0, 'primary_rows_in_dev_order': True, 'ok': True}"
+   "detail": "{'n': 680, 'bad_rows': 0, 'primary_rows_in_dev_order': True, 'ok': True}"
   },
   {
    "check": "2 C1: Cfg() trains on data/t2br_train_sd_<arm>.jsonl; run() refuses the canonical variant (exit 3, not persisted, no lease)",
@@ -56,7 +56,7 @@
   {
    "check": "4 outputs validate with the analysis loaders (states == texts parsed by each side's parser; held-out-surface ids / hs_index == the bank); provenance ok; every text file the runner writes is LF-only",
    "ok": true,
-   "detail": "12 HS rows"
+   "detail": "14 HS rows"
   },
   {
    "check": "4 rerun is a no-op (exit 0, no lease)",
@@ -131,7 +131,7 @@
   {
    "check": "10 oracle runs on the FULL dev + held-out-surface + chain banks: the analysis says GO; filler = gold -> STOP (decision point 3); a trace arm locked to Titan's surface -> NO-GO on exactly G1 / G2's held-out parts",
    "ok": true,
-   "detail": "GO | STOP (decision point 3): trace ~ filler, | NO-GO (failed: G1 [conditional HS, cond_oor_val HS, cond_oor_edge HS, cond_oor_edge predicate HS, cond_sametens HS, cond_sametens predicate HS]; G2 [mix HS]); held-out prompts seen 2320"
+   "detail": "GO | STOP (decision point 3): trace ~ filler, | NO-GO (failed: G1 [conditional HS, cond_oor_val HS, cond_oor_edge HS, cond_oor_edge predicate HS, cond_sametens HS, cond_sametens predicate HS, cond_adv predicate HS]; G2 [mix HS]); held-out prompts seen 2720"
   },
   {
    "check": "10 oracle run: gold trace side regret k4 0, product law predicted == observed == 1; the locked trace arm's surface audit shows the held-out loss on every primary stratum",
@@ -144,28 +144,39 @@
    "detail": "NO-GO (failed: G1 [cond_oor_edge predicate, cond_sametens predicate, cond_oor_edge predicate HS, cond_sametens predicate HS])"
   },
   {
-   "check": "11 freeze tool (fake root): run() refuses before a freeze (not persisted); refuses without approval and with an output present; freezes (the go rule revision 5, the 'sd' variant, the held-out-surface bank and the superseded rule revisions 1-4 are frozen inputs); verifies; refuses a second freeze; an installed hook that is not the draft byte for byte is flagged, the exact copy is not; a changed held-out-surface bank fails verification; run() refuses",
+   "check": "10 oracle runs, revision 6: the report-only shortcut-agreement analysis (read from the run's own trace texts) does not flag the gold trace arm and flags the tens-digit shortcut; a trace arm following the isolated exception 'other > threshold or other == threshold - 4' (the documented survivor) is GO and flagged SHORTCUT_CONSISTENT, its statement and report quote the flag and every always-quoted limit; a trace arm following the lexicographic comparison str(x) > str(t) is NO-GO on exactly the cond_adv predicate clause, both surfaces",
+   "ok": true,
+   "detail": "{'go': None, 'weak': 'SHORTCUT_CONSISTENT', 'exc_m4': 'SHORTCUT_CONSISTENT', 'lex': 'SHORTCUT_CONSISTENT'} | GO | NO-GO (failed: G1 [cond_adv predicate, cond_adv predicate HS])"
+  },
+  {
+   "check": "10 oracle runs, revision 7: the OVERALL headline (results JSON 'overall' and the report's Overall line) carries the report-only SHORTCUT_CONSISTENT flag and the LIMITS pointer whenever the flag is set (the GO of the exception at -4; the NO-GOs of the tens-digit shortcut and of the lexicographic comparison), beside the unchanged verdict; the gold GO (not flagged) keeps revision 6's headline 'SCREEN (seed 0): GO'",
+   "ok": true,
+   "detail": "SCREEN (seed 0): GO | SHORTCUT_CONSISTENT in s0 (report-only shortcut-agreement flag; it never changes the verdict: a member of H agrees with the trace's stated cmp.ok at least as well as the true predicate) | read the LIMITS quoted with the verdict (G1 excludes only the members of H, and not the ex"
+  },
+  {
+   "check": "11 freeze tool (fake root): run() refuses before a freeze (not persisted); refuses without approval and with an output present; freezes (the go rule revision 7, the 'sd' variant, the held-out-surface bank, the shortcut family module and the superseded rule revisions 1-6 are frozen inputs); verifies; refuses a second freeze; an installed hook that is not the draft byte for byte is flagged, the exact copy is not; a changed held-out-surface bank fails verification; run() refuses",
    "ok": true,
    "detail": "['no approval', 'output present', 'second freeze'] ['data/t2br_dev_hs.jsonl differs from the freeze']"
   },
   {
-   "check": "12 plan: one turn at the observed rate; two at the planning rate (turn 2 re-anchors, then E2; every gating stage incl. E1H in turn 1); a 3 h cap needs 2 turns; an impossible cap raises",
+   "check": "12 plan: one turn at the observed rate; two at the planning rate (turn 2 re-anchors, then E2; every gating stage incl. E1H in turn 1); a 3 h cap needs more than one turn and every later turn starts with the anchor (revision 6's larger E1 / E1H: training, then A0 + E1 + E1H, then re-anchor + E2); an impossible cap raises",
    "ok": true,
-   "detail": "planning [{'stages': ['T_plain', 'T_trace', 'T_filler', 'A0', 'E1', 'E1H'], 'projected_h': 3.57}, {'stages': ['A0 (re-anchor)', 'E2'], 'projected_h': 1.25}]; observed 3.94 h; 3 h cap: [{'stages': ['T_plain', 'T_trace', 'T_filler'], 'projected_h': 2.05}, {'stages': ['A0', 'E1', 'E1H', 'E2'], 'project"
+   "detail": "planning [{'stages': ['T_plain', 'T_trace', 'T_filler', 'A0', 'E1', 'E1H'], 'projected_h': 3.73}, {'stages': ['A0 (re-anchor)', 'E2'], 'projected_h': 1.26}]; observed 4.06 h; 3 h cap: [{'stages': ['T_plain', 'T_trace', 'T_filler'], 'projected_h': 2.05}, {'stages': ['A0', 'E1', 'E1H'], 'projected_h':"
   }
  ],
- "seconds": 145.2,
- "peak_working_set_mb": 1101.6,
+ "seconds": 166.8,
+ "peak_working_set_mb": 1223.3,
  "threads": 2,
- "go_rule_revision": 5,
+ "go_rule_revision": 7,
  "train_variant": "sd",
  "code_sha256": {
-  "scripts/t2br_run.py": "e45c82207be05236248cdb84f7e6a8bf9343cc2be4ebad56cae4378687756373",
-  "scripts/t2br_common.py": "453b3a985f256dc791fba5816d3fb3437783d5ab753a1f1641b2af03c46da999",
-  "scripts/t2br_analysis.py": "7a80a87eaed9cf585b72ce82d86d6a240e5181eaba0fa2c722af67d98543b80b",
-  "scripts/t2br_test_tiny.py": "6d41c6db23d6926f9fe0b8f56767fb1fab7d7c5a6353fcd1e47c812ab85544a1"
+  "scripts/t2br_run.py": "6e232189da5e8e8ae7e995623ccb5583f9e29fe5985b2526ba340f7925c4f527",
+  "scripts/t2br_common.py": "f47c6dc15fb9df3ebb7d8f06bcc41fd458ccd3dcaeedf29fab87b0b502f297c9",
+  "scripts/t2br_analysis.py": "29808c553dc90b14f0d0bda2457e4eef0d1c88bdc1b4e0c85d382bd17bdf94f4",
+  "scripts/t2br_shortcuts.py": "20ebf1814267eeeffcfe5aa99db749438a4fa03f4bf1672b293bd3d64d22b611",
+  "scripts/t2br_test_tiny.py": "2968b85d38cd15078bdeeed3fc699d4eb5d2052ca976fad7e4b6a8e0b51ba7c9"
  },
  "torch": "2.6.0+cu124",
  "transformers": "5.14.1",
- "written_utc": "2026-10-10T03:56:58Z"
+ "written_utc": "2026-10-10T10:08:03Z"
 }

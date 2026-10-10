@@ -1,4 +1,5 @@
-"""T2b-register screen runner, revision 5 (RCWM roadmap item 3; joint item 5b): train the three R-only LoRA arms with the
+"""T2b-register screen runner, revision 7 (wording only since revision 6: the stages, gates and computations are revision
+6's; RCWM roadmap item 3; joint item 5b): train the three R-only LoRA arms with the
 T2 recipe on the surface-diversity build 'sd' (decision C1: the canonical-only variant is not run), then evaluate adapter
 OFF and every arm ON in ONE process, in-surface and on the held-out surface (C3), all under ONE GPU lease. Modelled on
 scripts/p3_run.py.
@@ -30,9 +31,9 @@ pushing it past the cap). One model at a time. Stages, in order:
   A0 anchor   adapter OFF (disable_adapter() = Titan-Sparse) chain_one on the 208 pilot TEST register chains must
               reproduce runs/t2/t2_s0/gen_chain_one_base.jsonl (identical states on >= 99% of chains), else stop before
               any dev-bank output. A resumed turn re-anchors before E1/E2 (recorded; a failure is persisted).
-  E1          the 1,280 one-step dev rows in Titan's verbatim frame (generation.generate_texts, 160-token cap) per side
+  E1          the 1,380 one-step dev rows in Titan's verbatim frame (generation.generate_texts, 160-token cap) per side
               OFF / plain / trace / filler
-  E1H         the 580 dev rows of the primary strata + the identification strata (cond_sametens, cond_oor_edge) in
+  E1H         the 680 dev rows of the primary strata + the identification strata (cond_sametens, cond_oor_edge, cond_adv) in
               the combined HELD-OUT surface
               (data/t2br_dev_hs.jsonl: paraphrase 4 + field names 4 + held-out key orders rotating by row; C3) per side
               OFF / plain / trace / filler. plain and trace gate G1 / G2; OFF and filler are reported. Runs before E2 so
@@ -104,22 +105,26 @@ VRAM_EMPTY_MIB = 512.0
 THERMAL_FLAG = ROOT / "runs" / ".thermal_pause"
 RCWM_LABEL_PREFIX = "rcwm-t1:"
 FREEZE_SCRIPTS = ("scripts/t2br_common.py", "scripts/t2br_make_data.py", "scripts/t2br_run.py", "scripts/t2br_analysis.py",
-                  "scripts/t2br_test_tiny.py", "scripts/confirm2_gen.py", "scripts/l1_make_ood.py", "scripts/p3_make_bank.py",
+                  "scripts/t2br_shortcuts.py", "scripts/t2br_test_tiny.py", "scripts/confirm2_gen.py", "scripts/l1_make_ood.py", "scripts/p3_make_bank.py",
                   "vendor_bwm/scripts/train_generic.py", "vendor_bwm/bwmn/lm.py")
 HOOK_DRAFT_REL = "docs/t2b/register/queue_hook_t2br.sh.draft"
 GO_RULE_REL = "docs/t2b/register/GO_RULE.md"
 GO_RULE_REV_RELS = {1: "docs/t2b/register/GO_RULE_rev1.md", 2: "docs/t2b/register/GO_RULE_rev2.md",
-                    3: "docs/t2b/register/GO_RULE_rev3.md", 4: "docs/t2b/register/GO_RULE_rev4.md"}
+                    3: "docs/t2b/register/GO_RULE_rev3.md", 4: "docs/t2b/register/GO_RULE_rev4.md",
+                    5: "docs/t2b/register/GO_RULE_rev5.md", 6: "docs/t2b/register/GO_RULE_rev6.md"}
 DESIGN_REV_RELS = {1: "docs/t2b/register/DESIGN_rev1.md", 2: "docs/t2b/register/DESIGN_rev2.md",
-                   3: "docs/t2b/register/DESIGN_rev3.md", 4: "docs/t2b/register/DESIGN_rev4.md"}
+                   3: "docs/t2b/register/DESIGN_rev3.md", 4: "docs/t2b/register/DESIGN_rev4.md",
+                   5: "docs/t2b/register/DESIGN_rev5.md", 6: "docs/t2b/register/DESIGN_rev6.md"}
 FREEZE_DOCS = ("docs/t2b/register/DESIGN.md", GO_RULE_REL, *GO_RULE_REV_RELS.values(), *DESIGN_REV_RELS.values(),
                "docs/t2b/register/AUDIT.json", "docs/t2b/register/SCORER_SELFTEST.json",
                "docs/t2b/register/DRYRUN.json", "docs/t2b/register/TINY_TEST.json", "docs/t2b/register/GEN_PLAN.json",
                HOOK_DRAFT_REL)
 PROV_CODE = ("scripts/t2br_run.py", "scripts/t2br_common.py", "rcwmt/generation.py", "rcwmt/runtime.py", "rcwmt/env.py",
              "rcwmt/capture.py", "vendor_bwm/bwmn/lm.py")
-TINY_CODE = ("scripts/t2br_run.py", "scripts/t2br_common.py", "scripts/t2br_analysis.py", "scripts/t2br_test_tiny.py")
-DRYRUN_CODE = ("scripts/t2br_analysis.py", "scripts/t2br_common.py")
+TINY_CODE = ("scripts/t2br_run.py", "scripts/t2br_common.py", "scripts/t2br_analysis.py", "scripts/t2br_shortcuts.py",
+             "scripts/t2br_test_tiny.py")
+DRYRUN_CODE = ("scripts/t2br_analysis.py", "scripts/t2br_common.py", "scripts/t2br_shortcuts.py")
+AUDIT_CODE = ("scripts/t2br_make_data.py", "scripts/t2br_common.py", "scripts/t2br_shortcuts.py")
 
 
 class Stop(Exception):
@@ -478,9 +483,11 @@ def prefreeze_checks(root: Path) -> dict:
     files = au.get("files_sha256") or {}
     out["AUDIT.json ok (full verify incl. the historical harvest) on the current data and builder"] = bool(au.get("ok")) \
         and bool(au.get("historical_harvest")) and all(files.get(n) == sha256(root / "data" / n) for n in files) and bool(files) \
-        and all((au.get("code_sha256") or {}).get(r) == sha256(root / r) for r in ("scripts/t2br_make_data.py", "scripts/t2br_common.py"))
+        and all((au.get("code_sha256") or {}).get(r) == sha256(root / r) for r in AUDIT_CODE)
     sf = C.read_json(root / "docs/t2b/register/SCORER_SELFTEST.json") or {}
-    out["scorer self-test passed on this dev bank"] = bool(sf.get("ok")) and sf.get("dev_sha256") == sha256(root / "data" / C.DEV.name)
+    out["scorer self-test passed on this dev bank"] = bool(sf.get("ok")) and sf.get("dev_sha256") == sha256(root / "data" / C.DEV.name) \
+        and sf.get("dev_hs_sha256") == sha256(root / "data" / C.DEV_HS.name) and all(
+            (sf.get("code_sha256") or {}).get(r) == sha256(root / r) for r in DRYRUN_CODE)
     dr = C.read_json(root / "docs/t2b/register/DRYRUN.json") or {}
     out["analysis dry run passed with the current analysis code"] = bool(dr.get("ok")) and all(
         (dr.get("code_sha256") or {}).get(r) == sha256(root / r) for r in DRYRUN_CODE)
@@ -493,7 +500,7 @@ def prefreeze_checks(root: Path) -> dict:
         (root / r).is_file() and C.GO_RULE_TEXT in (root / r).read_text(encoding="utf-8")
         for r in ("docs/t2b/register/DESIGN.md", GO_RULE_REL))
     for k, txt in ((1, C.GO_RULE_TEXT_REV1), (2, C.GO_RULE_TEXT_REV2), (3, C.GO_RULE_TEXT_REV3),
-                   (4, C.GO_RULE_TEXT_REV4)):
+                   (4, C.GO_RULE_TEXT_REV4), (5, C.GO_RULE_TEXT_REV5), (6, C.GO_RULE_TEXT_REV6)):
         out[f"GO_RULE_rev{k}.md and DESIGN_rev{k}.md keep the superseded revision {k} verbatim"] = all(
             (root / r).is_file() and txt in (root / r).read_text(encoding="utf-8")
             for r in (GO_RULE_REV_RELS[k], DESIGN_REV_RELS[k]))

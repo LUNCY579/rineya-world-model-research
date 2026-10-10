@@ -1,7 +1,7 @@
 # RCWM-T1 report: consequence models from a frozen 0.6B Rineya LM
 
 **Date:** 2026-10-06
-**Status:** PREREG-1 **confirmed** (2026-10-07; §3). PREREG-2 **confirmed** (2026-10-08; §3b). PREREG-3 **confirmed: TRIGGER** (2026-10-09; §3c): the void fix is a token cue, not the rule. The L8-15 promotion screen (PREREG-L1) ran on 2026-10-09: **DO NOT PROMOTE**, failing C2 (prerequisite acquisition −8 vs Titan-Sparse; DECISIONS R-L1).
+**Status:** PREREG-1 **confirmed** (2026-10-07; §3). PREREG-2 **confirmed** (2026-10-08; §3b). PREREG-3 **confirmed: TRIGGER** (2026-10-09; §3c): the void fix is a token cue, not the rule. PREREG-LB **confirmed** (2026-10-10; §3d, joint with BWM): T2 as world model enables planning on its training surface (0.706 vs 0.078 OFF; T2/ORACLE 0.794). The L8-15 promotion screen (PREREG-L1) ran on 2026-10-09: **DO NOT PROMOTE**, failing C2 (prerequisite acquisition −8 vs Titan-Sparse; DECISIONS R-L1).
 
 This is the first native execution of the RCWM-001 plan (`../../report/`) on Rineya Titan models. Confirmatory statements are limited to PREREG-1 (§3). Everything else is exploratory, from the pilot bank. Supporting documents:
 - full numbers: `RESULTS_PILOT.md`
@@ -136,6 +136,37 @@ In-range chains with unseen statuses reach k=4 exact 0.05–0.125 for T2 and 0 f
 - Neither base model reads the rule text either. Titan-Sparse OFF treats nothing as a no-op, and Supa's status sensitivity is 0.00–0.03.
 
 Limits: ledger only, in one frame. "Rule" is tested on 16 non-posted strings, not on every possible string. Case variants and synonyms of "posted" are not tested. The chains are descriptive, with K = 4 and 10 parents per stratum. Full table: `runs/bank_p3_oor/analysis/PREREG_3_RESULTS.md`.
+
+## 3d. Confirmed results (PREREG-LB, joint with BWM): T2 as a world model enables planning on its training surface
+
+PREREG-LB was frozen on 2026-10-09 at 23:12, co-signed by BWM (BWM D-59; RCWM D-40, D-41). It ran on 2026-10-10, 02:06–05:19.
+- **Setup:** BWM's beam planner (enum W2 E12) with a model-free proposer. The world model F is Titan-Sparse with the T2 adapter ON, or the adapter OFF, or the exact simulator (ORACLE).
+- **Instances:** 180 fresh in-range ledger planning instances, sealed at the freeze from a commit-reveal seed.
+- **Success:** exact goal attainment of the one submitted plan.
+
+**Verdict (registered wording): "T2 ENABLES PLANNING, BELOW THE NEAR-ORACLE BAR (on its training surface)."**
+
+| | T2 | OFF | ORACLE | T2 vs OFF |
+|---|---:|---:|---:|---|
+| all 180 (co-primary 1) | 0.706 | 0.078 | 0.889 | +0.628, discordant 113/0, Holm p < 1e-4: PASS |
+| 52 needs-lookahead (co-primary 2) | 0.442 | 0.058 | 0.615 | +0.385, discordant 20/0, Holm p < 1e-4: PASS |
+| T2/ORACLE, all instances (key secondary) | 0.794 [0.73, 0.855] | | | near-oracle bar (≥ 0.80, lower bound ≥ 0.70) not met |
+
+Report-only results:
+- T2 beats exact arithmetic without the status rule (IGNORE_STATUS 0.350).
+- About 5% of the plans T2 verifies in imagination fail when executed (verified-plan precision 0.952).
+- T2's success falls from 0.83 at optimal depth 2 to 0.58 at depth 6.
+- Under the held-out-surface rendering, T2 solves 5/180. The planning gain exists only on T2's training surface, as PREREG-3 predicted.
+
+**Meaning.** Near-oracle one-step prediction becomes goal-reaching planning under search, including where greedy descent fails. Imagination error still compounds with depth.
+
+**Limits:**
+- training surface only;
+- in-range instances (scale factors −1/0, |b| ≤ 98);
+- one adapter seed and one planner configuration;
+- a model-free proposer.
+
+Full table: `runs/lbeam/analysis/PREREG_LB_RESULTS.md`.
 
 ## 4. Exploratory findings (pilot)
 

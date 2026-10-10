@@ -28,35 +28,35 @@
  },
  "seed": 0,
  "train_variant": "sd",
- "go_rule_revision": 5,
+ "go_rule_revision": 7,
  "side_decode_factor": {
   "E1": {
    "off": 1.0,
    "plain": 1.0,
-   "trace": 2.4678,
-   "filler": 2.7107
+   "trace": 2.4897,
+   "filler": 2.7368
   },
   "E1H": {
    "off": 1.0,
    "plain": 1.0,
-   "trace": 2.6642,
-   "filler": 2.9138
+   "trace": 2.6801,
+   "filler": 2.9374
   },
   "E2": {
    "off": 1.0,
    "plain": 1.0,
-   "trace": 2.4678,
-   "filler": 2.7107
+   "trace": 2.4897,
+   "filler": 2.7368
   }
  },
  "mean_target_tokens_dev": {
-  "plain": 15.66,
-  "trace": 40.11,
-  "filler": 44.16
+  "plain": 15.64,
+  "trace": 40.43,
+  "filler": 44.54
  },
  "mean_prompt_tokens": {
   "E1": 142.95,
-  "E1H": 182.31
+  "E1H": 182.27
  },
  "train": {
   "plain": {
@@ -113,27 +113,27 @@
   },
   {
    "stage": "E1",
-   "what": "1280 one-step dev rows (verbatim frame) x OFF / plain / trace / filler",
-   "generations_max": 5120,
-   "projected_s_planning": 3403.1,
-   "projected_s_observed": 2418.0
+   "what": "1380 one-step dev rows (verbatim frame) x OFF / plain / trace / filler",
+   "generations_max": 5520,
+   "projected_s_planning": 3693.5,
+   "projected_s_observed": 2624.4
   },
   {
    "stage": "E1H",
-   "what": "580 primary + identification dev rows, combined HELD-OUT surface x OFF / plain / trace / filler",
-   "generations_max": 2320,
-   "projected_s_planning": 1627.9,
-   "projected_s_observed": 1156.6
+   "what": "680 primary + identification dev rows, combined HELD-OUT surface x OFF / plain / trace / filler",
+   "generations_max": 2720,
+   "projected_s_planning": 1918.5,
+   "projected_s_observed": 1363.1
   },
   {
    "stage": "E2",
    "what": "384 k=4 dev chains x OFF / plain / trace / filler",
    "generations_max": 6144,
-   "projected_s_planning": 4083.8,
-   "projected_s_observed": 2901.6
+   "projected_s_planning": 4111.1,
+   "projected_s_observed": 2921.0
   }
  ],
- "total_generations_max": 14416,
+ "total_generations_max": 15216,
  "model_loads": 4,
  "stage_rule": "no stage starts within 0.5 h of the cap; a stage starts only if 1.25 x its estimate fits (checked before AND after the resource / thermal wait that precedes each model load); eval starts only if A0 + the next eval stage fits; a turn that evaluates after an earlier A0 re-anchors first; --cap-h above 4.5 is refused",
  "turns_at_planning_rate": [
@@ -146,14 +146,14 @@
     "E1",
     "E1H"
    ],
-   "projected_h": 3.57
+   "projected_h": 3.73
   },
   {
    "stages": [
     "A0 (re-anchor)",
     "E2"
    ],
-   "projected_h": 1.25
+   "projected_h": 1.26
   }
  ],
  "turns_at_observed_rate": [
@@ -167,17 +167,17 @@
     "E1H",
     "E2"
    ],
-   "projected_h": 3.94
+   "projected_h": 4.06
   }
  ],
- "projected_gpu_h_planning": 4.82,
- "projected_gpu_h_observed": 3.94,
+ "projected_gpu_h_planning": 4.99,
+ "projected_gpu_h_observed": 4.06,
  "generations_per_reanchor": 832,
  "total_generations_max_note": "total_generations_max counts the anchor A0 once and EXCLUDES re-anchors: every resumed turn that evaluates re-runs A0 first (generations_per_reanchor each)",
  "total_generations_max_with_reanchors": {
-  "planning_rate": 15248,
-  "observed_rate": 14416,
-  "hook_bound_3_calls": 16080
+  "planning_rate": 16048,
+  "observed_rate": 15216,
+  "hook_bound_3_calls": 16880
  },
  "reanchors_projected": {
   "planning_rate": 1,
@@ -185,10 +185,10 @@
   "hook_bound_3_calls": 2
  },
  "turn_split": "The runner defers by its own gate (no stage starts within 0.5 h of the cap; 1.25 x the estimate must fit, re-checked after every resource wait): a stage that does not fit ends the turn with exit 5, the hook's second call waits for the next RCWM turn and resumes from the recorded stages, re-anchoring (A0 re-check) before any further evaluation. E1H (the held-out-surface stage, gating G1 / G2) runs before E2, so every gating output exists by the end of the first turn whenever E1H fits there.",
- "per_factor_heldout_renderings": "omitted by CHOICE (a GPU-budget choice, not a capacity limit): 3 more renderings (paraphrase only, names only, key order only) of the 580 held-out-surface rows x 4 sides would cost about 3 x E1H = 81 min at the planning rate (6,960 generations). At the planning rate they would fit in the last turn (1.25 h used of 4.5 h; the D-22 gate admits them); at the observed rate they would need one more turn and a re-anchor (the last turn already uses 3.94 h). The operator chose not to spend GPU time on descriptive renderings; consequence: a held-out-surface loss cannot be attributed to paraphrase, names or key order",
+ "per_factor_heldout_renderings": "omitted by CHOICE (a GPU-budget choice, not a capacity limit): 3 more renderings (paraphrase only, names only, key order only) of the 680 held-out-surface rows x 4 sides would cost about 3 x E1H = 96 min at the planning rate (8,160 generations). At the planning rate they would fit in the last turn (1.26 h used of 4.5 h; the D-22 gate admits them); at the observed rate they would need one more turn and a re-anchor (the last turn already uses 4.06 h). The operator chose not to spend GPU time on descriptive renderings; consequence: a held-out-surface loss cannot be attributed to paraphrase, names or key order",
  "checks": {
-  "dev_sha256": "8c1566b5c58df6fb373298e9b632f0acdb23931c02a5ff41dbf692420d2d3636",
-  "dev_hs_sha256": "ee86bb12ffe84bd46267b49cc1eaa9a3c98c3120b42fcfe94c53f9685ae245a5",
+  "dev_sha256": "bd6189f6cc860741ac497c5828f5c3c40f674e6926fab2bb9bf83edddc39e43f",
+  "dev_hs_sha256": "0c68e7f58891fa7794dea561981a985ac69c99d37bd0321f64b219257dc22e44",
   "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
   "train_sha256": {
    "plain": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
