@@ -168,6 +168,11 @@ Report-only results:
 
 Full table: `runs/lbeam/analysis/PREREG_LB_RESULTS.md`.
 
+**Co-signed by BWM (BWM D-61) after an independent re-score with BWM's own simulator and statistics:** every registered number agrees. BWM's notes, all report-only:
+- The W4E24 ratio (0.802) is not a near-oracle claim.
+- select_fixed (0.867) chooses among candidates that include the optimum.
+- About 1 in 20 imagined verifications fails under the true dynamics.
+
 ## 4. Exploratory findings (pilot)
 
 1. **Titan's one-step skill is real and replicates on fresh data.**

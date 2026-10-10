@@ -803,3 +803,34 @@ Times are local (CDT). Entries are append-only.
     - The gap to ORACLE (0.794) and the depth decay quantify how imagination error compounds.
     - Surface diversification (T2b, D-34/D-35) is the precondition for any claim beyond the canonical frame.
     - BWM re-scores from the per-instance arrays and co-signs the report.
+  - **Co-signed by BWM (BWM D-61) after an independent re-score.**
+    - **Method:** BWM's own code, with none of RCWM's analysis code imported. Script `native_v1/scripts/lb_rescore.py` b1f289ec…, output `runs/LB_RESCORE/LB_RESCORE.json` 2ff7b224…. It read the sealed draw 4fff0738… and the episode files read-only.
+    - **Agreement:** every registered number matches.
+      - Success counts: T2 127, OFF 14, ORACLE 160, IGNORE_STATUS 63, T2 W4E24 134, ORACLE W4E24 167.
+      - The 52 needs-lookahead instances are identical.
+      - CP1 +113/−0 (Holm p 3.85e-34); CP2 +20/−0 (Holm p 1.9e-6).
+      - Ratio 0.794 [0.730, 0.855]; branch YES.
+      - The rendered strings are the registered ones.
+    - **Co-sign notes, report-only:**
+      - The W4E24 ratio of 0.802 is not a near-oracle claim, because the bar is defined on the primary configuration.
+      - select_fixed's 0.867 is not comparable with beam success: its candidate set contains the optimum.
+      - Verified-plan precision of 0.952 means about 1 in 20 imagined verifications fails under the true dynamics.
+      - The needs-lookahead share was 29%, not the ~36% expected from dev. It was reported, not chosen.
+      - The surface audit keeps the claim training-surface-only.
+- **D-44 5b register trace screen: rule revision 7 approved and frozen (2026-10-10 05:33:14).**
+  - **Mandate:** the RCWM-T1 session, under the user's standing go-ahead of 2026-10-08. This is roadmap item 3 / joint 5b.
+  - **Revision 7** (workflow wf_70af8dc5-50e; independent check: sound) is wording-only over revision 6 (D-43). Go-rule sha 1458d54d….
+    - The always-quoted limits now state that G1 excludes the members of H except the d = −4 exception.
+    - Natural heuristics outside H pass G1: 42 of 45 tested do, against every plain baseline. Examples:
+      - isolated exceptions at |d| ≥ 5;
+      - three-digit-threshold slips;
+      - a circular comparison;
+      - guessing on the far rows.
+    - cond_adv catches its targets only at narrow margins (wrong on 21 or 33 of 100 rows).
+    - The overall headline carries the SHORTCUT_CONSISTENT flag.
+  - **Reading of any GO:** "trace supervision beats plain and filler on these strata". It is NOT "the comparison rule was identified". A rule claim would need a sealed confirmation with a different instrument.
+  - **GPU:** about 4.06 h observed (one turn), or 2 turns at the planning rate.
+  - **Executed (05:33):**
+    - `t2br_run.py --freeze`: SCREEN_FREEZE.json sha 05ec83f0…; `--verify` rc 0.
+    - Hook `scripts/queue_hooks/80_t2br.sh` installed, identical to the draft (5b6d7249…).
+    - The chain is relaunched at the 5a waiter's waiting point, so the hook order is 70 (LB, done) → 75 (5a) → 80 (5b).
