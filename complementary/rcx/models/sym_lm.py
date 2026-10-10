@@ -9,12 +9,26 @@ words plus the account names), else encode() raises ValueError (fail closed).
 
 Vocabulary layout: [PAD, BOS, SEP, EOS] + CHARS + BASE_WORDS (sorted) + SYMBOLS (sorted). The first
 N_TRAINABLE rows of the embedding matrix are trained; the last N_SYMBOLS rows are a frozen buffer drawn from
-N(0, 0.02^2) (the trainable init std) with a generator seeded by SymLMConfig.symbol_seed. The buffer is never
-seen by the optimizer (hence no weight decay, no update) and is saved/restored bit-exactly with the weights.
-Input embedding and output head are tied over the full vocabulary, so a symbol can be emitted by copying.
+N(0, symbol_std^2) (default 0.02 = the trainable init std) with a generator seeded by SymLMConfig.symbol_seed.
+The buffer is never seen by the optimizer (hence no weight decay, no update) and is saved/restored bit-exactly
+with the weights. Input embedding and output head are tied over the full vocabulary, so a symbol can be emitted
+by copying.
 
 Architecture, sequence format (BOS + input + SEP + target + EOS, loss on target + EOS), trainer and KV-cache
 decoding are rcx.models.lm_core, i.e. exactly char_lm's. Token counts and max_len are in symbol-tokenizer tokens.
+
+Training notes (membership toy 'X,Y:Z' -> true/false, 2 layers, d64, trained on NONCE['train'], tested on
+unseen NONCE['dev']; see tests/test_sym_lm.py TestLearnability):
+- Binding sits behind a loss plateau set by the number of samples seen (~50K to leave chance at 5 tokens, about
+  the same at batch 32 and 256) that grows steeply with sequence length (11-token formats at batch 32 were still
+  at chance after 48K samples). Trainable symbol rows plateau the same way, so this is an optimisation property
+  of the relational circuit, not of the frozen table. lr 1e-2 is unstable; 3e-3 works.
+- With the fixed frozen table the model also memorises codes for the specific training vectors: fresh pairs of
+  training symbols reach 96-98% while unseen symbols peak at 0.86-0.94 and then erode (to 0.81-0.83) as training
+  continues. symbol_resample=True removes this (unseen == seen: 0.95 at 180K samples, 0.98 at 230K).
+- Emitting a symbol through the tied head is slow at symbol_std 0.02 (logit = h . e_s, |e_s| ~ 0.02 sqrt(d)):
+  copying the query symbol reached 69% at 600 steps (batch 32), vs 97% at 300 steps with symbol_std 0.5.
+  Symbol scale did not speed up the matching itself (inputs are layer-normed).
 """
 from __future__ import annotations
 
@@ -155,9 +169,13 @@ SYMBOL_OFFSET = TOKENIZER.symbol_offset
 
 @dataclass
 class SymLMConfig:
-    """Architecture hyperparameters (max_len in tokens). symbol_seed seeds the frozen symbol embeddings.
+    """Architecture hyperparameters (max_len in tokens). symbol_seed seeds the frozen symbol embeddings, whose
+    std defaults to the trainable init std (lm_core.INIT_STD = 0.02).
 
-    vocab_size / n_symbols record the tokenizer table sizes and must match it.
+    symbol_resample (binding-only control, default off): in train mode every forward pass uses a FRESH random
+    symbol table (drawn from the global torch RNG, so runs stay deterministic and resumable); eval mode and
+    decoding use the canonical frozen table. Nothing symbol-specific (including 'posted' triggers) can then be
+    learned. vocab_size / n_symbols record the tokenizer table sizes and must match it.
     """
     d_model: int = 128
     n_layers: int = 3
@@ -166,6 +184,8 @@ class SymLMConfig:
     dropout: float = 0.0
     max_len: int = 256
     symbol_seed: int = 0
+    symbol_std: float = core.INIT_STD
+    symbol_resample: bool = False
     rope_base: float = 10000.0
     vocab_size: int = VOCAB_SIZE
     n_symbols: int = N_SYMBOLS
@@ -179,9 +199,10 @@ class SymLMConfig:
 
 
 def symbol_table(config: SymLMConfig) -> torch.Tensor:
-    """The frozen (n_symbols, d_model) symbol embeddings for a config: N(0, INIT_STD^2), seeded by symbol_seed."""
+    """The frozen (n_symbols, d_model) symbol embeddings for a config: N(0, symbol_std^2), seeded by symbol_seed
+    with a private generator (the global torch RNG is not consumed)."""
     g = torch.Generator().manual_seed(config.symbol_seed)
-    return torch.randn(config.n_symbols, config.d_model, generator=g) * core.INIT_STD
+    return torch.randn(config.n_symbols, config.d_model, generator=g) * config.symbol_std
 
 
 class SymLM(core.DecoderLM):
@@ -192,7 +213,10 @@ class SymLM(core.DecoderLM):
         self.register_buffer("sym_emb", symbol_table(config))  # persistent, requires_grad=False, not a Parameter
 
     def embedding_matrix(self):
-        return torch.cat((self.emb.weight, self.sym_emb), 0)
+        sym = self.sym_emb
+        if self.training and self.config.symbol_resample:
+            sym = torch.randn(sym.shape, dtype=sym.dtype, device=sym.device) * self.config.symbol_std
+        return torch.cat((self.emb.weight, sym), 0)
 
 
 def frozen_param_count(model: SymLM) -> int:

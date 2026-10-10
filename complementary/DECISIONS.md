@@ -120,3 +120,26 @@ and the evidence path.
        Being built.
     2. The **native tier**, Titan-Sparse LoRA cells on CPU with the D-03 recipe. This is the decisive test for Rineya.
   - The kit is under adversarial review (wf_53c3f5a8-51d) before any 0.6B load.
+- **CX D-11 RGM-001 E07/E08 infrastructure built (about 09:50).**
+  - Code: `rcx/bw/*`, 19 tests.
+  - **BWM imports.** Pinned and executed from verified bytes, so no BWM bytecode is written. `bw_distill.problems`
+    runs from its pinned source without importing torch. Regenerating `b3_fresh` in memory reproduces BWM's file sha
+    exactly, which validates the exclusion recipe.
+  - **Exclusions** (`experiments/RCX-E07/EXCLUSIONS.json`): 349 renaming signatures and 637 invariants (n = 6..15).
+  - **Exact h\***: full state spaces up to n = 8 (695,417 states), and A\* per state for n ≥ 9. It agrees 100% with
+    `B.bfs_plan`.
+  - **Design consequence.** Full-goal instances at small n are nearly exhausted by the exclusions (n = 3: 0 survive;
+    n = 4: 25). E07 therefore trains on n = 4..7 and mixes in partial goals. Row-level exclusion stays on by default.
+    It is conservative and goes beyond BWM's instance-level recipe; its effect on coverage is reported.
+  - **Seeds:**
+
+    | Seed(s) | Use |
+    |---|---|
+    | 20261270 | training instances |
+    | 20261271 | validation instances |
+    | 20261272 | E07 test, 7–12 blocks |
+    | 20261273 | E08, 8–15 blocks |
+    | 20261274 | state sampling |
+    | 20261275 | split |
+    | 20261276–79 | model seeds |
+    | 20261280–89 | unit tests |
