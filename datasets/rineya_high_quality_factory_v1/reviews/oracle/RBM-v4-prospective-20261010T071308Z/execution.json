@@ -1,0 +1,205 @@
+{
+  "actual_execution_id": "/root/formal_oracle",
+  "role": "Public-only nonbinding preparation; no production/data approval",
+  "at_utc": "2026-10-10T07:17:21.398015+00:00",
+  "python_executable": "/opt/anaconda3/bin/python3",
+  "source_sha256": {
+    "schemas/BELIEF_CONTROL_PROPERTIES.md": "200631973256bbe5dcd7b99f3d52cb95f89c442acd29ea4de1fe82dd8b5f3034",
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V2.md": "46e3120dfd1ee931eec9d1e5e0e75f0b2aedb1d85764fd755afe9f7d36cf121f",
+    "schemas/BELIEF_CONTROL_PROPERTIES_REVISION_V3.md": "3a223952d9664577d7b637ddfb3e18d329863a3d5371a6c47cad233a1f50ff11",
+    "schemas/BELIEF_CONTROL_PROPERTIES_METADATA_V4.md": "40b552ecf47c11bfffb2669283640dda991d6dc6e7094ed3051fb9cad2489fce",
+    "research/curricula/RBM-EVIDENCE-GAP.md": "004fb0ec0c1a1104ba052fbda4882f48523d7d34dd45b2b88e8c890713b4a120",
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V2.md": "c2eb841ed546848088db4e0499e8e8f7087aa3d213af333ff39237ae6558bd33",
+    "research/curricula/RBM-EVIDENCE-GAP-REVISION-V3.md": "7e9c9f9160425ab7e455f57d72385e54f399835dfa351dcf75f6fc2842b1dc33",
+    "research/curricula/BELIEF-METADATA-V4-CLARIFICATION-EXECUTION.json": "2d100ce2ad27ded95275316991f3ec8ace9ef9daf2a40c50c3f06946c777ec0d",
+    "reviews/oracle/RBM-v3-public-interface-interpretation-20261010T040233Z.json": "11c54b46e7ccc127f4a8bb58a6595609cd1eaec2d33e98b871bebdddfd62c2f9",
+    "feedback/improvement_requests/RBM-INTERFACE-012.json": "240aa6a31ec822e1cf52fd8f4f68597a75c87a48f7c72cbf9a19ba44b4dce962",
+    "reviews/oracle/RBM-v4-prospective-20261010T071308Z/hand_probe.py": "a2a5ebb08478d0275ee6e14f6df2f099a0770f72f7e63e6b99770d34736ff577",
+    "reviews/oracle/RBM-v4-prospective-20261010T071308Z/proposal.md": "f01c2d8a85f963ba06035f44afbf1800178030395f8fb10e9083417f078519af"
+  },
+  "tests": 10,
+  "failures": 0,
+  "errors": 0,
+  "counts": {
+    "negative_cases": 41,
+    "aggregate_interface_examples": 3,
+    "positive_claim_joins": 50,
+    "toy_rows": 24,
+    "negative_semantic_controls": 1,
+    "typed_probes": 2,
+    "scalar_invariance_pairs": 6
+  },
+  "test_output": "test_actual_pair_ids_contexts_family_coordinate_and_typed_indices (__main__.HandTests.test_actual_pair_ids_contexts_family_coordinate_and_typed_indices) ... ok\ntest_aggregate_names_remain_separate_unapproved_group_proof (__main__.HandTests.test_aggregate_names_remain_separate_unapproved_group_proof) ... ok\ntest_all_toy_names_lengths_variants_styles_members_nonmembers (__main__.HandTests.test_all_toy_names_lengths_variants_styles_members_nonmembers) ... ok\ntest_closed_claim_shape_and_required_inline_fields (__main__.HandTests.test_closed_claim_shape_and_required_inline_fields) ... ok\ntest_false_pair_facts_queries_first_prefix_and_repeat (__main__.HandTests.test_false_pair_facts_queries_first_prefix_and_repeat) ... ok\ntest_manifest_resolution_required_fields_and_hash_not_private_format (__main__.HandTests.test_manifest_resolution_required_fields_and_hash_not_private_format) ... ok\ntest_nonmember_scope_and_recommendation_not_unpublished_gate (__main__.HandTests.test_nonmember_scope_and_recommendation_not_unpublished_gate) ... ok\ntest_queried_auxiliary_breaks_exact_output_invariance (__main__.HandTests.test_queried_auxiliary_breaks_exact_output_invariance) ... ok\ntest_shared_ids_property_alias_and_identical_duplicate_entries (__main__.HandTests.test_shared_ids_property_alias_and_identical_duplicate_entries) ... ok\ntest_typed_bins_exact_first_prefix_and_scalar_involution (__main__.HandTests.test_typed_bins_exact_first_prefix_and_scalar_involution) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 0.029s\n\nOK\n",
+  "preserved_expected_negative_results": [
+    {
+      "label": "bad actual pair",
+      "error": "actual distinct pair IDs required"
+    },
+    {
+      "label": "bad actual pair",
+      "error": "ordered empty/nonempty contexts required"
+    },
+    {
+      "label": "bad actual pair",
+      "error": "actual distinct pair IDs required"
+    },
+    {
+      "label": "pair coordinate source_family_key",
+      "error": "foreign pair family"
+    },
+    {
+      "label": "pair coordinate controlled_context",
+      "error": "ordered empty/nonempty contexts required"
+    },
+    {
+      "label": "pair coordinate schedule_index",
+      "error": "pair coordinate mismatch schedule_index"
+    },
+    {
+      "label": "pair coordinate schedule_index",
+      "error": "pair coordinate mismatch schedule_index"
+    },
+    {
+      "label": "pair coordinate renderer",
+      "error": "pair coordinate mismatch renderer"
+    },
+    {
+      "label": "pair coordinate auxiliary_scalar_variant",
+      "error": "pair coordinate mismatch auxiliary_scalar_variant"
+    },
+    {
+      "label": "missing name",
+      "error": "closed claim vocabulary/exclusive name"
+    },
+    {
+      "label": "missing scope",
+      "error": "unknown inherited name/scope"
+    },
+    {
+      "label": "missing pair_sample_ids",
+      "error": "required inherited fields/corpus-versus-probe"
+    },
+    {
+      "label": "missing control_id",
+      "error": "required inherited fields/corpus-versus-probe"
+    },
+    {
+      "label": "missing evidence_manifest",
+      "error": "required inherited fields/corpus-versus-probe"
+    },
+    {
+      "label": "closed/type property",
+      "error": "closed claim vocabulary/exclusive name"
+    },
+    {
+      "label": "closed/type expected_status",
+      "error": "closed claim vocabulary/exclusive name"
+    },
+    {
+      "label": "closed/type probe_id",
+      "error": "required inherited fields/corpus-versus-probe"
+    },
+    {
+      "label": "closed/type scope",
+      "error": "unknown inherited name/scope"
+    },
+    {
+      "label": "closed/type name",
+      "error": "unknown inherited name/scope"
+    },
+    {
+      "label": "closed/type control_id",
+      "error": "nonempty descriptive pointer/ID required"
+    },
+    {
+      "label": "closed/type evidence_manifest",
+      "error": "repository-relative manifest path required"
+    },
+    {
+      "label": "closed/type source_family_key",
+      "error": "claimant family mismatch"
+    },
+    {
+      "label": "false facts world",
+      "error": "pair worlds/ordered queries differ"
+    },
+    {
+      "label": "false facts query",
+      "error": "pair worlds/ordered queries differ"
+    },
+    {
+      "label": "false facts first",
+      "error": "only second equality may change"
+    },
+    {
+      "label": "false facts same_second",
+      "error": "only second equality may change"
+    },
+    {
+      "label": "false facts wrong_fact",
+      "error": "observation fact sequence differs"
+    },
+    {
+      "label": "F/H false repeat",
+      "error": "only second equality may change"
+    },
+    {
+      "label": "manifest control_id",
+      "error": "exact ID + name + actual pair has no manifest entry"
+    },
+    {
+      "label": "manifest name",
+      "error": "exact ID + name + actual pair has no manifest entry"
+    },
+    {
+      "label": "manifest scope",
+      "error": "manifest scope/family/variant mismatch"
+    },
+    {
+      "label": "manifest source_family_key",
+      "error": "manifest scope/family/variant mismatch"
+    },
+    {
+      "label": "manifest observation_length",
+      "error": "manifest typed length mismatch"
+    },
+    {
+      "label": "manifest observation_length",
+      "error": "manifest typed length mismatch"
+    },
+    {
+      "label": "manifest auxiliary_scalar_variant",
+      "error": "manifest scope/family/variant mismatch"
+    },
+    {
+      "label": "manifest exact_candidate_sha256",
+      "error": "manifest exact candidate hash mismatch"
+    },
+    {
+      "label": "manifest absent candidate hash",
+      "error": "manifest minimum published fields missing"
+    },
+    {
+      "label": "recommended claimant length",
+      "error": "RECOMMENDED claimant length mismatch"
+    },
+    {
+      "label": "recommended owner schedule_index",
+      "error": "RECOMMENDED claimant coordinate mismatch schedule_index"
+    },
+    {
+      "label": "recommended owner renderer",
+      "error": "RECOMMENDED claimant coordinate mismatch renderer"
+    },
+    {
+      "label": "recommended owner auxiliary_scalar_variant",
+      "error": "RECOMMENDED claimant coordinate mismatch auxiliary_scalar_variant"
+    }
+  ],
+  "hand_examples_sha256": "a5535027d61822b7a79358e07962f09044ae161f2f993783792045e826a47653",
+  "hand_examples_bytes": 48803,
+  "limitations": "No production candidate, full four-family A-H/profile/27-schedule/3456-cohort validation or old checker read. Candidate hash is an explicitly marked fixture token. Prototype does not resolve a real file; actual resolver/candidate/record-hash custody needs future separately frozen implementation. Aggregate group proof deliberately deferred rather than approved. Recommended-owner mode is prospective recommendation, not asserted existing V4 hard requirement.",
+  "guided_scope": "Frozen V1/V2/V3 public docs, own interpretation and public ticket, plus later explicitly authorized frozen V4/public author receipt. No linked private evidence read.",
+  "prior_authorship": "Author wrote prior belief checkers; same-model/root-guided preparation is not a new-model/blind-review result.",
+  "old_files_unchanged_after_run": true
+}

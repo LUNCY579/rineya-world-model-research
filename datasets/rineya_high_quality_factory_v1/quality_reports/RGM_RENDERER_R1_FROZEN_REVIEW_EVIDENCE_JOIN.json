@@ -1,0 +1,51 @@
+{
+  "runner_execution": "/root",
+  "utc": "2026-10-10T07:15:18.727232+00:00",
+  "exact_candidate_rows": 408,
+  "source_families": 48,
+  "reused_semantic_tasks": 204,
+  "new_semantic_tasks": 0,
+  "new_source_families": 0,
+  "roles": {
+    "expert": {
+      "actual_execution_id": "/root/expert_reviewer",
+      "decisions": {
+        "ACCEPT": 408
+      },
+      "exact_id_hash_joins": 408,
+      "first_final_byte_identical": true
+    },
+    "adversarial": {
+      "actual_execution_id": "/root/adversarial_auditor",
+      "decisions": {
+        "ACCEPT": 408
+      },
+      "exact_id_hash_joins": 408,
+      "first_final_byte_identical": true
+    }
+  },
+  "unique_first_canonical_receipt_ids": 816,
+  "decision_disagreements": 0,
+  "unresolved_high_or_critical_review_issues": 0,
+  "machine_quality_gates_pass": true,
+  "adjudication_status": "PENDING_ACTUAL_FRESH_DECISIONS",
+  "publication_authorized_by_this_join": false,
+  "candidate_original_pending_status_preserved": true,
+  "prior_gold_exposure_and_same_task_correlated_reuse_disclosed": true,
+  "evidence_sha256": {
+    "data/RGM-001/candidate_renderings/planning-gap-v2-renderer-r1.jsonl": "b306f67b2208406027d26d95094c649913e590291857764a9bf17edb9bcd923c",
+    "reviews/expert/planning-gap-v2-renderer-r1.jsonl": "9505e5921c117aff287d12634020ff33e6f6c41fb9e3b0af3617b661201bcc89",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input.freeze.json": "d36b5562d8b570bb4c0941ccb31cdf8e65af03269147e8b12f221e556aa1204c",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_comparison.execution.json": "f13cccd49b7047fee299bbd9b3b7b531c69dfb6887fb35e1d83529f6ba9566f2",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_comparison.freeze.json": "db2cf6ee85fdb4c7b9fec0706d8284935a5cdb855127d3b641d36bdc5ed8b66a",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.jsonl": "6b58be3a5b738b3ff01c7f6de936e0eddef249e04d46ac6de15df60c7aa071c9",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.input_freeze.json": "bd93545e5a5082662413db988988f0c22b25c018894b8535f97b9728bfe30b37",
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial.json": "f9a30152fc20cc4f21d303556f985a1fbfdf0cea13e27bb2cb606cb3eec9a52f",
+    "audits/leakage/planning-gap-v2-renderer-r1.json": "d715c4ca68301db20f6fb2fb91d58e74f0c4ecda4de6f9c7e15a4a113f75c335",
+    "audits/diversity/planning-gap-v2-renderer-r1-planning-controls.json": "00687108adce0fd18e39f3974c329cf038a6fbd278e2a38582f960df74c7f742",
+    "quality_reports/RGM_V2_RENDERER_R1_AUDIT_EXECUTION.json": "34732f8a7a5cab9addd30d113ae36f1e3db1c5d26ecab9bf785c706dcc78fe16",
+    "reviews/adjudication/planning-gap-v2-renderer-r1.preparation.final_receipt.json": "3ddf2ac7d2d27e30f8553daaa0814da4f08749a3277246e439457e1b599654b7"
+  },
+  "scope": "Root exact-byte custody join of completed independently executed reviews. No root/producer self-approval or model efficacy claim.",
+  "first_join_failure_preserved": "quality_reports/RGM_RENDERER_R1_REVIEW_JOIN_FIRST_FAILURE.json"
+}

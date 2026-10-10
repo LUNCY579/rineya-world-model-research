@@ -1,0 +1,96 @@
+{
+  "actual_execution_id": "/root/adversarial_auditor",
+  "actual_lexical_renaming_probes": 12,
+  "canonical_audit_sha256": "b0be5f73cb7b45827407ca49a1c1586f7c4160db6a78b79b12aaf587fbeb6609",
+  "common_model_public_guided_own_reuse_disclosed": true,
+  "completed": true,
+  "controls": 192,
+  "dataset_review_only_not_publication_approval": true,
+  "decisions": {
+    "ACCEPT": 408
+  },
+  "exact_targets": 408,
+  "executed_corruption_rejections": 48,
+  "files_sha256_before_after": {
+    "candidate": [
+      "data/RGM-001/candidate_renderings/planning-gap-v2-renderer-r1.jsonl",
+      "b306f67b2208406027d26d95094c649913e590291857764a9bf17edb9bcd923c"
+    ],
+    "current_input": [
+      "reviews/input_only/planning-gap-v2-renderer-r1.jsonl",
+      "5f0b3490720933caa7895f3223244e5e72ed8ca5fb89a97f2eeb516c151f58e3"
+    ],
+    "first_input_judgments": [
+      "reviews/adversarial/planning-gap-v2-renderer-r1.input_first_judgments.jsonl",
+      "ecad49409af2f3715a91f4f2d3b2041cb5a09779718633739adacd59e5d8f0dc"
+    ],
+    "input_custody": [
+      "reviews/adversarial/planning-gap-v2-renderer-r1.input_freeze.json",
+      "bd93545e5a5082662413db988988f0c22b25c018894b8535f97b9728bfe30b37"
+    ],
+    "manifest": [
+      "data/RGM-001/manifests/planning-gap-v2-renderer-r1.family_controls.json",
+      "e69a9c130b40aebd0dfdefa9b0f96ec075d3a383073aa963e63446e084bf5c63"
+    ],
+    "old_input": [
+      "reviews/input_only/planning-gap-v2.jsonl",
+      "00bd1c2de5d0d4719957bb2ded44e2342940de4d368c65b646817474fe79b73c"
+    ],
+    "old_predictions": [
+      "reviews/adversarial/planning-gap-v2.input_predictions.jsonl",
+      "ee63bdc9f62c1780326969cb05dbb8410897b176d6fe24fa67b72f257c480c1b"
+    ],
+    "own_surface": [
+      "audits/shortcut_detection/planning-gap-v2-renderer-r1-surface.json",
+      "ebe01f21153e25010880fcc2c66c47e70da7c9007b3539e7743350e34cfaff88"
+    ],
+    "parent_input": [
+      "reviews/input_only/planning-gap-v1.jsonl",
+      "2a6c9d785f9e2de47233de06bad3371e4a4f072e9be1133340913ceec30a6654"
+    ],
+    "policy": [
+      "schemas/RGM_PLANNING_V2_RENDERER_REVISION_POLICY.md",
+      "6e3759ebe9e3e1f801257d30df610b7dea091eb3324f0a76b59ad9520eac5e56"
+    ],
+    "predictions": [
+      "reviews/adversarial/planning-gap-v2-renderer-r1.input_predictions.jsonl",
+      "6738599d9285a779772ce36f61b6f243cf4f85e3e26744d0042cf2aa853d2d3e"
+    ],
+    "prior": [
+      "research/research_gap_analysis/RGM_PRIOR_ACTIVE_INPUTS.jsonl",
+      "896e6b1b994dad33f2288680d633afc0b50572140d2bd3aaa2169687529caf5d"
+    ]
+  },
+  "final_judgment_sha256": "6b58be3a5b738b3ff01c7f6de936e0eddef249e04d46ac6de15df60c7aa071c9",
+  "first_canonical_judgment_sha256": "6b58be3a5b738b3ff01c7f6de936e0eddef249e04d46ac6de15df60c7aa071c9",
+  "new_semantic_tasks": 0,
+  "new_source_families": 0,
+  "no_other_verdict_or_private_producer_formal_rootgate_read": true,
+  "preexec_sha256": "49b345035af735fd46c99fed42071f3369a3f8b1146cd577a5300eebe44f7b8b",
+  "prior_original_canonical_exposure": true,
+  "prior_public_semantic_inputs_solved": 216,
+  "public_sources_sha256_before_after": {
+    "research/curricula/RGM-NEXT-GAP-PROSPECTIVE.md": "6100d43fe1cf83d798bb34799fac70569f54d33f66692150d188581d9c940761",
+    "research/curricula/RGM-PLANNING-GAP-V2-PROSPECTIVE.md": "34a3c89302d4b965ee784cd2f52207b6e9cb0b4299b52b82bf97c675c2d77d2c",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES.md": "f591747cc1b6d0199b76311b5b8283666bf219589f534b42ef195c7b81a7be3a",
+    "schemas/RGM_PLANNING_CONTROL_PROPERTIES_V2.md": "d59ce14dd66c6ebd644580f7736e714fbceda32dd132d8c9cb5cf61e78a5a258",
+    "schemas/RGM_PLANNING_MANIFEST_ENCODING_SUPPLEMENT.md": "02613aa2333f401117def89da224f169d564b527bacc554a0b872877aaac42fe",
+    "schemas/RGM_PLANNING_V2_RENDERER_CONTROL_ENCODING_ADDENDUM.md": "48e1ebbe954944d8b6569866fa102962607c4ecf27a1d7133f1259f815eac603",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd"
+  },
+  "residual_scopes": [
+    "408 views /204 semantic inputs /48 revised source families; zero growth versus pendingV1. Two existing action grammars, not204 independent mechanisms.",
+    "C1 source/destination split balance is5train/1dev each; one dev infeasible A1 remains. Fuel-only lookup34/34 versus majority33/34 is a small exposed-dev association, with mixed same-fuel training cases.",
+    "Six shared block initial-shape groups remain; current joint base goals are distinct. No sealedOOD or efficacy claim.",
+    "Difficulty2–4 is bounded heuristic metadata; some C4 Level2 rows still require complex fresh minimum planning.",
+    "Actual producer private source/execution and root production schema/gate implementation were outside scope; declared generator/oracle versions/provenance are bound exact strings, not independently certified source execution.",
+    "No expert/adjudication/private formal/producer expectations read; original V2 canonical exposure and exact task reuse, common-model/public-guided design disclosed.",
+    "New goal-key-rank plus submitted plan length predicts goal labels26/34 per renderer on exposed dev. Fresh feasibility fuel34/34 versus majority33/34 is unchanged; no universal shortcut or efficacy assertion.",
+    "Raw V1 literal task/world differences do not mean all structures changed: own prior invariant audit measured18/18 block initial shapes reused,1graph topology and2joint block base classes shared; source family growth0."
+  ],
+  "reused_semantic_tasks": 204,
+  "reused_source_families": 48,
+  "rows": 408,
+  "source_sha256": "4579c13d2db8c378bab3ceec882f0868838c371edaa6c450a1e30da789c3b162",
+  "witnesses": 510
+}

@@ -1,0 +1,49 @@
+{
+  "adapter_author_execution": "/root",
+  "utc": "2026-10-10T06:59:25.349858+00:00",
+  "original_readiness_path": "backup_logs/RGM_V2_PROVISIONAL_CHECKPOINT_READINESS.json",
+  "original_readiness_sha256": "991655bbba57524fc3d51ee215530908ea470178631cce5ab0b51c5b7f791340",
+  "protected_git_byte_baselines": [
+    {
+      "label": "common_config",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/config",
+      "expected_exists": true,
+      "sha256": "1b63f67839c506daadf8d6fe1d23c593df985f41c026eb72895d3c1cda13746d"
+    },
+    {
+      "label": "common_HEAD",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/HEAD",
+      "expected_exists": true,
+      "sha256": "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80"
+    },
+    {
+      "label": "original_index",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/index",
+      "expected_exists": true,
+      "sha256": "02d57d88ca5bdbe0c8f2157851ba2c02b7d220317b7823a388d61b29aa53c9a2"
+    },
+    {
+      "label": "original_worktree_config",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/config.worktree",
+      "expected_exists": false
+    },
+    {
+      "label": "main_ref",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/refs/heads/main",
+      "expected_exists": true,
+      "sha256": "363a7880e8a3dc10eeddd8902023f402b5fdb223f3c118584c88222cf0601e3d"
+    },
+    {
+      "label": "packed_refs",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/packed-refs",
+      "expected_exists": true,
+      "sha256": "2a14a80913656f7f9fa034ec70e2c8b178610913a2b824eb27c1f5e2e1b457c1"
+    }
+  ],
+  "same_six_frozen_baselines_reverified": true,
+  "actual_failure_preserved": "backup_logs/rgm-v2-renderer-review-milestone_STAGE.json",
+  "error_cause": "Readiness nests exact six items under original.protected_git_byte_baselines_match; frozen archival runner expects protected_git_byte_baselines. New adapter only normalizes schema, retains identical bytes/existence expectations and unchanged runner.",
+  "no_guard_relaxation": true,
+  "no_copy_stage_commit_push_before_failure": true,
+  "scope": "Postinventory local correction evidence; no data approval or completed remote backup claim."
+}

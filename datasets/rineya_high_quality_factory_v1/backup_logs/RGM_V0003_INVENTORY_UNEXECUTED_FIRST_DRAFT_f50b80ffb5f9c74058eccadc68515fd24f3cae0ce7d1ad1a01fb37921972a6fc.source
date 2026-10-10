@@ -1,0 +1,331 @@
+# NEW manager derivative of unchanged root compatibility builder c8d052c...; original base preserved.
+# Root-authored compatibility derivative of unchanged manager inventory builder SHA256 ef3a45d6cf1b2cb53036f9d07c8f92abd4c135a395a25ef7975ff075ba5eb387
+#!/usr/bin/env python3
+"""Create an exact backup proposal, explicitly replacing oversized raw evidence.
+
+This only reads factory/repository state and writes its report/spec in backup_logs.
+It never creates gzip payloads, changes reviews/releases, copies, commits or pushes.
+Rerun after adjudication/release/doc edits to refresh the actual inventory.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+FACTORY = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(FACTORY))
+from backup_logs.checkpoint_backup import MAX_BYTES, SECRET_PATTERNS, atomic_json, safe_path
+
+
+
+# New scoped custody/deferral additions authored by /root/backup_manager.
+AUTHOR = "/root/backup_manager"
+PARENT = "bc5198e11273cb6ea69659b6d3a8b5dc312b6f00"
+CHECKPOINT = "rgm-v0003-independent-release"
+BASE_SHA = "c8d052c54797f0d6970715ba640d124313e1b8c945eb7a5e6bc42e45556b08f4"
+V2_SHA = "df03bdebc7d9cb6b24c65f82f1e17b42e8f857a106fafc3bfd2ac3ac341a0897"
+OFFICIAL_PREFIX = "reviews/oracle/RBM-v4-official-20261010T073119Z/"
+EXPERT_PREFIX = "reviews/expert/belief-v4-prospective-"
+COMPLETED_FORMAL_PREFIX = "reviews/oracle/RBM-v4-prospective-20261010T071308Z/"
+FREEZE_NAME = "backup_logs/RGM_V0003_INDEPENDENT_INVENTORY_SOURCE_FREEZE.json"
+BLOB_BY_PATH = {}
+
+
+def deferred_reason(name):
+    if name.startswith(OFFICIAL_PREFIX):
+        return "root_confirmed_unfinished_NEW_belief_v4_official_draft"
+    if name.startswith(EXPERT_PREFIX):
+        return "root_confirmed_unfinished_NEW_belief_v4_expert_prospective_preparation"
+    return None
+
+
+def custody_guard():
+    import importlib.util
+    logs = FACTORY / "backup_logs"
+    def checksum(path):
+        h = hashlib.sha256()
+        with path.open("rb") as stream:
+            for part in iter(lambda: stream.read(65536), b""):
+                h.update(part)
+        return h.hexdigest()
+    frozen = json.loads((FACTORY / FREEZE_NAME).read_bytes())
+    if checksum(Path(__file__)) != frozen["source"]["sha256"]:
+        raise ValueError("Exact inventory source freeze differs")
+    for item in frozen["frozen_inputs"]:
+        if checksum(FACTORY / item["path"]) != item["sha256"]:
+            raise ValueError("Frozen inventory input differs: " + item["path"])
+    if checksum(logs / "prepare_checkpoint_inventory_items.py") != BASE_SHA or checksum(logs / "run_provisional_archival_checkpoint_v2.py") != V2_SHA:
+        raise ValueError("Unchanged base/new validated runner differs")
+    loader = importlib.util.spec_from_file_location("validated_archival_v2", logs / "run_provisional_archival_checkpoint_v2.py")
+    m = importlib.util.module_from_spec(loader);loader.loader.exec_module(m)
+    original = FACTORY.parent / "rineya-world-model-research"
+    worktree = FACTORY.parent / ".rineya-dataset-git-worktree"
+    joined = json.loads((logs / "RGM_V2_RENDERER_FINAL_REVIEW_JOINED_CUSTODY.json").read_bytes())
+    m.original_custody(original, joined)
+    private = m.dedicated_custody(worktree, PARENT)
+    previous = json.loads((logs / "rgm-v2-renderer-review-milestone_SPEC.json").read_bytes())
+    prior_names = {x["path"] for x in previous["files"]}
+    if len(prior_names) != 2095 or any(deferred_reason(n) for n in prior_names):
+        raise ValueError("A prior tracked path would be deferred")
+    tree = m.tree(worktree, PARENT)
+    if set(tree) != prior_names or m.index(worktree) != tree:
+        raise ValueError("Prior dedicated tree/index paths differ")
+    boundary = json.loads((FACTORY / "quality_reports/RGM_RENDERER_ARCHIVAL_BOUNDARY_PREFLIGHT.json").read_bytes())
+    reference_root = FACTORY.parent / "rineya_complementary_research_2026-10-09"
+    reference_checks = []
+    for item in boundary["reference_checks"]:
+        path = m.safe(reference_root, item["path"])
+        actual = m.proof(path, False)["sha256"]
+        if actual != item["expected_sha256"]:
+            raise ValueError("Protected research reference changed: " + item["path"])
+        reference_checks.append({"path":item["path"], "expected_sha256":item["expected_sha256"], "actual_sha256":actual, "unchanged":True})
+    if len(reference_checks) != 65:
+        raise ValueError("Expected exactly 65 protected reference baselines")
+    release = json.loads((FACTORY / "quality_reports/RGM_RENDERER_R1_RELEASE_EXECUTION.json").read_bytes())
+    releases = dict(release["historical_release_bindings"])
+    for name,item in release["result"]["new_release_files"].items():
+        releases["data/RGM-001/releases/v0003/" + name] = item["sha256"]
+    actual_releases = {p.relative_to(FACTORY).as_posix() for p in (FACTORY / "data").rglob("*") if p.is_file() and "/releases/" in p.as_posix()}
+    if len(releases) != 210 or set(releases) != actual_releases:
+        raise ValueError("Exact 210 immutable historical release file scope differs")
+    for name,sha in releases.items():
+        if m.proof(m.safe(FACTORY, name), False)["sha256"] != sha:
+            raise ValueError("Immutable historical release bytes changed: " + name)
+    core = json.loads(m.run(["gh", "api", "rate_limit"]))["resources"]["core"]
+    return {"expected_parent":PARENT, "private_admin":private, "prior_tracked_paths_preserved_required":2095,
+            "protected_reference_root":str(reference_root), "reference_files":65, "reference_checks":reference_checks,
+            "immutable_release_files_verified":210, "original_six_protected_baselines":m.normalize_baselines(original,joined),
+            "disk_free_bytes":shutil.disk_usage(FACTORY).free,
+            "api_core_counts_only":{k:core[k] for k in ("limit","remaining","used","reset")}}
+
+
+def assert_frozen_output_entries(files, raw_entries, guard):
+    previous = json.loads((FACTORY / "backup_logs/rgm-v2-renderer-review-milestone_SPEC.json").read_bytes())
+    included = {e["path"] for e in files}
+    if not {e["path"] for e in previous["files"]} <= included:
+        raise ValueError("A previous 2095 tracked path is absent from the new full inventory")
+    if any(deferred_reason(name) for name in included):
+        raise ValueError("Unfinished explicitly deferred path was included")
+    for entry in files + raw_entries:
+        fresh,_ = snapshot(FACTORY / entry["path"])
+        if fresh != {k:entry[k] for k in ("path","size","sha256")}:
+            raise ValueError("Included frozen bytes changed at completion: " + entry["path"])
+    after = custody_guard()
+    if after["reference_checks"] != guard["reference_checks"]:
+        raise ValueError("Protected research references changed during inventory")
+    return after
+
+
+def snapshot(path):
+    before = path.stat()
+    data = path.read_bytes()
+    after = path.stat()
+    if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
+        raise RuntimeError(f"Source changed while reading: {path.relative_to(FACTORY)}")
+    BLOB_BY_PATH[path.relative_to(FACTORY).as_posix()] = hashlib.sha1(f"blob {len(data)}\0".encode() + data).hexdigest()
+    return {"path": path.relative_to(FACTORY).as_posix(), "size": len(data),
+            "sha256": hashlib.sha256(data).hexdigest()}, data
+
+
+def git(args, root):
+    return subprocess.check_output(["git", *args], cwd=root).decode().strip()
+
+
+def local_declared(value):
+    path = Path(value)
+    if not path.is_absolute():
+        path = FACTORY / path
+    return safe_path(FACTORY, path.relative_to(FACTORY).as_posix())
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--checkpoint-id", required=True)
+    parser.add_argument("--approval", default="provisional_checkpoint")
+    parser.add_argument("--validation-status", default="pending_final_snapshot_refresh")
+    parser.add_argument("--runner", default="/root")
+    parser.add_argument("--preparer", required=True,
+                        help="Actual execution preparing this inventory, e.g. /root")
+    args = parser.parse_args()
+    if not args.checkpoint_id or any(ch not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-" for ch in args.checkpoint_id):
+        raise ValueError("Invalid checkpoint identifier")
+    spec_path = FACTORY / "backup_logs" / f"{args.checkpoint_id}_SPEC.json"
+    report_path = FACTORY / "backup_logs" / f"{args.checkpoint_id}_INVENTORY_REPORT.json"
+    receipt_path = FACTORY / "backup_logs" / f"{args.checkpoint_id}_RECEIPT.json"
+    if receipt_path.exists() and json.loads(receipt_path.read_text()).get("status") == "BACKED_UP":
+        raise RuntimeError("Use a new checkpoint id; verified checkpoint already exists")
+
+    if args.checkpoint_id != CHECKPOINT or args.preparer != AUTHOR or args.runner != "/root":
+        raise ValueError("Explicit checkpoint/preparer/runner binding differs")
+    if any(p.exists() for p in (spec_path,report_path,receipt_path)):
+        raise ValueError("New checkpoint output paths must be absent")
+    guard = custody_guard()
+    candidates = []
+    excluded = []
+    deferred = []
+    for path in sorted(FACTORY.rglob("*")):
+        if not path.is_file():
+            continue
+        if path in {spec_path, report_path, receipt_path}:
+            continue
+        relative = path.relative_to(FACTORY).as_posix()
+        reason = deferred_reason(relative)
+        if reason:
+            # Only point-in-time digest observations; unfinished private content is never parsed.
+            before=path.stat();h=hashlib.sha256()
+            with path.open("rb") as stream:
+                for part in iter(lambda:stream.read(65536),b""):h.update(part)
+            after=path.stat()
+            stable=(before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_size,after.st_mtime_ns,after.st_ctime_ns)
+            deferred.append({"path":relative,"reason":reason,"observed_size":after.st_size,"observed_sha256":h.hexdigest() if stable else None,"point_in_time_digest_stable":stable,"frozen_hash_claim":False})
+            continue
+        entry, data = snapshot(path)
+        if "__pycache__" in path.parts or path.suffix == ".pyc" or path.name == ".DS_Store":
+            excluded.append({**entry, "reason": "generated_cache_or_platform_metadata"})
+            continue
+        safe_path(FACTORY, entry["path"])
+        candidates.append((entry, path))
+
+    manifests = {}
+    for entry, path in candidates:
+        if path.name.endswith("compression_manifest.json") or path.name.endswith(".lossless.json"):
+            metadata = json.loads(path.read_text())
+            records = metadata.get("artifacts", metadata.get("items", [metadata]))
+            for record in records:
+                normalized = dict(record)
+                # Preserve expert nested manifests as their actual original bytes;
+                # support their field names alongside the standard gzip schema.
+                for target, alternate in [("raw_bytes", "raw_length"),
+                                          ("gzip_path", "compressed_path"),
+                                          ("gzip_bytes", "compressed_length"),
+                                          ("gzip_sha256", "compressed_sha256")]:
+                    if target not in normalized and alternate in normalized:
+                        normalized[target] = normalized[alternate]
+                raw = local_declared(normalized["raw_path"])
+                manifests.setdefault(raw.relative_to(FACTORY).as_posix(), []).append((path, normalized))
+
+    files = []
+    pairings = []
+    blockers = []
+    secret_flags = []
+    for entry, path in candidates:
+        fresh, data = snapshot(path)
+        if fresh != entry:
+            raise RuntimeError(f"Source changed during inventory: {entry['path']}")
+        if any(pattern.search(data) for pattern in SECRET_PATTERNS):
+            secret_flags.append(entry["path"])
+        if entry["size"] <= MAX_BYTES:
+            files.append(entry)
+            continue
+        mappings = manifests.get(entry["path"], [])
+        verified = []
+        for manifest_path, metadata in mappings:
+            packed = local_declared(metadata["gzip_path"])
+            packed_entry, payload = snapshot(packed)
+            manifest_entry, _ = snapshot(manifest_path)
+            if entry["size"] != metadata["raw_bytes"] or entry["sha256"] != metadata["raw_sha256"]:
+                raise RuntimeError(f"Raw manifest mismatch: {entry['path']}")
+            if packed_entry["size"] != metadata["gzip_bytes"] or packed_entry["sha256"] != metadata["gzip_sha256"]:
+                raise RuntimeError(f"Gzip manifest mismatch: {packed_entry['path']}")
+            if packed_entry["size"] > MAX_BYTES:
+                raise RuntimeError(f"Compressed payload also exceeds cap: {packed_entry['path']}")
+            decoded = gzip.decompress(payload)
+            if decoded != data or hashlib.sha256(decoded).hexdigest() != entry["sha256"]:
+                raise RuntimeError(f"Lossless roundtrip mismatch: {entry['path']}")
+            verified.append({"gzip": packed_entry, "manifest": manifest_entry,
+                             "exact_raw_roundtrip_verified": True,
+                             "uncompressed_secret_scan": "FAIL" if entry["path"] in secret_flags else "PASS"})
+        if not verified:
+            blockers.append({**entry, "reason": "oversized_raw_evidence_has_no_verified_lossless_pair"})
+        excluded.append({**entry, "reason": "raw_exceeds_repository_25MiB_cap_preserved_local",
+                         "lossless_representations": verified})
+        pairings.append({"raw": entry, "representations": verified})
+
+    included = {entry["path"] for entry in files}
+    for pairing in pairings:
+        for representation in pairing["representations"]:
+            for role in ["gzip", "manifest"]:
+                if representation[role]["path"] not in included:
+                    raise RuntimeError("Lossless representation is absent from actual inventory")
+    worktree = FACTORY.parent / ".rineya-dataset-git-worktree"
+    original = FACTORY.parent / "rineya-world-model-research"
+    report = {"execution_role": "Independent GitHub backup inventory preparer",
+              "script_author_execution": AUTHOR, "base_script_author_execution": "/root", "original_script_author_execution": "/root/backup_manager", "inventory_preparer_execution": args.preparer,
+              "checkpoint_runner_execution": args.runner,
+              "created_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+              "checkpoint_id": args.checkpoint_id, "cap_bytes": MAX_BYTES,
+              "candidate_files_before_size_exclusion": len(candidates),
+              "included_files_before_this_report": len(files),
+              "included_bytes_before_this_report": sum(entry["size"] for entry in files),
+              "oversized_raw_artifacts": pairings, "excluded_files": excluded,
+              "secret_flags": secret_flags, "blockers": blockers,
+              "free_bytes": shutil.disk_usage(FACTORY).free,
+              "original_checkout": {"branch": git(["branch", "--show-current"], original),
+                                    "head": git(["rev-parse", "HEAD"], original),
+                                    "porcelain": git(["status", "--porcelain=v1"], original)},
+              "dedicated_checkout": {"branch": git(["branch", "--show-current"], worktree),
+                                      "head": git(["rev-parse", "HEAD"], worktree),
+                                      "porcelain": git(["status", "--porcelain=v1"], worktree)},
+              "packing_validation": "PASS" if not blockers and not secret_flags else "BLOCKED",
+              "scope": "Archival snapshot only; pending samples do not acquire release approval. Raw originals unchanged. Gzip and manifest actual bytes included; remote persistence pending future checkpoint.",
+              "snapshot_refresh_required": args.validation_status != "passed",
+              "self_inventory_boundary": {"spec": spec_path.relative_to(FACTORY).as_posix(),
+                                          "future_receipt": receipt_path.relative_to(FACTORY).as_posix(),
+                                          "reason": "A specification and post-push receipt cannot hash their own final bytes; preserve in the next checkpoint."}}
+    report.update(custody_preflight_before=guard, deferred_incomplete_new_v4_paths=deferred,
+                  declared_future_deferral_scopes=[OFFICIAL_PREFIX,EXPERT_PREFIX],
+                  all_completed_renderer_r1_included=True, completed_formal_preparation_prefix_included=COMPLETED_FORMAL_PREFIX,
+                  model_disclosure="Inherited same model; independent execution does not imply model diversity",
+                  inventory_builder_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                  inventory_base_source_sha256=BASE_SHA,
+                  unique_blob_groups_before_this_report=len({BLOB_BY_PATH[e["path"]] for e in files}))
+    atomic_json(report_path, report)
+    report_entry, _ = snapshot(report_path)
+    files.append(report_entry)
+    spec = {"checkpoint_id": args.checkpoint_id, "approval": args.approval,
+            "approved_by": "/root", "runner_execution": args.runner,
+            "inventory_preparer_execution": args.preparer,
+            "inventory_script_author_execution": AUTHOR, "base_inventory_script_author_execution": "/root", "original_inventory_script_author_execution": "/root/backup_manager",
+            "validation_status": args.validation_status,
+            "scope_note": "Draft exact-file inventory of current factory and verified lossless evidence. Refresh after final reviews, adjudication, release, tests and living-document edits before executing checkpoint.",
+            "inventory_report": report_entry,
+            "raw_size_exclusions": [entry for entry in excluded if entry["reason"].startswith("raw_exceeds")],
+            "excluded_generated_files": [entry for entry in excluded if entry["reason"].startswith("generated")],
+            "self_inventory_boundary": report["self_inventory_boundary"],
+            "files": sorted(files, key=lambda entry: entry["path"])}
+    spec.update(deferred_incomplete_new_v4_paths=deferred, declared_future_deferral_scopes=[OFFICIAL_PREFIX,EXPERT_PREFIX],
+                prior2095_paths_required_and_preserved=True, immutable210_release_files_preserved=True,
+                inventory_builder_source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                inventory_unique_git_blob_groups=len({BLOB_BY_PATH[e["path"]] for e in files}),
+                scope_note="Frozen complete archival checkpoint including published RGM v0003 and all completed renderer-r1 evidence. Only root-confirmed new unfinished BELIEF V4 scopes deferred; no new data approval.")
+    completion_guard = assert_frozen_output_entries(files, spec["raw_size_exclusions"], guard)
+    spec["post_read_custody_guard_passed"] = True
+    if blockers or secret_flags:
+        spec["validation_status"] = "blocked_packing_or_secret_scan"
+    atomic_json(spec_path, spec)
+    print(json.dumps({"spec": str(spec_path), "report": str(report_path),
+                      "files": len(files), "bytes": sum(entry["size"] for entry in files),
+                      "oversized_raw": len(pairings), "lossless_verified": sum(bool(x["representations"]) for x in pairings),
+                      "generated_exclusions": sum(e["reason"].startswith("generated") for e in excluded),
+                      "blockers": len(blockers), "secret_flags": len(secret_flags),
+                      "validation_status": spec["validation_status"], "unique_git_blob_groups":spec["inventory_unique_git_blob_groups"],
+                      "deferred_new_v4_paths":len(deferred), "references":65, "immutable_release_files":210,
+                      "raw_bytes_exactly_recoverable":sum(x["raw"]["size"] for x in pairings),
+                      "disk_free_bytes":completion_guard["disk_free_bytes"],"api_core_counts_only":completion_guard["api_core_counts_only"]}))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as error:
+        failure = FACTORY / "backup_logs/RGM_V0003_INDEPENDENT_INVENTORY_EXECUTION_FAILURE.json"
+        if not failure.exists():
+            atomic_json(failure,{"status":"FAILED_INVENTORY_LOCAL_EVIDENCE_PRESERVED","author_execution":AUTHOR,"actual_runner_execution":AUTHOR,"error_type":type(error).__name__,"error":str(error),"source_sha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),"no_copy_stage_commit_push":True})
+        raise

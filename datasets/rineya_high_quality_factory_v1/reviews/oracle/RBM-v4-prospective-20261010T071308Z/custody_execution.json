@@ -1,0 +1,5648 @@
+{
+  "actual_execution_id": "/root/formal_oracle",
+  "role": "Nonbinding public-only toy byte-custody demonstration; no data approval",
+  "at_utc": "2026-10-10T07:18:53.810862+00:00",
+  "source_and_output_sha256": {
+    "reviews/oracle/RBM-v4-prospective-20261010T071308Z/custody_probe.py": "8b68fa2f63c0ec6bd8c352f23cfef29ff16b1bad1e4fe179350fb27eabeeb1e6",
+    "reviews/oracle/RBM-v4-prospective-20261010T071308Z/hand_probe.py": "a2a5ebb08478d0275ee6e14f6df2f099a0770f72f7e63e6b99770d34736ff577",
+    "reviews/oracle/RBM-v4-prospective-20261010T071308Z/hand_rows.jsonl": "185d41ed5848d603eda37b1b96bf68440b5cf5edacc130c7a00fd634e3e97919",
+    "reviews/oracle/RBM-v4-prospective-20261010T071308Z/hand_manifest.json": "2b68dbefa976fd93395a1463ac9068f71686af5afe376c7e8d9fccfecf754e24"
+  },
+  "positive_actual_byte_bound_claim_joins": 48,
+  "resolved_actual_row_line_hashes": {
+    "arbitrary A λ identity forward": "dd600e7e15a2f7400a87d1b6ae00249c3e1ca8364b5d136a75efbaac3a5df22c",
+    "arbitrary A λ identity reverse": "8af8c6b81db285dfa86e9c73bfd7db9e1a682ec51a0d1240425e9748dc13cc65",
+    "arbitrary A λ transposed forward": "17e6568da9d26148f86c089a90bf6f277666fd97b10c2872b666cbd037c52836",
+    "arbitrary A λ transposed reverse": "f4e0b90ce44b44b1f7bb8cc8351c2f797480064a16722c0518f3ce6ffccefda8",
+    "arbitrary D λ identity forward": "3f2879f9ff16d14507fb1de49ea17c46af66fd0f8ff7976afcf866cdd462c9df",
+    "arbitrary D λ identity reverse": "fb8c9941bc9010f7ea026e342a27d9e0f710b3c8a107e179795f246612dd7e1f",
+    "arbitrary D λ transposed forward": "b2f8f7672a4c92d497d973fd97019955fa3a655fb2299d7391dee6d4ae546033",
+    "arbitrary D λ transposed reverse": "9780e6c19ff6e836f4377184999757ec9ce2a95719a37b6dfb7c24d339775b2b",
+    "arbitrary E λ identity forward": "cf45fa7ddd53c362e8e1ac56516bc563f72600db7299a673567b97ae70289a48",
+    "arbitrary E λ identity reverse": "011be08c44acb67080c8fa805ded2207ad2e243d0692ce28a4ec3eda6fc675a4",
+    "arbitrary E λ transposed forward": "4dae44bcc04d9027b10609a4e5cff19fb310cc2027fdd0ce3311280c75968053",
+    "arbitrary E λ transposed reverse": "59cb4dd99a16c75f3b735f386e3bde48d41120ca0af1d40104f1c6461e75a68c",
+    "arbitrary F λ identity forward": "1ad5a5271d9a335ffa0268c04e33bae5a20476bfd3e6b515f2342b15e1f0ae62",
+    "arbitrary F λ identity reverse": "83062a874c234c1ba4ad5c233a9a53ea48d2451146419ccbeb82f63cfd8b5ecc",
+    "arbitrary F λ transposed forward": "dd393519dae1c7888f3e02d339eea72eded397ce5b66510c623b59764cd9e701",
+    "arbitrary F λ transposed reverse": "8d100a17e7b09db7c12ab37329c9f8a4fa6d61c626796bf6d032cfa8fcb37470",
+    "arbitrary G λ identity forward": "e955b45a37c300956bf5fe39a33888a9dcbd569bfa092a525685aef10aaad09e",
+    "arbitrary G λ identity reverse": "61a6e8da22723f2ada525384d299f4d17843efcdeb3a745c41b29cb1ce3cfd54",
+    "arbitrary G λ transposed forward": "e64a41019fdf07d2f6ad22bcf6ea89c96bb821393aad5b9c0e0ac5ae0a787c6d",
+    "arbitrary G λ transposed reverse": "dcafd972c20f0ad20068ddc18983f0caee5533756ade7242c386af58fe91967b",
+    "arbitrary H λ identity forward": "70cf76947ecead515072b833c0692972307bf80bc5decccfb12481f1c47ef103",
+    "arbitrary H λ identity reverse": "d3f5cf6b7b2833dd4e74739102185bb00a9cffff48526f1ae8a44bab0ebdf64e",
+    "arbitrary H λ transposed forward": "cbfab058fcc3ec779c4ff4978cd99bb12e4227d149c4846c8eeb36042af3236e",
+    "arbitrary H λ transposed reverse": "63ccbdacc2133ae408d014ef6abd7d04e66420f6e4bef7d78fb801b0cd86a0fa"
+  },
+  "pair_proofs": [
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity forward",
+        "arbitrary G λ identity forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "cf45fa7ddd53c362e8e1ac56516bc563f72600db7299a673567b97ae70289a48",
+        "e955b45a37c300956bf5fe39a33888a9dcbd569bfa092a525685aef10aaad09e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity forward",
+        "arbitrary G λ identity forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "cf45fa7ddd53c362e8e1ac56516bc563f72600db7299a673567b97ae70289a48",
+        "e955b45a37c300956bf5fe39a33888a9dcbd569bfa092a525685aef10aaad09e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity reverse",
+        "arbitrary G λ identity reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "011be08c44acb67080c8fa805ded2207ad2e243d0692ce28a4ec3eda6fc675a4",
+        "61a6e8da22723f2ada525384d299f4d17843efcdeb3a745c41b29cb1ce3cfd54"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity reverse",
+        "arbitrary G λ identity reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "011be08c44acb67080c8fa805ded2207ad2e243d0692ce28a4ec3eda6fc675a4",
+        "61a6e8da22723f2ada525384d299f4d17843efcdeb3a745c41b29cb1ce3cfd54"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed forward",
+        "arbitrary G λ transposed forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "4dae44bcc04d9027b10609a4e5cff19fb310cc2027fdd0ce3311280c75968053",
+        "e64a41019fdf07d2f6ad22bcf6ea89c96bb821393aad5b9c0e0ac5ae0a787c6d"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed forward",
+        "arbitrary G λ transposed forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "4dae44bcc04d9027b10609a4e5cff19fb310cc2027fdd0ce3311280c75968053",
+        "e64a41019fdf07d2f6ad22bcf6ea89c96bb821393aad5b9c0e0ac5ae0a787c6d"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed reverse",
+        "arbitrary G λ transposed reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "59cb4dd99a16c75f3b735f386e3bde48d41120ca0af1d40104f1c6461e75a68c",
+        "dcafd972c20f0ad20068ddc18983f0caee5533756ade7242c386af58fe91967b"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed reverse",
+        "arbitrary G λ transposed reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "59cb4dd99a16c75f3b735f386e3bde48d41120ca0af1d40104f1c6461e75a68c",
+        "dcafd972c20f0ad20068ddc18983f0caee5533756ade7242c386af58fe91967b"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity forward",
+        "arbitrary H λ identity forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "1ad5a5271d9a335ffa0268c04e33bae5a20476bfd3e6b515f2342b15e1f0ae62",
+        "70cf76947ecead515072b833c0692972307bf80bc5decccfb12481f1c47ef103"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity forward",
+        "arbitrary H λ identity forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "1ad5a5271d9a335ffa0268c04e33bae5a20476bfd3e6b515f2342b15e1f0ae62",
+        "70cf76947ecead515072b833c0692972307bf80bc5decccfb12481f1c47ef103"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity reverse",
+        "arbitrary H λ identity reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "83062a874c234c1ba4ad5c233a9a53ea48d2451146419ccbeb82f63cfd8b5ecc",
+        "d3f5cf6b7b2833dd4e74739102185bb00a9cffff48526f1ae8a44bab0ebdf64e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity reverse",
+        "arbitrary H λ identity reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "83062a874c234c1ba4ad5c233a9a53ea48d2451146419ccbeb82f63cfd8b5ecc",
+        "d3f5cf6b7b2833dd4e74739102185bb00a9cffff48526f1ae8a44bab0ebdf64e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed forward",
+        "arbitrary H λ transposed forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "dd393519dae1c7888f3e02d339eea72eded397ce5b66510c623b59764cd9e701",
+        "cbfab058fcc3ec779c4ff4978cd99bb12e4227d149c4846c8eeb36042af3236e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed forward",
+        "arbitrary H λ transposed forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "dd393519dae1c7888f3e02d339eea72eded397ce5b66510c623b59764cd9e701",
+        "cbfab058fcc3ec779c4ff4978cd99bb12e4227d149c4846c8eeb36042af3236e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed reverse",
+        "arbitrary H λ transposed reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "8d100a17e7b09db7c12ab37329c9f8a4fa6d61c626796bf6d032cfa8fcb37470",
+        "63ccbdacc2133ae408d014ef6abd7d04e66420f6e4bef7d78fb801b0cd86a0fa"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed reverse",
+        "arbitrary H λ transposed reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": false,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "8d100a17e7b09db7c12ab37329c9f8a4fa6d61c626796bf6d032cfa8fcb37470",
+        "63ccbdacc2133ae408d014ef6abd7d04e66420f6e4bef7d78fb801b0cd86a0fa"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity forward",
+        "arbitrary G λ identity forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "cf45fa7ddd53c362e8e1ac56516bc563f72600db7299a673567b97ae70289a48",
+        "e955b45a37c300956bf5fe39a33888a9dcbd569bfa092a525685aef10aaad09e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity forward",
+        "arbitrary G λ identity forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "cf45fa7ddd53c362e8e1ac56516bc563f72600db7299a673567b97ae70289a48",
+        "e955b45a37c300956bf5fe39a33888a9dcbd569bfa092a525685aef10aaad09e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity reverse",
+        "arbitrary G λ identity reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "011be08c44acb67080c8fa805ded2207ad2e243d0692ce28a4ec3eda6fc675a4",
+        "61a6e8da22723f2ada525384d299f4d17843efcdeb3a745c41b29cb1ce3cfd54"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity reverse",
+        "arbitrary G λ identity reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "011be08c44acb67080c8fa805ded2207ad2e243d0692ce28a4ec3eda6fc675a4",
+        "61a6e8da22723f2ada525384d299f4d17843efcdeb3a745c41b29cb1ce3cfd54"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed forward",
+        "arbitrary G λ transposed forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "4dae44bcc04d9027b10609a4e5cff19fb310cc2027fdd0ce3311280c75968053",
+        "e64a41019fdf07d2f6ad22bcf6ea89c96bb821393aad5b9c0e0ac5ae0a787c6d"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed forward",
+        "arbitrary G λ transposed forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "4dae44bcc04d9027b10609a4e5cff19fb310cc2027fdd0ce3311280c75968053",
+        "e64a41019fdf07d2f6ad22bcf6ea89c96bb821393aad5b9c0e0ac5ae0a787c6d"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed reverse",
+        "arbitrary G λ transposed reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "59cb4dd99a16c75f3b735f386e3bde48d41120ca0af1d40104f1c6461e75a68c",
+        "dcafd972c20f0ad20068ddc18983f0caee5533756ade7242c386af58fe91967b"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed reverse",
+        "arbitrary G λ transposed reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "59cb4dd99a16c75f3b735f386e3bde48d41120ca0af1d40104f1c6461e75a68c",
+        "dcafd972c20f0ad20068ddc18983f0caee5533756ade7242c386af58fe91967b"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity forward",
+        "arbitrary H λ identity forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "1ad5a5271d9a335ffa0268c04e33bae5a20476bfd3e6b515f2342b15e1f0ae62",
+        "70cf76947ecead515072b833c0692972307bf80bc5decccfb12481f1c47ef103"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity forward",
+        "arbitrary H λ identity forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "1ad5a5271d9a335ffa0268c04e33bae5a20476bfd3e6b515f2342b15e1f0ae62",
+        "70cf76947ecead515072b833c0692972307bf80bc5decccfb12481f1c47ef103"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity reverse",
+        "arbitrary H λ identity reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "83062a874c234c1ba4ad5c233a9a53ea48d2451146419ccbeb82f63cfd8b5ecc",
+        "d3f5cf6b7b2833dd4e74739102185bb00a9cffff48526f1ae8a44bab0ebdf64e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity reverse",
+        "arbitrary H λ identity reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "83062a874c234c1ba4ad5c233a9a53ea48d2451146419ccbeb82f63cfd8b5ecc",
+        "d3f5cf6b7b2833dd4e74739102185bb00a9cffff48526f1ae8a44bab0ebdf64e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed forward",
+        "arbitrary H λ transposed forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "dd393519dae1c7888f3e02d339eea72eded397ce5b66510c623b59764cd9e701",
+        "cbfab058fcc3ec779c4ff4978cd99bb12e4227d149c4846c8eeb36042af3236e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed forward",
+        "arbitrary H λ transposed forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "dd393519dae1c7888f3e02d339eea72eded397ce5b66510c623b59764cd9e701",
+        "cbfab058fcc3ec779c4ff4978cd99bb12e4227d149c4846c8eeb36042af3236e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed reverse",
+        "arbitrary H λ transposed reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "8d100a17e7b09db7c12ab37329c9f8a4fa6d61c626796bf6d032cfa8fcb37470",
+        "63ccbdacc2133ae408d014ef6abd7d04e66420f6e4bef7d78fb801b0cd86a0fa"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed reverse",
+        "arbitrary H λ transposed reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "8d100a17e7b09db7c12ab37329c9f8a4fa6d61c626796bf6d032cfa8fcb37470",
+        "63ccbdacc2133ae408d014ef6abd7d04e66420f6e4bef7d78fb801b0cd86a0fa"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity forward",
+        "arbitrary G λ identity forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "cf45fa7ddd53c362e8e1ac56516bc563f72600db7299a673567b97ae70289a48",
+        "e955b45a37c300956bf5fe39a33888a9dcbd569bfa092a525685aef10aaad09e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity forward",
+        "arbitrary G λ identity forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "cf45fa7ddd53c362e8e1ac56516bc563f72600db7299a673567b97ae70289a48",
+        "e955b45a37c300956bf5fe39a33888a9dcbd569bfa092a525685aef10aaad09e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity reverse",
+        "arbitrary G λ identity reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "011be08c44acb67080c8fa805ded2207ad2e243d0692ce28a4ec3eda6fc675a4",
+        "61a6e8da22723f2ada525384d299f4d17843efcdeb3a745c41b29cb1ce3cfd54"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ identity reverse",
+        "arbitrary G λ identity reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "dcb4ce2f28dd3d3009482b8101302b12e0853e7f377ee0e1e988aab007ce7409",
+        "f2c7aa481b2c0ff16ec52e2ea1aabbd5ef063f58df1f734e3e755bdea1a18a11"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "011be08c44acb67080c8fa805ded2207ad2e243d0692ce28a4ec3eda6fc675a4",
+        "61a6e8da22723f2ada525384d299f4d17843efcdeb3a745c41b29cb1ce3cfd54"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed forward",
+        "arbitrary G λ transposed forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "4dae44bcc04d9027b10609a4e5cff19fb310cc2027fdd0ce3311280c75968053",
+        "e64a41019fdf07d2f6ad22bcf6ea89c96bb821393aad5b9c0e0ac5ae0a787c6d"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed forward",
+        "arbitrary G λ transposed forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "4dae44bcc04d9027b10609a4e5cff19fb310cc2027fdd0ce3311280c75968053",
+        "e64a41019fdf07d2f6ad22bcf6ea89c96bb821393aad5b9c0e0ac5ae0a787c6d"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed reverse",
+        "arbitrary G λ transposed reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "59cb4dd99a16c75f3b735f386e3bde48d41120ca0af1d40104f1c6461e75a68c",
+        "dcafd972c20f0ad20068ddc18983f0caee5533756ade7242c386af58fe91967b"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary E λ transposed reverse",
+        "arbitrary G λ transposed reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 2,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "0690d8f0a77c2f0c8f50ad30d419fd1a027c48882bb407bfaa6bc9ba468fc253",
+        "aaacaa601c612c9a85172a5704489adaf60d948ecc6c00573234d4b724cba900"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "59cb4dd99a16c75f3b735f386e3bde48d41120ca0af1d40104f1c6461e75a68c",
+        "dcafd972c20f0ad20068ddc18983f0caee5533756ade7242c386af58fe91967b"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity forward",
+        "arbitrary H λ identity forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "1ad5a5271d9a335ffa0268c04e33bae5a20476bfd3e6b515f2342b15e1f0ae62",
+        "70cf76947ecead515072b833c0692972307bf80bc5decccfb12481f1c47ef103"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity forward",
+        "arbitrary H λ identity forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "1ad5a5271d9a335ffa0268c04e33bae5a20476bfd3e6b515f2342b15e1f0ae62",
+        "70cf76947ecead515072b833c0692972307bf80bc5decccfb12481f1c47ef103"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity reverse",
+        "arbitrary H λ identity reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "83062a874c234c1ba4ad5c233a9a53ea48d2451146419ccbeb82f63cfd8b5ecc",
+        "d3f5cf6b7b2833dd4e74739102185bb00a9cffff48526f1ae8a44bab0ebdf64e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ identity reverse",
+        "arbitrary H λ identity reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "e354d846f63c61b473d3b59a7a106e6ed496e7e391fc1752da54c48e6a8f9cab",
+        "2d7f6cd3f63aaad261e095c7194f51e04b89450bb691ecc2d20b5b3fc31deb54"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "83062a874c234c1ba4ad5c233a9a53ea48d2451146419ccbeb82f63cfd8b5ecc",
+        "d3f5cf6b7b2833dd4e74739102185bb00a9cffff48526f1ae8a44bab0ebdf64e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed forward",
+        "arbitrary H λ transposed forward"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "dd393519dae1c7888f3e02d339eea72eded397ce5b66510c623b59764cd9e701",
+        "cbfab058fcc3ec779c4ff4978cd99bb12e4227d149c4846c8eeb36042af3236e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed forward",
+        "arbitrary H λ transposed forward"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "dd393519dae1c7888f3e02d339eea72eded397ce5b66510c623b59764cd9e701",
+        "cbfab058fcc3ec779c4ff4978cd99bb12e4227d149c4846c8eeb36042af3236e"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed reverse",
+        "arbitrary H λ transposed reverse"
+      ],
+      "name": "same_prefix_empty_nonempty_counterfactual",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "8d100a17e7b09db7c12ab37329c9f8a4fa6d61c626796bf6d032cfa8fcb37470",
+        "63ccbdacc2133ae408d014ef6abd7d04e66420f6e4bef7d78fb801b0cd86a0fa"
+      ]
+    },
+    {
+      "prefixes": [
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [],
+          []
+        ],
+        [
+          [
+            "w0",
+            "w1",
+            "w2"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ],
+          [
+            "w0",
+            "w1"
+          ]
+        ]
+      ],
+      "query_partitions": [
+        [
+          {
+            "query_id": "one",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          },
+          {
+            "query_id": "three",
+            "bins": [],
+            "distinct_values": 0,
+            "entailed": false,
+            "useful": false
+          }
+        ],
+        [
+          {
+            "query_id": "one",
+            "bins": [
+              [
+                null,
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          },
+          {
+            "query_id": "two",
+            "bins": [
+              [
+                1,
+                1
+              ],
+              [
+                true,
+                1
+              ]
+            ],
+            "distinct_values": 2,
+            "entailed": false,
+            "useful": true
+          },
+          {
+            "query_id": "three",
+            "bins": [
+              [
+                "marker",
+                2
+              ]
+            ],
+            "distinct_values": 1,
+            "entailed": true,
+            "useful": false
+          }
+        ]
+      ],
+      "actual_pair": [
+        "arbitrary F λ transposed reverse",
+        "arbitrary H λ transposed reverse"
+      ],
+      "name": "contradiction_equals_mixed_outcomes",
+      "matching_named_entries": 1,
+      "length": 3,
+      "claimant_is_pair_member": true,
+      "input_hashes": [
+        "6c2a8ab960176d63aa03d4c697e019a57c38202e86b28500f268edbe9f9aee9f",
+        "af73c41567cf0abd070e93cc23c96d2e4788c3fa4d90284bc590887db6f15d67"
+      ],
+      "resolved_actual_record_line_sha256": [
+        "8d100a17e7b09db7c12ab37329c9f8a4fa6d61c626796bf6d032cfa8fcb37470",
+        "63ccbdacc2133ae408d014ef6abd7d04e66420f6e4bef7d78fb801b0cd86a0fa"
+      ]
+    }
+  ],
+  "preserved_expected_custody_failures": [
+    {
+      "label": "candidate byte corruption",
+      "error": "manifest exact candidate hash mismatch"
+    },
+    {
+      "label": "manifest byte corruption",
+      "error": "actual manifest byte hash mismatch"
+    },
+    {
+      "label": "wrong manifest custody binding",
+      "error": "actual manifest byte hash mismatch"
+    }
+  ],
+  "no_mandatory_producer_pair_record_hashes": true,
+  "scope": "Actual hashes describe only newly executed24-row/3-world handmade artifacts. Raw line hashes are measured custody evidence, not asserted canonical-record hashes or new required manifest fields. No real candidate/gold/checker/factory/reviewer data read. Full3456-core/canonical/profile/schedule/style gate untested. This supplements the explicit placeholder fixture-hash initial mechanism tests without editing their frozen source/history."
+}

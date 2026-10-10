@@ -1,0 +1,200 @@
+{
+  "status": "INDEPENDENT_LOCAL_PUSHED_CUSTODY_AUDIT_PASS_FULL_REMOTE_GZIP_JOIN_PENDING",
+  "author_execution": "/root/backup_manager",
+  "actual_audit_runner_execution": "/root/backup_manager",
+  "actual_stage_copy_commit_push_runner_execution": "/root",
+  "same_model_disclosure": "Inherited same model; independent execution does not imply model diversity",
+  "at_utc": "2026-10-10T07:06:48.798505+00:00",
+  "commit_sha": "bc5198e11273cb6ea69659b6d3a8b5dc312b6f00",
+  "sole_parent_sha": "448c36af9370460782da3c0a4ba7c5ca4d8ba71a",
+  "spec": {
+    "path": "backup_logs/rgm-v2-renderer-review-milestone_SPEC.json",
+    "size": 462072,
+    "sha256": "ee1c503b896b5e705c181f0fadcfe92268fd9859bb55a348eab70e90d94c24f1"
+  },
+  "frozen_files": 2095,
+  "frozen_bytes": 886553408,
+  "independently_verified_actual_local_unique_blobs": 1740,
+  "source_target_index_commit_sha256_and_git_sha1_all_match": true,
+  "exact_committed_index_paths": true,
+  "all_previous_1801_paths_preserved": true,
+  "immutable_prior_release_files_verified": 198,
+  "immutable_release_changes": [],
+  "changed_paths_count": 306,
+  "all_commit_changes_scoped_exact_inventory": true,
+  "strict_commit_diff_check": "PASS",
+  "adapter": {
+    "path": "backup_logs/RGM_RENDERER_MILESTONE_CUSTODY_ADAPTER.json",
+    "size": 2410,
+    "sha256": "8a1b0f1af45128ef8cf5ce36e3831cb12595b40ecb9e858609720675fe2a0fa7"
+  },
+  "adapter_normalized_identical_six_baselines": true,
+  "adapter_does_not_relax_custody": true,
+  "failure_cause": "Actual first execution received nested readiness schema while runner expects top-level protected_git_byte_baselines; KeyError occurred before source inventory/copy/stage/commit/push. Exact argv guidance had a top-level joined baseline; root supplied a fresh exact six-record adapter without editing frozen runner.",
+  "preserved_failed_stage": {
+    "path": "backup_logs/rgm-v2-renderer-review-milestone_STAGE.json",
+    "size": 1338,
+    "sha256": "cbcd3bf662ff03bdd01fef9263ff407592c4b430ef6f51aaaeadc8f4baf2a795"
+  },
+  "preserved_failed_stage_ledger": {
+    "path": "backup_logs/rgm-v2-renderer-review-milestone_STAGE_LEDGER.jsonl",
+    "size": 168,
+    "sha256": "36c510a59cbfac7ceda719d44bdf293c35d07aba87f089c0624461359e3ec8e5"
+  },
+  "first_failure_was_before_copy": true,
+  "pushed_stage": {
+    "path": "backup_logs/rgm-v2-renderer-review-milestone_STAGE_R2.json",
+    "size": 47031,
+    "sha256": "c27836578aae3b512b632f869b55f140df974e4275526d90b40de74dbd91ce3c"
+  },
+  "pushed_stage_ledger": {
+    "path": "backup_logs/rgm-v2-renderer-review-milestone_STAGE_LEDGER_R2.jsonl",
+    "size": 1256065,
+    "sha256": "34b94934aca29b6ea5dcd7f9ba823e853d380956a9f98f0c0d8c1154e5020c46"
+  },
+  "private_admin": {
+    "isPrivate": true,
+    "nameWithOwner": "LUNCY579/rineya-world-model-research",
+    "viewerPermission": "ADMIN"
+  },
+  "original_main_head": "a223884d55ff47baf3890c7d4a82054d07223215",
+  "original_and_dedicated_clean": true,
+  "six_current_protected_git_baselines": [
+    {
+      "label": "common_config",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/config",
+      "expected_exists": true,
+      "sha256": "1b63f67839c506daadf8d6fe1d23c593df985f41c026eb72895d3c1cda13746d"
+    },
+    {
+      "label": "common_HEAD",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/HEAD",
+      "expected_exists": true,
+      "sha256": "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80"
+    },
+    {
+      "label": "original_index",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/index",
+      "expected_exists": true,
+      "sha256": "02d57d88ca5bdbe0c8f2157851ba2c02b7d220317b7823a388d61b29aa53c9a2"
+    },
+    {
+      "label": "original_worktree_config",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/config.worktree",
+      "expected_exists": false
+    },
+    {
+      "label": "main_ref",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/refs/heads/main",
+      "expected_exists": true,
+      "sha256": "363a7880e8a3dc10eeddd8902023f402b5fdb223f3c118584c88222cf0601e3d"
+    },
+    {
+      "label": "packed_refs",
+      "path": "/Users/chengli/Downloads/Rineya_World_Model/rineya-world-model-research/.git/packed-refs",
+      "expected_exists": true,
+      "sha256": "2a14a80913656f7f9fa034ec70e2c8b178610913a2b824eb27c1f5e2e1b457c1"
+    }
+  ],
+  "actual_remote_commit_tree_metadata_match": true,
+  "full_remote_blob_verification": "Root actual bounded two-worker run remains a separate execution; this local audit does not certify completed actual remote payload coverage. Await immutable completed full receipt before generic gzip verifier.",
+  "actual_new_remote_payload_fetches_by_this_audit": 0,
+  "raw_gzip_artifacts_expected": 24,
+  "raw_bytes_expected": 1188634377,
+  "snapshot_deferrals": [
+    {
+      "frozen_hash_claim": false,
+      "path": "audits/execution/planning-gap-v2-renderer-r1-adversarial-input.preexec.json",
+      "reason": "new_unfinished_renderer_r1_reviewer_artifact_explicitly_local"
+    },
+    {
+      "frozen_hash_claim": false,
+      "path": "audits/rgm_planning_gap_v2_renderer_r1_adversarial_input.py",
+      "reason": "new_unfinished_renderer_r1_reviewer_artifact_explicitly_local"
+    },
+    {
+      "frozen_hash_claim": false,
+      "path": "reviews/adversarial/planning-gap-v2-renderer-r1.input_first_judgments.jsonl",
+      "reason": "new_unfinished_renderer_r1_reviewer_artifact_explicitly_local"
+    },
+    {
+      "frozen_hash_claim": false,
+      "path": "reviews/adversarial/planning-gap-v2-renderer-r1.input_predictions.jsonl",
+      "reason": "new_unfinished_renderer_r1_reviewer_artifact_explicitly_local"
+    },
+    {
+      "frozen_hash_claim": false,
+      "path": "reviews/expert/review_rgm_planning_gap_v2_renderer_r1_input.py",
+      "reason": "new_unfinished_renderer_r1_reviewer_artifact_explicitly_local"
+    }
+  ],
+  "post_snapshot_local_names_only": [
+    "audits/diversity/planning-gap-v2-renderer-r1-adversarial-canonical.json",
+    "audits/diversity/planning-gap-v2-renderer-r1-input-derived-controls.json",
+    "audits/diversity/planning-gap-v2-renderer-r1-input-only.json",
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial-comparison.preexec.json",
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial-input-custody.preexec.json",
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial-input-freeze.json",
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial-input.preexec.json",
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial-surface.json",
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial-surface.preexec.json",
+    "audits/execution/planning-gap-v2-renderer-r1-adversarial.json",
+    "audits/history/rgm_planning_gap_v2_renderer_r1_adversarial_comparison-4579c13d2db8c378bab3ceec882f0868838c371edaa6c450a1e30da789c3b162.py",
+    "audits/history/rgm_planning_gap_v2_renderer_r1_adversarial_input_custody-47f0ab48f1d0bae5905d6878869b48e251e9df7f9b86e3eb4697a1881e79c07e.py",
+    "audits/history/rgm_planning_gap_v2_renderer_r1_adversarial_surface-69438412b921b34e341fd3716d9326362a5d039956efc1ea26fe4b4e47973087.py",
+    "audits/rgm_planning_gap_v2_renderer_r1_adversarial_comparison.py",
+    "audits/rgm_planning_gap_v2_renderer_r1_adversarial_input.py",
+    "audits/rgm_planning_gap_v2_renderer_r1_adversarial_input_custody.py",
+    "audits/rgm_planning_gap_v2_renderer_r1_adversarial_surface.py",
+    "audits/shortcut_detection/planning-gap-v2-renderer-r1-input-only.json",
+    "audits/shortcut_detection/planning-gap-v2-renderer-r1-surface.json",
+    "backup_logs/RGM_RENDERER_MILESTONE_CUSTODY_ADAPTER.json",
+    "backup_logs/RGM_RENDERER_REVIEW_MILESTONE_PRESTAGE_ROOT_CHECK.json",
+    "backup_logs/rgm-v2-renderer-review-milestone_LOCAL_COMMIT_R2.json",
+    "backup_logs/rgm-v2-renderer-review-milestone_REMOTE_LEDGER.jsonl",
+    "backup_logs/rgm-v2-renderer-review-milestone_SPEC.json",
+    "backup_logs/rgm-v2-renderer-review-milestone_STAGE.json",
+    "backup_logs/rgm-v2-renderer-review-milestone_STAGE_LEDGER.jsonl",
+    "backup_logs/rgm-v2-renderer-review-milestone_STAGE_LEDGER_R2.jsonl",
+    "backup_logs/rgm-v2-renderer-review-milestone_STAGE_R2.json",
+    "reviews/adjudication/planning-gap-v2-renderer-r1-input-preparation.py",
+    "reviews/adjudication/planning-gap-v2-renderer-r1-preexecution-923ce384c19420fd71d6400f87cf527d1d60341ae4c0e3fa0cb6ff676026f707.py",
+    "reviews/adjudication/planning-gap-v2-renderer-r1-preexecution-c53c43375b62c5eb3f770570a830d2e40d1b703663a7422e4eda2743ae2e5b8c.md",
+    "reviews/adjudication/planning-gap-v2-renderer-r1-preparation-procedure.md",
+    "reviews/adjudication/planning-gap-v2-renderer-r1-unexecuted-first-draft-57e85ef11ba1d0e934d734d67fe7f01d3fc9760218e55ab99761dd1d0fd84e21.py",
+    "reviews/adjudication/planning-gap-v2-renderer-r1-unexecuted-first-draft-57e85ef11ba1d0e934d734d67fe7f01d3fc9760218e55ab99761dd1d0fd84e21.receipt.json",
+    "reviews/adjudication/planning-gap-v2-renderer-r1.hand_examples.json",
+    "reviews/adjudication/planning-gap-v2-renderer-r1.input_custody_analysis.json",
+    "reviews/adjudication/planning-gap-v2-renderer-r1.input_predictions.jsonl",
+    "reviews/adjudication/planning-gap-v2-renderer-r1.input_preparation.execution.json",
+    "reviews/adjudication/planning-gap-v2-renderer-r1.preexecution.json",
+    "reviews/adjudication/planning-gap-v2-renderer-r1.preparation.final_receipt.json",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.first.jsonl",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.input_first_judgments.jsonl",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.input_freeze.json",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.input_predictions.jsonl",
+    "reviews/adversarial/planning-gap-v2-renderer-r1.jsonl",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_comparison.analysis.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_comparison.preexecution.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_comparison.preexecution_source.py",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_first_input_judgments.jsonl",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input.freeze.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input.preexecution.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input.preexecution_source.py",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input_analysis.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input_execution.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input_inspection.actual_final.freeze.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input_inspection.freeze.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input_inspection.freeze_writer_failure.json",
+    "reviews/expert/planning-gap-v2-renderer-r1.expert_input_predictions.jsonl",
+    "reviews/expert/review_rgm_planning_gap_v2_renderer_r1_comparison.py",
+    "reviews/expert/review_rgm_planning_gap_v2_renderer_r1_input.py",
+    "reviews/expert/semantic_inspection_planning_gap_v2_renderer_r1_input.md"
+  ],
+  "post_snapshot_boundary": "Failure/adapter/stage/localcommit/prospective remote receipts and this audit are post-inventory local until next exact checkpoint. Newborn/deferred reviewer artifacts are not claimed in bc519. Names only were inspected for excluded reviewer work.",
+  "data_or_release_approval": false,
+  "new_prospective_stage_runner_prepared": false,
+  "future_runner_note": "Existing frozen runner has fixed parent448. A fresh explicit-parent/custody normalization derivative may be prepared in a separate task; no current helper edits.",
+  "concrete_current_custody_blockers": [],
+  "scope": "Read-only independent custody/actual local byte audit, plus this NEW receipt only; no copy/stage/commit/push, source/report/release edits, or repeated1740 remote fetches"
+}
