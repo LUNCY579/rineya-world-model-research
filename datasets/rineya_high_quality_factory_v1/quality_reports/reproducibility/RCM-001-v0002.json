@@ -1,0 +1,31 @@
+{
+  "track": "RCM-001",
+  "release": "v0002",
+  "status": "SUPERSEDED; historical exact-source limitation retained",
+  "unrecovered_original_source_snapshots": [
+    {
+      "path": "factory/pipeline.py",
+      "sha256": "1cc0220d8d2c9da40795e464b9ff37622215cbe793b58dc8c92feb18d3139b29"
+    },
+    {
+      "path": "factory/status.py",
+      "sha256": "2d0a33babbbcca64893393124bc0c10f27c6fcbb699d582e0010413d5db341ea"
+    },
+    {
+      "path": "generators/critic/generate.py",
+      "sha256": "0bf9f125678b4a7995fc489fe572be0b543cf829805b7d990668f6293c6fe04e"
+    }
+  ],
+  "data_status": "Original immutable1200 canonical records remain correct and backed up; independent current generation reproduces all reviewed candidate records exactly.",
+  "replacement": "v0003",
+  "replacement_new_families": 0,
+  "replacement_review_policy": "Same candidate hashes and original3 ACCEPT receipts; no reviewer identities or new semantic approvals invented. Current source bytes snapshotted before manifest publication.",
+  "evidence": [
+    "backup_logs/FINAL_READINESS.json",
+    "reviews/expert/rcm-source-recovery-verification.json",
+    "quality_reports/RCM_SOURCE_REPRODUCTION.json",
+    "quality_reports/RCM_SOURCE_REPLACEMENT_VALIDATION.json",
+    "reproducibility/SOURCE_ARCHIVE_INDEX.json"
+  ],
+  "runner_execution": "/root"
+}

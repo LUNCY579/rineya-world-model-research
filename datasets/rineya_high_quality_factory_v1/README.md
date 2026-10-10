@@ -7,13 +7,15 @@ Semantic families are assigned to train or exposed development challenges before
 Run from this directory with Python 3.12 and `jsonschema` 4.x:
 
 ```sh
-/opt/anaconda3/bin/python3 -m generators.causal.generate
 /opt/anaconda3/bin/python3 -m unittest discover -s tests -p '*.py'
-/opt/anaconda3/bin/python3 -m factory.pipeline audit --batch pilot-v1
-/opt/anaconda3/bin/python3 -m factory.pipeline release --batch pilot-v1 --version v0001
+/opt/anaconda3/bin/python3 backup_logs/test_checkpoint_backup.py
+/opt/anaconda3/bin/python3 -m factory.catalog
+/opt/anaconda3/bin/python3 -m factory.status
 ```
 
-Generation writes pending candidates. Release assembly requires actual independent reviews and adjudication; passing an oracle does not approve a sample. Release directories are immutable. Corrected data requires a new release version and explicit supersession record.
+Load active approved canonical rows through `factory.catalog.catalog()`. Historical releases, including superseded versions and exact-hash errata, remain available for audit. Concatenating every release directory would mix obsolete records with approved replacements.
+
+Generation writes pending candidates. Use a fresh batch name and record the seed, offset and count before generating. Audit with `-m factory.pipeline audit --batch NAME`. Release assembly requires actual independent reviews and adjudication; passing an oracle does not approve a sample. Release directories are immutable. Corrected data requires a new release version and explicit supersession record.
 
 Protected test sets and weights are excluded. Structural template overlap is measured and disclosed; the development partition is not a sealed generalization benchmark. Dataset usefulness remains a hypothesis until a separately authorized training experiment.
 

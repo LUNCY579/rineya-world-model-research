@@ -30,6 +30,28 @@ def schema_validate(row):
         assert key not in payload, "privileged metadata in student payload"
 
 
+def preserve_prior_audit(path, new_bytes):
+    """Keep the exact earlier machine evidence if a rerun changes its bytes."""
+    if path.exists() and path.read_bytes()!=new_bytes:
+        previous=path.read_bytes()
+        sha=hashlib.sha256(previous).hexdigest()
+        snapshot=path.parent/'history'/f'{path.stem}-{sha}{path.suffix}'
+        if snapshot.exists():assert snapshot.read_bytes()==previous,'Audit snapshot mismatch'
+        else:atomic(snapshot,previous.decode('utf-8'))
+
+
+def preserve_source_bytes(paths):
+    """Snapshot source before publishing a manifest that references its hash."""
+    hashes={}
+    for source in paths:
+        content=source.read_bytes();sha=hashlib.sha256(content).hexdigest()
+        blob=ROOT/'reproducibility/source_blobs'/f'{sha}.source'
+        if blob.exists():assert blob.read_bytes()==content,'Source archive mismatch'
+        else:atomic(blob,content.decode('utf-8'))
+        hashes[str(source.relative_to(ROOT))]=sha
+    return hashes
+
+
 def audit(batch):
     from oracles.independent import solve as independent_solve
     rows=[r for p in candidate_paths(batch) for r in load_jsonl(p)]
@@ -63,8 +85,12 @@ def audit(batch):
     stats['metadata_failures']=sum(bool(c['metadata_errors']) for c in checks)
     stats['validation_failures']=stats['oracle_failures']
     stats['oracle_failures']=sum(any(not e.startswith('Metadata: ') for e in c['errors']) for c in checks)
-    write_jsonl(ROOT/f"reviews/oracle/{batch}.jsonl",checks)
-    write_json(ROOT/f"audits/leakage/{batch}.json",stats)
+    receipt_path=ROOT/f"reviews/oracle/{batch}.jsonl"
+    report_path=ROOT/f"audits/leakage/{batch}.json"
+    preserve_prior_audit(receipt_path,(''.join(canonical(c)+'\n' for c in checks)).encode('utf-8'))
+    preserve_prior_audit(report_path,(json.dumps(stats,indent=2,ensure_ascii=False)+'\n').encode('utf-8'))
+    write_jsonl(receipt_path,checks)
+    write_json(report_path,stats)
     return stats
 
 
@@ -111,7 +137,9 @@ def release(batch,version,tracks=None,supersedes=None):
     stats=audit(batch)
     # Failed diagnostic tracks in a mixed batch do not prevent a separately
     # approved selected track from release; validate each selected row below.
-    selected_checks=[c for c in load_jsonl(ROOT/f'reviews/oracle/{batch}.jsonl') if not tracks or c['sample_id'].split('-')[0]+'-001' in tracks]
+    selected_ids={r['sample_id'] for p in candidate_paths(batch) for r in load_jsonl(p) if not tracks or r['track_id'] in tracks}
+    selected_checks=[c for c in load_jsonl(ROOT/f'reviews/oracle/{batch}.jsonl') if c['sample_id'] in selected_ids]
+    assert selected_ids and len(selected_checks)==len(selected_ids),'Selected batch missing records or duplicate sample IDs'
     assert all(c['pass'] for c in selected_checks) and not stats["split_leakage"] and not stats["cross_parent_semantic_duplicates"] and stats["exact_prompt_duplicates"]==0,stats
     from factory.lineage import cross_release
     new_rows=[r for p in candidate_paths(batch) for r in load_jsonl(p) if not tracks or r['track_id'] in tracks]
@@ -161,7 +189,8 @@ def release(batch,version,tracks=None,supersedes=None):
         write_jsonl(dest/"review_receipts.jsonl",receipts)
         write_jsonl(dest/"oracle_receipts.jsonl",[x for x in load_jsonl(ROOT/f"reviews/oracle/{batch}.jsonl") if x["sample_id"] in {r["sample_id"] for r in accepted}])
         code_files=sorted((ROOT/"factory").glob("*.py"))+sorted((ROOT/"oracles").glob("*.py"))+sorted((ROOT/"schemas").glob("*.md"))+sorted((ROOT/"schemas").rglob('*.schema.json'))+sorted((ROOT/"generators").rglob("*.py"))
-        manifest={"release":version,"batch":batch,"track":track,"status":"QUALITY_APPROVED_LOCAL", "records":len(accepted),"semantic_parents":len({r["semantic_parent_id"] for r in accepted}),"splits":dict(collections.Counter(r["split"] for r in accepted)),"generator_versions":sorted({r["generator_version"] for r in accepted}),"framework_version":VERSION,"oracle_version":"independent-1.0.0","reproducibility_code_sha256":{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in code_files},"batch_configuration":f"manifests/{batch}_GENERATION.json","source":"original synthetic; repository-private research; no third-party examples","research_effectiveness":"untested; no model training performed","reviewer_correlation":"Independent executions use the same underlying model; correlated semantic errors remain possible.","data_custody":"exposed train/dev data; no sealed evaluation","files":{}}
+        source_hashes=preserve_source_bytes(code_files)
+        manifest={"release":version,"batch":batch,"track":track,"status":"QUALITY_APPROVED_LOCAL", "records":len(accepted),"semantic_parents":len({r["semantic_parent_id"] for r in accepted}),"splits":dict(collections.Counter(r["split"] for r in accepted)),"generator_versions":sorted({r["generator_version"] for r in accepted}),"framework_version":VERSION,"oracle_version":"independent-1.0.0","reproducibility_code_sha256":source_hashes,"source_archive":"reproducibility/source_blobs/{sha256}.source","batch_configuration":f"manifests/{batch}_GENERATION.json","source":"original synthetic; repository-private research; no third-party examples","research_effectiveness":"untested; no model training performed","reviewer_correlation":"Independent executions use the same underlying model; correlated semantic errors remain possible.","data_custody":"exposed train/dev data; no sealed evaluation","files":{}}
         manifest['export_profile']='specialized-1.0.0'
         if supersedes:manifest['supersedes']=[supersedes]
         if track=='RVM-001':manifest['exporter_review']=exporter_evidence
@@ -186,6 +215,10 @@ def validate_release(path):
     for name,meta in manifest["files"].items():
         f=path/name
         assert f.stat().st_size==meta["bytes"] and hashlib.sha256(f.read_bytes()).hexdigest()==meta["sha256"],name
+    if manifest.get('source_archive'):
+        for sha in set(manifest['reproducibility_code_sha256'].values()):
+            blob=ROOT/'reproducibility/source_blobs'/f'{sha}.source'
+            assert blob.is_file() and hashlib.sha256(blob.read_bytes()).hexdigest()==sha,'Missing exact release source bytes'
     rows=load_jsonl(path/"canonical.jsonl")
     assert len(rows)==manifest["records"]
     if manifest.get('export_profile'):
@@ -204,6 +237,10 @@ def validate_release(path):
         for receipt_id in r["review_receipt_ids"]:
             receipt=receipt_by[receipt_id]
             assert receipt["record_hash"]==r["reviewed_candidate_hash"] and receipt["decision"]=="ACCEPT"
+        receipts=[receipt_by[x] for x in r['review_receipt_ids']]
+        assert len(receipts)==3 and len(set(r['review_receipt_ids']))==3
+        assert {x['reviewer_execution_id'] for x in receipts}=={'/root/expert_reviewer','/root/adversarial_auditor','/root/research_architect'},'Released approval identities are not independent'
+        assert not any(x.get('critical_defects') or any(i.get('severity') in ['high','critical'] for i in x.get('issues',[])) for x in receipts),'Serious release issue unresolved'
         candidate=dict(r);candidate.pop("reviewed_candidate_hash");candidate["review_status"]="PENDING";candidate["review_receipt_ids"]=[]
         assert record_hash(candidate)==r["reviewed_candidate_hash"],"candidate-to-release lineage mismatch"
     for split in ["train","dev_challenge"]:

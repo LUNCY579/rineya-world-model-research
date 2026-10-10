@@ -1,0 +1,53 @@
+{
+  "snapshot_at_utc": "2026-10-10T00:57:11.572878+00:00",
+  "runner_execution": "/root",
+  "active_records": 2572,
+  "active_source_families": 636,
+  "counts_by_track": {
+    "RBM-001": 24,
+    "RCM-001": 1440,
+    "RDP-001": 24,
+    "REM-001": 120,
+    "RGM-001": 432,
+    "RJP-001": 24,
+    "RMM-001": 76,
+    "ROM-001": 24,
+    "RSM-001": 24,
+    "RVM-001": 384
+  },
+  "historical_releases": 16,
+  "active_releases": 14,
+  "superseded_releases": 2,
+  "tests": {
+    "quality_reports/FINAL_TEST_OUTPUT.txt": {
+      "count": 121,
+      "pass": true,
+      "sha256": "db8eabae67bbaa2576e775d02cedefa144ba3922ad585dde07475dff2991fc55"
+    },
+    "backup_logs/FINAL_SAFETY_TEST_OUTPUT.txt": {
+      "count": 7,
+      "pass": true,
+      "sha256": "86c967a00f06ad033ecab8fdfd48f0dfe4f7c54ecd2a5af426df39e10af79aa8"
+    }
+  },
+  "all_release_integrity": true,
+  "missing_active_source_requirements": 0,
+  "historical_missing_source_requirements": 3,
+  "unchanged_reference_files": 65,
+  "original_research_checkout_preserved": true,
+  "model_training": false,
+  "known_limits": [
+    "bounded supplied symbolic semantics and recurring motifs",
+    "exposed train/dev custody; no sealed evaluation",
+    "same underlying model across independent reviewers",
+    "guided correction-topic reviews disclosed",
+    "claim-gap full-pool fuel sign ratio2:1 and only2dev families",
+    "three missing broad historical RCMv0002source hashes; active v0003supersedes with exact current source payloads"
+  ],
+  "independent_final_publication_integrity": {
+    "path": "audits/execution/FINAL_PUBLICATION_INTEGRITY.json",
+    "sha256": "32266db8a67a934d5d6490c7c9c775c6706022cc8ce00a4ead3e12c0a7a044e6",
+    "reviewer_execution": "/root/adversarial_auditor",
+    "result": "PASS_WITH_DISCLOSED_HISTORICAL_SOURCE_GAPS"
+  }
+}

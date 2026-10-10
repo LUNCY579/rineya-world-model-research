@@ -425,7 +425,7 @@
       "active_status": "ACTIVE",
       "active_records": 24,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "all-pilots"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0001",
@@ -506,7 +506,7 @@
       "active_status": "ACTIVE",
       "active_records": 240,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "first-approved"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0002",
@@ -604,6 +604,113 @@
       },
       "export_profile": "specialized-1.0.0",
       "path": "data/RCM-001/releases/v0002",
+      "active_status": "SUPERSEDED",
+      "active_records": 0,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "production-milestone"
+    },
+    {
+      "release": "v0003",
+      "batch": "expansion-v1",
+      "track": "RCM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 1200,
+      "semantic_parents": 150,
+      "splits": {
+        "train": 960,
+        "dev_challenge": 240
+      },
+      "generator_versions": [
+        "1.2.0"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/catalog.py": "6a309e428c67ee653ab2fc5b5559b9dbabab82b9ed47479b481d0af9c97c7e58",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+        "factory/pipeline.py": "b0fcd3e1c16b9476bec7f0d83cd105c369c5dd8885bd15ad177cfa7b0fe22998",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "b3b961ce02852c7f07237d0fb6704f47a01cbfa49c1432a74e57d16310da3905",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "oracles/metadata_independent.py": "f218765cf0e67d4f813aea55a062b9f853b88eaaf8754619de09343de78c014e",
+        "schemas/COMPETENCY_TAGS.md": "efbfc5755fa7dda2c388e621ca17ac5d96c99bc9f59115d62027e2247dd0e097",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+        "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+        "schemas/process_reward/v1.schema.json": "b4084f1a1b849e9fd91d54cb6d38fbdc26e97a0e5e035aa59bd6bcf6c1c636a4",
+        "schemas/sft/v1.schema.json": "dcad9e7b91b1c5eb1ae7cb3fd96c9fa77eee633032fd66b5e5b0107ab3430830",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/archive/expansion_v1_generate.py": "f88662fdfd7af26673c9003bac6c0a354c429d381e8174921965086788c1983c",
+        "generators/critic/claim_controls.py": "83fae00f2ef905d8bff74022fdb58a0d1af0fb3db1d97ae3a37104fb5ec499f2",
+        "generators/critic/generate.py": "131b559479e5608ce90b0989e34d687ef37a17821a0146a2fe68646106a0bd5a",
+        "generators/critic/route_facts.py": "527d2b36931681418a0b4db35d54dffea3840d0e911cb0734186a82443c541ae",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/expansion_v1_diversity.py": "4b8f169621db336f208c727d2101c53f61d86d87be48574c786290a6e92f6d37",
+        "generators/relational/archive/expansion_v1_generate.py": "6a4a660ee89f0ce6d856042331d700db49f6320caddcc228c6c24f786aee25ea",
+        "generators/relational/archive/expansion_v2_diversity.py": "4636fd58168ff11ccdfa974be18e6943c6853af9718ee8b594acc661f8434f9a",
+        "generators/relational/archive/expansion_v2_generate.py": "826169eeece3fdb82d5e32ba10fbb8dcc343ec416b8d821c6b614a110f09df0c",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "013d918ffd426e74690a9ffe5b054153eb76cbb38d4ba476cf562362de45218e",
+        "generators/relational/generate.py": "c85d6577b3ca2fef45ac7c0de8fa8b28553131dbe1300de9001b8a3f6049c1b4",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "source_archive": "reproducibility/source_blobs/{sha256}.source",
+      "batch_configuration": "manifests/expansion-v1_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 438,
+          "sha256": "dde8cf0c5be53afa7e891a270cba447242614c63af4e3864161382c78db5bd8f"
+        },
+        "canonical.jsonl": {
+          "bytes": 3660504,
+          "sha256": "4744be7c5b23de7549124a237a044b03b8766c7875ef665af1024594486463b7"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 447460,
+          "sha256": "6a79c5e95672bc1b5b22a19e2689568bd8ea582a2515c105afaf981bf23f25e3"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 426100,
+          "sha256": "3c86b434d32cdbefd4a8cfa470fe33f2a24118bb8725c26a662ad2855af6fb18"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 438600,
+          "sha256": "fb21c5d7c6bd66632c71691cff5c95f2f633792fd7abebd9f1b482dc92e3cd8f"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 11434122,
+          "sha256": "99e8279f6b315d7533d52f2ceddd900de7b2df47c1bedd095826a7934624beda"
+        },
+        "train-sft.jsonl": {
+          "bytes": 1445244,
+          "sha256": "d5d4dcdb9622bd01c6d9aab55e0ebbbb569f1e6fd3f140fa5004700d8b2d4388"
+        },
+        "train-structured.jsonl": {
+          "bytes": 1368444,
+          "sha256": "c4e631935dfb3f6bc273fbf7a2cbfb6632d12e2eb3ade15f9b214622a0aa10ca"
+        }
+      },
+      "export_profile": "specialized-1.0.0",
+      "supersedes": [
+        "v0002"
+      ],
+      "path": "data/RCM-001/releases/v0003",
       "active_status": "ACTIVE",
       "active_records": 1200,
       "remote_backup_status": "LOCAL_ONLY",
@@ -694,7 +801,7 @@
       "active_status": "ACTIVE",
       "active_records": 24,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "all-pilots"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0001",
@@ -789,7 +896,7 @@
       "active_status": "ACTIVE",
       "active_records": 120,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "all-pilots"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0001",
@@ -884,7 +991,7 @@
       "active_status": "ACTIVE",
       "active_records": 72,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "all-pilots"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0002",
@@ -994,8 +1101,8 @@
       "path": "data/RGM-001/releases/v0002",
       "active_status": "ACTIVE",
       "active_records": 360,
-      "remote_backup_status": "LOCAL_ONLY",
-      "remote_checkpoint": null
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0001",
@@ -1082,7 +1189,7 @@
       "active_status": "ACTIVE",
       "active_records": 24,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "all-pilots"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0001",
@@ -1177,7 +1284,7 @@
       "active_status": "ACTIVE",
       "active_records": 76,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "all-pilots"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0001",
@@ -1272,7 +1379,7 @@
       "active_status": "ACTIVE",
       "active_records": 24,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "all-pilots"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0001",
@@ -1367,7 +1474,7 @@
       "active_status": "ACTIVE",
       "active_records": 24,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "all-pilots"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0001",
@@ -1448,7 +1555,7 @@
       "active_status": "SUPERSEDED",
       "active_records": 0,
       "remote_backup_status": "BACKED_UP",
-      "remote_checkpoint": "first-approved"
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0002",
@@ -1571,8 +1678,8 @@
       "path": "data/RVM-001/releases/v0002",
       "active_status": "ACTIVE",
       "active_records": 300,
-      "remote_backup_status": "LOCAL_ONLY",
-      "remote_checkpoint": null
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "production-milestone"
     },
     {
       "release": "v0003",
@@ -1698,6 +1805,130 @@
       "path": "data/RVM-001/releases/v0003",
       "active_status": "ACTIVE",
       "active_records": 60,
+      "remote_backup_status": "BACKED_UP",
+      "remote_checkpoint": "production-milestone"
+    },
+    {
+      "release": "v0004",
+      "batch": "claim-gap-v2",
+      "track": "RVM-001",
+      "status": "QUALITY_APPROVED_LOCAL",
+      "records": 24,
+      "semantic_parents": 12,
+      "splits": {
+        "train": 20,
+        "dev_challenge": 4
+      },
+      "generator_versions": [
+        "1.2.1"
+      ],
+      "framework_version": "1.0.0",
+      "oracle_version": "independent-1.0.0",
+      "reproducibility_code_sha256": {
+        "factory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "factory/catalog.py": "6a309e428c67ee653ab2fc5b5559b9dbabab82b9ed47479b481d0af9c97c7e58",
+        "factory/common.py": "8502429a270c0a2b0ee74ce89118b28c780b7242c58d8d9c6e858ebcd43ef7c8",
+        "factory/export_validation.py": "ea35f373255eaeec60f5ac7ec92f4f73073c4c99397f5f2750a65568ef2e49e8",
+        "factory/exports.py": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "factory/lineage.py": "12bb9fa20871b7231de26c3cf0e28d3aba641b6004e5403209817959ef324731",
+        "factory/pipeline.py": "62b8e7d6e499b45bd478bb0fc58930669f273ebfdd6851961a1028d56f10a1cf",
+        "factory/reference.py": "e75173466f036c72b1ec35ac9ccfec51f46fba780300183632e38240d51dad42",
+        "factory/status.py": "b3b961ce02852c7f07237d0fb6704f47a01cbfa49c1432a74e57d16310da3905",
+        "oracles/__init__.py": "912614a433d75e6be42ef77b1488213e8b22a337a461d17f68b11a66a395f4a8",
+        "oracles/extended_independent.py": "132907b05210f354d471f841ef6b6ac04a62225090092b67eefa64192a175d79",
+        "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+        "oracles/metadata_independent.py": "f218765cf0e67d4f813aea55a062b9f853b88eaaf8754619de09343de78c014e",
+        "schemas/COMPETENCY_TAGS.md": "efbfc5755fa7dda2c388e621ca17ac5d96c99bc9f59115d62027e2247dd0e097",
+        "schemas/EXTENDED_SEMANTICS.md": "2a67e05e10f99d1fd242ee1691d5b93755093fa701c48040c2d90f47422e7e23",
+        "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+        "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+        "schemas/preference/v1.schema.json": "130e576eb197a7d3ccead5ea9daac1b7b7924bb4e432e373f773d38eaf8175f2",
+        "schemas/process_reward/v1.schema.json": "b4084f1a1b849e9fd91d54cb6d38fbdc26e97a0e5e035aa59bd6bcf6c1c636a4",
+        "schemas/sft/v1.schema.json": "dcad9e7b91b1c5eb1ae7cb3fd96c9fa77eee633032fd66b5e5b0107ab3430830",
+        "generators/causal/archive/v1.py": "823594987543dcc4d34c1fde8a98ccb011050b318b26eb77ef10b4f0c5cf7e0a",
+        "generators/causal/generate.py": "a679c0631f99d76455471374f7fd2eb2909d049177c2d57a7d28256aa05e12cb",
+        "generators/critic/archive/expansion_v1_generate.py": "f88662fdfd7af26673c9003bac6c0a354c429d381e8174921965086788c1983c",
+        "generators/critic/claim_controls.py": "83fae00f2ef905d8bff74022fdb58a0d1af0fb3db1d97ae3a37104fb5ec499f2",
+        "generators/critic/generate.py": "131b559479e5608ce90b0989e34d687ef37a17821a0146a2fe68646106a0bd5a",
+        "generators/critic/route_facts.py": "527d2b36931681418a0b4db35d54dffea3840d0e911cb0734186a82443c541ae",
+        "generators/memory/generate.py": "23760235de99f4f0e1dc2ccecf3c8643c45c273eac1427112abc3aca00151a8b",
+        "generators/memory/rebalance.py": "99847d6668950e8eb0dba8bd88a7134950936e7c954f4b110a11c64a86912bab",
+        "generators/other_tracks/generate.py": "9a2f3abea5331dbf5c152756b6e43b54adc884b8c39a7ec07cae72a8873877ec",
+        "generators/other_tracks/reference.py": "a749e8c4ec85dd8a617987c5c04f2428338700333cf434ee86013524e9b48f5d",
+        "generators/other_tracks/regression.py": "c879b4223495e95135bc49737e353204e1070e72c51fb339f57f58dfa3aa26fc",
+        "generators/relational/archive/expansion_v1_diversity.py": "4b8f169621db336f208c727d2101c53f61d86d87be48574c786290a6e92f6d37",
+        "generators/relational/archive/expansion_v1_generate.py": "6a4a660ee89f0ce6d856042331d700db49f6320caddcc228c6c24f786aee25ea",
+        "generators/relational/archive/expansion_v2_diversity.py": "4636fd58168ff11ccdfa974be18e6943c6853af9718ee8b594acc661f8434f9a",
+        "generators/relational/archive/expansion_v2_generate.py": "826169eeece3fdb82d5e32ba10fbb8dcc343ec416b8d821c6b614a110f09df0c",
+        "generators/relational/archive/v2.py": "702b4d26ad5d89046dc26b3f359303b07efe61ff37e62f3d79d9ef11424b2fdb",
+        "generators/relational/expansion.py": "013d918ffd426e74690a9ffe5b054153eb76cbb38d4ba476cf562362de45218e",
+        "generators/relational/generate.py": "c85d6577b3ca2fef45ac7c0de8fa8b28553131dbe1300de9001b8a3f6049c1b4",
+        "generators/skills/generate.py": "9d3817ca933abbf184d4a77673519fce6c123efe3717ae2affffdae542675274"
+      },
+      "batch_configuration": "manifests/claim-gap-v2_GENERATION.json",
+      "source": "original synthetic; repository-private research; no third-party examples",
+      "research_effectiveness": "untested; no model training performed",
+      "reviewer_correlation": "Independent executions use the same underlying model; correlated semantic errors remain possible.",
+      "data_custody": "exposed train/dev data; no sealed evaluation",
+      "files": {
+        "QUALITY_REPORT.md": {
+          "bytes": 435,
+          "sha256": "1d16934eb2810d213139125b26553bca9981be29df87445f3a62ddf6148dadb6"
+        },
+        "canonical.jsonl": {
+          "bytes": 275572,
+          "sha256": "b8ab3087c33a3c032f248bdbce6cfcb95f31201cc192feb3294b020e3ccad8bb"
+        },
+        "dev_challenge-preference.jsonl": {
+          "bytes": 27632,
+          "sha256": "021fb61f93d1afb3d931b9834e054565c75433cabf4f5b89ccbd6066a201219f"
+        },
+        "dev_challenge-process_reward.jsonl": {
+          "bytes": 379094,
+          "sha256": "14b6edb77526285f310acf8f38ecc00c2ad36dfdfb00eb38d59fd25142a43c0d"
+        },
+        "dev_challenge-sft.jsonl": {
+          "bytes": 36840,
+          "sha256": "d203cefea67fa0a2d6c6c0f328e6b0ebad1098ff4f03476dd1777fd80c960c77"
+        },
+        "dev_challenge-structured.jsonl": {
+          "bytes": 34820,
+          "sha256": "0284db823fda72a9381f8c463d76beecd37fb3ea69a78df1395214f7dec8f88c"
+        },
+        "oracle_receipts.jsonl": {
+          "bytes": 8424,
+          "sha256": "bc705f3bb8dce3332de3657f8df64bec5f28d12eb794b8a5ef901017088fd88f"
+        },
+        "review_receipts.jsonl": {
+          "bytes": 545684,
+          "sha256": "2f18d3eedcdaf3c67fee4ba2a97f112e0534c0368005857706f7fddceeacc9fc"
+        },
+        "train-preference.jsonl": {
+          "bytes": 120200,
+          "sha256": "6e2b71a2b5c461fba16e1f51daca9c8d4436408222bc5b404f839f4d1aa93829"
+        },
+        "train-process_reward.jsonl": {
+          "bytes": 1791928,
+          "sha256": "91f32af465746f6ad3deeaf42b11315ae13cdb149536a0f19ebe692467827def"
+        },
+        "train-sft.jsonl": {
+          "bytes": 175884,
+          "sha256": "ceb458d818e84b75d74769416b9b9818793abcd44a32aa9afddb356222173cd9"
+        },
+        "train-structured.jsonl": {
+          "bytes": 165940,
+          "sha256": "370e8f01790cb3071b936859977ca8a8a697b3046dc0cd1a39198296536ebbd1"
+        }
+      },
+      "export_profile": "specialized-1.0.0",
+      "exporter_review": {
+        "exporter_sha256": "3ca80e926583e1a4a961037605598fc872901780e272ae518c52023d4f2da316",
+        "expert_receipt": "expert-exporter-revised-3ca80e926583",
+        "adversarial_evidence": "reviews/adversarial/exports-code-review.json"
+      },
+      "path": "data/RVM-001/releases/v0004",
+      "active_status": "ACTIVE",
+      "active_records": 24,
       "remote_backup_status": "LOCAL_ONLY",
       "remote_checkpoint": null
     }
@@ -1776,16 +2007,77 @@
       }
     },
     "RVM-001": {
-      "records": 360,
-      "source_families": 180,
+      "records": 384,
+      "source_families": 192,
       "splits": {
-        "train": 288,
-        "dev_challenge": 72
+        "train": 308,
+        "dev_challenge": 76
       }
     }
   },
-  "accepted_records": 2548,
-  "accepted_source_families": 624,
+  "accepted_records": 2572,
+  "accepted_source_families": 636,
+  "active_difficulty": {
+    "RBM-001": {
+      "2": 16,
+      "3": 8
+    },
+    "RCM-001": {
+      "3": 384,
+      "1": 192,
+      "4": 864
+    },
+    "RDP-001": {
+      "2": 4,
+      "3": 20
+    },
+    "REM-001": {
+      "3": 120
+    },
+    "RGM-001": {
+      "3": 64,
+      "4": 292,
+      "1": 28,
+      "2": 48
+    },
+    "RJP-001": {
+      "2": 12,
+      "3": 12
+    },
+    "RMM-001": {
+      "3": 76
+    },
+    "ROM-001": {
+      "3": 24
+    },
+    "RSM-001": {
+      "2": 4,
+      "3": 16,
+      "4": 4
+    },
+    "RVM-001": {
+      "4": 276,
+      "3": 108
+    }
+  },
+  "current_evidence": [
+    {
+      "path": "quality_reports/ALL_RELEASES_INTEGRITY.json",
+      "sha256": "cfbeaac8902eecc8e513bebb2754d759179a55c53cbd3db1d4faf57c410248d8"
+    },
+    {
+      "path": "quality_reports/FINAL_SESSION_VALIDATION.json",
+      "sha256": "ecf79cf06de45375661630f14a68fa2b1c3c6cc13c96dd946eb882f087a3c91f"
+    },
+    {
+      "path": "audits/shortcut_detection/claim-gap-v2-controls.json",
+      "sha256": "a9379ddb567d679b855c2f2c722916f67ec5c16a866247e65c20181195cf28d8"
+    },
+    {
+      "path": "research/research_gap_analysis/PRODUCTION_MILESTONE.md",
+      "sha256": "6150a5cfd47713fc0a76170b5390904c4b2ae75700432db04f970a2ead9aab4c"
+    }
+  ],
   "backups": [
     {
       "checkpoint_id": "all-pilots",
@@ -1816,6 +2108,13 @@
       "approval": "provisional_checkpoint"
     },
     {
+      "checkpoint_id": "production-milestone",
+      "status": "BACKED_UP",
+      "commit_sha": "ee7a91cf8cf4195238dafb0caa6f494a20c0b7ef",
+      "remote_commit_sha": "ee7a91cf8cf4195238dafb0caa6f494a20c0b7ef",
+      "approval": "reviewed_release"
+    },
+    {
       "checkpoint_id": "review-milestone",
       "status": "BACKED_UP",
       "commit_sha": "7decf8635f37a9e0e514b05dcd5dc7135a7eeb57",
@@ -1825,9 +2124,9 @@
   ],
   "reviews": {
     "expert": {
-      "records": 3616,
+      "records": 3640,
       "decisions": {
-        "ACCEPT": 3502,
+        "ACCEPT": 3526,
         "REVISE": 114
       }
     },
@@ -1839,9 +2138,9 @@
       }
     },
     "adjudication": {
-      "records": 3376,
+      "records": 3400,
       "decisions": {
-        "ACCEPT": 3236,
+        "ACCEPT": 3260,
         "REVISE": 140
       }
     }
@@ -1885,7 +2184,15 @@
       },
       "structural_template_holdout": false,
       "protected_benchmark_inspected": false,
-      "scope": "fresh generated development data; not a sealed generalization instrument"
+      "scope": "fresh generated development data; not a sealed generalization instrument",
+      "metadata_failures": 0,
+      "validation_failures": 0
+    },
+    {
+      "family_overlap": [],
+      "split_leakage": [],
+      "cross_parent_semantic_duplicates": [],
+      "already_released_samples": []
     },
     {
       "batch": "expansion-v1",
@@ -1909,7 +2216,9 @@
       },
       "structural_template_holdout": false,
       "protected_benchmark_inspected": false,
-      "scope": "fresh generated development data; not a sealed generalization instrument"
+      "scope": "fresh generated development data; not a sealed generalization instrument",
+      "metadata_failures": 80,
+      "validation_failures": 80
     },
     {
       "family_overlap": [],

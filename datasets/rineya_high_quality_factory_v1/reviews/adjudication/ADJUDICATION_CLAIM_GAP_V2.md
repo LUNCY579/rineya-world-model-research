@@ -1,0 +1,13 @@
+# Claim-gap-v2 independent adjudication
+
+Actual execution `/root/research_architect`:24 ACCEPT records after completed expert/adversarial reviews and independent lineage inspection. Exact canonical hashes, schema, visible payload/full target, oracle and factual tags agree. The adjudicator independently replayed all398 rendered candidate observations and checked both same-plan correctness matrices in every family.
+
+There are12 new source families p0180–p0191,12 distinct exact graph worlds,199 distinct semantic candidates and24 forward/reverse renderings. Source keys and exact worlds do not overlap earlier generated releases across graph/critic tracks. Every family's variants keep one parent/split. Training has10 families/20 rows; exposed development2 families/4 rows. These are fresh world instances under familiar graph dynamics and critic objectives, not12 new reasoning mechanisms. Four normalized graph motifs are already exposed under the adversarial auditor's documented stripping convention.
+
+Every family includes exact, fuel-overclaim, fuel-underclaim and exact-fuel wrong-location claims for the same empty and legal one-step plans, with matching absolute fuel-error magnitudes. Changing a claim leaves validity, actual goal reach, remaining distance, progress, usefulness and fresh initial repair unchanged. Wrong claims share exact ranking groups, while exact claims strictly outrank them; illegal action indices still take precedence over wrong claims.
+
+The199 distinct candidate pool includes71 valid exact claims,48 valid same-location overclaims,24 underclaims,24 valid wrong-location claims and32 invalid candidates. The full pure-fuel mix remains2:1 over-to-under, despite both directions appearing in every matched stratum. Renderer/candidate labels remain correlated within12 worlds, development has only2 families, and the fixed corruption matrix still limits broad unseen-producer claims. No efficacy claim follows without separate authorized training/evaluation.
+
+Both finalized reviewers ACCEPT all24 exact records; no disagreement is omitted. Their low issues and independent audit limits remain attached. Quarantined claim-gap-v1 was not used as approval evidence. This architect/adjudicator produced no samples and changed no producer or release files. Actual agent executions are separate, while same-model correlated error remains a limitation.
+
+Review context is disclosed: expert initial claim-gap review reports no prior batch verdicts read; adversarial factual-tag/control followup is informed by previously disclosed tag/control topics. The facts were independently recomputed, with no other reviewer verdict files reported read. Guided followup is not presented as an entirely blind new correction execution.

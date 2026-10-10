@@ -43,9 +43,9 @@ Review decision counts:
 ```json
 {
   "expert": {
-    "records": 3616,
+    "records": 3640,
     "decisions": {
-      "ACCEPT": 3502,
+      "ACCEPT": 3526,
       "REVISE": 114
     }
   },
@@ -57,9 +57,9 @@ Review decision counts:
     }
   },
   "adjudication": {
-    "records": 3376,
+    "records": 3400,
     "decisions": {
-      "ACCEPT": 3236,
+      "ACCEPT": 3260,
       "REVISE": 140
     }
   }
@@ -108,7 +108,15 @@ Exact oracle, schema, duplicates and family split audit summaries:
     },
     "structural_template_holdout": false,
     "protected_benchmark_inspected": false,
-    "scope": "fresh generated development data; not a sealed generalization instrument"
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 0,
+    "validation_failures": 0
+  },
+  {
+    "family_overlap": [],
+    "split_leakage": [],
+    "cross_parent_semantic_duplicates": [],
+    "already_released_samples": []
   },
   {
     "batch": "expansion-v1",
@@ -132,7 +140,9 @@ Exact oracle, schema, duplicates and family split audit summaries:
     },
     "structural_template_holdout": false,
     "protected_benchmark_inspected": false,
-    "scope": "fresh generated development data; not a sealed generalization instrument"
+    "scope": "fresh generated development data; not a sealed generalization instrument",
+    "metadata_failures": 80,
+    "validation_failures": 80
   },
   {
     "family_overlap": [],
@@ -418,3 +428,5 @@ Exact oracle, schema, duplicates and family split audit summaries:
 ```
 
 Template overlap remains a known scope limitation. All three P0 task families require independent expert/adversarial assessment and adjudication before release. Oracle equivalence and mechanized review do not establish native model performance. Reviewers share the underlying model, with correlated-error risk. Generation uses local CPU arithmetic/BFS, no paid external generation service; agent-token costs are not metered per sample.
+
+Source bytes are preserved under reproducibility/source_blobs and indexed in reproducibility/SOURCE_ARCHIVE_INDEX.json. Three original broad source snapshots for historical RCM v0002 could not be recovered; v0003 supersedes it with identical reviewed data, independently reproduced generation and available source bytes. The historical limitation remains documented in quality_reports/reproducibility/RCM-001-v0002.json. Machine audit reruns preserve prior bytes when results change.

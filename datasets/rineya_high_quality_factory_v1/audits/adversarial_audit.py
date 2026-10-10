@@ -547,7 +547,8 @@ def shortcuts(rows, answers):
             track_report["strict_preference_pair_length_counts"]=dict(pair_lengths)
             unequal=pair_lengths["preferred_shorter"]+pair_lengths["preferred_longer"]
             track_report["shorter_candidate_pair_baseline_accuracy_excluding_equal_lengths"]=pair_lengths["preferred_shorter"]/unequal if unequal else None
-            track_report["independence_caveat"]="310 candidate labels and all pairwise preferences share only 30 worlds; report family-level controls and do not treat these as independent trials."
+            track_report["independence_caveat"]=(f"{len(examples)} candidate labels and all pairwise preferences share only {len(rs)} worlds; "
+                                                    "report family-level controls and do not treat these as independent trials.")
         else:
             track_report["kind_only"] = lookup_baseline(examples, lambda e: e["kind"], lambda e: e["label"])
             track_report["reaches_goal_counts"] = dict(Counter(e["reaches"] for e in examples))
@@ -724,8 +725,10 @@ def semantic_probes():
     return len(samples)
 
 
-def main(batch):
+def main(batch, tracks=None):
     paths = sorted((ROOT/"data").glob("*/candidate_renderings/"+batch+".jsonl"))
+    if tracks:
+        paths = [p for p in paths if p.parent.parent.name in tracks]
     rows = [json.loads(line) for p in paths for line in p.read_text().splitlines() if line.strip()]
     require(rows, "no candidate records")
     answers, receipts, errors = {}, [], []
@@ -832,8 +835,9 @@ if __name__ == "__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--batch",default="pilot-v1")
     parser.add_argument("--calibration",action="store_true")
+    parser.add_argument("--track",action="append",help="Review only the selected release tracks; may repeat.")
     args=parser.parse_args()
     if args.calibration:
         calibration()
     else:
-        main(args.batch)
+        main(args.batch,args.track)

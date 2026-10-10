@@ -1,5 +1,73 @@
 # Actual curriculum coverage
 
+The first P0 production milestone is reached: each priority track has at least 150 reviewed source families, and all seven other tracks have independently reviewed exact-verifiable pilots. Further generation should follow diagnosed capability gaps.
+
+Active approved inventory:
+
+| Track | Approved records | Distinct source families |
+|---|---:|---:|
+| RBM-001 | 24 | 12 |
+| RCM-001 | 1440 | 180 |
+| RDP-001 | 24 | 12 |
+| REM-001 | 120 | 12 |
+| RGM-001 | 432 | 180 |
+| RJP-001 | 24 | 12 |
+| RMM-001 | 76 | 12 |
+| ROM-001 | 24 | 12 |
+| RSM-001 | 24 | 12 |
+| RVM-001 | 384 | 192 |
+
+
+Active difficulty counts (canonical records, including render variants):
+
+```json
+{
+  "RBM-001": {
+    "2": 16,
+    "3": 8
+  },
+  "RCM-001": {
+    "3": 384,
+    "1": 192,
+    "4": 864
+  },
+  "RDP-001": {
+    "2": 4,
+    "3": 20
+  },
+  "REM-001": {
+    "3": 120
+  },
+  "RGM-001": {
+    "3": 64,
+    "4": 292,
+    "1": 28,
+    "2": 48
+  },
+  "RJP-001": {
+    "2": 12,
+    "3": 12
+  },
+  "RMM-001": {
+    "3": 76
+  },
+  "ROM-001": {
+    "3": 24
+  },
+  "RSM-001": {
+    "2": 4,
+    "3": 16,
+    "4": 4
+  },
+  "RVM-001": {
+    "4": 276,
+    "3": 108
+  }
+}
+```
+
+Historical candidate inventory; revisions and renderings must not be added to active family counts:
+
 | Track | Batch | Candidate records | Source-family IDs |
 |---|---|---:|---:|
 | RBM-001 | extended-pilot-v1 | 24 | 12 |
@@ -36,7 +104,7 @@
 | RVM-001 | pilot-v4 | 60 | 30 |
 
 
-Difficulty counts by batch:
+Difficulty counts by historical batch:
 
 ```json
 {

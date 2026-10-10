@@ -2,7 +2,7 @@
 
 CPU-only dataset production is active. Existing research is read-only. No model loading, training or weights/architecture changes.
 
-2548 approved canonical records from 624 distinct source families. A family is one generated world/program instance, not a new mechanism class.
+2572 approved canonical records from 636 distinct source families. A family is one generated world/program instance, not a new mechanism class.
 
 | Track | Approved records | Distinct source families |
 |---|---:|---:|
@@ -15,7 +15,7 @@ CPU-only dataset production is active. Existing research is read-only. No model 
 | RMM-001 | 76 | 12 |
 | ROM-001 | 24 | 12 |
 | RSM-001 | 24 | 12 |
-| RVM-001 | 360 | 180 |
+| RVM-001 | 384 | 192 |
 
 
 Historical candidate inventory (revisions must not be summed):
@@ -58,20 +58,22 @@ Historical candidate inventory (revisions must not be summed):
 
 Approved release inventory:
 
-- RBM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (all-pilots).
-- RCM-001 v0001: 240 historical records, 240 active; ACTIVE, BACKED_UP (first-approved).
-- RCM-001 v0002: 1200 historical records, 1200 active; ACTIVE, LOCAL_ONLY (verification pending).
-- RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (all-pilots).
-- REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (all-pilots).
-- RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (all-pilots).
-- RGM-001 v0002: 360 historical records, 360 active; ACTIVE, LOCAL_ONLY (verification pending).
-- RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (all-pilots).
-- RMM-001 v0001: 76 historical records, 76 active; ACTIVE, BACKED_UP (all-pilots).
-- ROM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (all-pilots).
-- RSM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (all-pilots).
-- RVM-001 v0001: 60 historical records, 0 active; SUPERSEDED, BACKED_UP (first-approved).
-- RVM-001 v0002: 300 historical records, 300 active; ACTIVE, LOCAL_ONLY (verification pending).
-- RVM-001 v0003: 60 historical records, 60 active; ACTIVE, LOCAL_ONLY (verification pending).
+- RBM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
+- RCM-001 v0001: 240 historical records, 240 active; ACTIVE, BACKED_UP (production-milestone).
+- RCM-001 v0002: 1200 historical records, 0 active; SUPERSEDED, BACKED_UP (production-milestone).
+- RCM-001 v0003: 1200 historical records, 1200 active; ACTIVE, LOCAL_ONLY (verification pending).
+- RDP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
+- REM-001 v0001: 120 historical records, 120 active; ACTIVE, BACKED_UP (production-milestone).
+- RGM-001 v0001: 72 historical records, 72 active; ACTIVE, BACKED_UP (production-milestone).
+- RGM-001 v0002: 360 historical records, 360 active; ACTIVE, BACKED_UP (production-milestone).
+- RJP-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
+- RMM-001 v0001: 76 historical records, 76 active; ACTIVE, BACKED_UP (production-milestone).
+- ROM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
+- RSM-001 v0001: 24 historical records, 24 active; ACTIVE, BACKED_UP (production-milestone).
+- RVM-001 v0001: 60 historical records, 0 active; SUPERSEDED, BACKED_UP (production-milestone).
+- RVM-001 v0002: 300 historical records, 300 active; ACTIVE, BACKED_UP (production-milestone).
+- RVM-001 v0003: 60 historical records, 60 active; ACTIVE, BACKED_UP (production-milestone).
+- RVM-001 v0004: 24 historical records, 24 active; ACTIVE, LOCAL_ONLY (verification pending).
 
 Backups:
 
@@ -79,6 +81,7 @@ Backups:
 - first-approved: BACKED_UP; commit 8c2571e51e43ed206d111321482367802b79600a.
 - foundation-r2: BACKED_UP; commit 517a51a60a00e6b7a625edeeb8e6bc126393856c.
 - foundation: FAILED_LOCAL_ARTIFACTS_PRESERVED; commit pending.
+- production-milestone: BACKED_UP; commit ee7a91cf8cf4195238dafb0caa6f494a20c0b7ef.
 - review-milestone: BACKED_UP; commit 7decf8635f37a9e0e514b05dcd5dc7135a7eeb57.
 
 All ten curricula exist. P0 pilot correctness/review precedes expansion. Counterfactual/rendering counts do not inflate parent counts. Exposed dev challenges are not sealed tests. Exact state correctness is a data property; model benefit remains untested.

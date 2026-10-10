@@ -1,0 +1,1145 @@
+{
+  "schema_version": "1.0.0",
+  "reviewer_execution_id": "/root/research_architect",
+  "role": "Independent Quality Adjudicator",
+  "batch": "claim-gap-v2",
+  "completed_at_utc": "2026-10-10T00:48:47.168547+00:00",
+  "records": 24,
+  "new_source_families": 12,
+  "source_family_indices": [
+    180,
+    191
+  ],
+  "distinct_semantic_candidates": 199,
+  "rendered_candidate_observations": 398,
+  "split_counts": {
+    "train": 20,
+    "dev_challenge": 4
+  },
+  "difficulty_counts": {
+    "4": 20,
+    "3": 4
+  },
+  "decision_counts": {
+    "ACCEPT": 24
+  },
+  "reviewer_disagreements_preserved": 0,
+  "all_final_receipts_complete": true,
+  "typed_hash_schema_prompt_target_and_factual_tags_verified": true,
+  "independent_graph_replay_and_claim_matrix_checks": true,
+  "distinct_valid_claim_type_counts": {
+    "invalid": 32,
+    "exact": 71,
+    "wrong_location": 24,
+    "over": 48,
+    "under": 24
+  },
+  "pure_valid_same_location_fuel_error_delta_counts": {
+    "2": 15,
+    "-2": 9,
+    "1": 19,
+    "-1": 9,
+    "-3": 6,
+    "3": 14
+  },
+  "full_pool_sign_ratio": "48 overclaims:24 underclaims,2:1;matched both-sign presence is not global frequency balance",
+  "matched_plan_groups_per_world": 2,
+  "claim_independent_dynamics_and_exact_ranking_invariants": true,
+  "cross_release_source_family_overlap": 0,
+  "cross_release_exact_graph_world_overlap_all_tracks": 0,
+  "adversarial_normalized_motif_overlap_families": 4,
+  "independent_lineage_execution": "/root/research_architect/claim_lineage_audit",
+  "family_details": {
+    "RVM-001-seed20261009-p0180": {
+      "sample_id": "RVM-001-claim-gap-v2-p0180-base-forward",
+      "split": "train",
+      "independent_world_sha256": "47c4b5a284c66ae24ca725d29632fc44bb07aa4dedd43579a02759f5bd29c1d4",
+      "candidate_count": 17,
+      "valid_claim_type_counts": {
+        "invalid": 3,
+        "exact": 6,
+        "wrong_location": 2,
+        "over": 4,
+        "under": 2
+      },
+      "matrices": [
+        {
+          "plan": [
+            "Cedar"
+          ],
+          "actual_after": {
+            "node": "Cedar",
+            "fuel": 11
+          },
+          "claim_support": {
+            "exact": [
+              "c34949",
+              "c53965"
+            ],
+            "over": [
+              "c97734",
+              "c87526"
+            ],
+            "under": [
+              "c91124"
+            ],
+            "wrong_location": [
+              "c36271"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Ember",
+            "fuel": 14
+          },
+          "claim_support": {
+            "exact": [
+              "c86426"
+            ],
+            "over": [
+              "c60858"
+            ],
+            "under": [
+              "c46191"
+            ],
+            "wrong_location": [
+              "c24669"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0181": {
+      "sample_id": "RVM-001-claim-gap-v2-p0181-base-forward",
+      "split": "train",
+      "independent_world_sha256": "479d787ddd3d39c1e3cbc3d428097a481d979bd981e01f5ffa5ddedb5e4981b7",
+      "candidate_count": 16,
+      "valid_claim_type_counts": {
+        "exact": 5,
+        "under": 2,
+        "wrong_location": 2,
+        "over": 4,
+        "invalid": 3
+      },
+      "matrices": [
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Ember",
+            "fuel": 11
+          },
+          "claim_support": {
+            "exact": [
+              "c22407"
+            ],
+            "over": [
+              "c46089"
+            ],
+            "under": [
+              "c59726"
+            ],
+            "wrong_location": [
+              "c67685"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [
+            "Aster"
+          ],
+          "actual_after": {
+            "node": "Aster",
+            "fuel": 7
+          },
+          "claim_support": {
+            "exact": [
+              "c81575",
+              "c77985"
+            ],
+            "over": [
+              "c54930",
+              "c41659"
+            ],
+            "under": [
+              "c95197"
+            ],
+            "wrong_location": [
+              "c60689"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0182": {
+      "sample_id": "RVM-001-claim-gap-v2-p0182-base-forward",
+      "split": "train",
+      "independent_world_sha256": "d3b30c830293a69ef3395dd8e6843c6f78c53e9abbeb9a3488359818dfb893a6",
+      "candidate_count": 16,
+      "valid_claim_type_counts": {
+        "exact": 6,
+        "wrong_location": 2,
+        "over": 4,
+        "invalid": 2,
+        "under": 2
+      },
+      "matrices": [
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Beryl",
+            "fuel": 19
+          },
+          "claim_support": {
+            "exact": [
+              "c28400"
+            ],
+            "over": [
+              "c73814"
+            ],
+            "under": [
+              "c15651"
+            ],
+            "wrong_location": [
+              "c34714"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            3
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [
+            "Cedar"
+          ],
+          "actual_after": {
+            "node": "Cedar",
+            "fuel": 16
+          },
+          "claim_support": {
+            "exact": [
+              "c10833",
+              "c79054"
+            ],
+            "over": [
+              "c65793",
+              "c60818"
+            ],
+            "under": [
+              "c39347"
+            ],
+            "wrong_location": [
+              "c22463"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0183": {
+      "sample_id": "RVM-001-claim-gap-v2-p0183-base-forward",
+      "split": "train",
+      "independent_world_sha256": "fda0811478e7101771ffc11de7f1f01a4e4be1b33589be1da7c8e764d3751ba5",
+      "candidate_count": 17,
+      "valid_claim_type_counts": {
+        "invalid": 3,
+        "under": 2,
+        "wrong_location": 2,
+        "exact": 6,
+        "over": 4
+      },
+      "matrices": [
+        {
+          "plan": [
+            "Dune"
+          ],
+          "actual_after": {
+            "node": "Dune",
+            "fuel": 10
+          },
+          "claim_support": {
+            "exact": [
+              "c37593",
+              "c24273"
+            ],
+            "over": [
+              "c44970",
+              "c55440"
+            ],
+            "under": [
+              "c37550"
+            ],
+            "wrong_location": [
+              "c80759"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Cedar",
+            "fuel": 12
+          },
+          "claim_support": {
+            "exact": [
+              "c97896"
+            ],
+            "over": [
+              "c80176"
+            ],
+            "under": [
+              "c66713"
+            ],
+            "wrong_location": [
+              "c44166"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            3
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0184": {
+      "sample_id": "RVM-001-claim-gap-v2-p0184-base-forward",
+      "split": "train",
+      "independent_world_sha256": "ca852d823dde7d5e34d51c88ce1c2d3aee2dabbcd936acfa5fac61e60611791f",
+      "candidate_count": 16,
+      "valid_claim_type_counts": {
+        "wrong_location": 2,
+        "under": 2,
+        "exact": 6,
+        "invalid": 2,
+        "over": 4
+      },
+      "matrices": [
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Fjord",
+            "fuel": 13
+          },
+          "claim_support": {
+            "exact": [
+              "c37005",
+              "c26269"
+            ],
+            "over": [
+              "c29619",
+              "c73742"
+            ],
+            "under": [
+              "c53354"
+            ],
+            "wrong_location": [
+              "c52839"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [
+            "Aster"
+          ],
+          "actual_after": {
+            "node": "Aster",
+            "fuel": 9
+          },
+          "claim_support": {
+            "exact": [
+              "c98665",
+              "c57818"
+            ],
+            "over": [
+              "c57469",
+              "c13353"
+            ],
+            "under": [
+              "c11241"
+            ],
+            "wrong_location": [
+              "c54332"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0185": {
+      "sample_id": "RVM-001-claim-gap-v2-p0185-base-forward",
+      "split": "train",
+      "independent_world_sha256": "1ab910dcad6bff5d2b9b4f10328df4bf433ba986f2afd4e9b3967b1bfb2cff39",
+      "candidate_count": 17,
+      "valid_claim_type_counts": {
+        "over": 4,
+        "invalid": 3,
+        "exact": 6,
+        "under": 2,
+        "wrong_location": 2
+      },
+      "matrices": [
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Cedar",
+            "fuel": 13
+          },
+          "claim_support": {
+            "exact": [
+              "c88532"
+            ],
+            "over": [
+              "c63565"
+            ],
+            "under": [
+              "c64901"
+            ],
+            "wrong_location": [
+              "c18710"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [
+            "Aster"
+          ],
+          "actual_after": {
+            "node": "Aster",
+            "fuel": 11
+          },
+          "claim_support": {
+            "exact": [
+              "c23601",
+              "c86711"
+            ],
+            "over": [
+              "c89970",
+              "c10579"
+            ],
+            "under": [
+              "c55415"
+            ],
+            "wrong_location": [
+              "c13786"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0186": {
+      "sample_id": "RVM-001-claim-gap-v2-p0186-base-forward",
+      "split": "train",
+      "independent_world_sha256": "eff476aeaa6f53b3fe9e2386c79ed23a116e8e220a889e87543a8090d9e536aa",
+      "candidate_count": 17,
+      "valid_claim_type_counts": {
+        "exact": 6,
+        "invalid": 3,
+        "wrong_location": 2,
+        "over": 4,
+        "under": 2
+      },
+      "matrices": [
+        {
+          "plan": [
+            "Ember"
+          ],
+          "actual_after": {
+            "node": "Ember",
+            "fuel": 18
+          },
+          "claim_support": {
+            "exact": [
+              "c32118",
+              "c31615"
+            ],
+            "over": [
+              "c47592",
+              "c57708"
+            ],
+            "under": [
+              "c65150"
+            ],
+            "wrong_location": [
+              "c20443"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Beryl",
+            "fuel": 20
+          },
+          "claim_support": {
+            "exact": [
+              "c61004"
+            ],
+            "over": [
+              "c60412"
+            ],
+            "under": [
+              "c73499"
+            ],
+            "wrong_location": [
+              "c38751"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            3
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0187": {
+      "sample_id": "RVM-001-claim-gap-v2-p0187-base-forward",
+      "split": "train",
+      "independent_world_sha256": "be3bf738780bf2e427b2e28b21a0f6b984dc8386eee984107068bd39dd4bda61",
+      "candidate_count": 17,
+      "valid_claim_type_counts": {
+        "over": 4,
+        "wrong_location": 2,
+        "exact": 6,
+        "invalid": 3,
+        "under": 2
+      },
+      "matrices": [
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Fjord",
+            "fuel": 15
+          },
+          "claim_support": {
+            "exact": [
+              "c82723"
+            ],
+            "over": [
+              "c78279"
+            ],
+            "under": [
+              "c86021"
+            ],
+            "wrong_location": [
+              "c29978"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [
+            "Aster"
+          ],
+          "actual_after": {
+            "node": "Aster",
+            "fuel": 11
+          },
+          "claim_support": {
+            "exact": [
+              "c74106",
+              "c58810"
+            ],
+            "over": [
+              "c27781",
+              "c35936"
+            ],
+            "under": [
+              "c83085"
+            ],
+            "wrong_location": [
+              "c48228"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0188": {
+      "sample_id": "RVM-001-claim-gap-v2-p0188-base-forward",
+      "split": "dev_challenge",
+      "independent_world_sha256": "80c6010565ea7e2568dd984ffe965f4178dc2e6aa7e9eef0bbb7b7317cc6ef99",
+      "candidate_count": 16,
+      "valid_claim_type_counts": {
+        "invalid": 2,
+        "exact": 6,
+        "over": 4,
+        "wrong_location": 2,
+        "under": 2
+      },
+      "matrices": [
+        {
+          "plan": [
+            "Nacre"
+          ],
+          "actual_after": {
+            "node": "Nacre",
+            "fuel": 26
+          },
+          "claim_support": {
+            "exact": [
+              "c96825",
+              "c87227"
+            ],
+            "over": [
+              "c85422",
+              "c99423"
+            ],
+            "under": [
+              "c44831"
+            ],
+            "wrong_location": [
+              "c10419"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            3
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Quasar",
+            "fuel": 29
+          },
+          "claim_support": {
+            "exact": [
+              "c51862"
+            ],
+            "over": [
+              "c70960"
+            ],
+            "under": [
+              "c79501"
+            ],
+            "wrong_location": [
+              "c91701"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0189": {
+      "sample_id": "RVM-001-claim-gap-v2-p0189-base-forward",
+      "split": "dev_challenge",
+      "independent_world_sha256": "f700881ed7d98a5e0b7022ba1a832a9ffd403f6f239e60b2fc2de2fcb64f67e3",
+      "candidate_count": 17,
+      "valid_claim_type_counts": {
+        "exact": 6,
+        "under": 2,
+        "over": 4,
+        "invalid": 3,
+        "wrong_location": 2
+      },
+      "matrices": [
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Nacre",
+            "fuel": 16
+          },
+          "claim_support": {
+            "exact": [
+              "c49226"
+            ],
+            "over": [
+              "c23794"
+            ],
+            "under": [
+              "c96274"
+            ],
+            "wrong_location": [
+              "c91458"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [
+            "Vesper"
+          ],
+          "actual_after": {
+            "node": "Vesper",
+            "fuel": 12
+          },
+          "claim_support": {
+            "exact": [
+              "c84623",
+              "c16197"
+            ],
+            "over": [
+              "c43247",
+              "c39560"
+            ],
+            "under": [
+              "c91002"
+            ],
+            "wrong_location": [
+              "c24078"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            3
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0190": {
+      "sample_id": "RVM-001-claim-gap-v2-p0190-base-forward",
+      "split": "train",
+      "independent_world_sha256": "be03087440449b134d88a65bafa7064bc270689ccb8e485815f47902c55bbdbd",
+      "candidate_count": 16,
+      "valid_claim_type_counts": {
+        "over": 4,
+        "exact": 6,
+        "under": 2,
+        "invalid": 2,
+        "wrong_location": 2
+      },
+      "matrices": [
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Dune",
+            "fuel": 17
+          },
+          "claim_support": {
+            "exact": [
+              "c85231",
+              "c62554"
+            ],
+            "over": [
+              "c95603",
+              "c11767"
+            ],
+            "under": [
+              "c69076"
+            ],
+            "wrong_location": [
+              "c75704"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [
+            "Fjord"
+          ],
+          "actual_after": {
+            "node": "Fjord",
+            "fuel": 13
+          },
+          "claim_support": {
+            "exact": [
+              "c48715",
+              "c83130"
+            ],
+            "over": [
+              "c92688",
+              "c35637"
+            ],
+            "under": [
+              "c10994"
+            ],
+            "wrong_location": [
+              "c66985"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            2
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    },
+    "RVM-001-seed20261009-p0191": {
+      "sample_id": "RVM-001-claim-gap-v2-p0191-base-forward",
+      "split": "train",
+      "independent_world_sha256": "1e91838359a14ec5c64dd7f01a32e814374411a86473c7ab7b278ee9edeabc7a",
+      "candidate_count": 17,
+      "valid_claim_type_counts": {
+        "wrong_location": 2,
+        "over": 4,
+        "under": 2,
+        "exact": 6,
+        "invalid": 3
+      },
+      "matrices": [
+        {
+          "plan": [],
+          "actual_after": {
+            "node": "Aster",
+            "fuel": 23
+          },
+          "claim_support": {
+            "exact": [
+              "c98244"
+            ],
+            "over": [
+              "c63613"
+            ],
+            "under": [
+              "c44600"
+            ],
+            "wrong_location": [
+              "c13033"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            1
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        },
+        {
+          "plan": [
+            "Beryl"
+          ],
+          "actual_after": {
+            "node": "Beryl",
+            "fuel": 19
+          },
+          "claim_support": {
+            "exact": [
+              "c80279",
+              "c28720"
+            ],
+            "over": [
+              "c68644",
+              "c39847"
+            ],
+            "under": [
+              "c96791"
+            ],
+            "wrong_location": [
+              "c80641"
+            ]
+          },
+          "matched_signed_absolute_magnitudes": [
+            3
+          ],
+          "wrong_claims_share_exact_ranking_group": true,
+          "truth_strictly_outranks_wrong_claims": true,
+          "claim_independent_dynamics_fields": [
+            "valid",
+            "reaches_goal",
+            "remaining_moves",
+            "progress",
+            "usefulness",
+            "repair_plan"
+          ]
+        }
+      ]
+    }
+  },
+  "inputs_sha256": {
+    "data/RVM-001/candidate_renderings/claim-gap-v2.jsonl": "aec066f150f66d13fe399360e230a8d4c1c545826de7183b3d3a5a734763dbda",
+    "reviews/expert/claim-gap-v2.jsonl": "c666067e89c9cd9e06aa61c98bb486bdfd6300b47d43f326b1e226e935fc4cef",
+    "reviews/adversarial/claim-gap-v2.jsonl": "cef87613d4fbfa0ff8ade7ba78439e52ddbc6404c32b60a61e059f9925bfdccb",
+    "reviews/oracle/claim-gap-v2.jsonl": "ffe8650bd2dc41598743ecd88ca394ac0eb0afb498363f052772f68deb1fe55b",
+    "reviews/expert/verification_summary_claim_gap_v2.json": "4a013df534bd207be1fa366d533667fcff2e1b23aea88d979cf5efee4aec44a0",
+    "reviews/expert/semantic_inspection_claim_gap_v2.md": "66452830927038754d14549af845e6caaa307da36a91dab59edf473a5b163a18",
+    "reviews/adversarial/execution-claim-gap-v2.json": "ad0912a06c9e4af95da4dbea39790ae60b2e7d0274b3212c1022a921356459ee",
+    "audits/shortcut_detection/claim-gap-v2-controls.json": "a9379ddb567d679b855c2f2c722916f67ec5c16a866247e65c20181195cf28d8",
+    "reviews/adjudication/claim-gap-v2-lineage-audit.json": "3aceecaa473bdb6d149c18792ab979eab27aeb1b22bc6cd8fff776626467f01e",
+    "schemas/SEMANTICS.md": "718cd0da46f9fb2beaf179526a8c089a69c892cba099632aa6b3af3002371bdd",
+    "schemas/COMPETENCY_TAGS.md": "efbfc5755fa7dda2c388e621ca17ac5d96c99bc9f59115d62027e2247dd0e097",
+    "schemas/canonical/v1.schema.json": "f4d8276fe000ceafb0f70c69dbfd1608b823767487d7c0a79623f82cf0daf25f",
+    "oracles/independent.py": "12bc3a04d316184bcc102e334cb91ee3b830d311246b3234375977631b0f9a8a",
+    "data/RBM-001/releases/v0001/canonical.jsonl": "b5845f8303ee8e89d644de2ccea20f21f61507ce515723d83c1fa297e6c51f38",
+    "data/RCM-001/releases/v0001/canonical.jsonl": "e8f10d2b297b602200427a159fa67e6fcb763875603d1a1cd211795d2cadca2a",
+    "data/RCM-001/releases/v0002/canonical.jsonl": "4744be7c5b23de7549124a237a044b03b8766c7875ef665af1024594486463b7",
+    "data/RDP-001/releases/v0001/canonical.jsonl": "9a850a1312406ce7a68a060fa2f5e26ec5dfd4417d63129705678ce69926aa1c",
+    "data/REM-001/releases/v0001/canonical.jsonl": "f05717db521ae9fcfa325874a9dd523666d5009992e965eebdc1e91b4c82aeee",
+    "data/RGM-001/releases/v0001/canonical.jsonl": "bc0a821670884bc0ccf9a42c22a53ade3654718c797946d445f0266ae8ee6990",
+    "data/RGM-001/releases/v0002/canonical.jsonl": "ead8cb798dc5216b4a4a3260a698078b54fe267114edb41b69cfb084ce1eb2bc",
+    "data/RJP-001/releases/v0001/canonical.jsonl": "d5c83b79b78eeea4dd0d4ae8df1d9a7e4e4adf020428a43bf97a341a7ed9f1be",
+    "data/RMM-001/releases/v0001/canonical.jsonl": "bd150158faef6ba77673bcc1a7f500a6deedca063ba690ed75bc3bf236485356",
+    "data/ROM-001/releases/v0001/canonical.jsonl": "e8510bb86619f4070c4ed185a00cbaa33225afd54e42a819f4145517ef2b3114",
+    "data/RSM-001/releases/v0001/canonical.jsonl": "443a2f260ae174c93fa82a9854f4074665e1538a0a588f5b35652cc56975de37",
+    "data/RVM-001/releases/v0001/canonical.jsonl": "262d9bc470353c3aacb105b1bde2bb5b87f1e9771472966ab7f1c53ac672bac3",
+    "data/RVM-001/releases/v0002/canonical.jsonl": "0e23a3393e9a63d043e694aac13df2846e50b3c77ca02159cf609a1c6820c0f1",
+    "data/RVM-001/releases/v0003/canonical.jsonl": "4bb29efeb4e4f8df69ddc5d3f05dd336e442a1d6fc1fa0b3009635b7c9bfb76e",
+    "audits/leakage/claim-gap-v2.json": "9009b637cc0e742c7223f2f203ad9d7a90355dfb5a9e6ac040a21da39aa1b998",
+    "audits/diversity/claim-gap-v2.json": "863befc2ab6ac765b2da524a62a3212bf25fb99413952463e855159ac5be4fb2",
+    "audits/shortcut_detection/claim-gap-v2.json": "9e5d4aadbe61b068014c52ede747ca552a27f84793756afe1cec9c903150c2ea",
+    "audits/shortcut_detection/claim-gap-v2-mechanism-tags.json": "15dc1be453a5465fb115c1e71338747611ecee7dee2c49cccf96e79c0f6a8c53",
+    "reviews/adjudication/adjudicate_claim_gap_v2.py": "7679b5957178ef1756608a708a124f407555b0bfc7c62777ad3794e18ab37f6d",
+    "reviews/adjudication/adjudicate_metadata_revisions.py": "9d38ce28eb882e7a8be94a59a3eebaa106461f4d9f9206f6f7134372b0d5a973"
+  },
+  "output_sha256": {
+    "reviews/adjudication/claim-gap-v2.jsonl": "32b90231fc2a57c228d090320dca2e245ecd14384053f5fb1d90023ca7d90455"
+  },
+  "producer_or_release_files_modified": false,
+  "previous_quarantine_and_reviews_preserved": true,
+  "role_reuse_disclosure": "Actual architect/adjudicator authored specifications, not candidates; reviewers and lineage auditor are actual separate executions. Same underlying model correlation remains.",
+  "review_blinding_disclosure": "Expert initial claim-gap review reports no prior batch verdict read; adversarial executes public-contract/tag/control audits independently. Adjudicator consumes finalized reviews by design.",
+  "guided_followup_review_disclosure": "Expert completed initial blind claim-gap review without prior batch verdicts. Adversarial factual-tag/control followup is guided by previously disclosed tag/control topics; its exact facts are independently recomputed and no other reviewer verdict files are reported read. This is not represented as a new entirely blind correction execution."
+}

@@ -1,0 +1,27 @@
+{
+  "reviewer_execution_id": "/root/adversarial_auditor",
+  "batch": "claim-gap-v2",
+  "records": 24,
+  "logical_variants": 12,
+  "decision_counts": {
+    "ACCEPT": 24
+  },
+  "defect_record_counts": {},
+  "defect_logical_variant_counts": {},
+  "input_file_sha256": {
+    "data/RVM-001/candidate_renderings/claim-gap-v2.jsonl": "aec066f150f66d13fe399360e230a8d4c1c545826de7183b3d3a5a734763dbda"
+  },
+  "audit_script_sha256": "02d09301b74fcb3130ff15c59b5ab711550101240c0033679129e52e0d51ba5d",
+  "findings": [],
+  "challenge_context": "Fresh correction or erratum review informed by prior tag challenges. Current hashes, targets, metamorphics and tag facts checked independently; no other reviewer file read.",
+  "scope": [
+    "Tags are checked against final constructed tasks, not original template intent. Semantic target values continue to be checked independently.",
+    "Positive equal-route claims have distinct feasible simple-route witnesses. New no-equal-route claims exhaust complete goal-ending walks, including departures from and revisits to the goal, bounded by positive integer fuel costs.",
+    "The ordinal predicate tags are opaque producer strata and are not assigned an invented meaning.",
+    "The immutable pilot release is read only; errata live in separate review/audit files.",
+    "Correction batches preserve source families and are not new independent mechanism samples."
+  ],
+  "private_reference_producer_or_reviewer_files_read": false,
+  "small_counterexamples": {},
+  "minimal_semantic_counterexamples": {}
+}

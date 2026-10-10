@@ -1,0 +1,464 @@
+{
+  "schema_version": "1.0.0",
+  "audit_type": "bounded_independent_lineage",
+  "audit_execution_id": "/root/research_architect/claim_lineage_audit",
+  "auditor_identity": "/root/research_architect/claim_lineage_audit",
+  "created_at_utc": "2026-10-10T00:48:28.162567+00:00",
+  "input_file": "data/RVM-001/candidate_renderings/claim-gap-v2.jsonl",
+  "input_file_sha256": "aec066f150f66d13fe399360e230a8d4c1c545826de7183b3d3a5a734763dbda",
+  "scope": {
+    "candidate_file_only": true,
+    "comparison_inputs": "New synthetic RVM-001 critic and RGM-001 graph canonical releases only; RGM non-graph rows used only for complete-record hash and source-key checks.",
+    "original_historical_reference_datasets_read": false,
+    "sealed_instruments_read": false,
+    "models_read": false,
+    "reviewer_verdict_files_read": false,
+    "applicable_AGENTS_files_found": [],
+    "sample_decisions_issued": false,
+    "candidate_or_release_edits": false
+  },
+  "methods": {
+    "record_hash": "SHA256 of UTF-8 json.dumps(record excluding record_hash, sort_keys=True, separators=(comma,colon), ensure_ascii=False).",
+    "source_key": "Declared source_family_key when present; otherwise track_id + generation_seed + terminal semantic_parent_id p-index.",
+    "normalized_exact_graph_world": "Graph kind, sorted distinct node names, sorted [from,to,cost] edges, start, goal, initial fuel. Submitted plan, critic candidates, renderer, targets and metadata excluded; node names and costs retained.",
+    "weighted_world_isomorphism": "Supplementary exact minimization across all node renamings, retaining edge costs, start/goal roles and initial fuel.",
+    "unweighted_topology": "Supplementary exact minimization across all node renamings, preserving directed edge topology and start/goal roles but excluding edge costs and initial fuel.",
+    "renderer_equivalence": "Parsed Task JSON equals stored semantic_task; forward/reverse share exact semantic_task, verified_target, relevant metadata, and family/split, while rendering text differs.",
+    "independence_limitation": "Unique source keys and exact worlds establish distinct synthetic instances, not statistical independence or new reasoning mechanisms. No oracle target-correctness determination was made."
+  },
+  "summary": {
+    "candidate_record_count": 24,
+    "rendering_count": 24,
+    "renderer_counts": {
+      "forward": 12,
+      "reverse": 12
+    },
+    "declared_source_family_count": 12,
+    "expected_source_indices": "p0180–p0191 inclusive",
+    "source_family_instance_count": 12,
+    "semantic_parent_count": 12,
+    "semantic_family_count": 12,
+    "world_instance_count_before_rendering": 12,
+    "distinct_normalized_exact_graph_world_count": 12,
+    "distinct_weighted_world_isomorphism_count": 12,
+    "distinct_unweighted_topology_count": 12,
+    "source_instances_by_split": {
+      "train": 10,
+      "dev_challenge": 2
+    },
+    "renderings_by_split": {
+      "train": 20,
+      "dev_challenge": 4
+    },
+    "critic_candidate_instances_before_rendering": 199,
+    "critic_candidate_instances_including_renderings": 398,
+    "comparison_release_count": 5,
+    "comparison_records_including_renderings": 852,
+    "comparison_graph_or_critic_records_including_renderings": 672,
+    "comparison_distinct_graph_or_critic_source_families_across_releases": 288,
+    "comparison_distinct_exact_graph_worlds_across_releases": 290,
+    "source_family_overlap_count": 0,
+    "exact_graph_world_overlap_count": 0,
+    "candidate_record_hash_mismatch_count": 0,
+    "comparison_record_hash_mismatch_count": 0,
+    "lineage_issues": []
+  },
+  "checks": {
+    "declared_sources_match_expected": true,
+    "sample_ids_unique": true,
+    "candidate_record_hashes_match": true,
+    "family_parent_split_alignment_consistent": true,
+    "within_family_renderer_equivalence_consistent": true,
+    "source_families_do_not_cross_splits": true,
+    "exact_worlds_do_not_cross_splits": true
+  },
+  "mechanism_accounting": {
+    "basis": "Declared skill_tags counted once per source family, not once per rendering; mechanism labels are not new source/world instances and are not independently adjudicated here.",
+    "source_family_counts_by_declared_mechanism": {
+      "branched_resource_graph:equal_length_goal_routes": 1,
+      "branched_resource_graph:fresh_replacement_counterexample": 2,
+      "branched_resource_graph:fuel_precondition": 2,
+      "branched_resource_graph:initial_goal": 2,
+      "branched_resource_graph:initial_goal_reachable": 2,
+      "branched_resource_graph:legal_detour": 2,
+      "branched_resource_graph:no_equal_length_goal_routes": 1,
+      "fuel_overclaim": 12,
+      "fuel_underclaim": 12,
+      "matched_equal_plan_claims": 12,
+      "wrong_location_claim": 12
+    },
+    "claim_control_mechanisms_recur_across_all_12_sources": [
+      "fuel_underclaim",
+      "fuel_overclaim",
+      "wrong_location_claim",
+      "matched_equal_plan_claims"
+    ],
+    "repeated_unweighted_topology_groups": [],
+    "exact_world_duplicate_groups": []
+  },
+  "family_evidence": [
+    {
+      "source_family_key": "RVM-001-seed20261009-p0180",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0180",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0180",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0180-base-forward",
+        "RVM-001-claim-gap-v2-p0180-base-reverse"
+      ],
+      "record_hashes": [
+        "99f54912bb69a998954d7898900995a92667a7d8aceefbff9738084edeb31a5c",
+        "e370598c2eba44be976076b77fddaf9d116c963ef509e15035339baf65173cf9"
+      ],
+      "semantic_task_sha256": "5c92bc1594a8ed84be94ac1c59e730ac8a27dde96f6ed68c165518a165b17a26",
+      "verified_target_sha256": "adbd78094c5a8b4feb36d0eb76030741847c1c2acfd5e3067f568c1ad9ce691b",
+      "normalized_exact_graph_world_sha256": "b44826c8d12c975657bd8d4ec73056a09f7f48bbca3d028320a3d4948056ecd1",
+      "weighted_world_isomorphism_sha256": "d21e4d93d3f45eee2477346eb8d7f715557eb7caf9acb419261af7580c1daedf",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "fa11819b2a90535fde632ca820da596263525019be0476474990572101b63ba2",
+      "node_count": 3,
+      "edge_count": 3,
+      "initial_fuel": 14,
+      "candidate_instances_per_source": 17
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0181",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0181",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0181",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0181-base-forward",
+        "RVM-001-claim-gap-v2-p0181-base-reverse"
+      ],
+      "record_hashes": [
+        "42bbf542400e5efc9b14ec130ed3a27ac5c46c4fc225341ab6299cee544d8b30",
+        "623a74f59d49b02aff2d24b696bd7281ff0773a672787ad8ea70fdc741d03a61"
+      ],
+      "semantic_task_sha256": "a1fdacb7d7f57b4de8c7fe29755f43083e4f7da0f77c87e14ec88e76153e2775",
+      "verified_target_sha256": "8bcc096f2f13dbf447f4b10896ec63322dcc679a871e7222e1479a7cfeb896b7",
+      "normalized_exact_graph_world_sha256": "c48bd7a77ddb4fb1c371c605eaf1fb9217e8489cf48448e936625c3e40069424",
+      "weighted_world_isomorphism_sha256": "758339891104cdbbd17fc8454e54b419b37a426ed73247506ededdbc555b7072",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "3b4a8e35bca88214fd2c9d9762c0538324d3b0caaf52415b1edaf55c772acde8",
+      "node_count": 4,
+      "edge_count": 5,
+      "initial_fuel": 11,
+      "candidate_instances_per_source": 16
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0182",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0182",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0182",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0182-base-forward",
+        "RVM-001-claim-gap-v2-p0182-base-reverse"
+      ],
+      "record_hashes": [
+        "b571862f5836362de02bdc6eeb096d7b63c48e01ca39c2d7117ad83701279dea",
+        "009d47c4655393c044c11860e67ca3fc390807fe067b2280e577cd677398a77a"
+      ],
+      "semantic_task_sha256": "6aed75a64ee460677a77343576c7bc63ca5f287781dcfca81c0fa6b9e5714448",
+      "verified_target_sha256": "4d0c51ad3a498607fa3a11d5f433104546f433c52802f0e368bf3bbcf5884336",
+      "normalized_exact_graph_world_sha256": "9bfe3202c78982b838774fc4f87dd9d8dcb18fad047d76e8ec15ab4d078f9fdf",
+      "weighted_world_isomorphism_sha256": "11905566e99b83aeb9966fc1cfe26fd687a60fa92a9f3b42b54b59a6b1fd1401",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "de5f82a90c710fdd5d1f66cf50d32fdeda1b73527dd0699331bb76f59dc3f078",
+      "node_count": 5,
+      "edge_count": 11,
+      "initial_fuel": 19,
+      "candidate_instances_per_source": 16
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0183",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0183",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0183",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0183-base-forward",
+        "RVM-001-claim-gap-v2-p0183-base-reverse"
+      ],
+      "record_hashes": [
+        "585c1e321334ed1883a91ed13191700e8a408488a4c8e2c4df28e84ef6555b3b",
+        "abd95c8c9a5aa7dd566f210659b57457c59e2584c183b06300c4680237c61c59"
+      ],
+      "semantic_task_sha256": "92c68a9e9da0483dfd5c68d6125936316d500d18d00699dae6c1553e4ada8efd",
+      "verified_target_sha256": "58dcdec1419646241f9c573478c69bcf4361a224b8405a43e1eb22bd05e852d6",
+      "normalized_exact_graph_world_sha256": "6f114a81578e3258b4a13a144a846431e8afa8dad4a5c469218579c456117189",
+      "weighted_world_isomorphism_sha256": "b69d95449cc59cafa46ac19d3d1e3a0daea20b356e73b62864d3a464d0c4d951",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "e6256b9c6fc46a561e1b2f1d275dd55ed2881833fec71bc179ccbfe22c9108b9",
+      "node_count": 6,
+      "edge_count": 9,
+      "initial_fuel": 12,
+      "candidate_instances_per_source": 17
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0184",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0184",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0184",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0184-base-forward",
+        "RVM-001-claim-gap-v2-p0184-base-reverse"
+      ],
+      "record_hashes": [
+        "cc4552d6c44830a286d8cc453c54c764b2fcfa58ac0bd650d07f225ddafc1983",
+        "e2cba41ed51a657b9fdd442df1ecd8a30b7452e1aa5bdce18c06daca9e19255d"
+      ],
+      "semantic_task_sha256": "2ff182efd1b70d9ea60f72b4f586ef2d0926a9f1c3294f4fec00c23c3ab3cbcd",
+      "verified_target_sha256": "c4f2c11ade80546060e6cc1a2c45039e71680e112f390a48ca27e911862a46de",
+      "normalized_exact_graph_world_sha256": "c603bd7169657805e2c981e4a8194be08922713fb4892224a4bd92a030f3019d",
+      "weighted_world_isomorphism_sha256": "e4c0067c5c8f388eedec6c3b30afaf4854d93983ff00a2e94520fa3e8751c05a",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "c6afaef7c67c91ac2a6565b01dfaaab0e6c0fcaa676c5ff5cc7bb899531633cc",
+      "node_count": 3,
+      "edge_count": 3,
+      "initial_fuel": 13,
+      "candidate_instances_per_source": 16
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0185",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0185",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0185",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0185-base-forward",
+        "RVM-001-claim-gap-v2-p0185-base-reverse"
+      ],
+      "record_hashes": [
+        "7e12f89aacfc03eb2b4cd06d80bc34a4d1cc248b2e8f99ae1c6d2f69e4a90ae6",
+        "1ea7c60a3c1f551abe902ba96ba5f00b28bcb1cd618dde11d40ab8e9f8c6d88c"
+      ],
+      "semantic_task_sha256": "0a9cedffb4115c84784dcd0d945baeb587949087729c9558f6bea0c7677de4c5",
+      "verified_target_sha256": "2a1b2823e295978945ef465952742958297f4da1ba8469504c70b058818df0e8",
+      "normalized_exact_graph_world_sha256": "157e4842dfe3d1cca000588b968cf962153d0732d9155ac56c01da0c869460b4",
+      "weighted_world_isomorphism_sha256": "4337b25e08d40ab5981efbee705df87fb0f08aec23687e31800639e988637c32",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "ae61029c9c02d2c309491171b859b456a0d4fd6d313dc4eb14f17fffc496cb5c",
+      "node_count": 4,
+      "edge_count": 6,
+      "initial_fuel": 13,
+      "candidate_instances_per_source": 17
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0186",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0186",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0186",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0186-base-forward",
+        "RVM-001-claim-gap-v2-p0186-base-reverse"
+      ],
+      "record_hashes": [
+        "2ec217091b2b9817b701cc3d21fb139e8bc6ca2a70789c2fd9d7739d582b900f",
+        "5e55ce5fff9d07aa49bf93443c141c75a86e6875acee5b40295222c136770247"
+      ],
+      "semantic_task_sha256": "38e27d585553321d6834e07f18978f9a487b6cb2985c7edf3475604e9cb9a41a",
+      "verified_target_sha256": "9d8c80701533b69cf71bf4715567cf2e726b841e7913cf3c18d1279c3ccf8936",
+      "normalized_exact_graph_world_sha256": "fefbf076a1da8eedb5fa79b88fc52dcb9abb4e7988b188d60e69392bcd81b51c",
+      "weighted_world_isomorphism_sha256": "d9e820ad6ddec6c55f96cdfe49a7149e62f3d251401450d9fc35bc1e96754ed3",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "a62175560dc810d45242d1eca895c62cc784e3c4f9c3b8a7c726dc3173f981fb",
+      "node_count": 5,
+      "edge_count": 11,
+      "initial_fuel": 20,
+      "candidate_instances_per_source": 17
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0187",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0187",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0187",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0187-base-forward",
+        "RVM-001-claim-gap-v2-p0187-base-reverse"
+      ],
+      "record_hashes": [
+        "1bce0b06b4fa042814cacbb69b8f19f8df27daff790d552ee28fa94b1678f557",
+        "8e524e64e27929baa928f7f016fdf21cfff801560b5280a5c472f8ccd22f7194"
+      ],
+      "semantic_task_sha256": "854e90bbd088bdec7df244880a9f42d7c715f7895a6d691acfe0f36d1950f4ef",
+      "verified_target_sha256": "345f5b8bfbfad1a51533cb12e793a2f68bb927368a203dcb79e1e990d2e81000",
+      "normalized_exact_graph_world_sha256": "bedebefb52000b0aaa568d852685e78acdd5859627022ac1526f776a6e8d7a6d",
+      "weighted_world_isomorphism_sha256": "9e3e27a9cfaaa3308aed9158f9770113bcc82a386f558738452973712d550fb0",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "eac1ce09072376b29a016443f8202a709eca34e32baf2020782763e0e6241de3",
+      "node_count": 6,
+      "edge_count": 14,
+      "initial_fuel": 15,
+      "candidate_instances_per_source": 17
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0188",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0188",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0188",
+      "split": "dev_challenge",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0188-base-forward",
+        "RVM-001-claim-gap-v2-p0188-base-reverse"
+      ],
+      "record_hashes": [
+        "eec6108b65375383eadbefee2577872c8e068f97025be62d907e898f79d131c5",
+        "abe2a5d95b76c18554c2216663a66299f71acd8a028e29fde3f064a20ec0b51f"
+      ],
+      "semantic_task_sha256": "265da312c3565e067f3ebec42ca657acc80da4ce0326b5d48526e43f094a200a",
+      "verified_target_sha256": "4c7d4f1ab3481234b3dc337187e08fa97f00564cc91cc4e76c6f7f8c74f8515c",
+      "normalized_exact_graph_world_sha256": "8f3a9b2ea98f9aee7844d8c0b88f4954bc14b2f28f0d18990f7c3b98140faffa",
+      "weighted_world_isomorphism_sha256": "237438e8af526fd8e8bd4b753e59961083dd0fb754ad1167c53fd4398c721510",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "fd89cbc94aa338d4b76032fa6f6b3626cbdc2369c0df5727a799c379b616b646",
+      "node_count": 7,
+      "edge_count": 20,
+      "initial_fuel": 29,
+      "candidate_instances_per_source": 16
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0189",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0189",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0189",
+      "split": "dev_challenge",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0189-base-forward",
+        "RVM-001-claim-gap-v2-p0189-base-reverse"
+      ],
+      "record_hashes": [
+        "f13da3c4a441390d146df14f6e43c6f08cfe61aeb5d4e2c490a71612ee671a1d",
+        "ae041102d226d061f0353a81fd4c2908b513cbbb0943116ac5bd322e537bb639"
+      ],
+      "semantic_task_sha256": "8b3270dab18c224121d28938bf02de11d06922cea6b84a95259789d184b2d211",
+      "verified_target_sha256": "3f3d958f498ad1e85596d4de96aabe32f015ec8d84c1c7194717f88f5286627f",
+      "normalized_exact_graph_world_sha256": "d6d4fd2bdf68ba84a4cf5067d599588fde2ab88457a2ba8b65d7018d3866bce6",
+      "weighted_world_isomorphism_sha256": "6b0788ca757cf6e194219e06a63066a1bf11b74cc47eb1400f1db15d3ce45d61",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "19b8097421172078624b58cf86983d985e1307ed93ee85b0ecf77e3e53d281f6",
+      "node_count": 7,
+      "edge_count": 16,
+      "initial_fuel": 16,
+      "candidate_instances_per_source": 17
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0190",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0190",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0190",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0190-base-forward",
+        "RVM-001-claim-gap-v2-p0190-base-reverse"
+      ],
+      "record_hashes": [
+        "445047c11234fa6850d6efaf8cbd3490479e591e59cea9b1ddf77487015c1c6f",
+        "7d2d5f1864053fba49a905b7b22f966ffbffc67fecd5a0246ea14a4ae094a586"
+      ],
+      "semantic_task_sha256": "8667df3eae5914ade5aa7cca89eb73a53502a1d46db5c6426c8f249fd992490e",
+      "verified_target_sha256": "05a5d09bdbb06d7184499591b9eae935f7680f397e59da2875bc2d9c907312bf",
+      "normalized_exact_graph_world_sha256": "0c1d2c02b41de6051784dc1ffe5316c0f8cd5910cbc3c0e3138f9d0cb9845944",
+      "weighted_world_isomorphism_sha256": "866aa44ba8d2a1148b919b6ae1aba3a1bbcd042ea3953239bd09060cd08690d6",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "fcb8a70a7c2b7dcd2550742c13f2cef0d1741dc83dead6591d0260b2a56f3a7d",
+      "node_count": 5,
+      "edge_count": 10,
+      "initial_fuel": 17,
+      "candidate_instances_per_source": 16
+    },
+    {
+      "source_family_key": "RVM-001-seed20261009-p0191",
+      "semantic_family_id": "RVM-001-claim-gap-v2-p0191",
+      "semantic_parent_id": "RVM-001-claim-gap-v2-p0191",
+      "split": "train",
+      "rendering_count": 2,
+      "sample_ids": [
+        "RVM-001-claim-gap-v2-p0191-base-forward",
+        "RVM-001-claim-gap-v2-p0191-base-reverse"
+      ],
+      "record_hashes": [
+        "aea070ebcf042f6adc5ada668bd10adf0bc6f059aa90afa987e9b49c5cc9d452",
+        "3be0d63851ab1d276460a5f1fc8bee1536f8944d51d3405e1636a3979bedfbd0"
+      ],
+      "semantic_task_sha256": "b0cccbc51fa92b5046c6cb81caca1c09c58fd1bd4b8f22278661e8521f1bafd7",
+      "verified_target_sha256": "78718f26c3400844f9168d7874ee0c0a7f401e526b8f4f77f707d5fb66f9bb47",
+      "normalized_exact_graph_world_sha256": "046493ec5ed129d18e718ef08020836de296b721ee70ff58e4cff2aa79550ee5",
+      "weighted_world_isomorphism_sha256": "b9daeddf174fe4264d293b280bd00c946319b49c6d38962d890bec94ae40e28d",
+      "unweighted_topology_with_start_goal_isomorphism_sha256": "4e648ff3a140328bcd24ae788582acb01459fc98e70a39940ee36bf8a68d7a7a",
+      "node_count": 6,
+      "edge_count": 12,
+      "initial_fuel": 23,
+      "candidate_instances_per_source": 17
+    }
+  ],
+  "comparison_releases": [
+    {
+      "path": "data/RGM-001/releases/v0001/canonical.jsonl",
+      "file_sha256": "bc0a821670884bc0ccf9a42c22a53ade3654718c797946d445f0266ae8ee6990",
+      "record_count": 72,
+      "graph_or_critic_record_count": 42,
+      "graph_or_critic_source_family_count": 18,
+      "distinct_normalized_exact_graph_world_count": 19,
+      "source_key_basis_counts": {
+        "declared": 72
+      },
+      "record_hash_mismatches": [],
+      "source_family_overlap": [],
+      "exact_graph_world_overlap": []
+    },
+    {
+      "path": "data/RGM-001/releases/v0002/canonical.jsonl",
+      "file_sha256": "ead8cb798dc5216b4a4a3260a698078b54fe267114edb41b69cfb084ce1eb2bc",
+      "record_count": 360,
+      "graph_or_critic_record_count": 210,
+      "graph_or_critic_source_family_count": 90,
+      "distinct_normalized_exact_graph_world_count": 91,
+      "source_key_basis_counts": {
+        "declared": 360
+      },
+      "record_hash_mismatches": [],
+      "source_family_overlap": [],
+      "exact_graph_world_overlap": []
+    },
+    {
+      "path": "data/RVM-001/releases/v0001/canonical.jsonl",
+      "file_sha256": "262d9bc470353c3aacb105b1bde2bb5b87f1e9771472966ab7f1c53ac672bac3",
+      "record_count": 60,
+      "graph_or_critic_record_count": 60,
+      "graph_or_critic_source_family_count": 30,
+      "distinct_normalized_exact_graph_world_count": 30,
+      "source_key_basis_counts": {
+        "inferred_from_track_seed_parent_index": 60
+      },
+      "record_hash_mismatches": [],
+      "source_family_overlap": [],
+      "exact_graph_world_overlap": []
+    },
+    {
+      "path": "data/RVM-001/releases/v0002/canonical.jsonl",
+      "file_sha256": "0e23a3393e9a63d043e694aac13df2846e50b3c77ca02159cf609a1c6820c0f1",
+      "record_count": 300,
+      "graph_or_critic_record_count": 300,
+      "graph_or_critic_source_family_count": 150,
+      "distinct_normalized_exact_graph_world_count": 150,
+      "source_key_basis_counts": {
+        "declared": 300
+      },
+      "record_hash_mismatches": [],
+      "source_family_overlap": [],
+      "exact_graph_world_overlap": []
+    },
+    {
+      "path": "data/RVM-001/releases/v0003/canonical.jsonl",
+      "file_sha256": "4bb29efeb4e4f8df69ddc5d3f05dd336e442a1d6fc1fa0b3009635b7c9bfb76e",
+      "record_count": 60,
+      "graph_or_critic_record_count": 60,
+      "graph_or_critic_source_family_count": 30,
+      "distinct_normalized_exact_graph_world_count": 30,
+      "source_key_basis_counts": {
+        "declared": 60
+      },
+      "record_hash_mismatches": [],
+      "source_family_overlap": [],
+      "exact_graph_world_overlap": []
+    }
+  ],
+  "candidate_record_hash_mismatches": [],
+  "family_parent_split_alignment_issues": [],
+  "renderer_equivalence_issues": []
+}

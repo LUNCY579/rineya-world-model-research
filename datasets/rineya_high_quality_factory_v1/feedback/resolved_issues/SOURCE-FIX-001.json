@@ -1,0 +1,13 @@
+{
+  "ticket": "SOURCE-FIX-001",
+  "observed_problem": "Three original broad source hashes referenced by RCM v0002 were absent from searched local/archive files and dedicated Git history. Mutable machine audit files could change after reviewer execution snapshots.",
+  "root_cause": "Release manifests hashed mutable source paths without immediately preserving source payloads; audit reruns overwrote primary diagnostic files.",
+  "change": "Automatic content-addressed source snapshot at release assembly; previous machine-audit bytes archived when reruns differ; actual historical source payloads recovered without reconstruction; full RCM v0003 supersedes v0002 using unchanged reviewed data.",
+  "regression": "tests/test_evidence_preservation.py; exact original candidate reproduction in separate expert execution; new release validator requires source snapshots.",
+  "status": "ACTIVE SOURCE COVERAGE RESOLVED; historical three unavailable original hashes explicitly remain missing. Original releases/reviewer decisions unchanged.",
+  "evidence": [
+    "quality_reports/reproducibility/RCM-001-v0002.json",
+    "reproducibility/SOURCE_ARCHIVE_INDEX.json",
+    "quality_reports/RCM_SOURCE_REPLACEMENT_VALIDATION.json"
+  ]
+}
