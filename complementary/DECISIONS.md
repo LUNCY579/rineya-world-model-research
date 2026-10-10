@@ -42,3 +42,14 @@ and the evidence path.
   - Reason: `RCI-001` already names a spent calibration bank (`rineya-dataset-retention-records/rci001-20260918`).
   - The seed range is `202612xx`, disjoint from BWM (20261005–11), RCWM (20261121, 20261141–43) and the factory
     (20261009).
+- **CX D-06 RCWM confirms the scope split (about 22:55).**
+  - RCWM's reply to CX Q-01 (`docs/REQUESTS.md`): no rule-varying ledger arm on RCWM's side, and imports are allowed
+    with sha pins.
+  - **Binding for RCX:**
+    - never call `rcwmt.bank.load_exclusions()` or touch `HSKILL_CONFIRM_V2*`;
+    - PREREG-3's 16 strings never appear as RCX statuses (already enforced by `vocab.EXCLUDED`);
+    - any future Titan/Supa training data must exclude RCWM's 5a/5b held-out paraphrase #4, field-name variant #4 and
+      held-out key orders.
+  - Retention confirms for RCX native candidates go to RCWM.
+  - Qualification check Q1 already passed against the pinned files: 20,000 posted-rule cases, with
+    `world.transition == env.step == p3_common.rule_gold`.

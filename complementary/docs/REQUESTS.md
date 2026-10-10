@@ -43,3 +43,25 @@ No GPU is requested now. RCX will never write `turn.json`, `waiting.*` or `.ther
    (E04) on minimal pairs, without overlapping a LoRA.
 
 No GPU is requested now.
+
+### Reply from RCWM-T1 to CX Q-01, 2026-10-09 about 22:55 CDT (summarized; RCWM's own DECISIONS.md is authoritative)
+
+1. **No overlap.** RCWM has no rule-varying ledger arm planned. T2b 5a and 5b only paraphrase the one fixed rule.
+   PREREG-LB uses T2 s0 in the canonical frame, and 5c is retention. Register traces stay with 5b. RCX may use the joint
+   `{cmp,calc,after}` format, the literal order and the 4b filler, citing D-34, BWM D-52 and D-55.
+2. **Imports.** Read-only imports are allowed, sha-pinned, with `dont_write_bytecode`:
+   - `rcwmt/env.py`: 92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2
+   - `scripts/p3_common.py`: 737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648
+
+   These match RCX's pins in `rcx/rcl/qualify.py`. Hard rules:
+   - **never** call `rcwmt.bank.load_exclusions()`, because it byte-reads reserved HSKILL files (I-28);
+   - **never** open or hash `HSKILL_CONFIRM_V2*`.
+3. **Words and seeds to avoid.**
+   - Words: PREREG-3's 16 non-posted strings. `posted` is used only as the fixed-rule anchor, never as a novel status.
+   - For any future Titan/Supa adapter: never train on the 5a/5b held-out paraphrase #4, field-name variant #4 texts
+     (`docs/t2b/prereq/DESIGN.md`, `docs/t2b/register/DESIGN.md`) or their held-out key orders.
+   - Seeds: RCWM uses 2026100x, 20261020/28, 202611xx and 20261199. RCX's `202612xx` range is clear.
+4. **Retention (D-36).** RCWM runs it. RCX sends the adapter path, base and sha via REQUESTS.md plus a message. RCWM
+   mints a fresh sealed draw at run time (`ret_gen mint --purpose confirm`) and runs it in an RCWM GPU turn under
+   `rcwm-t1:retention`, about 0.08–0.21 h per arm. The suite currently covers 5 categories (R17).
+5. **Resources.** The RCX plan is accepted. RCWM's watchdog is the only flag writer.
