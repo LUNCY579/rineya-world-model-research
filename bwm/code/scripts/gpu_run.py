@@ -29,6 +29,10 @@ def honour_yield():
     deadline = start + float(y.get("max_wait_s", 3000))
     idle_s = float(y.get("give_up_if_not_seen_s", 1e9))
     seen = False
+    # D-63 (QP-2): announce BWM as a waiter during the yield too, so a peer re-call after its cap deferral sees a live
+    # BWM marker and alternates (wait_for_turn rewrites the marker; acquire removes it)
+    import os
+    WAITING.write_text(json.dumps({"pid": os.getpid(), "label": "bwm:yield", "since": time.time()}))
     print(f"  [gpu-run] yielding to peer lease '{label or prefix + '*'}' (max {y.get('max_wait_s')} s)", flush=True)
     while time.time() < deadline:
         try:

@@ -43,7 +43,22 @@ Single training seed; validation-grade unless marked frozen.
   - Proposer coverage, not the world model, limited reranking (K = 12: 0.82 vs 0.67).
   - The proposer did not beat plain search under F at matched compute.
 
-## Status
+## Status (2026-10-10)
 
-The Blocksworld-hard result is final. The mirror-set and PlanBench-600 runs are in progress. A local
-devfreeze package will follow (DECISIONS D-49). Publishing anywhere public requires the user's explicit approval.
+- **B2 complete (P-10), all frozen and run once:**
+  - hard: 73/110 vs 5/110;
+  - mirror: 61/110 vs 6/110;
+  - PlanBench "600" set (602 instances): 602/602 vs 584/602.
+
+  The pre-registered hard-minus-mirror contamination flag was **raised** (+10.9 pp, Fisher p = 0.13). A post-hoc,
+  descriptive analysis attributes the gap to the mirror's taller goal towers; reweighted, the gap is -3.5 pp
+  (`results/BW_TEST_B2/MIRROR_GAP_ANALYSIS.json`).
+- **Joint item 3 (PREREG-LB) closed:** RCWM's T2 ledger adapter, used as F inside this planner, plans: 127/180 vs
+  14/180 with the adapter off, T2/ORACLE 0.794. That is on its training surface only. BWM re-scored it independently
+  (D-61, `code/scripts/lb_rescore.py`).
+- **In progress:**
+  - B3 search distillation (`docs/PREREG_B3_DISTILL.md`). Its outputs are embargoed from this repo until its
+    registered report exists.
+  - D-54 key-order augmentation (`docs/PREREG_D54_KEYORDER.md`).
+- **Local package only:** `release/` in the bundle (D-49), not in the vault (D-60). Publishing anywhere public needs
+  the user's explicit approval.

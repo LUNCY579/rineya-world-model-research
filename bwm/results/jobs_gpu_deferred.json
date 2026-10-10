@@ -1,0 +1,191 @@
+[
+ {
+  "name": "bundleG",
+  "marker": "runs/bundles/bundleG.done",
+  "log": "runs/bundles/bundleG.stdout",
+  "cmd": [
+   "scripts/bundle.py",
+   "runs/bundles/bundleG.json"
+  ],
+  "deferred_reason": "merged into bundleE (D-63): its two sub-jobs run after B3 in the same bundle"
+ },
+ {
+  "name": "a2-train-Fvlab",
+  "marker": "runs/A2_Fvlab_s0/adapter/adapter_model.safetensors",
+  "log": "runs/A2_Fvlab_s0.stdout",
+  "after": "runs/A2_vlab_labels/vlab_sft.jsonl",
+  "cmd": [
+   "scripts/train_generic.py",
+   "--rows",
+   "runs/A2_vlab_labels/vlab_sft.jsonl",
+   "--steps",
+   "400",
+   "--seed",
+   "0",
+   "--max-len",
+   "256",
+   "--out",
+   "runs/A2_Fvlab_s0"
+  ],
+  "deferred_reason": "cancelled in D-47; never re-approved"
+ },
+ {
+  "name": "train-P-actions-s1-1600",
+  "marker": "runs/P_actions_s1_1600/adapter/adapter_model.safetensors",
+  "log": "runs/P_actions_s1_1600.stdout",
+  "cmd": [
+   "scripts/train_proposer.py",
+   "--mode",
+   "actions",
+   "--seed",
+   "1",
+   "--data-seed",
+   "1",
+   "--families",
+   "5121",
+   "--steps",
+   "1600",
+   "--save-at",
+   "1200",
+   "--out",
+   "runs/P_actions_s1_1600"
+  ],
+  "deferred_reason": "E2/P legacy single job (D-28 era), never started; each single job costs a full alternation turn; deferred, not cancelled (D-63)"
+ },
+ {
+  "name": "e2-titan-sparse-r1024",
+  "marker": "runs/E2/F_titan-sparse_r1024_s0/metrics.json",
+  "log": "runs/E2/F_titan-sparse_r1024_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "titan-sparse",
+   "--rows",
+   "1024",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_titan-sparse_r1024_s0",
+   "--no-grade"
+  ],
+  "deferred_reason": "E2/P legacy single job (D-28 era), never started; each single job costs a full alternation turn; deferred, not cancelled (D-63)"
+ },
+ {
+  "name": "e2-supa-r256",
+  "marker": "runs/E2/F_supa_r256_s0/metrics.json",
+  "log": "runs/E2/F_supa_r256_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "supa",
+   "--rows",
+   "256",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_supa_r256_s0",
+   "--no-grade"
+  ],
+  "deferred_reason": "E2/P legacy single job (D-28 era), never started; each single job costs a full alternation turn; deferred, not cancelled (D-63)"
+ },
+ {
+  "name": "e2-supa-r1024",
+  "marker": "runs/E2/F_supa_r1024_s0/metrics.json",
+  "log": "runs/E2/F_supa_r1024_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "supa",
+   "--rows",
+   "1024",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_supa_r1024_s0",
+   "--no-grade"
+  ],
+  "deferred_reason": "E2/P legacy single job (D-28 era), never started; each single job costs a full alternation turn; deferred, not cancelled (D-63)"
+ },
+ {
+  "name": "e2-qwen3-0.6b-r256",
+  "marker": "runs/E2/F_qwen3-0.6b_r256_s0/metrics.json",
+  "log": "runs/E2/F_qwen3-0.6b_r256_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "qwen3-0.6b",
+   "--rows",
+   "256",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_qwen3-0.6b_r256_s0",
+   "--no-grade"
+  ],
+  "deferred_reason": "E2/P legacy single job (D-28 era), never started; each single job costs a full alternation turn; deferred, not cancelled (D-63)"
+ },
+ {
+  "name": "e2-qwen3-0.6b-r1024",
+  "marker": "runs/E2/F_qwen3-0.6b_r1024_s0/metrics.json",
+  "log": "runs/E2/F_qwen3-0.6b_r1024_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "qwen3-0.6b",
+   "--rows",
+   "1024",
+   "--steps",
+   "200",
+   "--holdout-mod5",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_qwen3-0.6b_r1024_s0",
+   "--no-grade"
+  ],
+  "deferred_reason": "E2/P legacy single job (D-28 era), never started; each single job costs a full alternation turn; deferred, not cancelled (D-63)"
+ },
+ {
+  "name": "e2-xlimB",
+  "marker": "runs/E2/F_titan_xlimB_s0/metrics.json",
+  "log": "runs/E2/F_titan_xlimB_s0.stdout",
+  "cmd": [
+   "scripts/train_forward.py",
+   "--core",
+   "titan-sparse",
+   "--rows",
+   "4000",
+   "--steps",
+   "300",
+   "--extra-limits",
+   "8,16,24,40,56",
+   "--seed",
+   "0",
+   "--out",
+   "runs/E2/F_titan_xlimB_s0"
+  ],
+  "deferred_reason": "E2/P legacy single job (D-28 era), never started; each single job costs a full alternation turn; deferred, not cancelled (D-63)"
+ },
+ {
+  "name": "bundleF",
+  "marker": "runs/bundles/bundleF.done",
+  "log": "runs/bundles/bundleF.stdout",
+  "cmd": [
+   "scripts/bundle.py",
+   "runs/bundles/bundleF.json"
+  ],
+  "deferred_reason": "pilotG GPU replications, lower value (D-58)"
+ }
+]

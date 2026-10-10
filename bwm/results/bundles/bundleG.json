@@ -1,0 +1,38 @@
+{
+ "budget_s": 16200,
+ "jobs": [
+  {
+   "name": "train-Fdelta-ko",
+   "marker": "runs/BW_Fdelta_ko_s0/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Fdelta_ko_s0.stdout",
+   "est_s": 3600,
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_data/forward_delta_ko_train.jsonl",
+    "--steps",
+    "600",
+    "--batch",
+    "16",
+    "--lr",
+    "0.0001",
+    "--seed",
+    "0",
+    "--max-len",
+    "256",
+    "--out",
+    "runs/BW_Fdelta_ko_s0"
+   ]
+  },
+  {
+   "name": "eval-keyorder",
+   "marker": "runs/BW_KEYORDER/eval.json",
+   "log": "runs/BW_KEYORDER.stdout",
+   "est_s": 1200,
+   "cmd": [
+    "scripts/bw_keyorder.py",
+    "eval"
+   ]
+  }
+ ]
+}

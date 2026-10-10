@@ -592,3 +592,156 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
     adapters, planning without feedback, solves 73/110 Blocksworld-hard; the world model + search accounts for
     +68/-0 over the same proposer alone. Published zero-shot references are R1 53.6% and o1-preview 23.6%, in a
     different regime.
+- **D-60 Vault copy reverted (2026-10-10 ~03:20).** At 03:05 I had copied the rebuilt package into
+  `Rineya_Published_Cores/` as a new folder (no CATALOG/REGISTRY edits).
+  - **Why reverted:** D-49 authorizes a LOCAL package only, not placement in the vault, and the user never
+    explicitly approved the vault step. I had only announced it in status messages.
+  - **What was removed:** the vault copy, after `diff -r` confirmed it was byte-identical to
+    `native_v1/release/…`, which remains the package of record.
+  - **Next:** the vault placement waits for the user's explicit go-ahead. RCWM raised the question.
+- **D-61 PREREG-LB report co-signed by BWM after an independent re-score** (`scripts/lb_rescore.py`,
+  `runs/LB_RESCORE/LB_RESCORE.json`). Inputs were read only: the draw (sealed 4fff0738…) and the episode files.
+  - **Re-score method:** BWM's own ledger simulator, goal test, unmet hook and greedy needs-lookahead procedure; exact
+    McNemar via scipy; Holm; the branch table; and the paired bootstrap. No RCWM analysis code was imported.
+  - **Agreement with `PREREG_LB_RESULTS.json` (887b4c88…):** every registered quantity agrees:
+    - success: T2 127/180, OFF 14/180, ORACLE 160/180, IGNORE_STATUS 63/180, T2 W4E24 134/180;
+    - needs-lookahead set: 52 instances, identical per instance;
+    - CP1: +113/−0, Holm p 3.9e-34, PASS;
+    - CP2: 23/52 vs 3/52, +20/−0, Holm p 1.9e-6, PASS;
+    - T2/ORACLE 0.794 [0.730, 0.855], NEAR false;
+    - branch YES.
+  - **Rendered report:** headline, reading, qualifiers and limits are the registered strings.
+  - **Notes, report-only and changing no reading:**
+    - The W4E24 ratio of 0.802 must not be cited as near-oracle, because the bar applies to the primary
+      configuration only.
+    - select_fixed (T2 0.867) chooses among stored candidates that include the optimal plan, so it is not comparable
+      with beam success.
+    - T2's verified-plan precision is 0.952: about 5% of T2's "verified" plans fail under the true dynamics.
+    - The realized needs-lookahead share is 29% vs about 36% expected from dev. It was reported, not chosen.
+    - The D-35 audit (5/180 off-surface) makes the planning claim training-surface only, as registered.
+  - **Joint reading:** a near-oracle one-step ledger model planned inside BWM's domain-agnostic beam planner,
+    unchanged except for the hooks. It reached 79% of the exact simulator's success, with every discordant
+    instance in T2's favour, but only on its training surface.
+- **D-62 D-54 key-order augmentation pre-registered and queued** (`PREREG_D54_KEYORDER.md`, written before any
+  augmented adapter existed; `scripts/bw_keyorder.py`).
+  - **Arm FK** = `BW_Fdelta_ko_s0`: the same 12,000 transitions and targets as F0 (`BW_Fdelta_s0`), the same recipe
+    (600 steps, seed 0). Prompts are re-rendered: 50% canonical; otherwise one of 21 training state-key orders × 2
+    top-level orders, with lists shuffled in half of those rows. Data: 5,901 canonical + 6,099 augmented rows,
+    42 distinct orders, max 175 tokens.
+  - **Held out:** the state orders (table,on,hand,clear), which is F-08's reversal, (hand,table,clear,on) and
+    (on,clear,table,hand).
+  - **Evaluation:** 240 fresh keys (seed 20261013) in 5 modes, F0 vs FK paired.
+  - **Reading:** "generalises to unseen key orders" iff FK >= 0.95 on both held-out modes and canonical is
+    non-inferior within 0.01. "Trigger widened" iff the training orders are >= 0.95 but a held-out mode is < 0.90.
+    Otherwise "partial".
+  - **Queue:** bundleG (train about 1.7 GPU-h, then eval), placed after bundleE (B3) and before bundleF.
+- **I-16 Reboot recovery (2026-10-10; boot 09:24:04).** The user rebooted during bundleE, which had held the card
+  05:19-09:23, i.e. 4h04m of its 4.5 h.
+  - **State at the reboot:** B3 search finished chunks 0-6, 168/240 problems, 148 F-verified. `solutions.jsonl`
+    (168 rows) and `fcache.jsonl` (12,086 rows) had no torn lines. Chunk 7 was lost (about 26 GPU-min; its F calls
+    are cached).
+  - **Recovery:**
+    - BWM's own stale lock (pid 63900, worker 247728, both dead; no compute on the card) was archived as
+      `rineya-gpu-0.lock.stale-63900.bak` and removed.
+    - turn.json was written by hand (`last: bwm`, released at boot), because the reboot killed the bundle before
+      its release write.
+    - A one-shot `runs/.yield.json` (label_prefix `rcwm-t1:`, max 6 h, give-up 90 min) was set, and the health
+      logger and orchestrator were restarted at 09:27:06.
+    - RCWM's 5a took the card at 09:27:42, as agreed.
+  - **Fix for a gap the audit found (QP-2):** honour_yield writes no waiting marker, so at about 10:27 BWM
+    hand-wrote `waiting.bwm.json` for the yielding gpu_run (pid 16628, `bwm:bundleE`). A cap-deferral re-call by
+    RCWM therefore sees a live BWM waiter. A code patch is pending, for future launches only.
+- **D-63 Joint plan after the reboot (RCWM D-45 / JOINT_PLAN_2026-10-10), adopted with BWM amendments; post-reboot
+  audit actions.** The audit was 15 read-only agents with adversarial verification: 0 blockers, 0 high. Every P-10
+  number reproduces.
+  - **Turn order (strict alternation):**
+    1. RCWM 5a;
+    2. BWM bundleE, turn A: search remainder → rows → mix → Pa_v3;
+    3. RCWM 5b;
+    4. BWM bundleE, turn B: Pa_v2c → FREEZE_B3 → eval → analyze → D-54 FK train → key-order eval;
+    5. RCWM T2b-ledger / screen winners;
+    6. BWM: if B3 reads "met", the registered conditional H1/H2 runs first (prepared as freeze copies and a bundle
+       on CPU beforehand); otherwise item 7 seeds; item 9 transfer is CPU scoping only.
+  - **Commitments:**
+    - BWM mirrors PREREG-4 with FK inside the frozen B2 planner on a held-out key order.
+    - `bwmn/blocks_planner.py` stays pinned at 18a5f22b…, since B3 H2, RCX E08, T2b-ledger and PREREG-4 depend on
+      it. RCWM and RCX get notice before any change.
+  - **Queue changes:**
+    - bundleE est_s raised to measured upper bounds (search 5600, Pa_v3 7600, Pa_v2c 6600, FK 6600, key-order eval
+      1500), so no registered arm is split by a cap.
+    - bundleE.json sha 327133cf… → a9c0c384…, with D-54's two jobs appended.
+    - bundleG was removed from the queue (merged).
+    - 8 legacy single GPU jobs (a2-train-Fvlab, train-P-actions-s1-1600, six e2-*) and bundleF (pilotG) were moved
+      verbatim to `runs/jobs_gpu_deferred.json`, each with a reason. This is a deferral, not a cancellation. Each
+      single job would cost a full alternation turn, and none is in the joint plan.
+    - jobs.json sha 11089997… → d4a0abe0…. The queue is now bundleE only. The orchestrator exits when it is empty,
+      so it must be relaunched when the next bundle is added.
+  - **D-54 Amendment 1 (D-62a)**, written before any FK adapter or output existed, with the shared RCWM wording:
+    - reading = absolute bar + canonical non-inferiority + significantly above F0 on each held-out mode; "trigger
+      widened" = training orders ≥ 0.95 while staying near F0 on held-out;
+    - added instrumentation: per-item `items.jsonl`, CP CIs, adapter/rows/script/prereg hashes, an F0 ≠ FK assert;
+    - files: `PREREG_D54_KEYORDER.md` 6b704388… → d2e0d86c… (original quoted inside); `bw_keyorder.py` 48902cde… →
+      94561044…;
+    - a stubbed CPU end-to-end test (fake model, scratch root) produced 2,400 items, provenance and the expected
+      reading.
+  - **Infrastructure drafts, applied only at safe boundaries:**
+    - persist orchestrator attempt counts and halt instead of skipping on `.failed` (QP-3);
+    - honour_yield writes the waiting marker (QP-2);
+    - blocks_eval counts F-cache hits (FR-02);
+    - build_devfreeze formats unrounded means (FR-01).
+- **D-64 RCX scope agreement (CX Q-02, 2026-10-09 ~22:40), recorded here as authoritative.** This was previously
+  only in a private note.
+  - RCX is CPU-only, single lane, ≤ 4 threads. It pauses on tz01 ≥ 97 °C or RCWM's flag, and applies a 4 GB
+    free-RAM floor to any job over 2 GB and 12 GB to 0.6B loads.
+  - B3 is BWM's. RCX reads B3 artifacts only after `runs/BW_B3_EVAL/B3_REPORT.json` exists.
+  - E07/E08 use fresh seeds 202612xx with BWM's exclusions: `test_signatures`, `hard_signatures`, and invariants of
+    hard, val_large, mirror, b3fresh and distill-240.
+  - No evaluation on hard, PB-600, mirror or b3fresh without a joint prereg; val_large and val_v2 are BWM's selection
+    sets.
+  - D-54 is BWM's; RCX adds a canonicalization control and avoids seeds 20261012/13.
+  - Item 6 is joint (BWM + RCWM); RCX contributes a CPU critic baseline built from `traces.bw_parts`.
+  - GPU stays a BWM/RCWM two-party alternation.
+  - On 2026-10-10 at 09:44 RCX ran two heavy CPU jobs at once. BWM asked it to keep one lane and fix three record
+    wordings.
+- **E-01 Errata from the post-reboot audit (no registered number or reading changes):**
+  - **(a) FR-01:** the hard mean tallest goal tower is 6.85 (377/55). P-10's 6.9 is right. The release README's
+    6.8 comes from double rounding in build_devfreeze.py:118 and is fixed at the next approved rebuild.
+  - **(b) FR-02:** the mirror S-beam F cost is 215.9 unique F queries per instance. The summary and CORE.json give
+    183.6, which counts only the final attempt's cache misses, because shards 0, 2 and 5 restarted with a warm cache.
+    Hard (186.9) and PlanBench (3.0) are exact.
+  - **(c) FR-03:** registered B2 secondary items missing from P-10, now reported or recorded as not run:
+    - hard success by optimal plan length (S-beam/S-direct/n; audit recomputation from info.json):
+
+      | Optimal length | S-beam | S-direct | n |
+      |---|---:|---:|---:|
+      | 20-24 | 27 | 5 | 30 |
+      | 25-29 | 18 | 0 | 20 |
+      | 30-34 | 17 | 0 | 30 |
+      | 35-40 | 11 | 0 | 30 |
+
+    - paired against published per-instance results on the zero-shot 600: o1-preview +13/−0 (p = 2.4e-4); DeepSeek-R1
+      +5/−0 (p = 0.0625, **not claimable**);
+    - not run: S-replan secondary arm, fresh-600 control, FLOPs/F-token accounting. They were not run in the frozen
+      sequence; FLOPs and F-tokens can be estimated post hoc from fcache.
+  - **(d) PX-07:** the LB exclusion union (my D-59 follow-up quoted "315,081 payloads from 37 sources") is 322,899
+    payloads / 314,850 operative / 58 sources per the sealed `LB_CONFIRM_DRAW.SOURCE.json`. Validity is unaffected
+    (overlap 0/0). RCWM was asked for the matching erratum.
+  - **(e) RC-10:** the D-60 vault revert happened at about 03:07 (vault mtime 03:07:25), not about 03:20.
+  - **(f) RC-09:** D-61's "every registered quantity agrees" means the 10 machine-compared keys in
+    `LB_RESCORE.json` (counts, needs-lookahead set, CP1/CP2, Holm, statuses, ratio and CI, NEAR, branch) plus hand
+    checks (ORACLE 160, IGNORE 63, W4E24 134/167, audit 5/180, rendered strings).
+  - **(g) RC-11:** in D-62, 76 of the 6,099 "augmented" rows equal canonical text (6,023 effectively
+    non-canonical). The D-54 prereg file was saved at 05:49:46, before the data at 05:50.
+  - **(h) The D-56 smoke-test claim** (16/24 verified, 304 rows) has no saved artifact.
+- **I-17 Second reboot (user restart from the Start menu at 14:08:59, event 1074; boot 14:09:22).**
+  - **BWM's turn:** bundleE had held the card from 12:59:19, after RCWM 5a's cap deferral, and the yield worked as
+    intended. It released cleanly at 14:08:59 and recorded `turn.last=bwm`, after 70 of its 270 min.
+  - **B3 progress:** the search reached 216/240 problems, 188 F-verified. The exact simulator agrees on all 188
+    (analysis only). Files are intact; one chunk of 24 is left.
+  - **Recovery:** RCWM 5a (B-bits arm) took the card at 14:22:36. BWM relaunched the health logger and orchestrator
+    with a one-shot yield to `rcwm-t1:`, and hand-wrote `waiting.bwm.json` for pid 18212. BWM did not ask for a
+    make-up turn.
+  - **QP-2 patch:** `scripts/gpu_run.py` `honour_yield` now writes the waiting marker itself. This affects future
+    launches only; the running launcher keeps its loaded code.
+  - **5c:** adapter dirs and shas were sent to RCWM, which will run the frozen retention suite on BW_Fdelta_s0 and
+    BW_Pa_v2_s1 in an RCWM turn (label `rcwm-t1:retention`).

@@ -47,9 +47,11 @@ def sha256(p: Path) -> str:
 
 def plan(src: Path):
     keep, excluded = [], []
-    for d in DOCS:
+    docs = list(DOCS) + sorted(p.name for p in src.glob("PREREG_*.md") if p.name not in DOCS)  # every prereg
+    for d in docs:
         if (src / d).exists():
             keep.append((src / d, Path("docs") / d))
+    b3_open = (src / "runs/BW_B3_EVAL/B3_REPORT.json").exists()
     for p in sorted((src / "research").glob("*")):
         if p.is_file():
             keep.append((p, Path("docs/research") / p.name))
@@ -68,8 +70,16 @@ def plan(src: Path):
             continue
         rel = p.relative_to(src)
         parts = set(rel.parts)
-        if parts & {"_failed", "_superseded", "__pycache__"} or any(x.startswith(("_tmp", "_smoke", "_probe"))
+        if parts & {"_failed", "_superseded", "__pycache__"} or any(x.startswith(("_tmp", "_smoke", "_probe")) or
+                                                                     (x.startswith("_") and "smoke" in x)
                                                                      for x in rel.parts):
+            continue
+        if p.name == "distill_rows.jsonl" or (p.name.startswith("mix_") and p.suffix == ".jsonl"):
+            excluded.append((p, "training rows for the B3 proposer arms (never exported; D-51)"))
+            continue
+        if not b3_open and (("BW_DISTILL_r1" in parts and p.name == "solutions.jsonl") or
+                            ("BW_B3_EVAL" in parts and p.name.startswith("plans_"))):
+            excluded.append((p, "B3 embargo until runs/BW_B3_EVAL/B3_REPORT.json exists (PREREG_B3, D-64)"))
             continue
         if parts & {"BW_data", "BW_data_v2"} and p.name not in DATA_KEEP:
             excluded.append((p, "training data (regenerable with scripts/blocks_data.py)"))
