@@ -42,8 +42,15 @@ The goal-class constraint drives the data. A goal made only of `on` pairs is fix
 chain lengths, so there are only p(n) − 1 goal classes per size: 4, 6, 10 and 14 for n = 4, 5, 6 and 7. This holds
 for full and partial goals alike.
 
-"Dedupe by `goal_key` so no goal class repeats across train/val/test" therefore cannot coexist with 40 train instances
-per size. The runner resolves this as follows.
+**Decision CX D-17.** Classes are disjoint across splits, with one instance per goal class (`unique='goal'`) within
+train and val.
+- **Why not more instances per class.** At n ≤ 6 every state of an instance's goal is labelled, so further instances of
+  the same goal class only add renamed duplicate rows.
+- **Compensating at n = 7, where states are sampled.** `train_states_large` was raised from 3,000 to 10,000.
+- **Effect.** Train therefore has fewer than "40 per size" instances, and this is reported as a deviation. Class
+  diversity, not instance count, is the binding constraint, and it is shared by every model compared.
+
+The runner resolves the allocation as follows.
 
 1. **Class allocation per size** (`allocate_classes`).
    - *Discovery.* 3,000 draws per size of `B.generate(full_goal_frac=0.5)` with the split seed 20261275. Only the
@@ -59,6 +66,10 @@ per size. The runner resolves this as follows.
    - One instance per train goal class, with `--train-per-size` as a cap. The cap of 40 never binds.
    - States: all states for n ≤ 6, or a uniform sample of 3,000 at n = 7.
    - With all states labelled, more instances of the same class would only duplicate rows exactly (up to renaming).
+   - This does not hold at n = 7, where states are sampled: there the cap costs distinct rows (11 classes × 3,000
+     instead of 40 × 3,000). It is a deviation from "40 instances/size". Allowing repeats of a train class within
+     train (`unique='instance'`; classes stay disjoint across splits through `accept`) would restore it, at about 6×
+     the train rows, mostly renaming-duplicates at n ≤ 6. That choice is open for the coordinator.
 3. **Val.** Seed 20261271, the same per-class scheme, at most 10 instances per size, 300 states per instance. Val is
    used only for checkpoint selection.
 4. **Test.** Seed 20261272, 15 instances per size.
@@ -68,6 +79,15 @@ per size. The runner resolves this as follows.
    - Disjointness of goal classes across splits is asserted.
 5. **Row exclusion.** `exclude_rows=True` everywhere, including test rows: a row whose (state, goal) would itself be a
    reserved instance is dropped. Counts are reported.
+   - **val_v2 supplement** (`excl.with_selection_sets`, data phase only). BWM's selection set val_v2
+     (`runs/BW_data_v2/instances_val.json`: 400 instances, 4–6 blocks) was drawn with `B.generate(full_goal_frac=0.5)`,
+     which is this runner's own generator, and BWM's recipe does not cover it. Without the supplement, the smoke run
+     had one train and one ID-test instance that were val_v2 instances, and the full design's ID test had one more
+     (`test/20261272/6`).
+   - The supplement reads the file only to compute renaming signatures and invariants. Instances and rows that match
+     a val_v2 instance are excluded as `selection_signature`. The file's sha256 and counts are recorded in
+     `meta.json` and in the provenance.
+   - Cost: about 1 s, plus up to roughly 1 min of extra n = 6 row signatures.
 6. **Test states.** The init plus K = 60 random-walk endpoints, with walk lengths uniform in 0..2n and uniform random
    applicable actions, deduped in order.
    - Labels: exact h\* and the set of optimal actions.
@@ -93,23 +113,31 @@ per size. The runner resolves this as follows.
 - **Error metrics (learned models only).**
   - MAE and RMSE.
   - "Calibrated exact": `round(pred) == h*`.
-- **Spearman correlation (all models).** Reported as `–` when a predictor is constant, such as `h0`.
+- **Spearman correlation (all models).** Computed within each size. For the pooled ID and OOD groups it is the
+  unweighted mean of the per-size values (per-size values are in `spearman_per_size`), because a correlation pooled
+  across sizes would reward merely predicting n (h\* grows with n). Reported as `–` when a predictor is constant in
+  any size of the group, such as `h0`.
 - **Policy accuracy.**
   - Computed over states with h\* > 0 and a known optimal set.
   - A state counts as correct when every successor that minimises the predicted h is optimal.
   - Ties use a tolerance of 1e-5·max(1, |min|). The tie rate is reported.
 - **Paired CIs.**
   - Method: `rcx.stats.seed_parent_bootstrap`. Instances are the resampled clusters; each instance's states are
-    averaged per seed and then over seeds. 5,000 resamples.
+    averaged per seed and then over seeds. 5,000 resamples. The RNG seed is `"20261275:bootstrap"`, derived from
+    the allocated split seed instead of `rcx.stats`' default 17. Seeds are averaged, not resampled, so a CI is
+    conditional on the trained seeds; seed-to-seed spread is reported separately (mean ± sd and per-seed values).
   - Comparisons: GNN − MLP and GNN − best handcrafted.
   - Scopes: each OOD size and pooled OOD, plus pooled ID as context only.
-  - "Best handcrafted" is the handcrafted heuristic with the highest state-pooled policy accuracy *in that scope*,
-    which is the strongest baseline and therefore conservative for any GNN claim.
+  - "Best handcrafted" is the handcrafted heuristic with the highest instance-macro policy accuracy *in that scope*
+    (the statistic the bootstrap compares; all five are listed in `handcrafted_instance_macro`). It is chosen on the
+    test states themselves, so the baseline is optimistically selected: conservative for a "GNN better" claim,
+    anti-conservative for a "GNN worse" claim.
 
 ### E08
 
 - **Instances.** Seed 20261273, sizes {8, 10, 12, 14, 15}, 20 per size, full goals, exclusion-checked and distinct
-  from the E07 test instances.
+  from the E07 test instances. Their goal classes are disjoint from the train/val classes (n ≥ 8 > 7), and a guard
+  checks this.
 - **Optimal plan length.** `astar_hstar(init)` within `--opt-budget` (300,000 expansions). Coverage is reported;
   suboptimality is len/opt over successes with a known optimum.
 - **Search.**

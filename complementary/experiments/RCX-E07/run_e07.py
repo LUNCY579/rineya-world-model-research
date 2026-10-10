@@ -51,12 +51,13 @@ PHASES = ("data", "train", "e07", "e08", "report")
 ARCHS = ("gnn", "mlp")
 HANDCRAFTED = ("unmet_goal_facts", "misplaced_blocks", "misplaced_lb", "h_add", "h0")
 E08_HEURS = ("gnn", "mlp", "unmet_goal_facts", "misplaced_blocks", "h_add", "h0")
+BOOT_SEED = f"{D.SEEDS['split']}:bootstrap"  # derived from an allocated RCX seed (rcx.stats' default 17 is not one)
 CODE_FILES = ["experiments/RCX-E07/run_e07.py", "rcx/stats.py", "rcx/guard.py"] + \
     [f"rcx/bw/{m}.py" for m in ("__init__", "bwm_import", "excl", "space", "data", "encode", "models", "heuristics",
                                 "search")]
 
 FULL = dict(
-    train_sizes=[4, 5, 6, 7], train_per_size=40, train_all_states_max_n=6, train_states_large=3000, goal_frac=0.5,
+    train_sizes=[4, 5, 6, 7], train_per_size=40, train_all_states_max_n=6, train_states_large=10000, goal_frac=0.5,
     val_sizes=[4, 5, 6, 7], val_per_size=10, val_states=300,
     id_sizes=[5, 6], ood_sizes=[8, 10, 12], test_per_size=15, k_states=60,
     discovery_draws=3000, min_class_count=5, val_class_frac=0.2, test_class_frac=0.25,
@@ -225,7 +226,7 @@ def phase_data(ctx):
         return
     dd.mkdir(parents=True, exist_ok=True)
     B, VL = BI.load()
-    ex = EX.load_exclusions()
+    ex = EX.with_selection_sets(EX.load_exclusions())  # + BWM selection set val_v2 (4-6 blocks, same generator)
     t0 = time.perf_counter()
     alloc, disc = allocate_classes(ctx, B, VL, ex)
     cls = {sp: {k for n in alloc for k in alloc[n][sp]} for sp in ("train", "val", "test")}
@@ -287,7 +288,8 @@ def phase_data(ctx):
             "stats": stats, "label_seconds": dict(label_t),
             "test_label_seconds_per_state": {str(n): float(np.mean(v)) for n, v in sorted(per_state.items())},
             "test_label_seconds_max": {str(n): float(np.max(v)) for n, v in sorted(per_state.items())},
-            "exclusions_sha256": sha_file(EX.EXCLUSIONS_PATH), "wall_s": time.perf_counter() - t0}
+            "exclusions_sha256": sha_file(EX.EXCLUSIONS_PATH), "selection_set_exclusions": ex["selection_sources"],
+            "wall_s": time.perf_counter() - t0}
     write_json(dd / "meta.json", meta)
     ctx.log(f"data: rows {stats['rows']} test labelling {dict(tstats)} in {meta['wall_s']:.1f}s")
 
@@ -413,8 +415,13 @@ def metric_block(rows, model, learned):
     lab = [r for r in rows if r["h"] is not None]
     pol = [r["pol"][model] for r in lab if r["pol"][model] is not None]
     ties = [r["tie"][model] for r in lab if r["pol"][model] is not None]
+    # Spearman is computed within each size; a multi-size group (ID, OOD) reports the unweighted mean of its per-size
+    # values (None if any size is undefined). Pooling across sizes would reward predicting n, since h* grows with n.
+    rho = {n: spearman([r["pred"][model] for r in lab if r["n"] == n], [r["h"] for r in lab if r["n"] == n])
+           for n in sorted({r["n"] for r in lab})}
     out = {"n_states": len(lab), "n_policy_states": len(pol),
-           "spearman": spearman([r["pred"][model] for r in lab], [r["h"] for r in lab]),
+           "spearman": float(np.mean(list(rho.values()))) if rho and None not in rho.values() else None,
+           "spearman_per_size": {str(n): v for n, v in rho.items()},
            "policy_acc": float(np.mean(pol)) if pol else None, "tie_rate": float(np.mean(ties)) if ties else None}
     if learned:
         err = np.array([r["pred"][model] - r["h"] for r in lab], float)
@@ -504,14 +511,17 @@ def phase_e07(ctx):
     for g in [str(n) for n in cfg["ood_sizes"]] + ["OOD", "ID"]:
         sel = [r for r in rows if r["n"] in groups[g]]
         parents = sorted({r["i"] for r in sel if r["pol"][models[0]] is not None})
-        best_hc = max(HANDCRAFTED, key=lambda m: metrics["per_model"][m][g]["policy_acc"] or -1)
-        comp = {"best_handcrafted": best_hc, "n_instances": len(parents),
+        # best = highest instance-macro policy accuracy, i.e. the statistic the paired bootstrap compares
+        hc_macro = {m: ST.parent_macro(arm(m, sel)) if parents else None for m in HANDCRAFTED}
+        best_hc = max(HANDCRAFTED, key=lambda m: -1 if hc_macro[m] is None else hc_macro[m])
+        comp = {"best_handcrafted": best_hc, "handcrafted_instance_macro": hc_macro, "n_instances": len(parents),
                 "note": "context only (not in the design's comparison list)" if g == "ID" else ""}
         gnn = [arm(m, sel) for m in learned["gnn"]]
         for label, base in (("gnn_minus_mlp", [arm(m, sel) for m in learned["mlp"]]),
                             ("gnn_minus_best_handcrafted", [arm(best_hc, sel)])):
             try:
-                comp[label] = ST.seed_parent_bootstrap(base, gnn, resamples=cfg["bootstrap_resamples"])
+                comp[label] = ST.seed_parent_bootstrap(base, gnn, resamples=cfg["bootstrap_resamples"],
+                                                       seed=BOOT_SEED)
             except ValueError as e:
                 comp[label] = {"error": str(e)}
         metrics["comparisons"][g] = comp
@@ -538,6 +548,10 @@ def e08_instances(ctx, inst07):
             if it["split"] == "test" and it["n"] > 7}
     sizes = [n for n in cfg["e08_sizes"] for _ in range(cfg["e08_per_size"])]
     inst, st = D.fresh_instances(D.SEEDS["e08_instances"], sizes, full_goal_frac=1.0, seen=seen, prefix="e08")
+    clash = {it["goal_key"] for it in inst07.values() if it["split"] in ("train", "val")} & \
+        {it["goal_key"] for it in inst}
+    if clash:  # guard: E08 goal classes must be disjoint from the train/val classes (holds by size today)
+        raise RuntimeError(f"E08 goal classes overlap train/val: {sorted(clash)[:5]}")
     ctx.log(f"e08: {len(inst)} instances {st}")
     for it in inst:
         t1 = time.perf_counter()
@@ -614,15 +628,17 @@ def e08_metrics(cfg, inst, done):
         for b in (cfg["h0_budgets"] if name == "h0" else cfg["budgets"]):
             for sz in sizes:
                 recs = [done[(i, name, b)] for i in by_n if sz == "all" or str(by_n[i]) == sz]
+                n_na = sum("na" in r for r in recs)  # FlatMLP beyond n_max: a pooled cell then covers fewer sizes
                 recs = [r for r in recs if "na" not in r]
                 if not recs:
-                    res["per"][f"{name}|{b}|{sz}"] = {"n": 0, "na": True}
+                    res["per"][f"{name}|{b}|{sz}"] = {"n": 0, "na": True, "n_na": n_na}
                     continue
                 k = sum(bool(r["success"]) for r in recs)
                 succ = [r for r in recs if r["success"]]
                 sub = [r["subopt"] for r in succ if r["subopt"] is not None]
                 res["per"][f"{name}|{b}|{sz}"] = {
-                    "n": len(recs), "success": k, "rate": k / len(recs), "wilson": ST.wilson(k, len(recs)),
+                    "n": len(recs), "n_na": n_na, "success": k, "rate": k / len(recs),
+                    "wilson": ST.wilson(k, len(recs)),
                     "plan_len_mean": float(np.mean([r["plan_len"] for r in succ])) if succ else None,
                     "expansions_median": float(np.median([r["expansions"] for r in recs])),
                     "generated_mean": float(np.mean([r["generated"] for r in recs])),
@@ -763,7 +779,8 @@ def phase_report(ctx, timings):
     hdr = "| model | " + " | ".join(groups) + " |"
     sep = "|---|" + "---|" * len(groups)
     for key, title, learned_only in (("policy_acc", "Policy accuracy (argmin successor optimal; ties strict)", False),
-                                     ("spearman", "Spearman rank correlation with h*", False),
+                                     ("spearman", "Spearman rank correlation with h* (within size; ID/OOD = mean "
+                                                  "over sizes)", False),
                                      ("tie_rate", "Tie rate among argmin successors", False),
                                      ("mae", "MAE vs h*", True), ("rmse", "RMSE vs h*", True),
                                      ("exact", "Calibrated exact (round(pred) == h*)", True)):
@@ -807,7 +824,7 @@ def phase_report(ctx, timings):
             cells = []
             for sz in sizes:
                 v = m08["per"][f"{name}|{b}|{sz}"]
-                cells.append("n/a" if v.get("na") else f"{v['success']}/{v['n']}")
+                cells.append("n/a" if v.get("na") else f"{v['success']}/{v['n']}" + ("*" if v.get("n_na") else ""))
             a = m08["per"][f"{name}|{b}|all"]
             if a.get("na"):
                 continue
@@ -822,10 +839,13 @@ def phase_report(ctx, timings):
         L.append(f"| {comp} | {b} | {sz} | {v['baseline_only']} | {v['gnn_only']} | {v['n']} | {v['p_exact']:.4f} |")
     L += ["", f"Optimal-length coverage (A* within {cfg['opt_budget']} expansions): {m08['opt_coverage']}; "
           f"mean A* seconds {json.dumps({k: round(v, 3) for k, v in m08['opt_seconds'].items()})}.",
-          "FlatMLP cannot encode n > 12 (n_max = 12): its 14- and 15-block cells are n/a by construction.", ""]
+          "FlatMLP cannot encode n > 12 (n_max = 12): its 14- and 15-block cells are n/a by construction. A `*` marks "
+          "a pooled cell that therefore covers n <= 12 only; that row's rate, median expansions, plan length, subopt "
+          "and seconds are over the same reduced set and are not comparable with the other rows' pooled values.", ""]
     shas = {f: sha_file(ROOT / f) for f in CODE_FILES}
     prov = {"code_sha256": shas, "exclusions_json_sha256": sha_file(EX.EXCLUSIONS_PATH), "bwm_pins": BI.PINS,
-            "seeds": {**D.SEEDS, "model_seeds": cfg["seeds"]}, "config": cfg, "smoke": ctx.smoke,
+            "seeds": {**D.SEEDS, "model_seeds": cfg["seeds"], "bootstrap": BOOT_SEED},
+            "selection_set_exclusions": meta.get("selection_set_exclusions"), "config": cfg, "smoke": ctx.smoke,
             "threads": ctx.threads, "python": sys.version.split()[0], "torch": torch.__version__,
             "numpy": np.__version__, "platform": platform.platform(), "wall_s": timings,
             "guard_wait_s": ctx.guard_wait, "bwm_bytecode_check": BI.check_no_bytecode()}
@@ -863,8 +883,9 @@ def main():
             cfg[k] = [int(x) for x in v.split(",")] if k == "budgets" else type(FULL[k])(float(v) if "." in v else
                                                                                           int(v))
     for s in cfg["seeds"]:
-        if not D.SEED_RANGE[0] <= s <= D.SEED_RANGE[1]:
-            raise SystemExit(f"model seed {s} outside {D.SEED_RANGE}")
+        lo = D.SEEDS["model_init"]  # model seeds are 20261276-79 (DECISIONS D-11); 70-75 are data seeds, 80-89 tests
+        if not lo <= s <= lo + 3:
+            raise SystemExit(f"model seed {s} outside the allocated model seeds {lo}-{lo + 3}")
     out = (ROOT / a.out) if not Path(a.out).is_absolute() else Path(a.out)
     if str(out.resolve()).startswith(str(BI.BUNDLE_ROOT.resolve())):
         raise SystemExit("refusing to write inside the BWM bundle")

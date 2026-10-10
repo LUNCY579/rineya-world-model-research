@@ -99,7 +99,7 @@ class TestExclusions(unittest.TestCase):
         self.assertGreater(c["hard_signatures"], 0)
         self.assertGreater(c["invariants_union"], 0)
         for k in ("hard110", "instances_val_large.json", "instances_mirror_hard.json", "instances_b3_fresh.json",
-                  "bw_distill.problems(240)"):
+                  "instances_seeds_fresh.json", "bw_distill.problems(240)"):
             self.assertGreater(c[f"instances:{k}"], 0, k)
         self.assertEqual(EX.verify_sources(EXC["raw"]), [])
         self.assertEqual(len(EXC["signatures"]), c["signatures_union"])

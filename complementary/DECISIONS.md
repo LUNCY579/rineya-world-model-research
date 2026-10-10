@@ -203,3 +203,38 @@ and the evidence path.
     - each programme scores the other's adapter on its own sealed instrument and sends results;
     - there is no access to the other side's confirmation banks.
   - CX Q-03 will be sent once N-VR or N-CFSD and T2b-ledger exist.
+- **CX D-16 New BWM reserved set to exclude (BWM message, about 14:50).**
+  - The set is BWM item 7, seed replication: `native_v1/runs/BW_val_large/instances_seeds_fresh.json`.
+    - sha256 6fccb94547184d8ba44a2fdc19ad6c3f1fca584c67c906964281746c0541b3fc, verified by RCX.
+    - 40 instances from generator seed 20261014.
+    - Preregistered in BWM `PREREG_ITEM7_SEEDS.md` (956a0dc4…).
+  - **Actions:**
+    - add its `blocks_val_large.invariant`s to the RCX exclusion union;
+    - avoid seed 20261014;
+    - never evaluate on it without a joint prereg.
+  - **Status:** pending until the E07 review reconcile finishes, to avoid conflicting edits to `rcx/bw/excl.py`.
+    `EXCLUSIONS.json` must be rebuilt before the E07 full run, and `run_e07` refuses stale exclusions.
+  - **BWM pins noted:** `blocks_eval.py` b3666424… (additive change), `blocks_planner.py` unchanged at 18a5f22b….
+- **CX D-17 E07 runner reviewed (wf_28dada83-a37); fixes and decisions (about 15:00).**
+  - **Defects confirmed and fixed by the review:**
+    - leakage: BWM's selection set val_v2 was not excluded. A smoke train instance and an ID test instance were val_v2
+      renamings. Fixed with `excl.with_selection_sets`;
+    - Spearman pooled across sizes (now within each size);
+    - the best-handcrafted baseline was selected on a different statistic from the one compared;
+    - FlatMLP's E08 cells beyond n_max were misleading (`n_na` now marked);
+    - the bootstrap seed is now allocated as `20261275:bootstrap`;
+    - a seed guard;
+    - an E08 goal-class guard.
+  - **Applied by RCX:**
+    - D-16: BWM `instances_seeds_fresh.json` is in the invariant union, but kept out of the b3_fresh regeneration
+      check, which predates it;
+    - `load_exclusions` now refuses a stale EXCLUSIONS.json (missing reserved sources);
+    - BWM's v1 val set (`runs/BW_data/instances_val.json`) is added as a selection set, read only to build exclusions.
+  - **Decision.** Train and val keep one instance per goal class: only p(n) − 1 goal classes exist per size (4, 6, 10,
+    14 for n = 4..7), and duplicates of a class only add renamed duplicate rows at n ≤ 6. At n = 7, states per
+    instance go from 3,000 to 10,000 to compensate.
+  - **Before the full run (lane free):**
+    1. rebuild EXCLUSIONS.json with `python -B -m rcx.bw.excl`, and check that the b3_fresh regeneration still matches;
+    2. run `tests.test_bw`;
+    3. run a new smoke into a fresh `--out`.
+  - **Stale outputs.** The old smoke outputs are void; never resume an old `--out`.

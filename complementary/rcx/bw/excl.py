@@ -28,7 +28,14 @@ EXCLUSIONS_PATH = REPO / "experiments" / "RCX-E07" / "EXCLUSIONS.json"
 TEST_SIG_DIRS = ("blocksworld/generated_basic", "blocksworld/generated_basic_3", "unsolvable_blocksworld/generated_basic")
 HARD_DIR = "blocksworld_hard/generated"
 VAL_LARGE_FILES = ("instances_val_large.json", "instances_mirror_hard.json", "instances_b3_fresh.json")
+# Reserved BWM test sets created after b3_fresh (BWM message 2026-10-10; CX D-16). Excluded by invariant like the
+# val_large files, but NOT part of the b3_fresh regeneration check (they did not exist when b3_fresh was drawn).
+EXTRA_RESERVED_FILES = ("instances_seeds_fresh.json",)
 DISTILL_N = 240
+# BWM selection set val_v2 (blocks_eval --set val_v2): 400 instances, 4-6 blocks, drawn by B.generate(full_goal_frac=0.5)
+# -- RCX-E07's own generator and sizes, so fresh draws do collide with it. Not in BWM's bw_b3_prep recipe; see
+# with_selection_sets.
+SELECTION_FILES = ("runs/BW_data_v2/instances_val.json", "runs/BW_data/instances_val.json")
 
 
 def _inv_json(inv) -> list:
@@ -93,7 +100,7 @@ def build_exclusions(path: Path | None = EXCLUSIONS_PATH) -> dict:
     inv_by_source = {}
     hard = [B.parse_problem(p) for p in sorted((bench / HARD_DIR).glob("*.pddl"))]
     inv_by_source["hard110"] = [VL.invariant(*h) for h in hard]
-    for fn in VAL_LARGE_FILES:
+    for fn in VAL_LARGE_FILES + EXTRA_RESERVED_FILES:
         p = BI.BWM_ROOT / "runs" / "BW_val_large" / fn
         raw = p.read_bytes()
         src_sha[rel(p)] = BI.sha256_bytes(raw)
@@ -113,7 +120,8 @@ def build_exclusions(path: Path | None = EXCLUSIONS_PATH) -> dict:
     sig_ns[HARD_DIR + " (n <= 7)"] = dict(sorted(Counter(len(h[0]) for h in hard_small).items()))
     if {B.signature(*h) for h in hard_small} != hard_sigs:
         raise RuntimeError("hard_signatures() does not match the hard instances with <= 7 blocks")
-    inv_pre_b3 = set().union(*(set(v) for k, v in inv_by_source.items() if k != "instances_b3_fresh.json"))
+    inv_pre_b3 = set().union(*(set(v) for k, v in inv_by_source.items()
+                               if k != "instances_b3_fresh.json" and k not in EXTRA_RESERVED_FILES))
     b3_check = _b3_fresh_regeneration_check(B, VL, hard, hard_sigs, inv_pre_b3, src_sha, rel)
     counts.update(test_signatures=len(test_sigs), hard_signatures=len(hard_sigs),
                   signatures_union=len(test_sigs | hard_sigs), invariants_union=len(inv_all))
@@ -156,6 +164,11 @@ def verify_sources(ex: dict) -> list[str]:
 def load_exclusions(path: str = str(EXCLUSIONS_PATH), verify: bool = True) -> dict:
     """Load EXCLUSIONS.json as {'signatures': set, 'invariants': set, 'raw': dict}; fail closed if sources changed."""
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
+    missing = [fn for fn in VAL_LARGE_FILES + EXTRA_RESERVED_FILES
+               if f"runs/BW_val_large/{fn}" not in raw.get("source_sha256", {})]
+    if missing:
+        raise BI.PinError(f"EXCLUSIONS.json is stale (missing reserved sources {missing}); rebuild with "
+                          "python -B -m rcx.bw.excl")
     if raw["bwm_import"]["pins"] != BI.PINS:
         raise BI.PinError("EXCLUSIONS.json was built with different BWM code pins; rebuild it")
     if verify:
@@ -166,8 +179,40 @@ def load_exclusions(path: str = str(EXCLUSIONS_PATH), verify: bool = True) -> di
             "invariants": frozenset(_inv_key(x) for x in raw["invariants"]), "raw": raw}
 
 
+def with_selection_sets(ex: dict) -> dict:
+    """Copy of `ex` that also excludes BWM's selection set val_v2 (SELECTION_FILES) by exact renaming signature.
+
+    BWM's recipe (above) covers val_large by invariant (n >= 6) but not val_v2 (4-6 blocks, generated with
+    B.generate(full_goal_frac=0.5), RCX-E07's own generator), so fresh RCX instances and rows at n <= 6 can be val_v2
+    instances. The file is read only to compute signatures and invariants (nothing is copied); its sha256 and counts
+    are returned in ex['selection_sources']. Adds 'selection_signatures' and 'selection_invariants' (the invariants
+    only gate the row-level signature test in row_exclusion_reason). The reason reported is 'selection_signature'.
+    """
+    B, VL = BI.load()
+    sigs, invs, info = set(), set(), {}
+    for rel in SELECTION_FILES:
+        raw = (BI.BWM_ROOT / rel).read_bytes()
+        rows = json.loads(raw.decode("utf-8"))
+        file_sigs, ns = set(), Counter()
+        for r in rows:
+            objs, init, goal = list(r["objs"]), frozenset(map(tuple, r["init"])), frozenset(map(tuple, r["goal"]))
+            if len(objs) > 7 or ("handempty",) not in init:
+                raise RuntimeError(f"{rel}: instance outside the signature recipe (n > 7 or init not handempty)")
+            file_sigs.add(B.signature(objs, init, goal))
+            invs.add(VL.invariant(objs, init, goal))
+            ns[len(objs)] += 1
+        sigs |= file_sigs
+        info[rel] = {"sha256": BI.sha256_bytes(raw), "instances": len(rows), "unique_signatures": len(file_sigs),
+                     "already_in_exclusions": len(file_sigs & ex["signatures"]),
+                     "block_counts": dict(sorted(ns.items()))}
+    out = dict(ex)
+    out.update(selection_signatures=frozenset(sigs), selection_invariants=frozenset(invs), selection_sources=info)
+    return out
+
+
 def exclusion_reason(objs, init, goal, ex: dict | None = None, sig: str | None = None) -> str | None:
-    """'invariant' / 'signature' if the instance falls under BWM's exclusion recipe, else None.
+    """'invariant' / 'signature' if the instance falls under BWM's exclusion recipe, 'selection_signature' if it is
+    a selection-set instance (only when `ex` comes from with_selection_sets), else None.
 
     The cheap invariant test runs first (the recipe is an OR, so the order changes only the reported reason). `sig`
     may pass a precomputed B.signature(objs, init, goal) (n <= 7 brute force is ~0.1 s at n = 7).
@@ -181,6 +226,8 @@ def exclusion_reason(objs, init, goal, ex: dict | None = None, sig: str | None =
             sig = B.signature(list(objs), init, goal)
         if sig in ex["signatures"]:
             return "signature"
+        if sig in ex.get("selection_signatures", ()):
+            return "selection_signature"
     return None
 
 
@@ -196,14 +243,21 @@ def row_exclusion_reason(objs, state, goal, ex: dict | None = None) -> str | Non
         has a handempty init (a signature fixes the fact multiset, so a holding state cannot match), and the hard-110
         signatures (n = 6, 7) are subsumed by the invariant test (renaming-equivalent instances share invariants, and
         every hard instance's invariant is in the set).
+    With with_selection_sets(ex), handempty rows whose invariant matches a selection-set instance are signature-tested
+    as well ('selection_signature'; every selection instance has a handempty init, checked when loading).
     """
     B, VL = BI.load()
     ex = ex or load_exclusions()
-    if VL.invariant(list(objs), state, goal) in ex["invariants"]:
+    inv = VL.invariant(list(objs), state, goal)
+    if inv in ex["invariants"]:
         return "invariant"
-    if len(objs) in ex["raw"]["test_signature_block_counts"] and ("handempty",) in state:
-        if B.signature(list(objs), state, goal) in ex["signatures"]:
+    if ("handempty",) in state and (len(objs) in ex["raw"]["test_signature_block_counts"] or
+                                    inv in ex.get("selection_invariants", ())):
+        sig = B.signature(list(objs), state, goal)
+        if sig in ex["signatures"]:
             return "signature"
+        if sig in ex.get("selection_signatures", ()):
+            return "selection_signature"
     return None
 
 

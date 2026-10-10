@@ -108,8 +108,9 @@ def fresh_instances(seed: int, sizes, full_goal_frac: float = FULL_GOAL_FRAC, se
                 stats["duplicate"] += 1
                 continue
             sig = B.signature(objs, init, goal) if n <= 7 else None
-            if EX.exclusion_reason(objs, init, goal, ex, sig=sig):
-                stats["excluded_signature"] += 1
+            why = EX.exclusion_reason(objs, init, goal, ex, sig=sig)
+            if why:  # 'signature', or 'selection_signature' with an ex from EX.with_selection_sets
+                stats[f"excluded_{why}"] += 1
                 continue
             key = instance_key(objs, init, goal, sig) if unique == "instance" else gk
             if key in seen:
