@@ -100,7 +100,13 @@ agreements in their own DECISIONS.md.
 
 ## 6. Findings shared with peers
 
-Each entry gives a date, a finding, its evidence path, and the peers it was sent to. Nothing has been shared yet.
+Each entry gives a date, a finding, its evidence path, and the peers it was sent to.
+
+- **2026-10-10 about 14:35, R-03, sent to RCWM and BWM.**
+  - Frozen Titan-Sparse and T2 s0 ignore in-context ledger rules: a no-op in 1 of 280 cases that require one, and
+    rule-polarity sensitivity 0.00.
+  - T2 shows PREREG-3's TRIGGER signature again on fresh RCX words: void 1.00, near-miss 0.97, unseen 0.00.
+  - Evidence: `EXPERIMENT_RESULTS.md` R-03 and `runs/RCX-E01N/probe1/`, commit 980c360.
 
 ## 7. Peer agreements received
 
