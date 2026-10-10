@@ -260,7 +260,7 @@ def rollout_many(fwd, starts, plans):
 
 
 def plan_beam(instances, proposer, fwd, *, eval_seed=0, width=4, max_expansions=48, max_depth=80, max_rollout=0,
-              log=None):
+              log=None, goal_met=None, unmet=None):
     """Proposer-guided beam search in imagination (PlanBench single-plan setting: F only, no execution feedback).
 
     A node is (imagined state, action prefix). Expanding a node asks the proposer for K complete plans from its state
@@ -272,13 +272,18 @@ def plan_beam(instances, proposer, fwd, *, eval_seed=0, width=4, max_expansions=
     given in the problem; the domain rules are known only to the learned F. Nodes of all instances are expanded in one
     batched proposer call and one batched F rollout per round. Unsolved instances submit the prefix of the best node.
     max_rollout > 0 simulates only the first max_rollout actions of each candidate (F cost per expansion bounded; a
-    solution must then be reached within that prefix, and longer plans are built across expansions)."""
+    solution must then be reached within that prefix, and longer plans are built across expansions).
+    Domain hooks (joint roadmap item 3; defaults = Blocksworld): goal_met(state, goal) -> bool and
+    unmet(state, goal) -> number (lower is closer). States and actions must be hashable; instances need
+    "id", "init", "goal" (and whatever the proposer reads, e.g. "objs")."""
+    goal_met = goal_met or B.goal_met
+    unmet = unmet or (lambda st, g: len(g - st))
     eps = []
     for it in instances:
-        eps.append({"id": it["id"], "objs": it["objs"], "goal": it["goal"], "beam": [(it["init"], [])],
+        eps.append({"id": it["id"], "objs": it.get("objs"), "goal": it["goal"], "beam": [(it["init"], [])],
                     "seen": {it["init"]}, "done": False, "rounds": 0, "gen_tokens": 0, "verified": False,
                     "plan": None, "fail": None, "expansions": 0,
-                    "best": (len(it["goal"] - it["init"]), 0, it["init"], [])})
+                    "best": (unmet(it["init"], it["goal"]), 0, it["init"], [])})
     rnd = 0
     while True:
         active = [e for e in eps if not e["done"]]
@@ -304,16 +309,16 @@ def plan_beam(instances, proposer, fwd, *, eval_seed=0, width=4, max_expansions=
         for (e, path, rank), plan, r in zip(meta, plans, rolls):
             traj = r["traj"]
             for t, st in enumerate(traj):
-                if B.goal_met(st, e["goal"]):
+                if goal_met(st, e["goal"]):
                     full = path + list(plan[:t + 1])
                     if e["id"] not in sols or len(full) < len(sols[e["id"]]):
                         sols[e["id"]] = full
                     break
             if not traj:
                 continue
-            unmet = [len(e["goal"] - st) for st in traj]
-            t_best = min(range(len(traj)), key=lambda t: (unmet[t], t))
-            kids.setdefault(e["id"], []).append((unmet[t_best], len(path) + t_best + 1, rank, traj[t_best],
+            um = [unmet(st, e["goal"]) for st in traj]
+            t_best = min(range(len(traj)), key=lambda t: (um[t], t))
+            kids.setdefault(e["id"], []).append((um[t_best], len(path) + t_best + 1, rank, traj[t_best],
                                                  path + list(plan[:t_best + 1])))
         for e in active:
             e["rounds"] += 1

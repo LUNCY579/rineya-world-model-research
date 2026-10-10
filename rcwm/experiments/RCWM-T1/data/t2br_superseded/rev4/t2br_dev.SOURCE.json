@@ -1,0 +1,720 @@
+{
+ "schema": 4,
+ "revision": 4,
+ "experiment": "RCWM-T1 T2b-register screen (roadmap item 3; joint item 5b)",
+ "built_utc": "2026-10-09T22:38:44Z",
+ "model_calls": 0,
+ "torch_imported": false,
+ "builder": "scripts/t2br_make_data.py",
+ "builder_sha256_at_build": "edd960db347889c777a7a76ffc47189ff9cdf8156b50dd6dde80c4099c447ec4",
+ "common_sha256_at_build": "7cebf966f4e82d5a983d2d3e5054797c0382e1ff9430919219d4a2c300494d3c",
+ "builder_note": "the files' provenance is the --verify rebuild check (AUDIT.json): the CURRENT builder must rebuild every data file byte for byte; the hashes above are the code at build time",
+ "env_sha256": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+ "recorded_marginals_sha256": "45674251e38e574229f4ea98d04c30fe623ec6ac58ad308ad491661c84afab7e",
+ "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+ "chat_template_check": "render_prompt == real template on 500 t2_train register prompts",
+ "rows_identical_to_revision_2": {
+  "ok": true,
+  "train_rows": "fd6710e20a5556708b296364718b6edb7275f7b3adac02a52b95700384302e42",
+  "dev_rows": "1113af0fedb5d9e955445472d703799eac21403e37fbec7838c45cb2bc6d5648",
+  "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
+ },
+ "revision_3_files_reconstructed": {
+  "ok": true,
+  "t2br_train_plain.jsonl": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
+  "t2br_train_trace.jsonl": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
+  "t2br_train_filler.jsonl": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
+  "t2br_train_sd_plain.jsonl": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
+  "t2br_train_sd_trace.jsonl": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
+  "t2br_train_sd_filler.jsonl": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
+  "t2br_dev.jsonl": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+  "t2br_dev_hs.jsonl": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939"
+ },
+ "exclusion_sources": {
+  "historical": {
+   "payloads": 6464,
+   "operative_contents": 6258,
+   "sha256": null,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ]
+  },
+  "bank_pilot.json": {
+   "payloads": 15629,
+   "operative_contents": 15278,
+   "sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+  },
+  "bank_confirm.json": {
+   "payloads": 13552,
+   "operative_contents": 13247,
+   "sha256": "8bc6e2f8a8c7cae5b7b66293ef12b0efc440c281f820eca9d384a659b26a6a16"
+  },
+  "bank_confirm2.json": {
+   "payloads": 12163,
+   "operative_contents": 11903,
+   "sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea"
+  },
+  "bank_s4000.json": {
+   "payloads": 255745,
+   "operative_contents": 250614,
+   "sha256": "af1336c261375524a4a6eaf92cc48dc76b1159df093ce2705d279688f22bb4ce"
+  },
+  "t2_train.jsonl": {
+   "payloads": 1501,
+   "operative_contents": 1496,
+   "sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744"
+  },
+  "t2_eval.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59"
+  },
+  "t2_eval_xframe.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de"
+  },
+  "t2_eval_supp.jsonl": {
+   "payloads": 360,
+   "operative_contents": 360,
+   "sha256": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086"
+  },
+  "SELECT-VIEWS-001": {
+   "payloads": 384,
+   "operative_contents": 383,
+   "sha256": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3"
+  },
+  "l1_ood_bank.jsonl": {
+   "payloads": 600,
+   "operative_contents": 600,
+   "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c"
+  },
+  "fds/T_BANK.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "26c01effe9610230f7876bbe118792f85094605fe3dde5f873c78c67e1c493ba"
+  },
+  "fds/T_BANK_V2.json": {
+   "payloads": 192,
+   "operative_contents": 192,
+   "sha256": "fc094136a5b581cb9cc03393b1e5959ed8f69247638c81e37cf7f68fbf132e01"
+  },
+  "cc1/T_BANK_V3X.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "173aa372466d5e3cc8efbebe4cc7e7ba09a8eb34de4598ce8f9d96a2b8e6557c"
+  },
+  "cc2/STAGE_A_T_V3X.json": {
+   "payloads": 15,
+   "operative_contents": 15,
+   "sha256": "635c9c7ea6851d4a0147a299ecd158a880b91fa5b9046b0af787d2ebbd6eb0d4"
+  },
+  "cc2/T_BANK_V4.json": {
+   "payloads": 864,
+   "operative_contents": 864,
+   "sha256": "82f0a6423dd6b58b81319708e7fbda7c5880b9734742323ea11574ff354c93c0"
+  },
+  "multi_event_register_prompts": {
+   "payloads": 280,
+   "operative_contents": 280,
+   "sha256": null,
+   "skipped_by_name_never_opened": [
+    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+    "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+    "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+   ]
+  }
+ },
+ "exclusion_union": {
+  "payloads": 308726,
+  "operative_contents": 301783
+ },
+ "freshness": "zero payload and zero operative-content overlap with every source; train / dev / chain units mutually disjoint (checked during the draw by Registry, re-checked by --verify)",
+ "peak_rss_mb_at_write": 484.6,
+ "record": "dev screen bank (one-step strata + its held-out-surface rendering + k=4 chains)",
+ "seed": 20261110,
+ "chain_seed": 20261111,
+ "strata": {
+  "mix": [
+   "in",
+   "noninferiority",
+   "mix, in-range value, 50 wrap / 50 no-wrap"
+  ],
+  "wrap": [
+   "in",
+   "reported",
+   "add whose raw sum leaves [0, 96] (40 over / 40 under), in-range value"
+  ],
+  "cond_xm1": [
+   "in",
+   "noninferiority",
+   "conditional with other = threshold - 1 (ok false: subtract); triplet member"
+  ],
+  "cond_x0": [
+   "in",
+   "noninferiority",
+   "conditional with other = threshold (ok false under the STRICT '>'); triplet"
+  ],
+  "cond_xp1": [
+   "in",
+   "noninferiority",
+   "conditional with other = threshold + 1 (ok true: add); triplet member"
+  ],
+  "cond_mid": [
+   "in",
+   "noninferiority",
+   "conditional pairs with |other - threshold| 2..15 on both members (the training twins' band), one ok true / one ok false; 25 pairs move the threshold, 25 move the other register; in-range value"
+  ],
+  "swap": [
+   "in",
+   "control",
+   "swap of two unequal registers (untouched skill: not in training)"
+  ],
+  "add_nowrap": [
+   "in",
+   "control",
+   "add, in-range value != 0, no wrap (untouched skill: not in training)"
+  ],
+  "mix_oor": [
+   "oor",
+   "primary",
+   "mix with |value| in 12..40 (outside the trained -8..11), 50 wrap / 50 no-wrap"
+  ],
+  "wrap_oor": [
+   "oor",
+   "reported",
+   "add with |value| in 12..40 whose raw sum leaves [0, 96] (40 over / 40 under)"
+  ],
+  "cond_oor_val": [
+   "oor",
+   "primary",
+   "conditional boundary pairs sharing the row: threshold = other (ok false) / threshold = other - 1 (ok true), |value| in 12..40"
+  ],
+  "cond_oor_thr": [
+   "oor",
+   "primary",
+   "conditional pairs with thresholds outside the register range: -40..-1 (ok true) / 97..136 (ok false); value, registers in range"
+  ],
+  "cond_far": [
+   "oor",
+   "primary",
+   "conditional pairs FAR from the threshold: |other - threshold| 16..96 on both members (beyond the training rows' 0..15); in-range value, threshold and registers; each pair shares the event and moves the other register"
+  ],
+  "cond_sametens": [
+   "oor",
+   "identification",
+   "conditional pairs with tens(other) == tens(threshold): the branch is decided by the units digit; |other - threshold| in 2..9 on both members (2..7 realized: a pair lies in one decade), one ok true / one ok false; |value| in 12..40 (outside the trained -8..11), neither branch wraps; in-range registers and thresholds; 25 pairs move the threshold, 25 move the other register"
+  ]
+ },
+ "files": {
+  "t2br_dev.jsonl": "9aac40deffd678a4bdefffbb290081872015c88ea38296001c671e4067f46102",
+  "t2br_dev_hs.jsonl": "61845fbfc8635423257fac7c52b3ed1c70d19dd799720ca5f0e79866af1764f8",
+  "t2br_chains.jsonl": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62"
+ },
+ "sametens_seed": 20261114,
+ "describe": {
+  "n": 1200,
+  "by_stratum": {
+   "mix": 100,
+   "wrap": 80,
+   "cond_xm1": 60,
+   "cond_x0": 60,
+   "cond_xp1": 60,
+   "swap": 80,
+   "add_nowrap": 80,
+   "mix_oor": 100,
+   "wrap_oor": 80,
+   "cond_oor_val": 100,
+   "cond_oor_thr": 100,
+   "cond_mid": 100,
+   "cond_far": 100,
+   "cond_sametens": 100
+  },
+  "branch_by_stratum": {
+   "cond_xm1": {
+    "False": 60
+   },
+   "cond_x0": {
+    "False": 60
+   },
+   "cond_xp1": {
+    "True": 60
+   },
+   "cond_mid": {
+    "True": 50,
+    "False": 50
+   },
+   "cond_oor_val": {
+    "False": 50,
+    "True": 50
+   },
+   "cond_oor_thr": {
+    "True": 50,
+    "False": 50
+   },
+   "cond_far": {
+    "True": 50,
+    "False": 50
+   },
+   "cond_sametens": {
+    "True": 50,
+    "False": 50
+   }
+  },
+  "pair_types": {
+   "cond_mid": {
+    "threshold": 50,
+    "other": 50
+   },
+   "cond_far": {
+    "other": 100
+   },
+   "cond_sametens": {
+    "threshold": 50,
+    "other": 50
+   }
+  },
+  "distance_range": {
+   "cond_mid": [
+    2,
+    15
+   ],
+   "cond_far": [
+    16,
+    73
+   ],
+   "cond_sametens": [
+    2,
+    7
+   ]
+  },
+  "cond_sametens": {
+   "distance_counts": {
+    "2": 34,
+    "3": 26,
+    "4": 24,
+    "5": 10,
+    "6": 4,
+    "7": 2
+   },
+   "value_sign": {
+    "-": 38,
+    "+": 62
+   },
+   "decades": {
+    "0": 10,
+    "1": 6,
+    "2": 16,
+    "3": 10,
+    "5": 12,
+    "6": 18,
+    "7": 14,
+    "8": 14
+   },
+   "seed": 20261114
+  },
+  "chains": {
+   "CH_IN": 32,
+   "CH_X": 16
+  },
+  "chain_candidates": 384,
+  "heldout_surface_rows": 500
+ },
+ "dev_heuristics": {
+  "mix": {
+   "copy": 0.0,
+   "unreduced": 0.5,
+   "mix_1x": 0.04,
+   "mix_no_v": 0.12
+  },
+  "wrap": {
+   "copy": 0.0,
+   "unreduced": 0.0,
+   "always_wrap": 1.0
+  },
+  "cond_xm1": {
+   "always_add": 0.0,
+   "always_sub": 1.0,
+   "wrong_register": 0.5333,
+   "x_hi": 0.4833,
+   "thr_lo": 0.5333,
+   "v_pos": 0.4,
+   "non_strict": 1.0,
+   "eq_plus1": 1.0,
+   "units_eq_plus1": 1.0,
+   "units_digit_gt": 0.85,
+   "tens_digit_gt": 1.0,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 0.15
+  },
+  "cond_x0": {
+   "always_add": 0.0,
+   "always_sub": 1.0,
+   "wrong_register": 0.5333,
+   "x_hi": 0.4833,
+   "thr_lo": 0.5167,
+   "v_pos": 0.4,
+   "non_strict": 0.0,
+   "eq_plus1": 1.0,
+   "units_eq_plus1": 1.0,
+   "units_digit_gt": 1.0,
+   "tens_digit_gt": 1.0,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0
+  },
+  "cond_xp1": {
+   "always_add": 1.0,
+   "always_sub": 0.0,
+   "wrong_register": 0.4667,
+   "x_hi": 0.5167,
+   "thr_lo": 0.4833,
+   "v_pos": 0.6,
+   "non_strict": 1.0,
+   "eq_plus1": 1.0,
+   "units_eq_plus1": 1.0,
+   "units_digit_gt": 0.9,
+   "tens_digit_gt": 0.1,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0
+  },
+  "cond_mid": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.54,
+   "x_hi": 0.58,
+   "thr_lo": 0.58,
+   "v_pos": 0.5,
+   "non_strict": 1.0,
+   "eq_plus1": 0.5,
+   "units_eq_plus1": 0.54,
+   "units_digit_gt": 0.62,
+   "tens_digit_gt": 0.86,
+   "tens_or_eq_plus1": 0.86,
+   "tens_ge_not_eq": 0.88
+  },
+  "swap": {
+   "copy": 0.0,
+   "unreduced": 1.0
+  },
+  "add_nowrap": {
+   "copy": 0.0,
+   "unreduced": 1.0,
+   "always_wrap": 0.0
+  },
+  "mix_oor": {
+   "copy": 0.0,
+   "unreduced": 0.5,
+   "mix_1x": 0.04,
+   "mix_no_v": 0.0
+  },
+  "wrap_oor": {
+   "copy": 0.0,
+   "unreduced": 0.0,
+   "always_wrap": 1.0
+  },
+  "cond_oor_val": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.51,
+   "x_hi": 0.5,
+   "thr_lo": 0.5,
+   "v_pos": 0.5,
+   "non_strict": 0.5,
+   "eq_plus1": 1.0,
+   "units_eq_plus1": 1.0,
+   "units_digit_gt": 0.97,
+   "tens_digit_gt": 0.53,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0
+  },
+  "cond_oor_thr": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 1.0,
+   "x_hi": 0.5,
+   "thr_lo": 1.0,
+   "v_pos": 0.5,
+   "non_strict": 1.0,
+   "eq_plus1": 0.5,
+   "units_eq_plus1": 0.5,
+   "units_digit_gt": 0.5,
+   "tens_digit_gt": 1.0,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0
+  },
+  "cond_far": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.5,
+   "x_hi": 0.95,
+   "thr_lo": 0.5,
+   "v_pos": 0.5,
+   "non_strict": 1.0,
+   "eq_plus1": 0.5,
+   "units_eq_plus1": 0.54,
+   "units_digit_gt": 0.56,
+   "tens_digit_gt": 1.0,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0
+  },
+  "cond_sametens": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.52,
+   "x_hi": 0.5,
+   "thr_lo": 0.5,
+   "v_pos": 0.5,
+   "non_strict": 1.0,
+   "eq_plus1": 0.5,
+   "units_eq_plus1": 0.5,
+   "units_digit_gt": 1.0,
+   "tens_digit_gt": 0.5,
+   "tens_or_eq_plus1": 0.5,
+   "tens_ge_not_eq": 0.5
+  },
+  "primary_conditional": {
+   "always_add": 0.5,
+   "always_sub": 0.5,
+   "wrong_register": 0.67,
+   "x_hi": 0.65,
+   "thr_lo": 0.6667,
+   "v_pos": 0.5,
+   "non_strict": 0.8333,
+   "eq_plus1": 0.6667,
+   "units_eq_plus1": 0.68,
+   "units_digit_gt": 0.6767,
+   "tens_digit_gt": 0.8433,
+   "tens_or_eq_plus1": 1.0,
+   "tens_ge_not_eq": 1.0
+  },
+  "primary_mix": {
+   "copy": 0.0,
+   "unreduced": 0.5,
+   "mix_1x": 0.04,
+   "mix_no_v": 0.0
+  }
+ },
+ "surface_audit_heldout": {
+  "n_rows": 500,
+  "strata": {
+   "mix_oor": 100,
+   "cond_oor_val": 100,
+   "cond_oor_thr": 100,
+   "cond_far": 100,
+   "cond_sametens": 100
+  },
+  "bad_rows": 0,
+  "same_ids_and_golds_as_in_surface": true,
+  "order_rotation": {
+   "top": {
+    "event/before": 500
+   },
+   "state": {
+    "X/Z/Y": 166,
+    "Y/X/Z": 167,
+    "Z/Y/X": 167
+   },
+   "event": {
+    "other/kind/tick/threshold/register/value": 167,
+    "threshold/kind/tick/other/value/register": 166,
+    "value/tick/threshold/register/other/kind": 167
+   }
+  },
+  "mean_prompt_tokens": {
+   "held_out": 182.27,
+   "in_surface_same_rows": 143.27
+  },
+  "per_factor_renderings": "omitted by choice (a GPU-budget choice, not a capacity limit; see DESIGN.md)",
+  "ok": true
+ },
+ "surface_definition": {
+  "paraphrases": [
+   "Apply one instruction to the supplied registers. Registers are integers modulo 97. swap exchanges {register} and {other} simultaneously. add adds {value} to {register}. mix adds (2 times {other} plus {value}) to {register}. conditional adds {value} if {other} is greater than {threshold}, otherwise subtracts {value}. Reduce updated numeric registers modulo 97; preserve other registers. Return only the complete resulting registers as a JSON object.",
+   "You are given registers holding integers modulo 97 and one instruction. swap: the registers named by {register} and {other} exchange values at the same time. add: the {register} register increases by {value}. mix: the {register} register increases by twice the {other} register plus {value}. conditional: if the {other} register is strictly greater than {threshold}, the {register} register increases by {value}; otherwise it decreases by {value}. Reduce every updated register modulo 97 and leave the rest unchanged. Output only the complete resulting registers as a JSON object.",
+   "Execute the single instruction on the registers (integers modulo 97). swap - exchange the {register} and {other} registers simultaneously; add - add {value} to the {register} register; mix - add 2 x the {other} register + {value} to the {register} register; conditional - when the {other} register is greater than {threshold}, add {value} to the {register} register, else subtract {value} from it. Each updated register is reduced modulo 97; untouched registers keep their values. Reply with only the complete resulting registers as a JSON object.",
+   "Registers are integers modulo 97. Carry out the one instruction given. For swap, the {register} and {other} registers trade values simultaneously. For add, {value} is added to the {register} register. For mix, the {register} register gains two times the {other} register plus {value}. For conditional, the {register} register gains {value} if the {other} register is greater than {threshold} and loses {value} otherwise. Take updated registers modulo 97 and keep the others as they are. Return just the complete resulting registers as a JSON object.",
+   "Update the registers by applying the single instruction below; every register holds an integer modulo 97. A swap instruction makes the {register} and {other} registers exchange their values at once. An add instruction increases the {register} register by {value}. A mix instruction increases the {register} register by {value} plus double the {other} register. A conditional instruction increases the {register} register by {value} when the {other} register exceeds {threshold}, and decreases it by {value} when it does not. Every changed register is reduced modulo 97, and every other register stays the same. Respond with nothing but the full set of resulting registers as one JSON object."
+  ],
+  "train_paraphrases": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "heldout_paraphrase": 4,
+  "fields": {
+   "register": [
+    "register",
+    "target",
+    "dst",
+    "reg",
+    "dest"
+   ],
+   "other": [
+    "other",
+    "source",
+    "src",
+    "operand",
+    "peer"
+   ],
+   "value": [
+    "value",
+    "amount",
+    "delta",
+    "change",
+    "offset"
+   ],
+   "threshold": [
+    "threshold",
+    "limit",
+    "cutoff",
+    "bound",
+    "pivot"
+   ],
+   "kind": [
+    "kind",
+    "op",
+    "type",
+    "action",
+    "opcode"
+   ],
+   "before": [
+    "before",
+    "registers",
+    "state",
+    "regs",
+    "memory"
+   ],
+   "event": [
+    "event",
+    "instruction",
+    "command",
+    "step",
+    "operation"
+   ]
+  },
+  "train_name_idx": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "heldout_name_idx": 4,
+  "object_keys": {
+   "top": [
+    "before",
+    "event"
+   ],
+   "state": [
+    "X",
+    "Y",
+    "Z"
+   ],
+   "event": [
+    "kind",
+    "other",
+    "register",
+    "threshold",
+    "tick",
+    "value"
+   ]
+  },
+  "heldout_orders": {
+   "top": [
+    [
+     "event",
+     "before"
+    ]
+   ],
+   "state": [
+    [
+     "Z",
+     "Y",
+     "X"
+    ],
+    [
+     "Y",
+     "X",
+     "Z"
+    ],
+    [
+     "X",
+     "Z",
+     "Y"
+    ]
+   ],
+   "event": [
+    [
+     "value",
+     "tick",
+     "threshold",
+     "register",
+     "other",
+     "kind"
+    ],
+    [
+     "other",
+     "kind",
+     "tick",
+     "threshold",
+     "register",
+     "value"
+    ],
+    [
+     "threshold",
+     "kind",
+     "tick",
+     "other",
+     "value",
+     "register"
+    ]
+   ]
+  },
+  "heldout_order_seed": 20261113,
+  "train_orders_per_type": {
+   "top": 1,
+   "state": 3,
+   "event": 717
+  }
+ },
+ "go_rule": "PRE-STATED SCREEN GO RULE, REVISION 4 (T2b-register; supersedes revisions 1-3, stated before any output exists; seed by seed; point estimates on the fresh dev screen bank, decided EXACTLY on integer counts as rationals (no floating-point rounding: a difference equal to a bar meets a '>=' bar and does not meet a '<' bar); 95% cluster-bootstrap CIs reported, not gating; every condition component decided within one bootstrap SE of its bar is flagged in the report). TRAINING: the surface-diversity build 'sd' only (decision point 1 fired: PREREG-3 TRIGGER): the same 750 rows, each prompt rendered with a seeded rule-text paraphrase (0-3), field names (variants 0-3 per field) and JSON key orders drawn from a TRAIN subset of permutations per object type (top level, state, event); paraphrase 4, field-name variant 4 and the HELD-OUT key orders (per object type the fully reversed canonical order plus 2 fixed seeded permutations where they exist; the 2-key top level has only its reversed order, so it trains in the canonical order alone) never occur in training; targets keep the literal cmp -> calc -> after order. Outcome = exact 'after' state (the decision parser reads only 'after'; a malformed trace/filler answer is wrong). Two renderings of the same rows, paired by row: IN-SURFACE = Titan's verbatim one-step frame; HELD-OUT SURFACE (HS) = paraphrase 4 + field-name variant 4 + a held-out key order per object type, rotating over the held-out orders by row, on the primary strata and on cond_sametens. PRIMARY outcomes are out of range (joint amendment 5): 'conditional' = cond_oor_val + cond_oor_thr + cond_far pooled (branch-balanced pairs; cond_far = in-range values and thresholds with |other - threshold| 16..96, beyond every training row's 0..15); 'cond_oor_val' = the boundary pairs alone; 'mix' = mix_oor. IDENTIFICATION stratum (G1 only; not pooled into 'conditional'): 'cond_sametens' = 50 branch-balanced minimal pairs with tens(other) == tens(threshold), so the branch is decided by the units digit, |other - threshold| in 2..9 (2..7 realized: both members of a pair lie in one decade), |value| 12..40 (out of range), in-range registers and thresholds, neither branch wraps; it separates the comparison from tens-digit shortcuts that are exact on every primary conditional row (e.g. 'add iff tens(other) > tens(threshold) or other == threshold + 1' scores 1/2 on it). FILLER (amendment 4b): the fill length is a per-kind constant: the smallest run of ' .' units such that the filler target is at least as long (Titan tokens) as the LONGEST trace target of that kind over train + dev (one-step rows and the chains' gold steps), whatever its 'after' (swap 7, add 17, mix 17, conditional 29 units); every filler target of a kind is identical up to 'after', so its length carries no information about the answer. VALIDITY: format_ok = the strict joint parser accepts the answer; the trace (filler) side is valid iff its in-surface format_ok >= 0.95 on each primary. DECISION POINT 3 (checked first): if trace - filler < 0.10 on BOTH in-surface primaries, STOP: 'trace ~ filler, not supervision of the intermediates (an answer-free filler of constant length per action kind, amendment 4b, does as well: the gain is attributable to extra decode positions or the answer format)', with the sub-label 'trace format failed' if the trace side is not valid, else 'filler control invalid' if the filler side is not valid, else 'neither format helped' if filler - plain < 0.10 on both in-surface primaries. Otherwise GO iff ALL of: (G1) trace - plain >= +0.25 on conditional, on cond_oor_val alone AND on cond_sametens alone, each both in-surface and on the held-out surface; (G2) trace - plain >= +0.30 on mix, both in-surface and on the held-out surface; (G3) filler below trace: trace - filler >= +0.10 on EACH in-surface primary; (G4) controls: trace ON - OFF >= -0.05 on swap and on add_nowrap (untouched skills; in-surface); (G5) in-distribution non-inferiority: trace - plain >= -0.05 on conditional_in (branch-balanced mean over cond_xm1, cond_x0, cond_xp1, cond_mid) and on mix_in (in-surface); and the filler side is valid. If G1-G5 all hold but the filler side is not valid: INCONCLUSIVE: filler control invalid. Otherwise NO-GO, naming every failed condition and its failed parts. Reported, not gating: the held-out-surface results of the OFF and filler sides; the surface audit (held-out minus in-surface, paired by row, every side and held-out-surface stratum); the filler residual covariate (constant filler tokens minus that row's trace tokens) with the filler side's accuracy split at its median; per-factor held-out renderings (paraphrase only, names only, key order only) are omitted by choice (a GPU-budget choice, not a capacity limit). The screen is seed 0; the roadmap's confirmation requires the same rule in all 3 seeds before a sealed R bank is built.",
+ "go_rule_revision": 4,
+ "build_log": [
+  "[17:37:13] T2b-register data (revision 4): seeds train 20261109 / dev 20261110 / chains 20261111 / surfaces 20261112 / cond_sametens 20261114; no model call",
+  "[17:37:13] render_prompt == real chat template on 500 t2_train register prompts",
+  "[17:37:55] historical set: 6464 payloads (41s; recorded load_exclusions size 6464); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[17:37:55] bank_pilot.json: 15629 payloads, 15278 operative contents",
+  "[17:37:55] bank_confirm.json: 13552 payloads, 13247 operative contents",
+  "[17:37:55] bank_confirm2.json: 12163 payloads, 11903 operative contents",
+  "[17:37:58] bank_s4000.json: 255745 payloads, 250614 operative contents",
+  "[17:37:58] t2_train.jsonl: 1501 payloads",
+  "[17:37:58] t2_eval.jsonl: 600 payloads",
+  "[17:37:58] t2_eval_xframe.jsonl: 600 payloads",
+  "[17:37:58] t2_eval_supp.jsonl: 360 payloads",
+  "[17:37:58] SELECT-VIEWS-001: 384 payloads",
+  "[17:37:58] l1_ood_bank.jsonl: 600 payloads",
+  "[17:37:58] fds/T_BANK.json: 192 payloads",
+  "[17:37:58] fds/T_BANK_V2.json: 192 payloads",
+  "[17:37:58] cc1/T_BANK_V3X.json: 864 payloads",
+  "[17:37:58] cc2/STAGE_A_T_V3X.json: 15 payloads",
+  "[17:37:58] cc2/T_BANK_V4.json: 864 payloads",
+  "[17:38:33] multi-event register prompts: 280 transitions from 1 files (14161 scanned); skipped by name, never opened: ['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']",
+  "[17:38:33] exclusion union: 308726 payloads, 301783 operative contents (17 sources)",
+  "[17:38:34] train mix/wrap: 450 rows from 4984 draws; rejected {'state unchanged': 4, 'operative content in an exclusion source': 1, 'stratum full / not a wrap': 4529}",
+  "[17:38:34] train conditional: 150 pairs (300 rows) from 1317 draws; rejected {'twin threshold / other outside 0..96': 103, 'wrap pattern / twin type full, or both wrap': 1055, 'x outside 0..96': 9}",
+  "[17:38:34] dev: 1100 rows {'mix': 100, 'wrap': 80, 'cond_xm1': 60, 'cond_x0': 60, 'cond_xp1': 60, 'swap': 80, 'add_nowrap': 80, 'mix_oor': 100, 'wrap_oor': 80, 'cond_oor_val': 100, 'cond_oor_thr': 100, 'cond_mid': 100, 'cond_far': 100}; rejected {'wrap status / unchanged': 282, 'no wrap': 1745, 'operative content in an exclusion source': 1, 'equal registers': 1, 'wraps': 3, 'cond_far: threshold leaves no room': 15}",
+  "[17:38:34] chains CH_IN: 32 parents x 8 candidates from 34 draws",
+  "[17:38:34] chains CH_X: 16 parents x 8 candidates from 18 draws",
+  "[17:38:34] chains rejected {'operative content in an exclusion source': 3, 'CH_X candidate without an out-of-range value': 1}",
+  "[17:38:34] dev cond_sametens (revision 4, seed 20261114): 100 rows, 50 pairs; rejected {'a branch would wrap': 100, 'x leaves no same-tens room': 11, 'threshold leaves no same-tens room': 20}",
+  "[17:38:35] rows identical to revision 2 (never re-drawn): True",
+  "[17:38:38] revision-3 data files reconstructed byte for byte from these rows (FILL_UNITS_REV3, no cond_sametens): True",
+  "[17:38:38] audit: PASS copy|all 0.000, copy|mix 0.000, copy|wrap 0.000, copy|cond 0.000, unreduced|all 0.467, unreduced|mix 0.500, unreduced|wrap 0.000, always_add|cond 0.500, always_sub|cond 0.500, wrong_register|cond 0.527, x_hi|cond 0.527, thr_lo|cond 0.540, v_pos|cond 0.500, non_strict|cond 0.833, eq_plus1|cond 0.667, units_eq_plus1|cond 0.680, units_digit_gt|cond 0.717, tens_digit_gt|cond 0.757",
+  "[17:38:43] amendment 4b: swap derived 7 (pre-stated 7), 1 fill string(s), add derived 17 (pre-stated 17), 1 fill string(s), mix derived 17 (pre-stated 17), 1 fill string(s), conditional derived 29 (pre-stated 29), 1 fill string(s)",
+  "[17:38:43] surface audit: training rows using a held-out factor 0; held-out-surface bank ok True"
+ ]
+}

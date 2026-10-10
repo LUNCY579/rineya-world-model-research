@@ -1,0 +1,713 @@
+{
+ "part": "power",
+ "ok": true,
+ "n_checks": 3,
+ "n_failed": 0,
+ "checks": [
+  {
+   "check": "ORACLE enum W2 E12 on dev2_primary reproduces the kit's sizing (0.850; needs-lookahead 0.581)",
+   "ok": true,
+   "detail": "(np.float64(0.85), np.float64(0.5813953488372093))"
+  },
+  {
+   "check": "the runner's registered SIZING constants equal the measured sizing (to 0.01 keys per instance)",
+   "ok": true,
+   "detail": "{'measured': {'G1_T2': 69.91, 'G1_OFF': 80.76, 'G2_T2': 14.23, 'G2_OFF': 17.33, 'G3_T2': 55.56, 'G4_proxy': 80.76}, 'registered': {'G1_T2': 69.91, 'G1_OFF': 80.76, 'G2_T2': 14.23, 'G2_OFF': 17.33, 'G3_T2': 55.56, 'G4_proxy': 80.76}}"
+  },
+  {
+   "check": "power computed: resampled scenarios (as simulated, and with OFF decorrelated) and the exact grid are complete",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "numbers": {
+  "sizing_per_instance_new_keys": {
+   "G1_T2": 69.91,
+   "G1_OFF": 80.76,
+   "G2_T2": 14.23,
+   "G2_OFF": 17.33,
+   "G3_T2": 55.56,
+   "G4_proxy": 80.76
+  },
+  "refused_share": {
+   "T2_P3": {
+    "mean": 0.00018,
+    "max": 0.0009
+   },
+   "OFF": {
+    "mean": 0.0012,
+    "max": 0.0034
+   },
+   "T2": {
+    "mean": 0.0,
+    "max": 0.0
+   }
+  },
+  "dev_success_rates": {
+   "SIM_T2": {
+    "all": 0.735,
+    "needs_lookahead": 0.4326,
+    "greedy": 0.9039,
+    "ratio_all": 0.8647,
+    "ratio_needs_lookahead": 0.744,
+    "needs_lookahead_by_seed": [
+     0.5349,
+     0.3488,
+     0.3721,
+     0.4419,
+     0.4651
+    ]
+   },
+   "SIM_T2_P3": {
+    "all": 0.6467,
+    "needs_lookahead": 0.3488,
+    "greedy": 0.813,
+    "ratio_all": 0.7608,
+    "ratio_needs_lookahead": 0.6,
+    "needs_lookahead_by_seed": [
+     0.4884,
+     0.3023,
+     0.2558,
+     0.3721,
+     0.3256
+    ]
+   },
+   "PESS": {
+    "all": 0.5283,
+    "needs_lookahead": 0.2837,
+    "greedy": 0.6649,
+    "ratio_all": 0.6216,
+    "ratio_needs_lookahead": 0.488,
+    "needs_lookahead_by_seed": [
+     0.3023,
+     0.3256,
+     0.2558,
+     0.2791,
+     0.2558
+    ]
+   },
+   "OFF": {
+    "all": 0.1233,
+    "needs_lookahead": 0.0372,
+    "greedy": 0.1714
+   },
+   "ORACLE": {
+    "all": 0.85,
+    "needs_lookahead": 0.5814,
+    "greedy": 1.0,
+    "W4E24": 0.9
+   },
+   "OFF_DEC": {
+    "all": 0.115,
+    "needs_lookahead": 0.0233,
+    "greedy": 0.1662
+   }
+  },
+  "power_resampled": {
+   "optimistic: T2 = SIM_T2 (PREREG-2 four-step exact 0.698 -> 0.914 per step), OFF = SIM_OFF": {
+    "R": 2000,
+    "B_bootstrap": 2000,
+    "n_per_depth": 36,
+    "P_cp1_pass": 1.0,
+    "P_cp2_pass": 0.989,
+    "P_near_oracle": 0.954,
+    "P_near_bar_met": 0.954,
+    "P_cp2_pass_by_seed": [
+     1.0,
+     0.9725,
+     0.9825,
+     0.99,
+     1.0
+    ],
+    "P_branch": {
+     "GREEDY_ONLY": 0.0035,
+     "GREEDY_ONLY_NEAR": 0.0075,
+     "YES": 0.0425,
+     "YES_NEAR": 0.9465
+    },
+    "n_needs_lookahead_mean": 64.5,
+    "delta1_mean": 0.6121,
+    "delta2_mean": 0.3973
+   },
+   "central: T2 = SIM_T2_P3 (PREREG-3 posted accuracy 0.84), OFF = SIM_OFF": {
+    "R": 2000,
+    "B_bootstrap": 2000,
+    "n_per_depth": 36,
+    "P_cp1_pass": 1.0,
+    "P_cp2_pass": 0.865,
+    "P_near_oracle": 0.268,
+    "P_near_bar_met": 0.268,
+    "P_cp2_pass_by_seed": [
+     1.0,
+     0.9025,
+     0.5475,
+     0.91,
+     0.965
+    ],
+    "P_branch": {
+     "GREEDY_ONLY": 0.13,
+     "GREEDY_ONLY_NEAR": 0.005,
+     "YES": 0.602,
+     "YES_NEAR": 0.263
+    },
+    "n_needs_lookahead_mean": 64.5,
+    "delta1_mean": 0.5236,
+    "delta2_mean": 0.3122
+   },
+   "pessimistic: T2 posted errors 0.25 and void applied 0.05, OFF = SIM_OFF": {
+    "R": 2000,
+    "B_bootstrap": 2000,
+    "n_per_depth": 36,
+    "P_cp1_pass": 1.0,
+    "P_cp2_pass": 0.74,
+    "P_near_oracle": 0.0,
+    "P_near_bar_met": 0.0,
+    "P_cp2_pass_by_seed": [
+     0.9175,
+     0.96,
+     0.555,
+     0.545,
+     0.7225
+    ],
+    "P_branch": {
+     "GREEDY_ONLY": 0.26,
+     "YES": 0.74
+    },
+    "n_needs_lookahead_mean": 64.5,
+    "delta1_mean": 0.4044,
+    "delta2_mean": 0.2458
+   }
+  },
+  "power_resampled_off_decorrelated": {
+   "optimistic: T2 = SIM_T2 (PREREG-2 four-step exact 0.698 -> 0.914 per step), OFF = SIM_OFF": {
+    "R": 2000,
+    "B_bootstrap": 2000,
+    "n_per_depth": 36,
+    "P_cp1_pass": 1.0,
+    "P_cp2_pass": 0.9975,
+    "P_near_oracle": 0.954,
+    "P_near_bar_met": 0.954,
+    "P_cp2_pass_by_seed": [
+     1.0,
+     0.9925,
+     0.995,
+     1.0,
+     1.0
+    ],
+    "P_branch": {
+     "GREEDY_ONLY": 0.001,
+     "GREEDY_ONLY_NEAR": 0.0015,
+     "YES": 0.045,
+     "YES_NEAR": 0.9525
+    },
+    "n_needs_lookahead_mean": 64.5,
+    "delta1_mean": 0.6196,
+    "delta2_mean": 0.4098
+   },
+   "central: T2 = SIM_T2_P3 (PREREG-3 posted accuracy 0.84), OFF = SIM_OFF": {
+    "R": 2000,
+    "B_bootstrap": 2000,
+    "n_per_depth": 36,
+    "P_cp1_pass": 1.0,
+    "P_cp2_pass": 0.9195,
+    "P_near_oracle": 0.268,
+    "P_near_bar_met": 0.268,
+    "P_cp2_pass_by_seed": [
+     1.0,
+     0.88,
+     0.7325,
+     0.99,
+     0.995
+    ],
+    "P_branch": {
+     "GREEDY_ONLY": 0.0755,
+     "GREEDY_ONLY_NEAR": 0.005,
+     "YES": 0.6565,
+     "YES_NEAR": 0.263
+    },
+    "n_needs_lookahead_mean": 64.5,
+    "delta1_mean": 0.5311,
+    "delta2_mean": 0.3247
+   },
+   "pessimistic: T2 posted errors 0.25 and void applied 0.05, OFF = SIM_OFF": {
+    "R": 2000,
+    "B_bootstrap": 2000,
+    "n_per_depth": 36,
+    "P_cp1_pass": 1.0,
+    "P_cp2_pass": 0.83,
+    "P_near_oracle": 0.0,
+    "P_near_bar_met": 0.0,
+    "P_cp2_pass_by_seed": [
+     0.9125,
+     0.9375,
+     0.715,
+     0.715,
+     0.87
+    ],
+    "P_branch": {
+     "GREEDY_ONLY": 0.17,
+     "YES": 0.83
+    },
+    "n_needs_lookahead_mean": 64.5,
+    "delta1_mean": 0.412,
+    "delta2_mean": 0.2582
+   }
+  },
+  "power_exact_independence_grid": {
+   "note": "P(delta >= +0.20 and exact McNemar p < alpha) for [alpha 0.005 (a lower bound on the Holm pass), alpha 0.01 (an upper bound)]; T2 and OFF outcomes independent within an instance",
+   "cp1_n180": {
+    "T2 0.50 / OFF 0.10": [
+     1.0,
+     1.0
+    ],
+    "T2 0.50 / OFF 0.16": [
+     0.9989,
+     0.9989
+    ],
+    "T2 0.50 / OFF 0.25": [
+     0.8577,
+     0.8577
+    ],
+    "T2 0.50 / OFF 0.35": [
+     0.1797,
+     0.1797
+    ],
+    "T2 0.50 / OFF 0.45": [
+     0.0025,
+     0.0025
+    ],
+    "T2 0.55 / OFF 0.10": [
+     1.0,
+     1.0
+    ],
+    "T2 0.55 / OFF 0.16": [
+     1.0,
+     1.0
+    ],
+    "T2 0.55 / OFF 0.25": [
+     0.981,
+     0.981
+    ],
+    "T2 0.55 / OFF 0.35": [
+     0.523,
+     0.523
+    ],
+    "T2 0.55 / OFF 0.45": [
+     0.0315,
+     0.0315
+    ],
+    "T2 0.60 / OFF 0.10": [
+     1.0,
+     1.0
+    ],
+    "T2 0.60 / OFF 0.16": [
+     1.0,
+     1.0
+    ],
+    "T2 0.60 / OFF 0.25": [
+     0.999,
+     0.999
+    ],
+    "T2 0.60 / OFF 0.35": [
+     0.8497,
+     0.8497
+    ],
+    "T2 0.60 / OFF 0.45": [
+     0.1822,
+     0.1822
+    ],
+    "T2 0.65 / OFF 0.10": [
+     1.0,
+     1.0
+    ],
+    "T2 0.65 / OFF 0.16": [
+     1.0,
+     1.0
+    ],
+    "T2 0.65 / OFF 0.25": [
+     1.0,
+     1.0
+    ],
+    "T2 0.65 / OFF 0.35": [
+     0.9788,
+     0.9788
+    ],
+    "T2 0.65 / OFF 0.45": [
+     0.523,
+     0.523
+    ],
+    "T2 0.70 / OFF 0.10": [
+     1.0,
+     1.0
+    ],
+    "T2 0.70 / OFF 0.16": [
+     1.0,
+     1.0
+    ],
+    "T2 0.70 / OFF 0.25": [
+     1.0,
+     1.0
+    ],
+    "T2 0.70 / OFF 0.35": [
+     0.9989,
+     0.9989
+    ],
+    "T2 0.70 / OFF 0.45": [
+     0.8523,
+     0.8523
+    ],
+    "T2 0.75 / OFF 0.10": [
+     1.0,
+     1.0
+    ],
+    "T2 0.75 / OFF 0.16": [
+     1.0,
+     1.0
+    ],
+    "T2 0.75 / OFF 0.25": [
+     1.0,
+     1.0
+    ],
+    "T2 0.75 / OFF 0.35": [
+     1.0,
+     1.0
+    ],
+    "T2 0.75 / OFF 0.45": [
+     0.981,
+     0.981
+    ],
+    "T2 0.80 / OFF 0.10": [
+     1.0,
+     1.0
+    ],
+    "T2 0.80 / OFF 0.16": [
+     1.0,
+     1.0
+    ],
+    "T2 0.80 / OFF 0.25": [
+     1.0,
+     1.0
+    ],
+    "T2 0.80 / OFF 0.35": [
+     1.0,
+     1.0
+    ],
+    "T2 0.80 / OFF 0.45": [
+     0.9992,
+     0.9992
+    ]
+   },
+   "cp2_n64": {
+    "T2 0.25 / OFF 0.02": [
+     0.7242,
+     0.7256
+    ],
+    "T2 0.25 / OFF 0.05": [
+     0.5062,
+     0.5218
+    ],
+    "T2 0.25 / OFF 0.10": [
+     0.1921,
+     0.2231
+    ],
+    "T2 0.25 / OFF 0.20": [
+     0.0092,
+     0.0149
+    ],
+    "T2 0.30 / OFF 0.02": [
+     0.9221,
+     0.9235
+    ],
+    "T2 0.30 / OFF 0.05": [
+     0.7776,
+     0.7978
+    ],
+    "T2 0.30 / OFF 0.10": [
+     0.4201,
+     0.4808
+    ],
+    "T2 0.30 / OFF 0.20": [
+     0.0414,
+     0.0646
+    ],
+    "T2 0.35 / OFF 0.02": [
+     0.9856,
+     0.9863
+    ],
+    "T2 0.35 / OFF 0.05": [
+     0.9257,
+     0.9399
+    ],
+    "T2 0.35 / OFF 0.10": [
+     0.6606,
+     0.7291
+    ],
+    "T2 0.35 / OFF 0.20": [
+     0.1263,
+     0.1827
+    ],
+    "T2 0.40 / OFF 0.02": [
+     0.9982,
+     0.9984
+    ],
+    "T2 0.40 / OFF 0.05": [
+     0.9811,
+     0.9872
+    ],
+    "T2 0.40 / OFF 0.10": [
+     0.8417,
+     0.891
+    ],
+    "T2 0.40 / OFF 0.20": [
+     0.2842,
+     0.3746
+    ],
+    "T2 0.45 / OFF 0.02": [
+     0.9998,
+     0.9999
+    ],
+    "T2 0.45 / OFF 0.05": [
+     0.9963,
+     0.998
+    ],
+    "T2 0.45 / OFF 0.10": [
+     0.9427,
+     0.9665
+    ],
+    "T2 0.45 / OFF 0.20": [
+     0.4985,
+     0.5994
+    ],
+    "T2 0.50 / OFF 0.02": [
+     1.0,
+     1.0
+    ],
+    "T2 0.50 / OFF 0.05": [
+     0.9995,
+     0.9998
+    ],
+    "T2 0.50 / OFF 0.10": [
+     0.9844,
+     0.9922
+    ],
+    "T2 0.50 / OFF 0.20": [
+     0.7126,
+     0.7936
+    ]
+   },
+   "cp2_n55": {
+    "T2 0.25 / OFF 0.02": [
+     0.7053,
+     0.7285
+    ],
+    "T2 0.25 / OFF 0.05": [
+     0.4507,
+     0.5087
+    ],
+    "T2 0.25 / OFF 0.10": [
+     0.1553,
+     0.201
+    ],
+    "T2 0.25 / OFF 0.20": [
+     0.0082,
+     0.0132
+    ],
+    "T2 0.30 / OFF 0.02": [
+     0.896,
+     0.9129
+    ],
+    "T2 0.30 / OFF 0.05": [
+     0.6991,
+     0.7557
+    ],
+    "T2 0.30 / OFF 0.10": [
+     0.3401,
+     0.4105
+    ],
+    "T2 0.30 / OFF 0.20": [
+     0.0338,
+     0.0512
+    ],
+    "T2 0.35 / OFF 0.02": [
+     0.9726,
+     0.9799
+    ],
+    "T2 0.35 / OFF 0.05": [
+     0.8687,
+     0.9043
+    ],
+    "T2 0.35 / OFF 0.10": [
+     0.5607,
+     0.636
+    ],
+    "T2 0.35 / OFF 0.20": [
+     0.0997,
+     0.1417
+    ],
+    "T2 0.40 / OFF 0.02": [
+     0.9945,
+     0.9966
+    ],
+    "T2 0.40 / OFF 0.05": [
+     0.9545,
+     0.9703
+    ],
+    "T2 0.40 / OFF 0.10": [
+     0.7565,
+     0.8168
+    ],
+    "T2 0.40 / OFF 0.20": [
+     0.2245,
+     0.2984
+    ],
+    "T2 0.45 / OFF 0.02": [
+     0.9991,
+     0.9996
+    ],
+    "T2 0.45 / OFF 0.05": [
+     0.9876,
+     0.9928
+    ],
+    "T2 0.45 / OFF 0.10": [
+     0.8898,
+     0.9266
+    ],
+    "T2 0.45 / OFF 0.20": [
+     0.405,
+     0.5014
+    ],
+    "T2 0.50 / OFF 0.02": [
+     0.9999,
+     1.0
+    ],
+    "T2 0.50 / OFF 0.05": [
+     0.9974,
+     0.9987
+    ],
+    "T2 0.50 / OFF 0.10": [
+     0.9602,
+     0.9771
+    ],
+    "T2 0.50 / OFF 0.20": [
+     0.6083,
+     0.702
+    ]
+   },
+   "cp2_n75": {
+    "T2 0.25 / OFF 0.02": [
+     0.7551,
+     0.7551
+    ],
+    "T2 0.25 / OFF 0.05": [
+     0.5406,
+     0.5439
+    ],
+    "T2 0.25 / OFF 0.10": [
+     0.2171,
+     0.2347
+    ],
+    "T2 0.25 / OFF 0.20": [
+     0.0099,
+     0.0148
+    ],
+    "T2 0.30 / OFF 0.02": [
+     0.9437,
+     0.9438
+    ],
+    "T2 0.30 / OFF 0.05": [
+     0.8279,
+     0.8333
+    ],
+    "T2 0.30 / OFF 0.10": [
+     0.4929,
+     0.5335
+    ],
+    "T2 0.30 / OFF 0.20": [
+     0.0512,
+     0.0752
+    ],
+    "T2 0.35 / OFF 0.02": [
+     0.9924,
+     0.9925
+    ],
+    "T2 0.35 / OFF 0.05": [
+     0.9577,
+     0.9616
+    ],
+    "T2 0.35 / OFF 0.10": [
+     0.7525,
+     0.797
+    ],
+    "T2 0.35 / OFF 0.20": [
+     0.1644,
+     0.2251
+    ],
+    "T2 0.40 / OFF 0.02": [
+     0.9994,
+     0.9994
+    ],
+    "T2 0.40 / OFF 0.05": [
+     0.9929,
+     0.9944
+    ],
+    "T2 0.40 / OFF 0.10": [
+     0.9106,
+     0.9376
+    ],
+    "T2 0.40 / OFF 0.20": [
+     0.365,
+     0.458
+    ],
+    "T2 0.45 / OFF 0.02": [
+     1.0,
+     1.0
+    ],
+    "T2 0.45 / OFF 0.05": [
+     0.9992,
+     0.9995
+    ],
+    "T2 0.45 / OFF 0.10": [
+     0.9765,
+     0.9864
+    ],
+    "T2 0.45 / OFF 0.20": [
+     0.6072,
+     0.7004
+    ],
+    "T2 0.50 / OFF 0.02": [
+     1.0,
+     1.0
+    ],
+    "T2 0.50 / OFF 0.05": [
+     0.9999,
+     1.0
+    ],
+    "T2 0.50 / OFF 0.10": [
+     0.9956,
+     0.9979
+    ],
+    "T2 0.50 / OFF 0.20": [
+     0.8117,
+     0.8746
+    ]
+   }
+  },
+  "cp1_min_power_at_true_gain_0.30_or_more": 0.9788
+ },
+ "code_sha256": {
+  "scripts/lbeam_run.py": "55a0bd0fb8e2af0112b8485ae5f8fc858c56508f4293d456bc24802d0c1efa5c",
+  "scripts/lbeam_analysis.py": "e3b0e9e0baaf23f183218fda57c1e4855d6db80deb9ca9db5a51d3753dafbf7e",
+  "scripts/lbeam_test_run.py": "137c7e919b66ba603a3164fe9c3cadfae3ea2f1f2f7bc8cba4f9d2fe4c30e7aa",
+  "scripts/lbeam_f.py": "9a76562c2739df3254a650154acde41fe2052173b2f35556e5b75a7728680b6f",
+  "scripts/lbeam_problems.py": "2353e2fc846fac5ced11cfc5420bd60b6e9e50cf3399e9299974b3921a09465e",
+  "scripts/lbeam_proposer.py": "6c555d2e46db8a279541839a54b82d6e765f1e8bc438f735beb3ef30b9564881"
+ },
+ "bwm_blocks_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+ "draft_sha256": "26c62144d89dde15e7d18ad119f9361ce6f93562bd3d358f26808e7aefbd788d",
+ "hook_draft_sha256": "098cb1311bd9d5352b042a4e84dcabc606df6209fd9429a60ee4b543d27102ff",
+ "torch_imported": true,
+ "peak_rss_mb": 432.6,
+ "seconds": 37.7,
+ "written_utc": "2026-10-10T03:41:50Z",
+ "note": "CPU only; tiny random Qwen3 + LoRA stand-ins; no real model, no GPU, no lease"
+}

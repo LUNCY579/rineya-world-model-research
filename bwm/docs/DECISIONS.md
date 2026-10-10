@@ -474,3 +474,121 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
   vs o1-preview 26/110 p = 2.4e-10; vs o1-mini 10% p = 1.2e-18; vs DeepSeek-R1 53.6% (~59/110) two-sided p = 0.073
   (one-sided 0.037), so "above R1" is NOT established at the two-sided 5% level. Training saw <= 6 blocks.
   Mirror (generated, same block counts): S-direct 6/110 = 0.055; S-beam pending (8 shards).
+- **D-53 plan_beam domain hooks (joint roadmap item 3).** `plan_beam(..., goal_met=None, unmet=None)`; defaults
+  reproduce the Blocksworld behaviour exactly (harness regression after the change: 110/110 with the identical
+  79,745 exact-F calls), so the frozen B2 configuration's remaining runs (mirror S-beam, PlanBench-600) are
+  unaffected. Interface sent to RCWM for the ledger planning test.
+- **F-08 (finding, CPU; `scripts/bw_surface_audit.py`, `runs/BW_Fdelta_s0/surface_audit.json`): the Blocksworld
+  world model is invariant to names and list order but NOT to JSON key order.** Same 120 (state, action) keys
+  (5 and 10 blocks, ~50% illegal), exact match: training format 1.000; unseen block names (p-z, two-letter)
+  0.992; shuffled fact lists 1.000; reversed key order (user and state objects) 0.458; all changes 0.458. The
+  model learned the transition rule over symbols, but tied to one serialization: the format, not the names, is
+  the trigger. Same direction as RCWM PREREG-3 (T2, reordered keys 0.37-0.47). The frozen B2 results are
+  unaffected, because the planner always renders states in the training format; claims are scoped accordingly
+  ("generalizes in size and object names; format-locked"). Repair candidate: key-order augmentation in training
+  data (joint item 5b surface diversification).
+- **D-54 Serialization augmentation design (joint with RCWM, after F-08 / PREREG-3).** Augment INPUT only: randomize
+  key order and list order of the prompt's state/action JSON; targets keep their literal order (trace targets
+  cmp -> calc -> after, never sorted). Primary test on HELD-OUT input orders: train on a subset of key permutations
+  and evaluate on permutations never seen in training (e.g. fully reversed), so augmentation is tested as rule
+  learning rather than a wider trigger set.
+- **D-55 Filler amendment 4b (RCWM finding, adopted).** A per-row length-matched filler leaks the answer (RCWM:
+  fill length alone predicts wrap 0.957-0.970 and branch up to 0.85), giving a filler-trained model a hidden
+  channel. The filler length is now a CONSTANT per (domain, action kind), equal to the longest trace head of that
+  kind in train+dev (`traces.filler_length`); verified on Blocksworld that filler prefixes are identical within a kind
+  regardless of legality. The trace-vs-filler residual is reported as a covariate. RCWM-side deviations recorded:
+  R uses strict '>', R calc = {raw, mod}, cmp null for R add/mix, parser rejects duplicate keys.
+- **D-56 Search distillation (joint roadmap item 4), pipeline built.** `scripts/bw_distill.py`: (search, GPU)
+  240 fresh generated hard-style problems (6-10 blocks; seed 20261010, disjoint from val_large/mirror; hard-set
+  signatures/invariants and val_large/mirror invariants excluded) solved by the frozen B2 planner at K=4; ONLY
+  F-verified plans are kept (teacher = the model's own world model; the exact simulator scores label precision for
+  analysis only). (rows, CPU) every suffix of each verified plan, with F-predicted states, becomes a proposer row.
+  Next: continue Pa_v2 on new + v2 rows, then the frozen S-direct comparison on generated hard-style sets and a
+  pre-registered once-only run on the hard set (new addendum). Smoke test with exact F + scripted proposer: 16/24
+  verified, 304 rows, label precision 1.0. Queued as bundleE after bundleD's remaining frozen tests.
+- **D-57 Joint item 3 (ledger beam) prereg drafted; planner code frozen.** Draft v1 at
+  `research/PREREG_LEDGER_BEAM_DRAFT.md` (co-primaries T2 vs OFF paired, all instances and the needs-lookahead
+  stratum, enum W2E12; key secondary the T2/ORACLE ratio; N = 180 fresh; training-surface claim). RCWM runs and scores.
+  `bwmn/blocks_planner.py` is frozen at SHA-256 18a5f22b... until that run is complete (no edits on the BWM side).
+- **P-09 (INTERIM, frozen B2, mirror shards 0-4 = 70 of 110 generated hard-style instances; no decision depends on
+  it).** S-beam 38/70 = 0.543 (CI 0.419-0.663); S-direct on the same 4/70; paired +34 / -0, p = 1.2e-10. Hard set,
+  same shard indices: 44/70 = 0.629. Interim hard-minus-mirror gap +8.6 pp (pre-registered flag at > 10 pp; final
+  pending). Mirror S-direct (all 110): 6/110. The mirror goals (tall-tower targets, p_stack 0.85) are not
+  distribution-matched to the hard set's goal structure, so a gap in either direction is partly difficulty, not
+  only contamination.
+- **D-58 Addendum B3 (search distillation) pre-registered before any distillation data existed**
+  (`PREREG_B3_DISTILL.md`, sha e6aa884b…; `PREREG_PLANBENCH.md` left byte-identical to its frozen sha adfc4354…).
+  - **Arms:** Pa_v3 continues `BW_Pa_v2_s1` on distillation rows + an equal number of v2 rows. Pa_v2c is the control:
+    the same extra training on v2 rows only. Both use 400 steps, batch 16, lr 1e-4, seed 1, max-len 640, and rows
+    over 640 tokens are dropped explicitly and counted.
+  - **Primary:** S-direct (greedy, M 256) on a fresh generated hard-style set of 110
+    (`instances_b3_fresh.json`, seed 20261011, hard block-count mix, excluding hard/val_large/mirror/distill
+    invariants, sha 575c45b1…), Pa_v3 vs Pa_v2c, paired McNemar. The reading is "met" only if the difference is
+    >= +10 pp and p < 0.05.
+  - **Conditional hard runs:** once each, only if the reading is met (H1 S-direct, H2 S-beam with only Pa swapped).
+  - **Automation:** the whole chain is queued as bundleE: search -> rows -> mix -> train Pa_v3 -> train Pa_v2c ->
+    `FREEZE_B3.json` (SHAs) -> eval -> analyze. Nothing in it chooses a setting.
+  - **Code:** `train_generic.py --init-adapter`, `bw_b3_prep.py`, `bw_b3_eval.py`.
+  - **Queue:** the old pilotG GPU replications moved from bundleD to bundleF at the end of the queue (lower value now).
+- **D-59 PREREG-LB (joint roadmap item 3) co-signed by BWM: revision 2,
+  `RCWM-T1/docs/ledger_beam/PREREG_LB_DRAFT.md`, sha256 26c62144d89dde15e7d18ad119f9361ce6f93562bd3d358f26808e7aefbd788d.**
+  - **Salt commitment:** `commit:0b6b5ea92bd193a3bf75866a645be1abd50f99a991e01d8b852701c3e13de8cf`. BWM holds the salt
+    out of band and reveals it only to the RCWM operator at the freeze.
+  - **What I checked:** my v1 draft (b2896ba3…) is quoted verbatim; the planner pin is 18a5f22b…, and the runner
+    verifies it at import and every turn and imports the module from my tree read-only; the kit SHAs match.
+  - **Statistics:** exact McNemar is computed on the discordant pairs, with Holm m = 2. The status table
+    (PASS/SHORT/NS/REVERSED) and the 12 branches are exhaustive over 32 combinations, and every s1 = PASS branch keeps
+    my co-primary-1 meaning ("enables planning", qualified where co-primary 2 fails or reverses).
+  - **Seed:** the commit-reveal seed rule leaves no party able to compute the draw in advance.
+  - **Amendments accepted:** (a)-(f) and the operational definitions (A0, F as the first computed answer across
+    stages, void-twin exposure, the three-way audit reading).
+  - **Appendix B:** defaults accepted, Q1-Q10:
+    - all stages kept, primary first;
+    - beam vs one-shot left out;
+    - only blocks_planner.py binding;
+    - co-primary-2 bar +0.20;
+    - batch invariance >= 99%;
+    - audit margin 0.05;
+    - N = 180;
+    - salt procedure as written;
+    - data/ subdirectories in the union;
+    - automatic analysis after a verdict-eligible stop.
+  - **BWM commitments:**
+    - `bwmn/blocks_planner.py` unchanged until the registered analysis has run;
+    - no import-breaking edits to `bwmn/__init__.py`, `blocks.py` or `lm.py` (the planner module imports them in
+      RCWM's GPU process), with notice to RCWM before any edit to them while LB is queued or running.
+  - **D-59 follow-up:** at RCWM's freeze request, BWM revealed the salt by session message. Before sending, I
+    checked locally that it is 39 characters and that its sha256 equals the committed 0b6b5ea9…. The salt is now
+    recorded in RCWM's draw SOURCE record.
+  - **PREREG-LB frozen by RCWM, 2026-10-09 23:12:28.**
+    - PREREG_LB.md 0f414cbc…, PREREG_LB_FREEZE.json 1b7e7a54…; `--verify` rc 0.
+    - Draw: 180 instances, sealed 4fff0738…, not inspected. Exclusion union: 315,081 payloads from 37 sources.
+    - Queued as RCWM's next GPU job (`rcwm-t1:lbeam`), which follows bundleD's release.
+    - BWM keeps `blocks_planner.py`, `__init__.py`, `blocks.py` and `lm.py` stable until LB's analysis has run.
+- **P-10 (FINAL, frozen B2 configuration, every test set run once; settings chosen on generated sets only).
+  Exact simulator and local VAL agree on every plan (0 disagreements).**
+
+  | Set | S-beam (F + search) | S-direct (same proposer, no F) | Paired, exact McNemar |
+  |---|---|---|---|
+  | PlanBench Blocksworld-hard (110; 6-15 blocks) | 73/110 = 0.664 (CI 0.567-0.751) | 5/110 = 0.045 | +68 / -0, p = 6.8e-21 |
+  | Generated hard-style mirror (110) | 61/110 = 0.555 (CI 0.457-0.649) | 6/110 = 0.055 | +55 / -0, p = 5.6e-17 |
+  | PlanBench Blocksworld (602; 3-5 blocks) | 602/602 = 1.000 (CI 0.994-1.000) | 584/602 = 0.970 | +18 / -0, p = 7.6e-6 |
+
+  - **Cost per instance (S-beam):** hard 187 F queries and 8.0k proposer tokens; PlanBench-602 3.0 F queries and
+    279 proposer tokens.
+  - **Pre-registered contamination flag: RAISED.** Hard minus mirror is +10.9 pp, above the registered 10 pp
+    (unpaired Fisher p = 0.13, not significant).
+  - **Post-hoc, descriptive** (`scripts/bw_mirror_gap.py`, `runs/BW_TEST_B2/MIRROR_GAP_ANALYSIS.json`; the flag
+    stands as computed):
+    - The move lower bound is matched (hard 21.7 vs mirror 21.0).
+    - The goal structure differs. The mirror's tallest goal tower averages 8.1 vs 6.9 on hard, and 29/110 mirror
+      instances have a goal tower of >= 10 vs 13/110 on hard.
+    - Success falls with goal-tower height in both sets, and the bins are similar: <= 6: hard 51/61, mirror 30/33;
+      7-9: 20/36 and 25/48; >= 10: 2/13 and 6/29.
+    - Reweighting the mirror to the hard set's bin mix gives 0.699 vs hard 0.664 (gap -3.5 pp).
+    - Reading: the raw gap is explained by the mirror's taller goal towers, not by an advantage specific to the
+      PlanBench instances. It is still reported as flagged.
+  - **Allowed claim (B2):** trained only on <= 6-block generated problems, the frozen 0.6B core with two LoRA
+    adapters, planning without feedback, solves 73/110 Blocksworld-hard; the world model + search accounts for
+    +68/-0 over the same proposer alone. Published zero-shot references are R1 53.6% and o1-preview 23.6%, in a
+    different regime.

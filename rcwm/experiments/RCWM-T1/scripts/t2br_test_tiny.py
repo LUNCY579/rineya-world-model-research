@@ -1,4 +1,4 @@
-"""CPU test of scripts/t2br_run.py (T2b-register runner, revision 3), its hand-off to scripts/t2br_analysis.py, and the
+"""CPU test of scripts/t2br_run.py (T2b-register runner, revision 7), its hand-off to scripts/t2br_analysis.py, and the
 data / format / surface plumbing, with tiny random Qwen3 stand-ins. No real model is loaded
 (AutoModelForCausalLM.from_pretrained is disabled), no GPU is touched, no lease is taken; outputs go to a temporary
 directory only. Threads 2. One process.
@@ -13,12 +13,14 @@ BWM_DEVICE=cpu.
 Checks
   1  formats: render_prompt == tok.apply_chat_template on every training prompt (canonical and surface-diversity), every
      dev prompt and every held-out-surface prompt; the `tokenizers` counts equal AutoTokenizer's on every target;
-     amendment 4b with AutoTokenizer: ONE fill string per action kind over train + dev, and every filler target at least
-     as long as that row's trace target (the residual >= 0)
+     amendment 4b with AutoTokenizer: ONE fill string per action kind over train + dev, every filler target at least
+     as long as that row's trace target (the residual >= 0), and (revision-4 definition) the SHORTEST filler target of
+     every kind at least as long as the LONGEST trace target of that kind, with one unit less failing that
   2  surfaces (C2 / C3 proof on the files the runner trains and evaluates): every 'sd' training prompt decodes
      (t2br_common.read_prompt) to its row and recorded surface and uses NO held-out paraphrase, field name or key order
      (and the detector does flag a held-out rendering of the same rows); same rows / targets / golds as the canonical
-     rendering; every held-out-surface prompt decodes to its primary dev row and uses ONLY held-out factors; Cfg()
+     rendering; every held-out-surface prompt (primary + identification strata, 680) decodes to its dev row and uses ONLY
+     held-out factors; Cfg()
      trains on data/t2br_train_sd_<arm>.jsonl by default and run() refuses the canonical variant (exit 3, not
      persisted, no lease)
   3  t2br_chain(plain parser) == rcwmt.generation.chain('chain_one') on register chains (texts and states), on the
@@ -44,13 +46,22 @@ Checks
      per-side policies read from PEFT's own LoRA state and from the prompt's decoded surface: OFF unreduced + coin
      branch, plain mod-in-range + coin branch, trace gold, filler = plain's answers in the 4b format): the analysis on
      the run dir says GO; with filler = gold it says STOP (decision point 3); with a trace arm that is gold in Titan's
-     frame but plain-like on the held-out surface it says NO-GO on exactly G1 / G2's held-out parts
+     frame but plain-like on the held-out surface it says NO-GO on exactly G1 / G2's held-out parts; with a plain arm
+     weak on every out-of-range row and a trace arm following the tens-digit shortcut it says NO-GO on exactly the
+     predicate clauses that catch it (revision 5); revision 6: the report-only shortcut-agreement analysis, read from the
+     run's own trace texts, flags that shortcut (SHORTCUT_CONSISTENT) and not the gold trace arm, and every verdict
+     statement quotes it with the always-quoted limits; a trace arm following the isolated exception at other =
+     threshold - 4 (the documented survivor of G1) is GO and flagged; one following the lexicographic comparison is
+     NO-GO on exactly the cond_adv predicate clause, both surfaces; revision 7: the OVERALL headline of the results
+     JSON and of the report carries the flag and the LIMITS pointer exactly when the flag is set (the flagged GO and the
+     flagged NO-GOs; not the gold GO, whose headline is revision 6's)
  11  freeze tool on a fake root (the real code, docs and data): run() refuses before a freeze (not persisted); --freeze
      refuses without approval and with an output present; freezes; verifies; refuses a second freeze; an installed
      queue hook that is not the frozen draft byte for byte is flagged, the exact copy is not; a changed input fails
      verification and run() refuses
  12  plan / simulate_turns: the real bank fits one turn at the observed rate and two at the planning rate (the second
-     re-anchors, then E2); a 3 h cap also needs two turns; an impossible cap raises
+     re-anchors, then E2); a 3 h cap needs more than one turn, each later turn starting with the anchor; an impossible
+     cap raises
 
   python -B scripts/t2br_test_tiny.py [--keep] [--no-record]
 Writes docs/t2b/register/TINY_TEST.json (unless --no-record; refused once the screen is frozen).
@@ -380,6 +391,23 @@ def t_formats():
     check("1 amendment 4b (AutoTokenizer): ONE fill string per action kind over train + dev (fill length identical on "
           "every row of a kind); every filler target >= its row's trace target; recorded residuals exact",
           one and neg_res == 0, {k: len(next(iter(v))) // 2 for k, v in fills.items()})
+    # revision-4 definition, with AutoTokenizer: per kind, the SHORTEST filler target >= the LONGEST trace target (train +
+    # dev + the chains' gold steps), and FILL_UNITS is the smallest such constant (one unit less fails)
+    pairs = [(r["before"], r["event"]) for r in base["plain"]] + [(r["before"], r["event"]) for r in dev] + \
+        [(s_["before"], s_["event"]) for s_ in MD.chain_steps(C.load_chain_bank())]
+    longest, afters = {}, {}
+    for b, e in pairs:
+        tg = C.targets(b, e)
+        longest[e["kind"]] = max(longest.get(e["kind"], 0), n_at(tg["trace"]))
+        afters.setdefault(e["kind"], {})[tg["after"]] = json.loads(tg["after"])
+    per = {}
+    for k in C.KINDS:
+        sh = min(n_at(C.filler_text(C.FILL_UNITS[k], a)) for a in afters[k].values())
+        sh1 = min(n_at(C.filler_text(C.FILL_UNITS[k] - 1, a)) for a in afters[k].values())
+        per[k] = (C.FILL_UNITS[k], sh, longest[k], sh1 < longest[k])
+    check("1 amendment 4b, revision-4 definition (AutoTokenizer): per kind the SHORTEST filler target >= the LONGEST trace "
+          "target over train + dev + chain gold steps, and FILL_UNITS is the smallest such constant",
+          all(v[1] >= v[2] and v[3] for v in per.values()), per)
 
 
 def t_surfaces(tmp: Path):
@@ -417,8 +445,9 @@ def t_surfaces(tmp: Path):
           and used["paraphrase"] == set(C.TRAIN_PARAPHRASES) and used["names"] == set(C.TRAIN_NAME_IDX)
           and used["state"] == set(C.TRAIN_ORDERS["state"]) and not (used["event"] & set(C.HELDOUT_ORDERS["event"])),
           f"{len(sd['plain'])} prompts; event orders used {len(used['event'])}")
-    check("2 C3 proof: every held-out-surface prompt decodes to its primary dev row (same id, gold; dev order) and uses "
-          "ONLY held-out factors (paraphrase 4, names 4, held-out key orders)", hb["ok"] and hb["n"] == 400, hb)
+    check("2 C3 proof: every held-out-surface prompt decodes to its dev row (primary strata + cond_sametens + "
+          "cond_oor_edge + cond_adv; same id, gold; dev order) and uses ONLY held-out factors (paraphrase 4, names 4, "
+          "held-out key orders)", hb["ok"] and hb["n"] == sum(C.DEV_N[s] for s in C.HS_STRATA) == 680, hb)
     rt = FakeRuntime(tmp)
     be = TinyBackend(rt, FakeLM(rt))
     picked = all(R.Cfg().train_files[a] == C.DATA / f"t2br_train_sd_{a}.jsonl" for a in C.ARMS)
@@ -740,17 +769,36 @@ def t_oracle(tmp):
         POLICY["trace"] = ("gold", "trace", "plainlike")
         cfg3 = make_cfg(tmp, "oracle_locked", full, anchor)
         rc3 = run_cli(cfg3, be)
+        # revision 5, decision (1): a plain arm weak on every out-of-range row lets the tens-digit shortcut through every
+        # relative G1 part; the predicate clause, read from the run's own trace texts, stops it
+        POLICY.update({"plain": ("weak_oor", "plain"), "trace": ("rule:tens_or_eq_plus1", "trace"),
+                       "filler": ("weak_oor", "filler")})
+        cfg4 = make_cfg(tmp, "oracle_weak_shortcut", full, anchor)
+        rc4 = run_cli(cfg4, be)
+        # revision 6: the isolated exception at other = threshold - 4 (the documented survivor of G1) and the
+        # lexicographic comparison (caught by cond_adv alone), each against the weak plain arm
+        POLICY["trace"] = ("rule:exc_m4", "trace")
+        cfg5 = make_cfg(tmp, "oracle_exception_m4", full, anchor)
+        rc5 = run_cli(cfg5, be)
+        POLICY["trace"] = ("rule:lex_signed", "trace")
+        cfg6 = make_cfg(tmp, "oracle_lex_signed", full, anchor)
+        rc6 = run_cli(cfg6, be)
     finally:
         generation.generate_texts = REAL_GENERATE
     res = A.analyse_runs([cfg.out], registered=False, out_dir=tmp / "analysis_go", n_boot=1000)
     res2 = A.analyse_runs([cfg2.out], registered=False, out_dir=tmp / "analysis_stop", n_boot=1000)
     res3 = A.analyse_runs([cfg3.out], registered=False, out_dir=tmp / "analysis_locked", n_boot=1000)
-    v, v2, v3 = res["verdicts"]["s0"], res2["verdicts"]["s0"], res3["verdicts"]["s0"]
+    res4 = A.analyse_runs([cfg4.out], registered=False, out_dir=tmp / "analysis_weak", n_boot=1000)
+    res5 = A.analyse_runs([cfg5.out], registered=False, out_dir=tmp / "analysis_exc_m4", n_boot=1000)
+    res6 = A.analyse_runs([cfg6.out], registered=False, out_dir=tmp / "analysis_lex", n_boot=1000)
+    v, v2, v3, v4 = (r_["verdicts"]["s0"] for r_ in (res, res2, res3, res4))
+    v5, v6 = res5["verdicts"]["s0"], res6["verdicts"]["s0"]
     n_hs_gens = 4 * len(C.load_dev_hs())
     check("10 oracle runs on the FULL dev + held-out-surface + chain banks: the analysis says GO; filler = gold -> STOP "
           "(decision point 3); a trace arm locked to Titan's surface -> NO-GO on exactly G1 / G2's held-out parts",
           rc == rc2 == rc3 == 0 and v == "GO" and v2.startswith("STOP (decision point 3)")
-          and v3 == "NO-GO (failed: G1 [conditional HS, cond_oor_val HS]; G2 [mix HS])"
+          and v3 == "NO-GO (failed: G1 [conditional HS, cond_oor_val HS, cond_oor_edge HS, cond_oor_edge predicate HS, "
+                    "cond_sametens HS, cond_sametens predicate HS, cond_adv predicate HS]; G2 [mix HS])"
           and seen_go["heldout"] == n_hs_gens and (tmp / "analysis_go" / "T2BR_RESULTS_s0_sd.md").exists(),
           f"{v} | {v2[:40]} | {v3}; held-out prompts seen {seen_go['heldout']}")
     pl = res["per_seed"]["s0"]["chains"]["ALL"]["product_law"]["trace"]
@@ -760,6 +808,46 @@ def t_oracle(tmp):
           res["per_seed"]["s0"]["chains"]["ALL"]["k"]["4"]["sides"]["trace"]["regret"]["mean"] == 0.0
           and pl["predicted_k4_exact_product"] == 1.0 and pl["observed_k4_exact"] == 1.0
           and all(sa[m]["held_out_minus_in"] < 0 for m in A.HS_METRICS))
+    comps4 = {c["part"]: c["holds"] for c in res4["per_seed"]["s0"]["rule"]["components"] if c["condition"] == "G1"}
+    check("10 oracle run, revision 5 decision (1): plain weak on every out-of-range row + a trace arm following the "
+          "tens-digit shortcut 'tens(x) > tens(t) or x == t + 1' (its cmp.ok states that shortcut): every relative G1 part "
+          "holds, the predicate clauses read from the run's trace texts fail on both surfaces -> NO-GO on exactly those",
+          rc4 == 0 and v4 == "NO-GO (failed: G1 [cond_oor_edge predicate, cond_sametens predicate, cond_oor_edge "
+                             "predicate HS, cond_sametens predicate HS])"
+          and all(h for k, h in comps4.items() if "predicate" not in k), v4)
+    fl = {k: r_["shortcut_agreement_flags"]["s0"] for k, r_ in (("go", res), ("weak", res4), ("exc_m4", res5),
+                                                                ("lex", res6))}
+    md5 = (tmp / "analysis_exc_m4" / "T2BR_RESULTS_s0_sd.md").read_text(encoding="utf-8")
+    check("10 oracle runs, revision 6: the report-only shortcut-agreement analysis (read from the run's own trace texts) "
+          "does not flag the gold trace arm and flags the tens-digit shortcut; a trace arm following the isolated "
+          "exception 'other > threshold or other == threshold - 4' (the documented survivor) is GO and flagged "
+          "SHORTCUT_CONSISTENT, its statement and report quote the flag and every always-quoted limit; a trace arm "
+          "following the lexicographic comparison str(x) > str(t) is NO-GO on exactly the cond_adv predicate clause, both "
+          "surfaces",
+          rc5 == rc6 == 0 and fl == {"go": None, "weak": A.AGREE_FLAG, "exc_m4": A.AGREE_FLAG, "lex": A.AGREE_FLAG}
+          and v5 == "GO" and res5["statements"]["s0"].startswith("GO | shortcut agreement (report-only; never changes the "
+                                                               "verdict): " + A.AGREE_FLAG)
+          and all(x in res5["statements"]["s0"] and x in md5 for x in C.ALWAYS_QUOTED_LIMITS) and A.AGREE_FLAG in md5
+          and v6 == "NO-GO (failed: G1 [cond_adv predicate, cond_adv predicate HS])"
+          and res["statements"]["s0"].startswith("GO | shortcut agreement (report-only; never changes the verdict): no "
+                                                 "member of H"), f"{fl} | {v5} | {v6}")
+    heads = {k: r_["overall"] for k, r_ in (("go", res), ("weak", res4), ("exc_m4", res5), ("lex", res6))}
+    md = {k: (tmp / d / "T2BR_RESULTS_s0_sd.md").read_text(encoding="utf-8")
+          for k, d in (("go", "analysis_go"), ("weak", "analysis_weak"), ("exc_m4", "analysis_exc_m4"),
+                       ("lex", "analysis_lex"))}
+    pointer = "read the LIMITS quoted with the verdict"
+    check("10 oracle runs, revision 7: the OVERALL headline (results JSON 'overall' and the report's Overall line) "
+          "carries the report-only SHORTCUT_CONSISTENT flag and the LIMITS pointer whenever the flag is set (the GO of "
+          "the exception at -4; the NO-GOs of the tens-digit shortcut and of the lexicographic comparison), beside the "
+          "unchanged verdict; the gold GO (not flagged) keeps revision 6's headline 'SCREEN (seed 0): GO'",
+          heads["exc_m4"].startswith(f"SCREEN (seed 0): GO | {A.AGREE_FLAG} in s0 (report-only")
+          and heads["weak"].startswith(f"SCREEN (seed 0): {v4} | {A.AGREE_FLAG} in s0 (report-only")
+          and heads["lex"].startswith(f"SCREEN (seed 0): {v6} | {A.AGREE_FLAG} in s0 (report-only")
+          and all(pointer in heads[k] and f"**Overall:** {heads[k]}" in md[k] for k in ("exc_m4", "weak", "lex"))
+          and heads["go"] == "SCREEN (seed 0): GO" and "**Overall:** SCREEN (seed 0): GO\n" in md["go"]
+          and A.AGREE_FLAG not in heads["go"] and pointer not in heads["go"]
+          and all(heads[k] == A.overall_headline({"s0": r_["verdicts"]["s0"]}, r_["shortcut_agreement_flags"])
+                  for k, r_ in (("go", res), ("weak", res4), ("exc_m4", res5), ("lex", res6))), heads["exc_m4"])
 
 
 def t_freeze(tmp):
@@ -808,14 +896,22 @@ def t_freeze(tmp):
     cfg2 = R.Cfg(root=fake, out=tmp / "runs" / "frz2", steps=TINY_STEPS)
     rc2 = run_cli(cfg2, be)
     check("11 freeze tool (fake root): run() refuses before a freeze (not persisted); refuses without approval and with "
-          "an output present; freezes (the go rule revision 3, the 'sd' variant, the held-out-surface bank and the "
-          "superseded rule revisions are frozen inputs); verifies; refuses a second freeze; an installed hook that is "
+          "an output present; freezes (the go rule revision 7, the 'sd' variant, the held-out-surface bank, the shortcut "
+          "family module and the superseded rule revisions 1-6 are frozen inputs); verifies; refuses a second freeze; an "
+          "installed hook that is "
           "not the draft byte for byte is flagged, the exact copy is not; a changed held-out-surface bank fails "
           "verification; run() refuses",
           rc0 == 3 and no_persist and [e[0] for e in errs] == ["no approval", "output present", "second freeze"]
-          and rec["go_rule_text"] == C.GO_RULE_TEXT and rec["go_rule_revision"] == 3 and rec["train_variant"] == "sd"
+          and rec["go_rule_text"] == C.GO_RULE_TEXT and rec["go_rule_revision"] == 7 and rec["train_variant"] == "sd"
           and all(r in rec["inputs"] for r in ("data/t2br_dev_hs.jsonl", "docs/t2b/register/GO_RULE_rev1.md",
-                                                "docs/t2b/register/GO_RULE_rev2.md", "docs/t2b/register/DESIGN_rev2.md"))
+                                                "docs/t2b/register/GO_RULE_rev2.md", "docs/t2b/register/GO_RULE_rev3.md",
+                                                "docs/t2b/register/GO_RULE_rev4.md", "docs/t2b/register/GO_RULE_rev5.md",
+                                                "docs/t2b/register/GO_RULE_rev6.md",
+                                                "docs/t2b/register/DESIGN_rev2.md", "docs/t2b/register/DESIGN_rev3.md",
+                                                "docs/t2b/register/DESIGN_rev4.md", "docs/t2b/register/DESIGN_rev5.md",
+                                                "docs/t2b/register/DESIGN_rev6.md", "scripts/t2br_shortcuts.py"))
+          and all(rec["prefreeze_checks"].get(f"GO_RULE_rev{k}.md and DESIGN_rev{k}.md keep the superseded revision {k} "
+                                               "verbatim") for k in (1, 2, 3, 4, 5, 6))
           and ok1 and not e1 and not ok2 and rc2 == 3 and hook_bad and hook_ok
           and not any(c[0] == "lease" for c in rt.calls), f"{[e[0] for e in errs]} {e2[:1]}")
 
@@ -831,9 +927,10 @@ def t_plan():
     except RuntimeError:
         raised = True
     check("12 plan: one turn at the observed rate; two at the planning rate (turn 2 re-anchors, then E2; every gating "
-          "stage incl. E1H in turn 1); a 3 h cap needs 2 turns; an impossible cap raises",
+          "stage incl. E1H in turn 1); a 3 h cap needs more than one turn and every later turn starts with the anchor "
+          "(revision 6's larger E1 / E1H: training, then A0 + E1 + E1H, then re-anchor + E2); an impossible cap raises",
           len(t_o) == 1 and len(t_p) == 2 and t_p[1]["stages"] == ["A0 (re-anchor)", "E2"] and "E1H" in t_p[0]["stages"]
-          and len(t_3) == 2 and t_3[1]["stages"][0] in ("A0", "A0 (re-anchor)") and raised,
+          and len(t_3) >= 2 and all(t["stages"][0] in ("A0", "A0 (re-anchor)") for t in t_3[1:]) and raised,
           f"planning {t_p}; observed {t_o[0]['projected_h']} h; 3 h cap: {t_3}")
 
 

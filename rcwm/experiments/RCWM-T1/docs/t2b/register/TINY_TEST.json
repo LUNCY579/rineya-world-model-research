@@ -1,22 +1,42 @@
 {
  "ok": true,
- "n_checks": 25,
- "n_pass": 25,
+ "n_checks": 32,
+ "n_pass": 32,
  "checks": [
   {
-   "check": "1 render_prompt == apply_chat_template on every training and dev prompt",
+   "check": "1 render_prompt == apply_chat_template on every training prompt (canonical + surface-diversity), dev prompt and held-out-surface prompt",
    "ok": true,
-   "detail": "1850 prompts"
+   "detail": "3560 prompts"
   },
   {
-   "check": "1 tokenizers counts == AutoTokenizer on every target; filler == trace tokens on every row (AutoTokenizer)",
+   "check": "1 tokenizers counts == AutoTokenizer on every target (and the recorded prompt / target token counts)",
    "ok": true,
-   "detail": "5550 targets"
+   "detail": "6390 targets"
   },
   {
-   "check": "2 surface diversity: same rows/targets/golds; every paraphrase + field variant used; prompts parse back; chat template exact; Cfg(train_variant='sd') picks the files",
+   "check": "1 amendment 4b (AutoTokenizer): ONE fill string per action kind over train + dev (fill length identical on every row of a kind); every filler target >= its row's trace target; recorded residuals exact",
    "ok": true,
-   "detail": "750/750 prompts differ from canonical"
+   "detail": "{'conditional': 29, 'mix': 17, 'add': 17, 'swap': 7}"
+  },
+  {
+   "check": "1 amendment 4b, revision-4 definition (AutoTokenizer): per kind the SHORTEST filler target >= the LONGEST trace target over train + dev + chain gold steps, and FILL_UNITS is the smallest such constant",
+   "ok": true,
+   "detail": "{'swap': (7, 26, 26, True), 'add': (17, 35, 35, True), 'mix': (17, 35, 35, True), 'conditional': (29, 47, 47, True)}"
+  },
+  {
+   "check": "2 C2 proof: every 'sd' training prompt decodes to its row and recorded surface and uses NO held-out paraphrase / field name / key order (the detector flags a held-out rendering of the same rows); same rows, targets and golds as the canonical rendering; identical prompts across arms",
+   "ok": true,
+   "detail": "750 prompts; event orders used 464"
+  },
+  {
+   "check": "2 C3 proof: every held-out-surface prompt decodes to its dev row (primary strata + cond_sametens + cond_oor_edge + cond_adv; same id, gold; dev order) and uses ONLY held-out factors (paraphrase 4, names 4, held-out key orders)",
+   "ok": true,
+   "detail": "{'n': 680, 'bad_rows': 0, 'primary_rows_in_dev_order': True, 'ok': True}"
+  },
+  {
+   "check": "2 C1: Cfg() trains on data/t2br_train_sd_<arm>.jsonl; run() refuses the canonical variant (exit 3, not persisted, no lease)",
+   "ok": true,
+   "detail": ""
   },
   {
    "check": "3 t2br_chain(plain) == generation.chain chain_one (random tiny model and an oracle that parses)",
@@ -24,7 +44,7 @@
    "detail": "6 chains"
   },
   {
-   "check": "4 full tiny run: exit 0, DONE.json, all stages recorded, one lease 'rcwm-t1:t2b-register', a wait before each of 4 loads",
+   "check": "4 full tiny run: exit 0, DONE.json, all stages recorded (E1H included), one lease 'rcwm-t1:t2b-register', a wait before each of 4 loads; the arms trained on the 'sd' files",
    "ok": true,
    "detail": "calls ['lease', 'wait', 'train_load', 'unload', 'wait', 'train_load', 'unload', 'wait', 'train_load', 'unload', 'wait', 'load', 'unload', 'release']"
   },
@@ -34,9 +54,9 @@
    "detail": ""
   },
   {
-   "check": "4 outputs validate with the analysis loaders (states == texts parsed by each side's parser); provenance ok",
+   "check": "4 outputs validate with the analysis loaders (states == texts parsed by each side's parser; held-out-surface ids / hs_index == the bank); provenance ok; every text file the runner writes is LF-only",
    "ok": true,
-   "detail": ""
+   "detail": "14 HS rows"
   },
   {
    "check": "4 rerun is a no-op (exit 0, no lease)",
@@ -44,7 +64,7 @@
    "detail": ""
   },
   {
-   "check": "5 adapter switching in one PeftModel == each adapter loaded alone (identical texts)",
+   "check": "5 adapter switching in one PeftModel == each adapter loaded alone (identical texts, both renderings)",
    "ok": true,
    "detail": ""
   },
@@ -64,9 +84,9 @@
    "detail": ""
   },
   {
-   "check": "8 training deferred mid-way (exit 5), then E2 deferred (exit 5), then the next turn re-anchors and completes; byte-identical to 4",
+   "check": "8 training deferred mid-way (exit 5); E1H deferred (exit 5), the next turn re-anchors and runs it; E2 deferred (exit 5), the next turn re-anchors and completes; byte-identical to 4",
    "ok": true,
-   "detail": "rc 5 5 0"
+   "detail": "rc [5, 5, 5, 0]"
   },
   {
    "check": "8 the D-22 gate is re-checked after the resource wait: a wait that uses up the turn defers before a training load / before the eval load (exit 5, nothing loaded); the resumed run completes byte-identically to 4",
@@ -94,7 +114,7 @@
    "detail": ""
   },
   {
-   "check": "9 a recorded output changed: exit 3, persisted",
+   "check": "9 a recorded output changed (a held-out-surface output): exit 3, persisted",
    "ok": true,
    "detail": ""
   },
@@ -109,36 +129,54 @@
    "detail": ""
   },
   {
-   "check": "10 oracle run on the FULL dev + chain bank: the analysis says GO; with filler = gold, STOP (decision point 3)",
+   "check": "10 oracle runs on the FULL dev + held-out-surface + chain banks: the analysis says GO; filler = gold -> STOP (decision point 3); a trace arm locked to Titan's surface -> NO-GO on exactly G1 / G2's held-out parts",
    "ok": true,
-   "detail": "GO | STOP (decision point 3): trace ~ filler, not supervision of the intermediates (extra decode compute and/or the length-coded magnitude/branch information in the amendment-4 fill; not attributable to decode compute alone)"
+   "detail": "GO | STOP (decision point 3): trace ~ filler, | NO-GO (failed: G1 [conditional HS, cond_oor_val HS, cond_oor_edge HS, cond_oor_edge predicate HS, cond_sametens HS, cond_sametens predicate HS, cond_adv predicate HS]; G2 [mix HS]); held-out prompts seen 2720"
   },
   {
-   "check": "10 oracle run: gold trace side regret k4 0, product law predicted == observed == 1",
+   "check": "10 oracle run: gold trace side regret k4 0, product law predicted == observed == 1; the locked trace arm's surface audit shows the held-out loss on every primary stratum",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "11 freeze tool (fake root): run() refuses before a freeze (not persisted); refuses without approval and with an output present; freezes; verifies; refuses a second freeze; an installed hook that is not the draft byte for byte is flagged, the exact copy is not; a changed input fails verification; run() refuses",
+   "check": "10 oracle run, revision 5 decision (1): plain weak on every out-of-range row + a trace arm following the tens-digit shortcut 'tens(x) > tens(t) or x == t + 1' (its cmp.ok states that shortcut): every relative G1 part holds, the predicate clauses read from the run's trace texts fail on both surfaces -> NO-GO on exactly those",
    "ok": true,
-   "detail": "['no approval', 'output present', 'second freeze'] ['data/t2br_dev.jsonl differs from the freeze']"
+   "detail": "NO-GO (failed: G1 [cond_oor_edge predicate, cond_sametens predicate, cond_oor_edge predicate HS, cond_sametens predicate HS])"
   },
   {
-   "check": "12 plan: one turn at the planning and observed rates; a 3 h cap needs 2 turns (eval resumes with a re-anchor); an impossible cap raises",
+   "check": "10 oracle runs, revision 6: the report-only shortcut-agreement analysis (read from the run's own trace texts) does not flag the gold trace arm and flags the tens-digit shortcut; a trace arm following the isolated exception 'other > threshold or other == threshold - 4' (the documented survivor) is GO and flagged SHORTCUT_CONSISTENT, its statement and report quote the flag and every always-quoted limit; a trace arm following the lexicographic comparison str(x) > str(t) is NO-GO on exactly the cond_adv predicate clause, both surfaces",
    "ok": true,
-   "detail": "3.84 h / 3.27 h; 3 h cap: [{'stages': ['T_plain', 'T_trace', 'T_filler', 'A0', 'E1'], 'projected_h': 2.76}, {'stages': ['A0 (re-anchor)', 'E2'], 'projected_h': 1.2}]"
+   "detail": "{'go': None, 'weak': 'SHORTCUT_CONSISTENT', 'exc_m4': 'SHORTCUT_CONSISTENT', 'lex': 'SHORTCUT_CONSISTENT'} | GO | NO-GO (failed: G1 [cond_adv predicate, cond_adv predicate HS])"
+  },
+  {
+   "check": "10 oracle runs, revision 7: the OVERALL headline (results JSON 'overall' and the report's Overall line) carries the report-only SHORTCUT_CONSISTENT flag and the LIMITS pointer whenever the flag is set (the GO of the exception at -4; the NO-GOs of the tens-digit shortcut and of the lexicographic comparison), beside the unchanged verdict; the gold GO (not flagged) keeps revision 6's headline 'SCREEN (seed 0): GO'",
+   "ok": true,
+   "detail": "SCREEN (seed 0): GO | SHORTCUT_CONSISTENT in s0 (report-only shortcut-agreement flag; it never changes the verdict: a member of H agrees with the trace's stated cmp.ok at least as well as the true predicate) | read the LIMITS quoted with the verdict (G1 excludes only the members of H, and not the ex"
+  },
+  {
+   "check": "11 freeze tool (fake root): run() refuses before a freeze (not persisted); refuses without approval and with an output present; freezes (the go rule revision 7, the 'sd' variant, the held-out-surface bank, the shortcut family module and the superseded rule revisions 1-6 are frozen inputs); verifies; refuses a second freeze; an installed hook that is not the draft byte for byte is flagged, the exact copy is not; a changed held-out-surface bank fails verification; run() refuses",
+   "ok": true,
+   "detail": "['no approval', 'output present', 'second freeze'] ['data/t2br_dev_hs.jsonl differs from the freeze']"
+  },
+  {
+   "check": "12 plan: one turn at the observed rate; two at the planning rate (turn 2 re-anchors, then E2; every gating stage incl. E1H in turn 1); a 3 h cap needs more than one turn and every later turn starts with the anchor (revision 6's larger E1 / E1H: training, then A0 + E1 + E1H, then re-anchor + E2); an impossible cap raises",
+   "ok": true,
+   "detail": "planning [{'stages': ['T_plain', 'T_trace', 'T_filler', 'A0', 'E1', 'E1H'], 'projected_h': 3.73}, {'stages': ['A0 (re-anchor)', 'E2'], 'projected_h': 1.26}]; observed 4.06 h; 3 h cap: [{'stages': ['T_plain', 'T_trace', 'T_filler'], 'projected_h': 2.05}, {'stages': ['A0', 'E1', 'E1H'], 'projected_h':"
   }
  ],
- "seconds": 134.4,
- "peak_working_set_mb": 1062.3,
+ "seconds": 166.8,
+ "peak_working_set_mb": 1223.3,
  "threads": 2,
+ "go_rule_revision": 7,
+ "train_variant": "sd",
  "code_sha256": {
-  "scripts/t2br_run.py": "e3783d6aadffe0f99b67dbe33c5b8a2714223ae4bc52052dcc4a6436e6474d43",
-  "scripts/t2br_common.py": "d12a66a49fe3dd3f03fcc5dfb67f614ba6d79782635c3df4d349f134696ad8d9",
-  "scripts/t2br_analysis.py": "ce405fec2dbd02d1f010efcf54343429f571b5fc06a9d40a0e537fdc9289495b",
-  "scripts/t2br_test_tiny.py": "a651563ae9eb0e4075649bb250d011536cb5228b6e9af3edec2b2c452feb8c28"
+  "scripts/t2br_run.py": "6e232189da5e8e8ae7e995623ccb5583f9e29fe5985b2526ba340f7925c4f527",
+  "scripts/t2br_common.py": "f47c6dc15fb9df3ebb7d8f06bcc41fd458ccd3dcaeedf29fab87b0b502f297c9",
+  "scripts/t2br_analysis.py": "29808c553dc90b14f0d0bda2457e4eef0d1c88bdc1b4e0c85d382bd17bdf94f4",
+  "scripts/t2br_shortcuts.py": "20ebf1814267eeeffcfe5aa99db749438a4fa03f4bf1672b293bd3d64d22b611",
+  "scripts/t2br_test_tiny.py": "2968b85d38cd15078bdeeed3fc699d4eb5d2052ca976fad7e4b6a8e0b51ba7c9"
  },
  "torch": "2.6.0+cu124",
  "transformers": "5.14.1",
- "written_utc": "2026-10-09T12:58:08Z"
+ "written_utc": "2026-10-10T10:08:03Z"
 }

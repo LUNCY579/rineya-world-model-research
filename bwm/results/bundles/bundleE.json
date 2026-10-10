@@ -1,0 +1,123 @@
+{
+ "budget_s": 16200,
+ "jobs": [
+  {
+   "name": "bw-distill-search",
+   "marker": "runs/BW_DISTILL_r1/.search_done",
+   "log": "runs/BW_DISTILL_r1.search.stdout",
+   "est_s": 1800,
+   "cmd": [
+    "scripts/bw_distill.py",
+    "search",
+    "--n",
+    "240",
+    "--out",
+    "runs/BW_DISTILL_r1"
+   ]
+  },
+  {
+   "name": "bw-distill-rows",
+   "marker": "runs/BW_DISTILL_r1/.rows_done",
+   "log": "runs/BW_DISTILL_r1.rows.stdout",
+   "est_s": 120,
+   "cmd": [
+    "scripts/bw_distill.py",
+    "rows",
+    "--out",
+    "runs/BW_DISTILL_r1"
+   ]
+  },
+  {
+   "name": "bw-b3-mix",
+   "marker": "runs/BW_DISTILL_r1/.mix_done",
+   "log": "runs/BW_DISTILL_r1.mix.stdout",
+   "est_s": 300,
+   "cmd": [
+    "scripts/bw_b3_prep.py",
+    "mix",
+    "--out",
+    "runs/BW_DISTILL_r1"
+   ]
+  },
+  {
+   "name": "train-Pa_v3",
+   "marker": "runs/BW_Pa_v3_s1/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Pa_v3_s1.stdout",
+   "est_s": 3600,
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_DISTILL_r1/mix_v3.jsonl",
+    "--steps",
+    "400",
+    "--batch",
+    "16",
+    "--lr",
+    "0.0001",
+    "--seed",
+    "1",
+    "--max-len",
+    "640",
+    "--init-adapter",
+    "runs/BW_Pa_v2_s1/adapter",
+    "--out",
+    "runs/BW_Pa_v3_s1"
+   ]
+  },
+  {
+   "name": "train-Pa_v2c",
+   "marker": "runs/BW_Pa_v2c_s1/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Pa_v2c_s1.stdout",
+   "est_s": 3600,
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_DISTILL_r1/mix_v2c.jsonl",
+    "--steps",
+    "400",
+    "--batch",
+    "16",
+    "--lr",
+    "0.0001",
+    "--seed",
+    "1",
+    "--max-len",
+    "640",
+    "--init-adapter",
+    "runs/BW_Pa_v2_s1/adapter",
+    "--out",
+    "runs/BW_Pa_v2c_s1"
+   ]
+  },
+  {
+   "name": "b3-freeze",
+   "marker": "runs/FREEZE_B3.json",
+   "log": "runs/BW_B3_EVAL.stdout",
+   "est_s": 60,
+   "cmd": [
+    "scripts/bw_b3_eval.py",
+    "freeze"
+   ]
+  },
+  {
+   "name": "b3-eval",
+   "marker": "runs/BW_B3_EVAL/.run_done",
+   "log": "runs/BW_B3_EVAL.stdout",
+   "est_s": 2400,
+   "cmd": [
+    "scripts/bw_b3_eval.py",
+    "run"
+   ]
+  },
+  {
+   "name": "b3-analyze",
+   "marker": "runs/BW_B3_EVAL/B3_REPORT.json",
+   "log": "runs/BW_B3_EVAL.stdout",
+   "est_s": 60,
+   "cmd": [
+    "scripts/bw_b3_eval.py",
+    "analyze"
+   ]
+  }
+ ]
+}

@@ -1,16 +1,16 @@
 {
  "record": "T2BP_SCREEN_RULE",
- "revision": 3,
- "written_local": "2026-10-09 12:24:05 -0500",
+ "revision": 4,
+ "written_local": "2026-10-09 17:43:39 -0500",
  "runs_t2bp_exists": false,
  "statement": "written before any runs/t2bp output existed; no model was loaded and no model output was read to choose it",
- "rule_md_sha256": "5dae69b4e88e1b8465487df4b7ae8ec7110378f89e89f135b58a6747a4ec720c",
- "rule_text_sha256": "c16c63a1cf72a4c3f73d5e79adfec7b939c8428b630804cf51f4f03f03832b84",
+ "rule_md_sha256": "0da45df5e112cb537ae2b53f2b14cee8f18f49f6efcd68e78f642f5944dda243",
+ "rule_text_sha256": "211bb37c08a3d63f7804af3f590258290c8c456a55a79f16a8328f57fa2c7ba5",
  "inputs": {
-  "scripts/t2bp_common.py": "1175b758551ac0f01b7b38070dfbb5bf91e5a1b5f0dae12d142aa2c84b5f7ee7",
-  "scripts/t2bp_make_data.py": "8f1489fa1d2bf580fb84420bc10de89d7e2a1b0f2ae7b506c74d8b0b3eda5f40",
-  "scripts/t2bp_run.py": "c737e1be8189d3d8999fc1c85ce9293705f49d0276e494cfb563c66fb5d5c4ec",
-  "scripts/t2bp_analysis.py": "5b605a4c3202d1c764c74e80b93964f626b0966d303f48d1977048086de0cd05",
+  "scripts/t2bp_common.py": "a913523a9a848dfaa01783fb6858c4e88b80aa7d3b783db924f9fcc99634017c",
+  "scripts/t2bp_make_data.py": "176e6cb3992c2cda426b3e423c0fb1e6f5e87d17f9015b4e12e1256eda136131",
+  "scripts/t2bp_run.py": "09135f4d07e14fef3d2d6df5112fdb5763ac8a8286bb89325a456d26c4433150",
+  "scripts/t2bp_analysis.py": "5853c55d9473abc4d12ea127ccb3c85d3965a439538e8a1c30f67312ac6087ea",
   "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
   "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
   "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
@@ -43,15 +43,15 @@
   "no runs/t2bp output exists": true
  },
  "supersedes": {
-  "revision": 2,
-  "record_sha256": "3424188ebe3893324311530cd5ecc0c7786dd24e789200cf35e816d3befca383",
-  "rule_md_sha256": "1166d9cd92771584c1a7f7971c672c30a63aaecc4c2f286e9e49d708db884739",
-  "rule_text_sha256": "8808f700b8a10bcc2d775a14cf12467d28bbc180d595aa3efa71be24c4abf204",
-  "written_local": "2026-10-09 07:34:35 -0500",
+  "revision": 3,
+  "record_sha256": "f0d51bc3ec3621302caacbaf7e60de76789121f924c4c533e8a85b3a49166200",
+  "rule_md_sha256": "5dae69b4e88e1b8465487df4b7ae8ec7110378f89e89f135b58a6747a4ec720c",
+  "rule_text_sha256": "c16c63a1cf72a4c3f73d5e79adfec7b939c8428b630804cf51f4f03f03832b84",
+  "written_local": "2026-10-09 12:24:05 -0500",
   "kept_as": [
-   "SCREEN_RULE_rev2.md",
-   "SCREEN_RULE_rev2.json"
+   "SCREEN_RULE_rev3.md",
+   "SCREEN_RULE_rev3.json"
   ]
  },
- "reason": "operator decisions after PREREG-3 STATUS: TRIGGER (DECISIONS D-35, R16, D-36; C1-C6, 5a (a)-(c)): the screen trains the surface-diversity build only (paraphrases, field-name variants, input key-order augmentation from training subsets; held out: paraphrase 4, field names 4, the reversed key order and 2 fixed random event key orders); a held-out-surface stage E3 (ON, paired by row) and HS in the ranking R = (K4 + IAW + OOR + HS) / 4; the F-filler's fill length is a constant per action kind (amendment 4b); eligibility, R0-R3, tie-breaks, close-call wording and R5's thresholds unchanged"
+ "reason": "operator-selected fixes from the independent verifier (2026-10-09), two changes only: (1) the reason given for amendment 4b is corrected: revision 2's row-matched FILL length (trace-head tokens - 3) predicts applicability with accuracy 0.749 on the training rows (majority 0.500), 0.837 on the 8-bit dev rows (0.600) and 0.813 on the out-of-range dev rows (0.667), not 'perfectly' (that figure came from the full trace text, which contains the answer); (2) a report-only stage E4 runs the 240 dev chains in the combined held-out surface (ON) and reports K4_HS and K4 - K4_HS per arm; it enters neither R nor eligibility (HS stays on E3's one-step strata); everything else unchanged"
 }

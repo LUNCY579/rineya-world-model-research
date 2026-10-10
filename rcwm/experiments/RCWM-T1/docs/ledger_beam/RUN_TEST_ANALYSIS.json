@@ -1,0 +1,317 @@
+{
+ "part": "analysis",
+ "ok": true,
+ "n_checks": 58,
+ "n_failed": 0,
+ "checks": [
+  {
+   "check": "analysis dry run passes: statistics unit tests, metrics unit tests",
+   "ok": true,
+   "detail": "{'exact McNemar == the two-sided binomial test on the discordant pairs (9 cases)': True, 'Holm (m=2): 0.004, 0.03 -> 0.008, 0.03; 0.03, 0.004 -> 0.03, 0.008; 0.02, 0.02 -> 0.04, 0.04; 0.6, 0.7 -> 1.0, 1.0': True, 'bootstrap ratio CI is deterministic for the fixed seed and brackets the point ratio': True, 'delta boundary: exactly +0.20 with Holm p < 0.01 is PASS; +0.1944 is SHORT': True, 'Holm boundary: adjusted p 0.01 is NS; 0.0099 passes': True, \"audit reading: b 12 / c 18 of 180 (difference -0"
+  },
+  {
+   "check": "wording branch: YES_NEAR",
+   "ok": true,
+   "detail": "['YES_NEAR', 'PASS', 'PASS', True]"
+  },
+  {
+   "check": "wording branch: YES (ratio below 0.80)",
+   "ok": true,
+   "detail": "['YES', 'PASS', 'PASS', False]"
+  },
+  {
+   "check": "wording branch: GREEDY_ONLY_NEAR (lookahead NS)",
+   "ok": true,
+   "detail": "['GREEDY_ONLY_NEAR', 'PASS', 'NS', True]"
+  },
+  {
+   "check": "wording branch: GREEDY_ONLY (lookahead NS)",
+   "ok": true,
+   "detail": "['GREEDY_ONLY', 'PASS', 'NS', False]"
+  },
+  {
+   "check": "wording branch: GREEDY_ONLY (lookahead SHORT)",
+   "ok": true,
+   "detail": "['GREEDY_ONLY', 'PASS', 'SHORT', False]"
+  },
+  {
+   "check": "wording branch: LOOKAHEAD_ONLY (all SHORT)",
+   "ok": true,
+   "detail": "['LOOKAHEAD_ONLY', 'SHORT', 'PASS', False]"
+  },
+  {
+   "check": "wording branch: LOOKAHEAD_ONLY (all NS, near)",
+   "ok": true,
+   "detail": "['LOOKAHEAD_ONLY', 'NS', 'PASS', True]"
+  },
+  {
+   "check": "wording branch: DIRECTIONAL (both SHORT)",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'SHORT', 'SHORT', False]"
+  },
+  {
+   "check": "wording branch: DIRECTIONAL (all SHORT, lookahead NS)",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'SHORT', 'NS', False]"
+  },
+  {
+   "check": "wording branch: DIRECTIONAL (all NS, lookahead SHORT)",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'NS', 'SHORT', False]"
+  },
+  {
+   "check": "wording branch: NO (both NS)",
+   "ok": true,
+   "detail": "['NO', 'NS', 'NS', False]"
+  },
+  {
+   "check": "wording branch: NO (both NS, ratio near: OFF also near the oracle)",
+   "ok": true,
+   "detail": "['NO', 'NS', 'NS', True]"
+  },
+  {
+   "check": "wording branch: REVERSED (all instances)",
+   "ok": true,
+   "detail": "['REVERSED', 'REVERSED', 'NS', False]"
+  },
+  {
+   "check": "wording branch: REVERSED_LOOKAHEAD (lookahead only)",
+   "ok": true,
+   "detail": "['REVERSED_LOOKAHEAD', 'NS', 'REVERSED', False]"
+  },
+  {
+   "check": "wording branch: REVERSED (both)",
+   "ok": true,
+   "detail": "['REVERSED', 'REVERSED', 'REVERSED', False]"
+  },
+  {
+   "check": "wording branch: MIXED_PASS (reviewer's case: PASS overall, REVERSED where lookahead is needed, NEAR)",
+   "ok": true,
+   "detail": "['MIXED_PASS', 'PASS', 'REVERSED', True]"
+  },
+  {
+   "check": "wording branch: combination NS/NS/not near -> NO",
+   "ok": true,
+   "detail": "['NO', 'NS', 'NS', False]"
+  },
+  {
+   "check": "wording branch: combination NS/NS/NEAR -> NO",
+   "ok": true,
+   "detail": "['NO', 'NS', 'NS', True]"
+  },
+  {
+   "check": "wording branch: combination NS/PASS/not near -> LOOKAHEAD_ONLY",
+   "ok": true,
+   "detail": "['LOOKAHEAD_ONLY', 'NS', 'PASS', False]"
+  },
+  {
+   "check": "wording branch: combination NS/PASS/NEAR -> LOOKAHEAD_ONLY",
+   "ok": true,
+   "detail": "['LOOKAHEAD_ONLY', 'NS', 'PASS', True]"
+  },
+  {
+   "check": "wording branch: combination NS/REVERSED/not near -> REVERSED_LOOKAHEAD",
+   "ok": true,
+   "detail": "['REVERSED_LOOKAHEAD', 'NS', 'REVERSED', False]"
+  },
+  {
+   "check": "wording branch: combination NS/REVERSED/NEAR -> REVERSED_LOOKAHEAD",
+   "ok": true,
+   "detail": "['REVERSED_LOOKAHEAD', 'NS', 'REVERSED', True]"
+  },
+  {
+   "check": "wording branch: combination NS/SHORT/not near -> DIRECTIONAL",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'NS', 'SHORT', False]"
+  },
+  {
+   "check": "wording branch: combination NS/SHORT/NEAR -> DIRECTIONAL",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'NS', 'SHORT', True]"
+  },
+  {
+   "check": "wording branch: combination PASS/NS/not near -> GREEDY_ONLY",
+   "ok": true,
+   "detail": "['GREEDY_ONLY', 'PASS', 'NS', False]"
+  },
+  {
+   "check": "wording branch: combination PASS/NS/NEAR -> GREEDY_ONLY_NEAR",
+   "ok": true,
+   "detail": "['GREEDY_ONLY_NEAR', 'PASS', 'NS', True]"
+  },
+  {
+   "check": "wording branch: combination PASS/PASS/not near -> YES",
+   "ok": true,
+   "detail": "['YES', 'PASS', 'PASS', False]"
+  },
+  {
+   "check": "wording branch: combination PASS/PASS/NEAR -> YES_NEAR",
+   "ok": true,
+   "detail": "['YES_NEAR', 'PASS', 'PASS', True]"
+  },
+  {
+   "check": "wording branch: combination PASS/REVERSED/not near -> MIXED_PASS",
+   "ok": true,
+   "detail": "['MIXED_PASS', 'PASS', 'REVERSED', False]"
+  },
+  {
+   "check": "wording branch: combination PASS/REVERSED/NEAR -> MIXED_PASS",
+   "ok": true,
+   "detail": "['MIXED_PASS', 'PASS', 'REVERSED', True]"
+  },
+  {
+   "check": "wording branch: combination PASS/SHORT/not near -> GREEDY_ONLY",
+   "ok": true,
+   "detail": "['GREEDY_ONLY', 'PASS', 'SHORT', False]"
+  },
+  {
+   "check": "wording branch: combination PASS/SHORT/NEAR -> GREEDY_ONLY_NEAR",
+   "ok": true,
+   "detail": "['GREEDY_ONLY_NEAR', 'PASS', 'SHORT', True]"
+  },
+  {
+   "check": "wording branch: combination REVERSED/NS/not near -> REVERSED",
+   "ok": true,
+   "detail": "['REVERSED', 'REVERSED', 'NS', False]"
+  },
+  {
+   "check": "wording branch: combination REVERSED/NS/NEAR -> REVERSED",
+   "ok": true,
+   "detail": "['REVERSED', 'REVERSED', 'NS', True]"
+  },
+  {
+   "check": "wording branch: combination REVERSED/PASS/not near -> MIXED_LOOKAHEAD_BETTER",
+   "ok": true,
+   "detail": "['MIXED_LOOKAHEAD_BETTER', 'REVERSED', 'PASS', False]"
+  },
+  {
+   "check": "wording branch: combination REVERSED/PASS/NEAR -> MIXED_LOOKAHEAD_BETTER",
+   "ok": true,
+   "detail": "['MIXED_LOOKAHEAD_BETTER', 'REVERSED', 'PASS', True]"
+  },
+  {
+   "check": "wording branch: combination REVERSED/REVERSED/not near -> REVERSED",
+   "ok": true,
+   "detail": "['REVERSED', 'REVERSED', 'REVERSED', False]"
+  },
+  {
+   "check": "wording branch: combination REVERSED/REVERSED/NEAR -> REVERSED",
+   "ok": true,
+   "detail": "['REVERSED', 'REVERSED', 'REVERSED', True]"
+  },
+  {
+   "check": "wording branch: combination REVERSED/SHORT/not near -> MIXED_LOOKAHEAD_BETTER",
+   "ok": true,
+   "detail": "['MIXED_LOOKAHEAD_BETTER', 'REVERSED', 'SHORT', False]"
+  },
+  {
+   "check": "wording branch: combination REVERSED/SHORT/NEAR -> MIXED_LOOKAHEAD_BETTER",
+   "ok": true,
+   "detail": "['MIXED_LOOKAHEAD_BETTER', 'REVERSED', 'SHORT', True]"
+  },
+  {
+   "check": "wording branch: combination SHORT/NS/not near -> DIRECTIONAL",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'SHORT', 'NS', False]"
+  },
+  {
+   "check": "wording branch: combination SHORT/NS/NEAR -> DIRECTIONAL",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'SHORT', 'NS', True]"
+  },
+  {
+   "check": "wording branch: combination SHORT/PASS/not near -> LOOKAHEAD_ONLY",
+   "ok": true,
+   "detail": "['LOOKAHEAD_ONLY', 'SHORT', 'PASS', False]"
+  },
+  {
+   "check": "wording branch: combination SHORT/PASS/NEAR -> LOOKAHEAD_ONLY",
+   "ok": true,
+   "detail": "['LOOKAHEAD_ONLY', 'SHORT', 'PASS', True]"
+  },
+  {
+   "check": "wording branch: combination SHORT/REVERSED/not near -> MIXED_SHORT",
+   "ok": true,
+   "detail": "['MIXED_SHORT', 'SHORT', 'REVERSED', False]"
+  },
+  {
+   "check": "wording branch: combination SHORT/REVERSED/NEAR -> MIXED_SHORT",
+   "ok": true,
+   "detail": "['MIXED_SHORT', 'SHORT', 'REVERSED', True]"
+  },
+  {
+   "check": "wording branch: combination SHORT/SHORT/not near -> DIRECTIONAL",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'SHORT', 'SHORT', False]"
+  },
+  {
+   "check": "wording branch: combination SHORT/SHORT/NEAR -> DIRECTIONAL",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'SHORT', 'SHORT', True]"
+  },
+  {
+   "check": "wording branch: refused-key flag above 1% only",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "wording branch: ratio not evaluable when ORACLE success is 0 (NEAR false)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "wording branch: not-evaluable report-only stages are rendered mechanically (abandoned / stopped) and never change the branch",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "wording branch: exhaustive: every (status 1, status 2, NEAR) combination maps to the registered table (32) and is realised through decide() / wording() with truthful wording",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "every branch and every co-primary status is exercised by the wording self-test",
+   "ok": true,
+   "detail": "['DIRECTIONAL', 'GREEDY_ONLY', 'GREEDY_ONLY_NEAR', 'LOOKAHEAD_ONLY', 'MIXED_LOOKAHEAD_BETTER', 'MIXED_PASS', 'MIXED_SHORT', 'NO', 'REVERSED', 'REVERSED_LOOKAHEAD', 'YES', 'YES_NEAR']"
+  },
+  {
+   "check": "every registered sentence the analysis can render (77: headlines, readings, statuses, conclusions, qualifiers, not-evaluable and audit sentences, limits) appears verbatim in PREREG_LB_DRAFT.md",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the draft states the registered constants",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the dry-run record binds the current draft and hook draft (sha256), as the freeze requires",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "torch was never imported by the analysis part",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "numbers": {
+  "dry_run_dir": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\docs\\ledger_beam"
+ },
+ "code_sha256": {
+  "scripts/lbeam_run.py": "55a0bd0fb8e2af0112b8485ae5f8fc858c56508f4293d456bc24802d0c1efa5c",
+  "scripts/lbeam_analysis.py": "e3b0e9e0baaf23f183218fda57c1e4855d6db80deb9ca9db5a51d3753dafbf7e",
+  "scripts/lbeam_test_run.py": "137c7e919b66ba603a3164fe9c3cadfae3ea2f1f2f7bc8cba4f9d2fe4c30e7aa",
+  "scripts/lbeam_f.py": "9a76562c2739df3254a650154acde41fe2052173b2f35556e5b75a7728680b6f",
+  "scripts/lbeam_problems.py": "2353e2fc846fac5ced11cfc5420bd60b6e9e50cf3399e9299974b3921a09465e",
+  "scripts/lbeam_proposer.py": "6c555d2e46db8a279541839a54b82d6e765f1e8bc438f735beb3ef30b9564881"
+ },
+ "bwm_blocks_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+ "draft_sha256": "26c62144d89dde15e7d18ad119f9361ce6f93562bd3d358f26808e7aefbd788d",
+ "hook_draft_sha256": "098cb1311bd9d5352b042a4e84dcabc606df6209fd9429a60ee4b543d27102ff",
+ "torch_imported": false,
+ "peak_rss_mb": 54.7,
+ "seconds": 1.0,
+ "written_utc": "2026-10-10T03:41:08Z",
+ "note": "CPU only; tiny random Qwen3 + LoRA stand-ins; no real model, no GPU, no lease"
+}

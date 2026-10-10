@@ -27,7 +27,9 @@ Gates (t2bp_common.audit_rows + t2bp_make_data.audit_files):
 Descriptive (recorded, not gated): (before&~delete)+add and before&~delete accuracies; cheap-feature cue ceilings; the
 shortcut policies of t2bp_common.SHORTCUT_POLICIES and the rows separating each precondition-aware composite from the
 bitwise rule; minimal-pair twin artefacts; the surface diversity actually used; the filler residual (filler minus trace
-tokens) and what the revision-2 row-matched fill length would have revealed.
+tokens) and what the revision-2 row-matched FILL length (trace-head tokens - 3, the fill decoded before 'after';
+t2bp_make_data.rev2_fill_units) would have revealed on the training rows, the 8-bit dev rows and the out-of-range dev
+rows (revision 4: revision 3 computed it from the full trace text, which includes the answer).
 """
 from __future__ import annotations
 
@@ -58,6 +60,13 @@ def audit(variant: str = "sd") -> dict:
     res = MD.audit_files({a: files[a] for a in C.ARMS}, MD.counter(), source=src)
     res["variant"] = variant
     res["files"] = {files[a].name: C.sha256(files[a]) for a in C.ARMS}
+    if "filler_4b" in res:                 # descriptive: the revision-2 fill length's leak on the dev bank as well
+        dev_rows, _ = C.load_dev()
+        cnt = MD.counter()
+        res["filler_4b"]["rev2_row_matched_length_would_reveal_descriptive_dev"] = {
+            "dev_8bit": MD.rev2_length_leak([r for r in dev_rows if r["width"] == C.WIDTH_ID], cnt),
+            "dev_out_of_range": MD.rev2_length_leak([r for r in dev_rows if r["width"] != C.WIDTH_ID], cnt),
+            "dev_sha256": C.sha256(C.DEV)}
     res["torch_imported"] = "torch" in sys.modules
     if sd:
         canon = {a: C.load_jsonl(C.TRAIN_FILES[a]) for a in C.ARMS}
@@ -92,6 +101,7 @@ def main() -> int:
     print("  amendment 4b filler:", {k: f4.get(k) for k in ("distinct_fill_lengths_per_kind", "fill_length_lookup_accuracy",
                                                              "majority_share", "mutual_information_bits",
                                                              "rev2_row_matched_length_would_reveal_descriptive",
+                                                             "rev2_row_matched_length_would_reveal_descriptive_dev",
                                                              "residual_tokens_descriptive")})
     print("  cue ceilings (descriptive):", core["cue_ceilings"])
     print("  shortcut policies on the training rows (descriptive):", core["shortcut_accuracy_descriptive"])

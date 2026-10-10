@@ -15,24 +15,35 @@ module, the runner, the data builder, the rcwmt modules the runner and the score
 bank and the training files) must be unchanged (else exit 3), and the scorer self-test must pass (golds 100% in every
 arm's format, every heuristic and shortcut policy scored at its exact floor, malformed answers rejected; else exit 3).
 A run is scored only if it is the surface-diversity build, DONE.json exists, every output's sha256 equals its
-provenance record, one-step ids (in-surface and held-out surface) are the dev bank's ids in order, chain rows are the
-dev chains in order, and every recorded chain state equals the arm parser applied to the recorded text.
+provenance record, one-step ids (in-surface and held-out surface) are the dev bank's ids in order, chain rows
+(in-surface and held-out surface) are the dev chains in order, and every recorded chain state equals the arm parser
+applied to the recorded text. The held-out-surface chains (stage E4, revision 4) are report-only: apply_rule never
+reads them.
 
-PRE-STATED SCREEN RULE, revision 3 (T2b prerequisite representation screen, seed 0, surface-diversity build).
-What changed and why. Revisions 1 (2026-10-09 03:28) and 2 (07:34, after review) were written before any runs/t2bp
-output existed and are kept (docs/t2b/prereq/SCREEN_RULE_rev1.*, SCREEN_RULE_rev2.*). PREREG-3 then returned STATUS:
-TRIGGER (DECISIONS R-PREREG-3, D-35, R16): the T2 ledger LoRA took the literal token 'void' as its no-op cue instead of
-the stated rule and failed on reordered JSON keys, and BWM's delta world model is likewise locked to key order. A LoRA
-can learn a surface cue in place of a rule. Revision 3 applies the operator's decisions (DECISIONS D-36: C1-C6 and 5a
-(a)-(c)), again before any runs/t2bp output existed and without any model output being read:
+PRE-STATED SCREEN RULE, revision 4 (T2b prerequisite representation screen, seed 0, surface-diversity build).
+What changed and why. Revisions 1 (2026-10-09 03:28), 2 (07:34, after review) and 3 (12:24) were written before any
+runs/t2bp output existed and are kept (docs/t2b/prereq/SCREEN_RULE_rev1.*, SCREEN_RULE_rev2.*, SCREEN_RULE_rev3.*).
+PREREG-3 had returned STATUS: TRIGGER (DECISIONS R-PREREG-3, D-35, R16): the T2 ledger LoRA took the literal token
+'void' as its no-op cue instead of the stated rule and failed on reordered JSON keys, and BWM's delta world model is
+likewise locked to key order. A LoRA can learn a surface cue in place of a rule. Revision 3 applies the operator's
+decisions (DECISIONS D-36: C1-C6 and 5a (a)-(c)), again before any runs/t2bp output existed and without any model
+output being read:
   (1) decision point 1 has fired: the screen trains the surface-diversity build (the same canonical rows, each with a
       seeded rule-text paraphrase, a field-name variant and input key orders drawn from training subsets only); the
       canonical-only build is not run;
   (2) the ranking adds HS, accuracy on a combined held-out surface that no training prompt uses (R = the mean of K4,
       IAW, OOR and HS), so an arm that learned the rule only on its training surfaces cannot win on in-surface scores;
   (3) the F-filler control uses a constant fill length per action kind (amendment 4b), because a fill length matched
-      to the trace row by row reveals the answer (on these training rows the trace length alone predicts
-      applicability perfectly), which would give the control a hidden scratch channel.
+      to the trace row by row reveals the answer (on these training rows revision 2's fill length alone, trace-head
+      tokens - 3, predicts applicability with accuracy 0.749 against a majority share of 0.500), which would give the
+      control a hidden scratch channel.
+Revision 4 (fixes the operator selected from the independent verifier's review, 2026-10-09, again before any
+runs/t2bp output existed and without any model output being read) changes two things only: (a) it corrects the figure
+in (3), which revision 3 gave as "the trace length alone predicts applicability perfectly", computed from the full
+trace text (which contains the answer) instead of revision 2's fill length (on the dev rows that fill length predicts
+applicability with accuracy 0.837 on the 8-bit rows and 0.813 out of range, majority shares 0.600 and 0.667); (b) it
+adds stage E4, the 240 dev chains in the combined held-out surface (adapter ON), reported as K4_HS and K4 - K4_HS per
+arm; E4 is report-only: it enters neither R nor eligibility, and HS stays defined on E3's one-step strata.
 Eligibility, R0 (on the in-surface format rate), R1-R3, the tie-breaks, the close-call wording and R5's thresholds are
 unchanged. The rule text and the sha256 of every frozen input are recorded in docs/t2b/prereq/SCREEN_RULE.json; the
 runner and this analysis refuse when a frozen input differs. Verbatim in docs/t2b/prereq/SCREEN_RULE.md.
@@ -43,11 +54,12 @@ runner and this analysis refuse when a frozen input differs. Verbatim in docs/t2
   canonical surface: stages E1, E2); the one-step rows also in the COMBINED held-out-surface rendering (stage E3:
   paraphrase 4 with its state sentence, field names 4, the reversed top-level key order and one of the 3 held-out event
   key orders, rotating by the row's index within its stratum; no training prompt uses any of these; the same rows and
-  golds as E1, paired by row). All three arms must be complete with every stage (DONE.json; every output
-  hash-verified; the frozen inputs unchanged; the scorer self-test passes before any output is read); a run that is not
-  the surface-diversity build, or lacks stage E3, gets no verdict. Answers are scored by the arm's after-only parser
-  (t2bp_common.parse: D-int lenient exactly as rcwmt.env.parse_state; the others strict); an unparseable or malformed
-  answer is wrong.
+  golds as E1, paired by row). The chains are also rolled out in that combined held-out surface (stage E4, adapter ON;
+  the held-out event key order rotating by the chain's index in the dev bank; report-only, see the last paragraph).
+  All three arms must be complete with every stage (DONE.json; every output hash-verified; the frozen inputs
+  unchanged; the scorer self-test passes before any output is read); a run that is not the surface-diversity build, or
+  lacks stage E3, gets no verdict. Answers are scored by the arm's after-only parser (t2bp_common.parse: D-int lenient
+  exactly as rcwmt.env.parse_state; the others strict); an unparseable or malformed answer is wrong.
   Metrics (point estimates, adapter ON; "8-bit rows" = the 750 one-step rows outside D_ood10 and D_ood12; every metric
   except HS is in-surface):
     IAW(A)  accuracy on D_int_add_wrong (150 rows: applicable, the add bit is already set and the delete clears a set
@@ -98,10 +110,12 @@ runner and this analysis refuse when a frozen input differs. Verbatim in docs/t2
      the control is analysed, an S-trace win is stated with "decode-compute control pending".
   Everything else (OFF baselines, the other strata and subtypes, out-of-range false copy, the held-out-surface
   out-of-range strata, FC/FA/WF and ID in the held-out surface, the paired held-out minus in-surface contrasts,
-  accuracy by held-out key order, the filler's residual length (filler minus trace tokens) as a covariate, union
-  cells, shortcut agreement, cmp_ok / calc_ok / flag_ok, decision regret, paired contrasts) is descriptive and cannot
-  change the verdict. This is a screen on a dev bank: no confirmatory claim follows from it; a confirmatory claim needs
-  a sealed bank and a preregistration (roadmap item 2, "Confirm"), with held-out-surface primaries (D-35).
+  accuracy by held-out key order, the held-out-surface chains of stage E4 (K4_HS, the k=4 exact final-state accuracy
+  of the 240 chains in the combined held-out surface, and the gap K4 - K4_HS, per arm), the filler's residual length
+  (filler minus trace tokens) as a covariate, union cells, shortcut agreement, cmp_ok / calc_ok / flag_ok, decision
+  regret, paired contrasts) is descriptive and cannot change the verdict. This is a screen on a dev bank: no
+  confirmatory claim follows from it; a confirmatory claim needs a sealed bank and a preregistration (roadmap item 2,
+  "Confirm"), with held-out-surface primaries (D-35).
 """
 
 
@@ -148,7 +162,7 @@ from rcwmt import data, decide, decisions, env, fidelity  # noqa: E402
 
 RUN = C.OUT_ROOT / C.SCREEN_TAG
 FILLER_RUN = C.OUT_ROOT / C.FILLER_TAG
-RULE_REVISION = 3
+RULE_REVISION = 4
 IAW_STOP = 0.20
 FC_MAX = 0.25
 FA_MAX = 0.25
@@ -160,7 +174,7 @@ FILLER_FLAG_MARGIN = 0.05
 TIE_ORDER = ("dint", "bbits", "strace")
 FLAG_FILLER = "TRACE_GAIN_NOT_SEPARABLE_FROM_DECODE_COMPUTE"
 FLAG_VOID = "DECODE_COMPUTE_CONTROL_VOID"
-EVAL_STAGES = ("E1", "E2", "E3")
+EVAL_STAGES = ("E1", "E2", "E3", "E4")
 UNIONS = {"applicable state-changing (T2 definition)": ("D_app_add", "D_app_delete", "D_int_add_wrong"),
           "app-del (L1/T2 definition)": ("D_app_delete", "D_int_add_wrong"),
           "int-add-wrong (R11 definition: applicable, gold != before+add)": ("D_app_unchanged", "D_app_delete", "D_int_add_wrong"),
@@ -531,6 +545,44 @@ def heldout_order_cells(hsc: list, dev_rows: list) -> dict:
     return out
 
 
+def summarize_heldout_chains(h_out: list, in_out: list, chains: list) -> dict:
+    """Stage E4 (revision 4), REPORT-ONLY: the chains self-rolled out in the combined held-out surface (ON). K4_HS (k=4
+    exact final-state accuracy, a broken chain is wrong), k=1/2 exact, broken chains, per-step accuracy from the arm's
+    own state, K4_HS by held-out event order (the chain's index mod 3), and the paired in-surface minus held-out K4
+    gap K4 - K4_HS (chains resampled; descriptive). apply_rule never reads any of it."""
+    gh = {r["cand_id"]: r for r in h_out}
+    gi = {r["cand_id"]: r for r in in_out}
+    out = {"surface": C.HELDOUT_SURFACE_CHAINS, "report_only": True}
+    for k in (1, 2, 4):
+        ok = [gh[c["cand_id"]]["states"][k] == env.dumps(C.chain_gold_states(c)[k]) for c in chains]
+        out[f"k{k}_exact"] = {"k": int(sum(ok)), "n": len(ok), "acc": round(sum(ok) / len(ok), 4),
+                              "wilson95": C.wilson(int(sum(ok)), len(ok))}
+    gold4 = [env.dumps(C.chain_gold_states(c)[C.CHAIN_H]) for c in chains]
+    hs4 = [{"correct": gh[c["cand_id"]]["states"][C.CHAIN_H] == g} for c, g in zip(chains, gold4)]
+    in4 = [{"correct": gi[c["cand_id"]]["states"][C.CHAIN_H] == g} for c, g in zip(chains, gold4)]
+    out["K4_HS"] = out["k4_exact"]["acc"]
+    out["K4"] = round(sum(x["correct"] for x in in4) / len(in4), 4)
+    out["K4_minus_K4_HS"] = round(out["K4"] - out["K4_HS"], 4)
+    out["K4_minus_K4_HS_paired"] = paired_rows(in4, hs4, list(range(len(chains))))
+    out["broken_by_k4"] = round(sum(gh[c["cand_id"]]["states"][C.CHAIN_H] is None for c in chains) / len(chains), 4)
+    steps = Counter()
+    for c in chains:
+        sts = gh[c["cand_id"]]["states"]
+        for t, e in enumerate(c["events"]):
+            if sts[t] is None:
+                break
+            prev, nxt = json.loads(sts[t]), sts[t + 1]
+            key = "applicable" if C.applicable(prev, e) else "inapplicable"
+            steps[f"{key}_n"] += 1
+            steps[f"{key}_ok"] += int(nxt is not None and json.loads(nxt) == C.gold(prev, e))
+    out["step_accuracy_from_own_state"] = {k: round(steps[f"{k}_ok"] / steps[f"{k}_n"], 4) if steps[f"{k}_n"] else None
+                                           for k in ("applicable", "inapplicable")}
+    out["k4_by_heldout_event_order"] = {f"order{k}": {**cell(hs4, [j for j in range(len(chains)) if j % 3 == k]),
+                                                      "event_order": list(order)}
+                                        for k, order in enumerate(C.HELDOUT_ORDERS["event"])}
+    return out
+
+
 _COUNT: list = []
 
 
@@ -566,13 +618,30 @@ def filler_residual(sc: list, dev_rows: list) -> dict:
 
 # ---------------------------------------------------------------- inputs
 E3_SIDES = ("on",)                      # == t2bp_run.E3_SIDES (the held-out-surface stage generates ON only)
+E4_SIDES = ("on",)                      # == t2bp_run.E4_SIDES (the report-only held-out-surface chains: ON only)
 
 
 def eval_files(run: Path, a: str, side: str, data_variant: str) -> dict:
     fs = {"E1": run / a / f"onestep_{side}.jsonl", "E2": run / a / f"chains_{side}.jsonl"}
     if data_variant == "sd" and side in E3_SIDES:
         fs["E3"] = run / a / f"onestep_heldout_{side}.jsonl"
+    if data_variant == "sd" and side in E4_SIDES:
+        fs["E4"] = run / a / f"chains_heldout_{side}.jsonl"
     return fs
+
+
+def _check_chain_file(a: str, label: str, rows: list, chains: list) -> None:
+    """Chain rows are the dev chains in order and every recorded state equals the arm parser applied to the text."""
+    need([x["cand_id"] for x in rows] == [c["cand_id"] for c in chains], f"{label}: chain ids differ")
+    for x, c in zip(rows, chains):
+        re_states = [env.dumps(c["s0"])]
+        for t, txt in enumerate(x["texts"]):
+            v = C.parse_after(a, txt, c["width"])
+            re_states.append(None if v is None else env.dumps(v))
+            if v is None:
+                break
+        re_states += [None] * (C.CHAIN_H + 1 - len(re_states))
+        need(re_states == x["states"], f"{label}: chain {c['cand_id']} states != parse(texts)")
 
 
 def anchors_ok(prov: dict) -> bool:
@@ -585,7 +654,8 @@ def anchors_ok(prov: dict) -> bool:
 
 
 def validate_run(run: Path, dev_rows: list, chains: list, arms: list) -> dict:
-    """Loads and validates every output file; returns {arm: {side: {"onestep", "chains"[, "heldout"]}}}."""
+    """Loads and validates every output file; returns {arm: {side: {"onestep", "chains"[, "heldout",
+    "heldout_chains"]}}}."""
     prov = json.loads((run / "provenance.json").read_text(encoding="utf-8"))
     need((run / "DONE.json").is_file(), "DONE.json missing: the run is incomplete")
     dv = prov.get("data_variant") or ""
@@ -602,21 +672,16 @@ def validate_run(run: Path, dev_rows: list, chains: list, arms: list) -> dict:
             o1 = C.load_jsonl(fs["E1"])
             need([x["id"] for x in o1] == [r["id"] for r in dev_rows], f"{a}/{side}: one-step ids differ from the dev bank")
             o2 = C.load_jsonl(fs["E2"])
-            need([x["cand_id"] for x in o2] == [c["cand_id"] for c in chains], f"{a}/{side}: chain ids differ")
-            for x, c in zip(o2, chains):
-                re_states = [env.dumps(c["s0"])]
-                for t, txt in enumerate(x["texts"]):
-                    v = C.parse_after(a, txt, c["width"])
-                    re_states.append(None if v is None else env.dumps(v))
-                    if v is None:
-                        break
-                re_states += [None] * (C.CHAIN_H + 1 - len(re_states))
-                need(re_states == x["states"], f"{a}/{side}: chain {c['cand_id']} states != parse(texts)")
+            _check_chain_file(a, f"{a}/{side}", o2, chains)
             out[a][side] = {"onestep": [x["text"] for x in o1], "chains": o2}
             if "E3" in fs:
                 o3 = C.load_jsonl(fs["E3"])
                 need([x["id"] for x in o3] == [r["id"] for r in dev_rows], f"{a}/{side}: held-out-surface ids differ")
                 out[a][side]["heldout"] = [x["text"] for x in o3]
+            if "E4" in fs:
+                o4 = C.load_jsonl(fs["E4"])
+                _check_chain_file(a, f"{a}/{side} held-out-surface chains (E4)", o4, chains)
+                out[a][side]["heldout_chains"] = o4
     return out
 
 
@@ -625,6 +690,7 @@ def analyse(outputs: dict, dev_rows: list, chains: list, selftest: dict | None =
     res = {"selftest_ok": None if selftest is None else selftest["ok"], "arms": {}, "floors": floors(chains)}
     sc_all = {}
     metrics = {}
+    report_k4hs = {}
     for a, sides in outputs.items():
         res["arms"][a] = {}
         for side, o in sides.items():
@@ -645,6 +711,12 @@ def analyse(outputs: dict, dev_rows: list, chains: list, selftest: dict | None =
                     **{k: h[k] for k in ("IAW", "OOR", "FC", "FA", "WF", "ID")},
                     "by_heldout_event_order": heldout_order_cells(hsc, dev_rows),
                     "paired_heldout_minus_in_surface": {s: paired_rows(hsc, sc, idx_s) for s, idx_s in stratum_rows(dev_rows).items()}}
+            if "heldout_chains" in o:             # stage E4 (revision 4): report-only, never part of `metrics`
+                hc = summarize_heldout_chains(o["heldout_chains"], o["chains"], chains)
+                res["arms"][a][side]["heldout_surface_chains"] = hc
+                if side == "on":
+                    report_k4hs[a] = {"K4": hc["K4"], "K4_HS": hc["K4_HS"], "K4_minus_K4_HS": hc["K4_minus_K4_HS"],
+                                      "ci95": (hc["K4_minus_K4_HS_paired"] or {}).get("ci95")}
             if side == "on":
                 metrics[a] = {"IAW": one["IAW"], "OOR": one["OOR"], "K4": ch["k4_exact"]["acc"], "HS": hs, "FC": one["FC"],
                               "FA": one["FA"], "WF": one["WF"], "ID": one["ID"]}
@@ -661,6 +733,10 @@ def analyse(outputs: dict, dev_rows: list, chains: list, selftest: dict | None =
                        "anchors_ok": anchors, "R": {a: (r_of(v) if v["HS"] is not None else None) for a, v in metrics.items()},
                        "wording": f"No screen verdict: {why}; descriptive only."}
     res["verdict"] = res["rule"]["verdict"]
+    res["heldout_chains_report_only"] = {
+        "note": ("stage E4 (revision 4): the 240 chains in the combined held-out surface, adapter ON; K4_HS and the gap "
+                 "K4 - K4_HS per arm are descriptive: they enter neither R nor eligibility"),
+        "arms": {a: report_k4hs.get(a) for a in metrics}}
     con = {}
     idx = stratum_rows(dev_rows)
     for a in outputs:
@@ -704,6 +780,18 @@ def render_md(res: dict) -> str:
             else "-" for a in res["arms"]) + " |")
     L += ["", f"Training dose: {DOSE}.",
           "", "Descriptive only below this line; nothing here changes the verdict. This is a dev-bank screen, not a confirmation."]
+    hk = (res.get("heldout_chains_report_only") or {}).get("arms") or {}
+    L += ["", "Held-out-surface chains (stage E4, ON; REPORT-ONLY, not in R and not in eligibility; K4 in the ranking is "
+              "the in-surface value):", "",
+          "| Arm | K4 (in-surface) | K4_HS (held-out surface) | K4 - K4_HS | 95% CI (chains resampled) |", "|---|---|---|---|---|"]
+    for a in r["metrics"]:
+        x = hk.get(a)
+        if x:
+            ci = x.get("ci95") or [None, None]
+            L.append(f"| {C.ARM_LABEL[a]} | {f3(x['K4'])} | {f3(x['K4_HS'])} | {f3(x['K4_minus_K4_HS'])} | "
+                     f"[{f3(ci[0])}, {f3(ci[1])}] |")
+        else:
+            L.append(f"| {C.ARM_LABEL[a]} | - | - | - | - |")
     return "\n".join(L) + "\n"
 
 
@@ -746,34 +834,44 @@ def policy_text(policy: str, arm: str, before: int, ev: dict, w: int, rng: rando
     return C.render_prediction(arm, st, before, ev, w)
 
 
-def synth_outputs(policies: dict, dev_rows: list, chains: list, seed: int = 5, heldout: bool = True) -> dict:
-    """policies: {arm: {"off": policy, "on": policy[, "hs": policy]}} -> outputs in the analysis' input format (chains
-    rolled out under the policy; the held-out-surface stage E3 (ON) answers under policy "hs", default = "on")."""
+def _synth_chains(pol: str, a: str, chains: list, rng: random.Random) -> list:
+    rows = []
+    for c in chains:
+        st, sts, txs = c["s0"], [env.dumps(c["s0"])], []
+        for e in c["events"]:
+            if st is None:
+                sts.append(None)
+                continue
+            t = policy_text(pol, a, st, e, c["width"], rng)
+            txs.append(t)
+            st = C.parse_after(a, t, c["width"])
+            sts.append(None if st is None else env.dumps(st))
+        rows.append({"cand_id": c["cand_id"], "states": sts, "texts": txs})
+    return rows
+
+
+def synth_outputs(policies: dict, dev_rows: list, chains: list, seed: int = 5, heldout: bool = True,
+                  heldout_chains: bool = True) -> dict:
+    """policies: {arm: {"off": policy, "on": policy[, "hs": policy][, "hsc": policy]}} -> outputs in the analysis' input
+    format (chains rolled out under the policy; the held-out-surface stage E3 (ON) answers under policy "hs", default
+    = "on"; the report-only held-out-surface chains of stage E4 (ON) under policy "hsc", default = "hs")."""
     out = {}
     for a, sides in policies.items():
         out[a] = {}
         for side, pol in sides.items():
-            if side == "hs":
+            if side in ("hs", "hsc"):
                 continue
             rng = random.Random(seed)
             one = [policy_text(pol, a, r["before"], r["event"], r["width"], rng) for r in dev_rows]
-            rows = []
-            for c in chains:
-                st, sts, txs = c["s0"], [env.dumps(c["s0"])], []
-                for e in c["events"]:
-                    if st is None:
-                        sts.append(None)
-                        continue
-                    t = policy_text(pol, a, st, e, c["width"], rng)
-                    txs.append(t)
-                    st = C.parse_after(a, t, c["width"])
-                    sts.append(None if st is None else env.dumps(st))
-                rows.append({"cand_id": c["cand_id"], "states": sts, "texts": txs})
+            rows = _synth_chains(pol, a, chains, rng)
             out[a][side] = {"onestep": one, "chains": rows}
             if side == "on" and heldout:
                 rng_h = random.Random(seed + 1)
                 out[a][side]["heldout"] = [policy_text(sides.get("hs", pol), a, r["before"], r["event"], r["width"], rng_h)
                                            for r in dev_rows]
+            if side == "on" and heldout_chains:
+                out[a][side]["heldout_chains"] = _synth_chains(sides.get("hsc", sides.get("hs", pol)), a, chains,
+                                                               random.Random(seed + 2))
     return out
 
 
@@ -913,6 +1011,55 @@ FILLER_UNITS = {   # R5 addendum: (R(S-trace) of the screen, filler metrics, anc
 }
 
 
+REPORT_ONLY_UNITS = {   # revision 4: stage E4 is report-only. (policies as in SCENARIOS; two held-out-chain policies,
+    #                       each one policy for every arm or {arm: policy})
+    "rev4: K4_HS is report-only: perfect vs malformed held-out-surface chains give the identical rule outcome": (
+        {"dint": "copy", "strace": "perfect", "bbits": "noisy80"}, ("perfect", "malformed")),
+    "rev4: K4_HS is report-only in the surface-locked case: perfect vs copying held-out-surface chains, same outcome": (
+        {"dint": "t2like", "strace": ("perfect", "copy"), "bbits": "perfect_id_ignore_ood"}, ("perfect", "copy")),
+    "rev4: K4_HS is report-only when it reverses the in-surface K4 order (the in-surface winner copies on held-out chains)": (
+        {"dint": "perfect", "strace": "noisy80", "bbits": "copy"},
+        ({"dint": "copy", "strace": "perfect", "bbits": "perfect"}, "perfect")),
+}
+
+
+def _hsc_expected(pol: str, floors_: dict) -> float | None:
+    return {"perfect": 1.0, "malformed": 0.0, "copy": floors_["k4_exact"]["copy_s0"]}.get(pol)
+
+
+def report_only_units(dev_rows: list, chains: list) -> dict:
+    """Revision 4: the verdict, R, eligibility, ranking and wording never depend on stage E4. Each unit analyses the same
+    synthetic run twice, with different held-out-surface chain answers (and once without E4 at all), and requires an
+    identical rule outcome, while K4_HS and K4 - K4_HS are reported as expected."""
+    out = {}
+    for name, (pols, (h1, h2)) in REPORT_ONLY_UNITS.items():
+        base = {a: ({"off": "copy", "on": p[0], "hs": p[1]} if isinstance(p, tuple) else {"off": "copy", "on": p})
+                for a, p in pols.items()}
+        per_arm = {t: {a: (hp[a] if isinstance(hp, dict) else hp) for a in base} for t, hp in (("a", h1), ("b", h2))}
+        res = {}
+        for tag in ("a", "b"):
+            res[tag] = analyse(synth_outputs({a: {**v, "hsc": per_arm[tag][a]} for a, v in base.items()}, dev_rows, chains),
+                               dev_rows, chains)
+        res["none"] = analyse(synth_outputs(base, dev_rows, chains, heldout_chains=False), dev_rows, chains)
+        same = res["a"]["rule"] == res["b"]["rule"] == res["none"]["rule"]
+        rep = {t: res[t]["heldout_chains_report_only"]["arms"] for t in ("a", "b")}
+        k4hs_ok = all(rep[t][a]["K4_HS"] == _hsc_expected(per_arm[t][a], res[t]["floors"])
+                      for t in ("a", "b") for a in C.SCREEN_ARMS)
+        gap_ok = all(rep[t][a]["K4_minus_K4_HS"] == round(rep[t][a]["K4"] - rep[t][a]["K4_HS"], 4)
+                     and rep[t][a]["K4"] == res[t]["rule"]["metrics"][a]["K4"] for t in ("a", "b") for a in C.SCREEN_ARMS)
+        none_ok = all(v is None for v in res["none"]["heldout_chains_report_only"]["arms"].values())
+        ok = same and k4hs_ok and gap_ok and none_ok
+        out[name] = {"ok": ok, "verdict": verdict_string(res["a"]["rule"]), "identical_rule_outcome": same,
+                     "K4_HS_as_expected": k4hs_ok, "gap_equals_K4_minus_K4_HS": gap_ok,
+                     "no_E4_reports_none": none_ok, "R": res["a"]["rule"]["R"],
+                     "K4": {a: rep["a"][a]["K4"] for a in C.SCREEN_ARMS},
+                     "K4_HS": {t: {a: rep[t][a]["K4_HS"] for a in C.SCREEN_ARMS} for t in ("a", "b")},
+                     "heldout_chain_policies": per_arm}
+        print(f"  [{'PASS' if ok else 'FAIL'}] {name}: {out[name]['verdict']} either way; K4_HS {out[name]['K4_HS']}",
+              flush=True)
+    return out
+
+
 def _no_verdict_without_e3(dev_rows: list, chains: list) -> None:
     """Raises Refuse (the expected outcome) if analyse() gives NO_VERDICT to a 3-arm run whose outputs lack stage E3."""
     pols = {a: {"off": "copy", "on": "perfect"} for a in C.SCREEN_ARMS}
@@ -935,6 +1082,8 @@ def dry_run(dev_rows: list, chains: list) -> dict:
                                   "wording": res["rule"]["wording"]}
         out["ok"] &= ok
         print(f"  [{'PASS' if ok else 'FAIL'}] {name}: expected {expect}, got {v}", flush=True)
+    out["report_only_units"] = report_only_units(dev_rows, chains)
+    out["ok"] &= all(v["ok"] for v in out["report_only_units"].values())
     out["rule_units"] = {}
     for name, (m, expect) in RULE_UNITS.items():
         r = apply_rule(m)
@@ -981,10 +1130,14 @@ def dry_run(dev_rows: list, chains: list) -> dict:
         print(f"  [{'PASS' if refusals[name] else 'FAIL'}] {name}", flush=True)
     out["refusals"] = refusals
     out["ok"] &= all(refusals.values())
-    out["counts"] = {"scenarios": len(SCENARIOS), "rule_units": len(out["rule_units"]), "close_call_units": len(CLOSE_UNITS),
+    out["counts"] = {"scenarios": len(SCENARIOS), "report_only_units": len(REPORT_ONLY_UNITS),
+                     "rule_units": len(out["rule_units"]), "close_call_units": len(CLOSE_UNITS),
                      "filler_units": len(FILLER_UNITS), "refusals": len(refusals),
-                     "passed": sum(v["ok"] for k in ("scenarios", "rule_units", "close_call_units", "filler_units")
+                     "passed": sum(v["ok"] for k in ("scenarios", "report_only_units", "rule_units", "close_call_units",
+                                                     "filler_units")
                                    for v in out[k].values()) + sum(refusals.values())}
+    out["counts"]["total"] = (out["counts"]["scenarios"] + out["counts"]["report_only_units"] + out["counts"]["rule_units"]
+                              + out["counts"]["close_call_units"] + out["counts"]["filler_units"] + out["counts"]["refusals"])
     return out
 
 
@@ -994,10 +1147,31 @@ def rule_text() -> str:
     return doc[doc.index(RULE_HEAD):].rstrip() + "\n"
 
 
-RULE_PREFACE = """## What changed and why (revision 3, 2026-10-09)
+RULE_PREFACE = """## What changed and why (revision 4, 2026-10-09)
+
+Revision 4 was written before any `runs/t2bp/` output existed; no model was loaded and no model output was read to
+choose it. Revisions 1-3 are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*`, `SCREEN_RULE_rev3.*`). It makes exactly
+two changes to revision 3, both selected by the operator from the independent verifier's review:
+
+- **A corrected sentence (C4, amendment 4b).** Revision 3 said that revision 2's row-matched length "alone predicts
+  applicability perfectly" on the training rows. That figure was computed from the token count of the full trace
+  text, which contains the answer. Revision 2 actually used a fill of (trace-head tokens minus 3) units, decoded
+  before `after`. Computed from that fill length, the length predicts applicability with accuracy 0.749 on the
+  training rows (majority share 0.500), 0.837 on the 8-bit dev rows (0.600) and 0.813 on the out-of-range dev rows
+  (0.667). That is well above the majority share, so amendment 4b stands, but the prediction is not perfect. The
+  corrected sentence is in the C4 item below and in item (3) of the rule text.
+- **Held-out-surface chains, report-only (stage E4).** The 240 dev k=4 chains are also self-rolled out in the combined
+  held-out surface, adapter ON only. It is E3's surface, with the held-out event key order rotating by the chain's index
+  in the dev bank (E3 rotates by the row's index within its stratum). The analysis reports K4_HS and the gap K4 - K4_HS
+  per arm. E4 is descriptive: it enters neither R nor eligibility, and HS stays defined on E3's seven 8-bit one-step
+  strata. The screen still fits the 4.5 h turn cap (`GEN_PLAN.json`).
+- **Unchanged.** Everything else: R = (K4 + IAW + OOR + HS) / 4 with the in-surface K4, eligibility, R0-R5, the
+  tie-breaks, the close-call wording, the rows, the dev bank, the arms' answer formats and parsers, and the recipe.
+
+### Revision 3's changes (carried over; only the C4 sentence is corrected)
 
 Revision 3 was written before any `runs/t2bp/` output existed; no model was loaded and no model output was read to
-choose it. Revisions 1 and 2 are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*`).
+choose it.
 
 - **Why.** PREREG-3 returned STATUS: TRIGGER (DECISIONS R-PREREG-3, D-35, R16). The T2 ledger LoRA took the literal
   token 'void' as its no-op cue instead of the stated rule, and it failed on reordered JSON keys (0.37-0.47 vs 0.87-0.91
@@ -1017,7 +1191,8 @@ choose it. Revisions 1 and 2 are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*
   the close-call wording are unchanged. Per-factor held-out renderings are not run (they do not fit the planning budget).
 - **C4 / 5a (c) (amendment 4b).** The F-filler's fill length is a constant per action kind (26 units for the single
   prerequisite kind), at least the longest trace over the training and dev rows. Revision 2 matched the length to the
-  trace row by row, and on these training rows that length alone predicts applicability perfectly.
+  trace row by row, and on these training rows that fill length alone predicts applicability with accuracy 0.749,
+  against a majority share of 0.500.
 - **5a (b) (revision 2's open questions, answered by the operator; nothing changes).** Accepted as they were: the
   add=0 -> copy cue at 0.62 (descriptive; FC and FA guard it); strict A4 IAW for decision point 2 (the R11 union is
   reported); S-trace's cmp lists bit positions; B-bits writes the most significant bit first; out-of-range prompts change
@@ -1028,8 +1203,8 @@ choose it. Revisions 1 and 2 are kept (`SCREEN_RULE_rev1.*`, `SCREEN_RULE_rev2.*
 
 
 def rule_md() -> str:
-    return ("# Pre-stated screen rule (revision 3): T2b prerequisite representation screen (seed 0, surface-diversity "
-            "build)\n\n" + RULE_PREFACE + "\n## The rule (verbatim)\n\n"
+    return (f"# Pre-stated screen rule (revision {RULE_REVISION}): T2b prerequisite representation screen (seed 0, "
+            "surface-diversity build)\n\n" + RULE_PREFACE + "\n## The rule (verbatim)\n\n"
             "Copied verbatim from the docstring of `scripts/t2bp_analysis.py`, which implements it (`apply_rule`, "
             "`apply_filler`). Hashes of every frozen input: `SCREEN_RULE.json`.\n\n```\n" + rule_text() + "```\n")
 
@@ -1073,6 +1248,13 @@ REASONS = {
         "orders); a held-out-surface stage E3 (ON, paired by row) and HS in the ranking R = (K4 + IAW + OOR + HS) / 4; "
         "the F-filler's fill length is a constant per action kind (amendment 4b); eligibility, R0-R3, tie-breaks, "
         "close-call wording and R5's thresholds unchanged"),
+    4: ("operator-selected fixes from the independent verifier (2026-10-09), two changes only: (1) the reason given for "
+        "amendment 4b is corrected: revision 2's row-matched FILL length (trace-head tokens - 3) predicts applicability "
+        "with accuracy 0.749 on the training rows (majority 0.500), 0.837 on the 8-bit dev rows (0.600) and 0.813 on "
+        "the out-of-range dev rows (0.667), not 'perfectly' (that figure came from the full trace text, which contains "
+        "the answer); (2) a report-only stage E4 runs the 240 dev chains in the combined held-out surface (ON) and "
+        "reports K4_HS and K4 - K4_HS per arm; it enters neither R nor eligibility (HS stays on E3's one-step strata); "
+        "everything else unchanged"),
 }
 
 

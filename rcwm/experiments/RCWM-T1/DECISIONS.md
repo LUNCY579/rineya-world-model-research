@@ -663,3 +663,195 @@ Times are local (CDT). Entries are append-only.
     - **Before planning:** rerun the A0 anchor, and mint a fresh confirmation draw at the freeze.
     - **Runner:** RCWM writes `lbeam_run.py`; BWM drafts the prereg text.
   - **GPU:** about 1.7 h for 120 instances (T2 + OFF, fixed + W2 E12).
+- **R17 Retention suite dev selection (12:09, 2026-10-09).**
+  - **Run:** the Supa-only dev run (dev_20261121, 2,025 prompts) took 388 s under lease `rcwm-t1:retention`. `dev-select` ran once and wrote the create-only `docs/retention/DEV_SELECTION.json`.
+  - **Selected, 5 of 8 categories:**
+    - unit_conv, level 1 (Supa 0.68);
+    - pct_ratio, level 1 (0.52);
+    - kv_recall, level 3 (0.72);
+    - unknown_twin, level 2 (0.64; literal UNKNOWN on unanswerables 0.83, over-abstention 0.03);
+    - format_follow, level 1 (0.72).
+  - **Excluded,** with no level at ≥ 0.40:
+    - arith_word: 0.00–0.03 at every level, so Supa cannot do 2–4-operation integer word problems in this format;
+    - date_time: 0.08–0.19;
+    - count_sort: 0.09–0.39.
+  - **Consequence:** retention claims cover the 5 selected categories only. Multi-step arithmetic retention cannot be measured on this base, because there is nothing to retain. Every confirmation mints its own sealed draw at these levels.
+- **D-38 5a prerequisite representation screen: rule frozen and hook installed (2026-10-09 about 19:10).**
+  - **Rule:** revision 4, frozen by `t2bp_analysis.py --freeze-rule` before any `runs/t2bp` output existed. `docs/t2b/prereq/SCREEN_RULE.json` sha 530a9dbd… binds 26 inputs; `SCREEN_RULE.md` sha 0da45df5….
+  - **Design:**
+    - Surface-diversity build only (tags `sd_*`); arms D-int, S-trace and B-bits, seed 0, on the T2 recipe.
+    - Ranking: R = (K4 + IAW + OOR + HS)/4, with eligibility IAW ≥ 0.20, FC ≤ 0.25, FA ≤ 0.25, ID non-inferiority, and R0 instrument validity.
+    - Decision point 2 (STOP_P_TRAINING) applies if every arm is below 0.20 on int-add-wrong.
+    - A held-out-surface chain stage, E4, is report-only.
+    - A 4b-filler decode-compute control runs only if S-trace wins.
+  - **Path to freeze:**
+    - Finalisation wf_1cd4bf8f-573: independent verifier, minor issues.
+    - Pre-freeze fixes wf_a1647396-931: independent check, sound.
+    - The revision-2 filler-leak figures were corrected to 0.749 / 0.837 / 0.813, not 1.0. The 1.0 had been computed from the full trace text, which includes the answer.
+  - **Checks:** dry run 64/64, tiny test 83/83, data `--verify` with a fresh harvest (0 overlaps).
+  - **GPU:** 3.83 h in one turn at the observed rate, or 2 turns at the planning rate. The filler control, if triggered, adds one more turn (1.44 h).
+  - **Hook:** `scripts/queue_hooks/75_t2bp.sh` installed, identical to the draft (296874e0…). Number 70 is reserved for the joint PREREG-LB, so that it runs first once frozen.
+  - **When it runs:** only in a fresh chain. The live chain (relaunched at 12:03) globbed its hooks at start. It will be relaunched at the next safe point, when an RCWM step is waiting rather than holding the lease, after the 5b and LB kits are settled.
+  - **5b:** one more identification fix is under way before its freeze (wf_84e8f08d-166): an absolute predicate-accuracy bar on cond_sametens, and off-by-one boundary coverage.
+- **I-31 Second user restart (2026-10-09 18:38:14); recovered 22:02.**
+  - **Cause:** event 1074, a Start-menu restart; a clean shutdown.
+  - **State at the restart:**
+    - BWM's bundleD had held the lease since about 17:51 and was cut off after about 48 min.
+    - RCWM had only a waiter (`run_lik --arm supa`), which held no lease. `run_lik --arm sparse` had finished at 17:50 (rc 0). Nothing RCWM was lost.
+    - Two CPU workflows (the 5b identification fix, the PREREG-LB revise step) were also cut off by a usage limit. Both were resumed at about 22:05 with interruption notes.
+  - **Recovery:**
+    - 22:02: thermal watchdog relaunched.
+    - 22:02: fresh master chain launched. It picks up hook 75; its single waiter is the 5a screen (`rcwm-t1:t2b-prereq`).
+  - **Stale lock:** BWM's bundleD lock still lists pid 171840 and worker_pids [378032]. Both are verifiably dead, and no python process holds GPU memory.
+    - The vendored reclaim rule correctly refuses while worker_pids is non-empty. The lock is not removed by RCWM.
+    - BWM was asked at 22:04 to clear it under its protocol. Because BWM's turn was cut short, it was offered the next turn.
+  - **Stale lock cleared (22:05:27) on the user's explicit instruction.**
+    - **Checks first:** holder pid 171840 and worker 378032 dead; no compute process on the GPU.
+    - **Action:** the record was copied to `rineya-gpu-0.lock.stale-171840.bak` (hash-verified, same convention as the vendored reclaim), then removed.
+    - **Next turn:** BWM's relaunched waiter acquired a fresh lease at 22:05:30 (pid 32060, cap 4.5 h, release by about 02:35). That is the turn offered to BWM because its bundleD was cut short.
+    - **Check afterwards:** the backup holds only the stale record, and the live lock was written after it.
+    - **Queue:** RCWM's 5a screen is next in strict alternation.
+- **D-39 New peer RCX (complementary research session, RCI-001/RCM-001), boundary agreed (2026-10-09 about 22:15).**
+  - **RCX's study:** CPU-only rule-conditioned ledger execution. The rule is supplied in the prompt and varies: required-status sets, inverted rules, nonce words, counterfactual twins.
+    - Arms: answer-only, the D-34 trace, and the 4b filler.
+    - RCX writes only to its own branch and folder (`complementary/`, branch `research/rineya-complementary-intelligence-v1`), never to rcwm/, bwm/, tools/, main or this bundle.
+  - **RCWM answers:**
+    - RCWM has no rule-varying ledger arm planned. T2b 5a/5b only paraphrase the fixed rule, and register traces stay with 5b.
+    - Read-only, sha-pinned imports are allowed: `rcwmt/env.py` 92abb678… and `scripts/p3_common.py` 737d7984…. The I-28 rule applies (no `load_exclusions()`, never open HSKILL_CONFIRM_V2*).
+    - RCX avoids PREREG-3's 16 non-posted strings plus "posted", the 5a/5b held-out paraphrase and field variant #4, and our held-out key orders in anything trained on a Rineya model. Seeds 202612xx do not collide with RCWM's seeds (2026100x, 202610xx, 202611xx, 20261199, and PREREG-LB's 48-bit hash seed).
+    - Retention confirmations for RCX candidates are run by RCWM: a fresh sealed draw minted at run time, in an RCWM turn.
+  - **Resources:** RCX uses no GPU now. It never writes turn.json, waiting.* or .thermal_pause. Any GPU request goes through RCX's REQUESTS.md, both peers and the operator.
+- **D-40 PREREG-LB revision 2 ready for co-sign (2026-10-09 about 22:45).**
+  - **Build:** workflow wf_e3807215-cb6 (build, two adversarial reviews with minor issues, revise; the revise step resumed after the usage-limit cut).
+    - Files: draft `docs/ledger_beam/PREREG_LB_DRAFT.md` 26c62144…, `scripts/lbeam_run.py` 55a0bd0f…, `lbeam_analysis.py` e3b0e9e0…, `lbeam_test_run.py` 137c7e91…, hook draft 098cb131….
+    - Checks: 153 CPU checks; pre-freeze 21/21 on the real root.
+  - **Content:**
+    - BWM's draft (b2896ba3…) is included faithfully. RCWM amendments (a)–(f) are inline.
+    - Wording: 12 mechanical branches over all 32 outcome combinations, with seven limits always rendered.
+    - Draw seed by commit-reveal: BWM commits to sha256(salt) in its co-sign and reveals the salt at the freeze.
+    - Co-sign enforcement: the freeze checks BWM's quoted draft sha and the commit. `--approval` must cite a D-entry.
+  - **Power** (simulated F, N = 180): co-primary 1 is about 1.0; co-primary 2 is about 0.74–0.92 (central/pessimistic); near-oracle 0.27 central, 0.95 optimistic.
+  - **GPU:** 5.5–7.4 h over 2 RCWM turns; the primary alone takes one turn.
+  - **Open questions:** RCWM's defaults (Q1–Q10) were sent to BWM and stand unless BWM objects.
+  - **Next:** BWM review and co-sign, freeze, hook `70_lbeam.sh`, fresh chain at a waiting point.
+- **D-41 PREREG-LB co-signed by BWM and frozen (2026-10-09 about 23:15).**
+  - **Mandate:** the RCWM-T1 session, under the user's standing go-ahead of 2026-10-08 ("proceed with your recommendations whenever … ready"). PREREG-LB is joint roadmap item 3 (D-32).
+  - **BWM co-sign (verbatim):** "BWM-001 DECISIONS D-59 (2026-10-09) PREREG_LB_DRAFT.md sha256 26c62144d89dde15e7d18ad119f9361ce6f93562bd3d358f26808e7aefbd788d commit:0b6b5ea92bd193a3bf75866a645be1abd50f99a991e01d8b852701c3e13de8cf".
+    - BWM accepted all Appendix B defaults (Q1–Q10).
+    - BWM committed to keep `blocks_planner.py` unchanged (18a5f22b…) until the analysis has run, and to make no import-breaking edits to `bwmn/__init__.py`, `blocks.py` or `lm.py`.
+  - **Salt:** revealed by BWM at about 23:12 (39 characters). sha256(salt) equals the commit. The draw seed is derived by the registered rule at the freeze.
+  - **State before the freeze:** no `runs/lbeam`. No agent was writing to data/ (the 5b agent finished at about 23:05). All pinned files matched their recorded sha256.
+  - **Executed (23:12–23:14):**
+    - `lbeam_run.py --freeze`: frozen at 23:12:28. PREREG_LB.md sha 0f414cbc…, PREREG_LB_FREEZE.json sha 1b7e7a54….
+    - Confirmation draw: 180 instances, sealed sha 4fff0738…, not inspected. Exclusion union: 315,081 payloads from 37 sources.
+    - `--verify` rc 0.
+    - Hook `scripts/queue_hooks/70_lbeam.sh` installed, identical to the draft (098cb131…).
+    - The chain was stopped while the 5a waiter was only waiting (BWM held the lease) and relaunched at 23:13. The single RCWM waiter is now `rcwm-t1:lbeam` (stages A0, G1–G4, C1); 5a (75) follows. The 5a waiter's stale run lock is reclaimed automatically by the runner (pid and create-time check).
+- **D-42 5b identification: final design before freeze (2026-10-09 about 23:20).**
+  - **Why a sixth revision:** the revision-5 check found that the predicate-gated strata only compare same-decade, same-length numbers. So within-decade-correct heuristics pass G1: lexicographic string comparison, digit sum, units-only, and isolated distance exceptions.
+  - **Decision:** no more piecemeal gates. Revision 6 (workflow wf_c9e8b88d-426) adds four things:
+    - **(1) An explicit extended shortcut family H.**
+    - **(2) One adversarially sampled, predicate-gated stratum `cond_adv`** (n = 100, branch-balanced). Every member of H is wrong on at least 40% of its rows. G1 gains an absolute trace-predicate clause, ≥ 0.80 on both surfaces.
+    - **(3) A report-only shortcut-agreement analysis.** It flags `SHORTCUT_CONSISTENT` if any member of H matches the trained trace's decisions as well as the true rule does.
+    - **(4) Scoped rule text.** It states that G1 excludes H, not every conceivable heuristic, and this limit is always quoted.
+  - **Reason:** identification against every possible heuristic is impossible on a finite bank. The honest design names the family it excludes and reports agreement afterwards.
+- **R18 BWM roadmap item #1 final (BWM P-10, reported 2026-10-10 about 03:10); RCWM records only.**
+  - **Frozen Blocksworld B2 results, each set run once and VAL-checked, S-beam vs S-direct:**
+    - hard: 73/110 vs 5/110 (+68/−0, p 7e-21);
+    - mirror: 61/110 vs 6/110 (+55/−0, p 6e-17);
+    - PlanBench-602: 602/602 vs 584/602 (+18/−0, p 8e-6).
+  - **Mirror flag:** raised. Hard − mirror = +10.9 pp against a registered limit of 10 pp. BWM's reweighting to explain it is post-hoc.
+  - **Vault:** BWM added a new folder `Rineya_Published_Cores/Rineya-Titan-Sparse-BWM-Blocksworld-0.1.0-devfreeze` (10-10 03:05), with no CATALOG or REGISTRY edits and no Hugging Face.
+    - RCWM verified that its pinned cores are unchanged: Titan-Sparse model.safetensors a28629c9…, CATALOG.json and MODEL_REGISTRY.md untouched.
+    - RCWM asked BWM which user approval covers the vault copy, and will report the folder to the user.
+  - **Vault copy reverted (BWM D-60).** BWM confirmed the user had not explicitly approved the vault copy; its D-49 covers a local devfreeze package only.
+    - BWM checked with `diff -r` that the vault folder was byte-identical to its local release folder, then deleted the vault folder.
+    - RCWM verified that no BWM folder remains in `Rineya_Published_Cores`.
+    - BWM is asking the user directly whether the package should go into the vault.
+- **D-43 5b design approved at revision 6, with a wording-only revision 7 before the freeze (2026-10-10 about 05:00).**
+  - **Revision 6** (workflow wf_c9e8b88d-426; independent check: minor issues):
+    - Extended shortcut family H: 3,519 predicates, in the new `scripts/t2br_shortcuts.py`.
+    - Adversarially sampled stratum `cond_adv` (n = 100, seed 20261116) with an absolute trace-predicate clause (≥ 0.80, both surfaces).
+    - Report-only `SHORTCUT_CONSISTENT` agreement analysis.
+  - **Approved deviation:** the target "every member of H wrong on ≥ 40 of 100 rows" is provably infeasible. Five members of H have pairwise-disjoint error sets, and the exceptions at d = −4…−2 need more ok-false rows than a balanced 100-row stratum has. The closest-feasible design is accepted.
+  - **Enumeration result:** exactly one member of H passes G1 under every plain baseline, the isolated exception "x > t or x == t − 4". It is flagged by the agreement analysis whenever it matches.
+  - **Revision 7 (workflow running), wording only:**
+    - The always-quoted limits will name the natural survivors outside H, and say that cond_adv catches its targets only at narrow margins.
+    - The overall headline will carry the SHORTCUT_CONSISTENT flag.
+  - **GPU:** 4.06 h observed (one turn) or 4.99 h at the planning rate (2 turns). Every gating stage runs in turn 1.
+- **R-PREREG-LB (05:19, 2026-10-10): T2 ENABLES PLANNING, BELOW THE NEAR-ORACLE BAR (on its training surface). Branch YES.**
+  - **Run:** one RCWM turn, lease acquired 02:06:31, stages A0, G1, G2, G3, G4 in 3.2 h. C1 (CPU) ran at the start of the next call, at 05:19:00, and wrote DONE.json. `lbeam_analysis.py` ran once at 05:19:03. Outputs: `PREREG_LB_RESULTS.json` sha 887b4c88…, `.md` sha a563ddea….
+  - **Instrument:**
+    - The A0 anchor passed with states and texts 1.0 for OFF and ON.
+    - Batch invariance was 1.0.
+    - 0 refused keys in every arm, no orphaned stages, and no drift in BWM's modules.
+  - **Co-primaries:**
+    - Co-primary 1 (all 180): T2 127/180 = 0.706 vs OFF 14/180 = 0.078. Difference +0.628, discordant 113/0, Holm p < 1e-4. PASS.
+    - Co-primary 2 (52 needs-lookahead): T2 23/52 = 0.442 vs OFF 3/52 = 0.058. Difference +0.385, discordant 20/0, Holm p < 1e-4. PASS.
+  - **Key secondary:** T2/ORACLE = 0.794 [0.73, 0.855] (ORACLE 0.889). The near-oracle bar (≥ 0.80 with lower bound ≥ 0.70) is NOT met, just short.
+  - **Report-only:**
+    - T2/ORACLE on needs-lookahead instances: 0.719 [0.55, 0.87].
+    - W4E24 point: T2 0.744 vs ORACLE 0.928 (ratio 0.802).
+    - T2 vs IGNORE_STATUS (exact arithmetic without the status rule): 0.706 vs 0.350, discordant 80/16. T2's status handling, not its arithmetic alone, carries the planning.
+    - Verified-plan precision: T2 0.952 vs ORACLE 1.000. About 5% of T2-verified plans fail under env.step, which is imagination error.
+    - Void-twin exposure: T2 0/53 failures applied a void as posted, OFF 50/166.
+    - Fixed-candidate selection: T2 0.867, OFF 0.233.
+    - Success falls with optimal depth for T2: 0.83 at d* = 2 down to 0.58 at d* = 6. ORACLE: 0.94 to 0.86.
+  - **D-35 surface audit:** with held-out combined rendering, T2 solves 5/180 = 0.028 vs 127/180 canonical (difference −0.678). Planning is surface-dependent. This matches PREREG-3: the planning gain exists only on T2's training surface.
+  - **Consequence:**
+    - A near-oracle one-step world model (PREREG-2) does turn into goal-reaching planning under search. That includes instances where greedy descent fails: T2 gains +0.385 there over OFF, with no instance going the other way.
+    - The gap to ORACLE (0.794) and the depth decay quantify how imagination error compounds.
+    - Surface diversification (T2b, D-34/D-35) is the precondition for any claim beyond the canonical frame.
+    - BWM re-scores from the per-instance arrays and co-signs the report.
+  - **Co-signed by BWM (BWM D-61) after an independent re-score.**
+    - **Method:** BWM's own code, with none of RCWM's analysis code imported. Script `native_v1/scripts/lb_rescore.py` b1f289ec…, output `runs/LB_RESCORE/LB_RESCORE.json` 2ff7b224…. It read the sealed draw 4fff0738… and the episode files read-only.
+    - **Agreement:** every registered number matches.
+      - Success counts: T2 127, OFF 14, ORACLE 160, IGNORE_STATUS 63, T2 W4E24 134, ORACLE W4E24 167.
+      - The 52 needs-lookahead instances are identical.
+      - CP1 +113/−0 (Holm p 3.85e-34); CP2 +20/−0 (Holm p 1.9e-6).
+      - Ratio 0.794 [0.730, 0.855]; branch YES.
+      - The rendered strings are the registered ones.
+    - **Co-sign notes, report-only:**
+      - The W4E24 ratio of 0.802 is not a near-oracle claim, because the bar is defined on the primary configuration.
+      - select_fixed's 0.867 is not comparable with beam success: its candidate set contains the optimum.
+      - Verified-plan precision of 0.952 means about 1 in 20 imagined verifications fails under the true dynamics.
+      - The needs-lookahead share was 29%, not the ~36% expected from dev. It was reported, not chosen.
+      - The surface audit keeps the claim training-surface-only.
+- **D-44 5b register trace screen: rule revision 7 approved and frozen (2026-10-10 05:33:14).**
+  - **Mandate:** the RCWM-T1 session, under the user's standing go-ahead of 2026-10-08. This is roadmap item 3 / joint 5b.
+  - **Revision 7** (workflow wf_70af8dc5-50e; independent check: sound) is wording-only over revision 6 (D-43). Go-rule sha 1458d54d….
+    - The always-quoted limits now state that G1 excludes the members of H except the d = −4 exception.
+    - Natural heuristics outside H pass G1: 42 of 45 tested do, against every plain baseline. Examples:
+      - isolated exceptions at |d| ≥ 5;
+      - three-digit-threshold slips;
+      - a circular comparison;
+      - guessing on the far rows.
+    - cond_adv catches its targets only at narrow margins (wrong on 21 or 33 of 100 rows).
+    - The overall headline carries the SHORTCUT_CONSISTENT flag.
+  - **Reading of any GO:** "trace supervision beats plain and filler on these strata". It is NOT "the comparison rule was identified". A rule claim would need a sealed confirmation with a different instrument.
+  - **GPU:** about 4.06 h observed (one turn), or 2 turns at the planning rate.
+  - **Executed (05:33):**
+    - `t2br_run.py --freeze`: SCREEN_FREEZE.json sha 05ec83f0…; `--verify` rc 0.
+    - Hook `scripts/queue_hooks/80_t2br.sh` installed, identical to the draft (5b6d7249…).
+    - The chain is relaunched at the 5a waiter's waiting point, so the hook order is 70 (LB, done) → 75 (5a) → 80 (5b).
+- **I-32 User reboot (2026-10-10, boot 09:24:04); recovered 09:26–09:28.**
+  - **State at the reboot:**
+    - BWM's bundleE (B3 search distillation) had held the lease since about 05:19, about 4.1 h of its 4.5 h cap.
+    - RCWM had only the 5a waiter, which never started. Nothing RCWM was lost.
+  - **Integrity after the reboot:**
+    - Every confirmed result and freeze hash-verifies: PREREG-2, PREREG-3, PREREG-LB, L1, the 5a rule and the 5b freeze.
+    - `lbeam_run.py --verify` and `t2br_run.py --verify` pass.
+    - DECISIONS and REPORT are intact and LF-only. The repo is clean at ea1f36c.
+  - **Recovery:**
+    - 09:26: thermal watchdog relaunched.
+    - The master chain was relaunched; its single waiter is 5a.
+    - BWM's stale bundleE lock (pid 63900, worker 247728, both dead) is left to BWM. RCWM asked BWM to clear it and proposed that RCWM's 5a take the next turn, since bundleE had run most of a turn.
+    - A joint plan was sent to BWM for amendment: 5a/5b screens; new T2b-ledger, a surface-diversified ledger adapter re-tested on PREREG-3's map and PREREG-LB's held-out surface; B3 and BWM items; PREREG-4 at the end.
+- **D-45 Joint plan after the 2026-10-10 reboot (agreed with BWM by message).**
+  - **Plan document:** `docs/roadmap/JOINT_PLAN_2026-10-10.md`.
+  - **Turn order:** 5a (running since 09:27), BWM B3 resume, 5b, BWM (B3 remainder, then the D-54 key-order retrain), RCWM T2b-ledger, BWM item 7 seeds and item 9, joint PREREG-4.
+  - **New RCWM item, T2b-ledger:**
+    - A surface-diversified ledger adapter.
+    - Its sealed confirmation covers four things: PREREG-3's out-of-range map on fresh held-out surfaces, non-inferiority to T2 s0 in distribution, the 5c retention guard, and LB-style planning on the held-out surface (today 5/180).
+  - **Shared wording with BWM D-54:** "generalises to unseen X" vs "trigger widened" vs "partial".
+  - **Stale lock:** BWM cleared its own stale bundleE lock under its protocol at about 09:27 and wrote turn.json (last = bwm).

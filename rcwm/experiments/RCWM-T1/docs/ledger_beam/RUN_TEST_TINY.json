@@ -1,0 +1,272 @@
+{
+ "part": "tiny",
+ "ok": true,
+ "n_checks": 44,
+ "n_failed": 0,
+ "checks": [
+  {
+   "check": "first call: every GPU stage recorded under the one lease; C1 pending (it never runs in a call that used the GPU): exit 5, no DONE.json",
+   "ok": true,
+   "detail": "(5, ['A0', 'G1', 'G2', 'G3', 'G4'])"
+  },
+  {
+   "check": "second call: C1 runs first with no lease, no model load and no CUDA use, then DONE.json (exit 0); every stage recorded; not marked registered",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "check": "exactly one lease, label 'rcwm-t1:lbeam'; resource wait before the load; unload at the end",
+   "ok": true,
+   "detail": "['lease', 'wait', 'load', 'unload', 'release']"
+  },
+  {
+   "check": "A0 anchor: OFF (disable_adapter) and ON reproduce single-adapter references (states AND texts 1.0)",
+   "ok": true,
+   "detail": "{'off': {'n': 8, 'identical_states': 1.0, 'identical_texts': 1.0}, 'on': {'n': 8, 'identical_states': 1.0, 'identical_texts': 1.0}}"
+  },
+  {
+   "check": "A0 batch invariance: one generation call batched vs one per key (batch 1), states identical, recorded",
+   "ok": true,
+   "detail": "{'T2': {'identical_states': 1.0, 'identical_texts': 1.0, 'generation_calls_batched': 1, 'generation_calls_batch1': 16, 'model_generate_calls_batched': 1, 'model_generate_calls_batch1': 16, 'max_prompts_per_model_generate_batch1': 1}, 'OFF': {'identical_states': 1.0, 'identical_texts': 1.0, 'generation_calls_batched': 1, 'generation_calls_batch1': 16, 'model_generate_calls_batched': 1, 'model_generate_calls_batch1': 16, 'max_prompts_per_model_generate_batch1': 1}}"
+  },
+  {
+   "check": "C1 (ORACLE / IGNORE_STATUS) ran after A0 passed, after the lease release, flagged outside the lease and CUDA-free",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "provenance records only planned generation counts for planning stages; the turn records the cap, the start check, the attempts and the hashes of every loaded BWM module (blocks_planner.py at its pin)",
+   "ok": true,
+   "detail": "{'A0': [0], 'G1': [0], 'G2': [0], 'G3': [0], 'G4': [0], 'C1': ['cpu']}"
+  },
+  {
+   "check": "the analysis validates the tiny run in fixture mode and computes the decision (all answers unparseable: T2 = OFF = 0 successes)",
+   "ok": true,
+   "detail": "NO: T2 IS NOT SHOWN TO PLAN BETTER THAN OFF"
+  },
+  {
+   "check": "a rerun after DONE is a no-op (exit 0, no lease, files unchanged)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "stub run exits 5 then 0; canonical T2 (trigger-level) == ORACLE episodes at W2 E12 and W4 E24 and in select_fixed (statuses are posted / void only); OFF (status-blind) == IGNORE_STATUS",
+   "ok": true,
+   "detail": "[5, 0]"
+  },
+  {
+   "check": "the D-35 audit arm (void rendered 'cancelled', keys reversed, word names) with the trigger-level stub reproduces IGNORE_STATUS's episodes, not ORACLE's",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "analysis of the stub run: T2 == ORACLE (ratio 1.0, success 0.85 and needs-lookahead 0.58 as in the kit's ORACLE sizing), OFF == IGNORE_STATUS (0.283), both co-primaries PASS -> YES_NEAR",
+   "ok": true,
+   "detail": "{'branch': 'YES_NEAR', 'cp1': {'t2_success': 102, 'off_success': 34, 'delta': 0.5666666666666667, 'p_holm': 1.3552527156068805e-20}, 'cp2': {'n': 43, 't2_success': 25, 'off_success': 7, 'delta': 0.4186046511627907, 'p_holm': 7.62939453125e-06}, 'ratio': 1.0, 'audit': 'surface-dependent (a significant drop off the training surface)', 'ratio_needs_lookahead': 1.0, 't2_vs_ignore_status': {'b_t2_only': 68, 'c_off_only': 0, 'p_raw': 6.776263578034403e-21}}"
+  },
+  {
+   "check": "analysis report-only metrics: void-twin exposure ORACLE 0, OFF (status-blind) > 0 (applied as posted and not a no-op); the audit reads surface-dependent; refused keys 0 for every exact-equivalent arm",
+   "ok": true,
+   "detail": "{'eps:T2:W2E12': 0.0, 'eps:OFF:W2E12': 0.802, 'fixed:T2': None, 'fixed:OFF': 1.0, 'eps:T2:W4E24': 0.0, 'eps:T2@heldout_combined:W2E12': 0.802, 'eps:ORACLE:W2E12': 0.0, 'eps:ORACLE:W4E24': 0.0, 'eps:IGNORE_STATUS:W2E12': 0.802, 'fixed:ORACLE': None, 'fixed:IGNORE_STATUS': 1.0}"
+  },
+  {
+   "check": "report-only additions: T2/ORACLE on the needs-lookahead stratum (1.0 here), T2 vs IGNORE_STATUS, the co-primaries' discordant pairs by d* (summing to b and c), the instrument record",
+   "ok": true,
+   "detail": "{'la': 1.0}"
+  },
+  {
+   "check": "the mechanical render contains the headline, the limits, every arm row and the instrument block",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the uninterrupted reference run completes in two calls (5, then 0)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a crash propagates out of run_main (the interpreter's exit 1: the hook's one retry), leaves A0 and G1 recorded, G2 partial, no C1, no STOPPED.json, the lock released",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the resume orphans the partial G2 (never deleted, recorded), runs C1 BEFORE its lease, re-runs A0 first (anchor AND batch invariance, both recorded and passing), runs G2-G4, completes; G2's failed attempt is counted",
+   "ok": true,
+   "detail": "['G2', 'G3', 'G4']"
+  },
+  {
+   "check": "the resumed run's outputs equal the uninterrupted run byte for byte (episodes, caches, anchor rows)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the analysis accepts the resumed run (re-check recorded for the resumed turn; caches extend per arm) and lists the orphaned stage in the instrument record",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "nothing fits the cap: every GPU stage deferred, exit 5, no model load, nothing generated, no C1; the turn is counted as no progress (1)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the next turns complete (5: C1 pending, then 0), reset the no-progress count and equal the uninterrupted run",
+   "ok": true,
+   "detail": "[5, 0]"
+  },
+  {
+   "check": "mid-run deferral at a stage boundary: A0 and G1 run, G2-G4 deferred (exit 5); C1 waits for the next call",
+   "ok": true,
+   "detail": "['G2', 'G3', 'G4']"
+  },
+  {
+   "check": "the resumed call runs C1 before its lease, re-runs A0 (anchor + batch invariance) before G2, completes, equals the uninterrupted run",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "stall (an A0 measured at 1.2 h, registered 180-instance estimates): turn 1 runs A0 and defers G1 (5); the next turns defer on the MEASURED A0 without loading the model; the second turn without a recorded stage stops (3, persisted, no verdict). One model load in all",
+   "ok": true,
+   "detail": "([5, 5, 3], \"[lbeam] no stage was recorded in 2 consecutive turns (deferred ['G1', 'G2', 'G3', 'G4']): stop (deviation policy; a cap \")"
+  },
+  {
+   "check": "an anchor failure stops (exit 3, STOPPED.json persisted, no verdict) before ANY planning output (no primary/ fixed/ w4e24/ audit/ cpu/ dirs, no batch-invariance run)",
+   "ok": true,
+   "detail": "[lbeam] ANCHOR FAILED {'n': 8, 'identical_states': 0.0, 'identical_texts': 1.0} {'n': 8, 'identical_states': 1.0, 'ident"
+  },
+  {
+   "check": "after the stop, STOPPED.json refuses every rerun (exit 3, not persisted again: the record is unchanged)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a batch-invariance failure (answers depend on batch composition) stops (exit 3, persisted, no verdict) before any planning output; batch_invariance.json records pass false",
+   "ok": true,
+   "detail": "{'T2': {'identical_states': 0.8125, 'identical_texts': 0.8125, 'generation_calls_batched': 1, 'generation_calls_batch1': 16, 'model_generate_calls_batched': 0, 'model_generate_calls_batch1': 0, 'max_prompts_per_model_generate_batch1': 0}, 'OFF': {'identical_states': 0.8125, 'identical_texts': 0.8125, 'generation_calls_batched': 1, 'generation_calls_batch1': 16, 'model_generate_calls_batched': 0, 'model_generate_calls_batch1': 0, 'max_prompts_per_model_generate_batch1': 0}}"
+  },
+  {
+   "check": "with STOPPED.json moved aside, the failed batch_invariance.json still refuses the run",
+   "ok": true,
+   "detail": "the A0 batch_invariance.json check failed in an earlier turn (deviation policy: investigate, log)"
+  },
+  {
+   "check": "a failed A0 re-check on a resumed turn (after C1 ran before the lease) stops (exit 3, persisted) before any planning stage; RECHECK_FAILED_*.json written; G2-G4 never run; A0, G1 and C1 recorded and unchanged: the stop is verdict-eligible",
+   "ok": true,
+   "detail": "[lbeam] A0 RE-CHECK FAILED (anchor pass False, batch invariance None); stop before any planning (deviation policy)"
+  },
+  {
+   "check": "the analysis renders the verdict of the verdict-eligible stop from A0, G1 and C1, with G2, G3 and G4 'not evaluable' (not run: stopped), mechanically; the failed re-check is in the instrument record",
+   "ok": true,
+   "detail": "Not evaluable (report-only stages that are not recorded; the branch needs only A0, G1 and C1): G2 (select_fixed T2 and OFF), not run: the run ended by a deterministic stop after A0, G1 and C1 were recorded; G3 (T2 at enum W4 E24), not run: the run ended by a deterministic stop after A0, G1 and C1 were recorded; G4 (the D-35 audit, T2 under heldout_combined), not run: the run ended by a deterministic stop after A0, G1 and C1 were recorded."
+  },
+  {
+   "check": "G3 (report-only) crashes twice: the third call abandons it (not evaluable), runs G4 and writes DONE.json listing G3 as not evaluable (calls: crash, crash, 0)",
+   "ok": true,
+   "detail": "['crash', 'crash', 0]"
+  },
+  {
+   "check": "the analysis renders G3 'not evaluable' (abandoned after 2 failed attempts), no W4 E24 line, and the same branch as the complete run (the branch needs only A0, G1 and C1)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "G1 (core) failing three times: the fourth call stops (exit 3, persisted, no verdict: G1 not recorded)",
+   "ok": true,
+   "detail": "['crash', 'crash', 'crash', 3]"
+  },
+  {
+   "check": "the analysis refuses the core-stage stop",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a recorded output whose hash changed stops the job (exit 3, persisted, not verdict-eligible: a recorded output changed)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a Titan-Sparse fingerprint mismatch stops before any generation (exit 3, persisted)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "runtime drift after the load stops before any generation (exit 3, persisted); the lease is released",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a live run lock refuses (exit 3, not persisted); a stale one is reclaimed and the run completes",
+   "ok": true,
+   "detail": "[5, 0]"
+  },
+  {
+   "check": "one-waiter rule: a live RCWM waiter or holder refuses (not persisted; no lease, nothing written)",
+   "ok": true,
+   "detail": "[lbeam] another RCWM job waits for the GPU lease (rcwm-t1:other, pid 213132): one-waiter rule (R14). Start PREREG-LB only when no other RCWM GPU job is running or waiting (never next to a live master chain) | [lbeam] another RCWM job holds the GPU lease (rcwm-t1:other, pid 213132): one-waiter rule (R14). Start PREREG-LB only when no other RCWM GPU job is running or waiting (never next to a live master chain)"
+  },
+  {
+   "check": "one-waiter rule: a dead RCWM marker and a live BWM holder do not refuse",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "main() (the registered job) on the real, unfrozen root exits 3 and persists nothing (no runs/lbeam)",
+   "ok": true,
+   "detail": "3"
+  },
+  {
+   "check": "the analysis refuses: a changed output (hash), a missing DONE.json, a provenance edited after DONE (batch invariance), DONE.json and STOPPED.json together, a STOPPED.json that is not verdict-eligible, a verdict-eligible stop whose provenance changed afterwards, a C1 run not recorded CUDA-free; and refuses a registered analysis of an unregistered run",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a later cache that does not extend the earlier stage's entries is detected (F must be the first computed answer)",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "numbers": {
+  "stub_dev_analysis": {
+   "branch": "YES_NEAR",
+   "cp1": {
+    "t2_success": 102,
+    "off_success": 34,
+    "delta": 0.5666666666666667,
+    "p_holm": 1.3552527156068805e-20
+   },
+   "cp2": {
+    "n": 43,
+    "t2_success": 25,
+    "off_success": 7,
+    "delta": 0.4186046511627907,
+    "p_holm": 7.62939453125e-06
+   },
+   "ratio": 1.0,
+   "audit": "surface-dependent (a significant drop off the training surface)",
+   "ratio_needs_lookahead": 1.0,
+   "t2_vs_ignore_status": {
+    "b_t2_only": 68,
+    "c_off_only": 0,
+    "p_raw": 6.776263578034403e-21
+   }
+  },
+  "peak_rss_mb": 876.2,
+  "seconds": 131.8
+ },
+ "code_sha256": {
+  "scripts/lbeam_run.py": "55a0bd0fb8e2af0112b8485ae5f8fc858c56508f4293d456bc24802d0c1efa5c",
+  "scripts/lbeam_analysis.py": "e3b0e9e0baaf23f183218fda57c1e4855d6db80deb9ca9db5a51d3753dafbf7e",
+  "scripts/lbeam_test_run.py": "137c7e919b66ba603a3164fe9c3cadfae3ea2f1f2f7bc8cba4f9d2fe4c30e7aa",
+  "scripts/lbeam_f.py": "9a76562c2739df3254a650154acde41fe2052173b2f35556e5b75a7728680b6f",
+  "scripts/lbeam_problems.py": "2353e2fc846fac5ced11cfc5420bd60b6e9e50cf3399e9299974b3921a09465e",
+  "scripts/lbeam_proposer.py": "6c555d2e46db8a279541839a54b82d6e765f1e8bc438f735beb3ef30b9564881"
+ },
+ "bwm_blocks_planner_sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+ "draft_sha256": "26c62144d89dde15e7d18ad119f9361ce6f93562bd3d358f26808e7aefbd788d",
+ "hook_draft_sha256": "098cb1311bd9d5352b042a4e84dcabc606df6209fd9429a60ee4b543d27102ff",
+ "torch_imported": true,
+ "peak_rss_mb": 876.2,
+ "seconds": 143.3,
+ "written_utc": "2026-10-10T03:44:52Z",
+ "note": "CPU only; tiny random Qwen3 + LoRA stand-ins; no real model, no GPU, no lease"
+}

@@ -28,35 +28,35 @@
  },
  "seed": 0,
  "train_variant": "sd",
- "go_rule_revision": 3,
+ "go_rule_revision": 7,
  "side_decode_factor": {
   "E1": {
    "off": 1.0,
    "plain": 1.0,
-   "trace": 2.4188,
-   "filler": 2.4817
+   "trace": 2.4897,
+   "filler": 2.7368
   },
   "E1H": {
    "off": 1.0,
    "plain": 1.0,
-   "trace": 2.6181,
-   "filler": 2.6794
+   "trace": 2.6801,
+   "filler": 2.9374
   },
   "E2": {
    "off": 1.0,
    "plain": 1.0,
-   "trace": 2.4188,
-   "filler": 2.4817
+   "trace": 2.4897,
+   "filler": 2.7368
   }
  },
  "mean_target_tokens_dev": {
-  "plain": 15.65,
-  "trace": 39.28,
-  "filler": 40.32
+  "plain": 15.64,
+  "trace": 40.43,
+  "filler": 44.54
  },
  "mean_prompt_tokens": {
-  "E1": 142.83,
-  "E1H": 182.17
+  "E1": 142.95,
+  "E1H": 182.27
  },
  "train": {
   "plain": {
@@ -75,7 +75,7 @@
    "rows": 750,
    "row_visits": 3040,
    "epochs": 4.053,
-   "tokens": 606824
+   "tokens": 615944
   }
  },
  "t2_reference": {
@@ -101,8 +101,8 @@
    "stage": "T_filler",
    "what": "train filler arm",
    "generations_max": 0,
-   "projected_s_planning": 2548.8,
-   "projected_s_observed": 2548.8
+   "projected_s_planning": 2585.3,
+   "projected_s_observed": 2585.3
   },
   {
    "stage": "A0",
@@ -113,27 +113,27 @@
   },
   {
    "stage": "E1",
-   "what": "1100 one-step dev rows (verbatim frame) x OFF / plain / trace / filler",
-   "generations_max": 4400,
-   "projected_s_planning": 2811.3,
-   "projected_s_observed": 1997.5
+   "what": "1380 one-step dev rows (verbatim frame) x OFF / plain / trace / filler",
+   "generations_max": 5520,
+   "projected_s_planning": 3693.5,
+   "projected_s_observed": 2624.4
   },
   {
    "stage": "E1H",
-   "what": "400 primary dev rows, combined HELD-OUT surface x OFF / plain / trace / filler",
-   "generations_max": 1600,
-   "projected_s_planning": 1081.1,
-   "projected_s_observed": 768.2
+   "what": "680 primary + identification dev rows, combined HELD-OUT surface x OFF / plain / trace / filler",
+   "generations_max": 2720,
+   "projected_s_planning": 1918.5,
+   "projected_s_observed": 1363.1
   },
   {
    "stage": "E2",
    "what": "384 k=4 dev chains x OFF / plain / trace / filler",
    "generations_max": 6144,
-   "projected_s_planning": 3925.6,
-   "projected_s_observed": 2789.3
+   "projected_s_planning": 4111.1,
+   "projected_s_observed": 2921.0
   }
  ],
- "total_generations_max": 12976,
+ "total_generations_max": 15216,
  "model_loads": 4,
  "stage_rule": "no stage starts within 0.5 h of the cap; a stage starts only if 1.25 x its estimate fits (checked before AND after the resource / thermal wait that precedes each model load); eval starts only if A0 + the next eval stage fits; a turn that evaluates after an earlier A0 re-anchors first; --cap-h above 4.5 is refused",
  "turns_at_planning_rate": [
@@ -146,14 +146,14 @@
     "E1",
     "E1H"
    ],
-   "projected_h": 3.24
+   "projected_h": 3.73
   },
   {
    "stages": [
     "A0 (re-anchor)",
     "E2"
    ],
-   "projected_h": 1.21
+   "projected_h": 1.26
   }
  ],
  "turns_at_observed_rate": [
@@ -167,21 +167,33 @@
     "E1H",
     "E2"
    ],
-   "projected_h": 3.68
+   "projected_h": 4.06
   }
  ],
- "projected_gpu_h_planning": 4.45,
- "projected_gpu_h_observed": 3.68,
+ "projected_gpu_h_planning": 4.99,
+ "projected_gpu_h_observed": 4.06,
+ "generations_per_reanchor": 832,
+ "total_generations_max_note": "total_generations_max counts the anchor A0 once and EXCLUDES re-anchors: every resumed turn that evaluates re-runs A0 first (generations_per_reanchor each)",
+ "total_generations_max_with_reanchors": {
+  "planning_rate": 16048,
+  "observed_rate": 15216,
+  "hook_bound_3_calls": 16880
+ },
+ "reanchors_projected": {
+  "planning_rate": 1,
+  "observed_rate": 0,
+  "hook_bound_3_calls": 2
+ },
  "turn_split": "The runner defers by its own gate (no stage starts within 0.5 h of the cap; 1.25 x the estimate must fit, re-checked after every resource wait): a stage that does not fit ends the turn with exit 5, the hook's second call waits for the next RCWM turn and resumes from the recorded stages, re-anchoring (A0 re-check) before any further evaluation. E1H (the held-out-surface stage, gating G1 / G2) runs before E2, so every gating output exists by the end of the first turn whenever E1H fits there.",
- "per_factor_heldout_renderings": "not run: 3 more renderings of the 400 primary rows x 4 sides would add about 3 x E1H to a plan that already needs a second turn at the planning rate (C3: descriptive only if they fit the GPU budget)",
+ "per_factor_heldout_renderings": "omitted by CHOICE (a GPU-budget choice, not a capacity limit): 3 more renderings (paraphrase only, names only, key order only) of the 680 held-out-surface rows x 4 sides would cost about 3 x E1H = 96 min at the planning rate (8,160 generations). At the planning rate they would fit in the last turn (1.26 h used of 4.5 h; the D-22 gate admits them); at the observed rate they would need one more turn and a re-anchor (the last turn already uses 4.06 h). The operator chose not to spend GPU time on descriptive renderings; consequence: a held-out-surface loss cannot be attributed to paraphrase, names or key order",
  "checks": {
-  "dev_sha256": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
-  "dev_hs_sha256": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
+  "dev_sha256": "bd6189f6cc860741ac497c5828f5c3c40f674e6926fab2bb9bf83edddc39e43f",
+  "dev_hs_sha256": "0c68e7f58891fa7794dea561981a985ac69c99d37bd0321f64b219257dc22e44",
   "chains_sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
   "train_sha256": {
-   "plain": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
-   "trace": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
-   "filler": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd"
+   "plain": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+   "trace": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+   "filler": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011"
   },
   "anchor_ref_matches_pin": true,
   "outputs_present": [],
