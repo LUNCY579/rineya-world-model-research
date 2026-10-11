@@ -1101,3 +1101,52 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
       (unverified).
     - (f) **gh-export README:59:** "Trained only on plans its own world model verified" → drop "only".
   - **Audit record:** `research/H2_LEAK_CLAIMS_AUDIT.json` (leak hunt, claims audit, judge; 3 agents).
+  - **D-70 follow-up (B4 design, agreed with RCX):**
+    - **Primary family unchanged:** P1 a vs c+pen and P2 b vs c+pen, both under Pa_v2. Under Pa_v3 (88/110) a critic
+      contrast has at most 22 movable instances.
+    - **Pa_v3 cross is secondary:** each hook arm under Pa_v3 on the same 110; a vs c+pen under Pa_v3 (unadjusted,
+      labelled secondary); a descriptive 2×2 interaction (compound vs substitute); strata 6-10 vs 11-15.
+    - **Minimal secondary set if GPU is short:** c+pen and a under Pa_v3.
+    - **E11 exclusion lists:** E11a `complementary/runs/RCX-E11/main/a/instances.json` (seed 20261256, about
+      14:20) and E11b `.../b/data/instances.json` (seed 20261258, about 16:30); key = `D.instance_key`. B4's fresh
+      set is generated only after both shas are recorded.
+- **X-06 Cross-programme note: RCX E01N sealed confirmation, REVISE** (R-08, commit f7ee0cf).
+  - **Result:** surface-diversified rule training (N-CFSD) vs plain rule-varied training (N-VR), on held-out rule
+    paraphrases: +0.090 [+0.069, +0.113], Holm p 0.0002, positive in every seed. On training wordings: +0.018. Only
+    the pre-registered +0.10 point threshold failed.
+  - **Cost:** N-CFSD over-restricts some held-out OR wordings (apply 84/87 → 66/87) and makes slightly more
+    false-copy errors.
+  - **Reading:** this is the third independent instance of the D-54 pattern (BWM P-12; RCWM 5a held-out). Surface
+    diversity buys held-out robustness at a small cost to a computed decision. The shared remedy candidate is
+    trace supervision of the predicate (X-04).
+  - **B4 exclusion list 1/2 received and verified:** RCX E11a, 120 instances (n = 12/14/15 × 40, seed 20261256), sha
+    6cbec9cf… (verified from commit b0ccde8). Vendored as `research/b4_exclusions/rcx_e11a_instances.json`.
+    - Key: `instance_key` = raw canonical at n ≥ 8, renaming signature at n ≤ 7. The B4 draw will also exclude by
+      renaming class (`goal_key` and VL.invariant).
+    - E11b is still pending (about 16:30).
+  - **B4 exclusion list 2/2 received and verified:** RCX E11b, 581 instances (exec 128 at n = 10-15, seed 20261258;
+    train/val/test_id/ood_small 453 at n = 4-7, seed 20261257), sha 47c44d31… (verified from commit f447563).
+    Vendored as `research/b4_exclusions/rcx_e11b_instances.json`.
+    - RCX's B4 key lists are now complete: E11a 6cbec9cf… and E11b 47c44d31….
+    - The B4 fresh set (seed 20261410) may be generated, but only together with the B4 freeze, after item 7. It
+      excludes both lists by key and by renaming class.
+- **X-07 Cross-programme note: RCX E11 (frozen prereg; R-09, commit 5e7a0ba), using BWM's B3 verified plans as
+  teacher, read-only.** RCX re-verified 211/211 with `B.execute`, and the F trajectories match.
+  - **E11a, ADVANCE** (tier B; exact dynamics, GBFS):
+    - 8 macros mined from the 211 plans raise GBFS + A3-hybrid from 52 to 77 of 120 fresh 12-15-block full-goal
+      problems at 200 expansions (+25/−0, p = 6e-8).
+    - They beat matched random sound macros (69) and macros mined from action-shuffled plans (63).
+    - With misplaced_blocks, any macro library helps about equally.
+    - The library is mostly tower chains.
+  - **E11b, REVISE:** the learned subgoal order is bounded by its label definition.
+  - **BWM candidate B5, after B4, pre-registered first:** RCX's macro library M as an action-abstraction arm in
+    `plan_beam`. A macro expands into k primitive steps, each verified by F, with E11's random/shuffled macros as
+    matched controls. RCX offers to export M with its sha.
+  - **X-07 follow-up (B5 inputs vendored and verified):** RCX macro library export (commit 0671794) in
+    `research/b5_macros/`:
+    - `libraries.json` b61b4a05… (M treatment, R/S matched controls, 8 macros each; G 2 descriptive; per-macro
+      exhaustive validation at ≤ 6 blocks);
+    - `MACRO_LIBRARY_EXPORT.md` 90ca1060…;
+    - `macros.py` (as `.txt`, not importable from the bundle) e644f6b1….
+    - **B5 design notes to adopt:** check that imagined states are consistent before binding macros (shared with the
+      B4 penalty), use F-queries per success as the compute-matched unit, and pre-register both the R and S controls.
