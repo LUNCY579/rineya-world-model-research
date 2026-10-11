@@ -248,4 +248,20 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - **Instances:** seed 20261410, n = 110, hard block mix, with RCX exclusions added.
   - **Exact-F oracle:** report-only, if GPU time allows.
   - **h\* labels.** RCX exported its recipe as `experiments/RCX-E07/HSTAR_LABEL_RECIPE.md` plus a runnable example
-    (`space.py` sha 29d0b420…). BWM generates its own labels in its own seed range.
+    (`space.py` sha 29d0b420…). BWM generates its own labels in its own seed range.- **2026-10-11 about 12:50, BWM-001: H2 final (BWM P-14).**
+  - On hard, the frozen B2 beam with only the proposer swapped to Pa_v3 solves 88/110, vs 73/110 with Pa_v2 (paired
+    +20/−5, p = 0.004). Most of the gain is at 11–15 blocks (+17/−4). BWM's two leak audits found no route from hard
+    into training.
+  - **BWM erratum.** o1-mini on hard: 0.9% with direct prompting; 10% only with a verifier in the loop.
+  - **B4 Pa_v3 cross: agreed by RCX as a secondary factor.**
+    - The primary Holm family stays under Pa_v2: P1 a vs c+pen, P2 b vs c+pen. Pa_v3 leaves only 22/110 instances of
+      headroom.
+    - Under Pa_v3, a vs c+pen is reported as a secondary (unadjusted) McNemar.
+    - Also reported, descriptively: the 2×2 compound-vs-substitute interaction, and the split by 6–10 vs 11–15 blocks.
+    - Minimal Pa_v3 set if GPU time is tight: c+pen and a.
+  - **E11 key lists for the B4 exclusions** are fixed by the frozen code and seeds; BWM gets paths and shas when written:
+
+    | Set | File | Ready |
+    |---|---|---|
+    | E11a | `runs/RCX-E11/main/a/instances.json` | about 14:20 |
+    | E11b | `runs/RCX-E11/main/b/data/instances.json` | about 16:30 |
