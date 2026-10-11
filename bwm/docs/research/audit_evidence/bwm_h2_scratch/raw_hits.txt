@@ -1,0 +1,326 @@
+<class 'list'> 8
+[['summary', 'claims', 'recommendations'], ['summary', 'claims', 'recommendations'], ['verdicts'], ['verdicts'], ['summary', 'claims', 'recommendations']]
+== [0]/summary 23.6
+e-tuned GPT-3 alone reached only 20% on PlanBench. A fair amortization claim must count proposer tokens as well as world-model calls in one FLOPs currency, and compare success-vs-compute curves against uniform-policy search and BFS at matched compute, plus training compute and break-even task counts. BFS under F may already be cheaper in tokens on RW2. PlanBench's 3–5-block state spaces are also tiny: by my derivation from OEIS A000262, at most about 866 states for 5 blocks. The convincing amortization test is therefore on larger instances, such as the 6–20-block set where o1-preview drops to 23.6%.
+
+== [0]/claims[15]/claim 110 
+o1-preview scores 97.8% on PlanBench Blocksworld (600 instances, 3–5 blocks), 52.8% on Mystery Blocksworld and 37.3% on randomized Mystery. On 110 larger problems (6–20 blocks, 20–40-step plans) it drops to 23.63%, at about $42.12 per 100 instances. Fast Downward solves the benchmark in about 0.265 s per instance.
+
+== [0]/claims[15]/claim 23.6
+o1-preview scores 97.8% on PlanBench Blocksworld (600 instances, 3–5 blocks), 52.8% on Mystery Blocksworld and 37.3% on randomized Mystery. On 110 larger problems (6–20 blocks, 20–40-step plans) it drops to 23.63%, at about $42.12 per 100 instances. Fast Downward solves the benchmark in about 0.265 s per instance.
+
+== [0]/recommendations[4]/why 23.6
+e-to-pretraining ratio. 'AI Agents That Matter' shows accuracy-only reporting misattributes gains. Thought of Search shows LLM-in-the-loop search can cost about 482K calls on Blocksworld vs about 4. In RW2, A00's K=4 full-plan generations per round may already cost more tokens than BFS's ~80 short memoized F calls, so the current 'F calls per task: 0' column understates proposer cost. On PlanBench 3–5 blocks, the state space is at most about 866 states, so exhaustive search under an accurate F would make 'rivals o1 (587/600)' trivial and unconvincing. The 6–20-block set, where o1-preview gets 23.63% at about $42 per 100 instances, is where amortization can show a non-trivial advantage.
+
+== [2]/verdicts[12]/claim 110 
+13. o1-preview on PlanBench: 97.8% Blocksworld (600 instances, 3-5 blocks), 52.8% Mystery, 37.3% randomized Mystery. On 110 larger problems (6-20 blocks, 20-40-step plans) it drops to 23.63%, at about $42.12 per 100 instances. Fast Downward takes about 0.265 s per instance.
+
+== [2]/verdicts[12]/claim 23.6
+13. o1-preview on PlanBench: 97.8% Blocksworld (600 instances, 3-5 blocks), 52.8% Mystery, 37.3% randomized Mystery. On 110 larger problems (6-20 blocks, 20-40-step plans) it drops to 23.63%, at about $42.12 per 100 instances. Fast Downward takes about 0.265 s per instance.
+
+== [2]/verdicts[12]/correction 110 
+Attribution nuance: $42.12 per 100 instances is o1-preview's general cost in Table 4, not a cost measured on the 110 larger problems. The claim's sentence structure suggests the cost belongs to the larger-problem run.
+
+== [2]/verdicts[12]/evidence 110 
+arXiv 2409.13373v1: '600 instances range from three to five blocks'; o1-preview 'correctly answers 97.8%' (587/600); Mystery '52.8%'; Randomized Mystery '37.3%'; '110 larger Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'; Table 4 'Cost per 100 instances (in USD)' o1-preview $42.12, o1-mini $3.69; Fast Downward 'averaged 0.265 seconds per instance'.
+
+== [2]/verdicts[12]/evidence 23.6
+arXiv 2409.13373v1: '600 instances range from three to five blocks'; o1-preview 'correctly answers 97.8%' (587/600); Mystery '52.8%'; Randomized Mystery '37.3%'; '110 larger Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'; Table 4 'Cost per 100 instances (in USD)' o1-preview $42.12, o1-mini $3.69; Fast Downward 'averaged 0.265 seconds per instance'.
+
+== [2]/verdicts[12]/evidence o1-mini
+arXiv 2409.13373v1: '600 instances range from three to five blocks'; o1-preview 'correctly answers 97.8%' (587/600); Mystery '52.8%'; Randomized Mystery '37.3%'; '110 larger Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'; Table 4 'Cost per 100 instances (in USD)' o1-preview $42.12, o1-mini $3.69; Fast Downward 'averaged 0.265 seconds per instance'.
+
+== [4]/summary Blocksworld-Hard
+ilures. Their Qwen2-7B SFT dropped from 98.5% in-distribution to 13.5% on longer plans and 0% on obfuscated names. Bohnet et al. (96.3% to 34.2% on 8-20 blocks) and Emami et al. (59% at 6 blocks to 6% at 10) show the same collapse.  PlanBench's 600 instances are 3-5 blocks with optimal plans of at most 16 steps. They are also nearly saturated: R1 scores 99.1%, and your own leakage audit shows 54% of random 3-5-block problems are renamings of test items. So an in-distribution score, even a high one, is not news. The credible headline is size and name generalization at stated compute. PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40 step plans) has published zero-shot scores to pair against: R1 53.6%, o1-preview 23.65%, o1-mini 10%. Back it up with randomized object names and Mystery Regime B, where o1-preview scores 52.8% (37.3% randomized) and R1 43.3% (25.8%).  Templates for a "small model plus search beats big model" claim: Snell et al.'s FLOPs-matched evaluation (X=6·N·D_pretrain vs Y=2·N·D_inference; beats a ~14x larger model on easy and medium questions but not hard ones); Wu et al. (Llemma-7B plus tree search beats 34B); Liu et al. (1B beats 405B at N=512; total FLOPs 100-1000x 
+
+== [4]/summary 110 
+2-7B SFT dropped from 98.5% in-distribution to 13.5% on longer plans and 0% on obfuscated names. Bohnet et al. (96.3% to 34.2% on 8-20 blocks) and Emami et al. (59% at 6 blocks to 6% at 10) show the same collapse.  PlanBench's 600 instances are 3-5 blocks with optimal plans of at most 16 steps. They are also nearly saturated: R1 scores 99.1%, and your own leakage audit shows 54% of random 3-5-block problems are renamings of test items. So an in-distribution score, even a high one, is not news. The credible headline is size and name generalization at stated compute. PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40 step plans) has published zero-shot scores to pair against: R1 53.6%, o1-preview 23.65%, o1-mini 10%. Back it up with randomized object names and Mystery Regime B, where o1-preview scores 52.8% (37.3% randomized) and R1 43.3% (25.8%).  Templates for a "small model plus search beats big model" claim: Snell et al.'s FLOPs-matched evaluation (X=6·N·D_pretrain vs Y=2·N·D_inference; beats a ~14x larger model on easy and medium questions but not hard ones); Wu et al. (Llemma-7B plus tree search beats 34B); Liu et al. (1B beats 405B at N=512; total FLOPs 100-1000x lower,
+
+== [4]/summary 53.6
+Bohnet et al. (96.3% to 34.2% on 8-20 blocks) and Emami et al. (59% at 6 blocks to 6% at 10) show the same collapse.  PlanBench's 600 instances are 3-5 blocks with optimal plans of at most 16 steps. They are also nearly saturated: R1 scores 99.1%, and your own leakage audit shows 54% of random 3-5-block problems are renamings of test items. So an in-distribution score, even a high one, is not news. The credible headline is size and name generalization at stated compute. PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40 step plans) has published zero-shot scores to pair against: R1 53.6%, o1-preview 23.65%, o1-mini 10%. Back it up with randomized object names and Mystery Regime B, where o1-preview scores 52.8% (37.3% randomized) and R1 43.3% (25.8%).  Templates for a "small model plus search beats big model" claim: Snell et al.'s FLOPs-matched evaluation (X=6·N·D_pretrain vs Y=2·N·D_inference; beats a ~14x larger model on easy and medium questions but not hard ones); Wu et al. (Llemma-7B plus tree search beats 34B); Liu et al. (1B beats 405B at N=512; total FLOPs 100-1000x lower, but the paper does not say whether reward-model FLOPs were counted); Jones (each 10x of training
+
+== [4]/summary 23.6
+3% to 34.2% on 8-20 blocks) and Emami et al. (59% at 6 blocks to 6% at 10) show the same collapse.  PlanBench's 600 instances are 3-5 blocks with optimal plans of at most 16 steps. They are also nearly saturated: R1 scores 99.1%, and your own leakage audit shows 54% of random 3-5-block problems are renamings of test items. So an in-distribution score, even a high one, is not news. The credible headline is size and name generalization at stated compute. PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40 step plans) has published zero-shot scores to pair against: R1 53.6%, o1-preview 23.65%, o1-mini 10%. Back it up with randomized object names and Mystery Regime B, where o1-preview scores 52.8% (37.3% randomized) and R1 43.3% (25.8%).  Templates for a "small model plus search beats big model" claim: Snell et al.'s FLOPs-matched evaluation (X=6·N·D_pretrain vs Y=2·N·D_inference; beats a ~14x larger model on easy and medium questions but not hard ones); Wu et al. (Llemma-7B plus tree search beats 34B); Liu et al. (1B beats 405B at N=512; total FLOPs 100-1000x lower, but the paper does not say whether reward-model FLOPs were counted); Jones (each 10x of training compute saves abo
+
+== [4]/summary o1-mini
+.2% on 8-20 blocks) and Emami et al. (59% at 6 blocks to 6% at 10) show the same collapse.  PlanBench's 600 instances are 3-5 blocks with optimal plans of at most 16 steps. They are also nearly saturated: R1 scores 99.1%, and your own leakage audit shows 54% of random 3-5-block problems are renamings of test items. So an in-distribution score, even a high one, is not news. The credible headline is size and name generalization at stated compute. PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40 step plans) has published zero-shot scores to pair against: R1 53.6%, o1-preview 23.65%, o1-mini 10%. Back it up with randomized object names and Mystery Regime B, where o1-preview scores 52.8% (37.3% randomized) and R1 43.3% (25.8%).  Templates for a "small model plus search beats big model" claim: Snell et al.'s FLOPs-matched evaluation (X=6·N·D_pretrain vs Y=2·N·D_inference; beats a ~14x larger model on easy and medium questions but not hard ones); Wu et al. (Llemma-7B plus tree search beats 34B); Liu et al. (1B beats 405B at N=512; total FLOPs 100-1000x lower, but the paper does not say whether reward-model FLOPs were counted); Jones (each 10x of training compute saves about 15x of t
+
+== [4]/summary 110 
+ning compute saves about 15x of test-time compute in Hex); and in planning, RAP (LLaMA-33B plus MCTS with an LLM world model beats GPT-4 CoT) and Searchformer.  Minimum runs you must do yourself: - Same-harness Qwen3-4B zero-shot, non-thinking and thinking at fixed token budgets, with both the NL and the JSON prompt. - A larger open model (Qwen3-1.7B, or 4B with QLoRA if affordable) fine-tuned on exactly your data, plus stock Qwen3-0.6B with the same adapter recipe. - Internal ablations at matched FLOPs: proposer only, F rerank, BFS under the learned F, and the exact-simulator ceiling. - Hard-110 plus generated 7/8/10-block sets, a randomized-name rerun, and the fresh mirror set. - Signature-clustered CIs (347 distinct problems) and at least 3 seeds.  Compare the published API systems only per instance, using dollars as their cost column, never as FLOP-matched opponents.
+
+== [4]/claims[0]/claim Blocksworld-Hard
+Official PlanBench leaderboard (zero-shot): Blocksworld-NL / Mystery-NL / Randomized-Mystery-NL / Blocksworld-Hard-PDDL(110) = DeepSeek-R1 99.1% / 43.3% / 25.8% / 53.6%; o1-preview 97.8% / 52.8% / 37.3% / 23.65%; o1-mini 56.6% / 19.1% / 3.5% / 10%; LLaMA-3.1-405B 62.6% / 0.8%; GPT-4 34.6% / 0%.
+
+== [4]/claims[0]/claim 53.6
+Official PlanBench leaderboard (zero-shot): Blocksworld-NL / Mystery-NL / Randomized-Mystery-NL / Blocksworld-Hard-PDDL(110) = DeepSeek-R1 99.1% / 43.3% / 25.8% / 53.6%; o1-preview 97.8% / 52.8% / 37.3% / 23.65%; o1-mini 56.6% / 19.1% / 3.5% / 10%; LLaMA-3.1-405B 62.6% / 0.8%; GPT-4 34.6% / 0%.
+
+== [4]/claims[0]/claim 23.6
+Official PlanBench leaderboard (zero-shot): Blocksworld-NL / Mystery-NL / Randomized-Mystery-NL / Blocksworld-Hard-PDDL(110) = DeepSeek-R1 99.1% / 43.3% / 25.8% / 53.6%; o1-preview 97.8% / 52.8% / 37.3% / 23.65%; o1-mini 56.6% / 19.1% / 3.5% / 10%; LLaMA-3.1-405B 62.6% / 0.8%; GPT-4 34.6% / 0%.
+
+== [4]/claims[0]/claim o1-mini
+Official PlanBench leaderboard (zero-shot): Blocksworld-NL / Mystery-NL / Randomized-Mystery-NL / Blocksworld-Hard-PDDL(110) = DeepSeek-R1 99.1% / 43.3% / 25.8% / 53.6%; o1-preview 97.8% / 52.8% / 37.3% / 23.65%; o1-mini 56.6% / 19.1% / 3.5% / 10%; LLaMA-3.1-405B 62.6% / 0.8%; GPT-4 34.6% / 0%.
+
+== [4]/claims[2]/claim 110 
+Larger Blocksworld set: 110 instances of 6-20 blocks needing 20-40-step optimal plans; o1-preview 23.63%. Unsolvable set: o1-preview flagged 27% correctly.
+
+== [4]/claims[2]/claim 23.6
+Larger Blocksworld set: 110 instances of 6-20 blocks needing 20-40-step optimal plans; o1-preview 23.63%. Unsolvable set: o1-preview flagged 27% correctly.
+
+== [4]/claims[3]/claim o1-mini
+Cost per 100 instances: o1-preview $42.12, o1-mini $3.69, GPT-4o $0.65, Claude 3.5 Sonnet $0.44. Fast Downward solves 100% at ~0.265 s/instance. o1's hidden 'reasoning tokens' are billed but not revealed.
+
+== [4]/claims[4]/claim 23.6
+LRM-Modulo (o1-preview + sound verifier, up to 10 back-prompts) raises Hard Blocksworld from 23.65% to 98.2%. The authors argue evaluation must weigh accuracy, cost/efficiency and guarantees, and suggest a smaller LLM looped with a sound verifier as a cheaper option.
+
+== [4]/claims[4]/claim 98.2
+LRM-Modulo (o1-preview + sound verifier, up to 10 back-prompts) raises Hard Blocksworld from 23.65% to 98.2%. The authors argue evaluation must weigh accuracy, cost/efficiency and guarantees, and suggest a smaller LLM looped with a sound verifier as a cheaper option.
+
+== [4]/recommendations[1]/idea Blocksworld-Hard
+Make held-out block counts the headline axis. Run the frozen config on PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40-step optimal plans; published zero-shot PDDL R1 53.6%, o1-preview 23.65%, o1-mini 10%; o1-preview + VAL loop 98.2%). Also run our own generated ladder of 7, 8 and 10 blocks (about 100 each, signature-disjoint). Raise the step cap to at least 48 for these sets, selecting it on generated validation only.
+
+== [4]/recommendations[1]/idea 110 
+Make held-out block counts the headline axis. Run the frozen config on PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40-step optimal plans; published zero-shot PDDL R1 53.6%, o1-preview 23.65%, o1-mini 10%; o1-preview + VAL loop 98.2%). Also run our own generated ladder of 7, 8 and 10 blocks (about 100 each, signature-disjoint). Raise the step cap to at least 48 for these sets, selecting it on generated validation only.
+
+== [4]/recommendations[1]/idea 53.6
+Make held-out block counts the headline axis. Run the frozen config on PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40-step optimal plans; published zero-shot PDDL R1 53.6%, o1-preview 23.65%, o1-mini 10%; o1-preview + VAL loop 98.2%). Also run our own generated ladder of 7, 8 and 10 blocks (about 100 each, signature-disjoint). Raise the step cap to at least 48 for these sets, selecting it on generated validation only.
+
+== [4]/recommendations[1]/idea 23.6
+Make held-out block counts the headline axis. Run the frozen config on PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40-step optimal plans; published zero-shot PDDL R1 53.6%, o1-preview 23.65%, o1-mini 10%; o1-preview + VAL loop 98.2%). Also run our own generated ladder of 7, 8 and 10 blocks (about 100 each, signature-disjoint). Raise the step cap to at least 48 for these sets, selecting it on generated validation only.
+
+== [4]/recommendations[1]/idea o1-mini
+Make held-out block counts the headline axis. Run the frozen config on PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40-step optimal plans; published zero-shot PDDL R1 53.6%, o1-preview 23.65%, o1-mini 10%; o1-preview + VAL loop 98.2%). Also run our own generated ladder of 7, 8 and 10 blocks (about 100 each, signature-disjoint). Raise the step cap to at least 48 for these sets, selecting it on generated validation only.
+
+== [4]/recommendations[1]/idea 98.2
+Make held-out block counts the headline axis. Run the frozen config on PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40-step optimal plans; published zero-shot PDDL R1 53.6%, o1-preview 23.65%, o1-mini 10%; o1-preview + VAL loop 98.2%). Also run our own generated ladder of 7, 8 and 10 blocks (about 100 each, signature-disjoint). Raise the step cap to at least 48 for these sets, selecting it on generated validation only.
+
+== [4]/recommendations[4]/risk 110 
+BFS-N under F may dominate on 3-5 blocks, where the state space is tiny. The honest framing is then 'the proposer amortizes search on larger instances'; test that on Hard-110 and the ladder.
+
+== [4]/recommendations[7]/idea 110 
+Allowed headline wording. (a) Paired, per-instance comparison against published systems, labelled 'reference, different regime', with $ cost for API rows. (b) Iso-FLOP and iso-accuracy statements only against same-harness Qwen3 rows, giving the Snell-style total FLOPs (6·N·D_pre + training + inference) and the inference-only number side by side. (c) The size-generalization result on Hard-110 vs published LRMs and vs our SFT comparator. Never claim 'beats GPT-4/o1 at planning' without the regime tag, and never pool VAL-in-the-loop runs with feedback-free ones.
+
+== [5]/summary Blocksworld-hard
+verages ~64% on a 201-instance PlanBench split; LLM Reasoners reports 51% with Llama-2-70B. Thought of Search / AutoToS (LLM writes the successor function, then BFS) solve 100% of 502 instances with 2-10 LLM calls in total. LLM+P gets 90% on 20 IPC problems, and LLM-Modulo (GPT-4 with VAL feedback) 82% on a 50-instance subset. Tree-Planner (VirtualHome) and Searchformer (Sokoban/mazes) do not evaluate on Blocksworld; the nearest trained-search work on Blocksworld is System-1.x (Mistral-7B trained on A* traces), at 25-28% on 7-10-step plans. For harder cases there is the 110-instance PlanBench Blocksworld-hard set (6-20 blocks, 20-40-step plans): o1-preview 26/110, R1 53.6% (~59/110), o1-mini 10%, and o1-preview with a VAL loop 98.2%. On IPC-scale fresh tasks, Gemini 3.1 Pro now beats LAMA (35 vs 28 of 45 Blocksworld tasks). No single published comparator is fully fair. The fairest are: (a) for method, RAP on its own split, since it uses the same plan-in-imagination-under-a-model-plus-search regime; (b) for training regime, Emami et al. 2026 and Plansformer (LoRA or SFT on generated small Blocksworld, single greedy plan, VAL, tested on PlanBench or larger instances); (c) for the headline on the ide
+
+== [5]/summary 53.6
+th Llama-2-70B. Thought of Search / AutoToS (LLM writes the successor function, then BFS) solve 100% of 502 instances with 2-10 LLM calls in total. LLM+P gets 90% on 20 IPC problems, and LLM-Modulo (GPT-4 with VAL feedback) 82% on a 50-instance subset. Tree-Planner (VirtualHome) and Searchformer (Sokoban/mazes) do not evaluate on Blocksworld; the nearest trained-search work on Blocksworld is System-1.x (Mistral-7B trained on A* traces), at 25-28% on 7-10-step plans. For harder cases there is the 110-instance PlanBench Blocksworld-hard set (6-20 blocks, 20-40-step plans): o1-preview 26/110, R1 53.6% (~59/110), o1-mini 10%, and o1-preview with a VAL loop 98.2%. On IPC-scale fresh tasks, Gemini 3.1 Pro now beats LAMA (35 vs 28 of 45 Blocksworld tasks). No single published comparator is fully fair. The fairest are: (a) for method, RAP on its own split, since it uses the same plan-in-imagination-under-a-model-plus-search regime; (b) for training regime, Emami et al. 2026 and Plansformer (LoRA or SFT on generated small Blocksworld, single greedy plan, VAL, tested on PlanBench or larger instances); (c) for the headline on the identical 600 IDs, fine-tuned GPT-3 (122) as the only fine-tuned en
+
+== [5]/summary o1-mini
+hought of Search / AutoToS (LLM writes the successor function, then BFS) solve 100% of 502 instances with 2-10 LLM calls in total. LLM+P gets 90% on 20 IPC problems, and LLM-Modulo (GPT-4 with VAL feedback) 82% on a 50-instance subset. Tree-Planner (VirtualHome) and Searchformer (Sokoban/mazes) do not evaluate on Blocksworld; the nearest trained-search work on Blocksworld is System-1.x (Mistral-7B trained on A* traces), at 25-28% on 7-10-step plans. For harder cases there is the 110-instance PlanBench Blocksworld-hard set (6-20 blocks, 20-40-step plans): o1-preview 26/110, R1 53.6% (~59/110), o1-mini 10%, and o1-preview with a VAL loop 98.2%. On IPC-scale fresh tasks, Gemini 3.1 Pro now beats LAMA (35 vs 28 of 45 Blocksworld tasks). No single published comparator is fully fair. The fairest are: (a) for method, RAP on its own split, since it uses the same plan-in-imagination-under-a-model-plus-search regime; (b) for training regime, Emami et al. 2026 and Plansformer (LoRA or SFT on generated small Blocksworld, single greedy plan, VAL, tested on PlanBench or larger instances); (c) for the headline on the identical 600 IDs, fine-tuned GPT-3 (122) as the only fine-tuned entry, with R1/o1-prev
+
+== [5]/summary 98.2
+uccessor function, then BFS) solve 100% of 502 instances with 2-10 LLM calls in total. LLM+P gets 90% on 20 IPC problems, and LLM-Modulo (GPT-4 with VAL feedback) 82% on a 50-instance subset. Tree-Planner (VirtualHome) and Searchformer (Sokoban/mazes) do not evaluate on Blocksworld; the nearest trained-search work on Blocksworld is System-1.x (Mistral-7B trained on A* traces), at 25-28% on 7-10-step plans. For harder cases there is the 110-instance PlanBench Blocksworld-hard set (6-20 blocks, 20-40-step plans): o1-preview 26/110, R1 53.6% (~59/110), o1-mini 10%, and o1-preview with a VAL loop 98.2%. On IPC-scale fresh tasks, Gemini 3.1 Pro now beats LAMA (35 vs 28 of 45 Blocksworld tasks). No single published comparator is fully fair. The fairest are: (a) for method, RAP on its own split, since it uses the same plan-in-imagination-under-a-model-plus-search regime; (b) for training regime, Emami et al. 2026 and Plansformer (LoRA or SFT on generated small Blocksworld, single greedy plan, VAL, tested on PlanBench or larger instances); (c) for the headline on the identical 600 IDs, fine-tuned GPT-3 (122) as the only fine-tuned entry, with R1/o1-preview as the ceiling. The single most impor
+
+== [5]/summary Blocksworld-hard
+ost important comparator is an internal one that the literature implies: a same-size, same-data plain-SFT plan generator without F. Because SFT saturates in-distribution, a score on the 600 set says nothing about F unless it is paired against that arm. On the 600 set, ≥570/600 is the expected level for a competent specialist. Matching 587 equals o1-preview and ≥590-595 ties R1, but this is news only with a significant paired gain over the no-F SFT arm or much lower compute. Anything below ~540 (90%) would trail a 220M Plansformer. A result that really rivals far larger models has to come from Blocksworld-hard without feedback: beating 26/110 beats o1-preview, beating ~59/110 beats R1, and ~108/110 would match o1-preview with a VAL loop, with no verifier.
+
+== [5]/summary 110 
+at the literature implies: a same-size, same-data plain-SFT plan generator without F. Because SFT saturates in-distribution, a score on the 600 set says nothing about F unless it is paired against that arm. On the 600 set, ≥570/600 is the expected level for a competent specialist. Matching 587 equals o1-preview and ≥590-595 ties R1, but this is news only with a significant paired gain over the no-F SFT arm or much lower compute. Anything below ~540 (90%) would trail a 220M Plansformer. A result that really rivals far larger models has to come from Blocksworld-hard without feedback: beating 26/110 beats o1-preview, beating ~59/110 beats R1, and ~108/110 would match o1-preview with a VAL loop, with no verifier.
+
+== [5]/summary 110 
+size, same-data plain-SFT plan generator without F. Because SFT saturates in-distribution, a score on the 600 set says nothing about F unless it is paired against that arm. On the 600 set, ≥570/600 is the expected level for a competent specialist. Matching 587 equals o1-preview and ≥590-595 ties R1, but this is news only with a significant paired gain over the no-F SFT arm or much lower compute. Anything below ~540 (90%) would trail a 220M Plansformer. A result that really rivals far larger models has to come from Blocksworld-hard without feedback: beating 26/110 beats o1-preview, beating ~59/110 beats R1, and ~108/110 would match o1-preview with a VAL loop, with no verifier.
+
+== [5]/summary 110 
+FT plan generator without F. Because SFT saturates in-distribution, a score on the 600 set says nothing about F unless it is paired against that arm. On the 600 set, ≥570/600 is the expected level for a competent specialist. Matching 587 equals o1-preview and ≥590-595 ties R1, but this is news only with a significant paired gain over the no-F SFT arm or much lower compute. Anything below ~540 (90%) would trail a 220M Plansformer. A result that really rivals far larger models has to come from Blocksworld-hard without feedback: beating 26/110 beats o1-preview, beating ~59/110 beats R1, and ~108/110 would match o1-preview with a VAL loop, with no verifier.
+
+== [5]/claims[3]/claim o1-mini
+o1-preview, zero-shot on the 600 instances: 587/600 (97.8%) Blocksworld, 52.8% Mystery Blocksworld, 37.3% Randomized Mystery. o1-mini: 340/600 (56.6%), 19.1% Mystery, 3.5% Randomized. Fast Downward: 100%.
+
+== [5]/claims[4]/claim Blocksworld-hard
+Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [5]/claims[4]/claim 110 
+Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [5]/claims[4]/claim 23.6
+Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [5]/claims[4]/claim 98.2
+Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [5]/claims[5]/claim 53.6
+DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600 instances), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110 instances). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [5]/claims[5]/claim Blocksworld-hard
+DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600 instances), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110 instances). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [5]/claims[5]/claim 110 
+DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600 instances), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110 instances). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [5]/claims[5]/claim o1-mini
+DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600 instances), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110 instances). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [5]/claims[5]/claim Blocksworld-hard
+DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600 instances), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110 instances). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [5]/recommendations[0]/risk Blocksworld-hard
+The SFT arm may itself reach ~97-99%, leaving no headroom on the 600 set. If so, F's value has to be shown on OOD (Blocksworld-hard, more blocks) and on compute curves, and the prereg should say so before running.
+
+== [5]/recommendations[2]/idea Blocksworld-hard
+Make PlanBench Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step optimal plans, no feedback) the main 'rival larger models' test. Raise the prereg step cap from 24 to about 2× the maximum optimal length (~80). First pre-measure F's exact-transition and legality accuracy by block count (6-20) on generated states.
+
+== [5]/recommendations[2]/idea 110 
+Make PlanBench Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step optimal plans, no feedback) the main 'rival larger models' test. Raise the prereg step cap from 24 to about 2× the maximum optimal length (~80). First pre-measure F's exact-transition and legality accuracy by block count (6-20) on generated states.
+
+== [5]/recommendations[2]/why o1-mini
+Published no-feedback scores are o1-mini 10%, o1-preview 26/110 and R1 ~59/110; o1-preview with a VAL loop reaches 98.2%. SFT planners collapse with size and length: Gemma2-9B goes from 53-59% at 6 blocks to 0-6% at 10, and Qwen2-7B gets 13.5% on 17-32-step plans. A goal-blind local F plus execute-one-and-replan is the component most likely to generalize compositionally. Beating 26/110 without feedback beats o1-preview, and beating ~59/110 beats R1: a real 0.6B-vs-frontier result. The current cap of 24 cannot reach many 20-40-step solutions.
+
+== [5]/recommendations[2]/why 110 
+Published no-feedback scores are o1-mini 10%, o1-preview 26/110 and R1 ~59/110; o1-preview with a VAL loop reaches 98.2%. SFT planners collapse with size and length: Gemma2-9B goes from 53-59% at 6 blocks to 0-6% at 10, and Qwen2-7B gets 13.5% on 17-32-step plans. A goal-blind local F plus execute-one-and-replan is the component most likely to generalize compositionally. Beating 26/110 without feedback beats o1-preview, and beating ~59/110 beats R1: a real 0.6B-vs-frontier result. The current cap of 24 cannot reach many 20-40-step solutions.
+
+== [5]/recommendations[2]/why 98.2
+Published no-feedback scores are o1-mini 10%, o1-preview 26/110 and R1 ~59/110; o1-preview with a VAL loop reaches 98.2%. SFT planners collapse with size and length: Gemma2-9B goes from 53-59% at 6 blocks to 0-6% at 10, and Qwen2-7B gets 13.5% on 17-32-step plans. A goal-blind local F plus execute-one-and-replan is the component most likely to generalize compositionally. Beating 26/110 without feedback beats o1-preview, and beating ~59/110 beats R1: a real 0.6B-vs-frontier result. The current cap of 24 cannot reach many 20-40-step solutions.
+
+== [5]/recommendations[2]/why 110 
+Published no-feedback scores are o1-mini 10%, o1-preview 26/110 and R1 ~59/110; o1-preview with a VAL loop reaches 98.2%. SFT planners collapse with size and length: Gemma2-9B goes from 53-59% at 6 blocks to 0-6% at 10, and Qwen2-7B gets 13.5% on 17-32-step plans. A goal-blind local F plus execute-one-and-replan is the component most likely to generalize compositionally. Beating 26/110 without feedback beats o1-preview, and beating ~59/110 beats R1: a real 0.6B-vs-frontier result. The current cap of 24 cannot reach many 20-40-step solutions.
+
+== [5]/recommendations[2]/why 110 
+Published no-feedback scores are o1-mini 10%, o1-preview 26/110 and R1 ~59/110; o1-preview with a VAL loop reaches 98.2%. SFT planners collapse with size and length: Gemma2-9B goes from 53-59% at 6 blocks to 0-6% at 10, and Qwen2-7B gets 13.5% on 17-32-step plans. A goal-blind local F plus execute-one-and-replan is the component most likely to generalize compositionally. Beating 26/110 without feedback beats o1-preview, and beating ~59/110 beats R1: a real 0.6B-vs-frontier result. The current cap of 24 cannot reach many 20-40-step solutions.
+
+== [5]/recommendations[2]/cost_on_our_hardware 110 
+F-only size-generalization curve: <1 GPU-h. Planner on 110 long instances: roughly calls × latency. At ~1 unbatched F call/s and ~300 calls/instance that is ~9 GPU-h (~35 wall-h at 25% duty); batching the K candidates per F call should cut it 2-4×.
+
+== [5]/recommendations[2]/risk hard set
+F was trained on 4-6 blocks and may fail at unseen block counts, the same way F-01 failed at unseen limit values. Prompts grow ~3-4× at 20 blocks, a memory/latency risk in FP32 on 8 GB. Training F on up to ~10 blocks would make part of the hard set in-distribution, and the prereg must state that.
+
+== [5]/recommendations[6]/idea Blocksworld-hard
+Finish the paired ledger before any BWM run: resolve the LLaMA-3.1-405B discrepancy (VAL re-score 386 vs paper 376). Score the vendored GPT-4 back-prompting (50 instances), state-tracking, PDDL, Mystery and Blocksworld-hard files with the same VAL binary. Run the prereg's fresh contamination set.
+
+== [6]/verdicts[0]/claim 53.6
+1. Official PlanBench leaderboard (zero-shot): BW-NL / Mystery-NL / Randomized-Mystery-NL / BW-Hard-PDDL(110) = DeepSeek-R1 99.1/43.3/25.8/53.6; o1-preview 97.8/52.8/37.3/23.65; o1-mini 56.6/19.1/3.5/10; LLaMA-3.1-405B 62.6/0.8; GPT-4 34.6/0.
+
+== [6]/verdicts[0]/claim 23.6
+1. Official PlanBench leaderboard (zero-shot): BW-NL / Mystery-NL / Randomized-Mystery-NL / BW-Hard-PDDL(110) = DeepSeek-R1 99.1/43.3/25.8/53.6; o1-preview 97.8/52.8/37.3/23.65; o1-mini 56.6/19.1/3.5/10; LLaMA-3.1-405B 62.6/0.8; GPT-4 34.6/0.
+
+== [6]/verdicts[0]/claim o1-mini
+1. Official PlanBench leaderboard (zero-shot): BW-NL / Mystery-NL / Randomized-Mystery-NL / BW-Hard-PDDL(110) = DeepSeek-R1 99.1/43.3/25.8/53.6; o1-preview 97.8/52.8/37.3/23.65; o1-mini 56.6/19.1/3.5/10; LLaMA-3.1-405B 62.6/0.8; GPT-4 34.6/0.
+
+== [6]/verdicts[0]/evidence 53.6
+The raw README.md of karthikv792/LLMs-Planning, under 'PlanBench Static Test Set Leaderboard' (zero-shot), has these rows. Deepseek R1: 99.1% | 43.3% | 25.8% | 53.6%. o1-preview: 97.8% | 52.8% | 37.3% | 23.65%. o1-mini: 56.6% | 19.1% | 3.5% | 10%. LLaMA-3.1 405B: 62.6% | 0.8% | - | -. GPT-4: 34.6% | 0% | - | -. The README says Blocksworld Hard results are in results/backprompting/.
+
+== [6]/verdicts[0]/evidence 23.6
+The raw README.md of karthikv792/LLMs-Planning, under 'PlanBench Static Test Set Leaderboard' (zero-shot), has these rows. Deepseek R1: 99.1% | 43.3% | 25.8% | 53.6%. o1-preview: 97.8% | 52.8% | 37.3% | 23.65%. o1-mini: 56.6% | 19.1% | 3.5% | 10%. LLaMA-3.1 405B: 62.6% | 0.8% | - | -. GPT-4: 34.6% | 0% | - | -. The README says Blocksworld Hard results are in results/backprompting/.
+
+== [6]/verdicts[0]/evidence o1-mini
+The raw README.md of karthikv792/LLMs-Planning, under 'PlanBench Static Test Set Leaderboard' (zero-shot), has these rows. Deepseek R1: 99.1% | 43.3% | 25.8% | 53.6%. o1-preview: 97.8% | 52.8% | 37.3% | 23.65%. o1-mini: 56.6% | 19.1% | 3.5% | 10%. LLaMA-3.1 405B: 62.6% | 0.8% | - | -. GPT-4: 34.6% | 0% | - | -. The README says Blocksworld Hard results are in results/backprompting/.
+
+== [6]/verdicts[2]/claim 110 
+3. Larger Blocksworld set: 110 instances of 6-20 blocks needing 20-40-step optimal plans; o1-preview 23.63%. Unsolvable set: o1-preview flagged 27% correctly.
+
+== [6]/verdicts[2]/claim 23.6
+3. Larger Blocksworld set: 110 instances of 6-20 blocks needing 20-40-step optimal plans; o1-preview 23.63%. Unsolvable set: o1-preview flagged 27% correctly.
+
+== [6]/verdicts[2]/evidence 110 
+arXiv 2409.13373 p.4: 'a set of 110 larger Blocksworld problems... range from 6 to 20 blocks in length and require 20 to 40 step optimal plans... o1-preview only manages 23.63%'. p.5: 'On Blocksworld, only 27% of all instances were correctly and explicitly identified by o1 as unsolvable' (Table 3, True Negatives 27%).
+
+== [6]/verdicts[2]/evidence 23.6
+arXiv 2409.13373 p.4: 'a set of 110 larger Blocksworld problems... range from 6 to 20 blocks in length and require 20 to 40 step optimal plans... o1-preview only manages 23.63%'. p.5: 'On Blocksworld, only 27% of all instances were correctly and explicitly identified by o1 as unsolvable' (Table 3, True Negatives 27%).
+
+== [6]/verdicts[3]/claim o1-mini
+4. Cost per 100 instances: o1-preview $42.12, o1-mini $3.69, GPT-4o $0.65, Claude 3.5 Sonnet $0.44. Fast Downward 100% at ~0.265 s/instance. o1's hidden reasoning tokens are billed but not revealed.
+
+== [6]/verdicts[3]/evidence o1-mini
+arXiv 2409.13373, Table 4 'Cost per 100 instances (in USD)': Claude 3.5 Sonnet $0.44, GPT-4o $0.65, o1-preview $42.12, o1-mini $3.69. The same table is in arXiv 2410.02162. Text: 'Running Fast Downward on a personal computer was essentially free... and averaged 0.265 seconds per instance'. Table 2 shows Fast Downward at 600/600 (100%). Text: o1's price includes a surcharge for 'reasoning tokens... tokens generated as part of inference and not revealed to the user... charged at the significantly higher output token rate.'
+
+== [6]/verdicts[4]/claim 23.6
+5. LRM-Modulo (o1-preview + sound verifier, up to 10 back-prompts) raises Hard Blocksworld from 23.65% to 98.2%; authors argue evaluation must weigh accuracy, cost/efficiency and guarantees, and suggest a smaller LLM looped with a sound verifier as a cheaper option.
+
+== [6]/verdicts[4]/claim 98.2
+5. LRM-Modulo (o1-preview + sound verifier, up to 10 back-prompts) raises Hard Blocksworld from 23.65% to 98.2%; authors argue evaluation must weigh accuracy, cost/efficiency and guarantees, and suggest a smaller LLM looped with a sound verifier as a cheaper option.
+
+== [6]/verdicts[4]/evidence 110 
+arXiv 2410.02162, Table 5: 110 Blocksworld (hard), o1-preview Direct 23.65%, LRM-Modulo 98.2%, 7 iterations. Text: 'we limit the number of iterations to a maximum of ten'. Intro: 'new approaches to measuring LRM reasoning capabilities must take into account efficiency, cost, and guarantees'. Sec 4: 'Returning to LLM-modulo, where we use a smaller, cheaper, and faster LLM in a loop with a verifier, can provide similar or better performance in some domains.'
+
+== [6]/verdicts[4]/evidence 23.6
+arXiv 2410.02162, Table 5: 110 Blocksworld (hard), o1-preview Direct 23.65%, LRM-Modulo 98.2%, 7 iterations. Text: 'we limit the number of iterations to a maximum of ten'. Intro: 'new approaches to measuring LRM reasoning capabilities must take into account efficiency, cost, and guarantees'. Sec 4: 'Returning to LLM-modulo, where we use a smaller, cheaper, and faster LLM in a loop with a verifier, can provide similar or better performance in some domains.'
+
+== [6]/verdicts[4]/evidence 98.2
+arXiv 2410.02162, Table 5: 110 Blocksworld (hard), o1-preview Direct 23.65%, LRM-Modulo 98.2%, 7 iterations. Text: 'we limit the number of iterations to a maximum of ten'. Intro: 'new approaches to measuring LRM reasoning capabilities must take into account efficiency, cost, and guarantees'. Sec 4: 'Returning to LLM-modulo, where we use a smaller, cheaper, and faster LLM in a loop with a verifier, can provide similar or better performance in some domains.'
+
+== [7]/verdicts[3]/claim o1-mini
+4. o1-preview zero-shot on the 600 instances: 587/600 (97.8%) Blocksworld, 52.8% Mystery, 37.3% Randomized Mystery. o1-mini: 340/600 (56.6%), 19.1% Mystery, 3.5% Randomized. Fast Downward: 100%.
+
+== [7]/verdicts[3]/correction o1-mini
+No numeric correction. Attribution note: the o1-mini Randomized Mystery 3.5% appears only in arXiv 2410.02162 Table 2; 2409.13373 Table 2 shows '-' (not run) for it. arXiv 2410.02162 v1 is titled 'Planning in Strawberry Fields: Evaluating and Improving the Planning and Scheduling Capabilities of LRM o1'. Its TMLR 2025 version is titled 'A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1'.
+
+== [7]/verdicts[3]/evidence o1-mini
+2409.13373 Table 2: Blocksworld zero-shot o1-preview 587/600 (97.8%), o1-mini 340/600 (56.6%), Fast Downward 600/600 (100%). Mystery zero-shot: 317/600 (52.8%) and 115/600 (19.1%). Randomized Mystery: 224/600 (37.3%), o1-mini '-'. 2410.02162 Table 2: 97.8% / 56.6%; Mystery 52.8% / 19.1%; Randomized Mystery 37.3% / 3.5%; F.D. 100%. Local LEDGER.json: o1-preview_chat zero-shot 587/600, o1-mini_chat 340/600.
+
+== [7]/verdicts[3]/evidence o1-mini
+2409.13373 Table 2: Blocksworld zero-shot o1-preview 587/600 (97.8%), o1-mini 340/600 (56.6%), Fast Downward 600/600 (100%). Mystery zero-shot: 317/600 (52.8%) and 115/600 (19.1%). Randomized Mystery: 224/600 (37.3%), o1-mini '-'. 2410.02162 Table 2: 97.8% / 56.6%; Mystery 52.8% / 19.1%; Randomized Mystery 37.3% / 3.5%; F.D. 100%. Local LEDGER.json: o1-preview_chat zero-shot 587/600, o1-mini_chat 340/600.
+
+== [7]/verdicts[3]/evidence o1-mini
+2409.13373 Table 2: Blocksworld zero-shot o1-preview 587/600 (97.8%), o1-mini 340/600 (56.6%), Fast Downward 600/600 (100%). Mystery zero-shot: 317/600 (52.8%) and 115/600 (19.1%). Randomized Mystery: 224/600 (37.3%), o1-mini '-'. 2410.02162 Table 2: 97.8% / 56.6%; Mystery 52.8% / 19.1%; Randomized Mystery 37.3% / 3.5%; F.D. 100%. Local LEDGER.json: o1-preview_chat zero-shot 587/600, o1-mini_chat 340/600.
+
+== [7]/verdicts[4]/claim Blocksworld-hard
+5. Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [7]/verdicts[4]/claim 110 
+5. Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [7]/verdicts[4]/claim 23.6
+5. Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [7]/verdicts[4]/claim 98.2
+5. Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [7]/verdicts[4]/correction 23.6
+Minor points. (a) The source is internally inconsistent: Table 5 prints 23.65% while the text and Figure 2 say 23.63%. The '26/110' (=23.64%) is your own derivation, not printed in the paper. (b) The paper (arXiv v1) describes a 'sound verifier'; it does not name VAL for the LRM-Modulo loop. (c) The $139.36 is the LRM-Modulo cost; direct prompting cost $52.12. Verified against arXiv v1 only, because the TMLR PDF on OpenReview was blocked by a bot challenge, so Table 5's numbering in the TMLR version is unconfirmed.
+
+== [7]/verdicts[4]/correction 23.6
+Minor points. (a) The source is internally inconsistent: Table 5 prints 23.65% while the text and Figure 2 say 23.63%. The '26/110' (=23.64%) is your own derivation, not printed in the paper. (b) The paper (arXiv v1) describes a 'sound verifier'; it does not name VAL for the LRM-Modulo loop. (c) The $139.36 is the LRM-Modulo cost; direct prompting cost $52.12. Verified against arXiv v1 only, because the TMLR PDF on OpenReview was blocked by a bot challenge, so Table 5's numbering in the TMLR version is unconfirmed.
+
+== [7]/verdicts[4]/correction 23.6
+Minor points. (a) The source is internally inconsistent: Table 5 prints 23.65% while the text and Figure 2 say 23.63%. The '26/110' (=23.64%) is your own derivation, not printed in the paper. (b) The paper (arXiv v1) describes a 'sound verifier'; it does not name VAL for the LRM-Modulo loop. (c) The $139.36 is the LRM-Modulo cost; direct prompting cost $52.12. Verified against arXiv v1 only, because the TMLR PDF on OpenReview was blocked by a bot challenge, so Table 5's numbering in the TMLR version is unconfirmed.
+
+== [7]/verdicts[4]/evidence 110 
+2410.02162 Sec. 3.1: '110 harder Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'. Table 5: 'Blocksworld (hard)' o1-preview Direct 23.65%, $52.12; LRM Modulo 98.2%, 7 iterations, $139.36; o1-mini Direct 0.90%, $16.30; LRM Modulo 10%, 4 iterations, $40.80. Text: 'saturates within 7 iterations, with the combined system achieving 98.2%'.
+
+== [7]/verdicts[4]/evidence 23.6
+2410.02162 Sec. 3.1: '110 harder Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'. Table 5: 'Blocksworld (hard)' o1-preview Direct 23.65%, $52.12; LRM Modulo 98.2%, 7 iterations, $139.36; o1-mini Direct 0.90%, $16.30; LRM Modulo 10%, 4 iterations, $40.80. Text: 'saturates within 7 iterations, with the combined system achieving 98.2%'.
+
+== [7]/verdicts[4]/evidence 23.6
+2410.02162 Sec. 3.1: '110 harder Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'. Table 5: 'Blocksworld (hard)' o1-preview Direct 23.65%, $52.12; LRM Modulo 98.2%, 7 iterations, $139.36; o1-mini Direct 0.90%, $16.30; LRM Modulo 10%, 4 iterations, $40.80. Text: 'saturates within 7 iterations, with the combined system achieving 98.2%'.
+
+== [7]/verdicts[4]/evidence 98.2
+2410.02162 Sec. 3.1: '110 harder Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'. Table 5: 'Blocksworld (hard)' o1-preview Direct 23.65%, $52.12; LRM Modulo 98.2%, 7 iterations, $139.36; o1-mini Direct 0.90%, $16.30; LRM Modulo 10%, 4 iterations, $40.80. Text: 'saturates within 7 iterations, with the combined system achieving 98.2%'.
+
+== [7]/verdicts[4]/evidence o1-mini
+2410.02162 Sec. 3.1: '110 harder Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'. Table 5: 'Blocksworld (hard)' o1-preview Direct 23.65%, $52.12; LRM Modulo 98.2%, 7 iterations, $139.36; o1-mini Direct 0.90%, $16.30; LRM Modulo 10%, 4 iterations, $40.80. Text: 'saturates within 7 iterations, with the combined system achieving 98.2%'.
+
+== [7]/verdicts[4]/evidence 98.2
+2410.02162 Sec. 3.1: '110 harder Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'. Table 5: 'Blocksworld (hard)' o1-preview Direct 23.65%, $52.12; LRM Modulo 98.2%, 7 iterations, $139.36; o1-mini Direct 0.90%, $16.30; LRM Modulo 10%, 4 iterations, $40.80. Text: 'saturates within 7 iterations, with the combined system achieving 98.2%'.
+
+== [7]/verdicts[5]/claim 53.6
+6. DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [7]/verdicts[5]/claim Blocksworld-hard
+6. DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [7]/verdicts[5]/claim o1-mini
+6. DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [7]/verdicts[5]/claim Blocksworld-hard
+6. DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [7]/verdicts[5]/correction o1-mini
+The README numbers are correct, but two parts are wrong. (1) 'No paper found' is false. The TMLR 2025 paper (Valmeekam, Stechly, Gundawar, Kambhampati, 'A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1', openreview.net/forum?id=FkKBxp0FhR, which the README itself links) states in its abstract that it provides 'similar evaluations of a more recent (and open-weight) LRM - DeepSeek R1'. I could not open the TMLR PDF (OpenReview bot challenge), so whether its exact R1 numbers match the README is unverified. (2) The o1-mini 10% on Blocksworld-hard is not a direct-prompting score. In arXiv 2410.02162 Table 5, o1-mini direct is 0.90% and 10% is its LRM-Modulo result (4 iterations). The leaderboard column mixes this with o1-preview's direct 23.65%. Also note: an early Valmeekam tweet reported R1 at 96.6% Blocksworld and 39.8% Mystery, which differs from the README.
+
+== [7]/verdicts[5]/correction Blocksworld-hard
+The README numbers are correct, but two parts are wrong. (1) 'No paper found' is false. The TMLR 2025 paper (Valmeekam, Stechly, Gundawar, Kambhampati, 'A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1', openreview.net/forum?id=FkKBxp0FhR, which the README itself links) states in its abstract that it provides 'similar evaluations of a more recent (and open-weight) LRM - DeepSeek R1'. I could not open the TMLR PDF (OpenReview bot challenge), so whether its exact R1 numbers match the README is unverified. (2) The o1-mini 10% on Blocksworld-hard is not a direct-prompting score. In arXiv 2410.02162 Table 5, o1-mini direct is 0.90% and 10% is its LRM-Modulo result (4 iterations). The leaderboard column mixes this with o1-preview's direct 23.65%. Also note: an early Valmeekam tweet reported R1 at 96.6% Blocksworld and 39.8% Mystery, which differs from the README.
+
+== [7]/verdicts[5]/correction o1-mini
+ng. (1) 'No paper found' is false. The TMLR 2025 paper (Valmeekam, Stechly, Gundawar, Kambhampati, 'A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1', openreview.net/forum?id=FkKBxp0FhR, which the README itself links) states in its abstract that it provides 'similar evaluations of a more recent (and open-weight) LRM - DeepSeek R1'. I could not open the TMLR PDF (OpenReview bot challenge), so whether its exact R1 numbers match the README is unverified. (2) The o1-mini 10% on Blocksworld-hard is not a direct-prompting score. In arXiv 2410.02162 Table 5, o1-mini direct is 0.90% and 10% is its LRM-Modulo result (4 iterations). The leaderboard column mixes this with o1-preview's direct 23.65%. Also note: an early Valmeekam tweet reported R1 at 96.6% Blocksworld and 39.8% Mystery, which differs from the README.
+
+== [7]/verdicts[5]/correction 23.6
+lanning and Scheduling Abilities of the Reasoning Model o1', openreview.net/forum?id=FkKBxp0FhR, which the README itself links) states in its abstract that it provides 'similar evaluations of a more recent (and open-weight) LRM - DeepSeek R1'. I could not open the TMLR PDF (OpenReview bot challenge), so whether its exact R1 numbers match the README is unverified. (2) The o1-mini 10% on Blocksworld-hard is not a direct-prompting score. In arXiv 2410.02162 Table 5, o1-mini direct is 0.90% and 10% is its LRM-Modulo result (4 iterations). The leaderboard column mixes this with o1-preview's direct 23.65%. Also note: an early Valmeekam tweet reported R1 at 96.6% Blocksworld and 39.8% Mystery, which differs from the README.
+
+== [7]/verdicts[5]/evidence 53.6
+raw.githubusercontent.com/karthikv792/LLMs-Planning/main/README.md leaderboard: 'Deepseek R1 | LRM | 99.1% | 43.3% | 25.8% | 53.6%'; 'o1-mini | LRM | 56.6% | 19.1% | 3.5% | 10%'; 'o1-preview ... 23.65%'. ASU Pure and mlanthology abstracts of the TMLR paper both mention the DeepSeek R1 evaluation. Local LEDGER.json: deepseek-r1-api zero-shot 595/600 (99.17%), consistent with 99.1%.
+
+== [7]/verdicts[5]/evidence o1-mini
+raw.githubusercontent.com/karthikv792/LLMs-Planning/main/README.md leaderboard: 'Deepseek R1 | LRM | 99.1% | 43.3% | 25.8% | 53.6%'; 'o1-mini | LRM | 56.6% | 19.1% | 3.5% | 10%'; 'o1-preview ... 23.65%'. ASU Pure and mlanthology abstracts of the TMLR paper both mention the DeepSeek R1 evaluation. Local LEDGER.json: deepseek-r1-api zero-shot 595/600 (99.17%), consistent with 99.1%.
+
+== [7]/verdicts[5]/evidence 23.6
+raw.githubusercontent.com/karthikv792/LLMs-Planning/main/README.md leaderboard: 'Deepseek R1 | LRM | 99.1% | 43.3% | 25.8% | 53.6%'; 'o1-mini | LRM | 56.6% | 19.1% | 3.5% | 10%'; 'o1-preview ... 23.65%'. ASU Pure and mlanthology abstracts of the TMLR paper both mention the DeepSeek R1 evaluation. Local LEDGER.json: deepseek-r1-api zero-shot 595/600 (99.17%), consistent with 99.1%.
+

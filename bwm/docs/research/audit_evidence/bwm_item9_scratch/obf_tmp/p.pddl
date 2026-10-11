@@ -1,0 +1,7 @@
+(define(problem sgo011s1bm8o9qw)
+    (:domain dxpflc3up53obvi)
+    (:objects o1 o10 o11 o12 o13 o14 o15 o16 o17 o18 o19 o2 o20 o21 o22 o23 o24 o3 o4 o5 o6 o7 o8 o9)
+    (:init (a46zhwykn6jvbabk o1) (a46zhwykn6jvbabk o14) (a46zhwykn6jvbabk o17) (b6e9q4r60gagvdcn o13) (b6e9q4r60gagvdcn o7) (b6e9q4r60gagvdcn o8) (cql4o62p1yeke3ok o10) (cql4o62p1yeke3ok o9) (dvr5qjofrygv9zlx o10 o14) (dvr5qjofrygv9zlx o12 o11) (dvr5qjofrygv9zlx o15 o5) (dvr5qjofrygv9zlx o16 o18) (dvr5qjofrygv9zlx o19 o1) (dvr5qjofrygv9zlx o20 o17) (dvr5qjofrygv9zlx o21 o14) (dvr5qjofrygv9zlx o24 o1) (dvr5qjofrygv9zlx o3 o1) (dvr5qjofrygv9zlx o4 o2) (dvr5qjofrygv9zlx o6 o18) (dvr5qjofrygv9zlx o9 o14) (fe8cgp3y92p6lb85 o1) (fe8cgp3y92p6lb85 o11) (fe8cgp3y92p6lb85 o14) (fe8cgp3y92p6lb85 o17) (fe8cgp3y92p6lb85 o18) (fe8cgp3y92p6lb85 o2) (fe8cgp3y92p6lb85 o22) (fe8cgp3y92p6lb85 o23) (fe8cgp3y92p6lb85 o5) (j3bxzst7l100cyne o1 o13) (j3bxzst7l100cyne o11 o7) (j3bxzst7l100cyne o14 o7) (j3bxzst7l100cyne o17 o8) (j3bxzst7l100cyne o18 o8) (j3bxzst7l100cyne o2 o13) (j3bxzst7l100cyne o22 o13) (j3bxzst7l100cyne o23 o8) (j3bxzst7l100cyne o5 o7) (lwiiiuk750o3u28e o15) (lwiiiuk750o3u28e o16) (lwiiiuk750o3u28e o19) (lwiiiuk750o3u28e o20) (lwiiiuk750o3u28e o21) (lwiiiuk750o3u28e o3) (lwiiiuk750o3u28e o4) (rvgqqfhogwl9yspo o12) (rvgqqfhogwl9yspo o24) (rvgqqfhogwl9yspo o6))
+    (:goal (and (dvr5qjofrygv9zlx o4 o11) (dvr5qjofrygv9zlx o3 o1) (dvr5qjofrygv9zlx o16 o17) (dvr5qjofrygv9zlx o20 o23) (dvr5qjofrygv9zlx o21 o18) (dvr5qjofrygv9zlx o19 o18) (dvr5qjofrygv9zlx o15 o5)))
+)
+

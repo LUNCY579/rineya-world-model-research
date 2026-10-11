@@ -1,0 +1,1013 @@
+{
+ "audit": [
+  {
+   "dimension": "frozen_results",
+   "summary": "I recomputed every registered number in DECISIONS P-10 and MIRROR_GAP_ANALYSIS.json in memory from runs/BW_TEST_B2/*/plans.jsonl, using success = val if present, else success. Every one reproduces exactly. That covers the counts (73/110 vs 5/110, 61/110 vs 6/110, 602/602 vs 584/602), the discordant pairs (+68/-0, +55/-0, +18/-0), the exact McNemar p-values (6.776e-21, 5.551e-17, 7.629e-06), the Clopper-Pearson CIs, the +10.909 pp gap with Fisher p = 0.1283, and the costs per instance (186.9 F queries and 7991.9 proposer tokens on hard; 3.0 and 279.1 on PlanBench). All six summary.json files match their plans.jsonl (n, success, val_success, 0 val_disagreements). Each shard set covers its instance set exactly once with index % k == i, the shard concatenation is identical to the merged plans.jsonl, and the args of all 20 shard records equal FREEZE_B2_beam.json. The sha256 of PREREG_PLANBENCH.md is still adfc4354..., and the adapter hashes match the freeze records and release/adapters. The release evidence, code and CORE.json agree with runs/. Nothing found reaches blocker, high or medium severity. The mismatches are minor: (1) the README rounds the hard mean tallest goal tower to 6.8, while P-10 says 6.9 (true value 6.8545); (2) the mirror S-beam F-query cost of 183.6 per instance in summary.json and CORE.json is undercounted because three shards restarted with a warm F cache (215.9 unique cached queries per instance); (3) several registered B2 reporting items (optimal-length strata, FLOPs, S-replan) are missing from P-10 and no record says they were dropped. Context: the PlanBench run uses 602 IDs rather than the zero-shot 600 (same paired result), and the mirror set has no blocks_eval run-once guard (its args were verified after the fact). Read-only throughout: python -B, scratch files only under Temp/claude/bwm_audit_scratch, and `find -newer` shows no bundle writes other than the health logger's.",
+   "findings": [
+    {
+     "id": "FR-01",
+     "severity": "low",
+     "title": "Release README states the hard mean tallest goal tower as 6.8; DECISIONS P-10 says 6.9 (true value 6.85, which rounds to 6.9)",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/release/Rineya-Titan-Sparse-BWM-Blocksworld-0.1.0-devfreeze/README.md",
+     "evidence": "README.md:34 reads \"the mirror's tallest goal tower is taller (8.1 vs 6.8)\". DECISIONS.md:584 reads \"averages 8.1 vs 6.9 on hard\". MIRROR_GAP_ANALYSIS.json has hard.mean_max_goal_tower = 6.85. Recomputed from bench/planbench/blocksworld_hard/generated with VL.goal_towers: the sum is 754 over 110 instances = 377/55 = 6.8545, which rounds to 6.9 at one decimal. The README value comes from rounding the already-rounded 6.85 down again. All other README numbers match.",
+     "recommendation": "At the next authorised package rebuild, change the README to 6.9 (or 6.85) so it matches P-10 and the JSON. The package is the package of record, so do not edit it outside an approved rebuild.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced. README.md:34 reads '(8.1 vs 6.8)'; DECISIONS.md P-10 reads '8.1 vs 6.9 on hard'. Recomputed in memory with bw_mirror_gap's own functions (scratch v_gap.py): hard sum of max goal tower = 754, 377/55 = 6.8545, which rounds to 6.9. Root cause found: scripts/build_devfreeze.py:118 formats the already-rounded JSON value (6.85) with :.1f, and Python gives round(6.85,1) = 6.8. A plain rebuild would therefore print 6.8 again; the fix has to go in build_devfreeze.py (format the unrounded mean), not only in the README. Every other README number matches."
+    },
+    {
+     "id": "FR-02",
+     "severity": "low",
+     "title": "Mirror S-beam F-query cost (183.6 per instance) is undercounted because three shards restarted with a warm F cache",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/BW_TEST_B2/mirror_beam/summary.json",
+     "evidence": "Shard progress.txt files contain more than one 'round 1:' line for mirror shard 0 (2), shard 2 (2) and shard 5 (3). BW_TEST_B2.stdout:393/398, 431/436 and 590/609/622 show re-launches after cap kills (\"exited 1073807364\"). The reported f_model_queries counts only the cache misses of the final attempt. Unique (s, a) entries in fcache.jsonl against reported counts: shard0 3014 vs 2651, shard2 2356 vs 2115, shard5 3082 vs 132 (the final attempt logs 'F queries 0' for rounds 1-5). Mirror total: 23,752 unique cached vs 20,198 reported, i.e. 215.9 vs 183.6 per instance. hard_beam (20,554 = 20,554) and planbench_beam (1,786 = 1,786) match exactly. The 183.6 also appears in CORE.json:103. wall_s is undercounted the same way. P-10 cites only the hard and PlanBench costs, so P-10 is unaffected.",
+     "recommendation": "Report the mirror cost from unique fcache keys (215.9 per instance) or footnote it as a final-attempt-only count. Consider making blocks_eval record cache hits as well as misses, so B3 and D-62 runs that resume after a cap report true unique-query cost.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced (scratch v_fcache.py). All fcache keys are unique. Mirror shard summaries vs unique fcache entries: s0 2651 vs 3014, s2 2115 vs 2356, s5 132 vs 3082; every other shard is equal. Mirror sum is 20198 reported vs 23752 unique (183.6 vs 215.9 per instance). Hard (20554) and PlanBench (1786) match exactly. 'round 1:' counts in progress.txt are 2/2/3 for s0/s2/s5. Shard 5's final attempt logs 'F queries 0' for rounds 1-5 and ends at 132. Mechanism: blocks_planner.py:43 says 'model_queries counts only new model calls', and D-48 restarts from scratch with a warm cache, so the summary counts only the final attempt's misses. CORE.json:103 carries 183.6. Minor evidence nit: for shard 0 there is no 'exited' line between stdout 393 and 398; that attempt was ended by the 06:33 turn-end guard, not a cap kill. Shard 0's cache also holds 363 entries from the pre-D-53 attempt. P-10 is unaffected because it cites only the hard and 602 costs."
+    },
+    {
+     "id": "FR-03",
+     "severity": "low",
+     "title": "Registered B2 reporting items are absent from P-10, with no recorded deviation (optimal-length strata, FLOPs and F tokens, S-replan arm)",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/PREREG_PLANBENCH.md",
+     "evidence": "The prereg registers several items. PREREG_PLANBENCH.md:31 and 103 register 'strata by block count and optimal plan length (from info.json)'. Line 106 registers compute per instance as 'proposer generated tokens, unique F queries and tokens, total forward FLOPs ... wall time'. Line 94 registers 'S-replan (secondary): plan_instances ... step cap 80'. Lines 30-34 of the original Track B section register paired McNemar against published systems and a fresh-600 contamination control. P-10 (DECISIONS.md:568-595) and the README report only block-count strata, F queries and proposer tokens. bw_freeze.py writes only beam and direct records, and grep finds no 'S-replan' or optimal-length entry in DECISIONS.md. Recomputed for reference: hard by optimal length (beam/direct/n) is 20-24: 27/5/30, 25-29: 18/0/20, 30-34: 17/0/30, 35-40: 11/0/30. On the zero-shot 600, S-beam vs DeepSeek-R1 per instance is +5/-0 (p = 0.0625, not significant) and vs o1-preview +13/-0 (p = 2.4e-4). None of this changes a registered headline number.",
+     "recommendation": "Add a DECISIONS note that either reports these registered secondary items (strata, FLOPs, paired-vs-published on the 600) or records them as dropped with the reason (S-replan, fresh-600 control). Any '600-set vs R1' claim must not be made (p = 0.0625).",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced. PREREG_PLANBENCH.md:30-34 registers paired McNemar vs each published system, optimal-length strata and a fresh-600 control. Line 94 registers the S-replan secondary arm; lines 103-107 register optimal-length strata and FLOPs/F tokens. grep -i 'replan|optimal len|flops|fresh' over DECISIONS.md and the release README finds no report and no recorded drop for these items. Recomputed (v_sec.py): hard by optimal length (beam/direct/n) is 20-24 27/5/30, 25-29 18/0/20, 30-34 17/0/30, 35-40 11/0/30. On the zero-shot 600, vs DeepSeek-R1 (595) S-beam is +5/-0, p = 0.0625; vs o1-preview (587) +13/-0, p = 2.44e-4. These match the auditor exactly. The Track C same-harness Qwen comparators are also unreported, but they are tracked as open in TODO_BEFORE_RUNS.md. Low is defensible because no headline is affected; it could be argued medium, since registered analyses are missing with no deviation note."
+    },
+    {
+     "id": "FR-04",
+     "severity": "info",
+     "title": "The 'PlanBench 600' run scored 602 IDs (the union of the zero-shot and one-shot published ID sets); the paired result is identical on the registered zero-shot 600",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/scripts/blocks_eval.py",
+     "evidence": "PREREG_PLANBENCH.md:26-27 defines '600 ... IDs present in the published result files'. In LEDGER.json, the zero-shot ledgers use generated_basic 1-500 and _3 1-100; the one-shot ledgers use 2-501 and 2-101. blocks_eval.load_set globs all 501 + 101 files, so the run has 2 extra IDs (generated_basic/instance-501 and generated_basic_3/instance-101), both solved by both arms. On the zero-shot 600: beam 600/600 and direct 582/600, +18/-0, p = 7.63e-6. P-10 (DECISIONS.md:575) and README:30 disclose '602'.",
+     "recommendation": "No change needed. When citing the 600 set, note that 602 = the union of the zero-shot and one-shot published IDs.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Reproduced. In LEDGER.json, every zero-shot ledger covers generated_basic 1-500 and _3 1-100, and every one-shot ledger covers 2-501 and 2-101. load_set (blocks_eval.py:30-49) globs all 501 + 101 files. The two extra IDs (generated_basic/instance-501 and generated_basic_3/instance-101) are val=True in both arms. Restricted to the zero-shot 600: beam 600/600, direct 582/600, +18/-0, p = 7.63e-6. P-10 and README:30 disclose 602."
+    },
+    {
+     "id": "FR-05",
+     "severity": "info",
+     "title": "The mirror set is not covered by blocks_eval's test-set guard (freeze-args check and run-once); verified after the fact that all mirror runs used the frozen args",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/scripts/blocks_eval.py",
+     "evidence": "blocks_eval.py:22 has TEST_SETS = (\"planbench\", \"hard\"), so --set mirror skips the freeze-args comparison and the 'summary.json exists' refusal. Checked: mirror_direct args equal FREEZE_B2_direct.json, and all 8 mirror_beam shard args equal FREEZE_B2_beam.json, with freeze, val=True and n=0 set. The progress logs show restarts only of interrupted, never-completed attempts, so the frozen mirror result is valid.",
+     "recommendation": "Add 'mirror' (and future fresh B3 sets that are meant to run once) to TEST_SETS before more once-only runs. Not urgent for B2.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Reproduced. blocks_eval.py:22 has TEST_SETS = ('planbench','hard'), so the freeze-args check and the run-once check (lines 84-95) skip 'mirror'. Verified with v_shards.py: all 8 mirror_beam shard args equal FREEZE_B2_beam.json on all 16 keys (freeze=runs/FREEZE_B2_beam.json, val=True, n=0), and mirror_direct args equal FREEZE_B2_direct.json. BW_TEST_B2.stdout:367 shows the mirror direct arm ran once."
+    },
+    {
+     "id": "FR-06",
+     "severity": "info",
+     "title": "Planner code changed (D-53) between the hard S-beam run and the mirror/PlanBench S-beam runs; documented in D-53",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/bwmn/blocks_planner.py",
+     "evidence": "Timestamps: hard_beam/summary.json 2026-10-09 06:17:45; bwmn/blocks_planner.py modified 07:03:49 (sha 18a5f22b..., the D-57 pin, still unchanged); bundleD.stdout:14 'start bw-tests' at 07:19:35, which is the counted mirror shard 0 attempt. The discarded first attempt (06:2x-06:33) ran the old code, and its 363 F-cache entries were reused. DECISIONS.md:477-480 (D-53) claims the defaults are behaviour-identical, backed by an exact-F harness regression (110/110, identical 79,745 calls).",
+     "recommendation": "No action needed. When the frozen B2 code is described, cite D-53.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Reproduced. hard_beam shard summaries span 10-08 20:05 to 10-09 06:17:42. bwmn/blocks_planner.py was modified 10-09 07:03:49; its sha 18a5f22b equals the D-57 pin and release/code. Mirror shard 0's first attempt logged round 1 at 06:28:48 with 363 F queries; the counted attempt logged round 1 at 07:23:05 with 0 F queries. Extra check: the pre-D-53 planner is preserved in gh_export commit ea466a3 (sha b151c26a...). git diff ea466a3..5a317d1 shows only the goal_met/unmet hooks defaulting to B.goal_met and len(g - st), plus it.get('objs'), which is behaviour-preserving by inspection and consistent with the D-53 regression claim."
+    },
+    {
+     "id": "FR-07",
+     "severity": "info",
+     "title": "All P-10 and MIRROR_GAP_ANALYSIS numbers, summaries, shard merges and release numbers reproduce exactly",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/BW_TEST_B2",
+     "evidence": "Recompute (scratch audit_b2.py): hard beam 73/110 (CI 0.5673-0.7509), direct 5/110, +68/-0, p = 6.776e-21. Mirror 61/110 (CI 0.4567-0.6493), direct 6/110, +55/-0, p = 5.551e-17. PlanBench 602/602 (CI 0.9939-1.0), direct 584/602 (CI 0.9532-0.9822), +18/-0, p = 7.629e-06. Gap 10.909 pp, Fisher two-sided 0.1283. All six summaries match their plans.jsonl (n, success, val_success, val_disagreements 0, tokens per instance, verified_rate). No duplicate, missing or extra IDs. Shard concatenation equals merged plans.jsonl, and the F-query sums equal the merged totals. Recomputed MIRROR_GAP_ANALYSIS.json equals the stored file field for field (std 0.69904, gap -3.5). Interim P-07 (25/42, +24/-0, p = 1.2e-7) and P-09 (38/70, +34/-0, p = 1.2e-10; hard 44/70; +8.6 pp) and the P-08 block strata and 73/73 verified precision also reproduce. Every CORE.json value matches, including the README's CIs and its Fisher p-values vs the references (R1 59/110 p = 0.0733, o1-preview 26/110 p = 2.39e-10, o1-mini 11/110 p = 1.24e-18). The '20-40-step plans' range matches info.json (20-40, mean 30.0).",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Independently reproduced (v_recompute.py, v_core.py, v_shards.py, v_interim.py). Hard 73/110 (CI 0.5673-0.7509) vs 5/110, +68/-0, p = 6.776e-21. Mirror 61/110 (CI 0.4567-0.6493) vs 6/110, +55/-0, p = 5.551e-17. 602/602 (CI 0.9939-1) vs 584/602 (CI 0.9532-0.9822), +18/-0, p = 7.629e-06. Gap 10.909 pp, Fisher p = 0.12832. Every row has a val field, with 0 val/success disagreements. MIRROR_GAP_ANALYSIS recomputed equals the stored file (std 0.69904). For all 20 shard records, the shard concatenation equals the merged plans.jsonl line for line and the IDs equal index % k == i. Every value in the CORE.json measured block matches the recompute (0 mismatches), including success_by_blocks and the CIs. Fisher p vs references is 0.0733 / 2.39e-10 / 1.24e-18. P-07 (25/42, +24/-0, 1.19e-7), P-09 (38/70, +34/-0, 1.16e-10; hard 44/70; +8.57 pp), the P-08 strata, and verified precision 73/73 with 0 of 37 failures verified all reproduce."
+    },
+    {
+     "id": "FR-08",
+     "severity": "info",
+     "title": "Freeze integrity holds: PREREG sha unchanged, adapters unchanged, release evidence byte-identical, and B3 training does not overwrite the frozen Pa",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/FREEZE_B2_beam.json",
+     "evidence": "sha256sum PREREG_PLANBENCH.md = adfc4354adb0262ad5175c517ff186e7a17e4efe95ddd33ba6ae4ad1fc3bf4d2, equal to prereg_sha256 in both FREEZE_B2 records (file mtime 2026-10-07 14:49). BW_Pa_v2_s1 is ee1c5aec... and BW_Fdelta_s0 is 2ed0bb00...; both equal the freeze records and release/adapters/*. diff -rq of runs/BW_TEST_B2 against release evidence/BW_TEST_B2 differs only in fcache.jsonl and tmp_problem.pddl. FREEZE_*, PREREG and select.jsonl are byte-identical, as are code/*.py and code/bwmn/*.py against the working tree. gh_export/bwm/results/BW_TEST_B2 is identical too, and its P-10 text matches. bundleE uses '--init-adapter runs/BW_Pa_v2_s1/adapter', but train_generic.py:55-71 only reads it and saves to --out/adapter (BW_Pa_v3_s1 and BW_Pa_v2c_s1).",
+     "recommendation": "None. Keep runs/BW_Pa_v2_s1 and runs/BW_Fdelta_s0 read-only while bundleE and bundleG run.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Reproduced. sha256 of PREREG_PLANBENCH.md and of the release evidence copy is adfc4354... (mtime 10-07 14:49:14), equal to prereg_sha256 in both FREEZE records and in CORE.json. The adapter safetensors are ee1c5aec (Pa) and 2ed0bb00 (F), equal to the freeze records and release/adapters; diff -rq of the adapter dirs shows no differences. diff -rq of runs/BW_TEST_B2 against evidence differs only in fcache.jsonl and tmp_problem.pddl. release/code/*.py and code/bwmn/*.py are byte-identical to the working tree, and evidence/select.jsonl equals runs/BW_SELECT_v1/select.jsonl. bundleE writes to runs/BW_Pa_v3_s1 and BW_Pa_v2c_s1 only (train_generic.py saves to out/'adapter'). bw_b3_eval.py writes only under runs/BW_B3_EVAL (lines 42, 79, 127)."
+    }
+   ],
+   "verifier_missed": [
+    "LOW: the pushed private GitHub README is stale. gh_export/bwm/README.md (origin/main == HEAD 5a317d1) was last changed in ed94c45. It still says 'The mirror-set and PlanBench-600 runs are in progress' and does not mention the RAISED mirror contamination flag. tools/export_bwm.py:8 states that re-export replaces bwm/ except bwm/README.md, so it will stay stale until someone edits it by hand. docs/DECISIONS.md and results/ in the export are current.",
+    "LOW (root cause behind FR-01): scripts/build_devfreeze.py:118 builds the README sentence with f\"{g['hard']['mean_max_goal_tower']:.1f}\" from the 2-decimal JSON value, which double-rounds 6.8545 to 6.85 and then 6.8. Any rebuild repeats the error unless this line is fixed.",
+    "INFO: the test inputs are unchanged since the freeze. runs/BW_val_large/instances_mirror_hard.json has mtime 10-07 14:48:54 (before PREREG at 14:49:14) and sha256 2f61e38b..., identical to the gh_export copy. `find -newer PREREG_PLANBENCH.md` finds no file under bench/planbench/blocksworld_hard or blocksworld/generated_basic{,_3}. Nothing in runs/BW_TEST_B2 is newer than MIRROR_GAP_ANALYSIS.json (03:04:45); .done reads 'all test runs complete'.",
+    "INFO: each S-direct arm ran exactly once, including the unguarded mirror. BW_TEST_B2.stdout has a single 'run <set> direct' line for each set (lines 1, 367, 687), and no direct progress.txt shows a restart.",
+    "INFO: the B2 prereg text (PREREG_PLANBENCH.md:92) names BW_F_s0, but the frozen configuration uses BW_Fdelta_s0. The change is recorded before any test run as F-07 (DECISIONS ~l.415-421: 'Delta format kept for B2 ... before any test run'), and the sha-pinned prereg was not amended. Selection (runs/BW_SELECT_v1/select.jsonl) evaluated only 3 beam configurations, all delta-F, on subsets of n=30 (val_large) and n=50 (val_v2), not the full 120/400 named in prereg l.96-97. The mean of 0.633 and 0.98 is 0.8067, which equals selection_mean_success. The test-set selection rule was not violated (no test data was used), but the subset sizes are not stated in P-10 or the README.",
+    "INFO: peer RCWM DECISIONS.md:760-763 quotes the B2 numbers consistently, with rounded p-values (7e-21, 6e-17, 8e-6) and the mirror flag raised.",
+    "INFO, read-only compliance: I ran only read-only git commands (--no-optional-locks log/show/diff/rev-parse) in gh_export. The gh_export/.git directory mtime moved to 09:42:23, either from those commands or from another agent. No file in .git is newer than 03:06:27 (the index, refs and objects are unchanged). My scratch scripts are C:/Users/clclc/AppData/Local/Temp/claude/bwm_audit_scratch/v_*.py, and no __pycache__ was written into the bundles."
+   ]
+  },
+  {
+   "dimension": "b3_pipeline",
+   "summary": "I found no blockers in the B3 search-distillation pipeline. Every bundleE command matches PREREG_B3_DISTILL.md: n 240; K 4 with W 4, E 24, R 12, M 80, P 1; F and Pa adapters as registered; 400 steps x batch 16, lr 1e-4, seed 1, max-len 640, --init-adapter BW_Pa_v2_s1; the mix construction; the freeze contents; eval at K1, M256, eval_seed 0; and the met/partial/no reading rule. The prereg (e6aa884b) and the b3fresh set (575c45b1) still match the hashes in D-58. blocks_planner.py still matches its D-57 freeze (18a5f22b). The Pa and F adapters match FREEZE_B2_beam.\n\nThe search resumes safely after the reboot:\n- solutions.jsonl has 168 well-formed lines with ids distill/0..167.\n- bw_distill.problems(240) gives identical problems under two PYTHONHASHSEEDs, so the 72 remaining ids (168..239) form 3 chunks of 24 that line up with the original chunking.\n- The fcache has 12,086 lines and every one parses.\n\nThe data so far is clean: 148/168 verified, label precision 148/148, no verified plan with f_states shorter than its plan, no malformed facts, and no difference between F and the exact simulator over 3,030 rows. The largest row is 436 tokens, so none would be dropped at 640.\n\nI ran analyze() on synthetic files in scratch and it works. scipy is installed in the orchestrator venv.\n\nWeak points, none of which blocks the run:\n- The training time estimates are about 1.7x too low, so B3 will likely need two or more GPU turns.\n- The checkpoint-resume path in train_sft and the --init-adapter path have never been run, though the code reads as correct.\n- A few readers would fail on a half-written line, and the training marker file is written non-atomically.\n- results.jsonl stores the success rate under the name \"success\", and its truncation count has an off-by-one.\n- Some report-only secondary numbers are not computed automatically.\n\nbundleE is queued now: gpu_run pid 37616 is waiting while RCWM holds the lease. Any fix has to land before it acquires the lease.",
+   "findings": [
+    {
+     "id": "B3-01",
+     "severity": "info",
+     "title": "bundleE commands match the B3 prereg exactly",
+     "evidence": "bundleE.json: search --n 240; train both arms '--steps 400 --batch 16 --lr 0.0001 --seed 1 --max-len 640 --init-adapter runs/BW_Pa_v2_s1/adapter'. bw_distill.py:132-137 defaults K=4, W=4, E=24; line 73 'a.R = frz[\"R\"]' (=12); line 71 'max_new=frz[\"M\"]' (=80), 'prefix_ok=bool(frz[\"P\"])' (=1). FREEZE_B2_beam.json: fwd_adapter runs/BW_Fdelta_s0/adapter, fwd_fmt delta. bw_b3_prep.py:57-62 drops rows with prompt+target+1 > 640 (same arithmetic as lm.encode_pair) and uses Random(0); v2c = pick[:2|D|] and the v2 half of v3 = pick[:|D|]. bw_b3_eval.py:28 'M, K, EVAL_SEED = 256, 1, 0' matches FREEZE_B2_direct.json. Lines 125-126 implement met (>=10 pp and p<0.05), partial (>0), no. sha256: PREREG_B3_DISTILL.md e6aa884b..., instances_b3_fresh.json 575c45b1... (both as in D-58); blocks_planner.py 18a5f22b... (D-57 freeze); Pa_v2 ee1c5aec... and Fdelta 2ed0bb00... (as in FREEZE_B2). Scratch regen: b3fresh shares 0 invariants with the 240 distill problems and 0 with hard/val_large/mirror, and its block-count distribution equals the hard set's.",
+     "recommendation": "None. Do not edit the prereg, b3fresh, MIX_META, DISTILL_META or the three adapters between freeze and analyze: bw_b3_eval.py:53-58 calls sys.exit if any SHA changes.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Re-checked myself. bundleE.json: search passes only --n 240, so the bw_distill.py:132-137 defaults apply (K 4, W 4, E 24). bw_distill.py:71-73 takes M 80, P 1 and R 12 from FREEZE_B2_beam.json, which I verified: fwd_adapter BW_Fdelta_s0, fwd_fmt delta, pa BW_Pa_v2_s1. max_depth stays at the plan_beam default of 80, the same as the freeze. Both train commands are '--steps 400 --batch 16 --lr 0.0001 --seed 1 --max-len 640 --init-adapter runs/BW_Pa_v2_s1/adapter'. bw_b3_eval.py:28 sets M, K, EVAL_SEED = 256, 1, 0, which matches FREEZE_B2_direct (K 1, M 256, P 0, eval_seed 0); LMProposerBW's prefix_ok defaults to False. Lines 125-126 implement the met/partial/no rule. sha256sum: PREREG_B3_DISTILL.md e6aa884b..., instances_b3_fresh.json 575c45b1..., blocks_planner.py 18a5f22b..., Pa_v2 ee1c5aec..., Fdelta 2ed0bb00..., PREREG_PLANBENCH adfc4354..., all as recorded. I also regenerated b3fresh with a verbatim copy of bw_b3_prep.fresh(); it is byte-identical (sha 575c45b1...)."
+    },
+    {
+     "id": "B3-02",
+     "severity": "info",
+     "title": "Search resume is deterministic: 72 remaining ids in 3 aligned chunks, cache intact",
+     "evidence": "Scratch copy of solutions.jsonl: 168 lines, all parse, ids == distill/0..167, every line ends with \\r\\n. A verbatim copy of bw_distill.problems(240), run under PYTHONHASHSEED=1 and 12345, gives 0/168 mismatches against the stored objs/init/goal and the same hash (7dbd1f27...). Remaining ids are distill/168..239 (72), so chunks 168-191, 192-215 and 216-239 line up with the original chunk boundaries. Candidate seeds depend on the instance id, not its position (blocks_planner.py:117 '_seed(eval_seed, it[\"id\"], it[\"round\"], j)'). fcache.jsonl: 12,086 lines, 0 unparseable, and the loader skips torn lines anyway (blocks_planner.py:56-59). The interrupted chunk 7 (about 26 GPU-min after chunk 6 finished at 08:57) is lost, but its F calls are cached.",
+     "recommendation": "None needed. Note that the resumed log will number the new chunks 0-2 again (c0 counts within todo); this is only cosmetic.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Scratch copy of solutions.jsonl: 168 lines, ids distill/0..167, 168 CRLF line ends, last byte is a newline. A verbatim copy of problems(240) run under PYTHONHASHSEED 0, 777 and 31337 gives 0/168 mismatches and the same digest each time. The 72 remaining ids are distill/168..239, so the chunks are 168-191, 192-215 and 216-239, aligned with the old boundaries. Seeds are per id (blocks_planner.py:117). fcache.jsonl: 12,086 lines, 0 unparseable, 12,086 unique keys, ends with a newline. The loader skips torn lines (blocks_planner.py:55-59). solutions.jsonl mtime is 08:57:44 and fcache 09:23:21, so the lost chunk 7 is about 26 min of work. Chunk numbering restarts at 0 (c0 indexes into todo); this is cosmetic."
+    },
+    {
+     "id": "B3-03",
+     "severity": "info",
+     "title": "solutions.jsonl statistics: clean F labels, no short f_states, no row over 640 tokens",
+     "evidence": "Scratch analysis of the 168 done problems: 148 verified (by blocks 6:20/21, 7:21/21, 8:38/42, 9:38/42, 10:31/42). exact_valid_for_analysis_only is 148/148 among verified and 0/20 among unverified. 0 verified plans have len(f_states) < len(plan), so rows() cannot raise IndexError. 0 malformed facts. 0 verified plans whose last F-state misses the goal. 0 of 3,030 rows where the F-state differs from the exact state. Verified plan length 2-58 (mean 20.5); 6-7-block plans average 1.01x the BFS optimum. Token counts with the core tokenizer.json: rows average 225 tokens, max 436 (0 over 640); max target+EOS 248 (fits M=256); v2 rows max 245 (10% sample). Projected |D| is about 4,330 and 2|D| about 8,660, well under the 53,682 v2 rows, so rng.sample cannot fail.",
+     "recommendation": "None. If label precision stays at 1.0 after the remaining 72, the 'simulator-free' qualifier in the prereg does not apply.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Reproduced on the scratch copy. 148/168 verified; by block count 6:20/21, 7:21/21, 8:38/42, 9:38/42, 10:31/42. Exact success is 148/148 among verified and 0/20 among unverified. 0 verified plans have len(f_states) < len(plan). Of 3,030 rows, 0 have an F state that differs from the exact state. 0 plans whose last F state misses the goal, 0 malformed facts, 0 states with other than one hand fact. Plan length 2-58 (mean 20.47). 6-7-block plans average 1.01x the BFS optimum (max 1.4). Token counts with tokenizers on the core tokenizer.json: mean 225.0, max 436, 0 rows over 640; max target+EOS 248. v2 rows: 53,682 (48,444 success, 5,238 failure). Projected |D| is 4,329."
+    },
+    {
+     "id": "B3-04",
+     "severity": "low",
+     "title": "Training est_s=3600 is about 1.7x too low, so B3 will need 2+ GPU turns and one arm will likely be cut at the cap",
+     "evidence": "runs/BW_Pa_v2_s1/log.txt: 'step 1000/1000 ... 14805s' at max_len 256, about 174 tokens/row (tokens_processed 2781649 / 16000). Distillation rows average 225 tokens, so at 14.8-17 s/step each 400-step arm takes about 5,900-6,800 s. Rough budget for the next turn (16,200 s): remaining search about 5,400 s, plus rows and mix, then Pa_v3 at about 6,800 s. That leaves under 3,600 s for Pa_v2c, so bundle.py:39-42 returns 75, or the arm is started and killed at the cap (bundle.py:54-64) and resumes from its last 50-step checkpoint, losing up to 49 steps.",
+     "recommendation": "Nothing breaks. Set train est_s to about 7000 in a future bundle file so the cap-kill is avoided, or accept a planned resume. Tell the user and RCWM that B3 will span at least 2 turns.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "I rebuilt train_generic's row order (Random(10007*seed+17), one permutation prefix). My simulated real-token count for Pa_v2_s1 is 2,781,649, exactly RUN_META tokens_processed, so the order reconstruction is validated. Scaling Pa_v2's 14,805 s by microbatch token counts, using a projected mix (3,030 real distillation rows resampled to |D| = 4,329): Pa_v3 is about 6,800 s (real tokens) to 7,400 s (padded tokens), and Pa_v2c about 5,900 s. That is 1.65-2.1x the est_s of 3600. The search log shows about 30.5 min per chunk, so 3 chunks take about 5,500 s. Next turn: Pa_v3 finishes at about 12,500-13,100 s of the 16,200 s budget. Pa_v2c is then either refused (bundle.py:39-42, returns 75) or started and cap-killed (bundle.py:52-64), resuming from its 50-step checkpoint. B3 therefore needs at least 2 BWM turns. Nothing breaks."
+    },
+    {
+     "id": "B3-05",
+     "severity": "low",
+     "title": "The --init-adapter path and train_sft checkpoint resume have never run; static reading says they are correct",
+     "evidence": "No 'resumed from' or 'init adapter' line exists in any runs/**/*.txt or *.stdout (grep found nothing). train_generic.py:60 builds the model with 'PeftModel.from_pretrained(model, ..., is_trainable=True)'. In peft 0.20.0, peft_model.py:572-576 sets inference_mode = not is_trainable, so the LoRA tensors under adapter 'default' are trainable and have the same names as in the attach_lora path. lm.py:440 checks only steps, batch_size and order_head, none of which depend on the model. Lines 444-445 copy the saved LoRA params over the init weights and load AdamW state, which torch moves to each param's device. Lines 457/508 save every 50 steps, writing a .tmp file and then calling os.replace. The checkpoint does not record the init-adapter SHA or the rows SHA, but runs/BW_Pa_v3_s1 and runs/BW_Pa_v2c_s1 do not exist yet, so no stale checkpoint can be picked up.",
+     "recommendation": "After the first cap-kill, confirm the log shows 'resumed from .../ckpt.pt at step N' and that the loss curve continues smoothly. For the future, consider storing the init_sha and rows file SHA in ckpt.pt and checking them on resume.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "A grep of runs/ for 'resumed from|init adapter' finds no files, and Pa_v2_s1/log.txt shows a restart from step 1, not a resume. So neither path has run in production. Static reading of peft 0.20.0 holds: peft_model.py:573-576 sets inference_mode = not is_trainable. tuners_utils.py:1056-1061 freezes every non-lora_ parameter and leaves the 'default' adapter trainable when inference_mode is False. load_adapter calls self.eval() only when not is_trainable (peft_model.py:1586-1588), and train_sft calls model.train() anyway. Parameter names are identical to the attach_lora path. lm.py:440 validates steps, batch_size and order_head; lines 443-445 copy the params and load the AdamW state. save_ckpt writes .tmp and then os.replace. The checkpoint does not record the init-adapter or rows SHA; this is harmless because the output directories do not exist yet."
+    },
+    {
+     "id": "B3-06",
+     "severity": "low",
+     "title": "A half-written line would permanently break several readers; the training marker is written non-atomically",
+     "evidence": "bw_distill.py:56 builds the done set with 'json.loads(l)' on every solutions line with no try/except; rows() line 108 and bw_b3_eval.py:61 (results.jsonl) do the same. A taskkill or power loss during an append would make every retry crash, and the orchestrator marks the job .failed after 2 attempts (orchestrate.py). By contrast, LMForwardBW guards against this case. The training marker is adapter/adapter_model.safetensors (bundleE.json), written directly by PEFT save_pretrained before adapter_config.json and RUN_META.json. A kill inside that window would leave a marker for an incomplete adapter. Both windows are milliseconds long; the current files are intact.",
+     "recommendation": "No change before the run. If bundleE fails with a JSONDecodeError or a missing adapter_config.json, check the last line or the adapter folder by hand before retrying.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "bw_distill.py:56 and :108 and bw_b3_eval.py:61 call json.loads with no guard, while LMForwardBW guards (blocks_planner.py:56-59). The peft save_pretrained source writes the weights with safe_save_file (peft_model.py:378) before the config (line 432). lm.save_adapter then writes RUN_META, so the marker file appears first. orchestrate.py:127-135 writes <name>.failed after the 2nd non-75 failure (attempts reset when the orchestrator restarts). runnable[0] means bundleE is retried before bundleG. The current files are intact: solutions ends with a newline and has 0 bad lines. The windows are milliseconds long."
+    },
+    {
+     "id": "B3-07",
+     "severity": "low",
+     "title": "results.jsonl 'success' is a rate, and the truncation count includes plans that end with EOS at token 256",
+     "evidence": "bw_b3_eval.py:82 '\"success\": summ[\"success\"]', and blocks_planner.py:365 sets success = res[\"success\"] / max(1, res[\"n\"]), i.e. a fraction. Line 83 counts truncation as 'e[\"gen_tokens\"] >= M', but n_tokens includes the EOS (lm.py:645 'cut, hit = k + 1, True'), so a plan whose EOS is the 256th token is counted as truncated. Primary and secondary results come from the plans_*.jsonl files, so no reading is affected.",
+     "recommendation": "When writing the report, read success counts from B3_REPORT.json, not results.jsonl. Treat the truncation figure as an upper bound, or recompute it from plans (no EOS within 256 tokens).",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "blocks_planner.py:365 returns success as res['success']/n, a rate, and bw_b3_eval.py:82 stores it as 'success'. lm.py:645 'cut, hit = k + 1, True' means an EOS at index 255 gives n_tokens 256, which counts as truncated under bw_b3_eval.py:83 '>= M'. This only affects the report-only truncation secondary; the primary and secondary contrasts come from plans_*.jsonl."
+    },
+    {
+     "id": "B3-08",
+     "severity": "info",
+     "title": "analyze() works end to end; scipy is available to the orchestrator interpreter",
+     "evidence": "I loaded bw_b3_eval.py in scratch (importing it does not import torch), pointed OUT at the scratch folder, wrote 6 synthetic plans_<arm>_<set>.jsonl files and ran analyze(). It produced cells v2/v2c/v3 x b3fresh/mirror, the contrasts v3-v2c, v3-v2 and v2c-v2 on both sets, and a primary_reading. The filename split at line 104 parses correctly because arm and set names contain no '_'. Orchestrator, gpu_run and bundle run under the hermes venv python (process list: hermes-agent\\venv\\Scripts\\python.exe scripts/orchestrate.py), which has scipy 1.17.1. The uv base python has no scipy but is only reached through the venv launcher. blocks_eval.py has a __main__ guard and _json_set(path, prefix) exists.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "I loaded bw_b3_eval.py via importlib in scratch; torch was not in sys.modules. I set OUT to a scratch dir, wrote 6 synthetic plans_<arm>_<set>.jsonl files and ran analyze(). It produced all 6 cells and all 6 contrasts plus primary_reading ('partial' for the synthetic data); p.stem.split('_', 2) parses correctly. Process list: orchestrate.py, gpu_run.py (pid 37616) and the children run under the hermes venv python, which has scipy 1.17.1, peft 0.20.0, transformers 5.14.1 and torch 2.6.0+cu124. blocks_eval.py:25 defines _json_set(path, prefix) and has a __main__ guard at :162."
+    },
+    {
+     "id": "B3-09",
+     "severity": "info",
+     "title": "Some report-only secondaries from the prereg are not computed automatically",
+     "evidence": "The prereg's secondaries list per-block success, plan length against the exact optimum, invalid-action rate, and the share of F-verified plans that are exactly invalid. analyze() (bw_b3_eval.py:101-128) outputs only success, CI and the in-range/out-of-range split. DISTILL_META (bw_distill.py:122-123) records label_precision as exact success among verified plans, without separating invalid plans from valid plans that miss the goal. The data needed is in plans_*.jsonl ('valid', 'len', 'plan') and solutions.jsonl.",
+     "recommendation": "Compute these post hoc on CPU after analyze. A cheap sanity check: the v2/mirror cell should reproduce B2 S-direct mirror at 6/110 (runs/BW_TEST_B2/mirror_direct/plans.jsonl, same settings, 0 truncated, 300 s).",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "analyze() (bw_b3_eval.py:101-128) outputs only success, the CI and the in-range/out-of-range split. DISTILL_META (bw_distill.py:122-123) has only label precision. The plan-length-vs-optimum, invalid-action-rate and F-verified-but-exactly-invalid shares from the prereg's secondaries are not computed automatically. The v2/mirror cell uses the same ids ('mirror/i' via _json_set), K1, M256, eval_seed 0 and prefix_ok False as B2 S-direct mirror, so it should reproduce 6/110: a free sanity check."
+    },
+    {
+     "id": "B3-10",
+     "severity": "info",
+     "title": "Search uses eval_seed 7, which the prereg and D-56 do not state",
+     "evidence": "bw_distill.py:137 'ap.add_argument(\"--eval-seed\", type=int, default=7)'; FREEZE_B2_beam.json has eval_seed 0. The seed only affects the sampled candidates j>=1 on fresh problems, and 168 problems have already run with it.",
+     "recommendation": "Keep 7 so the results stay consistent, and state it in the B3 report as part of the search configuration.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "bw_distill.py:137 '--eval-seed' default 7, and the bundle does not override it. Neither PREREG_B3_DISTILL.md nor D-56/D-58 (DECISIONS.md:501-532) states the search eval seed. The seed affects only the sampled candidates j>=1. Keep 7 for consistency and report it."
+    },
+    {
+     "id": "B3-11",
+     "severity": "info",
+     "title": "By design, about 26% of mix rows are never seen in training, and the v2 half includes outcome=failure rows",
+     "evidence": "400 x 16 = 6,400 sampled rows against |mix| of about 8,660 (train_generic.py:47-52 takes one permutation prefix), so roughly a quarter of the distillation rows are never trained on. proposer_actions_train.jsonl has 48,444 success and 5,238 failure rows; Pa_v2_s1 was trained without a filter (RUN_META 'filter': \"\"), so both mixes match its training distribution.",
+     "recommendation": "Report the number of distillation rows actually seen (it can be derived from seed 1 and the order). No change, since the schedule is registered.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "train_generic.py:47-52 takes the first steps*batch = 6,400 indices of a single permutation of about 8,658 rows, so about 26% of mix rows are never seen; Pa_v3 sees roughly half distillation rows. Pa_v2_s1 RUN_META args has filter '' and the v2 file has 5,238 failure rows; their prompts carry \"outcome\":\"failure\" (blocks.py:303-304). This matches the Pa_v2 training distribution."
+    },
+    {
+     "id": "B3-12",
+     "severity": "info",
+     "title": "bundleE is already queued and waiting for the GPU lease",
+     "evidence": "Process list: pid 37616 'scripts/gpu_run.py bundleE -- scripts/bundle.py runs/bundles/bundleE.json', started 09:27:06. bundleE.stdout ends with '[gpu-run] yielding to peer lease 'rcwm-t1:*''. rineya-gpu-0.lock is held by label rcwm-t1:t2b-prereq (pid 38824, created 1791642462). None of the outputs exist yet (.search_done, .rows_done, BW_Pa_v3_s1, BW_Pa_v2c_s1, FREEZE_B3.json, BW_B3_EVAL).",
+     "recommendation": "Any change to bundleE.json or the scripts must land before gpu_run acquires the lease. The findings above do not require one.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Win32_Process: pid 37616 'scripts/gpu_run.py bundleE -- scripts/bundle.py runs/bundles/bundleE.json', created 09:27:06, child of orchestrate.py. bundleE.stdout ends with \"[gpu-run] yielding to peer lease 'rcwm-t1:*' (max 21600 s)\". rineya-gpu-0.lock: label rcwm-t1:t2b-prereq, pid 38824, created 1791642462.41. turn.json has last 'bwm'. runs/BW_DISTILL_r1 holds only fcache.jsonl and solutions.jsonl; no B3 output exists yet."
+    }
+   ],
+   "verifier_missed": [
+    "Contamination at row level, not just problem level: in a scratch check, the exact (state, goal) pairs of all 3,030 distillation rows overlap 0 times with b3fresh, mirror, val_large and the 110 hard instances, and their goals overlap 0 times (info).",
+    "Provenance of b3fresh: a verbatim copy of bw_b3_prep.fresh() regenerates instances_b3_fresh.json byte-identically (sha 575c45b1...), so the test set really is the registered seed-20261011 output (info).",
+    "Orchestrator retry semantics for B3 (orchestrate.py:79-135): rc 75 requeues without counting an attempt, and runnable[0] keeps bundleE ahead of bundleG. Two non-75 sub-job failures in one orchestrator lifetime would write runs/_failed/bundleE.failed and let bundleG run. bundleD had two rc=1073807364 (0x40010004, externally terminated) failures on 10-09, so a third-party kill path does exist; watch for bundleE.failed (low).",
+    "Memory at max-len 640 is not a risk: Pa_v2_s1 peaked at 2.90 GiB at max_len 256 with micro 4 (log.txt). The longest distillation row is 436 tokens, well inside MEM_FRACTION 0.70 of the card (info).",
+    "parse_plan rejects plans over 60 actions (blocks.py:404-405), and M=256 tokens holds about 58 actions (the longest verified plan so far is 58 actions with target+EOS 248). For long 11-15-block b3fresh/mirror instances the token cap and the action cap bind together, equally for all arms (info).",
+    "bw_b3_prep.py imports bw_distill at module top, which pulls in blocks_planner -> lm -> torch, so the CPU-only mix stage imports torch and transformers inside the GPU turn. This is harmless (no model load) but makes the stage slower to start (info).",
+    "peft 0.20 PeftModel.set_adapter (peft_model.py:1591-1611) sets requires_grad=True on the active adapter each time LMProposerBW/LMForwardBW switch adapters. This is harmless because sample_crn_shared and greedy_shared_prefix are @torch.no_grad (lm.py:570, 740), as in B2 (info).",
+    "The H1/H2 conditional hard-set runs are not in bundleE; if the primary reading is 'met' they need a separate queued job against the frozen B2 configs (info)."
+   ]
+  },
+  {
+   "dimension": "d54_readiness",
+   "summary": "I checked the D-54 key-order experiment against its prereg using only read-only, CPU-only steps: pure-python bwmn.blocks, the `tokenizers` library, and reading the peft 0.20.0 source. No torch, transformers or peft was imported, and nothing was written outside the scratch folder. I found no blockers and nothing that would invalidate the result.\n\n(1) The data file matches the prereg. Re-running bw_keyorder.py data in memory with seed 20261012 reproduces runs/BW_data/forward_delta_ko_train.jsonl byte for byte (sha256 82ec3418\u2026fa42). It holds the same 12,000 transitions in the same order, with identical target, legal and n_blocks fields, and every prompt parses back to the source state and action. The split is 5,901 canonical and 6,099 augmented rows. No row uses a held-out order H1-H3, and list shuffles occur only in augmented rows. The longest row is 175 tokens, so training will not hit the 256-token overlength error.\n\n(2) The eval code implements exactly the five registered modes and the registered reading rule. heldout_rev is identical to F-08's key_order rendering in 240 of 240 prompts. Renamed states parse correctly in 240 of 240 cases. The eval keys do not overlap with the training data or with F-08's keys.\n\n(3) Switching adapters is safe. greedy_shared_prefix never disables or switches adapters. It rebuilds its prefix cache on each call under whichever adapter is active and deep-copies only that cache, never the model. In peft 0.20.0, set_adapter switches every LoRA layer, and load_adapter does not make the new adapter active.\n\n(4) bundleG trains with exactly F0's recorded settings (600 steps, batch 16, lr 1e-4, seed 0, max-len 256); only the rows file and output folder differ. The FK adapter path matches ADAPTERS in bw_keyorder.py.\n\n(5) I found no way for the eval to silently score F0 twice. It is still worth fixing a few gaps before bundleG starts:\n- eval.json does not save per-item outputs, so the result cannot be re-scored independently.\n- It records no adapter hashes and has no check that F0 and FK differ.\n- The registered Clopper-Pearson confidence intervals are not computed.\n- The training time estimate (3,600 s) is low; F0 actually took 5,941 s.",
+   "findings": [
+    {
+     "id": "D54-01",
+     "severity": "medium",
+     "title": "eval.json saves no per-item generations or correctness, so the registered result cannot be re-scored independently",
+     "evidence": "scripts/bw_keyorder.py:116-120 keeps the generations `gens` and the dict `ok` only in memory. Lines 135-136 write only {modes, reading, eval_seed, adapters} to runs/BW_KEYORDER/eval.json. Raw outputs are not written anywhere. That rules out an independent re-score like D-61 (scripts/lb_rescore.py) or a post-hoc failure analysis like runs/BW_TEST_B2/MIRROR_GAP_ANALYSIS.json (for example, what F0 or FK actually output under the reversed key order). Re-running would cost another GPU turn.",
+     "recommendation": "Before bundleG starts (it is queued after bundleE), add a per-row JSONL dump: arm, mode, i, n, prompt sha, generated text, n_tokens, hit_eos, ok, plus the legal flag from the simulator. The registered analysis does not change, but write it down as a D-62 note.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced. The eval does write eval.json, but it holds only the aggregates: bw_keyorder.py:135-136 writes {modes, reading, eval_seed, adapters}, while `gens` and `ok` (lines 116-120) stay in memory. My stubbed end-to-end run (ROOT redirected to scratch) produced exactly that eval.json shape with no per-item data. Downgraded from medium to low: no registered quantity depends on per-item outputs. The b/c discordant counts and the rates (k = rate*240, exact) are saved, and the keys and prompts can be regenerated from seed 20261013. Recovering the raw outputs would take one deterministic greedy re-run (prereg allows 'GPU or CPU'). Still a cheap and sensible pre-run fix, given the D-61 re-score practice."
+    },
+    {
+     "id": "D54-02",
+     "severity": "low",
+     "title": "No adapter provenance and no check that F0 and FK are different files",
+     "evidence": "bw_keyorder.py:135-136 stores only the path dict ADAPTERS (line 27), not file hashes. No line in the script checks that the two adapter_model.safetensors files differ. I found no actual path to an F0 = FK result: load_adapter raises if the FK folder is missing, and train_generic.py:69 writes out/'adapter', which matches ADAPTERS['FK']. The current F0 sha256 is 2ed0bb0064bc6b11ec9c661840a38094e468462cea2ff833cda3bf234ead65ae, which matches runs/FREEZE_B2_beam.json and FREEZE_B2_direct.json.",
+     "recommendation": "Write both adapters' sha256 and the rows-file sha256 (82ec3418cf052f470bf74d5351d769ce36061b4bd36b4b24958abf151729fa42) into eval.json. Add `assert sha(F0) != sha(FK)` before generating.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "grep 'sha|hash' in bw_keyorder.py matches only line 118 (an unrelated substring). eval.json stores only ADAPTERS paths (line 27). No F0 != FK assert. sha256sum of runs/BW_Fdelta_s0/adapter/adapter_model.safetensors = 2ed0bb0064bc6b11...65ae, and the same hash appears in runs/FREEZE_B2_beam.json and FREEZE_B2_direct.json. I agree that no real path leads to F0 = FK: load_adapter reads a separate directory, train_generic.py:69 saves to out/'adapter' = ADAPTERS['FK'], and runs/BW_Fdelta_ko_s0 does not exist yet."
+    },
+    {
+     "id": "D54-03",
+     "severity": "low",
+     "title": "Registered Clopper-Pearson CIs are not computed",
+     "evidence": "PREREG_D54_KEYORDER.md:49 says 'paired exact McNemar, with Clopper-Pearson CIs'. bw_keyorder.py:127-128 computes only the rates (rounded to 4 decimals), the discordant counts and the McNemar p-value (binomtest(b, b+c, 0.5)). Grep finds no 'Clopper' or 'CI' in the script.",
+     "recommendation": "Add binomtest(k, 240).proportion_ci(method='exact') per arm and mode. The CIs can also be computed afterwards from the saved rates, since k = round(rate*240) is exact, but the registered output should contain them.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "PREREG_D54_KEYORDER.md:49 registers 'paired exact McNemar, with Clopper-Pearson CIs'. grep -i 'clopper|proportion_ci|_ci' in bw_keyorder.py finds nothing. Lines 127-128 compute only the rates, FK_only/F0_only and binomtest(b, b+c, 0.5).pvalue. scipy 1.17.1 in the venv supports binomtest(k, 240).proportion_ci(method='exact') (checked), so the CIs can be added or derived afterwards."
+    },
+    {
+     "id": "D54-04",
+     "severity": "low",
+     "title": "bundleG's training time estimate (3,600 s) is well below F0's measured wall time",
+     "evidence": "runs/bundles/bundleG.json:8 sets est_s 3600. F0 with the identical recipe took wall_s 5940.8 (runs/BW_Fdelta_s0/metrics.json), and D-62 (DECISIONS.md:637) itself says 'train about 1.7 GPU-h'. The underestimate is harmless: bundle.py:39 always starts the first sub-job, and training resumes from its 50-step checkpoint if the turn's cap stops it. The only effect is that a late start in a turn could split the run across turns.",
+     "recommendation": "Optionally set est_s to about 6000 so the scheduling log reflects reality. This does not affect correctness.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "bundleG.json:8 sets est_s 3600. F0's runs/BW_Fdelta_s0/metrics.json train.wall_s = 5940.8, and its log ends 'step 600/600 ... 5941s'. D-62 says 'train about 1.7 GPU-h' (about 6100 s). Harmless: bundle.py:39 (`if ran and est > left`) never blocks the first sub-job. After about 6000 s of training, about 10,000 s of the 16,200 s budget remains, which is above eval's est_s of 1200, so eval runs in the same turn. ckpt_dir=out/'ckpt' (train_generic.py:65) covers a cap split."
+    },
+    {
+     "id": "D54-05",
+     "severity": "info",
+     "title": "Data file matches the prereg and regenerates byte for byte",
+     "evidence": "Scratch script d54_data_check.py re-ran bw_keyorder.data() in memory (seed 20261012, CRLF line endings) and got 'regen identical to file: True'. Results: rows 12000 vs 12000; mismatched target/legal/n_blocks/state/action/system prompt: none ('bad {}'); kinds canon 5901 / aug 6099; heldout_hits 0; canon rows differing from source prompt: 0; canon rows with unsorted lists: 0. Augmented rows use all 21 training state orders (263-322 rows each) and both top-level orders (3081 / 3018). 76 augmented rows happen to be byte-identical to canonical text, so the canonical-text share is 49.8%. Tokens: max 175 (none over 256, so the overlength error at lm.py:414 cannot trigger). Replaying F0's row order (Random(17)) reproduces F0's tokens_processed of 1,551,649 and supervised tokens of 175,624 exactly. FK has the same 175,624 supervised tokens.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "My own regeneration (scratch data_check.py, loading the script's own render/TRAIN_ORDERS, seed 20261012, CRLF) gives 'identical True', sha 82ec3418...fa42 for both. Results: rows 12000/12000; target, legal, n_blocks, state, action and system prompt mismatches: 0; canon 5901 / aug 6099; held-out hits 0; canon rows differing from source 0; canon rows with unsorted lists 0; aug unsorted 2852; 76 aug rows identical to canonical text (share 0.498). All 21 state orders and all 42 (top, state) combos are used (129-166 rows each). Using the tokenizers library on the core's tokenizer.json: max 175 tokens, 0 over 256. The F0 replay with Random(17) gives tokens_processed 1,551,649 and supervised 175,624, matching metrics.json exactly. FK gives supervised 175,624 and tokens_processed 1,549,905."
+    },
+    {
+     "id": "D54-06",
+     "severity": "info",
+     "title": "Eval modes and reading rule match the prereg; heldout_rev equals F-08 key_order",
+     "evidence": "d54_eval_check.py replicated eval_() up to the model load. Keys: 240 (120 at 5 blocks, 120 at 10), 131 legal (45.4% illegal). canon: 240 canonical. train_order: 20 non-canonical training orders, 0 held-out, shuffled lists. heldout_rev: 240 \u00d7 (table,on,hand,clear), all state-first, 0 in training orders. heldout_other: H2 126 / H3 114, random top-level order. heldout_both: H1 + shuffled lists + names drawn only from UNSEEN. heldout_rev equals the F-08 render (copied from bw_surface_audit.py:30-43, key_order) in 240/240. For every row in every mode, the prompt parses back to (s2, a2), and the simulator's correct answer passes parse_forward_delta with the renamed state, so scoring is valid (240/240). Max target is 28 tokens (40 new tokens allowed). The shared prefix is 94 tokens, so the sample_crn fallback is not used. Overlap with training transitions: 0; with F-08 keys: 0. The reading at bw_keyorder.py:129-132 matches PREREG lines 45-48.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "I ran the real eval_() with stub lm and peft modules (no torch; ROOT redirected to scratch). Keys: 240 (120 at 5 blocks, 120 at 10), 131 legal. canon: 240/240 equal B.forward_prompt_delta. train_order: 240 training orders, 0 canonical, top-level 117 state-first / 123 action-first, 233 unsorted. heldout_rev: 240 H1, state-first, sorted, and 240/240 equal to bw_surface_audit.render(...,'key_order'). heldout_other: H2 126 / H3 114, mixed top-level. heldout_both: 240 H1, 240 all-UNSEEN names, 235 unsorted. Gold delta parses with the renamed state 240/240 in every mode. Max gold target is 29 tokens including EOS (limit 40). Shared prefix 94 tokens (minimum 16). Overlap with training prompts 0, with F-08 keys 0, duplicate keys 0. Reading code lines 129-132 match PREREG 45-48. 228/240 rounds to 0.95 and passes >= 0.95, so there is no float boundary issue."
+    },
+    {
+     "id": "D54-07",
+     "severity": "info",
+     "title": "Multi-adapter switching is correct: greedy_shared_prefix follows the active adapter",
+     "evidence": "bwmn/lm.py has no disable_adapter, set_adapter or merge calls (grep). greedy_shared_prefix (lm.py:740-818) builds a fresh DynamicCache prefix on every call (line 761) under the currently active adapter, and line 783 deep-copies only that cache, never the model. It has no module-level cache. peft 0.20.0: load_adapter's docstring says the new adapter 'is not automatically set as the active adapter'. PeftModel.set_adapter (peft_model.py:1591) leads to tuners_utils.set_adapter (line 2168), which calls module.set_adapter on every LoRA layer. The same pattern is already used in bwmn/blocks_planner.py:70,118. set_adapter turns requires_grad back on, which does not matter under @torch.no_grad.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "grep finds no disable_adapter, set_adapter or merge in bwmn/lm.py (those calls exist only in planner.py, flags_planner.py and f_factorized.py). greedy_shared_prefix (lm.py:740-818) builds pcache = DynamicCache() on each call and copy.deepcopy(pcache) at line 783, which copies the cache only. peft 0.20.0 source: load_adapter docstring at peft_model.py:1423 says the adapter is 'not automatically set as the active adapter'. PeftModel.set_adapter (1591) calls BaseTuner.set_adapter (tuners_utils.py:1265), then module-level set_adapter (2168), which loops model.modules() and calls module.set_adapter on each one. No .train() calls in tuners_utils, lora/layer, lora/model or peft_model, and model.eval() (bw_keyorder.py:114) comes after load_adapter. In the stubbed run, greedy_shared_prefix was called as ('F0', 1200 prompts, 40) then ('FK', 1200, 40), with identical prompt lists."
+    },
+    {
+     "id": "D54-08",
+     "severity": "info",
+     "title": "bundleG training command uses F0's recipe; FK path matches ADAPTERS",
+     "evidence": "runs/BW_Fdelta_s0/metrics.json args: steps 600, batch 16, lr 0.0001, seed 0, max_len 256, core titan-sparse, filter ''. bundleG.json:10-24 uses the same values with --rows forward_delta_ko_train.jsonl --out runs/BW_Fdelta_ko_s0. train_generic.py:69 saves to out/'adapter', which equals ADAPTERS['FK'] = 'runs/BW_Fdelta_ko_s0/adapter' (bw_keyorder.py:27). The marker is adapter/adapter_model.safetensors. runs/BW_Fdelta_ko_s0 and runs/BW_KEYORDER do not exist yet, so there is no stale checkpoint or marker. In runs/jobs.json, bundleG comes right after bundleE, and both are PENDING.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "F0 metrics args: titan-sparse, rows forward_delta_train.jsonl, steps 600, batch 16, lr 0.0001, seed 0, max_len 256, filter ''. bundleG.json:10-24 uses the same values with only --rows and --out changed. train_generic.py:69 saves to out/'adapter' = ADAPTERS['FK']. Queue status from my own marker and .failed check: bundleA-D DONE, bundleE PEND (orchestrator.log '09:27:06 start bundleE'), bundleG PEND next. runs/BW_Fdelta_ko_s0 and runs/BW_KEYORDER are absent. Extra check: train_sft's training math is identical to the pre-F0 vendored lm.py (RCWM vendor_bwm, 2026-10-06); only the checkpoint/resume code and a device line differ."
+    },
+    {
+     "id": "D54-09",
+     "severity": "info",
+     "title": "Held-out orders are new only as whole sequences",
+     "evidence": "Each of H1-H3 is one transposition away from some training order ('min swaps to a training order: 2' for all three). All of their adjacent key pairs and (key, position) pairs occur in the 21 training orders. The prereg already scopes the claim as 'rule-level within key permutations' (PREREG_D54_KEYORDER.md:45).",
+     "recommendation": "When reporting, say that a pass means generalisation to new full permutations whose local key patterns were all seen in training. It does not mean robustness to new key-order structure in general.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Reproduced, with a wording fix. The minimum number of transpositions to a training order is 1 for each of H1-H3. The auditor's 'min swaps: 2' is actually the minimum number of differing positions, which is 2. All adjacent key pairs and all (key, position) pairs of H1-H3 occur among the 21 training orders. This is a caveat on how to read the result, not a defect; the prereg's own scope 'rule-level within key permutations' (line 45) already covers it."
+    }
+   ],
+   "verifier_missed": [
+    "Queue after bundleG (adjacent to this dimension): 8 old GPU jobs are still pending in runs/jobs.json and sit before bundleF: a2-train-Fvlab (its 'after' file runs/A2_vlab_labels/vlab_sft.jsonl exists), train-P-actions-s1-1600, and six e2-* jobs. None has a marker or a runs/_failed/*.failed file. a2-train-Fvlab is the job deliberately cancelled in D-47 (orchestrator.log 23:50:41 FAILED rc=4294967295, attempt 1). orchestrate.py:79/85/88 will start them right after bundleG, so D-62's 'before bundleF' hides several unplanned GPU turns.",
+    "Dry run of the full eval path, which the auditor did not do: the stubbed run (real bw_keyorder.eval_, fake model, ROOT redirected to scratch) injected wrong FK answers on even indices of heldout_rev. Result: FK 0.5, F0_only 120, p 1.5e-36, reading 'trigger widened, not a rule'. Pairing, scoring, McNemar and the reading branch all behave correctly, and there is no import or shape error before the model load.",
+    "Pre-registration timing: the PREREG header says 'Written 2026-10-10 06:00 CDT, before any augmented row', but the mtimes are PREREG 05:49:46, bw_keyorder.py 05:50:08, the ko data 05:50:12, bundleG/jobs.json 05:50:36 and DECISIONS.md 05:50:45. The prereg's last save still predates the data by 26 s, so the claim holds; only the stated time is imprecise. Info.",
+    "Marker semantics: bundle.py:69-71 and orchestrate.py:118-120 write a fallback marker whenever rc == 0 and the marker is missing. For bundleG both markers (the adapter safetensors and eval.json) are written by the scripts themselves before they exit 0, so this cannot create a false 'done'. Info.",
+    "Recipe parity at the code level: lm.py was modified 2026-10-08 06:08, after F0 finished (metrics.json 03:03). Diffing train_sft against the 2026-10-06 vendored copy shows only the checkpoint/resume block and a device line, so the training math is unchanged. If FK's training is split at a cap and resumed, it could differ slightly through GPU nondeterminism, which F0 did not have. Info.",
+    "Not recorded for provenance (extends D54-02): eval.json also omits the bw_keyorder.py sha, the device (GPU or CPU), the peft/transformers versions (0.20.0 / 5.14.1 in the venv) and the per-stratum split (n5/n10) that F-08 reported. That makes a direct comparison of F0 heldout_rev with F-08's key_order 0.4583 (0.4333 at n5, 0.4833 at n10) coarser. Low."
+   ]
+  },
+  {
+   "dimension": "queue_protocol",
+   "summary": "Checked at 09:27 to 09:38 on 2026-10-10. The protocol state is healthy. The orchestrator (pid 20580, heartbeat 09:37:06), gpu_run for bundleE (pid 16628, in the one-shot yield, no bundle.py child yet) and health_log (pid 12868, health_now.json 09:31:04) are all alive. RCWM 5a (t2bp_run pid 38824) holds the lease as 'rcwm-t1:t2b-prereq', created 09:27:42. turn.json says last=bwm (written by hand). There are no waiting.*.json files. The yield has seen the RCWM lease. It ends when that lease is released: RCWM's cap is 4.5 h, so by about 13:58, and the joint plan expects about 13:15. The hard deadline is 15:27:06. After the yield, RCWM's release writes turn.last=rcwm before it unlinks the lock, so wait_for_turn exits at once and the 30-s courtesy gap is skipped. bundleE's 4.5 h budget starts at its own acquire (BWM_LEASE_ACQUIRED). The search can resume: solutions.jsonl has 168 rows that all parse and 168 unique ids, and all 12,086 lines of fcache.jsonl parse. The runnable order is bundleE -> bundleG -> a2-train-Fvlab (its 'after' file exists) -> train-P-actions-s1-1600 -> e2-titan-sparse-r1024 -> e2-supa-r256 -> e2-supa-r1024 -> e2-qwen3-0.6b-r256 -> e2-qwen3-0.6b-r1024 -> e2-xlimB -> bundleF. None of these has a marker or a .failed file. Jobs 0-6 (the 3 old singles and bundleA-D) are done. The main problems are: (1) 8 old RW2-era single jobs plus bundleF sit after bundleG, while the agreed joint plan gives BWM's next slot to item 7 (seeds) and item 9 (transfer), neither of which is queued. (2) During the yield, BWM writes no waiting marker, so RCWM can take two turns in a row. (3) The failure count lives only in memory, and two failures in one orchestrator lifetime would write bundleE.failed and silently move the queue on. Turn estimate for the queue as it stands: about 12 BWM turns (bundleE 2, bundleG 1, 8 singles 8, bundleF 1). With strict alternation, roughly as many RCWM turns fall in between, about 3-4 days. Only 3 of those BWM turns are joint-plan work.",
+   "findings": [
+    {
+     "id": "QP-1",
+     "severity": "high",
+     "title": "8 old single jobs plus bundleF come after bundleG, outside the joint plan; each costs a full alternation turn and has no 4.5 h cap",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/jobs.json",
+     "evidence": "Queue simulation (scratch queue_sim.py, same pending/after rule as orchestrate.py:79-90). RUNNABLE ORDER: ['bundleE', 'bundleG', 'a2-train-Fvlab', 'train-P-actions-s1-1600', 'e2-titan-sparse-r1024', 'e2-supa-r256', 'e2-supa-r1024', 'e2-qwen3-0.6b-r256', 'e2-qwen3-0.6b-r1024', 'e2-xlimB', 'bundleF'].\n\nStart history:\n- a2-train-Fvlab is runnable now because its 'after' file runs/A2_vlab_labels/vlab_sft.jsonl exists. It started once and was killed: orchestrator.log:195-197 '2026-10-07 23:50:41 FAILED a2-train-Fvlab rc=4294967295 after 64s (attempt 1)', and DECISIONS.md:376 says \"a2-train-Fvlab's queued wait was cancelled\".\n- train-P-actions-s1-1600 and all six e2-* jobs never started (no 'start' line in orchestrator.log).\n\nThe joint plan does not include them. RCWM-T1/docs/roadmap/JOINT_PLAN_2026-10-10.md, 'GPU turn order': step 4 is 'BWM: B3 remainder, then D-54 ... (bundleG)', step 6 is 'BWM: item 7 seeds (release gate), item 9 transfer'. Neither item 7 nor item 9 is queued. DECISIONS.md:532 calls bundleF (pilotG) 'lower value now'. jobs.json was last edited at 05:50:36, when bundleG was inserted at index 8 and the old entries were left in place.\n\nNo cap on single jobs: gpu_run.py:111-133 adds a bundle budget only when is_bundle; a single job holds the lease for the child's whole lifetime.\n\nMeasured costs: E2 r256 took 3,382 s (metrics wall_s); P_actions_s1 800 steps took 1,520 s.\n\nEstimate: about 8 extra BWM turns (8-10 GPU-h of RW2/Track-A/E2 work), each followed by an RCWM turn of up to 4.5 h. That delays bundleF, item 7 and item 9 by about 1.5-3 days.",
+     "recommendation": "Before bundleG finishes, the operator (not this audit) should move the 8 single entries, and bundleF if it is not wanted, from runs/jobs.json into a deferred file. orchestrate.py re-reads jobs.json every loop, so editing between jobs is safe. Then queue item 7 (BW_F and Pa_v2 seeds) as a capped bundle. When b3-analyze reports 'met', insert the B3 conditional H1/H2 hard runs ahead of anything else. Log the change in DECISIONS.md.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "I re-ran the queue simulation with orchestrate.py's own pending/after rule (orchestrate.py:79,85). The runnable order is exactly bundleE, bundleG, a2-train-Fvlab (its after file runs/A2_vlab_labels/vlab_sft.jsonl exists), train-P-actions-s1-1600, e2-titan-sparse-r1024, e2-supa-r256, e2-supa-r1024, e2-qwen3-0.6b-r256, e2-qwen3-0.6b-r1024, e2-xlimB, bundleF. None of these has a marker or a .failed file. orchestrator.log has 'start <name>' 1x for a2-train-Fvlab (lines 195-197, killed after 64 s) and 0x for the other 8. DECISIONS.md:376 says 'a2-train-Fvlab's queued wait was cancelled', but the job is still in jobs.json. JOINT_PLAN_2026-10-10.md:15 and :18 give BWM 'B3 remainder, then ... bundleG' and then 'item 7 seeds (release gate), item 9 transfer'; neither item 7 nor item 9 is queued. gpu_run.py:111-129 adds the 16200 s budget only when is_bundle. Measured costs match: E2 r256 train.wall_s 3382.2, P_actions_s1 train.wall_s 1519.7. jobs.json mtime is 05:50:36. Regraded from high to medium for three reasons. (1) It is not imminent: bundleE (2 turns) and bundleG (1 turn) come first, so the first single starts after 3 more BWM turns, about 1-1.5 days away. (2) It can be fixed at any time by editing jobs.json, which the orchestrator re-reads every loop. (3) 'Obsolete' is an inference. No DECISIONS entry cancels the E2 or RW2 singles: D-28 at DECISIONS.md:162-163 put them in the GPU order, and D-62 only says bundleG goes 'before bundleF'. Their divergence from the joint plan is real. A related detail: DECISIONS.md:532 says pilotG moved to bundleF 'at the end of the queue', so the operator appears to believe bundleF is next after the bundles, while 8 singles still sit in front of it."
+    },
+    {
+     "id": "QP-2",
+     "severity": "medium",
+     "title": "During the yield BWM writes no waiting marker, so RCWM's next GPU call can take a second turn in a row",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/scripts/gpu_run.py",
+     "evidence": "BWM side:\n- gpu_run.py:101-102 runs honour_yield() BEFORE wait_for_turn().\n- The waiting marker is only written at gpu_run.py:84, inside wait_for_turn. 'ls rineya-gpu-0.waiting.*' returns 'No such file' now.\n- The yield polls the lock every 10 s (gpu_run.py:45) and matches any label starting 'rcwm-t1:' (gpu_run.py:38).\n\nRCWM side:\n- runtime.py:240 yields only if turn.last == 'rcwm' AND BWM's waiting marker is live.\n- RCWM's hook 75_t2bp.sh:17-21 calls t2bp_run.py again at once after a cap deferral (rc 5).\n- 80_t2br.sh:29 (5b) runs right after, because docs/t2b/register/SCREEN_FREEZE.json exists.\n- An RCWM process goes from start to lock in about 9 s: pid 38824 was created 09:27:33 and the lock 'created' is 1791642462.41 = 09:27:42.\n\nWhat can happen: if 5a defers (the hook says 2 turns at the planning rate), the resume call can check alternation before BWM's yield loop has noticed the release and posted its marker. RCWM then re-acquires. If the gap is under 10 s, BWM's prefix match even keeps it yielding through RCWM's second turn, up to the 15:27:06 deadline. This conflicts with joint-plan step 2 (BWM B3 resume next). If 5a finishes, the CPU t2bp_analysis step in between probably leaves a gap long enough for BWM to win.",
+     "recommendation": "Either have honour_yield write rineya-gpu-0.waiting.bwm.json (pid, label, since) once the peer lease has been seen, or ask RCWM to make its rc-5 resume call wait. Option one is a gpu_run change that only affects future launches; the running pid 16628 keeps its loaded code. Option two is a coordination question for the operator, not this audit. Short of that, the operator should watch the lock label after RCWM 5a's release.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "I reproduced this from the code. gpu_run.py:101-102 calls honour_yield() before wait_for_turn(), and the BWM waiting marker is written only at gpu_run.py:84. honour_yield polls every 10 s (gpu_run.py:45) and matches any label with the prefix (:38). 'ls rineya-gpu-0.waiting*' returns nothing at 09:45. On the RCWM side, runtime.py alternate_turn (lines 230-245) defers only if turn.last=='rcwm' AND the waiting.bwm marker belongs to a live pid. 75_t2bp.sh:17-20 loops 'step scripts/t2bp_run.py' with no delay unless rc==3, and master_chain.sh:11 step() has no sleep. The resume uses the same label, rcwm-t1:t2b-prereq (t2bp_run.py:510), so a missed gap keeps BWM's prefix match yielding. The precondition is realistic, not hypothetical: RCWM's docs/t2b/prereq/GEN_PLAN.json projects 5a at 2 turns at the planning rate (3.66 h + 2.44 h) and 1 turn of 3.83 h at the observed rate. A deferral around 13:07 would therefore start this race. It is a race, not a certainty. RCWM must tear down its process, start a new one and import torch before alternate_turn runs; this launch took 9 s from creation (09:27:33) to lock (09:27:42). BWM writes its marker 0-10 s after the unlink. Worst case, alternation breaks once and BWM's B3 is delayed by about 2.4 h. Nothing breaks and no registered result is affected. Medium is fair."
+    },
+    {
+     "id": "QP-3",
+     "severity": "medium",
+     "title": "Failure count is in memory only: two bundleE failures in one orchestrator lifetime write bundleE.failed and skip all remaining B3 steps",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/scripts/orchestrate.py",
+     "evidence": "How it works:\n- orchestrate.py:68 'attempts: dict[str, int] = {}' resets on every restart.\n- orchestrate.py:127-135: any rc other than 0 or 75 adds 1; at 2, runs/_failed/<name>.failed is written.\n- orchestrate.py:79 then drops the job from pending for good.\n- bundle.py:66-68 returns the failing sub-job's rc, and gpu_run passes it through (gpu_run.py:135).\n- bundleG has no 'after' on bundleE, so the queue moves on to bundleG and then the old singles. B3's rows, mix, Pa_v3, Pa_v2c, FREEZE_B3, eval and analyze would never run.\n\nHistory shows that operator kills of a waiting gpu_run count as failures: orchestrator.log:481 '03:02:19 FAILED bundleD rc=1 after 3297s (attempt 1)' (the marker was set by hand while it waited for the lease), and the a2-train-Fvlab kill after 64 s. Bundles have also crashed with rc=4294967295 or 1073807364 (bundleB/C/D stdout).\n\nCurrent state: no runs/_failed/*.failed files exist. The counter restarted at 0 at 09:27:06.",
+     "recommendation": "Do not kill the yielding gpu_run (pid 16628) to cancel or shorten the yield without also restarting the orchestrator: the kill counts as bundleE attempt 1. After any bundleE failure, check runs/_failed/ before the second attempt. If bundleE.failed appears, the operator must decide and remove it, or the B3 chain is silently skipped.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "Verified in orchestrate.py. The attempts dict is in memory (:68). Any rc other than 0 or 75 increments it (:127), and at 2 it writes runs/_failed/<name>.failed (:134-135). The job is then excluded for good (:79). bundle.py:66-68 returns the failing sub-job's rc, and gpu_run.py:135 passes it through with sys.exit(rc). bundleG has no 'after' (jobs.json:96-104), so the queue would move on. The history shows the count resets on restart: bundleD failed at 18:38:16 under pid 171788 and again at 03:02:19 under pid 32100, each logged as 'attempt 1'. The 03:02:19 rc=1 failure came after 3297 s while the bundle was waiting for a foreign holder (the _failed/bundleD_030219.stdout tail is '[gpu-lease] waiting: foreign python pid 234772'), and bundleD.done carries the note 'marker set by hand'. This supports 'killing a waiting gpu_run counts as a failure'. There is no 'FAILED bundleE' line and runs/_failed/ has no .failed file. One addition: a LeaseError after 6 h of acquire polling (gpu_lease.py:178-179) also exits non-zero and counts as an attempt."
+    },
+    {
+     "id": "QP-4",
+     "severity": "low",
+     "title": "bundleE and bundleG run in separate lease turns, so joint-plan step 4 ('B3 remainder, then bundleG') can be split by an RCWM turn",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/jobs.json",
+     "evidence": "jobs.json lists bundleE (idx 7) and bundleG (idx 8) as two orchestrator jobs. Each one goes through gpu_run, which calls wait_for_turn (gpu_run.py:82-96): if turn.last=='bwm' and RCWM has a live waiting marker, BWM waits up to 2700 s for RCWM's turn. JOINT_PLAN_2026-10-10.md step 4 puts both in one BWM slot. My estimate for bundleE's second turn is about 1.5-2.5 h, and bundleG is about 1.9 h (Fdelta's measured 5,953 s plus a 1,200 s eval), so both would fit in one 16,200 s budget.",
+     "recommendation": "If step-4 ordering matters, the operator could add bundleG's two sub-jobs to the end of bundleE.json after b3-analyze. bundle.py reads the spec at each turn start (bundle.py:29), and the change does not alter any B3 sub-job. Log it in DECISIONS.md. Otherwise, tell RCWM that bundleG takes its own turn.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "bundleE and bundleG are separate orchestrator jobs (jobs.json:87-104). After bundleE's rc 0 the orchestrator continues at once (orchestrate.py:117-122). gpu_run then calls wait_for_turn, which blocks while turn.last=='bwm' and RCWM has a live waiting marker (gpu_run.py:87-96). Otherwise a 30 s courtesy sleep runs (:106-107). So joint-plan step 4 can be split whenever RCWM has a waiter. The fit estimate holds: BW_Fdelta_s0 metrics give train.wall_s 5940.8 (the auditor's 5,953 is negligibly different), and bundle.py:29 re-reads the spec each turn. One related detail: bundleG's train est_s of 3600 is also low against the measured 5,941 s. This does not matter, because the first sub-job of a turn always starts (bundle.py:39) and the eval's 1200 s still fits."
+    },
+    {
+     "id": "QP-5",
+     "severity": "low",
+     "title": "bundleE time estimates are low; B3 will take 2 BWM turns, with Pa_v2c likely cut at the cap",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/bundles/bundleE.json",
+     "evidence": "Search: est_s 1800, but chunks of 24 took about 31 min each (BW_DISTILL_r1.search.stdout: chunk 4 ended between 07:47 and 07:52, chunk 5 between 08:17 and 08:23, chunk 6 between 08:48 and 08:53). With 168/240 done, 72 problems = 3 chunks remain, about 5,600 s.\n\nTraining: train-Pa_v3 and train-Pa_v2c each have est_s 3600. Pa_v2 trained at 188 tok/s (2,781,649 tokens in 14,804.9 s). Distill rows are 1.24x as long as v2 rows (scratch rowlen.py: 719 vs 579 chars). That gives about 6,600 s for Pa_v3 and about 5,900 s for Pa_v2c.\n\nResult: when Pa_v2c's 3600 s estimate is checked, about 3,700 s are left, so it starts and is killed at the cap. bundle.py:57-64 kills the whole tree with taskkill /T, and train_generic resumes from the 50-step ckpt (lm.py:397-399, 437-452). Search resume works because already-solved ids are skipped (bw_distill.py:53-57), and a chunk interrupted at the cap loses at most about 31 min. This matches the joint plan's '~5.7 GPU-h over 2 turns'.",
+     "recommendation": "No action needed for correctness. If planning precision matters, the operator could raise est_s for the two trainings to about 6,000 s, so Pa_v2c starts cleanly in turn B instead of being cut. The edit is safe between turns.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced. solutions.jsonl has 168 rows, ids distill/0-167 contiguous and unique, mtime 08:57:44. fcache.jsonl has 12,086 lines, 0 bad, and ends with a newline. Seven chunks took 05:19:11 to 08:57:44, about 31.2 min per chunk. Minor misread: chunk 6 printed after the '[thermal] 08:53:29' line (not between 08:48 and 08:53), and chunk 5 after 08:23:04. 168 is a multiple of 24, so the resumed chunks align. Pa_v2 metrics: 1000 steps, 2,781,649 tokens, 14,804.9 s, i.e. 14.8 s per step. My own row-length check with the pure-python bwmn.blocks module (torch not loaded): v2 rows average 582.8 chars and the would-be distill rows average 719.5 chars over 3,030 rows from 148 verified solutions, a ratio of 1.23. mix_v3 is D plus |D| v2 rows (bw_b3_prep.py:6-7), so Pa_v3 is about 6,600 s and Pa_v2c about 5,900 s, both well above est_s 3600. The training resume path is sound: the init adapter is loaded and then overwritten by ckpt.pt (lm.py:437-452; train_generic.py:55-65). b3-eval is S-direct only, 3 arms x 2 sets (bw_b3_eval.py:4-7, 24-28), so its 2400 s estimate is plausible."
+    },
+    {
+     "id": "QP-6",
+     "severity": "low",
+     "title": "Yield file is consumed silently; if the rename fails, the next BWM launch yields again for up to 6 h",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/scripts/gpu_run.py",
+     "evidence": "gpu_run.py:47-50: 'try: YIELD.rename(...) except Exception: pass'. If the rename fails, for example because another process has runs/.yield.json open on Windows, it stays in place. The next gpu_run (bundleE turn B or bundleG) would then run honour_yield again with max_wait_s 21600. Earlier yields were renamed correctly (.yield_consumed_1791309626/1791467623/1791565791.json exist).",
+     "recommendation": "After RCWM 5a releases, check that runs/.yield.json has become .yield_consumed_<ts>.json. Avoid holding the file open, e.g. with an editor.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "The code path exists: gpu_run.py:47-50 swallows any rename exception. A failure needs another process to hold runs/.yield.json open without FILE_SHARE_DELETE at that exact moment. RCWM never reads BWM's yield file, since its yield_to_peer globs its own RCWM-T1/runs/.yield*.json (runtime.py:185). All three earlier renames succeeded (.yield_consumed_1791309626/1791467623/1791565791.json). Severity low, close to info. The re-yield would wait 6 h only if an rcwm-t1 lease is seen; otherwise the cost is a 5400 s idle wait."
+    },
+    {
+     "id": "QP-7",
+     "severity": "info",
+     "title": "Yield, alternation and budget clock behave as intended in the normal path",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/scripts/gpu_run.py",
+     "evidence": "Yield state:\n- .yield.json is {label_prefix 'rcwm-t1:', max_wait_s 21600, give_up_if_not_seen_s 5400}, written 09:26:55. The orchestrator started at 09:27:06.\n- bundleE.stdout last line: 'yielding to peer lease 'rcwm-t1:*' (max 21600 s)'.\n- The lock label has been rcwm-t1:t2b-prereq since 09:27:42 (36 s in), so seen=True and the 5400 s give-up branch no longer applies.\n\nThe yield loop (gpu_run.py:33-45) breaks on the first poll after the label stops matching, or at 15:27:06.\n\nRCWM writes turn.json last='rcwm' inside its lease (runtime.py:263-272, _released at 248-249) before the lock is unlinked. So BWM's wait_for_turn exits at once (gpu_run.py:91), and the courtesy sleep runs only when last=='bwm' (gpu_run.py:106-107). That is not the case here, so there is no double wait.\n\nBudget: BWM_LEASE_ACQUIRED is set right after acquire (gpu_run.py:119-120), and bundle.py:31 uses it as t_start. bundleE gets a fresh 16,200 s from its own acquire.\n\nThe acquire timeout is 6 h of polling (gpu_run.py:114), longer than any single RCWM turn.\n\nEdge case: if RCWM's holder process dies without running its finally block, the lock (worker_pids []) keeps its rcwm-t1: label. The yield does not reclaim it and waits until 15:27; RCWM's crash retry would reclaim it first.",
+     "recommendation": "None. Re-read the lock, turn.json and bundleE.stdout after RCWM 5a releases to confirm 'yield ended (peer seen=True)' and a bwm:bundle-bundleE acquire.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Verified as follows. .yield.json = {label_prefix 'rcwm-t1:', max_wait_s 21600, give_up_if_not_seen_s 5400}, mtime 09:26. bundleE.stdout's last line is the yield message. The lock label is rcwm-t1:t2b-prereq, created 1791642462.41 (09:27:42), so seen=True has been reached and the deadline is about 15:27:06. RCWM gpu_lease calls _released(label) in a finally inside 'with lease' (runtime.py:263-272, _released :248-249), so turn.last='rcwm' is written before the unlink. gpu_run wait_for_turn then breaks (:91) and the courtesy sleep is skipped (:106). BWM_LEASE_ACQUIRED is set after acquire (gpu_run.py:119-120), and bundle.py:31 uses it as t_start. The acquire timeout is 6 h (gpu_run.py:114). Note that RCWM's 4.5 h cap is a soft start-gate from acquisition (t2bp_run.py:44-47) and does not kill a running stage. The 13:58 end is therefore approximate, but BWM's yield ends by 15:27 regardless."
+    },
+    {
+     "id": "QP-8",
+     "severity": "info",
+     "title": "Processes, lease files and resume inputs are in a consistent state",
+     "file": "C:/Users/clclc/AppData/Local/Temp/rineya-gpu-0.lock",
+     "evidence": "Processes (Win32_Process):\n- orchestrate.py pid 20580 (log '09:37:06 heartbeat bundleE 600s')\n- gpu_run.py bundleE pid 16628 (no bundle.py child)\n- health_log.py pid 12868 (health.log every 30 s, last 09:33:34)\n- RCWM t2bp_run.py pid 38824 (3,012,472,832 B dedicated GPU memory)\n- RCX native_probe pid 13188: 3.8 GB RSS but only 24,576 B dedicated GPU memory, below the 256 MiB foreign-holder threshold (gpu_lease.py:99,111-113), so it will not block BWM's acquire\n- The launcher parent 5136 has exited, so the orchestrator and logger are detached.\n\nLease files:\n- turn.json {last 'bwm', label 'bwm:bundleE', released 09:24:04, bundle_start 05:19:11}\n- The stale bundleE lock was backed up as rineya-gpu-0.lock.stale-63900.bak (09:26:55), matching RCWM D-45.\n\nOther: no runs/.stop (only .stop_cpu2 from 10-07). Machine readings: tz01 94.9-95.9 C (the p95 over the whole log is 95.9; the CPU guard trips at 98), available RAM about 11-14 GB. Inputs for later bundles exist: instances_b3_fresh.json, forward_delta_ko_train.jsonl, proposer_actions_train.jsonl, the core model dirs and the Qwen3 snapshot.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Win32_Process at 09:40 shows orchestrate.py 20580, gpu_run 16628 (with launcher 37616) and health_log.py 12868, none with a bundle.py child. RCWM t2bp_run 38824 has 3,012,472,832 B of dedicated GPU memory and RCX native_probe 13188 has 24,576 B (Get-Counter at 09:40:49). The non-python holders (dwm, chrome, ChatGPT) are ignored by foreign_gpu_holder (gpu_lease.py:108-113). The RCX probe also forces CPU (native_probe.py:25,33). turn.json and the backup lock.stale-63900.bak (09:26:55, label bwm:bundle-bundleE) are as described. Ancestor 5136 is gone. The immediate parents are bash 28836 and 5176, still alive; their parents 16364 and 6664 point to 5136. There is no runs/.stop and orchestrator.err holds only an old '^C' from 10-06. Readings have drifted: health_now at 09:41:04 shows tz 95.9 C and RAM 9.84 GB, below the auditor's '11-14 GB'."
+    }
+   ],
+   "verifier_missed": [
+    "QP-2's precondition is likely, not hypothetical: RCWM-T1/docs/t2b/prereq/GEN_PLAN.json projects 5a at 2 turns at the planning rate (3.66 h, then 2.44 h) and 1 turn at the observed rate. A cap deferral around 13:07 followed by an immediate rc-5 re-call (75_t2bp.sh:17-20, step() has no sleep) is the realistic way the race happens.",
+    "wait_for_turn gives up after 2700 s (gpu_run.py:87) even if RCWM's waiter has not had its turn. RCWM writes its waiting marker in alternate_turn BEFORE it waits on its .thermal_pause flag (runtime.py:255-262). An RCWM job paused by its watchdog would idle the GPU for 45 min and then let BWM take another consecutive turn. Low.",
+    "A LeaseError after 6 h of acquire polling (gpu_lease.py:178-179) makes gpu_run exit non-zero without writing turn.json (write_turn is after the with at gpu_run.py:134). That counts as an orchestrator failure attempt and compounds QP-3. Low.",
+    "The orchestrator and health logger were launched with 'bash -c ... python scripts/orchestrate.py' (bash 16364 -> 28836, parent 5136 gone), not with the Win32_Process Create recipe in the orchestrate.py docstring (:9-10). They survived the parent's exit, so they are detached in practice. Info.",
+    "Turn-A work lost at the reboot: chunk 7 of the search (08:57:44 to about 09:23, about 26 min of GPU) wrote no solutions. fcache.jsonl was last written 09:23:21, so its F queries are cached and the redo of chunk 7 will be partly faster. Info.",
+    "bundleG's train est_s (3600) is also low against the measured Fdelta run (BW_Fdelta_s0 metrics train.wall_s 5940.8). It has no effect on scheduling because the first sub-job always starts and eval-keyorder (1200 s) still fits the 16200 s budget. Info.",
+    "RCWM's 4.5 h cap on 5a is a soft start-gate from acquisition (t2bp_run.py:44-47) and does not kill a running stage. The auditor's 'released by about 13:58' is an approximation; BWM's yield ends at about 15:27:06 regardless, and after that BWM simply waits on the lock. Info."
+   ]
+  },
+  {
+   "dimension": "records_consistency",
+   "summary": "I checked DECISIONS D-56..D-62, P-09, P-10 and their follow-ups against the files. Everything numeric holds up. All quoted SHA-256 prefixes recompute correctly: e6aa884b, adfc4354, 575c45b1, 18a5f22b and b2896ba3; lb_rescore.py b1f289ec and LB_RESCORE.json 2ff7b224 match what RCWM quoted; adapters ee1c5aec and 2ed0bb00 match FREEZE_B2 and release/. Recomputing from plans.jsonl reproduces P-09 and P-10 exactly: counts, McNemar p, Clopper-Pearson CIs, Fisher p 0.128, 0 VAL disagreements, and the mirror-gap bins. Every D-61 number matches RCWM's PREREG_LB_RESULTS.json (887b4c88). The D-62 data claims are exact: 12,000 rows, 5,901 canonical + 6,099 augmented, 42 orders, 0 held-out orders, targets identical, max 175 tokens. The vault is clean, with no BWM folder and CATALOG/REGISTRY untouched since Sep 25. No weights or salt are in bwm/ of the export, and 'bwm-lb-' does not appear anywhere in native_v1. No blocker for the queued GPU jobs. The bundleE resume state is intact: 168/240 problems, 148 verified, fcache parses fully. The real problems are about records and export. (1) D-60..D-62 are not in the GitHub remote. The export clone is clean at 5a317d1, and that clone's record of the remote (last fetch) is 3 RCWM commits behind the real one. (2) export_bwm.py would leave out PREREG_D54_KEYORDER.md. It would also push B3 artifacts: solutions.jsonl now, and the distillation and mix training rows later. That breaks the export README's 'no training data in the repo' rule and the RCX agreement that B3 artifacts stay closed until B3_REPORT.json exists. (3) No record pins the D-54 prereg, data or script hashes, so the prereg has no external timestamp before bundleG. (4) jobs.json still holds 8 legacy GPU jobs between bundleG and bundleF that are not in the agreed joint turn order. (5) BWM has no record of the 09:24 reboot recovery or of the joint plan that RCWM says BWM agreed to. (6) Memory files are partly stale: the 'records are pushed' line, obsolete LB instructions, a planner-edit permission that ignores RCX's SHA pin, and a GPU protocol note from before the yield file existed. A few minor timestamp and number discrepancies are listed at low severity.",
+   "findings": [
+    {
+     "id": "RC-01",
+     "severity": "medium",
+     "title": "D-60, D-61, D-62 and their artifacts are not in the GitHub remote; memory says records are pushed",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/gh_export/bwm/docs/DECISIONS.md",
+     "evidence": "gh_export: `git status -sb` -> '## main...origin/main'; `git status --short` is empty; HEAD = origin/main = 5a317d1 (2026-10-10 03:06:27). `diff <(git show origin/main:bwm/docs/DECISIONS.md) native_v1/DECISIONS.md` -> only '594a595,637', i.e. D-60, D-61 and D-62 are absent from the remote; the first 594 lines are identical. A read-only dry run of tools/export_bwm.py plan() against origin/main shows 7 new files (scripts/bw_keyorder.py, scripts/lb_rescore.py, bundles/bundleG.json x2, BW_DISTILL_r1/solutions.jsonl, BW_DISTILL_r1.search.stdout, LB_RESCORE/LB_RESCORE.json) and 5 changed files (docs/DECISIONS.md, jobs.json x2, bundleE.stdout, orchestrator.log). The rineya-world-model-research clone also has 0 matches for 'D-6[0-2]' in its origin/main:bwm/docs/DECISIONS.md. Memory bwm-packaging-and-publishing.md:17 says 'Records are pushed to the private GitHub repo (5a317d1)'. That was true before D-60 (03:20), but it is now stale.",
+     "recommendation": "After the user approves, fix the export filter first (RC-02), then re-export and push so D-60..D-62, PREREG_D54_KEYORDER.md, lb_rescore.py, LB_RESCORE.json and bundleG.json reach the remote before bundleG trains. Update the packaging memory line to name the new commit.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced. In gh_export, `git status -sb` gives '## main...origin/main', and HEAD and origin/main are both 5a317d1 (03:06:27). Diffing `git show origin/main:bwm/docs/DECISIONS.md` against native_v1/DECISIONS.md gives only '594a595,637', so D-60..D-62 are missing. My own read-only dry run of export_bwm.plan() against the origin/main tree found the same 7 NEW and 5 CHANGED files. Memory bwm-packaging-and-publishing.md:17 says 'Records are pushed ... (5a317d1)', but that file was written at 03:07:35, before D-60. I downgraded to low because the real remote (rineya-world-model-research, origin/main 4e7bd9b) already holds RCWM's account of both entries: rcwm/.../DECISIONS.md:767 'Vault copy reverted (BWM D-60)' and :807 quoting lb_rescore b1f289ec and LB_RESCORE 2ff7b224 (commit ea1f36c). What is missing is BWM's own text."
+    },
+    {
+     "id": "RC-02",
+     "severity": "medium",
+     "title": "export_bwm.py would leave out PREREG_D54 and push B3 artifacts and training rows",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/gh_export/tools/export_bwm.py",
+     "evidence": "export_bwm.py:26 DOCS = ['DESIGN.md','DECISIONS.md','PREREG.md','PREREG_PLANBENCH.md','PREREG_B3_DISTILL.md','RESULTS_INTERIM.md','TODO_BEFORE_RUNS.md'], so PREREG_D54_KEYORDER.md is not in the list (the dry run's NEW list does not include it). export_bwm.py:30-32 SKIP_NAME drops only fcache*, *_train.jsonl, *_val.jsonl and vlab_*. The dry run therefore keeps results/BW_DISTILL_r1/solutions.jsonl (987,809 B: 168 F-verified plans with F states). After the bundleE rows and mix stages, the same rule would also export runs/BW_DISTILL_r1/distill_rows.jsonl, mix_v3.jsonl and mix_v2c.jsonl (names from bw_distill.py:119 and bw_b3_prep.py:63), which are Pa_v3/Pa_v2c training rows. This contradicts bwm/README.md:4-5 ('Adapter weights, training data and caches are not in the repo'). It also contradicts the RCX agreement (memory bwm-peer-rcx-scope.md:14; RCX REQUESTS.md:73): B3 artifacts become readable only after runs/BW_B3_EVAL/B3_REPORT.json exists, and RCX reads this repo's main. Related, smaller points: the remote already holds bwm/results/_mystery_smoke/{forward,proposer}_{A,B}.jsonl (~10 MB of rows in training format, smoke output never trained on). forward_delta_ko_train.jsonl is excluded, but with the wrong reason ('regenerable with scripts/blocks_data.py'); it is produced by scripts/bw_keyorder.py data.",
+     "recommendation": "Before the next push: add PREREG_D54_KEYORDER.md (better, glob PREREG_*.md) to DOCS. Exclude runs/BW_DISTILL_r1/* except META and stdout files, distill_rows.jsonl and mix_*.jsonl (list them in EXCLUDED_LARGE_FILES.json with their SHA), at least until B3_REPORT.json exists. Give the ko rows the correct reason.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "Reproduced. export_bwm.py:26 DOCS does not include PREREG_D54_KEYORDER.md (dry run: 'PREREG_D54 in keep: False'). SKIP_NAME (lines 30-32) does not match solutions.jsonl, distill_rows.jsonl (bw_distill.py:119) or mix_v3/mix_v2c.jsonl (bw_b3_prep.py:63). The dry run lists bwm/results/BW_DISTILL_r1/solutions.jsonl (987,809 B) as NEW. After the rows and mix stages, the next export would therefore push Pa_v3/Pa_v2c training rows. That breaks D-51 (DECISIONS.md:443 'no adapter weights, training data or caches') and bwm/README.md:4-5. The remote already holds bwm/results/_mystery_smoke/{forward,proposer}_{A,B}.jsonl, about 9.9 MB of prompt/target rows, because the skip test is startswith('_smoke') (line 71). The ko rows are excluded, but under the wrong reason ('regenerable with scripts/blocks_data.py', line 75). One overstatement: the RCX agreement (REQUESTS.md:73) binds what RCX may analyse, not where files are visible, and RCX can read native_v1 locally anyway. The README/D-51 violation is enough to justify medium."
+    },
+    {
+     "id": "RC-03",
+     "severity": "medium",
+     "title": "The D-54 prereg, data and script have no pinned hash and no external timestamp; header time is after the data",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/PREREG_D54_KEYORDER.md",
+     "evidence": "Recomputed: PREREG_D54_KEYORDER.md 6b704388\u2026, runs/BW_data/forward_delta_ko_train.jsonl 82ec3418\u2026, scripts/bw_keyorder.py 48902cde\u2026. None of these prefixes appears in native_v1 (grep over *.md/*.json/*.py), RCWM-T1 DECISIONS/REPORT/docs, or gh_export. D-62 (DECISIONS.md:625-637) quotes no SHA, unlike D-58, which quotes e6aa884b/575c45b1. No FREEZE record exists for D-54, and bw_keyorder.py eval (lines 134-136) writes no prereg or adapter SHAs into eval.json. The prereg header (line 3) says 'Written 2026-10-10 06:00 CDT, before any augmented row or adapter exists', but the data file mtime is 05:50:12 and the prereg mtime is 05:49:46. The ordering rests on a 26 s mtime gap, and the stated 06:00 is later than the data. Same pattern in PREREG_B3_DISTILL.md:3 'Written 2026-10-09 22:30 CDT' vs file mtime 22:09:45, with instances_b3_fresh.json at 22:09:59. B3, however, was pushed with its sha.",
+     "recommendation": "Add a D-62 follow-up that quotes the three SHA-256 values and corrects the written-at time to about 05:49. Push it together with the prereg (RC-01/RC-02) before bundleG starts. Optionally have bw_keyorder.py eval record the prereg and adapter SHAs.",
+     "verdict": "refuted",
+     "verified_severity": "low",
+     "verifier_note": "The core claim, that the prereg has no pinned hash and no external timestamp, is wrong. The auditor searched only gh_export's stale refs and RCWM. RCX branch origin/research/rineya-complementary-intelligence-v1, commit b128150 (2026-10-10 06:19:11, an ancestor of the remote branch head 84be407), records at complementary/COLLABORATION.md:113-114 'D-54 key-order augmentation is preregistered as bundleG ... PREREG_D54_KEYORDER.md (sha 6b704388\u2026)'. That is before any FK adapter exists (runs/BW_Fdelta_ko_s0 is absent). I also regenerated the ko data in memory from the current scripts/bw_keyorder.py with seed 20261012: all 12,000 lines match the file (CRLF aside), so the data is a deterministic function of the script. Two small points stand. D-62 itself quotes no SHA. The prereg header reads '06:00 CDT' while its mtime is 05:49:46, and bw_keyorder.py (05:50:08) and the data (05:50:12) are later. The script was finalised 22 s after the prereg, but its seeds, orders and reading match the prereg."
+    },
+    {
+     "id": "RC-04",
+     "severity": "medium",
+     "title": "jobs.json will run 8 legacy GPU jobs after bundleG that are not in the agreed joint turn order",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/jobs.json",
+     "evidence": "Marker check: bundleE pending, bundleG pending, then a2-train-Fvlab (pending; its 'after' runs/A2_vlab_labels/vlab_sft.jsonl exists, so it is runnable), train-P-actions-s1-1600, e2-titan-sparse-r1024, e2-supa-r256, e2-supa-r1024, e2-qwen3-0.6b-r256, e2-qwen3-0.6b-r1024, e2-xlimB, then bundleF. orchestrate.py:79-90 runs runnable[0] in list order, and there is no runs/_failed/<name>.failed for these jobs. DECISIONS.md:376 (D-47) says 'a2-train-Fvlab's queued wait was cancelled', yet it remains queued. D-62 (DECISIONS.md:637) says bundleG is 'placed after bundleE (B3) and before bundleF', which is literally true but hides these 8 jobs. RCWM docs/roadmap/JOINT_PLAN_2026-10-10.md:18 makes BWM's turn after bundleG 'item 7 seeds (release gate), item 9 transfer', not these jobs.",
+     "recommendation": "Decide (with the user if needed) whether the E2/F_vlab/P_actions_1600 jobs are still wanted. Then either move them to a deferred list (as jobs_cpu_deferred.json already does for CPU jobs) or record in DECISIONS that they precede item 7. Do this before bundleG finishes.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "Reproduced from runs/jobs.json. In list order: bundleE (pending), bundleG (pending), then a2-train-Fvlab (pending; its after file runs/A2_vlab_labels/vlab_sft.jsonl exists), train-P-actions-s1-1600, e2-titan-sparse-r1024, e2-supa-r256, e2-supa-r1024, e2-qwen3-0.6b-r256, e2-qwen3-0.6b-r1024 and e2-xlimB, then bundleF (pilotG-actions, pilotG-states). None has a marker or a runs/_failed/*.failed file. These are real GPU training commands (train_forward.py / train_proposer.py / train_generic.py). orchestrate.py:79-90 runs runnable[0] in list order. JOINT_PLAN_2026-10-10.md:18 gives BWM's next slot to 'item 7 seeds (release gate), item 9 transfer'. D-47 (DECISIONS.md:376) says only that Fvlab's 'queued wait was cancelled', which is ambiguous; the job is still queued."
+    },
+    {
+     "id": "RC-05",
+     "severity": "medium",
+     "title": "BWM records omit the 09:24 reboot recovery and the joint plan RCWM logged as agreed with BWM",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/DECISIONS.md",
+     "evidence": "The last BWM entry is D-62 (DECISIONS.md mtime 2026-10-10 05:50:45). Since the reboot (boot 09:24:04), BWM-side actions exist only as files: rineya-gpu-0.lock.stale-63900.bak (09:26), turn.json note 'written by BWM after the user's reboot: bundleE held the card 05:19-09:23 (4h04m of 4.5h)\u2026', runs/.yield.json (09:26:55, label_prefix 'rcwm-t1:', max_wait_s 21600), orchestrator.log '09:27:06 orchestrator start pid=20580 / start bundleE'. RCWM-T1 DECISIONS.md:850-857 (D-45) records 'Joint plan after the 2026-10-10 reboot (agreed with BWM by message)' and 'BWM cleared its own stale bundleE lock \u2026 at about 09:27'. JOINT_PLAN_2026-10-10.md:1 says 'BWM side by message'. No BWM entry exists. The joint plan's bundleG estimate (~1.9 h, line 16) also differs from D-62 ('about 1.7 GPU-h' train) and from bundleG.json est_s 3600+1200.",
+     "recommendation": "Add a BWM incident entry for the reboot: state at 09:24 (168/240 search rows, 148 verified), stale-lock handling, the yield to rcwm-t1:*, and the orchestrator restart. Add a D-entry that adopts or amends JOINT_PLAN_2026-10-10.md (turn order; B3 resume ~5.7 GPU-h; bundleG estimate).",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "Reproduced. DECISIONS.md has mtime 05:50:45, and grep finds no entry for reboot, JOINT_PLAN or 10-10 09:xx. Earlier reboots were recorded (I-04 line 64, R-01 line 257). The post-reboot BWM actions exist only as files: lock.stale-63900.bak (09:26:55), turn.json (09:26:59, note 'written by BWM after the user's reboot...'), runs/.yield.json (09:26:55, label_prefix 'rcwm-t1:', max_wait_s 21600), and orchestrator.log '09:27:06 orchestrator start pid=20580 / start bundleE'. RCWM DECISIONS.md:850-857 (D-45) says 'agreed with BWM by message'. Minor point: the joint plan's '~1.9 h' for bundleG is consistent with D-62's 1.7 GPU-h of training plus eval. That is not a real discrepancy."
+    },
+    {
+     "id": "RC-06",
+     "severity": "low",
+     "title": "The gh_export clone's record of the remote is out of date; a push would be rejected until fast-forwarded",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/gh_export",
+     "evidence": "In C:/Users/clclc/BusinessProject/WorldModel/rineya-world-model-research, origin/main = 4e7bd9b (09:29:54 'rcwm: joint plan after 2026-10-10 reboot (D-45)'), preceded by ea1f36c (05:34) and 62ddd9e (05:20). 5a317d1 is an ancestor. gh_export's origin/main is still 5a317d1. `git diff --stat 5a317d1 origin/main -- bwm` in the other clone is empty, so the RCWM commits do not touch bwm/.",
+     "recommendation": "Before exporting, run `git pull --ff-only` in gh_export (clean fast-forward). Never force-push, because that would drop RCWM's D-44/D-45 records.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Reproduced. rineya-world-model-research origin/main = 4e7bd9b (09:29:54), preceded by ea1f36c and 62ddd9e. 5a317d1 is an ancestor, and `git diff --stat 5a317d1 origin/main -- bwm` is empty. gh_export's origin/main is still 5a317d1. Downgraded to info: D-51 (DECISIONS.md:444) already prescribes 'pull --rebase before push', so the documented procedure handles this."
+    },
+    {
+     "id": "RC-07",
+     "severity": "low",
+     "title": "LB memory has obsolete instructions; its planner-edit permission ignores RCX's SHA pin and B3's H2",
+     "file": "C:/Users/clclc/.claude/projects/C--Users-clclc-BusinessProject-WorldModel-Rineya-BWM-001-Research-Bundle/memory/bwm-prereg-lb-cosign.md",
+     "evidence": "Line 11 'it is queued as RCWM's next GPU job'. Lines 13-14 (reveal at the freeze; 'If the scratchpad is lost before the freeze\u2026') are obsolete: LB is done (RCWM runs/lbeam/DONE.json; R-PREREG-LB at RCWM DECISIONS.md:782-783, lease 02:06:31, analysis 05:19:03). MEMORY.md index line 4 still reads 'planner/lm freeze promises until LB analysis'. Line 24 says 'editing blocks_planner is allowed again, but don't edit it while a B3 run uses it'. However, RCX pins it: RCX branch complementary/docs/REQUESTS.md:35 says E08 calls plan_beam read-only at 18a5f22b, and COLLABORATION.md:88 lists 'Beam planner (frozen)'. PREREG_B3_DISTILL.md:66-67 (H2) also reuses the frozen B2 beam configuration. bwm-peer-rcx-scope.md:19 requires notice only for bwmn/blocks.py. The facts that remain correct: the salt file exists (39 chars after strip; sha256 prefix 0b6b5ea9 = commitment), and the LB numbers match.",
+     "recommendation": "Rewrite the LB memory as a closed record (D-59/D-61 done; salt revealed). Replace the edit permission with: blocks_planner.py stays at 18a5f22b while B3 (including a possible H2) is open and while RCX E08 pins it; message RCX and RCWM before any edit. Update the MEMORY.md index line.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced. bwm-prereg-lb-cosign.md:11 says 'queued as RCWM's next GPU job', and lines 13-14 give reveal and loss instructions that are now obsolete. RCWM runs/lbeam/DONE.json exists, and R-PREREG-LB is at RCWM DECISIONS.md:782. MEMORY.md:4 'freeze promises until LB analysis' is stale. Line 24 permits planner edits, but RCX pins the planner: REQUESTS.md:35 says 'frozen sha 18a5f22b\u2026', and COLLABORATION.md:28 and :88 say 'Beam planner (frozen)'. PREREG_B3_DISTILL.md:67 H2 also uses 'the frozen B2 beam configuration'. Salt still valid: 39 chars, starts 'bwm-lb-', sha256 prefix 0b6b5ea9."
+    },
+    {
+     "id": "RC-08",
+     "severity": "low",
+     "title": "GPU-protocol memory (last modified 10-08) lacks the yield file, post-crash turn and stale-lock steps, and the joint-plan lock rule",
+     "file": "C:/Users/clclc/.claude/projects/C--Users-clclc-BusinessProject-WorldModel-Rineya-BWM-001-Research-Bundle/memory/bwm-gpu-sharing-protocol.md",
+     "evidence": "Frontmatter 'modified: 2026-10-08T14:08:42'. The memory describes lock, turn.json and the .waiting files only (line 12). The current code also has the one-shot runs/.yield.json (scripts/gpu_run.py:12-49: label or label_prefix, max_wait_s, give_up_if_not_seen_s; renamed to .yield_consumed_* when used). It also has the bundle budget in lock and turn records (gpu_run.py:110-129; bundle_budget_s 16200), and the practice of writing turn.json and backing up dead locks as .stale-<pid>.bak after a crash (turn.json note; lock.stale-63900.bak). JOINT_PLAN_2026-10-10.md:39-40 adds the rule 'stale locks are cleared by their owner or with the user's explicit authorisation'. Thresholds still match code: 25% duty (lm.py:164 DUTY_RATIO 3.0), tz01 98/90 (lm.py:107-108).",
+     "recommendation": "Add the yield-file mechanism, the post-crash procedure (owner clears its own stale lock, writes turn.json with last=bwm, yields to the peer) and the joint-plan lock rule to the protocol memory.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "The memory file (mtime 2026-10-08 09:08:42) does omit the yield file (gpu_run.py:12-49 honour_yield with label/label_prefix/max_wait_s/give_up_if_not_seen_s), the stale-lock .bak practice and the joint-plan lock rule (JOINT_PLAN:39-40). Thresholds match the code (lm.py:107-108 98/90; lm.py:164 DUTY_RATIO 3.0). The auditor's summary is wrong to call it a note 'from before the yield file existed'. runs/.yield_consumed_1791309626.json is dated 2026-10-06 12:08, and stale-lock .bak files date from 10-06, so these mechanisms already existed when the memory was written. The memory is incomplete, not stale."
+    },
+    {
+     "id": "RC-09",
+     "severity": "low",
+     "title": "D-61's 'every registered quantity agrees' is broader than the automated check",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/scripts/lb_rescore.py",
+     "evidence": "lb_rescore.py:160-173 compares only n_needs_lookahead, the per-instance needs-lookahead set, cp1/cp2 counts, p_holm, statuses, ratio point/CI, near and branch. LB_RESCORE.json 'agreement' has exactly these 10 keys, all true. The ORACLE, IGNORE_STATUS and W4E24 counts and the claim that 'headline, reading, qualifiers and limits are the registered strings' (DECISIONS.md:606-613) are not machine-compared. I checked them by hand against PREREG_LB_RESULTS.json and they do match: ORACLE 0.889*180 = 160, IGNORE_STATUS 63/180 (qualifiers[1]), W4E24 success_k 134, ratio 0.802 (qualifiers[3]), select_fixed 0.867, verified_plan_precision 0.952, 52/180 = 29%.",
+     "recommendation": "Optionally extend the agreement block with these counts and a string comparison, or reword D-61 to say they were checked by hand.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced. In lb_rescore.py:160-173 the checks dict has exactly 10 keys, and LB_RESCORE.json 'agreement' has those 10, all true. ORACLE 160, IGNORE_STATUS 63, T2_W4E24 134 and ORACLE_W4E24 167 are computed (bwm_rescore.success) but not compared. The ratio CI is only checked to within 0.01. Comparing by hand with RCWM PREREG_LB_RESULTS.json (sha 887b4c88): ratio.oracle 0.8889 x 180 = 160, t2_vs_ignore_status.off_success 63, w4e24 t2_success 134 and off_success 167, lo 0.73006 and hi 0.85535. All match, so only the wording of D-61 overreaches."
+    },
+    {
+     "id": "RC-10",
+     "severity": "low",
+     "title": "Vault root mtime (03:07:25) does not fit D-60's 'reverted ~03:20'",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/DECISIONS.md",
+     "evidence": "DECISIONS.md:595 'D-60 Vault copy reverted (2026-10-10 ~03:20)'. stat on Rineya_Published_Cores shows a last-modified time of 2026-10-10 03:07:25.93. `find . -maxdepth 2 -newermt 2026-10-09` returns only '.'. build_devfreeze.py:219-223 uses shutil.copytree, which creates the folder at copy start (release files are stamped 03:05:54). Deleting a child normally updates the parent's mtime, so the last entry change, probably the removal, was at 03:07:25 rather than ~03:20. RCWM DECISIONS.md:758-769 dates its question to about 03:10. The vault state itself is correct: no Rineya-Titan-Sparse-BWM-* folder, and no BWM or Blocksworld mention in CATALOG.json (mtime 2026-09-25) or MODEL_REGISTRY.md (2026-09-25).",
+     "recommendation": "Confirm the deletion time from the session transcript and correct D-60's timestamp if needed. No change to the vault is needed.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced. stat on Rineya_Published_Cores gives a last-modified time of 2026-10-10 03:07:25.93, and `find -maxdepth 2 -newermt 2026-10-09` returns only '.'. Independent corroboration: bwm-packaging-and-publishing.md, mtime 03:07:35.5, already says 'I reverted it (D-60): the vault has no BWM folder'. The revert therefore happened at about 03:07, not '~03:20' (DECISIONS.md:595). The vault state is correct: no *BWM* folder, and grep -i 'bwm|blocksworld' on CATALOG.json and MODEL_REGISTRY.md (both 2026-09-25) has no hits."
+    },
+    {
+     "id": "RC-11",
+     "severity": "low",
+     "title": "Minor number and wording mismatches in D-62, PREREG_D54 and the release README",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/bundles/bundleG.json",
+     "evidence": "(a) PREREG_D54_KEYORDER.md:49 promises 'paired exact McNemar, with Clopper-Pearson CIs', but bw_keyorder.py:121-128 writes no CIs. (b) Of D-62's '6,099 augmented rows', 76 are byte-identical to the canonical prompt (canonical state order + action-first + no shuffle; expected about 6099/21/4 = 73), so 6,023 rows are actually non-canonical. (c) Training time: bundleG.json est_s 3600 for train-Fdelta-ko, but F0 took wall_s 5940.8 (runs/BW_Fdelta_s0/metrics.json). D-62 says about 1.7 GPU-h and the joint plan about 1.9 h. Harmless, because bundle.py:39 checks the estimate only after a prior sub-job has run in the same turn. (d) The release README says the mirror's tallest goal tower is '8.1 vs 6.8' on hard, while P-10 (DECISIONS.md:584) says '8.1 vs 6.9'. MIRROR_GAP_ANALYSIS.json has 6.85.",
+     "recommendation": "Note these in the D-62 follow-up: add CP CIs to the eval or drop the promise before results exist; give the effective augmented count; set est_s to about 6000. Leave the release README unchanged (package of record), but mention the rounding in the records.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "All four sub-points reproduce. (a) PREREG_D54:49 promises Clopper-Pearson CIs, but bw_keyorder.py:127-128 writes only rates, discordant counts and the McNemar p. The CIs can still be recovered from rate x n. (b) My regeneration gives 76 aug rows identical to the canonical prompt, so 6,023 rows are effectively non-canonical. (c) bundleG.json est_s is 3600, but runs/BW_Fdelta_s0/metrics.json train.wall_s is 5940.8. This is harmless because bundle.py:39 checks est_s only when ran > 0. (d) release README:34 says '8.1 vs 6.8', while P-10 (DECISIONS.md:584) says 6.9 and MIRROR_GAP_ANALYSIS.json has mean_max_goal_tower 6.85, a rounding difference."
+    },
+    {
+     "id": "RC-12",
+     "severity": "info",
+     "title": "Passing: all quoted hashes and every P-09, P-10, D-61 and D-62 number reproduce",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/DECISIONS.md",
+     "evidence": "sha256sum: PREREG_B3_DISTILL e6aa884b; PREREG_PLANBENCH adfc4354 (= FREEZE_B2 prereg_sha256); instances_b3_fresh 575c45b1; blocks_planner 18a5f22b; research/PREREG_LEDGER_BEAM_DRAFT b2896ba3; lb_rescore.py b1f289ec and LB_RESCORE.json 2ff7b224 (= RCWM DECISIONS.md:807); RCWM PREREG_LB_DRAFT 26c62144, PREREG_LB.md 0f414cbc, FREEZE 1b7e7a54, draw 4fff0738, RESULTS 887b4c88. Adapters ee1c5aec/2ed0bb00 = FREEZE_B2 = release CORE.json. Recomputed from plans.jsonl: hard 73/110 vs 5 (+68/-0, p 6.8e-21), mirror 61 vs 6 (+55/-0, 5.6e-17), PB 602/602 vs 584 (+18/-0, 7.6e-6); CIs 0.567-0.751, 0.457-0.649, 0.994-1.000; Fisher p 0.128; val_disagreements 0 in all 6 summaries; P-09 38/70, 4/70, +34/-0, p 1.2e-10, hard 44/70. D-62: 12,000 rows, canon 5,901 / aug 6,099, 42 orders, 21 state orders, 0 held-out, targets identical, max 175 tokens (tokenizers lib), recipe = F0 metrics (600, 16, 1e-4, seed 0, max_len 256). b3fresh: 110 instances with block mix identical to hard. bwmn/blocks.py, lm.py, __init__.py and blocks_planner.py are unchanged since before D-59 (mtimes 10-05..10-09 07:03), and their git blob hashes equal the remote's.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Recomputed independently. SHA prefixes match: e6aa884b, adfc4354, 575c45b1, 18a5f22b, b2896ba3, b1f289ec, 2ff7b224. The adapters are 2ed0bb00 (F) and ee1c5aec (Pa), equal to FREEZE_B2_{beam,direct}.json. From plans.jsonl: hard 73/5 (+68/-0), McNemar p 6.8e-21, CP 0.567-0.751; mirror 61/6 (+55/-0), 5.6e-17, 0.457-0.649; PB 602/584 (+18/-0), 7.6e-06, 0.994-1.000. VAL disagreements are 0, and Fisher p is 0.128. Cost per instance from the merged summary.json: 186.9 F queries and 7,991.9 tokens on hard; 3.0 and 279.1 on PB. D-62 data: 5,901 canonical + 6,099 augmented, 42 orders. bwmn module mtimes are 10-05..10-09 07:03, all before the LB freeze."
+    },
+    {
+     "id": "RC-13",
+     "severity": "info",
+     "title": "Passing: vault clean, no salt or weights exported, B3 resume state intact",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/BW_DISTILL_r1/solutions.jsonl",
+     "evidence": "Vault: `find -iname '*BWM*'` returns nothing; grep -i 'bwm|blocksworld' on CATALOG.json and MODEL_REGISTRY.md has no hits. gh_export: `git ls-files bwm | grep safetensors|.bin|.pt|salt` returns nothing; 64 excluded entries are listed (9 adapter weights). 'bwm-lb-' appears 0 times in native_v1. In the remote it appears only in rcwm/\u2026/LB_CONFIRM_DRAW.SOURCE.json, which is by design after the D-59 reveal. Scratchpad lb_salt.txt: 39 chars after strip, sha256 0b6b5ea9\u2026 = commitment. B3 search: solutions.jsonl has 168 rows, 168 unique ids, 0 parse errors, 148 verified. That equals the chunk log 22+22+20+20+22+21+21. Label precision so far is 148/148. fcache.jsonl has 12,086 lines and all parse after the reboot. 168 is a multiple of chunk 24, so the resume is chunk-aligned. bundleE.json sha 327133cf equals the pushed copy.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Reproduced. solutions.jsonl has 168 rows, 168 unique ids and 0 parse errors. 148 are verified, and all 148 have exact_valid_for_analysis_only true. The chunk log reads 22, 22, 20, 20, 22, 21, 21 of 24. fcache.jsonl has 12,086 lines and 0 parse errors. bundleE.json sha is 327133cf. grep for 'bwm-lb-' in native_v1 gives 0 hits; in gh_export origin/main it hits only rcwm/.../LB_CONFIRM_DRAW.SOURCE.json. Nothing in `git ls-files bwm` matches safetensors|.bin|.pt|salt|_train.jsonl|distill_rows|mix_v. bundleE.stdout shows it is now yielding to 'rcwm-t1:*' (09:27)."
+    }
+   ],
+   "verifier_missed": [
+    "The RCX branch already pins the D-54 prereg: origin/research/rineya-complementary-intelligence-v1, commit b128150 (2026-10-10 06:19:11), complementary/COLLABORATION.md:113-114 quotes 'PREREG_D54_KEYORDER.md (sha 6b704388\u2026)'. The auditor missed this, and it refutes RC-03. The same RCX record also misdates BWM's FYI as '2026-10-10 about 23:20', which is impossible (it was about 05:50). BWM could ask RCX to correct it.",
+    "The remote already has third-party copies of D-60 and D-61. The real origin/main (4e7bd9b, seen from rineya-world-model-research) carries rcwm/.../DECISIONS.md:767 (BWM D-60 vault revert) and :807 (lb_rescore b1f289ec, LB_RESCORE 2ff7b224; commit ea1f36c). Only BWM's own text of D-60..D-62 is missing, which is why RC-01 was downgraded.",
+    "D-51 (DECISIONS.md:439-444) is the user-approved rule behind the export: 'no adapter weights, training data or caches' and 'Re-export after each milestone; pull --rebase before push'. The auditor cited the README rather than this decision record. D-51 makes the export filter gap (RC-02) a breach of a user-approved decision, and it already covers RC-06.",
+    "No artifact backs the D-56 smoke-test claim ('16/24 verified, 304 rows, label precision 1.0'). There is no B3 distillation smoke output under native_v1/runs (only _smoke_select and _tmp_tests_mystery). The session scratchpad holds only smoke.py, with no solutions.jsonl or distill_rows.jsonl.",
+    "bw_keyorder.py's mtime (05:50:08) is 22 s after the D-54 prereg (05:49:46), so the script was finalised after the prereg was written. I checked that the seeds (20261012/20261013), the held-out orders H1-H3, the five modes and the reading thresholds in the script match the prereg, and that the existing data file regenerates line-for-line from the current script.",
+    "bwm-packaging-and-publishing.md frontmatter still says 'modified: 2026-10-08T14:08:32Z', but its body was rewritten on 10-10 (mtime 03:07:35). The MEMORY.md index line 1 does not mention that vault placement also needs explicit approval.",
+    "The RC-08 summary's premise is wrong: runs/.yield_consumed_1791309626.json (2026-10-06 12:08) and the lock.stale-*.bak files from 10-06 show the yield and stale-lock mechanisms existed before the GPU-protocol memory was written (10-08 09:08). The memory left them out; it did not predate them."
+   ]
+  },
+  {
+   "dimension": "peer_crosscheck",
+   "summary": "The PREREG-LB numbers agree across RCWM, BWM and the sealed artifacts. I checked T2 127/180, OFF 14/180, ORACLE 160/180, ratio 0.794 [0.730, 0.855], CP2 23/52 vs 3/52, branch YES and the audit 5/180. I recomputed the audit independently with BWM's simulator and got 5/180. The co-sign string in PREREG_LB_FREEZE.json is byte-identical to BWM D-59. sha256 of the scratchpad salt equals commit 0b6b5ea9\u2026, and recomputing the draw seed gives 216684901014726, matching the record. Every pinned file still hashes to its recorded value, including blocks_planner 18a5f22b and blocks/lm/__init__.\n\nNo contradiction found here invalidates a registered result or breaks a queued GPU job. The lease state matches the plan RCWM recorded after the reboot: RCWM's 5a holds the lease since 09:27:42, and BWM's bundleE is yielding.\n\nThe main problems are record gaps on the BWM side:\n- BWM's DECISIONS.md has no entry for the post-reboot joint plan, which adds new BWM commitments such as the PREREG-4 FK mirror.\n- BWM's DECISIONS.md has no entry for the RCX boundary, even though RCX and BWM's own reply both name BWM's DECISIONS.md as the authoritative record.\n- The 5b/item-1 RW2 mirrors and the RW2 surface audit appear only in RCWM's records.\n- The release package of record omits the F-08 key-order caveat and has no 5c retention evidence.\n\nOne live deviation: RCX is running two CPU jobs at once (about 4 + 2 cores). Its recorded rules allow a single lane and at most 4 threads, and tz01 is at 96.1 \u00b0C.\n\nSmaller items:\n- Both DECISIONS files carry an exclusion-union count (315,081 payloads, 37 sources) that the sealed record does not support (322,899, 58 sources).\n- Item numbering conflicts across the roadmaps for #6/#7/#8.\n- RCX has some wording and timestamp errors.\n- The GitHub export lags: D-60 to D-62 are missing.\n\nRCX has no open request to BWM.",
+   "findings": [
+    {
+     "id": "PX-01",
+     "severity": "medium",
+     "title": "Post-reboot joint plan and its new BWM commitments are recorded only by RCWM",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/DECISIONS.md",
+     "evidence": "RCWM DECISIONS.md:850 'D-45 Joint plan after the 2026-10-10 reboot (agreed with BWM by message)'. :852 turn order is '5a \u2026, BWM B3 resume, 5b, BWM (B3 remainder, then the D-54 key-order retrain), RCWM T2b-ledger, BWM item 7 seeds and item 9, joint PREREG-4'. JOINT_PLAN_2026-10-10.md:1 says '(agreed by message; RCWM D-45, BWM side by message)'. JOINT_PLAN:31 says 'BWM mirrors it [PREREG-4] with FK in the frozen B2 planner'. BWM DECISIONS.md ends at line 637 with D-62, written before 05:50: there is no entry for the 09:24 reboot, the stale bundleE lock clearing, the yield, or the plan. BWM's actions do match the plan: rineya-gpu-0.turn.json reads {\"last\":\"bwm\",\"label\":\"bwm:bundleE\",\u2026\"bundleE held the card 05:19-09:23 (4h04m of 4.5h)\"}; runs/.yield.json reads 'RCWM's turn is next'; the live lock is label rcwm-t1:t2b-prereq, created 09:27:42; jobs.json order is bundleE -> bundleG -> \u2026 -> bundleF.",
+     "recommendation": "Add a BWM D-entry (and I-entry) for the 2026-10-10 reboot and the agreed joint plan. It should cover the turn order, bundleE resume over about 2 turns, bundleG after B3, item 7 seeds and item 9, and the PREREG-4 FK-mirror commitment, so that BWM's own record backs commitments RCWM attributes to it.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "BWM DECISIONS.md was last modified at 05:50 and ends at D-62 (line 637). A grep for reboot, JOINT_PLAN, PREREG-4 or T2b-ledger finds nothing. RCWM DECISIONS.md:850 (D-45) and JOINT_PLAN_2026-10-10.md:1 and :31 ('BWM mirrors it with FK in the frozen B2 planner') attribute the plan and the FK mirror to BWM. The live state matches the plan: the lock reads label rcwm-t1:t2b-prereq, created 1791642462 = 09:27:42. turn.json is last=bwm with a note 'written by BWM after the user's reboot'. .yield.json says 'RCWM's turn is next'. The only BWM-side traces are these operational files, not a D-entry."
+    },
+    {
+     "id": "PX-02",
+     "severity": "medium",
+     "title": "BWM's DECISIONS.md, which both sides name as authoritative, has no record of the RCX scope agreement (CX Q-02 reply)",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/DECISIONS.md",
+     "evidence": "`grep -rIl 'RCX|complementary'` over native_v1 *.md/*.json/*.py and over gh_export/bwm returns nothing. RCX REQUESTS.md says 'Reply from BWM-001 to CX Q-02 \u2026 (summarized; BWM's own DECISIONS.md is authoritative)', and REQUESTS.md header says 'Peers' agreements are authoritative only as recorded in their own DECISIONS.md'. The terms exist only in BWM's private memory file bwm-peer-rcx-scope.md:\n- B3 artifacts readable only after runs/BW_B3_EVAL/B3_REPORT.json;\n- seeds 202612xx;\n- exclusions test_signatures/hard_signatures plus invariants of hard, val_large, mirror, b3fresh and distill-240;\n- no evaluation on hard/PB-600/mirror/b3fresh without a joint prereg;\n- single CPU lane;\n- message RCX before editing blocks.py.\nRCWM did record its side (RCWM DECISIONS.md:714 D-39).\nThe terms themselves match across sides: RCX D-07 and COLLABORATION \u00a77 match BWM memory; held-out orders H1\u2013H3 match D-62; PREREG_D54_KEYORDER.md sha 6b704388 matches; seeds 20261012/13 match PREREG_D54 lines 18 and 34.",
+     "recommendation": "Add a BWM D-entry recording the RCX boundary as sent in the CX Q-02 reply and the D-54 FYI, so the authoritative record exists and gets exported.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "`grep -rIl -i 'RCX|rineya-complementary'` over native_v1 (all text files except *.jsonl and health.log) and over gh_export/bwm returns nothing. RCX REQUESTS.md:4-5 and :69 name BWM's DECISIONS.md as authoritative. The terms do match across sides: REQUESTS.md:71-107 vs memory bwm-peer-rcx-scope.md; PREREG_D54 has seeds 20261012/13 at lines 18 and 34 and H1-H3 at lines 26-28; sha 6b704388 matches. Two small corrections to the evidence. 'Single CPU lane' is not in BWM's memory file; it appears only in RCX's record (REQUESTS.md:105). The memory's 'message RCX before editing blocks.py' appears in no RCX record."
+    },
+    {
+     "id": "PX-03",
+     "severity": "medium",
+     "title": "RCX is running two concurrent CPU jobs (about 6 cores) against its recorded single-lane, 4-thread rule",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/rineya-complementary-worktree/complementary/COLLABORATION.md",
+     "evidence": "COLLABORATION.md:44-45 says 'CPU only by default, in a single CPU lane (one heavy CPU job at a time, per BWM I-12). At most 4 torch threads.' CX D-07 says 'one CPU lane at a time (no concurrent heavy CPU jobs)'. Live processes at 09:36:\n- pid 13188 'native_probe.py --out runs/RCX-E01N/probe1 --arms OFF,T2,SUPA' (started 09:28:31, working set 3.77 GB, about 3.95 cores);\n- pid 58596 scratchpad 'proto2.py {\"steps\":1000,\u2026\"bs\":256,\u2026\"n\":40000}' (started 09:35:59, about 1.99 cores; Get-Counter samples).\nThermal_log at 09:36:49 shows tz01=96.1, ram=10.6 GB free. That is 1 \u00b0C under RCX's own 97 \u00b0C pause and 2 \u00b0C under the 98 \u00b0C shared GPU pause. RCWM 5a is on the GPU now, and BWM B3 training is next.",
+     "recommendation": "Ask RCX, via the user (no direct messaging from this audit), to keep one CPU job at a time and at most 4 threads total while a GPU job runs. A tz01 GPU pause would stall RCWM 5a and BWM's B3 resume.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "I could not see pid 58596 (proto2.py) because it had already exited. proto2.py exists in RCX's scratchpad (mtime 09:40:36) and calls torch.set_num_threads(2). I reproduced concurrency with a different pair at 09:44:04:\n- pid 13188, native_probe.py (RCX_THREADS default 4, 3.77 GB, started 09:28:31);\n- pid 76872, `unittest tests.test_sym_lm...TestLearnability` (started 09:42:58; it trains on 40,000 records at batch 256), from the RCX worktree.\nThat breaks COLLABORATION.md:44-45 and CX D-07 ('one CPU lane at a time (no concurrent heavy CPU jobs)'). The thermal framing is overstated. tz01 at about 95.9-96.1 is the steady state whenever GPU work runs: health.log shows 95.9 at 03:50 and 96.9 at 04:30, before any RCX native job, and RCWM thermal_log.txt has 665 historical tz01=97.1 lines. The rule breach is real, and it is the I-12 failure mode (concurrent CPU lanes under a GPU job)."
+    },
+    {
+     "id": "PX-04",
+     "severity": "medium",
+     "title": "Release package of record omits the F-08 key-order caveat (D-35 joint rule) and has no 5c retention evidence, while the vault decision is pending",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/release/Rineya-Titan-Sparse-BWM-Blocksworld-0.1.0-devfreeze/README.md",
+     "evidence": "BWM F-08 (DECISIONS.md:481-489) says 'claims are scoped accordingly (\"generalizes in size and object names; format-locked\")'. RCWM D-35 (DECISIONS.md:585) says 'every claim gets a surface-form audit (agreed with BWM)'. `grep -i 'key order|format-locked|F-08|surface|serializ'` over release/ returns nothing, and the evidence/ folder has no surface_audit.json. JOINT_ROADMAP_2026-10-08.md:90-92 says 5c [J] 'still measures adapter-on behaviour before any release'. RCWM_ROADMAP item 4 says 'BWM's adapters have no retention evidence at all'. BWM DECISIONS has no 5c entry, and no 5c BWM run is in jobs.json or JOINT_PLAN. D-60 makes release/ the package of record, and vault placement awaits the user.",
+     "recommendation": "Before the user decides on vault placement:\n- add the F-08 format-locked limitation and surface_audit.json to the package;\n- either schedule an adapter-on 5c retention run with RCWM (it covers 5 categories per R17) or state its absence as a release limitation.",
+     "verdict": "confirmed",
+     "verified_severity": "medium",
+     "verifier_note": "`grep -i 'key order|key-order|format-locked|F-08|surface|serializ|retention'` over release/ README/CORE/PROMOTION finds nothing relevant. The only limits are in README:45-51 ('does not show general planning ability\u2026 One training seed per adapter'). evidence/ has no surface_audit.json. BWM's own F-08 (DECISIONS.md:481-489) says 'claims are scoped accordingly (\"generalizes in size and object names; format-locked\")'. JOINT_ROADMAP_2026-10-08.md:90-93 (5c) says 'The suite still measures adapter-on behaviour before any release.' Mitigating: README:18 says 'Not a release, not release-qualified', and D-60 holds vault placement for the user."
+    },
+    {
+     "id": "PX-05",
+     "severity": "medium",
+     "title": "RW2 mirrors (5b / item 1) and the RW2 surface audit are BWM commitments in RCWM's records but absent from BWM's records, queue and the joint plan",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_Consequence_World_Model_Bundle_2026-10-05/experiments/RCWM-T1/docs/roadmap/RCWM_ROADMAP_2026-10-08.md",
+     "evidence": "RCWM_ROADMAP.md:\n- :11 'BWM mirrors it on RW2';\n- :33 '[5b register trace] BWM mirrors it as D-27 A3 on RW2 legality';\n- :82 'BWM turns: \u2026 then item 7 and the RW2 mirrors of items 1 and 3'.\nRCWM DECISIONS.md:588 (D-35) says 'BWM side: \u2026 5 renderings at 5 and 10 blocks \u2026 then RW2'.\nOn the BWM side:\n- D-52 (DECISIONS.md:460-465) defines the RW2 trace schema and says it 'Replaces the A3 slack-scratchpad plan', but no RW2 trace run is recorded or queued;\n- bw_surface_audit.py has no RW2 code (grep RW2 returns nothing), and runs/F_titan_main has no surface_audit output;\n- JOINT_PLAN_2026-10-10.md has no BWM RW2 item.",
+     "recommendation": "Agree with RCWM and record whether BWM still owes:\n- an RW2 surface audit (D-35);\n- RW2 mirrors of items 1/5b.\nThen either queue them or record them as dropped on both sides.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "Reproduced:\n- RCWM_ROADMAP:11, :33 and :82 assign RW2 mirrors to BWM;\n- RCWM D-35 (DECISIONS.md:588) says '\u2026then RW2';\n- bw_surface_audit.py has no RW2 code;\n- runs/F_titan_main has only F_TABLE.json, adapter, log.txt and metrics.json;\n- no bundle JSON mentions rw2, and jobs.json has no RW2 job;\n- JOINT_PLAN_2026-10-10 has no BWM RW2 item.\nDowngraded to low: the latest plan, agreed by both sides (D-45), omits these items. So they are stale roadmap commitments that need an explicit drop/keep on both sides, not a live contradiction."
+    },
+    {
+     "id": "PX-06",
+     "severity": "low",
+     "title": "Roadmap item numbering conflicts (#6/#7/#8), and the joint legality checker (#6) has no slot in the post-reboot plan",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_Consequence_World_Model_Bundle_2026-10-05/experiments/RCWM-T1/docs/roadmap/JOINT_PLAN_2026-10-10.md",
+     "evidence": "BWM JOINT_ROADMAP.md:35-38 numbers #6 = joint legality checker, #7 = BW_F/Pa_v2 seeds (B), #9 = transfer (B).\nRCWM_ROADMAP.md:58,64 numbers 6 = long horizons (RCWM) and 7 = 'Sealed confirmation of BWM's deferral gate. Owner: BWM'. That item is not in BWM's roadmap or records.\nJOINT_PLAN_2026-10-10.md mixes the two schemes: line 18 'BWM: item 7 seeds (release gate), item 9 transfer' (BWM numbering), line 34 'item 6 (k = 8/16 horizons\u2026)' (RCWM numbering).\nRCX COLLABORATION.md:29 lists RCWM owning '#6 long horizons', '#8 no-LLM learners', while :39 says 'joint item #6 (legality-checker LoRA)'.\nBWM's reply to RCX says joint #6 is 'joint BWM + RCWM, and nobody has started it'. It appears in no JOINT_PLAN step.",
+     "recommendation": "Adopt one numbering, BWM JOINT_ROADMAP's, in all three programmes' records. Decide explicitly whether the legality checker (#6) and RCWM's 'BWM deferral-gate sealed confirmation' are scheduled or dropped.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "BWM JOINT_ROADMAP:35-38 has #6 = legality checker, #7 = seeds (B), #9 = transfer. RCWM_ROADMAP:58 and :64 have 6 = long horizons and 7 = 'Sealed confirmation of BWM's deferral gate. Owner: BWM'. JOINT_PLAN:18 uses BWM numbering for items 7 and 9, but :34 uses RCWM's (item 6 = k = 8/16 horizons). RCX COLLABORATION.md:29 lists '#6 long horizons' under RCWM, while :39 says 'joint item #6 (legality-checker LoRA)'. JOINT_PLAN never mentions a legality checker."
+    },
+    {
+     "id": "PX-07",
+     "severity": "low",
+     "title": "Exclusion-union size in both DECISIONS files does not match the sealed draw record",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_Consequence_World_Model_Bundle_2026-10-05/experiments/RCWM-T1/docs/ledger_beam/LB_CONFIRM_DRAW.SOURCE.json",
+     "evidence": "RCWM DECISIONS.md:746 and BWM DECISIONS.md:565 both say 'Exclusion union: 315,081 payloads from 37 sources'. LB_CONFIRM_DRAW.SOURCE.json has exclusion_union_size {'payloads': 322899, 'operative': 314850} and 58 freshness sources, the same as RUN_TEST_REHEARSAL.json union_payloads 322899, union_sources 58. A grep for 315081/315,081 over RCWM-T1 matches only DECISIONS.md (and an unrelated lik_rank.jsonl). The overlap is 0/0 and verify_ok is true, so validity is unaffected.",
+     "recommendation": "Correct the figure in both records with an erratum note (322,899 payloads / 314,850 operative, 58 sources). No rerun is needed.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "LB_CONFIRM_DRAW.SOURCE.json gives exclusion_union_size payloads 322,899 / operative 314,850, and freshness.sources has 58 keys. RUN_TEST_REHEARSAL.json gives union_payloads 322899 and union_sources 58. '315,081 \u2026 37 sources' appears at RCWM DECISIONS.md:746 and BWM DECISIONS.md:565. Its only other match is an unrelated lik_rank.jsonl. The nearest similar figure is INTERFACE.md:226 (an older 12:27 union: 314,901 / 37 sources). Overlap is 0/0 and verify_ok is true, so validity is unaffected."
+    },
+    {
+     "id": "PX-08",
+     "severity": "low",
+     "title": "D-61 says 'every registered number' agrees, but LB_RESCORE.json did not re-score the D-35 audit or the rendered strings",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/scripts/lb_rescore.py",
+     "evidence": "lb_rescore.py:24-26 EPISODES covers T2, OFF, ORACLE, IGNORE_STATUS, T2_W4E24 and ORACLE_W4E24 only. There is no audit/episodes_T2_heldout_combined_W2E12.jsonl. LB_RESCORE.json 'agreement' keys cover only n_needs_lookahead, the per-instance list, cp1/cp2 counts, p_holm, statuses, ratio, near and branch: no audit, no strings. I recomputed the audit with lb_rescore.run() on the sealed draw (sha 4fff0738 verified): 'heldout_combined success 5 / 180', which matches RESULTS (success_k 5). So the numbers agree; only the scope of the re-score claim is overstated.",
+     "recommendation": "Add the heldout_combined arm (and, if claimed, a rendered-string check) to lb_rescore.py's recorded comparison. Alternatively, reword D-61 to 'every co-primary/key-secondary number' agrees.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "lb_rescore.py:24-26 EPISODES has no heldout_combined arm and no wording check, and the LB_RESCORE.json 'agreement' keys cover neither. However, I checked both claims independently and they are true:\n- lb_rescore.run() on audit/episodes_T2_heldout_combined_W2E12.jsonl against the draw (sha 4fff0738 verified) gives 5/180, matching success_k 5;\n- the headline and conclusion, and all 7 rendered limits, occur verbatim in PREREG_LB.md.\nOnly the machine record is narrower than D-61's wording, so this is downgraded to info."
+    },
+    {
+     "id": "PX-09",
+     "severity": "low",
+     "title": "RCX record inconsistencies: a future timestamp, a looser B3 gate wording, and a 'never opens' claim its code contradicts",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/rineya-complementary-worktree/complementary/COLLABORATION.md",
+     "evidence": "(1) COLLABORATION.md:112 is dated '2026-10-10 about 23:20, BWM-001 (FYI)', which is in the future. PREREG_D54_KEYORDER.md mtime is 2026-10-10 05:49 and COLLABORATION.md mtime is 05:51.\n(2) COLLABORATION.md:40 says E11/E12 run '**after** B3 artifacts exist'. The agreed gate (REQUESTS.md, CX D-07) is B3_REPORT.json. B3 artifacts already exist (runs/BW_DISTILL_r1/solutions.jsonl, 168 rows, 08:57), and no B3_REPORT.json exists.\n(3) COLLABORATION.md:67-71 says 'RCX never opens \u2026 BWM hard-110, mirror, PB-600 and b3fresh'. But untracked rcx/bw/excl.py (written 09:32) reads the hard PDDL and instances_{val_large,mirror_hard,b3_fresh}.json, and regenerates b3fresh in memory to check a hash. That reading is what BWM's exclusion recipe requires, and it is not evaluation.\nI found no RCX read of BW_DISTILL_r1 or BW_B3_EVAL (grep over complementary/).",
+     "recommendation": "Via the user, ask RCX to:\n- fix the timestamp;\n- change line 40 to 'after runs/BW_B3_EVAL/B3_REPORT.json exists';\n- reword the 'never opens' list to 'never evaluates on; reads only to compute exclusion invariants'.\nBWM should record that read-for-exclusion is permitted.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "(1) COLLABORATION.md:112 reads '2026-10-10 about 23:20', but the file's mtime is 05:51. (2) Line 40 says 'after B3 artifacts exist', while line 108, CX D-07 and REQUESTS.md:73 use B3_REPORT.json. (3) Lines 67-71 say 'RCX never opens \u2026 BWM hard-110, mirror, PB-600 and b3fresh', but untracked rcx/bw/excl.py does all of these:\n- parses hard PDDL (lines 94-95);\n- reads instances_{val_large,mirror_hard,b3_fresh}.json (lines 97-100);\n- builds test_signatures over the PB-600 PDDL;\n- regenerates b3fresh in memory (line 61).\nThis is read-for-exclusion, as BWM's recipe requires. `grep BW_DISTILL|BW_B3|solutions.jsonl` finds only doc mentions; there are no code reads."
+    },
+    {
+     "id": "PX-10",
+     "severity": "low",
+     "title": "Planner and code reuse after LB: no renewed stability promise, and RCX pins more BWM files than BWM promised to protect",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/rineya-complementary-worktree/complementary/rcx/bw/bwm_import.py",
+     "evidence": "JOINT_PLAN_2026-10-10.md says the T2b-ledger confirmation includes 'PREREG-LB-style planning on the held-out surface', and PREREG-4 includes 'an LB-style planning check'. Both reuse BWM's blocks_planner. BWM memory bwm-prereg-lb-cosign.md says 'The planner-freeze promise is fulfilled; editing blocks_planner is allowed again'. RCX bwm_import.py PINS blocks.py b1e28ed5, blocks_val_large.py 6a66d489 and bw_distill.py 2b2d5182, all of which match the current files. RCX COLLABORATION \u00a74 also pins blocks_planner 18a5f22b as '(frozen)'. BWM promised RCX notice only before editing blocks.py.",
+     "recommendation": "Before RCWM freezes T2b-ledger or PREREG-4, agree on a planner pin or freeze in both DECISIONS files. Tell RCX that its pins on blocks_planner, blocks_val_large and bw_distill fail closed if BWM edits those files.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "The memory file says 'The planner-freeze promise is fulfilled; editing blocks_planner is allowed again'. JOINT_PLAN:24-26 and :31 plan LB-style planning in T2b-ledger and PREREG-4, and neither DECISIONS file has a renewed planner pin. Minor corrections:\n- RCX bwm_import.py PINS (lines 34-39) cover __init__, blocks, blocks_val_large and bw_distill, not blocks_planner. All four match the current files (b1e28ed5, 6a66d489, 2b2d5182, e3b0c442).\n- COLLABORATION \u00a74 line 88 says 'Beam planner (frozen)' without a sha; the sha 18a5f22b is at line 28 and REQUESTS.md:91."
+    },
+    {
+     "id": "PX-11",
+     "severity": "low",
+     "title": "RCWM's live GPU chain still holds 9 pending pilot steps after hooks 75/80 that the joint plan does not mention; REPORT \u00a77 is stale",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_Consequence_World_Model_Bundle_2026-10-05/experiments/RCWM-T1/scripts/master_chain.sh",
+     "evidence": "master_chain.sh:47 sources the queue hooks, then runs lik supa, pvr stage1, offtask supa, pvr retro x2, steer, the arms randdelta/exp/transition/sparse_a0.5/a2.0/qwen3, lik transition, hstates and regen. Output-marker check: supa/lik_rank, pvr_sparse/stage1, supa/offtask_meta, the retro_*.npy files, steer_results, transition/lik_rank and hstates_supa are all PENDING. JOINT_PLAN step 5 says 'RCWM: T2b-ledger seeds'. REPORT.md:304-308 still lists 'Joint item 3: beam search over ledger' as a next step and '5c, retention suite: being built on CPU'. REPORT \u00a73d marks LB as confirmed, and D-36/R17 show 5c frozen and dev-selected.",
+     "recommendation": "For BWM planning, expect RCWM turns after 5b to run pilot steps unless RCWM inserts a T2b-ledger hook. Turn alternation is unaffected. Suggest RCWM update REPORT \u00a77.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "master_chain.sh:47 sources the hooks, then runs the pilot steps at lines 48-63. Marker check: sparse/lik_rank is DONE. Pending:\n- supa/lik_rank;\n- pvr stage1;\n- supa offtask_meta;\n- retro_sparse and retro_supa;\n- steer_results;\n- randdelta, exp, transition, sparse_a0.5, sparse_a2.0 and qwen3 (DONE.json);\n- transition/lik_rank;\n- hstates_supa;\n- plus the regen body.\nThat is 14 pending markers plus regen, not the 9 in the title. REPORT.md:304-308 still lists '5c \u2026 being built on CPU' and 'Joint item 3: beam search over ledger' as next steps."
+    },
+    {
+     "id": "PX-12",
+     "severity": "low",
+     "title": "BWM's GitHub export lags: D-60 to D-62, the LB re-score and the D-54 prereg are missing while peers cite them; the gh_export clone's RCX ref is stale",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/gh_export",
+     "evidence": "origin/main bwm/docs/DECISIONS.md ends at P-10 (`grep -c 'D-60|D-61|D-62'` gives 0). It has no lb_rescore.py, LB_RESCORE.json, PREREG_D54_KEYORDER.md or bw_keyorder.py. Meanwhile the RCWM export ea1f36c ('PREREG-LB co-signed by BWM (independent re-score)') cites BWM D-61, and RCX cites PREREG_D54_KEYORDER.md sha 6b704388. In gh_export, origin/research/rineya-complementary-intelligence-v1 is 18f1fa6 (10-09 23:03). The real head, 84be407 (10-10 09:26), is visible only in rineya-world-model-research.",
+     "recommendation": "Include D-60 to D-62, lb_rescore.py, LB_RESCORE.json and PREREG_D54_KEYORDER.md in the next BWM export, after user approval per D-51. Read RCX records from rineya-world-model-research or the worktree, not from gh_export.",
+     "verdict": "confirmed",
+     "verified_severity": "low",
+     "verifier_note": "In both gh_export origin/main (5a317d1) and the real remote origin/main (4e7bd9b, in rineya-world-model-research), bwm/docs/DECISIONS.md has 0 matches for D-60|D-61|D-62. `git log 5a317d1..origin/main -- bwm/` is empty, and there is no lb_rescore, LB_RESCORE or D54/keyorder file under bwm/. gh_export's RCX ref is 18f1fa6 (10-09 23:03), while the real head is 84be407 (10-10 09:26). Correction to the recommendation: D-51 already user-approved 'Re-export after each milestone', so no extra approval is needed."
+    },
+    {
+     "id": "PX-13",
+     "severity": "info",
+     "title": "PASS: PREREG-LB numbers, co-sign, salt and freeze agree across RCWM, BWM and the artifacts",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_Consequence_World_Model_Bundle_2026-10-05/experiments/RCWM-T1/PREREG_LB_FREEZE.json",
+     "evidence": "PREREG_LB_RESULTS.json (sha 887b4c88 \u2713):\n- cp1 127 vs 14, 113/0, p_holm 3.85e-34;\n- cp2 23/52 vs 3/52, 20/0, p_holm 1.9e-6;\n- ratio 0.79375 [0.7301, 0.8553], near False, branch YES;\n- ORACLE success_k 160, heldout success_k 5.\nLB_RESCORE.json (2ff7b224 \u2713) all_agree true.\nFreeze bwm_cosign is byte-equal to D-59: 'BWM-001 DECISIONS D-59 (2026-10-09) PREREG_LB_DRAFT.md sha256 26c62144\u2026 commit:0b6b5ea9\u2026'. Draft sha 26c62144 \u2713, PREREG_LB.md 0f414cbc \u2713, FREEZE 1b7e7a54 \u2713.\nScratchpad salt is 39 characters and its sha256 equals 0b6b5ea9\u2026. The seed recomputed from the tag, draft, union and salt is 216684901014726, equal to the record.\nBWM promises held: blocks_planner 18a5f22b, __init__ e3b0c442, blocks b1e28ed5 and lm 88a1e3a2 all equal the freeze record. BWM v1 draft b2896ba3 \u2713.",
+     "recommendation": "None. Item 3 is closed consistently on both sides.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "I reproduced the following:\n- hashes: RESULTS 887b4c88, PREREG_LB 0f414cbc, FREEZE 1b7e7a54, draft 26c62144, draw 4fff0738, LB_RESCORE 2ff7b224, lb_rescore.py b1f289ec, planner 18a5f22b, __init__ e3b0c442, blocks b1e28ed5, lm 88a1e3a2, BWM draft b2896ba3;\n- results: cp1 127/14 with 113/0 and p_holm 3.85e-34; cp2 23/52 vs 3/52 with 20/0 and p_holm 1.9e-6; ratio 0.79375 [0.7301, 0.8553]; near False; branch YES; ORACLE 160;\n- salt: the scratchpad lb_salt.txt (39 chars) equals the SOURCE salt, and its sha256 equals the commit. The recomputed seed is 216684901014726.\nCorrection: the freeze's bwm_cosign string is NOT byte-present in BWM DECISIONS.md (Python `cs in text` gives False), because D-59 splits the sha and the commit across its header and salt lines. The components agree, and the string is verbatim only in RCWM D-41."
+    },
+    {
+     "id": "PX-14",
+     "severity": "info",
+     "title": "RCWM's stated next GPU jobs and open items involving BWM",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/Rineya_Consequence_World_Model_Bundle_2026-10-05/experiments/RCWM-T1/DECISIONS.md",
+     "evidence": "GPU jobs:\n- 5a, D-38, hook 75: running under rcwm-t1:t2b-prereq since 09:27:42. Estimated 3.83 h (one turn) or 2 turns at the planning rate, plus a 1.44 h filler-control turn if S-trace wins.\n- 5b, D-44, hook 80: about 4.06 h, one turn or 2.\n- T2b-ledger: new and not yet preregistered.\n- Joint PREREG-4 at the end.\n- Retention confirmations for RCX candidates in RCWM turns (D-39).\nOpen items involving BWM:\n- B3 resume in the next BWM turn (D-45);\n- bundleG after B3;\n- item 7 seeds and item 9;\n- PREREG-4 FK mirror;\n- shared D-54 wording, which matches BWM D-62;\n- vault question pending with the user (R18/D-60).\nThe stale-lock request from I-32 is done: stale-63900.bak at 09:26, turn.json last=bwm, BWM yield to rcwm-t1. The blocks_planner/lm promise is fulfilled; see PX-10 for its reuse.",
+     "recommendation": "Use this list when planning BWM's turns.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "Confirmed:\n- the lock is rcwm-t1:t2b-prereq, created 09:27:42;\n- D-38 says '3.83 h in one turn \u2026 or 2 turns \u2026 filler control \u2026 1.44 h';\n- D-43 and D-44 give about 4.06 h for 5b;\n- D-45 lists the turn order and the new T2b-ledger;\n- D-39 assigns RCX retention confirmations to RCWM;\n- rineya-gpu-0.lock.stale-63900.bak is dated 09:26.\nThe list is accurate."
+    },
+    {
+     "id": "PX-15",
+     "severity": "info",
+     "title": "PASS: RCX pins, seeds and B3 gate match what BWM told RCX; no open RCX request to BWM",
+     "file": "C:/Users/clclc/BusinessProject/WorldModel/rineya-world-model-research",
+     "evidence": "In REQUESTS.md at 84be407, CX Q-01 and Q-02 are both 'ANSWERED'; there are no others. Pins match the current BWM files: traces.py 5da9ab09, blocks.py b1e28ed5, blocks_planner 18a5f22b, blocks_val_large 6a66d489. RCX seeds are 20261270-20261289 (rcx/bw/__init__.py), which do not collide with BWM's 20261006-13. No RCX code references BW_DISTILL_r1 or BW_B3_EVAL. RCX's E01N native probe uses RCWM assets only, not BWM sets.",
+     "recommendation": "None.",
+     "verdict": "confirmed",
+     "verified_severity": "info",
+     "verifier_note": "REQUESTS.md in the worktree is identical to branch 84be407 (diff empty). CX Q-01 and Q-02 are both ANSWERED; docs/requests/ is empty, and NEXT_STEPS mentions BWM only for E07. rcx/bw/__init__.py gives RCX seeds 20261270-20261289. Pins match the current files, including traces.py 5da9ab09. No RCX code reads BW_DISTILL_r1 or BW_B3_EVAL."
+    }
+   ],
+   "verifier_missed": [
+    "JOINT_PLAN step 6 (BWM item 7 seeds / item 9) has no job in runs/jobs.json. Between bundleG and bundleF the queue instead holds 8 legacy GPU jobs, each with no marker and no runs/_failed/*.failed file: a2-train-Fvlab (its after-marker runs/A2_vlab_labels/vlab_sft.jsonl exists), train-P-actions-s1-1600, e2-titan-sparse-r1024, e2-supa-r256, e2-supa-r1024, e2-qwen3-0.6b-r256, e2-qwen3-0.6b-r1024 and e2-xlimB. orchestrate.py:79-89 runs runnable[0] in list order, so after bundleG these pre-B2 jobs would take BWM's GPU turns, not the plan's item 7/9 (medium).",
+    "Only BWM's private memory (bwm-peer-rcx-scope.md: 'message RCX before editing bwmn/blocks.py') records BWM's commitment to notify RCX before editing blocks.py. Neither BWM DECISIONS.md nor RCX's record of BWM's reply contains it: `grep -i 'notice|before edit|editing'` over RCX COLLABORATION, REQUESTS and DECISIONS returns nothing. RCX's bwm_import pins fail closed on any edit (low).",
+    "Thermal context the auditor omitted: tz01 has sat at about 95.9-96.9 during every GPU run since 03:50 (BWM health.log), and RCWM thermal_log.txt has 665 tz01=97.1 and 3 tz01=98.1 lines. RCX's guard pause at 97 \u00b0C will therefore trigger often, and the 98 \u00b0C shared GPU pause has been hit before, independently of RCX (info).",
+    "COLLABORATION.md:28 and CX D-04 still describe a stale live state ('GPU lease bwm:bundle-bundleD until about 02:35'; PREREG-LB queued; blocks_planner frozen) (low)."
+   ]
+  }
+ ],
+ "dropped": [],
+ "final_plan": {
+  "immediate_fixes": [
+   {
+    "action": "Hands-off rule for the waiting B3 chain. Do not kill or restart orchestrate.py (pid 20580), gpu_run for bundleE (launcher 37616 / interpreter 16628) or health_log.py (12868), and do not open or edit runs/.yield.json. When RCWM 5a releases, check four things: (1) bundleE.stdout says 'yield ended (peer seen=True)'; (2) the lock label is bwm:bundle-bundleE; (3) runs/.yield.json has been renamed to .yield_consumed_<ts>.json; (4) BW_DISTILL_r1.search.stdout resumes at distill/168 and runs/_failed/bundleE.failed does not exist. After any non-75 bundleE exit, inspect two things by hand before the second attempt starts: the last line of solutions.jsonl (torn line?) and the adapter folder (adapter_config.json and RUN_META.json present next to the marker?).",
+    "why": "QP-3: the attempt counter lives only in memory. Killing a waiting gpu_run counts as attempt 1, and a second failure writes bundleE.failed. The queue would then silently skip rows, mix, both trainings, FREEZE_B3, eval and analyze. B3-06: a torn line or a half-written adapter would make every retry crash. State checked at 09:59: lock rcwm-t1:t2b-prereq, turn.last=bwm, no waiting markers, no bundleE.failed, orchestrator heartbeat 09:57.",
+    "deadline": "Standing rule from now until B3_REPORT.json exists (about 23:40 on Oct 10). Post-release check at about 13:05-14:00 today."
+   },
+   {
+    "action": "Close the yield race now without killing anything. Atomically write C:/Users/clclc/AppData/Local/Temp/rineya-gpu-0.waiting.bwm.json = {\"pid\": 16628, \"label\": \"bwm:bundleE\", \"since\": <now>, \"note\": \"hand-written during honour_yield; identical to what wait_for_turn writes\"}. Before writing, confirm that 16628 is still the interpreter running 'gpu_run.py bundleE'. In the same step, message RCWM: (a) the marker exists and why; (b) ask that the rc-5 re-call in 75_t2bp.sh keep going through alternate_turn, which it already does, and add a short sleep of 60 s or more. gpu_run's own code removes the marker at acquire (gpu_run.py:115-118). If 16628 dies, RCWM's psutil liveness check ignores the marker.",
+    "why": "QP-2: honour_yield runs before wait_for_turn, so BWM posts no waiting marker while it yields. RCWM's alternate_turn (runtime.py:230-245) defers only when turn.last=='rcwm' and a live waiting.bwm.json exists. GEN_PLAN projects a 5a cap deferral at about 13:07. The rc-5 re-call takes the lock again about 9 s after release, and BWM polls only every 10 s, so RCWM could get two turns in a row and delay B3 by about 2.4 h. I checked that t2bp_run's cap logic does not read BWM's marker, so the only effect is the intended deferral at RCWM's next acquire. This replaces Plan B's restart option, which needed process kills (the QP-3 hazard), and Plan A's message-only option, which leaves the race open.",
+    "deadline": "Before 12:45 today (earliest projected 5a cap deferral is about 13:07)"
+   },
+   {
+    "action": "Edit runs/bundles/bundleE.json, changing est_s values only, via a temp file and os.replace: bw-distill-search 1800->5600, train-Pa_v3 3600->7600, train-Pa_v2c 3600->6600. Commands, markers and order stay unchanged. Record the old sha (327133cf) and the new sha in the new D-entry as a scheduling-only change.",
+    "why": "B3-04/QP-5: the measured cost is Pa_v3 6,800-7,400 s and Pa_v2c about 5,900 s. With est_s 3600, Pa_v2c starts with about 3,600 s left and is cap-killed mid-arm. That forces the never-run resume path (B3-05) on the control arm only. With upper-bound estimates, bundle.py:39 refuses Pa_v2c cleanly (rc 75) at the end of turn A, so both arms train without interruption, and the unused time (about 0.9 h) goes back to RCWM. bundle.py re-reads the spec at each turn start.",
+    "deadline": "Before gpu_run acquires the lease (about 13:00 today)"
+   },
+   {
+    "action": "Ask RCX, through the user or RCX REQUESTS.md, to run one heavy CPU job at a time with at most 4 torch threads in total while any GPU job runs. At 09:44, native_probe (pid 13188, 4 threads) overlapped with a unittest learnability job (40k records, batch 256). At 10:00 only native_probe was running.",
+    "why": "PX-03: this breaks RCX's own COLLABORATION.md:44-45 and CX D-07, and it is the I-12 failure mode. tz01 sits at 95.9-96.1 C under GPU load, against RCX's own 97 C pause and the shared 98 C GPU pause. That margin is thin just as RCWM 5a runs and B3 training starts.",
+    "deadline": "Now (before BWM turn A, about 13:00)"
+   },
+   {
+    "action": "Move 9 entries out of runs/jobs.json into a new runs/jobs_gpu_deferred.json, copied verbatim with a reason per entry, using an atomic write: a2-train-Fvlab (cancelled in D-47), train-P-actions-s1-1600, e2-titan-sparse-r1024, e2-supa-r256, e2-supa-r1024, e2-qwen3-0.6b-r256, e2-qwen3-0.6b-r1024, e2-xlimB, and bundleF (pilotG, 'lower value now'). Record this as a deferral, not a cancellation, citing D-28 and JOINT_PLAN_2026-10-10. Afterwards the queue reads bundleE -> bundleG and nothing else. New BWM GPU work (bundleH, item 7) is added only after its freeze or prereg exists.",
+    "why": "QP-1/RC-04: orchestrate.py runs runnable[0] in list order. Right after bundleG it would run 8 uncapped pre-B2 singles, each taking a full alternation turn (about 1.5-3 days), and none of them is in the agreed turn order. The orchestrator re-reads jobs.json every loop, so editing between jobs is safe. The user can veto this (see user decisions); until then it is a reversible deferral.",
+    "deadline": "Today, before BWM turn A ends (about 17:00), and in any case before bundleE completes"
+   },
+   {
+    "action": "D-54 pre-result instrumentation, then merge D-54 into BWM turn B. Steps: (1) Write a D-62 addendum recording the pre-edit sha of scripts/bw_keyorder.py; PREREG_D54_KEYORDER.md (6b704388) and the data (82ec3418) stay unchanged. (2) Edit eval_() only, adding: a per-item dump runs/BW_KEYORDER/items.jsonl (arm, mode, i, n_blocks, prompt_sha, generated text, n_tokens, hit_eos, ok, legal), written to a temp file and os.replace'd before eval.json; sha256 of both adapters, the rows file, the script and the prereg, plus device and torch/peft/transformers versions, in eval.json; assert sha(F0) != sha(FK) before generating; registered Clopper-Pearson CIs via binomtest(k,240).proportion_ci('exact'); n5/n10 strata. Leave the reading code untouched. (3) Verify on CPU only: data() regenerates byte-identically, and a stubbed eval_ with ROOT pointed at scratch gives the same legacy keys and reading plus 2,400 item rows. (4) Append bundleG's two sub-jobs to the END of bundleE.json, after b3-analyze, with identical markers: train-Fdelta-ko with est_s 6600, and eval-keyorder with est_s 1200. (5) In the same edit, change bundleG's job-level marker in runs/jobs.json from runs/bundles/bundleG.done to runs/BW_KEYORDER/eval.json. (6) Send an FYI to RCX (it pins the prereg sha) and to RCWM.",
+    "why": "D54-01/02/03: without per-item outputs the result cannot be re-scored independently (D-61 practice). Adapter provenance is unrecorded, and the prereg's promised CIs are missing. All of this must land before FK exists so it stays clearly pre-result. QP-4 and JOINT_PLAN step 4 put 'B3 remainder, then D-54' in one BWM slot; as separate jobs, an RCWM waiter would split them. The marker repoint in step 5 is required for correctness. The orchestrator decides 'pending' from the job-level runs/bundles/*.done marker, not from sub-job markers. Without the repoint, bundleG would later take an empty lease and write turn.last=bwm, which would make BWM yield its next real turn. est_s 6600 means FK starts only if it can finish uninterrupted, so there is no cap-split training and no recipe-parity issue.",
+    "deadline": "Before BWM turn B starts (about 21:00 on Oct 10)"
+   },
+   {
+    "action": "Freeze list, standing until B3_REPORT.json and any H1/H2 runs are complete. Do not edit bwmn/blocks_planner.py (18a5f22b), bwmn/blocks.py, lm.py, train_generic.py, scripts/bw_distill.py, bw_b3_prep.py, bw_b3_eval.py, blocks_eval.py, any PREREG_*.md, instances_b3_fresh.json (575c45b1), runs/BW_Pa_v2_s1 or runs/BW_Fdelta_s0. Do not add mirror or b3fresh to TEST_SETS yet. Do not open runs/BW_B3_EVAL/plans_* or runs/BW_KEYORDER outputs before analyze or eval has written its report.",
+    "why": "bw_b3_eval.py:53-58 exits if any pinned sha changes. RCX E08, B3 H2, T2b-ledger and PREREG-4 all reuse the frozen planner. Changing the blocks_eval guard mid-B3 could make the registered eval refuse to run. Not looking early protects the reading.",
+    "deadline": "Now through B3 H2 (about Oct 12) and through the D-54 eval"
+   },
+   {
+    "action": "Records pass in native_v1/DECISIONS.md. (1) An I-entry for the 09:24 reboot recovery: 168/240 solved, 148 verified; chunk 7 lost (about 26 GPU-min, F calls cached); stale lock backed up as .stale-63900.bak; turn.json written by hand; one-shot yield to rcwm-t1:*; orchestrator restarted at 09:27:06; hand-written waiting marker. (2) A D-entry adopting JOINT_PLAN_2026-10-10 / RCWM D-45, with amendments: B3 over 2 BWM turns, D-54 merged into turn B, legacy queue deferred, est_s changes, conditional H1/H2, realistic item 7 cost, the PREREG-4 FK-mirror commitment, and the blocks_planner pin at 18a5f22b through B3/H2, T2b-ledger and PREREG-4. (3) A D-entry recording the RCX boundary from the CX Q-02 reply: B3 artifacts are readable only after runs/BW_B3_EVAL/B3_REPORT.json; RCX seeds 20261270-89; the exclusion invariants; no evaluation on hard/PB-600/mirror/b3fresh without a joint prereg; reading files to compute exclusions is permitted; single CPU lane with at most 4 threads; notice before edits to blocks.py, blocks_val_large.py, bw_distill.py, traces.py and blocks_planner.py.",
+    "why": "RC-05/PX-01/PX-02: RCWM and RCX both name BWM's DECISIONS.md as authoritative, but BWM's side of the joint plan and of the RCX agreement exists only in messages, operational files and private memory.",
+    "deadline": "Today by 18:00, and before any GitHub export"
+   },
+   {
+    "action": "Fix gh_export/tools/export_bwm.py before its next run. (1) DOCS becomes a glob of PREREG_*.md. (2) SKIP permanently: runs/BW_DISTILL_r1/distill_rows.jsonl and mix_*.jsonl (training data). (3) SKIP until B3_REPORT.json exists: solutions.jsonl and runs/BW_B3_EVAL/plans_*. (4) List all skipped files with their sha in EXCLUDED_LARGE_FILES.json. (5) Correct the ko-rows reason to 'scripts/bw_keyorder.py data'. (6) Stop exporting _mystery_smoke rows from now on, without rewriting history. (7) Dry-run plan() and confirm that no *.safetensors, salt, *_train.jsonl, distill_rows or mix_* files appear.",
+    "why": "RC-02: the current filter would push the Pa_v3/Pa_v2c training rows, which breaks the user-approved D-51 rule ('no adapter weights, training data or caches') and bwm/README.md. It would also leave out the D-54 prereg.",
+    "deadline": "Before the next export run. The mix files appear at about 15:00 today."
+   }
+  ],
+  "gpu_schedule": [
+   {
+    "turn": "R0: 09:27 to about 13:15 on Oct 10 (about 13:07 if 5a defers at its cap)",
+    "owner": "RCWM",
+    "work": "5a prerequisite representation screen, D-38 (lease rcwm-t1:t2b-prereq since 09:27:42). BWM bundleE is in its one-shot yield, with the hand-written waiting marker so that a cap deferral passes the turn to BWM.",
+    "est_gpu_h": 3.8
+   },
+   {
+    "turn": "B1: about 13:15-16:55 on Oct 10",
+    "owner": "BWM",
+    "work": "bundleE turn A. (1) Search distill/168-239: 3 chunks of 24 aligned with the original boundaries, about 31 min each, with chunk 7's F calls already cached. (2) Rows, then mix (seed 0, 640-token drop recorded). (3) Train Pa_v3: 400x16, lr 1e-4, seed 1, max-len 640, init from BW_Pa_v2_s1; about 1.9-2.05 h; check that the log shows the init adapter. (4) Pa_v2c is refused by est_s 6600 (rc 75), the turn ends early, and about 0.9 h goes back to RCWM. If search runs slow because of heat, Pa_v3 is refused instead and moves to B2; this is safe.",
+    "est_gpu_h": 3.6
+   },
+   {
+    "turn": "R1: about 17:00-21:05 on Oct 10",
+    "owner": "RCWM",
+    "work": "5b register trace screen (D-44: plain/trace/4b-filler arms, joint cmp/calc/after format), or the 5a remainder (about 2.4 h) if 5a deferred.",
+    "est_gpu_h": 4.1
+   },
+   {
+    "turn": "B2: about 21:05 on Oct 10 to about 01:25 on Oct 11",
+    "owner": "BWM",
+    "work": "bundleE turn B, sub-jobs in order. (1) Train Pa_v2c (about 1.65-1.8 h). (2) FREEZE_B3. (3) b3-eval: S-direct K1 M256 eval_seed 0, arms v2/v2c/v3 x sets b3fresh/mirror (about 0.6 h). (4) b3-analyze writes B3_REPORT.json at about 23:40. (5) Appended D-54: train BW_Fdelta_ko_s0 with F0's recipe (600x16, lr 1e-4, seed 0, max-len 256; about 1.65 h), which starts only if at least 6,600 s are left. (6) Instrumented eval-keyorder (about 0.3 h): 5 modes x 2 arms x 240, with items.jsonl, shas and CP CIs. If (5) or (6) does not fit, it is refused cleanly and its sub-job goes at the head of the next BWM bundle file, so it does not take a near-empty turn of its own.",
+    "est_gpu_h": 4.3
+   },
+   {
+    "turn": "R2: about 01:30-06:00 on Oct 11",
+    "owner": "RCWM",
+    "work": "5b remainder, the 5a filler control (1.44 h if S-trace wins), or screen-winner seeds. Per master_chain, RCWM pilot steps may run here if no T2b hook has been inserted.",
+    "est_gpu_h": 4.5
+   },
+   {
+    "turn": "B3: about 06:00-10:30 on Oct 11",
+    "owner": "BWM",
+    "work": "Branch on B3_REPORT.primary_reading. If 'met': bundleH turn 1 = H1, S-direct(Pa_v3) on hard 110 paired against B2 S-direct 5/110 (about 0.1 h), then H2 shards 0-2: frozen B2 beam config with only Pa swapped to Pa_v3, index % 8 sharding as in D-50, about 1.2 h per shard (B2 hard_beam took 34,770 s in total). If 'partial' or 'no': item 7 stage 1 (bundleI1) = train BW_Fdelta_s1 and BW_Fdelta_s2 with F0's recipe (about 3.3 h), plus the adapter-on 5c retention for BW_Fdelta_s0 and BW_Pa_v2_s1 (at most 0.6 h) if RCWM has supplied the suite and a fresh sealed draw. Item 7 runs only after PREREG_ITEM7_SEEDS.md is written and its fresh set is generated and hashed.",
+    "est_gpu_h": 3.9
+   },
+   {
+    "turn": "R3: about 10:30-15:00 on Oct 11",
+    "owner": "RCWM",
+    "work": "T2b-ledger training once its prereg is frozen, or winner seeds 1-2 / sealed confirmation (RCWM's call).",
+    "est_gpu_h": 4.5
+   },
+   {
+    "turn": "B4: about 15:00-19:30 on Oct 11",
+    "owner": "BWM",
+    "work": "If 'met': H2 shards 3-5 (about 3.6 h). If not: the item 7 seed-gate eval on the fresh set: S-beam and S-direct with the frozen B2 configs for (F_s1, Pa_v2_s1) and (F_s2, Pa_v2_s1), sharded and resumable. S-beam costs about 316 s per instance, so about 3.5 h per system at n=40 or 4.8 h at n=55. It spans B4-B5.",
+    "est_gpu_h": 4.3
+   },
+   {
+    "turn": "R4: about 19:30 on Oct 11 to about 00:00 on Oct 12",
+    "owner": "RCWM",
+    "work": "T2b-ledger seeds or confirmation 1 (PREREG-3 out-of-range map on fresh held-out words), or item 6 k=8/16 horizons (about 1.5 h, no training).",
+    "est_gpu_h": 4.5
+   },
+   {
+    "turn": "B5: about 00:00-04:30 on Oct 12",
+    "owner": "BWM",
+    "work": "If 'met': H2 shards 6-7 (about 2.4 h), then H2 analysis on CPU, then item 7 F-seed training begins (BW_Fdelta_s1, about 1.65 h). If not: finish the seed-gate eval, then Pa_v2 seed 2 with the Pa_v2_s1 RUN_META recipe (1000x16, max-len 256, about 4.1 h, est_s 15500, 50-step checkpoints).",
+    "est_gpu_h": 4.1
+   },
+   {
+    "turn": "After the 48 h window (Oct 12 onward)",
+    "owner": "BWM",
+    "work": "Remaining item 7 work: remaining F/Pa seeds, the seed-gate eval and an optional seed-0 anchor. Then the 5c retention run if not done yet, item 9 transfer (GPU only after its prereg is frozen), and the PREREG-4 FK mirror in the frozen B2 planner. About 4-6 more BWM turns.",
+    "est_gpu_h": 18
+   }
+  ],
+  "cpu_work": [
+   "All BWM CPU work stays in one lane with at most 4 threads, and nothing heavy runs while a GPU model is loading. Most items below are light reads of JSONL files.",
+   "Monitoring at each BWM turn boundary: lock label, turn.json, waiting markers, runs/_failed/, and 'FAILED' lines in orchestrator.log. During training, watch for the 50-step checkpoint lines. After any cap-kill or reboot, look for 'resumed from .../ckpt.pt at step N' and a smooth loss curve (B3-05). Watch health_now.json for tz01 approaching 98 C and free RAM below 8 GB.",
+   "During turn A, when no BWM gpu_run is inside honour_yield and after telling RCWM: patch gpu_run.honour_yield so it writes waiting.bwm.json once the peer lease has been seen (wait_for_turn and acquire already remove it). The patch affects future launches only.",
+   "B3 H1/H2 preparation, finished before B3_REPORT exists (about 23:40 tonight) so the follow-up is mechanical. (1) Write runs/FREEZE_B3_H1.json and runs/FREEZE_B3_H2.json as copies of FREEZE_B2_direct and FREEZE_B2_beam, with only the Pa path and sha changed to BW_Pa_v3_s1, plus the FREEZE_B3 and PREREG_B3 shas. (2) Write runs/bundles/bundleH.json: H1 first, then 8 H2 shards, each with est_s 5000, outputs in runs/BW_B3_HARD/{h1_direct,h2_beam_s0..7}, and fresh per-shard F caches. (3) Check statically that blocks_eval.py:84-95 accepts the new --freeze file under its freeze-args and run-once guards. (4) Add bundleH to jobs.json only if B3_REPORT.primary_reading == 'met'.",
+   "B3 post-analyze report (after about 23:40 tonight). (1) Read counts from B3_REPORT.json and plans_*.jsonl, not results.jsonl ('success' there is a rate, B3-07); recount truncation as 'no EOS within 256'. (2) Compute the registered report-only secondaries: per-block and in-range vs out-of-range success, plan length vs BFS optimum, invalid-action rate, the share of F-verified plans that are exactly invalid, label precision over all 240, and the distillation rows actually seen in the 6,400 draws. (3) Report search eval_seed 7 (B3-10). (4) Sanity check: the v2/mirror cell must reproduce B2 S-direct mirror 6/110. (5) Use the 'simulator-free' wording only if label precision is 1.0. (6) Write a P-entry, then tell RCX the B3 artifacts are open.",
+   "Records errata as a P-10 addendum D-entry; no registered number changes. FR-01: the hard mean tallest goal tower is 6.85 (377/55); the README's 6.8 comes from double rounding at build_devfreeze.py:118. FR-02: the mirror S-beam cost is 215.9 unique F queries per instance, against the final-attempt-only 183.6. FR-03: report the hard optimal-length strata (20-24 27/5/30, 25-29 18/0/20, 30-34 17/0/30, 35-40 11/0/30); report paired-vs-published results on the zero-shot 600 (o1-preview +13/-0, p=2.4e-4; R1 +5/-0, p=0.0625, recorded as not claimable); add a post-hoc F-token/FLOPs estimate from fcache; record S-replan and the fresh-600 control as not run, with reasons. Also: selection used subsets of n=30 and n=50; F-07 (BW_F_s0 -> BW_Fdelta_s0); 602 = union of the zero-shot and one-shot IDs. A scratch script scripts/bw_b2_secondary.py writing runs/BW_TEST_B2/SECONDARY_REPORT.json is acceptable; it reads only.",
+   "More errata: D-60's time is about 03:07, not about 03:20. Narrow D-61's wording to the 10 machine-compared keys plus the hand checks (ORACLE 160, IGNORE 63, W4E24 134/167, audit 5/180, strings verbatim). D-62: 76 of the 6,099 augmented rows equal the canonical text, so 6,023 are effectively non-canonical; the prereg was saved at 05:49:46. Exclusion-union erratum at DECISIONS.md:565: 322,899 payloads / 314,850 operative / 58 sources, coordinated with RCWM:746. The D-56 smoke-test claim has no artifact behind it.",
+   "Item 7 pre-registration, before any seed training, as native_v1/PREREG_ITEM7_SEEDS.md. Seeds: F seeds 1/2 with F0's recipe; Pa_v2 seeds 2/3 with the Pa_v2_s1 RUN_META recipe. Fresh set: generator seed 20261014, which collides with neither BWM 20261006-13 nor RCX 20261270-89; block mix matched to hard; excluding the invariants of hard, val_large, mirror, b3fresh and distill-240; generated and sha-recorded before training. Gate per seed system: S-beam beats S-direct with paired McNemar p<0.01 using the frozen B2 configs; report the seed spread; make no equality claim against seed 0 unless a seed-0 anchor runs on the same set. Write bundleI1/I2 specs with realistic est_s (F 6600, Pa 15500).",
+   "Item 9 scoping on CPU only; no GPU within 48 h. Clear the 7 must-fixes in bwmn/mystery.py and scripts/mystery_data.py (TODO_BEFORE_RUNS). Re-score the local PlanBench mystery_blocksworld published results (deepseek-r1-api, o1-preview, gpt-4o and others) with local VAL as a comparator ledger. Draft the transfer prereg for the domain the user picks. Freeze the prereg before generating any data.",
+   "Export, after the filter fix and the records pass, under D-51's standing approval for re-export after milestones: run git pull --ff-only in gh_export (origin is at 4e7bd9b; never force-push); hand-edit bwm/README.md (B2 complete, mirror contamination flag RAISED, P-10 numbers); re-export, dry-run check, commit, push. Read RCX records from rineya-world-model-research or the worktree, not from gh_export's stale ref.",
+   "Memory upkeep. (1) Rewrite bwm-prereg-lb-cosign.md as a closed record and replace its 'planner edits allowed again' with the 18a5f22b pin plus notice to RCX and RCWM. (2) Add to bwm-gpu-sharing-protocol.md: the yield-file semantics, the waiting marker during a yield, the post-crash procedure (the owner clears its own stale lock, writes turn.json, yields), the joint-plan lock rule, 'killing a waiting gpu_run counts as a failure attempt', and the job-level vs sub-job marker trap. (3) Update bwm-packaging-and-publishing.md with the new export commit and the rule that vault placement needs explicit approval. (4) Fix the MEMORY.md index lines.",
+   "Infrastructure drafts, applied only at safe boundaries. (1) orchestrate.py: persist attempt counts in runs/_attempts.json and halt the queue, instead of skipping, when a bundle reaches .failed; apply only at an orchestrator restart the user knows about. (2) After B3 and H2: add mirror and b3fresh to blocks_eval TEST_SETS (FR-05), and make blocks_eval count F-cache hits so resumed runs report true unique cost (FR-02). (3) Optionally store the init-adapter and rows shas in ckpt.pt. (4) Prepare the build_devfreeze.py:118 fix (format the unrounded mean) for the next approved package rebuild.",
+   "Release-gate inputs for the pending vault decision; release/ itself is not touched. Prepare surface_audit.json, the F-08 'format-locked' limitation text, the mirror-cost footnote, and the list of missing gates (item 7 seeds, 5c retention).",
+   "Lower priority if CPU time remains: the Track C must-fixes in scripts/planbench_qwen.py (two scorers, run lock, attention FLOPs, resume config). These are prerequisites for the same-harness Qwen3-4B iso-FLOP comparator."
+  ],
+  "joint_items": [
+   {
+    "item": "GPU alternation and the yield race at 5a's cap deferral (QP-2)",
+    "owner": "Joint (BWM gpu_run; RCWM runtime and 75_t2bp.sh)",
+    "status": "Normal path verified: RCWM writes turn.last before unlinking, and BWM's budget starts at its own acquire. The race window is closed for this yield by the hand-written waiting.bwm.json.",
+    "next_step": "Tell RCWM about the marker. Ask for a sleep of 60 s or more before the rc-5 re-call. BWM ships the honour_yield waiting-marker patch for future yields. If RCWM still takes two turns in a row, BWM logs a deviation and does not kill its gpu_run."
+   },
+   {
+    "item": "Turn order (RCWM 09:30 proposal / JOINT_PLAN_2026-10-10 / RCWM D-45)",
+    "owner": "Joint",
+    "status": "Accepted with amendments; recorded so far only by RCWM.",
+    "next_step": "Reply to RCWM and record the BWM D-entry. B3 takes 2 BWM turns: turn A ends early at about 3.6 h, and turn B carries the B3 remainder plus D-54, as in JOINT_PLAN step 4. If B3 reads 'met', the registered H1/H2 (about 10 GPU-h, about 3 BWM turns) come before item 7. Item 7 realistically takes about 5-7 BWM turns, not 2. The legacy BWM queue is deferred."
+   },
+   {
+    "item": "RCWM 5a/5b screens, then winner seeds and sealed confirmation",
+    "owner": "RCWM",
+    "status": "5a running since 09:27:42; 5b next in RCWM's turn.",
+    "next_step": "Nothing for BWM beyond alternation. Suggest RCWM update REPORT section 7 (it still lists 5c as 'being built' and LB as a next step), and note that master_chain pilot steps follow the hooks unless a T2b-ledger hook is inserted."
+   },
+   {
+    "item": "T2b-ledger (surface-diversified ledger adapter; PREREG-3 out-of-range map; LB-style planning on the held-out surface, beat 5/180)",
+    "owner": "RCWM, using BWM's planner",
+    "status": "Not yet preregistered",
+    "next_step": "BWM reviews the draft. Both DECISIONS files record the planner pin at 18a5f22b. BWM passes on the D54-09 lesson: held-out orders one transposition away from training orders only test new full permutations, so choose held-out orders and words at a larger distance."
+   },
+   {
+    "item": "PREREG-4 (one T3 adapter, 3-seed gate, 5c guard on a fresh sealed draw, LB-style planning check; BWM FK mirror in the frozen B2 planner)",
+    "owner": "Joint",
+    "status": "Scheduled for the end. BWM's FK mirror depends on the D-54 reading (expected at about 01:30 on Oct 11).",
+    "next_step": "After eval-keyorder, BWM drafts the FK-mirror section using the shared wording: 'generalises to unseen X', 'trigger widened, not a rule', or 'partial'."
+   },
+   {
+    "item": "5c retention suite applied to BWM adapters (release gate)",
+    "owner": "Joint (RCWM suite, BWM adapters)",
+    "status": "Unscheduled; BWM adapters have no retention evidence (PX-04).",
+    "next_step": "Ask RCWM for the frozen suite entrypoint and sha plus a fresh sealed draw. BWM runs adapter-on retention for BW_Fdelta_s0 and BW_Pa_v2_s1 (at most 0.6 GPU-h) in the first BWM turn with room, before any vault or HF decision."
+   },
+   {
+    "item": "Roadmap numbering and dormant items: #6 legality checker; RCWM's '7 = BWM deferral-gate sealed confirmation'; RW2 mirrors of 1/5b; RW2 surface audit (D-35)",
+    "owner": "Joint",
+    "status": "Numbering conflicts across the three programmes. These items have no slot in D-45.",
+    "next_step": "Adopt BWM JOINT_ROADMAP numbering everywhere; RCWM's 'item 6 horizons' gets a new label. Record each dormant item as deferred until after PREREG-4 in both DECISIONS files."
+   },
+   {
+    "item": "Exclusion-union erratum (315,081/37 in both DECISIONS files vs the sealed 322,899 / 314,850 operative / 58)",
+    "owner": "Joint",
+    "status": "Wrong in both records. Validity is unaffected (overlap 0/0, verify_ok).",
+    "next_step": "Matching erratum entries at BWM DECISIONS:565 and RCWM DECISIONS:746."
+   },
+   {
+    "item": "PREREG-LB (joint item 3)",
+    "owner": "Joint (RCWM ran it; BWM co-signed D-59 and re-scored D-61)",
+    "status": "Closed. All numbers agree across RCWM, BWM and the sealed artifacts, and the audit's 5/180 was independently recomputed.",
+    "next_step": "BWM narrows the D-61 wording only."
+   },
+   {
+    "item": "RCX coordination (CPU-only peer)",
+    "owner": "BWM <-> RCX",
+    "status": "Concurrent CPU lanes were observed at 09:44. BWM's scope record is missing. RCX's records have 3 errors: a future '23:20' timestamp, the gate worded as 'after B3 artifacts exist', and 'never opens' although it reads files to compute exclusions. No open RCX request to BWM.",
+    "next_step": "Ask for one lane with at most 4 threads now. Record the scope D-entry. Ask RCX to fix the 3 wording and timestamp errors. Send a D-54 instrumentation FYI. Confirm that RCX's pins (planner, blocks_val_large, bw_distill) fail closed on edits. Tell RCX when B3_REPORT.json exists (about 23:40 tonight), which opens E11/E12."
+   },
+   {
+    "item": "Checkpointing under frequent reboots (RCWM's shared note)",
+    "owner": "All three",
+    "status": "bundleE resumes per problem, and training checkpoints every 50 steps, but the train-resume path has never run in production.",
+    "next_step": "Every new BWM bundle gets markers at each stage boundary and upper-bound est_s. Any sub-job spilled from a turn goes at the head of the next bundle file. Check the first real resume in the log."
+   }
+  ],
+  "user_decisions": [
+   "Vault placement of release/Rineya-Titan-Sparse-BWM-Blocksworld-0.1.0-devfreeze (pending since D-60). I recommend not yet. It has one seed per adapter (the item 7 gate is not met), no 5c retention evidence, no F-08 'format-locked' caveat or surface_audit.json, and README:34 says 6.8 where it should say 6.9. A Hugging Face push will not happen without your explicit go-ahead.",
+   "Whether to authorise one rebuild of the devfreeze package: fix the build_devfreeze.py:118 rounding, and add the F-08 limitation, surface_audit.json, the mirror-cost footnote and the 5c status. I recommend a single rebuild after item 7 and 5c, not now.",
+   "Confirm or veto moving the 8 legacy GPU singles (a2-train-Fvlab, train-P-actions-s1-1600, six e2-* jobs) plus bundleF/pilotG out of runs/jobs.json into runs/jobs_gpu_deferred.json. This is a deferral, not a deletion; D-28 originally queued the E2 jobs. Without it they would take about 8 BWM turns before item 7.",
+   "If B3 reads 'met': H1 (about 0.1 GPU-h, registered) runs automatically. Should H2 (about 10 GPU-h, about 3 BWM turns, registered as conditional) run immediately, ahead of item 7? I recommend yes. It is the most direct test of whether self-distillation compounds with search on hard, where S-beam 73/110 vs R1 59/110 is not yet significant (p=0.073). It delays the item 7 release gate by about 1.5 days. If I hear nothing, H2 goes first.",
+   "Item 7 scope and budget. The full version (2 more F seeds plus 2 more Pa seeds, with an S-beam gate on a fresh set) is about 20 GPU-h, about 5-7 BWM turns, against the roadmap's '2 turns'. Please choose: (a) the fresh-set size, n=40 at about 3.5 h per system or n=55 at about 4.8 h; (b) whether the Pa seeds run now or after the F seeds; (c) whether to include a seed-0 anchor.",
+   "Domain for item 9 (transfer). The roadmap names PlanBench Logistics or Mystery Blocksworld Regime B (rules in the prompt) for the generality claim. Mystery Regime A is cheaper, since the generator and published o1/R1/GPT-4o result files are local, but it only tests the same recipe on renamed vocabulary, and its claims would have to be scoped that way. Which should the CPU scoping and prereg target? No item 9 GPU work is planned within 48 h.",
+   "GitHub re-export tonight (records D-60 through the new entries, PREREG_D54, lb_rescore, and the fixed export filter). It runs under your standing D-51 approval; tell me if you want it held.",
+   "Whether to schedule the same-harness Qwen3-4B iso-FLOP comparator (Track C, about 2-3 GPU turns) after item 9. It is needed before any fair 'rivals larger models' claim."
+  ],
+  "risks": [
+   "Yield race at RCWM's cap deferral: if the hand-written marker is missing, stale, or written with the wrong pid, RCWM may take two turns in a row and B3 slips about 2.4 h. Mitigation: verify the pid before writing, tell RCWM, and never kill gpu_run.",
+   "Attempt counts live only in memory (QP-3). Two non-75 bundleE failures in one orchestrator lifetime (a kill, a 6 h LeaseError, an external 0x40010004 termination) write bundleE.failed and silently skip the rest of B3. After B3_REPORT exists, only the appended D-54 sub-jobs are at risk, and bundleG, with its repointed marker, stays as a fallback.",
+   "Marker trap: the orchestrator decides 'pending' from the job-level runs/bundles/*.done markers. If D-54 is merged into bundleE without repointing bundleG's marker, bundleG later takes an empty lease and writes turn.last=bwm, costing BWM a real turn. The repoint and the bundleE append must land in the same edit window.",
+   "Frequent reboots: lost work is bounded at one search chunk (about 31 min), up to 49 training steps, or one non-resumable eval. A torn JSONL line or a half-written adapter (B3-06) would make retries crash until fixed by hand.",
+   "The train-resume and --init-adapter paths have never run in production (B3-05). Upper-bound est_s avoids planned cap-kills, but a reboot mid-arm would still force a resume, and that arm would differ slightly through GPU nondeterminism. That must be reported.",
+   "Thermal headroom is about 2 C (tz01 about 96 C steady vs the 98 C pause). Concurrent RCX or BWM CPU work can trip a pause that stalls whichever GPU turn is running. Free RAM was about 9.8 GB.",
+   "Turn B is tight (about 4.3 of 4.5 h). If Pa_v3 slipped from turn A, or FK finds less than 6,600 s left, D-54 moves to the next BWM turn. Its sub-jobs must then go at the head of the next bundle file, or they cost a near-empty turn.",
+   "B3 label precision may fall below 1.0 over the remaining 72 problems, in which case the 'simulator-free' wording is disallowed. The mirror cells come from a set with a raised contamination flag (+10.9 pp, Fisher p=0.128), so read them only together with b3fresh. If the v2/mirror cell does not reproduce 6/110, investigate before reporting.",
+   "Editing bw_keyorder.py after the D-54 prereg could look post hoc. Mitigations: a D-entry before FK exists, an unchanged prereg sha, data that regenerates byte-identically, untouched reading code, and an FYI to RCX and RCWM.",
+   "If the export runs before the filter fix, Pa_v3/Pa_v2c training rows reach GitHub (a D-51 breach), and a force-push to undo it would erase RCWM's commits.",
+   "A planner edit by any party breaks comparability for B3 H2, RCX E08, T2b-ledger and PREREG-4. The pin must be recorded on all three sides.",
+   "Item 7 is underestimated across all roadmaps, and B3 'met' adds about 10 GPU-h. The release gate realistically moves to about Oct 13-14.",
+   "Record drift across programmes (numbering, exclusion union, stale roadmap commitments) can lead one side to cite a wrong figure from the other's record."
+  ],
+  "rationale": "State checked at 09:59-10:00 on Oct 10 (read-only). RCWM 5a holds the lease (rcwm-t1:t2b-prereq, since 09:27:42). turn.json shows last=bwm. bundleE's gpu_run (interpreter 16628) is inside the one-shot yield. No waiting markers exist, and there is no bundleE.failed. The orchestrator heartbeat was at 09:57. Only RCX native_probe is running on CPU. The audits found no blocker: every B2 number reproduces, the B3 resume is deterministic, and the D-54 data regenerates byte-identically. So this plan protects the running chain, fixes scheduling and record gaps by their deadlines, and keeps strict alternation in RCWM's agreed order: RCWM 5a -> BWM B3 resume -> RCWM 5b -> BWM (B3 remainder + D-54) -> RCWM -> BWM.\n\nHow the conflicts between Plans A and B were resolved:\n\n(1) Yield race. Plan A only messaged RCWM, which leaves the 13:07 race open. Plan B patched gpu_run and restarted processes, which needs kills, the QP-3 hazard. I chose a hand-written waiting.bwm.json for pid 16628. It is byte-for-byte what wait_for_turn would write, gpu_run removes it at acquire, and RCWM's alternate_turn reads exactly this file with a liveness check. I checked that t2bp_run's cap logic does not read it. The code patch follows later, only for future launches.\n\n(2) est_s. I used upper bounds from the measurements (Pa_v3 7,600; Pa_v2c 6,600), not A's 7,000 (below Pa_v3's 7,400 padded estimate) or B's 6,800/6,000. Turn A then ends with a clean refusal, and neither registered arm is ever cap-split.\n\n(3) D-54 timing. Plan A gave it its own turn; Plan B merged it. I merged it into turn B, because JOINT_PLAN step 4 puts 'B3 remainder, then D-54' in one BWM slot (QP-4). Plan A's fit concern is handled by est_s gating: FK starts only if 6,600 s remain. Plan B said to leave bundleG in jobs.json because its sub-job markers would exist. That is wrong: orchestrate.py uses the job-level runs/bundles/bundleG.done marker, so bundleG would take an empty lease and flip turn.last, and BWM would lose a real turn. So bundleG's job marker must be repointed to runs/BW_KEYORDER/eval.json in the same edit.\n\n(4) H1. Plan B automated H1 inside bundleE through a new script that touches the hard set. I took Plan A's approach instead: prepare the freezes and bundleH now, and queue them only if B3 reads 'met'. This costs no GPU efficiency, because the H2 shards fill that turn, and it keeps new hard-set code out of the B3 bundle.\n\n(5) Item 7 vs item 9. Item 7 takes the GPU first: the F seeds need no new code and it is the release gate. It is preregistered with a fresh hashed set before any seed trains. Item 9 stays CPU-only in this window. The user picks the domain, noting that the roadmap's generality claim needs Logistics or Mystery Regime B, while Plan B's Regime A is cheaper but narrower.\n\n(6) Legacy queue. Both plans defer it; it is reversible and the user can veto. (7) Export. It proceeds under D-51 only after the filter fix and the records pass; no force-push. (8) The vault, package rebuild and HF push all wait for the user.\n\nEstimates come from measured runs: Pa_v2 14,805 s per 1,000 steps, scaled 1.24x for distillation row length; F0 5,941 s; B2 hard_beam 34,770 s over 8 shards; about 31 min per search chunk. That gives BWM 5 turns (about 20 GPU-h) and RCWM 5-6 turns over the next 48 h."
+ }
+}

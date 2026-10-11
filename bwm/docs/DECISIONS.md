@@ -1224,3 +1224,15 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
   post-reboot audit, H2 leak/claims audit incl. the downloaded upstream per-instance hard files, Logistics module
   probes, next-analysis replays) were copied from %TEMP% into `research/audit_evidence/` (about 88 MB). They go into
   the local and OneDrive archives. They are not on GitHub (research subfolders are not exported).
+- **D-75 User decisions (2026-10-11 ~16:10, explicit, on the next-analysis plan):**
+  1. **GPU order after item 7:** a one-turn B4 futility screen (RCX hybrid hook vs item 7's R0 beam on
+     seeds_fresh-40), then B6 (round-2 search distillation aimed at 11-15 blocks, with a matched control), then
+     item 9 Logistics.
+  2. **GitHub evidence:** the test-run F caches (about 48 MB) and the audit evidence (`research/audit_evidence`)
+     may go to the private repo. This relaxes D-51's "no caches" rule for these evidence files only. Weights and
+     training rows stay excluded.
+  3. **Published comparisons:** vendor the upstream per-instance Blocksworld-hard result files (R1, o1-preview,
+     o1-mini) with shas, re-score them with local VAL, and report paired comparisons. Always labelled POST HOC and
+     different regime; never "beats".
+  4. **Qwen3-4B:** run the same-harness Qwen3-4B comparator on CPU (about 25-45 CPU-h), only while no BWM model is
+     loaded, with RAM floors, and coordinated with RCX's CPU lane (one heavy CPU job at a time, I-12).

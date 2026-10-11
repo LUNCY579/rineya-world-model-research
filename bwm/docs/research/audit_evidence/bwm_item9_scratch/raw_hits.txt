@@ -1,0 +1,467 @@
+== [0]/summary
+The literature agrees that when the verifier is reliable, coverage keeps rising with the number of samples, roughly log-linearly (Large Language Monkeys). It also agrees that i.i.d. best-of-N is the least compute-efficient way to buy coverage at small budgets. Step-level search guided by a prior does better. Verifier beam search matches best-of-16 at N=4 (4x) and best-of-256 at N=16 (Hugging Face test-time compute blog), and compute-optimal allocation is more than 4x more efficient than best-of-N (Snell et al.). Sampling without replacement at the root is what makes 2–16-simulation search budgets work (Kool et al. 2019; Gumbel AlphaZero/MuZero). Our own diagnostics fit the regime where policy-guided search beats both i.i.d. sampling and uniform BFS. Per-step optimality is 87% but open-loop success is 24.5%, 51 of 76 failures are wrong at the first action, and there are at most 5 actions per step, so errors compound across sampled plans. LevinTS formalises this: it needs at most d/π(path) expansions, so a decent per-step prior costs far fewer world-model calls than BFS-256. When no candidate reaches the goal (76.5% of episodes), our rerank falls back to the first candidate. The standard fix is a learned value or goal-distance used for ranking and as a search heuristic (POLO, PHS, process reward models, WL-GOOSE). Expert iteration and search distillation reliably amortize search: ExIt, ReST-EM, STaR, Stream of Search (25.7%→51.3%), Searchformer, Dualformer (fast mode 80% vs 30% for solution-only), SiGPlan, and a 270M chess model at Lichess blitz Elo 2895 without search. The best quantitative anchor is Jones (2021): each 10x of train compute removes about 15x of test-time compute. The catch is that expert iteration and RL usually raise pass@1 while narrowing pass@k (Havrilla 2024; Yue 2025). A K-candidate system therefore needs diversity-preserving targets, and best-of-N-aware fine-tuning lifted Gemma-2B pass@32 from 60.0% to 67.0%. Small-model test-time scaling claims (a 1B model matching 8B and a 3B model beating 70B on MATH-500 with search; 0.5B beating GPT-4o) depend on strong verifiers and careful compute counting. On Blocksworld, RAP with LLaMA-33B beat GPT-4 chain-of-thought (6-step 0.42 vs 0.40), while a fine-tuned GPT-3 alone reached only 20% on PlanBench. A fair amortization claim must count proposer tokens as well as world-model calls in one FLOPs currency, and compare success-vs-compute curves against uniform-policy search and BFS at matched compute, plus training compute and break-even task counts. BFS under F may already be cheaper in tokens on RW2. PlanBench's 3–5-block state spaces are also tiny: by my derivation from OEIS A000262, at most about 866 states for 5 blocks. The convincing amortization test is therefore on larger instances, such as the 6–20-block set where o1-preview drops to 23.6%.
+
+== [0]/claims[0]/claim
+Coverage (fraction of problems solved by any sample) scales log-linearly with the number of samples over four orders of magnitude and is often well fit by an exponentiated power law c ≈ exp(a·k^b). On SWE-bench Lite, DeepSeek-Coder-V2-Instruct goes from 15.9% with 1 sample to 56% with 250 samples, versus a 43% single-attempt state of the art.
+
+== [0]/claims[4]/claim
+With compute-optimal test-time scaling, a 1B model exceeds a 405B model on MATH-500, a 0.5B model beats GPT-4o on MATH-500 and AIME24, and a 7B model beats o1 and DeepSeek-R1. The optimal strategy depends strongly on the policy model, the process reward model and problem difficulty.
+
+== [0]/claims[12]/claim
+On Blocksworld, RAP (MCTS with LLaMA-33B as both world model and policy) reaches 1.00/0.88/0.42 success on 2/4/6-step problems with 20 iterations. CoT with LLaMA-33B reaches 0.17/0.02/0.00, and CoT with GPT-4 0.50/0.63/0.40.
+
+== [0]/claims[15]/claim
+o1-preview scores 97.8% on PlanBench Blocksworld (600 instances, 3–5 blocks), 52.8% on Mystery Blocksworld and 37.3% on randomized Mystery. On 110 larger problems (6–20 blocks, 20–40-step plans) it drops to 23.63%, at about $42.12 per 100 instances. Fast Downward solves the benchmark in about 0.265 s per instance.
+
+== [0]/claims[15]/source
+Valmeekam et al., 'LLMs Still Can't Plan; Can LRMs? A Preliminary Evaluation of OpenAI's o1 on PlanBench', arXiv 2024, https://arxiv.org/abs/2409.13373
+
+== [0]/claims[30]/claim
+SiGPlan self-improves a decoder-only plan generator by combining multiple model calls with graph search to find better plans and then fine-tuning on them. Across Blocksworld, Logistics, Labyrinth and Sokoban it averages a 30% plan-length reduction over the source symbolic planner, with over 80% of plans optimal where the optimum is known, and latency that scales sub-exponentially.
+
+== [0]/claims[39]/claim
+Tree of Thoughts: on Game of 24, GPT-4 with CoT solves 4% vs 74% with ToT search.
+
+== [0]/recommendations[4]/why
+Snell et al. and Large Language Monkeys show that conclusions flip under FLOPs matching; whether smaller-plus-search wins depends on difficulty and the inference-to-pretraining ratio. 'AI Agents That Matter' shows accuracy-only reporting misattributes gains. Thought of Search shows LLM-in-the-loop search can cost about 482K calls on Blocksworld vs about 4. In RW2, A00's K=4 full-plan generations per round may already cost more tokens than BFS's ~80 short memoized F calls, so the current 'F calls per task: 0' column understates proposer cost. On PlanBench 3–5 blocks, the state space is at most about 866 states, so exhaustive search under an accurate F would make 'rivals o1 (587/600)' trivial and unconvincing. The 6–20-block set, where o1-preview gets 23.63% at about $42 per 100 instances, is where amortization can show a non-trivial advantage.
+
+== [1]/summary
+(1) F-01 is a standard case of shortcut learning caused by underspecification. With training limits {32,48,64}, both "|2x| <= L" and a magnitude rule fit the training data perfectly, so the data cannot tell them apart (Geirhos 2020; D'Amour 2020/2022). Which feature a network picks then depends on how easy it is to extract (Hermann et al., ICLR 2024). Transformers trained on rule-governed data often learn such statistical features while staying near-perfect in distribution (Zhang et al. SimpleLogic; Liu et al. on automata shortcuts; Wu et al. counterfactual tasks; Meszaros et al. rule extrapolation, NeurIPS 2024). The closest world-model analogues are: Vafa et al. 2024 (96-99% valid taxi routes, but incoherent maps; validity falls to 0.08 with 10% detours); Vafa et al. 2025 (models learn task-specific heuristics instead of Newtonian law); Kang et al. 2024 (video world models are perfect in distribution but generalize case-by-case out of it); ByteSized32-SP (GPT-4 at most 59.9% on non-trivial transitions, failing mostly where arithmetic or common sense is needed); and Emami et al. 2026 (fine-tuned Blocksworld LLMs encode action validity linearly even when their output probabilities do not). What F-01 adds is a clean split inside one model: arithmetic extrapolates (99.5%) but the parameterized legality predicate does not (36.5%), and the data provably forces this. That fits Xu et al. (ICLR 2021): extrapolation works only when the needed nonlinearity is built into the architecture or features. (2) The idea behind F-03 — defer when your own confidence falls in a reject band — is old: Chow's reject option, selective classification, learning to defer, KWIK, and confidence-based LLM cascades (FrugalGPT, Jitkrittum 2023, Gupta 2024, AutoMix, KnowNo). Combining a fine-tuned model with its own pretrained model to recover out-of-distribution robustness is also well known (WiSE-FT, Kumar et al. calibrated ensembles, VRF sample-wise weighting); Nudging gates in the opposite direction, and Co-LLM learns token-level deferral. I found no paper that uses the LoRA model's own P(legal) to gate the same backbone with the adapter switched off as a yes/no verifier inside a learned world model for planning. But that absence comes from a non-exhaustive search, and the configuration is a specific instance of known principles. So the defensible novelty is empirical. The always-on base verifier is a weaker model in distribution (0.912) that is better on flips — the "specialist" case where Jitkrittum et al. say confidence deferral can fail — yet the band gate still works. Flips are an anticorrelated spurious feature, which is exactly the condition under which Kumar et al. (UAI 2022) say calibrated ensembles fail. And the soft-versus-confident asymmetry is a concrete case of Kamath et al. (ACL 2020): max-probability confidence is overconfident under shift. (3) Confident errors need a signal other than confidence, or new information. Options: input-novelty or hidden-state OOD scores (Ren et al. ICLR 2023, SIRC, a Kamath-style calibrator); hidden-state probes; methods that train deliberately different models to find alternative hypotheses (DivDis, D-BAT); counterfactual or parameter-randomized data (Kaushik et al. 2020); or a symbolic/program legality model (Thought of Search/AutoToS, WorldCoder, GIF-MCTS, WALL-E, SAM learning). Temperature scaling preserves ranking and cannot fix confident errors, and LoRA ensembles or Laplace-LoRA may not either, because every member shares the data-forced shortcut. Every result so far is single-seed; the flip accuracy of 0.949 on n=216 has a 95% CI of roughly +/-3 pts. Proposed priorities: R1, a baseline ladder with risk-coverage curves (novelty); R2, a gate based on novelty or probes (confident errors, no training); R3, a 2x2 retraining on parameter coverage x factorized output format; R4, an induced-program legality verifier as a ceiling baseline and a bridge to Blocksworld.
+
+== [1]/claims[8]/claim
+ByteSized32-State-Prediction (76,369 transitions from 31 text games; 2,954 transitions evaluated): GPT-4 full-state accuracy is 77.1% on action-driven and 38.6% on environment-driven dynamic transitions with human-written rules; 'model accuracy does not exceed 59.9% for transitions in which a non-trivial change in the world state occurs'. Errors concentrate where arithmetic, common sense or science is needed; humans score 80% vs GPT-4 50% on a sampled subset.
+
+== [1]/claims[15]/claim
+FrugalGPT's learned LLM cascade can match GPT-4 with up to 98% cost reduction, or improve accuracy over GPT-4 by 4% at the same cost.
+
+== [1]/claims[20]/claim
+WiSE-FT (weight-space interpolation of zero-shot and fine-tuned weights) improves accuracy under distribution shift by 4-6 pp over prior work while increasing ImageNet accuracy by 1.6 pp.
+
+== [1]/claims[20]/source
+Wortsman et al., Robust fine-tuning of zero-shot models, CVPR 2022, https://arxiv.org/abs/2109.01903
+
+== [1]/claims[22]/claim
+VRF weights the fine-tuned vs zero-shot model per sample by the test input's feature distance to a 'zero-shot failure' set of training samples, improving OOD accuracy by 1.5-2.0 pp over ensemble baselines on ImageNet shifts while maintaining ID accuracy.
+
+== [1]/claims[22]/source
+Zhu, Cui, Zhang, Robust Fine-tuning of Zero-shot Models via Variance Reduction, NeurIPS 2024, https://arxiv.org/abs/2411.06966
+
+== [1]/claims[23]/claim
+Nudging: a small aligned model inserts tokens only when the large base model's token uncertainty is high (training-free; 7-14x smaller aligned model gives zero-shot performance comparable to large aligned models).
+
+== [1]/claims[31]/claim
+Thought of Search: GPT-4-generated Python successor and goal-test functions solve all 502 Blocksworld tasks (100%); a correct successor function took 2.8 iterations on average and the goal test 1, with a human validating code in the loop; total search time 0.56-9.7 s for all 502.
+
+== [1]/recommendations[0]/idea
+R1 (novelty of F-03): a deferral baseline ladder with risk-coverage curves, reported separately for ID, above-range flips and below-range keys. Baselines: (a) random deferral at the same ~18% verifier-call rate; (b) the current confidence band; (c) a Kumar-style calibrated ensemble (temperature-scale F's P(legal) and the base model's P(yes) on ID, then average); (d) a WiSE-FT analogue: LoRA scale alpha in {0.25, 0.5, 0.75} applied at inference; (e) proxy-tuning-style logit arithmetic between adapter-on and adapter-off; (f) a post-hoc learned deferral rule (logistic on [P(legal), |x|, L, op]) fit on calibration limits 80/112; (g) oracle deferral (defer only when F is wrong) as the upper bound. Report AURC, accuracy at matched verifier calls, and the fraction of oracle gain recovered, with bootstrap CIs over keys and 3 F seeds.
+
+== [1]/recommendations[1]/idea
+R2 (repair confident errors without training): add an epistemic, input-novelty signal to the gate. Step 0: measure the frozen base verifier's accuracy on the below-range confident-error keys (limit 21, doubling 11-14). If it is also wrong, no gate can help; go to R3/R4. Then compare gate signals at matched call rate: (a) the confidence band; (b) structural novelty: defer doubles whenever L lies outside the training-limit hull [32,64]; (c) relative Mahalanobis distance on F's final hidden state at the legality token, fit on ID (Ren et al. 2023); (d) a linear legality probe on adapter-on and adapter-off hidden states, trained on ID keys only; (e) a SIRC/Kamath-style combination of (a) with (c) or (d) via a small logistic deferral rule. Fit it on one below-range calibration limit (e.g. 24 or 26) plus 80/112, never on 21.
+
+== [1]/recommendations[1]/cost_on_our_hardware
+CPU only: one hidden-state extraction pass over the 3,476 keys (about one A1 pass, adapter on and off, so roughly 2 passes). Probe, Mahalanobis and logistic fits take seconds. No GPU.
+
+== [1]/recommendations[3]/why
+Program world models generalize where neural ones do not: Thought of Search (GPT-4 code solves all 502 Blocksworld tasks after ~2.8 iterations), AutoToS (unit-test feedback, 100%), WorldCoder, GIF-MCTS and WALL-E. In RW2 the shortest consistent program should be |op(x)| <= L, because a limit-dependent rule explains all three training limits with no extra constant. That would repair both the soft and the confident side, matching the hand-written code-rule ceiling (0.954 / 0.995) while being learned (cf. the Solomonoff-style account in Meszaros et al. 2024). For Blocksworld, SAM learning recovers exact IPC action models from at most two trajectories, so reviewers will expect this baseline. Better to measure it now and frame the LM world model's value accordingly: amortization, noisy or textual states, or obfuscated domains where symbol grounding is the hard part.
+
+== [2]/verdicts[0]/claim
+1. Large Language Monkeys: coverage scales log-linearly over four orders of magnitude, often fit by an exponentiated power law. DeepSeek-Coder-V2-Instruct on SWE-bench Lite goes from 15.9% (1 sample) to 56% (250 samples), against a 43% single-attempt SOTA.
+
+== [2]/verdicts[0]/evidence
+arXiv 2407.21787 abstract: coverage scales 'over four orders of magnitude'; 'often log-linear and can be modelled with an exponentiated power law'; DeepSeek-Coder-V2-Instruct goes 'from 15.9% with one sample to 56% with 250 samples, outperforming the single-sample state-of-the-art of 43%'.
+
+== [2]/verdicts[4]/claim
+5. Liu et al. 2025: with compute-optimal TTS, a 1B model beats a 405B model on MATH-500, a 0.5B beats GPT-4o on MATH-500 and AIME24, and a 7B beats o1 and DeepSeek-R1. The optimal strategy depends on the policy model, the PRM and problem difficulty.
+
+== [2]/verdicts[4]/evidence
+arXiv 2502.06703 abstract: 'the compute-optimal TTS strategy is highly dependent on the choice of policy model, PRM, and problem difficulty'; '1B LLM can exceed a 405B LLM on MATH-500'; 'on both MATH-500 and AIME24, a 0.5B LLM outperforms GPT-4o, a 3B LLM surpasses a 405B LLM, and a 7B LLM beats o1 and DeepSeek-R1'.
+
+== [2]/verdicts[9]/claim
+10. RAP on Blocksworld (MCTS, LLaMA-33B as world model and policy) reaches 1.00/0.88/0.42 on 2/4/6-step problems with 20 iterations. CoT with LLaMA-33B reaches 0.17/0.02/0.00, and CoT with GPT-4 0.50/0.63/0.40.
+
+== [2]/verdicts[9]/evidence
+ar5iv 2305.14992 Table 1: CoT 0.17/0.02/0.00; CoT pass@10 0.23/0.07/0.00; CoT (GPT-4) 0.50/0.63/0.40; RAP(10) 1.00/0.86/0.26; RAP(20) 1.00/0.88/0.42. LLaMA-33B is the base model.
+
+== [2]/verdicts[12]/claim
+13. o1-preview on PlanBench: 97.8% Blocksworld (600 instances, 3-5 blocks), 52.8% Mystery, 37.3% randomized Mystery. On 110 larger problems (6-20 blocks, 20-40-step plans) it drops to 23.63%, at about $42.12 per 100 instances. Fast Downward takes about 0.265 s per instance.
+
+== [2]/verdicts[12]/correction
+Attribution nuance: $42.12 per 100 instances is o1-preview's general cost in Table 4, not a cost measured on the 110 larger problems. The claim's sentence structure suggests the cost belongs to the larger-problem run.
+
+== [2]/verdicts[12]/evidence
+arXiv 2409.13373v1: '600 instances range from three to five blocks'; o1-preview 'correctly answers 97.8%' (587/600); Mystery '52.8%'; Randomized Mystery '37.3%'; '110 larger Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'; Table 4 'Cost per 100 instances (in USD)' o1-preview $42.12, o1-mini $3.69; Fast Downward 'averaged 0.265 seconds per instance'.
+
+== [3]/verdicts[1]/claim
+2. ByteSized32-State-Prediction (76,369 transitions, 31 games, 2,954 evaluated): GPT-4 full-state accuracy is 77.1% action-driven and 38.6% environment-driven (dynamic, human-written rules); accuracy 'does not exceed 59.9%' for non-trivial changes; errors concentrate on arithmetic/common sense/science; humans 80% vs GPT-4 50% on a sampled subset.
+
+== [3]/verdicts[1]/correction
+No numeric correction. Two caveats. (a) The 77.1% and 38.6% come from modelling F_act and F_env separately (Table 2, Human-rules, dynamic, Full). The best environment-driven score in any condition is 49.7% (LLM-generated rules, diff). (b) The subset for the human-vs-GPT-4 comparison was sampled on purpose so GPT-4 would score about 50% (Table 4 average is 0.49), so the 50% is set by the sampling, not measured independently.
+
+== [3]/verdicts[1]/evidence
+arXiv 2406.06485 PDF: 'Total transitions 76,369'; 'collected from 31 distinct text games'; 'The resulting experimental dataset consists of 2954 transition tuples'; Table 2 Human/dynamic row: '59.9 51.6 77.1 68.4 38.6 22.2' (F full/diff, Fact full/diff, Fenv full/diff); Intro: 'model accuracy does not exceed 59.9% for transitions in which a non-trivial change in the world state occurs'; 'errors are concentrated on non-trivial properties that requires arithmetic..., common-sense..., or scientific knowledge'; 'overall human accuracy is 80%, compared to the sampled LLM accuracy of 50%'; Table 4 caption: 'Transitions were sampled to normalize GPT-4 performance at 50%'.
+
+== [3]/verdicts[3]/correction
+The OOD numbers need their training regime named: 53% at 6 blocks down to 0% at 10 blocks is the random-walk++ model. The uniform random-walk model (the 81% one) reaches 0% at every OOD size, 6 through 10. The optimal-plan model goes 59% to 6%. Also, the 81% and 9% are averages over Blocksworld and Logistics (Blocksworld alone: 80/83 random walk), and the measure is the share of test plans where all valid actions rank above all invalid ones.
+
+== [3]/verdicts[5]/claim
+6. FrugalGPT's learned LLM cascade can match GPT-4 with up to 98% cost reduction, or improve accuracy over GPT-4 by 4% at the same cost.
+
+== [3]/verdicts[5]/evidence
+arXiv 2305.05176 abstract: 'FrugalGPT can match the performance of the best individual LLM (e.g. GPT-4) with up to 98% cost reduction or improve the accuracy over GPT-4 by 4% with the same cost.'
+
+== [3]/verdicts[7]/correction
+None. The paper's wording is 'comparable performance'. Setting: GPT-3.5-turbo as the weaker model and GPT-4 as the stronger, across six reasoning benchmarks.
+
+== [3]/verdicts[11]/claim
+12. VRF weights fine-tuned vs zero-shot per sample by the test input's distance to a Zero-Shot Failure set, improving OOD accuracy by 1.5-2.0 pp over ensemble baselines on ImageNet shifts while maintaining ID accuracy.
+
+== [3]/verdicts[11]/evidence
+arXiv 2411.06966 abstract: 'we construct a Zero-Shot Failure (ZSF) set containing training samples incorrectly predicted by the zero-shot model. For each test sample, we calculate its distance to the ZSF set and assign a higher weight to the fine-tuned model in the ensemble if the distance is small... On ImageNet and five derived distribution shifts, our VRF further improves the OOD accuracy by 1.5 - 2.0 pp over the ensemble baselines while maintaining or increasing ID accuracy.'
+
+== [3]/verdicts[12]/claim
+13. Nudging: a small aligned model inserts tokens only when the large base model's token uncertainty is high (training-free; 7-14x smaller aligned model gives zero-shot performance comparable to large aligned models).
+
+== [3]/verdicts[12]/evidence
+arXiv 2410.09300 (ACL 2025 main) abstract: 'NUDGING, a simple, training-free algorithm... employs a small aligned model to generate nudging tokens to guide the base model's output during decoding when the base model's uncertainty is high... nudging a large base model with a 7x-14x smaller aligned model achieves zero-shot performance comparable to, and sometimes surpassing, that of large aligned models.'
+
+== [3]/verdicts[13]/claim
+14. Thought of Search: GPT-4-generated Python successor and goal-test functions solve all 502 Blocksworld tasks (100%); correct successor function took 2.8 iterations on average and goal test 1, with a human validating code in the loop; total search time 0.56-9.7 s for all 502.
+
+== [3]/verdicts[13]/evidence
+arXiv 2404.11833 PDF Sec 4: 'A correct successor function and goal test are obtained after 2.8 and 1 iterations on average, respectively... we used them within a standard implementation of a BFS and experimented with the collection of 502 instances... All 502 tasks were solved by all five generated pairs... (100% accuracy), with the total time for all 502 tasks varying from 0.56s to 9.7s.' Sec 3: 'We assume the process to be iterative and user-guided, by a person capable of validating the code obtained'; uses GPT-4 in chat mode.
+
+== [4]/summary
+Prior work does not treat "domain-trained small model plus search vs. zero-shot giant" as a fair head-to-head. The comparisons that hold up do three things. First, they report cost on several axes at once: params, training examples and FLOPs, LLM calls and tokens and FLOPs per instance, and dollars for API models. Snell et al. and Liu et al. add pretraining and inference FLOPs; Katz et al. count LLM calls; Kapoor et al. and Dehghani et al. ask for Pareto/cost-controlled reporting. Second, they put each system in a regime and compare like with like: zero-shot LLM, LRM, SFT specialist, verifier-in-loop (LLM-Modulo), or classical planner with the true model (Fast Downward is 100% at ~0.27 s/instance). Third, they show generalization the training data cannot explain: larger problems, obfuscated or random names, and freshly generated mirror sets.
+
+The main criticism of your setup comes from Kambhampati: fine-tuning "is converting the planning task into a memory-based approximate retrieval... It doesn't prove that LLMs are able to plan." Huang et al. add that a fine-tuned planner tested on instances "generated using the same PDDL generator configurations as the training data" hides its failures. Their Qwen2-7B SFT dropped from 98.5% in-distribution to 13.5% on longer plans and 0% on obfuscated names. Bohnet et al. (96.3% to 34.2% on 8-20 blocks) and Emami et al. (59% at 6 blocks to 6% at 10) show the same collapse.
+
+PlanBench's 600 instances are 3-5 blocks with optimal plans of at most 16 steps. They are also nearly saturated: R1 scores 99.1%, and your own leakage audit shows 54% of random 3-5-block problems are renamings of test items. So an in-distribution score, even a high one, is not news. The credible headline is size and name generalization at stated compute. PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40 step plans) has published zero-shot scores to pair against: R1 53.6%, o1-preview 23.65%, o1-mini 10%. Back it up with randomized object names and Mystery Regime B, where o1-preview scores 52.8% (37.3% randomized) and R1 43.3% (25.8%).
+
+Templates for a "small model plus search beats big model" claim: Snell et al.'s FLOPs-matched evaluation (X=6·N·D_pretrain vs Y=2·N·D_inference; beats a ~14x larger model on easy and medium questions but not hard ones); Wu et al. (Llemma-7B plus tree search beats 34B); Liu et al. (1B beats 405B at N=512; total FLOPs 100-1000x lower, but the paper does not say whether reward-model FLOPs were counted); Jones (each 10x of training compute saves about 15x of test-time compute in Hex); and in planning, RAP (LLaMA-33B plus MCTS with an LLM world model beats GPT-4 CoT) and Searchformer.
+
+Minimum runs you must do yourself:
+- Same-harness Qwen3-4B zero-shot, non-thinking and thinking at fixed token budgets, with both the NL and the JSON prompt.
+- A larger open model (Qwen3-1.7B, or 4B with QLoRA if affordable) fine-tuned on exactly your data, plus stock Qwen3-0.6B with the same adapter recipe.
+- Internal ablations at matched FLOPs: proposer only, F rerank, BFS under the learned F, and the exact-simulator ceiling.
+- Hard-110 plus generated 7/8/10-block sets, a randomized-name rerun, and the fresh mirror set.
+- Signature-clustered CIs (347 distinct problems) and at least 3 seeds.
+
+Compare the published API systems only per instance, using dollars as their cost column, never as FLOP-matched opponents.
+
+== [4]/claims[0]/claim
+Official PlanBench leaderboard (zero-shot): Blocksworld-NL / Mystery-NL / Randomized-Mystery-NL / Blocksworld-Hard-PDDL(110) = DeepSeek-R1 99.1% / 43.3% / 25.8% / 53.6%; o1-preview 97.8% / 52.8% / 37.3% / 23.65%; o1-mini 56.6% / 19.1% / 3.5% / 10%; LLaMA-3.1-405B 62.6% / 0.8%; GPT-4 34.6% / 0%.
+
+== [4]/claims[1]/claim
+o1-preview: 587/600 (97.8%) Blocksworld and 317/600 (52.8%) Mystery Blocksworld zero-shot (41.6% one-shot); LLaMA-3.1-405B 376/600 Blocksworld and 5/600 Mystery. Randomized Mystery Blocksworld was created 'To test whether the exact obfuscation might be compromised because of data contamination' (37.3% for o1-preview).
+
+== [4]/claims[1]/source
+Valmeekam, Stechly, Kambhampati, 'LLMs Still Can't Plan; Can LRMs? A Preliminary Evaluation of OpenAI's o1 on PlanBench', arXiv 2409.13373 (2024), https://arxiv.org/abs/2409.13373
+
+== [4]/claims[2]/claim
+Larger Blocksworld set: 110 instances of 6-20 blocks needing 20-40-step optimal plans; o1-preview 23.63%. Unsolvable set: o1-preview flagged 27% correctly.
+
+== [4]/claims[3]/claim
+Cost per 100 instances: o1-preview $42.12, o1-mini $3.69, GPT-4o $0.65, Claude 3.5 Sonnet $0.44. Fast Downward solves 100% at ~0.265 s/instance. o1's hidden 'reasoning tokens' are billed but not revealed.
+
+== [4]/claims[3]/source
+arXiv 2409.13373; also Valmeekam et al., 'Planning in Strawberry Fields', arXiv 2410.02162, https://arxiv.org/abs/2410.02162
+
+== [4]/claims[4]/claim
+LRM-Modulo (o1-preview + sound verifier, up to 10 back-prompts) raises Hard Blocksworld from 23.65% to 98.2%. The authors argue evaluation must weigh accuracy, cost/efficiency and guarantees, and suggest a smaller LLM looped with a sound verifier as a cheaper option.
+
+== [4]/claims[4]/source
+Valmeekam, Stechly, Gundawar, Kambhampati, 'Planning in Strawberry Fields', arXiv 2410.02162 (2024), https://arxiv.org/abs/2410.02162
+
+== [4]/claims[5]/claim
+Fine-tuning GPT-3 on 1,000 Blocksworld instances solved only 122/600 (~20%). GPT-4 Blocksworld: 210/600 zero-shot, 206/600 one-shot; Mystery: 1/600 zero-shot, 26/600 one-shot. GPT-4 + VAL back-prompting solved 41/50 (82%) of previously failed instances within 15 rounds (avg 3.68 rounds).
+
+== [4]/claims[6]/claim
+Kambhampati: 'all that such fine tuning is doing is converting the planning task into a memory-based approximate retrieval (akin to the memorization/compilation from System 2 to System 1...). It doesn't prove that LLMs are able to plan.' He also notes off-the-shelf planners are unaffected by obfuscation while GPT-4 'plummeted'.
+
+== [4]/claims[8]/claim
+GPT-4 shows 'significant performance collapse with self-critique and significant performance gains with sound external verification' on Game of 24, graph coloring and STRIPS planning.
+
+== [4]/claims[15]/claim
+PDDL-Instruct (logical-CoT instruction tuning with VAL feedback during training only) with Llama-3-8B: Blocksworld 94% (baseline 28%), Mystery Blocksworld 64% (baseline 1%), Logistics 79%. Evaluated on 100 self-generated test tasks per domain, not the PlanBench 600.
+
+== [4]/claims[16]/claim
+RAP (LLaMA-33B as both world model and policy, with MCTS) 'surpasses CoT on GPT-4 with 33% relative improvement'. Blocksworld success at 2/4/6 steps: RAP(20) 1.00/0.88/0.42 vs GPT-4 CoT 0.50/0.63/0.40. Test set is 30/57/114 cases; world-model states are LLM-predicted.
+
+== [4]/claims[19]/claim
+Llama-3.2-1B with compute-optimal test-time scaling beats Llama-3.1-405B on MATH-500 at N=512; 0.5B beats GPT-4o; 3B beats 405B. Table 4 lists pretraining FLOPs (3B: 1.62e23; 405B: 3.65e25) and inference FLOPs and claims 100-1000x lower total FLOPs. The text does not say whether PRM FLOPs are included.
+
+== [4]/claims[25]/claim
+Newer rigorous protocol: 360 newly generated IPC-2023 Learning-Track tasks (8 domains, Blocksworld up to 477 blocks), VAL validation, planners LAMA/DecStar/Scorpion at 30 min / 8 GiB. Results: Gemini 3.1 Pro 245, Scorpion 234, GPT-5 205, LAMA 204, R1 157 solved. With random-string obfuscation: Gemini 231, GPT-5 152. Notes PlanBench has 'at most 5 blocks and optimal plans of at most 16 steps'.
+
+== [4]/claims[27]/claim
+Fine-tuned Granite-code 8B (QLoRA) on ACPBench, with 5 of 13 domains held out, improves from 51.43% to 95.71% (boolean) and 19.18% to 94.29% (MCQ). It sometimes surpasses GPT-4o on unseen domains. This is a held-out-domain template for small fine-tuned models.
+
+== [4]/claims[28]/claim
+GPT-4 synthesizing Python generalized plans for PDDL domains (with automated debugging) generalizes well from often just two training tasks. This is a data-efficiency reference point.
+
+== [4]/claims[29]/claim
+AoT+ reports Blocksworld GPT-4 82% (CoT 35%), LLaMA-3.1-70B 77%. Token accounting: AoT+ 2,067.8 total tokens vs LLM-Modulo 6,452.9 per instance for GPT-4.
+
+== [4]/claims[30]/source
+Lawsen, 'Comment on The Illusion of Thinking', arXiv 2506.09250 (2025), https://arxiv.org/abs/2506.09250; original Shojaee et al. arXiv 2506.06941 compares LRMs vs non-thinking LLMs 'under same inference compute'
+
+== [4]/recommendations[0]/idea
+Adopt one main reporting table with one row per system and a regime tag: ZS-LLM, ZS-LRM, SFT-specialist, SFT + learned-WM + search (ours), sound-verifier-in-loop, or classical planner with true model. Columns: (1) params total / non-embedding / trainable adapter; (2) domain training data: #problems, #rows, #tokens, block-count range, exclusion rule (renaming-canonical incl. suffix rows), #seeds; (3) training compute: adapter FLOPs (~4·N·tokens or measured) + GPU-h, and backbone pretraining FLOPs 6·N·D where known (Qwen3: 36T tokens; mark Titan 'n/a' if unknown; note Qwen3 small models were distilled from 32B/235B teachers, so 6ND understates their cost); (4) input format (NL / PDDL / code-parsed JSON) + prompt hash; (5) test-time feedback (none / learned F / sound VAL / exact simulator) and #sound-verifier calls; (6) per-instance inference: proposer, F and verifier calls, prompt and generated tokens, FLOPs (prefill + decode + attention term), wall-clock on named hardware, $ for API rows (published only); (7) plans submitted and selection rule; (8) valid/600 with Clopper-Pearson CI; (9) valid per distinct signature (347) with signature-cluster bootstrap CI; (10) paired exact McNemar W/L/p vs every row; (11) strata by block count (3 = count absent from training) and optimal-length bins; (12) optimality (fraction optimal, mean excess steps); (13) fresh mirror-set accuracy and gap; (14) generalization columns: Hard-110, generated 7/8/10 blocks, randomized object names, Mystery Regime B. Add one figure: success vs log10 FLOPs/instance with a Pareto frontier.
+
+== [4]/recommendations[1]/idea
+Make held-out block counts the headline axis. Run the frozen config on PlanBench Blocksworld-Hard (110 instances, 6-20 blocks, 20-40-step optimal plans; published zero-shot PDDL R1 53.6%, o1-preview 23.65%, o1-mini 10%; o1-preview + VAL loop 98.2%). Also run our own generated ladder of 7, 8 and 10 blocks (about 100 each, signature-disjoint). Raise the step cap to at least 48 for these sets, selecting it on generated validation only.
+
+== [4]/recommendations[1]/why
+In-distribution PlanBench is near-saturated: R1 595/600, Fast Downward 600/600, SFT planners about 96-100% in-distribution. Kambhampati's 'compilation to System 1' critique applies directly to in-distribution success. The documented failure of SFT planners is size extrapolation: Huang 98.5% to 13.5%, Bohnet 96.3% to 34.2%, Emami 59% to 6%. A goal-blind local F plus search is the component most likely to extrapolate, so a positive result here would be new. A negative result is still informative about the RAP/LLM-Modulo debate.
+
+== [4]/recommendations[2]/idea
+Same-harness zero-shot open comparators:
+- Qwen3-4B non-thinking on all 600.
+- Qwen3-4B thinking at fixed budgets (e.g. 1k, 4k, 16k thinking tokens via Qwen3 budget halting) on a stratified 150-200-instance subset and on Hard-110.
+- Each with two prompts: the PlanBench NL prompt and our compact-JSON prompt.
+- Also stock Qwen3-0.6B and frozen Titan with no adapters.
+Record truncation rate and use both extractors (ours and PlanBench's text_to_plan).
+
+== [4]/recommendations[2]/cost_on_our_hardware
+Rough estimates. 4B non-thinking, 600 instances × 2 prompts on CPU in bf16: ~15-30 CPU-h. Thinking at 4k-16k budgets on 150-200 instances: ~30-80 CPU-h, or ~10-25 GPU-h with a 4-bit quantized 4B at 25% duty. 0.6B/Titan zero-shot: <3 CPU-h each.
+
+== [4]/recommendations[6]/idea
+Mystery protocol. Count only Regime B (rules given in the prompt, no code mapping from renamed predicates or actions back to Blocksworld) as a Mystery result comparable to published numbers: o1-preview 52.8% (Randomized 37.3%), R1 43.3% (25.8%), LLaMA-405B 0.8%, GPT-4 1/600. Report Regime A (training on the renamed domain, or code-mapped names) only as a robustness check.
+
+== [4]/recommendations[6]/why
+Our planner reads code-parsed JSON. If the parser maps Mystery names back to Blocksworld, the obfuscation test that Kambhampati uses to distinguish retrieval from planning is bypassed entirely. Huang et al.'s SFT model scored 0% on obfuscation, and Corrêa et al. treat random-string obfuscation as the core reasoning test. PDDL-Instruct's 64% Mystery used its own 100 test tasks with training on the domain, so it is not a zero-shot comparator.
+
+== [4]/recommendations[6]/cost_on_our_hardware
+Regime B with a frozen Blocksworld-trained F is a cheap zero-shot probe (~3-6 CPU-h). Training F and proposer to read rules from the prompt (meta-training over many renamed domains) would cost tens of GPU-hours and is a separate project.
+
+== [4]/recommendations[7]/idea
+Allowed headline wording. (a) Paired, per-instance comparison against published systems, labelled 'reference, different regime', with $ cost for API rows. (b) Iso-FLOP and iso-accuracy statements only against same-harness Qwen3 rows, giving the Snell-style total FLOPs (6·N·D_pre + training + inference) and the inference-only number side by side. (c) The size-generalization result on Hard-110 vs published LRMs and vs our SFT comparator. Never claim 'beats GPT-4/o1 at planning' without the regime tag, and never pool VAL-in-the-loop runs with feedback-free ones.
+
+== [5]/summary
+On the standard 600-instance PlanBench Blocksworld set (3-5 blocks: about 446 four-block and 55 five-block instances in generated_basic, plus 100 three-block instances), the only published fine-tuned result is GPT-3 davinci fine-tuned on 1,000 generated instances: 122/600 (~20%), with no search. Every other number on that exact set is a zero-shot or one-shot generalist. The best are DeepSeek-R1 at 595 (99.1%, from the repo leaderboard only) and o1-preview at 587. Every non-reasoning LLM scores ≤386, and none reaches 5% on Mystery Blocksworld. The small-model fine-tuning papers from 2022-2026 all use their own generated test sets, not the 600 IDs, and they agree that plain SFT nearly saturates in-distribution Blocksworld: Plansformer (CodeT5-base, ~220M) 90.0% valid; Qwen2-7B 98.5%; Gemma2-9B LoRA 99-100%; Llama-3-8B 99.3% at 5 blocks; Gemini 1.0 S 96.3%; PDDL-Instruct (Llama-3-8B with state-tracking CoT) 94%. SFT breaks on bigger problems and longer plans. Emami et al. (2026, Gemma2-9B LoRA trained on 3-5 blocks) fall to 53-59% on 6-block PlanBench instances and 0-6% at 10 blocks. Huang et al.'s Qwen2-7B gets 13.5% on 17-32-step plans (41.5% after RL) and 0% when symbols are obfuscated. Methods that pair an LLM with a world model or search either imagine with the LLM itself or use a sound symbolic model. RAP (LLaMA-33B as its own world model, MCTS, no environment feedback) averages ~64% on a 201-instance PlanBench split; LLM Reasoners reports 51% with Llama-2-70B. Thought of Search / AutoToS (LLM writes the successor function, then BFS) solve 100% of 502 instances with 2-10 LLM calls in total. LLM+P gets 90% on 20 IPC problems, and LLM-Modulo (GPT-4 with VAL feedback) 82% on a 50-instance subset. Tree-Planner (VirtualHome) and Searchformer (Sokoban/mazes) do not evaluate on Blocksworld; the nearest trained-search work on Blocksworld is System-1.x (Mistral-7B trained on A* traces), at 25-28% on 7-10-step plans. For harder cases there is the 110-instance PlanBench Blocksworld-hard set (6-20 blocks, 20-40-step plans): o1-preview 26/110, R1 53.6% (~59/110), o1-mini 10%, and o1-preview with a VAL loop 98.2%. On IPC-scale fresh tasks, Gemini 3.1 Pro now beats LAMA (35 vs 28 of 45 Blocksworld tasks). No single published comparator is fully fair. The fairest are: (a) for method, RAP on its own split, since it uses the same plan-in-imagination-under-a-model-plus-search regime; (b) for training regime, Emami et al. 2026 and Plansformer (LoRA or SFT on generated small Blocksworld, single greedy plan, VAL, tested on PlanBench or larger instances); (c) for the headline on the identical 600 IDs, fine-tuned GPT-3 (122) as the only fine-tuned entry, with R1/o1-preview as the ceiling. The single most important comparator is an internal one that the literature implies: a same-size, same-data plain-SFT plan generator without F. Because SFT saturates in-distribution, a score on the 600 set says nothing about F unless it is paired against that arm. On the 600 set, ≥570/600 is the expected level for a competent specialist. Matching 587 equals o1-preview and ≥590-595 ties R1, but this is news only with a significant paired gain over the no-F SFT arm or much lower compute. Anything below ~540 (90%) would trail a 220M Plansformer. A result that really rivals far larger models has to come from Blocksworld-hard without feedback: beating 26/110 beats o1-preview, beating ~59/110 beats R1, and ~108/110 would match o1-preview with a VAL loop, with no verifier.
+
+== [5]/claims[1]/claim
+GPT-4 on the 600 Blocksworld instances, natural-language prompt: 210/600 (34.6%) zero-shot and 206/600 (34.3%) one-shot. With a PDDL prompt: 106/600 zero-shot and 75/600 one-shot. Instruct-GPT3 one-shot: 41/600.
+
+== [5]/claims[2]/claim
+LLM-Modulo / back-prompting (GPT-4 plus VAL feedback, max 15 rounds) produced correct plans on 82% of Blocksworld instances, averaging 3.68 rounds. The o1 paper calls this a subset of the test set; the vendored task_1_plan_generation_backprompting.json contains 50 instances.
+
+== [5]/claims[2]/source
+Valmeekam et al., NeurIPS 2023 — https://arxiv.org/abs/2305.15771; Valmeekam et al. 2024 — https://arxiv.org/abs/2409.13373; local bench/planbench/results/blocksworld/gpt-4_chat/task_1_plan_generation_backprompting.json
+
+== [5]/claims[3]/claim
+o1-preview, zero-shot on the 600 instances: 587/600 (97.8%) Blocksworld, 52.8% Mystery Blocksworld, 37.3% Randomized Mystery. o1-mini: 340/600 (56.6%), 19.1% Mystery, 3.5% Randomized. Fast Downward: 100%.
+
+== [5]/claims[3]/source
+Valmeekam, Stechly, Kambhampati, 'LLMs Still Can't Plan; Can LRMs?' (2024) and TMLR follow-up 'A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1' — https://arxiv.org/abs/2409.13373 , https://arxiv.org/abs/2410.02162
+
+== [5]/claims[4]/claim
+Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [5]/claims[5]/claim
+DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600 instances), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110 instances). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [5]/claims[6]/claim
+Zero-shot generalists on the 600 set, as published: LLaMA-3.1-405B 62.6%, Claude 3 Opus 59.3%, Claude 3.5 Sonnet 54.8%, GPT-4o 35.5%. No non-reasoning LLM reaches 5% on Mystery Blocksworld. The project's VAL re-score gives 386 for LLaMA-3.1-405B against the paper's 62.6% (=376); this discrepancy needs checking.
+
+== [5]/claims[7]/claim
+Plansformer (CodeT5-base, ~220M, fine-tuned on 18,000 plans per domain, 2-5 blocks) reached 90.04% valid plans (88.44% optimal) on 3,600 unseen problems from the same generator. Untuned baselines: Codex 0.15%, CodeT5-base 0.6%.
+
+== [5]/claims[7]/source
+Pallagani et al., 'Plansformer: Generating Symbolic Plans using Transformers' (2022) — https://arxiv.org/abs/2212.08681
+
+== [5]/claims[8]/claim
+PlanGPT (GPT-2-small architecture, ~83M parameters, trained from scratch on 63k LPG-solved problems with up to 20 blocks) reached 98.8% (greedy) to 100% (sampling) coverage on its own test set and 100% on 20 IPC Blocksworld problems, where Plansformer got 11%. VAL is used for checkpoint early stopping; it is unclear whether the multi-sample decoders select plans with a validator.
+
+== [5]/claims[9]/claim
+PDDL-Instruct (logical-CoT instruction tuning with state-action-state traces; VAL feedback during training only): Llama-3-8B reaches 94% on Blocksworld (baseline 28%), 64% Mystery (baseline 1%) and 79% Logistics, on 100 generated test tasks per domain. Single plan, no verifier at test time.
+
+== [5]/claims[17]/claim
+RAP uses LLaMA-33B as both policy and world model, with MCTS entirely in LLM-simulated states (no environment interaction). On PlanBench Blocksworld cases grouped by minimum plan length (30 two-step, 57 four-step, 114 six-step), RAP(20) scores 100% / 88% / 42% (~64% weighted). CoT scores 17/2/0 and GPT-4 CoT 50/63/40.
+
+== [5]/claims[18]/claim
+In LLM Reasoners, Blocksworld scores with Llama-2-70B are RAP 0.51, ToT-BFS 0.09, ToT-DFS 0.08, CoT 0.05. With CoT, GPT-4-turbo scores 0.45, Claude 3 Opus 0.41, and 7B models 0.06-0.10.
+
+== [5]/claims[19]/claim
+Thought of Search: GPT-4 writes a Python successor function and goal test, and BFS solves all 502 PlanBench Blocksworld instances (447 four-block, 55 five-block), 100% for all 5 generated pairs. Getting correct code took ~2.8 + 1 iterations on average; solving all 502 took 0.56-9.7 s.
+
+== [5]/claims[20]/claim
+AutoToS (automated feedback with unit tests) reaches 100% on the 502 Blocksworld instances with GPT-4o, GPT-4o-mini, Llama-3.1-70B/405B and DeepSeek-Coder-V2, using 2.0-10.0 LLM calls per domain; plans are checked with VAL.
+
+== [5]/claims[21]/claim
+LLM+P (GPT-4 translates NL to PDDL, a classical planner solves it) gets 90% on 20 Blocksworld problems with context, versus 20% for GPT-4 planning directly.
+
+== [5]/claims[22]/claim
+AoT+ prompting on Blocksworld (setup follows Valmeekam et al.; instance count not stated): GPT-4 82% and LLaMA-3.1-405B 77%, but LLaMA-3.1-8B only 5% (CoT 4%). Human baseline 78%.
+
+== [5]/claims[23]/claim
+GPT-4 on Blocksworld: 40% standard prompting, 55% with self-critique, 87% with VAL first-error back-prompting, 68% sampling 15 times with a sound verifier.
+
+== [5]/claims[25]/claim
+On fresh IPC-2023-learning-track-distribution tasks (Blocksworld up to 477 blocks, PDDL input, VAL, single attempt), Blocksworld coverage is LAMA 28/45, DeepSeek-R1 19/45, Gemini 2.5 Pro 21/45, Gemini 3 Pro 28/45, Gemini 3.1 Pro 35/45. Obfuscated: Gemini 3.1 Pro 31/45, R1 3/45. Across all domains, Gemini 3.1 Pro solves 245/360 versus 234 for the best planner.
+
+== [5]/recommendations[0]/idea
+Add an internal no-F SFT plan-generator arm in the same harness (same Titan backbone, same generated data, direct greedy plan output, one plan, no F, no replanning, Plansformer-style) next to the proposer-only arm. Pair both against BWM on the 600 IDs with exact McNemar.
+
+== [5]/recommendations[0]/why
+Every published small-model SFT result saturates in-distribution Blocksworld: Plansformer-220M 90%, Qwen2-7B 98.5%, Gemma2-9B 99-100%, Llama-3-8B 99.3%, Gemini 1.0 S 96.3%. The 600 set is 3-5 blocks, so a high BWM score alone cannot be credited to F or search. The only fair published fine-tuned entry on the identical IDs (fine-tuned GPT-3, 122/600) is far too weak to be informative. This arm is the comparator that actually isolates the contribution.
+
+== [5]/recommendations[2]/why
+Published no-feedback scores are o1-mini 10%, o1-preview 26/110 and R1 ~59/110; o1-preview with a VAL loop reaches 98.2%. SFT planners collapse with size and length: Gemma2-9B goes from 53-59% at 6 blocks to 0-6% at 10, and Qwen2-7B gets 13.5% on 17-32-step plans. A goal-blind local F plus execute-one-and-replan is the component most likely to generalize compositionally. Beating 26/110 without feedback beats o1-preview, and beating ~59/110 beats R1: a real 0.6B-vs-frontier result. The current cap of 24 cannot reach many 20-40-step solutions.
+
+== [5]/recommendations[5]/why
+Our parser maps PDDL to JSON by code, so obfuscation disappears before the model sees anything. That makes any Mystery score trivially equal to the standard one and not comparable to o1-preview's 317/600, R1's 43.3%, or PDDL-Instruct Llama-3-8B's 64% (own 100 tasks). Huang et al. show SFT planners score 0% when symbols really are obfuscated.
+
+== [5]/recommendations[6]/idea
+Finish the paired ledger before any BWM run: resolve the LLaMA-3.1-405B discrepancy (VAL re-score 386 vs paper 376). Score the vendored GPT-4 back-prompting (50 instances), state-tracking, PDDL, Mystery and Blocksworld-hard files with the same VAL binary. Run the prereg's fresh contamination set.
+
+== [5]/recommendations[6]/why
+Headline form (a) relies on paired McNemar against published plans; one unexplained discrepancy undermines the whole table. PlanBench has been public since 2022, so the R1/o1 ceilings may be inflated by contamination; Corrêa et al. use fresh tasks for that reason.
+
+== [5]/recommendations[6]/risk
+Low. The discrepancy may come from GPT-4o-based NL-to-PDDL plan extraction in the published files; document it rather than silently picking one number.
+
+== [6]/verdicts[0]/claim
+1. Official PlanBench leaderboard (zero-shot): BW-NL / Mystery-NL / Randomized-Mystery-NL / BW-Hard-PDDL(110) = DeepSeek-R1 99.1/43.3/25.8/53.6; o1-preview 97.8/52.8/37.3/23.65; o1-mini 56.6/19.1/3.5/10; LLaMA-3.1-405B 62.6/0.8; GPT-4 34.6/0.
+
+== [6]/verdicts[0]/evidence
+The raw README.md of karthikv792/LLMs-Planning, under 'PlanBench Static Test Set Leaderboard' (zero-shot), has these rows. Deepseek R1: 99.1% | 43.3% | 25.8% | 53.6%. o1-preview: 97.8% | 52.8% | 37.3% | 23.65%. o1-mini: 56.6% | 19.1% | 3.5% | 10%. LLaMA-3.1 405B: 62.6% | 0.8% | - | -. GPT-4: 34.6% | 0% | - | -. The README says Blocksworld Hard results are in results/backprompting/.
+
+== [6]/verdicts[1]/claim
+2. o1-preview 587/600 (97.8%) Blocksworld and 317/600 (52.8%) Mystery zero-shot (41.6% one-shot); LLaMA-3.1-405B 376/600 BW and 5/600 Mystery; Randomized Mystery created 'To test whether the exact obfuscation might be compromised because of data contamination' (37.3% o1-preview).
+
+== [6]/verdicts[1]/evidence
+arXiv 2409.13373, Table 2 (checked against the HTML version): Blocksworld zero-shot 587/600 (97.8%). Mystery BW one-shot 247/600 (41.6%). Mystery BW zero-shot 317/600 (52.8%). Randomized Mystery zero-shot 224/600 (37.3%). Table 1, LLaMA 3.1 405B zero-shot: BW 376/600 (62.6%), Mystery 5/600 (0.8%). The text matches the quote word for word: 'To test whether the exact obfuscation might be compromised because of data contamination, we also generated a new obfuscation using completely random strings... 37.3% of instances are answered correctly.'
+
+== [6]/verdicts[2]/claim
+3. Larger Blocksworld set: 110 instances of 6-20 blocks needing 20-40-step optimal plans; o1-preview 23.63%. Unsolvable set: o1-preview flagged 27% correctly.
+
+== [6]/verdicts[2]/evidence
+arXiv 2409.13373 p.4: 'a set of 110 larger Blocksworld problems... range from 6 to 20 blocks in length and require 20 to 40 step optimal plans... o1-preview only manages 23.63%'. p.5: 'On Blocksworld, only 27% of all instances were correctly and explicitly identified by o1 as unsolvable' (Table 3, True Negatives 27%).
+
+== [6]/verdicts[3]/claim
+4. Cost per 100 instances: o1-preview $42.12, o1-mini $3.69, GPT-4o $0.65, Claude 3.5 Sonnet $0.44. Fast Downward 100% at ~0.265 s/instance. o1's hidden reasoning tokens are billed but not revealed.
+
+== [6]/verdicts[3]/evidence
+arXiv 2409.13373, Table 4 'Cost per 100 instances (in USD)': Claude 3.5 Sonnet $0.44, GPT-4o $0.65, o1-preview $42.12, o1-mini $3.69. The same table is in arXiv 2410.02162. Text: 'Running Fast Downward on a personal computer was essentially free... and averaged 0.265 seconds per instance'. Table 2 shows Fast Downward at 600/600 (100%). Text: o1's price includes a surcharge for 'reasoning tokens... tokens generated as part of inference and not revealed to the user... charged at the significantly higher output token rate.'
+
+== [6]/verdicts[4]/claim
+5. LRM-Modulo (o1-preview + sound verifier, up to 10 back-prompts) raises Hard Blocksworld from 23.65% to 98.2%; authors argue evaluation must weigh accuracy, cost/efficiency and guarantees, and suggest a smaller LLM looped with a sound verifier as a cheaper option.
+
+== [6]/verdicts[4]/correction
+Detail: on Hard Blocksworld the system saturated at 7 iterations (cap was 10). Direct o1-preview cost $52.12 vs $139.36 for LRM-Modulo.
+
+== [6]/verdicts[4]/evidence
+arXiv 2410.02162, Table 5: 110 Blocksworld (hard), o1-preview Direct 23.65%, LRM-Modulo 98.2%, 7 iterations. Text: 'we limit the number of iterations to a maximum of ten'. Intro: 'new approaches to measuring LRM reasoning capabilities must take into account efficiency, cost, and guarantees'. Sec 4: 'Returning to LLM-modulo, where we use a smaller, cheaper, and faster LLM in a loop with a verifier, can provide similar or better performance in some domains.'
+
+== [6]/verdicts[5]/claim
+6. Fine-tuned GPT-3 on 1,000 BW instances solved 122/600 (~20%). GPT-4 BW 210/600 zero-shot, 206/600 one-shot; Mystery 1/600 zero-shot, 26/600 one-shot. GPT-4 + VAL back-prompting solved 41/50 (82%) of previously failed instances within 15 rounds (avg 3.68).
+
+== [6]/verdicts[5]/evidence
+arXiv 2305.15771: 'a dataset comprising... 1,000 distinct Blocksworld instances... 80-20 train-validation data split... fine-tuned GPT-3 solved only 122 instances out of the 600... approximately 20%'. Table 1 (HTML): BW One-shot 206/600 (34.3%), Zero-shot 210/600 (34.6%). Mystery BW (Deceptive): One-shot 26/600 (4.3%), Zero-shot 1/600 (0.16%). Table 4: Blocksworld 41/50 (82%), average feedback rounds 3.68. Text: 'threshold of 15 backprompting rounds... 50 failed instances from each domain'.
+
+== [6]/verdicts[6]/claim
+7. Kambhampati quote that fine tuning converts planning into 'memory-based approximate retrieval (akin to the memorization/compilation from System 2 to System 1...). It doesn't prove that LLMs are able to plan.' Off-the-shelf planners are unaffected by obfuscation while GPT-4 'plummeted'.
+
+== [6]/verdicts[7]/claim
+8. GPT-4 shows 'significant performance collapse with self-critique and significant performance gains with sound external verification' on Game of 24, graph coloring and STRIPS planning.
+
+== [6]/verdicts[7]/evidence
+Abstract of arXiv 2402.08115: 'We present a principled empirical study of the performance of GPT-4 in three domains: Game of 24, Graph Coloring, and STRIPS planning... We observe significant performance collapse with self-critique and significant performance gains with sound external verification.'
+
+== [6]/verdicts[11]/evidence
+arXiv 2606.03685, Table 3 (OOD goal reached %, blocks 6/7/8/9/10): Random walk 0/0/0/0/0. Random walk++ 53/28/6/2/0. Optimal 59/31/14/6/6. Text: 'LLMs fine-tuned on uniform random walks fail to reach any goals (0% OOD goal reach rate)'. Sec 5: '21,851 optimal plans (500 unique goal state)', '166 held out planning problems'. Table 1: Optimal Plansformer 100±1 goal and valid. Text: 'PlanBench... with 6-10 blocks (a total of 261 instances)'.
+
+== [6]/verdicts[12]/claim
+13. PDDL-Instruct with Llama-3-8B: BW 94% (baseline 28%), Mystery 64% (baseline 1%), Logistics 79%; VAL feedback only during training; evaluated on 100 self-generated test tasks per domain, not PlanBench 600.
+
+== [6]/verdicts[12]/correction
+Nuance: the paper says the 100 tasks per domain were generated with the PlanBench framework. It never mentions the 600-instance static set, so 'not the PlanBench 600' is an inference, though a consistent one. Logistics baseline was 11%.
+
+== [6]/verdicts[12]/evidence
+arXiv 2509.13351: 'For Llama-3, PDDL-INSTRUCT with detailed feedback and η = 15 achieves validity rates of 94%, 64%, and 79%, respectively in Blocksworld, Mystery Blocksworld, and Logistics'. Table 1 Llama-3 baseline: 28% / 1% / 11%. 'Llama-3's performance on Mystery Blocksworld improves from just 1% to 64%'. 'For each domain, we generate 100 test tasks of varying complexity'. Evaluation phase: plans 'evaluated for correctness using VAL, but only for assessment purposes, i.e., no feedback is returned to the model.' Models: Llama-3-8B and GPT-4.
+
+== [6]/verdicts[13]/claim
+14. RAP (LLaMA-33B as world model and policy, with MCTS) 'surpasses CoT on GPT-4 with 33% relative improvement'. BW success at 2/4/6 steps: RAP(20) 1.00/0.88/0.42 vs GPT-4 CoT 0.50/0.63/0.40. Test set 30/57/114 cases; world-model states LLM-predicted.
+
+== [6]/verdicts[13]/evidence
+arXiv 2305.14992 (arXiv comment: EMNLP 2023). Abstract: 'RAP with LLaMA-33B even surpasses CoT with GPT-4, achieving 33% relative improvement in a plan generation setting.' Table 1: CoT (GPT-4) 0.50 0.63 0.40; RAP(20) 1.00 0.88 0.42. Text: '30 cases solvable within 2 steps, 57 cases within 4 steps, and 114 cases within 6 steps'. 'To transit between states, we take the current action and query the LLM to predict the state changes to the relevant blocks.'
+
+== [7]/verdicts[1]/claim
+2. GPT-4, natural-language prompt: 210/600 (34.6%) zero-shot and 206/600 (34.3%) one-shot. PDDL prompt: 106/600 zero-shot and 75/600 one-shot. Instruct-GPT3 one-shot: 41/600.
+
+== [7]/verdicts[1]/correction
+All counts match the paper. One arithmetic quirk in the source: 210/600 is 35.0%, but the paper prints 34.6% (in both 2305.15771 Table 1 and 2409.13373 Table 1). If you cite the percentage, use the count or note the discrepancy. PDDL percentages are 17.6% (zero-shot) and 12.5% (one-shot); Instruct-GPT3 (text-davinci-002) one-shot is 41/600 (6.8%).
+
+== [7]/verdicts[1]/evidence
+2305.15771 Table 1 (NL), Blocksworld row: GPT-4 one-shot 206/600 (34.3%), zero-shot 210/600 (34.6%), CoT 214/600 (35.6%); I-GPT3 41/600 (6.8%); GPT-3 6/600 (1%). Table 2 (PDDL): GPT-4 one-shot 75/600 (12.5%), zero-shot 106/600 (17.6%). The text agrees: 'natural language prompts (206 and 210 instances for one-shot and zero-shot ...) as opposed to PDDL prompts (75 and 106 instances)'.
+
+== [7]/verdicts[2]/claim
+3. LLM-Modulo / back-prompting (GPT-4 plus VAL feedback, max 15 rounds) produced correct plans on 82% of Blocksworld instances, averaging 3.68 rounds. The o1 paper calls this a subset of the test set; the vendored backprompting JSON contains 50 instances.
+
+== [7]/verdicts[2]/correction
+The numbers are right, but the framing needs a qualifier. The 82% is 41/50 instances that GPT-4 had already FAILED in the one-shot natural-language setting. It is not 82% of the Blocksworld test set or a random subset. Suggested wording: '41/50 (82%) of previously failed one-shot instances; 3.68 average rounds among successes; 15-round cap'.
+
+== [7]/verdicts[2]/evidence
+2305.15771 Table 4: Blocksworld GPT-4 I.C 41/50 (82%), A.F.R 3.68 ('within 15 feedbacks'). Text: 'tested this setup on a subset of the failed instances in the one-shot natural language prompt configuration ... threshold of 15 backprompting rounds ... 50 failed instances from each domain'. 2409.13373 Sec. 4: LLM-Modulo 'can already achieve 82% accuracy on a subset of our original Blocksworld test set'. Local file bench/planbench/results/blocksworld/gpt-4_chat/task_1_plan_generation_backprompting.json (engine gpt-4_chat, prompt_type oneshot): 50 instances, 41 correct, mean steps among correct = 3.683, 9 instances hit the 15-round cap. All 50 instance IDs are marked incorrect in the vendored one-shot task_1_plan_generation.json.
+
+== [7]/verdicts[3]/claim
+4. o1-preview zero-shot on the 600 instances: 587/600 (97.8%) Blocksworld, 52.8% Mystery, 37.3% Randomized Mystery. o1-mini: 340/600 (56.6%), 19.1% Mystery, 3.5% Randomized. Fast Downward: 100%.
+
+== [7]/verdicts[3]/correction
+No numeric correction. Attribution note: the o1-mini Randomized Mystery 3.5% appears only in arXiv 2410.02162 Table 2; 2409.13373 Table 2 shows '-' (not run) for it. arXiv 2410.02162 v1 is titled 'Planning in Strawberry Fields: Evaluating and Improving the Planning and Scheduling Capabilities of LRM o1'. Its TMLR 2025 version is titled 'A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1'.
+
+== [7]/verdicts[3]/evidence
+2409.13373 Table 2: Blocksworld zero-shot o1-preview 587/600 (97.8%), o1-mini 340/600 (56.6%), Fast Downward 600/600 (100%). Mystery zero-shot: 317/600 (52.8%) and 115/600 (19.1%). Randomized Mystery: 224/600 (37.3%), o1-mini '-'. 2410.02162 Table 2: 97.8% / 56.6%; Mystery 52.8% / 19.1%; Randomized Mystery 37.3% / 3.5%; F.D. 100%. Local LEDGER.json: o1-preview_chat zero-shot 587/600, o1-mini_chat 340/600.
+
+== [7]/verdicts[4]/claim
+5. Blocksworld-hard (110 instances, 6-20 blocks, 20-40-step plans): o1-preview 23.63% (26/110) with direct prompting; with LRM-Modulo (VAL verifier loop) 98.2% within 7 iterations at a cost of $139.36.
+
+== [7]/verdicts[4]/correction
+Minor points. (a) The source is internally inconsistent: Table 5 prints 23.65% while the text and Figure 2 say 23.63%. The '26/110' (=23.64%) is your own derivation, not printed in the paper. (b) The paper (arXiv v1) describes a 'sound verifier'; it does not name VAL for the LRM-Modulo loop. (c) The $139.36 is the LRM-Modulo cost; direct prompting cost $52.12. Verified against arXiv v1 only, because the TMLR PDF on OpenReview was blocked by a bot challenge, so Table 5's numbering in the TMLR version is unconfirmed.
+
+== [7]/verdicts[4]/evidence
+2410.02162 Sec. 3.1: '110 harder Blocksworld problems ... range from 6 to 20 blocks ... require 20 to 40 step optimal plans ... o1-preview only manages 23.63%'. Table 5: 'Blocksworld (hard)' o1-preview Direct 23.65%, $52.12; LRM Modulo 98.2%, 7 iterations, $139.36; o1-mini Direct 0.90%, $16.30; LRM Modulo 10%, 4 iterations, $40.80. Text: 'saturates within 7 iterations, with the combined system achieving 98.2%'.
+
+== [7]/verdicts[5]/claim
+6. DeepSeek-R1 on the PlanBench leaderboard: 99.1% Blocksworld (NL, 600), 43.3% Mystery, 25.8% Randomized Mystery, 53.6% Blocksworld-hard (PDDL, 110). o1-mini Blocksworld-hard: 10%. This comes from the repo README only; no paper found.
+
+== [7]/verdicts[5]/correction
+The README numbers are correct, but two parts are wrong. (1) 'No paper found' is false. The TMLR 2025 paper (Valmeekam, Stechly, Gundawar, Kambhampati, 'A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1', openreview.net/forum?id=FkKBxp0FhR, which the README itself links) states in its abstract that it provides 'similar evaluations of a more recent (and open-weight) LRM - DeepSeek R1'. I could not open the TMLR PDF (OpenReview bot challenge), so whether its exact R1 numbers match the README is unverified. (2) The o1-mini 10% on Blocksworld-hard is not a direct-prompting score. In arXiv 2410.02162 Table 5, o1-mini direct is 0.90% and 10% is its LRM-Modulo result (4 iterations). The leaderboard column mixes this with o1-preview's direct 23.65%. Also note: an early Valmeekam tweet reported R1 at 96.6% Blocksworld and 39.8% Mystery, which differs from the README.
+
+== [7]/verdicts[5]/evidence
+raw.githubusercontent.com/karthikv792/LLMs-Planning/main/README.md leaderboard: 'Deepseek R1 | LRM | 99.1% | 43.3% | 25.8% | 53.6%'; 'o1-mini | LRM | 56.6% | 19.1% | 3.5% | 10%'; 'o1-preview ... 23.65%'. ASU Pure and mlanthology abstracts of the TMLR paper both mention the DeepSeek R1 evaluation. Local LEDGER.json: deepseek-r1-api zero-shot 595/600 (99.17%), consistent with 99.1%.
+
+== [7]/verdicts[6]/claim
+7. Zero-shot generalists on the 600 set: LLaMA-3.1-405B 62.6%, Claude 3 Opus 59.3%, Claude 3.5 Sonnet 54.8%, GPT-4o 35.5%. No non-reasoning LLM reaches 5% on Mystery Blocksworld. The project's VAL re-score gives 386 for LLaMA-3.1-405B vs the paper's 62.6% (=376).
+
+== [7]/verdicts[6]/correction
+No correction to the numbers. Notes: 376/600 is 62.67%. The paper's conclusion says '62.5%' for LLaMA 3.1 405B, an internal inconsistency in the source. The local ledger records val_success=386 and file_flag_success=387 for LLaMA-3.1-405B zero-shot, a +10 instance discrepancy that still needs explaining. The other models re-score exactly to the published counts (Opus 356, Sonnet 329, GPT-4o 213, GPT-4 210, LLaMA-3-70B 205).
+
+== [7]/verdicts[6]/evidence
+2409.13373 Table 1, zero-shot: Claude 3.5 Sonnet 329/600 (54.8%), Claude 3 Opus 356/600 (59.3%), GPT-4o 213/600 (35.5%), LLaMA 3.1 405B 376/600 (62.6%). Text: 'Mystery Blocksworld performance lags far behind - no LLM achieves even 5% on our test set'. Local native_v1/bench/planbench/LEDGER.json, 'llama-3.1-405b_aws|task_1_plan_generation_zero_shot': n=600, val_success=386, file_flag_success=387.
+
+== [7]/verdicts[7]/claim
+8. Plansformer (CodeT5-base, ~220M, fine-tuned on 18,000 plans per domain, 2-5 blocks) reached 90.04% valid plans (88.44% optimal) on 3,600 unseen problems from the same generator. Untuned baselines: Codex 0.15%, CodeT5-base 0.6%.
+
+== [7]/verdicts[7]/correction
+The training size is wrong. Each domain's dataset has 18,000 plans, but CodeT5 was fine-tuned on 14,400 (80%); the remaining 3,600 (20%) are the test set. Results are averaged over 5 random 80/20 splits. The '~220M' parameter count is not stated in the Plansformer paper (it is the standard CodeT5-base size). The other numbers are correct: 2-5 blocks, 90.04% valid, 88.44% optimal, 3,600 test instances, Codex 0.15%, CodeT5-base 0.6%.
+
+== [7]/verdicts[7]/evidence
+2212.08681 Sec. 3.1.1: 'The generated dataset for each domain consists of 18,000 plans ... 80%-20% split'. Sec. 3.1.3: 'we finetune it with 14400 samples (80% of the generated dataset)'. Sec. 4: 'test-bed of 3,600 unique and unseen problem instances (20% of the dataset) ... averaged over 5 randomly selected (80% - 20%) train-test splits'. Blocksworld: 'We generate the problems with 2 to 5 block configurations'. Text: 'Plansformer-bw - generated 90.04%, out of which 88.44% are optimal'; 'Codex ... only generates 0.15% valid plans'. Table 2 valid-plans column order (FastDownward, Codex, GPT-2, T5-base, CodeT5-base, ...) is 100%, 0.15%, 0%, 0.25%, 0.6%, so CodeT5-base = 0.6%.
+
+== [7]/verdicts[8]/claim
+9. PlanGPT (GPT-2-small architecture, ~83M params, trained from scratch on 63k LPG-solved problems with up to 20 blocks) reached 98.8% (greedy) to 100% (sampling) coverage on its own test set and 100% on 20 IPC Blocksworld problems, where Plansformer got 11%. VAL is used for checkpoint early stopping; unclear whether multi-sample decoders select plans with a validator.
+
+== [7]/verdicts[8]/correction
+Most of this is correct, but '20 IPC Blocksworld problems' is unsupported. The paper never states how many IPC Blocksworld problems it used, and Plansformer's reported 11% cannot be k/20 (k/20 gives multiples of 5%). The 11% fits, for example, 4/35 on the standard 35-problem IPC-2000 blocks set (11.4%), though that is my inference. Drop the '20'. Also, 98.8% is greedy decoding WITHOUT coverage early stopping (CE); greedy with CES is 99.5%. Sampling (top-p 0.9, N=10) is 100% with or without CES. On the validator question: the paper does not say how one of the N=10 plans is chosen. However, sampling coverage being above greedy implies a problem counts as solved if any of the 10 plans is valid, which amounts to oracle/validator selection.
+
+== [7]/verdicts[9]/claim
+10. PDDL-Instruct (logical-CoT instruction tuning with state-action-state traces; VAL feedback during training only): Llama-3-8B reaches 94% Blocksworld (baseline 28%), 64% Mystery (baseline 1%), 79% Logistics, on 100 generated test tasks per domain. Single plan, no verifier at test time.
+
+== [7]/verdicts[9]/correction
+No correction. These best numbers are for detailed VAL feedback with a feedback-loop limit of eta=15 during training. Llama-3 Logistics baseline is 11%. GPT-4 reaches 91/59/78%.
+
+== [7]/verdicts[9]/evidence
+2509.13351 Sec. 7: 'For Llama-3, PDDL-INSTRUCT with detailed feedback and eta = 15 achieves validity rates of 94%, 64%, and 79%, respectively in Blocksworld, Mystery Blocksworld, and Logistics'. Table 1, Llama-3 baseline: Blocksworld 28%, Mystery BW 1%, Logistics 11%. Caption: 'plan accuracy generated for 100 test tasks from each domain'. Sec. 5.3: the model 'directly generates complete state-action-state sequences'; plans are 'evaluated for correctness using VAL, but only for assessment purposes, i.e., no feedback is returned to the model'.
+

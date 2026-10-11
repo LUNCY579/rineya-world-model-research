@@ -1,0 +1,615 @@
+Proceedings of the Thirty-Fourth International Conference on Automated Planning and Scheduling (ICAPS 2024)
+
+            Learning General Policies for Planning through GPT Models
+
+Nicholas Rossetti§*, Massimiliano Tummolo, Alfonso Emilio Gerevini§, Luca Putelli, Ivan Serina,
+                                          Mattia Chiari, Matteo Olivato
+
+        Dipartimento di Ingegneria dell'Informazione, Università degli Studi di Brescia, Via Branze 38, Brescia, Italy
+{nicholas.rossetti, massimiliano.tummolo, alfonso.gerevini, luca.putelli, ivan.serina, mattia.chiari, matteo.olivato}@unibs.it
+
+                              Abstract                                   have limited reasoning capabilities, such as logical infer-
+                                                                         ence or AI planning. In particular, some studies suggest that
+   Transformer-based architectures, such as T5, BERT and GPT,            LLMs cannot generate valid plans to solve automated plan-
+   have demonstrated revolutionary capabilities in Natural Lan-          ning problems using simple prompting strategies or fine-
+   guage Processing. Several studies showed that deep learn-             tuning (Valmeekam et al. 2023, 2022; Arora and Kambham-
+   ing models using these architectures not only possess re-             pati 2023). However, the recent work on Plansformer (Pal-
+   markable linguistic knowledge, but they also exhibit forms            lagani et al. 2023) shows that it is possible to fine-tune a pre-
+   of factual knowledge, common sense, and even program-                 trained language model with planning instances from simple
+   ming skills. However, the scientific community still debates          planning domains obtaining promising results.
+   about their reasoning capabilities, which have been recently
+   tested in the context of automated AI planning; the litera-              In the context of generalised planning (e.g., (Hu and
+   ture presents mixed results, and the prevailing view is that          De Giacomo 2011; Srivastava, Immerman, and Zilberstein
+   current transformer-based models may not be adequate for              2008, 2011)), several works have demonstrated that deep
+   planning. In this paper, we address this challenge differently.       learning models can learn a general policy, i.e. a strategy
+   We introduce a GPT-based model customised for planning                employed to solve a set of different problems in a given
+   (PLANGPT) to learn a general policy for classical planning            planning domain (Groshev et al. 2018; Ståhlberg, Bonet,
+   by training the model from scratch with a dataset of solved           and Geffner 2022a,b). An example of general policy for the
+   planning instances. Once PLANGPT has been trained for a               BLOCKSWORLD domain is to place all blocks on the ta-
+   domain, it can be used to generate a solution plan for an input       ble and then stack them in the desired position. However,
+   problem instance in that domain. Our training procedure ex-           deep learning approaches for creating general policies are
+   ploits automated planning knowledge to enhance the perfor-            often used to heuristically evaluate search states, without di-
+   mance of the trained model. We build and evaluate our GPT             rectly tackling the problem of finding a valid plan. More-
+   model with several planning domains, and we compare its               over, they are often limited to image-based domains (Gro-
+   performance w.r.t. other recent deep learning techniques for          shev et al. 2018) or have logical restrictions, such as the one
+   generalised planning, demonstrating the effectiveness of the          in (Ståhlberg, Bonet, and Geffner 2022a) which limits the
+   proposed approach.                                                    approach to the two-variable fragment of first-order logic.
+
+                      Introduction                                          In this paper, we investigate generalised planning through
+                                                                         transformer-based architectures. We introduce a GPT-based
+Pre-trained Language Models and Large Language Mod-                      model customised for planning (PLANGPT) to learn a gen-
+els (LLMs) employing attention mechanisms represent                      eral policy for classical planning by training the model from
+the state-of-the-art in Natural Language Processing (NLP)                scratch with a dataset of solved planning instances. Once
+tasks. Starting from the Transformer architecture (Vaswani               PLANGPT has been trained for a domain, it can be used to
+et al. 2017), and then with BERT (Devlin et al. 2019) and                generate a solution plan for an input problem instance in that
+GPT (Radford and Narasimhan 2018), LLMs have achieved                    domain. Our training procedure exploits automated planning
+SOTA results in different NLP tasks, such as machine trans-              knowledge to enhance the performance of the trained model.
+lation and summarisation. Although these models can cap-                 In particular, to prevent overfitting in training, we design and
+ture some forms of general knowledge of real-world facts                 exploit an early-stopping technique validating the planning
+(e.g., historical facts, geography, and medicine) (Petroni               performance of the model while being trained. We build and
+et al. 2019; Jiang et al. 2020), basic common sense (Geva                evaluate PLANGPT with several planning domains, and we
+et al. 2021) and programming skills (Wang et al. 2021), they             compare its performance with respect to other recent deep
+                                                                         learning techniques for generalised planning, demonstrating
+    *N. Rossetti was enrolled in the National Doctorate on AI con-       the effectiveness of the proposed approach.
+ducted by Sapienza, University of Rome with the University of
+Brescia. §Corresponding authors.                                            The paper is organised as follows: first, we discuss re-
+Copyright © 2024, Association for the Advancement of Artificial          lated work and provide background information. Then, we
+Intelligence (www.aaai.org). All rights reserved.                        describe the preprocessing phase, the training datasets, and
+
+                                                                    500
+how the GPT models are designed and trained. Finally, we              model (trained from scratch) to learn a general policy for
+present the experimental results and draw our conclusions.            planning. This approach is followed by many other re-
+                                                                      searchers to solve tasks with a high level of complexity, such
+                     Related Work                                     as genetics-related challenges (Jumper et al. 2021) and the
+                                                                      generation of programming code (Wang et al. 2021). In au-
+Recently several researchers have leveraged pre-trained               tomated planning, Serina et al. (2022) trained a BERT model
+LLMs to address planning and evaluate their reasoning capa-           from scratch with a dataset of plans across various domains
+bilities. For instance, the studies in (Valmeekam et al. 2022,        to solve the plan recognition problem of predicting missing
+2023) assess how pre-trained GPT models (GPT-3.5 and                  actions from an observed partial plan. However, this method
+GPT-4) can generate plans. They do not modify the original            is not applicable for learning general policies as it ignores
+GPT model, but simply query it by exploiting some few-shot            information about the initial states and goal of the class of
+prompting frameworks to tackle planning tasks across vari-            problems handled by the policy.
+ous benchmark domains, such as BLOCKSWORLD and LO-
+GISTICS. Their results highlight poor performance in gener-                                 Background
+ating valid plans that satisfy the problem goal.
+                                                                      Classical Planning and General Policies
+   Arora and Kambhampati (2023) evaluated a fine-tuned
+GPT-2 model for the BLOCKSWORLD domain. Starting from                 We assume that the reader is familiar with the standard plan-
+a model pre-trained on text data, they built a generator of           ning language PDDL for representing deterministic, fully
+single actions, which are also progressively verified by an-          observable planning problems, of which here we present
+other GPT-2 model fine-tuned on this specific task, report-           the most relevant elements following the formalisation given
+ing promising performance (about 60% of problems solved               in (Ståhlberg, Bonet, and Geffner 2022a).
+over a custom-made test set of 200 instances). Another fine-
+tuning approach, called Plansformer, is proposed in (Palla-              A classical planning problem is a pair P = (D, I) where
+gani et al. 2023) starting from a Code-T5 model (Wang et al.          D is a planning domain and I is a problem instance. The
+2021) fine-tuned with solved problems in several planning             planning domain D contains a set of predicate symbols
+domains. Although Plansformer obtains almost 90% valid                p and a set of action schemas with preconditions and ef-
+plans, these results are not directly comparable to those in          fects given by atoms p(x1, ..., xk) where each xi is an ar-
+(Arora and Kambhampati 2023), since they are obtained us-             gument of the schema. The problem instance is a tuple I =
+ing two different test sets.                                          (O, Init, Goal) where O is a (finite) set of objects names
+                                                                      ci, and Init and Goal are sets of ground atoms p(c1, ..., ck)
+   Researchers also exploited different types of deep learn-          representing the initial state and the goal of the problem.
+ing architectures in the context of learning general policies.        A classical problem P = (D, I) encodes a state model
+Toyer et al. (2020) use a custom feed-forward neural net-             S(P ) = (S, s0, SG, Act, A, f ) where each state s  S is
+work to represent states and actions as neural layers and             a set of ground atoms from P , s0 is the initial state Init,
+obtain the following action in probabilistic planning. The            SG is the set of goal states s  S such that Goal  s,
+work in (Groshev et al. 2018) employed Convolutional Neu-             Act is the set of ground actions in P , A(s) is the set of
+ral Network (CNN) to plan in the Sokoban domain with the              ground actions whose preconditions are true in s, and f is
+current state represented as an image. To deal with propo-            the transition function so that f (a, s) for a  A(s) repre-
+sitional domains without image representations, they imple-           sents the state resulting from applying action a to state s. An
+mented a Graph Neural Network (GNN) that solves the trav-             action sequence a0, ..., an is applicable in P if ai  A(si)
+elling salesperson problem by building a plan selecting the           and si+1 = f (ai, si), for i = 0, ..., n, and it is a plan if
+next city to visit at each iteration.                                 sn+1  SG. The cost of a plan is assumed to be given by its
+                                                                      length, and a plan is optimal if there is no shorter plan.
+   Similarly, Ståhlberg et al. (2022a; 2022b) adopt a GNN to
+tackle various benchmark domains. Given the current state,               Generalised planning studies the representation and com-
+the system computes all the states reachable by applicable            putation of general policies to solve multiple problems in the
+actions and selects the state with the best heuristic value es-       same planning domain (e.g., (Hu and De Giacomo 2011; Sri-
+timated by the GNN, choosing it as the new current state;             vastava, Immerman, and Zilberstein 2008, 2011)). A general
+the procedure is repeated until a state is reached where the          policy can be defined as a function (s, Goal) providing the
+goal is satisfied. Recently, heuristic based on learned gen-          next action in Act to apply given the current state s  S and
+eral policy have also been integrated into greedy best-first          the goal of the problem instance Goal. A policy  solves a
+search (Chen, Thiébaux, and Trevizan 2024). An impor-                 set of classical planning instances for the same domain D
+tant difference of these approaches w.r.t our work is that            if each of these instances I = (O, Init, Goal) is solved by
+we use deep learning to directly generate the next actions            the sequence of actions (s0, Goal), ..., (sn, Goal), where
+rather than to evaluate heuristic values of states. Moreover,         s0 = Init and Goal  sn+1.
+the expressive power of GNNs is restricted to the two-
+variable fragment of first-order logic with counting quan-               Several approaches to generalised planning based on deep
+tifiers (C2) (Ståhlberg, Bonet, and Geffner 2022a,b), while           learning, including PLANGPT, adopt this representation of
+CNNs can only elaborate states encoded as images (Groshev             general policy (Groshev et al. 2018; Toyer et al. 2020). An
+et al. 2018).                                                         alternative method is to define a value function in which the
+                                                                      policy selects the successor state with the minimum value
+   Instead of fine-tuning or prompt-engineering a pre-trained         given the current state, goals and action, as in (Ståhlberg,
+model, in our work, we build a custom transformer-based
+
+                                                                 501
+Bonet, and Geffner 2022a,b).                                           Figure 1: Architecture of PLANGPT and example of in-
+                                                                       put/output for a planning problem with two fluents in the
+Generative Pretrained Transformer                                      initial state (F0 and F1) and two fluents forming the goal (G0
+                                                                       and G1). PLANGPT generates the plan A0, A1, ..., End.
+GPT (Radford and Narasimhan 2018), which stands for
+Generative Pretrained Transformer, is a transformer-based              layer and two residual connections with layer normalisation
+architecture (Vaswani et al. 2017) originally designed to              which ends a GPT block. The overall task of these blocks is
+analyse sequences of elements in NLP tasks. In the NLP                 to compute a more informative representation of each token
+context, these sequences are sentences or documents divided            of the same size e. The output of a block is the input of the
+into tokens (words or part of words). In our planning context,         next one. After the last block, the output of the last block is
+we will consider sequences of fluents and actions derived              multiplied by a weight matrix, obtaining a vector of length
+from the initial states, the goals, and the solution plans of          N . A softmax layer then turns this vector into a probability
+planning problems.                                                     distribution among all the tokens in the vocabulary. Finally,
+                                                                       GPT outputs the token with the highest probability.
+   The division of the sequence into tokens is performed by
+a probabilistic algorithm called tokenizer, which, through an             The overall process of GPT begins generating the first to-
+analysis of the training set, also collects all different tokens       ken; then this is added to the input and GPT continues gen-
+into a vocabulary of size v. Typically, given a sequence of            erating the second token, added (concatenated) to the input
+tokens in input, a GPT model is trained to generate another            again to generate the third token, and so on. GPT repeats
+sequence in response, such as the translation of a sentence            the procedure until the special token <EndOfSequence> is
+into another language, an answer to a question, or, in our             generated or reaches the maximum context length.
+case, a sequence of actions solving a planning instance. This
+generation is done one token at a time. In the following, we              At training time, first the model generates the whole se-
+describe how the GPT architecture works considering the ith            quence. Next, the training algorithm compares it with the
+token ti in a sequence of N tokens.                                    sequence label in order to compute the loss function (typ-
+                                                                       ically, the cross-entropy loss). In our planning context, we
+   First, the model encodes the input token ti into an embed-          generate a sequence of (tokenized) actions, and the label is
+ding vector Ei  Re. This operation is performed through                a sequence of tokens forming a valid plan.
+an embedding matrix E  Rv×e that embeds each token
+into a numeric vector of length equal to the embedding size               At inference/prediction time, the output plan can be de-
+e. Then, the model sums Ei with the positional encoding                rived using three different strategies (Welleck et al. 2020):
+vector Pi  Re obtaining the vector Ii  Re. The main
+component of GPT are N decoder blocks in sequence. After                · at each generation step GPT outputs the token with the
+the embedding phase, the first decoder block processes the                highest probability. (Greedy generation strategy);
+input through multiple masked self-attention mechanisms,
+typically called heads and other neural network layers.                 · GPT keeps in memory the most likely N sequences and,
+                                                                          at each generation step, it extends them with the to-
+   In a self-attention mechanism (without considering mask-               kens that yield the most likely extended N sequences.
+ing), the model projects Ii into three new representations                (Multibeam N generation strategy);
+called key (Ki  Rd), query (Qi  Rd) and value (Vi  Rd)
+by multiplying it with three weight matrices Wk  Re×d,                  · at each generation step, GPT selects the smallest set
+Wq  Re×d and Wv  Re×d, where d is the dimension                           of tokens whose cumulative probability exceeds a given
+of the attention vectors. Then, the model calculates the dot-             threshold P. Their probability is then redistribuited in the
+product between Qi and all Kj in the sequence, where Kj                   0/1 range and one token is sampled using such proba-
+is the key vector of the jth token in the sequence. The model             bilities. This is executed on N runs in parallel. (Top-P
+concatenates the results and applies the softmax function,                nucleus sampling strategy).
+obtaining a vector Ai  RN , called attention weight. Each
+element of the attention weight ai,j ideally represents the            The multibeam and top-P sampling strategies generate N
+interaction between the ith token and the jth token of the             plans, while greedy strategy generates one plan.
+sequence. The head then calculates a new representation of
+ti, Ri  Rd, by averaging the value representations of all                          Architecture of PLANGPT
+tokens in the sequence multiplied by the respective attention
+weight. Whereas the traditional self-attention calculates the          Our aim is to compute an effective general policy for a plan-
+attention weights considering all tokens in a sequence, in the         ning domain by training from scratch a custom GPT archi-
+masked-self attention mechanism, for the ith token, only the
+tokens with a position j  i are considered and the attention
+weights ai,j with j > i are set to 0.
+
+   Each block of GPT applies n heads at the same time
+(multi-head attention). In order to create a single representa-
+tion of the context, the model concatenates the result of each
+head, obtaining a vector Mi  Rq, where q = d × n, which
+is passed to a feed-forward layer that transforms Mi into the
+new output vector Oi  Re. Then there is a feed-forward
+
+                                                                  502
+tecture for that domain. We build a different model for each             a problem in a planning domain, PLANGPT generates a se-
+domain, training it from scratch using a set of training exam-
+ples, each one made by an initial state, a set of goal fluents           quence of ground actions (each one tokenized as described
+and the corresponding solution plan, which is the label of
+the example. In this section, we describe the preprocessing              above) forming a plan to reach the goal from the initial state.
+of the input data, the overall working of the model, how we
+train it, and how we evaluate the generated plans.                       First, the input is tokenized as described in the previous sec-
+
+Preprocessing and Tokenizer                                              tion. After tokenization, the embedding layer converts the
+
+In the preprocessing phase, the initial state and the goal are           tokens into embedding vectors, the decoder stack analyses
+transformed into a format suitable for GPT (i.e. a sequence
+of tokens). At training time, we also include the tokenized              the input sequence, and the final layer outputs the first token
+version of the solution plan P as the label of our training
+procedure. At inference time, the model has the objective of             of the plan. Then, PLANGPT adds the generated token to the
+generating P in the same format.
+                                                                         input sequence and repeats the whole process for generating
+   The tokenizer splits each input fluent in its components
+(the predicate name and its objects); then these tokens are              the second token, and so on. Each token generated by GPT
+concatenated to obtain a token sequence representing both
+the initial state and the goal fluents. Similarly, this procedure        is the name of an action or one of its objects. For example,
+is applied for each action that is generated and provided as
+input in the incremental generation of a solution plan: the              if the output of PLANGPT is the sequence Drive, Truck1,
+tokens of an action are its name and the objects of the action,
+and a plan is a sequence of such tokens. For example, for                Loc1, Loc3, ..., <end>, the first action of the generated plan
+fluent (At Truck1 Loc1) we have three tokens: At, Truck1
+and Loc1; for action (Drive Truck1 Loc1 Loc3), four tokens:              is (Drive Truck1 Loc1 Loc3). The tokens of each output ac-
+Drive, Truck1, Loc1 and Loc3.
+                                                                         tion are generated one after the other. E.g., first PLANGPT
+   The tokens of the initial state, the goal fluents, and the
+(already generated) action sequence are then concatenated                generates Drive, then it adds Drive to the input sequence and
+to obtain a single sequence for GPT using some special to-
+kens as follows: <start> to mark the start of the initial state;         outputs Truck1, and so on. This is repeated until the end-of-
+<goal> to mark the end of the initial state and the begin-
+ning of the goal fluents; <actions> to indicate the end of the           sequence token <end> is generated.
+goal fluents and the beginning of the tokens of the action se-
+quence; <end> to mark the end of the action sequence and,                Tipically, GPT models are trained to generate all the to-
+consequently, of the entire plan generated to solve the plan-
+ning problem.                                                            kens starting from token <start>, i.e., to replicate the entire
+
+   As in many GPT models, the tokenization and prepara-                  input sequence, which in our case represents the initial state,
+tion of the model input are performed by WordPiece (Devlin
+et al. 2019). Since GPT models have a predefined vocabu-                 the goal, and a solution plan. Since our goal is to generate
+lary, i.e., a predefined set of tokens, we define our vocabu-
+lary using a predefined set of objects for each object type and          only a plan, we are not interested in learning how to repli-
+build the vocabulary using such objects, the predicate names
+and the action names of the planning domain. Although the                cate the tokens of the initial state and the goal. Therefore, we
+predefined vocabulary is sensitive to the object names, in
+our architecture this operation only requires setting a maxi-            include a loss masking mechanism in the training procedure
+mum number of objects. This is because we use a mapping
+algorithm to translate new names into predefined ones. The               to prevent the model from learning to generate these tokens.
+algorithm takes as input a PDDL problem and retrieves all
+the objects, then checks if these objects are in the GPT vo-             Each training example consists of the sequence of to-
+cabulary. If an object is not in the vocabulary, it is substituted
+with an unused object of the same type in the vocabulary.                kens derived from a planning problem (initial state and goal)
+
+PLANGPT Models                                                           and its label is the sequence of tokens from a solution plan
+
+Figure 1 shows the architecture of our system, called                    solving the problem. At training time, the model generates
+PLANGPT, in which we use the latest open-source version
+of GPT (GPT-2).1 Given in input the initial state and goal of            a sequence of tokens corresponding to a sequence of ac-
+
+    1GPT-2 is significantly smaller than recent GPT versions, and        tions. Such a sequence is compared against the example
+hence much less demanding in terms of training data and required
+                                                                         label to compute the loss function and adjust the network
+
+                                                                         weights through backpropagation. As loss function we use
+
+                                                                         the widely used cross-entropy, i.e., for a single generated to-
+
+                                                                         ken, the loss function is -  |V |  log(y^t)    yt  where  y^t  is  the
+                                                                                                      t=1
+                                                                         probability computed by GPT for token t, yt is the label for
+
+                                                                         token t (1 if it is the correct token, 0 otherwise) and |V | is the
+
+                                                                         dimension of the vocabulary. The loss for a complete plan is
+
+                                                                         the mean of the loss over all tokens in the plan.
+
+                                                                         Planning Coverage for Early Stopping in Training
+
+                                                                         Generally speaking, the use of the cross-entropy (CE) forces
+                                                                         the model to mimic the example label. Each time the model
+                                                                         generates a token, this token is compared with the corre-
+                                                                         sponding one belonging to the label. From this comparison
+                                                                         the loss is calculated, and then, the backpropagation algo-
+                                                                         rithm modifies the weights in order to generate a sequence
+                                                                         of tokens that is the closest possible to the label.
+
+                                                                            However, this process is not fully adequate for learning
+                                                                         to solve planning tasks because a planning problem can be
+                                                                         solved by different plans. With the cross-entropy loss func-
+                                                                         tion, we may observe an error in the generated (tokenized)
+                                                                         plan just because it is not totally identical to the one that was
+                                                                         used as label. This problem is exacerbated by the tendency
+                                                                         of deep learning models to overfit the training data. With an
+                                                                         overfitted model, we may have a model that is capable of
+
+                                                                         computational resources for training.
+
+                                                                    503
+generating plans for the training problems, but is uncapable             Figure 2: Dataset generation procedure. Given a PDDL do-
+of solving other similar problems in the test set.                       main and a set of objects, the problem generator outputs a
+                                                                         PDDL problem in that domain; then the planner generates up
+   A typical technique to prevent overfitting is the Early               to four solution plans solving it; finally the objects names of
+Stopping (Goodfellow, Bengio, and Courville 2016). The                   the problem and of the corresponding plans are randomised.
+mechanism uses a validation set of examples that are not
+used for training. If the loss value for the validation set (the         Package1) are added to the initial state. This helps the model
+validation loss) increases, which is a typical evidence of               to associate each object name with its corresponding type.
+overfitting, the model continues to train for a fixed number
+of epochs. After these epochs, if the validation loss has not               For each generated problem, we compute different sub-
+improved, the model restores the weights that obtained the               optimal solutions (four in our implementation). This shows
+best performance on the validation set and the training stops.           the system that a single problem can have more than one
+                                                                         valid plan. Furthermore, generating multiple solutions for a
+   Since, for planning, optimising the standard cross-entropy            single problem augment the number of training samples. To
+on the validation set suffers the problem outlined above, we             obtain multiple plans, we used LPG (Gerevini and Serina
+designed a new early stopping technique. Our technique,                  2002), but other planners could be used (Richter and West-
+called Planning Coverage Early Stopping (CES for short),                 phal 2010; Lipovetzky and Geffner 2017; Helmert 2006).
+evaluates the capability of solving the planning problems in
+a validation set with the current learned model. This metric                Then, we randomise the object names to mitigate potential
+is based on verifying the correctness of the plans generated             biases in the generated problems and plans. The names ran-
+by the model for the planning problems in the validation set.            domisation is performed by replacing each object name obj
+The verification is performed using the PDDL specification               with a name of an object of the same type of obj randomly
+of the actions (preconditions and effects) through the stan-             taken from the vocabulary. This step is important because
+dard validator VAL (Howey, Long, and Fox 2004).                          it prevents a deep learning model to learn biases tied to the
+                                                                         conventions used in problem generators. In LOGISTICS this
+   At the end of each training epoch, the model generates                issue arises for the following reason: the generator names
+the solution plans for the validation problems. If at least one          trucks and cities with increasing numbers and assigns them
+action in a plan is not applicable or at least one goal fluents is       in increasing order. E.g., assume we consider problems with
+not reached, the plan is considered incorrect, otherwise it is           three cities (City1, City2, City3) and one truck for each city;
+valid. The coverage metric value is defined as the percentage            the generator always set in the initial states Truck1 at City1,
+of valid plans over the total number of generated plans.                 Truck2 at City2 and Truck3 at City3. Training a model using
+                                                                         only problems following this convention limits its general-
+   The use of CES helps the model to generate valid plans                isation capability, since it would provide wrong results for
+rather than plans identical to ones labelling the training set.          instances following other conventions.
+The CES metric is evaluated at each training epoch; if the
+CES value has not improved for a predefined number of                       In addition to LOGISTICS, we built datasets for other
+epochs (in our experiments 5), the training stops and we                 seven well-known benchmark domains from different
+select the model's weights which obtained the best perfor-               IPCs: BLOCKSWORLD, DEPOTS, DRIVERLOG, FLOORTILE,
+mance in terms of the coverage metric.                                   SATELLITE, VISITALL and ZENOTRAVEL.
+
+                 Dataset Generation
+
+In this section, we describe the procedure depicted in Fig-
+ure 2 to build the dataset used for training our GPT model.
+First, we generate 70, 000 planning problems (written in
+PDDL) for the considered domain using a problem genera-
+tor; we used the one proposed in (Seipp, Torralba, and Hoff-
+mann 2022).Depending on the number of objects involved,
+we have problems of different difficulty. We chose the num-
+ber of objects following the setups of the International Plan-
+ning Competition (IPC). However, with such setups and the
+problem generators we could derive a class of problems that
+is too specific for training, limiting the generalisation capa-
+bility of the learned model. When we observed this issue for
+the domain considered, we generated additional problems
+through a revised problem generator. For instance, the gen-
+erator available for LOGISTICS always creates problems in
+which all packages of the problem must be transferred to a
+location specified in the goal. To address this bias, we also
+create scenarios where the goal does not encompass all the
+packages specified in the planning problem.
+
+   For a typed domain, we incorporated the type predicates
+into the initial states of the problems. E.g., for problems
+in LOGISTICS, predicates such as (City City1) or (Package
+
+                                                                    504
+   We also analysed the previous biases in the IPC bench-             Domain        Greedy    Multibeam   Sampling
+marks and available generators of these domains. We ob-                            CE CES     CE CES      CE CES
+served that all the IPC problems of BLOCKSWORLD have                  BLOCKSWORLD
+only one tower to build, while BLOCKSWORLD generator                  DEPOTS       98.8 99.5  99.4 99.6  100.0 100.0
+always creates problems with more than one tower to build.            DRIVERLOG    72.9 78.7  77.1 85.4  90.3 94.5
+Therefore, we used a variant of the standard generator where          FLOORTILE    61.3 68.4  73.0 80.8  94.7 96.5
+every problem requires to build from one to five towers.              LOGISTICS    92.9 94.4  96.9 96.6  98.2 99.6
+                                                                      SATELLITE    63.3 66.1  62.8 63.7  76.3 77.3
+   In ZENOTRAVEL, planes consume fuel transporting peo-               VISITALL     68.0 75.3  71.6 78.3  81.3 90.1
+ple, and in general, a varying fuel level (among those avail-         ZENOTRAVEL   94.0 94.0  97.8 97.8  99.9 100.0
+able) is assigned to each plane in the initial state of a prob-                    82.7 82.7  87.3 87.3  94.7 94.7
+lem. However, in the ZENOTRAVEL problem generator, ev-
+ery plane has zero fuel in the initial state. A model trained         Table 1: Coverage for each domain with the greedy, multi-
+with such problems could learn a simplified version of the            beam and sampling generation of PLANGPT using standard
+domain in which all planes used must always be refuelled,             Cross Entropy without (CE column) and with the Coverage
+without an understanding of the overall fuel management.              Early Stopping (CES column) using the Tset test set.
+To solve this bias, we extended the ZENOTRAVEL generator
+to randomise the initial fuel level of each aircraft.                 created using the available generators modified as described
+                                                                      above to avoid original biases previously discussed.
+   For VISITALL, as in the approach of (Ståhlberg, Bonet,
+and Geffner 2022b), we used the IPC-2011 optimal track                   Our system obtains very good results for most of the
+problems, and we generated problems with rectangular grids            considered domains. In particular, with Sampling the cov-
+of different sizes and different percentages of tiles to visit.       erage is higher than 90% for every domain except LOGIS-
+                                                                      TICS, where coverage is 77.3%. PLANGPT solves all the
+                Experimental Results                                  BLOCKSWORLD and VISITALL problems and 99.6% of the
+                                                                      FLOORTILE problems with CES. Using the Multibeam and
+We trained a custom GPT model for each of the eight do-               Greedy strategies we have a lower performance, but the cov-
+mains indicated above using GPT-2 Small, which has 12                 erage percentage is never lower than 60%.
+blocks with 12 heads each, for a total of about 83M pa-
+rameters2. We also tested bigger GPT configurations (which               We now evaluate the effectiveness of our coverage early
+require a higher number of training instances, more train-            stopping (CES) technique, analyzing the coverage perfor-
+ing time, and more computational power) without obtain-               mance with and without its utilization on the Tset test set.
+ing significantly better results. Our models are trained on           The results are in Table 1. The use of CES improves per-
+a NVIDIA A100 GPU with 40 GB. We tested the three                     formance in all domains except ZENOTRAVEL, where the
+standard generation strategies previously described: Greedy,          performance remains the same. In particular, we have a re-
+Multibeam N generation (setting N = 10) and Sampling                  markable improvement for SATELLITE with all three gen-
+Top-P (setting P = 0.9 and N = 10). For each domain,                  eration strategies (7.3 points with greedy, 6.7 with multi-
+we employed 63,000 planning problems for training, 1000               beam, and 8.8 with sampling), DEPOTS and DRIVERLOG.
+for validation and 7000 for the testing (Tset). From these            Even for domains where PLANGPT obtains very high per-
+problems, we generated up to 4 plans using LPG.                       formance without CES, such as FLOORTILE, VISITALL and
+                                                                      BLOCKSWORLD, with CES we still have a small improve-
+   In the following, we evaluate our GPT-based models                 ment. These results confirm the usefulness of including our
+in terms of percentage of valid generated plans (cover-               planning evaluation technique in the training process.
+age). The generation takes, on average, less than 3 sec-
+onds, with a maximum of 20 seconds for FLOORTILE using                   In Figure 3 we examine the behaviour of the standard
+Sampling. We also experimentally compare our approach                 (cross-entropy) loss function and the use of CES for three
+with Plansformer (Pallagani et al. 2023), the best perform-           domains during training. The black cross on the curves in-
+ing transformer-based model applied to automated plan-                dicates when the training stops using the standard cross-
+ning, and with a state-of-the-art approach for learning gen-          entropy loss evaluated on a validation set (1000 randomly
+eral policies based on GNN (Ståhlberg, Bonet, and Geffner             generated problems for each domain not used for train-
+2022b). This comparison is perfomed in terms of correct               ing PLANGPT) as the early stopping metric. The red star
+plans, and scores IPCScore-Quality and IPCScore-Agile, as             markers indicates when the model stops the training us-
+defined in the last (2023) planning competition.                      ing CES. For all three domains, using CES leads to train-
+                                                                      ing for a higher number of epochs w.r.t. not using it (i.e.,
+Effectiveness in Valid Plan Generation                                with the standard cross-entropy technique). In these addi-
+                                                                      tional epochs, the loss function value worsens. Despite this
+Table 1 shows the results of PLANGPT with and with-                   worsening of the loss function, the coverage increases un-
+out the Planning Coverage Early Stopping (CES) for the                til the number of epochs indicated by the red star marker is
+Greedy, Multibeam and Sampling generation strategies. For             reached. This shows that using the CES improves the train-
+this evaluation, we used a test set of more than 6000 prob-           ing process, obtaining higher coverage.
+lems for each domain; this test set, indicated with Tset, was
+                                                                         The experimental results of Table 1 and Figure 3 indi-
+    2PLANGPT and our datasets are available at                        cate that the standard loss function of GPT-2 is not fully ad-
+https://github.com/aiunibs/planGPT
+
+                                                                 505
+(a) Cross Entropy Loss of PLANGPT.                                    (b) Coverage Early Stopping of PLANGPT.
+
+Figure 3: Cross Entropy Loss (on the left) and Coverage Early Stopping (on the right) for each epochs in the training phase
+of PLANGPT for DEPOTS, FLOORTILE, and SATELLITE domain on the validation set. The black marker indicates the training
+termination when the Cross Entropy Loss is at its minimum. The red marker indicates the termination of the training when
+Coverage Early Stopping is at its minimum.
+
+equate to learn planning policies because we can observe              (IPC). For this experiment we use CES and the Sampling
+that an improvement in the plan generation can be obtained            generation strategy, which we observed to perform gener-
+with a worsening of the loss function at training time. As            ally better than the other two implemented strategies. When
+we already noticed, a possible reason is that the standard            an object name in an IPC problem is not in the PLANGPT
+loss forces the model to imitate the target plan (the sample          vocabulary, a name for that object is randomly selected from
+label), limiting the model capabilities of generating a valid         the vocabulary, saving it into a conversion table. However, if
+plan that is different from the target one.                           the number of objects is higher than those in the vocabulary,
+                                                                      the problem cannot be attempted by PLANGPT. This is the
+   We have also performed an analysis of the invalid plans            case only for 4% of the IPC problems in the eight consid-
+generated by PLANGPT with aim of understanding its main               ered domains (2 problems in DEPOTS, 3 in SATELLITE and
+mistakes. Most of the errors in the invalid plans are related         2 in ZENOTRAVEL). In the following, we will consider both
+to a violation of a precondition. In particular, for LOGIS-           sets of test sets, the original set without the problems that
+TICS the trained GPT-based model selects an object that is            PLANGPT cannot attempt (IPC- test set) and the original
+not in the correct location for the truck/plane loading action.       one (IPC test set).
+Therefore, we argue that the main difficulty for the model is
+understanding the relation of the objects involved in a single           The results of this experiment are in Table 2. PLANGPT
+action (the truck and the package must be in the same posi-           solves all IPC problems in the domains of BLOCKSWORLD,
+tion to perform a load-truck action). For the invalid plans in        FLOORTILE and ZENOTRAVEL, and a very high percent-
+SATELLITE, PLANGPT generates take-image actions with                  age of problems in the domains of DEPOTS, VISITALL and
+unsatisfied preconditions of type supports instrument mode.           DRIVERLOG. These remarkable results are especially inter-
+This is because, before these actions, PLANGPT powers on,             esting for FLOORTILE because its IPC problems have nu-
+points, and calibrates the wrong instruments (that do not             merous dead-ends and different grid conformations, which
+support the mode needed later by the take-image actions).             make them hard to solve for state-of-the art planners such
+                                                                      as LAMA (Richter and Westphal 2010) and FastDownward
+   Finally, we have evaluated PLANGPT to perform plan                 (Helmert 2006) (e.g., LAMA solves only 2 of the 20 FLOOR-
+completion tasks rather than plan generation from scratch.            TILE problems with run time limit of 10 minutes). The do-
+In this setting, in input we have the additional information of       main for which we observe the lowest performance is LO-
+a plan prefix (an initial sub-sequence of its actions), and we        GISTICS, where only 53.3% of IPC problems are correctly
+ask the system to complete the plan. Overall the results are          solved. The observed performances for the original and the
+promising, reaching performances higher than when plan-               restricted (IPC-) test sets are similar, with lower perfor-
+ning from scratch. E.g., for LOGISTICS (the domain with the           mance for the original set because the 4% problems that are
+worst performance in Table 1), using the Sampling strategy            not attempted are counted as unsolved problems in the re-
+and an input plan prefix of 10%, 20%, 40% and 60% of a                sults for the original test set.
+valid plan, the obtained performance in term of coverage is
+79.9%, 83.1%, 86.1%, and 90%, respectively.                           Comparison with the State of the Art
+
+Evaluation with the IPC Benchmarks                                    We compare PLANGPT and state-of-the-art deep learning
+                                                                      models for computing general policies. We consider Plans-
+In this section, we evaluate PLANGPT using benchmark                  former (Pallagani et al. 2023) and the Graph Neural Net-
+problems from the International Planning Competition
+
+                                                                 506
+Domain            IPC- test set  IPC test set                               cessor state; this is repeated for such successor state, and
+                                                                            so on until a state satisfying the goal is reached. The GNN
+BLOCKSWORLD            100.0        100.0                                   models were trained by the authors with the IPC problems,
+DEPOTS                 95.0          86.4                                   augmenting the training set with traces obtained during the
+DRIVERLOG              95.0          95.0                                   heuristic search of planner BFWS (Lipovetzky and Geffner
+FLOORTILE              100.0        100.0                                   2017). Therefore, we can not use the IPC problems also as
+LOGISTICS              53.3          53.3                                   test set, and so we use our test set (Tset) as benchmark.
+SATELLITE              70.6          60.0
+VISITALL               95.0          95.0                                      Table 3 shows the performance of PLANGPT and GNN
+ZENOTRAVEL             100.0         90.0                                   in terms of coverage and IPC scores. For BLOCKSWORLD,
+                                                                            given that the GNN models were trained with the IPC bench-
+Table 2: Coverage of PLANGPT using the Sampling strat-                      marks, in which the goal of every problem has exactly one
+egy and CES on the IPC/IPC- test sets.                                      tower of blocks, for testing we considered only the instances
+                                                                            in Tset with one tower. Nonetheless, PLANGPT solves all
+        Coverage  IPC-A          IPC-Q                                      these problems while GNN solves only 81.4% of them.
+
+Domain  GPT GNN GPT GNN GPT GNN                                                For LOGISTICS, PLANGPT obtains a coverage of 77.3%
+                                                                            versus 21.6% of GNN. The authors of GNN notice that LO-
+BLOCKS 100.0 81.4 1763.1 1093.7 1847.1 1459.0                               GISTICS is a challenging domain for GNN due to its be-
+LOGISTICS 77.3 21.6 4752.2 791.7 5125.1 772.1                               longing to the C3 logic fragment (Ståhlberg, Bonet, and
+VISITALL 100.0 96.0 5754.5 3176.4 6046.4 6002.0                             Geffner 2022b). For this reason, they also modified this do-
+                                                                            main (changing the used fragment of logic to C2), adding
+Table 3: Comparison of PLANGPT (GPT) and GNN                                a predicate to link packages, trucks, and planes to loca-
+in terms of problem coverage, IPCScore-Agile (IPC-A)                        tions in the problems. With this modification of the domain,
+and IPCScore-Quality (IPC-Q) on the Tset test set.                          coverage increases to 44.7%, which is still lower than the
+BLOCKSWORLD is abbreviated with BLOCKS.                                     coverage result of PLANGPT. We also trained PLANGPT
+                                                                            with this modified version of LOGISTICS, observing a cover-
+works (GNNs) proposed in (Ståhlberg, Bonet, and Geffner                     age performance similar to the one of GNN. For VISITALL,
+2022b).                                                                     PLANGPT obtains a coverage of 100% versus 96% of GNN.
+
+   Plansformer is a transformer trained on code written in                     Regarding the comparison in terms of IPC scores reported
+several programming languages (CodeT5) and fine-tuned                       in Table 3, we observe that, for the considered domains,
+on planning problems. In general we observed that our                       PLANGPT performs generally better than GNN in terms of
+PLANGPT models perform much better than the available                       both run time to generate a valid plan (IPC-A column) and
+models of Plansformer. For instance, on the IPC problems                    length of the generated plan (IPC-Q column). Note that the
+of BLOCKSWORLD and DRIVERLOG the coverage results                           definitions of the IPC scores take account of the problems
+are 100% versus 11%, and 95% versus 5%, respectively.                       that are unsolved.
+Plansformer's inability to generalise to complex instances
+(the IPC benchmarks) could be explained by the excessive                                          Conclusions
+simplicity of the problems in its training set (up to 5 blocks
+in BLOCKSWORLD compared to 20 in our training dataset,                      We have investigated generalised planning as a deep learn-
+and up to 4 packages in DRIVERLOG compared to 25 in our                     ing task using transformer-based architectures. We propose a
+training). We tried to re-build Plansformer by fine-tuning                  system based on GPT, called PLANGPT, that learns to solve
+CodeT5 using our LOGISTICS and DRIVERLOG datasets.                          an extensive class of problems for a given planning domain.
+Even in this case, Plansformer obtained much lower perfor-                  Our training procedure exploits a technique that we designed
+mance for the two tested domains (coverage 30% and 5%                       to take into account the planning capability of the model in
+versus 53.3% and 95% of PLANGPT).                                           the validation phase, which we show helps to increase the
+                                                                            performance of the trained system w.r.t. just using the stan-
+   We now compare our GPT-based approach and the ap-                        dard cross-entropy loss.
+proach based on GNNs proposed in (Ståhlberg, Bonet, and
+Geffner 2022b), which in the following is indicated sim-                       An experimental analysis demonstrates the effectiveness
+ply with GNN. For this comparison we use three domains:                     of our approach. For several domains, PLANGPT solves the
+BLOCKSWORLD, LOGISTICS and VISITALL.3                                       large majority of the IPC benchmark problems, as well of
+                                                                            other larger test sets.
+   Starting from the problem initial state, GNN evaluates the
+successor states using a Graph Neural Network as heuristic                     Current and future work includes improving the training
+function, and chooses the action that leads to the best suc-                process through a tighter integration of planning knowledge
+                                                                            in the loss function, and to overcome the current limits due
+    3We could not use the other domains examined in (Ståhlberg,             to maximum number of objects in the vocabulary and the
+Bonet, and Geffner 2022b) because either they are too simple, or no         length of the context window. Finally we are exploring the
+generator is available, or they have particularly long lists of pred-       use of PLANGPT to provide useful plan seeds to a plan-
+icates in the problems that exceed the PLANGPT context window               repair system like LPG with very encouraging preliminary
+(2048 tokens). This implementation limitation could be solved by            results.
+using GPT models with larger context windows.
+
+                                                                       507
+                 Acknowledgements                                   Petroni, F.; Rocktäschel, T.; Riedel, S.; Lewis, P. S. H.;
+                                                                    Bakhtin, A.; Wu, Y.; and Miller, A. H. 2019. Language Mod-
+This work was supported by EU H2020 project AIPlan4EU               els as Knowledge Bases? In EMNLP/IJCNLP (1), 2463­
+(GA 101016442), EU ICT-48 2020 project TAILOR (GA                   2473. Association for Computational Linguistics.
+952215), MUR PRIN project RIPER (No. 20203FFYLK),
+and Climate Change AI project (No. IG-2023-174).                    Radford, A.; and Narasimhan, K. 2018. Improving Lan-
+                                                                    guage Understanding by Generative Pre-Training. In
+                       References                                   preprint. api.semanticscholar.org/CorpusID:49313245.
+
+Arora, D.; and Kambhampati, S. 2023. Learning and Lever-            Richter, S.; and Westphal, M. 2010. The LAMA Planner:
+aging Verifiers to Improve Planning Capabilities of Pre-            Guiding Cost-Based Anytime Planning with Landmarks. J.
+trained Language Models. CoRR, abs/2305.17077.                      Artif. Intell. Res., 39: 127­177.
+
+Chen, D.; Thiébaux, S.; and Trevizan, F. 2024. Learning             Seipp, J.; Torralba, Á.; and Hoffmann, J. 2022. PDDL Gen-
+Domain-Independent Heuristics for Grounded and Lifted               erators, https://github.com/AI-Planning/pddl-generators.
+Planning. In AAAI. AAAI Press.
+                                                                    Serina, L.; Chiari, M.; Gerevini, A. E.; Putelli, L.; and Se-
+Devlin, J.; Chang, M.; Lee, K.; and Toutanova, K. 2019.             rina, I. 2022. A Preliminary Study on BERT applied to
+BERT: Pre-training of Deep Bidirectional Transformers for           Automated Planning. In IPS/AI*IA, volume 3345. CEUR-
+Language Understanding. In NAACL-HLT (1), 4171­4186.                WS.org.
+Association for Computational Linguistics.
+                                                                    Srivastava, S.; Immerman, N.; and Zilberstein, S. 2008.
+Gerevini, A.; and Serina, I. 2002. LPG: A Planner Based             Learning Generalized Plans Using Abstract Counting. In
+on Local Search for Planning Graphs with Action Costs. In           AAAI, 991­997. AAAI Press.
+AIPS, 13­22. AAAI Press.
+                                                                    Srivastava, S.; Immerman, N.; and Zilberstein, S. 2011. A
+Geva, M.; Khashabi, D.; Segal, E.; Khot, T.; Roth, D.; and          new representation and associated algorithms for general-
+Berant, J. 2021. Did Aristotle Use a Laptop? A Question             ized planning. Artif. Intell., 175(2): 615­647.
+Answering Benchmark with Implicit Reasoning Strategies.
+Trans. Assoc. Comput. Linguistics, 9: 346­361.                      Ståhlberg, S.; Bonet, B.; and Geffner, H. 2022a. Learning
+                                                                    General Optimal Policies with Graph Neural Networks: Ex-
+Goodfellow, I.; Bengio, Y.; and Courville, A. 2016. Deep            pressive Power, Transparency, and Limits. In ICAPS, 629­
+Learning. MIT Press. http://www.deeplearningbook.org.               637. AAAI Press.
+
+Groshev, E.; Goldstein, M.; Tamar, A.; Srivastava, S.; and          Ståhlberg, S.; Bonet, B.; and Geffner, H. 2022b. Learning
+Abbeel, P. 2018. Learning Generalized Reactive Policies             Generalized Policies without Supervision Using GNNs. In
+Using Deep Neural Networks. In ICAPS, 408­416. AAAI                 KR, 474­483. IJCAI Org.
+Press.
+                                                                    Toyer, S.; Thiébaux, S.; Trevizan, F. W.; and Xie, L. 2020.
+Helmert, M. 2006. The Fast Downward Planning System. J.             ASNets: Deep Learning for Generalised Planning. J. Artif.
+Artif. Intell. Res., 26: 191­246.                                   Intell. Res., 68: 1­68.
+
+Howey, R.; Long, D.; and Fox, M. 2004. VAL: Automatic               Valmeekam, K.; Hernandez, A. O.; Sreedharan, S.; and
+Plan Validation, Continuous Effects and Mixed Initiative            Kambhampati, S. 2022. Large Language Models Still Can't
+Planning Using PDDL. In ICTAI, 294­301. IEEE Computer               Plan (A Benchmark for LLMs on Planning and Reasoning
+Society.                                                            about Change). CoRR, abs/2206.10498.
+
+Hu, Y.; and De Giacomo, G. 2011. Generalized Planning:              Valmeekam, K.; Sreedharan, S.; Marquez, M.; Hernandez,
+Synthesizing Plans that Work for Multiple Environments. In          A. O.; and Kambhampati, S. 2023. On the Planning Abilities
+IJCAI, 918­923. IJCAI Org.                                          of Large Language Models (A Critical Investigation with a
+                                                                    Proposed Benchmark). CoRR, abs/2302.06706.
+Jiang, Z.; Xu, F. F.; Araki, J.; and Neubig, G. 2020. How
+Can We Know What Language Models Know. Trans. Assoc.                Vaswani, A.; Shazeer, N.; Parmar, N.; Uszkoreit, J.; Jones,
+Comput. Linguistics, 8: 423­438.                                    L.; Gomez, A. N.; Kaiser, L.; and Polosukhin, I. 2017. At-
+                                                                    tention is All you Need. In NIPS, 5998­6008. Curran Asso-
+Jumper, J.; Evans, R.; Pritzel, A.; Green, T.; Figurnov, M.;        ciates Inc.
+Ronneberger, O.; Tunyasuvunakool, K.; Bates, R.; Zídek,
+A.; Potapenko, A.; Bridgland, A.; Meyer, C.; Kohl, S.; Bal-         Wang, Y.; Wang, W.; Joty, S. R.; and Hoi, S. C. H. 2021.
+lard, A.; Cowie, A.; Romera-Paredes, B.; Nikolov, S.; Jain,         CodeT5: Identifier-aware Unified Pre-trained Encoder-
+R.; Adler, J.; and Hassabis, D. 2021. Highly accurate protein       Decoder Models for Code Understanding and Generation.
+structure prediction with AlphaFold. Nature, 596: 1­11.             In EMNLP (1), 8696­8708. Association for Computational
+                                                                    Linguistics.
+Lipovetzky, N.; and Geffner, H. 2017. Best-First Width
+Search: Exploration and Exploitation in Classical Planning.         Welleck, S.; Kulikov, I.; Kim, J.; Pang, R. Y.; and Cho, K.
+In AAAI, 3590­3596. AAAI Press.                                     2020. Consistency of a Recurrent Language Model With Re-
+                                                                    spect to Incomplete Decoding. In EMNLP (1), 5553­5568.
+Pallagani, V.; Muppasani, B.; Srivastava, B.; Rossi, F.;            Association for Computational Linguistics.
+Horesh, L.; Murugesan, K.; Loreggia, A.; Fabiano, F.;
+Joseph, R.; and Kethepalli, Y. 2023. Plansformer Tool:
+Demonstrating Generation of Symbolic Plans Using Trans-
+formers. In IJCAI, 7158­7162. IJCAI Org.
+
+                                                               508
+

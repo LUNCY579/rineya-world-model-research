@@ -52,9 +52,22 @@ def plan(src: Path):
         if (src / d).exists():
             keep.append((src / d, Path("docs") / d))
     b3_open = (src / "runs/BW_B3_EVAL/B3_REPORT.json").exists()
-    for p in sorted((src / "research").glob("*")):
-        if p.is_file():
-            keep.append((p, Path("docs/research") / p.name))
+    for p in sorted((src / "research").rglob("*")):  # incl. audit_evidence/, b4_exclusions/, b5_macros/ (D-75)
+        if p.is_file() and "__pycache__" not in p.parts:
+            rp = p.relative_to(src / "research").parts
+            # never: git internals / third-party clones and papers (personal data, redistribution), weights or
+            # training rows even as test stubs (D-51)
+            if any(x == ".git" or x == "llmsp" or x == "pb2022" or x.startswith("dl_") for x in rp) or \
+                    p.suffix.lower() == ".pdf":
+                continue
+            if p.suffix == ".safetensors" or p.name.endswith("_train.jsonl") or p.name == "distill_rows.jsonl" or \
+                    (p.name.startswith("mix_") and p.suffix == ".jsonl"):
+                excluded.append((p, "weights or training rows inside research evidence (never exported; D-51)"))
+                continue
+            if p.stat().st_size > MAX_BYTES:
+                excluded.append((p, "larger than 25 MB"))
+                continue
+            keep.append((p, Path("docs/research") / p.relative_to(src / "research")))
     for d in CODE_DIRS:
         for p in sorted((src / d).rglob("*")):
             if p.is_file() and p.suffix in {".py", ".md"} and "__pycache__" not in p.parts:
@@ -87,7 +100,9 @@ def plan(src: Path):
         if p.name == "adapter_model.safetensors":
             excluded.append((p, "LoRA adapter weights (user decision 2026-10-08: no weights in the repo)"))
             continue
-        if SKIP_NAME.match(p.name):
+        evidence_cache = (p.name.startswith("fcache") and p.suffix == ".jsonl" and
+                          parts & {"BW_TEST_B2", "BW_B3_HARD", "BW_DISTILL_r1", "BW_SELECT_v1", "BW_B3_EVAL"})
+        if SKIP_NAME.match(p.name) and not evidence_cache:  # D-75: F caches of test/selection runs are evidence
             if p.name.startswith("fcache") or p.name.endswith((".jsonl",)):
                 excluded.append((p, "cache / training rows (regenerable)"))
             continue

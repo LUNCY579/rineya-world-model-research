@@ -1,0 +1,106 @@
+{
+ "modes": {
+  "canon": {
+   "n": 240,
+   "F0": 1.0,
+   "FK": 1.0,
+   "F0_ci95": [
+    0.9847,
+    1.0
+   ],
+   "FK_ci95": [
+    0.9847,
+    1.0
+   ],
+   "FK_only": 0,
+   "F0_only": 0,
+   "p_mcnemar": 1.0
+  },
+  "train_order": {
+   "n": 240,
+   "F0": 0.4542,
+   "FK": 1.0,
+   "F0_ci95": [
+    0.39,
+    0.5195
+   ],
+   "FK_ci95": [
+    0.9847,
+    1.0
+   ],
+   "FK_only": 131,
+   "F0_only": 0,
+   "p_mcnemar": 7.346839692639297e-40
+  },
+  "heldout_rev": {
+   "n": 240,
+   "F0": 0.4542,
+   "FK": 1.0,
+   "F0_ci95": [
+    0.39,
+    0.5195
+   ],
+   "FK_ci95": [
+    0.9847,
+    1.0
+   ],
+   "FK_only": 131,
+   "F0_only": 0,
+   "p_mcnemar": 7.346839692639297e-40
+  },
+  "heldout_other": {
+   "n": 240,
+   "F0": 0.4542,
+   "FK": 1.0,
+   "F0_ci95": [
+    0.39,
+    0.5195
+   ],
+   "FK_ci95": [
+    0.9847,
+    1.0
+   ],
+   "FK_only": 131,
+   "F0_only": 0,
+   "p_mcnemar": 7.346839692639297e-40
+  },
+  "heldout_both": {
+   "n": 240,
+   "F0": 0.4542,
+   "FK": 1.0,
+   "F0_ci95": [
+    0.39,
+    0.5195
+   ],
+   "FK_ci95": [
+    0.9847,
+    1.0
+   ],
+   "FK_only": 131,
+   "F0_only": 0,
+   "p_mcnemar": 7.346839692639297e-40
+  }
+ },
+ "reading": "generalises to unseen key orders",
+ "eval_seed": 20261013,
+ "adapters": {
+  "F0": "runs/BW_Fdelta_s0/adapter",
+  "FK": "runs/BW_Fdelta_ko_s0/adapter"
+ },
+ "provenance": {
+  "adapter_sha256": {
+   "F0": "87428fc522803d31065e7bce3cf03fe475096631e5e07bbd7a0fde60c4cf25c7",
+   "FK": "0263829989b6fd954f72baaf2fc64bc2e2f01d692d4de72986ea808f6e99813f"
+  },
+  "rows_sha256": "82ec3418cf052f470bf74d5351d769ce36061b4bd36b4b24958abf151729fa42",
+  "script_sha256": "945610442714159fcb7983ea57d3ea01502bc1ef785fc913fefe860338f79c0d",
+  "prereg_sha256": "6b704388bf7df07a3cb84ecb2330d42051d202eb8421b3bcba315c8e6fcd7965",
+  "items_sha256": "999bc91319c334c32c8ccbd32da7767bbb6964f59282c6908133009b34456acb",
+  "device": "cpu",
+  "versions": {
+   "torch": "2.6.0+cu124",
+   "transformers": "5.14.1",
+   "peft": "stub"
+  }
+ }
+}
