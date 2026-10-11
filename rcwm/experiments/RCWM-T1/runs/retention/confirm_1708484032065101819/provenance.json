@@ -1,0 +1,184 @@
+{
+ "draw_id": "confirm_1708484032065101819",
+ "draw_sha256": "864481a3adffbb90d620a3caea6bc37c6b1862f8b7f0338535affeb1e463b19b",
+ "seal_sha256": "528e1e016325d72ea4385f7a8d4d4c1c6427e3d12791ab1348a04a2facd15303",
+ "mode": "confirm",
+ "freeze_sha256": "b32ef14822d498ca9660bed0c1cc1ee83a88d7eff30b2098a03d3ae803c4634b",
+ "registered": true,
+ "sides": {
+  "SPARSE": [
+   "off",
+   "t2s0",
+   "x_bwf",
+   "x_bwpa"
+  ],
+  "SUPA": [
+   "supa"
+  ]
+ },
+ "adapters": {
+  "t2s0": {
+   "dir": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\t2\\t2_s0\\adapter",
+   "base": "sparse",
+   "sha256": {
+    "adapter_model.safetensors": "92bc7c7497c3cb2fc0c7c917b4f3b6bb931f0ed108144d969b26b18b42670b8a",
+    "adapter_config.json": "50d9a776e093a952ac440a77c9cd7cd8e51eb22a85eb93b383aee1eacc185d9d"
+   },
+   "base_model_name_or_path": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Published_Cores\\Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze"
+  },
+  "x_bwf": {
+   "dir": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\BW_Fdelta_s0\\adapter",
+   "base": "sparse",
+   "sha256": {
+    "adapter_model.safetensors": "2ed0bb0064bc6b11ec9c661840a38094e468462cea2ff833cda3bf234ead65ae",
+    "adapter_config.json": "3038c77961f33461e1bef736959765434c0be473d991b0ef92c4813d269b3b8c"
+   },
+   "base_model_name_or_path": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Published_Cores\\Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze"
+  },
+  "x_bwpa": {
+   "dir": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\BW_Pa_v2_s1\\adapter",
+   "base": "sparse",
+   "sha256": {
+    "adapter_model.safetensors": "ee1c5aec5e4a55e30f6df0e30a3cd68242c928cd158f9e5cf06184f409108110",
+    "adapter_config.json": "f6a2c4efb381678ac44bebef1165d84d587a81e72c8a8ea1c27062f2bc7494bf"
+   },
+   "base_model_name_or_path": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Published_Cores\\Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze"
+  }
+ },
+ "tokenizer": {
+  "dir": "C:\\Users\\clclc\\BusinessProject\\Chat-Bubble\\Rineya_Published_Cores\\Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze",
+  "files": {
+   "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+   "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+   "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+   "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "chat_template_sha256_pin": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8"
+ },
+ "max_new_tokens": 48,
+ "lp": true,
+ "stages": {
+  "SPARSE": {
+   "name": "SPARSE",
+   "turn": 0,
+   "generations": 1800,
+   "seconds": 425.5,
+   "pid": 235980,
+   "sides": {
+    "off": {
+     "pid": 235980,
+     "start_unix": 1791710320.8438919,
+     "end_unix": 1791710416.8239136
+    },
+    "t2s0": {
+     "pid": 235980,
+     "start_unix": 1791710416.8239136,
+     "end_unix": 1791710520.5973732
+    },
+    "x_bwf": {
+     "pid": 235980,
+     "start_unix": 1791710520.5973732,
+     "end_unix": 1791710626.736876
+    },
+    "x_bwpa": {
+     "pid": 235980,
+     "start_unix": 1791710626.736876,
+     "end_unix": 1791710739.1742587
+    }
+   },
+   "first_token_agreement": {
+    "off": 1.0,
+    "t2s0": 1.0,
+    "x_bwf": 1.0,
+    "x_bwpa": 1.0
+   },
+   "finished_unix": 1791710739.4215047,
+   "files": {
+    "sparse/gen_off.jsonl": "38530207d335b66321aaed249a4cb22a8b0a90f6fb2448a33898efac3d31ab9d",
+    "sparse/gen_t2s0.jsonl": "fca3106df19b37ebdc89f59ac4a89b5a03958809164a890f16d043891124a0aa",
+    "sparse/gen_x_bwf.jsonl": "7437d3c25f73da0c6b186301841e11bcbd1cbe1b2fcdf0df8f511914baf6d563",
+    "sparse/gen_x_bwpa.jsonl": "c72185b32fb2b528cbd468fa459441cd3377788a8a2ab0490ac842d4e4168912",
+    "sparse/lp_off.npy": "c0bfa5785f8cc7e39ed4671aea9adbd4ba35c99978d5bd36366079dbf2f53c8c",
+    "sparse/lp_t2s0.npy": "8331f9d4fd162112f9d6780dda92648a5984a827ccc2479cc008bbd9641572d2",
+    "sparse/lp_x_bwf.npy": "35531f0ae196250d340324b36a6c581bc2c70d4da5d9794f25d008c7d4918234",
+    "sparse/lp_x_bwpa.npy": "36bf8d7260f79fd1ae1040282158620cef1fb15d25619f04fe3bef63e5c8b049"
+   }
+  },
+  "SUPA": {
+   "name": "SUPA",
+   "turn": 0,
+   "generations": 450,
+   "seconds": 98.8,
+   "pid": 235980,
+   "sides": {
+    "supa": {
+     "pid": 235980,
+     "start_unix": 1791710741.2766635,
+     "end_unix": 1791710838.388248
+    }
+   },
+   "first_token_agreement": {
+    "supa": 1.0
+   },
+   "finished_unix": 1791710838.6849372,
+   "files": {
+    "supa/gen_supa.jsonl": "c0c1ed5ecdfe6fcc03a752e4a51e745a0a85678587dff134c4ed4050ea821c80",
+    "supa/lp_supa.npy": "7d4b191ca70f5d0be35c5c579180d51d118780fd81cfd6b0035f2fa28f1d060c"
+   }
+  }
+ },
+ "turns": [
+  {
+   "pid": 235980,
+   "acquired_unix": 1791710313.8165865,
+   "acquired_source": "lock record",
+   "entered_unix": 1791710313.9361453,
+   "stages_run": [
+    "SPARSE",
+    "SUPA"
+   ],
+   "deferred": [],
+   "device": "cuda",
+   "sparse_runtime": {
+    "python": "3.11.15",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.14.1",
+    "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+    "tf32": false,
+    "use_cache": false,
+    "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+   },
+   "sparse_versions": {
+    "peft": "0.20.0"
+   },
+   "sparse_load_s": 6.5,
+   "sparse_chat_template_sha256": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+   "supa_runtime": {
+    "python": "3.11.15",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.14.1",
+    "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+    "tf32": false,
+    "use_cache": false,
+    "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+   },
+   "supa_versions": {
+    "peft": null
+   },
+   "supa_load_s": 1.0,
+   "supa_chat_template_sha256": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+   "released_unix": 1791710838.7760303
+  }
+ ],
+ "code_sha256": {
+  "scripts/ret_run.py": "a560feab98b1b74a6ffbb954dedb89d27a76e80b598bc01f35aef4df4b6f645e",
+  "scripts/ret_common.py": "60fb6c736ce0ba34114b7ffa6e9df0fd03a5c5451c8514b031579d2fa1452a24",
+  "scripts/ret_gen.py": "6fe3b331a5bf49b98754d774843ad190335f2d3293ca7b1144d957b6b25399c7",
+  "scripts/ret_grade.py": "13b2696c6efd7968c5d82032873cb81d292529897dd23f26eaa48736fd861611",
+  "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+  "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+  "rcwmt/lease_vendored.py": "d1576bb9296c6bd033dd677c0f8cbe18c9bc24939f75bba30d740429b2ec36c9"
+ },
+ "sparse_fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+ "supa_fingerprint": "a9952c55f5a196d54981dab94a3ab54c6a54b222790d751caa8e39e07276e9c2"
+}

@@ -4067,3 +4067,73 @@ SCREEN (seed 0): NO-GO (failed: G2 [mix, mix HS]; G3 [mix]; G4 [swap])
 === 2026-10-11T00:26:58-05:00 start scripts/ret_run.py --mode confirm --draw docs/retention/draws/confirm_1708484032065101819.jsonl --extra-adapter bwf=C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/BW_Fdelta_s0/adapter --extra-adapter bwpa=C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/BW_Pa_v2_s1/adapter
 [retention] confirm_1708484032065101819 (confirm): stages to run ['SPARSE', 'SUPA']
   [gpu-lease] waiting: foreign python pid 229080 (3.47 GiB dedicated GPU memory)
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:retention token=ea3103d5
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:19,  3.87it/s]Loading weights:  15%|#5        | 48/310 [00:00<00:01, 169.65it/s]Loading weights:  31%|###1      | 97/310 [00:00<00:00, 277.42it/s]Loading weights:  47%|####7     | 146/310 [00:00<00:00, 340.88it/s]Loading weights:  62%|######1   | 192/310 [00:00<00:00, 373.36it/s]Loading weights:  78%|#######7  | 241/310 [00:00<00:00, 405.88it/s]Loading weights:  93%|#########2| 287/310 [00:00<00:00, 420.97it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 336.76it/s]
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[retention] SPARSE/off: 450 prompts in 96s
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[retention] SPARSE/t2s0: 450 prompts in 104s
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[retention] SPARSE/x_bwf: 450 prompts in 106s
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[retention] SPARSE/x_bwpa: 450 prompts in 112s
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:34,  3.27it/s]Loading weights:  25%|##4       | 77/310 [00:00<00:00, 241.44it/s]Loading weights:  49%|####9     | 152/310 [00:00<00:00, 396.94it/s]Loading weights:  72%|#######1  | 223/310 [00:00<00:00, 485.30it/s]Loading weights:  97%|#########6| 300/310 [00:00<00:00, 556.44it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 424.05it/s]
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[retention] SUPA/supa: 450 prompts in 97s
+  [gpu-lease] released rineya-gpu-0.lock
+[retention] all stages complete; DONE.json written
+=== 2026-10-11T04:27:19-05:00 exit rc=0 scripts/ret_run.py --mode confirm --draw docs/retention/draws/confirm_1708484032065101819.jsonl --extra-adapter bwf=C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/BW_Fdelta_s0/adapter --extra-adapter bwpa=C:/Users/clclc/BusinessProject/WorldModel/Rineya_BWM_001_Research_Bundle/native_v1/runs/BW_Pa_v2_s1/adapter
+=== 2026-10-11T04:27:19-05:00 start scripts/ret_analysis.py analyze --run runs/retention/confirm_1708484032065101819
+{
+ "t2s0_vs_off": [
+  "RETAINED",
+  "GO (5/5 binding)",
+  "gating"
+ ],
+ "x_bwf_vs_off": [
+  "RETAINED",
+  "GO (5/5 binding)",
+  "gating"
+ ],
+ "x_bwpa_vs_off": [
+  "RETAINED",
+  "GO (5/5 binding)",
+  "gating"
+ ],
+ "sparse_vs_supa": [
+  "LOSS DETECTED",
+  "NO-GO",
+  "report-only"
+ ],
+ "t2s0_vs_supa": [
+  "LOSS DETECTED",
+  "NO-GO",
+  "report-only"
+ ]
+}
+=== 2026-10-11T04:27:32-05:00 exit rc=0 scripts/ret_analysis.py analyze --run runs/retention/confirm_1708484032065101819
+=== 2026-10-11T04:27:32-05:00 start scripts/t2bp_run.py --tag sd_s1 --seed 1 --arms bbits
+[t2bp] reclaiming a stale run lock {'pid': 231084, 'create_time': 1791694360.2499428, 'started_utc': '2026-10-11T04:52:45Z'}
+[t2bp] stages to run: {'bbits': ['T', 'E1', 'E2', 'E3', 'E4']}
+  [gpu-lease] waiting: lock held by another session

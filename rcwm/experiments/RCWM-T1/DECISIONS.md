@@ -983,3 +983,29 @@ Times are local (CDT). Entries are append-only.
   - **Cause:** every hit came from `Rineya_BWM_001_Research_Bundle/gh_export/rcwm/.../docs/retention/draws/dev_20261121.jsonl`. That was BWM's git clone of the shared repo, which mirrors RCWM's own dev draw. The frozen scan treats BWM's bundle root as an external corpus, so a false positive.
   - **Fix:** BWM moved the clone to `WorldModel/bwm-gh-export` (BWM D-68). No frozen runner was amended. The hook's marker was never written, so the next chain pass mints afresh; this is not draw shopping, since no draw was ever produced.
   - **Re-mint (00:23–00:27, 2026-10-11):** draw `confirm_1708484032065101819`, 450 prompts, sealed sha 864481a3…. The freshness gate passed, and the marker `docs/retention/BWM_RELEASE_DRAW.txt` was written. The chain was relaunched at a waiting point before this, so the BWM-adapter retention run is the single RCWM waiter, with hooks 87 and 88 after it.
+- **D-49 Joint rule from R23, adopted by both programmes (BWM X-04).**
+  - **Control-skill rows:** every adapter's training data includes control-skill rows for every operation the adapter must keep, and the retention of untouched operations is reported with every result.
+  - **Scope:** this is binding for PREREG-4. RCWM's T2b-ledger kit covers it already: its data keep all event kinds on posted twins, and the 5c guard is part (c). Any revised register kit must add swap and add rows.
+  - **BWM:** an RW2 legality trace arm (A3) is pre-registered with a false-copy metric and a bitstring arm.
+- **R24 BWM D-54 key-order retrain: registered reading PARTIAL (BWM P-12; RCWM records only).**
+  - **Results** (BW delta world model, 240 fresh keys): FK vs F0
+    - held-out reversal 0.917 vs 0.454;
+    - other held-out orders 0.950 vs 0.496;
+    - trained orders 0.925 vs 0.550;
+    - canonical 0.963 vs 0.992 (0/7 discordant, p = 0.016).
+  - **Why PARTIAL:** not "generalises", because the reversal is below the 0.95 bar and canonical fell by more than 0.01. Not "trigger widened", because held-out equals trained-order accuracy, far above F0.
+  - **Mechanism (report-only):** FK's errors are almost all on illegal actions (canonical: illegal 100/109 right, legal 131/131). Input augmentation bought order invariance and cost the computed legality predicate.
+  - **Implications for RCWM:**
+    - (1) T2b-ledger's frozen gate already guards this failure mode: G2 non-inferiority to T2 s0 in distribution, G3 posted twins on the held-out surface, G4 alignment with its own ID_void accuracy. The kit is kept as frozen, and the dev screen will show whether diversity erodes the status no-op.
+    - (2) PREREG-4: a surface-diversified combined adapter should carry the joint cmp/calc/after trace for every computed predicate in the same training (R23, R24), plus control rows (D-49).
+- **R25 5c retention confirmation on BWM's release adapters and T2 s0 (04:27, 2026-10-11).**
+  - **Run:** draw confirm_1708484032065101819 (450 prompts, sha 864481a3…), one RCWM turn (lease 04:18:33; 9 min). Analysis ran once: `RET_RESULTS.json` fae050af…, `.md` 1af4c3ac….
+  - **Gated comparisons, each vs Titan-Sparse OFF** (5 categories, 75 items each; Holm-McNemar, category net below −11 or pooled net below −4%, both graders): all **RETAINED, GO (5/5 binding)**.
+    - T2 s0: pooled net +22 (primary) / +0 (lenient). Gains in kv_recall +11 and unknown_twin +9.
+    - BWM BW_Fdelta_s0: −3 / −5. Report-only flags: unit_conv −7, unknown_twin −6.
+    - BWM BW_Pa_v2_s1: +9 / −10.
+  - **Report-only:**
+    - Titan-Sparse vs Supa 1.7: LOSS DETECTED. unit_conv falls 49 → 30 of 75 (−19, Holm p 0.0008); pooled −29 / −22. Titan's own delta lost unit conversion relative to Supa, consistent with RCI-001's abstention-loss evidence.
+    - T2 s0 vs Supa: unit_conv inherits the same loss.
+    - Per-item first-token KL predicts correctness flips only weakly (AUROC 0.613–0.759), supporting "measure retention by correctness".
+  - **Consequence:** BWM's release gate gets its retention evidence (reported to BWM as computed). Any vault or HF decision remains the user's. The unit_conv loss belongs to Titan-Sparse itself, not to any adapter, and is a caveat for any Titan-based release card.

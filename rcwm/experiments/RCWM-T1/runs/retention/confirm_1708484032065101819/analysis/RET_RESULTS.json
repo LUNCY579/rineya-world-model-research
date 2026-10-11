@@ -1,0 +1,1743 @@
+{
+ "rule": "For each gating comparison of an arm A with its reference R (T2 s0 ON vs adapter OFF = Titan-Sparse; each extra Titan-Sparse adapter vs OFF; each extra Supa adapter vs Supa 1.7) on a sealed confirmation draw minted after the dev selection of its surface-diversity setting, for each of the two graders g (the primary typed grader and the lenient extraction grader) and each selected category c (75 items): lost = items R answers correctly and A does not; gained = items A answers correctly and R does not; net = gained - lost (an unknown_twin item is correct only if both twins are). p = two-sided exact McNemar p-value (binomial on the lost + gained discordant items, 1/2); p_Holm = Holm-Bonferroni adjustment of p over the selected categories of that comparison and grader. Category c has a DETECTED LOSS under g iff lost > gained and p_Holm < 0.05, and EXCEEDS ITS MARGIN under g iff net < -11 (more than 11 of its 75 items lost net). The pooled net under g is the sum of net over the selected categories; it EXCEEDS ITS MARGIN iff it is below -0.04 x the number of selected items (-24 for 600 items). Comparison verdict: LOSS DETECTED iff some category has a detected loss under either grader; otherwise MARGIN EXCEEDED iff some category or the pooled net exceeds its margin under either grader; otherwise RETAINED. GO (the retention guard passes for arm A) iff RETAINED, reported as GO (k/m binding), where k of the m selected categories are binding, i.e. R answers at least the fewest items whose loss with no gain would fail the category alone (9 when 8 categories are selected); LOSS DETECTED and MARGIN EXCEEDED are NO-GO. Report-only, never gating: the per-category flag net < -5 of 75 (a point estimate, not a non-inferiority test), Titan-Sparse (OFF) vs Supa 1.7 and T2 s0 vs Supa 1.7 (core and cumulative drift, verdicts computed the same way), excluded categories, accuracies with Wilson 95% intervals, EOS-termination rates, abstention components, the operating characteristics, and the AUROC of the per-item first-token KL(R || A) for predicting correctness flips. The suite is templated and narrow: a RETAINED verdict is a floor, not a proof of general retention.",
+ "draw_id": "confirm_1708484032065101819",
+ "draw_sha256": "864481a3adffbb90d620a3caea6bc37c6b1862f8b7f0338535affeb1e463b19b",
+ "selection_sha256": "2a4d15febf147ccc14ddf67a8df2c82360314e0208c48dab30a0f368b6da0836",
+ "surface_diversity": false,
+ "registered": true,
+ "categories": [
+  "unit_conv",
+  "pct_ratio",
+  "kv_recall",
+  "unknown_twin",
+  "format_follow"
+ ],
+ "levels": {
+  "unit_conv": [
+   1
+  ],
+  "pct_ratio": [
+   1
+  ],
+  "kv_recall": [
+   3
+  ],
+  "unknown_twin": [
+   2
+  ],
+  "format_follow": [
+   1
+  ]
+ },
+ "accuracy": {
+  "off": {
+   "unit_conv": {
+    "correct": 30,
+    "n": 75,
+    "acc": 0.4,
+    "wilson95": [
+     0.2966,
+     0.5131
+    ],
+    "lenient_correct": 30
+   },
+   "pct_ratio": {
+    "correct": 37,
+    "n": 75,
+    "acc": 0.4933,
+    "wilson95": [
+     0.3833,
+     0.604
+    ],
+    "lenient_correct": 37
+   },
+   "kv_recall": {
+    "correct": 52,
+    "n": 75,
+    "acc": 0.6933,
+    "wilson95": [
+     0.5817,
+     0.7861
+    ],
+    "lenient_correct": 65
+   },
+   "unknown_twin": {
+    "correct": 54,
+    "n": 75,
+    "acc": 0.72,
+    "wilson95": [
+     0.6096,
+     0.809
+    ],
+    "lenient_correct": 75
+   },
+   "format_follow": {
+    "correct": 52,
+    "n": 75,
+    "acc": 0.6933,
+    "wilson95": [
+     0.5817,
+     0.7861
+    ],
+    "lenient_correct": 53
+   },
+   "_termination_rate": 1.0,
+   "_abstention": {
+    "unanswerable_literal_UNKNOWN": 1.0,
+    "unanswerable_abstains_lenient": 1.0,
+    "answerable_correct": 0.72,
+    "answerable_over_abstention": 0.0
+   }
+  },
+  "t2s0": {
+   "unit_conv": {
+    "correct": 26,
+    "n": 75,
+    "acc": 0.3467,
+    "wilson95": [
+     0.2488,
+     0.4595
+    ],
+    "lenient_correct": 26
+   },
+   "pct_ratio": {
+    "correct": 42,
+    "n": 75,
+    "acc": 0.56,
+    "wilson95": [
+     0.4475,
+     0.6667
+    ],
+    "lenient_correct": 42
+   },
+   "kv_recall": {
+    "correct": 63,
+    "n": 75,
+    "acc": 0.84,
+    "wilson95": [
+     0.7408,
+     0.906
+    ],
+    "lenient_correct": 67
+   },
+   "unknown_twin": {
+    "correct": 63,
+    "n": 75,
+    "acc": 0.84,
+    "wilson95": [
+     0.7408,
+     0.906
+    ],
+    "lenient_correct": 72
+   },
+   "format_follow": {
+    "correct": 53,
+    "n": 75,
+    "acc": 0.7067,
+    "wilson95": [
+     0.5956,
+     0.7976
+    ],
+    "lenient_correct": 53
+   },
+   "_termination_rate": 1.0,
+   "_abstention": {
+    "unanswerable_literal_UNKNOWN": 1.0,
+    "unanswerable_abstains_lenient": 1.0,
+    "answerable_correct": 0.84,
+    "answerable_over_abstention": 0.0
+   }
+  },
+  "x_bwf": {
+   "unit_conv": {
+    "correct": 23,
+    "n": 75,
+    "acc": 0.3067,
+    "wilson95": [
+     0.2139,
+     0.4183
+    ],
+    "lenient_correct": 23
+   },
+   "pct_ratio": {
+    "correct": 38,
+    "n": 75,
+    "acc": 0.5067,
+    "wilson95": [
+     0.396,
+     0.6167
+    ],
+    "lenient_correct": 38
+   },
+   "kv_recall": {
+    "correct": 59,
+    "n": 75,
+    "acc": 0.7867,
+    "wilson95": [
+     0.6812,
+     0.8642
+    ],
+    "lenient_correct": 68
+   },
+   "unknown_twin": {
+    "correct": 48,
+    "n": 75,
+    "acc": 0.64,
+    "wilson95": [
+     0.527,
+     0.7394
+    ],
+    "lenient_correct": 72
+   },
+   "format_follow": {
+    "correct": 54,
+    "n": 75,
+    "acc": 0.72,
+    "wilson95": [
+     0.6096,
+     0.809
+    ],
+    "lenient_correct": 54
+   },
+   "_termination_rate": 1.0,
+   "_abstention": {
+    "unanswerable_literal_UNKNOWN": 1.0,
+    "unanswerable_abstains_lenient": 1.0,
+    "answerable_correct": 0.64,
+    "answerable_over_abstention": 0.0
+   }
+  },
+  "x_bwpa": {
+   "unit_conv": {
+    "correct": 25,
+    "n": 75,
+    "acc": 0.3333,
+    "wilson95": [
+     0.2371,
+     0.4458
+    ],
+    "lenient_correct": 28
+   },
+   "pct_ratio": {
+    "correct": 38,
+    "n": 75,
+    "acc": 0.5067,
+    "wilson95": [
+     0.396,
+     0.6167
+    ],
+    "lenient_correct": 38
+   },
+   "kv_recall": {
+    "correct": 61,
+    "n": 75,
+    "acc": 0.8133,
+    "wilson95": [
+     0.7107,
+     0.8854
+    ],
+    "lenient_correct": 62
+   },
+   "unknown_twin": {
+    "correct": 58,
+    "n": 75,
+    "acc": 0.7733,
+    "wilson95": [
+     0.6666,
+     0.8534
+    ],
+    "lenient_correct": 70
+   },
+   "format_follow": {
+    "correct": 52,
+    "n": 75,
+    "acc": 0.6933,
+    "wilson95": [
+     0.5817,
+     0.7861
+    ],
+    "lenient_correct": 52
+   },
+   "_termination_rate": 1.0,
+   "_abstention": {
+    "unanswerable_literal_UNKNOWN": 0.9333,
+    "unanswerable_abstains_lenient": 0.9333,
+    "answerable_correct": 0.8267,
+    "answerable_over_abstention": 0.0
+   }
+  },
+  "supa": {
+   "unit_conv": {
+    "correct": 49,
+    "n": 75,
+    "acc": 0.6533,
+    "wilson95": [
+     0.5405,
+     0.7512
+    ],
+    "lenient_correct": 50
+   },
+   "pct_ratio": {
+    "correct": 37,
+    "n": 75,
+    "acc": 0.4933,
+    "wilson95": [
+     0.3833,
+     0.604
+    ],
+    "lenient_correct": 37
+   },
+   "kv_recall": {
+    "correct": 56,
+    "n": 75,
+    "acc": 0.7467,
+    "wilson95": [
+     0.6379,
+     0.8314
+    ],
+    "lenient_correct": 66
+   },
+   "unknown_twin": {
+    "correct": 58,
+    "n": 75,
+    "acc": 0.7733,
+    "wilson95": [
+     0.6666,
+     0.8534
+    ],
+    "lenient_correct": 75
+   },
+   "format_follow": {
+    "correct": 54,
+    "n": 75,
+    "acc": 0.72,
+    "wilson95": [
+     0.6096,
+     0.809
+    ],
+    "lenient_correct": 54
+   },
+   "_termination_rate": 1.0,
+   "_abstention": {
+    "unanswerable_literal_UNKNOWN": 1.0,
+    "unanswerable_abstains_lenient": 1.0,
+    "answerable_correct": 0.7733,
+    "answerable_over_abstention": 0.0
+   }
+  }
+ },
+ "comparisons": {
+  "t2s0_vs_off": {
+   "graders": {
+    "primary": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 30,
+       "arm_correct": 26,
+       "lost": 8,
+       "gained": 4,
+       "net": -4,
+       "discordant": 12,
+       "p": 0.3876953125,
+       "p_holm": 0.775390625,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 42,
+       "lost": 0,
+       "gained": 5,
+       "net": 5,
+       "discordant": 5,
+       "p": 0.0625,
+       "p_holm": 0.1875,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 52,
+       "arm_correct": 63,
+       "lost": 0,
+       "gained": 11,
+       "net": 11,
+       "discordant": 11,
+       "p": 0.0009765625,
+       "p_holm": 0.0048828125,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 54,
+       "arm_correct": 63,
+       "lost": 2,
+       "gained": 11,
+       "net": 9,
+       "discordant": 13,
+       "p": 0.0224609375,
+       "p_holm": 0.08984375,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 52,
+       "arm_correct": 53,
+       "lost": 0,
+       "gained": 1,
+       "net": 1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 10,
+      "gained": 32,
+      "net": 22,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": false
+     },
+     "detected": false,
+     "category_margin_exceeded": [],
+     "margin_exceeded": false
+    },
+    "lenient": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 30,
+       "arm_correct": 26,
+       "lost": 8,
+       "gained": 4,
+       "net": -4,
+       "discordant": 12,
+       "p": 0.3876953125,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 42,
+       "lost": 0,
+       "gained": 5,
+       "net": 5,
+       "discordant": 5,
+       "p": 0.0625,
+       "p_holm": 0.3125,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 65,
+       "arm_correct": 67,
+       "lost": 0,
+       "gained": 2,
+       "net": 2,
+       "discordant": 2,
+       "p": 0.5,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 75,
+       "arm_correct": 72,
+       "lost": 3,
+       "gained": 0,
+       "net": -3,
+       "discordant": 3,
+       "p": 0.25,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 53,
+       "arm_correct": 53,
+       "lost": 1,
+       "gained": 1,
+       "net": 0,
+       "discordant": 2,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 12,
+      "gained": 12,
+      "net": 0,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": false
+     },
+     "detected": false,
+     "category_margin_exceeded": [],
+     "margin_exceeded": false
+    }
+   },
+   "verdict": "RETAINED",
+   "go": true,
+   "binding": {
+    "k": 5,
+    "m": 5,
+    "categories": [
+     "unit_conv",
+     "pct_ratio",
+     "kv_recall",
+     "unknown_twin",
+     "format_follow"
+    ],
+    "min_lost_to_fail": 8
+   },
+   "go_label": "GO (5/5 binding)",
+   "flags_net_below_minus5": {
+    "primary": [],
+    "lenient": []
+   },
+   "arm": "t2s0",
+   "reference": "off",
+   "gating": true,
+   "kl": {
+    "available": true,
+    "n_items": 375,
+    "kl_mean": 0.07605799402577262,
+    "kl_median": 0.02854227063694202,
+    "kl_mean_flipped": 0.1446970330302087,
+    "kl_mean_unflipped": 0.06740081793512302,
+    "auroc_flip": {
+     "auroc": 0.6247676247676248,
+     "ci95": [
+      0.5301476232283958,
+      0.7184160279377007
+     ],
+     "n": 375,
+     "n_pos": 42,
+     "boot_used": 2000
+    },
+    "auroc_loss_among_ref_correct": {
+     "auroc": 0.858139534883721,
+     "ci95": [
+      0.7592013550839084,
+      0.9345653273248471
+     ],
+     "n": 225,
+     "n_pos": 10,
+     "boot_used": 2000
+    }
+   }
+  },
+  "x_bwf_vs_off": {
+   "graders": {
+    "primary": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 30,
+       "arm_correct": 23,
+       "lost": 8,
+       "gained": 1,
+       "net": -7,
+       "discordant": 9,
+       "p": 0.0390625,
+       "p_holm": 0.1953125,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": true,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 38,
+       "lost": 0,
+       "gained": 1,
+       "net": 1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 52,
+       "arm_correct": 59,
+       "lost": 7,
+       "gained": 14,
+       "net": 7,
+       "discordant": 21,
+       "p": 0.18924713134765625,
+       "p_holm": 0.5677413940429688,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 54,
+       "arm_correct": 48,
+       "lost": 7,
+       "gained": 1,
+       "net": -6,
+       "discordant": 8,
+       "p": 0.0703125,
+       "p_holm": 0.28125,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": true,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 52,
+       "arm_correct": 54,
+       "lost": 1,
+       "gained": 3,
+       "net": 2,
+       "discordant": 4,
+       "p": 0.625,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 23,
+      "gained": 20,
+      "net": -3,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": false
+     },
+     "detected": false,
+     "category_margin_exceeded": [],
+     "margin_exceeded": false
+    },
+    "lenient": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 30,
+       "arm_correct": 23,
+       "lost": 8,
+       "gained": 1,
+       "net": -7,
+       "discordant": 9,
+       "p": 0.0390625,
+       "p_holm": 0.1953125,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": true,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 38,
+       "lost": 0,
+       "gained": 1,
+       "net": 1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 65,
+       "arm_correct": 68,
+       "lost": 2,
+       "gained": 5,
+       "net": 3,
+       "discordant": 7,
+       "p": 0.453125,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 75,
+       "arm_correct": 72,
+       "lost": 3,
+       "gained": 0,
+       "net": -3,
+       "discordant": 3,
+       "p": 0.25,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 53,
+       "arm_correct": 54,
+       "lost": 2,
+       "gained": 3,
+       "net": 1,
+       "discordant": 5,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 15,
+      "gained": 10,
+      "net": -5,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": false
+     },
+     "detected": false,
+     "category_margin_exceeded": [],
+     "margin_exceeded": false
+    }
+   },
+   "verdict": "RETAINED",
+   "go": true,
+   "binding": {
+    "k": 5,
+    "m": 5,
+    "categories": [
+     "unit_conv",
+     "pct_ratio",
+     "kv_recall",
+     "unknown_twin",
+     "format_follow"
+    ],
+    "min_lost_to_fail": 8
+   },
+   "go_label": "GO (5/5 binding)",
+   "flags_net_below_minus5": {
+    "primary": [
+     "unit_conv",
+     "unknown_twin"
+    ],
+    "lenient": [
+     "unit_conv"
+    ]
+   },
+   "arm": "x_bwf",
+   "reference": "off",
+   "gating": true,
+   "kl": {
+    "available": true,
+    "n_items": 375,
+    "kl_mean": 0.2450504555432277,
+    "kl_median": 0.07810071095141405,
+    "kl_mean_flipped": 0.7823080892537189,
+    "kl_mean_unflipped": 0.17546588250241105,
+    "auroc_flip": {
+     "auroc": 0.7592462874754833,
+     "ci95": [
+      0.6704322988707082,
+      0.8383794888942612
+     ],
+     "n": 375,
+     "n_pos": 43,
+     "boot_used": 2000
+    },
+    "auroc_loss_among_ref_correct": {
+     "auroc": 0.7879896685320706,
+     "ci95": [
+      0.6793520816604619,
+      0.8816141377432115
+     ],
+     "n": 225,
+     "n_pos": 23,
+     "boot_used": 2000
+    }
+   }
+  },
+  "x_bwpa_vs_off": {
+   "graders": {
+    "primary": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 30,
+       "arm_correct": 25,
+       "lost": 6,
+       "gained": 1,
+       "net": -5,
+       "discordant": 7,
+       "p": 0.125,
+       "p_holm": 0.5,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 38,
+       "lost": 0,
+       "gained": 1,
+       "net": 1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 52,
+       "arm_correct": 61,
+       "lost": 5,
+       "gained": 14,
+       "net": 9,
+       "discordant": 19,
+       "p": 0.063568115234375,
+       "p_holm": 0.317840576171875,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 54,
+       "arm_correct": 58,
+       "lost": 3,
+       "gained": 7,
+       "net": 4,
+       "discordant": 10,
+       "p": 0.34375,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 52,
+       "arm_correct": 52,
+       "lost": 1,
+       "gained": 1,
+       "net": 0,
+       "discordant": 2,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 15,
+      "gained": 24,
+      "net": 9,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": false
+     },
+     "detected": false,
+     "category_margin_exceeded": [],
+     "margin_exceeded": false
+    },
+    "lenient": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 30,
+       "arm_correct": 28,
+       "lost": 6,
+       "gained": 4,
+       "net": -2,
+       "discordant": 10,
+       "p": 0.75390625,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 38,
+       "lost": 0,
+       "gained": 1,
+       "net": 1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 65,
+       "arm_correct": 62,
+       "lost": 6,
+       "gained": 3,
+       "net": -3,
+       "discordant": 9,
+       "p": 0.5078125,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 75,
+       "arm_correct": 70,
+       "lost": 5,
+       "gained": 0,
+       "net": -5,
+       "discordant": 5,
+       "p": 0.0625,
+       "p_holm": 0.3125,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 53,
+       "arm_correct": 52,
+       "lost": 2,
+       "gained": 1,
+       "net": -1,
+       "discordant": 3,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 19,
+      "gained": 9,
+      "net": -10,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": false
+     },
+     "detected": false,
+     "category_margin_exceeded": [],
+     "margin_exceeded": false
+    }
+   },
+   "verdict": "RETAINED",
+   "go": true,
+   "binding": {
+    "k": 5,
+    "m": 5,
+    "categories": [
+     "unit_conv",
+     "pct_ratio",
+     "kv_recall",
+     "unknown_twin",
+     "format_follow"
+    ],
+    "min_lost_to_fail": 8
+   },
+   "go_label": "GO (5/5 binding)",
+   "flags_net_below_minus5": {
+    "primary": [],
+    "lenient": []
+   },
+   "arm": "x_bwpa",
+   "reference": "off",
+   "gating": true,
+   "kl": {
+    "available": true,
+    "n_items": 375,
+    "kl_mean": 0.20193306770198113,
+    "kl_median": 0.05475357958520656,
+    "kl_mean_flipped": 0.5951752506113834,
+    "kl_mean_unflipped": 0.15628888575713976,
+    "auroc_flip": {
+     "auroc": 0.6132478632478633,
+     "ci95": [
+      0.5129707550325366,
+      0.7131929396597764
+     ],
+     "n": 375,
+     "n_pos": 39,
+     "boot_used": 2000
+    },
+    "auroc_loss_among_ref_correct": {
+     "auroc": 0.766984126984127,
+     "ci95": [
+      0.6563239925249601,
+      0.8659542282079741
+     ],
+     "n": 225,
+     "n_pos": 15,
+     "boot_used": 2000
+    }
+   }
+  },
+  "sparse_vs_supa": {
+   "graders": {
+    "primary": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 49,
+       "arm_correct": 30,
+       "lost": 22,
+       "gained": 3,
+       "net": -19,
+       "discordant": 25,
+       "p": 0.00015652179718017578,
+       "p_holm": 0.0007826089859008789,
+       "detected_loss": true,
+       "margin_exceeded": true,
+       "fails": true,
+       "flag_net_below_minus5": true,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 37,
+       "lost": 0,
+       "gained": 0,
+       "net": 0,
+       "discordant": 0,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 56,
+       "arm_correct": 52,
+       "lost": 6,
+       "gained": 2,
+       "net": -4,
+       "discordant": 8,
+       "p": 0.2890625,
+       "p_holm": 0.8671875,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 58,
+       "arm_correct": 54,
+       "lost": 4,
+       "gained": 0,
+       "net": -4,
+       "discordant": 4,
+       "p": 0.125,
+       "p_holm": 0.5,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 54,
+       "arm_correct": 52,
+       "lost": 2,
+       "gained": 0,
+       "net": -2,
+       "discordant": 2,
+       "p": 0.5,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 34,
+      "gained": 5,
+      "net": -29,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": true
+     },
+     "detected": true,
+     "category_margin_exceeded": [
+      "unit_conv"
+     ],
+     "margin_exceeded": true
+    },
+    "lenient": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 50,
+       "arm_correct": 30,
+       "lost": 22,
+       "gained": 2,
+       "net": -20,
+       "discordant": 24,
+       "p": 3.5881996154785156e-05,
+       "p_holm": 0.00017940998077392578,
+       "detected_loss": true,
+       "margin_exceeded": true,
+       "fails": true,
+       "flag_net_below_minus5": true,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 37,
+       "lost": 0,
+       "gained": 0,
+       "net": 0,
+       "discordant": 0,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 66,
+       "arm_correct": 65,
+       "lost": 1,
+       "gained": 0,
+       "net": -1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 75,
+       "arm_correct": 75,
+       "lost": 0,
+       "gained": 0,
+       "net": 0,
+       "discordant": 0,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 54,
+       "arm_correct": 53,
+       "lost": 2,
+       "gained": 1,
+       "net": -1,
+       "discordant": 3,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 25,
+      "gained": 3,
+      "net": -22,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": true
+     },
+     "detected": true,
+     "category_margin_exceeded": [
+      "unit_conv"
+     ],
+     "margin_exceeded": true
+    }
+   },
+   "verdict": "LOSS DETECTED",
+   "go": false,
+   "binding": {
+    "k": 5,
+    "m": 5,
+    "categories": [
+     "unit_conv",
+     "pct_ratio",
+     "kv_recall",
+     "unknown_twin",
+     "format_follow"
+    ],
+    "min_lost_to_fail": 8
+   },
+   "go_label": "NO-GO",
+   "flags_net_below_minus5": {
+    "primary": [
+     "unit_conv"
+    ],
+    "lenient": [
+     "unit_conv"
+    ]
+   },
+   "arm": "off",
+   "reference": "supa",
+   "gating": false,
+   "kl": {
+    "available": true,
+    "n_items": 375,
+    "kl_mean": 0.07399871092036604,
+    "kl_median": 0.028773807289197862,
+    "kl_mean_flipped": 0.10217039578721032,
+    "kl_mean_unflipped": 0.07072878321260732,
+    "auroc_flip": {
+     "auroc": 0.5011446886446886,
+     "ci95": [
+      0.4066443707165864,
+      0.5954177993707593
+     ],
+     "n": 375,
+     "n_pos": 39,
+     "boot_used": 2000
+    },
+    "auroc_loss_among_ref_correct": {
+     "auroc": 0.504144385026738,
+     "ci95": [
+      0.4134409180702849,
+      0.591001213945016
+     ],
+     "n": 254,
+     "n_pos": 34,
+     "boot_used": 2000
+    }
+   }
+  },
+  "t2s0_vs_supa": {
+   "graders": {
+    "primary": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 49,
+       "arm_correct": 26,
+       "lost": 28,
+       "gained": 5,
+       "net": -23,
+       "discordant": 33,
+       "p": 6.618769839406013e-05,
+       "p_holm": 0.0003309384919703007,
+       "detected_loss": true,
+       "margin_exceeded": true,
+       "fails": true,
+       "flag_net_below_minus5": true,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 42,
+       "lost": 0,
+       "gained": 5,
+       "net": 5,
+       "discordant": 5,
+       "p": 0.0625,
+       "p_holm": 0.1875,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 56,
+       "arm_correct": 63,
+       "lost": 0,
+       "gained": 7,
+       "net": 7,
+       "discordant": 7,
+       "p": 0.015625,
+       "p_holm": 0.0625,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 58,
+       "arm_correct": 63,
+       "lost": 2,
+       "gained": 7,
+       "net": 5,
+       "discordant": 9,
+       "p": 0.1796875,
+       "p_holm": 0.359375,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 54,
+       "arm_correct": 53,
+       "lost": 1,
+       "gained": 0,
+       "net": -1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 31,
+      "gained": 24,
+      "net": -7,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": false
+     },
+     "detected": true,
+     "category_margin_exceeded": [
+      "unit_conv"
+     ],
+     "margin_exceeded": true
+    },
+    "lenient": {
+     "categories": {
+      "unit_conv": {
+       "n": 75,
+       "ref_correct": 50,
+       "arm_correct": 26,
+       "lost": 28,
+       "gained": 4,
+       "net": -24,
+       "discordant": 32,
+       "p": 1.9301194697618484e-05,
+       "p_holm": 9.650597348809242e-05,
+       "detected_loss": true,
+       "margin_exceeded": true,
+       "fails": true,
+       "flag_net_below_minus5": true,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "pct_ratio": {
+       "n": 75,
+       "ref_correct": 37,
+       "arm_correct": 42,
+       "lost": 0,
+       "gained": 5,
+       "net": 5,
+       "discordant": 5,
+       "p": 0.0625,
+       "p_holm": 0.25,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "kv_recall": {
+       "n": 75,
+       "ref_correct": 66,
+       "arm_correct": 67,
+       "lost": 0,
+       "gained": 1,
+       "net": 1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "unknown_twin": {
+       "n": 75,
+       "ref_correct": 75,
+       "arm_correct": 72,
+       "lost": 3,
+       "gained": 0,
+       "net": -3,
+       "discordant": 3,
+       "p": 0.25,
+       "p_holm": 0.75,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      },
+      "format_follow": {
+       "n": 75,
+       "ref_correct": 54,
+       "arm_correct": 53,
+       "lost": 1,
+       "gained": 0,
+       "net": -1,
+       "discordant": 1,
+       "p": 1.0,
+       "p_holm": 1.0,
+       "detected_loss": false,
+       "margin_exceeded": false,
+       "fails": false,
+       "flag_net_below_minus5": false,
+       "binding": {
+        "min_lost_to_fail": 8,
+        "binding": true
+       }
+      }
+     },
+     "pooled": {
+      "lost": 32,
+      "gained": 10,
+      "net": -22,
+      "n_items": 375,
+      "margin": -15.0,
+      "margin_exceeded": true
+     },
+     "detected": true,
+     "category_margin_exceeded": [
+      "unit_conv"
+     ],
+     "margin_exceeded": true
+    }
+   },
+   "verdict": "LOSS DETECTED",
+   "go": false,
+   "binding": {
+    "k": 5,
+    "m": 5,
+    "categories": [
+     "unit_conv",
+     "pct_ratio",
+     "kv_recall",
+     "unknown_twin",
+     "format_follow"
+    ],
+    "min_lost_to_fail": 8
+   },
+   "go_label": "NO-GO",
+   "flags_net_below_minus5": {
+    "primary": [
+     "unit_conv"
+    ],
+    "lenient": [
+     "unit_conv"
+    ]
+   },
+   "arm": "t2s0",
+   "reference": "supa",
+   "gating": false,
+   "kl": {
+    "available": true,
+    "n_items": 375,
+    "kl_mean": 0.13401319894174557,
+    "kl_median": 0.046832682013274916,
+    "kl_mean_flipped": 0.2586379977836078,
+    "kl_mean_unflipped": 0.11259331164080051,
+    "auroc_flip": {
+     "auroc": 0.6755681818181818,
+     "ci95": [
+      0.5984558982079082,
+      0.7539601822674549
+     ],
+     "n": 375,
+     "n_pos": 55,
+     "boot_used": 2000
+    },
+    "auroc_loss_among_ref_correct": {
+     "auroc": 0.7572689136409663,
+     "ci95": [
+      0.6882094573653352,
+      0.8201893441146177
+     ],
+     "n": 254,
+     "n_pos": 31,
+     "boot_used": 2000
+    }
+   }
+  }
+ },
+ "go": {
+  "t2s0_vs_off": true,
+  "x_bwf_vs_off": true,
+  "x_bwpa_vs_off": true
+ },
+ "go_label": {
+  "t2s0_vs_off": "GO (5/5 binding)",
+  "x_bwf_vs_off": "GO (5/5 binding)",
+  "x_bwpa_vs_off": "GO (5/5 binding)"
+ },
+ "code_sha256": {
+  "scripts/ret_common.py": "60fb6c736ce0ba34114b7ffa6e9df0fd03a5c5451c8514b031579d2fa1452a24",
+  "scripts/ret_grade.py": "13b2696c6efd7968c5d82032873cb81d292529897dd23f26eaa48736fd861611",
+  "scripts/ret_gen.py": "6fe3b331a5bf49b98754d774843ad190335f2d3293ca7b1144d957b6b25399c7",
+  "scripts/ret_run.py": "a560feab98b1b74a6ffbb954dedb89d27a76e80b598bc01f35aef4df4b6f645e",
+  "scripts/ret_analysis.py": "6d7032e8e3df1195d476e7169c4d13b0318ca726b5c597dfc66b4fb49cc7ce3a",
+  "scripts/ret_test_graders.py": "ec6c72ba791f960ae1168c02d3cdfc8bc94d08fd2f0147268608b9bc7211a3b5",
+  "scripts/ret_test_tiny.py": "753bb27e8cb2c847eb5670a22c3356ac7a78324aea26a0d7b18474720eaa33a0",
+  "docs/retention/DESIGN.md": "69f785eb2decc88f30a200712bfcb03e5befbc841a0b2e68fefd963111268ded"
+ },
+ "analysed_local": "2026-10-11 04:27:32 -0500"
+}
