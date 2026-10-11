@@ -1,0 +1,45 @@
+{
+ "core": "titan-sparse",
+ "arm": "filler",
+ "rows": 750,
+ "train": {
+  "steps": 190,
+  "batch_size": 16,
+  "rows_available": 750,
+  "lr_peak": 0.0001,
+  "final_loss_avg50": 0.06186551339924336,
+  "loss_curve_every50": [
+   0.4686,
+   0.0928,
+   0.06896,
+   0.06143
+  ],
+  "max_grad_norm": 3.985208034515381,
+  "tokens_processed": 615944,
+  "supervised_tokens": 131779,
+  "wall_s": 2118.3,
+  "peak_mem_gib": 2.8317666053771973
+ },
+ "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+ "args": {
+  "rows": "data\\t2br_train_sd_filler.jsonl",
+  "steps": 190,
+  "batch": 16,
+  "lr": 0.0001,
+  "seed": 0,
+  "max_len": 512,
+  "rank": 16,
+  "alpha": 32,
+  "dropout": 0.05,
+  "targets": [
+   "q_proj",
+   "k_proj",
+   "v_proj",
+   "o_proj",
+   "gate_proj",
+   "up_proj",
+   "down_proj"
+  ]
+ },
+ "data_sha256": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011"
+}

@@ -962,3 +962,24 @@ Times are local (CDT). Entries are append-only.
     - Hook `scripts/queue_hooks/88_t2bl.sh` installed, identical to the draft (e389df78…).
     - Plan: one turn, 2.56 h observed.
     - The live chain (relaunched 19:29) includes hooks 50–87, not 88. It will be relaunched at the next waiting point (after 5b, while hook 85 waits for its turn) so that 88 runs after 87.
+- **R23 5b register trace screen: NO-GO (failed: G2 [mix, mix HS]; G3 [mix]; G4 [swap]) (23:48, 2026-10-10; seed 0, sd build; dev screen).**
+  - **Run:** `runs/t2b_register/s0_sd`, one RCWM turn (lease 20:29:18), DONE at 23:48:22. Analysis ran once (`T2BR_RESULTS_s0_sd.json` dd0f86ae…, `.md` 452def27…) under frozen rule revision 7.
+  - **What passed:**
+    - G1, conditional: trace − plain on the out-of-range conditional is +0.513 in-surface and +0.420 on the held-out surface. All identification parts hold.
+    - Trace predicate accuracy is 1.000 / 0.975–0.990 on cond_oor_edge, cond_sametens and cond_adv (in-surface / held-out). Shortcut agreement: the true predicate scores 858/860 against 844 for the best member of H, so no SHORTCUT_CONSISTENT flag.
+    - G5 (in-distribution) passes.
+  - **What failed:**
+    - G2/G3, mix (OOR): trace 0.03, plain 0.02, filler 0.02, OFF 0.00. Mix is not learned in any format.
+    - G4, the swap control: OFF 1.000, but trace 0.000, plain 0.025 and filler 0.000. Every R-only adapter destroyed the untouched swap skill. The training set had no swap rows, so this is a data-design flaw common to all arms.
+  - **Other strata (in-surface):** wrap trace 1.000 vs plain 0.450 (OOR 0.688 vs 0.037); add_nowrap trace 0.925 vs OFF 0.900 (plain 0.438, filler 0.225).
+  - **Reading (exploratory; the registered verdict is NO-GO):**
+    - (1) Trace supervision in the joint `cmp/calc/after` format teaches the computed conditional predicate. That rule was at chance (0.51) under bare-answer T2 training. It is not the extra decode compute: trace − filler is +0.49.
+    - Within the limits quoted with the verdict (heuristics outside H are not excluded), the joint cross-programme finding "computed predicates are not learned from bare-answer rows" now has a positive counterpart: they are learned when the comparison is written out.
+    - (2) Multi-step mix arithmetic stays out of reach in every format.
+    - (3) Narrow R-only training without control rows overwrites untouched operations. PREREG-4's combined data must include control-skill rows (swap, add) in every family.
+  - **Consequence:** no seeds 1–2 for 5b under this rule. The register format for PREREG-4 is the trace for conditional and wrap, with control rows. Mix is excluded and reported as a limit, or routed to a code-side interface, as decision point 2 did for P.
+- **I-34 Retention confirmation mint refused by the freshness gate (23:52, 2026-10-10); cause fixed by BWM.**
+  - **What happened:** hook 85's `ret_gen.py mint --purpose confirm` exited 3 (F2 = 202 gated sentence hits). Nothing was written and no draw was spent.
+  - **Cause:** every hit came from `Rineya_BWM_001_Research_Bundle/gh_export/rcwm/.../docs/retention/draws/dev_20261121.jsonl`. That was BWM's git clone of the shared repo, which mirrors RCWM's own dev draw. The frozen scan treats BWM's bundle root as an external corpus, so a false positive.
+  - **Fix:** BWM moved the clone to `WorldModel/bwm-gh-export` (BWM D-68). No frozen runner was amended. The hook's marker was never written, so the next chain pass mints afresh; this is not draw shopping, since no draw was ever produced.
+  - **Re-mint (00:23–00:27, 2026-10-11):** draw `confirm_1708484032065101819`, 450 prompts, sealed sha 864481a3…. The freshness gate passed, and the marker `docs/retention/BWM_RELEASE_DRAW.txt` was written. The chain was relaunched at a waiting point before this, so the BWM-adapter retention run is the single RCWM waiter, with hooks 87 and 88 after it.

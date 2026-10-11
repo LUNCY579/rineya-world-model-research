@@ -1,0 +1,45 @@
+{
+  "args": {
+    "alpha": 32,
+    "batch": 16,
+    "dropout": 0.05,
+    "lr": 0.0001,
+    "max_len": 512,
+    "rank": 16,
+    "rows": "data\\t2br_train_sd_plain.jsonl",
+    "seed": 0,
+    "steps": 190,
+    "targets": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "arm": "plain",
+  "core": "titan-sparse",
+  "data_sha256": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+  "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+  "rows": 750,
+  "train": {
+    "batch_size": 16,
+    "final_loss_avg50": 0.1481189973652363,
+    "loss_curve_every50": [
+      0.31456,
+      0.19475,
+      0.16743,
+      0.14655
+    ],
+    "lr_peak": 0.0001,
+    "max_grad_norm": 5.385255336761475,
+    "peak_mem_gib": 2.5872268676757812,
+    "rows_available": 750,
+    "steps": 190,
+    "supervised_tokens": 50295,
+    "tokens_processed": 534460,
+    "wall_s": 2297.2
+  }
+}

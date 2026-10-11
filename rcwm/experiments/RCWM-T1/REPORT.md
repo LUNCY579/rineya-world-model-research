@@ -309,7 +309,10 @@ These are provisional and will be revised once PREREG-1 resolves.
      - The held-out surface halves the apply accuracy (K4 0.42).
      - This is an interface result, not decimal skill.
      - Seeds 1–2 are queued.
-   - **5b register trace screen (D-44):** queued.
+   - **5b register trace screen done (R23): NO-GO** (mix not learned; swap control destroyed by R-only training without swap rows).
+     - The trace teaches the computed conditional predicate: OOR conditional 0.90 vs plain 0.39 and filler 0.41; held-out surface 0.66 vs 0.24.
+     - Predicate accuracy is 1.00 on the adversarial strata.
+     - Lesson for PREREG-4: include control-skill rows.
    - **Next:** T2b-ledger, a surface-diversified ledger adapter, and its sealed PREREG-5. PREREG-5 checks the held-out-surface out-of-range map, LB-style planning on the held-out surface and the 5c guard.
    - **Then:** the joint PREREG-4.
 
