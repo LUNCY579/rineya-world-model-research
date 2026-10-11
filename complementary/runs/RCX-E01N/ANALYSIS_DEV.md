@@ -8,6 +8,7 @@
 |---|---|---|---|---|---|---|---|
 | OFF | 0.325 | 0.308 | 0.500 | 1/280 [0.001, 0.020] | 0.000 | 0.000 | never no-op (ignores the rule) |
 | T2 | 0.400 | 0.393 | 0.502 | 1/280 [0.001, 0.020] | 0.000 | 0.000 | TRIGGER (trigger widened: near-misses) |
+| N-CFSD_s0 | 0.984 | 0.693 | 0.993 | 276/280 [0.964, 0.994] | 1.000 | 1.000 | generalises to unseen statuses (RULE-like) |
 | N-VR_s0 | 0.964 | 0.594 | 0.966 | 254/280 [0.867, 0.936] | 1.000 | 0.975 | partial |
 
 ## Per-stratum exact / decision (surface `in`)
@@ -16,11 +17,18 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | OFF | 0.31/0.50 | 0.35/0.50 | 0.36/0.50 | 0.29/0.50 | 0.31/0.50 | 0.40/0.50 | 0.26/0.50 | 0.35/0.50 | 0.24/0.50 | 0.29/0.50 | 0.33/0.50 | 0.31/0.49 | 0.12/0.50 |
 | T2 | 0.94/1.00 | 0.39/0.50 | 0.40/0.50 | 0.85/0.99 | 0.42/0.50 | 0.39/0.50 | 0.41/0.51 | 0.39/0.50 | 0.40/0.50 | 0.34/0.49 | 0.42/0.50 | 0.33/0.50 | 0.25/0.53 |
+| N-CFSD_s0 | 0.99/1.00 | 0.99/0.99 | 1.00/1.00 | 0.97/0.97 | 1.00/1.00 | 0.99/1.00 | 0.96/0.99 | 1.00/1.00 | 0.95/0.97 | 0.93/0.93 | 0.99/0.99 | 0.90/0.99 | 0.70/0.89 |
 | N-VR_s0 | 1.00/1.00 | 1.00/1.00 | 1.00/1.00 | 0.99/1.00 | 0.79/0.79 | 0.99/0.99 | 1.00/1.00 | 0.99/1.00 | 0.99/0.99 | 0.68/0.68 | 0.93/0.93 | 0.85/0.97 | 0.72/0.91 |
 
 ## Paired contrasts on the primary composite (parent-clustered bootstrap; descriptive on DEV)
 
 | A | B | contrast | surface | A | B | A−B | 95% CI | n parents |
 |---|---|---|---|---|---|---|---|---|
+| N-CFSD | N-VR | PRIMARY: counterfactual/SD vs ordinary rule-varied data | in | 0.984 | 0.964 | +0.020 | [+0.002, +0.039] | 280 |
+| N-CFSD | N-VR | PRIMARY: counterfactual/SD vs ordinary rule-varied data | ho_tpl | 0.693 | 0.594 | +0.099 | [+0.075, +0.125] | 280 |
+| N-CFSD | T2 | RCX treatment vs registered T2 | in | 0.984 | 0.400 | +0.584 | [+0.562, +0.608] | 280 |
+| N-CFSD | T2 | RCX treatment vs registered T2 | ho_tpl | 0.693 | 0.393 | +0.300 | [+0.266, +0.335] | 280 |
 | N-VR | OFF | training effect (C - A), ordinary | in | 0.964 | 0.325 | +0.639 | [+0.608, +0.671] | 280 |
 | N-VR | OFF | training effect (C - A), ordinary | ho_tpl | 0.594 | 0.308 | +0.286 | [+0.251, +0.321] | 280 |
+| N-CFSD | OFF | training effect (C - A), counterfactual | in | 0.984 | 0.325 | +0.659 | [+0.630, +0.688] | 280 |
+| N-CFSD | OFF | training effect (C - A), counterfactual | ho_tpl | 0.693 | 0.308 | +0.385 | [+0.347, +0.422] | 280 |

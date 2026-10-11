@@ -293,3 +293,54 @@ N-VR − OFF on `ho_tpl` = +0.286 [+0.251, +0.321]. Errors are 445 applied_when_
   - E33 retention (no claim about retained general ability; RCWM will run D-36 on request).
 - **Not yet confirmed.** Confirmation requires the frozen PREREG_E01N on a SEALED battery, with 3 seeds.
 - **Artifact.** This is a component adapter on a frozen core, not a dense checkpoint.
+
+---
+
+## R-06 Native E01 cell N-CFSD seed 0 vs N-VR seed 0: counterfactual twins, nonce words and paraphrases improve rule reading (tier: native-C component artifact; DEV pilot, one seed each), 2026-10-11
+
+**Evidence:**
+- `runs/RCX-E01N/cells/eval_N-CFSD_s0.json`, `preds_N-CFSD_s0.jsonl.gz`;
+- `N-CFSD_s0/TRAIN_META.json` (adapter sha256 `97cc48e8…`, local, unmerged);
+- `runs/RCX-E01N/ANALYSIS_DEV.md`.
+
+**Setup.** Same recipe, core and DEV battery as R-05. The data regime differs: counterfactual parents (base, rule_flip,
+status_swap, set_swap twins), 50% nonce statuses, train paraphrases t0–t3, and 3–4 accounts. Rows, steps and budget
+are matched. Supervised tokens are −11.5% vs N-VR (a reported covariate). Training took 9,302 s on CPU.
+
+| DEV, seed 0 | N-VR | **N-CFSD** | N-CFSD − N-VR (parent-clustered bootstrap, 280 parents) |
+|---|---|---|---|
+| Composite, `in` (training wordings) | 0.964 | **0.984** | +0.020 [+0.002, +0.039] |
+| Composite, `ho_tpl` (held-out paraphrases) | 0.594 | **0.693** | **+0.099 [+0.075, +0.125]** |
+| No-op when the rule requires one (`in`) | 254/280 | **276/280** [0.964, 0.994] | |
+| F5 posted-like strings | 0.79 | **1.00** | |
+| V6 held-out compositions | 0.68 | **0.93** | |
+| V3 inverted twins, both exact | 0.975 | **1.000** | |
+| PREREG-3-style verdict (F strata, `in`) | partial | **generalises to unseen statuses** | |
+
+Against the R-03 arms, N-CFSD − T2 is +0.584 [+0.562, +0.608] on `in` and +0.300 [+0.266, +0.335] on `ho_tpl`.
+
+### Held-out paraphrases by wording (decision accuracy on no-op items, N-VR → N-CFSD)
+
+| Wording | N-VR | N-CFSD |
+|---|---|---|
+| Negative h1 "Every event takes effect except X events." | 0.19 | **0.88** |
+| Negative h0 | 0.93 | 0.92 |
+| Compositions | 0.29–0.32 | **0.79–0.90** |
+| Positive h0 "If the status is X, carry out the event; for any other status, do nothing." | 0.03 | 0.29 |
+| Positive h1 "Balances change only for X events." | 0.01 | 0.17 |
+
+### Reading
+
+Counterfactual and surface-diverse rule data:
+- makes the in-context rule reading more complete (RULE-like on fresh statuses, posted-like strings and compositions);
+- partly frees it from the trained wording (+0.10 on held-out paraphrases).
+
+**Residual failure.** Unseen phrasings of *restrictive positive* rules still fall back to Titan's "apply" prior. That is
+the next target: more diverse positive phrasings, or a predicate trace (`cmp → calc → after`).
+
+### Limits
+
+- **Scope.** DEV, one seed per arm.
+- **Confounds.** The CFSD regime changes several factors at once: twins, nonce words, paraphrases and account count.
+- **Not yet done:** retention, and the matched fixed-rule control N-FX.
+- **Confirmation.** It needs the frozen PREREG_E01N on a SEALED battery with 3 seeds.
