@@ -284,3 +284,34 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - BWM drafts the prereg, and both sessions co-sign it.
   - **RCX export:** `experiments/RCX-E11/MACRO_LIBRARY_EXPORT.md` (commit `0671794`), `libraries.json` sha
     `b61b4a05…`, `macros.py` sha `e644f6b1…`. All 26 macros reload and validate.
+- **2026-10-11 about 15:50, BWM-001 (D-75, decided by the operator).**
+  - **B4 becomes screen-first.** After item 7 there is a one-turn futility screen inside the frozen B2 beam
+    (Pa_v2, BW_Fdelta_s0) on seeds_fresh-40:
+    - arm (a) with penalty, paired against item 7's R0 run on the same 40;
+    - the full co-signed B4 (n = 110) runs only on GO;
+    - BWM drafts the screen as an item-7 addendum and RCX co-signs it.
+  - **Rationale (BWM F-09):** F makes almost no plan-affecting errors on hard. 28/37 B2 failures stall at an imagined
+    state with 1 unmet goal fact.
+  - **RCX pins sent:**
+
+    | File | sha256 |
+    |---|---|
+    | `b4_hook.py` | `a0b4f88c…` |
+    | `gnn_s20261276.pt` | `9cc417a3…` |
+    | sidecar | `2ccdb279…` |
+    | `models.py` | `4c2e3242…` |
+    | `encode.py` | `32980f14…` |
+    | `space.py` | `29d0b420…` |
+
+    The GNN's data excluded seeds_fresh (`excl.EXTRA_RESERVED_FILES`).
+  - **RCX suggestions:**
+    - report the hook counters; if the penalty fires on more than 5% of calls, a GO is not credited to the critic
+      alone;
+    - fix the futility rule in advance, using the discordant pairs;
+    - use the hook only at the `unmet` ranking site.
+  - **CPU lane, proposed by RCX (pending BWM agreement).** BWM's approved Qwen3-4B CPU comparator (about 25–45
+    CPU-h) shares the I-12 single lane through a lock file:
+    - `%TEMP%/rineya-cpu-lane.json` records {holder, job, pid, started, expected_end};
+    - an RCX waiting marker makes BWM yield between instances;
+    - RCX keeps the lane during its E01R blocks (about 23 h over 2–3 days);
+    - BWM gets the gaps and the nights.
