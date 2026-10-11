@@ -156,11 +156,77 @@ def eval_battery(n_parents, surfaces):
     return [r for r in gen.make_battery("dev", n_parents, NP.BATTERY_SEED) if r["surface"] in surfaces]
 
 
+# ----------------------------------------------------------------------------- SEALED confirmation battery
+# Protocol (PREREG_E01N): `mint-commit` draws a secret salt and records only sha256(salt) (SEALED_COMMIT.json, committed
+# with the frozen prereg). The salt file (*.secret, git-ignored) is not read by anything until `open-sealed`, which
+# refuses unless every adapter listed in SEALED_COMMIT.json exists. Only then may `eval --battery sealed` run.
+
+LF = chr(10)
+
+
+def _sealed_paths(out):
+    out = Path(out)
+    return out / "SEALED_COMMIT.json", out / "SEALED_SALT.secret", out / "SEALED_OPEN.json"
+
+
+def sealed_seed(salt):
+    return int(hashlib.sha256(salt.encode()).hexdigest()[:8], 16) % 10 ** 8
+
+
+def cmd_mint_commit(a):
+    import secrets
+    commit_p, salt_p, _ = _sealed_paths(a.out)
+    if commit_p.exists() or salt_p.exists():
+        raise SystemExit("sealed commitment already exists; refusing to re-mint")
+    if not a.arms_required:
+        raise SystemExit("--arms-required is mandatory (adapters that must exist before the battery is opened)")
+    salt = secrets.token_hex(32)
+    salt_p.write_text(salt, encoding="utf-8", newline=LF)
+    rec = {"sha256_salt": hashlib.sha256(salt.encode()).hexdigest(), "n_parents": a.n_parents,
+           "surfaces": a.surfaces.split(","), "split": "sealed", "world": "arith",
+           "derivation": "seed = int(sha256(salt)[:8], 16) % 10**8; gen.make_battery('sealed', n_parents, seed)",
+           "arms_required": a.arms_required.split(","), "minted_at": time.strftime("%Y-%m-%d %H:%M:%S %Z")}
+    commit_p.write_text(json.dumps(rec, indent=1), encoding="utf-8", newline=LF)
+    print(json.dumps(rec, indent=1), flush=True)
+
+
+def cmd_open_sealed(a):
+    commit_p, salt_p, open_p = _sealed_paths(a.out)
+    rec = json.loads(commit_p.read_text(encoding="utf-8"))
+    missing = [t for t in rec["arms_required"] if not (Path(a.out) / t / "adapter" / "adapter_model.safetensors").exists()]
+    if missing:
+        raise SystemExit(f"refusing to open the SEALED battery: adapters missing {missing}")
+    salt = salt_p.read_text(encoding="utf-8").strip()
+    if hashlib.sha256(salt.encode()).hexdigest() != rec["sha256_salt"]:
+        raise SystemExit("salt does not match the commitment")
+    adapters = {t: sha(Path(a.out) / t / "adapter" / "adapter_model.safetensors") for t in rec["arms_required"]}
+    o = {"opened_at": time.strftime("%Y-%m-%d %H:%M:%S %Z"), "salt": salt, "seed": sealed_seed(salt),
+         "adapters_sha256": adapters}
+    open_p.write_text(json.dumps(o, indent=1), encoding="utf-8", newline=LF)
+    print(json.dumps(o, indent=1), flush=True)
+
+
+def sealed_battery(out, surfaces):
+    commit_p, salt_p, open_p = _sealed_paths(out)
+    if not open_p.exists():
+        raise SystemExit("SEALED battery is not open (run open-sealed after all required adapters exist)")
+    rec = json.loads(commit_p.read_text(encoding="utf-8"))
+    o = json.loads(open_p.read_text(encoding="utf-8"))
+    assert hashlib.sha256(o["salt"].encode()).hexdigest() == rec["sha256_salt"]
+    gen.use_world("arith")
+    bat = gen.make_battery("sealed", rec["n_parents"], o["seed"])
+    return [r for r in bat if r["surface"] in surfaces], o["seed"]
+
+
 def cmd_eval(a):
     out = Path(a.out)
-    battery = eval_battery(a.n_parents, a.surfaces.split(","))
+    if a.battery == "sealed":
+        battery, bseed = sealed_battery(out, a.surfaces.split(","))
+        prefix = "sealed_"
+    else:
+        battery, bseed, prefix = eval_battery(a.n_parents, a.surfaces.split(",")), NP.BATTERY_SEED, ""
     tag = f"{a.arm}_s{a.seed}" if a.arm.startswith("N-") else a.arm
-    res_path = out / f"eval_{tag}.json"
+    res_path = out / f"eval_{prefix}{tag}.json"
     if res_path.exists():
         print("eval exists", flush=True)
         return
@@ -184,12 +250,12 @@ def cmd_eval(a):
     summ = S.aggregate(battery, res)
     # same bytes as native_probe's battery.jsonl, so battery_sha256 is comparable across the two scripts
     bsha = hashlib.sha256("".join(json.dumps(r) + "\n" for r in battery).encode()).hexdigest()
-    rec = {"arm": a.arm, "seed": a.seed, "battery_seed": NP.BATTERY_SEED, "battery_sha256": bsha,
+    rec = {"arm": a.arm, "seed": a.seed, "battery": a.battery, "battery_seed": bseed, "battery_sha256": bsha,
            "n": len(battery), "surfaces": a.surfaces, "wall_s": time.time() - t0,
            "composite": {s: S.composite(summ, s) for s in a.surfaces.split(",")},
            "composite_decision": {s: S.composite(summ, s, field="decision") for s in a.surfaces.split(",")},
            "cells": summ}
-    with gzip.open(out / f"preds_{tag}.jsonl.gz", "wt", encoding="utf-8") as f:
+    with gzip.open(out / f"preds_{prefix}{tag}.jsonl.gz", "wt", encoding="utf-8") as f:
         for i, (o, x) in enumerate(zip(outs, res)):
             f.write(json.dumps({"i": i, "out": o, **x}) + "\n")
     res_path.write_text(json.dumps(rec, indent=1), encoding="utf-8", newline="\n")
@@ -580,16 +646,20 @@ def cmd_audit(a):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["build", "audit", "profile", "train", "eval"])
+    ap.add_argument("cmd", choices=["build", "audit", "profile", "train", "eval", "mint-commit", "open-sealed"])
     ap.add_argument("--out", required=True)
     ap.add_argument("--arm", default="N-VR")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--steps", type=int, default=3)
     ap.add_argument("--n-parents", dest="n_parents", type=int, default=40)
     ap.add_argument("--surfaces", default="in,ho_tpl")
+    ap.add_argument("--battery", default="dev", choices=["dev", "sealed"])
+    ap.add_argument("--arms-required", dest="arms_required", default="",
+                    help="mint-commit: comma-separated adapter tags (e.g. N-VR_s0,N-CFSD_s1) required before opening")
     ap.add_argument("--no-tok", dest="no_tok", action="store_true", help="audit: skip token covariates")
     a = ap.parse_args()
-    {"build": cmd_build, "audit": cmd_audit, "profile": cmd_profile, "train": cmd_train, "eval": cmd_eval}[a.cmd](a)
+    {"build": cmd_build, "audit": cmd_audit, "profile": cmd_profile, "train": cmd_train, "eval": cmd_eval,
+     "mint-commit": cmd_mint_commit, "open-sealed": cmd_open_sealed}[a.cmd](a)
 
 
 if __name__ == "__main__":
