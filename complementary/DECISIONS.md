@@ -402,3 +402,19 @@ and the evidence path.
     revealed salt and is committed before the first SEALED evaluation, per PREREG_E01N §6.
   - **Next.** The SEALED evaluation chain: N-VR and N-CFSD s0–s2, OFF and T2 (`confirm_sealed_eval_chain.sh`), then
     a single analysis with `analyze_native.py --battery sealed`.
+- **CX D-31 PREREG_E11 FROZEN (2026-10-11 about 08:45). Outcomes known: smoke plumbing only (disclosed in the
+  header).**
+  - `experiments/RCX-E11/PREREG_E11.md` sha256 `c67f036d530ed1f961f84caf2e9b2e598562190ccf1722069379807046b5f40c`, pinned in `run_e11.py`.
+  - **Smoke** (`runs/RCX-E11/smoke`, 28 s):
+    - every gate passed (G1–G3, BWM bytecode clean);
+    - A3 hook accounting is exact;
+    - teacher custody: 240 rows, 211 verified, 211 trajectories matching;
+    - budget monotonicity: identical.
+  - **Seeds:**
+    - 20261256: E11a instances, plus derived R, S, mono and bootstrap seeds;
+    - 20261257: E11b small sets;
+    - 20261258: E11b execution set, plus derived seeds;
+    - 20261259: the selector, with derived replicate model seeds 816062654 and 250692302.
+  - **Settings:** `exclude_noop_macros=True`; `b_label_target=achiever`; arms P, M, R, S and G (G descriptive);
+    compute thresholds 500, 1,000, 2,500 and 5,000.
+  - **Scheduling.** The full run follows the SEALED E01N evaluation chain in the single CPU lane (estimate 1–2 h).

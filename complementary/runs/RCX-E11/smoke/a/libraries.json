@@ -1,0 +1,2715 @@
+{
+ "K": 3,
+ "libraries": {
+  "M": [
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "step_key": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0",
+    "steps": [
+     [
+      "pick-up",
+      0
+     ],
+     [
+      "stack",
+      0,
+      1
+     ],
+     [
+      "pick-up",
+      2
+     ],
+     [
+      "stack",
+      2,
+      0
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      0
+     ]
+    ],
+    "L": 4,
+    "nvars": 3,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      1
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "ontable",
+      0
+     ],
+     [
+      "ontable",
+      2
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "on",
+      2,
+      0
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      1
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "holding",
+      2
+     ],
+     [
+      "ontable",
+      0
+     ],
+     [
+      "ontable",
+      2
+     ]
+    ],
+    "pre_str": [
+     "clear(?0)",
+     "clear(?1)",
+     "clear(?2)",
+     "handempty",
+     "ontable(?0)",
+     "ontable(?2)"
+    ],
+    "meta": {
+     "occurrences": 598,
+     "support": 195,
+     "score": 1794,
+     "pass": 0
+    }
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "step_key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0",
+    "steps": [
+     [
+      "stack",
+      0,
+      1
+     ],
+     [
+      "pick-up",
+      2
+     ],
+     [
+      "stack",
+      2,
+      0
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      0
+     ]
+    ],
+    "L": 3,
+    "nvars": 3,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "ontable",
+      2
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "on",
+      2,
+      0
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      1
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "holding",
+      2
+     ],
+     [
+      "ontable",
+      2
+     ]
+    ],
+    "pre_str": [
+     "clear(?1)",
+     "clear(?2)",
+     "holding(?0)",
+     "ontable(?2)"
+    ],
+    "meta": {
+     "occurrences": 694,
+     "support": 199,
+     "score": 1388,
+     "pass": 0
+    }
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+    "step_key": "pick-up ?0; stack ?0 ?1; pick-up ?2",
+    "steps": [
+     [
+      "pick-up",
+      0
+     ],
+     [
+      "stack",
+      0,
+      1
+     ],
+     [
+      "pick-up",
+      2
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      0
+     ]
+    ],
+    "L": 3,
+    "nvars": 3,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      1
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "ontable",
+      0
+     ],
+     [
+      "ontable",
+      2
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "holding",
+      2
+     ],
+     [
+      "on",
+      0,
+      1
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "ontable",
+      0
+     ],
+     [
+      "ontable",
+      2
+     ]
+    ],
+    "pre_str": [
+     "clear(?0)",
+     "clear(?1)",
+     "clear(?2)",
+     "handempty",
+     "ontable(?0)",
+     "ontable(?2)"
+    ],
+    "meta": {
+     "occurrences": 598,
+     "support": 195,
+     "score": 1196,
+     "pass": 0
+    }
+   }
+  ],
+  "R": [
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?1; stack ?1 ?0 | on(?0,?2),on(?1,?0)",
+    "step_key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?1; stack ?1 ?0",
+    "steps": [
+     [
+      "unstack",
+      0,
+      1
+     ],
+     [
+      "stack",
+      0,
+      2
+     ],
+     [
+      "pick-up",
+      1
+     ],
+     [
+      "stack",
+      1,
+      0
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      0
+     ]
+    ],
+    "L": 4,
+    "nvars": 3,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "ontable",
+      1
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      2
+     ],
+     [
+      "on",
+      1,
+      0
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "holding",
+      1
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "ontable",
+      1
+     ]
+    ],
+    "pre_str": [
+     "clear(?0)",
+     "clear(?2)",
+     "handempty",
+     "on(?0,?1)",
+     "ontable(?1)"
+    ],
+    "meta": {
+     "template": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+     "tier": "same_L_V_G_new_pattern"
+    }
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2 | on(?0,?1),on(?2,?0)",
+    "step_key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2",
+    "steps": [
+     [
+      "unstack",
+      0,
+      1
+     ],
+     [
+      "put-down",
+      0
+     ],
+     [
+      "unstack",
+      1,
+      2
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      0
+     ]
+    ],
+    "L": 3,
+    "nvars": 3,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "on",
+      1,
+      2
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "holding",
+      1
+     ],
+     [
+      "ontable",
+      0
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "on",
+      1,
+      2
+     ]
+    ],
+    "pre_str": [
+     "clear(?0)",
+     "handempty",
+     "on(?0,?1)",
+     "on(?1,?2)"
+    ],
+    "meta": {
+     "template": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+     "tier": "same_L_V_G_new_pattern"
+    }
+   },
+   {
+    "key": "put-down ?0; unstack ?1 ?2; put-down ?1 | on(?0,?2),on(?1,?0)",
+    "step_key": "put-down ?0; unstack ?1 ?2; put-down ?1",
+    "steps": [
+     [
+      "put-down",
+      0
+     ],
+     [
+      "unstack",
+      1,
+      2
+     ],
+     [
+      "put-down",
+      1
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      0
+     ]
+    ],
+    "L": 3,
+    "nvars": 3,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "on",
+      1,
+      2
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      1
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "ontable",
+      0
+     ],
+     [
+      "ontable",
+      1
+     ]
+    ],
+    "dele": [
+     [
+      "holding",
+      0
+     ],
+     [
+      "holding",
+      1
+     ],
+     [
+      "on",
+      1,
+      2
+     ]
+    ],
+    "pre_str": [
+     "clear(?1)",
+     "holding(?0)",
+     "on(?1,?2)"
+    ],
+    "meta": {
+     "template": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+     "tier": "same_L_V_G_new_pattern"
+    }
+   }
+  ],
+  "S": [
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3; stack ?3 ?1 | on(?0,?2),on(?3,?1)",
+    "step_key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3; stack ?3 ?1",
+    "steps": [
+     [
+      "unstack",
+      0,
+      1
+     ],
+     [
+      "stack",
+      0,
+      2
+     ],
+     [
+      "pick-up",
+      3
+     ],
+     [
+      "stack",
+      3,
+      1
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      1
+     ]
+    ],
+    "L": 4,
+    "nvars": 4,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "clear",
+      3
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "ontable",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      3
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      2
+     ],
+     [
+      "on",
+      3,
+      1
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "holding",
+      3
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "ontable",
+      3
+     ]
+    ],
+    "pre_str": [
+     "clear(?0)",
+     "clear(?2)",
+     "clear(?3)",
+     "handempty",
+     "on(?0,?1)",
+     "ontable(?3)"
+    ],
+    "meta": {
+     "occurrences": 2,
+     "support": 2,
+     "score": 6,
+     "rank": 424,
+     "tier": "same_L_fill_support",
+     "template": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)"
+    }
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?3 | on(?0,?1),on(?2,?3)",
+    "step_key": "stack ?0 ?1; pick-up ?2; stack ?2 ?3",
+    "steps": [
+     [
+      "stack",
+      0,
+      1
+     ],
+     [
+      "pick-up",
+      2
+     ],
+     [
+      "stack",
+      2,
+      3
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      1
+     ],
+     [
+      2,
+      3
+     ]
+    ],
+    "L": 3,
+    "nvars": 4,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "clear",
+      3
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "ontable",
+      2
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "on",
+      2,
+      3
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "clear",
+      3
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "holding",
+      2
+     ],
+     [
+      "ontable",
+      2
+     ]
+    ],
+    "pre_str": [
+     "clear(?1)",
+     "clear(?2)",
+     "clear(?3)",
+     "holding(?0)",
+     "ontable(?2)"
+    ],
+    "meta": {
+     "occurrences": 9,
+     "support": 8,
+     "score": 18,
+     "rank": 77,
+     "tier": "same_L_min_support",
+     "template": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)"
+    }
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3 | on(?0,?2)",
+    "step_key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3",
+    "steps": [
+     [
+      "unstack",
+      0,
+      1
+     ],
+     [
+      "stack",
+      0,
+      2
+     ],
+     [
+      "pick-up",
+      3
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      2
+     ]
+    ],
+    "L": 3,
+    "nvars": 4,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "clear",
+      3
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "ontable",
+      3
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      1
+     ],
+     [
+      "holding",
+      3
+     ],
+     [
+      "on",
+      0,
+      2
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      2
+     ],
+     [
+      "clear",
+      3
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "on",
+      0,
+      1
+     ],
+     [
+      "ontable",
+      3
+     ]
+    ],
+    "pre_str": [
+     "clear(?0)",
+     "clear(?2)",
+     "clear(?3)",
+     "handempty",
+     "on(?0,?1)",
+     "ontable(?3)"
+    ],
+    "meta": {
+     "occurrences": 4,
+     "support": 4,
+     "score": 8,
+     "rank": 259,
+     "tier": "same_L_fill_support",
+     "template": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)"
+    }
+   }
+  ],
+  "G": [
+   {
+    "key": "pick-up ?0; stack ?0 ?1 | on(?0,?1)",
+    "step_key": "pick-up ?0; stack ?0 ?1",
+    "steps": [
+     [
+      "pick-up",
+      0
+     ],
+     [
+      "stack",
+      0,
+      1
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      1
+     ]
+    ],
+    "L": 2,
+    "nvars": 2,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      1
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "ontable",
+      0
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      1
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "ontable",
+      0
+     ]
+    ],
+    "pre_str": [
+     "clear(?0)",
+     "clear(?1)",
+     "handempty",
+     "ontable(?0)"
+    ],
+    "meta": {
+     "control": "goal_move"
+    }
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2 | on(?0,?2)",
+    "step_key": "unstack ?0 ?1; stack ?0 ?2",
+    "steps": [
+     [
+      "unstack",
+      0,
+      1
+     ],
+     [
+      "stack",
+      0,
+      2
+     ]
+    ],
+    "goal_on": [
+     [
+      0,
+      2
+     ]
+    ],
+    "L": 2,
+    "nvars": 3,
+    "consistent": true,
+    "why": null,
+    "pre": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      2
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      1
+     ]
+    ],
+    "add": [
+     [
+      "clear",
+      0
+     ],
+     [
+      "clear",
+      1
+     ],
+     [
+      "handempty"
+     ],
+     [
+      "on",
+      0,
+      2
+     ]
+    ],
+    "dele": [
+     [
+      "clear",
+      2
+     ],
+     [
+      "holding",
+      0
+     ],
+     [
+      "on",
+      0,
+      1
+     ]
+    ],
+    "pre_str": [
+     "clear(?0)",
+     "clear(?2)",
+     "handempty",
+     "on(?0,?1)"
+    ],
+    "meta": {
+     "control": "goal_move"
+    }
+   }
+  ]
+ },
+ "descriptors": {
+  "M": [
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "L": 4,
+    "V": 3,
+    "G": 2,
+    "occurrences": 598,
+    "support": 195,
+    "tier": null,
+    "rank": null,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established",
+      "established"
+     ],
+     "established": 2,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 2
+    }
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "L": 3,
+    "V": 3,
+    "G": 2,
+    "occurrences": 694,
+    "support": 199,
+    "tier": null,
+    "rank": null,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established",
+      "established"
+     ],
+     "established": 2,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 2
+    }
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+    "L": 3,
+    "V": 3,
+    "G": 2,
+    "occurrences": 598,
+    "support": 195,
+    "tier": null,
+    "rank": null,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established",
+      "pending"
+     ],
+     "established": 1,
+     "pending": 1,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 2
+    }
+   }
+  ],
+  "R": [
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?1; stack ?1 ?0 | on(?0,?2),on(?1,?0)",
+    "L": 4,
+    "V": 3,
+    "G": 2,
+    "occurrences": null,
+    "support": null,
+    "tier": "same_L_V_G_new_pattern",
+    "rank": null,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established",
+      "established"
+     ],
+     "established": 2,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 2
+    }
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2 | on(?0,?1),on(?2,?0)",
+    "L": 3,
+    "V": 3,
+    "G": 2,
+    "occurrences": null,
+    "support": null,
+    "tier": "same_L_V_G_new_pattern",
+    "rank": null,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "destroyed",
+      "unrelated"
+     ],
+     "established": 0,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 1,
+     "unrelated": 1,
+     "aligned": 0
+    }
+   },
+   {
+    "key": "put-down ?0; unstack ?1 ?2; put-down ?1 | on(?0,?2),on(?1,?0)",
+    "L": 3,
+    "V": 3,
+    "G": 2,
+    "occurrences": null,
+    "support": null,
+    "tier": "same_L_V_G_new_pattern",
+    "rank": null,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "unrelated",
+      "unrelated"
+     ],
+     "established": 0,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 2,
+     "aligned": 0
+    }
+   }
+  ],
+  "S": [
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3; stack ?3 ?1 | on(?0,?2),on(?3,?1)",
+    "L": 4,
+    "V": 4,
+    "G": 2,
+    "occurrences": 2,
+    "support": 2,
+    "tier": "same_L_fill_support",
+    "rank": 424,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established",
+      "established"
+     ],
+     "established": 2,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 2
+    }
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?3 | on(?0,?1),on(?2,?3)",
+    "L": 3,
+    "V": 4,
+    "G": 2,
+    "occurrences": 9,
+    "support": 8,
+    "tier": "same_L_min_support",
+    "rank": 77,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established",
+      "established"
+     ],
+     "established": 2,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 2
+    }
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3 | on(?0,?2)",
+    "L": 3,
+    "V": 4,
+    "G": 1,
+    "occurrences": 4,
+    "support": 4,
+    "tier": "same_L_fill_support",
+    "rank": 259,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established"
+     ],
+     "established": 1,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 1
+    }
+   }
+  ],
+  "G": [
+   {
+    "key": "pick-up ?0; stack ?0 ?1 | on(?0,?1)",
+    "L": 2,
+    "V": 2,
+    "G": 1,
+    "occurrences": null,
+    "support": null,
+    "tier": null,
+    "rank": null,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established"
+     ],
+     "established": 1,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 1
+    }
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2 | on(?0,?2)",
+    "L": 2,
+    "V": 3,
+    "G": 1,
+    "occurrences": null,
+    "support": null,
+    "tier": null,
+    "rank": null,
+    "noop_pairs": [],
+    "alignment": {
+     "literals": [
+      "established"
+     ],
+     "established": 1,
+     "pending": 0,
+     "kept": 0,
+     "destroyed": 0,
+     "unrelated": 0,
+     "aligned": 1
+    }
+   }
+  ]
+ },
+ "alignment": {
+  "M": {
+   "established": 5,
+   "pending": 1,
+   "kept": 0,
+   "destroyed": 0,
+   "unrelated": 0,
+   "aligned": 6,
+   "literals": 6,
+   "noop_macros": 0
+  },
+  "R": {
+   "established": 2,
+   "pending": 0,
+   "kept": 0,
+   "destroyed": 1,
+   "unrelated": 3,
+   "aligned": 2,
+   "literals": 6,
+   "noop_macros": 0
+  },
+  "S": {
+   "established": 5,
+   "pending": 0,
+   "kept": 0,
+   "destroyed": 0,
+   "unrelated": 0,
+   "aligned": 5,
+   "literals": 5,
+   "noop_macros": 0
+  },
+  "G": {
+   "established": 2,
+   "pending": 0,
+   "kept": 0,
+   "destroyed": 0,
+   "unrelated": 0,
+   "aligned": 2,
+   "literals": 2,
+   "noop_macros": 0
+  }
+ },
+ "exclude_noop_macros": true,
+ "selection_logs": {
+  "M": [
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "score": 1794,
+    "occurrences": 598,
+    "support": 195,
+    "pass": 0,
+    "decision": "accepted"
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "score": 1388,
+    "occurrences": 694,
+    "support": 199,
+    "pass": 0,
+    "decision": "accepted"
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+    "score": 1196,
+    "occurrences": 598,
+    "support": 195,
+    "pass": 0,
+    "decision": "accepted"
+   }
+  ],
+  "R": [
+   {
+    "template": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "drawn": "unstack ?0 ?1; stack ?0 ?2; pick-up ?1; stack ?1 ?0 | on(?0,?2),on(?1,?0)",
+    "tier": "same_L_V_G_new_pattern",
+    "skipped": {}
+   },
+   {
+    "template": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "drawn": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2 | on(?0,?1),on(?2,?0)",
+    "tier": "same_L_V_G_new_pattern",
+    "skipped": {}
+   },
+   {
+    "template": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+    "drawn": "put-down ?0; unstack ?1 ?2; put-down ?1 | on(?0,?2),on(?1,?0)",
+    "tier": "same_L_V_G_new_pattern",
+    "skipped": {}
+   }
+  ],
+  "S": [
+   {
+    "template": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "template_L": 4,
+    "chosen": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3; stack ?3 ?1 | on(?0,?2),on(?3,?1)",
+    "L": 4,
+    "tier": "same_L_fill_support",
+    "rank": 424,
+    "occurrences": 2,
+    "support": 2
+   },
+   {
+    "template": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "template_L": 3,
+    "chosen": "stack ?0 ?1; pick-up ?2; stack ?2 ?3 | on(?0,?1),on(?2,?3)",
+    "L": 3,
+    "tier": "same_L_min_support",
+    "rank": 77,
+    "occurrences": 9,
+    "support": 8
+   },
+   {
+    "template": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+    "template_L": 3,
+    "chosen": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3 | on(?0,?2)",
+    "L": 3,
+    "tier": "same_L_fill_support",
+    "rank": 259,
+    "occurrences": 4,
+    "support": 4
+   },
+   {
+    "summary": true,
+    "skipped_excluded_keys": [
+     "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1)",
+     "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?1,?2)"
+    ],
+    "skipped_internal_noop_keys": [
+     "pick-up ?0; pick-up ?1; put-down ?1 | -",
+     "pick-up ?0; pick-up ?1; put-down ?1; pick-up ?2 | on(?0,?1),on(?1,?2)",
+     "pick-up ?0; put-down ?0; pick-up ?1 | -",
+     "pick-up ?0; put-down ?0; pick-up ?1 | on(?0,?1)",
+     "pick-up ?0; put-down ?1; pick-up ?1 | -",
+     "put-down ?0; pick-up ?0; pick-up ?1 | -",
+     "put-down ?0; pick-up ?0; pick-up ?1; pick-up ?2 | -",
+     "put-down ?0; pick-up ?0; stack ?0 ?1 | on(?0,?1)",
+     "put-down ?0; pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?1,?2)",
+     "put-down ?0; pick-up ?0; stack ?1 ?2 | on(?1,?2)",
+     "put-down ?0; put-down ?1; pick-up ?1 | -",
+     "stack ?0 ?1; pick-up ?2; put-down ?2 | on(?0,?1)",
+     "stack ?0 ?1; put-down ?2; pick-up ?2 | on(?0,?1)",
+     "stack ?0 ?1; stack ?2 ?3; pick-up ?0; put-down ?0 | on(?0,?1),on(?2,?3)"
+    ],
+    "rejected_keys": {
+     "pick-up ?0; pick-up ?1; pick-up ?2 | -": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2 | on(?0,?1)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2 | on(?0,?2)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2 | on(?0,?2),on(?2,?1)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2 | on(?1,?0)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2 | on(?2,?0)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2 | on(?2,?1)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2; pick-up ?3 | -": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2; pick-up ?3 | on(?3,?1)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2; put-down ?0 | on(?0,?1),on(?1,?2)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2; stack ?1 ?3 | on(?1,?3)": "inconsistent",
+     "pick-up ?0; pick-up ?1; pick-up ?2; stack ?3 ?1 | on(?3,?1)": "inconsistent",
+     "pick-up ?0; pick-up ?1; put-down ?2 | -": "inconsistent",
+     "pick-up ?0; pick-up ?1; put-down ?2; put-down ?0 | -": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?0 ?2 | on(?0,?2)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?0 ?2; pick-up ?3 | on(?0,?2)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?1 ?2 | on(?1,?2)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?2 ?0 | on(?2,?0)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?2 ?1 | on(?2,?1)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?2 ?3 | on(?0,?2),on(?2,?3)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?2 ?3 | on(?1,?0),on(?2,?3)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?2 ?3 | on(?2,?3)": "inconsistent",
+     "pick-up ?0; pick-up ?1; stack ?2 ?3; stack ?3 ?1 | on(?0,?2),on(?2,?3),on(?3,?1)": "inconsistent",
+     "pick-up ?0; pick-up ?1; unstack ?2 ?3 | -": "inconsistent",
+     "pick-up ?0; pick-up ?1; unstack ?2 ?3 | on(?1,?0)": "inconsistent",
+     "pick-up ?0; pick-up ?1; unstack ?2 ?3 | on(?2,?0),on(?3,?2)": "inconsistent",
+     "pick-up ?0; put-down ?1; pick-up ?2 | -": "vacuous",
+     "pick-up ?0; put-down ?1; pick-up ?2 | on(?0,?1)": "vacuous",
+     "pick-up ?0; put-down ?1; pick-up ?2 | on(?1,?2)": "vacuous",
+     "pick-up ?0; put-down ?1; pick-up ?2; pick-up ?3 | on(?0,?1)": "inconsistent",
+     "pick-up ?0; put-down ?1; put-down ?0; stack ?0 ?2 | on(?0,?2)": "inconsistent",
+     "pick-up ?0; put-down ?1; put-down ?2 | -": "vacuous",
+     "pick-up ?0; put-down ?1; put-down ?2; stack ?2 ?3 | on(?2,?3)": "inconsistent",
+     "pick-up ?0; put-down ?1; stack ?0 ?2 | on(?0,?2)": "vacuous",
+     "pick-up ?0; put-down ?1; stack ?0 ?2; stack ?3 ?0 | on(?0,?2),on(?3,?0)": "vacuous",
+     "pick-up ?0; put-down ?1; stack ?1 ?2 | on(?1,?2)": "inconsistent",
+     "pick-up ?0; put-down ?1; stack ?2 ?0 | on(?2,?0)": "inconsistent",
+     "pick-up ?0; put-down ?1; stack ?2 ?0; stack ?3 ?2 | on(?2,?0),on(?3,?2)": "inconsistent",
+     "pick-up ?0; put-down ?1; stack ?2 ?1 | on(?2,?1)": "vacuous",
+     "pick-up ?0; put-down ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "vacuous",
+     "pick-up ?0; put-down ?1; stack ?2 ?3 | on(?2,?3)": "vacuous",
+     "pick-up ?0; stack ?0 ?1; put-down ?2 | on(?0,?1)": "vacuous",
+     "pick-up ?0; stack ?0 ?1; put-down ?2; put-down ?3 | on(?0,?1)": "vacuous",
+     "pick-up ?0; stack ?0 ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "vacuous",
+     "pick-up ?0; stack ?1 ?0; pick-up ?2 | on(?1,?0)": "inconsistent",
+     "pick-up ?0; stack ?1 ?0; stack ?2 ?3 | on(?1,?0),on(?2,?3)": "inconsistent",
+     "pick-up ?0; stack ?1 ?2; pick-up ?1 | on(?1,?2)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; pick-up ?1; put-down ?3 | on(?1,?2)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; pick-up ?2 | on(?1,?2)": "inconsistent",
+     "pick-up ?0; stack ?1 ?2; pick-up ?3 | on(?1,?2)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; pick-up ?3 | on(?1,?2),on(?3,?0)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; put-down ?1 | on(?1,?2)": "inconsistent",
+     "pick-up ?0; stack ?1 ?2; put-down ?2 | on(?1,?2)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; put-down ?3 | on(?1,?2)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; put-down ?3; stack ?0 ?1 | on(?0,?1),on(?1,?2)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; stack ?0 ?3 | on(?0,?3),on(?1,?2)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; stack ?2 ?3 | on(?1,?2),on(?2,?3)": "vacuous",
+     "pick-up ?0; stack ?1 ?2; stack ?3 ?0 | on(?1,?2),on(?3,?0)": "inconsistent",
+     "pick-up ?0; unstack ?1 ?2; pick-up ?3 | -": "inconsistent",
+     "pick-up ?0; unstack ?1 ?2; put-down ?1 | -": "inconsistent",
+     "pick-up ?0; unstack ?1 ?2; put-down ?3 | -": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2 | -": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2 | on(?0,?1)": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2 | on(?1,?0)": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2 | on(?1,?2)": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2 | on(?2,?0)": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2 | on(?2,?1)": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2; stack ?1 ?3 | on(?0,?1),on(?1,?3)": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2; stack ?2 ?0 | on(?2,?0)": "inconsistent",
+     "put-down ?0; pick-up ?1; pick-up ?2; stack ?3 ?1 | on(?3,?1)": "inconsistent",
+     "put-down ?0; pick-up ?1; put-down ?2 | -": "vacuous",
+     "put-down ?0; pick-up ?1; put-down ?2 | on(?0,?1)": "vacuous",
+     "put-down ?0; pick-up ?1; put-down ?2 | on(?1,?2)": "vacuous",
+     "put-down ?0; pick-up ?1; put-down ?2; stack ?1 ?3 | on(?1,?3)": "vacuous",
+     "put-down ?0; pick-up ?1; stack ?0 ?2 | on(?0,?2)": "inconsistent",
+     "put-down ?0; pick-up ?1; stack ?2 ?1 | on(?2,?1)": "inconsistent",
+     "put-down ?0; pick-up ?1; stack ?2 ?3 | on(?1,?0),on(?2,?3)": "vacuous",
+     "put-down ?0; pick-up ?1; stack ?2 ?3 | on(?2,?3)": "vacuous",
+     "put-down ?0; put-down ?1; pick-up ?2 | -": "vacuous",
+     "put-down ?0; put-down ?1; put-down ?2 | -": "vacuous",
+     "put-down ?0; put-down ?1; put-down ?2 | on(?0,?2)": "vacuous",
+     "put-down ?0; put-down ?1; put-down ?2; put-down ?3 | -": "vacuous",
+     "put-down ?0; put-down ?1; stack ?0 ?2 | on(?0,?2)": "inconsistent",
+     "put-down ?0; put-down ?1; stack ?1 ?2 | on(?1,?2)": "inconsistent",
+     "put-down ?0; put-down ?1; stack ?2 ?0 | on(?2,?0)": "vacuous",
+     "put-down ?0; put-down ?1; stack ?2 ?3 | on(?0,?2),on(?2,?3)": "vacuous",
+     "put-down ?0; put-down ?1; stack ?2 ?3 | on(?2,?3)": "vacuous",
+     "put-down ?0; put-down ?1; unstack ?0 ?2 | -": "vacuous",
+     "put-down ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1)": "inconsistent",
+     "put-down ?0; stack ?0 ?1; put-down ?2 | on(?0,?1)": "inconsistent",
+     "put-down ?0; stack ?0 ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "inconsistent",
+     "put-down ?0; stack ?1 ?0; put-down ?2 | on(?1,?0)": "vacuous",
+     "put-down ?0; stack ?1 ?0; stack ?2 ?3 | on(?1,?0),on(?2,?3)": "vacuous",
+     "put-down ?0; stack ?1 ?2; pick-up ?1 | on(?1,?2)": "vacuous",
+     "put-down ?0; stack ?1 ?2; pick-up ?3 | on(?0,?1),on(?1,?2)": "vacuous",
+     "put-down ?0; stack ?1 ?2; pick-up ?3 | on(?0,?3),on(?1,?2)": "vacuous",
+     "put-down ?0; stack ?1 ?2; pick-up ?3 | on(?1,?2)": "vacuous",
+     "put-down ?0; stack ?1 ?2; pick-up ?3 | on(?1,?2),on(?2,?0)": "vacuous",
+     "put-down ?0; stack ?1 ?2; pick-up ?3 | on(?1,?2),on(?3,?0)": "vacuous",
+     "put-down ?0; stack ?1 ?2; pick-up ?3 | on(?1,?2),on(?3,?1)": "vacuous",
+     "put-down ?0; stack ?1 ?2; pick-up ?3; stack ?2 ?0 | on(?1,?2),on(?2,?0)": "vacuous",
+     "put-down ?0; stack ?1 ?2; put-down ?2 | on(?1,?2)": "vacuous",
+     "put-down ?0; stack ?1 ?2; put-down ?2; stack ?2 ?3 | on(?1,?2),on(?2,?3)": "inconsistent",
+     "put-down ?0; stack ?1 ?2; put-down ?3 | on(?1,?2)": "vacuous",
+     "put-down ?0; stack ?1 ?2; put-down ?3 | on(?1,?2),on(?2,?3)": "vacuous",
+     "put-down ?0; stack ?1 ?2; put-down ?3; pick-up ?1 | on(?1,?2),on(?3,?0)": "vacuous",
+     "put-down ?0; stack ?1 ?2; stack ?0 ?3 | on(?0,?3),on(?1,?2)": "inconsistent",
+     "put-down ?0; stack ?1 ?2; stack ?2 ?3 | on(?1,?2),on(?2,?3)": "vacuous",
+     "put-down ?0; stack ?1 ?2; stack ?3 ?0 | on(?1,?2),on(?3,?0)": "vacuous",
+     "put-down ?0; stack ?1 ?2; stack ?3 ?1 | on(?1,?2),on(?3,?1)": "vacuous",
+     "put-down ?0; stack ?1 ?2; unstack ?0 ?3 | on(?1,?2)": "vacuous",
+     "put-down ?0; stack ?1 ?2; unstack ?1 ?3 | on(?1,?2)": "vacuous",
+     "put-down ?0; unstack ?1 ?0; stack ?2 ?3; put-down ?1 | on(?2,?3)": "vacuous",
+     "put-down ?0; unstack ?1 ?2; pick-up ?3 | -": "inconsistent",
+     "put-down ?0; unstack ?1 ?2; put-down ?3 | -": "vacuous",
+     "stack ?0 ?1; pick-up ?0; pick-up ?2 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; pick-up ?0; put-down ?2 | on(?0,?1)": "vacuous",
+     "stack ?0 ?1; pick-up ?0; stack ?1 ?2 | on(?0,?1),on(?1,?2)": "vacuous",
+     "stack ?0 ?1; pick-up ?0; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "vacuous",
+     "stack ?0 ?1; pick-up ?0; unstack ?2 ?3 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; pick-up ?1; pick-up ?2 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; pick-up ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?0 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?0 | on(?0,?1),on(?2,?0)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?1 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?3 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?3 | on(?0,?1),on(?1,?3),on(?3,?2)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?3 | on(?0,?1),on(?2,?0)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?3 | on(?0,?1),on(?3,?0)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?3 | on(?0,?1),on(?3,?2)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; pick-up ?3; pick-up ?0 | on(?0,?1),on(?2,?0)": "inconsistent",
+     "stack ?0 ?1; pick-up ?2; put-down ?1 | on(?0,?1)": "vacuous",
+     "stack ?0 ?1; pick-up ?2; put-down ?3 | on(?0,?1)": "vacuous",
+     "stack ?0 ?1; pick-up ?2; put-down ?3 | on(?0,?1),on(?2,?3)": "vacuous",
+     "stack ?0 ?1; pick-up ?2; stack ?1 ?3 | on(?0,?1),on(?1,?3)": "vacuous",
+     "stack ?0 ?1; pick-up ?2; stack ?3 ?0 | on(?0,?1),on(?3,?0)": "vacuous",
+     "stack ?0 ?1; pick-up ?2; stack ?3 ?2 | on(?0,?1),on(?3,?2)": "inconsistent",
+     "stack ?0 ?1; put-down ?0; pick-up ?2 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; put-down ?0; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "inconsistent",
+     "stack ?0 ?1; put-down ?0; stack ?2 ?3; pick-up ?2 | on(?0,?1),on(?2,?3),on(?3,?0)": "inconsistent",
+     "stack ?0 ?1; put-down ?1; pick-up ?2; pick-up ?3 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; put-down ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "vacuous",
+     "stack ?0 ?1; put-down ?2; pick-up ?0 | on(?0,?1)": "vacuous",
+     "stack ?0 ?1; put-down ?2; pick-up ?0; stack ?3 ?0 | on(?0,?1),on(?3,?0)": "inconsistent",
+     "stack ?0 ?1; put-down ?2; pick-up ?3 | on(?0,?1)": "vacuous",
+     "stack ?0 ?1; put-down ?2; pick-up ?3 | on(?0,?1),on(?2,?0)": "vacuous",
+     "stack ?0 ?1; put-down ?2; pick-up ?3 | on(?0,?1),on(?3,?2)": "vacuous",
+     "stack ?0 ?1; put-down ?2; put-down ?3 | on(?0,?1)": "vacuous",
+     "stack ?0 ?1; put-down ?2; put-down ?3 | on(?0,?1),on(?1,?2)": "vacuous",
+     "stack ?0 ?1; put-down ?2; stack ?1 ?3 | on(?0,?1),on(?1,?3)": "vacuous",
+     "stack ?0 ?1; put-down ?2; stack ?1 ?3; stack ?2 ?0 | on(?0,?1),on(?1,?3),on(?2,?0)": "inconsistent",
+     "stack ?0 ?1; put-down ?2; stack ?3 ?0 | on(?0,?1),on(?3,?0)": "vacuous",
+     "stack ?0 ?1; stack ?0 ?1; pick-up ?2 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; stack ?1 ?2; pick-up ?2 | on(?0,?1),on(?1,?2)": "inconsistent",
+     "stack ?0 ?1; stack ?1 ?2; pick-up ?3 | on(?0,?1),on(?1,?2)": "vacuous",
+     "stack ?0 ?1; stack ?1 ?2; put-down ?1 | on(?0,?1),on(?1,?2)": "inconsistent",
+     "stack ?0 ?1; stack ?2 ?0; pick-up ?3 | on(?0,?1),on(?2,?0)": "vacuous",
+     "stack ?0 ?1; stack ?2 ?0; stack ?1 ?3 | on(?0,?1),on(?1,?3),on(?2,?0)": "vacuous",
+     "stack ?0 ?1; stack ?2 ?3; pick-up ?0 | on(?0,?1),on(?2,?3)": "vacuous",
+     "stack ?0 ?1; stack ?2 ?3; pick-up ?1 | on(?0,?1),on(?2,?3)": "inconsistent",
+     "stack ?0 ?1; stack ?2 ?3; pick-up ?2 | on(?0,?1),on(?2,?3)": "vacuous",
+     "stack ?0 ?1; stack ?2 ?3; pick-up ?3 | on(?0,?1),on(?2,?3)": "inconsistent",
+     "stack ?0 ?1; stack ?2 ?3; put-down ?0 | on(?0,?1),on(?2,?3)": "inconsistent",
+     "stack ?0 ?1; stack ?2 ?3; stack ?2 ?3 | on(?0,?1),on(?2,?3)": "inconsistent",
+     "stack ?0 ?1; unstack ?0 ?2; pick-up ?3 | on(?0,?1)": "inconsistent",
+     "stack ?0 ?1; unstack ?2 ?1; pick-up ?3 | on(?0,?1)": "inconsistent",
+     "unstack ?0 ?1; pick-up ?2; pick-up ?3 | -": "inconsistent",
+     "unstack ?0 ?1; pick-up ?2; pick-up ?3; pick-up ?1 | on(?0,?1)": "inconsistent",
+     "unstack ?0 ?1; pick-up ?2; put-down ?1 | -": "inconsistent",
+     "unstack ?0 ?1; put-down ?0; stack ?2 ?3 | on(?2,?3)": "vacuous",
+     "unstack ?0 ?1; put-down ?2; put-down ?3 | -": "vacuous",
+     "unstack ?0 ?1; put-down ?2; put-down ?3; put-down ?0 | -": "vacuous"
+    }
+   }
+  ]
+ },
+ "top_candidates": {
+  "M": [
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "L": 4,
+    "nvars": 3,
+    "occurrences": 598,
+    "support": 195,
+    "score": 1794
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 694,
+    "support": 199,
+    "score": 1388
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 598,
+    "support": 195,
+    "score": 1196
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 1139,
+    "support": 209,
+    "score": 1139
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0; pick-up ?3 | on(?0,?1),on(?2,?0),on(?3,?2)",
+    "L": 4,
+    "nvars": 4,
+    "occurrences": 347,
+    "support": 148,
+    "score": 1041
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 694,
+    "support": 199,
+    "score": 694
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0 | -",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 517,
+    "support": 200,
+    "score": 517
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?3 | on(?0,?1),on(?2,?3)",
+    "L": 4,
+    "nvars": 4,
+    "occurrences": 125,
+    "support": 90,
+    "score": 375
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2; put-down ?1 | -",
+    "L": 4,
+    "nvars": 3,
+    "occurrences": 118,
+    "support": 75,
+    "score": 354
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?3 | on(?0,?1),on(?2,?3)",
+    "L": 3,
+    "nvars": 4,
+    "occurrences": 166,
+    "support": 114,
+    "score": 332
+   },
+   {
+    "key": "put-down ?0; unstack ?1 ?2; put-down ?1 | -",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 164,
+    "support": 103,
+    "score": 328
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2 | -",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 137,
+    "support": 83,
+    "score": 274
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; pick-up ?2 | on(?0,?1)",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 130,
+    "support": 95,
+    "score": 260
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0; pick-up ?3 | on(?0,?1),on(?2,?0)",
+    "L": 4,
+    "nvars": 4,
+    "occurrences": 84,
+    "support": 73,
+    "score": 252
+   },
+   {
+    "key": "put-down ?0; pick-up ?1; stack ?1 ?2; pick-up ?0 | on(?0,?1),on(?1,?2)",
+    "L": 4,
+    "nvars": 3,
+    "occurrences": 83,
+    "support": 69,
+    "score": 249
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; pick-up ?1; stack ?1 ?2 | on(?0,?1),on(?1,?2)",
+    "L": 4,
+    "nvars": 3,
+    "occurrences": 78,
+    "support": 63,
+    "score": 234
+   },
+   {
+    "key": "put-down ?0; pick-up ?1; stack ?1 ?2 | on(?1,?2)",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 100,
+    "support": 93,
+    "score": 200
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 198,
+    "support": 110,
+    "score": 198
+   },
+   {
+    "key": "put-down ?0; unstack ?1 ?2 | -",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 196,
+    "support": 119,
+    "score": 196
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2 | on(?0,?1)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 174,
+    "support": 120,
+    "score": 174
+   },
+   {
+    "key": "put-down ?0; pick-up ?1; stack ?1 ?2 | on(?0,?1),on(?1,?2)",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 87,
+    "support": 70,
+    "score": 174
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2 | on(?0,?2)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 172,
+    "support": 129,
+    "score": 172
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3; stack ?3 ?0 | on(?0,?2),on(?3,?0)",
+    "L": 4,
+    "nvars": 4,
+    "occurrences": 53,
+    "support": 53,
+    "score": 159
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; pick-up ?1 | on(?0,?1)",
+    "L": 3,
+    "nvars": 2,
+    "occurrences": 78,
+    "support": 63,
+    "score": 156
+   },
+   {
+    "key": "put-down ?0; pick-up ?1; stack ?1 ?2; pick-up ?3 | on(?1,?2),on(?3,?1)",
+    "L": 4,
+    "nvars": 4,
+    "occurrences": 51,
+    "support": 51,
+    "score": 153
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; pick-up ?1; stack ?1 ?2 | on(?1,?2)",
+    "L": 4,
+    "nvars": 3,
+    "occurrences": 49,
+    "support": 46,
+    "score": 147
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2; put-down ?1 | on(?0,?1),on(?1,?2)",
+    "L": 4,
+    "nvars": 3,
+    "occurrences": 48,
+    "support": 29,
+    "score": 144
+   },
+   {
+    "key": "put-down ?0; pick-up ?1; stack ?1 ?0 | on(?1,?0)",
+    "L": 3,
+    "nvars": 2,
+    "occurrences": 68,
+    "support": 61,
+    "score": 136
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; pick-up ?2; stack ?2 ?0 | on(?2,?0)",
+    "L": 4,
+    "nvars": 3,
+    "occurrences": 38,
+    "support": 37,
+    "score": 114
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3 | on(?0,?2),on(?3,?0)",
+    "L": 3,
+    "nvars": 4,
+    "occurrences": 53,
+    "support": 53,
+    "score": 106
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; unstack ?2 ?3; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "L": 4,
+    "nvars": 4,
+    "occurrences": 35,
+    "support": 33,
+    "score": 105
+   },
+   {
+    "key": "put-down ?0; pick-up ?1 | -",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 101,
+    "support": 94,
+    "score": 101
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; unstack ?2 ?3 | on(?0,?1)",
+    "L": 3,
+    "nvars": 4,
+    "occurrences": 50,
+    "support": 49,
+    "score": 100
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; pick-up ?1 | -",
+    "L": 3,
+    "nvars": 2,
+    "occurrences": 50,
+    "support": 47,
+    "score": 100
+   },
+   {
+    "key": "put-down ?0; unstack ?1 ?2; put-down ?1 | on(?0,?1),on(?1,?2)",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 50,
+    "support": 30,
+    "score": 100
+   },
+   {
+    "key": "put-down ?0; unstack ?1 ?2; put-down ?1; unstack ?2 ?3 | -",
+    "L": 4,
+    "nvars": 4,
+    "occurrences": 33,
+    "support": 29,
+    "score": 99
+   },
+   {
+    "key": "stack ?0 ?1; unstack ?2 ?3; put-down ?2 | on(?0,?1)",
+    "L": 3,
+    "nvars": 4,
+    "occurrences": 48,
+    "support": 46,
+    "score": 96
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2 | on(?0,?1),on(?1,?2)",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 48,
+    "support": 29,
+    "score": 96
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1; unstack ?2 ?3; put-down ?2 | on(?0,?1),on(?2,?3)",
+    "L": 4,
+    "nvars": 4,
+    "occurrences": 32,
+    "support": 28,
+    "score": 96
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?0; pick-up ?2; stack ?2 ?1 | on(?2,?1)",
+    "L": 4,
+    "nvars": 3,
+    "occurrences": 31,
+    "support": 31,
+    "score": 93
+   }
+  ],
+  "S": [
+   {
+    "key": "stack ?0 ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3)",
+    "L": 2,
+    "nvars": 4,
+    "occurrences": 201,
+    "support": 132,
+    "score": 201
+   },
+   {
+    "key": "pick-up ?0; stack ?1 ?2 | on(?1,?2)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 189,
+    "support": 133,
+    "score": 189
+   },
+   {
+    "key": "pick-up ?0; pick-up ?1 | -",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 187,
+    "support": 124,
+    "score": 187
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2 | on(?0,?1)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 186,
+    "support": 125,
+    "score": 186
+   },
+   {
+    "key": "put-down ?0; stack ?1 ?2 | on(?1,?2)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 149,
+    "support": 112,
+    "score": 149
+   },
+   {
+    "key": "stack ?0 ?1; put-down ?2 | on(?0,?1)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 118,
+    "support": 91,
+    "score": 118
+   },
+   {
+    "key": "pick-up ?0; put-down ?1 | -",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 115,
+    "support": 91,
+    "score": 115
+   },
+   {
+    "key": "put-down ?0; pick-up ?1 | -",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 114,
+    "support": 89,
+    "score": 114
+   },
+   {
+    "key": "put-down ?0; put-down ?1 | -",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 105,
+    "support": 75,
+    "score": 105
+   },
+   {
+    "key": "unstack ?0 ?1; pick-up ?2 | -",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 77,
+    "support": 62,
+    "score": 77
+   },
+   {
+    "key": "pick-up ?0; unstack ?1 ?2 | -",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 75,
+    "support": 63,
+    "score": 75
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?2 ?3 | on(?2,?3)",
+    "L": 2,
+    "nvars": 4,
+    "occurrences": 63,
+    "support": 54,
+    "score": 63
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?0 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 59,
+    "support": 54,
+    "score": 59
+   },
+   {
+    "key": "unstack ?0 ?1; put-down ?2 | -",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 59,
+    "support": 52,
+    "score": 59
+   },
+   {
+    "key": "put-down ?0; unstack ?1 ?2 | -",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 58,
+    "support": 51,
+    "score": 58
+   },
+   {
+    "key": "stack ?0 ?1; unstack ?2 ?3 | on(?0,?1)",
+    "L": 2,
+    "nvars": 4,
+    "occurrences": 58,
+    "support": 49,
+    "score": 58
+   },
+   {
+    "key": "pick-up ?0; stack ?0 ?1 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 56,
+    "support": 46,
+    "score": 56
+   },
+   {
+    "key": "pick-up ?0; pick-up ?1; pick-up ?2 | -",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 28,
+    "support": 25,
+    "score": 56
+   },
+   {
+    "key": "stack ?0 ?1; stack ?1 ?2 | on(?0,?1),on(?1,?2)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 53,
+    "support": 49,
+    "score": 53
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?2,?0)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 51,
+    "support": 49,
+    "score": 51
+   },
+   {
+    "key": "pick-up ?0; stack ?1 ?0 | on(?1,?0)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 46,
+    "support": 42,
+    "score": 46
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?1 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 44,
+    "support": 40,
+    "score": 44
+   },
+   {
+    "key": "pick-up ?0; stack ?1 ?2 | on(?0,?1),on(?1,?2)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 41,
+    "support": 37,
+    "score": 41
+   },
+   {
+    "key": "pick-up ?0; pick-up ?1 | on(?1,?0)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 40,
+    "support": 37,
+    "score": 40
+   },
+   {
+    "key": "pick-up ?0; put-down ?0 | -",
+    "L": 2,
+    "nvars": 1,
+    "occurrences": 39,
+    "support": 36,
+    "score": 39
+   },
+   {
+    "key": "pick-up ?0; pick-up ?1 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 39,
+    "support": 34,
+    "score": 39
+   },
+   {
+    "key": "stack ?0 ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3),on(?3,?0)",
+    "L": 2,
+    "nvars": 4,
+    "occurrences": 37,
+    "support": 34,
+    "score": 37
+   },
+   {
+    "key": "stack ?0 ?1; stack ?2 ?0 | on(?0,?1),on(?2,?0)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 36,
+    "support": 34,
+    "score": 36
+   },
+   {
+    "key": "stack ?0 ?1; put-down ?1 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 34,
+    "support": 31,
+    "score": 34
+   },
+   {
+    "key": "put-down ?0; stack ?0 ?1 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 33,
+    "support": 30,
+    "score": 33
+   },
+   {
+    "key": "put-down ?0; stack ?1 ?0 | on(?1,?0)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 32,
+    "support": 28,
+    "score": 32
+   },
+   {
+    "key": "stack ?0 ?1; put-down ?0 | on(?0,?1)",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 31,
+    "support": 29,
+    "score": 31
+   },
+   {
+    "key": "stack ?0 ?1; stack ?2 ?3 | on(?0,?1),on(?1,?2),on(?2,?3)",
+    "L": 2,
+    "nvars": 4,
+    "occurrences": 31,
+    "support": 28,
+    "score": 31
+   },
+   {
+    "key": "unstack ?0 ?1; stack ?2 ?3 | on(?0,?1),on(?2,?3)",
+    "L": 2,
+    "nvars": 4,
+    "occurrences": 31,
+    "support": 27,
+    "score": 31
+   },
+   {
+    "key": "stack ?0 ?1; pick-up ?2 | on(?0,?1),on(?1,?2)",
+    "L": 2,
+    "nvars": 3,
+    "occurrences": 30,
+    "support": 30,
+    "score": 30
+   },
+   {
+    "key": "unstack ?0 ?1; unstack ?2 ?3 | -",
+    "L": 2,
+    "nvars": 4,
+    "occurrences": 30,
+    "support": 27,
+    "score": 30
+   },
+   {
+    "key": "put-down ?0; pick-up ?1; pick-up ?2 | -",
+    "L": 3,
+    "nvars": 3,
+    "occurrences": 15,
+    "support": 15,
+    "score": 30
+   },
+   {
+    "key": "pick-up ?0; stack ?1 ?2; put-down ?3 | on(?1,?2)",
+    "L": 3,
+    "nvars": 4,
+    "occurrences": 15,
+    "support": 14,
+    "score": 30
+   },
+   {
+    "key": "pick-up ?0; unstack ?1 ?0 | -",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 29,
+    "support": 28,
+    "score": 29
+   },
+   {
+    "key": "put-down ?0; unstack ?0 ?1 | -",
+    "L": 2,
+    "nvars": 2,
+    "occurrences": 28,
+    "support": 28,
+    "score": 28
+   }
+  ]
+ },
+ "mining_stats": {
+  "M": {
+   "segments": 11497,
+   "skipped_L4_over_4_vars": 593,
+   "skipped_L3_over_4_vars": 79,
+   "plans": 211,
+   "distinct_keys": 485
+  },
+  "S": {
+   "segments": 11497,
+   "skipped_L3_over_4_vars": 896,
+   "skipped_L4_over_4_vars": 2155,
+   "plans": 211,
+   "distinct_keys": 3283
+  }
+ },
+ "validation": {
+  "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0": {
+   "key": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0 | -",
+   "step_key": "pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 420,
+    "state_changing_pairs": 420
+   },
+   "examples": {},
+   "seconds": 0.021
+  },
+  "stack ?0 ?1; pick-up ?2; stack ?2 ?0": {
+   "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0 | -",
+   "step_key": "stack ?0 ?1; pick-up ?2; stack ?2 ?0",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 420,
+    "state_changing_pairs": 420
+   },
+   "examples": {},
+   "seconds": 0.027
+  },
+  "pick-up ?0; stack ?0 ?1; pick-up ?2": {
+   "key": "pick-up ?0; stack ?0 ?1; pick-up ?2 | -",
+   "step_key": "pick-up ?0; stack ?0 ?1; pick-up ?2",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 420,
+    "state_changing_pairs": 420
+   },
+   "examples": {},
+   "seconds": 0.019
+  },
+  "unstack ?0 ?1; stack ?0 ?2; pick-up ?1; stack ?1 ?0": {
+   "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?1; stack ?1 ?0 | -",
+   "step_key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?1; stack ?1 ?0",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 420,
+    "state_changing_pairs": 420
+   },
+   "examples": {},
+   "seconds": 0.03
+  },
+  "unstack ?0 ?1; put-down ?0; unstack ?1 ?2": {
+   "key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2 | -",
+   "step_key": "unstack ?0 ?1; put-down ?0; unstack ?1 ?2",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 420,
+    "state_changing_pairs": 420
+   },
+   "examples": {},
+   "seconds": 0.028
+  },
+  "put-down ?0; unstack ?1 ?2; put-down ?1": {
+   "key": "put-down ?0; unstack ?1 ?2; put-down ?1 | -",
+   "step_key": "put-down ?0; unstack ?1 ?2; put-down ?1",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 420,
+    "state_changing_pairs": 420
+   },
+   "examples": {},
+   "seconds": 0.018
+  },
+  "unstack ?0 ?1; stack ?0 ?2; pick-up ?3; stack ?3 ?1": {
+   "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3; stack ?3 ?1 | -",
+   "step_key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3; stack ?3 ?1",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 360,
+    "state_changing_pairs": 360
+   },
+   "examples": {},
+   "seconds": 0.032
+  },
+  "stack ?0 ?1; pick-up ?2; stack ?2 ?3": {
+   "key": "stack ?0 ?1; pick-up ?2; stack ?2 ?3 | -",
+   "step_key": "stack ?0 ?1; pick-up ?2; stack ?2 ?3",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 360,
+    "state_changing_pairs": 360
+   },
+   "examples": {},
+   "seconds": 0.027
+  },
+  "unstack ?0 ?1; stack ?0 ?2; pick-up ?3": {
+   "key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3 | -",
+   "step_key": "unstack ?0 ?1; stack ?0 ?2; pick-up ?3",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 360,
+    "state_changing_pairs": 360
+   },
+   "examples": {},
+   "seconds": 0.03
+  },
+  "pick-up ?0; stack ?0 ?1": {
+   "key": "pick-up ?0; stack ?0 ?1 | -",
+   "step_key": "pick-up ?0; stack ?0 ?1",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 4,
+   "counts": {
+    "states": 125,
+    "executable_pairs": 84,
+    "state_changing_pairs": 84
+   },
+   "examples": {},
+   "seconds": 0.002
+  },
+  "unstack ?0 ?1; stack ?0 ?2": {
+   "key": "unstack ?0 ?1; stack ?0 ?2 | -",
+   "step_key": "unstack ?0 ?1; stack ?0 ?2",
+   "consistent": true,
+   "why": null,
+   "claimed": false,
+   "accepted": true,
+   "reason": null,
+   "sound": true,
+   "complete": true,
+   "vacuous": false,
+   "identity": false,
+   "n_check": 5,
+   "counts": {
+    "states": 866,
+    "executable_pairs": 780,
+    "state_changing_pairs": 780
+   },
+   "examples": {},
+   "seconds": 0.029
+  }
+ },
+ "validation_summary": {
+  "patterns_checked": 143,
+  "outcomes": {
+   "accepted": 11,
+   "inconsistent": 70,
+   "vacuous": 62
+  },
+  "mutex_shortcuts": 62,
+  "seconds": 0.26
+ },
+ "custody": {
+  "sha256": "fdf80151a52d5728c27d2bb7136f4ea1caa17ba3241487af9553a77dac86244c",
+  "path": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\BW_DISTILL_r1\\solutions.jsonl",
+  "counts": {
+   "rows": 240,
+   "verified": 211,
+   "f_states_match_exact": 211,
+   "actions": 4254,
+   "not_verified_skipped": 29
+  },
+  "by_n": {
+   "6": 29,
+   "7": 30,
+   "8": 55,
+   "9": 54,
+   "10": 43
+  },
+  "distill_meta_sha256": "4551750f9f6c832a482131f2ef16977862e89b72d88b4a692fc93dcdadf1840a"
+ },
+ "overlap": {
+  "M_S_keys": [],
+  "M_S_step_patterns": [],
+  "M_R_step_patterns": []
+ },
+ "seeds": {
+  "random": "20261256:random_macros",
+  "shuffle": "20261256:shuffle"
+ },
+ "wall_s": 0.75
+}

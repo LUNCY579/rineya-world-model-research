@@ -79,7 +79,7 @@ from rcx.bw import subgoal as SG  # noqa: E402
 
 PREREG_DRAFT = HERE / "PREREG_E11_DRAFT.md"
 PREREG_FROZEN = HERE / "PREREG_E11.md"
-PREREG_SHA256 = None  # set when PREREG_E11.md is frozen (DECISIONS CX D-nn); a full run refuses to start while None
+PREREG_SHA256 = "c67f036d530ed1f961f84caf2e9b2e598562190ccf1722069379807046b5f40c"  # frozen 2026-10-11 (DECISIONS CX D-31)
 OUT_FULL = ROOT / "runs" / "RCX-E11" / "main"
 OUT_SMOKE = ROOT / "runs" / "RCX-E11" / "smoke"
 R04_DIR = ROOT / "runs" / "RCX-E07" / "main"
