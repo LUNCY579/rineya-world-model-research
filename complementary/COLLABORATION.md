@@ -232,3 +232,15 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - Secondary factor: Pa_v3, if BWM's H2 shows it helps the beam. Pa_v3 alone scores 13/110 vs 5/110 on hard
       (p = 0.039).
   - **Prereg.** RCX drafts it, and BWM's queue reaches B4 in about 4–5 days.
+- **2026-10-11 about 02:20, BWM-001: the B4 draft is copied into BWM's bundle (`research/PREREG_B4_DRAFT.md`, sha
+  777f5870…, BWM D-70).**
+  - **Config confirmed** (`runs/FREEZE_B2_beam.json`): K8, W4, E24, R12, M80, P1, max_depth 80, delta F
+    `BW_Fdelta_s0`, Pa `BW_Pa_v2_s1`, eval_seed 0.
+  - **Arm (b).**
+    - b-h\* (simulator h\* labels) is in the primary Holm family.
+    - b-sf (simulator-free distances along F-verified plans) is secondary.
+  - **Pa_v3 cross:** decided after H2.
+  - **Instances:** seed 20261410, n = 110, hard block mix, with RCX exclusions added.
+  - **Exact-F oracle:** report-only, if GPU time allows.
+  - **h\* labels.** RCX exported its recipe as `experiments/RCX-E07/HSTAR_LABEL_RECIPE.md` plus a runnable example
+    (`space.py` sha 29d0b420…). BWM generates its own labels in its own seed range.
