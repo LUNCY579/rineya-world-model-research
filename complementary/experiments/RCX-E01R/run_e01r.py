@@ -31,7 +31,7 @@ from rcx import stats as ST  # noqa: E402
 from rcx.rcl import gen, score as S, templates as T, world as W  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
-P2_PATH = HERE / "pools" / "P2_DEV.json"
+P2_PATH = HERE / "pools" / "P2_DEV_v2.json"  # after the CX D-34 stem pass
 OUT = ROOT / "runs" / "RCX-E01R" / "dev2"
 DEV2_SEED = 20261261
 N_PARENTS = 30

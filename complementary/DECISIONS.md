@@ -447,3 +447,23 @@ and the evidence path.
 
     The first step is a descriptive diagnostic on the existing adapters before any new training. Details are in
     NEXT_STEPS.
+- **CX D-34 RCX-E01R wording pools fixed (2026-10-11 about 14:35). No model has seen them, and no outcome exists.**
+  - **Authoring** (workflow wf_d006d143-69e):
+    - 3 blind authors produced 143 unique templates: 6 cells (POS/NEG × EXPLICIT listed-first / EXPLICIT
+      complement-first / IMPLICIT), 23–24 per cell.
+    - All 143 passed unanimous label-blind verification by 3 verifiers at list sizes 1, 2 and 3.
+    - **Limitation:** no planted ambiguous controls were included, so the verifiers' sensitivity to ambiguity is
+      untested.
+  - **Transfer.** The pool was written to `POOL_ALL.json.secret` (git-ignored), sha256 `aa86ea65…`. Its FNV-1a32
+    (`9d8266ab`) matched the workflow payload, so the transcription was exact.
+  - **First audit and split** (`split_pool.py`, POOL_SPLIT.json; `wording_audit.py` as of 52e4c65):
+    - drops: 9 for status words, 11 near-duplicates of RCX templates, 22 within-pool near-duplicates;
+    - split: P2 49 / P3 49 / spare 3, by cell order under a fresh secret salt.
+  - **Second pass, stem drops (`refine_pool.py`, POOL_REFINE.json).**
+    - Reading P2 showed inflections of status words: "posting"/"post" (anchor "posted") and "rejection" ("rejected").
+      `wording_audit.stem_hits` drops any wording with a word sharing ≥ 4 leading letters with a real status-like word.
+    - On P2 it flags exactly those 4 wordings and nothing else.
+    - It removes items only, to avoid moving read P2 wordings into P3. Result: **P2_v2 45, P3_v2 48** (sha256
+      `88dd432b…`, never read by the lead), spare 3.
+  - **DEV2 battery for step A built:** seed 20261261, 1,320 records (`in` 660, `p2` 660), sha256 `38362338…`, all 45
+    P2_v2 templates used. It is evaluated after E11, in the single CPU lane: N-CFSD s0–s2, N-VR s0.

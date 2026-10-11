@@ -30,6 +30,11 @@ class TestWordingAudit(unittest.TestCase):
         self.assertIn("posted", WA.status_words())
         self.assertIn("pending", WA.status_words())
 
+    def test_stem_hits_catch_inflections_only(self):
+        self.assertEqual(WA.stem_hits("Posting is the default for {L}."), ["posting~posted", "posting~postedx"])
+        self.assertEqual(WA.stem_hits("Rejection applies to {L}."), ["rejection~rejected"])
+        self.assertEqual(WA.stem_hits("Apply every event except {L}; the operative rest stays."), [])
+
     def test_clusters_collapse_near_duplicates(self):
         items = [("w001", "Treat {L} as the sole statuses that move money; every remaining event is inert."),
                  ("w002", "Treat {L} as the sole statuses that move money; every other event is inert."),

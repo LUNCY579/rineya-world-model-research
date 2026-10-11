@@ -61,6 +61,31 @@ def vocab_hits(text, vocab=None):
     return sorted(set(words(text)) & vocab)
 
 
+def real_status_words():
+    """The real-word statuses, anchors, probes and excluded words (no nonce words): the words whose inflections a rule
+    wording must not contain either (e.g. 'posting' for the anchor 'posted', 'rejection' for 'rejected')."""
+    out = set()
+    for split in ("train", "dev", "sealed"):
+        out |= {w.lower() for w in V.pools(split)[0]}
+    out |= {w.lower() for w in V.EXCLUDED} | {V.ANCHOR_APPLY, V.ANCHOR_NOOP}
+    out |= {w.lower() for w in V.NEARMISS_VOID} | {w.lower() for w in V.POSTEDLIKE}
+    return {w for w in out if re.fullmatch(r"[a-z]+", w) and len(w) >= 4}
+
+
+def stem_hits(text, min_prefix=4, vocab=None):
+    """Words of `text` sharing a prefix of at least `min_prefix` letters with a real status-like word (CX D-34)."""
+    vocab = real_status_words() if vocab is None else vocab
+    hits = set()
+    for w in set(words(text)):
+        for s in vocab:
+            k = 0
+            while k < min(len(w), len(s)) and w[k] == s[k]:
+                k += 1
+            if k >= min_prefix:
+                hits.add(f"{w}~{s}")
+    return sorted(hits)
+
+
 def ref_hits(text, refs=None, jac=0.5, n=5):
     refs = reference_wordings() if refs is None else refs
     return sorted(k for k, r in refs.items() if near_dup(text, r, jac, n))

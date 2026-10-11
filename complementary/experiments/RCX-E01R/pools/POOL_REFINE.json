@@ -1,0 +1,77 @@
+{
+ "decision": "CX D-34",
+ "rule": "drop a wording with any word sharing >= 4 leading letters with a real status-like word (wording_audit.stem_hits)",
+ "inputs": {
+  "P2": {
+   "file": "P2_DEV.json",
+   "sha256": "efee36cc0b85a19fda26a98d523991c81d431db84d859274ecd44007abfcabdf",
+   "n": 49
+  },
+  "P3": {
+   "file": "P3_SEALED.json.secret",
+   "sha256": "697c0d912411278f702aa076042c9967fe289d4cf7d65b57fafd7a3c25a750a3",
+   "n": 49
+  },
+  "SPARE": {
+   "file": "SPARE.json.secret",
+   "sha256": "210e4a1a8d9de5308876daceb837387db992365a9506852a649abb33632590a9",
+   "n": 3
+  }
+ },
+ "outputs": {
+  "P2": {
+   "file": "P2_DEV_v2.json",
+   "sha256": "7e625a590004798e7ddd3b2828cd8f9009744abf14c996774a2ad890ccb7f64e",
+   "n": 45
+  },
+  "P3": {
+   "file": "P3_SEALED_v2.json.secret",
+   "sha256": "88dd432bf59ba82617035d3a96280be74ef9fce233cfafa03e539cb489bcf052",
+   "n": 48
+  },
+  "SPARE": {
+   "file": "SPARE_v2.json.secret",
+   "sha256": "b29951d4e49b5fc6c77cc360e445fa49112d8287756390626df913496772b20e",
+   "n": 3
+  }
+ },
+ "dropped_by_cell": {
+  "P2": {
+   "POS/EXPLICIT_COMPLEMENT_FIRST": 1,
+   "POS/IMPLICIT": 1,
+   "NEG/EXPLICIT_LISTED_FIRST": 1,
+   "NEG/EXPLICIT_COMPLEMENT_FIRST": 1
+  },
+  "P3": {
+   "POS/IMPLICIT": 1
+  },
+  "SPARE": {}
+ },
+ "kept_by_cell": {
+  "P2": {
+   "POS/EXPLICIT_LISTED_FIRST": 7,
+   "POS/EXPLICIT_COMPLEMENT_FIRST": 9,
+   "POS/IMPLICIT": 6,
+   "NEG/EXPLICIT_LISTED_FIRST": 6,
+   "NEG/EXPLICIT_COMPLEMENT_FIRST": 8,
+   "NEG/IMPLICIT": 9
+  },
+  "P3": {
+   "POS/EXPLICIT_LISTED_FIRST": 7,
+   "POS/EXPLICIT_COMPLEMENT_FIRST": 10,
+   "POS/IMPLICIT": 6,
+   "NEG/EXPLICIT_LISTED_FIRST": 7,
+   "NEG/EXPLICIT_COMPLEMENT_FIRST": 9,
+   "NEG/IMPLICIT": 9
+  },
+  "SPARE": {
+   "POS/EXPLICIT_LISTED_FIRST": 1,
+   "POS/IMPLICIT": 1,
+   "NEG/EXPLICIT_LISTED_FIRST": 1
+  }
+ },
+ "code_sha256": {
+  "refine_pool.py": "6ca104a2a2ea8729629616c0960ed8479273fce144c837a2d28ded68445b504d",
+  "wording_audit.py": "cd6a1ef511e6abad2c94931595b546142c14c8ccd01dde719c819a7c1aee017f"
+ }
+}
