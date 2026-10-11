@@ -30,7 +30,17 @@ EVERY valid state of n_check blocks (n_check = min(V + 2, n_check_max), at least
   * non-identity some execution changes the state (rejects e.g. pick-up ?0; put-down ?0 and stack ?0 ?1; unstack ?0 ?1).
 accepted = all five. A macro built with `claimed=(pre, add, dele)` is checked against its claim instead (tests use
 this to show that unsound claims are rejected). Validation ignores goal_on (dynamics only), so results are cached by
-step key.
+step key. Non-identity is a whole-macro property: an accepted macro may still contain an internal no-op, an adjacent
+inverse pair such as `pick-up ?0; put-down ?0` (`noop_pairs`). Such a macro is dominated by its reduced form (same
+effect, extra precondition, longer plan) and can smuggle a library's pattern into a control (e.g. `pick-up ?0;
+put-down ?0; pick-up ?1; stack ?1 ?2 | on(?1,?2)` generates only end states of `pick-up ?0; stack ?0 ?1 | on(?0,?1)`);
+the selectors drop such candidates when called with exclude_noop=True (logged).
+
+Goal annotations gate bindings by the goal; primitives are never gated. `annotation_alignment` classifies every goal
+literal of a macro as established (an on-fact the macro adds), kept, destroyed (required true and deleted), pending
+(not true before; it ends holding ?i with ?j clear) or unrelated, so libraries can be compared by how progress-aligned
+their gating is. `goal_move_library` is the minimal non-mined goal-gated control (move one block onto its goal
+support).
 
 Search (`gbfs_macro`, `beam_macro`): identical to rcx.bw.search.gbfs / beam_search (same successor order, duplicate
 detection, generation-time goal test, tie-breaking and budget semantics) plus, after the primitive children of an
@@ -39,7 +49,14 @@ B.step. One node expansion generates all primitive and macro children, so a macr
 of its parent as a primitive edge; prim_steps (B.step calls during search) and h_calls are reported as the compute-side
 cost. If an intermediate state of a macro satisfies the goal, the plan stops there (goal_mid_macro). With an empty
 library both functions return exactly what search.gbfs / search.beam_search return (tested). Both are budget-monotone
-in the same sense as search.gbfs (run_e11.at_budget derives smaller budgets from the largest-budget run).
+in the same sense as search.gbfs (run_e11.at_budget derives smaller budgets from the largest-budget run). Every state
+is scored at most once per run (global duplicate detection), so h_calls equals the number of heuristic calls, and
+with a fresh per-run heuristic cache it equals the number of evaluations (tested).
+
+Compute-matched view (`compute_matched`): the outcome under a budget of heuristic calls or simulator steps, derived
+from a run at a larger EXPANSION budget. It is exact only where that run consumed more than the threshold before
+stopping; a run stopped by the expansion budget at or below the threshold is CENSORED (None), never counted as a
+failure (counting it as a failure biases the view against the arm with fewer children per expansion).
 """
 from __future__ import annotations
 
@@ -138,6 +155,20 @@ def abstract(seq, goal) -> tuple:
     steps = tuple((a[0],) + tuple(m.setdefault(x, len(m)) for x in a[1:]) for a in seq)
     gon = tuple(sorted((m[f[1]], m[f[2]]) for f in goal if f[0] == "on" and f[1] in m and f[2] in m))
     return steps, gon, sorted(m, key=m.get)
+
+
+_INVERSE = {"pick-up": "put-down", "put-down": "pick-up", "stack": "unstack", "unstack": "stack"}
+
+
+def noop_pairs(steps) -> list:
+    """Positions k where steps[k], steps[k + 1] are an inverse pair over the same arguments (pick-up x; put-down x,
+    put-down x; pick-up x, stack x y; unstack x y, unstack x y; stack x y): an internal no-op. Whenever the pair is
+    executable it restores the state, so every end state of the macro is an end state of its reduced form (the pair
+    removed) and the plan is two actions longer. Checked in tests over the whole cheap-filtered universe (L 2-4, V 1-4;
+    98 of its 162 patterns contain a pair) on every 4-block state; there, every pattern WITHOUT a pair deletes one of
+    its own preconditions, so it changes the state on every executable binding."""
+    return [k for k in range(len(steps) - 1)
+            if _INVERSE[steps[k][0]] == steps[k + 1][0] and tuple(steps[k][1:]) == tuple(steps[k + 1][1:])]
 
 
 # ----------------------------------------------------------------------------- indices for binding enumeration
@@ -416,6 +447,52 @@ class ValidationCache:
                 "seconds": round(sum(v.get("seconds", 0.0) for v in self.cache.values()), 2)}
 
 
+# ----------------------------------------------------------------------------- teacher plans (custody)
+
+class CustodyError(RuntimeError):
+    """The teacher rows do not have the declared custody counts (fail closed)."""
+
+
+def _fs(x) -> frozenset:
+    return frozenset(map(tuple, x))
+
+
+def teacher_plans(rows, B, expected: dict | None = None) -> tuple[list, dict]:
+    """(plans, counts) from BWM B3 solution rows: only rows with `verified` exactly True (a JSON true; truthy strings
+    or `exact_valid_for_analysis_only` never admit a row); every admitted plan is re-verified with B.execute (an exact
+    failure is excluded and counted) and its F-predicted trajectory compared with the exact one (counted only).
+    expected: e.g. {"rows": 240, "verified": 211}; any mismatch, or a repeated problem id among the plans, raises
+    CustodyError. plans: dicts id, n, plan (action tuples), goal (frozenset)."""
+    cust, plans = Counter(), []
+    for r in rows:
+        cust["rows"] += 1
+        if r.get("verified") is not True:
+            cust["not_verified_skipped"] += 1
+            continue
+        cust["verified"] += 1
+        init, goal = _fs(r["init"]), _fs(r["goal"])
+        plan = [tuple(a) for a in r["plan"]]
+        if not B.execute(init, goal, plan)["success"]:
+            cust["verified_but_exact_invalid_excluded"] += 1
+            continue
+        s, traj = init, []
+        for a in plan:
+            s = B.step(s, a)[0]
+            traj.append(s)
+        cust["f_states_match_exact" if [_fs(x) for x in r.get("f_states", [])] == traj
+             else "f_states_differ_from_exact"] += 1
+        cust["actions"] += len(plan)
+        plans.append({"id": r["id"], "n": r["n"], "plan": plan, "goal": goal})
+    ids = [p["id"] for p in plans]
+    if len(set(ids)) != len(ids):
+        raise CustodyError(f"repeated problem ids among the teacher plans ({len(ids) - len(set(ids))})")
+    if expected is not None:
+        got = {k: cust.get(k, 0) for k in expected}
+        if got != dict(expected):
+            raise CustodyError(f"counts {got} != declared {dict(expected)}")
+    return plans, dict(cust)
+
+
 # ----------------------------------------------------------------------------- mining and library selection
 
 def mine(plans, lengths=(2, 3, 4), max_vars: int = 4) -> tuple[dict, dict]:
@@ -455,9 +532,10 @@ def rank(table: dict) -> list:
 
 
 def select_library(ranked, K: int, min_support: int, vcache, exclude_step_keys=frozenset(),
-                   fill_min_support: int | None = None) -> tuple[list, list]:
+                   fill_min_support: int | None = None, exclude_noop: bool = False) -> tuple[list, list]:
     """Top-K accepted macros in rank order with support >= min_support; if fewer than K, optionally a second pass with
-    support >= fill_min_support. Returns (library, log of every candidate examined)."""
+    support >= fill_min_support. exclude_noop: skip candidates with an internal no-op (noop_pairs; logged). Returns
+    (library, log of every candidate examined)."""
     lib, log, chosen = [], [], set()
     passes = [min_support] + ([fill_min_support] if fill_min_support is not None and
                               fill_min_support < min_support else [])
@@ -471,6 +549,9 @@ def select_library(ranked, K: int, min_support: int, vcache, exclude_step_keys=f
                      "pass": pi}
             if c["step_key"] in exclude_step_keys:
                 log.append(dict(entry, decision="excluded_step_pattern"))
+                continue
+            if exclude_noop and noop_pairs(c["steps"]):
+                log.append(dict(entry, decision="excluded_internal_noop"))
                 continue
             m = Macro(c["steps"], c["goal_on"], meta={k: c[k] for k in ("occurrences", "support", "score")} |
                       {"pass": pi})
@@ -488,7 +569,7 @@ MATCH_TIERS = ("same_L_min_support", "same_L_fill_support", "any_L_min_support",
 
 
 def select_matched_library(ranked, templates, min_support: int, vcache, exclude_step_keys=frozenset(),
-                           fill_min_support: int = 1) -> tuple[list, list]:
+                           fill_min_support: int = 1, exclude_noop: bool = False) -> tuple[list, list]:
     """A library matched to the templates' length mix and disjoint from an excluded library (the shuffled-plan control,
     CX decision on E11 Q7). For each template, in order, take the highest-ranked candidate that validate() accepts, is
     not already chosen and whose abstract step signature (step_key) is not in exclude_step_keys. Candidates sharing an
@@ -496,9 +577,12 @@ def select_matched_library(ranked, templates, min_support: int, vcache, exclude_
     excluded one. The first tier with a candidate is used:
       tier 0  same L, support >= min_support      tier 1  same L, support >= fill_min_support
       tier 2  any L, support >= min_support       tier 3  any L, support >= fill_min_support
+    exclude_noop: also skip candidates with an internal no-op (noop_pairs). Without it, a padded candidate can carry
+    an excluded pattern under a new signature (`pick-up ?0; put-down ?0; pick-up ?1; stack ?1 ?2 | on(?1,?2)` only
+    generates end states of `pick-up ?0; stack ?0 ?1 | on(?0,?1)`).
     Returns (library, log); every macro's meta records its tier, template, rank, occurrences, support and score."""
     lib, log, chosen = [], [], set()
-    skipped_excluded, rejected = set(), {}
+    skipped_excluded, rejected, skipped_noop = set(), {}, set()
     for t in templates:
         pick = None
         for tier, name in enumerate(MATCH_TIERS):
@@ -508,6 +592,9 @@ def select_matched_library(ranked, templates, min_support: int, vcache, exclude_
                     continue
                 if c["step_key"] in exclude_step_keys:
                     skipped_excluded.add(c["key"])
+                    continue
+                if exclude_noop and noop_pairs(c["steps"]):
+                    skipped_noop.add(c["key"])
                     continue
                 v = vcache(Macro(c["steps"], c["goal_on"]))
                 if not v["accepted"]:
@@ -527,8 +614,50 @@ def select_matched_library(ranked, templates, min_support: int, vcache, exclude_
                     "rank": pick.meta["rank"], "occurrences": pick.meta["occurrences"],
                     "support": pick.meta["support"]})
     log.append({"summary": True, "skipped_excluded_keys": sorted(skipped_excluded),
-                "rejected_keys": dict(sorted(rejected.items()))})
+                "skipped_internal_noop_keys": sorted(skipped_noop), "rejected_keys": dict(sorted(rejected.items()))})
     return lib, log
+
+
+ALIGN_CLASSES = ("established", "pending", "kept", "destroyed", "unrelated")
+
+
+def annotation_alignment(m: Macro) -> dict:
+    """How a macro's goal annotation relates to its own effect (the gating is a filter on bindings only; primitives
+    are never gated). Each literal on(?i, ?j) of goal_on is classed by the macro's regression (first match):
+      established  on(?i, ?j) in add: the macro makes the goal fact true (it fires only where it makes this progress)
+      kept         on(?i, ?j) in pre and not deleted: it fires only where the fact already holds, and keeps it
+      destroyed    on(?i, ?j) in pre and deleted: it fires only where the fact holds, and breaks it
+      pending      not in pre, and it ends holding ?i with ?j clear: the next primitive (stack ?i ?j) makes it true
+      unrelated    otherwise.
+    `kept` cannot occur for a regression-derived macro (the only operator that requires an on-fact, unstack, deletes
+    it); it is listed for claimed macros. Returns {"literals": [class per literal, goal_on order], class: count..., "aligned": established + pending}."""
+    post = (set(m.add) | (set(m.pre) - set(m.dele))) if m.consistent else set()
+    out = []
+    for i, j in m.goal_on:
+        f = ("on", i, j)
+        if f in m.add:
+            c = "established"
+        elif f in m.pre:
+            c = "destroyed" if f in m.dele else "kept"
+        elif ("holding", i) in post and ("clear", j) in post:
+            c = "pending"
+        else:
+            c = "unrelated"
+        out.append(c)
+    cnt = Counter(out)
+    return {"literals": out, **{c: cnt[c] for c in ALIGN_CLASSES}, "aligned": cnt["established"] + cnt["pending"]}
+
+
+GOAL_MOVE_STEPS = ((("pick-up", 0), ("stack", 0, 1)), (("unstack", 0, 1), ("stack", 0, 2)))
+GOAL_MOVE_GOAL_ON = (((0, 1),), ((0, 2),))
+
+
+def goal_move_library() -> list:
+    """The goal-gated single-move control (descriptive; not mined): `pick-up ?0; stack ?0 ?1 | on(?0,?1)` and
+    `unstack ?0 ?1; stack ?0 ?2 | on(?0,?2)`, i.e. move one clear block onto its goal support in one edge. It has
+    exactly the progress-aligned gating of the mined skills (every literal 'established') and no mined multi-step
+    structure, so M vs this library separates the two (an M advantage over it is not explained by goal gating)."""
+    return [Macro(st, g, meta={"control": "goal_move"}) for st, g in zip(GOAL_MOVE_STEPS, GOAL_MOVE_GOAL_ON)]
 
 
 def shuffled_plans(plans, rng: random.Random) -> list:
@@ -638,7 +767,7 @@ RANDOM_TIERS = ("same_L_V_G_new_pattern", "same_L_V_G_any_pattern", "same_L_G_an
 
 
 def random_library(templates, rng: random.Random, vcache, exclude_keys=frozenset(), exclude_step_keys=frozenset(),
-                   max_vars: int = 4) -> tuple[list, list]:
+                   max_vars: int = 4, exclude_noop: bool = False) -> tuple[list, list]:
     """The random-macro control: for every template macro (in order), a uniformly random ACCEPTED macro matched to
     it, drawn by the first tier that has one:
       tier 0  same (L, V, G); step pattern neither in exclude_step_keys (the mined library) nor already drawn;
@@ -648,6 +777,8 @@ def random_library(templates, rng: random.Random, vcache, exclude_keys=frozenset
     validate() accepts and that can carry G goal literals is taken (uniform over accepted patterns of the tier);
     goal_on = random_goal_on(rng, V, G); the full key must not be in exclude_keys (the mined library's keys).
     Small (L, V) classes are tiny (for L = 2, V = 2 only three sound non-identity patterns exist), hence the tiers.
+    exclude_noop: patterns with an internal no-op (noop_pairs) are skipped (counted) before any draw for them, so with
+    exclude_noop=False the random stream and the library are exactly those of the original rule.
     Returns (library, per-template log)."""
     lib, log, used = [], [], set()
     universes = {}
@@ -667,6 +798,9 @@ def random_library(templates, rng: random.Random, vcache, exclude_keys=frozenset
             for steps in order:
                 sk = step_key(steps)
                 if sk in used or (tier == 0 and sk in exclude_step_keys):
+                    continue
+                if exclude_noop and noop_pairs(steps):
+                    stat["internal_noop"] += 1
                     continue
                 m0 = Macro(steps)
                 if G > m0.nvars - 1:
@@ -832,6 +966,41 @@ def beam_macro(objs, init, goal, h, library=(), width: int = 4, max_expansions: 
         ranked = sorted((v, i) for i, v in enumerate(hs) if v < math.inf)
         beam = [kids[i] for _, i in ranked[:width]]
     return _result(B, init, goal, False, "exhausted", None, [], st, t0)
+
+
+COMPUTE_FIELDS = ("h_calls", "prim_steps")
+
+
+def compute_matched(rec: dict, field: str, threshold: int):
+    """Outcome of one search run (a gbfs_macro / beam_macro result or run record) under a compute budget of
+    `threshold` units of `field` ('h_calls': states scored by the heuristic; 'prim_steps': B.step calls), derived from
+    the run at its (larger) expansion budget. The trajectory under the compute budget is identical up to the point
+    where either budget binds, so:
+      True   solved, and the goal was generated with rec[field] <= threshold (h_calls at success counts the states
+             scored before the goal was generated, because the goal test precedes scoring; prim_steps at success
+             includes the step that generated the goal);
+      False  not solved within the threshold: solved only beyond it, exhausted, or stopped by the expansion budget
+             after consuming more than `threshold` units;
+      None   censored: the expansion budget stopped the run after consuming at most `threshold` units, so the outcome
+             under the compute budget is unknown (conservative at equality for prim_steps)."""
+    if field not in COMPUTE_FIELDS:
+        raise ValueError(f"field must be one of {COMPUTE_FIELDS}, got {field!r}")
+    v = rec[field]
+    if v is None:
+        raise ValueError(f"{field} is unknown for this record (derived from a larger budget); use the source run")
+    if rec["success"]:
+        return v <= threshold
+    if rec["reason"] == "budget" and v <= threshold:
+        return None
+    return False
+
+
+def compute_matched_counts(recs, field: str, threshold: int) -> dict:
+    """Success count under a compute budget over runs (compute_matched), with the number of censored runs; the count
+    is exact only when censored == 0 (otherwise it is a lower bound)."""
+    out = [compute_matched(r, field, threshold) for r in recs]
+    cens = sum(o is None for o in out)
+    return {"n": len(out), "success": sum(o is True for o in out), "censored": cens, "exact": cens == 0}
 
 
 def library_json(lib) -> list:

@@ -20,7 +20,8 @@ of facts f in U(s) such that some optimal plan from s achieves f before any othe
 the plan's step that stacks x on y (the only operator that adds an on-fact). Computed by a DFS over the optimal-move
 DAG of space.GoalLabels (h*(v) = h*(u) - 1), stopping each path at its first stack of a fact in U(s). A goal fact that
 holds in s, is broken and is re-made along the way does not count (it is not in U(s)). A(s) is never empty for a
-non-goal state (every unmet fact is stacked by every plan).
+non-goal state (every unmet fact is stacked by every plan). A(s) is NOT the achiever-level optimum: see
+`achiever_search` / `achiever_label_set` (exact option-level values V_A, Q_A and label sets A_A(s), any n within budget).
 
 Goal structure (`structure`): the multiset of goal-tower heights (singletons included); k = number of towers of
 height >= 2, hmax = tallest tower. E11b strata (train_k = 2, train_h = 4 by default): S (k <= 2 and hmax <= 4: the
@@ -30,6 +31,8 @@ torch is imported lazily (only by the selector model), so labels, achiever, base
 """
 from __future__ import annotations
 
+import heapq
+import itertools
 import math
 import os
 import random
@@ -163,6 +166,46 @@ def handempty_ids(L: SP.GoalLabels) -> list:
     import numpy as np
     S, n = L.space.states, L.space.n
     return np.flatnonzero(~(S == n + 1).any(axis=1) & (L.dist > 0)).tolist()
+
+
+def canonical_row_key(s, goal, objs) -> str:
+    """Renaming-invariant key of a (state, goal) pair whose goal is disjoint on-chains (every E11b goal).
+
+    Two rows get the same key iff some renaming of blocks maps one (state, goal) onto the other. Different instances
+    of one goal class (n, tower heights) share their whole state space up to renaming, so instance-level uniqueness
+    does not keep rows apart: this key is what row-level split hygiene (seen-in-training flags) uses. Blocks are coded
+    by goal coordinates (tower, level); towers of equal height >= 2 are interchangeable (minimum over their
+    permutations); singleton towers carry no goal constraint and share one code (exact, with no permutation)."""
+    towers = goal_towers(goal, objs)
+    heights = [len(t) for t in towers]
+    coord = {b: (ti if len(t) >= 2 else -1, lvl) for ti, t in enumerate(towers) for lvl, b in enumerate(t)}
+    groups = []
+    for ti, h in enumerate(heights):
+        if h < 2:
+            continue
+        if groups and heights[groups[-1][0]] == h:
+            groups[-1].append(ti)
+        else:
+            groups.append([ti])
+    _, above, held = _rel(s)
+    stacks = []
+    for b in sorted(f[1] for f in s if f[0] == "ontable"):
+        st = [b]
+        while st[-1] in above:
+            st.append(above[st[-1]])
+        stacks.append(st)
+    if sum(map(len, stacks)) + (held is not None) != len(objs):
+        raise ValueError("state does not place every block exactly once")
+    best = None
+    for perm in itertools.product(*(itertools.permutations(g) for g in groups)):
+        rel = {-1: -1}
+        for g, p in zip(groups, perm):
+            rel.update(zip(g, p))
+        code = tuple(sorted(tuple((rel[coord[b][0]], coord[b][1]) for b in st) for st in stacks))
+        hv = () if held is None else (rel[coord[held][0]], coord[held][1])
+        if best is None or (code, hv) < best:
+            best = (code, hv)
+    return f"{len(objs)}|{','.join(map(str, heights))}|{best!r}"
 
 
 # ----------------------------------------------------------------------------- achiever and execution
@@ -329,6 +372,112 @@ class RandomOrder:
             if f in cs:
                 return f
         raise ValueError("no unmet goal fact")
+
+
+# ----------------------------------------------------------------------------- achiever-level exact values (any n)
+#
+# The selector's problem is a deterministic shortest path over hand-empty states whose edges are ACHIEVE calls (cost =
+# the call's primitive length). V_A(s) is its exact optimum; Q_A(s, f) = |ACHIEVE(s, f)| + V_A(s'); the achiever-level
+# label set is A_A(s) = argmin_f Q_A(s, f). A selector that always picks from A_A(s) attains V_A(init)
+# (`AchieverOracle`); one that always picks from the optimal-plan label set A(s) (`label_set`) need not: an optimal
+# primitive plan may re-make a broken goal fact, or move a goal-tower bottom off a block that must be cleared later,
+# before its first unmet stack, and no ACHIEVE call does either (tests: a hand case where A(s) and A_A(s) are disjoint).
+
+def achiever_search(objs, s, goal, max_expansions: int = 200_000) -> dict:
+    """Exact V_A(s) by A* over ACHIEVE calls from hand-empty s, with h = 2 x not-done blocks (space.misplaced_compact).
+    h is consistent for these edges: a block that is not moved keeps its done status (blocks below it are not moved
+    either), and every moved block costs exactly 2 actions. Returns {"value": V_A (None over budget), "choices": an
+    optimal fact sequence, "plan": its primitive actions, "expansions"}; value 0 and empty lists at goal states."""
+    B, _ = BI.load()
+    objs, goal = list(objs), frozenset(goal)
+    cg = SP.CompiledGoal(objs, goal)
+
+    def h(u):
+        return SP.misplaced_compact(SP.from_facts(u, objs), cg)[1]
+
+    best, parent, tie, exp = {s: 0}, {s: None}, 0, 0
+    heap = [(h(s), 0, tie, s)]
+    while heap:
+        _, g, _, u = heapq.heappop(heap)
+        if g > best[u]:
+            continue
+        if B.goal_met(u, goal):
+            choices, plan, v = [], [], u
+            while parent[v] is not None:
+                v, f, acts = parent[v]
+                choices.append(f)
+                plan[:0] = acts
+            return {"value": g, "choices": choices[::-1], "plan": plan, "expansions": exp}
+        exp += 1
+        if exp > max_expansions:
+            return {"value": None, "choices": None, "plan": None, "expansions": exp}
+        for f in unmet_facts(u, goal):
+            acts, v = achieve(B, u, f)
+            ng = g + len(acts)
+            if ng < best.get(v, math.inf):
+                best[v], parent[v] = ng, (u, f, acts)
+                tie += 1
+                heapq.heappush(heap, (ng + h(v), ng, tie, v))
+    raise AchieverError("goal unreachable by ACHIEVE calls (goal is not disjoint on-chains)")
+
+
+def achiever_q(objs, s, goal, max_expansions: int = 200_000, cache: dict | None = None) -> dict:
+    """{unmet fact f: Q_A(s, f)} (None where V_A(s') is over budget). cache: optional {state: V_A} for one goal."""
+    B, _ = BI.load()
+    cache = {} if cache is None else cache
+    out = {}
+    for f in unmet_facts(s, goal):
+        acts, v = achieve(B, s, f)
+        if v not in cache:
+            cache[v] = achiever_search(objs, v, goal, max_expansions)["value"]
+        out[f] = None if cache[v] is None else len(acts) + cache[v]
+    return out
+
+
+def achiever_label_set(objs, s, goal, max_expansions: int = 200_000, cache: dict | None = None):
+    """A_A(s) = argmin_f Q_A(s, f) as a frozenset; None if any Q_A is over budget (labels would not be exact)."""
+    q = achiever_q(objs, s, goal, max_expansions, cache)
+    if not q:
+        return frozenset()
+    if any(v is None for v in q.values()):
+        return None
+    m = min(q.values())
+    return frozenset(f for f, v in q.items() if v == m)
+
+
+LABEL_TARGETS = ("plan", "achiever")  # E11b training target: optimal-plan set A(s) or achiever-level set A_A(s)
+
+
+def row_label_sets(L: SP.GoalLabels, i: int, objs, goal, max_expansions: int = 200_000,
+                   cache: dict | None = None) -> dict:
+    """Both exact label sets of row i (a hand-empty, non-goal state id of L's space): {"plan": A(s) (label_set),
+    "achiever": A_A(s) (achiever_label_set)}. cache: optional {state: V_A} for this goal (one per instance). Raises
+    AchieverError if A_A(s) is over budget, so a row never carries an inexact label set."""
+    s = L.state(i)
+    plan = label_set(L, i)
+    ach = achiever_label_set(objs, s, goal, max_expansions, cache)
+    if ach is None:
+        raise AchieverError(f"achiever-level labels over budget ({max_expansions} expansions)")
+    if not plan or not ach:
+        raise AchieverError("empty label set for a non-goal row")
+    return {"plan": plan, "achiever": ach}
+
+
+class AchieverOracle:
+    """Selector that picks argmin_f Q_A(s, f) (first candidate on ties): the achiever-level optimum (a ceiling, not a
+    baseline: it searches). Its execution length equals V_A(init)."""
+    name = "achiever_oracle"
+
+    def __init__(self, max_expansions: int = 200_000):
+        self.max_expansions, self.cache = max_expansions, {}
+
+    def __call__(self, s, goal, objs, cands):
+        key = frozenset(goal)
+        cache = self.cache.setdefault(key, {})
+        q = achiever_q(objs, s, goal, self.max_expansions, cache)
+        if any(v is None for v in q.values()):
+            raise AchieverError("achiever oracle over budget")
+        return min(cands, key=lambda f: q[f])
 
 
 # ----------------------------------------------------------------------------- learned selector (lazy torch)

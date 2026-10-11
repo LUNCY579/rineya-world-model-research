@@ -298,5 +298,564 @@ class TestAchieverAndSelectors(unittest.TestCase):
         self.assertEqual(SG.structure(g, objs)["heights"], [4, 2, 1])
 
 
+class TestCustodyAndLeakage(unittest.TestCase):
+    """Data-custody fixes: renaming-canonical row keys (E11b split hygiene), the teacher-row filter, the runner's
+    output-directory rule, the BWM bytecode record and the seed block (runner checks parsed with ast: no torch)."""
+    RUNNER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "experiments", "RCX-E11",
+                          "run_e11.py")
+
+    def _runner_ast(self):
+        import ast
+        with open(self.RUNNER, encoding="utf-8") as fh:
+            return ast.parse(fh.read())
+
+    def test_canonical_row_key_is_exact_renaming_class(self):
+        objs1, objs2 = ["a", "b", "c", "d"], ["p", "q", "r", "s"]
+        pi = {"a": "r", "b": "p", "c": "s", "d": "q"}  # not order-preserving
+        rows = SP.get_space(4).states
+        for heights in ((2, 2), (2, 1, 1), (3, 1)):
+            g1 = SG.make_goal(random.Random(TEST_RNG), objs1, heights)
+            g2 = frozenset((f[0], pi[f[1]], pi[f[2]]) for f in g1)
+            k1, s1 = {}, {}
+            k2, s2 = {}, {}
+            for r in rows:
+                st = SP.to_facts(tuple(int(v) for v in r), objs1)
+                k1[st] = SG.canonical_row_key(st, g1, objs1)
+                s1[st] = B.signature(objs1, st, g1)
+                st2 = frozenset((f[0],) + tuple(pi[x] for x in f[1:]) for f in st)
+                self.assertEqual(SG.canonical_row_key(st2, g2, objs2), k1[st], heights)  # renaming invariant
+                st3 = SP.to_facts(tuple(int(v) for v in r), objs2)
+                k2[st3] = SG.canonical_row_key(st3, g2, objs2)
+                s2[st3] = B.signature(objs2, st3, g2)
+            # key equality <=> BWM renaming-signature equality, across the two instances of one goal class
+            for a in k1:
+                for b in k2:
+                    self.assertEqual(k1[a] == k2[b], s1[a] == s2[b], (heights, sorted(a), sorted(b)))
+            # the leakage the runner flags: two instances of one class have the SAME row classes (n = 4: all of them)
+            he1 = {k1[s] for s in k1 if HE in s and not B.goal_met(s, g1)}
+            he2 = {k2[s] for s in k2 if HE in s and not B.goal_met(s, g2)}
+            self.assertEqual(he1, he2)
+            self.assertGreater(len(he1), 10)
+        g22 = SG.make_goal(random.Random(TEST_RNG), objs1, (2, 2))
+        g211 = SG.make_goal(random.Random(TEST_RNG), objs1, (2, 1, 1))
+        a = {SG.canonical_row_key(SP.to_facts(tuple(int(v) for v in r), objs1), g22, objs1) for r in rows}
+        b = {SG.canonical_row_key(SP.to_facts(tuple(int(v) for v in r), objs1), g211, objs1) for r in rows}
+        self.assertFalse(a & b)  # different goal structures never share a row key
+
+    def test_teacher_rows_strict_filter_and_counts(self):
+        objs = ["a", "b", "c"]
+        init = B.towers_to_state([["a"], ["b"], ["c"]])
+        goal = fs(("on", "a", "b"))
+        good = [("pick-up", "a"), ("stack", "a", "b")]
+        traj, s = [], init
+        for a in good:
+            s = B.step(s, a)[0]
+            traj.append(sorted(map(list, s)))
+        J = lambda x: sorted(map(list, x))  # noqa: E731
+
+        def row(i, verified, plan=good, **kw):
+            return dict({"id": f"distill/{i}", "n": 3, "objs": objs, "init": J(init), "goal": J(goal),
+                         "plan": [list(a) for a in plan], "f_states": traj, "verified": verified}, **kw)
+
+        rows = [row(0, True), row(1, "true"), row(2, 1), row(3, False, exact_valid_for_analysis_only=True),
+                row(4, None), row(5, True, plan=[("pick-up", "a"), ("put-down", "a")])]
+        plans, cust = MA.teacher_plans(rows, B, expected={"rows": 6, "verified": 2})
+        self.assertEqual([p["id"] for p in plans], ["distill/0"])
+        self.assertEqual((cust["not_verified_skipped"], cust["verified_but_exact_invalid_excluded"],
+                          cust["f_states_match_exact"]), (4, 1, 1))
+        with self.assertRaises(MA.CustodyError):
+            MA.teacher_plans(rows, B, expected={"rows": 6, "verified": 3})
+        with self.assertRaises(MA.CustodyError):
+            MA.teacher_plans([row(0, True), row(0, True)], B)
+
+    def test_runner_output_dir_rule(self):
+        import ast
+        from pathlib import Path
+        tree = self._runner_ast()
+        fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "out_dir_problem")
+        ns = {}
+        exec(compile(ast.Module(body=[fn], type_ignores=[]), self.RUNNER, "exec"), ns)
+        f = ns["out_dir_problem"]
+        root = Path("C:/W/complementary")
+        allowed, full = root / "runs" / "RCX-E11", root / "runs" / "RCX-E11" / "main"
+        bwm, rcwm = Path("C:/W/Rineya_BWM_001_Research_Bundle"), Path("C:/W/RCWM_bundle")
+        forbidden = [bwm, rcwm, root / "experiments", root / "runs" / "RCX-E07"]
+        self.assertIsNone(f(full, False, allowed, forbidden, full))
+        self.assertIsNone(f(allowed / "smoke", True, allowed, forbidden, full))
+        for p, smoke in ((bwm / "native_v1" / "runs" / "x", True), (rcwm / "x", True), (allowed, True),
+                         (root / "runs" / "RCX-E07" / "x", True), (root / "experiments" / "RCX-E11" / "x", True),
+                         (Path("C:/W/elsewhere"), True), (allowed / "smoke", False)):
+            self.assertIsNotNone(f(p, smoke, allowed, forbidden, full), (p, smoke))
+
+    def test_runner_records_bwm_bytecode_in_finally_and_seeds_in_block(self):
+        import ast
+        tree = self._runner_ast()
+        main = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "main")
+        tries = [n for n in ast.walk(main) if isinstance(n, ast.Try) and n.finalbody]
+        called = {c.func.id for t in tries for s in t.finalbody for c in ast.walk(s)
+                  if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)}
+        self.assertIn("record_bwm_bytecode", called)
+        consts = {}
+        for n in tree.body:
+            if isinstance(n, ast.Assign) and len(n.targets) == 1 and getattr(n.targets[0], "id", None) in (
+                    "SEED_BLOCK", "SEEDS", "DERIVED"):
+                consts[n.targets[0].id] = ast.literal_eval(n.value)
+        lo, hi = consts["SEED_BLOCK"]
+        self.assertEqual((lo, hi), (20261256, 20261259))
+        self.assertTrue(all(lo <= v <= hi for v in consts["SEEDS"].values()))
+        self.assertTrue(all(int(v.split(":")[0]) in range(lo, hi + 1) for v in consts["DERIVED"].values()))
+
+
+class TestComputeAccounting(unittest.TestCase):
+    """h_calls accounting (each state scored at most once per run, so a per-run A3 hook's calls = evaluations) and the
+    compute-matched view derived from expansion-budget runs (macros.compute_matched: exact or censored)."""
+    F = TestMacroSearch
+    LIB = [MA.Macro(BUILD2, ((0, 1), (2, 0))), MA.Macro(UNSTACK_PUT), MA.Macro(HOLD_BUILD, ((0, 1), (2, 0)))]
+    ALGOS = (("gbfs", MA.gbfs_macro), ("beam4", MA.beam_macro))
+
+    def run_(self, fn, lib, budget, h=H.misplaced_blocks):
+        return fn(self.F.OBJS, self.F.INIT, self.F.GOAL, h, lib, max_expansions=budget)
+
+    def test_each_state_scored_once_so_h_calls_counts_evaluations(self):
+        for lib in ((), self.LIB):
+            for name, fn in self.ALGOS:
+                scored = []
+
+                def h(s, goal):
+                    scored.append(s)
+                    return H.misplaced_blocks(s, goal)
+
+                r = self.run_(fn, lib, 400, h)
+                self.assertTrue(r["success"], name)
+                self.assertEqual(len(scored), r["h_calls"], (name, len(lib)))
+                self.assertEqual(len(set(scored)), len(scored), (name, len(lib)))  # a per-run cache never hits
+
+    def test_compute_matched_agrees_with_truncated_runs_and_flags_censoring(self):
+        for lib in ((), self.LIB):
+            for name, fn in self.ALGOS:
+                full = self.run_(fn, lib, 400)
+                self.assertTrue(full["success"], name)
+                parts = [self.run_(fn, lib, e) for e in range(full["expansions"])]  # each a prefix of `full`
+                self.assertTrue(all(p["reason"] == "budget" and not p["success"] for p in parts))
+                for field in MA.COMPUTE_FIELDS:
+                    v = full[field]
+                    self.assertIs(MA.compute_matched(full, field, v), True)
+                    self.assertIs(MA.compute_matched(full, field, v - 1), False)
+                    censored = exact = 0
+                    for p in parts:
+                        for t in range(v + 3):
+                            d = MA.compute_matched(p, field, t)
+                            if d is None:  # the expansion budget bound first: unknown, never a failure
+                                censored += 1
+                                self.assertLessEqual(p[field], t)
+                            else:  # exact: equals the outcome derived from the longer run
+                                exact += 1
+                                self.assertEqual(d, MA.compute_matched(full, field, t), (name, field, t))
+                    self.assertGreater(censored, 0)
+                    self.assertGreater(exact, 0)
+
+    def test_compute_matched_cases_and_counts(self):
+        def rec(success, reason, v):
+            return {"success": success, "reason": reason, "h_calls": v, "prim_steps": v}
+
+        cm = MA.compute_matched
+        self.assertIs(cm(rec(True, "goal", 1000), "h_calls", 1000), True)
+        self.assertIs(cm(rec(True, "goal", 1001), "h_calls", 1000), False)
+        self.assertIs(cm(rec(False, "exhausted", 50), "h_calls", 1000), False)
+        self.assertIsNone(cm(rec(False, "budget", 800), "h_calls", 1000))
+        self.assertIsNone(cm(rec(False, "budget", 1000), "prim_steps", 1000))
+        self.assertIs(cm(rec(False, "budget", 1001), "h_calls", 1000), False)
+        self.assertIs(cm(rec(False, "goal", 10), "h_calls", 1000), False)  # found but invalid (gate G2)
+        recs = [rec(True, "goal", 900), rec(True, "goal", 1100), rec(False, "budget", 700), rec(False, "exhausted", 5)]
+        self.assertEqual(MA.compute_matched_counts(recs, "h_calls", 1000),
+                         {"n": 4, "success": 1, "censored": 1, "exact": False})
+        with self.assertRaises(ValueError):
+            cm(rec(True, "goal", None), "h_calls", 10)  # counters of a derived (smaller-budget) record
+        with self.assertRaises(ValueError):
+            cm(rec(True, "goal", 1), "seconds", 10)
+
+    def test_runner_builds_a_fresh_heuristic_per_search_run(self):
+        """run_e11.phase_a_search (read as source, no torch): make_heuristic is called inside the per-run loop, and the
+        compute-matched view goes through macros.compute_matched (censoring), not a bare h_calls <= t count."""
+        import ast
+        from pathlib import Path
+        src = (Path(__file__).resolve().parents[1] / "experiments" / "RCX-E11" / "run_e11.py").read_text(
+            encoding="utf-8")
+        tree = ast.parse(src)
+        fns = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+        loops = [n for n in ast.walk(fns["phase_a_search"]) if isinstance(n, ast.For)]
+        run_loop = next(lp for lp in loops if any(isinstance(c, ast.Call) and getattr(c.func, "id", None) == "a_record"
+                                                  for c in ast.walk(lp)))
+        self.assertTrue(any(isinstance(c, ast.Call) and getattr(c.func, "id", None) == "make_heuristic"
+                            for c in ast.walk(run_loop)))
+        view = ast.unparse(fns["compute_matched_view"])
+        self.assertIn("MA.compute_matched(", view)
+        self.assertIn("MA.compute_matched_counts(", view)
+
+
+class TestAchieverLevelValues(unittest.TestCase):
+    """subgoal.achiever_search / achiever_q / achiever_label_set / AchieverOracle against an independent Dijkstra over
+    the full ACHIEVE-call graph of every hand-empty 5-block state (no heuristic), and the label-misalignment hand case."""
+
+    def exact_values(self, objs, states, goal):
+        """V_A for every hand-empty state: backward Dijkstra over the ACHIEVE-call graph (independent of achiever_search)."""
+        import heapq
+        rev, V, heap = {}, {}, []
+        for s in states:
+            if HE not in s:
+                continue
+            if B.goal_met(s, goal):
+                V[s] = 0
+                heap.append((0, sorted(s), s))
+                continue
+            for f in SG.unmet_facts(s, goal):
+                acts, v = SG.achieve(B, s, f)
+                rev.setdefault(v, []).append((len(acts), s))
+        heapq.heapify(heap)
+        done = set()
+        while heap:
+            d, _, v = heapq.heappop(heap)
+            if v in done:
+                continue
+            done.add(v)
+            for c, u in rev.get(v, ()):
+                if d + c < V.get(u, float("inf")):
+                    V[u] = d + c
+                    heapq.heappush(heap, (d + c, sorted(u), u))
+        return V
+
+    def test_values_labels_and_oracle_equal_exhaustive_dijkstra(self):
+        objs, states = all_states(5)
+        for goal in (fs(("on", "b", "a"), ("on", "c", "b"), ("on", "e", "d")),
+                     fs(("on", "b", "a"), ("on", "c", "b"), ("on", "d", "c"), ("on", "e", "d"))):
+            V = self.exact_values(objs, states, goal)
+            L = SP.GoalLabels(objs, goal)
+            checked, strictly_better_than_bu = 0, 0
+            for k, s in enumerate(sorted(V, key=sorted)):
+                if V[s] == 0 or k % 5:
+                    continue
+                r = SG.achiever_search(objs, s, goal)
+                self.assertEqual(r["value"], V[s], sorted(s))
+                self.assertEqual(len(r["plan"]), V[s])
+                self.assertTrue(B.execute(s, goal, r["plan"])["success"])
+                self.assertGreaterEqual(V[s], L.h(s))
+                q = SG.achiever_q(objs, s, goal)
+                want = {f: len(SG.achieve(B, s, f)[0]) + V[SG.achieve(B, s, f)[1]] for f in SG.unmet_facts(s, goal)}
+                self.assertEqual(q, want)
+                self.assertEqual(SG.achiever_label_set(objs, s, goal),
+                                 frozenset(f for f, v in want.items() if v == min(want.values())))
+                ex = SG.execute(objs, s, goal, SG.AchieverOracle(), max_calls=6 * len(goal), max_steps=16 * 5)
+                self.assertTrue(ex["success"])
+                self.assertEqual(ex["plan_len"], V[s])
+                bu = SG.execute(objs, s, goal, SG.BottomUp(), max_calls=6 * len(goal), max_steps=16 * 5)
+                self.assertGreaterEqual(bu["plan_len"], V[s])
+                strictly_better_than_bu += bu["plan_len"] > V[s]
+                checked += 1
+            self.assertGreater(checked, 50)
+            self.assertGreater(strictly_better_than_bu, 0)  # bottom-up is not the achiever-level optimum
+        flat = B.towers_to_state([[o] for o in objs])
+        self.assertIsNone(SG.achiever_search(objs, flat, goal, max_expansions=0)["value"])  # over budget -> None
+
+    def test_optimal_plan_labels_can_be_disjoint_from_achiever_labels(self):
+        """Optimal primitive plans first unstack d and c, re-make on(d, c) and stack b on d (A(s) = {on(b, d)}, h* = 10);
+        the achiever cannot re-make on(d, c) on the way, so on(b, d) first costs 14 and on(a, e) first costs 12."""
+        objs = ["a", "b", "c", "d", "e"]
+        s = B.towers_to_state([["a", "b", "c", "d"], ["e"]])
+        goal = fs(("on", "d", "c"), ("on", "b", "d"), ("on", "a", "e"))
+        L = SP.GoalLabels(objs, goal)
+        self.assertEqual(L.h(s), 10)
+        self.assertEqual(SG.label_set(L, L.sid(s)), fs(("on", "b", "d")))
+        self.assertEqual(SG.achiever_q(objs, s, goal), {("on", "a", "e"): 12, ("on", "b", "d"): 14})
+        self.assertEqual(SG.achiever_label_set(objs, s, goal), fs(("on", "a", "e")))
+        bu = SG.execute(objs, s, goal, SG.BottomUp(), max_calls=18, max_steps=80)
+        self.assertEqual((bu["plan_len"], bu["choices"][0]), (14, "on b d"))  # BU's first choice is the plan label
+        orc = SG.execute(objs, s, goal, SG.AchieverOracle(), max_calls=18, max_steps=80)
+        self.assertEqual((orc["plan_len"], orc["choices"][0]), (12, "on a e"))
+
+
+class TestMacroControlsAndSearchInvariants(unittest.TestCase):
+    """Internal no-op pairs (dominated macros that can carry an excluded pattern into a control), goal-annotation
+    alignment, the goal-gated single-move control, and macro-search invariants (duplicate library entries, goal reached
+    inside a macro, budget derivation of the full record)."""
+    F = TestMacroSearch
+    LIB = [MA.Macro(BUILD2, ((0, 1), (2, 0))), MA.Macro(UNSTACK_PUT), MA.Macro(HOLD_BUILD, ((0, 1), (2, 0)))]
+    PADDED_GOAL_MOVE = (("pick-up", 0), ("put-down", 0), ("pick-up", 1), ("stack", 1, 2))  # dry-run S macro
+
+    @staticmethod
+    def reduce(steps):
+        steps = list(steps)
+        while MA.noop_pairs(steps):
+            k = MA.noop_pairs(steps)[0]
+            del steps[k:k + 2]
+        return tuple(steps)
+
+    def test_noop_pairs_dominated_and_pair_free_patterns_always_change_state(self):
+        pats = [p for L in (2, 3, 4) for V in (1, 2, 3, 4) for p in MA.pattern_universe(L, V)]
+        padded = [p for p in pats if MA.noop_pairs(p)]
+        self.assertEqual((len(pats), len(padded)), (162, 98))
+        for p in pats:
+            if not MA.noop_pairs(p):
+                m = MA.Macro(p)
+                self.assertTrue(m.pre & m.dele, MA.step_key(p))  # every executable binding changes the state
+        objs, states = all_states(4)
+        idx = [MA.StateIndex(s) for s in states]
+        for p in padded:
+            full, r = MA.Macro(p), self.reduce(p)
+            red = MA.Macro(MA.canonical_steps(r)) if r else None
+            for s, si in zip(states, idx):
+                ends = {full.apply_symbolic(s, b) for b in full.bindings(si)}
+                base = {s} if red is None else {red.apply_symbolic(s, b) for b in red.bindings(si)}
+                if ends:
+                    self.assertLessEqual(ends, base, (MA.step_key(p), sorted(s)))
+        # the dry-run S macro only ever generates end states of M's `pick-up ?0; stack ?0 ?1 | on(?0,?1)`
+        objs6, states6 = all_states(6)
+        goal = fs(("on", objs6[1], objs6[0]), ("on", objs6[2], objs6[1]), ("on", objs6[4], objs6[3]))
+        gidx = MA.goal_index(goal)
+        s8, m4 = MA.Macro(self.PADDED_GOAL_MOVE, ((1, 2),)), MA.Macro((("pick-up", 0), ("stack", 0, 1)), ((0, 1),))
+        equal = 0
+        for s in states6[::4]:
+            si = MA.StateIndex(s)
+            e8 = {s8.apply_symbolic(s, b) for b in s8.bindings(si, gidx)}
+            e4 = {m4.apply_symbolic(s, b) for b in m4.bindings(si, gidx)}
+            self.assertLessEqual(e8, e4)
+            equal += bool(e8) and e8 == e4
+        self.assertGreater(equal, 20)
+
+    def test_selectors_exclude_noop_candidates(self):
+        vc = MA.ValidationCache(n_check_max=4)
+        mined = [MA.Macro((("pick-up", 0), ("stack", 0, 1)), ((0, 1),))]
+
+        def cand(steps, gon, occ, sup):
+            return {"key": MA.macro_key(steps, gon), "step_key": MA.step_key(steps), "steps": steps, "goal_on": gon,
+                    "L": len(steps), "nvars": MA.Macro(steps).nvars, "occurrences": occ, "support": sup,
+                    "score": occ * (len(steps) - 1)}
+
+        padded = cand(self.PADDED_GOAL_MOVE, ((1, 2),), 90, 30)
+        clean = cand((("put-down", 0), ("unstack", 1, 2), ("put-down", 1), ("pick-up", 2)), (), 10, 6)
+        ranked = MA.rank({c["key"]: c for c in (padded, clean)})
+        templ = [MA.Macro(BUILD2, ((0, 1), (2, 0)))]
+        lib, _ = MA.select_matched_library(ranked, templ, 5, vc, exclude_step_keys={m.step_key for m in mined})
+        self.assertEqual(lib[0].key, padded["key"])  # the syntactic signature rule lets the padded copy in
+        lib, log = MA.select_matched_library(ranked, templ, 5, vc, exclude_step_keys={m.step_key for m in mined},
+                                             exclude_noop=True)
+        self.assertEqual(lib[0].key, clean["key"])
+        self.assertEqual(log[-1]["skipped_internal_noop_keys"], [padded["key"]])
+        lib, log = MA.select_library(ranked, 1, 5, vc, exclude_noop=True)
+        self.assertEqual([m.key for m in lib], [clean["key"]])
+        self.assertEqual(log[0]["decision"], "excluded_internal_noop")
+        templates = [MA.Macro(UNSTACK_PUT), MA.Macro(HOLD_BUILD, ((0, 1), (2, 0)))]  # L <= 3: cheap universes
+        kw = dict(exclude_keys={m.key for m in templates}, exclude_step_keys={m.step_key for m in templates})
+        r0, _ = MA.random_library(templates, random.Random(TEST_RNG), vc, **kw)
+        r0b, _ = MA.random_library(templates, random.Random(TEST_RNG), vc, exclude_noop=False, **kw)
+        self.assertEqual([m.key for m in r0], [m.key for m in r0b])  # default = the original rule and stream
+        r1, rlog = MA.random_library(templates, random.Random(TEST_RNG), vc, exclude_noop=True, **kw)
+        self.assertFalse(any(MA.noop_pairs(m.steps) for m in r1))
+        self.assertEqual([(m.L, len(m.goal_on)) for m in r1], [(t.L, len(t.goal_on)) for t in templates])
+        self.assertTrue(all(vc(m)["accepted"] for m in r1))
+        self.assertGreater(sum(lg["skipped"].get("internal_noop", 0) for lg in rlog), 0)
+
+    def test_annotation_alignment_classes(self):
+        A = lambda steps, gon: MA.annotation_alignment(MA.Macro(steps, gon))["literals"]  # noqa: E731
+        self.assertEqual(A(BUILD2, ((0, 1), (2, 0))), ["established", "established"])
+        self.assertEqual(A((("pick-up", 0), ("stack", 0, 1), ("pick-up", 2)), ((0, 1), (2, 0))),
+                         ["established", "pending"])
+        self.assertEqual(A(UNSTACK_PUT, ((0, 1),)), ["destroyed"])
+        self.assertEqual(A(UNSTACK_PUT, ((1, 0),)), ["unrelated"])
+        # dry-run R macro: fires only where the goal fact on(?0, ?1) already holds, and breaks it
+        self.assertEqual(A((("unstack", 0, 1), ("put-down", 0), ("unstack", 1, 2)), ((0, 1), (2, 0))),
+                         ["destroyed", "unrelated"])
+        # unstacking a satisfied goal fact is 'destroyed' even though the macro ends holding the block over its support
+        self.assertEqual(A((("put-down", 0), ("unstack", 1, 2)), ((1, 2),)), ["destroyed"])
+        a = MA.annotation_alignment(MA.Macro(BUILD2, ((0, 1), (2, 0))))
+        self.assertEqual((a["established"], a["aligned"], a["destroyed"]), (2, 2, 0))
+
+    def test_goal_move_control_is_sound_aligned_and_usable(self):
+        lib = MA.goal_move_library()
+        self.assertEqual([m.key for m in lib], ["pick-up ?0; stack ?0 ?1 | on(?0,?1)",
+                                                "unstack ?0 ?1; stack ?0 ?2 | on(?0,?2)"])
+        for m in lib:
+            self.assertTrue(MA.validate(m, n_check=4)["accepted"], m.key)
+            a = MA.annotation_alignment(m)
+            self.assertEqual((a["established"], a["aligned"]), (len(m.goal_on), len(m.goal_on)))
+            self.assertFalse(MA.noop_pairs(m.steps))
+        for fn in (MA.gbfs_macro, MA.beam_macro):
+            r = fn(self.F.OBJS, self.F.INIT, self.F.GOAL, H.misplaced_blocks, lib, max_expansions=400)
+            self.assertTrue(r["success"])
+            self.assertEqual(r["sym_mismatch"], 0)
+
+    def test_duplicate_library_entries_only_add_bindings(self):
+        keys = ("success", "found", "plan", "plan_len", "expansions", "generated", "h_calls", "macro_children",
+                "macro_edges", "macro_uses", "goal_mid_macro", "reason")
+        for fn in (MA.gbfs_macro, MA.beam_macro):
+            a = fn(self.F.OBJS, self.F.INIT, self.F.GOAL, H.misplaced_blocks, self.LIB, max_expansions=400)
+            b = fn(self.F.OBJS, self.F.INIT, self.F.GOAL, H.misplaced_blocks, self.LIB + self.LIB, max_expansions=400)
+            self.assertEqual({k: a[k] for k in keys}, {k: b[k] for k in keys})  # copies only generate duplicates
+            self.assertGreater(b["macro_bindings"], a["macro_bindings"])
+            self.assertGreater(b["prim_steps"], a["prim_steps"])
+
+    def test_goal_reached_inside_a_macro(self):
+        objs = ["a", "b", "c"]
+        init = B.towers_to_state([["a"], ["b"], ["c"]])
+        goal = fs(("on", "a", "b"))
+        lib = [MA.Macro((("pick-up", 0), ("stack", 0, 1), ("pick-up", 2)), ((0, 1),))]
+        for fn in (MA.gbfs_macro, MA.beam_macro):
+            r = fn(objs, init, goal, H.h0, lib, max_expansions=10)
+            self.assertTrue(r["success"])
+            self.assertEqual(r["plan"], [("pick-up", "a"), ("stack", "a", "b")])  # truncated at the goal
+            self.assertEqual((r["expansions"], r["goal_mid_macro"], r["macro_edges"], r["plan_len"]), (1, 1, 1, 2))
+
+    def test_budget_derivation_reproduces_direct_reruns(self):
+        """run_e11.at_budget's rule on macro search: at b >= the solving expansion the run (plan and counters) is
+        identical; below it, a budget failure with expansions = b."""
+        keys = ("success", "found", "plan", "expansions", "generated", "h_calls", "prim_steps", "macro_edges", "reason")
+        for fn in (MA.gbfs_macro, MA.beam_macro):
+            big = fn(self.F.OBJS, self.F.INIT, self.F.GOAL, H.misplaced_blocks, self.LIB, max_expansions=400)
+            self.assertEqual(big["reason"], "goal")
+            for b in range(big["expansions"] + 3):
+                r = fn(self.F.OBJS, self.F.INIT, self.F.GOAL, H.misplaced_blocks, self.LIB, max_expansions=b)
+                if b >= big["expansions"]:
+                    self.assertEqual({k: r[k] for k in keys}, {k: big[k] for k in keys}, b)
+                else:
+                    self.assertEqual((r["success"], r["reason"], r["expansions"]), (False, "budget", b))
+
+    def test_runner_wires_noop_flag_alignment_and_goal_move_arm(self):
+        """run_e11 read as source (no torch): the three selectors get exclude_noop from cfg['exclude_noop_macros'],
+        FULL declares the flag, the G library is added only when 'G' is an arm, and the library descriptors carry
+        no-op pairs and annotation alignment (functions executed from the source with macros as MA)."""
+        import ast
+        from pathlib import Path
+        tree = ast.parse((Path(__file__).resolve().parents[1] / "experiments" / "RCX-E11" / "run_e11.py").read_text(
+            encoding="utf-8"))
+        fns = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+        calls = {c.func.attr: c for c in ast.walk(fns["phase_a_mine"]) if isinstance(c, ast.Call)
+                 and isinstance(c.func, ast.Attribute) and getattr(c.func.value, "id", None) == "MA"}
+        for sel in ("select_library", "random_library", "select_matched_library"):
+            kw = {k.arg: ast.unparse(k.value) for k in calls[sel].keywords}
+            self.assertEqual(kw.get("exclude_noop"), "xn", sel)
+        src = ast.unparse(fns["phase_a_mine"])
+        self.assertIn("xn = cfg['exclude_noop_macros']", src)
+        self.assertIn("if 'G' in cfg['arms']:", src)
+        full = next(n for n in tree.body if isinstance(n, ast.Assign) and getattr(n.targets[0], "id", None) == "FULL")
+        self.assertIn("exclude_noop_macros", {k.arg for k in full.value.keywords})
+        ns = {"MA": MA}
+        exec(compile(ast.Module(body=[fns["describe_lib"], fns["alignment_summary"]], type_ignores=[]), "run_e11",
+                     "exec"), ns)
+        lib = [MA.Macro(BUILD2, ((0, 1), (2, 0))), MA.Macro(self.PADDED_GOAL_MOVE, ((1, 2),)),
+               MA.Macro(UNSTACK_PUT, ((0, 1),))]
+        d = ns["describe_lib"](lib)
+        self.assertEqual([x["noop_pairs"] for x in d], [[], [0], []])
+        self.assertEqual(d[2]["alignment"]["literals"], ["destroyed"])
+        s = ns["alignment_summary"](lib)
+        self.assertEqual((s["literals"], s["established"], s["destroyed"], s["aligned"], s["noop_macros"]),
+                         (4, 3, 1, 3, 1))
+
+
+class TestAchieverLabelWiring(unittest.TestCase):
+    """E11b label wiring (reconciliation): subgoal.row_label_sets returns both exact sets; run_e11.b_rows (executed from
+    the source with stub R/EX, no torch) stores both, picks the training target from cfg['b_label_target'] and flags
+    rows seen in an earlier split; phase_b_data computes OPT_A; headroom_closed is the documented fraction."""
+    RUNNER = TestCustodyAndLeakage.RUNNER
+
+    def _fns(self):
+        import ast
+        with open(self.RUNNER, encoding="utf-8") as fh:
+            tree = ast.parse(fh.read())
+        return tree, {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+
+    def test_row_label_sets_equal_both_definitions(self):
+        objs, states = all_states(4)
+        goal = fs(("on", "b", "a"), ("on", "d", "c"))
+        L, cache = SP.GoalLabels(objs, goal), {}
+        k = 0
+        for i in SG.handempty_ids(L):
+            s = L.state(i)
+            got = SG.row_label_sets(L, i, objs, goal, cache=cache)
+            self.assertEqual(got, {"plan": SG.label_set(L, i), "achiever": SG.achiever_label_set(objs, s, goal)})
+            k += 1
+        self.assertGreater(k, 20)
+        objs5 = ["a", "b", "c", "d", "e"]  # the hand case where the two sets are disjoint
+        s = B.towers_to_state([["a", "b", "c", "d"], ["e"]])
+        goal5 = fs(("on", "d", "c"), ("on", "b", "d"), ("on", "a", "e"))
+        L5 = SP.GoalLabels(objs5, goal5)
+        self.assertEqual(SG.row_label_sets(L5, L5.sid(s), objs5, goal5),
+                         {"plan": fs(("on", "b", "d")), "achiever": fs(("on", "a", "e"))})
+        self.assertEqual(SG.LABEL_TARGETS, ("plan", "achiever"))
+
+    def test_runner_b_rows_stores_both_sets_and_flags_seen_rows(self):
+        import ast
+        from collections import Counter
+        _, fns = self._fns()
+
+        class Ctx:
+            def __init__(self, target):
+                self.cfg = {"b_label_target": target, "b_ach_budget": 200_000}
+
+            def courtesy(self):
+                pass
+
+        class StubR:
+            @staticmethod
+            def fs_json(s):
+                return sorted(map(list, s))
+
+        class StubEX:
+            @staticmethod
+            def row_exclusion_reason(objs, s, goal, ex):
+                return None
+
+        ns = {"random": random, "Counter": Counter, "SP": SP, "SG": SG, "R": StubR, "EX": StubEX,
+              "DERIVED": {"b_states": "20261256:tests:states:{split}"}}
+        exec(compile(ast.Module(body=[fns["b_rows"]], type_ignores=[]), self.RUNNER, "exec"), ns)
+        b_rows = ns["b_rows"]
+        rng = random.Random(TEST_RNG)
+        insts = []
+        for k in range(2):  # two instances of one goal class (n = 4): the second's rows are renamings of the first's
+            objs, init, goal = None, None, None
+            while objs is None:
+                g = SG.make_instance(rng, 4, (2, 2))
+                if g is not None:
+                    objs, init, goal = g
+            insts.append({"id": f"t{k}", "n": 4, "objs": objs, "init": init, "goal": goal})
+        for target, key in (("plan", "labels_plan"), ("achiever", "labels_ach")):
+            tr, st_tr, keys_tr = b_rows(Ctx(target), "train", insts[:1], None, 1000)
+            va, st_va, _ = b_rows(Ctx(target), "val", insts[1:], None, 1000, frozenset(keys_tr))
+            self.assertTrue(tr and va)
+            self.assertFalse(any(r["seen"] for r in tr))
+            self.assertTrue(all(r["seen"] for r in va))  # n = 4: every row class already occurs in train
+            self.assertEqual((st_va["rows_seen"], st_va["rows"]), (len(va), len(va)))
+            for r in tr + va:
+                self.assertEqual(r["labels"], r[key])
+                self.assertTrue(r["labels_plan"] and r["labels_ach"])
+                self.assertTrue(all(f in r["cands"] for f in r["labels_plan"] + r["labels_ach"]))
+            self.assertEqual(st_tr.get("plan_eq_ach_rows", 0), sum(r["labels_plan"] == r["labels_ach"] for r in tr))
+        with self.assertRaises(ValueError):
+            b_rows(Ctx("both"), "train", insts[:1], None, 10)
+
+    def test_headroom_closed_and_runner_wiring(self):
+        import ast
+        import math
+        tree, fns = self._fns()
+        ns = {"math": math}
+        exec(compile(ast.Module(body=[fns["headroom_closed"]], type_ignores=[]), self.RUNNER, "exec"), ns)
+        f = ns["headroom_closed"]
+        self.assertAlmostEqual(f([20, 40], [16, 30], [16, 30]), 1.0)
+        self.assertAlmostEqual(f([20, 40], [20, 40], [16, 30]), 0.0)
+        self.assertAlmostEqual(f([20], [math.sqrt(20 * 10)], [10]), 0.5)
+        self.assertIsNone(f([], [], []))
+        self.assertIsNone(f([20], [18], [20]))  # no excess over the ceiling
+        data_src = ast.unparse(fns["phase_b_data"])
+        self.assertIn("SG.achiever_search(", data_src)
+        self.assertIn("opt_ach=", data_src)
+        self.assertIn("SG.row_label_sets(", ast.unparse(fns["b_rows"]))
+        self.assertIn("cfg['b_label_target'] not in SG.LABEL_TARGETS", ast.unparse(fns["main"]))
+        full = next(n for n in tree.body if isinstance(n, ast.Assign) and getattr(n.targets[0], "id", None) == "FULL")
+        kw = {k.arg: ast.unparse(k.value) for k in full.value.keywords}
+        self.assertIn(kw.get("b_label_target"), ("'plan'", "'achiever'"))  # 'plan' as drafted; the prereg decides
+        self.assertEqual(kw.get("b_ach_budget"), "200000")
+        ev = ast.unparse(fns["phase_b_eval"])
+        self.assertIn("|vs_plan", ev)
+        self.assertIn("|vs_achiever", ev)
+
+
 if __name__ == "__main__":
     unittest.main()

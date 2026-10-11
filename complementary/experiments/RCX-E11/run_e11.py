@@ -6,14 +6,18 @@ E11a  macro (option) discovery and reuse. Parameterised macros (length 2-4, goal
       a matched random sound library (R) and a library mined from shuffled plans (S; same length mix as M, sharing no
       abstract step signature with M) on fresh n = 12/14/15 instances, with heuristics A3 (the B4 hook itself:
       rcx/bw/b4_hook LearnedUnmet, hybrid_lambda 1.0, R-04 GNN seed 20261276) and misplaced_blocks.
-E11b  compositional subgoal policy (rcx/bw/subgoal.py). A GNN subgoal selector is trained on exact optimal-plan
-      labels from fresh small problems (n <= 7, at most 2 goal towers of height <= 4) and executed with a fixed
+E11b  compositional subgoal policy (rcx/bw/subgoal.py). A GNN subgoal selector is trained on exact labels (cfg
+      b_label_target: optimal-plan sets A(s) as drafted, or achiever-level sets A_A(s); both are stored and evaluated,
+      and the achiever-level optimum OPT_A is the descriptive ceiling) from fresh small problems (n <= 7, at most 2
+      goal towers of height <= 4) and executed with a fixed
       achiever, without search, on fresh n = 10-15 goals with more and/or taller towers; compared with bottom-up (BU),
       random order (RND), ready-first (RF, descriptive) and goal-count GBFS.
 
 Design: experiments/RCX-E11/DESIGN.md. Prereg: experiments/RCX-E11/PREREG_E11_DRAFT.md (DRAFT). A full run refuses
 to start until the frozen PREREG_E11.md exists and its sha256 equals PREREG_SHA256 below (set at the freeze); --smoke
-runs on the draft and writes only to runs/RCX-E11/smoke (or --out outside the protected trees).
+runs on the draft and writes only to runs/RCX-E11/smoke (or an --out strictly below runs/RCX-E11/; nothing is ever
+written elsewhere). Every invocation, including a failed one, appends its BWM __pycache__ diff to
+bwm_bytecode_checks.json, and the report states whether all checks were clean.
 
 Usage (from complementary/; CPU only, single lane, <= 4 threads; ThermalGuard on):
   python -B experiments/RCX-E11/run_e11.py --smoke --threads 2     # plumbing check -> runs/RCX-E11/smoke
@@ -84,6 +88,8 @@ SOLUTIONS = DISTILL_DIR / "solutions.jsonl"
 SOLUTIONS_SHA256 = "fdf80151a52d5728c27d2bb7136f4ea1caa17ba3241487af9553a77dac86244c"  # read 2026-10-11 (DESIGN.md)
 DISTILL_META = DISTILL_DIR / "DISTILL_META.json"
 DISTILL_OFF_LIMITS = ("distill_rows.jsonl", "mix_v2c.jsonl", "mix_v3.jsonl", "fcache.jsonl")  # never opened
+TEACHER_EXPECTED = {"rows": 240, "verified": 211}  # DESIGN section 3; checked after the sha pin (macros.teacher_plans)
+RCWM_BUNDLE = Path("C:/Users/clclc/BusinessProject/WorldModel/Rineya_Consequence_World_Model_Bundle_2026-10-05")
 A3_MODEL = R04_DIR / "models" / "gnn_s20261276.pt"
 
 SEED_BLOCK = (20261256, 20261259)  # the RCX E11 block; no other seed is used
@@ -114,10 +120,12 @@ FULL = dict(
     # ---- E11a
     a_sizes=[12, 14, 15], a_per_size=40, a_opt_budget=300_000,
     mine_lengths=[2, 3, 4], mine_max_vars=4, K=8, min_support=5, s_fill_min_support=1, n_check_max=6,
+    exclude_noop_macros=False,  # True drops macros with an internal no-op pair from M, R, S (proposed; prereg decides)
     arms=["P", "M", "R", "S"], heuristics=["A3", "misplaced_blocks"], algos=["gbfs", "beam4"], beam_width=4,
     budgets=[50, 200, 500, 2000], primary_budget=200, primary_heur="A3", primary_algo="gbfs",
     a3_model_seed=20261276, a3_lambda=1.0, a3_cache=50_000,
-    hcall_thresholds=[1_000, 5_000, 20_000, 100_000], mono_check_runs=8, mono_check_budget=200,
+    hcall_thresholds=[1_000, 5_000, 20_000, 100_000], prim_thresholds=[1_000, 5_000, 20_000, 100_000],
+    mono_check_runs=8, mono_check_budget=200,
     a_attr_margin=5,
     # ---- E11b
     b_train_sizes=[4, 5, 6, 7], train_k=2, train_h=4,
@@ -126,12 +134,16 @@ FULL = dict(
     b_exec_sizes=[10, 12, 14, 15], b_exec_strata=["S", "T", "H", "TH"], b_exec_per_cell=8, b_opt_budget=300_000,
     b_calls_per_fact=6, b_steps_per_block=16, gc_budgets=[50, 200, 500, 2000],
     sel_hidden=48, sel_rounds=4, sel_head=64, epochs=10, batch_size=64, lr=2e-3, time_cap_s=1200.0,
+    b_select_unseen_val=True,  # epoch selection on val rows whose (state, goal) class is not a training row
+    # training target: "plan" = optimal-plan set A(s) (as drafted) or "achiever" = achiever-level set A_A(s)
+    # (subgoal.achiever_label_set; proposed; prereg decides). Both sets are always stored and evaluated.
+    b_label_target="plan", b_ach_budget=200_000,
     model_seeds=MODEL_SEEDS, b_advance_log_ratio=math.log(0.95), b_success_margin=2, b_stop_success_frac=0.8,
     # ---- statistics
     alpha=0.05, bootstrap_resamples=5000,
 )
 SMOKE = dict(FULL, a_sizes=[12, 14], a_per_size=2, a_opt_budget=20_000, K=3, n_check_max=5,
-             budgets=[20, 50, 100, 200], primary_budget=50, hcall_thresholds=[200, 2_000],
+             budgets=[20, 50, 100, 200], primary_budget=50, hcall_thresholds=[200, 2_000], prim_thresholds=[200, 2_000],
              mono_check_runs=2, mono_check_budget=50,
              b_train_sizes=[4, 5], b_per_class={"train": 2, "val": 1, "test_id": 1}, b_ood_small_sizes=[5, 6],
              b_ood_small_per_class=1, b_states={"train": 30, "val": 30, "test_id": 20, "ood_small": 20},
@@ -234,15 +246,25 @@ def median_or_none(xs):
 
 # ----------------------------------------------------------------------------- A3 heuristic
 
-def make_heuristic(cfg, name):
+def make_heuristic(cfg, name, a3=None):
     """misplaced_blocks, or A3 = the B4 hook itself: b4_hook.LearnedUnmet(R-04 gnn_s20261276, hybrid_lambda=1.0),
-    single-state forwards at 1 thread (bit-reproducible; exact parity with B4 arm (a); CX decision on E11 Q2). A new
-    hook (empty cache) is made per instance."""
+    single-state forwards at 1 thread (bit-reproducible; exact parity with B4 arm (a); CX decision on E11 Q2).
+    a3 = (model, provenance) from HK.load_gnn(A3_MODEL), loaded once per phase; without it the file is loaded here.
+    Callers make a NEW hook (empty cache, zero counters) for every search run: values never depend on the cache, but
+    a cache shared across the arms of one instance made later arms (M, R, S run after P) look faster in seconds and
+    made their evaluations fewer than their h_calls. With a per-run hook, h_calls = hook calls = evaluations (each
+    state is scored at most once per run; macros module doc), so h_calls is an exact A3 compute count per run."""
     if name == "misplaced_blocks":
         return H.misplaced_blocks
     if name != "A3":
         raise ValueError(name)
-    return HK.LearnedUnmet.from_file(A3_MODEL, hybrid_lambda=cfg["a3_lambda"], cache_size=cfg["a3_cache"])
+    if a3 is None:
+        return HK.LearnedUnmet.from_file(A3_MODEL, hybrid_lambda=cfg["a3_lambda"], cache_size=cfg["a3_cache"])
+    model, prov = a3
+    return HK.LearnedUnmet(model, hybrid_lambda=cfg["a3_lambda"], cache_size=cfg["a3_cache"], _provenance=prov)
+
+
+HOOK_COUNTERS = ("calls", "cache_hits", "evaluations", "model_evals", "invalid_states", "fallbacks", "failsafe")
 
 
 # ----------------------------------------------------------------------------- phase a_data
@@ -266,6 +288,22 @@ def prior_instance_keys():
     return keys, src
 
 
+def a3_training_goal_classes():
+    """Goal classes (data.goal_key) of R-04's train and val splits: the data behind the A3 GNN (gnn_s20261276)."""
+    return {it["goal_key"] for it in R.load_instances(R04_DIR).values() if it["split"] in ("train", "val")}
+
+
+def prior_and_e11a_keys(ctx):
+    """(keys, sources) of every earlier RCX test/selection instance (n >= 8) plus this run's E11a instances (if
+    a_data has run), for the E11b execution-set disjointness check."""
+    keys, src = prior_instance_keys()
+    ap = ctx.out / "a" / "instances.json"
+    src = {"prior_rcx": src, "e11a_checked": ap.exists()}
+    if ap.exists():
+        keys = keys | {inst_key(it) for it in load_instance_list(ap)}
+    return keys, src
+
+
 def phase_a_data(ctx):
     cfg, ad = ctx.cfg, ctx.out / "a"
     if (ad / "meta.json").exists():
@@ -281,9 +319,14 @@ def phase_a_data(ctx):
                                       prefix="e11a")
     keys = {inst_key(it) for it in inst}
     checks = {"unique": len(keys) == len(inst), "x_prior_rcx_sets": len(keys & prior),
+              "x_a3_train_val_goal_classes": len({it["goal_key"] for it in inst} & a3_training_goal_classes()),
+              "excluded_now": sum(EX.exclusion_reason(it["objs"], it["init"], it["goal"], ex) is not None
+                                  for it in inst),
               "goals_all_on_facts": all(f[0] == "on" for it in inst for f in it["goal"]),
               "sizes": dict(sorted(Counter(it["n"] for it in inst).items()))}
-    if not checks["unique"] or checks["x_prior_rcx_sets"] or not checks["goals_all_on_facts"]:
+    if (not checks["unique"] or checks["x_prior_rcx_sets"] or checks["x_a3_train_val_goal_classes"]
+            or checks["excluded_now"] or not checks["goals_all_on_facts"]
+            or checks["sizes"] != {n: cfg["a_per_size"] for n in sorted(cfg["a_sizes"])}):
         raise RuntimeError(f"E11a instance checks failed: {checks}")
     for it in inst:
         t1 = time.perf_counter()
@@ -304,34 +347,20 @@ def phase_a_data(ctx):
 
 def load_teacher_plans(ctx):
     """The 211 verified plans: sha-pinned read of solutions.jsonl only; every plan re-verified with B.execute and its
-    F-predicted trajectory compared with the exact one (custody statistics)."""
+    F-predicted trajectory compared with the exact one (custody statistics; macros.teacher_plans). Fails closed on a
+    sha mismatch or on custody counts other than TEACHER_EXPECTED."""
     B, _ = BI.load()
-    assert SOLUTIONS.name not in DISTILL_OFF_LIMITS
+    if SOLUTIONS.name in DISTILL_OFF_LIMITS or SOLUTIONS.name != "solutions.jsonl":  # not an assert (python -O)
+        raise SystemExit(f"teacher file {SOLUTIONS} is not the allowed solutions.jsonl")
     raw = SOLUTIONS.read_bytes()
     sha = hashlib.sha256(raw).hexdigest()
     if sha != SOLUTIONS_SHA256:
         raise SystemExit(f"solutions.jsonl sha256 {sha} != pinned {SOLUTIONS_SHA256}; refusing to mine")
     rows = [json.loads(line) for line in raw.decode("utf-8").splitlines() if line.strip()]
-    cust, plans = Counter(), []
-    for r in rows:
-        cust["rows"] += 1
-        if not r.get("verified"):
-            cust["not_verified_skipped"] += 1
-            continue
-        cust["verified"] += 1
-        init, goal = R.fs_from(r["init"]), R.fs_from(r["goal"])
-        plan = [tuple(a) for a in r["plan"]]
-        if not B.execute(init, goal, plan)["success"]:
-            cust["verified_but_exact_invalid_excluded"] += 1
-            continue
-        s, traj = init, []
-        for a in plan:
-            s = B.step(s, a)[0]
-            traj.append(s)
-        cust["f_states_match_exact" if [R.fs_from(x) for x in r.get("f_states", [])] == traj
-             else "f_states_differ_from_exact"] += 1
-        cust["actions"] += len(plan)
-        plans.append({"id": r["id"], "n": r["n"], "plan": plan, "goal": goal})
+    try:
+        plans, cust = MA.teacher_plans(rows, B, expected=TEACHER_EXPECTED)
+    except MA.CustodyError as e:
+        raise SystemExit(f"teacher custody: {e}; refusing to mine") from None
     return plans, {"sha256": sha, "path": str(SOLUTIONS), "counts": dict(cust),
                    "by_n": dict(sorted(Counter(p["n"] for p in plans).items())),
                    "distill_meta_sha256": R.sha_file(DISTILL_META)}
@@ -342,9 +371,19 @@ def _cand_json(c):
 
 
 def describe_lib(lib):
+    """Per macro: size, mining provenance, internal no-op pairs (macros.noop_pairs) and how its goal gating relates to
+    its own effect (macros.annotation_alignment: established / kept / destroyed / pending / unrelated literals)."""
     keys = ("occurrences", "support", "tier", "rank")
-    return [{"key": m.key, "L": m.L, "V": m.nvars, "G": len(m.goal_on), **{k: m.meta.get(k) for k in keys}}
-            for m in lib]
+    return [{"key": m.key, "L": m.L, "V": m.nvars, "G": len(m.goal_on), **{k: m.meta.get(k) for k in keys},
+             "noop_pairs": MA.noop_pairs(m.steps), "alignment": MA.annotation_alignment(m)} for m in lib]
+
+
+def alignment_summary(lib) -> dict:
+    """Library totals of annotation_alignment classes and of macros with internal no-op pairs."""
+    al = [MA.annotation_alignment(m) for m in lib]
+    out = {c: sum(a[c] for a in al) for c in MA.ALIGN_CLASSES + ("aligned",)}
+    out.update(literals=sum(len(m.goal_on) for m in lib), noop_macros=sum(bool(MA.noop_pairs(m.steps)) for m in lib))
+    return out
 
 
 def phase_a_mine(ctx):
@@ -361,25 +400,33 @@ def phase_a_mine(ctx):
     K, ms = cfg["K"], cfg["min_support"]
     table, mstats = MA.mine(plans, tuple(cfg["mine_lengths"]), cfg["mine_max_vars"])
     ranked = MA.rank(table)
-    lib_m, log_m = MA.select_library(ranked, K, ms, vc)
+    xn = cfg["exclude_noop_macros"]  # drop candidates with an internal no-op pair from M, R and S (macros.noop_pairs)
+    lib_m, log_m = MA.select_library(ranked, K, ms, vc, exclude_noop=xn)
     if len(lib_m) < K:
         raise SystemExit(f"gate G1: only {len(lib_m)} accepted mined macros (K = {K})")
     lib_r, log_r = MA.random_library(lib_m, random.Random(DERIVED["a_random_macros"]), vc,
                                      exclude_keys={m.key for m in lib_m},
-                                     exclude_step_keys={m.step_key for m in lib_m}, max_vars=cfg["mine_max_vars"])
+                                     exclude_step_keys={m.step_key for m in lib_m}, max_vars=cfg["mine_max_vars"],
+                                     exclude_noop=xn)
     splans = MA.shuffled_plans(plans, random.Random(DERIVED["a_shuffle"]))
     stable, sstats = MA.mine(splans, tuple(cfg["mine_lengths"]), cfg["mine_max_vars"])
     sranked = MA.rank(stable)
     lib_s, log_s = MA.select_matched_library(sranked, lib_m, ms, vc, exclude_step_keys={m.step_key for m in lib_m},
-                                             fill_min_support=cfg["s_fill_min_support"])
+                                             fill_min_support=cfg["s_fill_min_support"], exclude_noop=xn)
     libs = {"M": lib_m, "R": lib_r, "S": lib_s}
-    if len(lib_s) != K or {m.key for m in lib_m} & {m.key for m in lib_s} or             {m.step_key for m in lib_m} & {m.step_key for m in lib_s}:
+    if "G" in cfg["arms"]:  # descriptive goal-gated single-move control (macros.goal_move_library); not mined
+        libs["G"] = MA.goal_move_library()
+    if len(lib_s) != K or {m.key for m in lib_m} & {m.key for m in lib_s} or \
+            {m.step_key for m in lib_m} & {m.step_key for m in lib_s}:
         raise RuntimeError("gate G1: the S library must have K macros and share no macro or step signature with M")
+    if xn and any(MA.noop_pairs(m.steps) for a in ("M", "R", "S") for m in libs[a]):
+        raise RuntimeError("gate G1: a library macro has an internal no-op pair although exclude_noop_macros is set")
     validation = {m.step_key: vc(m) for lib in libs.values() for m in lib}
     if not all(v["accepted"] and "shortcut" not in v for v in validation.values()):
         raise RuntimeError("a library macro was not exhaustively accepted")
     out = {"K": K, "libraries": {a: MA.library_json(lib) for a, lib in libs.items()},
            "descriptors": {a: describe_lib(lib) for a, lib in libs.items()},
+           "alignment": {a: alignment_summary(lib) for a, lib in libs.items()}, "exclude_noop_macros": xn,
            "selection_logs": {"M": log_m, "R": log_r, "S": log_s},
            "top_candidates": {"M": [_cand_json(c) for c in ranked[:40]], "S": [_cand_json(c) for c in sranked[:40]]},
            "mining_stats": {"M": mstats, "S": sstats}, "validation": validation,
@@ -414,6 +461,8 @@ def a_record(cfg, it, arm, heur, algo, lib, h, budget):
     rec = {"inst": it["id"], "n": it["n"], "arm": arm, "heur": heur, "algo": algo, "budget": budget,
            "opt": it.get("opt"), **{k: r[k] for k in RUN_KEYS}, "plan": [" ".join(a) for a in r["plan"]]}
     rec["subopt"] = (rec["plan_len"] / rec["opt"]) if rec["success"] and rec["opt"] else None
+    if isinstance(h, HK.LearnedUnmet):  # per-run hook (make_heuristic): its counters are this run's A3 compute
+        rec["hook"] = {k: h.counters.get(k, 0) for k in HOOK_COUNTERS}
     return rec
 
 
@@ -434,13 +483,12 @@ def phase_a_search(ctx):
     todo = [(it, heur, arm, algo) for it in inst for heur in cfg["heuristics"] for arm in cfg["arms"]
             for algo in cfg["algos"] if (it["id"], arm, heur, algo) not in done]
     ctx.log(f"a_search: {len(todo)} runs to do, {len(done)} done (budget {bmax})")
-    t0, hcache = time.perf_counter(), {}
+    t0 = time.perf_counter()
+    a3 = HK.load_gnn(A3_MODEL) if "A3" in cfg["heuristics"] and todo else None  # weights loaded once
     with open(path, "a", encoding="utf-8", newline="\n") as fh:
         for k, (it, heur, arm, algo) in enumerate(todo):
-            if (it["id"], heur) not in hcache:
-                hcache = {kk: v for kk, v in hcache.items() if kk[0] == it["id"]}  # fresh A3 cache per instance
-                hcache[(it["id"], heur)] = make_heuristic(cfg, heur)
-            rec = a_record(cfg, it, arm, heur, algo, libs[arm], hcache[(it["id"], heur)], bmax)
+            h = make_heuristic(cfg, heur, a3)  # a fresh hook (empty cache, zero counters) per run: fair seconds
+            rec = a_record(cfg, it, arm, heur, algo, libs[arm], h, bmax)
             done[a_key(rec)] = rec
             fh.write(json.dumps(rec) + "\n")
             fh.flush()
@@ -505,11 +553,21 @@ def b_draw(ctx, rng, classes, per_class, seen, ex, split, max_draws):
     return out, dict(st)
 
 
-def b_rows(ctx, split, insts, ex, k_states):
+def b_rows(ctx, split, insts, ex, k_states, earlier_keys=frozenset()):
+    """Sampled hand-empty rows with exact label sets. Every row carries `seen` = its renaming-canonical (state, goal)
+    key (subgoal.canonical_row_key) occurs in an earlier split (`earlier_keys`; order train, val, test_id,
+    ood_small). Instances of one goal class share their state space up to renaming, so instance-level uniqueness does
+    not separate rows; selection and in-distribution accuracy use unseen rows. Every row stores both exact label
+    sets (subgoal.row_label_sets): `labels_plan` = A(s), `labels_ach` = A_A(s); `labels` (the training target and
+    the primary label-accuracy basis) is the one named by cfg['b_label_target']. Returns (rows, stats, keys)."""
+    target, ach_budget = ctx.cfg["b_label_target"], ctx.cfg["b_ach_budget"]
+    if target not in SG.LABEL_TARGETS:
+        raise ValueError(f"b_label_target {target!r}")
     rng = random.Random(DERIVED["b_states"].format(split=split))
-    rows, st = [], Counter()
+    rows, st, keys = [], Counter(), set()
     for it in insts:
         L = SP.GoalLabels(it["objs"], it["goal"])
+        vcache = {}  # V_A per state for this instance's goal (achiever_q cache)
         ids = SG.handempty_ids(L)
         pick = list(ids) if k_states >= len(ids) else rng.sample(ids, k_states)
         i0 = L.sid(it["init"])
@@ -522,15 +580,26 @@ def b_rows(ctx, split, insts, ex, k_states):
                 st[f"rows_excluded_{why}"] += 1
                 continue
             cands = SG.unmet_facts(s, it["goal"])
-            labels = SG.label_set(L, i)
+            ls = SG.row_label_sets(L, i, it["objs"], it["goal"], ach_budget, vcache)
+            labels = ls[target]
+            ck = SG.canonical_row_key(s, it["goal"], it["objs"])
+            seen = ck in earlier_keys
+            keys.add(ck)
             rows.append({"i": it["id"], "s": R.fs_json(s), "cands": [list(f) for f in cands],
-                         "labels": sorted(list(f) for f in labels)})
+                         "labels": sorted(list(f) for f in labels),
+                         "labels_plan": sorted(list(f) for f in ls["plan"]),
+                         "labels_ach": sorted(list(f) for f in ls["achiever"]), "seen": seen})
             st["rows"] += 1
+            st[f"rows_n{it['n']}"] += 1
+            st["rows_seen"] += seen
+            st[f"rows_seen_n{it['n']}"] += seen
             st["label_size_sum"] += len(labels)
             st["cands_sum"] += len(cands)
             st["single_label_rows"] += len(labels) == 1
+            st["plan_eq_ach_rows"] += ls["plan"] == ls["achiever"]
+            st["plan_ach_disjoint_rows"] += not (ls["plan"] & ls["achiever"])
         ctx.courtesy()
-    return rows, dict(st)
+    return rows, dict(sorted(st.items())), keys
 
 
 def phase_b_data(ctx):
@@ -553,9 +622,11 @@ def phase_b_data(ctx):
     rng = random.Random(DERIVED["b_split"].format(split="ood_small"))
     splits["ood_small"], gen["ood_small"] = b_draw(ctx, rng, ood_classes, cfg["b_ood_small_per_class"], seen, ex,
                                                    "ood_small", cfg["b_max_draws"])
-    rows_meta = {}
-    for split, insts in splits.items():
-        rows, st = b_rows(ctx, split, insts, ex, cfg["b_states"][split])
+    rows_meta, row_keys = {}, set()
+    for split in ("train", "val", "test_id", "ood_small"):  # this order defines `seen` (earlier splits)
+        insts = splits[split]
+        rows, st, keys = b_rows(ctx, split, insts, ex, cfg["b_states"][split], frozenset(row_keys))
+        row_keys |= keys
         R.write_jsonl_gz(bd / f"{split}.jsonl.gz", rows)
         rows_meta[split] = st
         ctx.log(f"b_data: {split}: {len(insts)} instances, {len(rows)} rows {st}")
@@ -594,17 +665,40 @@ def phase_b_data(ctx):
         t1 = time.perf_counter()
         h, exp = SP.astar_hstar(it["objs"], it["init"], it["goal"], cfg["b_opt_budget"])
         it.update(opt=h, opt_expansions=exp, opt_s=round(time.perf_counter() - t1, 4))
+        # exact achiever-level optimum OPT_A (descriptive ceiling of every selector under this achiever)
+        t1 = time.perf_counter()
+        oa = SG.achiever_search(it["objs"], it["init"], it["goal"], cfg["b_ach_budget"])
+        if oa["value"] is not None and (len(oa["plan"]) != oa["value"] or not B.execute(
+                it["init"], it["goal"], [tuple(a) for a in oa["plan"]])["success"]
+                or (it["opt"] is not None and oa["value"] < it["opt"])):
+            raise RuntimeError(f"OPT_A check failed for {it['id']}: value {oa['value']}, opt {it['opt']}")
+        it.update(opt_ach=oa["value"], opt_ach_expansions=oa["expansions"],
+                  opt_ach_s=round(time.perf_counter() - t1, 4))
         ctx.courtesy()
     allinst = [it for split in ("train", "val", "test_id", "ood_small") for it in splits[split]] + execs
     id_keys = {",".join(map(str, p)) + f"@{n}" for n, p in id_classes}
     ood_keys = {",".join(map(str, p)) + f"@{n}" for n, p in ood_classes}
+    prior_keys, prior_src = prior_and_e11a_keys(ctx)
     checks = {"ood_small_x_train_classes": len(id_keys & ood_keys),
-              "exec_strata_ok": all(SG.stratum_of(it["heights"], tk, th) == it["stratum"] for it in execs),
-              "train_strata_all_S": all(it["stratum"] == "S" for s in ("train", "val", "test_id") for it in splits[s]),
+              # strata recomputed from each goal itself (not from the declared heights)
+              "structure_matches_declared": all(SG.structure(it["goal"], it["objs"])["heights"] == list(it["heights"])
+                                                for it in allinst),
+              "exec_strata_ok": all(SG.stratum_of(SG.structure(it["goal"], it["objs"])["heights"], tk, th)
+                                    == it["stratum"] for it in execs),
+              "train_strata_all_S": all(SG.stratum_of(SG.structure(it["goal"], it["objs"])["heights"], tk, th) == "S"
+                                        for s in ("train", "val", "test_id") for it in splits[s]),
               "ood_small_strata": dict(Counter(it["stratum"] for it in splits["ood_small"])),
+              "ood_small_all_non_S": all(SG.stratum_of(SG.structure(it["goal"], it["objs"])["heights"], tk, th) != "S"
+                                         for it in splits["ood_small"]),
+              "ood_small_rows_seen_in_id_splits": rows_meta["ood_small"].get("rows_seen", 0),
+              "exec_x_prior_rcx_and_e11a": len({D.instance_key(it["objs"], it["init"], it["goal"]) for it in execs}
+                                               & prior_keys),
+              "exec_prior_sources": prior_src,
               "unique_ids": len({it["id"] for it in allinst}) == len(allinst)}
-    if checks["ood_small_x_train_classes"] or not (checks["exec_strata_ok"] and checks["train_strata_all_S"]
-                                                    and checks["unique_ids"]):
+    if checks["ood_small_x_train_classes"] or checks["ood_small_rows_seen_in_id_splits"] or \
+            checks["exec_x_prior_rcx_and_e11a"] or not (
+                checks["structure_matches_declared"] and checks["exec_strata_ok"] and checks["train_strata_all_S"]
+                and checks["ood_small_all_non_S"] and checks["unique_ids"]):
         raise RuntimeError(f"E11b data checks failed: {checks}")
     save_instances(bd / "instances.json", allinst)
     cover = Counter((it["stratum"], it["n"]) for it in execs if it["opt"] is not None)
@@ -652,8 +746,15 @@ def phase_b_train(ctx):
     insts = b_instances(ctx)
     dd = ctx.out / "b" / "data"
     xtr = b_encode(R.read_jsonl_gz(dd / "train.jsonl.gz"), insts)
-    xva = b_encode(R.read_jsonl_gz(dd / "val.jsonl.gz"), insts)
-    ctx.log(f"b_train: {len(xtr)} train rows, {len(xva)} val rows; seeds {todo}")
+    val_rows = R.read_jsonl_gz(dd / "val.jsonl.gz")
+    basis = "val_unseen_in_train" if cfg["b_select_unseen_val"] else "val_all"
+    xva = b_encode([r for r in val_rows if not (cfg["b_select_unseen_val"] and r["seen"])], insts)
+    if not xva:
+        if not ctx.smoke:
+            raise SystemExit("b_train: no validation rows unseen in training (selection would use training rows)")
+        basis, xva = "val_all_smoke_fallback", b_encode(val_rows, insts)
+    ctx.log(f"b_train: {len(xtr)} train rows, {len(xva)} of {len(val_rows)} val rows for selection ({basis}); "
+            f"seeds {todo}")
     for seed in todo:
         model = SG.new_net(sel_config(cfg), seed=seed)
         info = SG.fit(model, xtr, xva, epochs=cfg["epochs"], batch_size=cfg["batch_size"], lr=cfg["lr"], seed=seed,
@@ -663,7 +764,8 @@ def phase_b_train(ctx):
         torch.save(model.state_dict(), tmp)
         os.replace(tmp, p)
         R.write_json(md / f"sel_s{seed}.json", dict(info, threads=ctx.threads, rows_train=len(xtr),
-                                                    rows_val=len(xva)))
+                                                    rows_val=len(xva), rows_val_total=len(val_rows),
+                                                    selection_basis=basis))
 
 
 def load_selector(ctx, seed):
@@ -713,13 +815,18 @@ def phase_b_eval(ctx):
             groups = defaultdict(list)
             for k, r in enumerate(rows):
                 it = insts[r["i"]]
-                for g in ("all", f"stratum:{it['stratum']}", f"n:{it['n']}",
-                          "class:" + ",".join(map(str, it["heights"])) + f"@{it['n']}"):
+                gs = ["all", f"stratum:{it['stratum']}", f"n:{it['n']}",
+                      "class:" + ",".join(map(str, it["heights"])) + f"@{it['n']}"]
+                # `seen` (KeyError on rows without the flag: fail closed): the row's renaming class occurs in an
+                # earlier split. "unseen" is the clean in-distribution accuracy (test_id rows not in train or val).
+                if not r["seen"]:
+                    gs += ["unseen", f"unseen_n:{it['n']}", f"unseen_stratum:{it['stratum']}"]
+                for g in gs:
                     groups[g].append(k)
-            correct = {}
+            picks = {}  # method -> chosen candidate fact (as a list) per row
             for s, model in models.items():
                 ch = SG.predict_choice(model, enc)
-                correct[f"learned_s{s}"] = [c in e["lab"] for c, e in zip(ch, enc)]
+                picks[f"learned_s{s}"] = [r["cands"][c] for c, r in zip(ch, rows)]
             bu, rf = SG.BottomUp(), SG.ReadyFirst()
             for name in ("bottom_up", "ready_first", "random_order"):
                 cc = []
@@ -729,13 +836,20 @@ def phase_b_eval(ctx):
                     cands = [tuple(f) for f in r["cands"]]
                     sel = {"bottom_up": bu, "ready_first": rf}.get(name) or SG.RandomOrder(
                         it["goal"], DERIVED["b_random_order"].format(inst=it["id"]))
-                    cc.append(list(sel(s_, it["goal"], it["objs"], cands)) in r["labels"])
-                correct[name] = cc
+                    cc.append(list(sel(s_, it["goal"], it["objs"], cands)))
+                picks[name] = cc
                 ctx.courtesy()
+            # `m`: top-1 in the training-target set (cfg b_label_target); `m|vs_plan` / `m|vs_achiever`: in A(s) /
+            # A_A(s) (KeyError on rows without both sets: fail closed)
+            correct = {}
+            for name, ch in picks.items():
+                correct[name] = [c in r["labels"] for c, r in zip(ch, rows)]
+                correct[f"{name}|vs_plan"] = [c in r["labels_plan"] for c, r in zip(ch, rows)]
+                correct[f"{name}|vs_achiever"] = [c in r["labels_ach"] for c, r in zip(ch, rows)]
             res[split] = {g: {"rows": len(ix), **{m: float(np.mean([v[i] for i in ix])) for m, v in correct.items()}}
                           for g, ix in sorted(groups.items())}
         R.write_json(lpath, res)
-        ctx.log(f"b_eval: label accuracy {json.dumps({s: res[s]['all'] for s in res})}")
+        ctx.log(f"b_eval: label accuracy {json.dumps({s: {g: res[s].get(g) for g in ('all', 'unseen')} for s in res})}")
     execs = [it for it in insts.values() if it["split"] == "exec"]
     path = bdir / "exec_runs.jsonl"
     done = read_records(path, b_key)
@@ -809,17 +923,19 @@ def a_metrics(cfg, inst, done, libs_raw):
     for heur in cfg["heuristics"]:
         for algo in cfg["algos"]:
             for b in cfg["budgets"]:
-                for c in ("P", "R", "S"):
+                for c in [a for a in cfg["arms"] if a != "M"]:  # P, R, S (+ G when that arm is configured)
                     secondary[f"M_vs_{c}|{heur}|{algo}|{b}"] = mcnemar_maps(
                         a_success(done, ids, c, heur, algo, b), a_success(done, ids, "M", heur, algo, b), ids,
                         c, "M", b)
     bmax = max(cfg["budgets"])
-    hcall = {f"{arm}|{heur}|{algo}": {str(t): sum(1 for i in ids if done[(i, arm, heur, algo)]["success"] and
-                                                  done[(i, arm, heur, algo)]["h_calls"] <= t)
-                                      for t in cfg["hcall_thresholds"]}
-             for arm in cfg["arms"] for heur in cfg["heuristics"] for algo in cfg["algos"]}
+    compute, compute_tests = compute_matched_view(cfg, ids, done, bmax)
+    a3_recs = [r for r in done.values() if r["heur"] == "A3"]
+    hook_acct = {"runs": len(a3_recs), "without_counters": sum("hook" not in r for r in a3_recs),
+                 "calls_ne_h_calls": sum(1 for r in a3_recs if "hook" in r and r["hook"]["calls"] != r["h_calls"]),
+                 **{k: sum(r["hook"][k] for r in a3_recs if "hook" in r)
+                    for k in ("cache_hits", "invalid_states", "fallbacks", "failsafe")}}
     usage = {}
-    for arm in ("M", "R", "S"):
+    for arm in [a for a in cfg["arms"] if a != "P"]:
         u = Counter()
         for (i, a, h_, g), r in done.items():
             if a == arm and r["success"]:
@@ -835,8 +951,39 @@ def a_metrics(cfg, inst, done, libs_raw):
     stop_check = {f"{heur}|{b}": cells[f"M|{heur}|gbfs|{b}"]["success"] <= cells[f"P|{heur}|gbfs|{b}"]["success"]
                   for heur in cfg["heuristics"] for b in (pb, bmax)}
     return {"complete": True, "n_instances": len(ids), "cells": cells, "per_n_success": per_n, "primary": primary,
-            "attribution": attr, "secondary_mcnemar": secondary, "hcall_matched_success": hcall,
+            "attribution": attr, "secondary_mcnemar": secondary, "compute_matched_success": compute,
+            "compute_matched_mcnemar": compute_tests, "a3_hook_accounting": hook_acct,
             "macro_usage_in_solved_plans": usage, "gates": gates, "stop_check_M_not_better": stop_check}
+
+
+def compute_matched_view(cfg, ids, done, bmax):
+    """Descriptive compute-matched view (prereg secondary 'success within h-call thresholds'), for h_calls and
+    prim_steps: per (arm, heur, algo, threshold) the success count derived from the bmax-expansion runs
+    (macros.compute_matched) with its censored count, and exact McNemar M vs P / R / S on the derived outcomes. A
+    threshold above what an arm's expansion-budget-stopped runs consumed is CENSORED for that arm ('exact' False):
+    counting those runs as failures would bias the view toward the arm with more children per expansion (M)."""
+    fields = (("h_calls", cfg["hcall_thresholds"]), ("prim_steps", cfg["prim_thresholds"]))
+    counts, tests = {}, {}
+    for field, ths in fields:
+        for heur in cfg["heuristics"]:
+            for algo in cfg["algos"]:
+                outc = {arm: {t: {i: MA.compute_matched(done[(i, arm, heur, algo)], field, t) for i in ids}
+                              for t in ths} for arm in cfg["arms"]}
+                for arm in cfg["arms"]:
+                    counts[f"{field}|{arm}|{heur}|{algo}"] = {
+                        str(t): MA.compute_matched_counts([done[(i, arm, heur, algo)] for i in ids], field, t)
+                        for t in ths}
+                for t in ths:
+                    sm = {i: v is True for i, v in outc["M"][t].items()}
+                    for c in [a for a in cfg["arms"] if a != "M"]:
+                        sc = {i: v is True for i, v in outc[c][t].items()}
+                        test = mcnemar_maps(sc, sm, ids, c, "M", None)
+                        del test["budget"]
+                        test.update(unit=field, threshold=t, source_expansion_budget=bmax,
+                                    exact=all(v is not None for v in outc["M"][t].values())
+                                    and all(v is not None for v in outc[c][t].values()))
+                        tests[f"M_vs_{c}|{field}|{heur}|{algo}|{t}"] = test
+    return counts, tests
 
 
 def a_success_count(done, ids, arm, heur, algo, b):
@@ -865,6 +1012,15 @@ def a_decision(cfg, m, mono_ok):
 
 
 # ----------------------------------------------------------------------------- report: E11b metrics and decision
+
+def headroom_closed(base, cand, ceiling):
+    """Fraction of a baseline's excess over a ceiling that a candidate closes, on paired positive lengths:
+    (mean log base - mean log cand) / (mean log base - mean log ceiling). None without pairs or without excess."""
+    if not base or not len(base) == len(cand) == len(ceiling):
+        return None
+    lb, lc, lo = (sum(map(math.log, xs)) / len(xs) for xs in (base, cand, ceiling))
+    return (lb - lc) / (lb - lo) if lb - lo > 1e-12 else None
+
 
 def b_metrics(cfg, insts, done, labels):
     execs = [it for it in insts.values() if it["split"] == "exec"]
@@ -902,6 +1058,10 @@ def b_metrics(cfg, insts, done, labels):
                 "reasons": dict(Counter(r["reason"] for r in recs))}
             if m != "gc_gbfs" and ids_:
                 table[st][m]["geo_ratio_vs_BU"] = math.exp(mean_logratio(ids_, m, "bottom_up"))
+                oa = [i for i in ids_ if by[i].get("opt_ach")]  # OPT_A: achiever-level optimum (descriptive)
+                table[st][m]["geo_ratio_vs_OPTA"] = math.exp(float(np.mean(
+                    [math.log(length(by[i], m)) - math.log(by[i]["opt_ach"]) for i in oa]))) if oa else None
+                table[st][m]["opta_n"] = len(oa)
         table[st]["gc_gbfs_success_by_budget"] = {
             str(b): sum(bool(at_budget(done[(i, "gc_gbfs")], b)["success"]) for i in ids_) for b in cfg["gc_budgets"]}
     primary = logratio(ood, r0, "bottom_up")
@@ -910,9 +1070,15 @@ def b_metrics(cfg, insts, done, labels):
     reps = {f"learned_s{s}": mean_logratio(ood, f"learned_s{s}", "bottom_up") for s in cfg["model_seeds"]}
     comp_gap = {st: table[st][r0].get("geo_ratio_vs_BU") for st in cfg["b_exec_strata"]}
     succ = {m: table["pool_OOD"][m]["success"] for m in methods}
+    ood_oa = [i for i in ood if by[i].get("opt_ach")]
+    headroom = {"n": len(ood_oa), "n_pool": len(ood), **{
+        m: headroom_closed([length(by[i], "bottom_up") for i in ood_oa], [length(by[i], m) for i in ood_oa],
+                           [by[i]["opt_ach"] for i in ood_oa])
+        for m in methods if m not in ("bottom_up", "gc_gbfs")}}
     return {"complete": True, "n_exec": len(execs), "n_ood_pool": len(ood), "table": table, "primary": primary,
             "vs_random_order": vs_rnd, "vs_ready_first": vs_rf, "replicates_log_ratio_vs_BU": reps,
-            "composition_geo_ratio_vs_BU_by_stratum": comp_gap, "ood_success": succ, "label_accuracy": labels}
+            "composition_geo_ratio_vs_BU_by_stratum": comp_gap, "ood_success": succ,
+            "ood_headroom_closed_vs_OPTA": headroom, "label_accuracy": labels}
 
 
 def b_decision(cfg, m):
@@ -946,8 +1112,12 @@ def fmt(x, nd=3):
 
 def write_report(ctx, out):
     cfg = ctx.cfg
+    cu = out.get("custody", {})
     L = [f"# RCX-E11 report ({'SMOKE: plumbing only, not a result' if ctx.smoke else 'full run'})", "",
-         f"Prereg: {out['prereg']}", ""]
+         f"Prereg: {out['prereg']}", "",
+         f"Custody: BWM bytecode checks of earlier invocations {cu.get('bwm_bytecode_checks')}, all clean: "
+         f"{cu.get('bwm_bytecode_all_clean')}" + ("" if cu.get("bwm_bytecode_all_clean", True) else
+                                                   " -- INVESTIGATE before using any result"), ""]
     a = out.get("e11a", {})
     if a.get("metrics", {}).get("complete"):
         m = a["metrics"]
@@ -972,6 +1142,19 @@ def write_report(ctx, out):
         for k, v in m["attribution"].items():
             L.append(f"Attribution {k}: {v['cand_success']} vs {v['base_success']}; p = {v['p_exact']:.3g}, Holm "
                      f"{v['p_holm']:.3g}")
+        ph, pa = cfg["primary_heur"], cfg["primary_algo"]
+        L += ["", f"Compute-matched view ({ph}, {pa}; descriptive; derived from the {max(cfg['budgets'])}-expansion "
+              "runs; `*` = censored for an arm, a lower bound, no test):", "",
+              "| unit | threshold | " + " | ".join(cfg["arms"]) + " | M vs P exact McNemar p |",
+              "|---|---|" + "---|" * len(cfg["arms"]) + "---|"]
+        for field, ths in (("h_calls", cfg["hcall_thresholds"]), ("prim_steps", cfg["prim_thresholds"])):
+            for t in ths:
+                cc = {arm: m["compute_matched_success"][f"{field}|{arm}|{ph}|{pa}"][str(t)] for arm in cfg["arms"]}
+                tp = m["compute_matched_mcnemar"][f"M_vs_P|{field}|{ph}|{pa}|{t}"]
+                L.append(f"| {field} | {t} | " + " | ".join(f"{cc[x]['success']}{'' if cc[x]['exact'] else '*'}"
+                                                         for x in cfg["arms"])
+                         + f" | {format(tp['p_exact'], '.3g') if tp['exact'] else 'censored'} |")
+        L += ["", f"A3 hook accounting (per-run hooks): {json.dumps(m['a3_hook_accounting'])}"]
         L += ["", f"Gates: {json.dumps(m['gates'])}; monotonicity ok: {a['monotonicity_ok']}; A3 hook: "
               f"{json.dumps(a.get('a3_hook'))}", ""]
     else:
@@ -996,8 +1179,15 @@ def write_report(ctx, out):
               f"vs random order: {m['vs_random_order']['diff']:.4f} [{m['vs_random_order']['lo']:.4f}, "
               f"{m['vs_random_order']['hi']:.4f}]; vs ready-first: {m['vs_ready_first']['diff']:.4f}",
               f"Replicates (log ratio vs BU): {json.dumps(m['replicates_log_ratio_vs_BU'])}", "",
-              "Label accuracy (top-1 in the exact label set):", "```", json.dumps(
-                  {s: v.get("all") for s, v in m["label_accuracy"].items()}, indent=1), "```", ""]
+              "Achiever-level ceiling OPT_A (descriptive): OOD-pool geo ratio vs OPT_A " + json.dumps(
+                  {k: fmt(v.get("geo_ratio_vs_OPTA")) for k, v in m["table"]["pool_OOD"].items()
+                   if isinstance(v, dict) and "geo_ratio_vs_OPTA" in v}) + "; fraction of BU's excess over OPT_A "
+              "closed: " + json.dumps({k: fmt(v) for k, v in m["ood_headroom_closed_vs_OPTA"].items()}), "",
+              f"Label accuracy (top-1 in the training-target set `{cfg['b_label_target']}`; `|vs_plan` / "
+              "`|vs_achiever` = in A(s) / A_A(s); `unseen` = rows whose renaming class is not in an earlier split, "
+              "the in-distribution basis):", "```", json.dumps(
+                  {s: {g: v.get(g) for g in ("all", "unseen")} for s, v in m["label_accuracy"].items()}, indent=1),
+              "```", ""]
     else:
         L += ["## E11b: not complete", ""]
     (ctx.out / "REPORT_E11.md").write_text("\n".join(L) + "\n", encoding="utf-8", newline="\n")
@@ -1050,6 +1240,10 @@ def phase_report(ctx, timings, prereg):
         m = b_metrics(cfg, insts, done_b, labels)
         out["e11b"] = {"metrics": m, "decision": b_decision(cfg, m)}
     out["timings"] = timings
+    bpath = ctx.out / "bwm_bytecode_checks.json"  # earlier invocations (this one is recorded when main ends)
+    bhist = json.loads(bpath.read_text(encoding="utf-8")) if bpath.exists() else []
+    out["custody"] = {"bwm_bytecode_checks": len(bhist), "bwm_bytecode_all_clean": all(r["clean"] for r in bhist),
+                      "bwm_bytecode_dirty": [r for r in bhist if not r["clean"]]}
     if ctx.smoke and done_a:
         out["estimate_full_from_smoke"] = estimate_full(ctx, done_a, done_b)
     R.write_json(ctx.out / "metrics_e11.json", out)
@@ -1090,6 +1284,33 @@ def code_shas() -> dict:
     return {f: R.sha_file(ROOT / f) for f in CODE_FILES}
 
 
+def out_dir_problem(res, smoke: bool, allowed_root, forbidden, full_out):
+    """Why the resolved path `res` may not be an E11 output directory, else None (pure; tested). Every E11 write goes
+    to a strict subdirectory of `allowed_root` (runs/RCX-E11), never into a protected tree, and a full run writes only
+    to `full_out` (runs/RCX-E11/main)."""
+    if any(res == f or f in res.parents for f in forbidden):
+        return f"refusing to write to {res} (protected tree)"
+    if allowed_root not in res.parents:
+        return f"refusing to write to {res}: E11 writes only below {allowed_root}"
+    if not smoke and res != full_out:
+        return f"the full run writes only to {full_out}; use --smoke for other locations"
+    return None
+
+
+def record_bwm_bytecode(out: Path, phase: str) -> dict:
+    """Append this invocation's BWM __pycache__ diff (bwm_import.check_no_bytecode, against the snapshot anchored at
+    the start of main) to out/bwm_bytecode_checks.json. RCX never imports BWM through the import system, so a dirty
+    diff means either an RCX custody bug or BWM's own processes writing their caches; it is recorded and reported,
+    and the report flags it."""
+    diff = BI.check_no_bytecode()
+    rec = {"time": time.strftime("%Y-%m-%d %H:%M:%S"), "phase": phase,
+           "clean": not (diff["new_pycache_dirs"] or diff["ours"]), "diff": diff}
+    p = out / "bwm_bytecode_checks.json"
+    hist = json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
+    R.write_json(p, hist + [rec])
+    return rec
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", default=None, help="output dir (default runs/RCX-E11/main; smoke runs/RCX-E11/smoke)")
@@ -1099,19 +1320,22 @@ def main():
     a = ap.parse_args()
     if not 1 <= a.threads <= 4:
         raise SystemExit("CPU single lane: 1-4 torch threads")
+    BI.check_no_bytecode()  # anchors the BWM __pycache__ snapshot before any phase (no-op if load() already took it)
     prereg = check_prereg(a.smoke)
     cfg = copy.deepcopy(SMOKE if a.smoke else FULL)
     if cfg["primary_budget"] not in cfg["budgets"] or cfg["mono_check_budget"] > max(cfg["budgets"]):
         raise SystemExit("config: primary_budget must be one of the budgets")
+    if cfg["b_label_target"] not in SG.LABEL_TARGETS:
+        raise SystemExit(f"config: b_label_target must be one of {SG.LABEL_TARGETS}")
     out = Path(a.out) if a.out else (OUT_SMOKE if a.smoke else OUT_FULL)
     out = (ROOT / out) if not out.is_absolute() else out
     res = out.resolve()
-    forbidden = [BI.BUNDLE_ROOT, ROOT.parent / "bwm", ROOT.parent / "rcwm", ROOT / "runs" / "RCX-E07",
-                 ROOT / "runs" / "RCX-E01N", ROOT / "runs" / "RCX-E01", ROOT / "experiments"]
-    if any(res == f.resolve() or f.resolve() in res.parents for f in forbidden):
-        raise SystemExit(f"refusing to write to {res} (protected tree)")
-    if not a.smoke and res != OUT_FULL.resolve():
-        raise SystemExit(f"the full run writes only to {OUT_FULL}; use --smoke for other locations")
+    forbidden = [p.resolve() for p in (BI.BUNDLE_ROOT, RCWM_BUNDLE, ROOT.parent / "bwm", ROOT.parent / "rcwm",
+                                       ROOT / "runs" / "RCX-E07", ROOT / "runs" / "RCX-E01N", ROOT / "runs" / "RCX-E01",
+                                       ROOT / "experiments")]
+    why = out_dir_problem(res, a.smoke, (ROOT / "runs" / "RCX-E11").resolve(), forbidden, OUT_FULL.resolve())
+    if why:
+        raise SystemExit(why)
     if res.exists() and any(res.iterdir()) and not (res / "config.json").exists():
         raise SystemExit(f"{res} exists and is not an E11 run directory; never write into an old directory")
     out.mkdir(parents=True, exist_ok=True)
@@ -1147,20 +1371,22 @@ def main():
     tpath = out / "timings.json"
     timings = json.loads(tpath.read_text(encoding="utf-8")) if tpath.exists() else {}
     ctx.courtesy(force=True)
-    for ph in (PHASES if a.phase == "all" else (a.phase,)):
-        t0 = time.perf_counter()
-        if ph == "report":
-            phase_report(ctx, timings, prereg)
-        else:
-            {"a_data": phase_a_data, "a_mine": phase_a_mine, "a_search": phase_a_search, "b_data": phase_b_data,
-             "b_train": phase_b_train, "b_eval": phase_b_eval}[ph](ctx)
-        dt = time.perf_counter() - t0
-        if dt > 1.0 or ph not in timings:
-            timings[ph] = round(dt, 2)
-        R.write_json(tpath, timings)
-    diff = BI.check_no_bytecode()
-    if diff["new_pycache_dirs"] or diff["ours"]:
-        ctx.log(f"WARNING BWM bytecode check: {diff}")
+    try:
+        for ph in (PHASES if a.phase == "all" else (a.phase,)):
+            t0 = time.perf_counter()
+            if ph == "report":
+                phase_report(ctx, timings, prereg)
+            else:
+                {"a_data": phase_a_data, "a_mine": phase_a_mine, "a_search": phase_a_search,
+                 "b_data": phase_b_data, "b_train": phase_b_train, "b_eval": phase_b_eval}[ph](ctx)
+            dt = time.perf_counter() - t0
+            if dt > 1.0 or ph not in timings:
+                timings[ph] = round(dt, 2)
+            R.write_json(tpath, timings)
+    finally:  # also after a crash: every invocation's BWM bytecode state is recorded
+        bc = record_bwm_bytecode(out, a.phase)
+        if not bc["clean"]:
+            ctx.log(f"WARNING BWM bytecode check (recorded in bwm_bytecode_checks.json): {bc['diff']}")
     ctx.log(f"run_e11 end; guard wait {ctx.guard_wait:.1f}s; timings {timings}")
 
 
