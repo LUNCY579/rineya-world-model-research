@@ -248,3 +248,17 @@ and the evidence path.
     regeneration still matches BWM's file. No BWM bytecode was written.
   - **Checks.** `tests.test_bw` 20/20 OK. A fresh smoke (`scratchpad/e07_smoke_r2`) confirms the review fixes are live.
   - **E07 full run** to `runs/RCX-E07/main`; estimate 0.6–1.4 h of CPU.
+- **CX D-19 E07/E08 result R-04 (about 20:05). Outcomes known: yes.**
+  - **Findings.**
+    - The GNN generalizes structurally: OOD policy accuracy 0.998 vs MLP 0.563 vs h_add 0.848.
+    - The GNN is the best GBFS critic at ≤ 200 expansions, but plateaus at 65/100 at 2,000, where misplaced_blocks
+      reaches 87 and h_add 89.
+    - BWM's unmet-goal ranking is weak (14/100 at 500).
+  - **Decision.**
+    - E07b refinement, preregistered before any run, on a fresh E08 instance set with new seeds 20261290–20261299. Arms:
+      1. GNN-base;
+      2. training extended to n = 8 with full goals;
+      3. a pairwise successor-ranking loss;
+      4. a hybrid: GBFS key (GNN, misplaced_blocks), or GNN + λ·misplaced, with λ chosen on val.
+    - Primary endpoint: GBFS success at 2,000 expansions on n = 12–15.
+    - Share R-04 with BWM now, framed as tier B and exact dynamics.

@@ -1,3 +1,96 @@
 19:22:47 run_e07 start phase=all smoke=False threads=4 out=C:\Users\clclc\BusinessProject\WorldModel\rineya-complementary-worktree\complementary\runs\RCX-E07\main
 19:22:49 data: goal classes per size {"4": {"test": 0, "val": 1, "train": 3}, "5": {"test": 2, "val": 1, "train": 3}, "6": {"test": 3, "val": 2, "train": 5}, "7": {"test": 0, "val": 3, "train": 11}}
 19:22:50 data: instances train 22 val 6 test 75; generation {'train': {'draws': 293, 'generate_none': 16, 'excluded_signature': 38, 'duplicate': 73, 'rejected_class': 78, 'excluded_selection_signature': 4, 'excluded_invariant': 62, 'kept': 22}, 'val': {'draws': 2465, 'rejected_class': 1413, 'generate_none': 262, 'excluded_signature': 447, 'excluded_selection_signature': 102, 'exhausted': 1, 'excluded_invariant': 158, 'duplicate': 77, 'kept': 6}, 'test': {'draws': 173, 'rejected_class': 62, 'generate_none': 8, 'excluded_signature': 1, 'excluded_selection_signature': 1, 'excluded_invariant': 26, 'kept': 75}}
+19:33:35 data: rows {'train': {4: 181, 5: 2413, 6: 17380, 7: 90533}, 'val': {5: 186, 6: 571, 7: 782}, 'test': {5: 359, 6: 411, 8: 548, 10: 673, 12: 796}} test labelling {'test_states_sampled': 4575, 'test_states_deduped': 3063, 'test_rows_missing': 53, 'test_rows_excluded_signature': 11, 'test_rows_excluded_selection_signature': 21, 'test_rows_excluded_invariant': 244} in 646.2s
+19:33:38 train: encoded 110507 train / 1539 val rows for gnn in 0.9s
+19:33:53 train gnn s20261276 ep0 steps 1727 loss 0.1960 val_mae 0.3658
+19:34:07 train gnn s20261276 ep1 steps 3454 loss 0.0444 val_mae 0.1778
+19:34:21 train gnn s20261276 ep2 steps 5181 loss 0.0317 val_mae 0.1373
+19:34:35 train gnn s20261276 ep3 steps 6908 loss 0.0258 val_mae 0.1848
+19:34:49 train gnn s20261276 ep4 steps 8635 loss 0.0210 val_mae 0.1206
+19:35:03 train gnn s20261276 ep5 steps 10362 loss 0.0180 val_mae 0.1087
+19:35:17 train gnn s20261276 ep6 steps 12089 loss 0.0153 val_mae 0.1398
+19:35:30 train gnn s20261276 ep7 steps 13816 loss 0.0136 val_mae 0.0903
+19:35:43 train gnn s20261276 ep8 steps 15543 loss 0.0130 val_mae 0.0848
+19:35:56 train gnn s20261276 ep9 steps 17270 loss 0.0106 val_mae 0.0916
+19:36:10 train gnn s20261276 ep10 steps 18997 loss 0.0105 val_mae 0.0888
+19:36:23 train gnn s20261276 ep11 steps 20724 loss 0.0098 val_mae 0.0861
+19:36:23 train: gnn s20261276 params 123969 best ep 8 val_mae 0.0848 in 163.0s
+19:36:35 train gnn s20261277 ep0 steps 1727 loss 0.1800 val_mae 0.2387
+19:36:48 train gnn s20261277 ep1 steps 3454 loss 0.0426 val_mae 0.1703
+19:37:01 train gnn s20261277 ep2 steps 5181 loss 0.0308 val_mae 0.1487
+19:37:15 train gnn s20261277 ep3 steps 6908 loss 0.0241 val_mae 0.1202
+19:37:28 train gnn s20261277 ep4 steps 8635 loss 0.0201 val_mae 0.1453
+19:37:41 train gnn s20261277 ep5 steps 10362 loss 0.0166 val_mae 0.0999
+19:37:54 train gnn s20261277 ep6 steps 12089 loss 0.0137 val_mae 0.1052
+19:38:07 train gnn s20261277 ep7 steps 13816 loss 0.0122 val_mae 0.0995
+19:38:20 train gnn s20261277 ep8 steps 15543 loss 0.0107 val_mae 0.1061
+19:38:33 train gnn s20261277 ep9 steps 17270 loss 0.0097 val_mae 0.0754
+19:38:47 train gnn s20261277 ep10 steps 18997 loss 0.0088 val_mae 0.0906
+19:39:00 train gnn s20261277 ep11 steps 20724 loss 0.0078 val_mae 0.0716
+19:39:00 train: gnn s20261277 params 123969 best ep 11 val_mae 0.0716 in 157.1s
+19:39:13 train gnn s20261278 ep0 steps 1727 loss 0.1865 val_mae 0.2284
+19:39:26 train gnn s20261278 ep1 steps 3454 loss 0.0460 val_mae 0.1644
+19:39:39 train gnn s20261278 ep2 steps 5181 loss 0.0331 val_mae 0.1761
+19:39:53 train gnn s20261278 ep3 steps 6908 loss 0.0267 val_mae 0.1177
+19:40:06 train gnn s20261278 ep4 steps 8635 loss 0.0213 val_mae 0.1568
+19:40:19 train gnn s20261278 ep5 steps 10362 loss 0.0185 val_mae 0.1134
+19:40:32 train gnn s20261278 ep6 steps 12089 loss 0.0153 val_mae 0.0963
+19:40:46 train gnn s20261278 ep7 steps 13816 loss 0.0130 val_mae 0.0928
+19:40:59 train gnn s20261278 ep8 steps 15543 loss 0.0118 val_mae 0.0929
+19:41:12 train gnn s20261278 ep9 steps 17270 loss 0.0105 val_mae 0.0805
+19:41:25 train gnn s20261278 ep10 steps 18997 loss 0.0096 val_mae 0.0716
+19:41:38 train gnn s20261278 ep11 steps 20724 loss 0.0088 val_mae 0.1067
+19:41:38 train: gnn s20261278 params 123969 best ep 10 val_mae 0.0716 in 158.8s
+19:41:41 train: encoded 110507 train / 1539 val rows for mlp in 3.0s
+19:41:44 train mlp s20261276 ep0 steps 1727 loss 0.9564 val_mae 1.2384
+19:41:46 train mlp s20261276 ep1 steps 3454 loss 0.5803 val_mae 1.0520
+19:41:48 train mlp s20261276 ep2 steps 5181 loss 0.4566 val_mae 0.7860
+19:41:50 train mlp s20261276 ep3 steps 6908 loss 0.3691 val_mae 0.6903
+19:41:52 train mlp s20261276 ep4 steps 8635 loss 0.3235 val_mae 0.6582
+19:41:55 train mlp s20261276 ep5 steps 10362 loss 0.2912 val_mae 0.7254
+19:41:57 train mlp s20261276 ep6 steps 12089 loss 0.2691 val_mae 0.6099
+19:41:59 train mlp s20261276 ep7 steps 13816 loss 0.2471 val_mae 0.6350
+19:42:01 train mlp s20261276 ep8 steps 15543 loss 0.2297 val_mae 0.6559
+19:42:03 train mlp s20261276 ep9 steps 17270 loss 0.2171 val_mae 0.5596
+19:42:05 train mlp s20261276 ep10 steps 18997 loss 0.2012 val_mae 0.5586
+19:42:08 train mlp s20261276 ep11 steps 20724 loss 0.1911 val_mae 0.5607
+19:42:08 train: mlp s20261276 params 158721 best ep 10 val_mae 0.5586 in 26.1s
+19:42:10 train mlp s20261277 ep0 steps 1727 loss 0.9599 val_mae 1.3918
+19:42:12 train mlp s20261277 ep1 steps 3454 loss 0.5961 val_mae 1.0243
+19:42:14 train mlp s20261277 ep2 steps 5181 loss 0.4486 val_mae 0.7764
+19:42:14 19:42:14 [guard] PAUSE: pause flag (76)
+19:42:34 19:42:34 [guard] RESUME after 20.0s (total paused 20.0s)
+19:42:36 train mlp s20261277 ep3 steps 6908 loss 0.3652 val_mae 0.7214
+19:42:39 train mlp s20261277 ep4 steps 8635 loss 0.3204 val_mae 0.7111
+19:42:41 train mlp s20261277 ep5 steps 10362 loss 0.2843 val_mae 0.6385
+19:42:43 train mlp s20261277 ep6 steps 12089 loss 0.2582 val_mae 0.5883
+19:42:45 train mlp s20261277 ep7 steps 13816 loss 0.2325 val_mae 0.6269
+19:42:48 train mlp s20261277 ep8 steps 15543 loss 0.2147 val_mae 0.5649
+19:42:50 train mlp s20261277 ep9 steps 17270 loss 0.1992 val_mae 0.5433
+19:42:52 train mlp s20261277 ep10 steps 18997 loss 0.1861 val_mae 0.5508
+19:42:54 train mlp s20261277 ep11 steps 20724 loss 0.1775 val_mae 0.5412
+19:42:54 train: mlp s20261277 params 158721 best ep 11 val_mae 0.5412 in 46.5s
+19:42:56 train mlp s20261278 ep0 steps 1727 loss 0.9613 val_mae 1.2763
+19:42:58 train mlp s20261278 ep1 steps 3454 loss 0.6015 val_mae 1.0217
+19:43:01 train mlp s20261278 ep2 steps 5181 loss 0.4538 val_mae 0.8147
+19:43:03 train mlp s20261278 ep3 steps 6908 loss 0.3586 val_mae 0.6658
+19:43:05 train mlp s20261278 ep4 steps 8635 loss 0.3053 val_mae 0.6387
+19:43:07 train mlp s20261278 ep5 steps 10362 loss 0.2744 val_mae 0.6278
+19:43:09 train mlp s20261278 ep6 steps 12089 loss 0.2453 val_mae 0.5764
+19:43:12 train mlp s20261278 ep7 steps 13816 loss 0.2217 val_mae 0.5575
+19:43:14 train mlp s20261278 ep8 steps 15543 loss 0.2062 val_mae 0.5619
+19:43:16 train mlp s20261278 ep9 steps 17270 loss 0.1918 val_mae 0.5597
+19:43:16 19:43:16 [guard] PAUSE: pause flag (76)
+19:43:36 19:43:36 [guard] RESUME after 20.0s (total paused 40.0s)
+19:43:38 train mlp s20261278 ep10 steps 18997 loss 0.1820 val_mae 0.5508
+19:43:40 train mlp s20261278 ep11 steps 20724 loss 0.1728 val_mae 0.5505
+19:43:40 19:43:40 [guard] PAUSE: pause flag (78)
+19:44:00 19:44:00 [guard] RESUME after 20.0s (total paused 60.0s)
+19:44:00 train: mlp s20261278 params 158721 best ep 11 val_mae 0.5505 in 66.1s
+19:44:01 e07: 2787 test states, 14460 states to score
+19:44:08 e07: done in 7.9s
+19:44:08 e08: 100 instances {'draws': 135, 'excluded_invariant': 35, 'kept': 100}
+19:50:14 e08: done in 365.4s
+19:50:14 report: wrote REPORT.md and metrics.json
+19:50:14 run_e07 end; guard wait 60.0s; timings {'data': 647.82, 'train': 625.67, 'e07': 7.87, 'e08': 365.37, 'report': 0.25}

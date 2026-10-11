@@ -143,3 +143,84 @@ in about 100k examples. This makes the arm-vs-arm data-factor comparison uninfor
 - DEV battery, 40 parents per stratum, one decoding setting, two arms.
 - Exact accuracy on apply variants is limited by arithmetic errors, which the decision metric separates out.
 - This is *descriptive*: tiers A and B, no training, no confirmation claim.
+
+---
+
+## R-04 RCX-E07/E08 relational value learning for Blocksworld planning (tier: mechanism; external specialist = tier B), 2026-10-10
+
+**Evidence:**
+- `runs/RCX-E07/main/REPORT.md`, `e07_metrics.json`, `e08_metrics.json`, `e08_runs.jsonl`, `e08_success_vs_budget.json`;
+- code: `experiments/RCX-E07/run_e07.py` (reviewed in wf_28dada83-a37) and `rcx/bw/*`.
+
+### Setup
+
+- **Simulator.** BWM's `blocks.py`, pinned and imported read-only, run with exact dynamics.
+- **Instances.** All fresh (seeds 20261270–75). BWM's reserved and selection sets are excluded: hard-110, val_large,
+  mirror, b3fresh, seeds_fresh, distill-240, PB-600/unsolvable signatures, val_v2 and v1 val. They are read only to
+  build exclusions.
+- **Train.** n = 4–7, 22 goal classes (classes are disjoint from val and test), 110k exact-h\* rows.
+- **Models.** RelGNN (124k parameters) and FlatMLP (159k), with identical rows, epochs and selection on val MAE.
+  3 seeds.
+- **E07 test.** 15 instances per size, n ∈ {5, 6} (ID) and {8, 10, 12} (OOD). Random-walk states, exact h\* labels.
+- **E08.** GBFS on 100 fresh full-goal instances, n ∈ {8, 10, 12, 14, 15}.
+
+### E07: one-step policy accuracy (argmin successor is optimal; ties strict; mean ± sd over 3 seeds)
+
+| Model | ID (5–6) | OOD 8 | OOD 10 | OOD 12 | OOD pooled |
+|---|---|---|---|---|---|
+| **RelGNN** | 1.000 ± 0.000 | 1.000 | 0.999 | 0.995 | **0.998 ± 0.001** |
+| FlatMLP | 0.989 ± 0.003 | 0.709 | 0.513 | 0.499 | 0.563 ± 0.008 |
+| h_add (best handcrafted) | 0.803 | 0.819 | 0.903 | 0.821 | 0.848 |
+| misplaced_blocks | 0.560 | 0.600 | 0.633 | 0.377 | 0.526 |
+| unmet_goal_facts (BWM's beam ranking) | 0.139 | 0.082 | 0.054 | 0.054 | 0.062 |
+
+Paired instance-clustered bootstrap over OOD instances (n = 45):
+- GNN − MLP = **+0.406 [+0.355, +0.456]**;
+- GNN − h_add = **+0.148 [+0.113, +0.184]**.
+
+GNN MAE grows with size (0.06 at n = 8, 0.63 at n = 12), but its rank correlation stays high (Spearman ≥ 0.988).
+
+### E08: GBFS success (exact dynamics) vs expansion budget, out of 100 fresh instances, n = 8–15
+
+| Heuristic | 25 | 50 | 100 | 200 | 500 | 1,000 | 2,000 | Mean suboptimality (solved) |
+|---|---|---|---|---|---|---|---|---|
+| **RelGNN** | **26** | **49** | **54** | **57** | 61 | 61 | 65 | **1.056** |
+| misplaced_blocks | 6 | 22 | 36 | 48 | **68** | 78 | 87 | 1.012 |
+| h_add | 0 | 3 | 14 | 26 | 63 | 83 | **89** | 2.024 |
+| unmet_goal_facts (BWM ranking) | 0 | 2 | 3 | 8 | 14 | 21 | 31 | 1.595 |
+
+**Paired exact McNemar tests (GNN seed 1):**
+
+| Comparison | Budget | Baseline-only | GNN-only | p |
+|---|---|---|---|---|
+| GNN vs unmet_goal_facts | 500 | 0 | 47 | < 1e-4 |
+| GNN vs unmet_goal_facts | 2,000 | 6 | 40 | < 1e-4 |
+| GNN vs misplaced_blocks | 500 | 18 | 11 | 0.26 |
+| GNN vs misplaced_blocks | 2,000 | 24 | 2 | < 1e-4 |
+
+### Reading
+
+1. **Relational structure generalizes; flat encodings do not.** A GNN trained on ≤ 7 blocks keeps a near-perfect greedy
+   policy at 8–12 blocks, while an MLP at matched labels collapses to 0.50–0.71. This is the representation result
+   RGM-001 E07 asked for.
+2. **A learned value is a strong *low-budget* search critic.**
+   - Up to 200 expansions it solves the most instances of every heuristic tested, with near-optimal plans.
+   - BWM's hand-coded unmet-goal ranking is the weakest non-trivial heuristic here: policy accuracy 0.06 OOD and
+     14/100 solved at 500 expansions.
+   - This bears directly on BWM's beam failures (dead_end/budget), where each expansion costs LM calls.
+3. **It is brittle at higher budgets.**
+   - GNN coverage plateaus: all 35 failures at 2,000 expansions are budget exhaustion on longer problems (mean
+     optimal length 29.7 vs 22.7 for solved ones), concentrated at n = 12–15.
+   - When it succeeds it needs a median of only 28 expansions.
+   - Misplaced-blocks and h_add overtake it beyond about 500 expansions. One misranking deep in a large problem
+     traps GBFS in a big region.
+
+### Limits
+
+- Mechanism tier with a specialist heuristic: tier B, not a Rineya-core ability.
+- Exact dynamics, not BWM's LM forward model F.
+- GBFS, not BWM's beam.
+- One E08 seed instance set. The best-handcrafted baseline is selected on test states (conservative for "GNN better").
+- E08 full goals vs E07 mixed goals.
+- **Next refinements (E07b):** larger-n and full-goal training, a ranking loss, and hybrid tie-breaking with
+  misplaced_blocks, tested on a fresh E08 set. Then BWM's beam with the frozen LM F, read-only and coordinated.
