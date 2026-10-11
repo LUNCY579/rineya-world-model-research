@@ -418,3 +418,11 @@ and the evidence path.
   - **Settings:** `exclude_noop_macros=True`; `b_label_target=achiever`; arms P, M, R, S and G (G descriptive);
     compute thresholds 500, 1,000, 2,500 and 5,000.
   - **Scheduling.** The full run follows the SEALED E01N evaluation chain in the single CPU lane (estimate 1–2 h).
+- **CX D-32 Lane sequencing fix (2026-10-11 12:45). No outcome is involved.**
+  - The original wrapper would have started E11 the moment the SEALED chain ended. The one SEALED analysis would then
+    have run beside E11, breaking the single-lane rule (I-02).
+  - I stopped only the wrapper. `confirm_sealed_eval_chain.sh` kept running untouched: OFF was in progress and no cell
+    was restarted. The six adapter evals (raw outputs only) were committed in 2dd1ad0. The analysis has not been run.
+  - `confirm_post_sealed_chain.sh` waits for `SEALED CHAIN DONE`, then checks that all 8 `eval_sealed_*` files exist
+    (otherwise it stops). It then runs `analyze_native.py --battery sealed` once (outputs are create-only) and, only if
+    that exits 0, runs the frozen E11.
