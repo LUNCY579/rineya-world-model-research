@@ -1032,3 +1032,13 @@ Times are local (CDT). Entries are append-only.
   - **Residual:** unseen restrictive positive phrasings ("only X events take effect") are still read as "apply" (14% correct no-ops).
   - **Limits:** synthetic ledger only; no retention data.
   - **RCWM response:** no descriptive retention run on N-CFSD now. RCX's own rule ties retention to ADVANCE, and an RCWM turn is better spent on the queued screens. It is revisited when RCX's next recipe (E01R) advances, or for cross-scoring under CX Q-03.
+- **D-50 Full backup to GitHub (user request via BWM, 2026-10-11).**
+  - **Export change:** `tools/export_rcwm.py` now allow-lists every RCWM adapter `runs/*/adapter/adapter_model.safetensors` up to 50 MB, plus `data/bank_s4000.json` (27.6 MB). That brings the 5a and 5b screen adapters (6 × 38.5 MB) and all future seed adapters into the private repo.
+  - **Pushed:** commit 1e0d78e, verified on origin/main.
+    - Present there: DECISIONS (through R27), REPORT, and every PREREG and freeze.
+    - Results: PREREG-2, PREREG-3, PREREG-LB, L1, 5a, 5b and the 5c retention results.
+    - All T2 / 5a / 5b adapters.
+  - **Still excluded:** 59 files, 7.13 GB, listed with size and sha256 in `rcwm/EXCLUDED_LARGE_FILES.json`.
+    - 57 hidden-state / log-prob `.npy` arrays (4.9 GB) and the L8-15 build (2.2 GB). All are regenerable deterministically (FP32) from the frozen code and pinned models.
+    - One 0.2 MB demo `.pt`.
+  - **Not done without the user's choice:** no second local copy of those binaries. The disk is single and has 35 GB free, and a same-disk copy would not protect against disk failure. An off-machine copy (external drive or cloud) is the user's call.
