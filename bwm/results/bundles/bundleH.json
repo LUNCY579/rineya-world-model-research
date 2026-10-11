@@ -1,0 +1,25 @@
+{
+ "budget_s": 16200,
+ "jobs": [
+  {
+   "name": "b3-hard-run",
+   "marker": "runs/BW_B3_HARD/.run_done",
+   "log": "runs/BW_B3_HARD.stdout",
+   "est_s": 600,
+   "cmd": [
+    "scripts/bw_b3_hard.py",
+    "run"
+   ]
+  },
+  {
+   "name": "b3-hard-analyze",
+   "marker": "runs/BW_B3_HARD/B3_HARD_REPORT.json",
+   "log": "runs/BW_B3_HARD.stdout",
+   "est_s": 60,
+   "cmd": [
+    "scripts/bw_b3_hard.py",
+    "analyze"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "core": "titan-sparse",
+ "args": {
+  "core": "titan-sparse",
+  "rows": "runs/BW_DISTILL_r1/mix_v3.jsonl",
+  "steps": 400,
+  "batch": 16,
+  "lr": 0.0001,
+  "seed": 1,
+  "max_len": 640,
+  "filter": "",
+  "init_adapter": "runs/BW_Pa_v2_s1/adapter",
+  "out": "runs/BW_Pa_v3_s1"
+ },
+ "rows": 8508,
+ "train": {
+  "steps": 400,
+  "batch_size": 16,
+  "rows_available": 8508,
+  "lr_peak": 0.0001,
+  "final_loss_avg50": 0.024778729742392896,
+  "loss_curve_every50": [
+   0.08677,
+   0.05305,
+   0.04773,
+   0.03987,
+   0.04172,
+   0.03673,
+   0.03753,
+   0.02478
+  ],
+  "max_grad_norm": 2.9271881580352783,
+  "tokens_processed": 1272786,
+  "supervised_tokens": 267786,
+  "wall_s": 5099.3,
+  "peak_mem_gib": 3.0145740509033203
+ },
+ "init_adapter_sha256": "ee1c5aec5e4a55e30f6df0e30a3cd68242c928cd158f9e5cf06184f409108110"
+}

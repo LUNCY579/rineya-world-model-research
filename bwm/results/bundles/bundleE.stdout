@@ -7,3 +7,26 @@
 [bundle] 12:59:19 start bw-distill-search (remaining budget 16200 s)
   [gpu-lease] released rineya-gpu-0.lock
   [gpu-run] yielding to peer lease 'rcwm-t1:*' (max 21600 s)
+  [gpu-run] yield ended (peer seen=True)
+  [gpu-lease] acquired rineya-gpu-0.lock label=bwm:bundle-bundleE token=848aa3f2
+[bundle] 16:29:32 start bw-distill-search (remaining budget 16200 s)
+[bundle] 16:52:24 done bw-distill-search in 1372 s
+[bundle] 16:52:24 start bw-distill-rows (remaining budget 14828 s)
+[bundle] 16:52:27 done bw-distill-rows in 2 s
+[bundle] 16:52:27 start bw-b3-mix (remaining budget 14825 s)
+[bundle] 16:52:36 done bw-b3-mix in 9 s
+[bundle] 16:52:36 start train-Pa_v3 (remaining budget 14816 s)
+[bundle] 18:17:48 done train-Pa_v3 in 5112 s
+[bundle] 18:17:48 start train-Pa_v2c (remaining budget 9704 s)
+[bundle] 19:22:48 done train-Pa_v2c in 3900 s
+[bundle] 19:22:48 start b3-freeze (remaining budget 5804 s)
+[bundle] 19:22:50 done b3-freeze in 2 s
+[bundle] 19:22:50 start b3-eval (remaining budget 5802 s)
+[bundle] 20:29:15 done b3-eval in 3985 s
+[bundle] 20:29:15 start b3-analyze (remaining budget 1817 s)
+[bundle] 20:29:17 done b3-analyze in 2 s
+[bundle] 20:29:17 start b3-gate (remaining budget 1815 s)
+[bundle] 20:29:17 done b3-gate in 0 s
+[bundle] train-Fdelta-ko: estimate 6600 s exceeds remaining 1815 s; ending turn
+  [gpu-lease] released rineya-gpu-0.lock
+  [gpu-lease] waiting: foreign python pid 189632 (1.50 GiB) on the card

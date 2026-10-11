@@ -745,3 +745,136 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
     launches only; the running launcher keeps its loaded code.
   - **5c:** adapter dirs and shas were sent to RCWM, which will run the frozen retention suite on BW_Fdelta_s0 and
     BW_Pa_v2_s1 in an RCWM turn (label `rcwm-t1:retention`).
+  - **D-64 follow-up:** RCX logged the 09:44 concurrent-lane breach as CX I-02. It killed a second overlapping smoke
+    run at about 10:14 and adopted a stricter rule: sub-agents may only edit code or run checks under 5 s while an
+    RCX lane job runs. It also fixed the three record wordings (commit 2b55b72) and recorded BWM's pins as CX D-13.
+    RCX finding R-03 (commit 980c360) is a third independent instance of the TRIGGER pattern (after BWM F-01 and
+    RCWM PREREG-3): on its fresh-word ledger battery, T2's no-op fires on void (1.00) and its near-misses (0.97) but
+    never on unseen non-posted words (0.00); rule-polarity sensitivity is 0.00.
+- **D-65 User decisions (2026-10-10 ~14:40, explicit: "go with your recommendations on all five decisions").**
+  1. **Vault: not now.** The package stays in `release/` only. Re-ask the user once the item 7 seed gate and the 5c
+     retention check are done and the F-08 "format-locked" caveat is in the model card. A Hugging Face push still
+     needs its own explicit approval.
+  2. **Deferred GPU jobs** (`runs/jobs_gpu_deferred.json`: 8 legacy single jobs and pilotG) stay deferred.
+  3. **B3 conditional hard runs first:** if B3's primary reading is "met", the registered H1 (S-direct with Pa_v3 on
+     hard) and H2 (frozen B2 beam with only Pa swapped to Pa_v3, sharded) run before item 7.
+  4. **Item 7 (seed replication, the release gate):** two fully independent replicate systems, R1 = (F seed 1, Pa
+     seed 2) and R2 = (F seed 2, Pa seed 3), plus the anchor R0 = (BW_Fdelta_s0, BW_Pa_v2_s1). All three run with the
+     frozen B2 configurations on a fresh generated hard-style set of n = 40. That is about 22 GPU-h. Pre-registered
+     before any seed trains (`PREREG_ITEM7_SEEDS.md`).
+  5. **Item 9 (transfer):** PlanBench Logistics, the strongest generality claim (a different domain, same PlanBench
+     harness and VAL). Scoping and prereg on CPU first; no GPU until the prereg is frozen.
+- **D-66 Decisions 3 and 4 implemented; queue after B3.**
+  - **B3 conditional hard runs** (`scripts/bw_b3_hard.py`, sha 321ecd3e…):
+    - A `b3-gate` sub-job, added to bundleE after b3-analyze, reads the registered B3 reading. On "met" it writes
+      `FREEZE_B3_H1/H2.json` (the frozen B2 direct and beam args with only `pa` → `runs/BW_Pa_v3_s1/adapter`, plus
+      the Pa_v3, FREEZE_B3, prereg and report SHAs) and `runs/BW_B3_EVAL/H_GO.json`. Otherwise it writes
+      `H_NO.json`.
+    - bundleH (H1 hard S-direct; H2 hard S-beam in 8 shards; paired analysis vs B2) is queued with
+      `after: H_GO.json`, so it runs before item 7 only if B3 is met.
+    - A stub test of both branches passed; the H2 args differ from B2 beam only in `pa`.
+  - **Item 7 (`PREREG_ITEM7_SEEDS.md`, sha 956a0dc4…; `scripts/bw_seeds.py`, b783a191…):**
+    - Fresh set `instances_seeds_fresh.json`: n = 40, seed 20261014, sha 6fccb945…. Block mix 6:1, 8:3, 9:5,
+      10:5, 11:4, 12:5, 13:6, 14:8, 15:3; 637 invariants excluded. Generated before any seed training.
+    - Added to `blocks_eval.py` as test set `seeds_fresh` (TEST_SETS guard; additive change; blocks_eval sha
+      0f2175fb… → b3666424…).
+    - bundleI: train F seeds 1 and 2, then Pa seeds 2 and 3 (exact s0/s1 recipes; est 6600/15500 s), then
+      `FREEZE_I7_*`, then R0/R1/R2 × (direct, beam in 4 shards), then analyze. Expected about 6 BWM turns.
+  - **Queue order:** bundleE → bundleH (only if met) → bundleI.
+- **X-01 Cross-programme note: RCWM 5a screen (R20, dev bank, pre-stated rule rev 4): winner B-bits.**
+  - **B-bits** (bitstring state plus an explicit applicable flag): IAW 0.83, 4-step exact 0.84, false copy 0.07.
+  - **Decimal:** IAW 0.10, false copy 0.73, i.e. the copy shortcut.
+  - **Joint cmp/calc/after trace:** IAW 0.59. It helped the predicate strata but induced copying (0.29), so it was
+    excluded.
+  - **Held-out surface:** B-bits keeps its no-ops but its apply accuracy halves (4-step 0.84 → 0.42).
+  - **Relevance to BWM:**
+    - Before any RW2 trace (5b mirror / A3) is pre-registered, add a false-copy metric and a bitstring-interface arm.
+    - It supports "expose the predicate in the interface" over "teach the conversion": the "copy with the core,
+      compute with a module" reading.
+- **X-02 Cross-programme note: RCX R-04** (commit 0890ed1; tier B, an external specialist; exact dynamics; CPU).
+  - **The result:** a 124k-parameter relational GNN value function trained on exact h* for 4-7 blocks transfers
+    out of distribution.
+    - One-step policy accuracy at 8/10/12 blocks: 0.998, vs h_add 0.848 and unmet_goal_facts 0.062.
+    - GBFS on 100 fresh 8-15-block full-goal problems at low expansion budgets: GNN 49/57 at 50/200 expansions, vs
+      unmet_goal_facts 2/8.
+    - Above about 500 expansions misplaced_blocks and h_add overtake it.
+  - **Reading for BWM:** `plan_beam`'s ranking key (unmet goal facts) is a weak critic even with exact dynamics. Part
+    of B2's hard failures (budget and dead ends at 12-15 blocks) may be ranking, not F or Pa. Not claimed until tested.
+  - **Candidate B4, after B3 / D-54 / item 7, pre-registered first:**
+    - (a) RCX's GNN as the `unmet=` hook in the frozen B2 beam (read-only, co-signed, fresh instances, RCX's cache).
+      This is an external-module result.
+    - (b) A model-native critic: a value LoRA V on the same frozen Titan-Sparse, trained on h* (or on F-verified
+      search distances for a simulator-free variant), as the `unmet=` hook.
+    - (c) A paired comparison against the frozen B2 ranking, with Pa and F unchanged.
+- **D-67 Item 9 (PlanBench Logistics) scoped on CPU; draft prereg saved; nothing frozen; no GPU.**
+  - **Scoping:** a read-only workflow (3 scouts, 2 designers, 1 synthesis).
+  - **Draft:** `research/PREREG_LOGISTICS_DRAFT.md` (sha 56d36602…). Scoping notes and both designs are in
+    `research/ITEM9_LOGISTICS_SCOPING.json`.
+  - **Vendored assets:** the only local copy was in a Temp scratchpad clone of LLMs-Planning (fc638a1a), so it is
+    now copied into `bench/planbench/logistics/` (domain, generated_basic 286, generated 286, t1 prompts with
+    Fast-Downward astar(lmcut) ground truth, generator source) and `bench/planbench/results/logistics/` (published
+    results), recorded in SOURCE.md. These files are TEST ONLY.
+  - **Key verified facts:**
+    - Local VAL accepts 285/285 ground-truth plans.
+    - PlanBench Logistics t1: 4-7 packages in 212 instances; optimal plan lengths 12-48.
+    - Published per-instance results: o1-preview zero-shot PDDL 188/200 (strong); GPT-4 one-shot 28/200.
+    - PDDL action tokens: about 13 per action; the longest ground-truth target is 619 tokens.
+  - **Draft design:**
+    - train F and Pa on generated 1-3-package problems;
+    - select K/W/E on generated LG-VAL sets with a futility gate;
+    - test once on PB-OUT-80 (20 per package count 4-7) plus a generated mirror;
+    - paired S-beam vs S-direct;
+    - new modules only (`bwmn/logistics.py`, `bwmn/domain_planner.py` wrapping the pinned planner).
+  - **BWM defaults on its open questions** (user to confirm at freeze time):
+    - PB-OUT-80;
+    - Pa 1000 steps (recipe identity with B2);
+    - PDDL operator names;
+    - VAL semantics (self-moves are legal no-ops);
+    - K fixed at 4;
+    - the drafted futility gate;
+    - grid rationale from generated instances only, with any PlanBench-derived design numbers disclosed as history;
+    - seed replication as a later separate prereg;
+    - Stage C conditional runs registered but each needing explicit user GPU approval.
+  - **Cost and order:** about 6 BWM GPU turns (16-38 GPU-h), queued after bundleI (item 7).
+  - **Next:** CPU implementation (CPU-2..CPU-5), resolve the [VERIFY] items, then a freeze with the user's approval.
+    Seeds 20261101-05 are to be confirmed unused by RCWM and RCX.
+  - **D-67 follow-up:** the Logistics seed block moves to **20261401-20261405**.
+    - Why: RCX flagged that RCWM's PREREG-3 out-of-range bank used 20261103, and RCWM uses the whole 202611xx range.
+    - Ranges now: BWM 2026100x-2026101x and 202614xx; RCWM 202611xx; RCX 202612xx.
+    - The draft was updated in place (still unfrozen).
+  - **Seed-registry note:** RCWM listed every seed it uses: 20260917/18/22; 20261006-09; 20261020; 20261028;
+    20261103-04; 20261109-16; 20261121-23; 20261125-26; 20261141-43; 20261161-64; 20261199.
+    - 202614xx is clear.
+    - BWM's existing 20261006-09 (BW_data v1/v2, val_large, mirror) coincide numerically with RCWM's 20261006-09.
+      The generators and domains differ, so no data overlap; recorded for unambiguity.
+    - From now on new BWM seeds come only from 202614xx-202615xx.
+- **P-11 (FINAL, registered, run once): B3 search distillation, primary reading MET**
+  (`runs/BW_B3_EVAL/B3_REPORT.json`; FREEZE_B3 adapters v3 48c9d279…, v2c f7ac53bf…, v2 ee1c5aec…).
+  - **Primary** (S-direct, greedy, M 256, on the fresh 110 hard-style problems `b3fresh`):
+
+    | Arm | Solved | 95% CI |
+    |---|---|---|
+    | Pa_v3 | 22/110 = 0.200 | 0.130-0.287 |
+    | Pa_v2c (same extra training, no search plans) | 8/110 = 0.073 | — |
+
+    Paired: +18 / −4, exact McNemar p = 0.0043; +12.7 pp, which clears the +10 pp bar.
+  - **Secondary, report-only:**
+    - Pa_v3 vs the original Pa_v2: 22 vs 5 on b3fresh (+17/−0, p = 1.5e-5); 22 vs 6 on the mirror (+18/−2,
+      p = 4.0e-4).
+    - Pa_v3 vs Pa_v2c on the mirror: 22 vs 7 (+16/−1, p = 2.7e-4).
+    - The extra-training control alone does nothing: v2c vs v2 is +6/−3 (p = 0.51) and +3/−2 (p = 1.0).
+    - In range vs out of range (6-10 vs 11-15 blocks), b3fresh: v3 15/36 and 7/74; v2c 7/36 and 1/74.
+    - The v2/mirror cell reproduces B2's frozen S-direct 6/110 exactly.
+  - **Distillation:** 211/240 search plans F-verified; label precision 1.000 (all 211 valid under the exact
+    simulator, analysis only), so the "trained without simulator labels" wording is allowed. 4,254 rows, none over
+    640 tokens.
+  - **Truncation** (report-only): 25/110 (b3fresh) and 21/110 (mirror) of Pa_v3's plans reached the 256-token cap,
+    and none of them succeeded. Solved plans are longer for v3 (mean 21.5 vs 14.8 actions). The frozen M = 256
+    understates Pa_v3. No re-run with a larger M without a new addendum.
+  - **Independent check:** I re-scored all six cells with the exact simulator from the plan files. Every count and
+    both primary McNemar tests reproduce.
+  - **Allowed claim:** "Trained on plans its own world model verified (no simulator labels), the proposer alone solves
+    22/110 fresh hard-style problems vs 8/110 for the same extra training without them (paired p = 0.004)."
+  - **Consequence:** the registered H1/H2 hard runs are unlocked (H_GO.json; `FREEZE_B3_H1/H2` written by the gate).
+    bundleH's two jobs were merged into bundleE after D-54, so they use the rest of BWM's next turn. The separate
+    bundleH queue entry was removed. Queue: bundleE (FK → key-order eval → H1/H2) → bundleI (item 7).

@@ -56,9 +56,14 @@ Single training seed; validation-grade unless marked frozen.
 - **Joint item 3 (PREREG-LB) closed:** RCWM's T2 ledger adapter, used as F inside this planner, plans: 127/180 vs
   14/180 with the adapter off, T2/ORACLE 0.794. That is on its training surface only. BWM re-scored it independently
   (D-61, `code/scripts/lb_rescore.py`).
+- **B3 search distillation, MET (P-11).** Trained only on plans its own world model verified (no simulator labels),
+  the proposer alone, without search, solves 22/110 fresh hard-style problems. A same-training control solves 8/110
+  (paired +18/-4, p = 0.004); the original proposer solves 5/110. Label precision was 1.0. This unlocks the registered
+  hard-set runs H1/H2.
 - **In progress:**
-  - B3 search distillation (`docs/PREREG_B3_DISTILL.md`). Its outputs are embargoed from this repo until its
-    registered report exists.
-  - D-54 key-order augmentation (`docs/PREREG_D54_KEYORDER.md`).
+  - D-54 key-order augmentation (`docs/PREREG_D54_KEYORDER.md`);
+  - B3 H1/H2 on Blocksworld-hard;
+  - item 7 seed replication (`docs/PREREG_ITEM7_SEEDS.md`);
+  - item 9 PlanBench Logistics, a draft prereg only (`docs/research/PREREG_LOGISTICS_DRAFT.md`).
 - **Local package only:** `release/` in the bundle (D-49), not in the vault (D-60). Publishing anywhere public needs
   the user's explicit approval.

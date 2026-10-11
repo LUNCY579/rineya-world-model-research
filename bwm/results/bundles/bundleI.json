@@ -1,0 +1,127 @@
+{
+ "budget_s": 16200,
+ "jobs": [
+  {
+   "name": "train-Fdelta-s1",
+   "marker": "runs/BW_Fdelta_s1/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Fdelta_s1.stdout",
+   "est_s": 6600,
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_data/forward_delta_train.jsonl",
+    "--steps",
+    "600",
+    "--batch",
+    "16",
+    "--lr",
+    "0.0001",
+    "--seed",
+    "1",
+    "--max-len",
+    "256",
+    "--out",
+    "runs/BW_Fdelta_s1"
+   ]
+  },
+  {
+   "name": "train-Fdelta-s2",
+   "marker": "runs/BW_Fdelta_s2/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Fdelta_s2.stdout",
+   "est_s": 6600,
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_data/forward_delta_train.jsonl",
+    "--steps",
+    "600",
+    "--batch",
+    "16",
+    "--lr",
+    "0.0001",
+    "--seed",
+    "2",
+    "--max-len",
+    "256",
+    "--out",
+    "runs/BW_Fdelta_s2"
+   ]
+  },
+  {
+   "name": "train-Pa_v2-s2",
+   "marker": "runs/BW_Pa_v2_s2/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Pa_v2_s2.stdout",
+   "est_s": 15500,
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_data_v2/proposer_actions_train.jsonl",
+    "--steps",
+    "1000",
+    "--batch",
+    "16",
+    "--lr",
+    "0.0001",
+    "--seed",
+    "2",
+    "--max-len",
+    "256",
+    "--out",
+    "runs/BW_Pa_v2_s2"
+   ]
+  },
+  {
+   "name": "train-Pa_v2-s3",
+   "marker": "runs/BW_Pa_v2_s3/adapter/adapter_model.safetensors",
+   "log": "runs/BW_Pa_v2_s3.stdout",
+   "est_s": 15500,
+   "cmd": [
+    "scripts/train_generic.py",
+    "--rows",
+    "runs/BW_data_v2/proposer_actions_train.jsonl",
+    "--steps",
+    "1000",
+    "--batch",
+    "16",
+    "--lr",
+    "0.0001",
+    "--seed",
+    "3",
+    "--max-len",
+    "256",
+    "--out",
+    "runs/BW_Pa_v2_s3"
+   ]
+  },
+  {
+   "name": "i7-freeze",
+   "marker": "runs/FREEZE_I7_R2_direct.json",
+   "log": "runs/BW_SEEDS.stdout",
+   "est_s": 60,
+   "cmd": [
+    "scripts/bw_seeds.py",
+    "freeze"
+   ]
+  },
+  {
+   "name": "i7-run",
+   "marker": "runs/BW_SEEDS/.run_done",
+   "log": "runs/BW_SEEDS.stdout",
+   "est_s": 600,
+   "cmd": [
+    "scripts/bw_seeds.py",
+    "run"
+   ]
+  },
+  {
+   "name": "i7-analyze",
+   "marker": "runs/BW_SEEDS/SEEDS_REPORT.json",
+   "log": "runs/BW_SEEDS.stdout",
+   "est_s": 60,
+   "cmd": [
+    "scripts/bw_seeds.py",
+    "analyze"
+   ]
+  }
+ ]
+}

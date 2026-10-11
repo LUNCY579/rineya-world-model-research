@@ -1,0 +1,170 @@
+{
+ "arms": {
+  "v3": {
+   "path": "runs/BW_Pa_v3_s1/adapter",
+   "sha256": "48c9d279bd8813311f3232bc867a88d96604a93347270a16ac57829662e4c678"
+  },
+  "v2c": {
+   "path": "runs/BW_Pa_v2c_s1/adapter",
+   "sha256": "f7ac53bf1cb42cf64df6ec293abd98acf2e962b6a34aced9b4e9ceccf55044c9"
+  },
+  "v2": {
+   "path": "runs/BW_Pa_v2_s1/adapter",
+   "sha256": "ee1c5aec5e4a55e30f6df0e30a3cd68242c928cd158f9e5cf06184f409108110"
+  }
+ },
+ "files": {
+  "prereg": {
+   "path": "PREREG_B3_DISTILL.md",
+   "sha256": "e6aa884b8af74243e23624b451e96249175e65d4978e0e826a2123cdab4fe74a"
+  },
+  "b3fresh": {
+   "path": "runs/BW_val_large/instances_b3_fresh.json",
+   "sha256": "575c45b14c88f482728cc04e9f7234eabc7d160033f52e3f7f05fa8f4ca9844d"
+  },
+  "mix_meta": {
+   "path": "runs/BW_DISTILL_r1/MIX_META.json",
+   "sha256": "f3237c5d7edfa1c0c6918a5de848aaf20c78ca6d99a3fb2dade9b7154ca3984d"
+  },
+  "distill_meta": {
+   "path": "runs/BW_DISTILL_r1/DISTILL_META.json",
+   "sha256": "4551750f9f6c832a482131f2ef16977862e89b72d88b4a692fc93dcdadf1840a"
+  }
+ },
+ "direct": {
+  "K": 1,
+  "M": 256,
+  "eval_seed": 0
+ },
+ "frozen_unix": 1791678170.409735
+}
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:33,  3.31it/s]Loading weights:  15%|#5        | 47/310 [00:00<00:01, 148.21it/s]Loading weights:  30%|##9       | 92/310 [00:00<00:00, 239.87it/s]Loading weights:  45%|####5     | 140/310 [00:00<00:00, 310.61it/s]Loading weights:  60%|######    | 187/310 [00:00<00:00, 355.33it/s]Loading weights:  75%|#######4  | 231/310 [00:00<00:00, 377.01it/s]Loading weights:  88%|########8 | 273/310 [00:00<00:00, 386.52it/s]Loading weights: 100%|##########| 310/310 [00:01<00:00, 306.88it/s]
+  [thermal] 19:23:02 GPU 65 C
+  [thermal] 19:28:12 GPU 62 C
+  [thermal] 19:33:14 GPU 61 C
+  [thermal] 19:38:24 GPU 65 C
+{"arm": "v3", "set": "b3fresh", "n": 110, "success": 0.2, "truncated": 25, "wall_s": 950.3}
+  [thermal] 19:42:21 paused 5s, GPU now 64 C
+  [thermal] 19:43:20 paused 5s, GPU now 64 C
+  [thermal] 19:43:35 GPU 65 C
+{"arm": "v2c", "set": "b3fresh", "n": 110, "success": 0.07272727272727272, "truncated": 0, "wall_s": 501.0}
+  [thermal] 19:48:45 GPU 67 C
+  [thermal] 19:53:47 GPU 65 C
+{"arm": "v2", "set": "b3fresh", "n": 110, "success": 0.045454545454545456, "truncated": 0, "wall_s": 486.3}
+  [thermal] 19:58:53 GPU 65 C
+  [thermal] 20:04:03 GPU 66 C
+  [thermal] 20:07:27 paused 5s, GPU now 65 C
+  [thermal] 20:09:07 GPU 66 C
+{"arm": "v3", "set": "mirror", "n": 110, "success": 0.2, "truncated": 21, "wall_s": 845.2}
+  [thermal] 20:11:41 paused 5s, GPU now 66 C
+  [thermal] 20:14:13 paused 5s, GPU now 65 C
+  [thermal] 20:14:16 GPU 66 C
+  [thermal] 20:19:22 GPU 65 C
+{"arm": "v2c", "set": "mirror", "n": 110, "success": 0.06363636363636363, "truncated": 0, "wall_s": 636.4}
+  [thermal] 20:24:27 GPU 66 C
+  [thermal] 20:27:29 paused 5s, GPU now 66 C
+{"arm": "v2", "set": "mirror", "n": 110, "success": 0.05454545454545454, "truncated": 0, "wall_s": 554.7}
+{
+ "cells": {
+  "v2/b3fresh": {
+   "success": "5/110",
+   "rate": 0.0455,
+   "ci95": [
+    0.015,
+    0.103
+   ],
+   "in_range_6_10": "4/36",
+   "out_of_range_11_15": "1/74"
+  },
+  "v2/mirror": {
+   "success": "6/110",
+   "rate": 0.0545,
+   "ci95": [
+    0.02,
+    0.115
+   ],
+   "in_range_6_10": "5/36",
+   "out_of_range_11_15": "1/74"
+  },
+  "v2c/b3fresh": {
+   "success": "8/110",
+   "rate": 0.0727,
+   "ci95": [
+    0.032,
+    0.138
+   ],
+   "in_range_6_10": "7/36",
+   "out_of_range_11_15": "1/74"
+  },
+  "v2c/mirror": {
+   "success": "7/110",
+   "rate": 0.0636,
+   "ci95": [
+    0.026,
+    0.127
+   ],
+   "in_range_6_10": "6/36",
+   "out_of_range_11_15": "1/74"
+  },
+  "v3/b3fresh": {
+   "success": "22/110",
+   "rate": 0.2,
+   "ci95": [
+    0.13,
+    0.287
+   ],
+   "in_range_6_10": "15/36",
+   "out_of_range_11_15": "7/74"
+  },
+  "v3/mirror": {
+   "success": "22/110",
+   "rate": 0.2,
+   "ci95": [
+    0.13,
+    0.287
+   ],
+   "in_range_6_10": "14/36",
+   "out_of_range_11_15": "8/74"
+  }
+ },
+ "contrasts": {
+  "v3-v2c/b3fresh": {
+   "diff_pp": 12.7,
+   "x_only": 18,
+   "y_only": 4,
+   "p_mcnemar": 0.004343509674072266
+  },
+  "v3-v2c/mirror": {
+   "diff_pp": 13.6,
+   "x_only": 16,
+   "y_only": 1,
+   "p_mcnemar": 0.000274658203125
+  },
+  "v3-v2/b3fresh": {
+   "diff_pp": 15.5,
+   "x_only": 17,
+   "y_only": 0,
+   "p_mcnemar": 1.52587890625e-05
+  },
+  "v3-v2/mirror": {
+   "diff_pp": 14.5,
+   "x_only": 18,
+   "y_only": 2,
+   "p_mcnemar": 0.0004024505615234375
+  },
+  "v2c-v2/b3fresh": {
+   "diff_pp": 2.7,
+   "x_only": 6,
+   "y_only": 3,
+   "p_mcnemar": 0.5078125
+  },
+  "v2c-v2/mirror": {
+   "diff_pp": 0.9,
+   "x_only": 3,
+   "y_only": 2,
+   "p_mcnemar": 1.0
+  }
+ },
+ "primary_reading": "met"
+}
+B3 primary reading met -> FREEZE_B3_H1/H2 written; bundleH runnable

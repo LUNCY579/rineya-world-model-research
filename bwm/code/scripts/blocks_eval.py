@@ -19,7 +19,7 @@ from bwmn import blocks as B  # noqa: E402
 from bwmn import blocks_planner as BP  # noqa: E402
 
 
-TEST_SETS = ("planbench", "hard")
+TEST_SETS = ("planbench", "hard", "seeds_fresh")  # seeds_fresh: item 7 (PREREG_ITEM7_SEEDS.md, D-65)
 
 
 def _json_set(path: Path, prefix: str):
@@ -40,6 +40,8 @@ def load_set(name: str, n: int):
         out = _json_set(ROOT / "runs/BW_val_large/instances_val_large.json", "val_large")
     elif name == "mirror":
         out = _json_set(ROOT / "runs/BW_val_large/instances_mirror_hard.json", "mirror")
+    elif name == "seeds_fresh":
+        out = _json_set(ROOT / "runs/BW_val_large/instances_seeds_fresh.json", "seeds_fresh")
     elif name == "planbench":
         for sub in ("generated_basic_3", "generated_basic"):
             for p in sorted((B.BENCH / "blocksworld" / sub).glob("*.pddl"), key=lambda p: int(p.stem.split("-")[1])):
@@ -54,7 +56,7 @@ def load_set(name: str, n: int):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--set", choices=["planbench", "hard", "val", "val_v2", "val_large", "mirror"], required=True)
+    ap.add_argument("--set", choices=["planbench", "hard", "val", "val_v2", "val_large", "mirror", "seeds_fresh"], required=True)
     ap.add_argument("--planner", choices=["replan", "beam", "direct"], default="replan")
     ap.add_argument("--W", type=int, default=4, help="beam width (beam planner)")
     ap.add_argument("--E", type=int, default=48, help="expansion cap per instance (beam planner)")

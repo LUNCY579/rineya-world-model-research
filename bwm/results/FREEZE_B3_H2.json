@@ -1,0 +1,26 @@
+{
+ "args": {
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v3_s1/adapter",
+  "mode": "actions",
+  "eval_seed": 0,
+  "max_depth": 80,
+  "step_cap": 24,
+  "fwd": "lm",
+  "fwd_adapter": "runs/BW_Fdelta_s0/adapter",
+  "fwd_fmt": "delta",
+  "K": 8,
+  "planner": "beam",
+  "W": 4,
+  "E": 24,
+  "R": 12,
+  "M": 80,
+  "P": 1
+ },
+ "derived_from": "runs/FREEZE_B2_beam.json",
+ "only_change": "pa -> runs/BW_Pa_v3_s1/adapter",
+ "pa_sha256": "48c9d279bd8813311f3232bc867a88d96604a93347270a16ac57829662e4c678",
+ "freeze_b3_sha256": "dcf604566cee19b412ad97511189d46a95b96673ea9cb2f73a2ac9c544bb64b9",
+ "prereg_b3_sha256": "e6aa884b8af74243e23624b451e96249175e65d4978e0e826a2123cdab4fe74a",
+ "b3_report_sha256": "abc871c1cc57151789226fe038354658a054d22e17dfc8c7adaa253356f1bbae"
+}
