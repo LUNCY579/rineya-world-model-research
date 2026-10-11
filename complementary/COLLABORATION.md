@@ -107,6 +107,11 @@ authoritative.
 Open requests are listed in `docs/REQUESTS.md`. Every request is also delivered by session message, because peers record
 agreements in their own DECISIONS.md.
 
+- **2026-10-11, RCX note for BWM (to be sent by the coordinator; not yet sent): B4 fresh-set exclusions.** BWM's B4
+  fresh hard-style set (seed 20261410, §7 entry of 2026-10-11 about 02:20) should also exclude the instance keys of
+  RCX's E11a test set (seed 20261256) and E11b execution set (seed 20261258), so that no B4 instance is an E11
+  evaluation instance. The coordinator sends the key lists to BWM once the E11 data phases have drawn them.
+
 ## 6. Findings shared with peers
 
 Each entry gives a date, a finding, its evidence path, and the peers it was sent to.

@@ -850,11 +850,145 @@ class TestAchieverLabelWiring(unittest.TestCase):
         self.assertIn("cfg['b_label_target'] not in SG.LABEL_TARGETS", ast.unparse(fns["main"]))
         full = next(n for n in tree.body if isinstance(n, ast.Assign) and getattr(n.targets[0], "id", None) == "FULL")
         kw = {k.arg: ast.unparse(k.value) for k in full.value.keywords}
-        self.assertIn(kw.get("b_label_target"), ("'plan'", "'achiever'"))  # 'plan' as drafted; the prereg decides
+        self.assertEqual(kw.get("b_label_target"), "'achiever'")  # prereg H-b1 (achiever-level training target)
         self.assertEqual(kw.get("b_ach_budget"), "200000")
         ev = ast.unparse(fns["phase_b_eval"])
         self.assertIn("|vs_plan", ev)
         self.assertIn("|vs_achiever", ev)
+
+
+class TestPreregSettingsAndDecisionRules(unittest.TestCase):
+    """The runner's default config equals the prereg's settings (FULL, and SMOKE inherits them), and a_decision /
+    b_decision (executed from the runner source, no torch) follow the prereg tables: rows top to bottom, first match
+    wins; E11a attribution by discordants; E11b ADVANCE needs L-r0 vs RND < 0 and L-r0 vs RF <= 0."""
+    RUNNER = TestCustodyAndLeakage.RUNNER
+    THRESHOLDS = [500, 1000, 2500, 5000]
+
+    def _parse(self):
+        import ast
+        with open(self.RUNNER, encoding="utf-8") as fh:
+            tree = ast.parse(fh.read())
+        return tree, {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+
+    def _fn(self, name):
+        import ast
+        _, fns = self._parse()
+        ns = {}
+        exec(compile(ast.Module(body=[fns[name]], type_ignores=[]), self.RUNNER, "exec"), ns)
+        return ns[name]
+
+    def test_config_defaults_equal_prereg_settings(self):
+        import ast
+        from pathlib import Path
+        tree, _ = self._parse()
+        cfgs = {n.targets[0].id: n.value for n in tree.body if isinstance(n, ast.Assign)
+                and getattr(n.targets[0], "id", None) in ("FULL", "SMOKE")}
+        full = {k.arg: k.value for k in cfgs["FULL"].keywords}
+        lit = {k: ast.literal_eval(v) for k, v in full.items() if k in (
+            "exclude_noop_macros", "b_label_target", "arms", "hcall_thresholds", "prim_thresholds",
+            "compute_secondary_threshold", "a_g_clause_margin", "primary_budget", "b_select_unseen_val")}
+        self.assertIs(lit["exclude_noop_macros"], True)
+        self.assertEqual(lit["b_label_target"], "achiever")
+        self.assertEqual(lit["arms"], ["P", "M", "R", "S", "G"])
+        self.assertEqual(lit["hcall_thresholds"], self.THRESHOLDS)
+        self.assertEqual(lit["prim_thresholds"], self.THRESHOLDS)
+        self.assertEqual(lit["compute_secondary_threshold"], 1000)
+        self.assertIn(lit["compute_secondary_threshold"], lit["hcall_thresholds"])
+        self.assertEqual((lit["a_g_clause_margin"], lit["primary_budget"]), (5, 200))
+        self.assertIs(lit["b_select_unseen_val"], True)
+        self.assertNotIn("a_attr_margin", full)  # attribution is by discordants (no count margin)
+        self.assertEqual(ast.unparse(cfgs["SMOKE"].args[0]), "FULL")
+        smoke = {k.arg for k in cfgs["SMOKE"].keywords}
+        for k in lit:  # the smoke runs the settings that will be frozen (primary_budget is scaled down)
+            if k != "primary_budget":
+                self.assertNotIn(k, smoke)
+        here = Path(self.RUNNER).parent
+        prereg = here / "PREREG_E11.md" if (here / "PREREG_E11.md").exists() else here / "PREREG_E11_DRAFT.md"
+        text = prereg.read_text(encoding="utf-8")
+        for s in ("`exclude_noop_macros=True`", '`b_label_target="achiever"`', "{500, 1,000, 2,500, 5,000}",
+                  "| **G** (descriptive) |", "within 1,000 heuristic calls", "M-only > control-only discordants",
+                  "the L-r0 vs RND point estimate < 0", "the L-r0 vs RF point estimate ≤ 0",
+                  "Rows are evaluated top to bottom; the first match is the outcome."):
+            self.assertIn(s, text, s)
+
+    def test_b_decision_rows_in_order(self):
+        import math
+        f = self._fn("b_decision")
+        cfg = {"model_seeds": [1, 2, 3], "b_advance_log_ratio": math.log(0.95), "b_success_margin": 2,
+               "b_stop_success_frac": 0.8}
+
+        def m(diff=-0.08, hi=-0.02, rnd=(-0.3, -0.2), rf=-0.01, sL=90, sBU=90, reps=(-0.05, -0.06)):
+            return {"complete": True, "primary": {"diff": diff, "hi": hi},
+                    "vs_random_order": {"diff": rnd[0], "hi": rnd[1]}, "vs_ready_first": {"diff": rf},
+                    "ood_success": {"learned_s1": sL, "bottom_up": sBU},
+                    "replicates_log_ratio_vs_BU": {"learned_s1": diff, "learned_s2": reps[0], "learned_s3": reps[1]}}
+
+        self.assertEqual(f(cfg, {"complete": False})["outcome"], "NOT_RUN")
+        self.assertEqual(f(cfg, m())["outcome"], "ADVANCE")
+        self.assertEqual(f(cfg, m(rf=0.0))["outcome"], "ADVANCE")  # RF: point estimate <= 0
+        d = f(cfg, m(rf=0.02))  # beats BU by the margin but not RF: REVISE (RND CI < 0), with the RF clause
+        self.assertEqual((d["outcome"], d["rf_clause"], d["vs_rf_point_le_0"]), ("REVISE", True, False))
+        self.assertEqual(f(cfg, m(rf=0.02, rnd=(-0.1, 0.05)))["outcome"], "INCONCLUSIVE")
+        # no better than random order although BU is beaten by > 5% (random beats BU): STOP, never ADVANCE
+        d = f(cfg, m(rnd=(0.01, 0.1)))
+        self.assertEqual((d["outcome"], d["vs_rnd_point_negative"], d["rf_clause"]), ("STOP", False, False))
+        self.assertEqual(f(cfg, m(rnd=(0.0, 0.1)))["outcome"], "STOP")
+        # first match wins: ADVANCE and STOP's success clause (3 < 0.8 * 5) both hold -> ADVANCE
+        self.assertEqual(f(cfg, m(sL=3, sBU=5))["outcome"], "ADVANCE")
+        self.assertEqual(f(cfg, m(sL=87))["outcome"], "REVISE")  # success margin missed (87 < 90 - 2)
+        self.assertEqual(f(cfg, m(sL=70))["outcome"], "STOP")  # 70 < 0.8 * 90
+        self.assertEqual(f(cfg, m(diff=-0.03))["outcome"], "REVISE")  # not >= 5% shorter
+        self.assertEqual(f(cfg, m(hi=0.01))["outcome"], "REVISE")
+        self.assertEqual(f(cfg, m(reps=(-0.05, 0.01)))["outcome"], "REVISE")
+        self.assertEqual(f(cfg, m(diff=-0.03, rnd=(-0.1, 0.05)))["outcome"], "INCONCLUSIVE")
+
+    def test_a_decision_rows_attribution_and_wording_flags(self):
+        f = self._fn("a_decision")
+        cfg = {"alpha": 0.05, "primary_heur": "A3", "primary_algo": "gbfs", "primary_budget": 200,
+               "compute_secondary_threshold": 1000, "a_g_clause_margin": 5}
+
+        def mc(p, co, bo, cs=60, bs=50, exact=True):
+            return {"p_exact": p, "p_holm": p, "cand_only": co, "base_only": bo, "cand_success": cs,
+                    "base_success": bs, "exact": exact}
+
+        def m(prim=(0.01, 12, 2), attr=((0.01, 9, 1), (0.02, 8, 1)), stop=(False, False), ch=(0.01, 10, 1, True),
+              g=(60, 57)):
+            out = {"complete": True, "gates": {"ok": True}, "primary": mc(*prim),
+                   "attribution": {"M_vs_R": mc(*attr[0]), "M_vs_S": mc(*attr[1])},
+                   "stop_check_M_not_better": {"A3|200": stop[0], "A3|2000": stop[1]},
+                   "compute_matched_mcnemar": {"M_vs_P|h_calls|A3|gbfs|1000": mc(ch[0], ch[1], ch[2], exact=ch[3]),
+                                               "M_vs_P|prim_steps|A3|gbfs|1000": mc(0.5, 3, 2, exact=False)},
+                   "secondary_mcnemar": {}}
+            if g is not None:
+                out["secondary_mcnemar"]["M_vs_G|A3|gbfs|200"] = mc(0.3, 5, 2, cs=g[0], bs=g[1])
+            return out
+
+        self.assertEqual(f(cfg, {"complete": False}, True)["outcome"], "NOT_RUN")
+        self.assertEqual(f(cfg, m(), False)["outcome"], "INVALID")
+        bad = m()
+        bad["gates"]["ok"] = False
+        self.assertEqual(f(cfg, bad, True)["outcome"], "INVALID")
+        d = f(cfg, m(), True)
+        self.assertEqual((d["outcome"], d["M_minus_G_primary_cell"], d["g_clause"]), ("ADVANCE", 3, True))
+        self.assertTrue(d["compute_matched_secondary"]["saving_claim_allowed"])
+        self.assertFalse(d["compute_matched_secondary"]["prim_steps"]["evaluable"])
+        d = f(cfg, m(g=(60, 50)), True)
+        self.assertEqual((d["outcome"], d["g_clause"]), ("ADVANCE", False))
+        self.assertIsNone(f(cfg, m(g=None), True)["g_clause"])  # arm G not configured
+        # attribution needs M-only > control-only discordants (no +5 count margin) and Holm p < alpha
+        self.assertEqual(f(cfg, m(attr=((0.01, 9, 1), (0.04, 4, 3))), True)["outcome"], "ADVANCE")
+        self.assertEqual(f(cfg, m(attr=((0.01, 9, 1), (0.04, 3, 3))), True)["outcome"], "REVISE")
+        self.assertEqual(f(cfg, m(attr=((0.01, 9, 1), (0.06, 8, 1))), True)["outcome"], "REVISE")
+        self.assertEqual(f(cfg, m(prim=(0.01, 2, 12)), True)["outcome"], "STOP")
+        self.assertEqual(f(cfg, m(prim=(0.2, 8, 4), stop=(True, True)), True)["outcome"], "STOP")
+        self.assertEqual(f(cfg, m(prim=(0.2, 8, 4), stop=(True, False)), True)["outcome"], "INCONCLUSIVE")
+        # first match wins: a significant primary in M's favour is REVISE even if the stop check holds
+        self.assertEqual(f(cfg, m(attr=((0.2, 9, 1), (0.2, 8, 1)), stop=(True, True)), True)["outcome"], "REVISE")
+        # the compute-matched secondary grades wording only and needs an exact cell
+        for ch in ((0.01, 10, 1, False), (0.2, 10, 6, True), (0.01, 1, 10, True)):
+            d = f(cfg, m(ch=ch), True)
+            self.assertEqual(d["outcome"], "ADVANCE")
+            self.assertFalse(d["compute_matched_secondary"]["saving_claim_allowed"], ch)
 
 
 if __name__ == "__main__":

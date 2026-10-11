@@ -4,14 +4,15 @@ E11a  macro (option) discovery and reuse. Parameterised macros (length 2-4, goal
       F-verified B3 plans (runs/BW_DISTILL_r1/solutions.jsonl, read-only, sha pinned), validated against exact dynamics
       (rcx/bw/macros.py), and GBFS / beam(4) over primitives (P) is compared with primitives + the mined library (M),
       a matched random sound library (R) and a library mined from shuffled plans (S; same length mix as M, sharing no
-      abstract step signature with M) on fresh n = 12/14/15 instances, with heuristics A3 (the B4 hook itself:
-      rcx/bw/b4_hook LearnedUnmet, hybrid_lambda 1.0, R-04 GNN seed 20261276) and misplaced_blocks.
+      abstract step signature with M; no internal no-op macros in M, R or S) on fresh n = 12/14/15 instances, with
+      heuristics A3 (the B4 hook itself: rcx/bw/b4_hook LearnedUnmet, hybrid_lambda 1.0, R-04 GNN seed 20261276) and
+      misplaced_blocks. Arm G (primitives + the goal-gated single-move library) is descriptive, not in the decision.
 E11b  compositional subgoal policy (rcx/bw/subgoal.py). A GNN subgoal selector is trained on exact labels (cfg
-      b_label_target: optimal-plan sets A(s) as drafted, or achiever-level sets A_A(s); both are stored and evaluated,
-      and the achiever-level optimum OPT_A is the descriptive ceiling) from fresh small problems (n <= 7, at most 2
-      goal towers of height <= 4) and executed with a fixed
-      achiever, without search, on fresh n = 10-15 goals with more and/or taller towers; compared with bottom-up (BU),
-      random order (RND), ready-first (RF, descriptive) and goal-count GBFS.
+      b_label_target = "achiever": achiever-level sets A_A(s); the optimal-plan sets A(s) are stored and evaluated
+      descriptively, and the achiever-level optimum OPT_A is the descriptive ceiling) from fresh small problems
+      (n <= 7, at most 2 goal towers of height <= 4) and executed with the same fixed achiever, without search, on
+      fresh n = 10-15 goals with more and/or taller towers; compared with bottom-up (BU), random order (RND),
+      ready-first (RF; enters only the E11b ADVANCE condition L-r0 vs RF <= 0) and goal-count GBFS.
 
 Design: experiments/RCX-E11/DESIGN.md. Prereg: experiments/RCX-E11/PREREG_E11_DRAFT.md (DRAFT). A full run refuses
 to start until the frozen PREREG_E11.md exists and its sha256 equals PREREG_SHA256 below (set at the freeze); --smoke
@@ -120,13 +121,15 @@ FULL = dict(
     # ---- E11a
     a_sizes=[12, 14, 15], a_per_size=40, a_opt_budget=300_000,
     mine_lengths=[2, 3, 4], mine_max_vars=4, K=8, min_support=5, s_fill_min_support=1, n_check_max=6,
-    exclude_noop_macros=False,  # True drops macros with an internal no-op pair from M, R, S (proposed; prereg decides)
-    arms=["P", "M", "R", "S"], heuristics=["A3", "misplaced_blocks"], algos=["gbfs", "beam4"], beam_width=4,
+    exclude_noop_macros=True,  # drop candidates with an internal no-op pair from M, R and S (prereg section 2, gate G1)
+    # G: descriptive goal-gated single-move control (macros.goal_move_library); not in the decision rule (prereg 2)
+    arms=["P", "M", "R", "S", "G"], heuristics=["A3", "misplaced_blocks"], algos=["gbfs", "beam4"], beam_width=4,
     budgets=[50, 200, 500, 2000], primary_budget=200, primary_heur="A3", primary_algo="gbfs",
     a3_model_seed=20261276, a3_lambda=1.0, a3_cache=50_000,
-    hcall_thresholds=[1_000, 5_000, 20_000, 100_000], prim_thresholds=[1_000, 5_000, 20_000, 100_000],
+    hcall_thresholds=[500, 1_000, 2_500, 5_000], prim_thresholds=[500, 1_000, 2_500, 5_000],
+    compute_secondary_threshold=1_000,  # prereg 'E11a compute-matched secondary' (grades wording only)
+    a_g_clause_margin=5,  # prereg E11a interpretation clause: ADVANCE with M - G < 5 at the primary cell
     mono_check_runs=8, mono_check_budget=200,
-    a_attr_margin=5,
     # ---- E11b
     b_train_sizes=[4, 5, 6, 7], train_k=2, train_h=4,
     b_per_class={"train": 12, "val": 3, "test_id": 4}, b_ood_small_sizes=[5, 6, 7], b_ood_small_per_class=6,
@@ -135,15 +138,17 @@ FULL = dict(
     b_calls_per_fact=6, b_steps_per_block=16, gc_budgets=[50, 200, 500, 2000],
     sel_hidden=48, sel_rounds=4, sel_head=64, epochs=10, batch_size=64, lr=2e-3, time_cap_s=1200.0,
     b_select_unseen_val=True,  # epoch selection on val rows whose (state, goal) class is not a training row
-    # training target: "plan" = optimal-plan set A(s) (as drafted) or "achiever" = achiever-level set A_A(s)
-    # (subgoal.achiever_label_set; proposed; prereg decides). Both sets are always stored and evaluated.
-    b_label_target="plan", b_ach_budget=200_000,
+    # training target (prereg H-b1): "achiever" = achiever-level set A_A(s) (subgoal.achiever_label_set); the
+    # optimal-plan set A(s) ("plan") is stored and evaluated descriptively. Both sets are always stored and evaluated.
+    b_label_target="achiever", b_ach_budget=200_000,
     model_seeds=MODEL_SEEDS, b_advance_log_ratio=math.log(0.95), b_success_margin=2, b_stop_success_frac=0.8,
     # ---- statistics
     alpha=0.05, bootstrap_resamples=5000,
 )
+# SMOKE inherits the frozen settings (exclude_noop_macros, arms incl. G, the compute thresholds, b_label_target) so
+# the smoke runs the configuration that will be frozen; at its 200-expansion cap the larger thresholds are censored.
 SMOKE = dict(FULL, a_sizes=[12, 14], a_per_size=2, a_opt_budget=20_000, K=3, n_check_max=5,
-             budgets=[20, 50, 100, 200], primary_budget=50, hcall_thresholds=[200, 2_000], prim_thresholds=[200, 2_000],
+             budgets=[20, 50, 100, 200], primary_budget=50,
              mono_check_runs=2, mono_check_budget=50,
              b_train_sizes=[4, 5], b_per_class={"train": 2, "val": 1, "test_id": 1}, b_ood_small_sizes=[5, 6],
              b_ood_small_per_class=1, b_states={"train": 30, "val": 30, "test_id": 20, "ood_small": 20},
@@ -991,15 +996,17 @@ def a_success_count(done, ids, arm, heur, algo, b):
 
 
 def a_decision(cfg, m, mono_ok):
-    """E11a decision rule as drafted in PREREG_E11_DRAFT.md section 'E11a decision rule'."""
+    """E11a decision rule of the prereg ('E11a decision rule'): validity gates first, then the outcome rows top to
+    bottom, first match wins. Also returned, without changing the outcome: the pre-declared compute-matched secondary
+    (M vs P within cfg compute_secondary_threshold units at the primary heuristic/algorithm; it grades wording only:
+    a saving claim needs an exact cell with p < alpha in M's favour) and the arm-G interpretation flag."""
     if not m.get("complete"):
         return {"outcome": "NOT_RUN"}
     if not (m["gates"]["ok"] and mono_ok):
         return {"outcome": "INVALID", "why": {"gates": m["gates"], "monotonicity_ok": mono_ok}}
     p, a = m["primary"], cfg["alpha"]
     sig, better = p["p_exact"] < a, p["cand_only"] > p["base_only"]
-    attr_ok = all(v["p_holm"] < a and v["cand_success"] - v["base_success"] >= cfg["a_attr_margin"]
-                  for v in m["attribution"].values())
+    attr_ok = all(v["p_holm"] < a and v["cand_only"] > v["base_only"] for v in m["attribution"].values())
     if sig and better and attr_ok:
         out = "ADVANCE"
     elif sig and better:
@@ -1008,7 +1015,20 @@ def a_decision(cfg, m, mono_ok):
         out = "STOP"
     else:
         out = "INCONCLUSIVE"
-    return {"outcome": out, "primary_significant": sig, "M_better": better, "attribution_ok": attr_ok}
+    ph, pa, t = cfg["primary_heur"], cfg["primary_algo"], cfg["compute_secondary_threshold"]
+    cs = {}
+    for field in ("h_calls", "prim_steps"):
+        v = m["compute_matched_mcnemar"].get(f"M_vs_P|{field}|{ph}|{pa}|{t}")
+        cs[field] = None if v is None else {
+            "threshold": t, "exact": v["exact"], "p_exact": v["p_exact"] if v["exact"] else None,
+            "M_better": v["cand_only"] > v["base_only"], "evaluable": bool(v["exact"])}
+    h = cs["h_calls"]
+    cs["saving_claim_allowed"] = bool(h and h["exact"] and h["p_exact"] < a and h["M_better"])
+    g = m["secondary_mcnemar"].get(f"M_vs_G|{ph}|{pa}|{cfg['primary_budget']}")
+    g_gap = None if g is None else g["cand_success"] - g["base_success"]
+    return {"outcome": out, "primary_significant": sig, "M_better": better, "attribution_ok": attr_ok,
+            "compute_matched_secondary": cs, "M_minus_G_primary_cell": g_gap,
+            "g_clause": None if g is None else (out == "ADVANCE" and g_gap < cfg["a_g_clause_margin"])}
 
 
 # ----------------------------------------------------------------------------- report: E11b metrics and decision
@@ -1082,14 +1102,19 @@ def b_metrics(cfg, insts, done, labels):
 
 
 def b_decision(cfg, m):
-    """E11b decision rule as drafted in PREREG_E11_DRAFT.md section 'E11b decision rule'."""
+    """E11b decision rule of the prereg ('E11b decision rule'): rows top to bottom, first match wins. ADVANCE also
+    needs the L-r0 vs RND point estimate < 0 and the L-r0 vs RF point estimate <= 0. `rf_clause` flags the
+    interpretation clause: every other ADVANCE condition holds but L-r0 is longer than RF."""
     if not m.get("complete"):
         return {"outcome": "NOT_RUN"}
-    p, rnd = m["primary"], m["vs_random_order"]
+    p, rnd, rf = m["primary"], m["vs_random_order"], m["vs_ready_first"]
     r0 = f"learned_s{cfg['model_seeds'][0]}"
     sL, sBU = m["ood_success"][r0], m["ood_success"]["bottom_up"]
     reps_ok = all(v < 0 for v in m["replicates_log_ratio_vs_BU"].values())
-    if p["hi"] < 0 and p["diff"] <= cfg["b_advance_log_ratio"] and sL >= sBU - cfg["b_success_margin"] and reps_ok:
+    rnd_ok, rf_ok = rnd["diff"] < 0, rf["diff"] <= 0
+    adv_but_rf = (p["hi"] < 0 and p["diff"] <= cfg["b_advance_log_ratio"] and sL >= sBU - cfg["b_success_margin"]
+                  and reps_ok and rnd_ok)
+    if adv_but_rf and rf_ok:
         out = "ADVANCE"
     elif rnd["diff"] >= 0 or sL < cfg["b_stop_success_frac"] * sBU:
         out = "STOP"
@@ -1097,7 +1122,8 @@ def b_decision(cfg, m):
         out = "REVISE"
     else:
         out = "INCONCLUSIVE"
-    return {"outcome": out, "learned_success": sL, "bu_success": sBU, "replicates_all_negative": reps_ok}
+    return {"outcome": out, "learned_success": sL, "bu_success": sBU, "replicates_all_negative": reps_ok,
+            "vs_rnd_point_negative": rnd_ok, "vs_rf_point_le_0": rf_ok, "rf_clause": adv_but_rf and not rf_ok}
 
 
 # ----------------------------------------------------------------------------- report
