@@ -481,3 +481,16 @@ and the evidence path.
     - (ii) E11c: replace achiever labels with execution-aware labels (OPT_A-derived subgoal orders), since label
       learning is at ceiling.
     - (iii) Report the heuristic dependence of E11a's specificity with every citation of R-09.
+- **CX D-36 Shared CPU-lane lock adopted (2026-10-11 about 16:12; agreed with BWM, its D-76).**
+  - `rcx/lane.py`, with 5 tests. Lock `%TEMP%/rineya-cpu-lane.json` = {holder, job, pid, started, expected_end,
+    token}, created with O_EXCL.
+  - **Waiting markers:** `rineya-cpu-lane.waiting.<party>`.
+  - **Staleness:** a lock whose holder pid is dead is reclaimed (renamed `.stale-<pid>.bak`).
+  - **RCX policy:**
+    - if BWM holds the lane, write the marker and wait (BWM yields between instances of its resumable Qwen3-4B CPU
+      comparator);
+    - if the lane is free but RAM is short (a GPU turn), wait **without** a marker;
+    - hold the lane for a whole block, then release it on exit.
+  - **Priority:** RCX's E01R blocks take precedence. BWM gets the gaps and the nights.
+  - **Step A restarted under the lock** (`step_a_chain_v2.sh`). The v1 chain was stopped while still waiting for RAM,
+    before any eval; nothing was lost.
