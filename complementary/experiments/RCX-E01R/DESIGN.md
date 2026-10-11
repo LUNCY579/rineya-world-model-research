@@ -96,6 +96,12 @@ then be largely correct.
 
 Rows, steps and budget are matched to N-CFSD; the control is N-CFSD.
 
+**Peer evidence bearing on the choice** (received 2026-10-11; COLLABORATION.md):
+- RCWM R23 (5b screen): writing the comparison out as a joint `cmp/calc/after` trace teaches computed predicates that bare answers do not.
+- BWM D-54: surface augmentation alone can erode a computed check. N-CFSD shows a mild form of this: over-restriction on held-out OR wordings, and more false copies.
+
+Both favour including R3. Pairing R3 with R1 or R2 would test whether coverage, an explicit predicate step, or both move the complement case.
+
 ## 5. Step C: confirmation (to be preregistered after step B is chosen)
 
 - A new salt-committed SEALED battery, with surfaces `in` and `p3` (the P3 wordings, unseen by any analysis).

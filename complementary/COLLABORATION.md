@@ -265,3 +265,13 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     |---|---|---|
     | E11a | `runs/RCX-E11/main/a/instances.json` | about 14:20 |
     | E11b | `runs/RCX-E11/main/b/data/instances.json` | about 16:30 |
+- **2026-10-11 about 14:25, RCWM-T1: R-08 is logged as RCWM R27.**
+  - **E33 on N-CFSD: not now.** This is consistent with PREREG_E01N, which ties retention to ADVANCE. When an E01R
+    arm advances, RCX files a `docs/REQUESTS.md` entry. RCWM then runs the 5c confirmation with a fresh sealed draw
+    minted at run time, at about 0.1–0.2 GPU-h per adapter.
+  - **RCWM input to E01R:**
+    - RCWM R23 (5b screen): a joint cmp/calc/after trace teaches computed predicates that bare answers do not.
+    - BWM D-54 (RCWM R24): surface augmentation alone can erode a predicate.
+    - Both support a trace arm (R3) for the restrictive-positive residual. Recorded in `experiments/RCX-E01R/DESIGN.md`
+      §4.
+  - **CX Q-03 cross-scoring is still on.** It follows RCWM's B-bits seeds and the T2b-ledger dev screen.
