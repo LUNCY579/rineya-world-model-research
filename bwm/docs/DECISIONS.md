@@ -1188,3 +1188,39 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
     - **Caveat:** at copy time OneDrive.exe was not running and no account was registered, so the cloud upload
       happens only once the user starts OneDrive and signs in.
     - The base Titan-Sparse core is not in the archive; it lives in the vault.
+  - **D-73 follow-up:** the archive was regenerated after D-72/D-73 as `bwm_native_v1_20261011_1604.zip` (3,433
+    files, sha 187a70ad…, verified). The OneDrive copy was replaced with it (sha verified); 1541 stays locally only.
+  - **D-73 follow-up (RCX):** RCX is fully pushed and verified at d098a612… (branch
+    research/rineya-complementary-intelligence-v1).
+    - Its 37 out-of-git artifacts (276.7 MB: 27 weight files including the B4 arm-(a) GNN, 6 sealed or secret files,
+      4 batteries) are copied to `WorldModel/_backups/rcx_complementary_20261011_1545/`, with a manifest committed
+      as `complementary/docs/ARTIFACTS_MANIFEST.json`.
+    - That copy is on the same disk. An off-machine copy of RCX's artifacts, including sealed material that must
+      stay unread, is the user's decision; BWM did not move it.
+- **F-09 (exploratory; to be registered as a CPU replay, PREREG_FREPLAY): the learned F's own `legal` flag is
+  often wrong on illegal actions, and the planner's guarantee rests partly on a domain-agnostic consistency check.**
+  - **Source:** read-only scratch replays by the next-analysis panel
+    (`research/NEXT_ANALYSIS_PANEL_2026-10-11.json`; scripts in `research/audit_evidence/bwm_next_scratch`).
+  - **Harmful F errors are near zero.** On every unique (state, action) key the frozen planners queried on hard:
+    - B2: 20,530 keys, 0 illegal actions accepted, 0 wrong next states, 6 false-illegal;
+    - H2: 22,895 keys, the same pattern, 5 false-illegal.
+    - All false-illegal keys are in instance-102, which both runs solved. So the exact-F ceiling on hard equals the
+      observed 73 and 88. F is not the bottleneck on hard.
+  - **But F's `legal` flag says "legal" on many proposer-emitted illegal actions:** 798/4,066 (19.6%) in B2-hard and
+    657/2,363 (27.8%) in H2-hard, mostly pick-up of a stacked block. Every one was rejected only by
+    `parse_forward_delta`'s support check: a predicted deletion of a fact absent from the state gives None. Similar
+    rates hold on the mirror (24%), PB-600 (13%) and the B3 distillation (22%).
+  - **Wording consequence** (pending the registered replay): "every verified plan is valid" and B3's label precision
+    1.000 hold for *learned F plus a domain-agnostic delta-consistency check (deletions must hold)*. The planner
+    docstring's "rules known only to the learned F" is too strong.
+  - **Logistics consequence:** the check cannot catch false-legal answers there (LOAD/UNLOAD keep `at` of the
+    vehicle; DRIVE keeps `in-city`), so the item 9 prereg needs a legality gate before its freeze.
+  - **H2 forensics** (exploratory):
+    - B2 failures are 23 dead-end and 14 budget; H2 failures are 5 dead-end and 17 budget.
+    - 14 of H2's 20 wins were B2 dead-ends.
+    - Most failures reach an imagined state with exactly 1 unmet goal fact (deceptive minima of the unmet key).
+    - Round-capped curves are exact: solved within 4/6/8 rounds, B2 38/59/70 vs H2 51/74/82.
+- **D-74 Audit evidence preserved:** the five scratch folders cited by D-61, D-69, D-71, P-14 and F-09 (5c re-score,
+  post-reboot audit, H2 leak/claims audit incl. the downloaded upstream per-instance hard files, Logistics module
+  probes, next-analysis replays) were copied from %TEMP% into `research/audit_evidence/` (about 88 MB). They go into
+  the local and OneDrive archives. They are not on GitHub (research subfolders are not exported).
