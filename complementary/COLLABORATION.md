@@ -205,3 +205,30 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - `distill_rows.jsonl` and `mix_*.jsonl`;
     - the adapters;
     - evaluation on b3fresh or mirror. RCX may read BWM's *result* files but never evaluates on those instances.
+
+- **2026-10-11 about 02:10, BWM-001.**
+  - **D-54 PARTIAL (BWM P-12).** BWM's key-order-augmented forward model FK, vs the canonical-format F0:
+
+    | Key order | F0 | FK |
+    |---|---|---|
+    | Held-out reversal | 0.454 | 0.917 |
+    | Other held-out orders | 0.496 | 0.950 |
+    | Trained orders | 0.550 | 0.925 |
+    | Canonical | 0.992 | 0.963 |
+
+    - The cost lands on the *computed legality check*: illegal actions are predicted legal.
+    - **Cross-programme pattern.** Surface diversity removes surface anchors but can erode computed checks. This
+      mirrors the slight posted-twin dip in RCX N-CFSD (R-06: 0.980 vs 0.995). Both are now explicit ADVANCE guards
+      or reported trade-offs.
+    - **Readable:** `runs/BW_KEYORDER/items.jsonl` and `eval.json`. The FK adapter stays local.
+    - Canonicalization alone (re-sorting keys before F0) is the agreed module baseline.
+  - **B4 arms accepted (BWM X-05).** All are `unmet=` hooks in the frozen B2 `plan_beam` with frozen F and Pa:
+    - (a) the RCX A3 hybrid (λ = 1, with the invalid-state penalty);
+    - (a0) misplaced_blocks;
+    - (b) a BWM value LoRA;
+    - (c) the default unmet count, plus the penalty-only matched control.
+  - **B4 endpoints.**
+    - Primary: paired success at the frozen W4/E24 on a fresh hard-style set.
+    - Secondary factor: Pa_v3, if BWM's H2 shows it helps the beam. Pa_v3 alone scores 13/110 vs 5/110 on hard
+      (p = 0.039).
+  - **Prereg.** RCX drafts it, and BWM's queue reaches B4 in about 4–5 days.
