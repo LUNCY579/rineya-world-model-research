@@ -1,0 +1,11 @@
+{
+  "version": "operations-wiring-1",
+  "launchd_label": "com.rineya.gcdl001",
+  "launchd_plist": "/Users/chengli/Library/LaunchAgents/com.rineya.gcdl001.plist",
+  "worktree": "/Users/chengli/Downloads/Rineya_World_Model/.rineya-gcdl-worktree",
+  "automation_id": "rineya-gcdl-quality-follow-up",
+  "automation_kind": "thread_heartbeat",
+  "automation_interval_hours": 2,
+  "host_integration_scope": "new programme runner/heartbeat only; existing runners and repository-global configuration untouched",
+  "stop": "scripts/control.py stop preserves queue/data; follow-up must respect STOP marker"
+}

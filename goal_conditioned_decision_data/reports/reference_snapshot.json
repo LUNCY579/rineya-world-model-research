@@ -1,0 +1,444 @@
+{
+  "checked_recorded_analysis": {
+    "RCWM_PREREG2": {
+      "claim_confirmed": true,
+      "exact_state_off": 0.029166666666666667,
+      "exact_state_on": 0.6975,
+      "n_ledger_parents": 150,
+      "regret_off": 0.5444576493899027,
+      "regret_on": 0.05600610428001649,
+      "verification": "Read immutable recorded analysis fields; parent-level bootstrap and native outputs not independently rerun."
+    },
+    "RCWM_PREREG3": {
+      "trigger_low_every_seed": true,
+      "verdict": "TRIGGER",
+      "verification": "Read recorded analysis and report; no native experiment rerun."
+    }
+  },
+  "claim_verification": [
+    {
+      "sources": [
+        "BWM-B2-BEAM",
+        "BWM-B2-DIRECT"
+      ],
+      "status": "VERIFIED_FROM_RECORDED_PER_INSTANCE_OUTPUTS",
+      "user_claim": "BWM original search73/110 versus5/110"
+    },
+    {
+      "sources": [
+        "BWM-H1",
+        "BWM-HARD-REPORT"
+      ],
+      "status": "VERIFIED_FROM_RECORDED_PER_INSTANCE_OUTPUTS",
+      "user_claim": "BWM distilled direct13/110"
+    },
+    {
+      "sources": [
+        "BWM-H2",
+        "BWM-HARD-REPORT"
+      ],
+      "status": "VERIFIED_FROM_RECORDED_PER_INSTANCE_OUTPUTS",
+      "user_claim": "BWM distilled proposer inserted into search88/110"
+    },
+    {
+      "sources": [
+        "RCWM-P2",
+        "RCWM-REPORT"
+      ],
+      "status": "VERIFIED_IN_RECORDED_ANALYSIS",
+      "user_claim": "RCWM ledger improves four-step regret and exactness"
+    },
+    {
+      "sources": [
+        "RCWM-P3",
+        "RCWM-REPORT"
+      ],
+      "status": "VERIFIED_IN_RECORDED_ANALYSIS",
+      "user_claim": "RCWM void token shortcut on OOD"
+    },
+    {
+      "sources": [
+        "RCWM-REPORT"
+      ],
+      "status": "SUPPORTED_WITH_DOMAIN_AND_COMPARATOR_QUALIFIERS",
+      "user_claim": "Hidden consequence heads do not consistently outperform chains"
+    }
+  ],
+  "complementary_commit": "11981b66aba399be927109a74639f7c73f8232e5",
+  "complementary_commit_time": "2026-10-11T16:12:19-05:00",
+  "contradictions_and_precedence": [
+    "Initial Oct9 local export lacked H1/H2. Oct11 fetched ece566d resolves the later13/88 claims.",
+    "RCWM report header DateOct6 and early PREREG1-only/queued sentences are stale; latest dated confirmation analysis and decisions supersede.",
+    "RCI external planning bundle pins a223884 and contains synthetic utility examples/proposed experiments; live RCX branch has later measured results.",
+    "P14 corrects zero-shot o1-mini10percent, Pa_v3-only<=6block training, aggregate-only references and unsupported truncation-cause wording.",
+    "P14 fixed search settings do not make actual token/F-query costs equal. Mirror cache-restart cost183.6 was corrected215.9.",
+    "F09 perfect accepted-plan precision includes delta-support checks; legal flags alone are frequently wrong. F09 remains exploratory pending registered replay.",
+    "BWM hard-minus-mirror flag remains raised; post-hoc reweighting does not erase it.",
+    "Numeric202611/202614 seed prefixes do not date future experimental events."
+  ],
+  "excluded_reads": [
+    "HSKILL_CONFIRM_V2*",
+    "RCX-E01R secret wording pools/sealed labels",
+    "model weight contents",
+    "unrelated High-Quality_Dataset contents"
+  ],
+  "independence_limits": [
+    "Recorded VAL-field recount is not a fresh VAL validation.",
+    "Most native statistical/native-model results are read-only report evidence.",
+    "Subagents share filesystem/account/model lineage; four concurrent slots, eight sequential scientific responsibilities.",
+    "GCDL sealed custody is procedural on the shared host."
+  ],
+  "initial_worktree_base": "8f41180a7f207a359541094871ab7ece293363c1",
+  "inspection_date_local": "2026-10-11",
+  "main_commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+  "main_commit_time": "2026-10-11T16:08:47-05:00",
+  "mission": "Dataset production only; read-only native evidence audit",
+  "original_primary_checkout_at_discovery": "a223884d55ff47baf3890c7d4a82054d07223215",
+  "paid_service_used": false,
+  "recomputed_recorded_output_statistics": {
+    "B2_beam_vs_direct": {
+      "method": "Recounted stored success and VAL fields by matching instance ID; exact binomial discordance test. No native inference, simulator or VAL rerun.",
+      "n": 110,
+      "reference_only": 0,
+      "reference_success": 5,
+      "reference_val_success_disagreements": 0,
+      "same_unique_ids": true,
+      "treatment_only": 68,
+      "treatment_success": 73,
+      "treatment_val_success_disagreements": 0,
+      "two_sided_exact_mcnemar_p": 6.776263578034403e-21
+    },
+    "H1_distilled_direct_vs_original_direct": {
+      "method": "Recounted stored success and VAL fields by matching instance ID; exact binomial discordance test. No native inference, simulator or VAL rerun.",
+      "n": 110,
+      "reference_only": 2,
+      "reference_success": 5,
+      "reference_val_success_disagreements": 0,
+      "same_unique_ids": true,
+      "treatment_only": 10,
+      "treatment_success": 13,
+      "treatment_val_success_disagreements": 0,
+      "two_sided_exact_mcnemar_p": 0.03857421875
+    },
+    "H2_distilled_beam_vs_original_beam": {
+      "method": "Recounted stored success and VAL fields by matching instance ID; exact binomial discordance test. No native inference, simulator or VAL rerun.",
+      "n": 110,
+      "reference_only": 5,
+      "reference_success": 73,
+      "reference_val_success_disagreements": 0,
+      "same_unique_ids": true,
+      "treatment_only": 20,
+      "treatment_success": 88,
+      "treatment_val_success_disagreements": 0,
+      "two_sided_exact_mcnemar_p": 0.004077315330505371
+    }
+  },
+  "snapshot_version": "gcdl.reference-snapshot.v1",
+  "sources": [
+    {
+      "bytes": 5594,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "d1be2f37622a7409124ac5bb0ae5f3d08f8ae4af",
+      "read_only": true,
+      "repository_path": "bwm/README.md",
+      "sha256": "277c5cccef55facd87687cbd74a703ddf76362a27cd90acaa885d61bcd7ecd3b",
+      "source_id": "BWM-README"
+    },
+    {
+      "bytes": 113456,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "0c84b51cd385f6a3a97c250186778b4b51f77d42",
+      "read_only": true,
+      "repository_path": "bwm/docs/DECISIONS.md",
+      "sha256": "c231e4453dbabf55377897f54f4fedc683e51af0808d332a3fb24fa134c93e07",
+      "source_id": "BWM-DECISIONS"
+    },
+    {
+      "bytes": 69509,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "2f3b9763858a4b74542a741e9ea6e8f17f24fc89",
+      "read_only": true,
+      "repository_path": "bwm/results/BW_TEST_B2/hard_beam/plans.jsonl",
+      "sha256": "85812972a2e5e8bcedee245673dee98a0f0fdb93f02e2e852e44fa7c037fb3ee",
+      "source_id": "BWM-B2-BEAM"
+    },
+    {
+      "bytes": 62006,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "71582504e3644836a56220b20fb75eb2369a74c3",
+      "read_only": true,
+      "repository_path": "bwm/results/BW_TEST_B2/hard_direct/plans.jsonl",
+      "sha256": "67b7bc33991e7bb571b128ef72681bc0a5b131a591fd4d0345c9e59dcc82c034",
+      "source_id": "BWM-B2-DIRECT"
+    },
+    {
+      "bytes": 63118,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "a3c57a3f927ef6364cda90f513a4508c68bc08c3",
+      "read_only": true,
+      "repository_path": "bwm/results/BW_B3_HARD/h1_direct/plans.jsonl",
+      "sha256": "fb5ab1d0e0a8808c4b882a6e440d4c888f17ce52c7738120e5142525c7f4fc42",
+      "source_id": "BWM-H1"
+    },
+    {
+      "bytes": 71713,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "0e7c98ca3ff2aa2a9c136c5124792445d68349b8",
+      "read_only": true,
+      "repository_path": "bwm/results/BW_B3_HARD/h2_beam/plans.jsonl",
+      "sha256": "3cf3cd01b8a73f3e036fda126a5d6b562b38f63e458197a188639f2df6e2b91b",
+      "source_id": "BWM-H2"
+    },
+    {
+      "bytes": 360,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "7da75007a2c85cdaa19763b762ecb1c143ef94ed",
+      "read_only": true,
+      "repository_path": "bwm/results/BW_B3_HARD/B3_HARD_REPORT.json",
+      "sha256": "7528d2ffa314263aec9258f19a2ea5e9f7719a95526d3d545ec58a48dbaeb8fe",
+      "source_id": "BWM-HARD-REPORT"
+    },
+    {
+      "bytes": 47935,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "919bf174affa82a5b8aa0e9718e94d01a439e031",
+      "read_only": true,
+      "repository_path": "bwm/docs/research/H2_LEAK_CLAIMS_AUDIT.json",
+      "sha256": "79b35bb21a74f06880db64d509c864f6cbe371e3b6320318881c766e1638e095",
+      "source_id": "BWM-HARD-AUDIT"
+    },
+    {
+      "bytes": 94193,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "c4605d15f8a7c71b07f3a6305236de90d0dab295",
+      "read_only": true,
+      "repository_path": "bwm/docs/research/NEXT_ANALYSIS_PANEL_2026-10-11.json",
+      "sha256": "b2f21d73c555dbf1a3931ce2c2a426a34276afed9ecb0b2687ecbea414959885",
+      "source_id": "BWM-NEXT-PANEL"
+    },
+    {
+      "bytes": 8211,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "0d00e7d173eedd5ccf79e7ec9a55ed2005f51303",
+      "read_only": true,
+      "repository_path": "bwm/docs/research/JOINT_ROADMAP_2026-10-08.md",
+      "sha256": "3dbc0494f0b6ed6416b3327c4f217daceb2bdf96cbd5f3cbb98f7db8268470a4",
+      "source_id": "BWM-JOINT-ROADMAP"
+    },
+    {
+      "bytes": 8771,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "95d0a31e75bcb5b6c8ee643dc879f04f290e28a6",
+      "read_only": true,
+      "repository_path": "bwm/docs/RESULTS_INTERIM.md",
+      "sha256": "bd31cf9f4e43435c20b4677bcffeaf39ea5cb19dc8a133971d3b1a378e4a5983",
+      "source_id": "BWM-INTERIM"
+    },
+    {
+      "bytes": 15393,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "a1876ec16c416d36adbb0b07d032de0b857b9c2d",
+      "read_only": true,
+      "repository_path": "bwm/code/bwmn/blocks.py",
+      "sha256": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+      "source_id": "BWM-BLOCKS-CODE"
+    },
+    {
+      "bytes": 18194,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "958508e5bc670ddd5afb9cb03a640e1d32f56c6a",
+      "read_only": true,
+      "repository_path": "bwm/code/bwmn/blocks_planner.py",
+      "sha256": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+      "source_id": "BWM-PLANNER-CODE"
+    },
+    {
+      "bytes": 28925,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "b60525b654e99728e587f7d596b1cc75877d7a6e",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/REPORT.md",
+      "sha256": "b4ea49f986327fc72e02c9c6f497d438e549cb8e591846f56ad3d96736917b12",
+      "source_id": "RCWM-REPORT"
+    },
+    {
+      "bytes": 125190,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "e98390ae7fac3c2fbe02a7f1520349bbc816d774",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/DECISIONS.md",
+      "sha256": "56b0ab5024d59423a42fd8bd2446439644220508b9ad01259893827c543fe182",
+      "source_id": "RCWM-DECISIONS"
+    },
+    {
+      "bytes": 67855,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "0c0b54526a357ec33fccb0fd9b8122f644c0199e",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/runs/bank_confirm2/analysis/PREREG_2_RESULTS.json",
+      "sha256": "3b42e0671d5a5fb1a781a6013e38fb301ff87fbe2d78be2086b422399af08ac5",
+      "source_id": "RCWM-P2"
+    },
+    {
+      "bytes": 168928,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "d0e63aa25fec35378a8a958964df7f383209713f",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/runs/bank_p3_oor/analysis/PREREG_3_RESULTS.json",
+      "sha256": "8e03029a9a9ae81766f81834beafcf58c703f63af0b78f70b69e1fb1954f6c2d",
+      "source_id": "RCWM-P3"
+    },
+    {
+      "bytes": 42902,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "eec6326d1b24109699913597ca399d2a029b88a8",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/runs/lbeam/analysis/PREREG_LB_RESULTS.json",
+      "sha256": "887b4c88203479a4b262be0bedcb4d585a0cd99f068bcf8c955bfae393a3748d",
+      "source_id": "RCWM-LB"
+    },
+    {
+      "bytes": 39102,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "0fd046a0ea333de7fcfba07ec2e4ad4f1fe31b07",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/runs/retention/confirm_1708484032065101819/analysis/RET_RESULTS.json",
+      "sha256": "fae050afed436849d215eee1a5b8ad929f6e24f9c6c6098af6c8a5b49e4bf326",
+      "source_id": "RCWM-RETENTION"
+    },
+    {
+      "bytes": 28662,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "b2d9d8036c1199c75d401f0846cdcc4a2cf1c5e0",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/runs/t2b_register/analysis/T2BR_RESULTS_s0_sd.md",
+      "sha256": "452def27cb5b2aea77f6df504a3acf20d311c336ff8d6a7f70d41e588fda27a8",
+      "source_id": "RCWM-REGISTER"
+    },
+    {
+      "bytes": 11021,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "f2bbf0a09937d2f965f4d26474228ba616f4d31d",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/docs/roadmap/RCWM_ROADMAP_2026-10-08.md",
+      "sha256": "441ad4d8038c0e7230189c160b97475806e5538d01dbe199138ef0c3722a3971",
+      "source_id": "RCWM-ROADMAP"
+    },
+    {
+      "bytes": 16153,
+      "commit": "ece566dfa31e1e49f93efb264505c3c622c5dad9",
+      "git_blob_sha1": "d26ebbdc615f49fa7f3a1e92e8f216b2bb88c932",
+      "read_only": true,
+      "repository_path": "rcwm/experiments/RCWM-T1/rcwmt/env.py",
+      "sha256": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+      "source_id": "RCWM-ENV-CODE"
+    },
+    {
+      "access_method": "git show; no checkout or copy",
+      "bytes": 5425,
+      "commit": "11981b66aba399be927109a74639f7c73f8232e5",
+      "git_blob_sha1": "4d67d2ecb2c42ad334e8be6e37a1ba81b63971f8",
+      "read_only": true,
+      "ref_at_inspection": "origin/research/rineya-complementary-intelligence-v1",
+      "repository_path": "complementary/README.md",
+      "sha256": "9a8e5f5c39d8f0c6f30afb5d6acf5d0093ad6759e8df9b819e744638eef2c56e",
+      "source_id": "RCX-README"
+    },
+    {
+      "access_method": "git show; no checkout or copy",
+      "bytes": 35634,
+      "commit": "11981b66aba399be927109a74639f7c73f8232e5",
+      "git_blob_sha1": "937be01773444f8c9fb4bb97cf0a013d96b80a9b",
+      "read_only": true,
+      "ref_at_inspection": "origin/research/rineya-complementary-intelligence-v1",
+      "repository_path": "complementary/DECISIONS.md",
+      "sha256": "7b6d1ed063381f351829948c6784724a8440d36dd2d488d4bf10e6f7dcf9a165",
+      "source_id": "RCX-DECISIONS"
+    },
+    {
+      "access_method": "git show; no checkout or copy",
+      "bytes": 32857,
+      "commit": "11981b66aba399be927109a74639f7c73f8232e5",
+      "git_blob_sha1": "edc3fe566a43d0626a1c891006fac51e06c557e1",
+      "read_only": true,
+      "ref_at_inspection": "origin/research/rineya-complementary-intelligence-v1",
+      "repository_path": "complementary/EXPERIMENT_RESULTS.md",
+      "sha256": "343ea5dbf8400e314fe6a478bedaaa86ffdf75ff1f9565ccd3a0807dd813b051",
+      "source_id": "RCX-RESULTS"
+    },
+    {
+      "bytes": 5436,
+      "external_bundle_path": "/Users/chengli/Downloads/Rineya_World_Model/rineya_complementary_research_2026-10-09/README.md",
+      "pinned_repository_commit_in_bundle": "a223884d55ff47baf3890c7d4a82054d07223215",
+      "read_only": true,
+      "sha256": "f55d0f3577bb761133b0d43c6eeb5cd19eb187247f819ce65e7e8a51a11dc275",
+      "source_id": "RCI-README"
+    },
+    {
+      "bytes": 3827,
+      "external_bundle_path": "/Users/chengli/Downloads/Rineya_World_Model/rineya_complementary_research_2026-10-09/07_evidence/READING_NOTES.md",
+      "pinned_repository_commit_in_bundle": "a223884d55ff47baf3890c7d4a82054d07223215",
+      "read_only": true,
+      "sha256": "67b5e1d9e8b6ff394b67c5c6aa4e550df60e00019a57a8503842f1020b5c5c71",
+      "source_id": "RCI-NOTES"
+    },
+    {
+      "bytes": 3565,
+      "external_bundle_path": "/Users/chengli/Downloads/Rineya_World_Model/rineya_complementary_research_2026-10-09/07_evidence/evidence_ledger.json",
+      "pinned_repository_commit_in_bundle": "a223884d55ff47baf3890c7d4a82054d07223215",
+      "read_only": true,
+      "sha256": "cfee093c0dc8d2ae29bb6b415cf987af6d9a9ab82bc53933b6d737788afac1a0",
+      "source_id": "RCI-LEDGER"
+    },
+    {
+      "bytes": 2469,
+      "external_bundle_path": "/Users/chengli/Downloads/Rineya_World_Model/rineya_complementary_research_2026-10-09/07_evidence/repository_sources.json",
+      "pinned_repository_commit_in_bundle": "a223884d55ff47baf3890c7d4a82054d07223215",
+      "read_only": true,
+      "sha256": "d4aced777553ddbdadea130355a97c0087a61778ae37ac528a432f240df4f36b",
+      "source_id": "RCI-SOURCES"
+    },
+    {
+      "bytes": 5687,
+      "external_bundle_path": "/Users/chengli/Downloads/Rineya_World_Model/rineya_complementary_research_2026-10-09/04_experiments/COMMON_PROTOCOL.md",
+      "pinned_repository_commit_in_bundle": "a223884d55ff47baf3890c7d4a82054d07223215",
+      "read_only": true,
+      "sha256": "d72a38611da3eca81dc6939551c48ba1a72a502f693d63128c6fc3713f1317c2",
+      "source_id": "RCI-PROTOCOL"
+    },
+    {
+      "bytes": 1723,
+      "external_bundle_path": "/Users/chengli/Downloads/Rineya_World_Model/rineya_complementary_research_2026-10-09/04_experiments/DATA_CONTRACTS.md",
+      "pinned_repository_commit_in_bundle": "a223884d55ff47baf3890c7d4a82054d07223215",
+      "read_only": true,
+      "sha256": "c58c0cb475826af261c802671ff3a1faf47d2f49f38a5142e604c2856d008440",
+      "source_id": "RCI-CONTRACT"
+    },
+    {
+      "bytes": 1298,
+      "external_bundle_path": "/Users/chengli/Downloads/Rineya_World_Model/rineya_complementary_research_2026-10-09/05_execution/REUSE_AND_BRANCH_POLICY.md",
+      "pinned_repository_commit_in_bundle": "a223884d55ff47baf3890c7d4a82054d07223215",
+      "read_only": true,
+      "sha256": "7f82c78f3b000bf2928bd18a5f477f530914d2be145f564f76bd4392ad173d8d",
+      "source_id": "RCI-REUSE"
+    },
+    {
+      "bytes": 3124,
+      "external_bundle_path": "/Users/chengli/Downloads/Rineya_World_Model/rineya_complementary_research_2026-10-09/05_execution/INTEGRATION_AND_TRANSFER.md",
+      "pinned_repository_commit_in_bundle": "a223884d55ff47baf3890c7d4a82054d07223215",
+      "read_only": true,
+      "sha256": "ebedbe2eed29a6b0f69fb898aa69ea00d090c51187c351b59580a31c8fc921bb",
+      "source_id": "RCI-TIERS"
+    },
+    {
+      "attachment_path": "/Users/chengli/.codex/attachments/3598cef8-ed91-4209-a975-bb255bced66d/pasted-text-1.txt",
+      "bytes": 27918,
+      "read_only": true,
+      "sha256": "4e80e99ae27bcca5be4e0ef958a884b2ef0edc4c72480955a98136ebf976a1a8",
+      "source_id": "USER-PROGRAMME"
+    }
+  ],
+  "timezone": "America/Chicago",
+  "training_run_started": false,
+  "written_utc": "2026-10-11T23:28:39.824780+00:00"
+}
