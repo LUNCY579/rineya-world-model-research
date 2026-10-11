@@ -5,15 +5,16 @@ It is a peer of `bwm/` (BWM-001) and `rcwm/` (RCWM-T1), and it never writes outs
 
 **Spec:** bundle RCI-001 v1.0 (`rineya_complementary_research_2026-10-09/`), outside the repository.
 
-## Status (2026-10-10, about 15:00 CDT)
+## Status (2026-10-11, about 02:00 CDT)
 
 | Track | State | Key evidence |
 |---|---|---|
-| **RCM-001** (causal and counterfactual rules) | The instrument is qualified (R-01). The char-model CPU tier is closed as non-informative (R-02). **Native probe: frozen Titan-Sparse and T2 s0 ignore in-context rules** (R-03). The native LoRA cells N-VR, N-CFSD and N-FX are in progress on CPU. | `EXPERIMENT_RESULTS.md` R-01 to R-03 |
-| **RGM-001** (relational) × **RVM-001** (value) | E07/E08 infrastructure is built and reviewed: exact h*, the BWM exclusion recipe, GNN, MLP, heuristics and search. The full run is queued. | `experiments/RCX-E07/` |
-| **RSM-001** (skills) | Waiting: no B3 reads before BWM's `B3_REPORT.json` exists. | `COLLABORATION.md` |
+| **RCM-001** (causal and counterfactual rules) | The instrument is qualified (R-01). The char-model tier is closed (R-02). **Frozen Titan-Sparse and T2 ignore in-context rules** (R-03). **Native DEV pilot (one seed each):** a rule-varied LoRA makes Titan-Sparse read supplied rules, raising polarity sensitivity from 0.00 to 1.00 (R-05). Counterfactual and paraphrase data does better again, especially on held-out wordings: +0.099 [+0.075, +0.125] (R-06). PREREG_E01N is **frozen**, with a SEALED salt commitment, and confirmation seeds 1–2 are training. | R-01 to R-03, R-05, R-06 |
+| **RGM-001** (relational) × **RVM-001** (value) | A relational GNN value generalizes to 8–12 blocks: policy accuracy 0.998 vs MLP 0.563 (R-04). The **preregistered E07b reached CLOSED**: the GNN + misplaced hybrid doubles low-budget success and matches classical coverage (R-07). Joint B4 with BWM (inside its frozen beam planner) is agreed. | R-04, R-07 |
+| **RSM-001** (skills) | Unblocked by BWM's B3 report. E11 (macro discovery and compositional subgoals from 211 verified plans) is being designed. | CX D-24 |
 
-RCX has trained no Rineya-core adapter yet. Every claim in `EXPERIMENT_RESULTS.md` states its tier.
+Every claim in `EXPERIMENT_RESULTS.md` states its tier. **No retained or dense-model claim has been made.** Native cells
+are component adapters on a frozen core, and E33 retention through RCWM follows a confirmation ADVANCE.
 
 ## Documents
 
