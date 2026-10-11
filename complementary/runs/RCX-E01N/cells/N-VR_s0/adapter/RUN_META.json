@@ -1,0 +1,32 @@
+{
+  "arm": "N-VR",
+  "audit_sha256": "81412faecb638f8a45576df876eeb1176f95d39d0b0ee5ce707ad5eb7a7a9756",
+  "base_sha256": "a28629c9d3454fbf2e884fd7ca442c1b406e7caf4b36d34b2c0614d0add31284",
+  "code_sha256": {
+    "lora_cpu.py": "ca469a13782f00fc8fd13c393e469d7166c57230e04b5a7d06927c541007e2d8",
+    "native_e01.py": "f023c20193da2c957cc5e0f31cd07990b6bb7ddc44e35fc33d75a4e85baa16b6"
+  },
+  "core": "titan-sparse",
+  "recipe": "D-03 (r16/a32/do0.05; 190x16; lr 1e-4 WSD; AdamW 0.9/0.95) on CPU FP32, unmerged",
+  "regime": "VR",
+  "rows_sha256": "77555eccc4abcf4058f2059ce620bcc59894e7666ea30d9e74f2998fc650fed5",
+  "seed": 0,
+  "train": {
+    "batch_size": 16,
+    "final_loss_avg50": 0.014087670192947353,
+    "guard_wait_s": 2205.4,
+    "loss_curve_every50": [
+      0.05911,
+      0.0414,
+      0.02991,
+      0.01138
+    ],
+    "lr_peak": 0.0001,
+    "max_grad_norm": 1.8226653337478638,
+    "rows_available": 1501,
+    "steps": 190,
+    "supervised_tokens": 65726,
+    "tokens_processed": 466728,
+    "wall_s": 9768.6
+  }
+}

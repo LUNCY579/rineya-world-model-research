@@ -238,3 +238,13 @@ and the evidence path.
     2. run `tests.test_bw`;
     3. run a new smoke into a fresh `--out`.
   - **Stale outputs.** The old smoke outputs are void; never resume an old `--out`.
+- **CX D-18 N-VR seed 0 trained; E07 exclusions rebuilt; E07 full run started (about 19:25).**
+  - **N-VR s0 (native, CPU, D-03 recipe).**
+    - Wall time 9,769 s, of which 2,205 s were courtesy pauses on the shared thermal flag.
+    - Final loss (mean of the last 50 steps) 0.014.
+    - Adapter sha256 `2f376882…`, unmerged. Weights stay local and are git-ignored; the sha is in `TRAIN_META.json`.
+    - Evaluation waits for ≥ 12 GB of free RAM (10.4 GB at 19:21).
+  - **EXCLUSIONS.json rebuilt with D-16 seeds_fresh.** The invariant union went from 637 to 677. The b3_fresh
+    regeneration still matches BWM's file. No BWM bytecode was written.
+  - **Checks.** `tests.test_bw` 20/20 OK. A fresh smoke (`scratchpad/e07_smoke_r2`) confirms the review fixes are live.
+  - **E07 full run** to `runs/RCX-E07/main`; estimate 0.6–1.4 h of CPU.
