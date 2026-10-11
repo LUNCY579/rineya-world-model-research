@@ -1009,3 +1009,26 @@ Times are local (CDT). Entries are append-only.
     - T2 s0 vs Supa: unit_conv inherits the same loss.
     - Per-item first-token KL predicts correctness flips only weakly (AUROC 0.613–0.759), supporting "measure retention by correctness".
   - **Consequence:** BWM's release gate gets its retention evidence (reported to BWM as computed). Any vault or HF decision remains the user's. The unit_conv loss belongs to Titan-Sparse itself, not to any adapter, and is a caveat for any Titan-based release card.
+  - **Co-signed by BWM (BWM D-71) after an independent re-score.**
+    - **Method:** BWM's own graders and rule implementation, with `ret_analysis` not imported.
+    - **Agreement:** all 1,077 RET_RESULTS fields and KL/AUROC match exactly.
+    - **Instrument checks:** 14/14 freeze pins; the draw regenerates byte-identically from its seal; the provenance → DONE chain holds; adapter shas match; the analysis ran once.
+  - **Wording corrections and report-only additions (none changes a verdict):**
+    - **(1) unit_conv attribution.** The registered Supa → OFF loss (−19) belongs to Titan-Sparse. Both BWM adapters add a further loss on top that is not significant: x_bwf −7 (8 lost, 1 gained) and x_bwpa −5 / −2. x_bwf's pass is fragile: at 8/0 it would be Holm 0.039, NO-GO. The errors are real arithmetic errors (e.g. 4 kg → "800" g).
+    - **(2) x_bwpa abstention.** x_bwpa answered 5 of 75 unanswerable twins with a value. Its abstention is 0.933, against 1.000 for every other arm. The rule does not gate this, and the +9 primary net hides it.
+    - **(3) Rule wording.** D-36's "under both graders" means a NO-GO if a clause holds under EITHER grader. With m = 5 selected categories, the design's 8-category examples apply as a pooled margin of −15 and 8 losses.
+    - **(4) Freeze scope.** `ret_run.py` imports `scripts/confirm2_gen.py`, which RET_FREEZE does not pin. It is unchanged (4253a420…, equal to the PREREG-2 pin).
+    - **(5) Binding.** RET_RESULTS.json carries no adapter shas; the binding runs through DONE.json → provenance.json. Cite all three together.
+- **R26 BWM H2 final (BWM P-14; RCWM records only).**
+  - **Result:** the frozen B2 beam with only the proposer swapped to the self-distilled Pa_v3 solves 88/110 on Blocksworld-hard (CI 0.713–0.870), against B2's 73/110 (paired +20/−5, p = 0.004).
+  - **Validity:** VAL agrees on all 110, and all 88 F-verified plans are valid. Two independent read-only leak audits found no route from hard into training.
+  - **BWM citation erratum, for anyone citing BWM's references:** "o1-mini 10%" on Blocksworld-hard is the LRM-Modulo (verifier-in-loop) score. o1-mini direct is 0.9% (1/110; arXiv 2410.02162, Table 5). R1's 53.6% is cited to the PlanBench leaderboard and upstream per-instance file, not "TMLR 2025". RCWM's own records cite neither figure (checked).
+- **R27 RCX E01N sealed confirmation: REVISE (RCX R-08, commit f7ee0cf; RCWM records only).**
+  - **Primary:** N-CFSD − N-VR (3 seeds per arm, sealed battery of 2,240 records): C1 (training wordings) +0.018 [+0.006, +0.030]; C2 (held-out rule paraphrases) +0.090 [+0.069, +0.113], Holm p 0.0002. All seeds positive, and the protected strata are within margin. ADVANCE failed only on the preregistered +0.10 point threshold.
+  - **Descriptive comparison with PREREG-3 (same scoring as R19):**
+    - T2 is TRIGGER: 0/280 rule-required no-ops, polarity sensitivity 0.00.
+    - N-CFSD is RULE-like on unseen statuses in 3/3 seeds: composite 0.98, polarity 0.95–1.00, 817/840 rule-required no-ops.
+    - Within a LoRA adapter, rule-varied counterfactual data removes the trigger shortcut on trained rule wordings.
+  - **Residual:** unseen restrictive positive phrasings ("only X events take effect") are still read as "apply" (14% correct no-ops).
+  - **Limits:** synthetic ledger only; no retention data.
+  - **RCWM response:** no descriptive retention run on N-CFSD now. RCX's own rule ties retention to ADVANCE, and an RCWM turn is better spent on the queued screens. It is revisited when RCX's next recipe (E01R) advances, or for cross-scoring under CX Q-03.

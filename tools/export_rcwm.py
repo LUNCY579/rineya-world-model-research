@@ -34,8 +34,11 @@ SKIP_GLOBS = [".thermal_*", "*.lock", "*.lock.*", "*.pyc",
               "experiments/RCWM-T1/runs/l1_screen/arm-*/vocab.json",
               "experiments/RCWM-T1/runs/l1_screen/arm-*/merges.txt",
               "experiments/RCWM-T1/runs/t2/smoke_cpu/adapter/*"]
-# Registered / replication LoRA adapters (PREREG-2 artifact is t2_s0, sha 92bc7c74...): allowed up to 50 MB.
-ALLOW_LARGE = ["experiments/RCWM-T1/runs/t2/t2_s[0-9]/adapter/adapter_model.safetensors"]
+# Registered / replication / screen LoRA adapters (PREREG-2 artifact is t2_s0, sha 92bc7c74...) and the one data
+# bank above 25 MB: allowed up to 50 MB (2026-10-11 backup request: every non-regenerable artifact on GitHub).
+ALLOW_LARGE = ["experiments/RCWM-T1/runs/t2/t2_s[0-9]/adapter/adapter_model.safetensors",
+               "experiments/RCWM-T1/runs/*/adapter/adapter_model.safetensors",
+               "experiments/RCWM-T1/data/bank_s4000.json"]
 ALLOW_MAX = 50 * 1024 * 1024
 
 

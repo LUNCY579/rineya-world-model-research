@@ -1,0 +1,270 @@
+{
+ "tag": "sd_s2",
+ "seed": 2,
+ "steps": 190,
+ "lr": 0.0001,
+ "arms": [
+  "bbits"
+ ],
+ "data_variant": "sd",
+ "stages_per_arm": [
+  "T",
+  "E1",
+  "E2",
+  "E3",
+  "E4"
+ ],
+ "data_sha256": {
+  "t2bp_train_sd_bbits.jsonl": "f190b34738cd219c98041d755f21143dc1b7c75e4b340bea217f1ddded71fea3",
+  "t2bp_dev.jsonl": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54"
+ },
+ "dev_subset": null,
+ "n_dev_rows": 1050,
+ "n_chains": 240,
+ "lease_label": "rcwm-t1:t2b-prereq",
+ "code_sha256": {
+  "scripts/t2bp_common.py": "a913523a9a848dfaa01783fb6858c4e88b80aa7d3b783db924f9fcc99634017c",
+  "scripts/t2bp_make_data.py": "176e6cb3992c2cda426b3e423c0fb1e6f5e87d17f9015b4e12e1256eda136131",
+  "scripts/t2bp_run.py": "09135f4d07e14fef3d2d6df5112fdb5763ac8a8286bb89325a456d26c4433150",
+  "scripts/t2bp_analysis.py": "5853c55d9473abc4d12ea127ccb3c85d3965a439538e8a1c30f67312ac6087ea",
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+  "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+  "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+  "rcwmt/data.py": "f77270ee04d64985e5b6fa9a88f989a04b0b7ed8cc75f69a4984ca7e7593beb4",
+  "rcwmt/decide.py": "148e98ab528dcd283f6896f07f01135ede658e124d09d08d293e7d3645463643",
+  "rcwmt/decisions.py": "bd6a4531622d2479f1b7fe35fcb11338d831c1ab2e9402b515f9a35ef5237188",
+  "rcwmt/fidelity.py": "da03bbca4962c05b13eb13dfa0414578344bbe2674015dc93070465ca4e1bb0e",
+  "vendor_bwm/scripts/train_generic.py": "816d2f562946177397a5f186e9fcadd7febd2b49c894afc9abafe9474665ad61",
+  "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57"
+ },
+ "screen_rule_sha256": "530a9dbd2b2582fc19a78daec319af05a7de9cefdde10dd7ffa9183b01c47220",
+ "stages": {
+  "bbits": {
+   "T": {
+    "turn": 0,
+    "seconds": 3208.6,
+    "planned_s": 3848.5,
+    "rows": "t2bp_train_sd_bbits.jsonl",
+    "finished_unix": 1791745271.069455,
+    "files": {
+     "bbits/train/adapter/adapter_model.safetensors": "59884ea5dbcde504b86ca673ce1c858bbee54378fa4bb790f840ab9c54f48365",
+     "bbits/train/adapter/adapter_config.json": "5d09953a1c9d272284e5759662ebbea011361d46410deadccd2aacf18dfe4301"
+    }
+   },
+   "E1": {
+    "turn": 0,
+    "seconds": 791.6,
+    "planned_s": 2052.1,
+    "generations_planned_max": 2100,
+    "sides": {
+     "off": {
+      "start_unix": 1791745348.9278295,
+      "end_unix": 1791745742.8702247
+     },
+     "on": {
+      "start_unix": 1791745742.8702247,
+      "end_unix": 1791746140.5487127
+     }
+    },
+    "pid": 445180,
+    "finished_unix": 1791746140.5487127,
+    "files": {
+     "bbits/onestep_off.jsonl": "bc889065e80b27c59a5250ca7dc2f2a50b68ab7c9a74f1d5a8d7d8e422d6e7b8",
+     "bbits/onestep_on.jsonl": "0544736979ba6b81c9af0f2d2076df59e6c5c7e2bafde580ca5a18079614c37f"
+    }
+   },
+   "E2": {
+    "turn": 0,
+    "seconds": 400.7,
+    "planned_s": 1869.0,
+    "generations_planned_max": 1920,
+    "sides": {
+     "off": {
+      "start_unix": 1791746140.5659492,
+      "end_unix": 1791746217.0183136
+     },
+     "on": {
+      "start_unix": 1791746217.0183136,
+      "end_unix": 1791746541.233668
+     }
+    },
+    "pid": 445180,
+    "finished_unix": 1791746541.2449455,
+    "files": {
+     "bbits/chains_off.jsonl": "ee9505305124aece7d81fd3e277bc563c54c67c725484ecb8082df9e97470b74",
+     "bbits/chains_on.jsonl": "ee038695615ca2ca954b5d2a81a71c296c48e44c55f521167df87ea5a5f16fe6"
+    }
+   },
+   "E3": {
+    "turn": 0,
+    "seconds": 348.3,
+    "planned_s": 368.2,
+    "generations_planned_max": 1050,
+    "sides": {
+     "on": {
+      "start_unix": 1791746541.2788825,
+      "end_unix": 1791746889.5841007
+     }
+    },
+    "pid": 445180,
+    "surface": {
+     "stage": "E3",
+     "para": 4,
+     "names": 4,
+     "order_top": [
+      "events",
+      "before"
+     ],
+     "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the row's index within its stratum (id suffix)",
+     "held_out_event_orders": [
+      [
+       "pre_on",
+       "pre_off",
+       "name",
+       "kind",
+       "delete",
+       "cost",
+       "add"
+      ],
+      [
+       "add",
+       "delete",
+       "kind",
+       "pre_off",
+       "cost",
+       "pre_on",
+       "name"
+      ],
+      [
+       "cost",
+       "pre_off",
+       "delete",
+       "pre_on",
+       "name",
+       "kind",
+       "add"
+      ]
+     ]
+    },
+    "sides_run": [
+     "on"
+    ],
+    "finished_unix": 1791746889.5841007,
+    "files": {
+     "bbits/onestep_heldout_on.jsonl": "03a7f337fe9583a8296c14a54c3372ecbdc0db06814202d863d673880a9e4bb9"
+    }
+   },
+   "E4": {
+    "turn": 0,
+    "seconds": 309.4,
+    "planned_s": 329.3,
+    "generations_planned_max": 960,
+    "sides": {
+     "on": {
+      "start_unix": 1791746889.5841007,
+      "end_unix": 1791747198.9799228
+     }
+    },
+    "pid": 445180,
+    "surface": {
+     "stage": "E4",
+     "report_only": true,
+     "para": 4,
+     "names": 4,
+     "order_top": [
+      "events",
+      "before"
+     ],
+     "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the chain's index in the dev bank's chain list (dev_chains order); every step of a chain uses its chain's surface",
+     "held_out_event_orders": [
+      [
+       "pre_on",
+       "pre_off",
+       "name",
+       "kind",
+       "delete",
+       "cost",
+       "add"
+      ],
+      [
+       "add",
+       "delete",
+       "kind",
+       "pre_off",
+       "cost",
+       "pre_on",
+       "name"
+      ],
+      [
+       "cost",
+       "pre_off",
+       "delete",
+       "pre_on",
+       "name",
+       "kind",
+       "add"
+      ]
+     ]
+    },
+    "sides_run": [
+     "on"
+    ],
+    "report_only": true,
+    "finished_unix": 1791747198.9799228,
+    "files": {
+     "bbits/chains_heldout_on.jsonl": "0252e6d1fc428bb6d52cb9d5dd200462d5c22730b9260f23d4a8ab2d53149ddc"
+    }
+   }
+  }
+ },
+ "turns": [
+  {
+   "pid": 445180,
+   "acquired_unix": 1791742062.3113806,
+   "acquired_source": "lock record",
+   "entered_unix": 1791742062.429031,
+   "stages_run": [
+    "bbits:T",
+    "bbits:E1",
+    "bbits:E2",
+    "bbits:E3",
+    "bbits:E4"
+   ],
+   "deferred": [],
+   "device": "cuda",
+   "prompts_checked": {
+    "bbits": 1500
+   },
+   "loads": [
+    {
+     "arm": "bbits",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     }
+    }
+   ],
+   "anchor": {
+    "n": 224,
+    "identical_states": 1.0,
+    "identical_texts": 1.0,
+    "pass": true,
+    "seconds": 76.3,
+    "generations": 785,
+    "pid": 445180,
+    "unix": 1791745348.9121826
+   },
+   "released_unix": 1791747199.9384701
+  }
+ ]
+}
