@@ -328,3 +328,39 @@ and the evidence path.
   - The A3 hybrid (λ = 1) becomes the RCX module for joint B4 arm (a).
   - A1 (n = 8 full-goal) and A2 (ranking loss) are not pursued further.
   - This is shared with BWM as an input to the B4 prereg.
+- **CX D-26 PREREG_E01N FROZEN; SEALED commitment minted (2026-10-11 about 01:55). Outcomes known: yes for DEV seed 0
+  of every arm (see the prereg header); no for SEALED.**
+  - `PREREG_E01N.md` sha256 `975cca9a8041d53d12a08a2924ae565dcaf07eb8df09420936c8eadac6afa059`.
+  - **SEALED commitment.**
+    - `SEALED_COMMIT.json` sha256 `4f5f9780199067e652b12594fb76b776a8d84e6b2330212ae520faff31a15b32`, to be used as `open-sealed --expect-commit-sha`.
+    - sha256(salt) = `8e5e08f1b7dc7a4fb39e33a874c1b5deba28b6074389f3de3be52c6d50943765`.
+    - 40 parents per stratum, surfaces `in` and `ho_tpl`.
+    - Required adapters: N-VR_s0..s2 and N-CFSD_s0..s2.
+    - The salt is in `SEALED_SALT.secret`, git-ignored and unread until open-sealed.
+  - **Frozen code (sha256):**
+
+    | File | sha256 |
+    |---|---|
+    | `rcx/native/lora_cpu.py` | `ca469a13782f00fc8fd13c393e469d7166c57230e04b5a7d06927c541007e2d8` |
+    | `experiments/RCX-E01N/native_e01.py` | `e4f630e0fbe3e1d1699f0ddac7ee498510923e3b0fe57272be85c026ccfcc0a5` |
+    | `experiments/RCX-E01N/native_probe.py` | `e8e8723f50d8f1120047661cb9932a6e23d1a6310be9cb347a1909fe6096f8e0` |
+    | `experiments/RCX-E01N/analyze_native.py` | `74866ab20d995d40486a64f2927f685747a9e3a4048b664272792e2b8298fdb3` |
+    | `rcx/rcl/world.py` | `51e00a15c57e5ecfcaa53b8395b61d85118908378853d9e1d8cd5f3c56b7501d` |
+    | `rcx/rcl/gen.py` | `fd89a80d90be4a66d4b0e875ec56e01993042d0e2d23de5f56f6508940fae744` |
+    | `rcx/rcl/vocab.py` | `de9f1adbc0f4eec96939bf5037688ded0ef6f3ee75a7af4bcb3c5708505d8e55` |
+    | `rcx/rcl/templates.py` | `c0d6f35544100d91bf2f0fec7095a4d7dba4b3dbb7fb79630450ce601eb5f642` |
+    | `rcx/rcl/score.py` | `771fd12ca3755f054db23df974db753b2a12120da5c9d52d6134293b0477d22e` |
+    | `rcx/stats.py` | `06a30c10acb6998033619560aac1b1130542a4344d0edf53e85e63386acf24b2` |
+
+  - **Review.** The prereg was reviewed before the freeze (wf_45d6b236-470: statistics, custody, implementation), and all
+    edits E1–E17 were applied.
+    - Analysis switches: `P_TIES=both`, `DECISION_ORDER=ADVANCE,STOP,REVISE`, `ADVANCE_PER_SEED=True`,
+      `PROTECTED_BASIS=ci`, `DROP_TRAIN_OVERLAP=True`.
+    - Tests: 67 pass (native kit, stats, world).
+  - **Seed 0 provenance.** The seed-0 `TRAIN_META` records `native_e01.py` `f023c201` (84be407). Its training code is
+    identical to the frozen file (AST-checked by the reviewer).
+  - **Next:**
+    1. train N-VR s1, N-CFSD s1, N-VR s2 and N-CFSD s2;
+    2. open-sealed;
+    3. evaluate all arms on SEALED;
+    4. analyse once.

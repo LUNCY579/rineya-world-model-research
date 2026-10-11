@@ -1,0 +1,29 @@
+{
+ "sha256_salt": "8e5e08f1b7dc7a4fb39e33a874c1b5deba28b6074389f3de3be52c6d50943765",
+ "battery_commit": "555912c9f2133ab00ce8045480b1c58b63ddfd3f7777b042f3de678e51c5d465",
+ "n_parents": 40,
+ "surfaces": [
+  "in",
+  "ho_tpl"
+ ],
+ "split": "sealed",
+ "world": "arith",
+ "derivation": "seed = int(sha256(salt)[:8], 16) % 10**8; gen.make_battery('sealed', n_parents, seed) restricted to surfaces; battery_commit = sha256(salt + ':' + sha256(battery jsonl bytes))",
+ "arms_required": [
+  "N-VR_s0",
+  "N-VR_s1",
+  "N-VR_s2",
+  "N-CFSD_s0",
+  "N-CFSD_s1",
+  "N-CFSD_s2"
+ ],
+ "battery_code_sha256": {
+  "gen.py": "fd89a80d90be4a66d4b0e875ec56e01993042d0e2d23de5f56f6508940fae744",
+  "vocab.py": "de9f1adbc0f4eec96939bf5037688ded0ef6f3ee75a7af4bcb3c5708505d8e55",
+  "templates.py": "c0d6f35544100d91bf2f0fec7095a4d7dba4b3dbb7fb79630450ce601eb5f642",
+  "world.py": "51e00a15c57e5ecfcaa53b8395b61d85118908378853d9e1d8cd5f3c56b7501d"
+ },
+ "native_e01_sha256": "e4f630e0fbe3e1d1699f0ddac7ee498510923e3b0fe57272be85c026ccfcc0a5",
+ "python": "3.11.15",
+ "minted_at": "2026-10-11 01:54:24 Central Daylight Time"
+}
