@@ -80,8 +80,15 @@ authoritative.
     - BWM 20261005–20261011
     - RCWM `dev_20261121` and 20261141–43
     - the factory 20261009
-    - BWM 20261012–20261014 (D-54 and item 7 seed sets), and BWM item 9 draft 20261101–20261105 (Logistics;
-      collides with RCWM's 20261103, which RCX flagged to BWM)
+    - BWM 20261012–20261014 (D-54 and item 7 seed sets), and BWM item 9 Logistics 20261401–20261405 (moved from
+      20261101–05 after RCX flagged a collision with RCWM's 20261103; BWM D-67 follow-up)
+  - **Agreed seed ranges** (2026-10-10):
+
+    | Programme | Range |
+    |---|---|
+    | BWM | 2026100x–2026101x and 202614xx |
+    | RCWM | 202611xx |
+    | RCX | 202612xx |
   - RCX uses the **2026-12-xx** range (`202612xx`) and records every seed in `DECISIONS.md`.
 
 ## 4. Interfaces RCX may import read-only (sha pinned at first import)
