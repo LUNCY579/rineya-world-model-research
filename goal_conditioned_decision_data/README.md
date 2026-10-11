@@ -12,7 +12,7 @@ Canonical records separate `input` from `targets`, provenance and audit evidence
 
 ## Commands on this host
 
-Run from `/Users/chengli/Downloads/Rineya_World_Model/.rineya-gcdl-worktree`:
+The initial development checkout is `/Users/chengli/Downloads/Rineya_World_Model/.rineya-gcdl-worktree`. For host persistence, the canonical runner worktree is `/Users/chengli/.codex/gcdl001-host/worktree`; run the commands there. It uses an isolated shallow, sparse clone of the same confirmed branch so a daemon need not access Downloads or another programme’s Git metadata. No model weights or native experiment folders are fetched.
 
 ```sh
 python3 -m unittest discover -s goal_conditioned_decision_data/tests -v
@@ -25,6 +25,8 @@ python3 goal_conditioned_decision_data/scripts/control.py once
 python3 goal_conditioned_decision_data/scripts/backup.py
 python3 goal_conditioned_decision_data/scripts/export.py --split train --view listwise
 ```
+
+After changing the runner environment or interval, use `stop` followed by `resume` to reload launchd’s cached configuration.
 
 `resume` clears the durable pause/stop markers, then rechecks disk, storage, reviewed source hashes and all other gates. Resolve the reported cause first. It does not relax a resource or quality gate. `once` processes a short resumable cycle. `start` requires frozen evaluation and a validated source/config receipt. `control.py seal` is the explicit auditor-only bootstrap path; it creates the sealed pool once and never replaces an existing freeze. Normal production recovery reads only sealed hashes and protected manifest indices, never its target labels. All agents use the same user account; sealed access isolation is procedural.
 

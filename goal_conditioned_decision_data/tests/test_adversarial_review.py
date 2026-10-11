@@ -11,7 +11,9 @@ import io
 import json
 import os
 from pathlib import Path
+import plistlib
 import runpy
+import shutil
 import signal
 import sqlite3
 import subprocess
@@ -286,6 +288,28 @@ class IndependentSemanticTests(unittest.TestCase):
 
 
 class IndependentOperationsTests(unittest.TestCase):
+    def test_launchd_plist_preserves_installer_tool_path(self):
+        from goal_conditioned_decision_data.pipelines import common
+        namespace = runpy.run_path(str(common.ROOT/'scripts/control.py'))
+        install_globals = namespace['install'].__globals__
+        with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
+            repo = Path(directory)/'checkout'; root = repo/'goal_conditioned_decision_data'
+            (root/'configs').mkdir(parents=True); (root/'scripts').mkdir()
+            (root/'configs/production.json').write_text('{"interval_seconds":300}')
+            (root/'scripts/run_cycle.py').write_text('# independent fake entrypoint\n')
+            tool_directory = Path(directory)/'configured-tools'; tool_directory.mkdir()
+            for name in ['gh', 'git']:
+                executable = tool_directory/name; executable.write_text('#!/bin/sh\nexit 0\n'); executable.chmod(0o755)
+            host_path = str(tool_directory)+':/usr/bin:/bin'
+            plist = Path(directory)/'LaunchAgents/test.plist'
+            install_globals.update(ROOT=root, REPO=repo, PLIST=plist)
+            with patch.dict(os.environ, {'PATH': host_path, 'GH_TOKEN': 'fake_not_to_persist'}): namespace['install']()
+            content = plistlib.loads(plist.read_bytes())
+            self.assertEqual(content['EnvironmentVariables'], {'PYTHONUNBUFFERED': '1', 'PATH': host_path})
+            self.assertEqual(shutil.which('gh', path=content['EnvironmentVariables']['PATH']), str(tool_directory/'gh'))
+            self.assertEqual(shutil.which('git', path=content['EnvironmentVariables']['PATH']), str(tool_directory/'git'))
+            self.assertEqual(content['WorkingDirectory'], str(repo))
+
     def test_immutable_publish_replay_and_conflict_preserve_original(self):
         from goal_conditioned_decision_data.pipelines.common import immutable_bytes
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:

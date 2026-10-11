@@ -25,7 +25,7 @@ def install():
     content={'Label':LABEL,'ProgramArguments':[sys.executable,str(ROOT/'scripts/run_cycle.py')],
         'WorkingDirectory':str(REPO),'StartInterval':config['interval_seconds'],'RunAtLoad':True,
         'ProcessType':'Background','LowPriorityIO':True,'Nice':10,'StandardOutPath':'/dev/null','StandardErrorPath':'/dev/null',
-        'EnvironmentVariables':{'PYTHONUNBUFFERED':'1'},'ExitTimeOut':10}
+        'EnvironmentVariables':{'PYTHONUNBUFFERED':'1','PATH':os.environ.get('PATH','/usr/bin:/bin')},'ExitTimeOut':10}
     PLIST.parent.mkdir(parents=True,exist_ok=True)
     if PLIST.exists() and plistlib.loads(PLIST.read_bytes()).get('WorkingDirectory')!=str(REPO):
         raise RuntimeError('runner label owned by different checkout')

@@ -21,7 +21,7 @@ python3 -m unittest goal_conditioned_decision_data.tests.test_adversarial_review
 python3 -m unittest discover -s goal_conditioned_decision_data/tests -v
 ```
 
-The independent suite passes **31/31 tests**: 14 semantic, 8 integrity and 9 operations tests. The final complete suite passes **56/56 tests**, with no skipped cases or expected failures hiding a failing gate.
+The independent suite passes **32/32 tests**: 14 semantic, 8 integrity and 10 operations tests. The final complete suite passes **57/57 tests**, with no skipped cases or expected failures hiding a failing gate.
 
 Independent tests verify reverse/retain semantics; literal `void` meaning settled while another token means void; signed entries; unchanged dynamics under goal reversal; uniform three-world success probability 1/3; duplicate/contradictory world rejection; invalid booleans/bounds/statuses/cycles/branching; genuine ties; all-infeasible abstention even when the final state repairs an initial violation; unrepaired historical constraint violations; illegal-prefix termination and successful-action-only cost; Blocksworld clearance; register add/multiply/set/copy/swap and reject/clamp/wrap controls.
 
@@ -80,7 +80,7 @@ Promotion is supported **only for removing this option-position correlation in o
 
 SHA-256 digest of the canonical `source_hashes()` map covering 25 Python/configuration files:
 
-`9492bb7f5163d45fba93c3bf89e5fb5d063b0c27bf9b6b6f6a2b9ee2dcb666be`
+`6ab9696269e42a9aeaee1198d24a6cb49e6b3e39b3102e0b4056488fc47b265a`
 
 Operations must retain the matching full map in `manifests/VALIDATED_CODE.json`. Key pins:
 
@@ -92,7 +92,8 @@ Operations must retain the matching full map in `manifests/VALIDATED_CODE.json`.
 | `generators/build.py` | `78387f73de0bd8cdda4cbef446d9e735edfea175badb1575bb567fb087e4a575` |
 | `auditors/integrity.py` | `1ce9a68a04d2eb71c3d3bcb8188dd3d392af69cda105b0caa408be9c6c53a62d` |
 | `pipelines/worker.py` | `4130b27b7332c6fba9d0c58decd4e950d240817bc044a9823f96d1f8e40ee076` |
-| `tests/test_adversarial_review.py` | `807a1f3161ea6c7f58f33ec9a5f2def5e448ca853f2412947f56384238abd5bd` |
+| `scripts/control.py` | `9990ad7a7538dc9ce8fdd10d3db26f9a592f56f04d74ef6138f7f5054f8ea909` |
+| `tests/test_adversarial_review.py` | `73338da3288cb55fde3c6f22e3fa454f90de1296f455b100d440458d069e0d70` |
 | `DATA_CONTRACT.md` | `e92b9e720aa70cd46589eb1c2c8c0ee7d7523f36e338d3f1581ab20fba7f5762` |
 | `manifests/schema-1.0.json` | `2a0e5540ccbb444cd7d4083874ac0ce94050e2f7a6ac10ecfb8a9fa3e321afa0` |
 
@@ -101,3 +102,11 @@ The generator remains narrow: additive ledger/register primitives, small Blocksw
 Uniform-world probabilities are exact conditional facts, not empirical calibration for an unknown distribution. Search operation counts are not model FLOPs; runtime evidence stays separate from targets. Active-batch time divided by accepted records measures combined generation/verification/persistence cost, not isolated audit execution time.
 
 No training, GPU experiment, paid API, model download, or other-programme modification occurred in this review. The worker may run while the logged-in host is awake; it does not imply an indefinitely active AI research team. These limits are part of the PASS scope.
+
+## Host follow-up: launchd PATH
+
+An initial host activation attempt exposed launchd's sanitized default PATH, which omitted the configured Homebrew `gh`/`git` executables. Operations stopped the worker safely before asserting a live successful cycle; the observed checkpoint remains seed 1000011 with 568 records.
+
+The only runtime-source correction in this follow-up is `scripts/control.py` recording the installer's PATH in the plist. The new independent test constructs executable fake `gh` and `git` files in a temporary configured tool directory, installs an isolated plist, and confirms both tools resolve through its stored PATH. It also verifies that only PATH and PYTHONUNBUFFERED are copied; a fake GH_TOKEN is excluded. All 57 tests pass after this correction. This report's source digest and test pin were refreshed accordingly; oracle/generator/data semantics are unchanged.
+
+An already loaded launchd job retains its cached environment when merely kickstarted. The reviewed activation procedure for environment/interval changes is explicit stop/bootout followed by resume/bootstrap. The PATH fix does not by itself establish a successful live cycle or resolve a possible Downloads privacy restriction. Startup diagnosis and actual checkpoint advancement remain outside this code-only PASS until operations records them.
