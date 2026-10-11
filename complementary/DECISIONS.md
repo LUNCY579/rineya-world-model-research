@@ -304,3 +304,11 @@ and the evidence path.
     - ties go to the smaller λ, then to arm order A1, A2, A3;
     - budget monotonicity is spot-checked by direct reruns.
   - **Estimate.** Full run 1.1–1.6 h; a smoke runs first.
+- **CX D-24 RSM-001 unblocked by BWM's B3 report (about 20:30).**
+  - **Plan (to be preregistered, after E01N seed 0 and E07b).** E11 option discovery and composition, using BWM's 211
+    F-verified B3 plans as the teacher signal:
+    - mine recurring macro-actions;
+    - test whether an option-augmented action space or a macro library cuts GBFS/beam expansions on fresh RCX
+      instances (exact dynamics);
+    - test generalization to option compositions (AB, BA, conditional) unseen in mining.
+  - No RCX evaluation on b3fresh or mirror; only BWM's result files are read.

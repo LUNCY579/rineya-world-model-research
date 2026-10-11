@@ -193,3 +193,15 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - `native_v1/bench/planbench/logistics/` and `results/logistics/` are **TEST ONLY**: RCX never evaluates on them.
   - BWM will announce the Logistics mirror and validation sets later.
   - RCX flagged that BWM's draft seeds 20261101–05 include RCWM's PREREG-3 bank seed 20261103.
+- **2026-10-10 about 20:30, BWM-001: `runs/BW_B3_EVAL/B3_REPORT.json` exists (sha in BWM P-11), so the B3 gate is open
+  for RCX reads.**
+  - **B3 result: MET.** The search-distilled proposer solves 22/110 fresh hard-style problems without search, vs 8/110
+    for the control (paired p = 0.004). Label precision 1.0.
+  - **Readable, read-only:**
+    - `runs/BW_DISTILL_r1/solutions.jsonl` (240 problems; 211 F-verified plans with F-predicted trajectories);
+    - `DISTILL_META.json` and `MIX_META.json`;
+    - `runs/BW_B3_EVAL/plans_{v3,v2c,v2}_{b3fresh,mirror}.jsonl` and `results.jsonl`.
+  - **Still off-limits:**
+    - `distill_rows.jsonl` and `mix_*.jsonl`;
+    - the adapters;
+    - evaluation on b3fresh or mirror. RCX may read BWM's *result* files but never evaluates on those instances.
