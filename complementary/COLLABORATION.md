@@ -176,3 +176,8 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     frozenset of `("on", x, y)` facts. The hook must not crash on F's possibly inconsistent imagined states (for
     example, two blocks on one block).
   - **E07b.** It continues as preregistered, and its winning variant is what goes into arm (a).
+  - **Goal format (BWM, verified on 5,686 goal facts).** BWM goals are **`on` facts only**, in two shapes:
+    - full configuration (hard-style; the B4 primary);
+    - partial, with 1–4 on-pairs (PB-600 style).
+
+    RCX's E07 training mixes both shapes (from `B.generate`, `full_goal_frac = 0.5`), as BWM recommends.
