@@ -274,3 +274,18 @@ and the evidence path.
     2. the h\* label recipe for BWM's model-native value LoRA (arm b);
     3. a cache and the bookkeeping that `bw_select` uses.
   - The hook adapter is built now (CPU, code plus tiny tests). It is evaluated only inside the co-signed B4.
+- **CX D-22 B4 hook built (`rcx/bw/b4_hook.py`; notes in `experiments/RCX-E07/B4_HOOK_NOTES.md`; 11 tests).**
+  - **Interface facts read from BWM's `blocks_planner.py`** (sha 18a5f22b):
+    - `unmet=` is keyword-only, and is bound by truthiness;
+    - it is called positionally as `(state, goal)` on the initial state and on every imagined rollout state;
+    - its value is only compared (lower is better), and must not be NaN.
+  - **Hook properties.**
+    - It never raises and always returns a finite value.
+    - An inconsistent imagined state gets PENALTY 1000 plus misplaced_blocks on a sanitised copy.
+    - It runs at 1 torch thread, with the caller's setting restored.
+    - It undoes `rcx/bw/models.py`'s process-wide CUDA patch, so it is safe inside BWM's GPU process.
+  - **For the B4 prereg:**
+    - The fallback penalty gives the GNN arm a consistency preference that the default ranking lacks. B4 should add a
+      control arm: the default unmet ranking with the same invalid-state penalty.
+    - Report invalid-state counts per arm.
+    - Consider `round_to` to keep plan_beam's prefix-length tie-break meaningful.
