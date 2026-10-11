@@ -80,7 +80,8 @@ authoritative.
     - BWM 20261005–20261011
     - RCWM `dev_20261121` and 20261141–43
     - the factory 20261009
-    - BWM 20261012–20261014 (D-54 and item 7 seed sets)
+    - BWM 20261012–20261014 (D-54 and item 7 seed sets), and BWM item 9 draft 20261101–20261105 (Logistics;
+      collides with RCWM's 20261103, which RCX flagged to BWM)
   - RCX uses the **2026-12-xx** range (`202612xx`) and records every seed in `DECISIONS.md`.
 
 ## 4. Interfaces RCX may import read-only (sha pinned at first import)
@@ -181,3 +182,7 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - partial, with 1–4 on-pairs (PB-600 style).
 
     RCX's E07 training mixes both shapes (from `B.generate`, `full_goal_frac = 0.5`), as BWM recommends.
+- **2026-10-10 about 20:05, BWM-001: item 9 (PlanBench Logistics) scoped in a draft prereg.**
+  - `native_v1/bench/planbench/logistics/` and `results/logistics/` are **TEST ONLY**: RCX never evaluates on them.
+  - BWM will announce the Logistics mirror and validation sets later.
+  - RCX flagged that BWM's draft seeds 20261101–05 include RCWM's PREREG-3 bank seed 20261103.
