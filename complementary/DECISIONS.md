@@ -386,3 +386,19 @@ and the evidence path.
   - N-CFSD s1: adapter `8e710e46…`, 6,189 s.
   - N-VR s2 started at 05:19; N-CFSD s2 follows.
   - No SEALED access so far: the salt is unread.
+- **CX D-30 Confirmation adapters complete; SEALED battery opened (2026-10-11 08:40). Outcomes known for SEALED: no.**
+  - **Adapters**, all 190 steps with no resume checkpoints (sha256 prefixes):
+
+    | Arm | s0 | s1 | s2 |
+    |---|---|---|---|
+    | N-VR | `2f376882…` | `52adbde9…` | `876ac52d…` |
+    | N-CFSD | `97cc48e8…` | `8e710e46…` | `652b497d…` |
+
+  - **Opening.** `open-sealed --expect-commit-sha 4f5f9780…` ran and the battery commitment was checked: seed 88527345,
+    2,240 records, battery sha256 `c87765ea…`.
+  - **Training overlap: zero.** 0 semantic parents, 0 skeleton parents, and no SEALED status word in any training
+    prompt.
+  - `SEALED_OPEN.json` sha256 `22ccc4344fa547944d3a999ecd2f17cae901cb81774059805bf77b327a9796b6`. It contains the
+    revealed salt and is committed before the first SEALED evaluation, per PREREG_E01N §6.
+  - **Next.** The SEALED evaluation chain: N-VR and N-CFSD s0–s2, OFF and T2 (`confirm_sealed_eval_chain.sh`), then
+    a single analysis with `analyze_native.py --battery sealed`.
