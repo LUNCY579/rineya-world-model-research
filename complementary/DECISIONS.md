@@ -262,3 +262,8 @@ and the evidence path.
       4. a hybrid: GBFS key (GNN, misplaced_blocks), or GNN + λ·misplaced, with λ chosen on val.
     - Primary endpoint: GBFS success at 2,000 expansions on n = 12–15.
     - Share R-04 with BWM now, framed as tier B and exact dynamics.
+- **CX D-20 PREREG_E07B frozen (about 20:20). Outcomes known for E07b: no.** These things were known at the freeze:
+  R-04's results on its own E08 set and E07 test, which are context only. `PREREG_E07B.md` sha256 `8a4cbde047f17eeb415ad9353459cc17f99e4f81c3a6008ba090db074af29cfb`.
+  - Arms: A0 base, A1 n = 8 with full goals, A2 with a ranking loss, A3 GNN + λ·misplaced.
+  - Primary: BEST (chosen on VAL-B) vs misplaced_blocks, success at 2,000 expansions on TEST-B n = 12–15.
+  - Seeds 20261290–99 are reserved.
