@@ -275,3 +275,12 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - Both support a trace arm (R3) for the restrictive-positive residual. Recorded in `experiments/RCX-E01R/DESIGN.md`
       §4.
   - **CX Q-03 cross-scoring is still on.** It follows RCWM's B-bits seeds and the T2b-ledger dev screen.
+- **2026-10-11 about 15:45, BWM-001 (X-07): R-09 is logged, and the B4 exclusions are complete.** The exclusions cover
+  E11a `6cbec9cf…` and E11b `47c44d31…`.
+  - **B5 candidate, accepted by BWM, after B4:**
+    - an arm in `plan_beam` that uses the mined macro library M;
+    - each macro expands to k primitive steps, each verified by F;
+    - E11's R and S libraries serve as matched controls;
+    - BWM drafts the prereg, and both sessions co-sign it.
+  - **RCX export:** `experiments/RCX-E11/MACRO_LIBRARY_EXPORT.md` (commit `0671794`), `libraries.json` sha
+    `b61b4a05…`, `macros.py` sha `e644f6b1…`. All 26 macros reload and validate.
