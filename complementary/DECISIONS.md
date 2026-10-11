@@ -467,3 +467,17 @@ and the evidence path.
       `88dd432b…`, never read by the lead), spare 3.
   - **DEV2 battery for step A built:** seed 20261261, 1,320 records (`in` 660, `p2` 660), sha256 `38362338…`, all 45
     P2_v2 templates used. It is evaluated after E11, in the single CPU lane: N-CFSD s0–s2, N-VR s0.
+- **CX D-35 RCX-E11 outcomes (2026-10-11 15:30; R-09). Applied by `run_e11.py`'s frozen decision functions.**
+  - **E11a ADVANCE.**
+    - M vs P @200: 77 vs 52, discordant pairs 25/0, p = 6e-8.
+    - Holm attribution vs R (p = 0.0078) and S (p = 0.00024). M − G = 14.
+    - Compute claims are worded per heuristic call. Per primitive step, M is ahead only from 1,000 steps.
+  - **E11b REVISE.**
+    - Primary −0.074 [−0.139, +0.0006].
+    - The order is longer than ready-first (+0.018).
+  - **Follow-ups (in NEXT_STEPS; none preregistered yet):**
+    - (i) Offer BWM the mined library M as a candidate action-abstraction arm for its beam planner (B5 idea; BWM's
+      call).
+    - (ii) E11c: replace achiever labels with execution-aware labels (OPT_A-derived subgoal orders), since label
+      learning is at ceiling.
+    - (iii) Report the heuristic dependence of E11a's specificity with every citation of R-09.

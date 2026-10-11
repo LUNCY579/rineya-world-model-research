@@ -492,3 +492,95 @@ N-CFSD − T2 is +0.614 [+0.588, +0.641] on `in` and +0.317 [+0.280, +0.354] on 
   The descriptive N-FX control was not run.
 - **The `ho_tpl` wordings are now spent.** Their per-wording results have been seen twice (DEV and SEALED). Any next
   recipe must be judged on a new, blind-authored held-out wording pool and a new sealed battery.
+
+---
+
+## R-09 RCX-E11 (frozen PREREG_E11): macros mined from Rineya-verified plans speed up exact-dynamics search, **E11a ADVANCE**; a learned subgoal order transfers but does not beat simple rules, **E11b REVISE** (tier: mechanism, external specialist B; exact dynamics), 2026-10-11
+
+**Evidence:**
+- `runs/RCX-E11/main/REPORT_E11.md`, `metrics_e11.json`, `a/runs.jsonl`, `b/exec_runs.jsonl` (commit `bddfcda`);
+- prereg `experiments/RCX-E11/PREREG_E11.md` (sha `c67f036d…`, frozen after a plumbing-only smoke; CX D-31);
+- teacher custody: BWM B3 `solutions.jsonl`, sha-pinned. 240 rows; 211 F-verified plans re-executed exactly; 29 not
+  verified, skipped.
+- Gates: BWM bytecode clean; G1–G3 OK; A3 hook accounting exact (1,200 runs, 0 invalid states, 0 fallbacks); budget
+  monotonicity OK.
+
+### E11a: macro discovery and reuse (120 fresh full-goal instances, n = 12/14/15; seed 20261256)
+
+**Arms.** Each arm is primitives plus 8 macros, except P and G:
+
+| Arm | Macros |
+|---|---|
+| P | none (primitives only) |
+| M | mined from the 211 verified plans |
+| R | random sound macros matched to M by length and goal size |
+| S | mined the same way from action-shuffled plans, disjoint from M |
+| G (descriptive) | 2 goal-gated single moves |
+
+**Library M** is mostly tower-building chains, such as `pick-up ?0; stack ?0 ?1; pick-up ?2; stack ?2 ?0`, and one
+clearing pair, `unstack; put-down`.
+
+| GBFS + A3 hybrid (primary heuristic) | @50 | **@200** | @500 | @2000 | plan length / optimal |
+|---|---|---|---|---|---|
+| P | 34 | **52** | 63 | 76 | 1.06 |
+| **M** | 75 | **77** | 82 | 85 | 1.08 |
+| R | 53 | 69 | 74 | 83 | 1.13 |
+| S | 42 | 63 | 69 | 79 | 1.17 |
+| G | 49 | 63 | 71 | 84 | 1.04 |
+
+**Primary and attribution.**
+- **Primary (M vs P @200):** 77 vs 52 of 120; discordant pairs 25 / 0; exact McNemar p = 6.0e-8.
+- **Attribution (Holm):** M vs R 77 vs 69, p = 0.0078; M vs S 77 vs 63, p = 0.00024. Both are significant, so the
+  outcome is ADVANCE.
+- M − G = 14 (≥ 5), so the gain is not matched by goal-gated single moves.
+
+**Compute-matched view** (descriptive; censored cells marked in the report):
+- Per heuristic call (h_calls ≤ 500 / 1,000 / 2,500), M solves 76 / 76 / 82 vs P's 49 / 58 / 69 (p ≤ 0.00025).
+- Per primitive step at ≤ 500, M is not ahead (41 vs 43). From 1,000 primitive steps on, M is ahead (66 vs 52,
+  p = 0.0013).
+
+### E11b: learned subgoal ordering (128 fresh execution instances, n = 10–15, strata S/T/H/TH; seed 20261258)
+
+**Primary.** Learned order (r0) vs bottom-up on the OOD pool (n = 96):
+- mean log length ratio −0.074 [−0.139, +0.0006] (geometric ratio 0.93);
+- all three replicates negative: −0.074, −0.084, −0.041;
+- vs random order −0.52 [−0.60, −0.45];
+- vs ready-first +0.018 (longer).
+
+**Why REVISE.**
+- The CI upper bound is not below 0.
+- The order is longer than ready-first.
+- Success is 96/96 in every ordered method.
+
+**By stratum.**
+- The learned order helps on T (0.81 of BU length) and TH (0.87).
+- It hurts on tall-tower H goals (1.09–1.21).
+
+**Label accuracy.** On rows of unseen renaming classes, the learned selector matches its achiever-label teacher at
+0.997, vs 0.63 for BU and 0.75 for ready-first. OOD it scores 0.97–0.98.
+
+### Reading
+
+1. **E11a (confirmed at tier B, exact dynamics).** Under the RCX A3 heuristic, multi-step macros mined from Rineya's own
+   F-verified plans (BWM B3) make greedy search solve more hard instances at low budgets.
+   - The gain is +25/−0 at 200 expansions, and +13 to +27 at matched heuristic-call budgets.
+   - The specificity is real: the gain beats random sound macros and shuffled-plan macros of matched shape.
+   - This is a **search-level skill-reuse mechanism** (RSM-001). The skills come from the dense model's plans, but the
+     gain is realized in an external planner. Nothing is internalized in Rineya.
+2. **The specificity depends on the heuristic** (descriptive; not in the decision).
+   - With misplaced_blocks, *any* macro library helps a lot: S 90 and M 85 vs P 34 at @200; at @2000, S and M are
+     both 115.
+   - With beam4, R collapses: 23/120 at every budget.
+   - So "mined beats shuffled" holds with the learned A3 value, not universally.
+3. **E11b.** The selector learns its achiever-level teacher almost perfectly (0.997 on unseen classes). The execution
+   result is therefore bounded by the *label definition*, not by learning. The achiever teacher orders tall towers
+   poorly (stratum H), and the hand rule ready-first closes more of BU's excess over the achiever optimum: 0.46 vs
+   0.20–0.42.
+
+### Limits
+
+- **Tier B.** Exact dynamics, GBFS/beam4, and 120 / 128 instances.
+- **Not tested here:** BWM's LM-F beam planner and Rineya's proposer. The A3 heuristic is RCX's GNN hybrid.
+- **Smoke disclosure.** The plumbing smoke's 4 + 4 instances may coincide with the first full-run draws; this was
+  disclosed at the freeze.
+- **E11b** used one achiever definition, and partial tower goals.

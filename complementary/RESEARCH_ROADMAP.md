@@ -54,9 +54,12 @@ results, with retention, may be described as native improvements.
 | RCX-E05 | Goal-conditioned successor features allow zero-shot re-ranking for new goal weights, matching per-goal value training at lower label cost. | Regret on held-out goal weights |
 | RCX-E06 | A dead-end / value critic reduces beam failures (dead_end, budget) at equal expansions. | Success at a fixed budget |
 
-### P0-d RSM-001: skills (after BWM B3)
+### P0-d RSM-001: skills (E11 done, R-09: E11a ADVANCE, E11b REVISE)
 
-- RCX-E11: option composition (AB / BA / conditional).
+- RCX-E11: macro discovery from verified plans (E11a, ADVANCE) and learned subgoal ordering (E11b, REVISE). R-09.
+- RCX-E11c (candidate): execution-aware subgoal labels (OPT_A-derived orders) instead of achiever labels, since label
+  learning is at ceiling.
+- Joint idea for BWM (B5, BWM's call): the mined macro library as an action-abstraction arm in the LM beam planner.
 - RCX-E12: DAgger on top of the B3 distilled policy.
 
 These start only after BWM's B3 is analysed: **no B3 reads before `runs/BW_B3_EVAL/B3_REPORT.json` exists**. E10 is
