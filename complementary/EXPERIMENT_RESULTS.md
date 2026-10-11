@@ -305,7 +305,7 @@ N-VR − OFF on `ho_tpl` = +0.286 [+0.251, +0.321]. Errors are 445 applied_when_
 
 **Setup.** Same recipe, core and DEV battery as R-05. The data regime differs: counterfactual parents (base, rule_flip,
 status_swap, set_swap twins), 50% nonce statuses, train paraphrases t0–t3, and 3–4 accounts. Rows, steps and budget
-are matched. Supervised tokens are −11.5% vs N-VR (a reported covariate). Training took 9,302 s on CPU.
+are matched. Supervised tokens are −11.4% vs N-VR (−11.5% vs N-FX) (a reported covariate). Training took 9,302 s on CPU.
 
 | DEV, seed 0 | N-VR | **N-CFSD** | N-CFSD − N-VR (parent-clustered bootstrap, 280 parents) |
 |---|---|---|---|
@@ -344,3 +344,59 @@ the next target: more diverse positive phrasings, or a predicate trace (`cmp →
 - **Confounds.** The CFSD regime changes several factors at once: twins, nonce words, paraphrases and account count.
 - **Not yet done:** retention, and the matched fixed-rule control N-FX.
 - **Confirmation.** It needs the frozen PREREG_E01N on a SEALED battery with 3 seeds.
+
+---
+
+## R-07 RCX-E07b, preregistered: a GNN-value + misplaced-blocks hybrid closes the high-budget gap while keeping the low-budget advantage (tier: mechanism, external specialist B; exact dynamics), 2026-10-11
+
+**Evidence:**
+- `runs/RCX-E07/e07b/REPORT_E07B.md` and `metrics_e07b.json`;
+- prereg `experiments/RCX-E07/PREREG_E07B.md` (sha `8a4cbde0…`, frozen before any E07b code or run; CX D-20);
+- clarification CX D-23.
+
+**Setup.**
+- TEST-B: 100 fresh full-goal instances, seed 20261290, n ∈ {10, 12, 14, 15}. They are disjoint from R-04's E08 set,
+  from R-04's E07 test instances, and from every BWM reserved and selection set.
+- VAL-B (30 instances) was used only to choose λ and BEST.
+- Arms:
+  - A0: the R-04 GNN, 3 seeds.
+  - A1: training extended to n = 8 with full goals, 3 seeds.
+  - A2: a successor-ranking hinge loss, 3 seeds.
+  - A3: GNN + λ·misplaced_blocks, with λ = 1.0 chosen on VAL-B.
+- GBFS with exact dynamics.
+
+**PRIMARY (prereg rule, n = 12–15, 75 instances): outcome CLOSED.**
+- BEST = A3 (λ = 1.0).
+- At 2,000 expansions: 55/75 vs misplaced_blocks 54/75 (8:9, p = 1). That meets the "≥ misplaced − 3" condition.
+- At 200 expansions: 39/75 vs 19/75 (McNemar 4:24, **p = 0.00018**).
+- Vs A0 at 2,000: 55 vs 35 (0:20, p = 1.9e-6).
+
+| n = 12–15, success / 75 | @50 | @200 | @500 | @2000 | Mean suboptimality (solved, all n) |
+|---|---|---|---|---|---|
+| **A3 hybrid (λ = 1)** | 26 | **39** | **47** | 55 | 1.045 |
+| A0 GNN (3 seeds, mean) | 22.0 | 26.0 | 28.7 | 32.0 | 1.037 |
+| A1 n = 8 full-goal (mean) | 26.3 | 28.3 | 32.0 | 36.0 | 1.022 |
+| A2 ranking loss (mean ± sd) | 27 ± 8 | 33 ± 11 | 38 ± 10 | 40 ± 9 | 1.052 |
+| misplaced_blocks | 8 | 19 | 35 | 54 | 1.007 |
+| h_add | 0 | 13 | 34 | **66** | 1.965 |
+| unmet_goal_facts (BWM ranking) | 0 | 0 | 1 | 3 | 1.658 |
+
+### Reading
+
+1. **The hybrid has the best overall profile among the heuristics compared.**
+   - It roughly doubles misplaced_blocks' success at small budgets, which is where each expansion is costly in an
+     LM-driven planner.
+   - It matches misplaced_blocks at large budgets.
+   - Its plans are near-optimal.
+   - h_add has the most coverage at 2,000, but its plans are about 2× optimal length and it is weak at low budgets.
+2. **The two learned-only refinements did not help.** Data scaling (A1) did not raise coverage, and the ranking loss
+   (A2) was unstable across seeds. So the GNN's high-budget failures are best repaired by combining it with a classical
+   heuristic, not by more of the same training.
+3. **This A3 hybrid is the RCX module for joint B4 arm (a)** (`rcx/bw/b4_hook.py`, `hybrid_lambda=1.0`), to be tested
+   inside BWM's frozen beam planner with LM F under a co-signed prereg.
+
+### Limits
+
+- Tier B specialist with exact dynamics and GBFS. Not BWM's beam with LM F, and not a Rineya-core claim.
+- A single selected arm, and seed 1 for the paired tests (A3 inherits A0's seed 1).
+- Selection on VAL-B used only 30 instances.

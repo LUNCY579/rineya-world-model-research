@@ -323,3 +323,8 @@ and the evidence path.
     same hypothesis (counterfactual/SD data improves rule reading), but `ho_tpl` is where N-VR shows headroom, and the
     `in` contrast has a ceiling at 0.964.
   - **Lane order:** E07b smoke (3 min); N-CFSD train (needs ≥ 12 GB RAM) and eval; E07b full; N-FX; SUPA.
+- **CX D-27 E07b result R-07: primary outcome CLOSED (about 02:00 on 10-11; computed mechanically by the frozen
+  rule).**
+  - The A3 hybrid (λ = 1) becomes the RCX module for joint B4 arm (a).
+  - A1 (n = 8 full-goal) and A2 (ranking loss) are not pursued further.
+  - This is shared with BWM as an input to the B4 prereg.

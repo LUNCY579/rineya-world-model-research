@@ -14,6 +14,9 @@ Subcommands (from complementary/):
   python -B experiments/RCX-E01N/native_e01.py profile --out runs/RCX-E01N/cells --arm N-VR --steps 3
   python -B experiments/RCX-E01N/native_e01.py train   --out runs/RCX-E01N/cells --arm N-VR --seed 0
   python -B experiments/RCX-E01N/native_e01.py eval    --out runs/RCX-E01N/cells --arm N-VR --seed 0
+  SEALED (PREREG_E01N section 6): mint-commit --arms-required ... ; open-sealed --expect-commit-sha <D-26 value> ;
+  eval --battery sealed --arm <arm>
+  [--seed s]; then analyze_native.py --battery sealed.
 CPU only; refuses model loads below 12 GB available RAM (D-39); rcx.guard between micro-batches.
 """
 import argparse
@@ -157,9 +160,11 @@ def eval_battery(n_parents, surfaces):
 
 
 # ----------------------------------------------------------------------------- SEALED confirmation battery
-# Protocol (PREREG_E01N): `mint-commit` draws a secret salt and records only sha256(salt) (SEALED_COMMIT.json, committed
-# with the frozen prereg). The salt file (*.secret, git-ignored) is not read by anything until `open-sealed`, which
-# refuses unless every adapter listed in SEALED_COMMIT.json exists. Only then may `eval --battery sealed` run.
+# Protocol (PREREG_E01N): `mint-commit` draws a secret salt and records only sha256(salt) and a salted commitment to the
+# battery content (SEALED_COMMIT.json, committed with the frozen prereg). The salt file (*.secret, git-ignored) is not
+# read by anything until `open-sealed`, which runs once, needs --expect-commit-sha (the DECISIONS record) and refuses
+# unless every adapter listed in SEALED_COMMIT.json is a completed, untampered run. Only then may `eval --battery
+# sealed` run, on the committed surfaces, with the adapters recorded at opening (other cells of a committed arm refused).
 
 LF = chr(10)
 
@@ -173,49 +178,193 @@ def sealed_seed(salt):
     return int(hashlib.sha256(salt.encode()).hexdigest()[:8], 16) % 10 ** 8
 
 
+# Custody hardening (CX custody review): the commitment also binds the battery CONTENT (salted, so the 10**8 seed space
+# cannot be brute-forced from it) and the generator code; mint/open records are write-once; open-sealed is tied to the
+# DECISIONS record (--expect-commit-sha), opens only completed, untampered training runs, and records the battery's
+# overlap with every training-row file (the DEV audit cannot cover a battery that does not exist yet).
+SEALED_TAG_RE = re.compile(r"(N-FX|N-VR|N-CFSD)_s(\d+)")
+
+
+def battery_sha256(battery):
+    """sha256 of the battery as native_probe writes it (one json.dumps line per record); cmd_eval hashes the same bytes."""
+    return hashlib.sha256("".join(json.dumps(r) + "\n" for r in battery).encode()).hexdigest()
+
+
+def battery_code_sha256():
+    """sha256 of the modules that determine the battery for a given seed (rcx/rcl gen, vocab, templates, world)."""
+    return {Path(m.__file__).name: sha(Path(m.__file__)) for m in (gen, V, T, W)}
+
+
+def battery_commit(salt, battery_sha):
+    return hashlib.sha256(f"{salt}:{battery_sha}".encode()).hexdigest()
+
+
+def _sealed_records(seed, n_parents, surfaces):
+    gen.use_world("arith")
+    return [r for r in gen.make_battery("sealed", n_parents, seed) if r["surface"] in surfaces]
+
+
+def _write_once(p, text):
+    with open(p, "x", encoding="utf-8", newline=LF) as f:  # exclusive create: a sealed record is never overwritten
+        f.write(text)
+
+
 def cmd_mint_commit(a):
     import secrets
-    commit_p, salt_p, _ = _sealed_paths(a.out)
-    if commit_p.exists() or salt_p.exists():
+    commit_p, salt_p, open_p = _sealed_paths(a.out)
+    if commit_p.exists() or salt_p.exists() or open_p.exists():
         raise SystemExit("sealed commitment already exists; refusing to re-mint")
-    if not a.arms_required:
+    tags = [t.strip() for t in a.arms_required.split(",") if t.strip()]
+    if not tags:
         raise SystemExit("--arms-required is mandatory (adapters that must exist before the battery is opened)")
+    bad = [t for t in tags if not SEALED_TAG_RE.fullmatch(t)]
+    if bad or len(set(tags)) != len(tags):
+        raise SystemExit(f"--arms-required: malformed or duplicate adapter tags {bad or tags} (want e.g. N-VR_s0)")
+    surfaces = a.surfaces.split(",")
+    if set(surfaces) - set(gen.SURFACES) or len(set(surfaces)) != len(surfaces) or a.n_parents < 2:
+        raise SystemExit(f"bad --surfaces {surfaces} or --n-parents {a.n_parents}")
     salt = secrets.token_hex(32)
-    salt_p.write_text(salt, encoding="utf-8", newline=LF)
-    rec = {"sha256_salt": hashlib.sha256(salt.encode()).hexdigest(), "n_parents": a.n_parents,
-           "surfaces": a.surfaces.split(","), "split": "sealed", "world": "arith",
-           "derivation": "seed = int(sha256(salt)[:8], 16) % 10**8; gen.make_battery('sealed', n_parents, seed)",
-           "arms_required": a.arms_required.split(","), "minted_at": time.strftime("%Y-%m-%d %H:%M:%S %Z")}
-    commit_p.write_text(json.dumps(rec, indent=1), encoding="utf-8", newline=LF)
+    bsha = battery_sha256(_sealed_records(sealed_seed(salt), a.n_parents, surfaces))  # in memory only, never shown
+    rec = {"sha256_salt": hashlib.sha256(salt.encode()).hexdigest(), "battery_commit": battery_commit(salt, bsha),
+           "n_parents": a.n_parents, "surfaces": surfaces, "split": "sealed", "world": "arith",
+           "derivation": "seed = int(sha256(salt)[:8], 16) % 10**8; gen.make_battery('sealed', n_parents, seed) "
+                         "restricted to surfaces; battery_commit = sha256(salt + ':' + sha256(battery jsonl bytes))",
+           "arms_required": tags, "battery_code_sha256": battery_code_sha256(),
+           "native_e01_sha256": sha(Path(__file__)), "python": sys.version.split()[0],
+           "minted_at": time.strftime("%Y-%m-%d %H:%M:%S %Z")}
+    Path(a.out).mkdir(parents=True, exist_ok=True)
+    _write_once(salt_p, salt)
+    _write_once(commit_p, json.dumps(rec, indent=1))
     print(json.dumps(rec, indent=1), flush=True)
+    print(f"record in DECISIONS: sha256_salt {rec['sha256_salt']}; SEALED_COMMIT.json sha256 {sha(commit_p)} "
+          f"(open-sealed --expect-commit-sha)", flush=True)
+
+
+def completed_adapter(out, tag, manifest):
+    """(record, None) if `tag` is a completed, untampered training run in out, else (None, reason)."""
+    m = SEALED_TAG_RE.fullmatch(tag)
+    d = Path(out) / tag
+    ad, meta_p = d / "adapter" / "adapter_model.safetensors", d / "TRAIN_META.json"
+    if not m:
+        return None, "malformed tag"
+    if not ad.exists():
+        return None, "adapter missing"
+    if not meta_p.exists():
+        return None, "TRAIN_META.json missing (training incomplete)"
+    if (d / "ckpt" / "state.pt").exists():
+        return None, "resume checkpoint still present (training incomplete)"
+    meta = json.loads(meta_p.read_text(encoding="utf-8"))
+    got = sha(ad)
+    if meta.get("adapter_sha256") != got:
+        return None, "adapter sha differs from TRAIN_META.json"
+    if (meta.get("arm"), meta.get("seed")) != (m.group(1), int(m.group(2))):
+        return None, "TRAIN_META.json arm/seed differ from the tag"
+    if meta.get("rows_sha256") != manifest.get(m.group(1), {}).get("sha256"):
+        return None, "rows sha differs from TRAIN_MANIFEST.json"
+    if meta.get("train", {}).get("steps") != STEPS:
+        return None, f"not a {STEPS}-step run"
+    return {"adapter_sha256": got, "train_meta_sha256": sha(meta_p), "rows_sha256": meta["rows_sha256"],
+            "base_sha256": meta.get("base_sha256"), "code_sha256": meta.get("code_sha256")}, None
+
+
+def sealed_train_overlap(out, battery):
+    """The DEV audit's overlap checks for the opened SEALED battery against every train_N-*.jsonl in out: semantic and
+    skeleton hashes (recorded and read back from the prompt text) and status words other than the posted/void anchors
+    occurring in any training prompt. parent_ids = SEALED parents with any hash overlap (dropped from every arm)."""
+    tr_sem, tr_skel, tr_tok, files = set(), set(), set(), {}
+    for p in sorted(Path(out).glob("train_N-*.jsonl")):
+        rows = [json.loads(l) for l in open(p, encoding="utf-8")]
+        files[p.name] = {"sha256": sha(p), "rows": len(rows)}
+        for r in rows:
+            tr_sem.add(r.get("semantic_hash"))
+            tr_skel.add(r.get("skeleton_hash"))
+            tr_tok |= set(_WORD_RE.findall(r["prompt"]))
+            try:
+                rb = read_back(r)
+            except (ValueError, KeyError, TypeError, AttributeError):
+                continue
+            tr_sem.add(rb["semantic_hash"])
+            tr_skel.add(rb["skeleton_hash"])
+    tr_sem.discard(None)
+    tr_skel.discard(None)
+    sem_p, skel_p, words = set(), set(), set()
+    for r in battery:
+        if {r["semantic_hash"], W.semantic_hash(r["rule_ast"], r["state"], r["event"])} & tr_sem:
+            sem_p.add(r["parent_id"])
+        if {r["skeleton_hash"], W.skeleton_hash(r["state"], r["event"])} & tr_skel:
+            skel_p.add(r["parent_id"])
+        sa = W.status_atom(r["rule_ast"])
+        words |= ({r["event"]["status"]} | set(sa["set"] if sa else ())) & tr_tok
+    return {"train_files": files, "semantic_parents": len(sem_p), "skeleton_parents": len(skel_p),
+            "status_words_in_train_prompts": sorted(words - {gen.POSTED, gen.VOID}),
+            "parent_ids": sorted(sem_p | skel_p)}
 
 
 def cmd_open_sealed(a):
     commit_p, salt_p, open_p = _sealed_paths(a.out)
+    if not commit_p.exists():
+        raise SystemExit("no SEALED_COMMIT.json (mint-commit first)")
+    if open_p.exists():
+        raise SystemExit("the SEALED battery is already open; SEALED_OPEN.json is write-once")
+    if not a.expect_commit_sha or a.expect_commit_sha != sha(commit_p):
+        raise SystemExit("--expect-commit-sha must equal the SEALED_COMMIT.json sha256 recorded in DECISIONS at the "
+                         "freeze; refusing to open a commitment that does not match it")
     rec = json.loads(commit_p.read_text(encoding="utf-8"))
-    missing = [t for t in rec["arms_required"] if not (Path(a.out) / t / "adapter" / "adapter_model.safetensors").exists()]
-    if missing:
-        raise SystemExit(f"refusing to open the SEALED battery: adapters missing {missing}")
+    man_p = Path(a.out) / "TRAIN_MANIFEST.json"
+    manifest = json.loads(man_p.read_text(encoding="utf-8")) if man_p.exists() else {}
+    adapters, bad = {}, {}
+    for t in rec["arms_required"]:
+        info, why = completed_adapter(a.out, t, manifest)
+        if why:
+            bad[t] = why
+        else:
+            adapters[t] = info
+    if bad:
+        raise SystemExit(f"refusing to open the SEALED battery: {bad}")
     salt = salt_p.read_text(encoding="utf-8").strip()
     if hashlib.sha256(salt.encode()).hexdigest() != rec["sha256_salt"]:
         raise SystemExit("salt does not match the commitment")
-    adapters = {t: sha(Path(a.out) / t / "adapter" / "adapter_model.safetensors") for t in rec["arms_required"]}
-    o = {"opened_at": time.strftime("%Y-%m-%d %H:%M:%S %Z"), "salt": salt, "seed": sealed_seed(salt),
-         "adapters_sha256": adapters}
-    open_p.write_text(json.dumps(o, indent=1), encoding="utf-8", newline=LF)
-    print(json.dumps(o, indent=1), flush=True)
+    seed = sealed_seed(salt)
+    battery = _sealed_records(seed, rec["n_parents"], rec["surfaces"])
+    bsha = battery_sha256(battery)
+    if "battery_commit" in rec and battery_commit(salt, bsha) != rec["battery_commit"]:
+        now = battery_code_sha256()
+        raise SystemExit("the regenerated SEALED battery is not the committed one; generator files changed since the "
+                         f"mint: {sorted(k for k in now if now[k] != rec.get('battery_code_sha256', {}).get(k))}")
+    o = {"opened_at": time.strftime("%Y-%m-%d %H:%M:%S %Z"), "salt": salt, "seed": seed, "battery_sha256": bsha,
+         "n_records": len(battery), "sealed_commit_sha256": sha(commit_p), "battery_commit_checked":
+         "battery_commit" in rec, "adapters_sha256": {t: v["adapter_sha256"] for t, v in adapters.items()},
+         "adapters": adapters, "train_overlap": sealed_train_overlap(a.out, battery),
+         "battery_code_sha256": battery_code_sha256(), "native_e01_sha256": sha(Path(__file__))}
+    _write_once(open_p, json.dumps(o, indent=1))
+    print(json.dumps({k: v for k, v in o.items() if k != "adapters"}, indent=1), flush=True)
+    if o["train_overlap"]["parent_ids"]:
+        print(f"WARNING: {len(o['train_overlap']['parent_ids'])} SEALED parents overlap training rows; PREREG_E01N "
+              "drops them from every arm", flush=True)
 
 
 def sealed_battery(out, surfaces):
+    """The committed SEALED battery restricted to `surfaces` (which must be the committed surfaces), and its seed.
+    Raises SystemExit unless the battery has been opened and SEALED_OPEN.json matches SEALED_COMMIT.json."""
     commit_p, salt_p, open_p = _sealed_paths(out)
     if not open_p.exists():
         raise SystemExit("SEALED battery is not open (run open-sealed after all required adapters exist)")
     rec = json.loads(commit_p.read_text(encoding="utf-8"))
     o = json.loads(open_p.read_text(encoding="utf-8"))
-    assert hashlib.sha256(o["salt"].encode()).hexdigest() == rec["sha256_salt"]
-    gen.use_world("arith")
-    bat = gen.make_battery("sealed", rec["n_parents"], o["seed"])
-    return [r for r in bat if r["surface"] in surfaces], o["seed"]
+    if hashlib.sha256(o["salt"].encode()).hexdigest() != rec["sha256_salt"]:
+        raise SystemExit("SEALED_OPEN.json salt does not match the commitment")
+    if o["seed"] != sealed_seed(o["salt"]):
+        raise SystemExit("SEALED_OPEN.json seed is not the committed derivation of the salt")
+    if set(surfaces) != set(rec["surfaces"]):
+        raise SystemExit(f"surfaces {sorted(surfaces)} differ from the committed SEALED surfaces {rec['surfaces']}")
+    if o.get("sealed_commit_sha256") != sha(commit_p):
+        raise SystemExit("SEALED_COMMIT.json changed after the battery was opened")
+    bat = _sealed_records(o["seed"], rec["n_parents"], rec["surfaces"])
+    bsha = battery_sha256(bat)
+    if bsha != o.get("battery_sha256") or ("battery_commit" in rec
+                                            and battery_commit(o["salt"], bsha) != rec["battery_commit"]):
+        raise SystemExit("the regenerated SEALED battery differs from the committed/opened one (generator changed?)")
+    return bat, o["seed"]
 
 
 def cmd_eval(a):
@@ -230,6 +379,17 @@ def cmd_eval(a):
     if res_path.exists():
         print("eval exists", flush=True)
         return
+    adapter_sha = None
+    if a.arm.startswith("N-"):
+        adapter_sha = sha(out / tag / "adapter" / "adapter_model.safetensors")
+        if a.battery == "sealed":
+            fixed = json.loads(_sealed_paths(out)[2].read_text(encoding="utf-8"))["adapters_sha256"]
+            want = fixed.get(tag)
+            if want is None and a.arm in {SEALED_TAG_RE.fullmatch(t).group(1) for t in fixed}:
+                raise SystemExit(f"{tag} is not among the adapters fixed by open-sealed {sorted(fixed)}; a confirmatory "
+                                 "arm's cells are never added or replaced after opening (PREREG_E01N section 6)")
+            if want is not None and want != adapter_sha:
+                raise SystemExit(f"{tag}: adapter sha {adapter_sha[:12]} != {want[:12]} recorded by open-sealed")
     NP.need_ram()
     model, tok = LC.load_core("supa" if a.arm == "SUPA" else "sparse")
     if a.arm.startswith("N-"):
@@ -251,7 +411,7 @@ def cmd_eval(a):
     # same bytes as native_probe's battery.jsonl, so battery_sha256 is comparable across the two scripts
     bsha = hashlib.sha256("".join(json.dumps(r) + "\n" for r in battery).encode()).hexdigest()
     rec = {"arm": a.arm, "seed": a.seed, "battery": a.battery, "battery_seed": bseed, "battery_sha256": bsha,
-           "n": len(battery), "surfaces": a.surfaces, "wall_s": time.time() - t0,
+           "adapter_sha256": adapter_sha, "n": len(battery), "surfaces": a.surfaces, "wall_s": time.time() - t0,
            "composite": {s: S.composite(summ, s) for s in a.surfaces.split(",")},
            "composite_decision": {s: S.composite(summ, s, field="decision") for s in a.surfaces.split(",")},
            "cells": summ}
@@ -656,6 +816,8 @@ def main():
     ap.add_argument("--battery", default="dev", choices=["dev", "sealed"])
     ap.add_argument("--arms-required", dest="arms_required", default="",
                     help="mint-commit: comma-separated adapter tags (e.g. N-VR_s0,N-CFSD_s1) required before opening")
+    ap.add_argument("--expect-commit-sha", dest="expect_commit_sha", default="",
+                    help="open-sealed: sha256 of SEALED_COMMIT.json as recorded in DECISIONS at the freeze (mandatory)")
     ap.add_argument("--no-tok", dest="no_tok", action="store_true", help="audit: skip token covariates")
     a = ap.parse_args()
     {"build": cmd_build, "audit": cmd_audit, "profile": cmd_profile, "train": cmd_train, "eval": cmd_eval,

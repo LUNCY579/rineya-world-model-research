@@ -213,3 +213,65 @@ def paired_binary_table(a01: Arm, b01: Arm, threshold: float = 0.5) -> tuple[int
     ca = {k: ma[k] >= threshold for k in ma}
     cb = {k: mb[k] >= threshold for k in mb}
     return sum(ca[k] and not cb[k] for k in ca), sum(cb[k] and not ca[k] for k in ca)
+
+
+# Bootstrap p-values (added for PREREG_E01N; the functions above are unchanged).
+# Replicate differences within ZERO_TOL of 0 count as exactly 0: real nonzero replicate means of parent-macro scores
+# are rationals far from 0 (>= 1/(parents x seeds x variants)), so this only removes floating-point summation noise.
+ZERO_TOL = 1e-12
+
+
+P_TIES_MODES = ('both', 'low', 'split')
+
+
+def bootstrap_p_two_sided(boot: Sequence[float], floor: float | None = None, ties: str = 'low') -> float:
+    """Two-sided bootstrap p of a difference, floored at `floor` (default 1/len(boot)) and capped at 1. Replicates
+    within ZERO_TOL of 0 are ties; without ties every mode gives 2 * min(share < 0, share > 0).
+      ties='both':  2 * min(share <= 0, share >= 0): ties count on both sides (conservative; identically 0 -> p = 1).
+                    With 10,000 replicates, p < 0.05 implies that the 95% percentile interval (_interval) excludes 0.
+      ties='low':   2 * min(share <= 0, share > 0): ties on the <= 0 side only (identically 0 -> 0 -> the floor).
+      ties='split': ties counted half on each side (identically 0 -> p = 1)."""
+    n = len(boot)
+    if n == 0:
+        raise ValueError('no bootstrap replicates')
+    if ties not in P_TIES_MODES:
+        raise ValueError(f'ties must be one of {P_TIES_MODES}, got {ties!r}')
+    floor = 1.0 / n if floor is None else float(floor)
+    if not 0.0 <= floor <= 1.0:
+        raise ValueError(f'floor must be in [0, 1], got {floor!r}')
+    zero = sum(1 for d in boot if abs(d) <= ZERO_TOL)
+    neg = sum(1 for d in boot if d < -ZERO_TOL)
+    pos = n - neg - zero
+    if ties == 'both':
+        p = 2.0 * min(neg + zero, pos + zero) / n
+    else:
+        low = neg + zero if ties == 'low' else neg + zero / 2
+        p = 2.0 * min(low, n - low) / n
+    return min(1.0, max(floor, p))
+
+
+def seed_parent_bootstrap_test(per_seed_a: Sequence[Arm], per_seed_b: Sequence[Arm], resamples: int = 5000,
+                               seed: int = 17, alpha: float = 0.05, p_floor: float | None = None,
+                               ties: str = 'low') -> dict:
+    """seed_parent_bootstrap(per_seed_a, per_seed_b, resamples, seed, alpha) for b - a (parents resampled, seeds
+    averaged, resample_seeds=False) plus the two-sided bootstrap p (bootstrap_p_two_sided(boot, p_floor, ties)) from
+    the SAME replicates. mean_a, mean_b, diff, lo, hi equal seed_parent_bootstrap's exactly. Extra keys: p, n_le0,
+    n_eq0, n_gt0, n_ge0, ties, resamples, boot_seed (ties: replicates within ZERO_TOL of 0)."""
+    if not per_seed_a or not per_seed_b:
+        raise ValueError('each arm needs at least one seed')
+    _same_parents(*(list(per_seed_a) + list(per_seed_b)))
+    keys = _order(per_seed_a[0])
+    _check_boot(len(keys), resamples, alpha)
+    n = len(keys)
+    mat_a, mat_b = _seed_matrix(per_seed_a, keys), _seed_matrix(per_seed_b, keys)
+    pa = [sum(row[j] for row in mat_a) / len(mat_a) for j in range(n)]
+    pb = [sum(row[j] for row in mat_b) / len(mat_b) for j in range(n)]
+    point = [y - x for x, y in zip(pa, pb)]
+    boot = _boot_means(point, resamples, seed)
+    lo, hi = _interval(boot, alpha)
+    le = sum(1 for d in boot if d <= ZERO_TOL)
+    eq = sum(1 for d in boot if abs(d) <= ZERO_TOL)
+    return dict(mean_a=sum(pa) / n, mean_b=sum(pb) / n, diff=sum(point) / n, lo=lo, hi=hi, n_parents=n,
+                n_seeds_a=len(mat_a), n_seeds_b=len(mat_b), p=bootstrap_p_two_sided(boot, p_floor, ties),
+                n_le0=le, n_eq0=eq, n_gt0=resamples - le, n_ge0=resamples - le + eq, ties=ties,
+                resamples=resamples, boot_seed=seed)

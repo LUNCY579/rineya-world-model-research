@@ -285,7 +285,7 @@ class TestEvalBatterySha(unittest.TestCase):
         LC.generate = lambda model, tok_, prompts, **kw: ["{}"] * len(prompts)
         try:
             with tempfile.TemporaryDirectory() as d:
-                NE.cmd_eval(Namespace(out=d, arm="OFF", seed=0, n_parents=1, surfaces="in,ho_tpl"))
+                NE.cmd_eval(Namespace(out=d, arm="OFF", seed=0, n_parents=1, surfaces="in,ho_tpl", battery="dev"))
                 rec = json.loads((Path(d) / "eval_OFF.json").read_text(encoding="utf-8"))
                 bpath = Path(d) / "battery.jsonl"                 # written exactly as native_probe.main does
                 with open(bpath, "w", encoding="utf-8", newline="\n") as f:
@@ -295,6 +295,197 @@ class TestEvalBatterySha(unittest.TestCase):
         finally:
             NP.need_ram, LC.load_core, LC.generate = saved
 
+
+class TestSealedCustody(unittest.TestCase):
+    """SEALED protocol (PREREG_E01N section 2) in a temp dir with fake adapters and tiny training-row files: never the
+    real cells dir, never a model load (need_ram/load_core raise AssertionError, so a refusal must come first)."""
+    TAGS = "N-VR_s0,N-CFSD_s0"
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+        self.d = Path(self.tmp.name)
+        gen.use_world("arith")
+        write_cells(self.d, {"N-VR": [native_row(r) for r in gen.make_train("VR", 6, NE.DATA_SEED["VR"])],
+                             "N-CFSD": [native_row(r) for r in gen.make_train("CF_SD", 6, NE.DATA_SEED["CF_SD"])]})
+        self.man = json.loads((self.d / "TRAIN_MANIFEST.json").read_text(encoding="utf-8"))
+        self.saved = (NP.need_ram, LC.load_core, LC.generate, LC.PATHS, gen.make_battery)
+        NP.need_ram = LC.load_core = self._no_model
+        core = self.d / "core"
+        core.mkdir()
+        (core / "model.safetensors").write_bytes(b"not a model")
+        LC.PATHS = {"sparse": core, "supa": core}
+
+    def tearDown(self):
+        NP.need_ram, LC.load_core, LC.generate, LC.PATHS, gen.make_battery = self.saved
+        self.tmp.cleanup()
+
+    @staticmethod
+    def _no_model(*a, **k):
+        raise AssertionError("a model must not be loaded here")
+
+    def ns(self, **kw):
+        base = dict(out=str(self.d), arm="N-VR", seed=0, n_parents=2, surfaces="in,ho_tpl", battery="sealed",
+                    arms_required=self.TAGS, expect_commit_sha="")
+        base.update(kw)
+        return Namespace(**base)
+
+    def fake_adapter(self, tag, payload=b"w", meta_over=None, steps=NE.STEPS):
+        arm, seed = NE.SEALED_TAG_RE.fullmatch(tag).groups()
+        ad = self.d / tag / "adapter"
+        ad.mkdir(parents=True, exist_ok=True)
+        (ad / "adapter_model.safetensors").write_bytes(payload + tag.encode())
+        meta = {"arm": arm, "seed": int(seed), "rows_sha256": self.man[arm]["sha256"],
+                "adapter_sha256": NE.sha(ad / "adapter_model.safetensors"), "train": {"steps": steps}}
+        meta.update(meta_over or {})
+        (self.d / tag / "TRAIN_META.json").write_text(json.dumps(meta), encoding="utf-8", newline="\n")
+
+    def mint(self):
+        import contextlib
+        import io
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            NE.cmd_mint_commit(self.ns())
+        return NE.sha(self.d / "SEALED_COMMIT.json"), buf.getvalue()
+
+    def open_ok(self):
+        csha, _ = self.mint()
+        for t in self.TAGS.split(","):
+            self.fake_adapter(t)
+        self.quiet(NE.cmd_open_sealed, self.ns(expect_commit_sha=csha))
+        return csha, json.loads((self.d / "SEALED_OPEN.json").read_text(encoding="utf-8"))
+
+    @staticmethod
+    def quiet(fn, *args):
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()):
+            return fn(*args)
+
+    def assertRefused(self, fn, *args):
+        with self.assertRaises(SystemExit):
+            self.quiet(fn, *args)
+
+    def test_mint_validates_tags_and_never_reveals_the_salt(self):
+        for bad in ("", "N-VR_s0, N-VR-s1", "N-VR_s0,N-VR_s0", "T2,N-VR_s0"):
+            self.assertRefused(NE.cmd_mint_commit, self.ns(arms_required=bad))
+        self.assertEqual(sorted(p.name for p in self.d.glob("SEALED_*")), [])
+        csha, printed = self.mint()
+        salt = (self.d / "SEALED_SALT.secret").read_text(encoding="utf-8").strip()
+        text = (self.d / "SEALED_COMMIT.json").read_text(encoding="utf-8")
+        rec = json.loads(text)
+        self.assertNotIn(salt, text)
+        self.assertNotIn(salt, printed)
+        if NE.sealed_seed(salt) >= 10 ** 6:                                    # short seeds may occur in shas by chance
+            self.assertNotIn(str(NE.sealed_seed(salt)), text)
+        self.assertEqual(rec["sha256_salt"], hashlib.sha256(salt.encode()).hexdigest())
+        self.assertEqual(rec["arms_required"], ["N-VR_s0", "N-CFSD_s0"])
+        bsha = NE.battery_sha256(NE._sealed_records(NE.sealed_seed(salt), 2, ["in", "ho_tpl"]))
+        self.assertEqual(rec["battery_commit"], NE.battery_commit(salt, bsha))
+        self.assertIn(csha, printed)
+        self.assertRefused(NE.cmd_mint_commit, self.ns())                   # no re-mint
+        self.assertEqual(NE.sha(self.d / "SEALED_COMMIT.json"), csha)
+
+    def test_salt_file_is_git_ignored_and_commit_is_not(self):
+        import subprocess
+        try:
+            def ignored(rel):
+                return subprocess.run(["git", "check-ignore", "-q", "--no-index", rel], cwd=ROOT,
+                                      capture_output=True).returncode == 0
+            salt_ign, commit_ign = (ignored("runs/RCX-E01N/cells/SEALED_SALT.secret"),
+                                    ignored("runs/RCX-E01N/cells/SEALED_COMMIT.json"))
+        except OSError:
+            self.skipTest("git not available")
+        self.assertTrue(salt_ign)
+        self.assertFalse(commit_ign)
+
+    def test_eval_sealed_refuses_before_open(self):
+        self.mint()
+        for t in self.TAGS.split(","):
+            self.fake_adapter(t)
+        self.assertRefused(NE.cmd_eval, self.ns(arm="OFF"))
+        self.assertRefused(NE.cmd_eval, self.ns(arm="N-VR"))
+        self.assertRefused(NE.sealed_battery, self.d, ["in", "ho_tpl"])
+        self.assertEqual(list(self.d.glob("eval_*")) + list(self.d.glob("preds_*")), [])
+
+    def test_open_refuses_incomplete_or_tampered_runs(self):
+        csha, _ = self.mint()
+        op = self.ns(expect_commit_sha=csha)
+        self.assertRefused(NE.cmd_open_sealed, op)                           # no adapters
+        self.fake_adapter("N-VR_s0")
+        self.assertRefused(NE.cmd_open_sealed, op)                           # one adapter missing
+        bad_runs = [dict(meta_over={"adapter_sha256": "0" * 64}), dict(steps=3), dict(meta_over={"seed": 1}),
+                    dict(meta_over={"rows_sha256": self.man["N-VR"]["sha256"]})]
+        for kw in bad_runs:
+            self.fake_adapter("N-CFSD_s0", **kw)
+            self.assertRefused(NE.cmd_open_sealed, op)
+        self.fake_adapter("N-CFSD_s0")
+        (self.d / "N-CFSD_s0" / "ckpt").mkdir()
+        (self.d / "N-CFSD_s0" / "ckpt" / "state.pt").write_bytes(b"x")       # interrupted run
+        self.assertRefused(NE.cmd_open_sealed, op)
+        (self.d / "N-CFSD_s0" / "ckpt" / "state.pt").unlink()
+        (self.d / "N-CFSD_s0" / "TRAIN_META.json").unlink()                  # adapter saved, meta not yet written
+        self.assertRefused(NE.cmd_open_sealed, op)
+        self.fake_adapter("N-CFSD_s0")
+        for wrong in ("", "0" * 64):
+            self.assertRefused(NE.cmd_open_sealed, self.ns(expect_commit_sha=wrong))
+        salt_p = self.d / "SEALED_SALT.secret"
+        salt = salt_p.read_text(encoding="utf-8")
+        salt_p.write_text("f" * 64, encoding="utf-8", newline="\n")
+        self.assertRefused(NE.cmd_open_sealed, op)                           # salt swapped
+        salt_p.write_text(salt, encoding="utf-8", newline="\n")
+        self.assertFalse((self.d / "SEALED_OPEN.json").exists())
+        self.quiet(NE.cmd_open_sealed, op)
+        self.assertTrue((self.d / "SEALED_OPEN.json").exists())
+
+    def test_generator_change_after_mint_is_caught(self):
+        csha, _ = self.mint()
+        for t in self.TAGS.split(","):
+            self.fake_adapter(t)
+        real = self.saved[4]
+        gen.make_battery = lambda *a, **k: real(*a, **k)[1:]                  # e.g. a stratum edited after DEV
+        self.assertRefused(NE.cmd_open_sealed, self.ns(expect_commit_sha=csha))
+        gen.make_battery = real
+        self.quiet(NE.cmd_open_sealed, self.ns(expect_commit_sha=csha))
+        gen.make_battery = lambda *a, **k: real(*a, **k)[1:]
+        self.assertRefused(NE.sealed_battery, self.d, ["in", "ho_tpl"])
+
+    def test_open_once_and_eval_bound_to_the_opened_battery_and_adapters(self):
+        csha, o = self.open_ok()
+        salt = (self.d / "SEALED_SALT.secret").read_text(encoding="utf-8").strip()
+        bat, seed = NE.sealed_battery(self.d, ["ho_tpl", "in"])
+        self.assertEqual((o["salt"], o["seed"], seed), (salt, NE.sealed_seed(salt), NE.sealed_seed(salt)))
+        self.assertEqual(o["battery_sha256"], NE.battery_sha256(bat))
+        self.assertEqual(set(o["adapters_sha256"]), {"N-VR_s0", "N-CFSD_s0"})
+        self.assertEqual((o["train_overlap"]["parent_ids"], o["train_overlap"]["status_words_in_train_prompts"]),
+                         ([], []))
+        self.assertTrue(all(r["split"] == "sealed" and r["parent_id"].startswith("sealed-") for r in bat))
+        before = NE.sha(self.d / "SEALED_OPEN.json")
+        self.assertRefused(NE.cmd_open_sealed, self.ns(expect_commit_sha=csha))    # write-once
+        self.assertEqual(NE.sha(self.d / "SEALED_OPEN.json"), before)
+        self.assertRefused(NE.cmd_eval, self.ns(arm="OFF", surfaces="in"))          # not the committed surfaces
+        (self.d / "N-VR_s0" / "adapter" / "adapter_model.safetensors").write_bytes(b"swapped after opening")
+        self.assertRefused(NE.cmd_eval, self.ns(arm="N-VR", seed=0))
+        self.fake_adapter("N-CFSD_s1")                                              # trained after opening
+        self.assertRefused(NE.cmd_eval, self.ns(arm="N-CFSD", seed=1))
+        NP.need_ram = lambda: 99.0
+        LC.load_core = lambda name="sparse": (object(), LiteralTok())
+        LC.generate = lambda model, tok, prompts, **kw: ["{}"] * len(prompts)
+        self.quiet(NE.cmd_eval, self.ns(arm="OFF"))
+        rec = json.loads((self.d / "eval_sealed_OFF.json").read_text(encoding="utf-8"))
+        self.assertEqual((rec["battery"], rec["battery_seed"], rec["battery_sha256"], rec["n"]),
+                         ("sealed", seed, o["battery_sha256"], len(bat)))
+        self.assertFalse((self.d / "eval_OFF.json").exists())
+
+    def test_overlap_of_a_leaked_sealed_item_is_recorded(self):
+        _, o = self.open_ok()
+        bat, _ = NE.sealed_battery(self.d, ["in", "ho_tpl"])
+        leak = next(r for r in bat if r["group"] == "V1_pos" and r["surface"] == "in")
+        with open(self.d / "train_N-FX.jsonl", "w", encoding="utf-8", newline="\n") as f:
+            f.write(json.dumps(native_row(leak)) + "\n")
+        ov = NE.sealed_train_overlap(self.d, bat)
+        self.assertEqual(ov["parent_ids"], [leak["parent_id"]])
+        self.assertGreaterEqual(ov["semantic_parents"], 1)
+        self.assertIn(leak["event"]["status"], ov["status_words_in_train_prompts"])
 
 
 # ------------------------------------------------------------------------------------------------ recipe parity
@@ -760,6 +951,402 @@ class TestNativeE01Recipe(unittest.TestCase):
         self.assertEqual([ast.unparse(x) for x in calls["row_order_for"][0].args],
                          ["len(rows)", "STEPS", "BATCH", "a.seed"])
         self.assertEqual({k.arg: ast.unparse(k.value) for k in calls["attach_lora"][0].keywords}, {"seed": "a.seed"})
+
+
+# ------------------------------------------------------------------------------------- SEALED analysis (PREREG_E01N)
+import analyze_native as AN  # noqa: E402
+from rcx import stats as ST  # noqa: E402
+
+_SEALED_NTAGS = ("N-VR_s0", "N-VR_s1", "N-VR_s2", "N-CFSD_s0", "N-CFSD_s1", "N-CFSD_s2")
+
+
+def _sealed_out_text(r, mode):
+    """A raw model output for battery record r: 'exact' (the gold JSON), 'wrong' (an off-by-1000 balance, never a
+    copy of the state) or 'format' (not JSON)."""
+    if mode == "format":
+        return "not json"
+    after = dict(r["gold"]["after"])
+    if mode == "wrong":
+        k = next(iter(after))
+        after[k] += 1000
+    return json.dumps(after, separators=(",", ":"))
+
+
+def _sealed_preds(battery, mode):
+    from rcx.rcl import score as S
+    out = []
+    for i, r in enumerate(battery):
+        o = _sealed_out_text(r, mode(r))
+        out.append({"i": i, "out": o, **S.classify(r, NP.parse_answer(o, list(r["gold"]["after"].keys())))})
+    return out
+
+
+def _write_sealed_cell(d, tag, battery, bseed, preds, bsha=None):
+    import gzip
+    arm, seed = AN.split_tag(tag)
+    with gzip.open(Path(d) / f"preds_sealed_{tag}.jsonl.gz", "wt", encoding="utf-8") as f:
+        for p in preds:
+            f.write(json.dumps(p) + "\n")
+    ad = Path(d) / tag / "adapter" / "adapter_model.safetensors"
+    rec = {"arm": arm, "seed": 0 if seed is None else seed, "battery": "sealed", "battery_seed": bseed,
+           "battery_sha256": bsha or AN.battery_sha256(battery),
+           "adapter_sha256": NE.sha(ad) if seed is not None else None, "n": len(battery), "surfaces": "in,ho_tpl"}
+    (Path(d) / f"eval_sealed_{tag}.json").write_text(json.dumps(rec), encoding="utf-8", newline="\n")
+
+
+def _pid(r):
+    return int(r["parent_id"].rsplit("-", 1)[1])
+
+
+def _exact_all(r):
+    return "exact"
+
+
+def _noop_wrong_on_ho(cond=lambda r: True):
+    """Wording-bound behaviour: on held-out paraphrases (ho_tpl) the no-op items (where cond holds) are applied."""
+    return lambda r: "wrong" if r["surface"] == "ho_tpl" and r["gold"]["decision"] == "noop" and cond(r) else "exact"
+
+
+class TestSealedAnalysis(unittest.TestCase):
+    """analyze_native --battery sealed on a synthetic SEALED battery (temp dir; the real mint-commit / open-sealed with
+    fake adapters; 4 parents per stratum) and synthetic predictions. No model load, never the real cells dir."""
+    N_PARENTS = 4
+
+    @classmethod
+    def setUpClass(cls):
+        import contextlib
+        import io
+        cls.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+        cls.d = Path(cls.tmp.name) / "cells"
+        cls.d.mkdir()
+        gen.use_world("arith")
+        write_cells(cls.d, {"N-VR": [native_row(r) for r in gen.make_train("VR", 4, NE.DATA_SEED["VR"])],
+                            "N-CFSD": [native_row(r) for r in gen.make_train("CF_SD", 4, NE.DATA_SEED["CF_SD"])]})
+        man = json.loads((cls.d / "TRAIN_MANIFEST.json").read_text(encoding="utf-8"))
+        for tag in _SEALED_NTAGS:                                   # fake completed training runs
+            arm, seed = AN.split_tag(tag)
+            ad = cls.d / tag / "adapter"
+            ad.mkdir(parents=True)
+            (ad / "adapter_model.safetensors").write_bytes(b"fake adapter " + tag.encode())
+            meta = {"arm": arm, "seed": seed, "rows_sha256": man[arm]["sha256"], "train": {"steps": NE.STEPS},
+                    "adapter_sha256": NE.sha(ad / "adapter_model.safetensors")}
+            (cls.d / tag / "TRAIN_META.json").write_text(json.dumps(meta), encoding="utf-8", newline="\n")
+        ns = Namespace(out=str(cls.d), arms_required=",".join(_SEALED_NTAGS), n_parents=cls.N_PARENTS,
+                       surfaces="in,ho_tpl", battery="sealed", arm="OFF", seed=0, expect_commit_sha="")
+        saved = (NP.need_ram, LC.load_core, LC.generate)
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                NE.cmd_mint_commit(ns)
+                ns.expect_commit_sha = NE.sha(cls.d / "SEALED_COMMIT.json")
+                NE.cmd_open_sealed(ns)
+                NP.need_ram = lambda: 99.0                          # OFF through the real eval path, fake decoder
+                LC.load_core = lambda name="sparse": (object(), LiteralTok())
+                LC.generate = lambda model, tok, prompts, **kw: ["{}"] * len(prompts)
+                NE.cmd_eval(ns)
+        finally:
+            NP.need_ram, LC.load_core, LC.generate = saved
+        cls.battery, cls.bseed = NE.sealed_battery(cls.d, ["in", "ho_tpl"])
+        for t in _SEALED_NTAGS + ("T2",):
+            P = _sealed_preds(cls.battery, _noop_wrong_on_ho() if t.startswith("N-VR") else _exact_all)
+            _write_sealed_cell(cls.d, t, cls.battery, cls.bseed, P)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def copy_cells(self):
+        tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+        self.addCleanup(tmp.cleanup)
+        dst = Path(tmp.name) / "cells"
+        shutil.copytree(self.d, dst)
+        return dst
+
+    def arms(self, vr, cf, off=_exact_all, t2=_exact_all):
+        """In-memory SEALED cells: vr / cf are 3 per-seed behaviours (record -> 'exact' | 'wrong' | 'format')."""
+        a = {f"N-VR_s{s}": _sealed_preds(self.battery, vr[s]) for s in range(3)}
+        a.update({f"N-CFSD_s{s}": _sealed_preds(self.battery, cf[s]) for s in range(3)})
+        a.update(OFF=_sealed_preds(self.battery, off), T2=_sealed_preds(self.battery, t2))
+        return a
+
+    def run_decision(self, arms, revise_rule=None):
+        conf = AN.confirmatory(self.battery, arms, resamples=1000)
+        prot = AN.protected(self.battery, arms, resamples=1000)
+        return conf, prot, AN.decide(conf, prot["ok"], revise_rule)
+
+    # ---- inputs: battery sha, adapters, re-scoring, missing cells, create-only outputs
+    def test_load_checks_battery_sha_against_eval_records(self):
+        battery, arms, meta = AN.load_sealed(self.d, ne=NE)
+        self.assertEqual(sorted(arms), sorted(_SEALED_NTAGS + ("OFF", "T2")))
+        self.assertEqual((meta["missing"], meta["warnings"], meta["dropped_train_overlap_parents"]), ([], [], []))
+        off = json.loads((self.d / "eval_sealed_OFF.json").read_text(encoding="utf-8"))   # written by cmd_eval
+        self.assertEqual(meta["battery_sha256"], off["battery_sha256"])
+        self.assertEqual(meta["battery_sha256"], NE.battery_sha256(battery))
+        self.assertEqual(len(battery), len(self.battery))
+        d = self.copy_cells()
+        p = d / "eval_sealed_T2.json"
+        rec = json.loads(p.read_text(encoding="utf-8"))
+        p.write_text(json.dumps(dict(rec, battery_sha256="0" * 64)), encoding="utf-8", newline="\n")
+        with self.assertRaisesRegex(SystemExit, "T2: battery sha"):    # T2 scored on another battery
+            AN.load_sealed(d, ne=NE)
+        p.write_text(json.dumps(dict(rec, battery="dev")), encoding="utf-8", newline="\n")
+        with self.assertRaisesRegex(SystemExit, "not 'sealed'"):
+            AN.load_sealed(d, ne=NE)
+
+    def test_load_refuses_tampered_adapters_scores_and_missing_cells(self):
+        d = self.copy_cells()
+        (d / "N-CFSD_s1" / "adapter" / "adapter_model.safetensors").write_bytes(b"swapped after opening")
+        with self.assertRaisesRegex(SystemExit, "N-CFSD_s1: adapter sha"):
+            AN.load_sealed(d, ne=NE)
+        d = self.copy_cells()
+        P = _sealed_preds(self.battery, _exact_all)
+        P[3] = dict(P[3], exact=1 - P[3]["exact"])                  # a stored score the raw output does not give
+        _write_sealed_cell(d, "N-VR_s2", self.battery, self.bseed, P)
+        with self.assertRaisesRegex(SystemExit, "re-score"):
+            AN.load_sealed(d, ne=NE)
+        d = self.copy_cells()
+        (d / "preds_sealed_N-VR_s2.jsonl.gz").unlink()
+        with self.assertRaisesRegex(SystemExit, "missing"):
+            AN.load_sealed(d, ne=NE)
+        battery, arms, meta = AN.load_sealed(d, allow_missing=True, ne=NE)
+        self.assertEqual(meta["missing"], ["N-VR_s2"])
+        conf = AN.confirmatory(battery, arms, resamples=200)
+        self.assertEqual((conf["C1"]["n_seeds_a"], conf["C1"]["n_seeds_b"]), (2, 3))
+
+    def test_main_sealed_is_create_only_and_pins_the_resamples(self):
+        d = self.copy_cells()
+        out = d.parent / "ANALYSIS_SEALED.md"
+        a = Namespace(cells=str(d), out=None, json_out=None, resamples=1000, allow_missing=False)
+        with self.assertRaisesRegex(SystemExit, "10000"):
+            AN.main_sealed(a)
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()):
+            AN.main_sealed(Namespace(**dict(vars(a), resamples=10000)))         # the preregistered analysis
+        res = json.loads(out.with_suffix(".json").read_text(encoding="utf-8"))
+        self.assertEqual((res["decision"], res["parameters"]["resamples"], res["parameters"]["prereg_resamples"]),
+                         ("ADVANCE", 10000, True))
+        self.assertNotIn(b"\r", out.read_bytes())
+        self.assertNotIn("NOT THE PREREGISTERED", out.read_text(encoding="utf-8"))
+        before = out.read_bytes()
+        with self.assertRaisesRegex(SystemExit, "create-only"):                  # analysed once: never overwritten
+            AN.main_sealed(Namespace(**dict(vars(a), resamples=10000)))
+        self.assertEqual(out.read_bytes(), before)
+
+    def test_end_to_end_advance_report(self):
+        battery, arms, meta = AN.load_sealed(self.d, ne=NE)
+        res, md = AN.analyze_sealed(battery, arms, meta, resamples=1000)
+        self.assertEqual(res["decision"], "ADVANCE")
+        c2 = res["confirmatory"]["C2"]
+        self.assertAlmostEqual(c2["diff"], 0.5)
+        self.assertEqual((c2["p"], c2["p_holm"]), (AN.P_FLOOR, 2 * AN.P_FLOOR))
+        self.assertTrue(res["protected"]["ok"])
+        self.assertIn("**DECISION: ADVANCE**", md)
+        self.assertIn("NOT THE PREREGISTERED ANALYSIS", md)        # 1000 resamples here
+        self.assertNotIn("\r", md)
+        json.loads(json.dumps(res))
+        self.assertEqual(set(res["secondary"]["arms"]), {"OFF", "T2", "N-VR", "N-CFSD"})
+        self.assertEqual(sorted(c2["per_seed"]), ["s0", "s1", "s2"])
+        for v in c2["per_seed"].values():
+            self.assertAlmostEqual(v, 0.5)
+        self.assertEqual(res["secondary"]["matched_seed_differences"]["s1"]["ho_tpl"], c2["per_seed"]["s1"])
+        ti = res["secondary"]["seed_t_interval"]["ho_tpl"]
+        self.assertEqual((ti["k"], ti["df"], ti["sd"]), (3, 2, 0.0))
+        sens = res["secondary"]["seed_sensitivity"]
+        self.assertEqual((sens["seeds"], sens["endpoints"]["C2"]["control"], sens["endpoints"]["C2"]["treatment"]),
+                         ([1, 2], ["N-VR_s1", "N-VR_s2"], ["N-CFSD_s1", "N-CFSD_s2"]))
+        self.assertAlmostEqual(sens["endpoints"]["C2"]["diff"], 0.5)
+        self.assertEqual([sens["endpoints"][e]["point_ge_practical_and_ci_lo_gt_0"] for e in ("C1", "C2")],
+                         [False, True])
+        self.assertIn("Seed-0 sensitivity", md)
+        self.assertEqual(res["parameters"]["decision_order"], ["ADVANCE", "STOP", "REVISE"])
+        self.assertEqual(res["secondary"]["cells"]["OFF"]["in"]["errors"]["format"],
+                         sum(r["surface"] == "in" for r in battery))   # cmd_eval's fake '{}' outputs are malformed
+
+    # ---- the decision rule
+    def test_decision_rule_constructed_cases(self):
+        vr = [_noop_wrong_on_ho()] * 3
+        odd, even = (lambda r: _pid(r) % 2 == 1), (lambda r: _pid(r) % 2 == 0)
+        cases = {
+            "ADVANCE": (vr, [_exact_all] * 3),                                   # C2 +0.50 on every parent
+            "REVISE": (vr, [_noop_wrong_on_ho(odd), vr[0], vr[0]]),               # C2 +1/12: significant, < +0.10
+            "STOP": (vr, vr),                                                     # identical arms: both CIs [0, 0]
+            "INCONCLUSIVE": ([_noop_wrong_on_ho(odd)] * 3, [_noop_wrong_on_ho(even)] * 3),   # C2 0 +- 0.5
+        }
+        for want, (a, b) in cases.items():
+            conf, prot, dec = self.run_decision(self.arms(a, b))
+            self.assertEqual(dec["decision"], want, {k: (v["diff"], v["lo"], v["hi"], v["p_holm"])
+                                                     for k, v in conf.items()})
+            if want == "REVISE":
+                self.assertAlmostEqual(conf["C2"]["diff"], 1 / 12)
+                self.assertTrue(dec["per_endpoint"]["C2"]["holm_p_lt_alpha"])
+
+        def f0_lost(r):    # posted twins of F strata outside the composite (F1, F4) become wrong: C1/C2 unchanged
+            return ("wrong" if r["group"] in ("F1_void", "F4_nearmiss") and r["variant"] == "twin_posted"
+                    and r["surface"] == "in" else "exact")
+
+        def fmt_up(r):     # malformed outputs on M1/M2 (outside the composite)
+            return "format" if r["group"] in ("M1_bal", "M2_amt") else "exact"
+
+        for bad, which in ((f0_lost, "F0_twin_posted"), (fmt_up, "format_error_rate")):
+            conf, prot, dec = self.run_decision(self.arms(vr, [bad] * 3))
+            self.assertFalse(prot[which]["ok"], which)
+            self.assertTrue(dec["per_endpoint"]["C2"]["meets_advance_endpoint"])
+            self.assertEqual(dec["decision"], "REVISE")                         # +0.10 reached, a guard failed
+            self.assertEqual(AN.decide(conf, prot["ok"], "literal")["decision"], "INCONCLUSIVE")   # pre-review text
+        # one seed pair without an effect: C2 is still >= +0.10 overall, but ADVANCE needs every seed pair > 0
+        conf, prot, dec = self.run_decision(self.arms(vr, [_exact_all, _exact_all, vr[0]]))
+        self.assertEqual(conf["C2"]["per_seed"]["s2"], 0.0)
+        self.assertTrue(dec["per_endpoint"]["C2"]["meets_advance_triple"])
+        self.assertFalse(dec["per_endpoint"]["C2"]["all_seeds_gt_0"])
+        self.assertEqual(dec["decision"], "REVISE")
+        self.assertEqual(AN.decide(conf, prot["ok"], per_seed_rule=False)["decision"], "ADVANCE")
+
+    def test_missing_cells_confirmatory_forces_inconclusive_reference_does_not(self):
+        d = self.copy_cells()
+        (d / "preds_sealed_N-VR_s2.jsonl.gz").unlink()
+        battery, arms, meta = AN.load_sealed(d, allow_missing=True, ne=NE)
+        self.assertEqual((meta["missing"], meta["missing_confirmatory"]), (["N-VR_s2"], ["N-VR_s2"]))
+        res, md = AN.analyze_sealed(battery, arms, meta, resamples=1000)
+        self.assertEqual(res["decision"], "INCONCLUSIVE")          # C2 is +0.50 on the remaining seeds
+        self.assertFalse(res["decision_trace"]["complete"])
+        self.assertTrue(res["decision_trace"]["per_endpoint"]["C2"]["meets_advance_endpoint"])
+        c2 = res["confirmatory"]["C2"]
+        self.assertEqual((c2["n_seeds_a"], c2["n_seeds_b"], sorted(c2["per_seed"])), (2, 2, ["s0", "s1"]))
+        self.assertIn("A confirmatory cell is missing", md)
+        d = self.copy_cells()
+        (d / "eval_sealed_T2.json").unlink()
+        with self.assertRaisesRegex(SystemExit, "missing"):
+            AN.load_sealed(d, ne=NE)
+        battery, arms, meta = AN.load_sealed(d, allow_missing=True, ne=NE)
+        self.assertEqual((meta["missing"], meta["missing_confirmatory"]), (["T2"], []))
+        res, md = AN.analyze_sealed(battery, arms, meta, resamples=1000)
+        self.assertEqual(res["decision"], "ADVANCE")
+        self.assertNotIn(f"{AN.TREATMENT} - T2", res["secondary"]["reference_contrasts"])
+        self.assertIn("Only reference cells are missing", md)
+
+    def test_load_refuses_unbound_adapters_and_other_commitments(self):
+        d = self.copy_cells()
+        p = d / "SEALED_OPEN.json"
+        o = json.loads(p.read_text(encoding="utf-8"))
+        del o["adapters_sha256"]["N-CFSD_s2"]
+        p.write_text(json.dumps(o, indent=1), encoding="utf-8", newline="\n")
+        with self.assertRaisesRegex(SystemExit, "no adapter sha for confirmatory cells"):
+            AN.load_sealed(d, ne=NE)
+        d = self.copy_cells()
+        p = d / "SEALED_COMMIT.json"
+        c = json.loads(p.read_text(encoding="utf-8"))
+        p.write_text(json.dumps(dict(c, arms_required=c["arms_required"][:4]), indent=1), encoding="utf-8",
+                     newline="\n")
+        with self.assertRaisesRegex(SystemExit, "arms_required"):
+            AN.load_sealed(d, ne=NE)
+
+    def test_decide_edges_precedence_and_holm(self):
+        def ep(diff, lo, hi, p, per_seed=None):
+            return {"diff": diff, "lo": lo, "hi": hi, "p_holm": p,
+                    "per_seed": {f"s{k}": diff for k in range(3)} if per_seed is None else per_seed}
+
+        def D(c1, c2, prot=True, **kw):
+            return AN.decide({"C1": c1, "C2": c2}, prot, **kw)
+
+        self.assertEqual((AN.DECISION_ORDER, AN.REVISE_RULE, AN.P_TIES, AN.ADVANCE_PER_SEED),
+                         (("ADVANCE", "STOP", "REVISE"), "not_advance", "both", True))
+        null = ep(0.0, -0.01, 0.01, 1.0)
+        self.assertEqual(D(ep(0.12, 0.05, 0.19, 0.001), ep(0.0, -0.04, 0.04, 0.9))["decision"], "ADVANCE")
+        # a significant gain of >= +0.10 whose ADVANCE guards fail is REVISE (the pre-review text left it INCONCLUSIVE)
+        c1_up_c2_down = (ep(0.12, 0.05, 0.19, 0.001), ep(-0.02, -0.06, 0.02, 0.3))   # other lower bound <= -0.05
+        self.assertEqual(D(*c1_up_c2_down)["decision"], "REVISE")
+        self.assertEqual(D(*c1_up_c2_down, revise_rule="literal")["decision"], "INCONCLUSIVE")
+        self.assertEqual(D(null, ep(0.15, 0.03, 0.27, 0.001), prot=False)["decision"], "REVISE")
+        # a significant drop on the other endpoint within the -0.05 margin does not block ADVANCE
+        self.assertEqual(D(ep(-0.03, -0.045, -0.015, 0.001), ep(0.15, 0.03, 0.27, 0.001))["decision"], "ADVANCE")
+        # float noise at the thresholds: 0.1 - 1e-12 reaches +0.10; p = 0.05 is not < 0.05; lo = 0 is not > 0
+        self.assertEqual(D(null, ep(0.1 - 1e-12, 0.02, 0.18, 0.0002))["decision"], "ADVANCE")
+        self.assertEqual(D(null, ep(0.15, 0.03, 0.27, 0.05))["decision"], "INCONCLUSIVE")
+        self.assertEqual(D(null, ep(0.15, 0.0, 0.27, 0.01))["decision"], "REVISE")
+        # the per-seed condition: one seed pair <= 0 blocks ADVANCE (REVISE); ignored when per_seed_rule=False
+        weak = ep(0.15, 0.03, 0.27, 0.001, {"s0": 0.3, "s1": 0.16, "s2": 0.0})
+        self.assertEqual(D(null, weak)["decision"], "REVISE")
+        self.assertEqual(D(null, weak, per_seed_rule=False)["decision"], "ADVANCE")
+        with self.assertRaises(ValueError):
+            AN.decide({"C1": null, "C2": {"diff": 0.15, "lo": 0.03, "hi": 0.27, "p_holm": 0.001}}, True)
+        # a missing confirmatory cell: INCONCLUSIVE whatever the estimates
+        for c in ((null, ep(0.15, 0.03, 0.27, 0.001)), (null, null), (null, ep(0.04, 0.01, 0.07, 0.001))):
+            self.assertEqual(D(*c, complete=False)["decision"], "INCONCLUSIVE")
+        # REVISE and STOP can both hold (small significant effect): STOP is tested first
+        dec = D(ep(0.02, 0.005, 0.035, 0.01), ep(0.01, -0.02, 0.04, 0.4))
+        self.assertEqual((dec["decision"], dec["also_satisfied"]), ("STOP", ["REVISE"]))
+        dec = D(ep(0.02, 0.005, 0.035, 0.01), ep(0.01, -0.02, 0.04, 0.4), order=("ADVANCE", "REVISE", "STOP"))
+        self.assertEqual((dec["decision"], dec["also_satisfied"]), ("REVISE", ["STOP"]))
+        with self.assertRaises(ValueError):
+            D(null, null, order=("ADVANCE", "STOP"))
+        self.assertEqual(D(null, ep(-0.08, -0.12, -0.04, 0.001))["decision"], "STOP")   # significant but negative
+        self.assertEqual(D(null, ep(0.04, -0.01, 0.09, 0.2))["decision"], "INCONCLUSIVE")
+        self.assertEqual(D(ep(-0.04, -0.07, -0.01, 0.001), ep(0.04, 0.01, 0.07, 0.001))["decision"], "REVISE")
+        # Holm: raw p 0.03 / 0.04 would ADVANCE; Holm-adjusted 0.06 / 0.06 does not
+        raw = {"C1": 0.03, "C2": 0.04}
+        adj = ST.holm(raw)
+        self.assertEqual(adj, {"C1": 0.06, "C2": 0.06})
+        self.assertEqual(ST.holm({"C1": 0.2, "C2": 0.01}), {"C1": 0.2, "C2": 0.02})
+        self.assertEqual(D(*(ep(0.12, 0.01, 0.23, raw[k]) for k in ("C1", "C2")))["decision"], "ADVANCE")
+        self.assertEqual(D(*(ep(0.12, 0.01, 0.23, adj[k]) for k in ("C1", "C2")))["decision"], "INCONCLUSIVE")
+
+    def test_confirmatory_applies_holm_and_matches_seed_parent_bootstrap(self):
+        arms = self.arms([_noop_wrong_on_ho()] * 3, [_noop_wrong_on_ho(lambda r: _pid(r) % 2 == 1)] * 3)
+        conf = AN.confirmatory(self.battery, arms, resamples=1000)
+        self.assertEqual({k: v["p_holm"] for k, v in conf.items()}, ST.holm({k: v["p"] for k, v in conf.items()}))
+        for k, s in AN.ENDPOINTS:
+            pa = [AN.parents(self.battery, arms[f"N-VR_s{i}"], AN.COMPOSITE, s) for i in range(3)]
+            pb = [AN.parents(self.battery, arms[f"N-CFSD_s{i}"], AN.COMPOSITE, s) for i in range(3)]
+            ref = ST.seed_parent_bootstrap(pa, pb, resamples=1000, seed=AN.BOOT_SEED_SEALED)
+            for f in ("mean_a", "mean_b", "diff", "lo", "hi", "n_parents"):
+                self.assertEqual(conf[k][f], ref[f], (k, f))
+            self.assertEqual(conf[k]["n_parents"], 7 * self.N_PARENTS)
+
+    def test_p_value_floor_and_ties(self):
+        p2 = ST.bootstrap_p_two_sided
+        self.assertEqual(p2([0.2] * 10000, floor=AN.P_FLOOR), 1e-4)       # all > 0: 2 * min(0, 1) = 0 -> floor
+        self.assertEqual(p2([-0.2] * 10000, floor=AN.P_FLOOR), 1e-4)      # two-sided
+        self.assertEqual(p2([0.2] * 1000), 1e-3)                           # default floor 1 / resamples
+        self.assertEqual(p2([-1.0] * 30 + [1.0] * 70), 0.6)
+        self.assertAlmostEqual(p2([-1.0] * 3 + [0.0] * 2 + [1.0] * 95), 0.10)           # zeros on the <= 0 side
+        self.assertAlmostEqual(p2([-1.0] * 3 + [0.0] * 2 + [1.0] * 95, ties="split"), 0.08)
+        self.assertEqual(p2([0.0] * 100, floor=1e-4), 1e-4)                # literal rule: identically 0 -> floor
+        self.assertEqual(p2([0.0] * 100, ties="split"), 1.0)
+        self.assertEqual(p2([1e-17] * 50 + [1.0] * 50), 1.0)               # float noise counts as 0
+        with self.assertRaises(ValueError):
+            p2([])
+        with self.assertRaises(ValueError):
+            p2([0.1] * 100, ties="mid")
+        # ties='both' (the analysis default): zeros count on both sides
+        self.assertEqual(AN.P_TIES, "both")
+        self.assertAlmostEqual(p2([-1.0] * 3 + [0.0] * 2 + [1.0] * 95, ties="both"), 0.10)
+        self.assertEqual(p2([0.0] * 100, floor=1e-4, ties="both"), 1.0)    # identical arms: p = 1, not the floor
+        self.assertEqual(p2([0.2] * 10000, floor=1e-4, ties="both"), 1e-4)
+        self.assertEqual(p2([-1.0] * 30 + [1.0] * 70, ties="both"), 0.6)   # no ties: same as 'low'
+        # the review case: every replicate <= 0, 6% exactly 0 (CI upper bound 0): 'low' calls it p = 1e-4
+        tied = [-0.002] * 9400 + [0.0] * 600
+        self.assertEqual(p2(tied, floor=1e-4), 1e-4)
+        self.assertAlmostEqual(p2(tied, floor=1e-4, ties="both"), 0.12)
+        # with 10,000 replicates, p('both') < 0.05 implies that the 95% percentile interval excludes 0
+        for k in (249, 250, 251):
+            for sign in (1.0, -1.0):
+                boot = [-sign * 0.01] * (k - 1) + [0.0] + [sign * 0.01 * (1 + i / 10000) for i in range(10000 - k)]
+                lo, hi = ST._interval(boot, 0.05)
+                p = p2(boot, floor=1e-4, ties="both")
+                self.assertEqual(p < 0.05, k <= 249, (k, sign, p))
+                if p < 0.05:
+                    self.assertTrue(lo > 0 if sign > 0 else hi < 0, (k, sign, lo, hi))
+        a = [{"p": [0, 1], "q": 1, "r": [0], "s": [1, 1]}, {"p": [1, 1], "q": 0, "r": [1], "s": [0, 1]}]
+        b = [{"p": [1, 1], "q": 1, "r": [1], "s": [1, 1]}] * 3
+        t = ST.seed_parent_bootstrap_test(a, b, resamples=500, seed=7, p_floor=1e-4)
+        ref = ST.seed_parent_bootstrap(a, b, resamples=500, seed=7)
+        self.assertEqual({k: t[k] for k in ref}, ref)
+        boot = ST._boot_means([0.25, 0.5, 0.5, 0.25], 500, 7)            # per-parent b - a for p, q, r, s
+        self.assertEqual(t["p"], p2(boot, 1e-4))
+        self.assertEqual((t["n_le0"], t["n_gt0"], t["n_ge0"], t["ties"]),
+                         (sum(x <= 0 for x in boot), sum(x > 0 for x in boot), sum(x >= 0 for x in boot), "low"))
+        t = ST.seed_parent_bootstrap_test(a, b, resamples=500, seed=7, p_floor=1e-4, ties="both")
+        self.assertEqual(t["p"], p2(boot, 1e-4, ties="both"))
 
 
 if __name__ == "__main__":
