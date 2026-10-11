@@ -1150,3 +1150,41 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
     - `macros.py` (as `.txt`, not importable from the bundle) e644f6b1….
     - **B5 design notes to adopt:** check that imagined states are consistent before binding macros (shared with the
       B4 penalty), use F-queries per success as the compute-matched unit, and pre-register both the R and S controls.
+- **D-72 Item 9 CPU-3 done: `bwmn/domain_planner.py` (7f440d0e…) and `tests/test_domain_planner.py` (16dbe3e2…).**
+  Built by implement → adversarial review (parity/pin; Logistics integration) → fix. An interrupted first attempt
+  left drafts, which were finished rather than discarded.
+  - **Design:**
+    - Domain-generic subclasses `LMForwardD` / `LMProposerD`, which set `dom` before the inherited cache loader runs.
+    - `ExactD` and `score_d`.
+    - The planner functions are re-exported unchanged.
+    - The import refuses (ImportError) unless `blocks_planner.py` is sha 18a5f22b…. The pinned file is unchanged
+      and never patched.
+  - **Tests** (28/28; 61/61 together with `test_logistics.py`; re-run independently):
+    - with `dom = blocks`, byte-identical prompts, parses, cache bytes and candidates vs `LMForwardBW`/`LMProposerBW`
+      on about 400 real cached keys;
+    - Logistics `plan_beam`/`plan_direct` with exact F and scripted proposers agree with the executor and VAL;
+    - stub-LM caching and refusal paths.
+  - **Review fixes:** 5 confirmed issues (1 medium: a malformed imagined state crashed a parse), all fixed with
+    regression tests.
+  - **Remaining for item 9:**
+    - CPU-4 harness check (40 instances at 4-7 packages, seed 20261405);
+    - CPU-5 `lg_*` scripts;
+    - the [VERIFY] items;
+    - the freeze with user confirmation.
+- **D-73 Full backups (user request, 2026-10-11).**
+  - **GitHub (records and code, no weights; D-51):** BWM on main at f96b62e, with the key records verified on the
+    remote (DECISIONS through D-71/X-07; all PREREGs; B3, H2, D-54, LB and 5c reports).
+    - RCWM is fully pushed at bb7850e. Its own adapters up to 50 MB are now in the repo, by RCWM's choice; its 7.13
+      GB of regenerable arrays are listed in `rcwm/EXCLUDED_LARGE_FILES.json`.
+    - RCX was asked to push its last live logs.
+  - **Full local archive:** `scripts/backup_bundle.py` →
+    `WorldModel/_backups/bwm_native_v1_20261011_1541.zip`.
+    - Contents: all of native_v1, including the 12 adapters (463 MB), training data, B3 data, the release package,
+      vendored bench files, and the session memory.
+    - 3,432 files, 627 MB, sha 8ded0d28…. Every member was re-verified against the sha256 manifest: 0 failures,
+      0 errors.
+  - **Off-machine:** at the user's choice, the archive, manifest and a restore README were copied to
+    `C:/Users/clclc/OneDrive/Rineya_backups/` (sha verified).
+    - **Caveat:** at copy time OneDrive.exe was not running and no account was registered, so the cloud upload
+      happens only once the user starts OneDrive and signs in.
+    - The base Titan-Sparse core is not in the archive; it lives in the vault.

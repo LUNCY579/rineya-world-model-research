@@ -193,6 +193,9 @@ def test_constructor_contracts():
     assert (p.K, p.max_new, p.prefix_ok, p.mode, p.temperature, p.top_p) == (4, 184, True, "actions", 1.0, 0.95)
     f = DP.LMForwardD(m, tok, dom=L)
     assert (f.adapter, f.fmt, f.max_new, f.max_batch_tokens, f.cache) == ("fwd", "delta", 40, 2000, None)
+    assert f.roundtrip and not DP.LMForwardD(m, tok, dom=B).roundtrip  # Blocksworld keeps B2's parse rule
+    with pytest.raises(TypeError, match="state_json"):  # the render check needs the domain's state codec
+        DP.LMForwardD(m, tok, dom=types.SimpleNamespace(forward_prompt_delta=len, parse_forward_delta=len))
 
 
 # ----------------------------------------------------------------------------- PARITY with dom = bwmn.blocks
@@ -235,11 +238,14 @@ def test_forward_parity_blocks_real_keys(bw_real_rows, tmp_path):
             text = '{"add":[],"del":["on zz yy"],"legal":true}'
         elif i % 11 == 4:
             text = text.replace('"legal":true', '"legal":"yes"').replace('"legal":false', '"legal":"no"')
+        elif i % 13 == 6:  # degenerate fact: B2's rule accepts it (state with ()); dom=B must keep that rule
+            text = '{"add":[""],"del":[],"legal":true}'
         answers[B.forward_prompt_delta(s, a)] = text
     handler = lambda prompt, seed: answers.get(prompt, "<missing>")
-    m_bw, m_d, tok = FakeLM({"fwd": handler}), FakeLM({"fwd": handler}), FakeTok()
-    f_bw = BP.LMForwardBW(m_bw, tok, "fwd", fmt="delta", cache=tmp_path / "bw.jsonl", max_batch_tokens=3000)
-    f_d = DP.LMForwardD(m_d, tok, "fwd", cache=tmp_path / "d.jsonl", max_batch_tokens=3000, dom=B)
+    ad = "fwd_delta"  # bw_select.py's F adapter name (f"fwd_{fmt}"), not the default
+    m_bw, m_d, tok = FakeLM({ad: handler}), FakeLM({ad: handler}), FakeTok()
+    f_bw = BP.LMForwardBW(m_bw, tok, ad, fmt="delta", cache=tmp_path / "bw.jsonl", max_batch_tokens=3000)
+    f_d = DP.LMForwardD(m_d, tok, ad, cache=tmp_path / "d.jsonl", max_batch_tokens=3000, dom=B)
     assert len(f_bw.memo) > 200 and f_d.memo == f_bw.memo
     rng = random.Random(5)
     keys = [_key(r) for r in rows]
@@ -249,8 +255,9 @@ def test_forward_parity_blocks_real_keys(bw_real_rows, tmp_path):
     out_d = f_d.predict(keys)
     assert out_d == out_bw
     assert m_d.log == m_bw.log and len(m_d.log) == 1
+    assert m_d.adapter_log == m_bw.adapter_log == [ad]
     kind, adapter, prompts, max_new, mbt = m_d.log[0]
-    assert (kind, adapter, max_new, mbt) == ("greedy", "fwd", 40, 3000)
+    assert (kind, adapter, max_new, mbt) == ("greedy", ad, 40, 3000)
     assert "<missing>" not in [answers.get(p, "<missing>") for p in prompts]
     assert (f_d.model_queries, f_d.model_tokens) == (f_bw.model_queries, f_bw.model_tokens)
     assert f_d.model_queries == len(prompts) == len({k for k in keys if k not in dict.fromkeys(_key(json.loads(x))
@@ -258,12 +265,13 @@ def test_forward_parity_blocks_real_keys(bw_real_rows, tmp_path):
     assert (tmp_path / "d.jsonl").read_bytes() == (tmp_path / "bw.jsonl").read_bytes()
     n_none = sum(o is None for o in out_d)
     assert 0 < n_none < len(out_d) // 2
+    assert any(o is not None and () in o[0] for o in out_d)  # the B2 rule, unchanged for dom=B
     # the real outputs are mostly correct: the sample is a meaningful parse workload
     ok = [o == B.step(*k) for k, o in zip(keys, out_d) if o is not None]
     assert sum(ok) / len(ok) > 0.9
     # a reload of either cache gives the same memo; the parse is the domain's
-    r_bw = BP.LMForwardBW(FakeLM({}), tok, "fwd", fmt="delta", cache=tmp_path / "bw.jsonl")
-    r_d = DP.LMForwardD(FakeLM({}), tok, "fwd", cache=tmp_path / "d.jsonl", dom=B)
+    r_bw = BP.LMForwardBW(FakeLM({}), tok, ad, fmt="delta", cache=tmp_path / "bw.jsonl")
+    r_d = DP.LMForwardD(FakeLM({}), tok, ad, cache=tmp_path / "d.jsonl", dom=B)
     assert r_d.memo == r_bw.memo == f_bw.memo
     assert r_d.predict(keys) == out_bw and r_d.model_queries == 0
 
@@ -320,9 +328,18 @@ def _bw_handler(mode):
 @pytest.mark.parametrize("mode,prefix_ok,max_new,K,eval_seed,min_parsed", [
     ("actions", False, None, 4, 0, 0.25), ("actions", True, 60, 4, 0, 0.25), ("actions", True, 184, 8, 7, 0.25),
     ("states", False, None, 3, 0, 0.25),
+    ("states", True, None, 3, 1, 0.25),  # prefix_ok is an actions-mode rule: state plans keep the full parse
     ("states", False, 90, 2, 3, 0.05)])  # 90-token cap: most state plans are cut and unparseable
 def test_proposer_parity_blocks_generated_items(mode, prefix_ok, max_new, K, eval_seed, min_parsed):
     _proposer_parity(_bw_items(), mode, prefix_ok, max_new, K, eval_seed, min_parsed)
+
+
+@pytest.mark.parametrize("mode,prefix_ok,max_new", [("actions", True, 184), ("states", True, None),
+                                                   ("states", False, None)])
+def test_proposer_parity_blocks_nondefault_sampling(mode, prefix_ok, max_new):
+    """Non-default temperature, top-p and adapter name reach the sampler exactly as LMProposerBW passes them."""
+    _proposer_parity(_bw_items(12, seed=13), mode, prefix_ok, max_new, 3, 5, 0.25, adapter="pa_lg",
+                     temperature=0.7, top_p=0.8)
 
 
 def test_proposer_parity_blocks_real_states(bw_real_rows):
@@ -343,22 +360,23 @@ def test_proposer_parity_blocks_real_states(bw_real_rows):
     _proposer_parity(items, "actions", False, None, 2, 11, 0.25)
 
 
-def _proposer_parity(items, mode, prefix_ok, max_new, K, eval_seed, min_parsed):
+def _proposer_parity(items, mode, prefix_ok, max_new, K, eval_seed, min_parsed, adapter="pa", temperature=1.0,
+                     top_p=0.95):
     """LMProposerD(dom=B) vs LMProposerBW on the same items and the same fake Pa: identical prompts, seeds, caps,
-    adapter switches, raw outputs and parsed candidates."""
+    sampling parameters, adapter switches, raw outputs and parsed candidates."""
     tok = FakeTok()
-    m_bw, m_d = FakeLM({"pa": _bw_handler(mode)}), FakeLM({"pa": _bw_handler(mode)})
-    p_bw = BP.LMProposerBW(m_bw, tok, "pa", mode, K=K, max_new=max_new, prefix_ok=prefix_ok, max_batch_tokens=2500)
-    p_d = DP.LMProposerD(m_d, tok, "pa", mode, K=K, max_new=max_new, prefix_ok=prefix_ok, max_batch_tokens=2500,
-                         dom=B)
+    m_bw, m_d = FakeLM({adapter: _bw_handler(mode)}), FakeLM({adapter: _bw_handler(mode)})
+    kw = dict(K=K, temperature=temperature, top_p=top_p, max_new=max_new, prefix_ok=prefix_ok, max_batch_tokens=2500)
+    p_bw = BP.LMProposerBW(m_bw, tok, adapter, mode, **kw)
+    p_d = DP.LMProposerD(m_d, tok, adapter, mode, dom=B, **kw)
     out_bw = p_bw.propose(items, eval_seed)
     out_d = p_d.propose(items, eval_seed)
     assert out_d == out_bw
-    assert m_d.log == m_bw.log and m_d.adapter_log == m_bw.adapter_log == ["pa"]
-    _, _, prompts, seeds, mx, temp, top_p, mbt = m_d.log[0]
+    assert m_d.log == m_bw.log and m_d.adapter_log == m_bw.adapter_log == [adapter]
+    _, ad, prompts, seeds, mx, temp, tp, mbt = m_d.log[0]
     assert prompts == [B.proposer_prompt(it["state"], it["goal"]) for it in items]
     assert seeds == [[None] + [BP._seed(eval_seed, it["id"], it["round"], j) for j in range(1, K)] for it in items]
-    assert (mx, temp, top_p, mbt) == (p_bw.max_new, 1.0, 0.95, 2500)
+    assert (ad, mx, temp, tp, mbt) == (adapter, p_bw.max_new, temperature, top_p, 2500)
     assert m_d.outputs == m_bw.outputs and len(m_d.outputs) == K * len(items)
     flat = [(it, c) for it, cands in zip(items, out_d) for c in cands]
     plans = [c["plan"] for _, c in flat]
@@ -366,11 +384,11 @@ def _proposer_parity(items, mode, prefix_ok, max_new, K, eval_seed, min_parsed):
     # each candidate is the domain parse of its own raw text, with the item's objs passed through
     for (it, c), text in zip(flat, m_d.outputs):
         full = B.parse_plan(text, it["objs"], mode)
-        if prefix_ok:
+        if prefix_ok and mode == "actions":  # LMProposerBW's rule: the prefix parse applies in actions mode only
             assert c["plan"] == (B.parse_plan_prefix(text, it["objs"]) or (None,))[0]
         else:
             assert c["plan"] == (full[0] if full else None) and c["claimed"] == (full[1] if full else None)
-    if prefix_ok:  # some truncated outputs are accepted as prefixes, others are not
+    if prefix_ok and mode == "actions":  # some truncated outputs are accepted as prefixes, others are not
         assert any(c["plan"] is not None and B.parse_plan(t, it["objs"], "actions") is None
                    for (it, c), t in zip(flat, m_d.outputs))
     if mode == "states":
@@ -621,6 +639,141 @@ def test_lmproposerd_stub_lm_logistics_truncation(lg_instances):
     out = DP.LMProposerD(FakeLM({"pa": lg_proposer_handler(rate=0.0)}), tok, "pa", K=2, max_new=704, dom=L).propose(
         [item], 0)[0]
     assert out[0]["plan"] == plan and out[0]["claimed"] is None
+
+
+# ----------------------------------------------------------------------------- unrenderable F outputs, missing objs
+
+# accepted by the shared B2 delta parser, but the next state holds the empty fact (): both renderers raise IndexError
+DEGENERATE = ('{"add":[""],"del":[],"legal":true}', '{"add":["   "],"del":[],"legal":false}',
+              '{"add":"at p0 l0-1","del":[],"legal":true}')
+
+
+def alias_slip(delta_text):
+    """F slip on an unload: 'in p l' written for 'at p l'. Rendered exactly like the true next state, but not goal_met
+    (the review's LG-DP-2 case); deltas that add no package 'at' fact are unchanged."""
+    return delta_text.replace('"add":["at p', '"add":["in p', 1)
+
+
+def test_lmforwardd_rejects_unrenderable_states(lg_instances, tmp_path):
+    """Logistics: an F output whose next state does not round-trip through state_json is unsupported (None), live
+    and on cache reload; correct outputs are unaffected; a non-renderable key state is a harness error."""
+    it = lg_instances[2]
+    s, goal, objs = it["init"], it["goal"], it["objs"]
+    plan = astar(s, goal)
+    states = [s]
+    for a in plan:
+        states.append(L.step(states[-1], a)[0])
+    t = next(i for i, a in enumerate(plan) if a[0].startswith("unload"))
+    st, un = states[t], plan[t]
+    true_ns = L.step(st, un)[0]
+    p, tr, loc = objs["obj"][0], objs["truck"][0], objs["location"][0]
+    acts = [a for a in L.ground_actions(objs, s) if not L.applicable(s, a)]
+    # each bad answer on its own key: (key, raw F text)
+    bad = [((s, acts[i]), text) for i, text in enumerate(DEGENERATE)]
+    bad += [((st, un), alias_slip(L.forward_target_delta(st, true_ns, True))),
+            ((s, acts[3]), '{"add":["at %s"],"del":[],"legal":false}' % p),  # 2-ary 'at': not rendered
+            ((s, acts[4]), '{"add":["location l9-9"],"del":[],"legal":false}'),  # a location in no city
+            ((s, acts[5]), '{"add":["at %s %s"],"del":[],"legal":false}' % (p, tr))]  # 'at' a truck: shown as 'in'
+    assert len({k for k, _ in bad}) == len(bad)
+    for (ks, ka), text in bad:  # all accepted by the raw (B2) delta parse
+        raw = L.parse_forward_delta(text, ks)
+        assert raw is not None and raw[0] != L.step(ks, ka)[0]
+        try:
+            assert L.state_from_json(L.state_json(raw[0])) != raw[0]
+        except IndexError:
+            assert () in raw[0]
+    for text in DEGENERATE:  # the crash the render check prevents
+        with pytest.raises(IndexError):
+            L.forward_prompt_delta(L.parse_forward_delta(text, s)[0], plan[0])
+        with pytest.raises(IndexError):
+            L.proposer_prompt(L.parse_forward_delta(text, s)[0], goal)
+    alias = L.parse_forward_delta(bad[3][1], st)[0]  # the alias: same prompts as the true state, goal fact missing
+    assert alias != true_ns and ("at",) + un[1:2] + un[3:] in true_ns - alias
+    assert L.forward_prompt_delta(alias, plan[0]) == L.forward_prompt_delta(true_ns, plan[0])
+    assert L.proposer_prompt(alias, goal) == L.proposer_prompt(true_ns, goal)
+    # legal, illegal and goal-reaching keys: exact answers still parse
+    good = [(s, plan[0]), (s, acts[6])] + [k for k in [(states[-2], plan[-1])] if k != (st, un)]
+    answers = {L.forward_prompt_delta(*k): x for k, x in bad}
+    exact = lg_forward_handler()
+    model, tok = FakeLM({"fwd": lambda pr, sd: answers.get(pr) or exact(pr, sd)}), FakeTok()
+    cache = tmp_path / "fc.jsonl"
+    fwd = DP.LMForwardD(model, tok, "fwd", cache=cache, dom=L)
+    keys = [k for k, _ in bad] + good
+    assert fwd.predict(keys) == [None] * len(bad) + [L.step(*k) for k in good]
+    assert fwd.model_queries == len(keys) == len(cache.read_text().splitlines())
+    # reload: the raw texts are re-parsed under the same rule (a degenerate line no longer replays a crash)
+    fwd2 = DP.LMForwardD(FakeLM({}), tok, "fwd", cache=cache, dom=L)
+    assert fwd2.memo == fwd.memo and fwd2.predict(keys) == fwd.predict(keys) and fwd2.model_queries == 0
+    # a key state the renderer cannot show exactly (e.g. an instance init with a location in no city) is refused
+    m3 = FakeLM({"fwd": exact})
+    f3 = DP.LMForwardD(m3, tok, "fwd", dom=L)
+    for ks in (s | {("location", "l9-9")}, s | {("in", p, loc)}, s | {()}):
+        with pytest.raises(ValueError, match="not renderable"):
+            f3.predict([(s, plan[0]), (ks, plan[0])])
+    assert m3.n_generations == f3.model_queries == 0 and not f3.memo
+
+
+def test_plan_beam_survives_unrenderable_f_outputs(lg_instances, tmp_path):
+    """End to end: a fake F that emits degenerate deltas and 'in'-for-'at' slips on a fixed subset of keys. The
+    beam completes (the unguarded B2 rule crashes on the same run), every accepted state renders exactly, planner
+    keys and F prompts correspond one to one, verified plans are valid, and the cached rerun is identical."""
+    exact = lg_forward_handler()
+
+    def slippy(prompt, seed):
+        text = exact(prompt, seed)
+        r = int(hashlib.sha256(prompt.encode()).hexdigest()[:8], 16) % 25
+        return (DEGENERATE[0], DEGENERATE[2])[r] if r < 2 else (alias_slip(text) if r < 7 else text)
+
+    tok = FakeTok()
+    kw = dict(eval_seed=0, width=4, max_expansions=24, max_depth=100, max_rollout=12)
+
+    def run(cache, roundtrip=True):
+        model = FakeLM({"fwd": slippy, "pa": lg_proposer_handler(rate=0.5)})
+        fwd = DP.LMForwardD(model, tok, "fwd", cache=cache, dom=L)
+        fwd.roundtrip = roundtrip
+        prop = DP.LMProposerD(model, tok, "pa", K=4, max_new=14 * 12 + 16, prefix_ok=True, dom=L)
+        return DP.plan_beam(lg_instances, prop, fwd, **kw), fwd
+
+    with pytest.raises(IndexError):  # without the render check (B2's rule) a degenerate state reaches a renderer
+        run(None, roundtrip=False)
+    eps, fwd = run(tmp_path / "fc.jsonl")
+    summ, rows = _check_scored(lg_instances, eps, val=False)  # verified => valid (asserted inside)
+    slips = {k: slippy(L.forward_prompt_delta(*k), None) for k in fwd.memo}
+    wrong = [k for k, x in slips.items() if x != exact(L.forward_prompt_delta(*k), None)]
+    assert any(slips[k] in DEGENERATE for k in wrong) and any(slips[k] not in DEGENERATE for k in wrong)  # both kinds
+    assert all(fwd.memo[k] is None for k in wrong)
+    assert all(v == L.step(*k) for k, v in fwd.memo.items() if k not in wrong)
+    assert all(fwd.renders(v[0]) for v in fwd.memo.values() if v is not None)
+    prompts = {L.forward_prompt_delta(*k) for k in fwd.memo}
+    assert len(prompts) == len(fwd.memo) == fwd.model_queries  # one F query per distinct prompt
+    assert summ["n"] == len(lg_instances) and summ["verified_rate"] > 0
+    eps2, fwd2 = run(tmp_path / "fc.jsonl")
+    assert eps2 == eps and fwd2.model_queries == 0
+
+
+def test_lmproposerd_requires_objs(lg_instances):
+    """Logistics items without objs fail loudly before any generation (the parsers would reject every candidate,
+    every instance ending dead_end); score_d has no silent size fallback; Blocksworld keeps the parent's path."""
+    noobjs = [{k: v for k, v in it.items() if k != "objs"} for it in lg_instances]
+    tok = FakeTok()
+    m = FakeLM({"pa": lg_proposer_handler(rate=0.0)})
+    prop = DP.LMProposerD(m, tok, "pa", K=4, max_new=184, prefix_ok=True, dom=L)
+    with pytest.raises(ValueError, match="objs missing"):
+        DP.plan_beam(noobjs, prop, DP.ExactD(L), width=4, max_expansions=24, max_depth=100, max_rollout=12)
+    item = {"id": "x", "objs": None, "goal": noobjs[0]["goal"], "state": noobjs[0]["init"], "round": "0.0"}
+    with pytest.raises(ValueError, match="objs missing"):
+        prop.propose([item], 0)
+    assert m.n_generations == 0 and m.log == [] and m.adapter_log == []
+    eps = DP.plan_direct(lg_instances, ScriptedProposer(K=1))
+    assert DP.score_d(lg_instances, eps, L)[0]["success"] == 1.0
+    with pytest.raises(ValueError, match="no 'objs'"):
+        DP.score_d(noobjs, eps, L)
+    # Blocksworld (parity): no objs check is added; both classes give the same all-unparseable candidates
+    bw = [dict(x, objs=None) for x in _bw_items(4)]
+    outs = []
+    for cls, extra in ((BP.LMProposerBW, {}), (DP.LMProposerD, {"dom": B})):
+        outs.append(cls(FakeLM({"pa": _bw_handler("actions")}), tok, "pa", K=3, **extra).propose(bw, 0))
+    assert outs[0] == outs[1] and all(c["plan"] is None for cands in outs[1] for c in cands)
 
 
 @NEEDS_VAL

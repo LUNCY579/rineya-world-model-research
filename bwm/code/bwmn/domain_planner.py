@@ -16,6 +16,16 @@ methods (lines 66-88 and 115-131) with the domain's prompt and parser functions;
 format and fsync, model_queries / model_tokens accounting, CRN seeds, candidate-0 greedy, adapter switching, the
 item 'objs' handed to the parser unchanged) is the parent's. With dom = bwmn.blocks they reproduce LMForwardBW
 (fmt="delta") and LMProposerBW string for string (tests/test_domain_planner.py).
+
+Two rules apply to every domain other than bwmn.blocks (Blocksworld keeps B2's behaviour exactly, for parity):
+  * F next states must be renderable keys. An F output is accepted only if its next state s' satisfies
+    dom.state_from_json(dom.state_json(s')) == s', i.e. s' is exactly the state the models are shown next; otherwise
+    the output is unsupported (None), like any unparseable output. Exact states always pass, so no correct output is
+    affected. Rejected: degenerate facts such as "" (the empty tuple, which crashes the renderer), and facts the
+    rendering hides or rewrites (e.g. 'in p0 l0-0', rendered as if p0 were at l0-0 but failing goal_met). Planner keys
+    and model prompts therefore correspond one to one. A key whose state is not renderable (an instance's init) is a
+    harness error: predict raises ValueError.
+  * Proposer items must carry 'objs' (the domain parsers need them): propose raises ValueError before generating.
 """
 from __future__ import annotations
 
@@ -82,23 +92,42 @@ class ExactD:
 
 class LMForwardD(BP.LMForwardBW):
     """LMForwardBW (delta format) with the domain's F prompt and parser. Goal-blind, memoised, optional JSONL cache
-    (format unchanged: {"s": sorted facts, "a": action, "text": raw output}); unparseable or refused output -> None.
-    max_new: F decode cap (default 40, as B2)."""
+    (format unchanged: {"s": sorted facts, "a": action, "text": raw output}, re-parsed on load); unparseable or refused
+    output -> None, and for domains other than bwmn.blocks also an output whose next state is not renderable (module
+    docstring). max_new: F decode cap (default 40, as B2)."""
 
     def __init__(self, model, tok, adapter="fwd", fmt="delta", cache=None, max_batch_tokens=2000, *, dom,
                  max_new=F_MAX_NEW):
         if fmt != "delta":
             raise ValueError("LMForwardD supports only the delta format")
-        _require(dom, ("forward_prompt_delta", "parse_forward_delta"), "LMForwardD")
+        self.roundtrip = dom is not B  # B2 parity: Blocksworld keeps blocks_planner's parse rule unchanged
+        _require(dom, ("forward_prompt_delta", "parse_forward_delta")
+                 + (("state_json", "state_from_json") if self.roundtrip else ()), "LMForwardD")
         self.dom = dom  # before super().__init__: its cache loader calls self._parse
         self.max_new = max_new
         super().__init__(model, tok, adapter=adapter, fmt=fmt, cache=cache, max_batch_tokens=max_batch_tokens)
 
+    def renders(self, s) -> bool:
+        """s is exactly the state the models are shown: dom.state_from_json(dom.state_json(s)) == s, no exception."""
+        try:
+            return self.dom.state_from_json(self.dom.state_json(s)) == s
+        except Exception:
+            return False
+
     def _parse(self, text, s):
-        return self.dom.parse_forward_delta(text, s)
+        r = self.dom.parse_forward_delta(text, s)
+        if r is None or not self.roundtrip:
+            return r
+        return r if self.renders(r[0]) else None
 
     def predict(self, keys):
         need = list(dict.fromkeys(k for k in keys if k not in self.memo))
+        if need and self.roundtrip:  # harness check (instance inits); F's own next states always pass
+            bad = [k for k in need if not self.renders(k[0])]
+            if bad:
+                raise ValueError(f"LMForwardD: {len(bad)} key state(s) not renderable by "
+                                 f"{getattr(self.dom, '__name__', self.dom)}.state_json (the models would be shown a "
+                                 f"different state), e.g. {sorted(bad[0][0])}")
         if need:
             self.model_queries += len(need)
             self.model.set_adapter(self.adapter)
@@ -120,7 +149,9 @@ class LMForwardD(BP.LMForwardBW):
 class LMProposerD(BP.LMProposerBW):
     """LMProposerBW with the domain's proposer prompt and plan parsers. max_new is the generation cap M (required for
     any domain other than bwmn.blocks, whose B2 defaults 120 / 700 would silently truncate longer plans).
-    prefix_ok: accept the leading complete actions of a truncated output (actions mode)."""
+    prefix_ok: accept the leading complete actions of a truncated output (actions mode). For domains other than
+    bwmn.blocks every item must carry 'objs' (else ValueError before any generation: the domain parsers would reject
+    every candidate silently)."""
 
     def __init__(self, model, tok, adapter, mode="actions", K=8, temperature=1.0, top_p=0.95, max_new=None,
                  prefix_ok=False, max_batch_tokens=2000, *, dom):
@@ -133,6 +164,11 @@ class LMProposerD(BP.LMProposerBW):
                          prefix_ok=prefix_ok, max_batch_tokens=max_batch_tokens)
 
     def propose(self, items, eval_seed):
+        if self.dom is not B:  # B2 parity: Blocksworld items are passed to the parser as the parent passes them
+            miss = [it.get("id") for it in items if it.get("objs") is None]
+            if miss:
+                raise ValueError(f"LMProposerD: item objs missing for {len(miss)} item(s), e.g. id {miss[0]!r} "
+                                 f"(needed by {getattr(self.dom, '__name__', self.dom)}.parse_plan)")
         prompts = [self.dom.proposer_prompt(it["state"], it["goal"]) for it in items]
         seeds = [[None if j == 0 else BP._seed(eval_seed, it["id"], it["round"], j) for j in range(self.K)]
                  for it in items]
@@ -155,12 +191,12 @@ class LMProposerD(BP.LMProposerBW):
 def _size_cols(it, dom) -> dict:
     """'n_blocks' is the size stratum bw_run_tests.merge groups on (line 45): the block count for an untyped object
     list, the package count for typed domains (objs = {type: names}, packages under 'obj'), which also get
-    'n_packages'."""
+    'n_packages'. Like BP.score, every instance must carry 'objs' (no fallback that could mask a loader bug)."""
     objs = it.get("objs")
-    if objs is None and callable(getattr(dom, "objs_of", None)):
-        objs = dom.objs_of(it["init"])
+    if objs is None:
+        raise ValueError(f"score_d: instance {it.get('id')!r} has no 'objs'")
     if isinstance(objs, dict):
-        n = len(objs.get("obj", ()))
+        n = len(objs["obj"])
         return {"n_blocks": n, "n_packages": n}
     return {"n_blocks": len(objs)}
 
