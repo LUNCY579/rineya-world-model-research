@@ -426,3 +426,24 @@ and the evidence path.
   - `confirm_post_sealed_chain.sh` waits for `SEALED CHAIN DONE`, then checks that all 8 `eval_sealed_*` files exist
     (otherwise it stops). It then runs `analyze_native.py --battery sealed` once (outputs are create-only) and, only if
     that exits 0, runs the frozen E11.
+- **CX D-33 RCX-E01N confirmation outcome: REVISE (2026-10-11 14:07; R-08). Applied as preregistered, with no
+  reinterpretation.**
+  - `analyze_native.py --battery sealed` ran once (create-only outputs, rc 0, 11 s):
+    - C1 `in`: +0.018 [+0.006, +0.030], Holm p 0.002.
+    - C2 `ho_tpl`: +0.090 [+0.069, +0.113], Holm p 0.0002.
+    - All per-seed diffs are > 0. The protected strata are within margin.
+    - ADVANCE failed only on the +0.10 point threshold.
+  - **Consequences fixed by PREREG_E01N:**
+    - No E33 retention request to RCWM and no CX Q-03 cross-scoring; both are conditional on ADVANCE.
+    - No retained or dense-model claim.
+    - The N-CFSD adapters stay local, unmerged component artifacts.
+  - **The held-out wording pool `ho_tpl` is spent for confirmatory use.** Per-wording results were seen on DEV (R-06)
+    and SEALED (R-08). The SEALED battery is likewise opened and used.
+  - **Next recipe: RCX-E01R.** The target is the specific residual failure: unseen restrictive *positive* phrasings
+    are read as "apply". The design must use:
+    - a new held-out wording pool, authored blind to the training pools and audited for near-duplicates;
+    - a new salt-committed SEALED battery;
+    - matched compute against N-CFSD as the control.
+
+    The first step is a descriptive diagnostic on the existing adapters before any new training. Details are in
+    NEXT_STEPS.

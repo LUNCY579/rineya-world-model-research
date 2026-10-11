@@ -400,3 +400,95 @@ the next target: more diverse positive phrasings, or a predicate trace (`cmp →
 - Tier B specialist with exact dynamics and GBFS. Not BWM's beam with LM F, and not a Rineya-core claim.
 - A single selected arm, and seed 1 for the paired tests (A3 inherits A0's seed 1).
 - Selection on VAL-B used only 30 instances.
+
+---
+
+## R-08 RCX-E01N SEALED confirmation (PREREG_E01N): counterfactual and paraphrase rule data beats rule-varied data on both co-primaries in every seed, but the held-out-wording gain (+0.090) misses the preregistered +0.10, so the decision is **REVISE** (tier: native-C component artifact; confirmatory, 3 seeds per arm), 2026-10-11
+
+**Evidence:**
+- `runs/RCX-E01N/ANALYSIS_SEALED.md` (sha `7e1c6023…`) and `ANALYSIS_SEALED.json` (sha `7b6a6fc4…`): one run at 14:07,
+  create-only, decision applied by code;
+- `runs/RCX-E01N/cells/eval_sealed_*.json` and `preds_sealed_*.jsonl.gz` (8 cells; commits `2dd1ad0`, `5b848c6`);
+- prereg `experiments/RCX-E01N/PREREG_E01N.md` (sha `975cca9a…`, frozen before any SEALED record existed; CX D-26);
+- custody: `SEALED_COMMIT.json` (salt commitment minted at 01:54) and `SEALED_OPEN.json` (opened at 08:40, after all
+  six adapters existed; committed in `fb27d1d` before the first SEALED eval; CX D-30).
+
+**Setup.**
+- **Battery.** SEALED: seed 88527345, sha `c87765ea…`. 2,240 records over 280 parents, surfaces `in` (training
+  wordings) and `ho_tpl` (held-out rule paraphrases). Training-overlap parents: 0.
+- **Arms.** N-VR (rule-varied) vs N-CFSD (counterfactual twins + nonce statuses + paraphrases), seeds 0–2 each. These
+  are LoRA adapters (BWM D-03 recipe, unmerged) on frozen FP32 Titan-Sparse, with matched rows, steps and budget.
+- **References.** OFF (frozen core) and T2 (RCWM's T2 adapter).
+- **Method.** Seed × parent paired cluster bootstrap, 10,000 resamples. Holm over C1 and C2.
+
+### Confirmatory: N-CFSD − N-VR
+
+| Endpoint | N-VR | N-CFSD | Diff [95% CI] | Holm p | Per seed (s0, s1, s2) |
+|---|---|---|---|---|---|
+| C1 `in` composite | 0.963 | 0.981 | **+0.018 [+0.006, +0.030]** | 0.002 | +0.015, +0.002, +0.036 |
+| C2 `ho_tpl` composite | 0.591 | 0.681 | **+0.090 [+0.069, +0.113]** | 0.0002 | +0.095, +0.121, +0.055 |
+
+**Decision trace.** ADVANCE needs a point estimate ≥ +0.10 on at least one endpoint. Neither reached it (C2 +0.090).
+Every other ADVANCE condition held for C2:
+- Holm p < 0.05 and CI lower bound > 0;
+- all three per-seed diffs > 0;
+- C1's CI lower bound > −0.05;
+- both protected strata within margin.
+
+STOP did not hold, so the outcome is **REVISE**. Seeds 1–2 alone (excluding the DEV-gated seed 0) give the same
+picture: C2 +0.088 [+0.066, +0.111].
+
+**Protected strata (within margin).**
+- F0 posted twins (exact, `in`): −0.007 [−0.025, +0.013].
+- Format-error rate: 0.001 → 0.000.
+
+**DEV → SEALED replication.** The DEV pilot (R-06, seed 0) gave +0.020 / +0.099. SEALED, on a fresh battery and three
+seeds, gives +0.018 / +0.090.
+
+### Against the frozen references (descriptive)
+
+| Arm | Composite `in` | Composite `ho_tpl` | No-op when required, `in` | V3 rule-polarity sensitivity `in` / `ho_tpl` | PREREG-3-style verdict, `in` |
+|---|---|---|---|---|---|
+| OFF | 0.336 | 0.319 | 4/280 | 0.00 / 0.00 | ignores the rule |
+| T2 | 0.367 | 0.364 | 0/280 | 0.00 / 0.00 | TRIGGER (widened to near-misses) |
+| N-VR (3 seeds) | 0.963 | 0.591 | 782/840 [0.91, 0.95] | 1.00 / 0.50–0.55 | partial (3/3 seeds) |
+| N-CFSD (3 seeds) | **0.981** | **0.681** | **817/840 [0.96, 0.98]** | 0.95–1.00 / **0.95–0.98** | **generalises to unseen statuses (RULE-like), 3/3 seeds** |
+
+N-CFSD − T2 is +0.614 [+0.588, +0.641] on `in` and +0.317 [+0.280, +0.354] on `ho_tpl`.
+
+### Held-out wordings (`ho_tpl`, pooled over seeds): decision accuracy
+
+| Wording family | No-op items, N-VR → N-CFSD | Apply items, N-VR → N-CFSD |
+|---|---|---|
+| Negative h0 (S−) | 228/252 → 243/252 | 177/192 → 171/192 |
+| Negative h1 (S−) "Every event takes effect except X events." | 44/255 → **247/255** | 192/195 → 188/195 |
+| AND compositions | 25/33 → **33/33** | 33/33 → 32/33 |
+| OR compositions | 27/87 → **73/87** | 84/87 → **66/87** |
+| **Positive (S+), h0 and h1** | 24/1,053 (0.02) → **146/1,053 (0.14)** | 1,149/1,173 → 1,120/1,173 |
+
+### Reading
+
+1. **Confirmed, within this task family.** Rule-varied LoRA training makes Titan-Sparse read a supplied rule, where
+   the frozen core and T2 ignore it (+0.63 composite on `in`). Counterfactual and paraphrase data improves on that on
+   both surfaces, in each of three seeds, on a sealed battery. On training wordings, N-CFSD is RULE-like on unseen
+   statuses in all three seeds. This is the PREREG-3 shortcut/trigger failure, removed inside the adapter (no external
+   module at inference).
+2. **Not confirmed at the preregistered size.** The held-out-wording gain is +0.090, short of +0.10. The threshold
+   is not reinterpreted.
+3. **The residual failure is specific.** Unseen phrasings of *restrictive positive* rules ("only X events take
+   effect") are still read as "apply": N-CFSD decides no-op on only 14% of the no-op items that need one. That error
+   direction (`applied_when_noop`) is 286–350 of each N-CFSD cell's `ho_tpl` errors, and leaves the F strata near 0.52–0.58
+   on `ho_tpl`. Negative and compositional held-out wordings are mostly solved.
+4. **Trade-off.** N-CFSD over-restricts some held-out OR wordings (apply items 84/87 → 66/87), and has slightly more
+   `false_copy` errors on `in` (15–30 vs 9–13 per cell).
+
+### Limits
+
+- **Synthetic task family.** This is not a claim of improved general model intelligence. Retention (RCWM D-36 / E33) was
+  not run, because the prereg makes it conditional on ADVANCE.
+- **Confounds.** The CFSD regime changes several factors at once: twins, nonce words, paraphrases and account count.
+  Supervised tokens are about 11% fewer than N-VR.
+- **Scope of inference.** Inference is conditional on these six adapters: three seeds per arm, with seed 0 DEV-gated.
+  The descriptive N-FX control was not run.
+- **The `ho_tpl` wordings are now spent.** Their per-wording results have been seen twice (DEV and SEALED). Any next
+  recipe must be judged on a new, blind-authored held-out wording pool and a new sealed battery.

@@ -30,11 +30,12 @@ results, with retention, may be described as native improvements.
 
 ## Priorities and hypotheses
 
-### P0-a RCM-001: rule-conditioned causal execution (started)
+### P0-a RCM-001: rule-conditioned causal execution (E01 native: SEALED REVISE, R-08; next E01R)
 
 | ID | Hypothesis (falsifiable) | Primary endpoint | Depends on |
 |---|---|---|---|
 | **RCX-E01** (bundle E01) | Training on *counterfactually varied, in-context rules* (opposite meanings, nonce statuses, minimal twins, surface diversity) yields RULE-level behavior on fresh vocabularies and inverted rules. Fixed-rule training, even surface-diversified, yields TRIGGER or fixed-rule behavior that cannot follow a new supplied rule. A predicate trace (`cmp → calc → after`) adds to this beyond a constant filler. | Parent-macro exact transition accuracy on the predeclared held-out semantic+surface composite | qualified interpreter; floor validation |
+| **RCX-E01R** (after R-08 REVISE) | Unseen restrictive *positive* rule phrasings are read as "apply" because positive restrictions are under-covered in training. Grammar-generated positive phrasings, polarity-paired paraphrase twins, or a predicate-first trace raise no-op accuracy on a fresh blind-authored wording pool beyond N-CFSD, at matched compute. | Composite exact on a new held-out wording pool (new SEALED battery); N-CFSD s0–s2 as control | R-08; blind wording pool P2/P3 |
 | RCX-E02 (bundle E02) | Computed predicates (thresholds, compositions, larger arithmetic ranges) extrapolate only when the trace exposes the comparison. | Exact accuracy on held-out thresholds and compositions | E01 instrument |
 | RCX-E03 (bundle E03) | Rule handling learned in the ledger transfers to unseen natural-language constraints and to the factory's `{x,y}` causal-AST domain. | Exact accuracy on the domain split | E01 positive |
 
