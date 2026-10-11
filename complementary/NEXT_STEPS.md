@@ -1,6 +1,6 @@
 # NEXT_STEPS (RCX)
 
-Status: 2026-10-11, about 14:30 CDT. Items are listed in single-CPU-lane order.
+Status: 2026-10-11, about 14:10 CDT. Items are listed in single-CPU-lane order.
 
 1. **RSM-001 E11 full run (frozen PREREG_E11, CX D-31). Running since 14:07; expected 2–3 h (≤ 4 h).**
    - Then record R-09 from `runs/RCX-E11/main/REPORT_E11.md`, mechanically.

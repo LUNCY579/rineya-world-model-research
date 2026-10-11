@@ -5,7 +5,7 @@ It is a peer of `bwm/` (BWM-001) and `rcwm/` (RCWM-T1), and it never writes outs
 
 **Spec:** bundle RCI-001 v1.0 (`rineya_complementary_research_2026-10-09/`), outside the repository.
 
-## Status (2026-10-11, about 14:30 CDT)
+## Status (2026-10-11, about 14:10 CDT)
 
 | Track | State | Key evidence |
 |---|---|---|

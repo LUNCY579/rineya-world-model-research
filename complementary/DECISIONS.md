@@ -447,7 +447,7 @@ and the evidence path.
 
     The first step is a descriptive diagnostic on the existing adapters before any new training. Details are in
     NEXT_STEPS.
-- **CX D-34 RCX-E01R wording pools fixed (2026-10-11 about 14:35). No model has seen them, and no outcome exists.**
+- **CX D-34 RCX-E01R wording pools fixed (2026-10-11 about 14:25). No model has seen them, and no outcome exists.**
   - **Authoring** (workflow wf_d006d143-69e):
     - 3 blind authors produced 143 unique templates: 6 cells (POS/NEG × EXPLICIT listed-first / EXPLICIT
       complement-first / IMPLICIT), 23–24 per cell.
