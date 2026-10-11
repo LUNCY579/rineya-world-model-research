@@ -72,6 +72,10 @@
 - **Primary.** Parent-macro exact transition accuracy on the composite {F2, F3, F5, V1, V2, V3, V5}. The surface is
   `in`, which is Titan's canonical frame with the rule sentence in canonical wording.
 - **Primary comparison.** N-CFSD − N-VR, by seed × parent paired cluster bootstrap with 10,000 resamples.
+- **Co-primary** (added 2026-10-10 after the N-VR DEV pilot, CX D-25, before any N-CFSD output existed): the same
+  contrast on surface `ho_tpl` (held-out rule paraphrases). It is Holm-corrected with the primary over a family of 2.
+  - Rationale: N-VR reaches 0.964 on `in` (ceiling) but 0.594 on `ho_tpl`.
+  - This is an instrument-headroom decision taken without N-CFSD data.
 - **Secondary (Holm family of 3):**
   - N-VR − N-FX;
   - N-CFSD − T2;

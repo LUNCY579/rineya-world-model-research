@@ -312,3 +312,14 @@ and the evidence path.
       instances (exact dynamics);
     - test generalization to option compositions (AB, BA, conditional) unseen in mining.
   - No RCX evaluation on b3fresh or mirror; only BWM's result files are read.
+- **CX D-25 N-VR seed 0 DEV result R-05 (about 20:45). Outcomes known: yes (DEV pilot).**
+  - **Result.**
+    - Canonical wording: rule reading is induced, with composite 0.964 vs OFF 0.325 and T2 0.400, and V3 sensitivity
+      1.00.
+    - Held-out paraphrases: wording-bound, with `ho_tpl` composite 0.594.
+  - **Consequence for PREREG_E01N.** The primary-endpoint choice between `in` and `ho_tpl` must be made on instrument
+    grounds before freezing, not by looking at N-CFSD. Proposed, and recorded now before N-CFSD exists: keep the
+    primary on `in` as drafted, and make the `ho_tpl` contrast N-CFSD − N-VR a co-primary under Holm. Both test the
+    same hypothesis (counterfactual/SD data improves rule reading), but `ho_tpl` is where N-VR shows headroom, and the
+    `in` contrast has a ceiling at 0.964.
+  - **Lane order:** E07b smoke (3 min); N-CFSD train (needs ≥ 12 GB RAM) and eval; E07b full; N-FX; SUPA.

@@ -224,3 +224,72 @@ GNN MAE grows with size (0.06 at n = 8, 0.63 at n = 12), but its rank correlatio
 - E08 full goals vs E07 mixed goals.
 - **Next refinements (E07b):** larger-n and full-goal training, a ranking loss, and hybrid tie-breaking with
   misplaced_blocks, tested on a fresh E08 set. Then BWM's beam with the frozen LM F, read-only and coordinated.
+
+---
+
+## R-05 Native E01 cell N-VR seed 0: rule-varied LoRA on Titan-Sparse reads supplied rules, but only in trained wordings (tier: native-C component artifact; DEV pilot, one seed), 2026-10-10
+
+**Evidence:**
+- `runs/RCX-E01N/cells/eval_N-VR_s0.json`, `preds_N-VR_s0.jsonl.gz`, `N-VR_s0/TRAIN_META.json` (adapter sha256
+  `2f376882…`; weights local, unmerged, never published);
+- `runs/RCX-E01N/ANALYSIS_DEV.md`.
+
+### Setup
+
+- **Student.** LoRA r16/α32 on frozen FP32 Titan-Sparse, exactly T2's D-03 recipe: 1,501 rows, 190 × 16 steps,
+  lr 1e-4 WSD, AdamW (0.9, 0.95). Recipe parity with the vendored trainer is verified.
+- **Training.** On CPU, 9,769 s.
+- **Data.** Rule-conditioned ledger, *varied* in-context rules. Canonical wording only (template t0) and real TRAIN
+  words only. 30% two-atom compositions. Balanced apply/no-op.
+- **Evaluation.** The same DEV battery as R-03 (seed 20261240; fresh DEV words; 13 strata × 40 parents; surfaces `in`
+  and `ho_tpl`), in Titan's frame. Greedy decoding.
+
+### Results vs R-03 arms (surface `in` = the canonical wording used in training)
+
+| | OFF | T2 s0 | **N-VR s0** |
+|---|---|---|---|
+| Primary composite (exact) | 0.325 | 0.400 | **0.964** |
+| Decision accuracy | 0.500 | 0.502 | **0.966** |
+| No-op when the supplied (varied) rule requires one | 1/280 | 1/280 | **254/280** [0.867, 0.936] |
+| V3 rule-polarity sensitivity / both twins exact | 0.00 / 0.00 | 0.00 / 0.00 | **1.00 / 0.975** |
+| F2 / F3 unseen real / nonce statuses under the posted rule (exact) | 0.35 / 0.36 | 0.39 / 0.40 | **1.00 / 1.00** |
+| F5 posted-like strings | 0.31 | 0.42 | 0.79 |
+| V5 rule overrides the `posted` prior | 0.24 | 0.40 | **0.99** |
+| V6 held-out compositions / V7 3-word sets (unseen size) | 0.29 / 0.33 | 0.34 / 0.42 | 0.68 / 0.93 |
+| M1 / M2 magnitudes (exact; decision) | 0.31 / 0.12 | 0.33 / 0.25 | 0.85 / 0.72 (0.97 / 0.91) |
+
+Paired parent-clustered bootstrap: N-VR − OFF = **+0.639 [+0.608, +0.671]** (`in`, 280 parents).
+
+### Held-out rule paraphrases (`ho_tpl`): composite 0.594, decision 0.597
+
+N-VR − OFF on `ho_tpl` = +0.286 [+0.251, +0.321]. Errors are 445 applied_when_noop, 15 false_copy and 31 arithmetic.
+
+| Held-out wording | Behaviour |
+|---|---|
+| Positive rule, "If the status is X, carry out the event; for any other status, do nothing." | no-op 0.03 |
+| Positive rule, "Balances change only for X events." | no-op 0.01 |
+| Negative rule, h0 | no-op 0.93 |
+| Negative rule, h1 "Every event takes effect except X events." | no-op 0.19 |
+| Compositions | no-op 0.29–0.32 |
+
+### Reading
+
+1. Rule-*varied* training creates genuine in-context rule execution where frozen Titan-Sparse and T2 have none:
+   - rule-polarity sensitivity rises from 0.00 to 1.00;
+   - the no-op is applied to unseen statuses and to rules that override the `posted` prior.
+
+   In the shared wording, it **generalises to unseen statuses** (F2/F3 1.00). It is partial on posted-like strings
+   (F5 0.79).
+2. **The capability is bound to the trained wording.** For rule phrasings it never saw, the model mostly reverts to
+   Titan's "apply everything" prior. This is a surface-form limit of the same family as PREREG-3/R16. It is the exact
+   motivation for the N-CFSD arm, which trains on paraphrases, nonce words and counterfactual twins.
+
+### Limits
+
+- **Scope.** DEV battery, a single seed, a single cell.
+- **Controls still missing:**
+  - the matched fixed-rule control (N-FX, same generator and budget);
+  - N-CFSD;
+  - E33 retention (no claim about retained general ability; RCWM will run D-36 on request).
+- **Not yet confirmed.** Confirmation requires the frozen PREREG_E01N on a SEALED battery, with 3 seeds.
+- **Artifact.** This is a component adapter on a frozen core, not a dense checkpoint.
