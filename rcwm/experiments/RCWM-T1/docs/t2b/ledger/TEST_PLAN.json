@@ -1,8 +1,8 @@
 {
  "part": "plan",
  "ok": true,
- "n_checks": 7,
- "n_pass": 7,
+ "n_checks": 10,
+ "n_pass": 10,
  "checks": [
   {
    "check": "both --plan paths exit 0 without importing torch",
@@ -12,12 +12,12 @@
   {
    "check": "dev screen: one 4.5 h turn at the planning and at the observed rate",
    "ok": true,
-   "detail": "(3.32, 2.53)"
+   "detail": "(3.38, 2.56)"
   },
   {
    "check": "each seed's whole pair (training, load, A0, E0, its evaluation) x 1.25 fits an empty turn",
    "ok": true,
-   "detail": "1.5"
+   "detail": "1.53"
   },
   {
    "check": "a 2.5 h cap splits the dev screen over several turns (the D-22 rule defers whole pairs)",
@@ -25,12 +25,27 @@
    "detail": "[['s0:T', 'A0', 'E0', 's0:E'], ['s1:T', 'A0', 's1:E', 's2:T', 's2:E']]"
   },
   {
-   "check": "PREREG-5: every GPU stage fits an empty turn even at its ceiling at the planning rate (4 turns), 2 turns at the observed rate",
+   "check": "PREREG-5: every simulated schedule (expected / ceiling sizes; observed, planning and a 2.5 generations/s rate) completes under the runner's own start rule and no turn exceeds 4.5 h",
    "ok": true,
-   "detail": "(7.95, 5.23, 10.65)"
+   "detail": "{'expected sizes, observed rates': (5.33, 3.19), 'expected sizes, planning rates': (8.13, 3.3), 'ceiling sizes, observed rates': (6.98, 3.94), 'ceiling sizes, planning rates': (10.83, 3.93), 'ceiling sizes, 2.5 generations/s (below the planning rate)': (12.03, 2.47)}"
   },
   {
-   "check": "the plan records the lease labels and the 1.25 x / 0.5 h stage rule",
+   "check": "PREREG-5: 2 turns at the observed rate (expected sizes), at most 5 at 2.5 generations/s",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the start rule bounds a planning stage by its CEILING generation count (104 new keys per instance) at the registered rate before any planning stage, and at the measured rate after one",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "--cap-h never raises the turn cap above 4.5 h (both runners)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the plan records the lease labels and the 1.25 x / 0.5 h stage rule with the ceiling bound",
    "ok": true,
    "detail": ""
   },
@@ -41,29 +56,128 @@
   }
  ],
  "code_sha256": {
-  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
-  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
-  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
-  "scripts/t2bl_run.py": "05cf9acf509a90bab24fece12fc7f11b5ece72b5009619c78227a3d01d9e588a",
-  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
-  "scripts/t2bl_confirm_bank.py": "9a291f1f5d9d623c904ca25efb153e4b9d74b9e1955d23abf1248afa524036d4",
-  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60",
-  "scripts/t2bl_confirm_analysis.py": "ba9e6fa344f6aec7ca2ec33314f98aa083b19cd38b423cf7bef483d48f5f3b06",
-  "scripts/t2bl_test.py": "bd91470a2b0f352a4166246089d541895b9793c7ff5f16b97e66df64a05ca6c8"
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
+  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
+  "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09",
+  "scripts/t2bl_test.py": "b58b21fbb9b2578ccd67e72d784823650da37fdd11ba778da8caf0d1d560d29f"
  },
- "draft_sha256": "66c7e5b7bfd3c982be1a676b5438d6cc40f495c1dfd677910267f2108afd69b0",
- "hook_draft_sha256": "0bda6db3a83867a114ea24084ca9837deabe5c36d8a714bafe4992864cfa81d9",
- "hook_draft_t2bl_sha256": "746f7bd6a719b3f33e8cb0b932c3ea18c1bb8f5c9300df3c80cec9f5597ae6ae",
- "peak_mb": 39.6,
- "recorded_local": "2026-10-10 15:17:57 -0500",
+ "draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b",
+ "hook_draft_sha256": "c546ccfa4142bfc05eb961a3868030022edcee6263acd11fc96d6264f2eb484e",
+ "hook_draft_t2bl_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
+ "peak_mb": 41.3,
+ "recorded_local": "2026-10-10 20:41:28 -0500",
  "dev_gpu_h": {
-  "planning": 3.32,
-  "observed": 2.53
+  "planning": 3.38,
+  "observed": 2.56
  },
- "p5_gpu_h": {
-  "gpu_h_planning": 7.95,
-  "gpu_h_observed": 5.23,
-  "gpu_h_ceiling_observed": 6.88,
-  "gpu_h_ceiling_planning": 10.65
+ "p5_schedules": {
+  "expected sizes, observed rates": {
+   "gpu_h": 5.33,
+   "max_turn_h": 3.19,
+   "turns": [
+    [
+     "A0",
+     "M1",
+     "P1",
+     "P2"
+    ],
+    [
+     "A0 re-check",
+     "P3",
+     "P4"
+    ]
+   ]
+  },
+  "expected sizes, planning rates": {
+   "gpu_h": 8.13,
+   "max_turn_h": 3.3,
+   "turns": [
+    [
+     "A0",
+     "M1",
+     "P1"
+    ],
+    [
+     "A0 re-check",
+     "P2",
+     "P3"
+    ],
+    [
+     "A0 re-check",
+     "P4"
+    ]
+   ]
+  },
+  "ceiling sizes, observed rates": {
+   "gpu_h": 6.98,
+   "max_turn_h": 3.94,
+   "turns": [
+    [
+     "A0",
+     "M1",
+     "P1",
+     "P2"
+    ],
+    [
+     "A0 re-check",
+     "P3",
+     "P4"
+    ]
+   ]
+  },
+  "ceiling sizes, planning rates": {
+   "gpu_h": 10.83,
+   "max_turn_h": 3.93,
+   "turns": [
+    [
+     "A0",
+     "M1",
+     "P1"
+    ],
+    [
+     "A0 re-check",
+     "P2"
+    ],
+    [
+     "A0 re-check",
+     "P3"
+    ],
+    [
+     "A0 re-check",
+     "P4"
+    ]
+   ]
+  },
+  "ceiling sizes, 2.5 generations/s (below the planning rate)": {
+   "gpu_h": 12.03,
+   "max_turn_h": 2.47,
+   "turns": [
+    [
+     "A0",
+     "M1"
+    ],
+    [
+     "A0 re-check",
+     "P1"
+    ],
+    [
+     "A0 re-check",
+     "P2"
+    ],
+    [
+     "A0 re-check",
+     "P3"
+    ],
+    [
+     "A0 re-check",
+     "P4"
+    ]
+   ]
+  }
  }
 }

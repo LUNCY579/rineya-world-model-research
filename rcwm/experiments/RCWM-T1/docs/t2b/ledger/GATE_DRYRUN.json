@@ -1,6 +1,6 @@
 {
  "ok": true,
- "n_cases": 15,
+ "n_cases": 22,
  "cases": [
   {
    "case": "all seeds good -> PROCEED",
@@ -9,16 +9,16 @@
    "patterns": [],
    "ok": true,
    "headline": "DEV GATE: PROCEED",
-   "sentence": "In all three T2b-ledger seeds, on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) the adapter left held-out non-posted statuses unchanged on 0.95 of rows (each >= 0.80; T2 s0 0.03, OFF 0.30), copied the posted twins on 0.00 (each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 0.01; each >="
+   "sentence": "In all three T2b-ledger seeds the adapter left held-out non-posted statuses unchanged on 0.95 of rows on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) and on 0.95 on the canonical surface (each >= 0.80, every word kind >= 0.60; T2 s0 0.03 and 0.05, OFF 0.30), within 0.10 of its own canonical no-op accuracy; it applied the posted twins on the held-out surface correctly on 0.95 (each >= 0.80; copied 0.00, each <= 0.10), and its in-distribution accur"
   },
   {
-   "case": "HS_words exactly 0.80 in every seed -> PROCEED (boundary)",
+   "case": "HS_words and H_words exactly 0.80 in every seed, ID_void 0.90 -> PROCEED (boundaries of G1, G1b, G4)",
    "want": "PROCEED",
    "got": "PROCEED",
    "patterns": [],
    "ok": true,
    "headline": "DEV GATE: PROCEED",
-   "sentence": "In all three T2b-ledger seeds, on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) the adapter left held-out non-posted statuses unchanged on 0.80 of rows (each >= 0.80; T2 s0 0.03, OFF 0.30), copied the posted twins on 0.00 (each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 0.01; each >="
+   "sentence": "In all three T2b-ledger seeds the adapter left held-out non-posted statuses unchanged on 0.80 of rows on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) and on 0.80 on the canonical surface (each >= 0.80, every word kind >= 0.60; T2 s0 0.03 and 0.05, OFF 0.30), within 0.10 of its own canonical no-op accuracy; it applied the posted twins on the held-out surface correctly on 0.95 (each >= 0.80; copied 0.00, each <= 0.10), and its in-distribution accur"
   },
   {
    "case": "HS_words 0.79 in s1 -> PARTIAL heldout_below_bar + seed_disagreement",
@@ -26,11 +26,59 @@
    "got": "PARTIAL",
    "patterns": [
     "heldout_below_bar",
+    "not_aligned_with_own_canonical",
     "seed_disagreement"
    ],
    "ok": true,
    "headline": "DEV GATE: STOP (PARTIAL)",
-   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words on the combined held-out surface below 0.80 (s0 0.95, s1 0.79, s2 0.95); the seeds disagree on G1. The per-stratum, per-variant table follows."
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words below 0.80 (combined surface s0 0.95, s1 0.79, s2 0.95; canonical surface s0 0.95, s1 0.95, s2 0.95); held-out words more than 0.10 below the seed's own ID_void accuracy (ID_void s0 0.99, s1 0.99, s2 0.99); the seeds disagree. The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "H_words 0.70 in every seed and kind (a surface-conditioned trigger passes HS_words only) -> PARTIAL",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "heldout_below_bar",
+    "not_aligned_with_own_canonical"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words below 0.80 (combined surface s0 0.95, s1 0.95, s2 0.95; canonical surface s0 0.70, s1 0.70, s2 0.70); held-out words more than 0.10 below the seed's own ID_void accuracy (ID_void s0 0.99, s1 0.99, s2 0.99). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "one word kind at 0.55 on HS_words (posted look-alikes), the others 1.00 -> PARTIAL word_kind_below_floor",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "word_kind_below_floor"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: a word kind below 0.60 (posted_like (HS_words)). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "H_words at exactly 0.60 in every kind passes the floor but not the bar -> PARTIAL",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "heldout_below_bar",
+    "not_aligned_with_own_canonical"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words below 0.80 (combined surface s0 0.95, s1 0.95, s2 0.95; canonical surface s0 0.60, s1 0.60, s2 0.60); held-out words more than 0.10 below the seed's own ID_void accuracy (ID_void s0 0.99, s1 0.99, s2 0.99). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "a string cue that fails one kind wholesale (contains 'posted' -> apply: 0.80 overall) -> PARTIAL",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "word_kind_below_floor",
+    "not_aligned_with_own_canonical"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: a word kind below 0.60 (posted_like (HS_words), posted_like (H_words)); held-out words more than 0.10 below the seed's own ID_void accuracy (ID_void s0 0.99, s1 0.99, s2 0.99). The per-stratum, per-variant table follows."
   },
   {
    "case": "ID 0.05 below T2 s0 exactly -> PROCEED (boundary)",
@@ -39,67 +87,106 @@
    "patterns": [],
    "ok": true,
    "headline": "DEV GATE: PROCEED",
-   "sentence": "In all three T2b-ledger seeds, on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) the adapter left held-out non-posted statuses unchanged on 0.95 of rows (each >= 0.80; T2 s0 0.03, OFF 0.30), copied the posted twins on 0.00 (each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 -0.05, s1 -0.05, s2 -0.05; each"
+   "sentence": "In all three T2b-ledger seeds the adapter left held-out non-posted statuses unchanged on 0.95 of rows on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) and on 0.95 on the canonical surface (each >= 0.80, every word kind >= 0.60; T2 s0 0.03 and 0.05, OFF 0.30), within 0.10 of its own canonical no-op accuracy; it applied the posted twins on the held-out surface correctly on 0.95 (each >= 0.80; copied 0.00, each <= 0.10), and its in-distribution accur"
   },
   {
    "case": "ID 0.06 below T2 s0 in s2 -> PARTIAL in_distribution_cost",
    "want": "PARTIAL",
    "got": "PARTIAL",
    "patterns": [
-    "in_distribution_cost"
+    "in_distribution_cost",
+    "seed_disagreement"
    ],
    "ok": true,
    "headline": "DEV GATE: STOP (PARTIAL)",
-   "sentence": "Neither PROCEED nor TRIGGER WIDENED: in-distribution accuracy more than 0.05 below T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 -0.06). The per-stratum, per-variant table follows."
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: in-distribution accuracy more than 0.05 below T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 -0.06); the seeds disagree. The per-stratum, per-variant table follows."
   },
   {
-   "case": "held-out posted twins copied 0.10 -> PROCEED (boundary)",
+   "case": "held-out posted twins 0.80 correct and copied 0.10 -> PROCEED (boundary)",
    "want": "PROCEED",
    "got": "PROCEED",
    "patterns": [],
    "ok": true,
    "headline": "DEV GATE: PROCEED",
-   "sentence": "In all three T2b-ledger seeds, on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) the adapter left held-out non-posted statuses unchanged on 0.95 of rows (each >= 0.80; T2 s0 0.03, OFF 0.30), copied the posted twins on 0.10 (each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 0.01; each >="
+   "sentence": "In all three T2b-ledger seeds the adapter left held-out non-posted statuses unchanged on 0.95 of rows on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) and on 0.95 on the canonical surface (each >= 0.80, every word kind >= 0.60; T2 s0 0.03 and 0.05, OFF 0.30), within 0.10 of its own canonical no-op accuracy; it applied the posted twins on the held-out surface correctly on 0.80 (each >= 0.80; copied 0.10, each <= 0.10), and its in-distribution accur"
   },
   {
-   "case": "held-out posted twins copied 0.12 in s0 -> PARTIAL copy_on_heldout_surface",
+   "case": "held-out posted twins copied 0.12 in s0 -> PARTIAL heldout_posted_twins",
    "want": "PARTIAL",
    "got": "PARTIAL",
    "patterns": [
-    "copy_on_heldout_surface"
+    "heldout_posted_twins",
+    "seed_disagreement"
    ],
    "ok": true,
    "headline": "DEV GATE: STOP (PARTIAL)",
-   "sentence": "Neither PROCEED nor TRIGGER WIDENED: posted twins on the held-out surface copied above 0.10 (s0 0.12, s1 0.00, s2 0.00). The per-stratum, per-variant table follows."
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: the posted twins on the held-out surface below 0.80 or copied above 0.10 (accuracy s0 0.85, s1 0.95, s2 0.95; copied s0 0.12, s1 0.00, s2 0.00); the seeds disagree. The per-stratum, per-variant table follows."
   },
   {
-   "case": "trained words learned, held-out words base-like -> TRIGGER WIDENED",
+   "case": "held-out posted twins 0.75 correct (wrong values, no copying) -> PARTIAL heldout_posted_twins",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "heldout_posted_twins"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: the posted twins on the held-out surface below 0.80 or copied above 0.10 (accuracy s0 0.75, s1 0.75, s2 0.75; copied s0 0.00, s1 0.00, s2 0.00). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "held-out words 0.82 but ID_void 0.99 (more than 0.10 below own canonical) -> PARTIAL not_aligned",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "not_aligned_with_own_canonical"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words more than 0.10 below the seed's own ID_void accuracy (ID_void s0 0.99, s1 0.99, s2 0.99). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "trained words learned, held-out words base-like, errors applied as posted -> TRIGGER WIDENED",
    "want": "TRIGGER_WIDENED",
    "got": "TRIGGER_WIDENED",
    "patterns": [],
    "ok": true,
    "headline": "DEV GATE: STOP (TRIGGER WIDENED)",
-   "sentence": "In all three seeds the adapter treated the TRAINED non-posted words as no-ops (0.95, each >= 0.80) but HELD-OUT words on the combined held-out surface only on 0.10 of rows (each <= 0.30; T2 s0 0.03): the surface augmentation widened the trigger set; it did not teach the stated rule."
+   "sentence": "In all three seeds the adapter treated the TRAINED non-posted words as no-ops (0.95, each >= 0.80) but HELD-OUT words on the canonical surface only on 0.12 of rows (each <= 0.30; T2 s0 0.05), mostly applying them as if posted: the surface augmentation widened the trigger set; it did not teach the stated rule."
   },
   {
-   "case": "held-out words exactly 0.30 -> TRIGGER WIDENED (boundary)",
+   "case": "held-out canonical-surface words exactly 0.30 -> TRIGGER WIDENED (boundary)",
    "want": "TRIGGER_WIDENED",
    "got": "TRIGGER_WIDENED",
    "patterns": [],
    "ok": true,
    "headline": "DEV GATE: STOP (TRIGGER WIDENED)",
-   "sentence": "In all three seeds the adapter treated the TRAINED non-posted words as no-ops (0.95, each >= 0.80) but HELD-OUT words on the combined held-out surface only on 0.30 of rows (each <= 0.30; T2 s0 0.03): the surface augmentation widened the trigger set; it did not teach the stated rule."
+   "sentence": "In all three seeds the adapter treated the TRAINED non-posted words as no-ops (0.95, each >= 0.80) but HELD-OUT words on the canonical surface only on 0.30 of rows (each <= 0.30; T2 s0 0.05), mostly applying them as if posted: the surface augmentation widened the trigger set; it did not teach the stated rule."
   },
   {
-   "case": "held-out words 0.31 in one seed -> PARTIAL (not trigger)",
+   "case": "held-out canonical-surface words 0.35 in one seed -> PARTIAL (not trigger)",
    "want": "PARTIAL",
    "got": "PARTIAL",
    "patterns": [
-    "heldout_below_bar"
+    "heldout_below_bar",
+    "word_kind_below_floor",
+    "not_aligned_with_own_canonical"
    ],
    "ok": true,
    "headline": "DEV GATE: STOP (PARTIAL)",
-   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words on the combined held-out surface below 0.80 (s0 0.31, s1 0.20, s2 0.20). The per-stratum, per-variant table follows."
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words below 0.80 (combined surface s0 0.20, s1 0.20, s2 0.20; canonical surface s0 0.35, s1 0.20, s2 0.20); a word kind below 0.60 (neutral (HS_words), neutral (H_words), nonce (HS_words), nonce (H_words), not_applied (HS_words), not_applied (H_words), posted_like (HS_words), posted_like (H_words), void_variant (HS_words), void_variant (H_words)); held-out words more than 0.10 below the seed's own ID_void accuracy (ID_void s0 0.99, s1 0.99, s2 0.99)."
+  },
+  {
+   "case": "held-out words low but the errors are other changes, not applied as posted -> PARTIAL (not trigger)",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "heldout_below_bar",
+    "word_kind_below_floor",
+    "not_aligned_with_own_canonical"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words below 0.80 (combined surface s0 0.10, s1 0.10, s2 0.10; canonical surface s0 0.10, s1 0.10, s2 0.10); a word kind below 0.60 (neutral (HS_words), neutral (H_words), nonce (HS_words), nonce (H_words), not_applied (HS_words), not_applied (H_words), posted_like (HS_words), posted_like (H_words), void_variant (HS_words), void_variant (H_words)); held-out words more than 0.10 below the seed's own ID_void accuracy (ID_void s0 0.99, s1 0.99, s2 0.99)."
   },
   {
    "case": "trained words below bar and held-out low -> PARTIAL trained_words_below_bar",
@@ -107,11 +194,13 @@
    "got": "PARTIAL",
    "patterns": [
     "heldout_below_bar",
+    "word_kind_below_floor",
+    "not_aligned_with_own_canonical",
     "trained_words_below_bar"
    ],
    "ok": true,
    "headline": "DEV GATE: STOP (PARTIAL)",
-   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words on the combined held-out surface below 0.80 (s0 0.10, s1 0.10, s2 0.10); even the trained non-posted words below 0.80 (s0 0.60, s1 0.60, s2 0.60). The per-stratum, per-variant table follows."
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words below 0.80 (combined surface s0 0.10, s1 0.10, s2 0.10; canonical surface s0 0.10, s1 0.10, s2 0.10); a word kind below 0.60 (neutral (HS_words), neutral (H_words), nonce (HS_words), nonce (H_words), not_applied (HS_words), not_applied (H_words), posted_like (HS_words), posted_like (H_words), void_variant (HS_words), void_variant (H_words)); held-out words more than 0.10 below the seed's own ID_void accuracy (ID_void s0 0.99, s1 0.99, s2 0.99);"
   },
   {
    "case": "everything fails -> PARTIAL with every pattern but seed disagreement",
@@ -119,13 +208,15 @@
    "got": "PARTIAL",
    "patterns": [
     "heldout_below_bar",
+    "word_kind_below_floor",
     "in_distribution_cost",
-    "copy_on_heldout_surface",
+    "heldout_posted_twins",
+    "not_aligned_with_own_canonical",
     "trained_words_below_bar"
    ],
    "ok": true,
    "headline": "DEV GATE: STOP (PARTIAL)",
-   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words on the combined held-out surface below 0.80 (s0 0.50, s1 0.50, s2 0.50); in-distribution accuracy more than 0.05 below T2 s0's (ON - T2 s0: s0 -0.14, s1 -0.14, s2 -0.14); posted twins on the held-out surface copied above 0.10 (s0 0.30, s1 0.30, s2 0.30); even the trained non-posted words below 0.80 (s0 0.50, s1 0.50, s2 0.50). The per-stratum, pe"
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words below 0.80 (combined surface s0 0.46, s1 0.46, s2 0.46; canonical surface s0 0.50, s1 0.50, s2 0.50); a word kind below 0.60 (neutral (HS_words), neutral (H_words), nonce (HS_words), nonce (H_words), not_applied (HS_words), not_applied (H_words), posted_like (HS_words), posted_like (H_words), void_variant (HS_words)); in-distribution accuracy more than 0.05 below T2 s0's (ON - T2 s0: s0 -0.14, s1 -0.14, s2 -0.14); the posted twins on the held-o"
   },
   {
    "case": "failed anchor -> NO VERDICT",
@@ -137,32 +228,34 @@
    "sentence": "No gate verdict: an evaluation turn has no passing anchor."
   },
   {
-   "case": "incomplete run -> NO VERDICT",
+   "case": "incomplete or stopped run -> NO VERDICT",
    "want": "NO_VERDICT_INSTRUMENT",
    "got": "NO_VERDICT_INSTRUMENT",
    "patterns": [],
    "ok": true,
    "headline": "DEV GATE: NO VERDICT (instrument)",
-   "sentence": "No gate verdict: DONE.json missing."
+   "sentence": "No gate verdict: the dev run stopped before completing (x)."
   },
   {
-   "case": "a copier on the held-out surface -> PARTIAL copy_on_heldout_surface",
+   "case": "a copier on the held-out surface -> PARTIAL heldout_posted_twins",
    "want": "PARTIAL",
    "got": "PARTIAL",
    "patterns": [
-    "copy_on_heldout_surface"
+    "heldout_posted_twins"
    ],
    "ok": true,
    "headline": "DEV GATE: STOP (PARTIAL)",
-   "sentence": "Neither PROCEED nor TRIGGER WIDENED: posted twins on the held-out surface copied above 0.10 (s0 1.00, s1 1.00, s2 1.00). The per-stratum, per-variant table follows."
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: the posted twins on the held-out surface below 0.80 or copied above 0.10 (accuracy s0 0.00, s1 0.00, s2 0.00; copied s0 1.00, s1 1.00, s2 1.00). The per-stratum, per-variant table follows."
   }
  ],
  "patterns_covered": [
-  "copy_on_heldout_surface",
   "heldout_below_bar",
+  "heldout_posted_twins",
   "in_distribution_cost",
+  "not_aligned_with_own_canonical",
   "seed_disagreement",
-  "trained_words_below_bar"
+  "trained_words_below_bar",
+  "word_kind_below_floor"
  ],
  "verdicts_covered": [
   "NO_VERDICT_INSTRUMENT",
@@ -171,8 +264,8 @@
   "TRIGGER_WIDENED"
  ],
  "code_sha256": {
-  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
-  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
   "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
   "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
  }

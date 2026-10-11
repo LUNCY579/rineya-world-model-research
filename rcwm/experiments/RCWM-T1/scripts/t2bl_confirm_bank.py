@@ -4,9 +4,10 @@ freeze, so nobody can compute either set before the freeze). Torch-free and mode
 
   seed(tag) = int(sha256('<tag>|<sha256 of PREREG_5_DRAFT.md>|<freshness-union digest>|<BWM salt>')[:12], 16)
       tags: 'PREREG-5 map bank v1', 'PREREG-5 planning draw v1'
-  map bank       t2bl_make_data.build_bank(seed_map, t2bl_common.CONFIRM_STRATA, union, 'p5', 'p5-map'): 24 strata on 100
-                 bases (2,367 rows), the dev bank's derivations with PREREG-3's eight unseen-status strata instead of
-                 the dev bank's pooled P3_words stratum
+  map bank       t2bl_make_data.build_bank(seed_map, t2bl_common.CONFIRM_STRATA, union, 'p5', 'p5-map', split='confirm'):
+                 28 strata on 100 bases (2,701 rows), the dev bank's derivations rendered with the CONFIRM half of every
+                 split held-out partition (words, names, key orders, paraphrase 5), plus the report-only H_order_top /
+                 H_order_inner and PREREG-3's eight unseen-status strata instead of the dev bank's pooled P3_words
   planning draw  lbeam_problems.make_set(generator v2 primary spec: 36 per optimal depth 2-6, V 8, K 8, D_CLOSE 8,
                  seed_plan, union + every map-bank payload): N = 180, in range and closed under the vocabulary
   union          t2bl_make_data.build_union(skip_prefix=None): PREREG-LB's union (name-skipping historical harvest,
@@ -89,15 +90,15 @@ def mint(draft_sha: str, excl: dict, salt: str, map_n_bases: int = C.N_BASES, pl
     dig = union_digest(excl)
     s_map, s_plan = seed_from_rule(TAG_MAP, draft_sha, dig, salt), seed_from_rule(TAG_PLAN, draft_sha, dig, salt)
     need(s_map not in SPENT_SEEDS and s_plan not in SPENT_SEEDS and s_map != s_plan, "the seed rule gave a spent seed")
-    rows, mrec = MD.build_bank(s_map, C.CONFIRM_STRATA, excl, MAP_PREFIX, MAP_TAG, n_bases=map_n_bases)
+    rows, mrec = MD.build_bank(s_map, C.CONFIRM_STRATA, excl, MAP_PREFIX, MAP_TAG, n_bases=map_n_bases, split="confirm")
     ov_map = MD.overlap([(r["before"], r["event"]) for r in rows], excl)
     need(not ov_map["payload_overlap"] and not ov_map["operative_overlap"], f"the map bank overlaps the union {ov_map}")
     regen, _ = MD.build_bank(s_map, C.CONFIRM_STRATA, MD.empty_union(), MAP_PREFIX, MAP_TAG,
-                             replay=mrec["fresh_rejections"], n_bases=map_n_bases)
+                             replay=mrec["fresh_rejections"], n_bases=map_n_bases, split="confirm")
     map_text = C.dumps_rows(rows)
     need(C.dumps_rows(regen) == map_text, "the map bank does not regenerate from (seed, recorded rejections)")
     import t2bl_audit as AU
-    au = AU.audit_bank(rows, C.CONFIRM_STRATA)
+    au = AU.audit_bank(rows, C.CONFIRM_STRATA, "confirm")
     need(not au["problems"], f"the map bank does not pass the stratum audit ({len(au['problems'])} problems; not shown)")
     mpay, mops = map_items(rows)
     excl2 = {"pay": excl["pay"] | mpay, "ops": excl["ops"] | mops, "historical": excl.get("historical"),
@@ -173,10 +174,10 @@ def verify_sealed(root: Path, fz: dict | None = None) -> list:
             errs.append(f"{tag}: BWM's salt does not match its commitment")
     rows = C.load_jsonl(root / MAP_REL)
     regen, _ = MD.build_bank(ms["seed_rule"]["seed"], C.CONFIRM_STRATA, MD.empty_union(), MAP_PREFIX, MAP_TAG,
-                             replay=ms["fresh_rejections"], n_bases=ms["n_bases"])
+                             replay=ms["fresh_rejections"], n_bases=ms["n_bases"], split="confirm")
     if C.dumps_rows(regen) != C.dumps_rows(rows):
         errs.append("the map bank does not regenerate from its seed and recorded rejections")
-    if AU.audit_bank(rows, C.CONFIRM_STRATA)["problems"]:
+    if AU.audit_bank(rows, C.CONFIRM_STRATA, "confirm")["problems"]:
         errs.append("the map bank fails the stratum audit")
     insts = P.load_set(root / PLAN_REL)
     spec = P.spec_from_record(ps)

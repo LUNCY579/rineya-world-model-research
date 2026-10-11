@@ -3,14 +3,14 @@
  "cap_h": 4.5,
  "load_s": 120.0,
  "counts": {
-  "map_rows": 2367,
+  "map_rows": 2701,
   "inst": 180,
   "anchor_gens": 1664,
   "ident_gens": 300,
   "bi_batched": 128,
   "bi_batch1": 128,
-  "map_gens": 11835,
-  "answer_tokens": 24.1
+  "map_gens": 13505,
+  "answer_tokens": 23.62
  },
  "sizing_new_keys_per_instance": {
   "T2BL@HS": 69.91,
@@ -34,16 +34,18 @@
    "generations_ceiling": 2220,
    "h_planning": 0.34,
    "h_observed": 0.27,
-   "h_ceiling_planning": 0.34
+   "h_ceiling_planning": 0.34,
+   "h_start_estimate_first": 0.34
   },
   {
    "stage": "M1",
-   "what": "part (a): the map bank (2367 rows) x OFF, T2s0, T2BL s0-s2",
-   "generations_expected": 11835,
-   "generations_ceiling": 11835,
-   "h_planning": 1.46,
-   "h_observed": 0.8,
-   "h_ceiling_planning": 1.46
+   "what": "part (a): the map bank (2701 rows) x OFF, T2s0, T2BL s0-s2",
+   "generations_expected": 13505,
+   "generations_ceiling": 13505,
+   "h_planning": 1.63,
+   "h_observed": 0.9,
+   "h_ceiling_planning": 1.63,
+   "h_start_estimate_first": 1.63
   },
   {
    "stage": "P1",
@@ -52,7 +54,8 @@
    "generations_ceiling": 18720,
    "h_planning": 1.29,
    "h_observed": 0.92,
-   "h_ceiling_planning": 1.93
+   "h_ceiling_planning": 1.93,
+   "h_start_estimate_first": 1.93
   },
   {
    "stage": "P2",
@@ -61,7 +64,8 @@
    "generations_ceiling": 18720,
    "h_planning": 1.5,
    "h_observed": 1.06,
-   "h_ceiling_planning": 1.93
+   "h_ceiling_planning": 1.93,
+   "h_start_estimate_first": 1.93
   },
   {
    "stage": "P3",
@@ -70,7 +74,8 @@
    "generations_ceiling": 18720,
    "h_planning": 1.29,
    "h_observed": 0.92,
-   "h_ceiling_planning": 1.93
+   "h_ceiling_planning": 1.93,
+   "h_start_estimate_first": 1.93
   },
   {
    "stage": "P4",
@@ -79,112 +84,188 @@
    "generations_ceiling": 18720,
    "h_planning": 1.29,
    "h_observed": 0.92,
-   "h_ceiling_planning": 1.93
+   "h_ceiling_planning": 1.93,
+   "h_start_estimate_first": 1.93
   }
  ],
  "cpu_stage": "C1 (ORACLE and IGNORE_STATUS at enum W2 E12): CPU only, never under the lease, at the start of the invocation after the one that records A0; about 1 CPU-min",
  "retention_part_c": "a separate RCWM turn under lease 'rcwm-t1:retention' (ret_run.py --mode confirm with --extra-adapter t2bl_s0=...): 0.46-1.11 GPU-h by the 5c plan (docs/retention/RET_PLAN.json scale; one extra Titan-Sparse side)",
- "stage_rule": "no stage starts within 0.5 h of the 4.5 h cap; a stage starts only if 1.25 x its estimate fits; every turn after the first re-runs A0 before any stage; the start-of-turn check adds the model load and the longest A0 measured so far",
- "dev_answer_tokens": 24.1,
+ "stage_rule": "no stage starts within 0.5 h of the 4.5 h cap; a stage starts only if 1.25 x its start estimate fits (A0, M1: expected time at the registered rates; P1-P4: the CEILING generation count x the slowest seconds per generation measured on a recorded planning stage, or the registered planning rate before the first); every turn after the first re-runs A0 before any stage; the start-of-turn check adds the model load and the longest A0 measured so far, and the model is not loaded if the first remaining stage does not fit",
+ "dev_answer_tokens": 23.62,
  "dev_source_present": true,
- "turns_planning": [
+ "schedules": [
   {
-   "stages": [
-    "A0",
-    "M1",
-    "P1"
+   "name": "expected sizes, observed rates",
+   "sizes": "expected",
+   "true_rate_F": 3.8,
+   "true_rate_map": 4.882,
+   "turns": [
+    {
+     "stages": [
+      "A0",
+      "M1",
+      "P1",
+      "P2"
+     ],
+     "projected_h": 3.19
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P3",
+      "P4"
+     ],
+     "projected_h": 2.14
+    }
    ],
-   "projected_h": 3.12
+   "gpu_h": 5.33,
+   "max_turn_h": 3.19
   },
   {
-   "stages": [
-    "A0 re-check",
-    "P2",
-    "P3"
+   "name": "expected sizes, planning rates",
+   "sizes": "expected",
+   "true_rate_F": 2.7,
+   "true_rate_map": 2.7,
+   "turns": [
+    {
+     "stages": [
+      "A0",
+      "M1",
+      "P1"
+     ],
+     "projected_h": 3.3
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P2",
+      "P3"
+     ],
+     "projected_h": 3.16
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P4"
+     ],
+     "projected_h": 1.67
+    }
    ],
-   "projected_h": 3.16
+   "gpu_h": 8.13,
+   "max_turn_h": 3.3
   },
   {
-   "stages": [
-    "A0 re-check",
-    "P4"
+   "name": "ceiling sizes, observed rates",
+   "sizes": "ceiling",
+   "true_rate_F": 3.8,
+   "true_rate_map": 4.882,
+   "turns": [
+    {
+     "stages": [
+      "A0",
+      "M1",
+      "P1",
+      "P2"
+     ],
+     "projected_h": 3.94
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P3",
+      "P4"
+     ],
+     "projected_h": 3.04
+    }
    ],
-   "projected_h": 1.67
+   "gpu_h": 6.98,
+   "max_turn_h": 3.94
+  },
+  {
+   "name": "ceiling sizes, planning rates",
+   "sizes": "ceiling",
+   "true_rate_F": 2.7,
+   "true_rate_map": 2.7,
+   "turns": [
+    {
+     "stages": [
+      "A0",
+      "M1",
+      "P1"
+     ],
+     "projected_h": 3.93
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P2"
+     ],
+     "projected_h": 2.3
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P3"
+     ],
+     "projected_h": 2.3
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P4"
+     ],
+     "projected_h": 2.3
+    }
+   ],
+   "gpu_h": 10.83,
+   "max_turn_h": 3.93
+  },
+  {
+   "name": "ceiling sizes, 2.5 generations/s (below the planning rate)",
+   "sizes": "ceiling",
+   "true_rate_F": 2.5,
+   "true_rate_map": 2.5,
+   "turns": [
+    {
+     "stages": [
+      "A0",
+      "M1"
+     ],
+     "projected_h": 2.15
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P1"
+     ],
+     "projected_h": 2.47
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P2"
+     ],
+     "projected_h": 2.47
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P3"
+     ],
+     "projected_h": 2.47
+    },
+    {
+     "stages": [
+      "A0 re-check",
+      "P4"
+     ],
+     "projected_h": 2.47
+    }
+   ],
+   "gpu_h": 12.03,
+   "max_turn_h": 2.47
   }
  ],
- "gpu_h_planning": 7.95,
- "turns_observed": [
-  {
-   "stages": [
-    "A0",
-    "M1",
-    "P1",
-    "P2",
-    "P3"
-   ],
-   "projected_h": 4.01
-  },
-  {
-   "stages": [
-    "A0 re-check",
-    "P4"
-   ],
-   "projected_h": 1.22
-  }
- ],
- "gpu_h_observed": 5.23,
- "turns_ceiling_observed": [
-  {
-   "stages": [
-    "A0",
-    "M1",
-    "P1",
-    "P2"
-   ],
-   "projected_h": 3.84
-  },
-  {
-   "stages": [
-    "A0 re-check",
-    "P3",
-    "P4"
-   ],
-   "projected_h": 3.04
-  }
- ],
- "gpu_h_ceiling_observed": 6.88,
- "turns_ceiling_planning": [
-  {
-   "stages": [
-    "A0",
-    "M1",
-    "P1"
-   ],
-   "projected_h": 3.75
-  },
-  {
-   "stages": [
-    "A0 re-check",
-    "P2"
-   ],
-   "projected_h": 2.3
-  },
-  {
-   "stages": [
-    "A0 re-check",
-    "P3"
-   ],
-   "projected_h": 2.3
-  },
-  {
-   "stages": [
-    "A0 re-check",
-    "P4"
-   ],
-   "projected_h": 2.3
-  }
- ],
- "gpu_h_ceiling_planning": 10.65,
  "checks": {
   "pins_match": true,
   "bwm_planner_pinned": true,
@@ -196,6 +277,6 @@
   "torch_imported": false
  },
  "code_sha256": {
-  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60"
+  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209"
  }
 }

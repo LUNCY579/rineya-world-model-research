@@ -1,5 +1,5 @@
 """T2b-ledger data: the surface-diversified oracle-labelled training set and the fresh dev bank. Built WITHOUT any model
-call, model output or torch (the `tokenizers` library reads tokenizer.json for token statistics only).
+call, model output or torch (the `tokenizers` library reads tokenizer.json for token statistics and the token audit only).
 
   python -B scripts/t2bl_make_data.py                 # writes (create-only) data/t2bl_dev.jsonl + .SOURCE.json and
                                                       # data/t2bl_train.jsonl + .SOURCE.json, then docs/t2b/ledger/AUDIT.json
@@ -15,19 +15,19 @@ TRAINING SET (data/t2bl_train.jsonl; 1,500 ledger one-step rows on the T2 recipe
   DIV block     1,200 rows: 300 twin pairs (posted + a non-posted member, same base and surface) + 250 posted and 350
                 non-posted singles. 15% of DIV slots use the exact canonical T2 surface with the slot's own status (so the
                 training words also occur on the canonical frame). Otherwise every factor is drawn from its TRAINING
-                partition only (t2bl_common): paraphrases
-                0-3, training key orders (canonical w.p. 0.25), account names (A-D-based 0.35, training letters 0.30,
-                training words 0.35) with 4-7 accounts (4 w.p. 0.55), balances and amounts by digit class (balances
-                t2 / 3-digit / 4-digit 0.40 / 0.30 / 0.30; add/transfer amounts t2 / 2-digit / 3-digit 0.45 / 0.30 /
-                0.25; scale factors always the recorded marginal), non-posted statuses void 50 and 600 TRAINING words
-                (not-applied 180, neutral 150, nonce 120, case / spelling variants of void 60, posted look-alikes 90;
-                15 rows per word, 10 per void variant).
+                partition only (t2bl_common): paraphrases 0-3, training key orders (canonical w.p. 0.25), account names
+                (A-D-based 0.35, training letters 0.30, training words 0.35) with 4-7 accounts (4 w.p. 0.55), balances
+                and amounts by digit class (balances t2 / 3-digit / 4-digit 0.40 / 0.30 / 0.30, scale rows t2 / 3-digit
+                0.50 / 0.50; add/transfer amounts t2 / 2-digit / 3-digit 0.45 / 0.30 / 0.25; scale factors always the
+                recorded marginal), every input and posted-gold value at most 4 digits (redrawn otherwise), non-posted
+                statuses void 50 and 600 TRAINING words (not-applied 180, neutral 150, nonce 120, case / spelling
+                variants of void 60, posted look-alikes 90; 15 rows per word, 10 per void variant).
   Totals: posted 750 / non-posted 750; event kinds by PREREG-3's quota (transfer 0.45, scale 0.33, add 0.22); every
   posted event changes the state (so copy and apply-regardless score exactly 0.50).
-DEV BANK (data/t2bl_dev.jsonl; seed 20261162): 100 bases (env.gen_start balances, |b| <= 98, accounts A-D; an
-  env.gen_event-style event with a trained amount whose posted version changes the state; kind quota 45/33/22), every
-  stratum the same base with ONE factor changed (or, for the combined surfaces, one surface), t2bl_common.DEV_STRATA:
-  17 strata, 1,667 rows (H_amt only on the 67 add/transfer bases).
+DEV BANK (data/t2bl_dev.jsonl; seed 20261162; the DEV half of every split held-out partition): 100 bases (env.gen_start
+  balances, |b| <= 98, accounts A-D; an env.gen_event-style event with a trained amount whose posted version changes the
+  state; kind quota 45/33/22), every stratum the same base with ONE factor changed (or, for the combined surfaces, one
+  surface), t2bl_common.DEV_STRATA: 19 strata, 1,801 rows (S_bal, S_amt, H_amt only on the 67 add/transfer bases).
 FRESHNESS (binding): no (before, event) payload and no FDS operative content of any training or dev row equals one of
   the union (lbeam_problems.load_exclusions without data/t2bl_*: the name-skipping historical harvest, every pinned
   source, PREREG-3's bank; every other data/**/*.json[l] payload and rolled-out multi-event transition; the binding
@@ -63,7 +63,7 @@ if hasattr(sys.stdout, "reconfigure"):
 import t2bl_common as C  # noqa: E402
 from rcwmt import env  # noqa: E402
 
-GEN_VERSION = "t2bl-data-v1"
+GEN_VERSION = "t2bl-data-v2"
 BUILD_CODE = ("scripts/t2bl_common.py", "scripts/t2bl_make_data.py", "scripts/t2bl_audit.py", "scripts/p3_common.py",
               "rcwmt/env.py")
 MAX_ATTEMPTS = 200
@@ -83,6 +83,7 @@ N_TRAIN = 2 * CANON_PAIRS + CANON_SINGLES + 2 * DIV_PAIRS + DIV_POSTED_SINGLES +
 P_COUNT = ((4, 0.55), (5, 0.15), (6, 0.15), (7, 0.15))
 P_NAMES = (("canonical", 0.35), ("train_letters", 0.30), ("train_words", 0.35))
 P_BAL_LEVEL = (("t2", 0.40), ("b3", 0.30), ("b4", 0.30))
+P_BAL_LEVEL_SCALE = (("t2", 0.50), ("b3", 0.50))  # scale rows: at most 3-digit balances (no 4-digit x factor products)
 BAL_MIX = {"t2": (("t2", 1.0),), "b3": (("t2", 0.4), ("b3", 0.6)), "b4": (("t2", 0.3), ("b3", 0.3), ("b4", 0.4))}
 P_AMT_LEVEL = (("t2", 0.45), ("a2", 0.30), ("a3", 0.25))
 # A share of DIV slots is rendered in the exact canonical T2 surface (paraphrase 0, sorted keys, accounts A-D, |b| <= 98,
@@ -273,10 +274,14 @@ def _with_status(ev: dict, status: str) -> dict:
     return {**ev, "status": status}
 
 
-def derive(stratum: str, idx: int, before: dict, ev: dict, rng_of, pool: list) -> tuple | None:
+def derive(stratum: str, idx: int, before: dict, ev: dict, rng_of, pool: list, split: str = "dev") -> tuple | None:
     """(before, event, surface, meta) of a stratum on base idx (None: the stratum has no row on this base). rng_of(key)
-    gives the base's seeded sub-RNG for a key; strata that share a surface use the same key."""
+    gives the base's seeded sub-RNG for a key; strata that share a surface use the same key. split: which half of the
+    held-out partitions the bank renders (t2bl_common.heldout)."""
+    H = C.heldout(split)
     canon = C.canonical_surface(before)
+    ms, mk = C.mixed_status(idx)
+    mmeta = {"status": ms, "status_kind": mk}
     if stratum == "ID_posted":
         return before, _with_status(ev, "posted"), canon, {}
     if stratum == "ID_void":
@@ -286,15 +291,12 @@ def derive(stratum: str, idx: int, before: dict, ev: dict, rng_of, pool: list) -
         return before, _with_status(ev, w), canon, {"word_kind": kind, "word": w}
     if stratum in ("S_surface_posted", "S_surface_words"):
         rng = rng_of("S_surface")
-        n = 4 + (idx // 2) % 4
+        n = 5 + (idx // 2) % 3
         nk = "train_letters" if idx % 2 == 0 else "train_words"
         names = sorted(rng.sample(C.TRAIN_LETTERS if nk == "train_letters" else C.TRAIN_NAME_WORDS, n))
-        b2, e2 = C.remap(before, ev, names[:4])
-        b2 = {k: C.bal_value(rng, rng.choice(("b3", "b4")), pool) for k in b2}
+        b2, e2 = C.remap(before, ev, names[:4])               # the base's own in-range values and trained amount
         for k in names[4:]:
             b2[k] = rng.choice(pool)
-        if e2["kind"] != "scale":
-            e2 = {**e2, "amount": C.amt_value(rng, rng.choice(("a2", "a3")), [])}
         para = 1 + idx % 3
         eperm = C.draw_train_perm(rng, "event", allow_canon=False)
         bperm = C.draw_train_perm(rng, "before", len(names), allow_canon=False)
@@ -304,28 +306,48 @@ def derive(stratum: str, idx: int, before: dict, ev: dict, rng_of, pool: list) -
             return b2, _with_status(e2, "posted"), surf, meta
         kind, w = C.word_for(C.TRAIN_WORDS, idx)
         return b2, _with_status(e2, w), surf, {**meta, "word_kind": kind, "word": w}
+    if stratum == "S_bal":
+        if ev["kind"] == "scale":
+            return None
+        rng = rng_of("S_bal")
+        e2 = _with_status(ev, "posted")
+        for _ in range(500):
+            b2 = {k: C.bal_value(rng, rng.choice(("b3", "b4")), pool) for k in before}
+            if C.within_train_range(b2, e2) and max(abs(v) for v in b2.values()) >= 100:
+                return b2, e2, C.canonical_surface(b2), {"band": "trained 3-4-digit balances"}
+        raise RuntimeError("S_bal: no in-band draw")
+    if stratum == "S_amt":
+        if ev["kind"] == "scale":
+            return None
+        rng = rng_of("S_amt")
+        return before, {**_with_status(ev, "posted"), "amount": C.amt_value(rng, rng.choice(("a2", "a3")), [])}, canon,             {"band": "trained 2-3-digit amounts"}
     if stratum == "H_words":
-        kind, w = C.word_for(C.HELDOUT_WORDS, idx)
+        kind, w = C.word_for(H["words"], idx)
         return before, _with_status(ev, w), canon, {"word_kind": kind, "word": w}
-    if stratum == "H_order":
+    if stratum in ("H_order", "H_order_inner"):
         j1, j2 = idx % 3, (idx // 3) % 3
-        surf = C.surface_with(before, 0, (1, 0), C.HELDOUT_PERMS["event"][j1], C.HELDOUT_PERMS["before4"][j2])
-        return before, _with_status(ev, "posted"), surf, {"event_order": j1, "before_order": j2}
+        top = (1, 0) if stratum == "H_order" else (0, 1)
+        surf = C.surface_with(before, 0, top, H["event"][j1], H["before4"][j2])
+        return before, _with_status(ev, ms), surf, {"event_order": j1, "before_order": j2, **mmeta}
+    if stratum == "H_order_top":
+        surf = C.surface_with(before, 0, (1, 0), tuple(range(len(C.EVENT_KEYS))), tuple(range(len(before))))
+        return before, _with_status(ev, ms), surf, dict(mmeta)
     if stratum in ("H_names", "HS_words", "HS_posted"):
         rng = rng_of("H_names" if stratum == "H_names" else "HS")
-        if idx % 2 == 0:
-            names, nk = list(C.HELDOUT_LETTERS), "heldout_letters"
+        letters = ((idx // 2) % 2 == 0) if stratum == "H_names" else (idx % 2 == 0)   # decoupled from the status parity
+        if letters:
+            names, nk = list(H["letters"]), "heldout_letters"
         else:
-            names, nk = sorted(rng.sample(C.HELDOUT_NAME_WORDS, 4)), "heldout_words"
+            names, nk = sorted(rng.sample(H["name_words"], 4)), "heldout_words"
         b2, e2 = C.remap(before, ev, names)
         if stratum == "H_names":
-            return b2, _with_status(e2, "posted"), C.canonical_surface(b2), {"names_kind": nk, "names": names}
+            return b2, _with_status(e2, ms), C.canonical_surface(b2), {"names_kind": nk, "names": names, **mmeta}
         j1, j2 = idx % 3, (idx // 3) % 3
-        surf = C.surface_with(b2, C.HELDOUT_PARA, (1, 0), C.HELDOUT_PERMS["event"][j1], C.HELDOUT_PERMS["before4"][j2])
+        surf = C.surface_with(b2, H["para"], (1, 0), H["event"][j1], H["before4"][j2])
         meta = {"names_kind": nk, "names": names, "event_order": j1, "before_order": j2}
         if stratum == "HS_posted":
             return b2, _with_status(e2, "posted"), surf, meta
-        kind, w = C.word_for(C.HELDOUT_WORDS, idx)
+        kind, w = C.word_for(H["words"], idx)
         return b2, _with_status(e2, w), surf, {**meta, "word_kind": kind, "word": w}
     if stratum == "H_count":
         rng = rng_of("H_count")
@@ -333,10 +355,9 @@ def derive(stratum: str, idx: int, before: dict, ev: dict, rng_of, pool: list) -
         b2 = dict(before)
         for k in extra:
             b2[k] = rng.choice(pool)
-        return b2, _with_status(ev, "posted"), C.canonical_surface(b2), {"n_accounts": 8, "extra": extra}
+        return b2, _with_status(ev, ms), C.canonical_surface(b2), {"n_accounts": 8, "extra": extra, **mmeta}
     if stratum == "H_para":
-        st = "posted" if idx % 2 == 0 else "void"
-        return before, _with_status(ev, st), {**canon, "para": C.HELDOUT_PARA}, {"status": st}
+        return before, _with_status(ev, ms), {**canon, "para": H["para"]}, dict(mmeta)
     if stratum == "H_bal":
         rng = rng_of("H_bal")
         b2 = {k: C.bal_value(rng, "b5", pool) for k in before}
@@ -349,7 +370,7 @@ def derive(stratum: str, idx: int, before: dict, ev: dict, rng_of, pool: list) -
     if stratum in ("LB_void", "LB_posted"):
         b2, e2 = C.remap(before, ev, list(C.LB_NAMES))
         surf = C.surface_with(b2, 0, C.LB_ORDER["top"], C.LB_ORDER["event"], tuple(range(3, -1, -1)))
-        return b2, _with_status(e2, "cancelled" if stratum == "LB_void" else "posted"), surf, {}
+        return b2, _with_status(e2, C.LB_STATUS if stratum == "LB_void" else "posted"), surf, {}
     if stratum == "P3_words":
         w = C.P3_WORDS[idx % len(C.P3_WORDS)]
         return before, _with_status(ev, w), canon, {"word": w}
@@ -372,10 +393,11 @@ def bank_row(prefix: str, stratum: str, idx: int, attempt: int, before, ev, surf
 
 
 def build_bank(seed: int, strata: tuple, excl: dict, prefix: str, tag: str, extra_pay=(), extra_ops=(),
-               replay=None, n_bases: int = C.N_BASES) -> tuple:
-    """(rows in stratum-major order, record). Deterministic given (tag, seed, strata, union): base idx draws use
+               replay=None, n_bases: int = C.N_BASES, split: str = "dev") -> tuple:
+    """(rows in stratum-major order, record). Deterministic given (tag, seed, strata, split, union): base idx draws use
     random.Random(f'{tag}|{seed}|{idx}|{attempt}|<key>') (str seeds are SHA-512 hashed: PYTHONHASHSEED-independent).
-    replay: the recorded freshness rejections [(idx, attempt)] reproduce the set without the union."""
+    replay: the recorded freshness rejections [(idx, attempt)] reproduce the set without the union. split: the half of
+    the held-out partitions the bank renders ('dev': the dev bank; 'confirm': PREREG-5's map bank)."""
     m = env.load_marginals()
     pool = C.small_pool(m)
     kinds = _schedule(random.Random(f"{tag}|{seed}|kinds"), n_bases, C.KIND_QUOTA)
@@ -390,7 +412,7 @@ def build_bank(seed: int, strata: tuple, excl: dict, prefix: str, tag: str, extr
             rows = []
             ok = True
             for s in strata:
-                d = derive(s, idx, before, ev, rng_of, pool)
+                d = derive(s, idx, before, ev, rng_of, pool, split)
                 if d is None:
                     continue
                 b2, e2, surf, meta = d
@@ -413,7 +435,7 @@ def build_bank(seed: int, strata: tuple, excl: dict, prefix: str, tag: str, extr
         else:
             raise RuntimeError(f"base {idx}: no fresh draw in {MAX_ATTEMPTS} attempts")
     ordered = [r for s in strata for idx in range(n_bases) for r in rows_by[idx] if r["stratum"] == s]
-    rec = {"tag": tag, "seed": seed, "n_bases": n_bases, "strata": list(strata), "kind_schedule": kinds,
+    rec = {"tag": tag, "seed": seed, "n_bases": n_bases, "split": split, "strata": list(strata), "kind_schedule": kinds,
            "fresh_rejections": rejections, "rejection_counts": dict(counts), "n_rows": len(ordered)}
     return ordered, rec
 
@@ -463,23 +485,28 @@ def draw_div(rng: random.Random, kind: str, m, pool: list) -> tuple:
         names = sorted(rng.sample(C.TRAIN_LETTERS, n))
     else:
         names = sorted(rng.sample(C.TRAIN_NAME_WORDS, n))
-    level = _pick(rng, P_BAL_LEVEL)
-    for _ in range(200):
-        before = {k: C.bal_value(rng, _pick(rng, BAL_MIX[level]), pool) for k in names}
-        mb = max(abs(v) for v in before.values())
-        got = "t2" if mb <= 98 else "b3" if mb <= 999 else "b4"
-        if got == level:
-            break
-    else:
-        raise RuntimeError("balance level not reached")
+    level = _pick(rng, P_BAL_LEVEL_SCALE if kind == "scale" else P_BAL_LEVEL)
     alevel = "t2" if kind == "scale" else _pick(rng, P_AMT_LEVEL)
-    for _ in range(200):
-        amount = C.amt_value(rng, alevel, m.ledger_amounts) if kind != "scale" else rng.choice(m.ledger_amounts)
-        ev = draw_event(rng, names, kind, amount)
-        if C.effective(before, ev):
+    ev = None
+    for _ in range(50):                               # balances at the level, then an effective in-range event
+        for _ in range(200):
+            before = {k: C.bal_value(rng, _pick(rng, BAL_MIX[level]), pool) for k in names}
+            mb = max(abs(v) for v in before.values())
+            got = "t2" if mb <= 98 else "b3" if mb <= 999 else "b4"
+            if got == level:
+                break
+        else:
+            raise RuntimeError("balance level not reached")
+        for _ in range(200):
+            amount = C.amt_value(rng, alevel, m.ledger_amounts) if kind != "scale" else rng.choice(m.ledger_amounts)
+            cand = draw_event(rng, names, kind, amount)
+            if C.effective(before, cand) and C.within_train_range(before, cand):
+                ev = cand
+                break
+        if ev is not None:
             break
     else:
-        raise RuntimeError("no effective event")
+        raise RuntimeError("no effective in-range event")
     para = rng.choice(C.TRAIN_PARA)
     surf = C.surface_with(before, para, (0, 1), C.draw_train_perm(rng, "event"), C.draw_train_perm(rng, "before", n))
     return before, ev, surf, {"names_kind": nk, "n_accounts": n, "bal_level": level, "amt_level": alevel, "para": para}
@@ -554,6 +581,10 @@ def composition(rows: list) -> dict:
         / max(1, len(canon_rows)), 4)
     out["distinct_event_orders"] = len({tuple(r["surface"]["event"]) for r in rows})
     out["max_abs_balance"] = max(abs(v) for r in rows for v in r["before"].values())
+    out["max_abs_value_inputs_and_targets"] = max(abs(v) for r in rows for v in list(r["before"].values()) +
+                                                  list(json.loads(r["target"]).values()) + [r["event"]["amount"]])
+    out["max_abs_scale_row_balance"] = max(abs(v) for r in rows if r["event"]["kind"] == "scale"
+                                           for v in r["before"].values())
     out["max_abs_amount_add_transfer"] = max(abs(r["event"]["amount"]) for r in rows if r["event"]["kind"] != "scale")
     out["scale_amounts"] = sorted({r["event"]["amount"] for r in rows if r["event"]["kind"] == "scale"})
     return out
@@ -590,7 +621,28 @@ def heuristic_scores(rows: list) -> dict:
             "by_block_descriptive": descr,
             "note": "apply_regardless == ignore_status (apply every event as if posted); by_block is descriptive (the "
                     "canonical block is 2/3 posted, the diversified block 11/24 posted; a 'copy on an unfamiliar surface' "
-                    "cue is what the dev gate's copy guard G3 tests on held-out posted twins)"}
+                    "cue is what the dev gate's clause G3 tests on the held-out posted twins: accuracy and copy rate)"}
+
+
+def bank_heuristics(rows: list) -> dict:
+    """Descriptive: per stratum, the accuracy of every heuristic on a bank (string cues from t2bl_common.heuristic_states;
+    token cues from t2bl_audit.token_cue_noop: void_token, anchor_trigger = no-op iff the token 'void' is present or the
+    token 'posted' with another token, token_overlap = no-op iff any token is shared with a trained non-posted status)."""
+    import t2bl_audit as AU
+    acc: dict = {}
+    for r in rows:
+        g = json.loads(r["gold"])
+        st = r["event"]["status"]
+        hs = C.heuristic_states(r["before"], r["event"])
+        applied, copy = hs["apply_regardless"], hs["copy"]
+        for k, noop in AU.token_cue_noop(st).items():
+            hs[k] = copy if noop else applied
+        a = acc.setdefault(r["stratum"], Counter())
+        a["_n"] += 1
+        for k, v in hs.items():
+            if k not in C.RULE_EQUIVALENT:
+                a[k] += int(v == g)
+    return {s: {k: round(v / c["_n"], 3) for k, v in sorted(c.items()) if k != "_n"} for s, c in acc.items()}
 
 
 def token_stats(train_rows: list, dev_rows: list) -> dict:
@@ -642,7 +694,7 @@ def _source_summary(excl: dict) -> dict:
 
 # ============================================================================================== main build
 def build_all(excl: dict, replay_dev=None, replay_train=None) -> dict:
-    dev_rows, dev_rec = build_bank(C.SEED_DEV, C.DEV_STRATA, excl, "t2bl-dev", "t2bl-dev", replay=replay_dev)
+    dev_rows, dev_rec = build_bank(C.SEED_DEV, C.DEV_STRATA, excl, "t2bl-dev", "t2bl-dev", replay=replay_dev, split="dev")
     P, MB, L1 = _builders()
     dpay = {L1.payload(r["before"], r["event"]) for r in dev_rows}
     dops = {L1.opkey(C.LEDGER, r["before"], r["event"]) for r in dev_rows}
@@ -681,6 +733,7 @@ def write_all(out_dir: Path, excl: dict, harvest: bool, lines: list) -> dict:
     if harvest and (ov_dev["payload_overlap"] or ov_dev["operative_overlap"] or ov_tr["payload_overlap"] or ov_tr["operative_overlap"]):
         raise SystemExit(f"freshness overlap: dev {ov_dev}, train {ov_tr}")
     ts = token_stats(B["train"], B["dev"])
+    bh = bank_heuristics(B["dev"])
     code = C.code_hashes(BUILD_CODE)
     common = {"gen_version": GEN_VERSION, "code_sha256": code, "harvest": harvest, "union": _source_summary(excl),
               "regenerates_from_seed_and_rejections": regen, "built_local": time.strftime("%Y-%m-%d %H:%M:%S %z"),
@@ -691,8 +744,9 @@ def write_all(out_dir: Path, excl: dict, harvest: bool, lines: list) -> dict:
                "strata": {s: {"n": sum(r["stratum"] == s for r in B["dev"]), "factor": C.STRATA[s][0],
                               "gold_rule": C.STRATA[s][1], "surface": C.STRATA[s][2], "description": C.STRATA[s][3]}
                           for s in C.DEV_STRATA},
-               "overlap": ov_dev, "use": "T2b-ledger dev screen (t2bl_run.py E0/E stages; t2bl_gate.py). Never the "
-                                         "PREREG-5 confirmation bank (minted at its freeze, fresh against this file).",
+               "overlap": ov_dev, "heuristics_by_stratum_descriptive": bh,
+               "use": "T2b-ledger dev screen (t2bl_run.py E0/E stages; t2bl_gate.py). Never the PREREG-5 confirmation "
+                      "bank (minted at its freeze from the CONFIRM half of the held-out partitions, fresh against this file).",
                **common}
     train_src = {"record": "T2BL_TRAIN_SOURCE", "file": C.TRAIN.name, "file_sha256": train_sha, **B["train_rec"],
                  "composition": composition(B["train"]), "heuristics": heur, "token_stats": ts,
@@ -704,29 +758,42 @@ def write_all(out_dir: Path, excl: dict, harvest: bool, lines: list) -> dict:
     C.write_create(paths["train_src"], json.dumps(train_src, indent=1) + "\n")
     _log(lines, f"wrote {paths['dev']} (sha {dev_sha[:16]}) and {paths['train']} (sha {train_sha[:16]})")
     return {"dev_sha256": dev_sha, "train_sha256": train_sha, "audit": au, "heuristics": heur, "token_stats": ts,
+            "dev_heuristics": bh,
             "overlap": {"dev": ov_dev, "train": ov_tr}, "composition": train_src["composition"], "union": _source_summary(excl),
             "paths": {k: str(v) for k, v in paths.items()}}
 
 
 def partitions_record() -> dict:
+    halves = lambda dev, conf: {"dev": list(dev), "confirm": list(conf)}  # noqa: E731
     return {"status": {"train": {k: list(v) for k, v in C.TRAIN_WORDS.items()},
-                       "heldout": {k: list(v) for k, v in C.HELDOUT_WORDS.items()},
+                       "heldout": {k: halves(C.HELDOUT_WORDS_DEV[k], C.HELDOUT_WORDS_CONFIRM[k]) for k in C.WORD_KINDS},
+                       "heldout_rule": "token-novel under Titan's tokenizer: no token 'void' or 'posted', and at least one "
+                                       "token no trained status contains (t2bl_audit.token_audit, binding)",
                        "prereg3_reserved_never_trained": list(C.P3_WORDS), "trained_canonical": ["posted", "void"],
                        "excluded_no_gold": list(C.EXCLUDED_STATUS)},
-            "names": {"train_letters": list(C.TRAIN_LETTERS), "heldout_letters": list(C.HELDOUT_LETTERS),
-                      "train_words": list(C.TRAIN_NAME_WORDS), "heldout_words": list(C.HELDOUT_NAME_WORDS),
-                      "canonical": list(C.CANON_NAMES), "lb_names": list(C.LB_NAMES)},
-            "counts": {"train": list(C.TRAIN_COUNTS), "heldout": list(C.HELDOUT_COUNTS)},
+            "names": {"train_letters": list(C.TRAIN_LETTERS),
+                      "heldout_letters": halves(C.HELDOUT_LETTERS_DEV, C.HELDOUT_LETTERS_CONFIRM),
+                      "train_words": list(C.TRAIN_NAME_WORDS),
+                      "heldout_words": halves(C.HELDOUT_NAME_WORDS_DEV, C.HELDOUT_NAME_WORDS_CONFIRM),
+                      "canonical": list(C.CANON_NAMES), "lb_names_reserved": list(C.LB_NAMES)},
+            "counts": {"train": list(C.TRAIN_COUNTS), "heldout": list(C.HELDOUT_COUNTS),
+                       "note": "not split (the dev gate does not read H_count)"},
             "magnitudes": {"train_balance_classes": {"t2": "the recorded pool |b| <= 98", "b3": [100, 999], "b4": [1000, 9999]},
+                           "train_scale_row_balances": "t2 / b3 only (at most 3 digits)",
                            "train_amount_classes_add_transfer": {"t2": "the recorded marginal -9..12", "a2": [13, 99], "a3": [100, 999]},
                            "scale_factors": "the recorded marginal only (train and test)",
-                           "heldout_balance_band": list(C.HELDOUT_BAL), "heldout_amount_band_add_transfer": list(C.HELDOUT_AMT)},
-            "key_orders": {"order_seed": C.ORDER_SEED, "heldout_position_permutations": {k: [list(p) for p in v] for k, v in C.HELDOUT_PERMS.items()},
+                           "max_abs_value_in_training": C.MAX_TRAIN_ABS,
+                           "heldout_balance_band": list(C.HELDOUT_BAL), "heldout_amount_band_add_transfer": list(C.HELDOUT_AMT),
+                           "note": "not split (the dev gate does not read H_bal / H_amt; the confirmation draws fresh values)"},
+            "key_orders": {"order_seed": C.ORDER_SEED, "min_kendall_from_sorted": C.MIN_KENDALL,
+                           "heldout_position_permutations": {k: [list(p) for p in v] for k, v in C.HELDOUT_PERMS.items()},
+                           "dev_indices": list(C.DEV_PERM_IDX), "confirm_indices": list(C.CONFIRM_PERM_IDX),
                            "train": "every other permutation (the identity w.p. 0.25); the 2-key top object is never "
-                                    "augmented (its only other order, reversed, is held out)",
+                                    "augmented (its only other order, reversed, is held out and shared by both halves)",
                            "lb_heldout_combined": {"top": list(C.LB_ORDER["top"]), "event": list(C.LB_ORDER["event"]),
-                                                   "before": "reversed (held out)"}},
-            "paraphrases": {"train": list(C.TRAIN_PARA), "heldout": C.HELDOUT_PARA, "texts": list(C.PARAPHRASES)}}
+                                                   "before": "reversed (the confirm half's index 0)"}},
+            "paraphrases": {"train": list(C.TRAIN_PARA), "heldout": {"dev": C.HELDOUT_PARA_DEV, "confirm": C.HELDOUT_PARA_CONFIRM},
+                            "texts": list(C.PARAPHRASES)}}
 
 
 def verify(data_dir: Path = C.DATA, harvest: bool = True, quiet: bool = False) -> list:
@@ -778,7 +845,8 @@ def main() -> int:
         raise SystemExit(f"union sources failed: {union_errors(excl)}")
     res = write_all(out, excl, not a.no_harvest, lines)
     if out == C.DATA:
-        rec = {"record": "T2BL_AUDIT", "audit": res["audit"], "heuristics": res["heuristics"],
+        rec = {"record": "T2BL_AUDIT", "kit_revision": C.KIT_REVISION, "audit": res["audit"], "heuristics": res["heuristics"],
+               "dev_bank_heuristics_descriptive": res["dev_heuristics"],
                "token_stats": res["token_stats"], "overlap": res["overlap"], "composition": res["composition"],
                "files": {"dev": res["dev_sha256"], "train": res["train_sha256"]},
                "union": {k: v for k, v in res["union"].items() if k != "sources"},

@@ -1,0 +1,70 @@
+{
+ "registered": true,
+ "freeze_sha256": "05ec83f0586b4d7413d2a9188a7ad436b652c83daa4b35e376ae360eb7f80dfc",
+ "seed": 0,
+ "steps": 190,
+ "train_variant": "sd",
+ "recipe": {
+  "core": "titan-sparse",
+  "steps": 190,
+  "batch": 16,
+  "lr": 0.0001,
+  "max_len": 512,
+  "rank": 16,
+  "alpha": 32,
+  "dropout": 0.05,
+  "targets": [
+   "q_proj",
+   "k_proj",
+   "v_proj",
+   "o_proj",
+   "gate_proj",
+   "up_proj",
+   "down_proj"
+  ],
+  "schedule": "WSD (bwmn.lm.wsd_lr: warm 10%, decay last 20% to 0.1x)",
+  "micro": 4,
+  "row_order": "train_generic: Random(10007 * seed + 17), concatenated shuffled epochs",
+  "source": "T2 (runs/t2/t2_s0/metrics.json args; scripts/run_t2.py _train_body)"
+ },
+ "lease_label": "rcwm-t1:t2b-register",
+ "stages": {},
+ "turns": [
+  {
+   "pid": 189632,
+   "acquired_unix": 1791682158.2427144,
+   "acquired_source": "lock record",
+   "entered_unix": 1791682158.38207,
+   "code_sha256": {
+    "scripts/t2br_run.py": "6e232189da5e8e8ae7e995623ccb5583f9e29fe5985b2526ba340f7925c4f527",
+    "scripts/t2br_common.py": "f47c6dc15fb9df3ebb7d8f06bcc41fd458ccd3dcaeedf29fab87b0b502f297c9",
+    "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+    "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+    "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+    "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+    "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57"
+   },
+   "stages_run": [],
+   "deferred": [],
+   "device": "cuda"
+  }
+ ],
+ "data_sha256": {
+  "plain": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+  "trace": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+  "filler": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+  "dev": "bd6189f6cc860741ac497c5828f5c3c40f674e6926fab2bb9bf83edddc39e43f",
+  "dev_hs": "0c68e7f58891fa7794dea561981a985ac69c99d37bd0321f64b219257dc22e44",
+  "chains": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
+  "anchor_ref": "c082a5324ae63f76b6550381a5368faf9ae8669f17c7da510ee5234bb44255ae"
+ },
+ "code_sha256": {
+  "scripts/t2br_run.py": "6e232189da5e8e8ae7e995623ccb5583f9e29fe5985b2526ba340f7925c4f527",
+  "scripts/t2br_common.py": "f47c6dc15fb9df3ebb7d8f06bcc41fd458ccd3dcaeedf29fab87b0b502f297c9",
+  "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+  "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+  "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57"
+ }
+}

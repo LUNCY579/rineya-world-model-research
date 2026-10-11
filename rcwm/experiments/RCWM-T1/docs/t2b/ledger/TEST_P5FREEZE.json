@@ -1,8 +1,8 @@
 {
  "part": "p5freeze",
  "ok": true,
- "n_checks": 27,
- "n_pass": 27,
+ "n_checks": 42,
+ "n_pass": 42,
  "checks": [
   {
    "check": "freeze refuses an approval without a DECISIONS entry (nothing minted, not persisted)",
@@ -12,12 +12,22 @@
   {
    "check": "freeze refuses a co-sign that does not quote the draft's sha256 (nothing minted, not persisted)",
    "ok": true,
-   "detail": "--bwm-cosign does not quote this draft's sha256 (66c7e5b7bfd3c982be1a676b5438d6cc40f495c1dfd677910267f2108afd69b0); BWM co-signs a stated text"
+   "detail": "--bwm-cosign does not quote this draft's sha256 (a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b); BWM co-signs a stated text"
   },
   {
    "check": "freeze refuses a co-sign without a salt commitment (nothing minted, not persisted)",
    "ok": true,
    "detail": "--bwm-cosign carries no salt commitment 'commit:<sha256 of BWM's salt>'"
+  },
+  {
+   "check": "freeze refuses a co-sign without the union digest (nothing minted, not persisted)",
+   "ok": true,
+   "detail": "--bwm-cosign carries no union digest 'union:<digest>' (publish it with --union-digest before the co-sign)"
+  },
+  {
+   "check": "freeze refuses a co-sign quoting another union digest (data/ or docs/ changed after it was published) (nothing minted, not persisted)",
+   "ok": true,
+   "detail": "the rebuilt freshness union's digest differs from the one BWM's co-sign quotes (data/ or docs/ changed since it was published); nothing was minted. Publish the new digest (--union-digest) and get a NEW co-sign with a NEW salt (this salt was"
   },
   {
    "check": "freeze refuses a salt that does not match the commitment (nothing minted, not persisted)",
@@ -45,17 +55,22 @@
    "detail": "data/ changed while the freshness union was built (['data/zz_concurrent.json']); freeze only while no agent writes to data/. Nothing was minted"
   },
   {
-   "check": "the real pre-freeze checks fail on the fake root's stub records (records must be produced by the tests with the current code, draft and hook draft)",
+   "check": "freeze refuses decision code changed since the dev gate's freeze without a change list, or with a list that does not name the changed file (not persisted)",
    "ok": true,
-   "detail": "['test record TEST_P5FREEZE.json passed with the current kit code', 'test record TEST_P5FREEZE.json was produced with the current draft and hook draft']"
+   "detail": "(\"PREREG-5's rules or decision code differ from those pinned when the dev gate rule was frozen (rules changed: False; code\", \"PREREG-5's rules or decision code differ from those pinned when the dev gate rule was frozen (rules changed: False; code\")"
   },
   {
-   "check": "freeze: both sets minted from the seed rule with the revealed salt, sealed, every input hashed; verify ok",
+   "check": "the real pre-freeze checks fail on the fake root's stub records (records must be produced by the tests with the current code, draft and hook draft)",
+   "ok": true,
+   "detail": "['test record TEST_P5FREEZE.json passed with the current kit code', 'test record TEST_HOOK.json passed with the current kit code']"
+  },
+  {
+   "check": "freeze: both sets minted from the seed rule with the revealed salt, sealed, every input hashed; the rules and the decision code unchanged since the dev gate; verify ok",
    "ok": true,
    "detail": "[]"
   },
   {
-   "check": "the map seed follows the rule (tag, draft sha256, union digest, BWM salt) and the salt matches the commit",
+   "check": "the map seed follows the rule (tag, draft sha256, the quoted union digest, BWM salt); the salt matches the commit; the map bank renders the CONFIRM half",
    "ok": true,
    "detail": ""
   },
@@ -85,9 +100,14 @@
    "detail": "['scripts/t2bl_confirm_analysis.py differs from the freeze (+ amendments)']"
   },
   {
-   "check": "the job refuses an installed hook that is not the frozen draft (not persisted)",
+   "check": "verify fails when the co-sign's quoted union digest is not the one the sets were minted from",
    "ok": true,
-   "detail": "[prereg5] scripts/queue_hooks/90_prereg5.sh (sha256 2767be22637c) is not the hook draft byte for byte; reinstall it byte for byte from docs/t2b/ledger/queue_hook_prereg5.sh.draft (or remove it) before any run"
+   "detail": "[\"BWM's co-sign does not quote the union digest the sealed sets were minted from\"]"
+  },
+  {
+   "check": "the job refuses an installed hook that is not the frozen draft, also under another *prereg5*.sh name (not persisted); the draft installed byte for byte passes",
+   "ok": true,
+   "detail": "('[prereg5] scripts/queue_hooks/90_prereg5.sh (sha256 2767be22637c) is not the hook draft byte for byt', '[prereg5] scripts/queue_hooks/91_prereg5_old.sh (sha256 0fa8c5d3278f) is not the hook draft byte for')"
   },
   {
    "check": "the registered job (fake root) completes: exit 5 (C1 pending), then 0",
@@ -112,12 +132,12 @@
   {
    "check": "the registered analysis renders parts (a), (b) and (c) from the fake-root run",
    "ok": true,
-   "detail": "('PREREG-5 (a): GENERALISES TO none; TRIGGER WIDENED for unseen key orders, unseen account n', 'PREREG-5 (b): PARTIAL', 'PREREG-5 (c): retention guard GO (5/5 binding)')"
+   "detail": "('PREREG-5 (a): GENERALISES TO none; TRIGGER WIDENED for none; PARTIAL for unseen status wor', 'PREREG-5 (b): PARTIAL', 'PREREG-5 (c): retention guard GO (5/5 binding)')"
   },
   {
    "check": "with the stub (T2b-ledger follows the rule, T2 s0 the void trigger) part (b) is not 'TRIGGER WIDENED' and T2b-ledger's held-out planning equals ORACLE's",
    "ok": true,
-   "detail": "{'T2BL@HS': 6, 'T2s0@HS': 3, 'T2BL@canon': 6, 'T2s0@canon': 6, 'ORACLE': 6, 'IGNORE_STATUS': 3}"
+   "detail": "{'T2BL@HS': 9, 'T2s0@HS': 3, 'T2BL@canon': 9, 'T2s0@canon': 9, 'ORACLE': 9, 'IGNORE_STATUS': 3}"
   },
   {
    "check": "the results are written once (create-only) as JSON and Markdown",
@@ -135,25 +155,80 @@
    "detail": ""
   },
   {
+   "check": "a change listed with --changes is accepted, recorded (rules.unchanged false, the changed file named) and rendered into PREREG_5.md Appendix A; verify ok",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the fake root has a dev-screen output (runs/t2bl), as after step (iii)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a dev-screen record is timestamped (never overwritten) once a runs/t2bl output exists",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "PREREG-5's pre-freeze records are rewritten IN PLACE after the dev screen's outputs exist (not timestamped)",
+   "ok": true,
+   "detail": "['TEST_P5ANALYSIS.json', 'TEST_P5TINY.json', 'TEST_P5FREEZE.json', 'TEST_PLAN.json']"
+  },
+  {
+   "check": "after --render-draft and the test rerun, every pre-freeze check passes on the fake root (records bound to the re-rendered draft and the current code)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the documented sequence ends in a freeze with the REAL pre-freeze checks (gate frozen, dev output, power from the gate, --render-draft, tests, freeze)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "once PREREG-5 is frozen, a pre-freeze record is never overwritten (a timestamped copy is written)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "recovery adopts the one confirmation seal written after the intent and claimed by no one",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a seal older than the intent is not adopted; with nothing written after the intent a fresh mint follows (recorded as an intent retry)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a new seal that another consumer recorded (hook 85's BWM release draw) is never adopted",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a draw file without a seal after the intent stops for the operator (not persisted; nothing minted)",
+   "ok": true,
+   "detail": "[prereg5] an interrupted retention mint left draw files without a seal ['confirm_444.jsonl']: move them aside unread, log it in DECISIONS.md"
+  },
+  {
    "check": "MD.empty_union is the only union the tests use (no harvest), and the registered union builder is build_union(skip_prefix=None)",
    "ok": true,
    "detail": ""
   }
  ],
  "code_sha256": {
-  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
-  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
-  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
-  "scripts/t2bl_run.py": "05cf9acf509a90bab24fece12fc7f11b5ece72b5009619c78227a3d01d9e588a",
-  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
-  "scripts/t2bl_confirm_bank.py": "9a291f1f5d9d623c904ca25efb153e4b9d74b9e1955d23abf1248afa524036d4",
-  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60",
-  "scripts/t2bl_confirm_analysis.py": "ba9e6fa344f6aec7ca2ec33314f98aa083b19cd38b423cf7bef483d48f5f3b06",
-  "scripts/t2bl_test.py": "bd91470a2b0f352a4166246089d541895b9793c7ff5f16b97e66df64a05ca6c8"
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
+  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
+  "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09",
+  "scripts/t2bl_test.py": "b58b21fbb9b2578ccd67e72d784823650da37fdd11ba778da8caf0d1d560d29f"
  },
- "draft_sha256": "66c7e5b7bfd3c982be1a676b5438d6cc40f495c1dfd677910267f2108afd69b0",
- "hook_draft_sha256": "0bda6db3a83867a114ea24084ca9837deabe5c36d8a714bafe4992864cfa81d9",
- "hook_draft_t2bl_sha256": "746f7bd6a719b3f33e8cb0b932c3ea18c1bb8f5c9300df3c80cec9f5597ae6ae",
- "peak_mb": 765.1,
- "recorded_local": "2026-10-10 15:22:12 -0500"
+ "draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b",
+ "hook_draft_sha256": "c546ccfa4142bfc05eb961a3868030022edcee6263acd11fc96d6264f2eb484e",
+ "hook_draft_t2bl_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
+ "peak_mb": 766.0,
+ "recorded_local": "2026-10-10 20:45:00 -0500"
 }

@@ -4,28 +4,42 @@ from_pretrained is disabled; the vendored trainer's load_core returns the tiny m
 torch, is_available / device_count patched; 2 threads; below-normal priority; outputs in a temporary directory under the
 session scratchpad. Each part runs in its own process (RAM < 1.5 GB):
 
-  python -B scripts/t2bl_test.py --part data        # audit of the real files, perturbation refusals (every held-out
-                                                    # factor, a prompt that lies about its surface, a wrong target, a
-                                                    # broken pair), partitions, held-out orders, freshness records, LF
+  python -B scripts/t2bl_test.py --part data        # audit of the real files (token-novel held-out words, dev / confirm
+                                                    # halves, <= 4-digit training values), perturbation refusals (every
+                                                    # held-out factor of both halves, a prompt that lies about its surface,
+                                                    # a wrong target, a broken pair, a 5-digit target, an anchor-token
+                                                    # held-out word), partitions, held-out orders, freshness records, LF
   python -B scripts/t2bl_test.py --part gate        # scorer self-test, every dev-gate branch, rule document, the gate
-                                                    # freeze mechanics (in a temporary docs dir), refusals
-  python -B scripts/t2bl_test.py --part p5analysis  # every PREREG-5 wording branch, the rendered draft, verbatim strings
-  python -B scripts/t2bl_test.py --part plan        # both --plan paths without torch; turn rules
+                                                    # freeze mechanics (temporary docs dir; PREREG-5 rules AND code pinned),
+                                                    # the frozen / not-frozen state, a stopped run's NO VERDICT record,
+                                                    # an orphan GATE.md, P(PROCEED), the hook glob
+  python -B scripts/t2bl_test.py --part p5analysis  # every PREREG-5 wording branch, the rendered draft, verbatim strings,
+                                                    # the power records (seed regimes, planning regimes, gate alignment)
+  python -B scripts/t2bl_test.py --part plan        # both --plan paths without torch; turn rules; every simulated
+                                                    # schedule under the runner's own start rule stays within 4.5 h
   python -B scripts/t2bl_test.py --part devtiny     # t2bl_run.py with tiny models and the REAL vendored trainer: full run,
-                                                    # gate analysis, crash / resume, deferral, stops, prompt rendering
+                                                    # gate analysis, crash / resume, deferral, no-progress stop, stale
+                                                    # DONE.json.partial, cap clamp, stops, prompt rendering
   python -B scripts/t2bl_test.py --part p5tiny      # t2bl_confirm_run.py with tiny models and BWM's pinned planner: full
-                                                    # run (A0, M1, P1-P4, C1 outside the lease), crash / resume, deferral,
-                                                    # no-progress stop, A0 failures (anchor, adapter identity, batch
-                                                    # invariance), a re-check failure (part a eligible), stops
-  python -B scripts/t2bl_test.py --part p5freeze    # fake root: freeze refusals, freeze (sets minted from the seed rule),
-                                                    # verify, tamper, the registered job, retention binding, the
-                                                    # registered analysis (create-only)
+                                                    # run (A0, M1, P1-P4, C1 outside the lease), crash / resume (the
+                                                    # exception recorded on the attempt), reboot-interrupted attempts not
+                                                    # counted, failed attempts counted, deferral, no-progress stop, A0
+                                                    # failures, a re-check failure (part a eligible), stops
+  python -B scripts/t2bl_test.py --part p5freeze    # fake root: freeze refusals (incl. the quoted union digest and an
+                                                    # unlisted rules / code change), freeze, a listed change rendered into
+                                                    # Appendix A, verify, tamper, the documented path to the freeze (records
+                                                    # rewritten after dev outputs exist), the registered job, the hook glob,
+                                                    # retention binding and mint recovery, the registered analysis
+  python -B scripts/t2bl_test.py --part rehearsal   # the freeze-time mint at full size against the REAL freshness union,
+                                                    # with stand-in tags and salt (never the registered seeds), in memory,
+                                                    # counts only (a pre-freeze record: rerun just before the co-sign)
   python -B scripts/t2bl_test.py --part hook        # both hook drafts under bash with a stub step(): exit-code paths, the
                                                     # 60 s sleep before every deferral re-call, idempotency
   python -B scripts/t2bl_test.py --part all         # every part, each in its own process
 
-Writes docs/t2b/ledger/TEST_<PART>.json (code sha256s, the draft's and the hook drafts' sha256; refused once PREREG-5 is
-frozen). Exit 0 iff every check passes.
+Writes docs/t2b/ledger/TEST_<PART>.json (code sha256s, the draft's and the hook drafts' sha256). PREREG-5's pre-freeze
+records (TEST_P5*, TEST_PLAN, TEST_HOOK, TEST_REHEARSAL) are rewritten in place until PREREG_5_FREEZE.json exists, the
+others until a runs/t2bl output exists (then timestamped; t2bl_common.write_doc). Exit 0 iff every check passes.
 """
 from __future__ import annotations
 
@@ -71,7 +85,7 @@ import t2bl_common as C  # noqa: E402
 SCRATCH = Path(r"C:/Users/clclc/AppData/Local/Temp/claude/C--Users-clclc-BusinessProject-WorldModel-Rineya-Consequence-"
                r"World-Model-Bundle-2026-10-05/4c2a936e-32bf-4e01-aa62-961d6b162be5/scratchpad")
 PY = sys.executable
-PARTS = ("data", "gate", "p5analysis", "plan", "devtiny", "p5tiny", "p5freeze", "hook")
+PARTS = ("data", "gate", "p5analysis", "plan", "devtiny", "p5tiny", "p5freeze", "rehearsal", "hook")
 KIT_CODE = ("scripts/t2bl_common.py", "scripts/t2bl_make_data.py", "scripts/t2bl_audit.py", "scripts/t2bl_run.py",
             "scripts/t2bl_gate.py", "scripts/t2bl_confirm_bank.py", "scripts/t2bl_confirm_run.py",
             "scripts/t2bl_confirm_analysis.py", "scripts/t2bl_test.py")
@@ -129,18 +143,24 @@ def raises(fn, exc, needle: str = "") -> tuple:
     return False, "no exception raised", None
 
 
+def make_record(part: str, results: list, root: Path = ROOT, extra: dict | None = None) -> dict:
+    """A test record as the freeze reads it: the outcome, the code it ran with and the draft / hook drafts it is bound to
+    (computed under `root`: the real root, or a fake root in the documented-path test)."""
+    root = Path(root)
+    docs = root / "docs" / "t2b" / "ledger"
+    draft, hp5, ht2 = root / "PREREG_5_DRAFT.md", docs / "queue_hook_prereg5.sh.draft", docs / "queue_hook_t2bl.sh.draft"
+    return {"part": part, "ok": all(r["ok"] for r in results), "n_checks": len(results),
+            "n_pass": sum(r["ok"] for r in results), "checks": results,
+            "code_sha256": {r: sha(root / r) for r in KIT_CODE if (root / r).is_file()},
+            "draft_sha256": sha(draft) if draft.is_file() else None,
+            "hook_draft_sha256": sha(hp5) if hp5.is_file() else None,
+            "hook_draft_t2bl_sha256": sha(ht2) if ht2.is_file() else None,
+            "peak_mb": peak_mb(), "recorded_local": time.strftime("%Y-%m-%d %H:%M:%S %z"), **(extra or {})}
+
+
 def record(part: str, extra: dict | None = None) -> dict:
-    ok = all(r["ok"] for r in RESULTS)
-    rec = {"part": part, "ok": ok, "n_checks": len(RESULTS), "n_pass": sum(r["ok"] for r in RESULTS), "checks": RESULTS,
-           "code_sha256": {r: sha(ROOT / r) for r in KIT_CODE},
-           "draft_sha256": sha(DRAFT) if DRAFT.is_file() else None,
-           "hook_draft_sha256": sha(HOOK_P5) if HOOK_P5.is_file() else None,
-           "hook_draft_t2bl_sha256": sha(HOOK_T2BL) if HOOK_T2BL.is_file() else None,
-           "peak_mb": peak_mb(), "recorded_local": time.strftime("%Y-%m-%d %H:%M:%S %z"), **(extra or {})}
-    if (ROOT / "PREREG_5_FREEZE.json").exists():
-        print("PREREG-5 is frozen: test records are frozen inputs and are not rewritten")
-    else:
-        print("wrote", C.write_doc(f"TEST_{part.upper()}.json", json.dumps(rec, indent=1, default=str) + "\n"))
+    rec = make_record(part, RESULTS, ROOT, extra)
+    print("wrote", C.write_doc(f"TEST_{part.upper()}.json", json.dumps(rec, indent=1, default=str) + "\n"))
     print(f"[{part}] {rec['n_pass']}/{rec['n_checks']} checks pass; peak {rec['peak_mb']} MB")
     return rec
 
@@ -156,12 +176,33 @@ def part_data() -> None:
     check("1,500 rows: posted 750 / non-posted 750, 300 canonical-block rows, 400 pairs",
           tr["composition"]["rows"] == 1500 and tr["composition"]["posted"] == 750 and
           tr["composition"]["canon_block"] == 300 and tr["composition"]["pairs"] == 400, tr["composition"])
-    check("no held-out factor read back from any of the 1,500 training prompts (independent parser)",
+    check("no held-out factor of either half read back from any of the 1,500 training prompts (independent parser)",
           tr["heldout_factor_hits"] == {} and tr["n_prompts_read_back"] == 1500, tr["heldout_factor_hits"])
-    check("none of the held-out text fragments occurs in any training prompt or target",
-          tr["fragment_hits"] == {} and tr["n_fragments_checked"] >= 70, tr["n_fragments_checked"])
-    check("dev bank: 17 strata, 1,667 rows, every row its stratum's declared change of its base",
-          au["dev"]["rows"] == 1667 and len(au["dev"]["per_stratum"]) == 17, au["dev"]["per_stratum"])
+    check("none of the held-out text fragments (both halves, PREREG-3, PREREG-LB names) occurs in any training prompt "
+          "or target", tr["fragment_hits"] == {} and tr["n_fragments_checked"] == len(C.HELDOUT_PARA_FRAGMENTS) +
+          len(C.HELDOUT_WORD_LIST) + len(C.P3_WORDS) + len(C.EXCLUDED_STATUS) + len(C.HELDOUT_LETTERS) +
+          len(C.HELDOUT_NAME_WORDS) + len(C.LB_NAMES), tr["n_fragments_checked"])
+    check("no number with more than 4 digits in any training prompt or target (so a 5-digit balance is an unseen length)",
+          tr["composition"]["max_abs_value"] <= C.MAX_TRAIN_ABS, tr["composition"]["max_abs_value"])
+    ta = au["token_audit"]
+    check("token audit (binding): all 40 held-out words are token-novel (no 'void' / 'posted' token; a token no trained "
+          "status has)", ta["ok"] and len(ta["heldout"]) == 40 and all(not v["anchor_tokens"] and v["untrained_tokens"]
+                                                                       for v in ta["heldout"].values()), ta["problems"][:2])
+    saved = (C.HELDOUT_WORD_LIST_DEV, dict(C.WORD_KIND_OF))
+    try:
+        C.HELDOUT_WORD_LIST_DEV = C.HELDOUT_WORD_LIST_DEV + ("voidd", "xvoid", "postedq")
+        C.WORD_KIND_OF.update({"voidd": "void_variant", "xvoid": "void_variant", "postedq": "posted_like"})
+        bad = AU.token_audit()
+    finally:
+        C.HELDOUT_WORD_LIST_DEV, kinds = saved
+        C.WORD_KIND_OF.clear()
+        C.WORD_KIND_OF.update(kinds)
+    check("the token audit refuses anchor-token and trained-token-only held-out words (voidd, xvoid, postedq)",
+          not bad["ok"] and sum("anchor token" in p for p in bad["problems"]) == 3 and
+          any("only of trained status tokens" in p for p in bad["problems"]), bad["problems"][:3])
+    check("dev bank: 19 strata, 1,801 rows, every row its stratum's declared change of its base in the DEV half",
+          au["dev"]["rows"] == 1801 and len(au["dev"]["per_stratum"]) == 19 and au["dev"]["split"] == "dev",
+          au["dev"]["per_stratum"])
     probs = MD.verify(harvest=False, quiet=True)
     check("both files regenerate byte for byte from (seed, recorded rejections) (MD.verify without the union)", not probs, probs)
     src_t, src_d = C.read_json(C.TRAIN_SOURCE), C.read_json(C.DEV_SOURCE)
@@ -177,35 +218,62 @@ def part_data() -> None:
     check("heuristics balanced: copy and apply-regardless (= ignore-status) 0.50, void trigger <= 0.70, string cues "
           "<= 0.95, the rule 1.00", h["ok"] and sc["copy"] == 0.5 and sc["apply_regardless"] == 0.5 and
           sc["void_trigger"] <= 0.70, sc)
+    bh = src_d["heuristics_by_stratum_descriptive"]
+    check("held-out words defeat the widened triggers: on H_words and HS_words the anchor-token trigger and the 'void' "
+          "token score 0.00, T2's void substring cue <= 0.05, the token-overlap trigger <= 0.30",
+          all(bh[s]["anchor_trigger"] == 0.0 and bh[s]["void_token"] == 0.0 and bh[s]["void_trigger"] <= 0.05 and
+              bh[s]["token_overlap"] <= 0.30 for s in ("H_words", "HS_words")), {s: bh[s] for s in ("H_words",)})
+    check("the mixed factor cells need the rule: copy and apply-regardless score 0.50 on H_order, H_names, H_count, H_para",
+          all(bh[s]["copy"] == 0.5 and bh[s]["apply_regardless"] == 0.5 for s in ("H_order", "H_names", "H_count", "H_para")))
+    sv = [r for r in dev if r["stratum"] in ("S_surface_posted", "S_surface_words")]
+    check("the trained-surface controls use in-range values (|b| <= 98, trained amounts) and 5-7 accounts",
+          all(max(abs(v) for v in r["before"].values()) <= 98 and r["event"]["amount"] in C.TRAINED_AMOUNTS and
+              5 <= len(r["before"]) <= 7 for r in sv) and len(sv) == 200)
+    sm = [r for r in dev if r["stratum"] in ("S_bal", "S_amt")]
+    check("the magnitude controls (S_bal, S_amt) are add / transfer rows in the TRAINED bands (67 each)",
+          len(sm) == 134 and all(r["event"]["kind"] != "scale" for r in sm) and
+          all(100 <= max(abs(v) for v in r["before"].values()) <= 9999 for r in sm if r["stratum"] == "S_bal") and
+          all(13 <= abs(r["event"]["amount"]) <= 999 for r in sm if r["stratum"] == "S_amt"))
     comp = MD.composition(train)
     check("non-void training words occur on the canonical surface (no surface-conditioned void cue fits)",
           sum(v for k, v in comp["canonical_surface_status_kinds"].items() if k not in ("posted", "void")) >= 40 and
           comp["canonical_surface_void_trigger_accuracy"] < 0.95, comp["canonical_surface_status_kinds"])
+    check("training scale rows keep balances of at most 3 digits", comp["max_abs_scale_row_balance"] <= 999,
+          comp["max_abs_scale_row_balance"])
     t2c = MD.t2_prompt_check()
     check("the canonical renderer reproduces all 501 stored T2 ledger prompts and targets", t2c["ok"], t2c)
     # partitions
-    tw = set(C.TRAIN_WORD_LIST) | {"void"}
-    hw, pw = set(C.HELDOUT_WORD_LIST), set(C.P3_WORDS)
-    low = lambda s: {x.lower() for x in s if x.lower() != "void"}  # noqa: E731
-    check("status partitions disjoint exactly and after lower-casing (except the trained 'void' form)",
-          not (tw & hw or tw & pw or hw & pw) and not (low(tw) & low(hw) or low(tw) & low(pw) or low(hw) & low(pw)))
+    check("partition tables: train, dev half, confirm half and PREREG-3 disjoint (exactly and after lower-casing, except "
+          "'void' itself); names, paraphrases and order halves consistent", not AU.partition_problems(),
+          AU.partition_problems()[:2])
     check("no held-out string lower-cases to 'void'; the training case variants are VOId and vOid",
-          not any(x.lower() == "void" for x in hw) and set(C.VOID_CASE_VARIANTS) == {"VOId", "vOid"})
+          not any(x.lower() == "void" for x in C.HELDOUT_WORD_LIST) and set(C.VOID_CASE_VARIANTS) == {"VOId", "vOid"})
     statuses = {r["event"]["status"] for r in train}
-    check("PREREG-3's 16 strings, the held-out words and the excluded strings never occur as a training status",
-          not (statuses & (pw | hw | set(C.EXCLUDED_STATUS))) and statuses == tw | {"posted"}, sorted(statuses - tw)[:5])
+    tw = set(C.TRAIN_WORD_LIST) | {"void"}
+    check("PREREG-3's 16 strings, both held-out halves and the excluded strings never occur as a training status",
+          not (statuses & (set(C.P3_WORDS) | set(C.HELDOUT_WORD_LIST) | set(C.EXCLUDED_STATUS)))
+          and statuses == tw | {"posted"}, sorted(statuses - tw)[:5])
+    dev_words = {r["event"]["status"] for r in dev if r["stratum"] in ("H_words", "HS_words")}
+    check("the dev bank's held-out words are exactly the DEV half (20 words); no CONFIRM-half word, name, order or "
+          "paraphrase 5 appears in the dev bank", dev_words == set(C.HELDOUT_WORD_LIST_DEV) and
+          not any(f'"status":"{w}"' in C.user_json(r["before"], r["event"], r["surface"])
+                  for r in dev for w in C.HELDOUT_WORD_LIST_CONFIRM) and
+          all(r["surface"]["para"] != C.HELDOUT_PARA_CONFIRM for r in dev) and
+          not any(set(r["before"]) & (set(C.HELDOUT_LETTERS_CONFIRM) | set(C.HELDOUT_NAME_WORDS_CONFIRM)) for r in dev))
     rng = random.Random(C.ORDER_SEED)
     third = {"top": [(1, 0)]}
     for name, n in [("event", 6)] + [(f"before{k}", k) for k in range(4, 9)]:
         lst = [tuple(range(n - 1, -1, -1))]
-        while len(lst) < 3:
+        while len(lst) < 6:
             q = list(range(n))
             rng.shuffle(q)
-            if tuple(q) != tuple(range(n)) and tuple(q) not in lst:
+            inv = sum(1 for i in range(n) for j in range(i + 1, n) if q[i] > q[j])
+            if inv >= 2 and tuple(q) not in lst:
                 lst.append(tuple(q))
         third[name] = lst
-    check("held-out key orders regenerate from seed 20261163 (three independent derivations agree)",
-          third == C.HELDOUT_PERMS == AU.HELD)
+    check("held-out key orders regenerate from seed 20261163 (three independent derivations agree); every random one is "
+          ">= 2 swaps from the sorted order", third == C.HELDOUT_PERMS == AU.HELD and
+          all(C.kendall(p) >= 2 for k, v in C.HELDOUT_PERMS.items() if k != "top" for p in v))
     # perturbations: each must be refused by the independent audit
     base = next(r for r in train if r["block"] == "div" and not r["pair"] and r["event"]["status"] == "posted"
                 and r["event"]["kind"] == "transfer" and len(r["before"]) == 4)
@@ -231,33 +299,43 @@ def part_data() -> None:
     b, ev, sf = base["before"], base["event"], base["surface"]
     names = sorted(b)
     cases = {}
-    cases["paraphrase 4"] = rerender(base, surface={**sf, "para": C.HELDOUT_PARA})
+    cases["paraphrase 4 (dev half)"] = rerender(base, surface={**sf, "para": C.HELDOUT_PARA_DEV})
+    cases["paraphrase 5 (confirm half)"] = rerender(base, surface={**sf, "para": C.HELDOUT_PARA_CONFIRM})
     cases["reversed top order"] = rerender(base, surface={**sf, "top": ["event", "before"]})
-    cases["held-out event order"] = rerender(base, surface={**sf, "event": C.apply_perm(list(C.EVENT_KEYS),
-                                                                                         C.HELDOUT_PERMS["event"][1])})
+    cases["dev-half event order"] = rerender(base, surface={**sf, "event": C.apply_perm(list(C.EVENT_KEYS),
+                                                                                         C.split_perms("dev", "event")[1])})
+    cases["confirm-half event order"] = rerender(base, surface={**sf, "event": C.apply_perm(list(C.EVENT_KEYS),
+                                                                                             C.split_perms("confirm", "event")[0])})
     cases["held-out before order"] = rerender(base, surface={**sf, "before": C.apply_perm(names, C.HELDOUT_PERMS["before4"][2])})
-    for label, nm in (("held-out letter names", list(C.HELDOUT_LETTERS)), ("held-out word names", ["barn", "dock", "lamp", "mill"])):
-        b2, e2 = C.remap({k2: b[k] for k, k2 in zip(names, C.CANON_NAMES)},
-                         {**ev, "account": dict(zip(names, C.CANON_NAMES))[ev["account"]],
-                          "other": dict(zip(names, C.CANON_NAMES))[ev["other"]]}, nm)
+    canon_of = dict(zip(names, C.CANON_NAMES))
+    for label, nm in (("dev-half letter names", list(C.HELDOUT_LETTERS_DEV)),
+                      ("confirm-half word names", list(C.HELDOUT_NAME_WORDS_CONFIRM[:4])), ("PREREG-LB names", list(C.LB_NAMES))):
+        b2, e2 = C.remap({canon_of[k]: b[k] for k in names},
+                         {**ev, "account": canon_of[ev["account"]], "other": canon_of[ev["other"]]}, nm)
         cases[label] = rerender(base, before=b2, ev=e2, surface={**sf, "before": sorted(b2)})
     extra = [x for x in C.TRAIN_LETTERS if x not in b][:8 - len(b)]
     b8 = {**b, **{x: 7 for x in extra}}
     cases["8 accounts"] = rerender(base, before=b8, surface={**sf, "before": sorted(b8)})
-    cases["held-out status word"] = rerender(base, ev={**ev, "status": "rescinded"})
+    cases["dev-half status word"] = rerender(base, ev={**ev, "status": C.HELDOUT_WORD_LIST_DEV[0]})
+    cases["confirm-half status word"] = rerender(base, ev={**ev, "status": C.HELDOUT_WORD_LIST_CONFIRM[-1]})
     cases["PREREG-3 status string"] = rerender(base, ev={**ev, "status": "pending"})
     cases["excluded status string"] = rerender(base, ev={**ev, "status": "settled"})
     k0 = names[0]
     cases["5-digit balance"] = rerender(base, before={**b, k0: 54321})
     cases["4-digit amount"] = rerender(base, ev={**ev, "amount": 4321})
-    sc_row = next(r for r in train if r["event"]["kind"] == "scale" and r["block"] == "div" and not r["pair"])
-    expect = {"paraphrase 4": "para", "reversed top order": "top", "held-out event order": "event",
-              "held-out before order": "before", "held-out letter names": "names", "held-out word names": "names",
-              "8 accounts": "count", "held-out status word": "status", "PREREG-3 status string": "status",
-              "excluded status string": "status", "5-digit balance": "bal", "4-digit amount": "amt"}
+    expect = {"paraphrase 4 (dev half)": "para", "paraphrase 5 (confirm half)": "para", "reversed top order": "top",
+              "dev-half event order": "event", "confirm-half event order": "event", "held-out before order": "before",
+              "dev-half letter names": "names", "confirm-half word names": "names", "PREREG-LB names": "names",
+              "8 accounts": "count", "dev-half status word": "status", "confirm-half status word": "status",
+              "PREREG-3 status string": "status", "excluded status string": "status", "5-digit balance": "bal",
+              "4-digit amount": "amt"}
     for label, r2 in cases.items():
         ok, pr = refused(r2, f"'{expect[label]}'")
         check(f"audit refuses a training row with a {label}", ok, pr)
+    big = rerender(base, before={**b, ev["other"]: 9990}, ev={**ev, "amount": 900})
+    ok, pr = refused(big, "more than 4 digits")
+    check("audit refuses a training row whose target has a 5-digit value (inputs of 4 digits)", ok, pr)
+    sc_row = next(r for r in train if r["event"]["kind"] == "scale" and r["block"] == "div" and not r["pair"])
     r2 = copy.deepcopy(sc_row)
     r2["event"] = {**r2["event"], "amount": 13}
     r2["prompt"] = C.render_chat(C.messages(r2["before"], r2["event"], r2["surface"]))
@@ -279,15 +357,25 @@ def part_data() -> None:
     devm = [copy.deepcopy(r) for r in dev]
     hw_row = next(r for r in devm if r["stratum"] == "H_words")
     hw_row["event"]["status"] = C.TRAIN_WORD_LIST[0]
-    pr = AU.audit_bank(devm, C.DEV_STRATA)["problems"]
-    check("dev audit refuses an H_words row that carries a TRAINING word", any(hw_row["id"] in p for p in pr), pr[:1])
+    hc_row = next(r for r in devm if r["stratum"] == "H_words" and r["id"] != hw_row["id"])
+    hc_row["event"]["status"] = C.HELDOUT_WORD_LIST_CONFIRM[0]
+    hs_row = next(r for r in devm if r["stratum"] == "HS_posted")
+    hs_row["surface"] = {**hs_row["surface"], "para": C.HELDOUT_PARA_CONFIRM}
+    mx_row = next(r for r in devm if r["stratum"] == "H_names" and r["base"] % 2 == 1)
+    mx_row["event"]["status"] = "void"
+    pr = AU.audit_bank(devm, C.DEV_STRATA, "dev")["problems"]
+    check("dev audit refuses an H_words row with a TRAINING word, one with a CONFIRM-half word, an HS row in paraphrase 5, "
+          "and a mixed row with 'void' instead of its training word",
+          all(any(x["id"] in p for p in pr) for x in (hw_row, hc_row, hs_row, mx_row)), pr[:2])
     crlf = [str(p.relative_to(ROOT)) for p in list((ROOT / "scripts").glob("t2bl_*.py")) + list(C.DOCS.glob("*"))
             + [DRAFT, C.TRAIN, C.DEV, C.TRAIN_SOURCE, C.DEV_SOURCE] if p.is_file() and b"\r" in p.read_bytes()]
     check("no CRLF in any kit file, record, data file or the draft", not crlf, crlf)
     check("torch was never imported by the data part", "torch" not in sys.modules)
     record("data", {"train_sha256": sha(C.TRAIN), "dev_sha256": sha(C.DEV), "heuristics": sc,
+                    "dev_heuristics_heldout_words": {s: bh[s] for s in ("H_words", "HS_words")},
                     "composition": {k: comp[k] for k in ("status_kind", "names", "count", "bal", "amt", "para",
-                                                         "canonical_surface_status_kinds")}})
+                                                         "canonical_surface_status_kinds", "max_abs_value_inputs_and_targets",
+                                                         "max_abs_scale_row_balance")}})
 
 
 def env_dumps_bad(row) -> str:
@@ -318,13 +406,24 @@ def part_gate() -> None:
     if md != G.rule_md() and not C.run_outputs():
         C.write_doc("GATE_RULE.md", G.rule_md())
         md = (C.DOCS / "GATE_RULE.md").read_text(encoding="utf-8")
-    check("GATE_RULE.md is rendered from the code's rule text (verbatim, pre-stated)", md == G.rule_md() and G.RULE_TEXT in md)
+    check("GATE_RULE.md is rendered from the code's rule text (verbatim, pre-stated, revision 2)",
+          md == G.rule_md() and G.RULE_TEXT in md and G.RULE_VERSION == 2)
     probs = G.verify_rule_record()
-    check("the gate rule is NOT frozen by the kit build (GATE_RULE.json absent: the runner and the analysis refuse)",
-          not (C.DOCS / "GATE_RULE.json").exists() and any("missing" in p or "not a gate-rule record" in p for p in probs), probs[:1])
     cfg = R.Cfg()
-    check("the runner refuses before the lease while the rule is not frozen (exit 3, not persisted)",
-          raises(lambda: R.check_frozen(cfg), R.Stop, "not frozen")[0])
+    frozen = (C.DOCS / "GATE_RULE.json").exists()
+    if not frozen:
+        check("state: the gate rule is NOT frozen (GATE_RULE.json absent): its verification reports the missing record",
+              any("missing" in p or "not a gate-rule record" in p for p in probs), probs[:1])
+        check("state: the runner refuses before the lease while the rule is not frozen (exit 3, not persisted)",
+              raises(lambda: R.check_frozen(cfg), R.Stop, "not frozen")[0])
+    else:
+        check("state: the gate rule IS frozen: GATE_RULE.json verifies against every frozen input", not probs, probs[:2])
+        ok_frozen = True
+        try:
+            R.check_frozen(cfg)
+        except R.Stop as e:
+            ok_frozen = str(e)
+        check("state: the runner's frozen-input check passes", ok_frozen is True, ok_frozen)
     # freeze mechanics in a temporary docs directory (never the real one)
     tmp = tmpdir("gatefreeze")
     real_docs, real_run_outputs = C.DOCS, C.run_outputs
@@ -339,8 +438,10 @@ def part_gate() -> None:
         C.run_outputs = real_run_outputs
         rec = G.freeze_rule("test operator, 2026-10-10, D-test (tests only)")
         import t2bl_confirm_analysis as CA
-        check("freeze-rule writes GATE_RULE.json with every frozen input and pins PREREG-5's rules digest",
+        check("freeze-rule writes GATE_RULE.json with every frozen input and pins PREREG-5's rules digest AND decision code",
               rec["record"] == "T2BL_GATE_RULE" and rec["prereg5_rules"]["sha256"] == CA.rules_digest()["sha256"] and
+              sorted(rec["prereg5_code"]["files"]) == sorted(CA.PINNED_CODE) and
+              rec["prereg5_code"]["sha256"] == CA.code_digest()["sha256"] and
               "docs/t2b/ledger/queue_hook_t2bl.sh.draft" in rec["inputs"] and "data/t2bl_train.jsonl" in rec["inputs"],
               sorted(rec["inputs"])[:4])
         bad = R.frozen_problems(rec, R.frozen_files(R.Cfg(rule_record=tmp / "GATE_RULE.json")))
@@ -354,10 +455,49 @@ def part_gate() -> None:
     finally:
         C.DOCS, C.run_outputs = real_docs, real_run_outputs
         shutil.rmtree(tmp, ignore_errors=True)
+    # the registered analysis on a STOPPED run, and an orphan GATE.md
+    tmp = tmpdir("gatestop")
+    try:
+        run = tmp / "run"
+        write_lf(run / "STOPPED.json", json.dumps({"reason": "[t2bl] ANCHOR FAILED (test)", "unix": 0}) + "\n")
+        res = G.analyze(run, registered=False, rows=dev, out_dir=tmp / "an")
+        check("a stopped dev run gets a NO VERDICT record (GATE.md and GATE.json written, the reason quoted)",
+              res["decision"]["verdict"] == "NO_VERDICT_INSTRUMENT" and (tmp / "an" / "GATE.json").exists() and
+              (tmp / "an" / "GATE.md").exists() and "ANCHOR FAILED" in res["wording"]["sentence"], res["wording"]["sentence"])
+        write_lf(tmp / "an2" / "GATE.md", "# orphan from a crash between the two writes\n")
+        write_lf(tmp / "an2" / "GATE.json.partial", "{")
+        res2 = G.analyze(run, registered=False, rows=dev, out_dir=tmp / "an2")
+        check("an orphan GATE.md (no GATE.json) and a stale GATE.json.partial are moved aside, never deleted, and the "
+              "analysis completes", (tmp / "an2" / "GATE.json").exists() and bool(list((tmp / "an2").glob("GATE.md.orphan.*")))
+              and bool(list((tmp / "an2").glob("GATE.json.partial.stale.*"))) and
+              res2["decision"]["verdict"] == "NO_VERDICT_INSTRUMENT")
+        check("the gate analysis is create-only (GATE.json exists)",
+              raises(lambda: G.analyze(run, registered=False, rows=dev, out_dir=tmp / "an"), G.GateError, "create-only")[0])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    p95, p85 = G.gate_power(0.95, reps=600), G.gate_power(0.85, reps=600)
+    check("P(PROCEED) is high at a true held-out-word accuracy of 0.95 and near 0 at 0.85 (G4 aligns the gate with "
+          "PREREG-5's non-inferiority)", p95 > 0.85 and p85 < 0.05, (p95, p85))
     check("the hook identity rule: an installed hook that differs from the draft is refused",
           R.hook_problem(installed=HOOK_P5, draft=HOOK_T2BL) is not None and R.hook_problem(installed=HOOK_T2BL, draft=HOOK_T2BL) is None)
+    real_hook = R.HOOK_INSTALLED
+    tmp = tmpdir("hookglob")
+    try:
+        R.HOOK_INSTALLED = tmp / "88_t2bl.sh"
+        none_ok = R.hook_problem() is None
+        shutil.copy(HOOK_T2BL, tmp / "88_t2bl.sh")
+        same_ok = R.hook_problem() is None
+        write_lf(tmp / "89_t2bl_old.sh", "# a stale copy\n")
+        other_bad = R.hook_problem() is not None
+        check("the hook glob: every installed *t2bl*.sh must be the draft (none installed: fine; a second, different copy "
+              "under another name: refused)", none_ok and same_ok and other_bad)
+    finally:
+        R.HOOK_INSTALLED = real_hook
+        shutil.rmtree(tmp, ignore_errors=True)
+    check("the real scripts/queue_hooks has no t2bl hook installed (read-only scan)", R.hook_problem() is None)
     check("torch was never imported by the gate part", "torch" not in sys.modules)
-    record("gate", {"verdicts": dr["verdicts_covered"], "patterns": dr["patterns_covered"]})
+    record("gate", {"verdicts": dr["verdicts_covered"], "patterns": dr["patterns_covered"], "gate_frozen": frozen,
+                    "P_PROCEED": {"0.95": p95, "0.85": p85}})
 
 
 # ====================================================================================== part: p5analysis (no torch)
@@ -389,10 +529,19 @@ def part_p5analysis() -> None:
     d1, d2 = CA.rules_digest(), CA.rules_digest()
     check("the rules digest is deterministic and covers every registered string", d1 == d2 and d1["n_strings"] ==
           len(CA.registered_strings()), d1)
-    check("the power record exists and covers every primary cell, the in-distribution control and planning",
+    cd = CA.code_digest()
+    check("the code digest covers PREREG-5's decision code (common, make_data, audit, confirm bank / run / analysis)",
+          sorted(cd["files"]) == sorted(CA.PINNED_CODE) and len(cd["sha256"]) == 64)
+    regs = [label for label, _ in CA.SEED_REGIMES]
+    check("the power record covers every primary cell under three seed regimes (independent, 80% shared, identical) and "
+          "two cell-vs-twin correlations, the in-distribution control under the same regimes, planning with nested and "
+          "independent-within-ORACLE success sets, and P(dev gate PROCEED) against P(GENERALISES)",
           bool(pw.get("map")) and {m["cell"] for m in pw["map"]} >= {"H_words", "H_order", "H_names", "H_count", "H_para",
                                                                       "H_bal", "H_amt", "HS_words", "HS_posted"}
-          and bool(pw.get("id_ni")) and bool(pw.get("plan")))
+          and all(set(m["regimes"]) == set(regs) for m in pw["map"])
+          and all(set(v) == {f"{r}, {k}" for r in regs for k in ("nested", "independent")} for v in pw["id_ni"].values())
+          and all({"nested", "independent_within_oracle"} <= set(r) for r in pw["plan"])
+          and len(pw.get("gate_alignment") or []) == 6)
     import t2bl_gate as G
     dev = C.load_jsonl(C.DEV)
     good = {"*": 0.95, "ID_posted": 0.90, "ID_void": 0.99}
@@ -402,8 +551,9 @@ def part_p5analysis() -> None:
     try:
         gp = write_lf(tmp / "GATE.json", json.dumps({"metrics": sc["M"]}, default=float))
         pdv = CA.power(from_gate=gp)
-        check("power from the dev screen's outcomes (--from-gate): every primary cell, the in-distribution control and "
-              "the planning scenario are computed from a GATE.json", len(pdv["map"]) == 9 and bool(pdv["id_ni"]) and
+        check("power from the dev screen's outcomes (--from-gate): every primary cell (with the seed regimes), the "
+              "in-distribution control and the planning scenario are computed from a GATE.json",
+              len(pdv["map"]) == 9 and all(set(m["regimes"]) == set(regs) for m in pdv["map"]) and bool(pdv["id_ni"]) and
               bool(pdv["plan"]) and str(pdv["assumption_source"]).endswith("GATE.json"),
               [(m["cell"], m["p_on"]) for m in pdv["map"]][:3])
     finally:
@@ -436,15 +586,31 @@ def part_plan() -> None:
     split = R.simulate_turns(R.Cfg(cap_h=2.5), est)
     check("a 2.5 h cap splits the dev screen over several turns (the D-22 rule defers whole pairs)", len(split) > 1,
           [t["stages"] for t in split])
-    check("PREREG-5: every GPU stage fits an empty turn even at its ceiling at the planning rate (4 turns), 2 turns "
-          "at the observed rate", isinstance(p5["turns_ceiling_planning"], list) and len(p5["turns_observed"]) == 2,
-          (p5["gpu_h_planning"], p5["gpu_h_observed"], p5["gpu_h_ceiling_planning"]))
-    check("the plan records the lease labels and the 1.25 x / 0.5 h stage rule", gp["lease"] == "rcwm-t1:t2b-ledger" and
-          p5["lease"] == "rcwm-t1:prereg5" and "1.25" in p5["stage_rule"])
+    sched = {sc["name"]: sc for sc in p5["schedules"]}
+    check("PREREG-5: every simulated schedule (expected / ceiling sizes; observed, planning and a 2.5 generations/s rate) "
+          "completes under the runner's own start rule and no turn exceeds 4.5 h",
+          len(sched) == 5 and all(isinstance(sc["turns"], list) and sc["max_turn_h"] <= 4.5 for sc in sched.values()),
+          {k: (v["gpu_h"], v["max_turn_h"]) for k, v in sched.items()})
+    check("PREREG-5: 2 turns at the observed rate (expected sizes), at most 5 at 2.5 generations/s",
+          len(sched["expected sizes, observed rates"]["turns"]) == 2 and
+          len(sched["ceiling sizes, 2.5 generations/s (below the planning rate)"]["turns"]) <= 5)
+    n = CR.counts(C.bank_rows_expected(C.CONFIRM_STRATA), 180)
+    e0 = CR.start_estimate_s("P2", n, CR.RATE_PLAN, CR.MAP_PLAN, None)
+    e1 = CR.start_estimate_s("P2", n, CR.RATE_PLAN, CR.MAP_PLAN, 0.5)
+    check("the start rule bounds a planning stage by its CEILING generation count (104 new keys per instance) at the "
+          "registered rate before any planning stage, and at the measured rate after one",
+          abs(e0 - 180 * CR.CEILING / CR.RATE_PLAN) < 1e-6 and abs(e1 - 180 * CR.CEILING * 0.5) < 1e-6 and
+          CR.measured_planning_spg({"stages": {"P1": {"seconds": 900.0, "generations": 3000}, "M1": {"seconds": 1,
+                                                                                                  "generations": 9}}}) == 0.3)
+    check("--cap-h never raises the turn cap above 4.5 h (both runners)", R.cap_from_arg(9) == 4.5 and
+          CR.cap_from_arg(9) == 4.5 and R.cap_from_arg(2.0) == 2.0)
+    check("the plan records the lease labels and the 1.25 x / 0.5 h stage rule with the ceiling bound",
+          gp["lease"] == "rcwm-t1:t2b-ledger" and p5["lease"] == "rcwm-t1:prereg5" and "1.25" in p5["stage_rule"] and
+          "CEILING" in p5["stage_rule"])
     check("torch was never imported by the plan part", "torch" not in sys.modules)
     record("plan", {"dev_gpu_h": {"planning": gp["planning"]["gpu_h"], "observed": gp["observed"]["gpu_h"]},
-                    "p5_gpu_h": {k: p5[k] for k in ("gpu_h_planning", "gpu_h_observed", "gpu_h_ceiling_observed",
-                                                    "gpu_h_ceiling_planning")}})
+                    "p5_schedules": {k: {"gpu_h": v["gpu_h"], "max_turn_h": v["max_turn_h"],
+                                         "turns": [t["stages"] for t in v["turns"]]} for k, v in sched.items()}})
 
 
 # ====================================================================================== tiny-model helpers (torch)
@@ -750,6 +916,10 @@ def part_devtiny(keep: bool) -> None:
         rc, rt4, be4 = run(c4)
         check("nothing fits (cap 0.45 h): exit 5, no training, no model load", rc == 5 and not be4.trained and
               not [c for c in rt4.calls if c[0] == "load"], rc)
+        rc4b, _, _ = run(c4)
+        st4 = C.read_json(c4.out / "STOPPED.json") or {}
+        check("a second consecutive turn without a recorded stage stops the job (exit 3, persisted)",
+              rc4b == 3 and "no stage was recorded in 2 consecutive turns" in st4.get("reason", ""), (rc4b, st4.get("reason")))
         c5 = cfg("defer_seed")
         real_cs = R.G2.can_start
 
@@ -763,6 +933,7 @@ def part_devtiny(keep: bool) -> None:
             rc_a, _, _ = run(c5)
         finally:
             R.G2.can_start = real_cs
+        write_lf(c5.out / "DONE.json.partial", "{")        # a crash between DONE's write and its rename, then a reboot
         rc_b, rt5, _ = run(c5)
         prov5 = C.read_json(c5.out / "provenance.json")
         check("a seed whose pair no longer fits is deferred (exit 5); the next call re-anchors and completes with "
@@ -770,6 +941,8 @@ def part_devtiny(keep: bool) -> None:
               prov5["turns"][1]["anchor"]["pass"] and all(sha(c5.out / f"s{s}" / "dev_on.jsonl") ==
                                                           sha(c1.out / f"s{s}" / "dev_on.jsonl") for s in (0, 1, 2)),
               (rc_a, rc_b, prov5["turns"][0]["deferred"]))
+        check("a stale DONE.json.partial is moved aside (never deleted) and DONE.json is written",
+              (c5.out / "DONE.json").exists() and bool(list(c5.out.glob("DONE.json.partial.stale.*"))))
         # 4 stops
         import psutil
         parent = os.getppid() if psutil.pid_exists(os.getppid()) else None
@@ -993,6 +1166,14 @@ def part_p5tiny(keep: bool) -> None:
         check("a crash inside P2 propagates; the resume orphans the partial P2, re-runs A0 and completes with outputs "
               "identical to the uninterrupted run", ok and rcs2[-1] == 0 and bool(list((c2.out / "_orphans").glob("P2_*")))
               and prov2["turns"][-1].get("a0_recheck") is not None and same, (rcs2, same))
+        a2 = prov2["attempts"]["P2"]
+        check("the crashed attempt records its exception (it counts as failed); every attempt records pid and boot time",
+              "simulated crash inside P2" in str(a2[0].get("exception")) and all("boot_time" in a and "pid" in a for a in a2),
+              a2[0])
+        p1rec = prov2["stages"]["P1"]
+        check("a recorded planning stage keeps its generation count and the start estimate it was admitted on",
+              p1rec.get("generations", 0) > 0 and p1rec.get("start_estimate_s", 0) > 0, {k: p1rec.get(k) for k in
+                                                                                         ("generations", "start_estimate_s")})
         # 3 deferral
         c3 = p5_cfg(CR, tmp, "defer_none", sets, w, cap_h=0.45)
         with GenPatch(stub):
@@ -1002,26 +1183,60 @@ def part_p5tiny(keep: bool) -> None:
               "job (exit 3, persisted)", rcs3 == [5, 3] and not [c for c in rt3.calls if c[0] == "load"] and
               (c3.out / "STOPPED.json").exists() and prov3["no_progress_turns"] == 2, rcs3)
         c4 = p5_cfg(CR, tmp, "defer_mid", sets, w)
-        real_est = CR.stage_est_s
+        real_est = CR.start_estimate_s
 
-        def est_after_m1(st, n, rate, map_rate, mode="expected"):
+        def est_after_m1(st, n, rate, map_rate, measured_spg):
             if st in ("P1", "P2", "P3", "P4") and len(c4_calls) == 1:
                 return 4.0 * 3600
-            return real_est(st, n, rate, map_rate, mode)
+            return real_est(st, n, rate, map_rate, measured_spg)
         c4_calls = [1]
-        CR.stage_est_s = est_after_m1
+        CR.start_estimate_s = est_after_m1
         try:
             with GenPatch(stub):
                 rc_a = CR.run_main(c4, p5_backend(FakeRuntime(tmp)))
         finally:
-            CR.stage_est_s = real_est
+            CR.start_estimate_s = real_est
         c4_calls.append(2)
+        write_lf(c4.out / "DONE.json.partial", "{")        # a crash between DONE's write and its rename, then a reboot
         with GenPatch(stub):
             rcs4, _ = complete(CR, c4)
+        check("a stale DONE.json.partial is moved aside (never deleted) and DONE.json is written",
+              (c4.out / "DONE.json").exists() and bool(list(c4.out.glob("DONE.json.partial.stale.*"))))
         prov4 = C.read_json(c4.out / "provenance.json")
         check("a mid-run deferral after A0 and M1 (exit 5) resumes next call with an A0 re-check and completes",
               rc_a == 5 and rcs4[-1] == 0 and prov4["turns"][0]["stages_run"] == ["A0", "M1"] and
               prov4["turns"][1].get("a0_recheck") is not None, (rc_a, rcs4))
+        # attempts cut off by a reboot are not failures; recorded exceptions and silent deaths in this boot are
+        boot = CR.current_boot_time()
+        for name, atts, want in (
+                ("reboot", [{"turn": 0, "where": "gpu", "pid": 999999, "boot_time": boot - 7200.0, "start_unix": 0.0}] * 3,
+                 "complete"),
+                ("failed", [{"turn": 0, "where": "gpu", "pid": 999999, "boot_time": boot, "start_unix": 0.0,
+                             "exception": "RuntimeError: x"}] * 2 +
+                 [{"turn": 0, "where": "gpu", "pid": 999999, "boot_time": boot, "start_unix": 0.0}], "stop")):
+            cx = p5_cfg(CR, tmp, f"attempts_{name}", sets, w)
+            CR.start_estimate_s = est_after_m1
+            c4_calls[:] = [1]
+            try:
+                with GenPatch(stub):
+                    CR.run_main(cx, p5_backend(FakeRuntime(tmp)))
+            finally:
+                CR.start_estimate_s = real_est
+            c4_calls.append(2)
+            pv = C.read_json(cx.out / "provenance.json")
+            pv["attempts"]["P1"] = atts
+            write_lf(cx.out / "provenance.json", json.dumps(pv, indent=1) + "\n")
+            with GenPatch(stub):
+                rcsx, _ = complete(CR, cx)
+            pvx = C.read_json(cx.out / "provenance.json")
+            if want == "complete":
+                check("three P1 attempts cut off by a reboot (an earlier boot, no exception) are not counted: the job "
+                      "completes", rcsx[-1] == 0 and pvx["attempts_classified"]["P1"]["interrupted_by_reboot"] == 3,
+                      (rcsx, pvx.get("attempts_classified", {}).get("P1")))
+            else:
+                stx = C.read_json(cx.out / "STOPPED.json") or {}
+                check("two recorded exceptions and one silent death in this boot count as three failures: the job stops "
+                      "(persisted)", rcsx == [3] and "failed 3 attempts" in stx.get("reason", ""), (rcsx, stx.get("reason")))
         # 4 A0 failures
         bad_off = write_lf(tmp / "refs" / "ref_bad_off.jsonl", "".join(
             json.dumps({**x, "states": ['{"A":0,"B":0,"C":0,"D":0}'] * len(x["states"])}) + "\n"
@@ -1049,13 +1264,13 @@ def part_p5tiny(keep: bool) -> None:
               "BATCH INVARIANCE" in (C.read_json(c7.out / "STOPPED.json") or {}).get("reason", ""), rcs7)
         # a re-check failure after M1 is recorded: part (a) stays eligible
         c8 = p5_cfg(CR, tmp, "recheck_fail", sets, w)
-        CR.stage_est_s = est_after_m1
+        CR.start_estimate_s = est_after_m1
         c4_calls[:] = [1]
         try:
             with GenPatch(stub):
                 rc8a = CR.run_main(c8, p5_backend(FakeRuntime(tmp)))
         finally:
-            CR.stage_est_s = real_est
+            CR.start_estimate_s = real_est
         c8.anchor_refs = bad_refs
         with GenPatch(stub):
             rc8b = CR.run_main(c8, p5_backend(FakeRuntime(tmp)))
@@ -1081,13 +1296,13 @@ def part_p5tiny(keep: bool) -> None:
         rcs11 = CR.run_main(c11, p5_backend(FakeRuntime(tmp)))
         check("a recorded output whose hash changed stops the job", rcs11 == 3)
         c12 = p5_cfg(CR, tmp, "adapter_swap", sets, w)
-        CR.stage_est_s = est_after_m1
+        CR.start_estimate_s = est_after_m1
         c4_calls[:] = [1]
         try:
             with GenPatch(stub):
                 CR.run_main(c12, p5_backend(FakeRuntime(tmp)))
         finally:
-            CR.stage_est_s = real_est
+            CR.start_estimate_s = real_est
         c12.t2bl_dirs = {**c12.t2bl_dirs, 1: w["t2bl2"]}
         rc12 = CR.run_main(c12, p5_backend(FakeRuntime(tmp)))
         check("an adapter that changed between invocations stops the job", rc12 == 3)
@@ -1136,11 +1351,29 @@ def build_fake_root(froot: Path, w: dict, gate_verdict: str = "PROCEED") -> None
     for s in (0, 1, 2):
         shutil.copy(w["dev_on"][s], write_lf(froot / CR.DEV_ON_RELS[s], ""))
     write_lf(froot / CR.GATE_RULE_REL, json.dumps({"record": "T2BL_GATE_RULE", "frozen_local": "2026-10-11 09:00:00 -0500",
-                                                   "prereg5_rules": CA.rules_digest()}, indent=1) + "\n")
+                                                   "prereg5_rules": CA.rules_digest(),
+                                                   "prereg5_code": CA.code_digest(froot)}, indent=1) + "\n")
     write_lf(froot / CR.DEV_RUN_REL / "DONE.json", json.dumps({"seeds": [0, 1, 2]}) + "\n")
     write_lf(froot / CR.DEV_RUN_REL / "provenance.json", json.dumps({"tag": "dev"}) + "\n")
     write_lf(froot / CR.GATE_REL, json.dumps({"record": "T2BL_GATE", "registered": True,
                                               "decision": {"verdict": gate_verdict}}) + "\n")
+
+
+def ret_root(tmp: Path, name: str) -> Path:
+    r = tmp / name
+    (r / "docs" / "retention" / "draws").mkdir(parents=True, exist_ok=True)
+    (r / "runs" / "prereg5").mkdir(parents=True, exist_ok=True)
+    return r
+
+
+def stub_seal(draws: Path, did: str, with_seal: bool = True) -> dict:
+    text = '{"id": "x"}\n'
+    seal = {"draw_id": did, "purpose": "confirm", "file": f"docs/retention/draws/{did}.jsonl",
+            "file_sha256": hashlib.sha256(text.encode()).hexdigest(), "minted_local": "now"}
+    write_lf(draws / f"{did}.jsonl", text)
+    if with_seal:
+        write_lf(draws / f"{did}.SEAL.json", json.dumps(seal))
+    return seal
 
 
 def part_p5freeze(keep: bool) -> None:
@@ -1161,21 +1394,25 @@ def part_p5freeze(keep: bool) -> None:
                    **{rel: sha(froot / rel) for rel in CR.ANCHOR_REF_RELS.values()}}
         CB.mint = lambda d, e, s, **k: real_mint(d, e, s, map_n_bases=4, plan_n_per_depth=2)
         small = lambda r: {"pay": set(), "ops": set(), "sources": {"test": {"payloads": 0}}, "rule": "test union"}  # noqa: E731
+        dig = CB.union_digest(small(None))
         all_ok = lambda r: {"stub": True}  # noqa: E731
         dsha = sha(froot / CR.DRAFT_REL)
         commit = hashlib.sha256(TEST_SALT.encode()).hexdigest()
-        cos = f"BWM-test co-sign {dsha} commit:{commit}"
+        cos = f"BWM-test co-sign {dsha} union:{dig} commit:{commit}"
         appr = "test operator, 2026-10-10, DECISIONS D-test"
 
-        def fz(a=appr, c=cos, s=TEST_SALT, checks=all_ok, union=small):
-            return CR.freeze(a, c, s, root=froot, checks=checks, union_builder=union)
+        def fz(a=appr, c=cos, s=TEST_SALT, checks=all_ok, union=small, root=froot, changes=None):
+            return CR.freeze(a, c, s, root=root, checks=checks, union_builder=union, changes=changes)
         for label, kw, needle in (
                 ("an approval without a DECISIONS entry", {"a": "test operator 2026-10-10"}, "DECISIONS"),
-                ("a co-sign that does not quote the draft's sha256", {"c": f"BWM commit:{commit}"}, "sha256"),
-                ("a co-sign without a salt commitment", {"c": f"BWM {dsha}"}, "commitment"),
+                ("a co-sign that does not quote the draft's sha256", {"c": f"BWM union:{dig} commit:{commit}"}, "sha256"),
+                ("a co-sign without a salt commitment", {"c": f"BWM {dsha} union:{dig}"}, "commitment"),
+                ("a co-sign without the union digest", {"c": f"BWM {dsha} commit:{commit}"}, "union digest"),
+                ("a co-sign quoting another union digest (data/ or docs/ changed after it was published)",
+                 {"c": f"BWM {dsha} union:{'0' * 64} commit:{commit}"}, "NEW salt"),
                 ("a salt that does not match the commitment", {"s": "another-salt-0123456789"}, "commitment"),
-                ("a salt shorter than 16 characters", {"s": "short", "c": f"BWM {dsha} commit:{hashlib.sha256(b'short').hexdigest()}"},
-                 "16 characters"),
+                ("a salt shorter than 16 characters",
+                 {"s": "short", "c": f"BWM {dsha} union:{dig} commit:{hashlib.sha256(b'short').hexdigest()}"}, "16 characters"),
                 ("a failing pre-freeze check", {"checks": lambda r: {"a record": False}}, "pre-freeze checks failed"),
                 ("a union source that cannot be read", {"union": lambda r: {"pay": set(), "ops": set(),
                                                                             "sources": {"x": {"error": "OSError"}}}},
@@ -1190,18 +1427,31 @@ def part_p5freeze(keep: bool) -> None:
         ok, msg, _ = raises(lambda: fz(union=writes_data), CR.Stop, "data/ changed")
         (froot / "data" / "zz_concurrent.json").unlink()
         check("freeze refuses when data/ changes while the union is built", ok, msg)
+        an = froot / "scripts" / "t2bl_confirm_analysis.py"
+        keep_an = an.read_bytes()
+        an.write_bytes(keep_an + b"\n# a change after the dev gate's freeze (test)\n")
+        ok, msg, pers = raises(lambda: fz(), CR.Stop, "--changes")
+        ok_b, msg_b, _ = raises(lambda: fz(changes=[{"what": "x", "why": "y", "files": ["scripts/t2bl_audit.py"]}]),
+                                CR.Stop, "is not listed")
+        an.write_bytes(keep_an)
+        check("freeze refuses decision code changed since the dev gate's freeze without a change list, or with a list "
+              "that does not name the changed file (not persisted)", ok and pers is False and ok_b and
+              not any((froot / r).exists() for r in CR.SEALED), (msg[:120], msg_b[:120]))
         pre = CR.prefreeze_checks(froot)
         check("the real pre-freeze checks fail on the fake root's stub records (records must be produced by the tests "
               "with the current code, draft and hook draft)", not all(pre.values()), [k for k, v in pre.items() if not v][:2])
         frec = fz()
         ok, errs, fzr = CR.verify_freeze(froot)
-        check("freeze: both sets minted from the seed rule with the revealed salt, sealed, every input hashed; verify ok",
+        check("freeze: both sets minted from the seed rule with the revealed salt, sealed, every input hashed; the rules and "
+              "the decision code unchanged since the dev gate; verify ok",
               ok and frec["sealed"]["map_bank"]["n"] > 0 and frec["sealed"]["plan_draw"]["n"] == 10 and
-              frec["rules"]["unchanged"] is True and (froot / CR.PREREG_REL).exists(), errs[:2])
+              frec["rules"]["unchanged"] is True and not frec["rules"]["code_changed"] and (froot / CR.PREREG_REL).exists(),
+              errs[:2])
         ms = C.read_json(froot / CR.MAP_SOURCE_REL)
-        check("the map seed follows the rule (tag, draft sha256, union digest, BWM salt) and the salt matches the commit",
-              ms["seed_rule"]["seed"] == CB.seed_from_rule(CB.TAG_MAP, dsha, ms["seed_rule"]["union_digest"], TEST_SALT) and
-              ms["seed_rule"]["bwm_commit"] == commit)
+        check("the map seed follows the rule (tag, draft sha256, the quoted union digest, BWM salt); the salt matches the "
+              "commit; the map bank renders the CONFIRM half", ms["seed_rule"]["seed"] == CB.seed_from_rule(
+                  CB.TAG_MAP, dsha, dig, TEST_SALT) and ms["seed_rule"]["union_digest"] == dig and
+              ms["seed_rule"]["bwm_commit"] == commit and ms["split"] == "confirm")
         check("PREREG_5.md = the draft with the status line and section 10 filled",
               "**Status:** FROZEN at" in (froot / CR.PREREG_REL).read_text(encoding="utf-8") and
               "## 10. Freeze record" in (froot / CR.PREREG_REL).read_text(encoding="utf-8"))
@@ -1216,6 +1466,15 @@ def part_p5freeze(keep: bool) -> None:
             ok3, errs3, _ = CR.verify_freeze(froot)
             p.write_bytes(keep_b)
             check(f"verify fails when {label} changes", not ok3, errs3[:1])
+        fzp = froot / CR.FREEZE_REL
+        keep_fz = fzp.read_bytes()
+        fzj = json.loads(keep_fz)
+        fzj["bwm_cosign"] = fzj["bwm_cosign"].replace(f"union:{dig}", "union:" + "1" * 64)
+        fzp.write_text(json.dumps(fzj, indent=1) + "\n", encoding="utf-8", newline="\n")
+        ok3, errs3, _ = CR.verify_freeze(froot)
+        fzp.write_bytes(keep_fz)
+        check("verify fails when the co-sign's quoted union digest is not the one the sets were minted from",
+              not ok3 and any("union digest" in e for e in errs3), errs3[:1])
         # the registered job in the fake root (tiny models, the stub generator)
         cfg = CR.Cfg(root=froot, out=froot / CR.OUT_REL, map_bank=froot / CR.MAP_BANK_REL, map_source=froot / CR.MAP_SOURCE_REL,
                      plan_draw=froot / CR.PLAN_DRAW_REL, plan_source=froot / CR.PLAN_SOURCE_REL,
@@ -1227,22 +1486,20 @@ def part_p5freeze(keep: bool) -> None:
         write_lf(froot / CR.HOOK_INSTALLED_REL, "# not the draft\n")
         ok4, msg, pers = raises(lambda: CR.run(cfg, p5_backend(FakeRuntime(tmp))), CR.Stop, "byte for byte")
         (froot / CR.HOOK_INSTALLED_REL).unlink()
-        check("the job refuses an installed hook that is not the frozen draft (not persisted)", ok4 and pers is False, msg)
+        shutil.copy(froot / CR.HOOK_DRAFT_REL, froot / CR.HOOK_INSTALLED_REL)
+        write_lf(froot / "scripts" / "queue_hooks" / "91_prereg5_old.sh", "# a stale copy under another name\n")
+        ok4b, msg_b, pers_b = raises(lambda: CR.run(cfg, p5_backend(FakeRuntime(tmp))), CR.Stop, "91_prereg5_old.sh")
+        (froot / "scripts" / "queue_hooks" / "91_prereg5_old.sh").unlink()
+        check("the job refuses an installed hook that is not the frozen draft, also under another *prereg5*.sh name "
+              "(not persisted); the draft installed byte for byte passes", ok4 and pers is False and ok4b and
+              pers_b is False and CR.hook_problem(froot, fzr) is None, (msg[:100], msg_b[:100]))
         with GenPatch(stub):
             rcs, _ = complete(CR, cfg)
         check("the registered job (fake root) completes: exit 5 (C1 pending), then 0", rcs == [5, 0], rcs)
         # part (c): retention binding with a stub mint and a fake retention run
         draws = froot / "docs" / "retention" / "draws"
-
-        def stub_mint():
-            text = '{"id": "x"}\n'
-            seal = {"draw_id": "confirm_424242", "purpose": "confirm", "file": "docs/retention/draws/confirm_424242.jsonl",
-                    "file_sha256": hashlib.sha256(text.encode()).hexdigest(), "minted_local": "now"}
-            write_lf(draws / "confirm_424242.jsonl", text)
-            write_lf(draws / "confirm_424242.SEAL.json", json.dumps(seal))
-            return seal
-        rd = CR.ret_mint(froot, mint_fn=stub_mint)
-        ok5, msg, _ = raises(lambda: CR.ret_mint(froot, mint_fn=stub_mint), CR.Stop, "minted once")
+        rd = CR.ret_mint(froot, mint_fn=lambda: stub_seal(draws, "confirm_424242"))
+        ok5, msg, _ = raises(lambda: CR.ret_mint(froot, mint_fn=lambda: stub_seal(draws, "confirm_9")), CR.Stop, "minted once")
         check("--ret-mint records ONE draw after the freeze and refuses a second mint", rd["draw_id"] == "confirm_424242"
               and ok5, msg)
         rrun = froot / "runs" / "retention" / "confirm_424242"
@@ -1279,6 +1536,83 @@ def part_p5freeze(keep: bool) -> None:
         build_fake_root(froot2, w, gate_verdict="TRIGGER_WIDENED")
         pre2 = CR.prefreeze_checks(froot2)
         check("the pre-freeze checks refuse a dev gate other than PROCEED", pre2["the registered dev gate says PROCEED"] is False)
+        # a listed change after the dev gate's freeze: accepted and rendered into Appendix A
+        froot3 = tmp / "root3"
+        build_fake_root(froot3, w)
+        an3 = froot3 / "scripts" / "t2bl_confirm_analysis.py"
+        an3.write_bytes(an3.read_bytes() + b"\n# a logged crash fix after the dev gate's freeze (test)\n")
+        d3 = sha(froot3 / CR.DRAFT_REL)
+        frec3 = fz(root=froot3, c=f"BWM-test co-sign {d3} union:{dig} commit:{commit}",
+                   changes=[{"what": "a crash fix in the analysis' report rendering", "why": "found by the full test rerun",
+                             "files": ["scripts/t2bl_confirm_analysis.py"]}])
+        pr3 = (froot3 / CR.PREREG_REL).read_text(encoding="utf-8")
+        ok3, errs3, _ = CR.verify_freeze(froot3)
+        check("a change listed with --changes is accepted, recorded (rules.unchanged false, the changed file named) and "
+              "rendered into PREREG_5.md Appendix A; verify ok", ok3 and frec3["rules"]["unchanged"] is False and
+              frec3["rules"]["code_changed"] == ["scripts/t2bl_confirm_analysis.py"] and
+              "### Changes after the dev gate rule was frozen" in pr3 and "found by the full test rerun" in pr3, errs3[:2])
+        # the documented path to the freeze: records rewritten in place after the dev screen's outputs exist
+        froot5 = tmp / "root5"
+        build_fake_root(froot5, w)
+        d5 = froot5 / "docs" / "t2b" / "ledger"
+        check("the fake root has a dev-screen output (runs/t2bl), as after step (iii)", bool(C.run_outputs(froot5 / "runs" / "t2bl")))
+        p0 = C.write_doc("TEST_DATA.json", "{}\n", docs=d5)
+        p1 = C.write_doc("TEST_DATA.json", '{"x": 1}\n', docs=d5)
+        check("a dev-screen record is timestamped (never overwritten) once a runs/t2bl output exists",
+              p0.name == "TEST_DATA.json" and p1.name.startswith("TEST_DATA.") and p1.name != "TEST_DATA.json")
+        with open(froot5 / CR.DRAFT_REL, "a", encoding="utf-8", newline="\n") as fh:      # step (iv): --render-draft
+            fh.write("\n<!-- section 5b refreshed from the dev screen (test) -->\n")
+        written = []
+        for part in CR.TEST_PARTS:                                                       # step (v): the tests rerun
+            rec = make_record(part, [{"check": "stand-in", "ok": True, "detail": ""}], froot5)
+            written.append(C.write_doc(f"TEST_{part.upper()}.json", json.dumps(rec, indent=1, default=str) + "\n", docs=d5))
+        an_code = {r: sha(froot5 / r) for r in ("scripts/t2bl_confirm_analysis.py", "scripts/t2bl_common.py")}
+        written.append(C.write_doc("P5_DRYRUN.json", json.dumps({"ok": True, "code_sha256": an_code}) + "\n", docs=d5))
+        written.append(C.write_doc("P5_POWER_DEV.json", json.dumps({"assumption_source": "runs/t2bl/dev/analysis/GATE.json",
+                                                                    "map": []}) + "\n", docs=d5))
+        check("PREREG-5's pre-freeze records are rewritten IN PLACE after the dev screen's outputs exist (not timestamped)",
+              all("." not in p.stem for p in written) and all(p.parent == d5 for p in written), [p.name for p in written][:4])
+        pre5 = CR.prefreeze_checks(froot5)
+        check("after --render-draft and the test rerun, every pre-freeze check passes on the fake root (records bound to the "
+              "re-rendered draft and the current code)", all(pre5.values()), [k for k, v in pre5.items() if not v][:3])
+        d5sha = sha(froot5 / CR.DRAFT_REL)
+        frec5 = CR.freeze(appr, f"BWM-test co-sign {d5sha} union:{dig} commit:{commit}", TEST_SALT, root=froot5,
+                          union_builder=small)
+        check("the documented sequence ends in a freeze with the REAL pre-freeze checks (gate frozen, dev output, power "
+              "from the gate, --render-draft, tests, freeze)", CR.verify_freeze(froot5)[0] and all(frec5["prefreeze_checks"].values()))
+        p6 = C.write_doc("TEST_HOOK.json", "{}\n", docs=d5)
+        check("once PREREG-5 is frozen, a pre-freeze record is never overwritten (a timestamped copy is written)",
+              p6.name != "TEST_HOOK.json" and (d5 / "TEST_HOOK.json").read_text(encoding="utf-8") != "{}\n")
+        # retention mint recovery after an interrupted --ret-mint
+        r1 = ret_root(tmp, "ret_adopt")
+        write_lf(r1 / CR.RET_INTENT_REL, json.dumps({"confirm_seals_before": [], "unix": time.time() - 1.0}))
+        stub_seal(r1 / "docs" / "retention" / "draws", "confirm_111")
+        rec1 = CR.ret_mint(r1, require_freeze=False, mint_fn=lambda: (_ for _ in ()).throw(AssertionError("no mint")))
+        check("recovery adopts the one confirmation seal written after the intent and claimed by no one",
+              rec1["draw_id"] == "confirm_111" and "adopted" in rec1["how"])
+        r2 = ret_root(tmp, "ret_stale")
+        stub_seal(r2 / "docs" / "retention" / "draws", "confirm_222")
+        old = time.time() - 3600
+        os.utime(r2 / "docs" / "retention" / "draws" / "confirm_222.SEAL.json", (old, old))
+        os.utime(r2 / "docs" / "retention" / "draws" / "confirm_222.jsonl", (old, old))
+        write_lf(r2 / CR.RET_INTENT_REL, json.dumps({"confirm_seals_before": [], "unix": time.time() - 1.0}))
+        rec2 = CR.ret_mint(r2, require_freeze=False, mint_fn=lambda: stub_seal(r2 / "docs" / "retention" / "draws", "confirm_223"))
+        check("a seal older than the intent is not adopted; with nothing written after the intent a fresh mint follows "
+              "(recorded as an intent retry)", rec2["draw_id"] == "confirm_223" and "retry" in rec2["how"] and
+              len((C.read_json(r2 / CR.RET_INTENT_REL) or {}).get("retries") or []) == 1)
+        r3 = ret_root(tmp, "ret_claimed")
+        write_lf(r3 / CR.RET_INTENT_REL, json.dumps({"confirm_seals_before": [], "unix": time.time() - 1.0}))
+        stub_seal(r3 / "docs" / "retention" / "draws", "confirm_333")
+        write_lf(r3 / "docs" / "retention" / "BWM_RELEASE_DRAW.txt", "docs/retention/draws/confirm_333.jsonl\n")
+        rec3 = CR.ret_mint(r3, require_freeze=False, mint_fn=lambda: stub_seal(r3 / "docs" / "retention" / "draws", "confirm_334"))
+        check("a new seal that another consumer recorded (hook 85's BWM release draw) is never adopted",
+              rec3["draw_id"] == "confirm_334")
+        r4 = ret_root(tmp, "ret_orphan")
+        write_lf(r4 / CR.RET_INTENT_REL, json.dumps({"confirm_seals_before": [], "unix": time.time() - 1.0}))
+        stub_seal(r4 / "docs" / "retention" / "draws", "confirm_444", with_seal=False)
+        ok7, msg, pers = raises(lambda: CR.ret_mint(r4, require_freeze=False, mint_fn=lambda: {}), CR.Stop, "without a seal")
+        check("a draw file without a seal after the intent stops for the operator (not persisted; nothing minted)",
+              ok7 and pers is False and not (r4 / CR.RET_DRAW_REL).exists(), msg)
         check("MD.empty_union is the only union the tests use (no harvest), and the registered union builder is "
               "build_union(skip_prefix=None)", callable(MD.build_union))
     finally:
@@ -1286,6 +1620,53 @@ def part_p5freeze(keep: bool) -> None:
         if not keep:
             shutil.rmtree(tmp, ignore_errors=True)
     record("p5freeze")
+
+
+# ====================================================================================== part: rehearsal (no torch)
+def part_rehearsal() -> None:
+    """The freeze-time mint at full size against the REAL freshness union, in memory, with stand-in tags (so it can
+    never produce the registered seeds) and a stand-in salt; only counts are recorded, no row or instance is printed or
+    written. Rerun just before the co-sign: its record is a pre-freeze check."""
+    import t2bl_confirm_bank as CB
+    import t2bl_make_data as MD
+    t0 = time.time()
+    excl = MD.build_union(skip_prefix=None, log=lambda *a: None)
+    t_union = round(time.time() - t0, 1)
+    errs = MD.union_errors(excl)
+    check("the real freshness union (skip_prefix=None: T2b-ledger's training set and dev bank included) builds without a "
+          "source error", not errs, errs[:3])
+    dig = CB.union_digest(excl)
+    real_tags = (CB.TAG_MAP, CB.TAG_PLAN)
+    stand_in = ("REHEARSAL map bank (not PREREG-5)", "REHEARSAL planning draw (not PREREG-5)")
+    draft0, salt0 = "0" * 64, "rehearsal-salt-0123456789abcdef"
+    CB.TAG_MAP, CB.TAG_PLAN = stand_in
+    try:
+        t1 = time.time()
+        M = CB.mint(draft0, excl, salt0)
+        t_mint = round(time.time() - t1, 1)
+    finally:
+        CB.TAG_MAP, CB.TAG_PLAN = real_tags
+    ms, ps = M["map_source"], M["plan_source"]
+    want_rows = C.bank_rows_expected(C.CONFIRM_STRATA)
+    check(f"the full-size map bank mints from the CONFIRM half: 28 strata, {want_rows:,} rows, the stratum audit passes, "
+          "0 payload / operative overlaps, regenerates from (seed, rejections)",
+          len(M["map_rows"]) == want_rows and len(ms["strata"]) == 28 and ms["split"] == "confirm" and
+          ms["stratum_audit_problems"] == 0 and ms["regenerates"] and not ms["overlap"]["payload_overlap"] and
+          not ms["overlap"]["operative_overlap"], (len(M["map_rows"]), len(ms["fresh_rejections"])))
+    check("the full-size planning draw mints: 180 instances, 36 per optimal depth, verifies, 0 overlaps, regenerates",
+          len(M["plan_insts"]) == 180 and set(ps["per_depth"].values()) == {36} and ps["verify_ok"] and
+          ps["regenerated_equal"] and not ps["overlap"]["payload_overlap"] and not ps["overlap"]["operative_overlap"],
+          (len(M["plan_insts"]), len(ps["fresh_rejections"])))
+    reg = (CB.seed_from_rule(CB.TAG_MAP, draft0, dig, salt0), CB.seed_from_rule(CB.TAG_PLAN, draft0, dig, salt0))
+    check("the stand-in tags give other seeds than the registered tags would on the same inputs",
+          (M["seeds"]["map"], M["seeds"]["plan"]) != reg and M["seeds"]["map"] not in reg)
+    del M, excl
+    check("torch was never imported by the rehearsal", "torch" not in sys.modules)
+    record("rehearsal", {"union": {"digest_at_rehearsal": dig, "seconds": t_union},
+                         "map": {"rows": len(ms["strata"]) and sum(ms["strata"].values()), "strata": len(ms["strata"]),
+                                 "fresh_rejections": len(ms["fresh_rejections"]), "rejection_counts": ms["rejection_counts"]},
+                         "plan": {"instances": sum(ps["per_depth"].values()), "fresh_rejections": len(ps["fresh_rejections"])},
+                         "mint_seconds": t_mint})
 
 
 # ====================================================================================== part: hook (bash)
@@ -1344,7 +1725,8 @@ def part_hook() -> None:
         ("complete in one call, then the gate once", pre, [f"0 {D}", f"0 {A}"], [run_, gate]),
         ("deferral: sleep 60 s BEFORE the re-call, then complete and the gate",
          pre, ["5", f"0 {D}", f"0 {A}"], [run_, "sleep 60", run_, gate]),
-        ("persisted stop: never retried, no gate", pre, [f"3 {S}"], [run_]),
+        ("persisted stop: never retried; the gate writes its NO VERDICT record", pre, [f"3 {S}", f"0 {A}"], [run_, gate]),
+        ("idempotent: STOPPED and GATE exist, nothing runs", pre + [S, A], [], []),
         ("non-persisted stop (another RCWM job): no retry in this pass", pre, ["3"], [run_]),
         ("a crash is retried once", pre, ["1", f"0 {D}", f"0 {A}"], [run_, run_, gate]),
         ("two crashes: no third call", pre, ["1", "1"], [run_, run_]),
@@ -1383,6 +1765,8 @@ def part_hook() -> None:
         ("a crash of the GPU job is retried once", fz, ["1", f"0 {PD}", f"0 {RD}", f"0 {RRD}", f"0 {RRA}", f"0 {RT}", f"0 {PR_}"],
          [p5, p5, mint, retr, reta, rec, ana]),
         ("idempotent: every output exists, nothing runs", fz + [PD, RD, RT, PR_], [], []),
+        ("six deferrals: at most six GPU calls per pass, a sleep before each re-call", fz, ["5"] * 6,
+         [p5, "sleep 60"] * 6),
         ("the analysis waits for part (c) to be bound", fz + [PD, RD, RRD, RRA], ["3"], [rec]),
     ]
     for label, files, rcs, want in cases:
@@ -1412,7 +1796,7 @@ def main() -> int:
     t0 = time.time()
     fn = {"data": part_data, "gate": part_gate, "p5analysis": part_p5analysis, "plan": part_plan, "hook": part_hook,
           "devtiny": lambda: part_devtiny(a.keep), "p5tiny": lambda: part_p5tiny(a.keep),
-          "p5freeze": lambda: part_p5freeze(a.keep)}[a.part]
+          "p5freeze": lambda: part_p5freeze(a.keep), "rehearsal": part_rehearsal}[a.part]
     try:
         fn()
     except Exception as e:                             # noqa: BLE001  (a crash is a failed part, recorded)

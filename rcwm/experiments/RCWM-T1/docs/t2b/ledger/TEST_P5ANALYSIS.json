@@ -1,16 +1,16 @@
 {
  "part": "p5analysis",
  "ok": true,
- "n_checks": 8,
- "n_pass": 8,
+ "n_checks": 9,
+ "n_pass": 9,
  "checks": [
   {
-   "check": "every PREREG-5 dry-run case gives its registered reading (31 cases)",
+   "check": "every PREREG-5 dry-run case gives its registered reading (35 cases)",
    "ok": true,
    "detail": "[]"
   },
   {
-   "check": "every registered rule, limit and template (64) appears verbatim in the draft",
+   "check": "every registered rule, limit and template (68) appears verbatim in the draft",
    "ok": true,
    "detail": "[]"
   },
@@ -27,15 +27,20 @@
   {
    "check": "the rules digest is deterministic and covers every registered string",
    "ok": true,
-   "detail": "{'sha256': '65206927d132f50a895ed357efe6ce5390540304f79c48ac2e186ab20bcf1452', 'n_strings': 64}"
+   "detail": "{'sha256': '37b96032f34441960a2dc1a7c8c81e35aef2fef149f8f6e632239f676551df77', 'n_strings': 68}"
   },
   {
-   "check": "the power record exists and covers every primary cell, the in-distribution control and planning",
+   "check": "the code digest covers PREREG-5's decision code (common, make_data, audit, confirm bank / run / analysis)",
    "ok": true,
    "detail": ""
   },
   {
-   "check": "power from the dev screen's outcomes (--from-gate): every primary cell, the in-distribution control and the planning scenario are computed from a GATE.json",
+   "check": "the power record covers every primary cell under three seed regimes (independent, 80% shared, identical) and two cell-vs-twin correlations, the in-distribution control under the same regimes, planning with nested and independent-within-ORACLE success sets, and P(dev gate PROCEED) against P(GENERALISES)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "power from the dev screen's outcomes (--from-gate): every primary cell (with the seed regimes), the in-distribution control and the planning scenario are computed from a GATE.json",
    "ok": true,
    "detail": "[('H_words', 0.95), ('H_order', 0.95), ('H_names', 0.95)]"
   },
@@ -46,24 +51,24 @@
   }
  ],
  "code_sha256": {
-  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
-  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
-  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
-  "scripts/t2bl_run.py": "05cf9acf509a90bab24fece12fc7f11b5ece72b5009619c78227a3d01d9e588a",
-  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
-  "scripts/t2bl_confirm_bank.py": "9a291f1f5d9d623c904ca25efb153e4b9d74b9e1955d23abf1248afa524036d4",
-  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60",
-  "scripts/t2bl_confirm_analysis.py": "ba9e6fa344f6aec7ca2ec33314f98aa083b19cd38b423cf7bef483d48f5f3b06",
-  "scripts/t2bl_test.py": "bd91470a2b0f352a4166246089d541895b9793c7ff5f16b97e66df64a05ca6c8"
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
+  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
+  "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09",
+  "scripts/t2bl_test.py": "b58b21fbb9b2578ccd67e72d784823650da37fdd11ba778da8caf0d1d560d29f"
  },
- "draft_sha256": "66c7e5b7bfd3c982be1a676b5438d6cc40f495c1dfd677910267f2108afd69b0",
- "hook_draft_sha256": "0bda6db3a83867a114ea24084ca9837deabe5c36d8a714bafe4992864cfa81d9",
- "hook_draft_t2bl_sha256": "746f7bd6a719b3f33e8cb0b932c3ea18c1bb8f5c9300df3c80cec9f5597ae6ae",
- "peak_mb": 61.1,
- "recorded_local": "2026-10-10 15:17:56 -0500",
- "n_cases": 31,
+ "draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b",
+ "hook_draft_sha256": "c546ccfa4142bfc05eb961a3868030022edcee6263acd11fc96d6264f2eb484e",
+ "hook_draft_t2bl_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
+ "peak_mb": 64.1,
+ "recorded_local": "2026-10-10 20:41:27 -0500",
+ "n_cases": 35,
  "rules_digest": {
-  "sha256": "65206927d132f50a895ed357efe6ce5390540304f79c48ac2e186ab20bcf1452",
-  "n_strings": 64
+  "sha256": "37b96032f34441960a2dc1a7c8c81e35aef2fef149f8f6e632239f676551df77",
+  "n_strings": 68
  }
 }

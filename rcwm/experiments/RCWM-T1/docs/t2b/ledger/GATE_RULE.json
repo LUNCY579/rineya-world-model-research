@@ -1,0 +1,46 @@
+{
+ "record": "T2BL_GATE_RULE",
+ "rule_version": 2,
+ "rule_text": "T2b-ledger dev gate, revision 2 (pre-stated on 2026-10-10 before any T2b-ledger adapter or output exists). Inputs: the dev bank data/t2bl_dev.jsonl (seed 20261162; 100 bases; 19 strata; the DEV half of every split held-out partition: held-out words, names, key orders and paraphrase 4) generated in one run of scripts/t2bl_run.py (tag dev) with sides OFF (Titan-Sparse, adapter disabled), T2s0 (the PREREG-2 T2 seed-0 adapter) and ON (each T2b-ledger seed s = 0, 1, 2, unmerged), scored by p3_common.score_onestep (exact balances, any key order). For each seed s: G1 (held-out words on the combined held-out surface): the ON accuracy on HS_words (100 rows: a held-out non-posted status word in the combined held-out surface: rule paraphrase 4, held-out account names, every object in a held-out key order; gold = balances unchanged) is >= 0.80; G1b (held-out words on the canonical surface): the ON accuracy on H_words (100 rows) is >= 0.80; G1c (every word kind): on HS_words and on H_words, the ON accuracy of each of the five word kinds (not-applied, neutral, nonce, void variants, posted look-alikes; 20 rows each) is >= 0.60; G2 (in-distribution non-inferiority to T2 s0): the ON accuracy on ID (ID_posted and ID_void, 200 canonical-surface in-range rows) minus T2s0's accuracy on the same rows is >= -0.05 (point estimate; the paired base-bootstrap 95% lower bound is reported, not gated); G3 (the posted twins on the held-out surface): on HS_posted (the posted twins of HS_words' bases in the same surface) the ON accuracy is >= 0.80 and the share of ON answers equal to the input balances is <= 0.10; G4 (alignment with the seed's own canonical accuracy, as in PREREG-5's non-inferiority): the ON accuracies on HS_words and on H_words are each at least the seed's ON accuracy on ID_void minus 0.10. PROCEED to the sealed confirmation (PREREG-5) iff G1, G1b, G1c, G2, G3 and G4 hold in all three seeds, the run is complete (DONE.json, every stage recorded and unchanged) and the A0 anchor passed in every turn. Otherwise STOP, worded as: TRIGGER WIDENED iff in all three seeds the ON accuracy on S_words (training non-posted words, canonical surface) is >= 0.80, the ON accuracy on H_words (held-out words, canonical surface) is <= 0.30, and more than half of the H_words errors apply the event as if posted; PARTIAL otherwise, with the per-stratum, per-variant, per-seed table and the named patterns (heldout_below_bar, word_kind_below_floor, in_distribution_cost, heldout_posted_twins, not_aligned_with_own_canonical, trained_words_below_bar, seed_disagreement). NO VERDICT (instrument) iff the run is incomplete or stopped (STOPPED.json) or an anchor failed; the gate analysis then writes a NO VERDICT record. Revision path after a STOP (pre-stated): no confirmation is drafted from this kit; a revised kit may change only the training data (composition, vocabulary sizes, magnitude bands, paraphrases), must draw a fresh dev bank under a new seed (this dev bank and every adapter trained on the old data are then recorded as spent), and keeps these thresholds. T2b-ledger seed 0 is the registered artifact for PREREG-5's planning and retention parts; seeds 1 and 2 replicate; no seed is ever chosen by its outcome.",
+ "approval": "RCWM-T1 session under the user's standing go-ahead of 2026-10-08; 2026-10-10; DECISIONS D-48",
+ "frozen_local": "2026-10-10 20:49:23 -0500",
+ "inputs": {
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+  "scripts/confirm2_gen.py": "4253a42039c4a1bb95f412666ad4bc1804244d5b10e6e9fa393c99a488659380",
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+  "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+  "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+  "vendor_bwm/scripts/train_generic.py": "816d2f562946177397a5f186e9fcadd7febd2b49c894afc9abafe9474665ad61",
+  "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57",
+  "data/t2bl_train.jsonl": "89d6a01e280080f7559e6a597dad3ceaa43f51d50a4801337ff04750ff53eb39",
+  "data/t2bl_train.SOURCE.json": "c07159c538e6ca750a438fd6d518c3a161dcd0324b20c20e3627db70cd6646ff",
+  "data/t2bl_dev.jsonl": "f710b17e228b3865c9b7993082966a07d2ab5306f137978768b09bd179390c78",
+  "data/t2bl_dev.SOURCE.json": "4f729e68b00496684579f8d23c2baafae36f7d738c244e629fcb77b485bab3f5",
+  "docs/t2b/ledger/GATE_RULE.md": "a6bebb950c26db8c77ad0850572169f8e1bab1dd8cb435bcf4f75f809b5605d9",
+  "docs/t2b/ledger/queue_hook_t2bl.sh.draft": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b"
+ },
+ "prereg5_rules": {
+  "sha256": "37b96032f34441960a2dc1a7c8c81e35aef2fef149f8f6e632239f676551df77",
+  "n_strings": 68,
+  "note": "sha256 of PREREG-5's registered rules, wording templates, limits and thresholds (t2bl_confirm_analysis.rules_digest) at this freeze; PREREG-5's freeze records whether they changed"
+ },
+ "prereg5_code": {
+  "files": {
+   "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+   "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+   "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+   "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
+   "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
+   "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09"
+  },
+  "sha256": "148d180c41f1fc82b699105a95cad2c9f926fd05188aecefaa2644d0679aea3f",
+  "note": "sha256 of PREREG-5's decision code (t2bl_confirm_analysis.PINNED_CODE) at this freeze; PREREG-5's freeze refuses a change that is not listed (--changes)"
+ },
+ "prereg5_draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b"
+}

@@ -1,27 +1,28 @@
 {
  "record": "T2BL_AUDIT",
+ "kit_revision": 2,
  "audit": {
   "ok": true,
   "problems": [],
   "train": {
    "heldout_factor_hits": {},
    "fragment_hits": {},
-   "n_fragments_checked": 76,
+   "n_fragments_checked": 107,
    "classes": {
     "para": {
-     "canonical": 721,
-     "train": 779
+     "canonical": 715,
+     "train": 785
     },
     "top": {
      "canonical": 1500
     },
     "event": {
-     "canonical": 713,
-     "train": 787
+     "canonical": 693,
+     "train": 807
     },
     "before": {
-     "canonical": 728,
-     "train": 772
+     "canonical": 696,
+     "train": 804
     },
     "names": {
      "canonical": 633,
@@ -39,12 +40,12 @@
      "void": 150
     },
     "bal": {
-     "t2": 856,
-     "wide": 644
+     "t2": 917,
+     "wide": 583
     },
     "amt": {
-     "t2": 1087,
-     "wide": 413
+     "t2": 1129,
+     "wide": 371
     }
    },
    "composition": {
@@ -53,18 +54,21 @@
     "nonposted": 750,
     "canon_block": 300,
     "pairs": 400,
-    "fully_canonical_rows": 378
+    "fully_canonical_rows": 378,
+    "max_abs_value": 9974
    },
    "n_prompts_read_back": 1500
   },
   "dev": {
-   "rows": 1667,
+   "rows": 1801,
    "per_stratum": {
     "ID_posted": 100,
     "ID_void": 100,
     "S_words": 100,
     "S_surface_posted": 100,
     "S_surface_words": 100,
+    "S_bal": 67,
+    "S_amt": 67,
     "H_words": 100,
     "H_order": 100,
     "H_names": 100,
@@ -77,15 +81,843 @@
     "LB_void": 100,
     "LB_posted": 100,
     "P3_words": 100
-   }
+   },
+   "split": "dev"
   },
   "heldout_orders_regenerated": true,
+  "token_audit": {
+   "ok": true,
+   "problems": [],
+   "n_trained_status_tokens": 58,
+   "heldout": {
+    "rescinded": {
+     "half": "dev",
+     "kind": "not_applied",
+     "tokens": [
+      "res",
+      "c",
+      "inded"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "res",
+      "c",
+      "inded"
+     ]
+    },
+    "refused": {
+     "half": "dev",
+     "kind": "not_applied",
+     "tokens": [
+      "ref",
+      "used"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "ref",
+      "used"
+     ]
+    },
+    "stalled": {
+     "half": "dev",
+     "kind": "not_applied",
+     "tokens": [
+      "st",
+      "alled"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "st",
+      "alled"
+     ]
+    },
+    "nullified": {
+     "half": "dev",
+     "kind": "not_applied",
+     "tokens": [
+      "null",
+      "ified"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "null",
+      "ified"
+     ]
+    },
+    "verified": {
+     "half": "dev",
+     "kind": "neutral",
+     "tokens": [
+      "verified"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "verified"
+     ]
+    },
+    "valid": {
+     "half": "dev",
+     "kind": "neutral",
+     "tokens": [
+      "valid"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "valid"
+     ]
+    },
+    "signed": {
+     "half": "dev",
+     "kind": "neutral",
+     "tokens": [
+      "signed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "signed"
+     ]
+    },
+    "routine": {
+     "half": "dev",
+     "kind": "neutral",
+     "tokens": [
+      "routine"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "routine"
+     ]
+    },
+    "toma": {
+     "half": "dev",
+     "kind": "nonce",
+     "tokens": [
+      "t",
+      "oma"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "t",
+      "oma"
+     ]
+    },
+    "zib": {
+     "half": "dev",
+     "kind": "nonce",
+     "tokens": [
+      "z",
+      "ib"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "ib"
+     ]
+    },
+    "fep": {
+     "half": "dev",
+     "kind": "nonce",
+     "tokens": [
+      "f",
+      "ep"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "ep"
+     ]
+    },
+    "wux": {
+     "half": "dev",
+     "kind": "nonce",
+     "tokens": [
+      "w",
+      "ux"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "w",
+      "ux"
+     ]
+    },
+    "voyd": {
+     "half": "dev",
+     "kind": "void_variant",
+     "tokens": [
+      "voy",
+      "d"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "voy",
+      "d"
+     ]
+    },
+    "vooid": {
+     "half": "dev",
+     "kind": "void_variant",
+     "tokens": [
+      "vo",
+      "oid"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "vo",
+      "oid"
+     ]
+    },
+    "v0id": {
+     "half": "dev",
+     "kind": "void_variant",
+     "tokens": [
+      "v",
+      "0",
+      "id"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "0"
+     ]
+    },
+    "re_void": {
+     "half": "dev",
+     "kind": "void_variant",
+     "tokens": [
+      "re",
+      "_void"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "re",
+      "_void"
+     ]
+    },
+    "yposted": {
+     "half": "dev",
+     "kind": "posted_like",
+     "tokens": [
+      "yp",
+      "ost",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "yp",
+      "ost"
+     ]
+    },
+    "mposted": {
+     "half": "dev",
+     "kind": "posted_like",
+     "tokens": [
+      "mp",
+      "ost",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "mp",
+      "ost"
+     ]
+    },
+    "tposted": {
+     "half": "dev",
+     "kind": "posted_like",
+     "tokens": [
+      "tp",
+      "ost",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "tp",
+      "ost"
+     ]
+    },
+    "posteda": {
+     "half": "dev",
+     "kind": "posted_like",
+     "tokens": [
+      "post",
+      "eda"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "post",
+      "eda"
+     ]
+    },
+    "halted": {
+     "half": "confirm",
+     "kind": "not_applied",
+     "tokens": [
+      "halt",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "halt"
+     ]
+    },
+    "vetoed": {
+     "half": "confirm",
+     "kind": "not_applied",
+     "tokens": [
+      "v",
+      "eto",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "eto"
+     ]
+    },
+    "retracted": {
+     "half": "confirm",
+     "kind": "not_applied",
+     "tokens": [
+      "re",
+      "tracted"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "re",
+      "tracted"
+     ]
+    },
+    "denied": {
+     "half": "confirm",
+     "kind": "not_applied",
+     "tokens": [
+      "den",
+      "ied"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "den",
+      "ied"
+     ]
+    },
+    "marked": {
+     "half": "confirm",
+     "kind": "neutral",
+     "tokens": [
+      "marked"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "marked"
+     ]
+    },
+    "linked": {
+     "half": "confirm",
+     "kind": "neutral",
+     "tokens": [
+      "linked"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "linked"
+     ]
+    },
+    "normal": {
+     "half": "confirm",
+     "kind": "neutral",
+     "tokens": [
+      "normal"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "normal"
+     ]
+    },
+    "seen": {
+     "half": "confirm",
+     "kind": "neutral",
+     "tokens": [
+      "seen"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "seen"
+     ]
+    },
+    "blorf": {
+     "half": "confirm",
+     "kind": "nonce",
+     "tokens": [
+      "bl",
+      "orf"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "bl",
+      "orf"
+     ]
+    },
+    "snik": {
+     "half": "confirm",
+     "kind": "nonce",
+     "tokens": [
+      "sn",
+      "ik"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "sn",
+      "ik"
+     ]
+    },
+    "trav": {
+     "half": "confirm",
+     "kind": "nonce",
+     "tokens": [
+      "tr",
+      "av"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "tr",
+      "av"
+     ]
+    },
+    "quib": {
+     "half": "confirm",
+     "kind": "nonce",
+     "tokens": [
+      "qu",
+      "ib"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "qu",
+      "ib"
+     ]
+    },
+    "viod": {
+     "half": "confirm",
+     "kind": "void_variant",
+     "tokens": [
+      "v",
+      "iod"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "iod"
+     ]
+    },
+    "vo_id": {
+     "half": "confirm",
+     "kind": "void_variant",
+     "tokens": [
+      "vo",
+      "_id"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "vo",
+      "_id"
+     ]
+    },
+    "vo1d": {
+     "half": "confirm",
+     "kind": "void_variant",
+     "tokens": [
+      "vo",
+      "1",
+      "d"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "vo",
+      "1",
+      "d"
+     ]
+    },
+    "vojd": {
+     "half": "confirm",
+     "kind": "void_variant",
+     "tokens": [
+      "vo",
+      "jd"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "vo",
+      "jd"
+     ]
+    },
+    "aposted": {
+     "half": "confirm",
+     "kind": "posted_like",
+     "tokens": [
+      "ap",
+      "ost",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "ap",
+      "ost"
+     ]
+    },
+    "oposted": {
+     "half": "confirm",
+     "kind": "posted_like",
+     "tokens": [
+      "op",
+      "ost",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "op",
+      "ost"
+     ]
+    },
+    "sposted": {
+     "half": "confirm",
+     "kind": "posted_like",
+     "tokens": [
+      "sp",
+      "ost",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "sp",
+      "ost"
+     ]
+    },
+    "postedy": {
+     "half": "confirm",
+     "kind": "posted_like",
+     "tokens": [
+      "post",
+      "edy"
+     ],
+     "anchor_tokens": [],
+     "untrained_tokens": [
+      "post",
+      "edy"
+     ]
+    }
+   },
+   "prereg3_descriptive": {
+    "pending": {
+     "tokens": [
+      "pending"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "draft": {
+     "tokens": [
+      "draft"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "cancelled": {
+     "tokens": [
+      "cancelled"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "reversed": {
+     "tokens": [
+      "re",
+      "versed"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "held": {
+     "tokens": [
+      "held"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "approved": {
+     "tokens": [
+      "approved"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "active": {
+     "tokens": [
+      "active"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "ok": {
+     "tokens": [
+      "ok"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "dax": {
+     "tokens": [
+      "d",
+      "ax"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "wug": {
+     "tokens": [
+      "w",
+      "ug"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "Void": {
+     "tokens": [
+      "Void"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "VOID": {
+     "tokens": [
+      "VOID"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "voided": {
+     "tokens": [
+      "void",
+      "ed"
+     ],
+     "anchor_tokens": [
+      "void"
+     ],
+     "all_tokens_trained": true
+    },
+    "unposted": {
+     "tokens": [
+      "un",
+      "posted"
+     ],
+     "anchor_tokens": [
+      "posted"
+     ],
+     "all_tokens_trained": false
+    },
+    "not_posted": {
+     "tokens": [
+      "not",
+      "_post",
+      "ed"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    },
+    "not posted": {
+     "tokens": [
+      "not",
+      "\u0120posted"
+     ],
+     "anchor_tokens": [],
+     "all_tokens_trained": false
+    }
+   },
+   "names_descriptive": {
+    "W": {
+     "tokens": [
+      "W"
+     ],
+     "shared_with_trained_names": []
+    },
+    "X": {
+     "tokens": [
+      "X"
+     ],
+     "shared_with_trained_names": []
+    },
+    "Y": {
+     "tokens": [
+      "Y"
+     ],
+     "shared_with_trained_names": []
+    },
+    "Z": {
+     "tokens": [
+      "Z"
+     ],
+     "shared_with_trained_names": []
+    },
+    "E": {
+     "tokens": [
+      "E"
+     ],
+     "shared_with_trained_names": []
+    },
+    "F": {
+     "tokens": [
+      "F"
+     ],
+     "shared_with_trained_names": []
+    },
+    "G": {
+     "tokens": [
+      "G"
+     ],
+     "shared_with_trained_names": []
+    },
+    "H": {
+     "tokens": [
+      "H"
+     ],
+     "shared_with_trained_names": []
+    },
+    "barn": {
+     "tokens": [
+      "b",
+      "arn"
+     ],
+     "shared_with_trained_names": [
+      "b"
+     ]
+    },
+    "dock": {
+     "tokens": [
+      "dock"
+     ],
+     "shared_with_trained_names": []
+    },
+    "lamp": {
+     "tokens": [
+      "lamp"
+     ],
+     "shared_with_trained_names": []
+    },
+    "mill": {
+     "tokens": [
+      "mill"
+     ],
+     "shared_with_trained_names": []
+    },
+    "nest": {
+     "tokens": [
+      "nest"
+     ],
+     "shared_with_trained_names": []
+    },
+    "pier": {
+     "tokens": [
+      "p",
+      "ier"
+     ],
+     "shared_with_trained_names": []
+    },
+    "silo": {
+     "tokens": [
+      "s",
+      "ilo"
+     ],
+     "shared_with_trained_names": [
+      "s"
+     ]
+    },
+    "yard": {
+     "tokens": [
+      "yard"
+     ],
+     "shared_with_trained_names": []
+    },
+    "fund": {
+     "tokens": [
+      "fund"
+     ],
+     "shared_with_trained_names": []
+    },
+    "loan": {
+     "tokens": [
+      "loan"
+     ],
+     "shared_with_trained_names": []
+    },
+    "rent": {
+     "tokens": [
+      "rent"
+     ],
+     "shared_with_trained_names": []
+    },
+    "wage": {
+     "tokens": [
+      "w",
+      "age"
+     ],
+     "shared_with_trained_names": []
+    },
+    "fort": {
+     "tokens": [
+      "fort"
+     ],
+     "shared_with_trained_names": []
+    },
+    "pond": {
+     "tokens": [
+      "pond"
+     ],
+     "shared_with_trained_names": []
+    },
+    "vault": {
+     "tokens": [
+      "vault"
+     ],
+     "shared_with_trained_names": []
+    },
+    "gold": {
+     "tokens": [
+      "gold"
+     ],
+     "shared_with_trained_names": []
+    },
+    "bank": {
+     "tokens": [
+      "bank"
+     ],
+     "shared_with_trained_names": []
+    },
+    "card": {
+     "tokens": [
+      "card"
+     ],
+     "shared_with_trained_names": []
+    },
+    "cash": {
+     "tokens": [
+      "cash"
+     ],
+     "shared_with_trained_names": []
+    },
+    "fees": {
+     "tokens": [
+      "fe",
+      "es"
+     ],
+     "shared_with_trained_names": [
+      "fe",
+      "es"
+     ]
+    }
+   },
+   "context": "\"status\":\"<w>\",\"tick\" (names: ,\"<name>\":12,)",
+   "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+  },
   "n_train_perms_before": {
-   "before4": 21,
-   "before5": 117,
-   "before6": 717,
-   "before7": 5037,
-   "before8": 40317
+   "before4": 18,
+   "before5": 114,
+   "before6": 714,
+   "before7": 5034,
+   "before8": 40314
   }
  },
  "heuristics": {
@@ -144,21 +976,270 @@
     "void_trigger": 0.55
    }
   },
-  "note": "apply_regardless == ignore_status (apply every event as if posted); by_block is descriptive (the canonical block is 2/3 posted, the diversified block 11/24 posted; a 'copy on an unfamiliar surface' cue is what the dev gate's copy guard G3 tests on held-out posted twins)"
+  "note": "apply_regardless == ignore_status (apply every event as if posted); by_block is descriptive (the canonical block is 2/3 posted, the diversified block 11/24 posted; a 'copy on an unfamiliar surface' cue is what the dev gate's clause G3 tests on the held-out posted twins: accuracy and copy rate)"
+ },
+ "dev_bank_heuristics_descriptive": {
+  "ID_posted": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "ID_void": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 1.0,
+   "copy": 1.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "S_words": {
+   "anchor_trigger": 0.34,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.6,
+   "len6": 0.9,
+   "semantic": 0.4,
+   "startswith_p": 0.87,
+   "token_overlap": 1.0,
+   "void_token": 0.14,
+   "void_trigger": 0.2
+  },
+  "S_surface_posted": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "S_surface_words": {
+   "anchor_trigger": 0.34,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.6,
+   "len6": 0.9,
+   "semantic": 0.4,
+   "startswith_p": 0.87,
+   "token_overlap": 1.0,
+   "void_token": 0.14,
+   "void_trigger": 0.2
+  },
+  "S_bal": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "S_amt": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "H_words": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.55,
+   "len6": 0.95,
+   "semantic": 0.4,
+   "startswith_p": 0.95,
+   "token_overlap": 0.3,
+   "void_token": 0.0,
+   "void_trigger": 0.05
+  },
+  "H_order": {
+   "anchor_trigger": 0.67,
+   "apply_regardless": 0.5,
+   "contains_posted": 0.9,
+   "copy": 0.5,
+   "endswith_ed": 0.76,
+   "len6": 0.95,
+   "semantic": 0.7,
+   "startswith_p": 0.97,
+   "token_overlap": 1.0,
+   "void_token": 0.57,
+   "void_trigger": 0.6
+  },
+  "H_names": {
+   "anchor_trigger": 0.67,
+   "apply_regardless": 0.5,
+   "contains_posted": 0.9,
+   "copy": 0.5,
+   "endswith_ed": 0.76,
+   "len6": 0.95,
+   "semantic": 0.7,
+   "startswith_p": 0.97,
+   "token_overlap": 1.0,
+   "void_token": 0.57,
+   "void_trigger": 0.6
+  },
+  "H_count": {
+   "anchor_trigger": 0.67,
+   "apply_regardless": 0.5,
+   "contains_posted": 0.9,
+   "copy": 0.5,
+   "endswith_ed": 0.76,
+   "len6": 0.95,
+   "semantic": 0.7,
+   "startswith_p": 0.97,
+   "token_overlap": 1.0,
+   "void_token": 0.57,
+   "void_trigger": 0.6
+  },
+  "H_para": {
+   "anchor_trigger": 0.67,
+   "apply_regardless": 0.5,
+   "contains_posted": 0.9,
+   "copy": 0.5,
+   "endswith_ed": 0.76,
+   "len6": 0.95,
+   "semantic": 0.7,
+   "startswith_p": 0.97,
+   "token_overlap": 1.0,
+   "void_token": 0.57,
+   "void_trigger": 0.6
+  },
+  "H_bal": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "H_amt": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "HS_words": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.55,
+   "len6": 0.95,
+   "semantic": 0.4,
+   "startswith_p": 0.95,
+   "token_overlap": 0.3,
+   "void_token": 0.0,
+   "void_trigger": 0.05
+  },
+  "HS_posted": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "LB_void": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 1.0,
+   "copy": 1.0,
+   "endswith_ed": 0.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 0.0,
+   "void_token": 0.0,
+   "void_trigger": 0.0
+  },
+  "LB_posted": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "P3_words": {
+   "anchor_trigger": 0.12,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.82,
+   "copy": 1.0,
+   "endswith_ed": 0.56,
+   "len6": 0.88,
+   "semantic": 0.52,
+   "startswith_p": 0.93,
+   "token_overlap": 0.18,
+   "void_token": 0.06,
+   "void_trigger": 0.18
+  }
  },
  "token_stats": {
   "available": true,
   "train": {
-   "mean_row_tokens_incl_eos": 161.19,
-   "max_row_tokens": 217,
-   "mean_target_tokens": 25.56,
-   "max_target_tokens": 48
+   "mean_row_tokens_incl_eos": 160.73,
+   "max_row_tokens": 222,
+   "mean_target_tokens": 25.23,
+   "max_target_tokens": 49
   },
   "dev": {
-   "mean_prompt_tokens": 132.11,
-   "max_prompt_tokens": 170,
-   "mean_target_tokens": 24.1,
-   "max_target_tokens": 46
+   "mean_prompt_tokens": 131.43,
+   "max_prompt_tokens": 157,
+   "mean_target_tokens": 23.62,
+   "max_target_tokens": 42
   },
   "t2_ledger_reference": {
    "mean_row_tokens_incl_eos": 145.97,
@@ -168,7 +1249,7 @@
  },
  "overlap": {
   "dev": {
-   "items": 1667,
+   "items": 1801,
    "payload_overlap": 0,
    "operative_overlap": 0
   },
@@ -181,19 +1262,19 @@
  "composition": {
   "n": 1500,
   "para": {
-   "canonical": 721,
-   "train": 779
+   "canonical": 715,
+   "train": 785
   },
   "top": {
    "canonical": 1500
   },
   "event": {
-   "canonical": 713,
-   "train": 787
+   "canonical": 693,
+   "train": 807
   },
   "before": {
-   "canonical": 728,
-   "train": 772
+   "canonical": 696,
+   "train": 804
   },
   "names": {
    "canonical": 633,
@@ -211,14 +1292,14 @@
    "void": 150
   },
   "bal": {
-   "b3": 335,
-   "b4": 309,
-   "t2": 856
+   "b3": 391,
+   "b4": 192,
+   "t2": 917
   },
   "amt": {
-   "a2": 223,
-   "a3": 190,
-   "t2": 1087
+   "a2": 209,
+   "a3": 162,
+   "t2": 1129
   },
   "status_kind": {
    "neutral": 150,
@@ -300,9 +1381,11 @@
    "void_variant": 11
   },
   "canonical_surface_void_trigger_accuracy": 0.8625,
-  "distinct_event_orders": 387,
-  "max_abs_balance": 9951,
-  "max_abs_amount_add_transfer": 985,
+  "distinct_event_orders": 398,
+  "max_abs_balance": 9974,
+  "max_abs_value_inputs_and_targets": 9974,
+  "max_abs_scale_row_balance": 998,
+  "max_abs_amount_add_transfer": 994,
   "scale_amounts": [
    -9,
    -8,
@@ -327,8 +1410,8 @@
   ]
  },
  "files": {
-  "dev": "befcd7132ef84a71cc354b9209bd5c549bc31ae1dce968490f3efe9bd36752bd",
-  "train": "8faa6a5d24e545ccf7273a042631fb9d77a6a3a7f4d25545a58799f4fda3f94b"
+  "dev": "f710b17e228b3865c9b7993082966a07d2ab5306f137978768b09bd179390c78",
+  "train": "89d6a01e280080f7559e6a597dad3ceaa43f51d50a4801337ff04750ff53eb39"
  },
  "union": {
   "rule": "lbeam_problems.load_exclusions(extra_data=False) (l1_make_ood.harvest_historical skips HSKILL_CONFIRM_V2* by name, never opened; rcwmt.bank.load_exclusions() NOT called; every pinned source; data/bank_p3_oor.jsonl) + every payload and rolled-out multi-event transition of every other data/**/*.json[l] file except t2bl_* + the binding transitions of docs/ledger_beam/dev_set.jsonl, docs/ledger_beam/dev2_primary.jsonl, docs/ledger_beam/dev2_oor.jsonl, docs/ledger_beam/LB_CONFIRM_DRAW.jsonl + every {before, event} payload under docs/ except docs/t2b/ledger/",
@@ -907,16 +1990,16 @@
   }
  },
  "code_sha256": {
-  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
-  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
-  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
   "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
   "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
  },
  "build_log": [
-  "[15:16:33] [lbeam] exclusion union: 310446 payloads, 302643 operative contents from 17 sources (49s)",
-  "[15:16:36] [t2bl] freshness union: 329532 payloads, 320334 operative contents from 85 sources (51s)",
-  "[15:16:36] built 1667 dev rows and 1500 training rows (0s)",
-  "[15:16:38] wrote C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\t2bl_dev.jsonl (sha befcd7132ef84a71) and C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\t2bl_train.jsonl (sha 8faa6a5d24e545cc)"
+  "[20:21:56] [lbeam] exclusion union: 310446 payloads, 302643 operative contents from 17 sources (53s)",
+  "[20:21:58] [t2bl] freshness union: 329532 payloads, 320334 operative contents from 85 sources (55s)",
+  "[20:21:59] built 1801 dev rows and 1500 training rows (0s)",
+  "[20:22:02] wrote C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\t2bl_dev.jsonl (sha f710b17e228b3865) and C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\t2bl_train.jsonl (sha 89d6a01e280080f7)"
  ]
 }

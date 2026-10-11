@@ -920,3 +920,45 @@ Times are local (CDT). Entries are append-only.
   - **Hook added:** `87_t2bp_seeds.sh`, running seeds 1 and 2 of B-bits only, and only if the frozen screen named B-bits.
   - **Relaunch:** the chain was relaunched at the 5b waiting point (BWM held the lease) so that it picks up hooks 85 and 87.
   - **RCWM order:** 5b (80), the 5c run on BWM's adapters (85), B-bits seeds (87), then T2b-ledger (being built).
+- **Seed-range agreement across sessions (2026-10-10 evening).**
+  - **Ranges:** RCWM 202611xx; RCX 202612xx; BWM new seeds only from 202614xx–202615xx (its Logistics draft uses 20261401–05).
+  - **Historical overlap (recorded by both sides, no data overlap):** RCWM's and BWM's 20261006–09 coincide numerically, but the generators and domains differ.
+  - **Pins:** BWM keeps `bwmn/__init__.py`, `blocks.py` and `lm.py` unedited, and `blocks_planner` at 18a5f22b. New BWM modules are additive.
+- **R21 BWM B3 (roadmap item 4, search distillation): registered primary MET (BWM P-11; RCWM records only).**
+  - **Setup:** S-direct only, with no search at test time, on fresh hard-style problems (n = 110).
+  - **Primary:** Pa_v3 (distilled from the model's own world-model-verified beam searches) solves 22/110 vs Pa_v2c 8/110 (equal extra training without search plans). +18/−4, McNemar p = 0.0043, +12.7 pp against a +10 pp bar.
+  - **Secondaries:**
+    - mirror 22 vs 7;
+    - vs the original Pa_v2: 22 vs 5;
+    - extra training alone does nothing (v2c vs v2: p = 0.51).
+  - **Label precision:** 1.0. All 211 F-verified plans were valid under the exact simulator, which was used for analysis only.
+  - **Reading for RCWM:** the model's own verified searches were a clean teacher, with the extra-training control isolating the effect. Relevant for any future RCWM self-distillation arm (R-D SD control, T2b).
+- **R22 RCX native pilot N-VR s0 (RCX R-05, commit 5e05a5b; DEV, one seed, not a claim; RCWM records only).**
+  - **Setup:** the T2 recipe exactly (CPU-trained, unmerged), on ledger rows with rules varied in context (status sets, compositions; canonical rule wording).
+  - **Canonical rule wording:** N-VR composite 0.964 (OFF 0.325, T2 s0 0.400).
+    - Rule-required no-ops 254/280 (OFF and T2: 1/280).
+    - Rule-polarity sensitivity 1.00.
+    - The fixed posted rule holds for unseen real and nonce statuses at 1.00/1.00, where T2 scores about 0.39.
+  - **Held-out paraphrases of the rule sentence:** composite 0.594. For unseen positive-rule wordings it reverts to "apply everything".
+  - **Reading:** rule-varied training induces rule reading that generalises to unseen status words, but it is tied to the rule wordings seen in training. This is the same surface lesson as PREREG-3 and R20, one level up.
+  - **Boundary (D-39) kept:** rule-varied training stays RCX's. T2b-ledger stays fixed-rule with surface diversity. The two are compared through the agreed cross-scoring (CX Q-03) once RCX's paraphrase-diverse cell N-CFSD exists.
+- **D-48 T2b-ledger kit accepted; dev gate rule (revision 2) frozen; hook 88 installed (2026-10-10 about 20:50).**
+  - **Kit:** workflow wf_ac99b655-207 (draft, then adversarial reviews: validity/statistics major issues, engineering minor; then revise).
+    - Checks: 212/212. Pre-freeze 19/24 on the real root; the other 5 wait on the dev screen by design.
+    - Key fix: held-out status words are token-novel (no `void`/`posted` token, and each has a token no trained status has).
+    - Every held-out partition is split into DEV and CONFIRM halves, so the sealed PREREG-5 bank uses items the dev screen never saw.
+    - Training set: 1,500 rows (2.03 epochs, as T2). Seeds 20261161–64.
+  - **Operator answers to the kit's open questions:**
+    - (1) Accept the stricter gate revision 2 (G1, G1b, G1c, G2, G3, G4, in all 3 seeds). Its P(PROCEED) tracks PREREG-5's own power, so a sealed confirmation is not spent on a likely fail.
+    - (2) Accept the two partly declined review items: mixed cells use a training word, not `void`; magnitude cells stay posted-only.
+    - (3) Keep the held-out words. A cue on tokens shared with trained no-op words (e.g. "-ed") is itself a widened trigger, so the TRIGGER WIDENED label is correct for it.
+    - (4) Keep seed-mean non-inferiority.
+    - (5) D-22 scope note: the dev screen runs three train+eval pairs plus E0 under one lease, beyond D-22's "T2 pairs only". This is approved; the plan is one turn, 2.56–3.38 h.
+    - (7) Part (c) retention runs as the hook does.
+    - (8) RCX cross-scoring stays separate (CX Q-03).
+  - **Questions for BWM** (P4, the planning bar of 0.70 of ORACLE, the union digest in the co-sign, the D-54 operationalisation, NI strictness, turn counts): sent with the PREREG-5 co-sign request, after a PROCEED.
+  - **Executed (about 20:52):**
+    - `t2bl_gate.py --freeze-rule`: GATE_RULE.json sha 06ec07dd…. It pins PREREG-5's decision code and the draft (a06dc9a8…).
+    - Hook `scripts/queue_hooks/88_t2bl.sh` installed, identical to the draft (e389df78…).
+    - Plan: one turn, 2.56 h observed.
+    - The live chain (relaunched 19:29) includes hooks 50–87, not 88. It will be relaunched at the next waiting point (after 5b, while hook 85 waits for its turn) so that 88 runs after 87.

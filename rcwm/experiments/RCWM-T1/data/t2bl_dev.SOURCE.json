@@ -1,10 +1,11 @@
 {
  "record": "T2BL_DEV_SOURCE",
  "file": "t2bl_dev.jsonl",
- "file_sha256": "befcd7132ef84a71cc354b9209bd5c549bc31ae1dce968490f3efe9bd36752bd",
+ "file_sha256": "f710b17e228b3865c9b7993082966a07d2ab5306f137978768b09bd179390c78",
  "tag": "t2bl-dev",
  "seed": 20261162,
  "n_bases": 100,
+ "split": "dev",
  "strata": {
   "ID_posted": {
    "n": 100,
@@ -25,14 +26,14 @@
    "factor": "words_train",
    "gold_rule": "noop",
    "surface": "canonical",
-   "description": "a TRAINING non-posted word (kind by base index mod 5), canonical surface otherwise (in-surface status control)"
+   "description": "a TRAINING non-posted word (kind by base index mod 5), canonical surface otherwise (trained-variant control of the words factor)"
   },
   "S_surface_posted": {
    "n": 100,
    "factor": "surface_train",
    "gold_rule": "apply",
    "surface": "train",
-   "description": "posted, a training surface: paraphrase 1-3, training names (letters / words, 4-7 accounts), training key orders, training magnitude bands"
+   "description": "posted, a TRAINING surface on the base's own in-range values: paraphrase 1-3, training names (letters / words), 5-7 accounts (extra balances in range), training key orders of the event and before objects (trained-variant control)"
   },
   "S_surface_words": {
    "n": 100,
@@ -41,40 +42,54 @@
    "surface": "train",
    "description": "the same training surface with a training non-posted word"
   },
+  "S_bal": {
+   "n": 67,
+   "factor": "magnitude_train",
+   "gold_rule": "apply",
+   "surface": "canonical",
+   "description": "posted, every balance redrawn in the TRAINED 3-4-digit band (add / transfer bases only; trained-variant control)"
+  },
+  "S_amt": {
+   "n": 67,
+   "factor": "magnitude_train",
+   "gold_rule": "apply",
+   "surface": "canonical",
+   "description": "posted, the amount redrawn in the TRAINED 2-3-digit band (add / transfer bases only; trained-variant control)"
+  },
   "H_words": {
    "n": 100,
    "factor": "words",
    "gold_rule": "noop",
    "surface": "canonical",
-   "description": "a HELD-OUT non-posted word (kind by base index mod 5; 4 words per kind), canonical surface otherwise"
+   "description": "a HELD-OUT non-posted word of the bank's half (kind by base index mod 5; 4 words per kind), canonical surface otherwise"
   },
   "H_order": {
    "n": 100,
    "factor": "order",
-   "gold_rule": "apply",
+   "gold_rule": "mixed",
    "surface": "heldout_order",
-   "description": "posted, every object in a held-out key order: top reversed, event held-out order (index mod 3), before held-out order"
+   "description": "every object in a held-out key order: top reversed, event and before in held-out orders of the bank's half; posted (even bases) or a training word (odd)"
   },
   "H_names": {
    "n": 100,
    "factor": "names",
-   "gold_rule": "apply",
+   "gold_rule": "mixed",
    "surface": "heldout_names",
-   "description": "posted, accounts renamed to held-out names: E-H (even bases) or 4 held-out words, sorted (odd bases)"
+   "description": "accounts renamed to held-out names of the bank's half (4 letters or 4 of 8 words, sorted); posted (even bases) or a training word (odd)"
   },
   "H_count": {
    "n": 100,
    "factor": "count",
-   "gold_rule": "apply",
+   "gold_rule": "mixed",
    "surface": "heldout_count",
-   "description": "posted, 8 accounts (held-out count): A-D plus 4 training letters with in-range balances; the event is the base's"
+   "description": "8 accounts (held-out count): A-D plus 4 training letters with in-range balances; posted (even bases) or a training word (odd)"
   },
   "H_para": {
    "n": 100,
    "factor": "para",
    "gold_rule": "mixed",
    "surface": "heldout_para",
-   "description": "the held-out rule paraphrase 4; posted (even bases) or void (odd)"
+   "description": "the held-out rule paraphrase of the bank's half; posted (even bases) or a training word (odd)"
   },
   "H_bal": {
    "n": 100,
@@ -95,7 +110,7 @@
    "factor": "combined",
    "gold_rule": "noop",
    "surface": "heldout_combined",
-   "description": "the COMBINED held-out surface (paraphrase 4, held-out names, held-out key orders) with a held-out non-posted word"
+   "description": "the COMBINED held-out surface of the bank's half (its paraphrase, its names, held-out key orders) with a held-out non-posted word of that half"
   },
   "HS_posted": {
    "n": 100,
@@ -109,14 +124,14 @@
    "factor": "lb_surface",
    "gold_rule": "noop",
    "surface": "lb_heldout_combined",
-   "description": "PREREG-LB's heldout_combined rendering (paraphrase 0, keys reversed, accounts bank/card/cash/fees) with 'void' rendered 'cancelled'"
+   "description": "PREREG-LB's heldout_combined rendering (paraphrase 0, keys reversed, accounts bank/card/cash/fees) with 'void' rendered 'cancelled' (report-only)"
   },
   "LB_posted": {
    "n": 100,
    "factor": "lb_surface",
    "gold_rule": "apply",
    "surface": "lb_heldout_combined",
-   "description": "the same rendering, posted"
+   "description": "the same rendering, posted (report-only)"
   },
   "P3_words": {
    "n": 100,
@@ -230,18 +245,267 @@
  ],
  "fresh_rejections": [],
  "rejection_counts": {},
- "n_rows": 1667,
+ "n_rows": 1801,
  "overlap": {
-  "items": 1667,
+  "items": 1801,
   "payload_overlap": 0,
   "operative_overlap": 0
  },
- "use": "T2b-ledger dev screen (t2bl_run.py E0/E stages; t2bl_gate.py). Never the PREREG-5 confirmation bank (minted at its freeze, fresh against this file).",
- "gen_version": "t2bl-data-v1",
+ "heuristics_by_stratum_descriptive": {
+  "ID_posted": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "ID_void": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 1.0,
+   "copy": 1.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "S_words": {
+   "anchor_trigger": 0.34,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.6,
+   "len6": 0.9,
+   "semantic": 0.4,
+   "startswith_p": 0.87,
+   "token_overlap": 1.0,
+   "void_token": 0.14,
+   "void_trigger": 0.2
+  },
+  "S_surface_posted": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "S_surface_words": {
+   "anchor_trigger": 0.34,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.6,
+   "len6": 0.9,
+   "semantic": 0.4,
+   "startswith_p": 0.87,
+   "token_overlap": 1.0,
+   "void_token": 0.14,
+   "void_trigger": 0.2
+  },
+  "S_bal": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "S_amt": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "H_words": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.55,
+   "len6": 0.95,
+   "semantic": 0.4,
+   "startswith_p": 0.95,
+   "token_overlap": 0.3,
+   "void_token": 0.0,
+   "void_trigger": 0.05
+  },
+  "H_order": {
+   "anchor_trigger": 0.67,
+   "apply_regardless": 0.5,
+   "contains_posted": 0.9,
+   "copy": 0.5,
+   "endswith_ed": 0.76,
+   "len6": 0.95,
+   "semantic": 0.7,
+   "startswith_p": 0.97,
+   "token_overlap": 1.0,
+   "void_token": 0.57,
+   "void_trigger": 0.6
+  },
+  "H_names": {
+   "anchor_trigger": 0.67,
+   "apply_regardless": 0.5,
+   "contains_posted": 0.9,
+   "copy": 0.5,
+   "endswith_ed": 0.76,
+   "len6": 0.95,
+   "semantic": 0.7,
+   "startswith_p": 0.97,
+   "token_overlap": 1.0,
+   "void_token": 0.57,
+   "void_trigger": 0.6
+  },
+  "H_count": {
+   "anchor_trigger": 0.67,
+   "apply_regardless": 0.5,
+   "contains_posted": 0.9,
+   "copy": 0.5,
+   "endswith_ed": 0.76,
+   "len6": 0.95,
+   "semantic": 0.7,
+   "startswith_p": 0.97,
+   "token_overlap": 1.0,
+   "void_token": 0.57,
+   "void_trigger": 0.6
+  },
+  "H_para": {
+   "anchor_trigger": 0.67,
+   "apply_regardless": 0.5,
+   "contains_posted": 0.9,
+   "copy": 0.5,
+   "endswith_ed": 0.76,
+   "len6": 0.95,
+   "semantic": 0.7,
+   "startswith_p": 0.97,
+   "token_overlap": 1.0,
+   "void_token": 0.57,
+   "void_trigger": 0.6
+  },
+  "H_bal": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "H_amt": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "HS_words": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.55,
+   "len6": 0.95,
+   "semantic": 0.4,
+   "startswith_p": 0.95,
+   "token_overlap": 0.3,
+   "void_token": 0.0,
+   "void_trigger": 0.05
+  },
+  "HS_posted": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "LB_void": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 1.0,
+   "copy": 1.0,
+   "endswith_ed": 0.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 0.0,
+   "void_token": 0.0,
+   "void_trigger": 0.0
+  },
+  "LB_posted": {
+   "anchor_trigger": 1.0,
+   "apply_regardless": 1.0,
+   "contains_posted": 1.0,
+   "copy": 0.0,
+   "endswith_ed": 1.0,
+   "len6": 1.0,
+   "semantic": 1.0,
+   "startswith_p": 1.0,
+   "token_overlap": 1.0,
+   "void_token": 1.0,
+   "void_trigger": 1.0
+  },
+  "P3_words": {
+   "anchor_trigger": 0.12,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.82,
+   "copy": 1.0,
+   "endswith_ed": 0.56,
+   "len6": 0.88,
+   "semantic": 0.52,
+   "startswith_p": 0.93,
+   "token_overlap": 0.18,
+   "void_token": 0.06,
+   "void_trigger": 0.18
+  }
+ },
+ "use": "T2b-ledger dev screen (t2bl_run.py E0/E stages; t2bl_gate.py). Never the PREREG-5 confirmation bank (minted at its freeze from the CONFIRM half of the held-out partitions, fresh against this file).",
+ "gen_version": "t2bl-data-v2",
  "code_sha256": {
-  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
-  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
-  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
   "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
   "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
  },
@@ -823,7 +1087,7 @@
   ]
  },
  "regenerates_from_seed_and_rejections": true,
- "built_local": "2026-10-10 15:16:38 -0500",
+ "built_local": "2026-10-10 20:22:02 -0500",
  "no_model_call": true,
  "torch_imported": false
 }

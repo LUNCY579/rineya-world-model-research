@@ -7,14 +7,20 @@ planner import, the BWM module hashes), and on scripts/t2bl_run.py.
   python -B scripts/t2bl_confirm_run.py --plan     # CPU only, no torch: generations, GPU time per stage and per 4.5 h turn
                                                    # -> docs/t2b/ledger/P5_GEN_PLAN.json (refused once frozen)
   python -B scripts/t2bl_confirm_run.py --verify   # CPU only: PREREG_5_FREEZE.json (+ PREREG_5_AMENDMENT_*) against files
+  python -B scripts/t2bl_confirm_run.py --union-digest
+                                                   # CPU only: rebuild the freshness union and print its digest (the
+                                                   # operator publishes it before BWM's co-sign, which quotes it)
   python -B scripts/t2bl_confirm_run.py --freeze --approval "<who, when, DECISIONS D-<n>>" \
-         --bwm-cosign "<BWM's co-sign: reference, this draft's full sha256, commit:<sha256 of BWM's salt>>" \
-         --bwm-salt "<the salt BWM reveals at the freeze>"
+         --bwm-cosign "<BWM's co-sign: reference, this draft's full sha256, union:<digest>, commit:<sha256 of salt>>" \
+         --bwm-salt "<the salt BWM reveals at the freeze>" [--changes <JSON change list>]
                                                    # CPU only: the pre-freeze checks, the freshness union rebuilt (data/
-                                                   # unchanged while it is built), the map bank and the planning draw MINTED
-                                                   # from the seed rule (t2bl_confirm_bank.mint; sealed, never printed),
-                                                   # every input hashed, PREREG_5.md + PREREG_5_FREEZE.json (.partial first,
-                                                   # renamed in order; create-only)
+                                                   # unchanged while it is built; its digest must be the one BWM's co-sign
+                                                   # quotes), the map bank and the planning draw MINTED from the seed rule
+                                                   # (t2bl_confirm_bank.mint; sealed, never printed), every input hashed,
+                                                   # PREREG_5.md + PREREG_5_FREEZE.json (.partial first, renamed in order;
+                                                   # create-only). If PREREG-5's rules or decision code differ from those
+                                                   # pinned at the dev gate's freeze, --changes must list every change
+                                                   # (rendered into PREREG_5.md Appendix A), else the freeze refuses.
   python -B scripts/t2bl_confirm_run.py            # the registered GPU job (parts a and b)
   python -B scripts/t2bl_confirm_run.py --ret-mint # part (c), CPU, once: mint the 5c confirmation draw at run time
                                                    # (ret_gen.mint('confirm'), OS-entropy seed) -> runs/prereg5/RET_DRAW.json
@@ -39,7 +45,7 @@ turn: Titan-Sparse FP32 + T2 s0 (PEFT adapter 't2', PREREG-2's pins) + T2b-ledge
           dev2_primary, never a confirmation key) for T2b-ledger s0 in the canonical frame and in the held-out combined
           rendering, as ONE predict list vs one key per call: identical parsed states on >= 99% per arm.
       Any failure stops the job (persisted) before any output of that turn.
-  M1  part (a): the sealed map bank (2,367 rows), sides OFF, T2s0, T2BL s0, s1, s2, in one process, written together
+  M1  part (a): the sealed map bank (2,701 rows), sides OFF, T2s0, T2BL s0, s1, s2, in one process, written together
   P1  part (b) PRIMARY arm: plan_beam enum W2 E12 on the sealed planning draw, T2BL@HS (SurfaceAuditF('T2',
       'heldout_combined') with adapter 't2bl0')
   P2  part (b) PRIMARY comparator: the same, T2s0@HS (adapter 't2')
@@ -52,9 +58,13 @@ and the blind lbeam_problems.planner_instances. Each planning arm has its own ca
 
 Outputs (create-only) under runs/prereg5/. A stage is DONE only if its files exist AND provenance.json records them with
 matching sha256; anything else a stage wrote is PARTIAL: moved to runs/prereg5/_orphans/ (never deleted) and redone in
-full. A recorded output whose hash changes stops the job. Attempts: every stage start is recorded; a started stage that
-is not recorded failed; a stage that failed three times stops the job. Deferral: exit 5 at a stage boundary; two
-consecutive turns without a recorded stage stop the job. Parts: (a) needs A0 and M1; (b) needs A0, P1-P4 and C1. A
+full. A recorded output whose hash changes stops the job. Attempts: every stage start is recorded (turn, pid, boot
+time); a started stage that was never recorded FAILED if it ended in a recorded Python exception, or if its process
+died without one while the machine kept running (same boot); an attempt cut off by a reboot (Kernel-Power 41, TDR) is
+logged as interrupted and NOT counted; a stage that failed three times stops the job. The stage-start rule bounds a
+planning stage by its ceiling generation count at the slowest measured planning rate (the registered rate before the
+first planning stage; start_estimate_s).
+Deferral: exit 5 at a stage boundary; two consecutive turns without a recorded stage stop the job. Parts: (a) needs A0 and M1; (b) needs A0, P1-P4 and C1. A
 deterministic stop records which parts are verdict-eligible (their stages recorded, every recorded output unchanged,
 the first A0 passed); the analysis renders the other parts 'not evaluable'.
 
@@ -69,7 +79,7 @@ import os
 import sys
 
 sys.dont_write_bytecode = True
-_CPU_FLAGS = ("--plan", "--verify", "--freeze", "--ret-mint", "--ret-record")
+_CPU_FLAGS = ("--plan", "--verify", "--freeze", "--ret-mint", "--ret-record", "--union-digest")
 if __name__ == "__main__" and any(f in sys.argv for f in _CPU_FLAGS):
     os.environ["CUDA_VISIBLE_DEVICES"] = ""        # never touch the driver: empty string, NEVER "-1" (I-21)
     for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS", "RCWM_THREADS"):
@@ -194,7 +204,8 @@ LB_CODE = ("scripts/lbeam_f.py", "scripts/lbeam_problems.py", "scripts/lbeam_pro
            "scripts/lbeam_analysis.py")
 RET_CODE = ("scripts/ret_common.py", "scripts/ret_gen.py", "scripts/ret_run.py", "scripts/ret_analysis.py",
             "scripts/ret_grade.py", "docs/retention/RET_FREEZE.json", "docs/retention/DEV_SELECTION.json")
-TEST_PARTS = ("p5analysis", "p5tiny", "p5freeze", "plan", "hook")
+TEST_PARTS = ("p5analysis", "p5tiny", "p5freeze", "plan", "hook", "rehearsal")
+REBOOT_TOL_S = 5.0                                  # psutil.boot_time() jitter allowed when comparing boots
 PREFREEZE_RECORDS = ("docs/t2b/ledger/P5_DRYRUN.json", "docs/t2b/ledger/P5_DRYRUN.md",
                      "docs/t2b/ledger/P5_POWER_DEV.json", "docs/t2b/ledger/P5_GEN_PLAN.json",
                      *[f"docs/t2b/ledger/TEST_{p.upper()}.json" for p in TEST_PARTS])
@@ -247,8 +258,16 @@ def write_text_x(path: Path, text: str) -> None:
     C.write_create(path, text)
 
 
-def write_json_x(path: Path, obj) -> None:
-    write_text_x(path, json.dumps(obj, indent=1) + "\n")
+def write_json_x(path: Path, obj, stale_partial: str = "refuse") -> None:
+    path = Path(path)
+    if path.exists():
+        raise Stop(f"[prereg5] {path} exists (create-only)")
+    C.write_create(path, json.dumps(obj, indent=1) + "\n", stale_partial=stale_partial)
+
+
+def union_commit(cosign: str) -> str | None:
+    m = re.search(r"union:([0-9a-f]{64})\b", str(cosign or ""))
+    return m.group(1) if m else None
 
 
 # ---------------------------------------------------------------- configuration (the registered job uses the defaults)
@@ -378,32 +397,71 @@ def stage_est_s(st: str, n: dict, rate: float, map_rate: float, mode: str = "exp
     return stage_gens(st, n, mode) / rate
 
 
-def simulate_turns(n: dict, rate: float, map_rate: float, cap_h: float = CAP_H, mode: str = "expected") -> list:
+def start_estimate_s(st: str, n: dict, rate: float, map_rate: float, measured_spg: float | None) -> float:
+    """The estimate the runner's stage-start rule uses (D-22: a stage starts only if 1.25 x this fits the turn and not
+    within 0.5 h of the cap). A0 and M1 have deterministic generation counts: their expected time at the registered
+    rates. A planning stage (P1-P4) is bounded by its CEILING generation count ((E + W - 1) x V = 104 new keys per
+    instance; the expected count is 70-81) times the seconds per generation: the slowest rate measured on a planning
+    stage already recorded in this run, or the registered planning rate before the first one."""
+    if st in STAGE_ARMS:
+        spg = measured_spg if measured_spg else 1.0 / rate
+        return stage_gens(st, n, "ceiling") * spg
+    return stage_est_s(st, n, rate, map_rate)
+
+
+def measured_planning_spg(prov: dict) -> float | None:
+    """The slowest seconds per generation of the planning stages recorded in this run (None before the first)."""
+    xs = [float(r["seconds"]) / float(r["generations"]) for st, r in (prov.get("stages") or {}).items()
+          if st in STAGE_ARMS and r.get("generations") and r.get("seconds")]
+    return max(xs) if xs else None
+
+
+def simulate_turns(n: dict, true_rate: float, true_map_rate: float, sizes: str = "expected", cap_h: float = CAP_H,
+                   plan_rate: float = RATE_PLAN, plan_map_rate: float = MAP_PLAN) -> list:
+    """The turns the runner's own start rule produces when every stage takes its time at the TRUE rates (planning
+    stages at their expected or ceiling sizes), with the start decisions made exactly as in _run_locked: the model load
+    and the longest A0 so far added before the first stage of a turn, A0 re-run at the start of every later turn, a
+    planning stage gated on start_estimate_s with the rate measured on the planning stages already done."""
     cap = cap_h * 3600
     left = list(GPU_STAGES)
-    turns = []
-    a0_done = False
+    turns, a0_s, spg = [], None, None
+    true_s = lambda st: (stage_gens(st, n, sizes) / true_rate if st in STAGE_ARMS  # noqa: E731
+                         else stage_est_s(st, n, true_rate, true_map_rate))
+    est = lambda st: start_estimate_s(st, n, plan_rate, plan_map_rate, spg)  # noqa: E731
     while left:
-        t, ran = LOAD_S, []
-        if a0_done:
-            t += stage_est_s("A0", n, rate, map_rate)
+        t, ran = 0.0, []
+        extra = LOAD_S + (a0_s if a0_s is not None else 0.0)
+        if not G2.can_start(extra, est(left[0]), 0.0, cap):
+            raise RuntimeError(f"no stage fits an empty turn ({sizes}, {true_rate}/s)")
+        t = LOAD_S
+        if a0_s is not None:
+            t += a0_s
             ran.append("A0 re-check")
         for st in list(left):
-            if not G2.can_start(t, stage_est_s(st, n, rate, map_rate, mode), 0.0, cap):
+            if not G2.can_start(t, est(st), 0.0, cap):
                 break
-            t += stage_est_s(st, n, rate, map_rate, mode)
+            d = true_s(st)
+            t += d
             ran.append(st)
             left.remove(st)
-            a0_done = a0_done or st == "A0"
-        if not [r for r in ran if r != "A0 re-check"]:
-            raise RuntimeError(f"no stage fits an empty turn ({mode}, {rate}/s)")
+            if st == "A0":
+                a0_s = d
+            if st in STAGE_ARMS:
+                spg = max(spg or 0.0, 1.0 / true_rate)
         turns.append({"stages": ran, "projected_h": round(t / 3600, 2)})
     return turns
 
 
+SCHEDULES = (("expected sizes, observed rates", "expected", RATE_OBS, MAP_OBS),
+             ("expected sizes, planning rates", "expected", RATE_PLAN, MAP_PLAN),
+             ("ceiling sizes, observed rates", "ceiling", RATE_OBS, MAP_OBS),
+             ("ceiling sizes, planning rates", "ceiling", RATE_PLAN, MAP_PLAN),
+             ("ceiling sizes, 2.5 generations/s (below the planning rate)", "ceiling", 2.5, 2.5))
+
+
 def plan(verbose: bool = True) -> dict:
     src = C.read_json(C.DEV_SOURCE) or {}
-    n_map = 23 * C.N_BASES + round(C.N_BASES * (C.KIND_QUOTA["transfer"] + C.KIND_QUOTA["add"]))
+    n_map = C.bank_rows_expected(C.CONFIRM_STRATA)
     ans = ((C.read_json(C.TRAIN_SOURCE) or {}).get("token_stats") or {}).get("dev", {}).get("mean_target_tokens", 25.0)
     n = counts(n_map, CB.N_PER_DEPTH * len(CB.DEPTHS), answer_tokens=ans)
     what = {"A0": "PREREG-2 anchor (208 chains x 4 x OFF/T2s0) + adapter identity (3 x 100 dev rows) + batch invariance "
@@ -423,34 +481,37 @@ def plan(verbose: bool = True) -> dict:
                                "--extra-adapter t2bl_s0=...): 0.46-1.11 GPU-h by the 5c plan (docs/retention/RET_PLAN.json "
                                "scale; one extra Titan-Sparse side)",
            "stage_rule": (f"no stage starts within {G2.STAGE_MARGIN_H} h of the {CAP_H} h cap; a stage starts only if "
-                          f"{G2.STAGE_SAFETY} x its estimate fits; every turn after the first re-runs A0 before any "
-                          "stage; the start-of-turn check adds the model load and the longest A0 measured so far"),
-           "dev_answer_tokens": ans, "dev_source_present": bool(src)}
+                          f"{G2.STAGE_SAFETY} x its start estimate fits (A0, M1: expected time at the registered rates; "
+                          "P1-P4: the CEILING generation count x the slowest seconds per generation measured on a "
+                          "recorded planning stage, or the registered planning rate before the first); every turn "
+                          "after the first re-runs A0 "
+                          "before any stage; the start-of-turn check adds the model load and the longest A0 measured so "
+                          "far, and the model is not loaded if the first remaining stage does not fit"),
+           "dev_answer_tokens": ans, "dev_source_present": bool(src), "schedules": []}
     for st in GPU_STAGES:
         res["stages"].append({"stage": st, "what": what[st], "generations_expected": round(stage_gens(st, n)),
                               "generations_ceiling": round(stage_gens(st, n, "ceiling")),
                               "h_planning": round(stage_est_s(st, n, RATE_PLAN, MAP_PLAN) / 3600, 2),
                               "h_observed": round(stage_est_s(st, n, RATE_OBS, MAP_OBS) / 3600, 2),
-                              "h_ceiling_planning": round(stage_est_s(st, n, RATE_PLAN, MAP_PLAN, "ceiling") / 3600, 2)})
-    for key, rate, mrate, mode in (("turns_planning", RATE_PLAN, MAP_PLAN, "expected"),
-                                   ("turns_observed", RATE_OBS, MAP_OBS, "expected"),
-                                   ("turns_ceiling_observed", RATE_OBS, MAP_OBS, "ceiling"),
-                                   ("turns_ceiling_planning", RATE_PLAN, MAP_PLAN, "ceiling")):
+                              "h_ceiling_planning": round(stage_est_s(st, n, RATE_PLAN, MAP_PLAN, "ceiling") / 3600, 2),
+                              "h_start_estimate_first": round(start_estimate_s(st, n, RATE_PLAN, MAP_PLAN, None) / 3600, 2)})
+    for name, sizes, rate, mrate in SCHEDULES:
         try:
-            res[key] = simulate_turns(n, rate, mrate, CAP_H, mode)
-            res[key.replace("turns", "gpu_h")] = round(sum(t["projected_h"] for t in res[key]), 2)
+            turns = simulate_turns(n, rate, mrate, sizes)
+            res["schedules"].append({"name": name, "sizes": sizes, "true_rate_F": rate, "true_rate_map": round(mrate, 3),
+                                     "turns": turns, "gpu_h": round(sum(t["projected_h"] for t in turns), 2),
+                                     "max_turn_h": max(t["projected_h"] for t in turns)})
         except RuntimeError as e:
-            res[key] = str(e)
-            res[key.replace("turns", "gpu_h")] = None
+            res["schedules"].append({"name": name, "sizes": sizes, "turns": str(e), "gpu_h": None, "max_turn_h": None})
     if verbose:
         print(f"PREREG-5 GPU plan ({n_map} map rows, {n['inst']} planning instances)")
         for r in res["stages"]:
             print(f"  {r['stage']}  {r['what'][:96]:<96} gens ~{r['generations_expected']:>6} (<= {r['generations_ceiling']:>6})"
-                  f"  {r['h_planning']:5.2f} h plan  {r['h_observed']:5.2f} h obs")
-        for key in ("turns_planning", "turns_observed", "turns_ceiling_observed", "turns_ceiling_planning"):
-            v = res[key]
-            print(f"  {key}: " + ("; ".join(f"turn {i + 1}: {t['stages']} {t['projected_h']} h" for i, t in enumerate(v))
-                                  if isinstance(v, list) else v))
+                  f"  {r['h_planning']:5.2f} h plan  {r['h_observed']:5.2f} h obs  {r['h_ceiling_planning']:5.2f} h ceil")
+        for sc in res["schedules"]:
+            v = sc["turns"]
+            print(f"  {sc['name']}: " + ("; ".join(f"turn {i + 1}: {t['stages']} {t['projected_h']} h" for i, t in enumerate(v))
+                                         if isinstance(v, list) else v) + f"  (max {sc['max_turn_h']} h)")
     return res
 
 
@@ -535,6 +596,8 @@ def verify_freeze(root: Path | None = None) -> tuple:
             errs.append(f"{key}: the seed differs between the freeze record and its SOURCE record")
     if not fz.get("draft_sha256") or str(fz.get("draft_sha256")) not in cos:
         errs.append("BWM's co-sign does not quote the frozen draft's sha256")
+    if union_commit(cos) is None or union_commit(cos) != sealed.get("union_digest"):
+        errs.append("BWM's co-sign does not quote the union digest the sealed sets were minted from")
     if fz.get("registered_runtime") != REGISTERED_RUNTIME:
         errs.append("registered runtime differs")
     if not fz.get("approval") or not fz.get("bwm_cosign"):
@@ -608,6 +671,7 @@ def dev_gate_status(root: Path) -> dict:
             "gate_sha256": sha256(root / GATE_REL) if (root / GATE_REL).is_file() else None,
             "gate_rule_frozen": gr.get("record") == "T2BL_GATE_RULE", "dev_run_done": bool(done),
             "rules_digest_at_gate_freeze": (gr.get("prereg5_rules") or {}).get("sha256"),
+            "code_at_gate_freeze": (gr.get("prereg5_code") or {}).get("files"),
             "gate_frozen_local": gr.get("frozen_local")}
 
 
@@ -649,7 +713,7 @@ def prefreeze_checks(root: Path) -> dict:
 
 
 def _fill_prereg(text: str, stamp: str, inputs: dict, approval: str, cosign: str, sealed: dict, gate: dict,
-                 rules: dict) -> str:
+                 rules: dict, changes: list | None = None) -> str:
     lines = text.splitlines()
     st = [i for i, l in enumerate(lines) if l.startswith("**Status:**")]
     if len(st) != 1:
@@ -674,10 +738,39 @@ def _fill_prereg(text: str, stamp: str, inputs: dict, approval: str, cosign: str
            f"{sealed['data_snapshot_digest']}).", "", "SHA-256 of every frozen input:", ""]
     sec += [f"- `{k}` `{v}`" for k, v in sorted(inputs.items())]
     sec.append("")
-    return "\n".join(lines[: i10[0]] + sec + lines[nxt:]) + "\n"
+    out = lines[: i10[0]] + sec + lines[nxt:]
+    if changes:
+        ia = [i for i, l in enumerate(out) if l.startswith("## Appendix A.")]
+        if len(ia) != 1:
+            raise Stop("the draft has no unique Appendix A", persist=False)
+        na = next((i for i in range(ia[0] + 1, len(out)) if out[i].startswith("## ")), len(out))
+        add = ["", "### Changes after the dev gate rule was frozen (listed at the freeze, --changes)", ""]
+        add += [f"- {c['what']} (files: {', '.join(c.get('files') or ['the registered rules'])}). Reason: {c['why']}"
+                for c in changes]
+        out = out[:na] + add + [""] + out[na:]
+    return "\n".join(out) + "\n"
 
 
-def freeze(approval: str, bwm_cosign: str, bwm_salt: str, root: Path | None = None, checks=None, union_builder=None) -> dict:
+def check_changes(changes, rules: dict) -> list:
+    """The change list a freeze needs when PREREG-5's rules or decision code changed after the dev gate's freeze: every
+    changed code file and, if the rules digest changed, an entry with 'rules': true; each entry states what and why."""
+    probs = []
+    if not isinstance(changes, list) or not changes:
+        return ["no change list (--changes)"]
+    for c in changes:
+        if not isinstance(c, dict) or not str(c.get("what") or "").strip() or not str(c.get("why") or "").strip():
+            probs.append("every change states 'what' and 'why'")
+    listed = {f for c in changes if isinstance(c, dict) for f in (c.get("files") or [])}
+    for f in rules.get("code_changed") or []:
+        if f not in listed:
+            probs.append(f"{f} changed since the dev gate's freeze and is not listed")
+    if rules.get("rules_changed") and not any(isinstance(c, dict) and c.get("rules") is True for c in changes):
+        probs.append("the registered rules changed since the dev gate's freeze and no change says 'rules': true")
+    return probs
+
+
+def freeze(approval: str, bwm_cosign: str, bwm_salt: str, root: Path | None = None, checks=None, union_builder=None,
+           changes: list | None = None) -> dict:
     """The freeze (section 7.2 of the draft). union_builder: tests pass a small stand-in (never the registered path)."""
     import t2bl_confirm_analysis as CA
     import t2bl_make_data as MD
@@ -707,6 +800,10 @@ def freeze(approval: str, bwm_cosign: str, bwm_salt: str, root: Path | None = No
     commit = cosign_commit(cosign)
     if commit is None:
         raise Stop("--bwm-cosign carries no salt commitment 'commit:<sha256 of BWM's salt>'", persist=False)
+    quoted_union = union_commit(cosign)
+    if quoted_union is None:
+        raise Stop("--bwm-cosign carries no union digest 'union:<digest>' (publish it with --union-digest before the "
+                   "co-sign)", persist=False)
     salt = str(bwm_salt or "")
     if len(salt) < SALT_MIN_LEN or salt_commit(salt) != commit:
         raise Stop(f"--bwm-salt is missing, shorter than {SALT_MIN_LEN} characters, or does not match the commitment",
@@ -720,14 +817,31 @@ def freeze(approval: str, bwm_cosign: str, bwm_salt: str, root: Path | None = No
         raise Stop(f"pre-freeze checks failed: {bad}", persist=False)
     gate = dev_gate_status(root)
     rd = CA.rules_digest()
-    rules = {"sha256": rd["sha256"], "at_gate_freeze": gate["rules_digest_at_gate_freeze"],
-             "unchanged": bool(gate["rules_digest_at_gate_freeze"]) and rd["sha256"] == gate["rules_digest_at_gate_freeze"],
-             "gate_frozen_local": gate["gate_frozen_local"]}
+    cd = CA.code_digest(root)
+    code0 = gate.get("code_at_gate_freeze") or {}
+    code_changed = sorted(r for r in set(code0) | set(cd["files"]) if code0.get(r) != cd["files"].get(r))
+    rules_changed = not (bool(gate["rules_digest_at_gate_freeze"]) and rd["sha256"] == gate["rules_digest_at_gate_freeze"])
+    rules = {"sha256": rd["sha256"], "at_gate_freeze": gate["rules_digest_at_gate_freeze"], "rules_changed": rules_changed,
+             "code_sha256": cd["files"], "code_changed": code_changed,
+             "unchanged": not rules_changed and not code_changed and bool(code0),
+             "gate_frozen_local": gate["gate_frozen_local"], "changes": changes or []}
+    if not rules["unchanged"]:
+        if not code0:
+            rules["code_changed"] = code_changed = sorted(cd["files"])
+        bad_ch = check_changes(changes, rules)
+        if bad_ch:
+            raise Stop("PREREG-5's rules or decision code differ from those pinned when the dev gate rule was frozen "
+                       f"(rules changed: {rules_changed}; code changed: {code_changed}); the freeze needs a change list "
+                       f"naming each change and why (--changes): {bad_ch}", persist=False)
     snap0 = LR.data_snapshot(root)
     excl = (union_builder or (lambda r: MD.build_union(root=r, skip_prefix=None)))(root)
     bad_src = MD.union_errors(excl)
     if bad_src:
         raise Stop(f"a source of the freshness union could not be read: {bad_src}; nothing was minted", persist=False)
+    if CB.union_digest(excl) != quoted_union:
+        raise Stop("the rebuilt freshness union's digest differs from the one BWM's co-sign quotes (data/ or docs/ "
+                   "changed since it was published); nothing was minted. Publish the new digest (--union-digest) and get "
+                   "a NEW co-sign with a NEW salt (this salt was revealed)", persist=False)
     snap1 = LR.data_snapshot(root)
     if snap1 != snap0:
         changed = sorted(k for k in set(snap0) | set(snap1) if snap0.get(k) != snap1.get(k))
@@ -765,7 +879,8 @@ def freeze(approval: str, bwm_cosign: str, bwm_salt: str, root: Path | None = No
                             "fresh_rejections": len(ps["fresh_rejections"])},
               "draft_sha256": draft_sha, "union_digest": ms["seed_rule"]["union_digest"], "bwm_commit": commit,
               "data_files": len(snap0), "data_snapshot_digest": LR.snapshot_digest(snap0)}
-    text_pr = _fill_prereg(draft_bytes.decode("utf-8"), stamp, inputs, approval.strip(), cosign, sealed, gate, rules)
+    text_pr = _fill_prereg(draft_bytes.decode("utf-8"), stamp, inputs, approval.strip(), cosign, sealed, gate, rules,
+                           changes if not rules["unchanged"] else None)
     with open(_partial(root / PREREG_REL), "x", encoding="utf-8", newline="\n") as fh:
         fh.write(text_pr)
     frec = {"frozen_at": stamp, "approval": approval.strip(), "bwm_cosign": cosign,
@@ -804,7 +919,7 @@ def acquire_run_lock(out: Path) -> Path:
         if alive:
             raise Stop(f"[prereg5] another t2bl_confirm_run.py holds the run lock {rec}", persist=False)
         print(f"[prereg5] reclaiming a stale run lock {rec}", flush=True)
-        lk.unlink()
+        lk.unlink(missing_ok=True)
     with open(lk, "x", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps({"pid": os.getpid(), "create_time": psutil.Process().create_time(),
                              "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}))
@@ -823,16 +938,18 @@ def one_waiter_problem(backend) -> str | None:
 
 
 def hook_problem(root: Path, fz: dict | None) -> str | None:
+    """Every installed queue hook whose name contains 'prereg5' (the documented name is 90_prereg5.sh) must be the
+    frozen hook draft byte for byte."""
     root = Path(root)
-    inst = root / HOOK_INSTALLED_REL
-    if not inst.exists():
+    hooks = sorted((root / "scripts" / "queue_hooks").glob("*prereg5*.sh"))
+    if not hooks:
         return None
-    h = sha256(inst)
     if fz is not None:
         allowed = allowed_hashes(fz, root).get(HOOK_DRAFT_REL, set())
     else:
         allowed = {sha256(root / HOOK_DRAFT_REL)} if (root / HOOK_DRAFT_REL).is_file() else set()
-    return None if h in allowed else f"{HOOK_INSTALLED_REL} (sha256 {h[:12]}) is not the hook draft byte for byte"
+    bad = [f"{p.relative_to(root).as_posix()} (sha256 {sha256(p)[:12]})" for p in hooks if sha256(p) not in allowed]
+    return f"{', '.join(bad)} is not the hook draft byte for byte" if bad else None
 
 
 def runtime_problem(rt: dict, versions: dict | None = None) -> str | None:
@@ -1119,6 +1236,56 @@ def measured_a0_s(prov: dict, n: dict, cfg: Cfg) -> float:
     return m if m > 0 else stage_est_s("A0", n, cfg.rate, cfg.map_rate)
 
 
+# ---------------------------------------------------------------- attempts (reboot-aware)
+def current_boot_time() -> float:
+    import psutil
+    return float(psutil.boot_time())
+
+
+def new_attempt(turn: int | None, where: str) -> dict:
+    return {"turn": turn, "where": where, "pid": os.getpid(), "boot_time": current_boot_time(), "start_unix": time.time()}
+
+
+@contextmanager
+def attempt_guard(att: dict, save):
+    """Records an exception that ends a stage attempt (then re-raises): such an attempt counts as failed."""
+    try:
+        yield
+    except BaseException as e:                       # noqa: BLE001  (recorded, then re-raised unchanged)
+        att["exception"] = f"{type(e).__name__}: {str(e)[:200]}"
+        att["end_unix"] = time.time()
+        try:
+            save()
+        except Exception:                            # noqa: BLE001
+            pass
+        raise
+
+
+def _pid_alive(pid) -> bool:
+    import psutil
+    try:
+        return int(pid) != os.getpid() and psutil.pid_exists(int(pid))
+    except (TypeError, ValueError):
+        return False
+
+
+def classify_attempts(attempts: list, boot: float) -> tuple:
+    """(failed, interrupted_by_reboot) among the attempts of a stage that is not recorded. Failed: a recorded exception,
+    or a process that died without one in the current boot (a native crash, a kill); interrupted: an attempt from an
+    earlier boot without a recorded exception (cut off by a reboot). Legacy entries (not dicts) count as failed."""
+    failed, interrupted = [], []
+    for a in attempts:
+        if not isinstance(a, dict):
+            failed.append(a)
+        elif a.get("exception"):
+            failed.append(a)
+        elif a.get("boot_time") is not None and abs(float(a["boot_time"]) - boot) > REBOOT_TOL_S:
+            interrupted.append(a)
+        elif not _pid_alive(a.get("pid")):
+            failed.append(a)
+    return failed, interrupted
+
+
 # ---------------------------------------------------------------- the job
 def run(cfg: Cfg, backend) -> int:
     out = Path(cfg.out)
@@ -1192,11 +1359,16 @@ def _run_locked(cfg: Cfg, backend, out: Path, fz, rows: list, insts: list, shas:
             prov["stages"].pop(st, None)
             states[st] = "todo"
     done = {st for st, s in states.items() if s == "done"}
-    for st in STAGE_ORDER:                                  # a started attempt that was never recorded failed
-        if st not in done and len(prov["attempts"].get(st) or []) >= MAX_FAILED:
+    boot = current_boot_time()
+    for st in STAGE_ORDER:                                  # a started attempt that was never recorded: failed or interrupted
+        if st in done:
+            continue
+        failed, interrupted = classify_attempts(prov["attempts"].get(st) or [], boot)
+        prov.setdefault("attempts_classified", {})[st] = {"failed": len(failed), "interrupted_by_reboot": len(interrupted)}
+        if len(failed) >= MAX_FAILED:
             save()
-            raise Stop(f"[prereg5] stage {st} failed {len(prov['attempts'][st])} attempts (limit {MAX_FAILED}): stop "
-                       "(deviation policy: investigate, log)")
+            raise Stop(f"[prereg5] stage {st} failed {len(failed)} attempts (limit {MAX_FAILED}; {len(interrupted)} more "
+                       "were cut off by a reboot and not counted): stop (deviation policy: investigate, log)")
 
     def record(st: str, extra: dict) -> None:
         prov["stages"][st] = {"name": st, "turn": len(prov["turns"]) - 1, **extra,
@@ -1211,7 +1383,7 @@ def _run_locked(cfg: Cfg, backend, out: Path, fz, rows: list, insts: list, shas:
         save()
         write_json_x(out / "DONE.json", {"finished_unix": time.time(), "stages": list(STAGE_ORDER),
                                          "files": {st: prov["stages"][st]["files"] for st in STAGE_ORDER},
-                                         "provenance_sha256": sha256(prov_path)})
+                                         "provenance_sha256": sha256(prov_path)}, stale_partial="aside")
         print("[prereg5] all stages complete; DONE.json written", flush=True)
         return 0
 
@@ -1227,12 +1399,14 @@ def _run_locked(cfg: Cfg, backend, out: Path, fz, rows: list, insts: list, shas:
                cfg.bi_n_inst, cfg.ident_per_stratum * len(IDENT_STRATA) * len(SEEDS))
 
     if "A0" in done and "C1" not in done:     # A0 passed in an EARLIER invocation: C1 first, before any lease or CUDA use
-        prov["attempts"].setdefault("C1", []).append("cpu")
+        att = new_attempt(None, "cpu")
+        prov["attempts"].setdefault("C1", []).append(att)
         save()
         cuda0 = LR.cuda_initialized()
         need(not cuda0, "C1 would run in a process that has initialised CUDA")
         t0 = time.time()
-        run_cpu_stage(BP, out, insts, PI, own)
+        with attempt_guard(att, save):
+            run_cpu_stage(BP, out, insts, PI, own)
         prov["cpu_runs"].append({"pid": os.getpid(), "start_unix": t0, "end_unix": time.time(),
                                  "code_sha256": dict(prov["code_sha256"]), "bwm_planner_sha256": prov["bwm_planner_sha256"],
                                  "bwm_modules_sha256": bwm_mods, "lease_held": False, "cuda_initialized_before": cuda0,
@@ -1257,12 +1431,17 @@ def _run_locked(cfg: Cfg, backend, out: Path, fz, rows: list, insts: list, shas:
             t_idx = len(prov["turns"]) - 1
             save()
 
+            def start_est(st: str) -> float:
+                return start_estimate_s(st, n, cfg.rate, cfg.map_rate, measured_planning_spg(prov))
+
             def ok_to_start(st: str) -> bool:
-                return G2.can_start(time.time() - t_acq, stage_est_s(st, n, cfg.rate, cfg.map_rate), 0.0, cap_s)
+                return G2.can_start(time.time() - t_acq, start_est(st), 0.0, cap_s)
 
             extra = LOAD_S + (measured_a0_s(prov, n, cfg) if "A0" in done else 0.0)
-            turn["start_check"] = {"load_s": LOAD_S, "a0_s": round(extra - LOAD_S, 1), "first_stage": gpu_todo[0]}
-            if not G2.can_start(time.time() - t_acq + extra, stage_est_s(gpu_todo[0], n, cfg.rate, cfg.map_rate), 0.0, cap_s):
+            turn["start_check"] = {"load_s": LOAD_S, "a0_s": round(extra - LOAD_S, 1), "first_stage": gpu_todo[0],
+                                   "first_stage_estimate_s": round(start_est(gpu_todo[0]), 1),
+                                   "measured_planning_spg": measured_planning_spg(prov)}
+            if not G2.can_start(time.time() - t_acq + extra, start_est(gpu_todo[0]), 0.0, cap_s):
                 turn["deferred"] = list(gpu_todo)
                 print(f"[prereg5] cap: deferring {turn['deferred']} to the next turn (model not loaded)", flush=True)
                 save()
@@ -1304,43 +1483,47 @@ def _run_locked(cfg: Cfg, backend, out: Path, fz, rows: list, insts: list, shas:
                             print(f"[prereg5] cap: deferring {turn['deferred']} to the next turn", flush=True)
                             save()
                             break
-                        prov["attempts"].setdefault(st, []).append(t_idx)
+                        att = new_attempt(t_idx, "gpu")
+                        prov["attempts"].setdefault(st, []).append(att)
                         save()
                         t0 = time.time()
-                        if st == "A0":
-                            r = run_a0(model, tok, cfg, chains, keys)
-                            write_text_x(out / FILES["A0"]["anchor_off"], C.dumps_rows(r["anchor_off"]))
-                            write_text_x(out / FILES["A0"]["anchor_on"], C.dumps_rows(r["anchor_on"]))
-                            write_json_x(out / FILES["A0"]["anchor"], r["anchor"])
-                            prov["anchor"] = r["anchor"]
-                            if not r["anchor"]["pass"]:
-                                save()
-                                raise Stop(f"[prereg5] ANCHOR FAILED {r['anchor'].get('off')} {r['anchor'].get('on')}: the "
-                                           "instrument does not reproduce T2 s0; stop before any output (deviation policy)")
-                            write_text_x(out / FILES["A0"]["ident_rows"], C.dumps_rows(r["ident_rows"]))
-                            write_json_x(out / FILES["A0"]["ident"], r["ident"])
-                            prov["adapter_identity"] = r["ident"]
-                            if not r["ident"]["pass"]:
-                                save()
-                                raise Stop(f"[prereg5] ADAPTER IDENTITY FAILED {r['ident']['seeds']}: a loaded T2b-ledger "
-                                           "adapter does not reproduce the dev screen's answers; stop before any output")
-                            write_text_x(out / FILES["A0"]["bi_rows"], C.dumps_rows(r["bi_rows"]))
-                            write_json_x(out / FILES["A0"]["bi"], r["bi"])
-                            prov["batch_invariance"] = r["bi"]
-                            if not r["bi"]["pass"]:
-                                save()
-                                raise Stop(f"[prereg5] BATCH INVARIANCE FAILED {r['bi']['arms']}: stop before any output")
-                            record("A0", {"seconds": round(time.time() - t0, 1), "pid": os.getpid(),
-                                          "generations": stage_gens("A0", n)})
-                        elif st == "M1":
-                            res = run_map_stage(model, tok, rows, out)
-                            record("M1", {"seconds": round(time.time() - t0, 1), "pid": os.getpid(), "sides": res["sides"],
-                                          "generations": res["n_new"]})
-                        else:
-                            res = run_planning_stage(st, BP, model, tok, cfg, out, insts, PI, own)
-                            record(st, {"seconds": round(time.time() - t0, 1), "pid": os.getpid(), "sides": res["sides"],
-                                        "generations_planned_expected": round(stage_gens(st, n)),
-                                        "generations_planned_ceiling": round(stage_gens(st, n, "ceiling"))})
+                        with attempt_guard(att, save):
+                            if st == "A0":
+                                r = run_a0(model, tok, cfg, chains, keys)
+                                write_text_x(out / FILES["A0"]["anchor_off"], C.dumps_rows(r["anchor_off"]))
+                                write_text_x(out / FILES["A0"]["anchor_on"], C.dumps_rows(r["anchor_on"]))
+                                write_json_x(out / FILES["A0"]["anchor"], r["anchor"])
+                                prov["anchor"] = r["anchor"]
+                                if not r["anchor"]["pass"]:
+                                    save()
+                                    raise Stop(f"[prereg5] ANCHOR FAILED {r['anchor'].get('off')} {r['anchor'].get('on')}: the "
+                                               "instrument does not reproduce T2 s0; stop before any output (deviation policy)")
+                                write_text_x(out / FILES["A0"]["ident_rows"], C.dumps_rows(r["ident_rows"]))
+                                write_json_x(out / FILES["A0"]["ident"], r["ident"])
+                                prov["adapter_identity"] = r["ident"]
+                                if not r["ident"]["pass"]:
+                                    save()
+                                    raise Stop(f"[prereg5] ADAPTER IDENTITY FAILED {r['ident']['seeds']}: a loaded T2b-ledger "
+                                               "adapter does not reproduce the dev screen's answers; stop before any output")
+                                write_text_x(out / FILES["A0"]["bi_rows"], C.dumps_rows(r["bi_rows"]))
+                                write_json_x(out / FILES["A0"]["bi"], r["bi"])
+                                prov["batch_invariance"] = r["bi"]
+                                if not r["bi"]["pass"]:
+                                    save()
+                                    raise Stop(f"[prereg5] BATCH INVARIANCE FAILED {r['bi']['arms']}: stop before any output")
+                                record("A0", {"seconds": round(time.time() - t0, 1), "pid": os.getpid(),
+                                              "generations": stage_gens("A0", n)})
+                            elif st == "M1":
+                                res = run_map_stage(model, tok, rows, out)
+                                record("M1", {"seconds": round(time.time() - t0, 1), "pid": os.getpid(), "sides": res["sides"],
+                                              "generations": res["n_new"]})
+                            else:
+                                res = run_planning_stage(st, BP, model, tok, cfg, out, insts, PI, own)
+                                record(st, {"seconds": round(time.time() - t0, 1), "pid": os.getpid(), "sides": res["sides"],
+                                            "generations": res["n_new"],
+                                            "generations_planned_expected": round(stage_gens(st, n)),
+                                            "generations_planned_ceiling": round(stage_gens(st, n, "ceiling")),
+                                            "start_estimate_s": round(start_est(st), 1)})
                         turn["stages_run"].append(st)
                         save()
                         print(f"[prereg5] {st} done in {time.time() - t0:.0f}s", flush=True)
@@ -1361,6 +1544,11 @@ def _run_locked(cfg: Cfg, backend, out: Path, fz, rows: list, insts: list, shas:
         return finalize()
     print(f"[prereg5] remaining stages {[s for s in STAGE_ORDER if s not in done]} resume next turn", flush=True)
     return 5
+
+
+def cap_from_arg(x) -> float:
+    """--cap-h may lower the turn cap (tests, a short turn), never raise it above the agreed 4.5 h."""
+    return min(float(x), CAP_H)
 
 
 def stop_record(out: Path, e: Stop) -> dict:
@@ -1400,9 +1588,33 @@ def run_main(cfg: Cfg, backend) -> int:
 
 
 # ---------------------------------------------------------------- part (c): the retention guard binding (CPU)
+RET_CLAIM_RECORDS = ("docs/retention/BWM_RELEASE_DRAW.txt",)   # other consumers' records of the confirmation draw they use
+
+
+def claimed_draws(root: Path, exclude: Path | None = None) -> set:
+    """Draw ids that another consumer has recorded as its own (hook 85's BWM release draw, any other run's RET_DRAW)."""
+    root = Path(root)
+    out: set = set()
+    for rel in RET_CLAIM_RECORDS:
+        p = root / rel
+        if p.is_file():
+            out |= set(re.findall(r"confirm_[0-9]+", p.read_text(encoding="utf-8", errors="ignore")))
+    runs = root / "runs"
+    for p in (runs.glob("*/RET_DRAW.json") if runs.is_dir() else []):
+        if exclude is not None and p.resolve() == Path(exclude).resolve():
+            continue
+        d = (C.read_json(p) or {}).get("draw_id")
+        if d:
+            out.add(str(d))
+    return out
+
+
 def ret_mint(root: Path | None = None, require_freeze: bool = True, mint_fn=None) -> dict:
     """Mint the 5c confirmation draw ONCE, at run time, after the freeze; record it (create-only). An interrupted mint
-    is recovered from the intent record: exactly one confirmation draw minted since the intent is adopted."""
+    is recovered from the intent record: a confirmation seal written after the intent (seal file time) and claimed by
+    no other consumer is adopted if it is the only one; if none exists and no draw file without a seal appeared after
+    the intent (a crash before the mint wrote anything), a fresh mint is allowed (recorded in the intent's retries);
+    anything else stops for the operator."""
     root = Path(root or ROOT)
     if require_freeze:
         ok, errs, _ = verify_freeze(root)
@@ -1411,18 +1623,37 @@ def ret_mint(root: Path | None = None, require_freeze: bool = True, mint_fn=None
     need(not rec_p.exists(), f"{RET_DRAW_REL} exists: the PREREG-5 retention draw is minted once", persist=False)
     draws = root / "docs" / "retention" / "draws"
     now = sorted(p.name for p in draws.glob("confirm_*.SEAL.json")) if draws.is_dir() else []
+    if mint_fn is None:
+        import ret_gen as RGEN
+        mint_fn = lambda: RGEN.mint("confirm", root=root)  # noqa: E731
+    seal, how = None, None
     if intent_p.exists():
-        before = (C.read_json(intent_p) or {}).get("confirm_seals_before") or []
-        new = sorted(set(now) - set(before))
-        need(len(new) == 1, f"an interrupted retention mint left {len(new)} new confirmation draws: investigate, log",
-             persist=False)
-        seal = C.read_json(draws / new[0]) or {}
-        how = "adopted after an interrupted mint (intent record)"
+        intent = C.read_json(intent_p) or {}
+        t_int = float(intent.get("unix") or 0.0)
+        before = set(intent.get("confirm_seals_before") or [])
+        claimed = claimed_draws(root, exclude=rec_p)
+        new = [n for n in sorted(set(now) - before) if (draws / n).stat().st_mtime >= t_int - 2.0
+               and n[: -len(".SEAL.json")] not in claimed]
+        need(len(new) <= 1, f"an interrupted retention mint left {len(new)} unclaimed new confirmation seals: "
+                            "investigate, log", persist=False)
+        if new:
+            seal = C.read_json(draws / new[0]) or {}
+            how = "adopted after an interrupted mint (intent record; seal written after the intent, claimed by no one)"
+        else:
+            orphans = [p.name for p in draws.glob("confirm_*.jsonl") if p.stat().st_mtime >= t_int - 2.0 and
+                       not p.with_name(p.name[: -len(".jsonl")] + ".SEAL.json").exists()] if draws.is_dir() else []
+            need(not orphans, f"an interrupted retention mint left draw files without a seal {orphans}: move them aside "
+                              "unread, log it in DECISIONS.md", persist=False)
+            intent.setdefault("retries", []).append({"unix": time.time(), "confirm_seals_before": now})
+            tmp = intent_p.with_name(intent_p.name + ".partial")
+            with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write(json.dumps(intent, indent=1) + "\n")
+            os.replace(tmp, intent_p)
+            seal = mint_fn()
+            how = "minted by --ret-mint after an interrupted mint that wrote nothing (intent retry)"
     else:
-        C.write_create(intent_p, json.dumps({"confirm_seals_before": now, "unix": time.time()}, indent=1) + "\n")
-        if mint_fn is None:
-            import ret_gen as RGEN
-            mint_fn = lambda: RGEN.mint("confirm", root=root)  # noqa: E731
+        C.write_create(intent_p, json.dumps({"confirm_seals_before": now, "unix": time.time()}, indent=1) + "\n",
+                       stale_partial="aside")
         seal = mint_fn()
         how = "minted by --ret-mint"
     need(seal.get("purpose") == "confirm" and seal.get("draw_id"), "the minted seal is not a confirmation draw seal")
@@ -1432,7 +1663,7 @@ def ret_mint(root: Path | None = None, require_freeze: bool = True, mint_fn=None
            "how": how, "freeze_prereg_sha256": (C.read_json(root / FREEZE_REL) or {}).get("prereg_sha256"),
            "run_cmd": (f"ret_run.py --mode confirm --draw {seal.get('file')} --extra-adapter "
                        f"{RET_EXTRA_NAME}={T2BL_RELS[0]}")}
-    C.write_create(rec_p, json.dumps(rec, indent=1) + "\n")
+    C.write_create(rec_p, json.dumps(rec, indent=1) + "\n", stale_partial="aside")
     print(f"[prereg5] retention draw {seal['draw_id']} recorded in {RET_DRAW_REL}", flush=True)
     return rec
 
@@ -1470,7 +1701,7 @@ def ret_record(root: Path | None = None, require_freeze: bool = True) -> dict:
                     "stopped_sha256": sha256(run_dir / "STOPPED.json")})
     else:
         raise Stop("the retention run has neither a registered result nor a persisted stop yet", persist=False)
-    C.write_create(ptr, json.dumps(rec, indent=1) + "\n")
+    C.write_create(ptr, json.dumps(rec, indent=1) + "\n", stale_partial="aside")
     print(f"[prereg5] retention {rec['status']}: {RETENTION_RESULT_POINTER} written", flush=True)
     return rec
 
@@ -1483,13 +1714,16 @@ def main() -> int:
     g.add_argument("--freeze", action="store_true", help="CPU only: freeze PREREG-5 and mint the sealed sets")
     g.add_argument("--ret-mint", action="store_true", help="CPU only: mint and record the 5c confirmation draw (once)")
     g.add_argument("--ret-record", action="store_true", help="CPU only: bind the retention result (or stop) to PREREG-5")
+    g.add_argument("--union-digest", action="store_true", help="CPU only: rebuild the freshness union, print its digest")
     ap.add_argument("--approval", default=None)
     ap.add_argument("--bwm-cosign", default=None)
     ap.add_argument("--bwm-salt", default=None)
+    ap.add_argument("--changes", default=None, help="JSON file: the list of changes since the dev gate's freeze")
     ap.add_argument("--cap-h", type=float, default=CAP_H)
     a = ap.parse_args()
-    if not (a.plan or a.verify or a.freeze or a.ret_mint or a.ret_record):
-        return run_main(Cfg(cap_h=a.cap_h), RealBackend())
+    cap_h = cap_from_arg(a.cap_h)
+    if not (a.plan or a.verify or a.freeze or a.ret_mint or a.ret_record or a.union_digest):
+        return run_main(Cfg(cap_h=cap_h), RealBackend())
     try:
         if a.plan:
             res = plan()
@@ -1515,7 +1749,20 @@ def main() -> int:
         if a.ret_record:
             ret_record()
             return 0
-        freeze(a.approval or "", a.bwm_cosign or "", a.bwm_salt or "")
+        if a.union_digest:
+            import t2bl_make_data as MD
+            excl = MD.build_union(root=ROOT, skip_prefix=None)
+            need(not MD.union_errors(excl), f"union sources could not be read: {MD.union_errors(excl)}", persist=False)
+            print(json.dumps({"union_digest": CB.union_digest(excl), "n_payloads": len(excl["pay"]),
+                              "n_operative": len(excl["ops"]), "n_sources": len(excl["sources"]),
+                              "computed_local": time.strftime("%Y-%m-%d %H:%M:%S %z"),
+                              "quote_in_cosign_as": "union:" + CB.union_digest(excl)}, indent=1))
+            return 0
+        changes = None
+        if a.changes:
+            changes = C.read_json(Path(a.changes))
+            need(isinstance(changes, list), "--changes must name a JSON file holding a list of changes", persist=False)
+        freeze(a.approval or "", a.bwm_cosign or "", a.bwm_salt or "", changes=changes)
         return 0
     except (Stop, LR.Stop) as e:
         print(str(e), flush=True)

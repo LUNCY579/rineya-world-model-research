@@ -1,6 +1,6 @@
 # DRAFT queue hook for PREREG-5 (the sealed confirmation of T2b-ledger; PREREG_5_DRAFT.md section 7). NOT INSTALLED. Its
-# sha256 is recorded in the freeze, and scripts/t2bl_confirm_run.py refuses to run (exit 3, not persisted) if
-# scripts/queue_hooks/90_prereg5.sh exists and is not this file byte for byte. Install only AFTER the freeze (which needs
+# sha256 is recorded in the freeze, and scripts/t2bl_confirm_run.py refuses to run (exit 3, not persisted) if any
+# installed scripts/queue_hooks/*prereg5*.sh is not this file byte for byte. Install only AFTER the freeze (which needs
 # the dev gate's PROCEED and BWM's co-sign), by the RCWM-T1 operator on the user's go-ahead, logged in DECISIONS.md:
 #   cp docs/t2b/ledger/queue_hook_prereg5.sh.draft scripts/queue_hooks/90_prereg5.sh   (then compare the two sha256 values)
 # WHEN IT RUNS. master_chain.sh expands its hook glob ONCE, when execution enters that loop: a new hook runs only in a FRESH
@@ -11,8 +11,9 @@
 #   the start of the call after the one that recorded A0). Exit codes: 0 complete; 3 deterministic stop - NEVER retried
 #   (persisted as runs/prereg5/STOPPED.json with its verdict-eligible parts); 5 deferred by the 4.5 h cap or C1 pending:
 #   SLEEP 60 s FIRST (so BWM's yield loop sees the release; agreed with BWM), then call again; anything else is a crash -
-#   exactly one retry. At most five calls per chain pass (the plan is 2 turns at the observed rate, 3 at the planning rate,
-#   4 at the planning-rate ceiling; docs/t2b/ledger/P5_GEN_PLAN.json).
+#   exactly one retry. At most six calls per chain pass (the runner's own start rule gives 2 turns at the observed rate, 3
+#   at the planning rate, 4 at the planning-rate ceiling and 5 at 2.5 generations/s; docs/t2b/ledger/P5_GEN_PLAN.json);
+#   any remaining stage resumes in the next chain pass.
 # Part (c), only after the GPU job is terminal and verdict-eligible: mint ONE sealed 5c confirmation draw at run time
 #   (t2bl_confirm_run.py --ret-mint -> runs/prereg5/RET_DRAW.json; never re-minted), run the frozen retention suite with
 #   T2b-ledger seed 0 as the extra Titan-Sparse adapter (lease rcwm-t1:retention; rc 5: sleep 60 s, then call again; at
@@ -24,7 +25,7 @@
 if [ -f PREREG_5_FREEZE.json ]; then
   p5_calls=0
   p5_crashes=0
-  while [ "$p5_calls" -lt 5 ] && [ ! -f runs/prereg5/DONE.json ] && [ ! -f runs/prereg5/STOPPED.json ]; do
+  while [ "$p5_calls" -lt 6 ] && [ ! -f runs/prereg5/DONE.json ] && [ ! -f runs/prereg5/STOPPED.json ]; do
     step scripts/t2bl_confirm_run.py
     p5_rc=$?
     p5_calls=$((p5_calls + 1))

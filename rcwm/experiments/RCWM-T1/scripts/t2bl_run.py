@@ -22,9 +22,9 @@ rcwmt.generation.generate_texts (160-token cap, its batching), prompts t2bl_comm
       chains, rcwmt.generation.chain) OFF and T2s0 against runs/t2/t2_s0/gen_chain_one_base.jsonl / gen_chain_one.jsonl
       (PREREG-2 pins): identical states on >= 99% of chains per side, else the job stops (persisted) before any
       evaluation output of that turn. It also shows that loading a second adapter leaves OFF and T2s0 unchanged.
-  E0  once: the 1,667 dev rows (17 strata, every surface of the bank) OFF and T2s0 (the two reference sides).
+  E0  once: the 1,801 dev rows (19 strata, every surface of the bank) OFF and T2s0 (the two reference sides).
   T   per seed: training (stage T; the adapter directory).
-  E   per seed: the 1,667 dev rows ON (the seed's adapter).
+  E   per seed: the 1,801 dev rows ON (the seed's adapter).
 The rows, sides and strata the gate reads are fixed in docs/t2b/ledger/GATE_RULE.md (pre-stated before any output).
 
 Pairing (D-22 style, ONE lease 'rcwm-t1:t2b-ledger', 4.5 h cap from acquisition): seeds run in order 0, 1, 2. A seed's
@@ -33,8 +33,8 @@ remaining turn and never within 0.5 h of the cap; each evaluation stage starts o
 Otherwise that seed (and every later one) is deferred: exit 5, and the next call resumes from the recorded stages
 (re-anchoring first). Estimates are corrected by the observed / planned ratio of the stages already run.
 
-Before the lease (exit 3, not persisted): the frozen gate rule and every frozen input (incl. the hook draft; an installed
-scripts/queue_hooks/88_t2bl.sh must be that draft byte for byte); the training file and dev bank
+Before the lease (exit 3, not persisted): the frozen gate rule and every frozen input (incl. the hook draft; every
+installed scripts/queue_hooks/*t2bl*.sh, documented name 88_t2bl.sh, must be that draft byte for byte); the training file and dev bank
 equal their SOURCE records; T2 s0's adapter equals PREREG-2's pins; the vendored trainer is the pinned one; every
 training prompt == tok.apply_chat_template(messages(row)); the one-waiter rule (R14: another RCWM job waiting for or
 holding the GPU lease refuses this one; BWM jobs are waited for in the lease); a one-runner lock on runs/t2bl/<tag>/.
@@ -42,6 +42,9 @@ A resumed run refuses if a frozen code file differs from the hashes recorded at 
 under runs/t2bl/<tag>/; a stage is DONE only if its files exist AND provenance.json records them with matching sha256;
 anything else a stage wrote is PARTIAL: moved to _orphans/ (never deleted) and redone in full. A recorded output whose
 hash changes stops the job.
+
+Two consecutive turns that record no stage stop the job (persisted; a cap or rate amendment is needed). --cap-h is
+clamped to 4.5 h (the agreed turn cap).
 
 Exit codes: 0 complete (DONE.json) or already complete; 3 deterministic stop (never retried; persisted as STOPPED.json
 when it concerns the run); 5 deferred by the turn cap (resumable); 1 crash (an exception; the lease is released).
@@ -119,6 +122,7 @@ T2_ROW_TOKENS = 152.76
 OBS_RATE, PLAN_RATE, REF_ANSWER_TOKENS = 6000 / 1229.0, 2.7, 20.0
 ANCHOR_ANSWER_TOKENS = 20.0
 LOAD_S = 120.0
+NO_PROGRESS_STOP = 2
 
 
 class Stop(Exception):
@@ -200,7 +204,7 @@ def estimates(cfg: Cfg, n_rows: int | None = None, n_anchor: int | None = None) 
     ts = src.get("token_stats") or {}
     row_tok = (ts.get("train") or {}).get("mean_row_tokens_incl_eos", 165.0)
     ans = (ts.get("dev") or {}).get("mean_target_tokens", 25.0)
-    n_rows = n_rows if n_rows is not None else sum(v["n"] for v in (C.read_json(C.DEV_SOURCE) or {}).get("strata", {}).values()) or 1667
+    n_rows = n_rows if n_rows is not None else sum(v["n"] for v in (C.read_json(C.DEV_SOURCE) or {}).get("strata", {}).values()) or 1801
     n_anchor = n_anchor if n_anchor is not None else N_ANCHOR_CHAINS * ANCHOR_STEPS
     t2 = T2_TRAIN_S_MAX if cfg.planning else T2_TRAIN_S_MEAN
     return {"T": LOAD_S + t2 * (row_tok / T2_ROW_TOKENS) * (cfg.steps / STEPS),
@@ -372,7 +376,7 @@ def acquire_run_lock(out: Path) -> Path:
         if alive:
             raise Stop(f"[t2bl] another t2bl_run.py holds the run lock {rec}", persist=False)
         print(f"[t2bl] reclaiming a stale run lock {rec}", flush=True)
-        lk.unlink()
+        lk.unlink(missing_ok=True)
     with lk.open("x", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps({"pid": os.getpid(), "create_time": psutil.Process().create_time(),
                              "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}))
@@ -601,14 +605,17 @@ def frozen_files(cfg: Cfg) -> dict:
     return files
 
 
-def hook_problem(installed: Path = HOOK_INSTALLED, draft: Path = HOOK_DRAFT) -> str | None:
-    """An installed scripts/queue_hooks/88_t2bl.sh must be the hook draft byte for byte (the draft is bound by the frozen
-    gate rule)."""
-    if not Path(installed).exists():
+def hook_problem(installed: Path | None = None, draft: Path = HOOK_DRAFT) -> str | None:
+    """Every installed queue hook whose name contains 't2bl' (the documented name is scripts/queue_hooks/88_t2bl.sh)
+    must be the hook draft byte for byte (the draft is bound by the frozen gate rule). installed: one file (tests) or
+    None = scan scripts/queue_hooks/*t2bl*.sh."""
+    hooks = [Path(installed)] if installed is not None else sorted(HOOK_INSTALLED.parent.glob("*t2bl*.sh"))
+    hooks = [h for h in hooks if h.exists()]
+    if not hooks:
         return None
-    if not Path(draft).is_file() or C.sha256(installed) != C.sha256(draft):
-        return f"{installed} is not the hook draft {draft} byte for byte"
-    return None
+    want = C.sha256(draft) if Path(draft).is_file() else None
+    bad = [str(h) for h in hooks if C.sha256(h) != want]
+    return f"{', '.join(bad)} is not the hook draft {draft} byte for byte" if bad else None
 
 
 def frozen_problems(rec, files: dict) -> list:
@@ -718,7 +725,7 @@ def _run_locked(cfg, backend, out, shas, dev_rows, anchor_chains, tok, n_checked
         C.write_create(out / "DONE.json", json.dumps({
             "finished_unix": time.time(), "seeds": list(cfg.seeds),
             "files": {u: {st: prov["stages"][u][st]["files"] for st in prov["stages"][u]} for u in prov["stages"]},
-            "provenance_sha256": C.sha256(prov_path)}, indent=1) + "\n")
+            "provenance_sha256": C.sha256(prov_path)}, indent=1) + "\n", stale_partial="aside")
         print("[t2bl] all seeds complete; DONE.json written", flush=True)
 
     todo = {u: [st for st in ("E0", "T", "E") if st in states[u] and states[u][st] != "done"] for u in states}
@@ -845,13 +852,23 @@ def _run_locked(cfg, backend, out, shas, dev_rows, anchor_chains, tok, n_checked
             turn["deferred"] = rest
             print(f"[t2bl] cap: deferring {rest} to the next turn ({d})", flush=True)
         turn["released_unix"] = time.time()
+        turn["no_progress"] = not turn["stages_run"]
+        prov["no_progress_turns"] = (prov.get("no_progress_turns") or 0) + 1 if turn["no_progress"] else 0
         save()
     st_end = stage_states(prov, out, cfg)
     if all(v == "done" for u in st_end.values() for v in u.values()):
         finalize()
         return 0
+    if prov.get("no_progress_turns", 0) >= NO_PROGRESS_STOP:
+        raise Stop(f"[t2bl] no stage was recorded in {prov['no_progress_turns']} consecutive turns (deferred "
+                   f"{turn['deferred']}): stop (a cap or rate amendment is needed; investigate, log)")
     print("[t2bl] turn ended; the remaining stages resume next turn", flush=True)
     return 5
+
+
+def cap_from_arg(x) -> float:
+    """--cap-h may lower the turn cap (tests, a short turn), never raise it above the agreed 4.5 h."""
+    return min(float(x), CAP_H)
 
 
 def persist_stop(out: Path, e: Stop) -> None:
@@ -883,7 +900,7 @@ def main() -> int:
             return 0
         print("wrote", C.write_doc("GEN_PLAN.json", json.dumps(res, indent=1) + "\n"))
         return 0
-    cfg = Cfg(cap_h=a.cap_h)
+    cfg = Cfg(cap_h=cap_from_arg(a.cap_h))
     try:
         return run(cfg, RealBackend())
     except Stop as e:

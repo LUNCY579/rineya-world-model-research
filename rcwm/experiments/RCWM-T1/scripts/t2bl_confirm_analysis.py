@@ -53,57 +53,66 @@ BAR, BAR_LB = 0.80, 0.70
 NI_OWN = 0.10                 # non-inferiority to the adapter's own canonical twins (bootstrap one-sided 95% LB)
 ID_NI = 0.05                  # in-distribution non-inferiority to T2 s0 (bootstrap one-sided 95% LB)
 ALPHA = 0.05                  # Holm over the 27 (cell, seed) gain tests
-NEAR_T2 = 0.10                # 'stays near T2 s0': at most this much above it
+NEAR_T2 = 0.10                # 'stays near T2 s0': within this much of it, above or below
+CTRL_GAIN = 0.10              # 'improves on trained surface variants': the control at least this much above T2 s0
 P_PLAN, DELTA_PLAN = 0.01, 0.20
 RATIO_BAR = 0.70              # planning absolute bar: success(T2BL@HS) / success(ORACLE)
 NEAR_ORACLE, NEAR_ORACLE_LB = 0.80, 0.70
 NI_PLAN = 0.10
 CANON_COST = 0.05
 P3_TRIGGER_MAX, P3_COPY_CAP = 0.30, 0.10
+SURFACE_CTRL = ("S_surface_posted", "S_surface_words")
 FACTORS = OrderedDict([
     ("words", {"label": "unseen status words", "cells": (("H_words", "all"),), "control": ("S_words",)}),
-    ("order", {"label": "unseen key orders", "cells": (("H_order", "all"),), "control": ("S_surface_posted",)}),
-    ("names", {"label": "unseen account names", "cells": (("H_names", "all"),), "control": ("S_surface_posted",)}),
-    ("count", {"label": "an unseen account count (8 accounts)", "cells": (("H_count", "all"),),
-               "control": ("S_surface_posted",)}),
-    ("para", {"label": "an unseen rule paraphrase", "cells": (("H_para", "all"),),
-              "control": ("S_surface_posted", "S_surface_words")}),
-    ("magnitude", {"label": "unseen magnitudes (5-digit balances and 4-digit amounts, add / transfer)",
-                   "cells": (("H_bal", "at"), ("H_amt", "at")), "control": ("S_surface_posted",)}),
+    ("order", {"label": "unseen key orders", "cells": (("H_order", "all"),), "control": SURFACE_CTRL}),
+    ("names", {"label": "unseen account names", "cells": (("H_names", "all"),), "control": SURFACE_CTRL}),
+    ("count", {"label": "an unseen account count (8 accounts)", "cells": (("H_count", "all"),), "control": SURFACE_CTRL}),
+    ("para", {"label": "an unseen rule paraphrase", "cells": (("H_para", "all"),), "control": SURFACE_CTRL}),
+    ("magnitude", {"label": "unseen magnitudes (posted add / transfer events: 5-digit balances, 4-digit amounts)",
+                   "cells": (("H_bal", "at"), ("H_amt", "at")), "control": ("S_bal", "S_amt")}),
     ("combined", {"label": "the combined unseen surface", "cells": (("HS_words", "all"), ("HS_posted", "all")),
-                  "control": ("S_surface_words", "S_surface_posted")}),
+                  "control": SURFACE_CTRL}),
 ])
-REPORT_CELLS = (("H_bal", "sc"), ("LB_void", "all"), ("LB_posted", "all"), ("S_words", "all"),
-                ("S_surface_posted", "all"), ("S_surface_words", "all"), ("ID_posted", "all"), ("ID_void", "all"))
+REPORT_CELLS = (("H_bal", "sc"), ("H_order_top", "all"), ("H_order_inner", "all"), ("LB_void", "all"),
+                ("LB_posted", "all"), ("S_words", "all"), ("S_surface_posted", "all"), ("S_surface_words", "all"),
+                ("S_bal", "all"), ("S_amt", "all"), ("ID_posted", "all"), ("ID_void", "all"))
+WORD_CLUSTER_CELLS = ("H_words", "HS_words")   # report-only: accuracy with a word-cluster bootstrap interval
 P3_STRATA = tuple(C.P3.UNSEEN_STATUS_STRATA)
 P3_TRIGGER = tuple(C.P3.TRIGGER_STRATA)
 VARIANT_KEYS = {"H_words": "word_kind", "HS_words": "word_kind", "S_words": "word_kind", "S_surface_words": "word_kind",
-                "H_names": "names_kind", "HS_posted": "names_kind", "H_order": "event_order", "H_para": "status",
+                "H_names": "names_kind", "HS_posted": "names_kind", "H_order": "event_order", "H_count": "status_kind",
+                "H_para": "status_kind", "H_order_top": "status_kind", "H_order_inner": "event_order",
                 "S_surface_posted": "names_kind"}
+PINNED_CODE = ("scripts/t2bl_common.py", "scripts/t2bl_make_data.py", "scripts/t2bl_audit.py", "scripts/t2bl_confirm_bank.py",
+               "scripts/t2bl_confirm_run.py", "scripts/t2bl_confirm_analysis.py")
 
 RULE_MAP = (
-    "PREREG-5 part (a), the one-step map. Bank: the sealed map bank minted at the freeze (t2bl_common.CONFIRM_STRATA: 24 "
-    "strata on 100 fresh bases; H_amt on the 67 add / transfer bases). Sides, all generated in one process: OFF "
+    "PREREG-5 part (a), the one-step map. Bank: the sealed map bank minted at the freeze (t2bl_common.CONFIRM_STRATA: 28 "
+    "strata on 100 fresh bases, rendered with the CONFIRM half of every split held-out partition, which the dev screen "
+    "never used; S_bal, S_amt and H_amt on the 67 add / transfer bases). Sides, all generated in one process: OFF "
     "(Titan-Sparse, adapters disabled), T2 s0 (PREREG-2's adapter) and T2b-ledger seeds 0, 1, 2, unmerged. Scoring: "
     "p3_common.score_onestep (exact balances, any key order). For every primary cell c (words: H_words; key order: "
     "H_order; names: H_names; count: H_count; paraphrase: H_para; magnitude: H_bal on the add / transfer bases and "
-    "H_amt; combined held-out surface: HS_words and HS_posted) and every T2b-ledger seed s: BAR(c, s) iff accuracy >= "
-    "0.80 and Wilson 95% lower bound >= 0.70; GAIN(c, s) iff the exact two-sided McNemar test of seed s against T2 s0 "
-    "on c's rows is significant at 0.05 after Holm adjustment over the 27 (cell, seed) tests, with seed s ahead (b > c); "
-    "NI(c) iff every seed's difference between its accuracy on c and its accuracy on the same bases' canonical twins "
-    "(ID_posted for apply rows, ID_void for no-op rows) is >= -0.10 and the paired base-bootstrap one-sided 95% lower "
-    "bound of that difference averaged over the three seeds (bases resampled with all their rows and seeds; 10,000 "
-    "resamples, seed 17) is >= -0.10. Per factor X: GENERALISES TO UNSEEN X iff BAR and GAIN hold for every cell of X in "
-    "all three seeds and NI holds for every cell of X; TRIGGER "
-    "WIDENED iff the factor's trained-surface control (words: S_words; every other factor: S_surface_posted, plus "
-    "S_surface_words for the paraphrase and the combined surface) has accuracy >= 0.80 in all three seeds while, on "
-    "every cell of X and in every seed, the seed's accuracy is at most 0.10 above T2 s0's and at least one cell of X "
-    "misses BAR in every seed; PARTIAL otherwise, reported "
-    "with the per-cell, per-variant, per-seed table and its named patterns (below_bar, not_noninferior, no_gain, "
-    "no_headroom where T2 s0 itself meets BAR on a cell without GAIN, seed_disagreement). In-distribution control: "
-    "ID_NI iff the paired base-bootstrap one-sided 95% lower bound of T2b-ledger's accuracy minus T2 s0's on ID_posted "
-    "and ID_void (200 rows), averaged over the three seeds, is >= -0.05 (each seed's difference is reported); if ID_NI "
-    "fails, every part (a) headline carries 'at an in-distribution cost relative to T2 s0'.")
+    "H_amt; combined held-out surface: HS_words and HS_posted; H_order, H_names, H_count and H_para carry posted events "
+    "on even bases and the base's training non-posted word on odd bases, the magnitude cells posted events only) and "
+    "every T2b-ledger seed s: BAR(c, s) iff accuracy >= 0.80 and Wilson 95% lower bound >= 0.70 (on the 67-row cells "
+    "that is at least 55 of 67); GAIN(c, s) iff the exact two-sided McNemar test of seed s against T2 s0 on c's rows is "
+    "significant at 0.05 after Holm adjustment over the 27 (cell, seed) tests, with seed s ahead (b > c); NI(c) iff "
+    "every seed's difference between its accuracy on c and its accuracy on the same bases' canonical twins (ID_posted "
+    "for posted rows, ID_void for the held-out-word rows, S_words for the training-word rows) is >= -0.10 and the "
+    "paired base-bootstrap one-sided 95% lower bound of that difference averaged over the three seeds (bases resampled "
+    "with all their rows and seeds; 10,000 resamples, seed 17) is >= -0.10. Per factor X: GENERALISES TO UNSEEN X iff "
+    "BAR and GAIN hold for every cell of X in all three seeds and NI holds for every cell of X; TRIGGER WIDENED iff the "
+    "factor's trained-variant control (words: S_words; magnitude: S_bal and S_amt; every other factor: S_surface_posted "
+    "and S_surface_words; all on in-range values) has, in all three seeds, accuracy >= 0.80 and at least 0.10 above T2 "
+    "s0's on the same rows, while, on every cell of X and in every seed, the seed's accuracy is within 0.10 of T2 s0's "
+    "(above or below) and at least one cell of X misses BAR in every seed; PARTIAL otherwise, reported with the "
+    "per-cell, per-variant, per-seed table and its named patterns (below_bar, not_noninferior, no_gain, no_headroom "
+    "where T2 s0 itself meets BAR on a cell without GAIN, below_t2s0 where a seed is more than 0.10 below T2 s0 on a "
+    "cell, seed_disagreement). In-distribution control: ID_NI iff the paired base-bootstrap one-sided 95% lower bound "
+    "of T2b-ledger's accuracy minus T2 s0's on ID_posted and ID_void (200 rows), averaged over the three seeds, is >= "
+    "-0.05 (each seed's difference is reported); if ID_NI fails, every part (a) headline carries 'at an "
+    "in-distribution cost relative to T2 s0'.")
 RULE_P3 = (
     "PREREG-5 part (a), secondary (comparable with PREREG-3's V1; never changes a factor verdict): PREREG-3's V1 rule "
     "applied to each T2b-ledger seed on this bank's eight PREREG-3 strata (U_pending, U_draft, U_cancelled, U_reversed, "
@@ -130,11 +139,11 @@ RULE_PLAN = (
     "PASS, the absolute bar success(T2BL@HS) / success(ORACLE) >= 0.70 holds, and T2BL@HS is non-inferior to "
     "T2BL@canon (paired instance-bootstrap one-sided 95% lower bound of success(T2BL@HS) - success(T2BL@canon) >= "
     "-0.10; 10,000 resamples, seed 17); TRIGGER WIDENED iff success(T2BL@canon) - success(T2s0@canon) >= -0.05 and the "
-    "primary is NS with delta < +0.10; PARTIAL otherwise, with its named reason (short, below_bar, not_noninferior, "
-    "reversed, canonical_cost, ns_with_gain). Report-only: NEAR-ORACLE on the unseen surface iff the T2BL@HS / "
-    "ORACLE ratio is >= 0.80 with paired bootstrap 95% lower bound >= 0.70; T2BL@canon vs T2s0@canon (exact McNemar, "
-    "the difference with its interval); success by optimal depth and on the needs-lookahead stratum, verified-plan "
-    "precision, refused keys and void-twin exposure for every arm; IGNORE_STATUS (CPU).")
+    "primary is NS with delta within 0.10 of zero; PARTIAL otherwise, with its named reason (short, below_bar, "
+    "not_noninferior, reversed, canonical_cost, ns_with_gain). Report-only: NEAR-ORACLE on the unseen surface iff the "
+    "T2BL@HS / ORACLE ratio is >= 0.80 with paired bootstrap 95% lower bound >= 0.70; T2BL@canon vs T2s0@canon (exact "
+    "McNemar, the difference with its interval); success by optimal depth and on the needs-lookahead stratum, "
+    "verified-plan precision, refused keys and void-twin exposure for every arm; IGNORE_STATUS (CPU).")
 RULE_RET = (
     "PREREG-5 part (c), the retention guard: the frozen 5c retention suite (docs/retention/RET_FREEZE.json) on a "
     "confirmation draw minted at run time (ret_gen.py mint --purpose confirm: a fresh OS-entropy seed, the registered "
@@ -150,26 +159,47 @@ LIMITS = (
     "T2 s0 differs from T2b-ledger in more than surface diversity: it trained on 501 ledger rows inside 1,501 rows of "
     "three families; T2b-ledger trains on 1,500 ledger rows with widened magnitudes, twin pairs and 600 rows of "
     "non-posted words. A gain over T2 s0 is a gain of the T2b-ledger recipe, not of surface augmentation alone.",
-    "'Unseen' means outside T2b-ledger's training partitions, fixed at build time: 20 held-out status words (five "
-    "kinds), letters E-H and 16 held-out word names, 8 accounts, the reversed top-level order and 2 + 1 held-out orders "
-    "per object, rule paraphrase 4, 5-digit balances and 4-digit add / transfer amounts. A pass is transfer to these "
-    "items, not to every surface.",
-    "The top-level object (before, event) is never varied in training, so every held-out-order row also reverses it.",
-    "Field names (before, event, account, amount, kind, other, status, tick) and the kind words are never varied; scale "
-    "factors stay in the recorded marginal everywhere, so magnitude claims cover add / transfer only (scale is report-only).",
+    "'Unseen' means outside T2b-ledger's training partitions, fixed at build time, and outside the dev screen's half of "
+    "them: the confirmation uses 20 held-out status words (four per kind, each token-novel: no 'void' or 'posted' token "
+    "and a token no trained status has), letters E-H and 8 held-out word names, held-out orders of the event and before "
+    "objects (the reversal and two random orders each) and rule paraphrase 5, none of which the dev screen used. A pass "
+    "is transfer to these items, not to every surface.",
+    "Shared with the dev screen: the reversed top-level order (the 2-key top object is never varied in training and has "
+    "one other order, so every H_order and combined-surface row reverses it; H_order_top and H_order_inner report the "
+    "top-level reversal and the inner orders separately), the 8-account count and the magnitude bands (the dev gate read "
+    "neither; the confirmation's values are freshly drawn), and PREREG-LB's rendering (names bank / card / cash / fees, "
+    "keys reversed, 'cancelled'), which both one-step banks carry only in report-only strata.",
+    "Every held-out event or before order is a few adjacent swaps from some trained order (every other permutation is "
+    "trained; the random held-out orders are at least two swaps from the sorted order, the most trained one).",
+    "Field names (before, event, account, amount, kind, other, status, tick) and the kind words are never varied. "
+    "'Unseen magnitude' means a digit length that no training prompt or target contains (training values have at most 4 "
+    "digits). Scale factors stay in the recorded marginal everywhere and training scale rows keep balances of at most 3 "
+    "digits, so magnitude claims cover posted add / transfer events (arithmetic at unseen lengths, not status reading); "
+    "scale at the held-out band is report-only.",
+    "Status reading under each surface factor is tested with TRAINING non-posted words (the odd rows of H_order, H_names, "
+    "H_count and H_para); unseen words under unseen surfaces are the combined cell's job (HS_words).",
     "Planning: in-range instances only, one planner configuration (enum W2 E12), one adapter seed (s0), a model-free "
     "proposer, and PREREG-LB's single held-out combined rendering.",
     "Retention: the five categories the 5c dev selection kept (R17); losses of 6-12 items in one category are often missed.",
-    "Thresholds were fixed before any T2b-ledger output: bar 0.80 with Wilson 0.70, own-canonical margin 0.10, "
-    "in-distribution margin 0.05, Holm at 0.05 over 27 tests; planning +0.20 at p < 0.01, ratio 0.70, margin 0.10.",
+    "Thresholds were fixed before any T2b-ledger output, with knowledge of PREREG-3's and PREREG-LB's aggregate results "
+    "(T2 s0's per-stratum accuracies, its planning success 0.706 and 5/180, its 0.794 ratio to ORACLE), which informed "
+    "the bars and the power scenarios: bar 0.80 with Wilson 0.70, own-canonical margin 0.10, in-distribution margin "
+    "0.05, Holm at 0.05 over 27 tests, control gain 0.10, 'near T2 s0' within 0.10; planning +0.20 at p < 0.01, ratio "
+    "0.70, margin 0.10.",
+    "Rows are treated as independent: each held-out word kind has four words (five rows per word) and the paraphrase "
+    "cell one paraphrase, so BAR's Wilson bound and the McNemar tests understate item-level uncertainty; word-cluster "
+    "bootstrap intervals for H_words and HS_words are reported (report-only).",
     "Fixed rule: every prompt states the same rule (paraphrased); a pass shows that T2b-ledger follows this fixed rule "
     "on unseen surfaces, not that it reads a rule supplied in the prompt (RCX's replication, R19: neither OFF nor T2 s0 "
     "reads a supplied rule; that needs rule-varied training).",
-    "T2b-ledger's training contains case and spelling variants of 'void' (VOId, vOid, voids, voiding, void_, voidz), so "
-    "PREREG-3's N_voidcase strings (Void, VOID, voided) are near-trained for it; the secondary PREREG-3 reading counts "
-    "them as PREREG-3 did, and the seven strata without a form of 'void' carry its TRIGGER clause.",
-    "The dev screen chose nothing that this test reads: its gate only decided whether PREREG-5 runs; the map bank, the "
-    "planning draw and the retention draw are fresh, sealed, and were minted after the dev gate's PROCEED.",
+    "PREREG-3's 16 strings are untrained for T2b-ledger, but two are token-near-trained: voided = [void, ed] (both tokens "
+    "trained) and unposted = [un, posted] (the trained affix + 'posted' pattern of xposted, zposted, qposted); Void and "
+    "VOID are single tokens never seen in training (the trained case variants are VOId = [VO, Id] and vOid = [v, O, "
+    "id]). The secondary PREREG-3 reading counts them as PREREG-3 did; the seven strata without a form of 'void' carry "
+    "its TRIGGER clause.",
+    "The dev gate conditioned only on the dev half of the held-out partitions and on in-distribution rows; the "
+    "confirmation's held-out items are the other half, and its bases, values, planning instances and retention items "
+    "are fresh and sealed, minted after the dev gate's PROCEED.",
 )
 NOT_EVALUABLE_PART = {
     "a": "PREREG-5 (a): not evaluable ({reason}).",
@@ -178,16 +208,17 @@ NOT_EVALUABLE_PART = {
 NOT_EVALUABLE_REASONS = {"stopped": "the run ended by a deterministic stop before this part's stages were recorded",
                          "missing": "this part's stages are not recorded"}
 RULES_SENTENCE = {
-    True: ("The decision rules of parts (a)-(c), the wording templates and the limits are byte-identical to those "
-           "recorded when the dev gate rule was frozen ({when}), before any T2b-ledger adapter existed."),
-    False: ("The decision rules, wording templates or limits differ from those recorded when the dev gate rule was "
-            "frozen ({when}); the changes were made after the dev screen's outputs existed and are listed in "
-            "PREREG_5.md Appendix A."),
+    True: ("The decision rules of parts (a)-(c), the wording templates, the limits and the decision code are "
+           "byte-identical to those recorded when the dev gate rule was frozen ({when}), before any T2b-ledger adapter "
+           "existed."),
+    False: ("The decision rules, wording templates, limits or decision code differ from those recorded when the dev "
+            "gate rule was frozen ({when}); the changes were made after the dev screen's outputs existed and are "
+            "listed, with their reasons, in PREREG_5.md Appendix A."),
 }
 THRESHOLDS = {"BAR": 0.80, "BAR_LB": 0.70, "NI_OWN": 0.10, "ID_NI": 0.05, "ALPHA": 0.05, "NEAR_T2": 0.10,
-              "P_PLAN": 0.01, "DELTA_PLAN": 0.20, "RATIO_BAR": 0.70, "NEAR_ORACLE": 0.80, "NEAR_ORACLE_LB": 0.70,
-              "NI_PLAN": 0.10, "CANON_COST": 0.05, "P3_TRIGGER_MAX": 0.30, "P3_COPY_CAP": 0.10, "BOOT_B": 10000,
-              "BOOT_SEED": 17}
+              "CTRL_GAIN": 0.10, "P_PLAN": 0.01, "DELTA_PLAN": 0.20, "RATIO_BAR": 0.70, "NEAR_ORACLE": 0.80,
+              "NEAR_ORACLE_LB": 0.70, "NI_PLAN": 0.10, "CANON_COST": 0.05, "P3_TRIGGER_MAX": 0.30, "P3_COPY_CAP": 0.10,
+              "BOOT_B": 10000, "BOOT_SEED": 17}
 
 
 class AnalysisError(Exception):
@@ -294,13 +325,17 @@ def decide_map(rows: list, sc: dict, cls: dict | None = None) -> dict:
     for st in sorted({c for spec in FACTORS.values() for c in spec["control"]}):
         ix = cell_index(rows, st, "all")
         ctrl[st] = {s: acc_block(sc[s], ix) for s in T2BL + ("t2s0", "off")}
+        for s in T2BL:
+            ctrl[st][s]["minus_t2s0"] = ctrl[st][s]["acc"] - ctrl[st]["t2s0"]["acc"]
     factors = OrderedDict()
     for f, spec in FACTORS.items():
         cks = [f"{st}|{part}" for st, part in spec["cells"]]
         per_seed_ok = [all(cellres[c]["seeds"][s]["bar"] and cellres[c]["seeds"][s]["gain"] for c in cks) for s in T2BL]
         ni_ok = all(cellres[c]["ni"]["pass"] for c in cks)
-        ctrl_ok = all(ctrl[st][s]["acc"] >= BAR for st in spec["control"] for s in T2BL)
-        near = all(cellres[c]["seeds"][s]["minus_t2s0"] <= NEAR_T2 + 1e-12 for c in cks for s in T2BL)
+        ctrl_ok = all(ctrl[st][s]["acc"] >= BAR - 1e-12 and ctrl[st][s]["minus_t2s0"] >= CTRL_GAIN - 1e-12
+                      for st in spec["control"] for s in T2BL)
+        near = all(abs(cellres[c]["seeds"][s]["minus_t2s0"]) <= NEAR_T2 + 1e-12 for c in cks for s in T2BL)
+        below = [(c, s) for c in cks for s in T2BL if cellres[c]["seeds"][s]["minus_t2s0"] < -NEAR_T2 - 1e-12]
         misses = any(all(not cellres[c]["seeds"][s]["bar"] for s in T2BL) for c in cks)
         if all(per_seed_ok) and ni_ok:
             v = "GENERALISES"
@@ -319,9 +354,12 @@ def decide_map(rows: list, sc: dict, cls: dict | None = None) -> dict:
                 pats.append("no_gain")
             if any(cellres[c]["t2s0_meets_bar"] for c, _ in ng):
                 pats.append("no_headroom")
+            if below:
+                pats.append("below_t2s0")
             if any(per_seed_ok) and not all(per_seed_ok):
                 pats.append("seed_disagreement")
         factors[f] = {"verdict": v, "patterns": pats, "cells": cks, "control_ok": ctrl_ok, "near_t2s0": near,
+                      "below_t2s0": [f"{c}@{s}" for c, s in below],
                       "a_cell_misses_bar_in_every_seed": misses, "ni_ok": ni_ok, "per_seed_bar_and_gain": per_seed_ok}
     idni = id_ni(rows, sc)
     report = OrderedDict()
@@ -338,8 +376,16 @@ def decide_map(rows: list, sc: dict, cls: dict | None = None) -> dict:
         for i in ix:
             g.setdefault(str(rows[i]["meta"].get(vk)), []).append(i)
         variants[st] = {v: {s: acc_block(sc[s], ii) for s in MAP_SIDES} for v, ii in sorted(g.items())}
+    clusters = {}
+    for st in WORD_CLUSTER_CELLS:
+        ix = cell_index(rows, st, "all")
+        words = sorted({str(rows[i]["meta"].get("word")) for i in ix})
+        clusters[st] = {s: C.cluster_ci([(int(sum(sc[s][i] for i in ix if str(rows[i]["meta"].get("word")) == w)),
+                                          sum(1 for i in ix if str(rows[i]["meta"].get("word")) == w)) for w in words])
+                        for s in MAP_SIDES}
     out = {"cells": cellres, "factors": factors, "id_ni": idni, "id_cost": not idni["pass"],
-           "controls": ctrl, "holm_family": len(tests), "report_only": report, "variants": variants}
+           "controls": ctrl, "holm_family": len(tests), "report_only": report, "variants": variants,
+           "word_clusters_report_only": clusters}
     out["p3"] = decide_p3(rows, sc, cls) if cls is not None else None
     return out
 
@@ -444,7 +490,7 @@ def decide_plan(succ: dict, B: int = C.BOOT_B) -> dict:
     ni_ok = ni["lower_95_one_sided"] >= -NI_PLAN - 1e-12
     if status == "PASS" and bar and ni_ok:
         v, reasons = "GENERALISES", []
-    elif canon_diff >= -CANON_COST - 1e-12 and status == "NS" and delta < NEAR_T2 - 1e-12:
+    elif canon_diff >= -CANON_COST - 1e-12 and status == "NS" and abs(delta) < NEAR_T2 - 1e-12:
         v, reasons = "TRIGGER_WIDENED", []
     else:
         v = "PARTIAL"
@@ -512,15 +558,16 @@ T = OrderedDict([
                            ">= 0.80, Wilson lower bound >= 0.70) and above T2 s0 ({t2}) in every Holm-adjusted McNemar "
                            "test, within the margin of its own canonical accuracy (difference {nis} per seed, seed-mean "
                            "lower bound {lbs}, each >= -0.10)."),
-    ("factor_trigger", "TRIGGER WIDENED for {label}{qual}: on trained surface variants ({controls}) the adapter reached "
-                       "{ctrl} (each >= 0.80), but on {cells} it stayed near T2 s0 ({accs} vs T2 s0 {t2}; at most +0.10 "
-                       "above it in every seed)."),
+    ("factor_trigger", "TRIGGER WIDENED for {label}{qual}: on trained variants ({controls}) the adapter reached {ctrl} "
+                       "(each >= 0.80 and at least 0.10 above T2 s0's {ctrl_t2}), but on {cells} it stayed near T2 s0 "
+                       "({accs} vs T2 s0 {t2}; within 0.10 of it in every seed)."),
     ("factor_partial", "PARTIAL for {label}{qual}: accuracy {accs} (T2 s0 {t2}); {bits}. Per-cell and per-variant table "
                        "below."),
     ("bit_below_bar", "below the bar in {list}"),
     ("bit_not_noninferior", "not non-inferior to its own canonical accuracy in {list}"),
     ("bit_no_gain", "no Holm-significant gain over T2 s0 in {list}"),
     ("bit_no_headroom", "no shown gain where T2 s0 already meets the bar ({list})"),
+    ("bit_below_t2s0", "more than 0.10 below T2 s0 in {list}"),
     ("bit_seed_disagreement", "the seeds disagree"),
     ("id_cost_qual", " (at an in-distribution cost relative to T2 s0)"),
     ("headline_a", "PREREG-5 (a): GENERALISES TO {g}; TRIGGER WIDENED for {t}; PARTIAL for {p}{cost}"),
@@ -593,8 +640,9 @@ def factor_sentence(f: str, A: dict) -> str:
                                               nis=_r(nis), lbs=_r(lbs), t2=_r(t2))
     if F["verdict"] == "TRIGGER_WIDENED":
         ctrl = [A["controls"][st][s]["acc"] for st in spec["control"] for s in T2BL]
+        ctrl_t2 = [A["controls"][st]["t2s0"]["acc"] for st in spec["control"]]
         return T["factor_trigger"].format(label=spec["label"], qual=qual, controls=", ".join(spec["control"]),
-                                          ctrl=_r(ctrl), cells=cells, accs=_r(accs), t2=_r(t2))
+                                          ctrl=_r(ctrl), ctrl_t2=_r(ctrl_t2), cells=cells, accs=_r(accs), t2=_r(t2))
     fails = lambda key: [f"{c.split('|')[0]} {s.replace('t2bl', 's')}" for c in cks for s in T2BL  # noqa: E731
                          if not A["cells"][c]["seeds"][s][key]]
     bits = []
@@ -611,6 +659,9 @@ def factor_sentence(f: str, A: dict) -> str:
     if "no_headroom" in F["patterns"]:
         bits.append(T["bit_no_headroom"].format(list=", ".join(
             f"{c.split('|')[0]} T2 s0 {A['cells'][c]['t2s0']['acc']:.2f}" for c in cks if A["cells"][c]["t2s0_meets_bar"])))
+    if "below_t2s0" in F["patterns"]:
+        bits.append(T["bit_below_t2s0"].format(list=", ".join(x.split("|")[0] + " " + x.split("@")[1].replace("t2bl", "s")
+                                                               for x in F["below_t2s0"])))
     if "seed_disagreement" in F["patterns"]:
         bits.append(T["bit_seed_disagreement"])
     return T["factor_partial"].format(label=spec["label"], qual=qual, accs=_r(accs), t2=_r(t2), bits="; ".join(bits))
@@ -720,6 +771,14 @@ def rules_digest() -> dict:
     return {"sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(), "n_strings": len(registered_strings())}
 
 
+def code_digest(root: Path | None = None) -> dict:
+    """sha256 of every file of PREREG-5's decision code (PINNED_CODE): recorded when the dev gate rule is frozen and
+    compared at PREREG-5's freeze (a change must be listed there)."""
+    root = Path(root or ROOT)
+    files = {r: C.sha256(root / r) for r in PINNED_CODE if (root / r).is_file()}
+    return {"files": files, "sha256": hashlib.sha256(json.dumps(files, sort_keys=True).encode("utf-8")).hexdigest()}
+
+
 # ================================================================================ synthetic outcomes (dry run / power)
 def synth_correct(rows: list, acc: dict, seed: int) -> np.ndarray:
     """A synthetic correctness vector: per stratum (or 'stratum|part'), round(acc * n) rows correct in a seeded order."""
@@ -730,7 +789,7 @@ def synth_correct(rows: list, acc: dict, seed: int) -> np.ndarray:
         part = "sc" if r["event"]["kind"] == "scale" else "at"
         key = f"{r['stratum']}|{part}" if f"{r['stratum']}|{part}" in acc else r["stratum"]
         groups.setdefault(key, []).append(i)
-    for key, ix in groups.items():
+    for key, ix in sorted(groups.items()):
         a = acc.get(key, acc.get("*", 1.0))
         ix = list(ix)
         rng.shuffle(ix)
@@ -761,13 +820,18 @@ def synth_texts_from(rows: list, correct: np.ndarray, copy_share: float = 0.0, s
 def test_bank() -> list:
     """The PREREG-5 map bank's strata on the TEST seed (20261164; tests only, never registered, no union)."""
     import t2bl_make_data as MD
-    rows, _ = MD.build_bank(C.TEST_SEED, C.CONFIRM_STRATA, MD.empty_union(), "p5test", "p5-test")
+    rows, _ = MD.build_bank(C.TEST_SEED, C.CONFIRM_STRATA, MD.empty_union(), "p5test", "p5-test", split="confirm")
     return rows
 
 
-T2S0_LIKE = {"*": 0.85, "ID_posted": 0.87, "ID_void": 0.99, "H_words": 0.05, "HS_words": 0.02, "HS_posted": 0.20,
-             "S_words": 0.05, "S_surface_words": 0.03, "LB_void": 0.02, "LB_posted": 0.25, "H_order": 0.40,
-             "H_names": 0.68, "H_count": 0.87, "H_para": 0.60, "H_bal": 0.50, "H_amt": 0.15, "S_surface_posted": 0.30,
+# T2 s0-like accuracies (synthetic outcomes and power scenarios). Set with knowledge of PREREG-3's and PREREG-LB's
+# aggregate results (stated in LIMITS): unseen statuses 0.01-0.18 (the confirm half has no form of 'void'), reordered keys
+# 0.37-0.47 and word names 0.60-0.66 on posted rows, 8 accounts 0.84-0.90, magnitudes 0.14-0.60; the mixed cells pair
+# those posted rows with training words, which T2 s0 (it knows only 'void') mostly applies.
+T2S0_LIKE = {"*": 0.85, "ID_posted": 0.87, "ID_void": 0.99, "H_words": 0.10, "HS_words": 0.05, "HS_posted": 0.20,
+             "S_words": 0.10, "S_surface_words": 0.05, "S_surface_posted": 0.40, "S_bal": 0.50, "S_amt": 0.15,
+             "LB_void": 0.02, "LB_posted": 0.25, "H_order": 0.25, "H_order_top": 0.40, "H_order_inner": 0.30,
+             "H_names": 0.35, "H_count": 0.47, "H_para": 0.35, "H_bal": 0.50, "H_amt": 0.15,
              **{s: 0.05 for s in P3_STRATA}, "N_voidcase": 0.95}
 OFF_LIKE = {"*": 0.30, "ID_void": 0.05, **{s: 0.03 for s in P3_STRATA}}
 GOOD = {"*": 0.95, "ID_posted": 0.90, "ID_void": 0.99}
@@ -790,6 +854,7 @@ def dryrun() -> dict:
         R = R or {"status": "GO", "label": "GO (5/5 binding)", "draw_id": "confirm_test"}
         W = wording(A, D, R, extra)
         ok = bool(check(A, D, W)) if check else True
+
         def strings(o):
             if isinstance(o, dict):
                 return [x for v in o.values() for x in strings(v)]
@@ -806,23 +871,37 @@ def dryrun() -> dict:
 
     good3 = [GOOD] * 3
     A, _ = map_case(rows, good3)
-    add("(a) every factor generalises except count (T2 s0 meets the bar) -> count PARTIAL no_headroom", A,
-        check=lambda A, D, W: all(A["factors"][f]["verdict"] == "GENERALISES" for f in FACTORS if f != "count")
-        and A["factors"]["count"]["verdict"] == "PARTIAL" and "no_headroom" in A["factors"]["count"]["patterns"]
-        and "GENERALISES TO UNSEEN STATUS WORDS" in W["factor_sentences"]["words"] and not A["id_cost"])
-    A, _ = map_case(rows, good3, t2={**T2S0_LIKE, "H_count": 0.55})
-    add("(a) all seven factors generalise", A,
+    add("(a) all seven factors generalise (T2 s0 far below the bar on every primary cell)", A,
         check=lambda A, D, W: all(v["verdict"] == "GENERALISES" for v in A["factors"].values())
-        and W["headline_a"].startswith("PREREG-5 (a): GENERALISES TO unseen status words, unseen key orders"))
+        and W["headline_a"].startswith("PREREG-5 (a): GENERALISES TO unseen status words, unseen key orders")
+        and "GENERALISES TO UNSEEN STATUS WORDS" in W["factor_sentences"]["words"] and not A["id_cost"])
+    A, _ = map_case(rows, good3, t2={**T2S0_LIKE, "H_count": 0.90})
+    add("(a) count: T2 s0 already meets the bar -> PARTIAL no_headroom", A,
+        check=lambda A, D, W: A["factors"]["count"]["verdict"] == "PARTIAL"
+        and "no_headroom" in A["factors"]["count"]["patterns"]
+        and all(A["factors"][f]["verdict"] == "GENERALISES" for f in FACTORS if f != "count"))
     tw = {**GOOD, "H_words": 0.10, "HS_words": 0.08}
     A, _ = map_case(rows, [tw] * 3)
-    add("(a) words: trained words learned, held-out words near T2 s0 -> TRIGGER WIDENED; combined PARTIAL", A,
+    add("(a) words: trained words learned (well above T2 s0), held-out words near T2 s0 -> TRIGGER WIDENED; combined "
+        "PARTIAL", A,
         check=lambda A, D, W: A["factors"]["words"]["verdict"] == "TRIGGER_WIDENED"
-        and A["factors"]["combined"]["verdict"] == "PARTIAL" and "TRIGGER WIDENED for unseen status words" in W["factor_sentences"]["words"])
+        and A["factors"]["combined"]["verdict"] == "PARTIAL"
+        and "TRIGGER WIDENED for unseen status words" in W["factor_sentences"]["words"])
+    A, _ = map_case(rows, [tw] * 3, t2={**T2S0_LIKE, "S_words": 0.90})
+    add("(a) words: held-out words near T2 s0 but the trained-word control is not 0.10 above T2 s0 -> PARTIAL", A,
+        check=lambda A, D, W: A["factors"]["words"]["verdict"] == "PARTIAL" and not A["factors"]["words"]["control_ok"])
+    A, _ = map_case(rows, [{**GOOD, "H_count": 0.50}] * 3, t2={**T2S0_LIKE, "H_count": 0.90})
+    add("(a) count: far BELOW T2 s0 (not 'near' it) -> PARTIAL below_t2s0, not TRIGGER WIDENED", A,
+        check=lambda A, D, W: A["factors"]["count"]["verdict"] == "PARTIAL"
+        and "below_t2s0" in A["factors"]["count"]["patterns"] and "more than 0.10 below T2 s0" in W["factor_sentences"]["count"])
+    A, _ = map_case(rows, [{**GOOD, "H_bal|at": 0.52, "H_amt": 0.16}] * 3)
+    add("(a) magnitude: trained magnitude bands learned, held-out bands near T2 s0 -> TRIGGER WIDENED", A,
+        check=lambda A, D, W: A["factors"]["magnitude"]["verdict"] == "TRIGGER_WIDENED"
+        and "S_bal, S_amt" in W["factor_sentences"]["magnitude"])
     A, _ = map_case(rows, [{**GOOD, "H_order": 0.75}] * 3)
     add("(a) order below the bar but gaining -> PARTIAL below_bar", A,
         check=lambda A, D, W: A["factors"]["order"]["verdict"] == "PARTIAL" and "below_bar" in A["factors"]["order"]["patterns"])
-    A, _ = map_case(rows, [{**GOOD, "ID_posted": 0.99, "H_names": 0.82}] * 3, t2={**T2S0_LIKE, "H_names": 0.40})
+    A, _ = map_case(rows, [{**GOOD, "ID_posted": 0.99, "S_words": 0.99, "H_names": 0.82}] * 3)
     add("(a) names at the bar but far below own canonical -> PARTIAL not_noninferior", A,
         check=lambda A, D, W: A["factors"]["names"]["verdict"] == "PARTIAL" and "not_noninferior" in A["factors"]["names"]["patterns"])
     A, _ = map_case(rows, [{**GOOD, "H_para": 0.86}] * 3, t2={**T2S0_LIKE, "H_para": 0.79})
@@ -836,11 +915,14 @@ def dryrun() -> dict:
     add("(a) in-distribution cost qualifies every headline", A,
         check=lambda A, D, W: A["id_cost"] and "in-distribution cost" in W["headline_a"]
         and all("in-distribution cost" in s for s in W["factor_sentences"].values()))
-    A, _ = map_case(rows, [{**GOOD, "S_surface_posted": 0.60, "H_order": 0.45}] * 3)
+    A, _ = map_case(rows, [{**GOOD, "S_surface_posted": 0.60, "H_order": 0.30}] * 3)
     add("(a) order near T2 s0 but the trained-surface control also low -> PARTIAL, not TRIGGER WIDENED", A,
         check=lambda A, D, W: A["factors"]["order"]["verdict"] == "PARTIAL")
-    # secondary P3
     A, _ = map_case(rows, good3)
+    add("(a) report-only: word-cluster intervals for H_words and HS_words on every side", A,
+        check=lambda A, D, W: set(A["word_clusters_report_only"]) == set(WORD_CLUSTER_CELLS)
+        and all(A["word_clusters_report_only"][c]["t2bl0"]["n_clusters"] == 20 for c in WORD_CLUSTER_CELLS))
+    # secondary P3
     add("(a) secondary: T2b-ledger RULE vs T2 s0 TRIGGER", A,
         check=lambda A, D, W: A["p3"]["verdict"] == "RULE" and A["p3"]["t2s0_verdict"] == "TRIGGER" and "STATUS RULE" in W["p3_sentence"])
     A, _ = map_case(rows, [{**GOOD, **{s: 0.05 for s in P3_STRATA}, "N_voidcase": 0.9}] * 3)
@@ -899,14 +981,14 @@ def dryrun() -> dict:
         extra={"not_evaluable": {"a": "stopped", "b": "stopped"}},
         check=lambda A, D, W: W["headline_a"].startswith("PREREG-5 (a): not evaluable (the run ended by a deterministic stop")
         and W["headline_b"].startswith("PREREG-5 (b): not evaluable") and "not evaluable" in W["headline_c"])
-    A_ok, _ = map_case(rows, good3, t2={**T2S0_LIKE, "H_count": 0.55})
+    A_ok, _ = map_case(rows, good3)
     add("(b) not evaluable, (a) rendered (a stop after M1)", A=A_ok, extra={"not_evaluable": {"b": "stopped"}},
         check=lambda A, D, W: W["headline_a"].startswith("PREREG-5 (a): GENERALISES TO") and "not evaluable" in W["headline_b"])
-    add("rules unchanged since the dev gate", D=plan(120, 5, 125, 127, 160),
+    add("rules and code unchanged since the dev gate", D=plan(120, 5, 125, 127, 160),
         extra={"rules": {"unchanged": True, "when": "2026-10-11 09:00:00 -0500"}},
         check=lambda A, D, W: W["rules_sentence"].startswith("The decision rules of parts (a)-(c), the wording templates")
         and "2026-10-11 09:00:00" in W["rules_sentence"])
-    add("rules changed after the dev gate", D=plan(120, 5, 125, 127, 160),
+    add("rules or code changed after the dev gate", D=plan(120, 5, 125, 127, 160),
         extra={"rules": {"unchanged": False, "when": "2026-10-11 09:00:00 -0500"}},
         check=lambda A, D, W: "differ from those recorded" in W["rules_sentence"])
     # every template is used by some realised case or is a fragment of one (no orphan template)
@@ -937,28 +1019,25 @@ def stats_selftest() -> dict:
     ok.append(abs(C.mcnemar_p(10, 0) - 2 * 0.5 ** 10) < 1e-15)
     ok.append(C.holm({"x": 0.01, "y": 0.02}) == {"x": 0.02, "y": 0.02})
     ok.append(C.wilson(80, 100) == P3.wilson(80, 100))
+    ok.append(C.wilson(55, 67)[0] >= BAR_LB > C.wilson(54, 67)[0])          # the effective bar on 67 rows is 55 / 67
     bl = C.boot_lower([(1, 1)] * 50 + [(0, 1)] * 50)
     ok.append(abs(bl["diff"] - 0.5) < 1e-12 and 0.38 < bl["lo"] < 0.45)
+    cc = C.cluster_ci([(5, 5)] * 10 + [(0, 5)] * 10)
+    ok.append(abs(cc["acc"] - 0.5) < 1e-12 and cc["ci95"][0] < 0.5 < cc["ci95"][1] and cc["n_clusters"] == 20)
     a = np.array([True] * 90 + [False] * 90)
     d = boot_mean_diff(a, a)
     ok.append(d["diff"] == 0.0 and d["lower_95_one_sided"] == 0.0)
     consts = {"BAR": BAR, "BAR_LB": BAR_LB, "NI_OWN": NI_OWN, "ID_NI": ID_NI, "ALPHA": ALPHA, "NEAR_T2": NEAR_T2,
-              "P_PLAN": P_PLAN, "DELTA_PLAN": DELTA_PLAN, "RATIO_BAR": RATIO_BAR, "NEAR_ORACLE": NEAR_ORACLE,
-              "NEAR_ORACLE_LB": NEAR_ORACLE_LB, "NI_PLAN": NI_PLAN, "CANON_COST": CANON_COST,
+              "CTRL_GAIN": CTRL_GAIN, "P_PLAN": P_PLAN, "DELTA_PLAN": DELTA_PLAN, "RATIO_BAR": RATIO_BAR,
+              "NEAR_ORACLE": NEAR_ORACLE, "NEAR_ORACLE_LB": NEAR_ORACLE_LB, "NI_PLAN": NI_PLAN, "CANON_COST": CANON_COST,
               "P3_TRIGGER_MAX": P3_TRIGGER_MAX, "P3_COPY_CAP": P3_COPY_CAP, "BOOT_B": C.BOOT_B, "BOOT_SEED": C.BOOT_SEED}
     ok.append(consts == THRESHOLDS)
     return {"ok": all(ok), "checks": len(ok), "passed": sum(ok)}
 
 
 # ================================================================================ power (dev-like assumptions)
-def _paired(rng, n: int, p_hi: float, p_lo: float, nested: bool):
-    """Two correctness vectors with marginals p_hi >= p_lo: nested (the lower one's successes are a subset of the
-    higher one's: maximal positive correlation) or independent. Returns (hi, lo)."""
-    hi = rng.random(n) < p_hi
-    if not nested:
-        return hi, rng.random(n) < p_lo
-    lo = hi & (rng.random(n) < (p_lo / p_hi if p_hi > 0 else 0.0))
-    return hi, lo
+TWIN_P = {"noop": 0.99, "apply": 0.93, "mixed": 0.95}   # the canonical twins' accuracy in the scenarios
+SEED_REGIMES = (("seeds independent", 0.0), ("seeds 80% shared", 0.8), ("seeds identical", 1.0))
 
 
 def _boot_lo_fast(d_by_base: np.ndarray, cnt: np.ndarray, rng, B: int = 400) -> float:
@@ -967,38 +1046,49 @@ def _boot_lo_fast(d_by_base: np.ndarray, cnt: np.ndarray, rng, B: int = 400) -> 
     return float(np.percentile(m, 5))
 
 
-def power_map(p_on: float, p_twin: float, p_t2: float, n: int, reps: int = 400, seed: int = 5, m_holm: int = 27) -> dict:
+def power_map(p_on: float, p_twin: float, p_t2: float, n: int, reps: int = 400, seed: int = 5, m_holm: int = 27,
+              shared: float = 0.0) -> dict:
     """P(GENERALISES on one cell) = P(BAR and GAIN in all three seeds, and NI) for a cell of n rows (one row per base),
-    under two correlation regimes for the cell vs its canonical twins (nested = the twin's successes contain the
-    cell's when p_on <= p_twin; independent), seeds independent, T2 s0 independent of the seeds. GAIN uses the Holm
-    threshold bounds alpha / m (worst case) and alpha (best case). NI: every seed's point difference >= -0.10 and the
-    base-bootstrap (B = 400 here) one-sided 95% lower bound of the seed-mean difference >= -0.10."""
-    out = {"p_on": p_on, "p_twin": p_twin, "p_t2s0": p_t2, "n": n, "reps": reps}
+    under two correlations of the cell with its canonical twins (nested: the lower success set inside the higher one;
+    independent) and a seed correlation `shared` (each row's latent draws are shared by the three seeds with that
+    probability: 0 independent seeds, 1 identical seeds); T2 s0 independent of the seeds. GAIN uses the Holm threshold
+    bounds alpha / m (worst case) and alpha (best case). NI: every seed's point difference >= -0.10 and the
+    base-bootstrap (B = 400 here) one-sided 95% lower bound of the seed-mean difference >= -0.10 (with the analysis'
+    1e-12 tolerance)."""
+    out = {"p_on": p_on, "p_twin": p_twin, "p_t2s0": p_t2, "n": n, "reps": reps, "shared": shared}
     for regime in ("nested", "independent"):
         rng = np.random.default_rng(seed)
         hit_lo = hit_hi = bar_all = ni_all = 0
         for _ in range(reps):
             t2 = rng.random(n) < p_t2
+            uc0, ut0 = rng.random(n), rng.random(n)
             ok_lo = ok_hi = okbar = True
             diffs = np.zeros(n)
             seed_ok = True
             for _s in range(3):
-                if p_on <= p_twin:
-                    tw, on = _paired(rng, n, p_twin, p_on, regime == "nested")
+                m = rng.random(n) < shared
+                uc, ut = np.where(m, uc0, rng.random(n)), np.where(m, ut0, rng.random(n))
+                if regime == "nested":
+                    if p_on <= p_twin:
+                        tw = ut < p_twin
+                        on = tw & (uc < (p_on / p_twin if p_twin > 0 else 0.0))
+                    else:
+                        on = uc < p_on
+                        tw = on & (ut < p_twin / p_on)
                 else:
-                    on, tw = _paired(rng, n, p_on, p_twin, regime == "nested")
+                    on, tw = uc < p_on, ut < p_twin
                 k = int(on.sum())
                 lo, _ = C.wilson(k, n)
-                bar = k / n >= BAR and lo >= BAR_LB
+                bar = k / n >= BAR - 1e-12 and lo >= BAR_LB - 1e-12
                 d = on.astype(float) - tw.astype(float)
                 diffs += d
-                seed_ok &= d.mean() >= -NI_OWN
+                seed_ok &= d.mean() >= -NI_OWN - 1e-12
                 b, c = int((on & ~t2).sum()), int((~on & t2).sum())
                 p = C.mcnemar_p(b, c)
                 ok_lo &= bar and b > c and p < ALPHA / m_holm
                 ok_hi &= bar and b > c and p < ALPHA
                 okbar &= bar
-            ni = seed_ok and _boot_lo_fast(diffs, np.full(n, 3.0), rng) >= -NI_OWN
+            ni = seed_ok and _boot_lo_fast(diffs, np.full(n, 3.0), rng) >= -NI_OWN - 1e-12
             hit_lo += ok_lo and ni
             hit_hi += ok_hi and ni
             bar_all += okbar
@@ -1011,35 +1101,60 @@ def power_map(p_on: float, p_twin: float, p_t2: float, n: int, reps: int = 400, 
 def power_plan(p_hs: float, p_can: float, p_t2: float = 5 / 180, p_orc: float = 0.889, n: int = 180, reps: int = 300,
                seed: int = 11) -> dict:
     """P(part (b) reads GENERALISES) by simulation through the registered decide_plan (bootstrap B reduced to 2,000 for
-    the simulation): T2BL@HS successes nested in T2BL@canon's (p_hs <= p_can), those nested in ORACLE's; T2s0@HS
-    independent at p_t2 (PREREG-LB's 5/180); T2s0@canon independent at 0.706 (PREREG-LB). Also the exact P(primary PASS)
-    under independence (lbeam_analysis.exact_pass_prob)."""
+    the simulation) under two regimes: 'nested' (T2BL@HS successes inside T2BL@canon's, those inside ORACLE's: the best
+    case for the held-out-vs-canonical non-inferiority) and 'independent within ORACLE' (both inside ORACLE's, otherwise
+    independent); T2s0@HS independent at p_t2 (PREREG-LB's 5/180); T2s0@canon independent at 0.706 (PREREG-LB). Also
+    the exact P(primary PASS) under independence (lbeam_analysis.exact_pass_prob)."""
     import lbeam_analysis as LA
-    rng = np.random.default_rng(seed)
-    cnt = Counter()
-    for _ in range(reps):
-        orc = rng.random(n) < p_orc
-        can = orc & (rng.random(n) < min(1.0, p_can / p_orc))
-        hs = can & (rng.random(n) < (p_hs / p_can if p_can > 0 else 0.0))
-        t2hs = rng.random(n) < p_t2
-        t2can = rng.random(n) < 0.706
-        D = decide_plan({"T2BL@HS": hs, "T2s0@HS": t2hs, "T2BL@canon": can, "T2s0@canon": t2can, "ORACLE": orc}, B=2000)
-        cnt[D["verdict"]] += 1
-        cnt["PASS"] += D["primary"]["status"] == "PASS"
-    return {"p_t2bl_hs": p_hs, "p_t2bl_canon": p_can, "p_t2s0_hs": round(p_t2, 4), "p_oracle": p_orc, "n": n,
-            "reps": reps, "P_GENERALISES": cnt["GENERALISES"] / reps, "P_PARTIAL": cnt["PARTIAL"] / reps,
-            "P_TRIGGER_WIDENED": cnt["TRIGGER_WIDENED"] / reps, "P_primary_PASS_sim": cnt["PASS"] / reps,
-            "P_primary_PASS_exact_independent": LA.exact_pass_prob(n, p_hs, p_t2, P_PLAN, DELTA_PLAN)}
+    out = {"p_t2bl_hs": p_hs, "p_t2bl_canon": p_can, "p_t2s0_hs": round(p_t2, 4), "p_oracle": p_orc, "n": n, "reps": reps,
+           "P_primary_PASS_exact_independent": LA.exact_pass_prob(n, p_hs, p_t2, P_PLAN, DELTA_PLAN)}
+    for regime in ("nested", "independent_within_oracle"):
+        rng = np.random.default_rng(seed)
+        cnt = Counter()
+        for _ in range(reps):
+            orc = rng.random(n) < p_orc
+            can = orc & (rng.random(n) < min(1.0, p_can / p_orc))
+            if regime == "nested":
+                hs = can & (rng.random(n) < (p_hs / p_can if p_can > 0 else 0.0))
+            else:
+                hs = orc & (rng.random(n) < min(1.0, p_hs / p_orc))
+            t2hs = rng.random(n) < p_t2
+            t2can = rng.random(n) < 0.706
+            D = decide_plan({"T2BL@HS": hs, "T2s0@HS": t2hs, "T2BL@canon": can, "T2s0@canon": t2can, "ORACLE": orc}, B=2000)
+            cnt[D["verdict"]] += 1
+            cnt["PASS"] += D["primary"]["status"] == "PASS"
+        out[regime] = {"P_GENERALISES": cnt["GENERALISES"] / reps, "P_PARTIAL": cnt["PARTIAL"] / reps,
+                       "P_TRIGGER_WIDENED": cnt["TRIGGER_WIDENED"] / reps, "P_primary_PASS_sim": cnt["PASS"] / reps}
+    return out
+
+
+def gate_alignment(ps=(0.85, 0.90, 0.95), reps_gate: int = 2000, reps_map: int = 400) -> list:
+    """P(the dev gate PROCEEDs) against P(PREREG-5 reads GENERALISES on the held-out-word cells), when every seed's true
+    held-out-word accuracy is p in the dev screen and in the confirmation (ID_void 0.99, ID_posted 0.90, held-out posted
+    twins 0.95, T2 s0 ID 0.93; T2 s0 0.10 on H_words and 0.05 on HS_words), with independent and 80%-shared seeds."""
+    import t2bl_gate as G
+    out = []
+    for p in ps:
+        for label, sh in SEED_REGIMES[:2]:
+            hw = power_map(p, TWIN_P["noop"], T2S0_LIKE["H_words"], 100, reps=reps_map, shared=sh)
+            hs = power_map(p, TWIN_P["noop"], T2S0_LIKE["HS_words"], 100, reps=reps_map, shared=sh)
+            out.append({"p_true": p, "seeds": label, "P_PROCEED": G.gate_power(p, shared=sh, reps=reps_gate),
+                        "P_GENERALISES_H_words_nested": hw["nested"]["P_generalises_worst_case_holm"],
+                        "P_GENERALISES_HS_words_nested": hs["nested"]["P_generalises_worst_case_holm"]})
+    return out
 
 
 def power(from_gate: Path | None = None) -> dict:
     res = {"method": ("simulation through the registered rules (map: per cell, P(BAR and GAIN in all three seeds and NI) "
-                      "under nested and independent cell-vs-twin correlation, Holm bounded by alpha / 27 and alpha; "
-                      "in-distribution control: P(ID_NI) under nested and independent T2b-ledger-vs-T2 s0 correlation; "
-                      "planning: P(GENERALISES) through decide_plan with nested success sets, and the exact P(primary "
-                      "PASS) under independence). Rows, bases and seeds are otherwise independent; the strata share "
-                      "bases, so joint figures over factors are not products of these."),
-           "assumption_source": "scenarios" if from_gate is None else str(from_gate)}
+                      "under nested and independent cell-vs-twin correlation and three seed regimes (independent, 80% "
+                      "shared, identical), Holm bounded by alpha / 27 and alpha; in-distribution control: P(ID_NI) under "
+                      "nested and independent T2b-ledger-vs-T2 s0 correlation and the same seed regimes; planning: "
+                      "P(GENERALISES) through decide_plan with nested success sets and with success sets independent "
+                      "within ORACLE's, and the exact P(primary PASS) under independence; the dev gate: P(PROCEED) "
+                      "against P(GENERALISES) on the held-out-word cells). The strata share bases, so joint figures "
+                      "over factors are not products of these."),
+           "assumption_source": "scenarios" if from_gate is None else str(from_gate),
+           "twin_accuracy_assumed": TWIN_P}
     scen = []
     if from_gate is not None:
         G = C.read_json(from_gate) or {}
@@ -1048,9 +1163,10 @@ def power(from_gate: Path | None = None) -> dict:
             for cs, part in spec["cells"]:
                 if cs not in (st.get("s0") or {}):
                     continue
-                twin = "ID_void" if C.STRATA[cs][1] == "noop" else "ID_posted"
-                scen.append((f, cs, min(st[f"s{s}"][cs]["acc"] for s in (0, 1, 2)),
-                             min(st[f"s{s}"][twin]["acc"] for s in (0, 1, 2)), st["t2s0"][cs]["acc"]))
+                rule = C.STRATA[cs][1]
+                tw = {"noop": ["ID_void"], "apply": ["ID_posted"], "mixed": ["ID_posted", "S_words"]}[rule]
+                p_tw = min(sum(st[f"s{s}"][t]["acc"] for t in tw) / len(tw) for s in (0, 1, 2))
+                scen.append((f, cs, min(st[f"s{s}"][cs]["acc"] for s in (0, 1, 2)), p_tw, st["t2s0"][cs]["acc"]))
         id_on = min(st[f"s{s}"]["ID_posted"]["acc"] + st[f"s{s}"]["ID_void"]["acc"] for s in (0, 1, 2)) / 2 if st else 0.93
         id_t2 = (st["t2s0"]["ID_posted"]["acc"] + st["t2s0"]["ID_void"]["acc"]) / 2 if st else 0.93
         res["id_ni"] = id_power([(id_on, id_t2)])
@@ -1064,42 +1180,52 @@ def power(from_gate: Path | None = None) -> dict:
             for cs, part in spec["cells"]:
                 t2 = T2S0_LIKE.get(cs, 0.5)
                 for p_on in (0.85, 0.90, 0.95):
-                    scen.append((f, cs, p_on, 0.95, t2))
+                    scen.append((f, cs, p_on, TWIN_P[C.STRATA[cs][1]], t2))
         res["id_ni"] = id_power([(0.90, 0.93), (0.93, 0.93), (0.96, 0.93)])
         res["plan"] = [power_plan(ph, pc) for ph, pc in ((0.30, 0.70), (0.50, 0.70), (0.60, 0.70), (0.65, 0.70),
                                                           (0.70, 0.75))]
         res["plan_note"] = ("T2 s0's held-out-surface planning success is taken as 5/180 (PREREG-LB's registered D-35 "
                             "audit, REPORT 3d) and its canonical success as 0.706 (PREREG-LB); ORACLE 0.889 (PREREG-LB); "
                             "N = 180 is PREREG-LB's and was not chosen from it.")
-    res["map"] = [{"factor": f, "cell": cs, **power_map(p_on, tw, t2, 67 if cs in ("H_amt", "H_bal") else 100)}
-                  for f, cs, p_on, tw, t2 in scen]
+    res["map"] = []
+    for f, cs, p_on, tw, t2 in scen:
+        n = 67 if cs in ("H_amt", "H_bal") else 100
+        res["map"].append({"factor": f, "cell": cs, "n": n, "p_on": p_on, "p_twin": tw, "p_t2s0": t2,
+                           "regimes": {label: {k: v for k, v in power_map(p_on, tw, t2, n, shared=sh).items()
+                                               if k in ("nested", "independent")} for label, sh in SEED_REGIMES}})
+    res["gate_alignment"] = gate_alignment()
     return res
 
 
 def id_power(pairs, reps: int = 400, seed: int = 9) -> dict:
-    """P(ID_NI): 200 rows (100 bases x 2), T2 s0 at p_t2, each seed at p (independent seeds), nested or independent
-    T2b-ledger-vs-T2 s0 correlation; the base-bootstrap lower bound of the seed-mean difference (B = 400 here)."""
+    """P(ID_NI): 200 rows (100 bases x 2), T2 s0 at p_t2, each seed at p, nested or independent T2b-ledger-vs-T2 s0
+    correlation, three seed regimes (each row's latent shared by the seeds with probability 0, 0.8, 1); the
+    base-bootstrap lower bound of the seed-mean difference (B = 400 here)."""
     out = {}
     for p, p_t2 in pairs:
         rec = {}
-        for regime in ("nested", "independent"):
-            rng = np.random.default_rng(seed)
-            hit = 0
-            for _ in range(reps):
-                t2 = rng.random(200) < p_t2
-                diffs = np.zeros(100)
-                for _s in range(3):
-                    if regime == "nested":
-                        if p <= p_t2:
-                            on = t2 & (rng.random(200) < p / p_t2)
+        for label, sh in SEED_REGIMES:
+            for regime in ("nested", "independent"):
+                rng = np.random.default_rng(seed)
+                hit = 0
+                for _ in range(reps):
+                    u_t2 = rng.random(200)
+                    t2 = u_t2 < p_t2
+                    u0 = rng.random(200)
+                    diffs = np.zeros(100)
+                    for _s in range(3):
+                        u = np.where(rng.random(200) < sh, u0, rng.random(200))
+                        if regime == "nested":
+                            if p <= p_t2:
+                                on = t2 & (u < p / p_t2)
+                            else:
+                                on = t2 | (u < (p - p_t2) / (1 - p_t2))
                         else:
-                            on = t2 | (rng.random(200) < (p - p_t2) / (1 - p_t2))
-                    else:
-                        on = rng.random(200) < p
-                    d = on.astype(float) - t2.astype(float)
-                    diffs += d[0::2] + d[1::2]
-                hit += _boot_lo_fast(diffs, np.full(100, 6.0), rng) >= -ID_NI
-            rec[regime] = hit / reps
+                            on = u < p
+                        d = on.astype(float) - t2.astype(float)
+                        diffs += d[0::2] + d[1::2]
+                    hit += _boot_lo_fast(diffs, np.full(100, 6.0), rng) >= -ID_NI - 1e-12
+                rec[f"{label}, {regime}"] = hit / reps
         out[f"seed_acc_{p:.2f}_vs_t2s0_{p_t2:.2f}"] = rec
     return out
 
@@ -1110,39 +1236,54 @@ DRAFT_PATH = C.ROOT / "PREREG_5_DRAFT.md"
 
 
 def _power_table(pw: dict) -> str:
-    L = ["| factor | cell | n | true accuracy (seeds) | twin | T2 s0 | P(GENERALISES) nested / independent (Holm worst case) |",
-         "|---|---|---:|---:|---:|---:|---:|"]
+    regs = [label for label, _ in SEED_REGIMES]
+    L = ["P(GENERALISES) per cell, Holm worst case (alpha / 27), shown as nested / independent cell-vs-twin correlation:",
+         "", "| factor | cell | n | true accuracy (every seed) | twin | T2 s0 | " + " | ".join(regs) + " |",
+         "|---|---|---:|---:|---:|---:|" + "---:|" * len(regs)]
     for m in pw.get("map") or []:
+        vals = [f"{float(m['regimes'][r]['nested']['P_generalises_worst_case_holm']):.2f} / "
+                f"{float(m['regimes'][r]['independent']['P_generalises_worst_case_holm']):.2f}" for r in regs]
         L.append(f"| {m['factor']} | {m['cell']} | {m['n']} | {m['p_on']:.2f} | {m['p_twin']:.2f} | {m['p_t2s0']:.2f} | "
-                 f"{float(m['nested']['P_generalises_worst_case_holm']):.2f} / "
-                 f"{float(m['independent']['P_generalises_worst_case_holm']):.2f} |")
-    L += ["", "| in-distribution control (each seed vs T2 s0) | P(ID_NI) nested / independent |", "|---|---:|"]
+                 + " | ".join(vals) + " |")
+    L += ["", "| in-distribution control (each seed vs T2 s0) | " + " | ".join(f"P(ID_NI) {r}, nested / independent"
+                                                                           for r in regs) + " |",
+          "|---|" + "---:|" * len(regs)]
     for k, v in (pw.get("id_ni") or {}).items():
-        L.append(f"| {k} | {float(v['nested']):.2f} / {float(v['independent']):.2f} |")
-    L += ["", "| planning: T2BL@HS / T2BL@canon success | P(GENERALISES) | P(primary PASS), simulated / exact under independence |",
-          "|---|---:|---:|"]
+        L.append(f"| {k} | " + " | ".join(f"{float(v[f'{r}, nested']):.2f} / {float(v[f'{r}, independent']):.2f}"
+                                           for r in regs) + " |")
+    L += ["", "| planning: T2BL@HS / T2BL@canon success | P(GENERALISES) nested | P(GENERALISES) independent within "
+              "ORACLE | P(primary PASS), simulated / exact under independence |", "|---|---:|---:|---:|"]
     for r in pw.get("plan") or []:
-        L.append(f"| {r['p_t2bl_hs']:.2f} / {r['p_t2bl_canon']:.2f} | {float(r['P_GENERALISES']):.2f} | "
-                 f"{float(r['P_primary_PASS_sim']):.2f} / {float(r['P_primary_PASS_exact_independent']):.3f} |")
-    L += ["", f"Assumption source: {pw.get('assumption_source')}. {pw.get('plan_note', '')}"]
+        L.append(f"| {r['p_t2bl_hs']:.2f} / {r['p_t2bl_canon']:.2f} | {float(r['nested']['P_GENERALISES']):.2f} | "
+                 f"{float(r['independent_within_oracle']['P_GENERALISES']):.2f} | "
+                 f"{float(r['nested']['P_primary_PASS_sim']):.2f} / {float(r['P_primary_PASS_exact_independent']):.3f} |")
+    ga = pw.get("gate_alignment") or []
+    if ga:
+        L += ["", "| true held-out-word accuracy (dev and confirmation) | seeds | P(dev gate PROCEED) | P(GENERALISES) H_words "
+                  "| P(GENERALISES) HS_words |", "|---:|---|---:|---:|---:|"]
+        for g in ga:
+            L.append(f"| {g['p_true']:.2f} | {g['seeds']} | {float(g['P_PROCEED']):.2f} | "
+                     f"{float(g['P_GENERALISES_H_words_nested']):.2f} | {float(g['P_GENERALISES_HS_words_nested']):.2f} |")
+    L += ["", f"Assumption source: {pw.get('assumption_source')}. Twins assumed at {pw.get('twin_accuracy_assumed')} "
+              f"(no-op rows' twin ID_void, posted rows' ID_posted, mixed cells' ID_posted / S_words). "
+              f"{pw.get('plan_note', '')}"]
     return "\n".join(L)
 
 
 def _plan_table(gp: dict) -> str:
-    L = ["| stage | what | generations expected (ceiling) | h planning rate | h observed rate |", "|---|---|---:|---:|---:|"]
+    L = ["| stage | what | generations expected (ceiling) | h planning rate | h observed rate | h ceiling, planning rate |",
+         "|---|---|---:|---:|---:|---:|"]
     for r in gp.get("stages") or []:
         L.append(f"| {r['stage']} | {r['what']} | {r['generations_expected']:,} ({r['generations_ceiling']:,}) | "
-                 f"{r['h_planning']:.2f} | {r['h_observed']:.2f} |")
-    L.append("")
-    for key, name in (("turns_observed", "expected, observed rate"), ("turns_planning", "expected, planning rate"),
-                      ("turns_ceiling_observed", "ceiling, observed rate"), ("turns_ceiling_planning", "ceiling, planning rate")):
-        v = gp.get(key)
-        if isinstance(v, list):
-            L.append(f"   - {name}: " + "; ".join(f"turn {i + 1}: {', '.join(t['stages'])} ({t['projected_h']} h)"
-                                                    for i, t in enumerate(v))
-                     + f"; {gp.get(key.replace('turns', 'gpu_h'))} GPU-h")
+                 f"{r['h_planning']:.2f} | {r['h_observed']:.2f} | {r['h_ceiling_planning']:.2f} |")
+    L += ["", "   Schedules simulated with the runner's own start rule (t2bl_confirm_run.start_estimate_s):"]
+    for sc in gp.get("schedules") or []:
+        if isinstance(sc.get("turns"), list):
+            L.append(f"   - {sc['name']}: " + "; ".join(f"turn {i + 1}: {', '.join(t['stages'])} ({t['projected_h']} h)"
+                                                        for i, t in enumerate(sc["turns"]))
+                     + f"; {sc['gpu_h']} GPU-h; longest turn {sc['max_turn_h']} h")
         else:
-            L.append(f"   - {name}: {v}")
+            L.append(f"   - {sc['name']}: {sc.get('turns')}")
     L.append("   - part (c): one more RCWM turn under its own lease (about 0.5-1.1 GPU-h).")
     return "\n".join(L)
 
@@ -1296,8 +1437,11 @@ def run_registered(root: Path = ROOT, run: Path | None = None, registered: bool 
            "analysed_local": time.strftime("%Y-%m-%d %H:%M:%S %z")}
     js, md = json.dumps(clean(res), indent=1) + "\n", render_md(res)   # both rendered before anything is written
     out_dir.mkdir(parents=True, exist_ok=True)
-    C.write_create(out_dir / "PREREG_5_RESULTS.md", md)
-    C.write_create(out_dir / "PREREG_5_RESULTS.json", js)                # the JSON last: its presence means 'done'
+    if (out_dir / "PREREG_5_RESULTS.md").exists():      # an orphan from a crash between the two writes (no JSON yet)
+        os.replace(out_dir / "PREREG_5_RESULTS.md",
+                   out_dir / f"PREREG_5_RESULTS.md.orphan.{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}")
+    C.write_create(out_dir / "PREREG_5_RESULTS.md", md, stale_partial="aside")
+    C.write_create(out_dir / "PREREG_5_RESULTS.json", js, stale_partial="aside")   # last: its presence means 'done'
     return res
 
 
@@ -1341,9 +1485,17 @@ def render_md(res: dict) -> str:
         for st, vs in A["variants"].items():
             L.append(f"- **{st}**: " + "; ".join(f"{v}: " + ", ".join(f"{s} {x[s]['acc']:.2f}" for s in MAP_SIDES)
                                                  for v, x in vs.items()))
+        L += ["", "## Trained-variant controls (accuracy; T2b-ledger minus T2 s0)", ""]
+        for st, d in A["controls"].items():
+            L.append(f"- {st}: T2 s0 {d['t2s0']['acc']:.2f}; " + ", ".join(
+                f"{s.replace('t2bl', 's')} {d[s]['acc']:.2f} ({d[s]['minus_t2s0']:+.2f})" for s in T2BL))
         L += ["", "## Report-only cells", ""]
         for ck, d in A["report_only"].items():
             L.append(f"- {ck}: " + ", ".join(f"{s} {d[s]['acc']:.2f}" for s in MAP_SIDES))
+        L += ["", "## Word-cluster bootstrap intervals (report-only; 20 held-out words, 5 rows each)", ""]
+        for st, d in (A.get("word_clusters_report_only") or {}).items():
+            L.append(f"- {st}: " + "; ".join(f"{s} {d[s]['acc']:.2f} [{d[s]['ci95'][0]:.2f}, {d[s]['ci95'][1]:.2f}]"
+                                             for s in MAP_SIDES))
     return "\n".join(L) + "\n"
 
 
