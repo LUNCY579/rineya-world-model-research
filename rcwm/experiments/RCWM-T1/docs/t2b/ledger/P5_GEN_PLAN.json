@@ -1,0 +1,201 @@
+{
+ "lease": "rcwm-t1:prereg5",
+ "cap_h": 4.5,
+ "load_s": 120.0,
+ "counts": {
+  "map_rows": 2367,
+  "inst": 180,
+  "anchor_gens": 1664,
+  "ident_gens": 300,
+  "bi_batched": 128,
+  "bi_batch1": 128,
+  "map_gens": 11835,
+  "answer_tokens": 24.1
+ },
+ "sizing_new_keys_per_instance": {
+  "T2BL@HS": 69.91,
+  "T2s0@HS": 80.76,
+  "T2BL@canon": 69.91,
+  "T2s0@canon": 69.91
+ },
+ "ceiling_per_instance": 104,
+ "rates": {
+  "planning_F_plan": 2.7,
+  "planning_F_observed": 3.8,
+  "map_plan": 2.7,
+  "map_observed": 4.882,
+  "batch1": 0.3
+ },
+ "stages": [
+  {
+   "stage": "A0",
+   "what": "PREREG-2 anchor (208 chains x 4 x OFF/T2s0) + adapter identity (3 x 100 dev rows) + batch invariance (64 keys x T2BL canonical / held-out x batched and batch 1)",
+   "generations_expected": 2220,
+   "generations_ceiling": 2220,
+   "h_planning": 0.34,
+   "h_observed": 0.27,
+   "h_ceiling_planning": 0.34
+  },
+  {
+   "stage": "M1",
+   "what": "part (a): the map bank (2367 rows) x OFF, T2s0, T2BL s0-s2",
+   "generations_expected": 11835,
+   "generations_ceiling": 11835,
+   "h_planning": 1.46,
+   "h_observed": 0.8,
+   "h_ceiling_planning": 1.46
+  },
+  {
+   "stage": "P1",
+   "what": "part (b) PRIMARY arm: plan_beam enum W2 E12, T2BL@HS (held-out combined rendering)",
+   "generations_expected": 12584,
+   "generations_ceiling": 18720,
+   "h_planning": 1.29,
+   "h_observed": 0.92,
+   "h_ceiling_planning": 1.93
+  },
+  {
+   "stage": "P2",
+   "what": "part (b) PRIMARY comparator: plan_beam enum W2 E12, T2s0@HS (held-out combined rendering)",
+   "generations_expected": 14537,
+   "generations_ceiling": 18720,
+   "h_planning": 1.5,
+   "h_observed": 1.06,
+   "h_ceiling_planning": 1.93
+  },
+  {
+   "stage": "P3",
+   "what": "part (b): plan_beam enum W2 E12, T2BL@canon (canonical frame)",
+   "generations_expected": 12584,
+   "generations_ceiling": 18720,
+   "h_planning": 1.29,
+   "h_observed": 0.92,
+   "h_ceiling_planning": 1.93
+  },
+  {
+   "stage": "P4",
+   "what": "part (b): plan_beam enum W2 E12, T2s0@canon (canonical frame)",
+   "generations_expected": 12584,
+   "generations_ceiling": 18720,
+   "h_planning": 1.29,
+   "h_observed": 0.92,
+   "h_ceiling_planning": 1.93
+  }
+ ],
+ "cpu_stage": "C1 (ORACLE and IGNORE_STATUS at enum W2 E12): CPU only, never under the lease, at the start of the invocation after the one that records A0; about 1 CPU-min",
+ "retention_part_c": "a separate RCWM turn under lease 'rcwm-t1:retention' (ret_run.py --mode confirm with --extra-adapter t2bl_s0=...): 0.46-1.11 GPU-h by the 5c plan (docs/retention/RET_PLAN.json scale; one extra Titan-Sparse side)",
+ "stage_rule": "no stage starts within 0.5 h of the 4.5 h cap; a stage starts only if 1.25 x its estimate fits; every turn after the first re-runs A0 before any stage; the start-of-turn check adds the model load and the longest A0 measured so far",
+ "dev_answer_tokens": 24.1,
+ "dev_source_present": true,
+ "turns_planning": [
+  {
+   "stages": [
+    "A0",
+    "M1",
+    "P1"
+   ],
+   "projected_h": 3.12
+  },
+  {
+   "stages": [
+    "A0 re-check",
+    "P2",
+    "P3"
+   ],
+   "projected_h": 3.16
+  },
+  {
+   "stages": [
+    "A0 re-check",
+    "P4"
+   ],
+   "projected_h": 1.67
+  }
+ ],
+ "gpu_h_planning": 7.95,
+ "turns_observed": [
+  {
+   "stages": [
+    "A0",
+    "M1",
+    "P1",
+    "P2",
+    "P3"
+   ],
+   "projected_h": 4.01
+  },
+  {
+   "stages": [
+    "A0 re-check",
+    "P4"
+   ],
+   "projected_h": 1.22
+  }
+ ],
+ "gpu_h_observed": 5.23,
+ "turns_ceiling_observed": [
+  {
+   "stages": [
+    "A0",
+    "M1",
+    "P1",
+    "P2"
+   ],
+   "projected_h": 3.84
+  },
+  {
+   "stages": [
+    "A0 re-check",
+    "P3",
+    "P4"
+   ],
+   "projected_h": 3.04
+  }
+ ],
+ "gpu_h_ceiling_observed": 6.88,
+ "turns_ceiling_planning": [
+  {
+   "stages": [
+    "A0",
+    "M1",
+    "P1"
+   ],
+   "projected_h": 3.75
+  },
+  {
+   "stages": [
+    "A0 re-check",
+    "P2"
+   ],
+   "projected_h": 2.3
+  },
+  {
+   "stages": [
+    "A0 re-check",
+    "P3"
+   ],
+   "projected_h": 2.3
+  },
+  {
+   "stages": [
+    "A0 re-check",
+    "P4"
+   ],
+   "projected_h": 2.3
+  }
+ ],
+ "gpu_h_ceiling_planning": 10.65,
+ "checks": {
+  "pins_match": true,
+  "bwm_planner_pinned": true,
+  "prereg5_outputs_present": [],
+  "freeze_ok": false,
+  "freeze_blockers": [
+   "PREREG_5_FREEZE.json does not exist or is unreadable (PREREG-5 is a draft)"
+  ],
+  "torch_imported": false
+ },
+ "code_sha256": {
+  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60"
+ }
+}

@@ -1,0 +1,69 @@
+{
+ "part": "plan",
+ "ok": true,
+ "n_checks": 7,
+ "n_pass": 7,
+ "checks": [
+  {
+   "check": "both --plan paths exit 0 without importing torch",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "dev screen: one 4.5 h turn at the planning and at the observed rate",
+   "ok": true,
+   "detail": "(3.32, 2.53)"
+  },
+  {
+   "check": "each seed's whole pair (training, load, A0, E0, its evaluation) x 1.25 fits an empty turn",
+   "ok": true,
+   "detail": "1.5"
+  },
+  {
+   "check": "a 2.5 h cap splits the dev screen over several turns (the D-22 rule defers whole pairs)",
+   "ok": true,
+   "detail": "[['s0:T', 'A0', 'E0', 's0:E'], ['s1:T', 'A0', 's1:E', 's2:T', 's2:E']]"
+  },
+  {
+   "check": "PREREG-5: every GPU stage fits an empty turn even at its ceiling at the planning rate (4 turns), 2 turns at the observed rate",
+   "ok": true,
+   "detail": "(7.95, 5.23, 10.65)"
+  },
+  {
+   "check": "the plan records the lease labels and the 1.25 x / 0.5 h stage rule",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "torch was never imported by the plan part",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
+  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
+  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
+  "scripts/t2bl_run.py": "05cf9acf509a90bab24fece12fc7f11b5ece72b5009619c78227a3d01d9e588a",
+  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
+  "scripts/t2bl_confirm_bank.py": "9a291f1f5d9d623c904ca25efb153e4b9d74b9e1955d23abf1248afa524036d4",
+  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60",
+  "scripts/t2bl_confirm_analysis.py": "ba9e6fa344f6aec7ca2ec33314f98aa083b19cd38b423cf7bef483d48f5f3b06",
+  "scripts/t2bl_test.py": "bd91470a2b0f352a4166246089d541895b9793c7ff5f16b97e66df64a05ca6c8"
+ },
+ "draft_sha256": "66c7e5b7bfd3c982be1a676b5438d6cc40f495c1dfd677910267f2108afd69b0",
+ "hook_draft_sha256": "0bda6db3a83867a114ea24084ca9837deabe5c36d8a714bafe4992864cfa81d9",
+ "hook_draft_t2bl_sha256": "746f7bd6a719b3f33e8cb0b932c3ea18c1bb8f5c9300df3c80cec9f5597ae6ae",
+ "peak_mb": 39.6,
+ "recorded_local": "2026-10-10 15:17:57 -0500",
+ "dev_gpu_h": {
+  "planning": 3.32,
+  "observed": 2.53
+ },
+ "p5_gpu_h": {
+  "gpu_h_planning": 7.95,
+  "gpu_h_observed": 5.23,
+  "gpu_h_ceiling_observed": 6.88,
+  "gpu_h_ceiling_planning": 10.65
+ }
+}

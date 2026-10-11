@@ -1,0 +1,96 @@
+{
+ "lease": "rcwm-t1:t2b-ledger",
+ "cap_h": 4.5,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "steps": 190,
+ "stage_rule": "a seed's training starts only if 1.25 x its whole remaining pair (training + model load + [A0 + E0 if due] + its evaluation) fits the turn and never within 0.5 h of the cap; each evaluation stage starts only if 1.25 x its estimate fits; otherwise exit 5 and resume next turn (re-anchored)",
+ "timing_model": {
+  "train": "T2 190-step training (planning max 2191 s; observed mean 1902 s) x tokens/row / 152.76",
+  "generation": "planning 2.7 gens/s, observed 4.88 gens/s (PREREG-3 S1), both x (answer tokens + 1) / 21",
+  "load_s": 120.0
+ },
+ "planning": {
+  "stage_s": {
+   "T": 2432.2,
+   "A0": 616.3,
+   "E0": 1475.9,
+   "E": 737.9,
+   "load": 120.0
+  },
+  "generations": {
+   "A0": 1664,
+   "E0": 3334,
+   "E": 1667
+  },
+  "inputs": {
+   "train_row_tokens": 161.19,
+   "dev_answer_tokens": 24.1,
+   "n_rows": 1667,
+   "n_anchor_steps": 832
+  },
+  "turns": [
+   {
+    "stages": [
+     "s0:T",
+     "A0",
+     "E0",
+     "s0:E",
+     "s1:T",
+     "s1:E",
+     "s2:T",
+     "s2:E"
+    ],
+    "projected_h": 3.32
+   }
+  ],
+  "gpu_h": 3.32,
+  "per_seed_pair_h": 0.91
+ },
+ "observed": {
+  "stage_s": {
+   "T": 2127.2,
+   "A0": 340.8,
+   "E0": 816.2,
+   "E": 408.1,
+   "load": 120.0
+  },
+  "generations": {
+   "A0": 1664,
+   "E0": 3334,
+   "E": 1667
+  },
+  "inputs": {
+   "train_row_tokens": 161.19,
+   "dev_answer_tokens": 24.1,
+   "n_rows": 1667,
+   "n_anchor_steps": 832
+  },
+  "turns": [
+   {
+    "stages": [
+     "s0:T",
+     "A0",
+     "E0",
+     "s0:E",
+     "s1:T",
+     "s1:E",
+     "s2:T",
+     "s2:E"
+    ],
+    "projected_h": 2.53
+   }
+  ],
+  "gpu_h": 2.53,
+  "per_seed_pair_h": 0.74
+ },
+ "generations_total": 9999,
+ "torch_imported": false,
+ "train_source_sha256": "6f902c61423f51fe9feff5e7ecd28ee90320d28aa6c0507f0b18aa083e40519f",
+ "code_sha256": {
+  "scripts/t2bl_run.py": "05cf9acf509a90bab24fece12fc7f11b5ece72b5009619c78227a3d01d9e588a"
+ }
+}

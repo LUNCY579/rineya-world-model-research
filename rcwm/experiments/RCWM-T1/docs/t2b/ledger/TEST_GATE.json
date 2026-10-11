@@ -1,0 +1,107 @@
+{
+ "part": "gate",
+ "ok": true,
+ "n_checks": 14,
+ "n_pass": 14,
+ "checks": [
+  {
+   "check": "scorer self-test on the dev bank: gold renderings scored correct, negatives wrong, error classes, copy floor, parser identity with env.parse_state on A-D rows",
+   "ok": true,
+   "detail": "{'gold_renderings': 11669, 'negatives': 15003, 'parse_general_equals_env_parse_state_on_A_D': '13872/13872'}"
+  },
+  {
+   "check": "every dev-gate case gives its pre-stated verdict (15 cases)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "every verdict and every named pattern is realised",
+   "ok": true,
+   "detail": "(['NO_VERDICT_INSTRUMENT', 'PARTIAL', 'PROCEED', 'TRIGGER_WIDENED'], ['copy_on_heldout_surface', 'heldout_below_bar', 'in_distribution_cost', 'seed_disagreement', 'trained_words_below_bar'])"
+  },
+  {
+   "check": "GATE_RULE.md is rendered from the code's rule text (verbatim, pre-stated)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the gate rule is NOT frozen by the kit build (GATE_RULE.json absent: the runner and the analysis refuse)",
+   "ok": true,
+   "detail": "['docs/t2b/ledger/GATE_RULE.json is missing or not a gate-rule record (t2bl_gate.py --freeze-rule)']"
+  },
+  {
+   "check": "the runner refuses before the lease while the rule is not frozen (exit 3, not persisted)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "freeze-rule refuses an approval that names nobody",
+   "ok": true,
+   "detail": "--approval must name who approved, when, and the DECISIONS entry"
+  },
+  {
+   "check": "freeze-rule refuses once a runs/t2bl output exists",
+   "ok": true,
+   "detail": "a runs/t2bl output exists: the rule can no longer be frozen"
+  },
+  {
+   "check": "freeze-rule writes GATE_RULE.json with every frozen input and pins PREREG-5's rules digest",
+   "ok": true,
+   "detail": "['data/t2bl_dev.SOURCE.json', 'data/t2bl_dev.jsonl', 'data/t2bl_train.SOURCE.json', 'data/t2bl_train.jsonl']"
+  },
+  {
+   "check": "the frozen record verifies against the current files",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "a changed frozen input is reported",
+   "ok": true,
+   "detail": "['data/t2bl_dev.jsonl: differs from the frozen gate rule (sha256)']"
+  },
+  {
+   "check": "freeze-rule is create-only",
+   "ok": true,
+   "detail": "GATE_RULE.json exists (create-only)"
+  },
+  {
+   "check": "the hook identity rule: an installed hook that differs from the draft is refused",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "torch was never imported by the gate part",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
+  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
+  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
+  "scripts/t2bl_run.py": "05cf9acf509a90bab24fece12fc7f11b5ece72b5009619c78227a3d01d9e588a",
+  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
+  "scripts/t2bl_confirm_bank.py": "9a291f1f5d9d623c904ca25efb153e4b9d74b9e1955d23abf1248afa524036d4",
+  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60",
+  "scripts/t2bl_confirm_analysis.py": "ba9e6fa344f6aec7ca2ec33314f98aa083b19cd38b423cf7bef483d48f5f3b06",
+  "scripts/t2bl_test.py": "bd91470a2b0f352a4166246089d541895b9793c7ff5f16b97e66df64a05ca6c8"
+ },
+ "draft_sha256": "66c7e5b7bfd3c982be1a676b5438d6cc40f495c1dfd677910267f2108afd69b0",
+ "hook_draft_sha256": "0bda6db3a83867a114ea24084ca9837deabe5c36d8a714bafe4992864cfa81d9",
+ "hook_draft_t2bl_sha256": "746f7bd6a719b3f33e8cb0b932c3ea18c1bb8f5c9300df3c80cec9f5597ae6ae",
+ "peak_mb": 61.9,
+ "recorded_local": "2026-10-10 15:17:47 -0500",
+ "verdicts": [
+  "NO_VERDICT_INSTRUMENT",
+  "PARTIAL",
+  "PROCEED",
+  "TRIGGER_WIDENED"
+ ],
+ "patterns": [
+  "copy_on_heldout_surface",
+  "heldout_below_bar",
+  "in_distribution_cost",
+  "seed_disagreement",
+  "trained_words_below_bar"
+ ]
+}

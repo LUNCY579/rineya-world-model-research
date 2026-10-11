@@ -1,0 +1,129 @@
+{
+ "part": "p5tiny",
+ "ok": true,
+ "n_checks": 21,
+ "n_pass": 21,
+ "checks": [
+  {
+   "check": "real tiny generation: A0, M1, P1-P4 in the first call (exit 5: C1 pending), C1 then DONE in the second",
+   "ok": true,
+   "detail": "[5, 0]"
+  },
+  {
+   "check": "C1 ran on the CPU outside the lease, in a process that had not initialised CUDA",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "one lease 'rcwm-t1:prereg5' per GPU turn; the C1 call took no lease",
+   "ok": true,
+   "detail": "[('lease', 'rcwm-t1:prereg5')]"
+  },
+  {
+   "check": "A0: anchor (OFF and T2 s0 vs references), adapter identity (each T2b-ledger seed vs its own single-adapter answers) and batch invariance all pass with four adapters loaded",
+   "ok": true,
+   "detail": "({'n': 3, 'identical_states': 1.0, 'identical_texts': 1.0}, {'s0': {'identical_states': 1.0, 'identical_texts': 1.0}, 's1': {'identical_states': 1.0, 'identical_texts': 1.0}, 's2': {'identical_states': 1.0, 'identical_texts': 1.0}}, {'T2BL@canon': 1.0, 'T2BL@HS': 1.0})"
+  },
+  {
+   "check": "M1 wrote one answer per map row for each of the five sides, in bank order",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the five sides are distinct models (OFF, T2 s0 and three T2b-ledger seeds give different answers)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "stub run completes (exit 5 then 0)",
+   "ok": true,
+   "detail": "[5, 0]"
+  },
+  {
+   "check": "stub planning: the rule-following T2b-ledger plans on the held-out rendering at ORACLE's level; the void-trigger T2 s0 loses there ('cancelled' is applied as posted)",
+   "ok": true,
+   "detail": "{'T2BL@HS': 10, 'T2s0@HS': 4, 'T2BL@canon': 10, 'T2s0@canon': 10, 'ORACLE': 10}"
+  },
+  {
+   "check": "a crash inside P2 propagates; the resume orphans the partial P2, re-runs A0 and completes with outputs identical to the uninterrupted run",
+   "ok": true,
+   "detail": "([0], True)"
+  },
+  {
+   "check": "nothing fits (cap 0.45 h): exit 5 without loading the model; the second turn without progress stops the job (exit 3, persisted)",
+   "ok": true,
+   "detail": "[5, 3]"
+  },
+  {
+   "check": "a mid-run deferral after A0 and M1 (exit 5) resumes next call with an A0 re-check and completes",
+   "ok": true,
+   "detail": "(5, [0])"
+  },
+  {
+   "check": "an anchor failure stops before any output (persisted; no eligible part)",
+   "ok": true,
+   "detail": "([3], \"[prereg5] ANCHOR FAILED {'n': 3, 'identical_states': 0.0, 'identical_texts': 1.0\")"
+  },
+  {
+   "check": "an adapter-identity failure (a seed does not reproduce its dev answers) stops before any output",
+   "ok": true,
+   "detail": "[3]"
+  },
+  {
+   "check": "a batch-invariance failure stops before any output",
+   "ok": true,
+   "detail": "[3]"
+  },
+  {
+   "check": "an A0 re-check failure on a later turn stops; part (a) (A0 + M1 recorded) stays verdict-eligible",
+   "ok": true,
+   "detail": "(5, 3, ['a'])"
+  },
+  {
+   "check": "a fingerprint mismatch stops (exit 3)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a runtime drift stops before anything is generated",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a recorded output whose hash changed stops the job",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "an adapter that changed between invocations stops the job",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "one-waiter rule: a live RCWM waiter refuses (exit 3, not persisted)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the registered job refuses without a freeze (not persisted)",
+   "ok": true,
+   "detail": "refusing to run the PREREG-5 job: PREREG_5_FREEZE.json does not exist or is unreadable (PREREG-5 is a draft)"
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
+  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
+  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
+  "scripts/t2bl_run.py": "05cf9acf509a90bab24fece12fc7f11b5ece72b5009619c78227a3d01d9e588a",
+  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
+  "scripts/t2bl_confirm_bank.py": "9a291f1f5d9d623c904ca25efb153e4b9d74b9e1955d23abf1248afa524036d4",
+  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60",
+  "scripts/t2bl_confirm_analysis.py": "ba9e6fa344f6aec7ca2ec33314f98aa083b19cd38b423cf7bef483d48f5f3b06",
+  "scripts/t2bl_test.py": "bd91470a2b0f352a4166246089d541895b9793c7ff5f16b97e66df64a05ca6c8"
+ },
+ "draft_sha256": "66c7e5b7bfd3c982be1a676b5438d6cc40f495c1dfd677910267f2108afd69b0",
+ "hook_draft_sha256": "0bda6db3a83867a114ea24084ca9837deabe5c36d8a714bafe4992864cfa81d9",
+ "hook_draft_t2bl_sha256": "746f7bd6a719b3f33e8cb0b932c3ea18c1bb8f5c9300df3c80cec9f5597ae6ae",
+ "peak_mb": 802.3,
+ "recorded_local": "2026-10-10 15:21:25 -0500"
+}

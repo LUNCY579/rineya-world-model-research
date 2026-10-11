@@ -1,0 +1,69 @@
+{
+ "part": "p5analysis",
+ "ok": true,
+ "n_checks": 8,
+ "n_pass": 8,
+ "checks": [
+  {
+   "check": "every PREREG-5 dry-run case gives its registered reading (31 cases)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "every registered rule, limit and template (64) appears verbatim in the draft",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the draft is exactly the render of its template with the current power and plan records",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a draft missing one registered template is detected",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the rules digest is deterministic and covers every registered string",
+   "ok": true,
+   "detail": "{'sha256': '65206927d132f50a895ed357efe6ce5390540304f79c48ac2e186ab20bcf1452', 'n_strings': 64}"
+  },
+  {
+   "check": "the power record exists and covers every primary cell, the in-distribution control and planning",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "power from the dev screen's outcomes (--from-gate): every primary cell, the in-distribution control and the planning scenario are computed from a GATE.json",
+   "ok": true,
+   "detail": "[('H_words', 0.95), ('H_order', 0.95), ('H_names', 0.95)]"
+  },
+  {
+   "check": "the analysis never imports torch",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
+  "scripts/t2bl_make_data.py": "a40f4c9d4c4a2a77a1f001aedb212c7b4b13b63eace20389b4ccb1f97ffd07b7",
+  "scripts/t2bl_audit.py": "8b19607e44d2e3369e4a38424a155d4fecd72e8f49dd3b9a17f1266575ca39c4",
+  "scripts/t2bl_run.py": "05cf9acf509a90bab24fece12fc7f11b5ece72b5009619c78227a3d01d9e588a",
+  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
+  "scripts/t2bl_confirm_bank.py": "9a291f1f5d9d623c904ca25efb153e4b9d74b9e1955d23abf1248afa524036d4",
+  "scripts/t2bl_confirm_run.py": "45f198d59cd2d70d0296608d6754dff8a3c2993c8f5e01e2fd51143f7c88ca60",
+  "scripts/t2bl_confirm_analysis.py": "ba9e6fa344f6aec7ca2ec33314f98aa083b19cd38b423cf7bef483d48f5f3b06",
+  "scripts/t2bl_test.py": "bd91470a2b0f352a4166246089d541895b9793c7ff5f16b97e66df64a05ca6c8"
+ },
+ "draft_sha256": "66c7e5b7bfd3c982be1a676b5438d6cc40f495c1dfd677910267f2108afd69b0",
+ "hook_draft_sha256": "0bda6db3a83867a114ea24084ca9837deabe5c36d8a714bafe4992864cfa81d9",
+ "hook_draft_t2bl_sha256": "746f7bd6a719b3f33e8cb0b932c3ea18c1bb8f5c9300df3c80cec9f5597ae6ae",
+ "peak_mb": 61.1,
+ "recorded_local": "2026-10-10 15:17:56 -0500",
+ "n_cases": 31,
+ "rules_digest": {
+  "sha256": "65206927d132f50a895ed357efe6ce5390540304f79c48ac2e186ab20bcf1452",
+  "n_strings": 64
+ }
+}

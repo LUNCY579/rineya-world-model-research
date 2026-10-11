@@ -1,0 +1,1 @@
+Build of 2026-10-10 14:55 (this session; never used by any run). Its two .jsonl files are byte-identical to the final build; the final build only refreshes the SOURCE records, whose recorded code hashes predate a generalisation of t2bl_audit.audit_bank (stratum sizes from the number of bases, so small test banks audit too).

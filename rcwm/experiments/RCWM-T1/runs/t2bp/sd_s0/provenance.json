@@ -43,21 +43,664 @@
   "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57"
  },
  "screen_rule_sha256": "530a9dbd2b2582fc19a78daec319af05a7de9cefdde10dd7ffa9183b01c47220",
- "stages": {},
+ "stages": {
+  "dint": {
+   "T": {
+    "turn": 0,
+    "seconds": 2129.2,
+    "planned_s": 2392.3,
+    "rows": "t2bp_train_sd_dint.jsonl",
+    "finished_unix": 1791644591.7117915,
+    "files": {
+     "dint/train/adapter/adapter_model.safetensors": "037a3bc288f1b9c1f4cb439db0a23c1d5d1abe6ff2fdfdb79a117e8831bb6808",
+     "dint/train/adapter/adapter_config.json": "bbb5bf0109935eb25fa9a519d7558ca73680977b71b43335d4359df1975a529d"
+    }
+   },
+   "E1": {
+    "turn": 0,
+    "seconds": 365.9,
+    "planned_s": 456.2,
+    "generations_planned_max": 2100,
+    "sides": {
+     "off": {
+      "start_unix": 1791644708.0601554,
+      "end_unix": 1791644885.5371628
+     },
+     "on": {
+      "start_unix": 1791644885.5371628,
+      "end_unix": 1791645073.8829188
+     }
+    },
+    "pid": 38824,
+    "finished_unix": 1791645073.9007862,
+    "files": {
+     "dint/onestep_off.jsonl": "df64a82098114b0fba5a4ae77bebf3968fea5c4b7e23e19a72429c10631d4eaf",
+     "dint/onestep_on.jsonl": "a3b404c664ab2390e76917957ff0dc6f20281f294df059689fcb6d9445189b31"
+    }
+   },
+   "E2": {
+    "turn": 0,
+    "seconds": 299.1,
+    "planned_s": 416.6,
+    "generations_planned_max": 1920,
+    "sides": {
+     "off": {
+      "start_unix": 1791645073.922493,
+      "end_unix": 1791645202.835111
+     },
+     "on": {
+      "start_unix": 1791645202.835111,
+      "end_unix": 1791645373.0199034
+     }
+    },
+    "pid": 38824,
+    "finished_unix": 1791645373.0507762,
+    "files": {
+     "dint/chains_off.jsonl": "9443df54e06087d800d5f51d987723d6630a8971299d4bf0813950d3c6fa52bc",
+     "dint/chains_on.jsonl": "f953f317ed86efc5fec97f74182520661922a9a2b0da9e2c4bc54456bca96c46"
+    }
+   },
+   "E3": {
+    "turn": 0,
+    "seconds": 174.5,
+    "planned_s": 228.1,
+    "generations_planned_max": 1050,
+    "sides": {
+     "on": {
+      "start_unix": 1791645373.1000476,
+      "end_unix": 1791645547.6008923
+     }
+    },
+    "pid": 38824,
+    "surface": {
+     "stage": "E3",
+     "para": 4,
+     "names": 4,
+     "order_top": [
+      "events",
+      "before"
+     ],
+     "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the row's index within its stratum (id suffix)",
+     "held_out_event_orders": [
+      [
+       "pre_on",
+       "pre_off",
+       "name",
+       "kind",
+       "delete",
+       "cost",
+       "add"
+      ],
+      [
+       "add",
+       "delete",
+       "kind",
+       "pre_off",
+       "cost",
+       "pre_on",
+       "name"
+      ],
+      [
+       "cost",
+       "pre_off",
+       "delete",
+       "pre_on",
+       "name",
+       "kind",
+       "add"
+      ]
+     ]
+    },
+    "sides_run": [
+     "on"
+    ],
+    "finished_unix": 1791645547.6094506,
+    "files": {
+     "dint/onestep_heldout_on.jsonl": "727784d9cd7477fd8d74b999ec545a48c95ba69ed32d3bea6970f586714449bd"
+    }
+   },
+   "E4": {
+    "turn": 0,
+    "seconds": 165.6,
+    "planned_s": 208.3,
+    "generations_planned_max": 960,
+    "sides": {
+     "on": {
+      "start_unix": 1791645547.6210363,
+      "end_unix": 1791645713.2574017
+     }
+    },
+    "pid": 38824,
+    "surface": {
+     "stage": "E4",
+     "report_only": true,
+     "para": 4,
+     "names": 4,
+     "order_top": [
+      "events",
+      "before"
+     ],
+     "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the chain's index in the dev bank's chain list (dev_chains order); every step of a chain uses its chain's surface",
+     "held_out_event_orders": [
+      [
+       "pre_on",
+       "pre_off",
+       "name",
+       "kind",
+       "delete",
+       "cost",
+       "add"
+      ],
+      [
+       "add",
+       "delete",
+       "kind",
+       "pre_off",
+       "cost",
+       "pre_on",
+       "name"
+      ],
+      [
+       "cost",
+       "pre_off",
+       "delete",
+       "pre_on",
+       "name",
+       "kind",
+       "add"
+      ]
+     ]
+    },
+    "sides_run": [
+     "on"
+    ],
+    "report_only": true,
+    "finished_unix": 1791645713.2650676,
+    "files": {
+     "dint/chains_heldout_on.jsonl": "b1476c9bbb81190bfc0b6cf36f15b20a89b3878bc0e8f95b29d3b1ab269f727d"
+    }
+   }
+  },
+  "strace": {
+   "T": {
+    "turn": 0,
+    "seconds": 5966.7,
+    "planned_s": 3941.6,
+    "rows": "t2bp_train_sd_strace.jsonl",
+    "finished_unix": 1791651680.1327255,
+    "files": {
+     "strace/train/adapter/adapter_model.safetensors": "8a153e88c1994239fcdf6a2aae61de5bb9d95b4a6b6e142effb87307a7604873",
+     "strace/train/adapter/adapter_config.json": "bbb5bf0109935eb25fa9a519d7558ca73680977b71b43335d4359df1975a529d"
+    }
+   },
+   "E1": {
+    "turn": 0,
+    "seconds": 843.1,
+    "planned_s": 2172.9,
+    "generations_planned_max": 2100,
+    "sides": {
+     "off": {
+      "start_unix": 1791651681.9908683,
+      "end_unix": 1791652038.4531984
+     },
+     "on": {
+      "start_unix": 1791652038.4531984,
+      "end_unix": 1791652525.0173552
+     }
+    },
+    "pid": 38824,
+    "finished_unix": 1791652525.0290926,
+    "files": {
+     "strace/onestep_off.jsonl": "6cac3130c0ef1922af089ad0b490215a532b74184708ba4d60301b204b18276d",
+     "strace/onestep_on.jsonl": "5f77eac195d80d108c0814cad57a5eca43dd4bd9251f3992583cc12e7a3bdd4c"
+    }
+   },
+   "E2": {
+    "turn": 0,
+    "seconds": 1162.8,
+    "planned_s": 1987.9,
+    "generations_planned_max": 1920,
+    "sides": {
+     "off": {
+      "start_unix": 1791652525.0441723,
+      "end_unix": 1791652980.507736
+     },
+     "on": {
+      "start_unix": 1791652980.507736,
+      "end_unix": 1791653687.8130393
+     }
+    },
+    "pid": 38824,
+    "finished_unix": 1791653687.8236651,
+    "files": {
+     "strace/chains_off.jsonl": "e9a238df27430e630af6606b6b9871ab5fc78bc083138f4847158ca44c7ff7d0",
+     "strace/chains_on.jsonl": "73dd69684a601d9f44a558196351365b0380aedc784dba4a1095bf756bf3ed13"
+    }
+   },
+   "E3": {
+    "turn": 0,
+    "seconds": 828.4,
+    "planned_s": 489.0,
+    "generations_planned_max": 1050,
+    "sides": {
+     "on": {
+      "start_unix": 1791653687.8658037,
+      "end_unix": 1791654516.2071977
+     }
+    },
+    "pid": 38824,
+    "surface": {
+     "stage": "E3",
+     "para": 4,
+     "names": 4,
+     "order_top": [
+      "events",
+      "before"
+     ],
+     "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the row's index within its stratum (id suffix)",
+     "held_out_event_orders": [
+      [
+       "pre_on",
+       "pre_off",
+       "name",
+       "kind",
+       "delete",
+       "cost",
+       "add"
+      ],
+      [
+       "add",
+       "delete",
+       "kind",
+       "pre_off",
+       "cost",
+       "pre_on",
+       "name"
+      ],
+      [
+       "cost",
+       "pre_off",
+       "delete",
+       "pre_on",
+       "name",
+       "kind",
+       "add"
+      ]
+     ]
+    },
+    "sides_run": [
+     "on"
+    ],
+    "finished_unix": 1791654516.2132359,
+    "files": {
+     "strace/onestep_heldout_on.jsonl": "afe6634988df5b351fc73e0a8c93751773531f8b7d34b0778b02102ed179d367"
+    }
+   },
+   "E4": {
+    "turn": 0,
+    "seconds": 639.4,
+    "planned_s": 448.2,
+    "generations_planned_max": 960,
+    "sides": {
+     "on": {
+      "start_unix": 1791654516.2248147,
+      "end_unix": 1791655155.5748103
+     }
+    },
+    "pid": 38824,
+    "surface": {
+     "stage": "E4",
+     "report_only": true,
+     "para": 4,
+     "names": 4,
+     "order_top": [
+      "events",
+      "before"
+     ],
+     "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the chain's index in the dev bank's chain list (dev_chains order); every step of a chain uses its chain's surface",
+     "held_out_event_orders": [
+      [
+       "pre_on",
+       "pre_off",
+       "name",
+       "kind",
+       "delete",
+       "cost",
+       "add"
+      ],
+      [
+       "add",
+       "delete",
+       "kind",
+       "pre_off",
+       "cost",
+       "pre_on",
+       "name"
+      ],
+      [
+       "cost",
+       "pre_off",
+       "delete",
+       "pre_on",
+       "name",
+       "kind",
+       "add"
+      ]
+     ]
+    },
+    "sides_run": [
+     "on"
+    ],
+    "report_only": true,
+    "finished_unix": 1791655155.5813067,
+    "files": {
+     "strace/chains_heldout_on.jsonl": "5db914e8720a53a35e861405ee7fe388088b30582bdfed066662b33e22a6de25"
+    }
+   }
+  },
+  "bbits": {
+   "T": {
+    "turn": 1,
+    "seconds": 4084.7,
+    "planned_s": 3848.5,
+    "rows": "t2bp_train_sd_bbits.jsonl",
+    "finished_unix": 1791664241.035701,
+    "files": {
+     "bbits/train/adapter/adapter_model.safetensors": "45338e8b4671f9f23bedac5fd72dd8d85461ce860b384a0e3615d0d38c2fb50f",
+     "bbits/train/adapter/adapter_config.json": "49d6039bc50212ecf514b32284a80c4f81ba91c790fb815dcaa29f0cdf7706e4"
+    }
+   },
+   "E1": {
+    "turn": 1,
+    "seconds": 1483.2,
+    "planned_s": 2052.1,
+    "generations_planned_max": 2100,
+    "sides": {
+     "off": {
+      "start_unix": 1791664498.2560627,
+      "end_unix": 1791665336.9555328
+     },
+     "on": {
+      "start_unix": 1791665336.9555328,
+      "end_unix": 1791665981.4196787
+     }
+    },
+    "pid": 17844,
+    "finished_unix": 1791665981.433164,
+    "files": {
+     "bbits/onestep_off.jsonl": "bc889065e80b27c59a5250ca7dc2f2a50b68ab7c9a74f1d5a8d7d8e422d6e7b8",
+     "bbits/onestep_on.jsonl": "1c693bc5ece4d3130de694e36fce500e900cb71ad3930509e780910645f329cc"
+    }
+   },
+   "E2": {
+    "turn": 1,
+    "seconds": 611.1,
+    "planned_s": 1869.0,
+    "generations_planned_max": 1920,
+    "sides": {
+     "off": {
+      "start_unix": 1791665981.4541504,
+      "end_unix": 1791666052.0553935
+     },
+     "on": {
+      "start_unix": 1791666052.0553935,
+      "end_unix": 1791666592.5149481
+     }
+    },
+    "pid": 17844,
+    "finished_unix": 1791666592.5246084,
+    "files": {
+     "bbits/chains_off.jsonl": "ee9505305124aece7d81fd3e277bc563c54c67c725484ecb8082df9e97470b74",
+     "bbits/chains_on.jsonl": "6908ea0b9f2f61575c3b2fa08a99853b765c3d231c00ef1b10c4a004afcae48a"
+    }
+   },
+   "E3": {
+    "turn": 1,
+    "seconds": 626.4,
+    "planned_s": 368.2,
+    "generations_planned_max": 1050,
+    "sides": {
+     "on": {
+      "start_unix": 1791666592.5616362,
+      "end_unix": 1791667218.9295313
+     }
+    },
+    "pid": 17844,
+    "surface": {
+     "stage": "E3",
+     "para": 4,
+     "names": 4,
+     "order_top": [
+      "events",
+      "before"
+     ],
+     "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the row's index within its stratum (id suffix)",
+     "held_out_event_orders": [
+      [
+       "pre_on",
+       "pre_off",
+       "name",
+       "kind",
+       "delete",
+       "cost",
+       "add"
+      ],
+      [
+       "add",
+       "delete",
+       "kind",
+       "pre_off",
+       "cost",
+       "pre_on",
+       "name"
+      ],
+      [
+       "cost",
+       "pre_off",
+       "delete",
+       "pre_on",
+       "name",
+       "kind",
+       "add"
+      ]
+     ]
+    },
+    "sides_run": [
+     "on"
+    ],
+    "finished_unix": 1791667218.9349728,
+    "files": {
+     "bbits/onestep_heldout_on.jsonl": "c80c26f420c22fa3446f15be0071c56a455d9f459100262aee169d5c020ad3f1"
+    }
+   },
+   "E4": {
+    "turn": 1,
+    "seconds": 549.5,
+    "planned_s": 329.3,
+    "generations_planned_max": 960,
+    "sides": {
+     "on": {
+      "start_unix": 1791667218.9480145,
+      "end_unix": 1791667768.4486146
+     }
+    },
+    "pid": 17844,
+    "surface": {
+     "stage": "E4",
+     "report_only": true,
+     "para": 4,
+     "names": 4,
+     "order_top": [
+      "events",
+      "before"
+     ],
+     "order_event": "HELDOUT_ORDERS['event'][j % 3], j = the chain's index in the dev bank's chain list (dev_chains order); every step of a chain uses its chain's surface",
+     "held_out_event_orders": [
+      [
+       "pre_on",
+       "pre_off",
+       "name",
+       "kind",
+       "delete",
+       "cost",
+       "add"
+      ],
+      [
+       "add",
+       "delete",
+       "kind",
+       "pre_off",
+       "cost",
+       "pre_on",
+       "name"
+      ],
+      [
+       "cost",
+       "pre_off",
+       "delete",
+       "pre_on",
+       "name",
+       "kind",
+       "add"
+      ]
+     ]
+    },
+    "sides_run": [
+     "on"
+    ],
+    "report_only": true,
+    "finished_unix": 1791667768.4507265,
+    "files": {
+     "bbits/chains_heldout_on.jsonl": "83fca34f2492e7cd44daf2d52ed1eb5c5f6832ea75d7f70899b23d345d9a7a18"
+    }
+   }
+  }
+ },
  "turns": [
   {
    "pid": 38824,
    "acquired_unix": 1791642462.4115937,
    "acquired_source": "lock record",
    "entered_unix": 1791642462.5382388,
-   "stages_run": [],
+   "stages_run": [
+    "dint:T",
+    "dint:E1",
+    "dint:E2",
+    "dint:E3",
+    "dint:E4",
+    "strace:T",
+    "strace:E1",
+    "strace:E2",
+    "strace:E3",
+    "strace:E4"
+   ],
+   "deferred": [
+    "bbits:T",
+    "bbits:E1",
+    "bbits:E2",
+    "bbits:E3",
+    "bbits:E4"
+   ],
+   "device": "cuda",
+   "prompts_checked": {
+    "dint": 1500,
+    "strace": 1500,
+    "bbits": 1500
+   },
+   "loads": [
+    {
+     "arm": "dint",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     }
+    },
+    {
+     "arm": "strace",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     }
+    }
+   ],
+   "anchor": {
+    "n": 224,
+    "identical_states": 1.0,
+    "identical_texts": 1.0,
+    "pass": true,
+    "seconds": 114.4,
+    "generations": 785,
+    "pid": 38824,
+    "unix": 1791644708.0402071
+   },
+   "released_unix": 1791655155.834843
+  },
+  {
+   "pid": 17844,
+   "acquired_unix": 1791660156.1899428,
+   "acquired_source": "lock record",
+   "entered_unix": 1791660156.3079646,
+   "stages_run": [
+    "bbits:T",
+    "bbits:E1",
+    "bbits:E2",
+    "bbits:E3",
+    "bbits:E4"
+   ],
    "deferred": [],
    "device": "cuda",
    "prompts_checked": {
     "dint": 1500,
     "strace": 1500,
     "bbits": 1500
-   }
+   },
+   "loads": [
+    {
+     "arm": "bbits",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     }
+    }
+   ],
+   "anchor": {
+    "n": 224,
+    "identical_states": 1.0,
+    "identical_texts": 1.0,
+    "pass": true,
+    "seconds": 255.3,
+    "generations": 785,
+    "pid": 17844,
+    "unix": 1791664498.234887
+   },
+   "released_unix": 1791667768.6843889
   }
  ]
 }

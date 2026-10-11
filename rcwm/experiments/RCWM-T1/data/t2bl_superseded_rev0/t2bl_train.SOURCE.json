@@ -1,0 +1,1329 @@
+{
+ "record": "T2BL_TRAIN_SOURCE",
+ "file": "t2bl_train.jsonl",
+ "file_sha256": "38da88fab74ee44bce20f49506e1b0249e7983b257b9962e41c3e5dfd2e335b2",
+ "seed": 20261161,
+ "n_rows": 1500,
+ "fresh_rejections": [],
+ "rejection_counts": {},
+ "composition": {
+  "n": 1500,
+  "para": {
+   "canonical": 601,
+   "train": 899
+  },
+  "top": {
+   "canonical": 1500
+  },
+  "event": {
+   "canonical": 589,
+   "train": 911
+  },
+  "before": {
+   "canonical": 587,
+   "train": 913
+  },
+  "names": {
+   "canonical": 520,
+   "canonical_plus_train_letters": 200,
+   "train_letters": 372,
+   "train_words": 408
+  },
+  "count": {
+   "canonical": 948,
+   "train": 552
+  },
+  "status": {
+   "posted": 750,
+   "train_word": 600,
+   "void": 150
+  },
+  "bal": {
+   "b3": 349,
+   "b4": 376,
+   "t2": 775
+  },
+  "amt": {
+   "a2": 243,
+   "a3": 201,
+   "t2": 1056
+  },
+  "status_kind": {
+   "neutral": 150,
+   "nonce": 120,
+   "not_applied": 180,
+   "posted": 750,
+   "posted_like": 90,
+   "void": 150,
+   "void_variant": 60
+  },
+  "kinds": {
+   "add": 321,
+   "scale": 503,
+   "transfer": 676
+  },
+  "blocks": {
+   "canon": 300,
+   "div": 1200
+  },
+  "pairs": 400,
+  "n_accounts": {
+   "4": 948,
+   "5": 179,
+   "6": 198,
+   "7": 175
+  },
+  "words_rows": {
+   "aborted": 15,
+   "accepted": 15,
+   "annulled": 15,
+   "blick": 15,
+   "blocked": 15,
+   "checked": 15,
+   "declined": 15,
+   "deferred": 15,
+   "failed": 15,
+   "flagged": 15,
+   "frell": 15,
+   "glorp": 15,
+   "kiki": 15,
+   "manual": 15,
+   "mipa": 15,
+   "new": 15,
+   "nim": 15,
+   "open": 15,
+   "paused": 15,
+   "pinned": 15,
+   "posted2": 15,
+   "posted_no": 15,
+   "postedx": 15,
+   "qposted": 15,
+   "queued": 15,
+   "rejected": 15,
+   "reviewed": 15,
+   "revoked": 15,
+   "standard": 15,
+   "suspended": 15,
+   "tagged": 15,
+   "tove": 15,
+   "void_": 15,
+   "voiding": 15,
+   "voids": 15,
+   "voidz": 15,
+   "withdrawn": 15,
+   "xposted": 15,
+   "zorp": 15,
+   "zposted": 15
+  },
+  "fully_canonical_surface_rows": 300,
+  "distinct_event_orders": 436,
+  "max_abs_balance": 9948,
+  "max_abs_amount_add_transfer": 988,
+  "scale_amounts": [
+   -9,
+   -8,
+   -7,
+   -6,
+   -5,
+   -4,
+   -2,
+   -1,
+   0,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ]
+ },
+ "heuristics": {
+  "scores": {
+   "apply_regardless": 0.5,
+   "ci_posted": 1.0,
+   "contains_posted": 0.94,
+   "copy": 0.5,
+   "endswith_ed": 0.8,
+   "exact": 1.0,
+   "len6": 0.94,
+   "semantic": 0.76,
+   "startswith_p": 0.95,
+   "void_trigger": 0.64
+  },
+  "binding": {
+   "copy": [
+    0.48,
+    0.52
+   ],
+   "apply_regardless": [
+    0.48,
+    0.52
+   ],
+   "void_trigger": [
+    0.0,
+    0.7
+   ]
+  },
+  "string_cue_max": 0.95,
+  "problems": [],
+  "ok": true,
+  "note": "apply_regardless == ignore_status (apply every event as if posted)"
+ },
+ "token_stats": {
+  "available": true,
+  "train": {
+   "mean_row_tokens_incl_eos": 163.41,
+   "max_row_tokens": 217,
+   "mean_target_tokens": 26.52,
+   "max_target_tokens": 50
+  },
+  "dev": {
+   "mean_prompt_tokens": 132.1,
+   "max_prompt_tokens": 170,
+   "mean_target_tokens": 24.1,
+   "max_target_tokens": 46
+  },
+  "t2_ledger_reference": {
+   "mean_row_tokens_incl_eos": 145.97,
+   "rows": 501
+  },
+  "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+ },
+ "t2_prompt_check": {
+  "t2_ledger_rows": 501,
+  "mismatches": 0,
+  "ok": true
+ },
+ "overlap": {
+  "items": 1500,
+  "payload_overlap": 0,
+  "operative_overlap": 0
+ },
+ "dev_file_sha256": "9fc0e76a09686896116c1159399450e35f78ee636384c932efa5de10285d17e4",
+ "partitions": {
+  "status": {
+   "train": {
+    "not_applied": [
+     "rejected",
+     "declined",
+     "failed",
+     "blocked",
+     "suspended",
+     "withdrawn",
+     "aborted",
+     "revoked",
+     "annulled",
+     "deferred",
+     "queued",
+     "paused"
+    ],
+    "neutral": [
+     "open",
+     "new",
+     "flagged",
+     "reviewed",
+     "manual",
+     "standard",
+     "accepted",
+     "checked",
+     "pinned",
+     "tagged"
+    ],
+    "nonce": [
+     "blick",
+     "zorp",
+     "kiki",
+     "mipa",
+     "tove",
+     "frell",
+     "glorp",
+     "nim"
+    ],
+    "void_variant": [
+     "voids",
+     "voiding",
+     "void_",
+     "voidz"
+    ],
+    "posted_like": [
+     "postedx",
+     "xposted",
+     "posted_no",
+     "zposted",
+     "posted2",
+     "qposted"
+    ]
+   },
+   "heldout": {
+    "not_applied": [
+     "rescinded",
+     "refused",
+     "stalled",
+     "nullified"
+    ],
+    "neutral": [
+     "verified",
+     "valid",
+     "signed",
+     "routine"
+    ],
+    "nonce": [
+     "toma",
+     "zib",
+     "fep",
+     "wux"
+    ],
+    "void_variant": [
+     "voidd",
+     "re_void",
+     "voidy",
+     "xvoid"
+    ],
+    "posted_like": [
+     "postedq",
+     "yposted",
+     "posted_zero",
+     "posted9"
+    ]
+   },
+   "prereg3_reserved_never_trained": [
+    "pending",
+    "draft",
+    "cancelled",
+    "reversed",
+    "held",
+    "approved",
+    "active",
+    "ok",
+    "dax",
+    "wug",
+    "Void",
+    "VOID",
+    "voided",
+    "unposted",
+    "not_posted",
+    "not posted"
+   ],
+   "trained_canonical": [
+    "posted",
+    "void"
+   ],
+   "excluded_no_gold": [
+    "Posted",
+    "POSTED",
+    "posted.",
+    " posted",
+    "posted ",
+    "booked",
+    "recorded",
+    "settled",
+    "cleared",
+    "completed",
+    "confirmed",
+    "logged",
+    "entered",
+    "applied",
+    "executed",
+    "processed",
+    "done"
+   ]
+  },
+  "names": {
+   "train_letters": [
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W"
+   ],
+   "heldout_letters": [
+    "E",
+    "F",
+    "G",
+    "H"
+   ],
+   "train_words": [
+    "bills",
+    "bonus",
+    "cafe",
+    "coins",
+    "dues",
+    "farm",
+    "gifts",
+    "house",
+    "media",
+    "petty",
+    "pool",
+    "roof",
+    "salary",
+    "shop",
+    "tips",
+    "trust"
+   ],
+   "heldout_words": [
+    "bank",
+    "card",
+    "cash",
+    "fees",
+    "fund",
+    "loan",
+    "rent",
+    "wage",
+    "barn",
+    "dock",
+    "lamp",
+    "mill",
+    "nest",
+    "pier",
+    "silo",
+    "yard"
+   ],
+   "canonical": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ],
+   "lb_names": [
+    "bank",
+    "card",
+    "cash",
+    "fees"
+   ]
+  },
+  "counts": {
+   "train": [
+    4,
+    5,
+    6,
+    7
+   ],
+   "heldout": [
+    8
+   ]
+  },
+  "magnitudes": {
+   "train_balance_classes": {
+    "t2": "the recorded pool |b| <= 98",
+    "b3": [
+     100,
+     999
+    ],
+    "b4": [
+     1000,
+     9999
+    ]
+   },
+   "train_amount_classes_add_transfer": {
+    "t2": "the recorded marginal -9..12",
+    "a2": [
+     13,
+     99
+    ],
+    "a3": [
+     100,
+     999
+    ]
+   },
+   "scale_factors": "the recorded marginal only (train and test)",
+   "heldout_balance_band": [
+    10000,
+    99999
+   ],
+   "heldout_amount_band_add_transfer": [
+    1000,
+    9999
+   ]
+  },
+  "key_orders": {
+   "order_seed": 20261163,
+   "heldout_position_permutations": {
+    "top": [
+     [
+      1,
+      0
+     ]
+    ],
+    "event": [
+     [
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     [
+      1,
+      5,
+      3,
+      2,
+      0,
+      4
+     ],
+     [
+      4,
+      3,
+      5,
+      0,
+      1,
+      2
+     ]
+    ],
+    "before4": [
+     [
+      3,
+      2,
+      1,
+      0
+     ],
+     [
+      1,
+      0,
+      2,
+      3
+     ],
+     [
+      0,
+      2,
+      1,
+      3
+     ]
+    ],
+    "before5": [
+     [
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     [
+      0,
+      3,
+      4,
+      1,
+      2
+     ],
+     [
+      3,
+      2,
+      4,
+      1,
+      0
+     ]
+    ],
+    "before6": [
+     [
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     [
+      2,
+      4,
+      3,
+      1,
+      0,
+      5
+     ],
+     [
+      0,
+      1,
+      4,
+      2,
+      5,
+      3
+     ]
+    ],
+    "before7": [
+     [
+      6,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     [
+      4,
+      6,
+      5,
+      0,
+      1,
+      2,
+      3
+     ],
+     [
+      4,
+      2,
+      5,
+      0,
+      6,
+      1,
+      3
+     ]
+    ],
+    "before8": [
+     [
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     [
+      6,
+      1,
+      5,
+      7,
+      3,
+      2,
+      4,
+      0
+     ],
+     [
+      4,
+      2,
+      7,
+      6,
+      3,
+      5,
+      1,
+      0
+     ]
+    ]
+   },
+   "train": "every other permutation (the identity w.p. 0.25); the 2-key top object is never augmented (its only other order, reversed, is held out)",
+   "lb_heldout_combined": {
+    "top": [
+     1,
+     0
+    ],
+    "event": [
+     5,
+     4,
+     3,
+     2,
+     1,
+     0
+    ],
+    "before": "reversed (held out)"
+   }
+  },
+  "paraphrases": {
+   "train": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "heldout": 4,
+   "texts": [
+    "Apply one event to the supplied account balances. If status is not posted, leave all balances unchanged. add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.",
+    "You are given account balances and one event. The event takes effect only if its status is posted; for any other status, every balance stays the same. add: increase account by amount. scale: multiply account by amount. transfer: take amount from account and give it to other at the same time. Reply with only the full set of resulting balances as a JSON object.",
+    "Update the balances using the event. An event whose status is not posted changes nothing. For add, add amount to account; for scale, multiply account by amount; for transfer, subtract amount from account and add it to other in one step. Output only the complete resulting balances as a JSON object.",
+    "Process one ledger event against the given balances. Only a posted event is applied; any other status leaves all balances as they were. add adds amount to account. scale multiplies account by amount. transfer moves amount from account to other simultaneously. Return just the complete balances after the event, as a JSON object.",
+    "Here are some account balances and a single event. Unless the event's status is posted, return the balances unchanged. With add, amount is added to account. With scale, account is multiplied by amount. With transfer, amount is subtracted from account and added to other at once. Answer with nothing but a JSON object holding every resulting balance."
+   ]
+  }
+ },
+ "audit_summary": {
+  "ok": true,
+  "problems": [],
+  "train": {
+   "heldout_factor_hits": {},
+   "fragment_hits": {},
+   "n_fragments_checked": 76,
+   "classes": {
+    "para": {
+     "canonical": 601,
+     "train": 899
+    },
+    "top": {
+     "canonical": 1500
+    },
+    "event": {
+     "canonical": 589,
+     "train": 911
+    },
+    "before": {
+     "canonical": 587,
+     "train": 913
+    },
+    "names": {
+     "canonical": 520,
+     "canonical_plus_train_letters": 200,
+     "train_letters": 372,
+     "train_words": 408
+    },
+    "count": {
+     "canonical": 948,
+     "train": 552
+    },
+    "status": {
+     "posted": 750,
+     "train_word": 600,
+     "void": 150
+    },
+    "bal": {
+     "t2": 775,
+     "wide": 725
+    },
+    "amt": {
+     "t2": 1056,
+     "wide": 444
+    }
+   },
+   "composition": {
+    "rows": 1500,
+    "posted": 750,
+    "nonposted": 750,
+    "canon_block": 300,
+    "pairs": 400,
+    "fully_canonical_rows": 300
+   },
+   "n_prompts_read_back": 1500
+  },
+  "dev": {
+   "rows": 1667,
+   "per_stratum": {
+    "ID_posted": 100,
+    "ID_void": 100,
+    "S_words": 100,
+    "S_surface_posted": 100,
+    "S_surface_words": 100,
+    "H_words": 100,
+    "H_order": 100,
+    "H_names": 100,
+    "H_count": 100,
+    "H_para": 100,
+    "H_bal": 100,
+    "H_amt": 67,
+    "HS_words": 100,
+    "HS_posted": 100,
+    "LB_void": 100,
+    "LB_posted": 100,
+    "P3_words": 100
+   }
+  },
+  "heldout_orders_regenerated": true,
+  "n_train_perms_before": {
+   "before4": 21,
+   "before5": 117,
+   "before6": 717,
+   "before7": 5037,
+   "before8": 40317
+  }
+ },
+ "gen_version": "t2bl-data-v1",
+ "code_sha256": {
+  "scripts/t2bl_common.py": "3833df168a1b2d90e1fead73e9b0f56bcf492f20e205803b31b6983b618c6430",
+  "scripts/t2bl_make_data.py": "9128dc7e890c7d85a3852c57ad7f8c49943f98b32f90a7067e8c3be48326c95f",
+  "scripts/t2bl_audit.py": "c627111187aa31ae00de2d200549d10c146ccc2f8174ddd5eb684752256a13e7",
+  "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+ },
+ "harvest": true,
+ "union": {
+  "rule": "lbeam_problems.load_exclusions(extra_data=False) (l1_make_ood.harvest_historical skips HSKILL_CONFIRM_V2* by name, never opened; rcwmt.bank.load_exclusions() NOT called; every pinned source; data/bank_p3_oor.jsonl) + every payload and rolled-out multi-event transition of every other data/**/*.json[l] file except t2bl_* + the binding transitions of docs/ledger_beam/dev_set.jsonl, docs/ledger_beam/dev2_primary.jsonl, docs/ledger_beam/dev2_oor.jsonl, docs/ledger_beam/LB_CONFIRM_DRAW.jsonl + every {before, event} payload under docs/ except docs/t2b/ledger/",
+  "n_payloads": 329532,
+  "n_operative": 320334,
+  "sources": {
+   "historical": {
+    "payloads": 6464,
+    "operative": 6258,
+    "skipped_by_name_never_opened": [
+     "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+     "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+     "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+     "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+    ]
+   },
+   "bank_pilot.json": {
+    "payloads": 15629,
+    "operative": 15278,
+    "sha256": "7c9b432c30e1abf142e10ec7413ee8383c6b51c5410a4fe7246906f7af659e7a"
+   },
+   "bank_confirm.json": {
+    "payloads": 13552,
+    "operative": 13247,
+    "sha256": "8bc6e2f8a8c7cae5b7b66293ef12b0efc440c281f820eca9d384a659b26a6a16"
+   },
+   "bank_confirm2.json": {
+    "payloads": 12163,
+    "operative": 11903,
+    "sha256": "fafb13e573a20eb5045ef204a7cdbf8da4393d21604245e9df26995f5be58aea"
+   },
+   "bank_s4000.json": {
+    "payloads": 255745,
+    "operative": 250614,
+    "sha256": "af1336c261375524a4a6eaf92cc48dc76b1159df093ce2705d279688f22bb4ce"
+   },
+   "t2_train.jsonl": {
+    "payloads": 1501,
+    "operative": 1496,
+    "sha256": "bf5a22765757856517496b64e54d4d7b307dbb50af8f4e30540ff69937a1d744"
+   },
+   "t2_eval.jsonl": {
+    "payloads": 600,
+    "operative": 600,
+    "sha256": "78b5c02255e4ee7c53d4b91d66c0ac2cae4427e927f47832e297e5ffde54eb59"
+   },
+   "t2_eval_xframe.jsonl": {
+    "payloads": 600,
+    "operative": 600,
+    "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de"
+   },
+   "t2_eval_supp.jsonl": {
+    "payloads": 360,
+    "operative": 360,
+    "sha256": "2c1efbc207a4c56f2ed135a4987dc4aa118353b35292e243c74b282459ff9086"
+   },
+   "SELECT-VIEWS-001": {
+    "payloads": 384,
+    "operative": 383,
+    "sha256": "7dd53f2a751b54c349c2ef571e8f9c5153737f4a1ed3df5eafe25f95980e78a3"
+   },
+   "l1_ood_bank.jsonl": {
+    "payloads": 600,
+    "operative": 600,
+    "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c"
+   },
+   "fds/T_BANK.json": {
+    "payloads": 192,
+    "operative": 192,
+    "sha256": "26c01effe9610230f7876bbe118792f85094605fe3dde5f873c78c67e1c493ba"
+   },
+   "fds/T_BANK_V2.json": {
+    "payloads": 192,
+    "operative": 192,
+    "sha256": "fc094136a5b581cb9cc03393b1e5959ed8f69247638c81e37cf7f68fbf132e01"
+   },
+   "cc1/T_BANK_V3X.json": {
+    "payloads": 864,
+    "operative": 864,
+    "sha256": "173aa372466d5e3cc8efbebe4cc7e7ba09a8eb34de4598ce8f9d96a2b8e6557c"
+   },
+   "cc2/STAGE_A_T_V3X.json": {
+    "payloads": 15,
+    "operative": 15,
+    "sha256": "635c9c7ea6851d4a0147a299ecd158a880b91fa5b9046b0af787d2ebbd6eb0d4"
+   },
+   "cc2/T_BANK_V4.json": {
+    "payloads": 864,
+    "operative": 864,
+    "sha256": "82f0a6423dd6b58b81319708e7fbda7c5880b9734742323ea11574ff354c93c0"
+   },
+   "bank_p3_oor.jsonl": {
+    "payloads": 1720,
+    "operative": 860,
+    "sha256": "0fd18295d6eaa84d0f451c94b81ea1ecf37ab88e8ab298b58820d80ac740bf12"
+   },
+   "data/t2_eval_substrata.jsonl": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "240ffddc7f50f7996716260ad2efe96756a2eacfd983f99f2878b93854ffdef6",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_dev.jsonl": {
+    "payloads": 1050,
+    "operative": 1050,
+    "sha256": "46421b99aabad7e59006dde343b124a2d2ce98690586487e9b05cc096c998a54",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_bbits.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "f95f6a802858ff29558b440f7daf88f5c2cf29559b6a07277bf494146450565b",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_dint.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "c57187b4b9b152d3647cf21d77fb3ada25f03eb814994de50bb6976b92e6365e",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_ffill.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "d92c74af3a26a55a71d6793ae8823f8aa04164959b0cf77f8dda8706c9b84ab7",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_ffill.rev2_rowmatched.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "527fc4639d5747c315c8290414c4a3ba8e8270baf1ce8d40592b1d420d38399a",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_sd_bbits.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "f190b34738cd219c98041d755f21143dc1b7c75e4b340bea217f1ddded71fea3",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_sd_dint.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "3cdd5bba030d0f7829a589e25d1030bea3a6f414267a7287dfe8842076040a78",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_sd_ffill.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "159d02ef590b7b597c42d86c2c8cf8e603de9bb83394c88f5e094cb325dba96f",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_sd_strace.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "d3577e68451b8fbc38b46dd8f1d4a0d7804fdbcba23f81908c067ec81ac22462",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2bp_train_strace.jsonl": {
+    "payloads": 1500,
+    "operative": 1500,
+    "sha256": "ef8fba31d9a1606b300be3b965955ee29f4a5ae4c65333d9aba64dacc961bc66",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_chains.jsonl": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
+    "multi_event_objects": 384,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_dev.jsonl": {
+    "payloads": 1380,
+    "operative": 1380,
+    "sha256": "bd6189f6cc860741ac497c5828f5c3c40f674e6926fab2bb9bf83edddc39e43f",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_dev_hs.jsonl": {
+    "payloads": 681,
+    "operative": 680,
+    "sha256": "0c68e7f58891fa7794dea561981a985ac69c99d37bd0321f64b219257dc22e44",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_chains.jsonl": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
+    "multi_event_objects": 384,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_dev.jsonl": {
+    "payloads": 1100,
+    "operative": 1100,
+    "sha256": "503d7686a38db51ae1a5ef59ee6b67c55defdc00f2a967562d1680d0877f02e8",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_dev_hs.jsonl": {
+    "payloads": 401,
+    "operative": 400,
+    "sha256": "1ced9b71716abb9883629b05e661b37b0c9fb518fa51cbaeca107511a7861939",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_train_filler.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "726134cd2ed5a9cda6fc53ae4a3b65a96f8325afda12b80edc42e43736f77e5a",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_train_plain.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "058acce806b2e40f087098387c4921a80440644fe1b4cf599008350f213e96b3",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_train_sd_filler.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "e99f4f5f7015451c5e372ef4b821fbfc796d26fe0e5bbad98162144944d31bcd",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_train_sd_plain.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "4c679f3596780237c57436b32be8a74723f1272007a5222957b5a1d09d516eef",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_train_sd_trace.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "941c14084708db53d01db7d9cf8589f12adfe5fc18e5bae25a8017b0e8ebc68e",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev3/t2br_train_trace.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "81f4af025c254c97e86bce289ec8de3ded021cca6c9b85197d5e7c62db43a1c1",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_chains.jsonl": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
+    "multi_event_objects": 384,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_dev.jsonl": {
+    "payloads": 1200,
+    "operative": 1200,
+    "sha256": "9aac40deffd678a4bdefffbb290081872015c88ea38296001c671e4067f46102",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_dev_hs.jsonl": {
+    "payloads": 501,
+    "operative": 500,
+    "sha256": "61845fbfc8635423257fac7c52b3ed1c70d19dd799720ca5f0e79866af1764f8",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_train_filler.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_train_plain.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_train_sd_filler.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_train_sd_plain.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_train_sd_trace.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev4/t2br_train_trace.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_chains.jsonl": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
+    "multi_event_objects": 384,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_dev.jsonl": {
+    "payloads": 1280,
+    "operative": 1280,
+    "sha256": "8c1566b5c58df6fb373298e9b632f0acdb23931c02a5ff41dbf692420d2d3636",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_dev_hs.jsonl": {
+    "payloads": 581,
+    "operative": 580,
+    "sha256": "ee86bb12ffe84bd46267b49cc1eaa9a3c98c3120b42fcfe94c53f9685ae245a5",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_train_filler.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_train_plain.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_train_sd_filler.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_train_sd_plain.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_train_sd_trace.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev5/t2br_train_trace.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_chains.jsonl": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "fe15c2b77c549942f79c389987404c96b691dd20efd006c3465319b800f44a62",
+    "multi_event_objects": 384,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_dev.jsonl": {
+    "payloads": 1380,
+    "operative": 1380,
+    "sha256": "bd6189f6cc860741ac497c5828f5c3c40f674e6926fab2bb9bf83edddc39e43f",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_dev_hs.jsonl": {
+    "payloads": 681,
+    "operative": 680,
+    "sha256": "0c68e7f58891fa7794dea561981a985ac69c99d37bd0321f64b219257dc22e44",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_train_filler.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_train_plain.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_train_sd_filler.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_train_sd_plain.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_train_sd_trace.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_superseded/rev6/t2br_train_trace.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_filler.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "4e207129c97b88898145fa43ee6f29573d2e16bc6a4bff9a98bde54b5cd5a433",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_plain.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "3540a991710b8898ffc733bfd3da1d81023b5bf579abd7df9cefe884e5bab890",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_sd_filler.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "01165efe0d1f385905cb30f91e001c6852473bdb671d0f2868e6f1e656227011",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_sd_plain.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "d3de9554d31c3c7fc234554d19f83fe9d2f3ce38c5c9893d6ca9c12a4a8e43cc",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_sd_trace.jsonl": {
+    "payloads": 804,
+    "operative": 750,
+    "sha256": "cc9128c965c12293c4e32fbfb69bd05ba7bb640ffa199bff5320c5b76102e3a2",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "data/t2br_train_trace.jsonl": {
+    "payloads": 750,
+    "operative": 750,
+    "sha256": "c9cb9238e12a66ce9c93ad70639f5f8174b4ff66ed142dcbca3f590b13ae51dd",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "docs/ledger_beam/dev_set.jsonl": {
+    "payloads": 3898,
+    "operative": 3797,
+    "sha256": "a64f1424864fb9e3ab3c1e105a1b2d08843e03aeecd49687017bebebeb93c3ed",
+    "kind": "binding transitions of a spent PREREG-LB instance set"
+   },
+   "docs/ledger_beam/dev2_primary.jsonl": {
+    "payloads": 3145,
+    "operative": 3071,
+    "sha256": "bb63aef48262f4643e8bc5bfc97990ee71f43ff8bee4a047e0603b04c1f10d05",
+    "kind": "binding transitions of a spent PREREG-LB instance set"
+   },
+   "docs/ledger_beam/dev2_oor.jsonl": {
+    "payloads": 775,
+    "operative": 759,
+    "sha256": "2d497c88fbb133318921529bf2d4327cf10617a14b5bd0ec3790fce166427439",
+    "kind": "binding transitions of a spent PREREG-LB instance set"
+   },
+   "docs/ledger_beam/LB_CONFIRM_DRAW.jsonl": {
+    "payloads": 4673,
+    "operative": 4536,
+    "sha256": "4fff07389cb1ac52b9d47773c7fd3a83f2d46681866bbdc82f9370889c3f6e55",
+    "kind": "binding transitions of a spent PREREG-LB instance set"
+   },
+   "docs/l1/ood_bank.jsonl": {
+    "payloads": 600,
+    "operative": 600,
+    "sha256": "ac665c115b8c098e6bf58f6182a4a5a73b6fa1d87401afb1b3a55eeb165e940c",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "docs/prereg3/P3_DRYRUN.json": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "33dbee65d9db517917ab00196e666f8a494ba94f5ad435a22e6e02d73862de33",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "docs/prereg3/superseded/bank_p3_oor.v1.jsonl": {
+    "payloads": 1582,
+    "operative": 600,
+    "sha256": "9e7108df6aa681b8f08769b2e37b976933c8406ffd671034f542e4068881b545",
+    "multi_event_objects": 80,
+    "multi_event_transitions": 320
+   },
+   "docs/prereg3/superseded/bank_p3_oor.v1.SOURCE.json": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "a3299de6cf9426df9f1635a086ff96a3d9383feae769acf838f86a10411f8e5e",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "docs/t2_review/t2_eval_xframe.jsonl": {
+    "payloads": 600,
+    "operative": 600,
+    "sha256": "ddc0d7982ba163f78475af9f5f803dc76ba167ea56d6cc7999fd220d172302de",
+    "multi_event_objects": 520,
+    "multi_event_transitions": 240
+   },
+   "docs/t2b/prereq/AUDIT.json": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "140f5df7cb61bca999cc206df26307627f41ccf2a31628b185ec0f4c0e288ea7",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "docs/t2b/prereq/AUDIT_canonical.json": {
+    "payloads": 0,
+    "operative": 0,
+    "sha256": "835aa885155b2e91d9e4c0856c9cc2319574b82280a3b39e8059a3def04f6974",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   },
+   "docs/t2b/register/AUDIT.json": {
+    "payloads": 2,
+    "operative": 0,
+    "sha256": "7be34a2ac220f43a3ffd3840db9c8a0d000f26d8adb7f4e330489db414afa9c0",
+    "multi_event_objects": 0,
+    "multi_event_transitions": 0
+   }
+  },
+  "errors": [],
+  "skipped_by_name_never_opened": [
+   "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
+   "hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json",
+   "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json",
+   "hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json"
+  ]
+ },
+ "regenerates_from_seed_and_rejections": true,
+ "built_local": "2026-10-10 09:57:36 -0500",
+ "no_model_call": true,
+ "torch_imported": false
+}

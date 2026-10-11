@@ -301,11 +301,17 @@ These are provisional and will be revised once PREREG-1 resolves.
 
 ## 7. Next steps
 
-0. **PREREG-3 is done: TRIGGER (§3c).** Roadmap decision point 1 has fired: the de-shortcut kits (D-34) switch on surface-diversified rule data before any training, and their confirmations use out-of-range primaries.
-   - **5a, prerequisite representation:** integer, trace and bitstring answer formats.
-   - **5b, register trace:** plain, trace and filler formats, in the joint `cmp/calc/after` format with BWM.
-   - **5c, retention suite:** being built on CPU.
-   - **Joint item 3:** beam search over ledger with T2 as F inside BWM's planner, restricted to T2's verified range.
+0. **Current plan:** `docs/roadmap/JOINT_PLAN_2026-10-10.md` (D-45).
+   - **Done:** PREREG-3 (§3c), PREREG-LB (§3d) and the 5c retention suite (frozen, dev selection R17).
+   - **5a screen done (R20): WINNER = B-bits.**
+     - With a bitstring state and an explicit applicability flag, the T2 recipe learns the bitwise precondition rule: int-add-wrong 0.83, 10/12-bit 0.80, 4-step chains 0.84 exact, false copy 0.07.
+     - The decimal format fails (0.10) and the trace format copies.
+     - The held-out surface halves the apply accuracy (K4 0.42).
+     - This is an interface result, not decimal skill.
+     - Seeds 1–2 are queued.
+   - **5b register trace screen (D-44):** queued.
+   - **Next:** T2b-ledger, a surface-diversified ledger adapter, and its sealed PREREG-5. PREREG-5 checks the held-out-surface out-of-range map, LB-style planning on the held-out surface and the 5c guard.
+   - **Then:** the joint PREREG-4.
 
 1. **RCWM-T2** (3 seeds done, R13 and addendum; PREREG-2 frozen 2026-10-08 15:34 and running on a fresh sealed bank): a rule-coverage LoRA on frozen Titan-Sparse, using 1,501 fresh rows stratified over void, inapplicable, mix and wrap cases.
    - The ledger fix replicates in all three seeds: regret drop +0.47 / +0.41 / +0.48.

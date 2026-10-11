@@ -1,0 +1,1 @@
+Superseded T2b-ledger build of 2026-10-10 14:45 (this session; never used by any run): replaced at 14:55 because 15% of the diversified training slots now use the exact canonical surface, so non-void training words also occur on the canonical frame.

@@ -1,0 +1,179 @@
+{
+ "ok": true,
+ "n_cases": 15,
+ "cases": [
+  {
+   "case": "all seeds good -> PROCEED",
+   "want": "PROCEED",
+   "got": "PROCEED",
+   "patterns": [],
+   "ok": true,
+   "headline": "DEV GATE: PROCEED",
+   "sentence": "In all three T2b-ledger seeds, on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) the adapter left held-out non-posted statuses unchanged on 0.95 of rows (each >= 0.80; T2 s0 0.03, OFF 0.30), copied the posted twins on 0.00 (each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 0.01; each >="
+  },
+  {
+   "case": "HS_words exactly 0.80 in every seed -> PROCEED (boundary)",
+   "want": "PROCEED",
+   "got": "PROCEED",
+   "patterns": [],
+   "ok": true,
+   "headline": "DEV GATE: PROCEED",
+   "sentence": "In all three T2b-ledger seeds, on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) the adapter left held-out non-posted statuses unchanged on 0.80 of rows (each >= 0.80; T2 s0 0.03, OFF 0.30), copied the posted twins on 0.00 (each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 0.01; each >="
+  },
+  {
+   "case": "HS_words 0.79 in s1 -> PARTIAL heldout_below_bar + seed_disagreement",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "heldout_below_bar",
+    "seed_disagreement"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words on the combined held-out surface below 0.80 (s0 0.95, s1 0.79, s2 0.95); the seeds disagree on G1. The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "ID 0.05 below T2 s0 exactly -> PROCEED (boundary)",
+   "want": "PROCEED",
+   "got": "PROCEED",
+   "patterns": [],
+   "ok": true,
+   "headline": "DEV GATE: PROCEED",
+   "sentence": "In all three T2b-ledger seeds, on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) the adapter left held-out non-posted statuses unchanged on 0.95 of rows (each >= 0.80; T2 s0 0.03, OFF 0.30), copied the posted twins on 0.00 (each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 -0.05, s1 -0.05, s2 -0.05; each"
+  },
+  {
+   "case": "ID 0.06 below T2 s0 in s2 -> PARTIAL in_distribution_cost",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "in_distribution_cost"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: in-distribution accuracy more than 0.05 below T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 -0.06). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "held-out posted twins copied 0.10 -> PROCEED (boundary)",
+   "want": "PROCEED",
+   "got": "PROCEED",
+   "patterns": [],
+   "ok": true,
+   "headline": "DEV GATE: PROCEED",
+   "sentence": "In all three T2b-ledger seeds, on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) the adapter left held-out non-posted statuses unchanged on 0.95 of rows (each >= 0.80; T2 s0 0.03, OFF 0.30), copied the posted twins on 0.10 (each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 0.01, s1 0.01, s2 0.01; each >="
+  },
+  {
+   "case": "held-out posted twins copied 0.12 in s0 -> PARTIAL copy_on_heldout_surface",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "copy_on_heldout_surface"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: posted twins on the held-out surface copied above 0.10 (s0 0.12, s1 0.00, s2 0.00). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "trained words learned, held-out words base-like -> TRIGGER WIDENED",
+   "want": "TRIGGER_WIDENED",
+   "got": "TRIGGER_WIDENED",
+   "patterns": [],
+   "ok": true,
+   "headline": "DEV GATE: STOP (TRIGGER WIDENED)",
+   "sentence": "In all three seeds the adapter treated the TRAINED non-posted words as no-ops (0.95, each >= 0.80) but HELD-OUT words on the combined held-out surface only on 0.10 of rows (each <= 0.30; T2 s0 0.03): the surface augmentation widened the trigger set; it did not teach the stated rule."
+  },
+  {
+   "case": "held-out words exactly 0.30 -> TRIGGER WIDENED (boundary)",
+   "want": "TRIGGER_WIDENED",
+   "got": "TRIGGER_WIDENED",
+   "patterns": [],
+   "ok": true,
+   "headline": "DEV GATE: STOP (TRIGGER WIDENED)",
+   "sentence": "In all three seeds the adapter treated the TRAINED non-posted words as no-ops (0.95, each >= 0.80) but HELD-OUT words on the combined held-out surface only on 0.30 of rows (each <= 0.30; T2 s0 0.03): the surface augmentation widened the trigger set; it did not teach the stated rule."
+  },
+  {
+   "case": "held-out words 0.31 in one seed -> PARTIAL (not trigger)",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "heldout_below_bar"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words on the combined held-out surface below 0.80 (s0 0.31, s1 0.20, s2 0.20). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "trained words below bar and held-out low -> PARTIAL trained_words_below_bar",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "heldout_below_bar",
+    "trained_words_below_bar"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words on the combined held-out surface below 0.80 (s0 0.10, s1 0.10, s2 0.10); even the trained non-posted words below 0.80 (s0 0.60, s1 0.60, s2 0.60). The per-stratum, per-variant table follows."
+  },
+  {
+   "case": "everything fails -> PARTIAL with every pattern but seed disagreement",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "heldout_below_bar",
+    "in_distribution_cost",
+    "copy_on_heldout_surface",
+    "trained_words_below_bar"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: held-out words on the combined held-out surface below 0.80 (s0 0.50, s1 0.50, s2 0.50); in-distribution accuracy more than 0.05 below T2 s0's (ON - T2 s0: s0 -0.14, s1 -0.14, s2 -0.14); posted twins on the held-out surface copied above 0.10 (s0 0.30, s1 0.30, s2 0.30); even the trained non-posted words below 0.80 (s0 0.50, s1 0.50, s2 0.50). The per-stratum, pe"
+  },
+  {
+   "case": "failed anchor -> NO VERDICT",
+   "want": "NO_VERDICT_INSTRUMENT",
+   "got": "NO_VERDICT_INSTRUMENT",
+   "patterns": [],
+   "ok": true,
+   "headline": "DEV GATE: NO VERDICT (instrument)",
+   "sentence": "No gate verdict: an evaluation turn has no passing anchor."
+  },
+  {
+   "case": "incomplete run -> NO VERDICT",
+   "want": "NO_VERDICT_INSTRUMENT",
+   "got": "NO_VERDICT_INSTRUMENT",
+   "patterns": [],
+   "ok": true,
+   "headline": "DEV GATE: NO VERDICT (instrument)",
+   "sentence": "No gate verdict: DONE.json missing."
+  },
+  {
+   "case": "a copier on the held-out surface -> PARTIAL copy_on_heldout_surface",
+   "want": "PARTIAL",
+   "got": "PARTIAL",
+   "patterns": [
+    "copy_on_heldout_surface"
+   ],
+   "ok": true,
+   "headline": "DEV GATE: STOP (PARTIAL)",
+   "sentence": "Neither PROCEED nor TRIGGER WIDENED: posted twins on the held-out surface copied above 0.10 (s0 1.00, s1 1.00, s2 1.00). The per-stratum, per-variant table follows."
+  }
+ ],
+ "patterns_covered": [
+  "copy_on_heldout_surface",
+  "heldout_below_bar",
+  "in_distribution_cost",
+  "seed_disagreement",
+  "trained_words_below_bar"
+ ],
+ "verdicts_covered": [
+  "NO_VERDICT_INSTRUMENT",
+  "PARTIAL",
+  "PROCEED",
+  "TRIGGER_WIDENED"
+ ],
+ "code_sha256": {
+  "scripts/t2bl_gate.py": "b8fe27416f92904b565291bdcb024bbb0598fcc7ac43216e12148e79a54cd7ad",
+  "scripts/t2bl_common.py": "f310f461af106a973ed9d8e80d3819de18d2101d446cff7bc57478fb53567dae",
+  "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+ }
+}

@@ -855,3 +855,68 @@ Times are local (CDT). Entries are append-only.
     - Its sealed confirmation covers four things: PREREG-3's out-of-range map on fresh held-out surfaces, non-inferiority to T2 s0 in distribution, the 5c retention guard, and LB-style planning on the held-out surface (today 5/180).
   - **Shared wording with BWM D-54:** "generalises to unseen X" vs "trigger widened" vs "partial".
   - **Stale lock:** BWM cleared its own stale bundleE lock under its protocol at about 09:27 and wrote turn.json (last = bwm).
+- **Erratum to D-40/D-41 (joint with BWM PX-07, 2026-10-10).**
+  - **What was wrong:** D-41's "Exclusion union: 315,081 payloads from 37 sources" quoted an intermediate console line printed by `lbeam_run.py --freeze`, before the data/ subdirectories, `bank_p3_oor` and the spent dev sets were added.
+  - **Correct figures:** the sealed record `docs/ledger_beam/LB_CONFIRM_DRAW.SOURCE.json` has 58 sources, 322,899 payloads and 314,850 operative contents. RUN_TEST_REHEARSAL matches.
+  - **Effect:** none on validity (overlap 0/0; `--verify` ok).
+  - **Roadmap numbering:** from here on, RCWM cites JOINT_ROADMAP_2026-10-08 numbering. RCWM's "item 6 horizons" becomes "R-H (horizons)" and "item 5 dissect T2" becomes "R-D (dissect T2)".
+- **I-33 Third user reboot (2026-10-10, boot 14:09:22); recovered 14:21–14:22.**
+  - **Before the reboot:**
+    - 5a ran 09:27–12:59. The D-int and S-trace arms finished (T, E1–E4). S-trace training took 5,967 s against 3,942 s planned, so the B-bits arm was deferred by the turn cap (exit 5, as designed).
+    - BWM's bundleE turn ran from 12:59 and released at 14:08:59 (turn.json last = bwm).
+    - The reboot came 23 s later. No lock was held and nothing was lost on either side.
+  - **Recovery:**
+    - 14:21: watchdog relaunched.
+    - 14:22: chain relaunched. 5a's remaining B-bits arm acquired the lease at 14:22 and is training.
+    - The T2b-ledger build workflow (wf_ac99b655-207, cut off earlier by a usage limit) was resumed with an interruption note.
+- **D-46 5c retention confirmation for BWM's release adapters (BWM PX-04), queued as hook 85 (2026-10-10 about 14:40).**
+  - **Adapters:** BWM's BW_Fdelta_s0 and BW_Pa_v2_s1, PEFT r16/α32 on FP32 Titan-Sparse. Their sha256 pins, as sent by BWM, were verified on disk:
+    - BW_Fdelta_s0: model 2ed0bb00…, config 3038c779…;
+    - BW_Pa_v2_s1: model ee1c5aec…, config f6a2c4ef….
+  - **Hook `scripts/queue_hooks/85_retention_bwm.sh`** (sha 8d0e6e0b…):
+    - It re-checks the pins and skips the run on any mismatch.
+    - It mints ONE sealed confirmation draw at run time (OS-entropy seed), records it in `docs/retention/BWM_RELEASE_DRAW.txt`, and never re-mints.
+    - It runs the frozen suite with arms OFF, T2 s0, Supa, x_bwf and x_bwpa (`ret_run.py --mode confirm`).
+    - On deferral it sleeps 60 s before its one re-call, as agreed with BWM. Then it runs the registered analysis once.
+  - **GPU:** 0.46–1.11 h, one RCWM turn. It enters the queue at the next fresh chain (after 5a, at a waiting point), behind 5b (80).
+  - **Rule:** the result is reported to BWM as computed. Any vault or HF decision remains the user's.
+- **R19 Independent replication of PREREG-3 by RCX (exploratory, inference only, CPU; RCX R-03, commit 980c360 on its branch).**
+  - **Instrument:** RCWM's verbatim one-step ledger frame (only the status clause swapped for a supplied rule sentence; a verbatim control gives the same results), with fresh status words disjoint from PREREG-3's 16. Arms: OFF and T2 s0, sha-verified.
+  - **Fixed posted rule:** T2 gives a no-op for `void` 1.00 and its near-misses 0.97, but 0.00 for unseen real, nonce and posted-like words, all errors applied as posted. This replicates "trigger widened" (case/morphology), not "generalises".
+  - **Rules varied in context:** OFF and T2 give a no-op in 1 of 280 cases that require one, with rule-polarity sensitivity 0.00. Neither model reads a supplied rule.
+  - **Consequence for T2b-ledger / PREREG-5 wording:** fixed-rule surface diversification can at most show "follows the frame's fixed rule on unseen surfaces". It cannot show reading a supplied rule, which needs rule-varied training (RCX's native cells). PREREG-5's limits will say so.
+  - **Offer:** RCX proposes cross-scoring once both adapters exist: RCWM's map on RCX adapters, RCX's RCL battery on T2b-ledger. Accepted in principle.
+- **BWM queue and user decisions, for planning (BWM D-65/D-66, reported 2026-10-10).**
+  - **User decisions:**
+    - Vault: not now. BWM re-asks after its item-7 seed gate, RCWM's 5c run on its adapters (D-46) and an F-08 caveat in its card.
+    - Legacy BWM jobs stay deferred.
+    - If B3 meets its bar, its H1/H2 hard runs precede item 7.
+    - Item 7: independent replicates R1/R2 plus anchor R0, on a fresh n = 40 set, prereg sha 956a0dc4….
+    - Item 9 (PlanBench Logistics): CPU scoping first.
+  - **BWM GPU queue:** bundleE (B3 remainder, B3 analyze and gate), then bundleH (H1+H2, about 10 GPU-h, only if B3 is "met"), then bundleI (item 7, about 6 BWM turns). `blocks_planner` stays pinned at 18a5f22b.
+  - **RCWM queue under strict alternation:** 5a (running), 5b (80), the 5c run on BWM's adapters (85), the T2b-ledger seeds, then PREREG-5 and PREREG-4.
+- **R20 5a prerequisite representation screen: WINNER = B-bits (16:29, 2026-10-10; dev-bank screen, not a confirmation).**
+  - **Run:** `runs/t2bp/sd_s0`, surface-diversity build, seed 0, T2 recipe, over two RCWM turns (09:27–12:59 and 14:22–16:29). A0 anchors passed in every turn, and the frozen inputs were unchanged.
+  - **Analysis:** the pre-stated rule (revision 4) was applied once: `T2BP_SCREEN.json` a4fb7c72…, `.md` b34250d1….
+  - **Results, adapter ON** (IAW / OOR 10-12-bit / K4 4-step chains / HS held-out surface / false copy / false apply / R):
+
+    | Arm | IAW | OOR | K4 | HS | FC | FA | R | Status |
+    |---|---|---|---|---|---|---|---|---|
+    | D-int (decimal) | 0.10 | 0.45 | 0.13 | 0.46 | 0.73 | 0.49 | 0.286 | excluded |
+    | S-trace (cmp/calc/after) | 0.59 | 0.56 | 0.13 | 0.54 | 0.29 | 0.21 | 0.451 | excluded (FC > 0.25) |
+    | B-bits (bitstring state plus an explicit applicable flag) | 0.83 | 0.80 | 0.84 | 0.74 | 0.07 | 0.14 | 0.804 | WINNER |
+
+  - **B-bits per stratum:** app_add 0.94, app_delete 0.95, app_unchanged 1.00, inapplicable 0.86–0.97.
+  - **Held-out surface (E3/E4):** B-bits keeps its no-op strata (0.98–1.00) but its apply strata fall (app_add 0.34, app_delete 0.43, IAW 0.43). K4 on the held-out surface is 0.42 against 0.84 in-surface, a gap of 0.425 [0.35, 0.50]. Surface sensitivity is reduced, not removed.
+  - **Interpretation (exploratory):**
+    - In the decimal frame, a fixed-recipe LoRA cannot learn the bitwise precondition rule: D-int IAW 0.10 with a copy shortcut, as in T2.
+    - Given a bit-level interface (bitstring state, explicit applicability flag), the same recipe learns it nearly completely in distribution and largely out of range (10/12-bit 0.80), and 4-step chains become 0.84 exact.
+    - The trace format alone (S-trace) helps the predicate (inapp 0.80–1.00, IAW 0.59) but induces copying.
+    - Scope: this is an interface result. The decimal-to-bits conversion is not done by the model. Per the roadmap's decision point 2, it is reported as "rule learned under a bit representation", not as decimal skill.
+  - **Next:**
+    - Seeds 1–2 of B-bits (hook `87_t2bp_seeds.sh`, sha 8ceb1c6d…; D-47), then a sealed P confirmation, folded into PREREG-4 as the P format.
+    - The filler control is not triggered (S-trace did not win).
+- **D-47 Queue after 5a (2026-10-10 about 19:30).**
+  - **Hook added:** `87_t2bp_seeds.sh`, running seeds 1 and 2 of B-bits only, and only if the frozen screen named B-bits.
+  - **Relaunch:** the chain was relaunched at the 5b waiting point (BWM held the lease) so that it picks up hooks 85 and 87.
+  - **RCWM order:** 5b (80), the 5c run on BWM's adapters (85), B-bits seeds (87), then T2b-ledger (being built).
