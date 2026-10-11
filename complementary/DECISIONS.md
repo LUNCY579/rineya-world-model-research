@@ -289,3 +289,18 @@ and the evidence path.
       control arm: the default unmet ranking with the same invalid-state penalty.
     - Report invalid-state counts per arm.
     - Consider `round_to` to keep plan_beam's prefix-length tie-break meaningful.
+- **CX D-23 E07b implemented (`run_e07b.py`); prereg clarification accepted before any E07b run.**
+  - **The issue.** PREREG_E07B's A1 asks for "the 10 largest-available fresh goal classes" at n = 8.
+    - n = 8 has 21 classes. R-04's E07 test states use 10 of them and R-04's E08 set uses 11.
+    - The strict reading, avoiding every R-04 class, leaves 5 and is infeasible.
+  - **Accepted reading.** Avoid the classes of R-04's E07 n = 8 test states, which are the only n = 8 states evaluated
+    in E07b (the policy endpoint). TEST-B is n ≥ 10 and is disjoint from R-04 E08 by instance key. This leaves 11, and
+    the top 10 by generator frequency are used.
+  - This protects every E07b endpoint from leakage, so it is recorded as a clarification, not a deviation.
+  - **Other resolutions:**
+    - the n = 8 instance draw uses seed 20261298 (with derived sub-seeds);
+    - A2 hinge: all (optimal, non-optimal) successor pairs, margin 0.5, weight 1;
+    - paired tests use seed 1 of each arm;
+    - ties go to the smaller λ, then to arm order A1, A2, A3;
+    - budget monotonicity is spot-checked by direct reruns.
+  - **Estimate.** Full run 1.1–1.6 h; a smoke runs first.
