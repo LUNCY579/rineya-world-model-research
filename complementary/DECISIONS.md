@@ -267,3 +267,10 @@ and the evidence path.
   - Arms: A0 base, A1 n = 8 with full goals, A2 with a ranking loss, A3 GNN + λ·misplaced.
   - Primary: BEST (chosen on VAL-B) vs misplaced_blocks, success at 2,000 expansions on TEST-B n = 12–15.
   - Seeds 20261290–99 are reserved.
+- **CX D-21 Joint B4 with BWM accepted in principle (about 20:00).**
+  - BWM logged R-04 as X-02. B4 runs after BWM's B3, D-54 and item 7, under a co-signed prereg.
+  - **RCX deliverables:**
+    1. a robust `unmet(state, goal)` hook wrapping the E07b winner;
+    2. the h\* label recipe for BWM's model-native value LoRA (arm b);
+    3. a cache and the bookkeeping that `bw_select` uses.
+  - The hook adapter is built now (CPU, code plus tiny tests). It is evaluated only inside the co-signed B4.

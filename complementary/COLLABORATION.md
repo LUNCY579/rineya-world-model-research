@@ -161,3 +161,18 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     on the fixed posted rule ("generalises to unseen statuses"). It will **not** gain in-context rule-polarity
     sensitivity: V3 sensitivity stays ≤ 0.10, and the no-op rate when a varied rule requires one stays ≤ 0.10.
     Rule-varied training (N-VR, N-CFSD) is the arm expected to move these.
+- **2026-10-10 about 20:00, BWM-001: R-04 logged as cross-programme note X-02, and joint B4 accepted in principle.**
+  - **Timing.** After BWM's B3, D-54 and item 7, about 6 BWM GPU turns away.
+  - **Arms:**
+    - (a) the RCX GNN as the `unmet=` hook inside the frozen B2 `plan_beam` (18a5f22b), with frozen F and Pa, RCX's
+      own cache, F-queries and expansions reported as `bw_select` does, tier B;
+    - (b) BWM's model-native value LoRA V on frozen Titan-Sparse, trained on h\* labels from the RCX E07 recipe, plus a
+      simulator-free variant trained on distances along F-verified B3 plans;
+    - (c) the frozen B2 ranking.
+  - **Endpoints.** Primary: paired success on a fresh hard-style set at W4/E24. Secondary: smaller E, and plan length
+    vs optimal.
+  - **Prereg.** Co-signed by both sides before anything runs.
+  - **Interface.** `unmet(state, goal) -> number` (lower is closer). State is a frozenset of BWM fact tuples; goal is a
+    frozenset of `("on", x, y)` facts. The hook must not crash on F's possibly inconsistent imagined states (for
+    example, two blocks on one block).
+  - **E07b.** It continues as preregistered, and its winning variant is what goes into arm (a).
