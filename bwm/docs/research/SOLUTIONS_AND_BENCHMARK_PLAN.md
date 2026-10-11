@@ -41,7 +41,7 @@ The synthesis below is mine. It is reconciled with what was run today; see DECIS
    - So a high 600 score says nothing about the world model unless it is paired against our own no-F arm.
 5. **The credible headline axis is size generalization: PlanBench Blocksworld-hard.**
    - The set: 110 instances, 6-15 blocks, 20-40-step plans.
-   - Zero-shot scores: o1-preview 23.6% (26/110), o1-mini 10% (TMLR 2025, https://arxiv.org/abs/2410.02162).
+   - Zero-shot (direct) scores: o1-preview 23.6% (26/110), o1-mini 0.9% (1/110) (https://arxiv.org/abs/2410.02162, Table 5). **Erratum 2026-10-11 (DECISIONS P-14):** this line previously gave o1-mini 10%, which is its LRM-Modulo (verifier-in-loop) score, not zero-shot.
      DeepSeek-R1 53.6% (PlanBench leaderboard, https://github.com/karthikv792/LLMs-Planning).
    - SFT planners trained on small problems collapse there. Examples: Gemma2-9B LoRA trained on 3-5 blocks falls to
      53% at 6 blocks and 0% at 10; Qwen2-7B SFT gets 0% on obfuscated names.

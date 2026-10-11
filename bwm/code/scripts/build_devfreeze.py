@@ -27,8 +27,10 @@ from bwmn import lm, stats  # noqa: E402
 NAME = "Rineya-Titan-Sparse-BWM-Blocksworld-0.1.0-devfreeze"
 VAULT = Path("C:/Users/clclc/BusinessProject/Chat-Bubble/Rineya_Published_Cores")
 TITAN = VAULT / "Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze"
-PUBLISHED_HARD = {"DeepSeek-R1 (PlanBench leaderboard / TMLR 2025)": 0.536, "o1-preview (TMLR 2025, Table 5)": 26 / 110,
-                  "o1-mini (TMLR 2025)": 0.10}
+# zero-shot / direct prompting only (P-14 erratum: o1-mini's 10% is the LRM-Modulo verifier-in-loop score; direct is 0.9%)
+PUBLISHED_HARD = {"DeepSeek-R1 (PlanBench leaderboard; upstream per-instance file at fc638a1a)": 59 / 110,
+                  "o1-preview (direct prompting; arXiv 2410.02162 Table 5)": 26 / 110,
+                  "o1-mini (direct prompting; arXiv 2410.02162 Table 5)": 1 / 110}
 
 
 def clopper_pearson(k: int, n: int, alpha: float = 0.05):
@@ -129,7 +131,8 @@ def readme(meas, frz, sel_mean):
             txt += f" (unpaired Fisher vs ours, two-sided p = {p2:.2g})"
         lines.append(txt)
     lines.append("")
-    lines.append("Published systems report aggregates only, so these comparisons are unpaired. A difference with two-sided")
+    lines.append("These comparisons use published aggregates and are unpaired (upstream per-instance files exist but are not yet")
+    lines.append("vendored and re-scored with the local VAL; DECISIONS P-14). A difference with two-sided")
     lines.append("p >= 0.05 is not claimed (this applies to DeepSeek-R1).")
     lines += ["", "## What this does and does not show", "",
               "- It shows that a 0.6B frozen core with a *learned* world model and search plans far beyond the problem sizes its",

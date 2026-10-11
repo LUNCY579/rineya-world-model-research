@@ -68,7 +68,7 @@ Item 9 tests: "learned F + search beats S-direct out of size range in a new doma
 | Core | Titan-Sparse FP32, frozen | same |
 | Adapters | two unmerged LoRAs (F, Pa) | same |
 | Trainer | `train_generic.py`, batch 16, lr 1e-4; F 600 steps seed 0; Pa 1000 steps seed 1 | same |
-| Max-len | 256 | **640** (about 13 tokens per action vs 5.3) |
+| Max-len | 256 | **768** (about 13 tokens per action vs 5.3; generated 1-3-package Pa rows reach 690 tokens, review LG-SPEC-1) |
 | F output | delta `{add, del, legal}`, `B.forward_target_delta` / `B.parse_forward_delta` | same functions, unchanged |
 | Pa rows | outcome-conditioned, action-only; every suffix of an optimal plan, plus one noisy plan | same recipe |
 | Planner | `plan_beam` / `plan_direct` (sha 18a5f22b), default `goal_met` / `unmet` | same file, unmodified, default hooks |
@@ -77,7 +77,7 @@ Item 9 tests: "learned F + search beats S-direct out of size range in a new doma
 | New code | (none) | the domain module: simulator, renderer, parser, generator, signature; planner subclasses; `lg_*` scripts |
 
 **Declared deviations:**
-1. Max-len is 640 instead of 256.
+1. Max-len is 768 instead of 256 (peak memory to be re-measured in the bundleL1 smoke test).
 2. K is fixed at 4. B2 selected K = 8; in B2's selection, K4 vs K8 gave val_large 0.600 vs 0.633 at 134.3 vs 256.7 s per instance, and val_v2 0.98 vs 0.98 (`runs/BW_SELECT_v1/select.jsonl`).
 3. Token caps are rescaled to about 14 tokens per action. max_depth goes from 80 to 100, the S-direct M from 256 to 704, and the parse cap from 60 to 96 actions.
 4. The F random walk starts on a teacher-plan state. B2's code starts at init (`blocks_data.py` lines 105-108), though its comment says "states along the optimal plan".
@@ -138,11 +138,11 @@ Item 9 tests: "learned F + search beats S-direct out of size range in a new doma
   - one noisy plan per instance, with one action replaced by a random typed ground action, labelled with the outcome it actually achieves.
 - **F rows:** 12,000 unique (state, action) keys, plus 1,500 validation rows.
   - Start state: chosen uniformly among the teacher plan's states, then 0-7 random legal steps.
-  - Action: 50% legal, drawn uniformly from the applicable typed actions, self-loops included.
+  - Action: 50% legal, drawn uniformly from the applicable typed actions EXCLUDING self-moves, except that self-moves (legal no-ops) make up exactly 5% of the legal rows so the no-op semantics is still taught (review LG-SPEC-2: uniform drawing would make about 36% of legal rows self-moves).
   - The other 50% are illegal: 75% typed actions whose preconditions fail, 25% actions with the right arity but a wrong-type argument.
   - Labels come from the VAL-semantics simulator.
-- **Length.** Rows over 640 tokens (prompt + target + EOS) are dropped and counted before training, because `lm.train_sft` raises on overlength rows (lm.py lines 413-414; D-58 precedent).
-  - Expected count: 0.
+- **Length.** Rows over 768 tokens (prompt + target + EOS) are dropped and counted before training, because `lm.train_sft` raises on overlength rows (lm.py lines 413-414; D-58 precedent).
+  - Expected count: 0 at 768 (the largest generated 1-3-package row seen in the module tests is 690 tokens).
   - Measured on PlanBench 1-3-package ground-truth rows with the draft prompts: at most 588 tokens.
   - Designers' generated samples reached Pa 567-617 and F 316-329 tokens [VERIFY on the generated data].
 - No PlanBench instance, plan or prompt enters any row.
@@ -151,8 +151,8 @@ Item 9 tests: "learned F + search beats S-direct out of size range in a new doma
 
 | Adapter | Rows | Steps | Batch | lr | Seed | Max-len |
 |---|---|---:|---:|---|---:|---:|
-| `LG_F_s0` | `runs/LG_data/forward_delta_train.jsonl` | 600 | 16 | 1e-4 | 0 | 640 |
-| `LG_Pa_s1` | `runs/LG_data/proposer_actions_train.jsonl` | 1000 | 16 | 1e-4 | 1 | 640 |
+| `LG_F_s0` | `runs/LG_data/forward_delta_train.jsonl` | 600 | 16 | 1e-4 | 0 | 768 |
+| `LG_Pa_s1` | `runs/LG_data/proposer_actions_train.jsonl` | 1000 | 16 | 1e-4 | 1 | 768 |
 
 - These are the `BW_Fdelta_s0` and `BW_Pa_v2_s1` recipes (their `metrics.json` args), except max-len.
 - Checkpoints resume across turns (lm.py lines 437-452).

@@ -1,0 +1,49 @@
+{
+ "args": {
+  "set": "hard",
+  "planner": "beam",
+  "W": 4,
+  "E": 24,
+  "max_depth": 80,
+  "step_cap": 24,
+  "R": 12,
+  "fwd_fmt": "delta",
+  "max_batch_tokens": 5000,
+  "M": 80,
+  "P": 1,
+  "prop_batch_tokens": 6000,
+  "freeze": "runs/FREEZE_B3_H2.json",
+  "shard": "5/8",
+  "n": 0,
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v3_s1/adapter",
+  "mode": "actions",
+  "fwd": "lm",
+  "fwd_adapter": "runs/BW_Fdelta_s0/adapter",
+  "K": 8,
+  "eval_seed": 0,
+  "val": true,
+  "out": "runs\\BW_B3_HARD\\h2_beam\\shard_5of8"
+ },
+ "summary": {
+  "success": 0.9285714285714286,
+  "n": 14,
+  "verified_rate": 0.9285714285714286,
+  "verification_precision": 1.0,
+  "wall_s": 4158.4,
+  "f_model_queries": 3057,
+  "f_queries_per_instance": 218.4,
+  "proposer_tokens_per_instance": 8748.1,
+  "expansions_per_instance": 14.5,
+  "val_success": 0.9285714285714286,
+  "val_disagreements": 0,
+  "success_by_blocks": {
+   "9": 1.0,
+   "11": 1.0,
+   "12": 1.0,
+   "13": 1.0,
+   "14": 1.0,
+   "15": 0.0
+  }
+ }
+}

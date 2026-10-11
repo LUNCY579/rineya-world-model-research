@@ -878,3 +878,226 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
   - **Consequence:** the registered H1/H2 hard runs are unlocked (H_GO.json; `FREEZE_B3_H1/H2` written by the gate).
     bundleH's two jobs were merged into bundleE after D-54, so they use the rest of BWM's next turn. The separate
     bundleH queue entry was removed. Queue: bundleE (FK → key-order eval → H1/H2) → bundleI (item 7).
+- **X-03 Cross-programme note: RCX R-05** (commit 5e05a5b; DEV pilot, one seed, not a claim).
+  - **Setup:** a rule-varied LoRA (N-VR), D-03 recipe on frozen Titan-Sparse.
+  - **Canonical rule wording:** it executes in-context ledger rules (composite 0.964 vs OFF 0.325 and T2 0.400;
+    rule-polarity sensitivity 1.00; unseen statuses 1.00).
+  - **Held-out paraphrases of the rule:** it drops to 0.594, falling back to the base model's apply-everything prior.
+  - **Reading:** the same surface-anchoring family as BWM F-08 (key order) and RCWM PREREG-3/5a (held-out surface).
+    Training-surface diversity (D-54 here; T2b-ledger and N-VR paraphrase cells on the peer side) is the shared next
+    test.
+- **D-68 GitHub export clone moved out of the bundle** (2026-10-11 ~00:35, at RCWM's request), from
+  `Rineya_BWM_001_Research_Bundle/gh_export` to `C:/Users/clclc/BusinessProject/WorldModel/bwm-gh-export`.
+  - **Why:** RCWM's frozen 5c freshness gate scans the whole BWM bundle as an external corpus. The clone mirrors
+    RCWM's own retention dev draw (`rcwm/.../retention/draws/dev_20261121.jsonl`), which produced 202 false "outside"
+    hits. The gate refused to mint the 5c draw for BWM's adapters; no draw was spent.
+  - **State:** the clone was clean and pushed (1442515). `tools/export_bwm.py` locates the repo relative to itself,
+    so nothing else changes.
+  - **Side benefit:** RCWM's banks and draws no longer sit inside any freshness union that scans the BWM bundle.
+- **X-04 Cross-programme note: RCWM 5b register trace screen (R23), registered NO-GO** (failed the mix and swap
+  gates). Its two lessons are central for BWM:
+  - **(1) Traces teach computed conditional predicates.** On out-of-range conditionals the joint cmp/calc/after
+    trace scores 0.90, vs 0.39 for plain answers and 0.41 for the constant-length filler control. On held-out
+    surfaces: 0.66 vs 0.24 vs 0.22. Trace − filler = +0.49, so the gain comes from supervision, not extra decode
+    compute. cmp.ok is 0.99-1.00 on adversarial identification strata. This is the positive half of "computed
+    predicates aren't learned from bare-answer rows" (BWM F-01, RW2 `|2x| <= L`). It makes the RW2 legality trace
+    arm (A3, 5b mirror) a strong candidate. Pre-register it with RCWM's false-copy metric (X-01).
+  - **(2) Narrow LoRA training overwrote an untouched operation:** swap went 1.00 → 0.00 in every arm, with no swap
+    rows in training. Rule for all future BWM adapters: training data includes control-skill rows for every
+    operation the adapter must keep.
+    - B3 already did this (mix_v3 = distillation rows + equal v2 rows), and D-54 FK uses the same transitions.
+    - For item 9 Logistics and any RW2 trace arm, add explicit control rows, and report retention of untouched
+      operations.
+- **D-69 Item 9 CPU-1/CPU-2 done: `bwmn/logistics.py` (eb683a6f…), `tests/test_logistics.py` (423ef5b5…),
+  `scripts/lg_published.py` (5a39ede2…).** Built by an implement → adversarial review (VAL semantics; spec and
+  planner interface) → fix workflow, then re-run independently: 33/33 tests pass (58 s, CPU, no torch).
+  - **Semantics:**
+    - 285/285 PlanBench ground-truth plans valid under the executor and local VAL;
+    - self-moves are legal no-ops, as VAL treats them;
+    - type-wrong actions are rejected;
+    - VAL's plan-text reader is reproduced from probes (39 pinned cases, 6,000 random texts).
+  - **A* teacher:** optimal on all 285 PlanBench instances (equal to Fast Downward's lmcut plans; at most 36k
+    expansions at 4-7 packages). This retires the draft's "[VERIFY] teacher failures at 4-5 packages".
+  - **Signature:** a renaming-invariant signature with 285 classes over 286 files (instances 47 and 48 are
+    isomorphic). Exact against brute-force isomorphism on 161 small states.
+  - **Tokens:** delta target ≤ 26; Pa prompt ≤ 348; generated 1-3-package Pa rows up to 690.
+  - **Published re-score** (`runs/LG_published/PUBLISHED_RESCORE.json`): 1,450 plans in 8 files with 0
+    disagreements among the executor, VAL and the published flags. o1-preview zero-shot PDDL 188/200; GPT-4 one-shot
+    NL 28/200; Llama-3.1-405B zero-shot PDDL 19/200.
+  - **BWM design decisions on the review's open items** (draft updated in place, still unfrozen):
+    - (a) LG-SPEC-1: max-len 768 for both Logistics adapters instead of 640, with peak memory re-measured in the
+      bundleL1 smoke test;
+    - (b) LG-SPEC-2: self-moves fixed at exactly 5% of legal F rows (uniform drawing would make about 36%).
+  - **Remaining for item 9 before the freeze:**
+    - CPU-3 `domain_planner.py`;
+    - CPU-4 harness check;
+    - CPU-5 `lg_*` scripts;
+    - the [VERIFY] items;
+    - the user's confirmation of the defaults.
+- **P-12 (registered, run once): D-54 key-order augmentation, reading PARTIAL** (`runs/BW_KEYORDER/eval.json`;
+  FK adapter ed26cbf7…; prereg with Amendment 1 d2e0d86c…; 240 fresh keys per mode; F0 vs FK paired).
+
+  | Mode | F0 | FK | Paired (FK-only / F0-only) |
+  |---|---|---|---|
+  | canon | 0.992 | 0.963 | 0 / 7, p = 0.016 |
+  | train_order | 0.550 | 0.925 | |
+  | heldout_rev | 0.454 | **0.917** (CI 0.874-0.948) | 130 / 19, p = 1.6e-21 |
+  | heldout_other | 0.496 | **0.950** | 120 / 11, p = 2.6e-24 |
+  | heldout_both | 0.454 | 0.858 | |
+
+  - **Why "partial":** FK is far above F0 on every held-out order, but heldout_rev is below the 0.95 bar and
+    canonical accuracy fell by more than the 0.01 margin.
+  - **Independent check:** all 2,400 prompts rebuilt from the seed with identical hashes; held-out prompts verified to
+    use H1-H3 only; every item re-scored from its text with 0 mismatches.
+  - **Report-only mechanism:**
+    - FK's held-out accuracy (0.917/0.950) equals its accuracy on trained orders (0.925), so the gain transfers to
+      unseen orders. This is evidence against "trigger widened".
+    - Nearly all FK errors are on ILLEGAL actions: canon 100/109 illegal vs 131/131 legal. FK predicts the action's
+      effects with `legal: true` when a precondition fails, e.g. pick-up while holding.
+    - So input augmentation bought order invariance at the price of the computed legality predicate. This is the
+      same failure class as F-01 (RW2) and RCWM's 5a/5b findings.
+  - **Next candidate** (to be pre-registered; not run): FK plus the joint cmp/calc/after trace of Blocksworld
+    preconditions (`traces.bw_parts`), which RCWM's 5b showed teaches computed predicates (X-04). Add a false-copy /
+    false-apply metric and control rows. FK is NOT used in any frozen planner.
+- **P-13 (registered conditional run H1, run once): Pa_v3 S-direct on PlanBench Blocksworld-hard**
+  (`runs/BW_B3_HARD/h1_direct/`; freeze `FREEZE_B3_H1.json` = the B2 direct args with only `pa` → Pa_v3).
+  - **Result:** 13/110 = 0.118, vs the frozen B2 S-direct 5/110. Paired +10 / −2, exact McNemar p = 0.039. VAL agrees
+    on all 110 (0 disagreements).
+  - **By blocks:** 6:1.00, 7:0.00, 8:0.14, 9:0.50, 10:0.23, 11:0.08, 12-15:0.00.
+  - **Truncation** (report-only): 24/110 plans reached the 256-token cap; none succeeded.
+  - **Reading:** search distillation transfers to the real hard set without search. The size of the gain is limited
+    out of range (≥ 12 blocks: 0) and by the frozen token cap.
+  - **H2** (frozen B2 beam with Pa_v3, 8 shards) started at 01:55. It continues across BWM turns before item 7.
+- **X-05 RCX E07b (pre-registered, sha 8a4cbde0…; R-07, commit d9c993c): CLOSED with a hybrid winner.**
+  - **Setup:** GBFS with exact dynamics on 75 fresh full-goal problems of 12-15 blocks.
+  - **Result:** the hybrid (GNN + 1.0 × misplaced_blocks) solves 39/75 at 200 expansions, vs misplaced alone 19,
+    the GNN 28, h_add 13, and unmet-goal (BWM's beam key) 0. At 2,000 expansions: 55 vs 54 vs 35 vs h_add 66 vs 3.
+    Plan suboptimality 1.045 vs h_add 1.97.
+  - **B4 arms updated** (pre-register later, co-signed with RCX), all as `unmet=` hooks in the frozen B2 `plan_beam`:
+    - (a) RCX hybrid, an external learned module;
+    - (a0) misplaced_blocks alone, a hand-written zero-cost control that separates "learned value" from "any better
+      heuristic";
+    - (b) a BWM value LoRA on Titan-Sparse;
+    - (c) the default unmet-goal count.
+- **D-70 B4 (learned critic as `unmet=` hook) draft received from RCX** (commit 117e53a; copied to
+  `research/PREREG_B4_DRAFT.md`, sha 777f5870…). It is a draft: BWM owns execution, the instances and the final
+  text, and it is frozen only after H2 and item 7.
+  - **Arms (as drafted):** c (default), c+pen, a0 (misplaced + penalty), a (RCX hybrid + penalty), b (BWM value
+    LoRA). Primary Holm family of 2: a vs c+pen and b vs c+pen. 110 fresh hard-style instances at the frozen W4/E24.
+  - **BWM answers to the draft's §8:**
+    1. The frozen config is `runs/FREEZE_B2_beam.json` args: K 8, W 4, E 24, R 12, M 80, P 1, max_depth 80, delta F
+       `BW_Fdelta_s0`, Pa `BW_Pa_v2_s1`, eval_seed 0.
+    2. Arm (b) has two variants: b-h* (h* labels, simulator-supervised) in the primary family, and b-sf (distances
+       along F-verified search plans, simulator-free) as a secondary.
+    3. The Pa_v3 cross is decided after H2.
+    4. Instance seed 20261410, n = 110, hard block mix, BWM + RCX exclusions.
+    5. An exact-F oracle ceiling, report-only, if the budget allows.
+    6. RCX exports the h* labelling recipe; BWM generates labels in its own seed range under the exclusions.
+  - **D-70 follow-up:** RCX exported the h* labelling recipe (commit e85acc5:
+    `complementary/experiments/RCX-E07/HSTAR_LABEL_RECIPE.md`; `complementary/rcx/bw/space.py` sha 29d0b420…,
+    numpy and stdlib only).
+    - Exact backward-BFS h* for n ≤ 8; A* h* beyond that, with over-budget states recorded as missing, never dropped.
+    - Splits by goal class, never by state.
+    - BWM will vendor a copy at a pinned sha, or re-implement it, when B4's arm (b) data is built. Labels are
+      generated in BWM's seed range under the joint exclusions.
+- **D-71 Co-sign of RCWM R25: 5c retention of BWM's release adapters** (run confirm_1708484032065101819).
+  **Both RETAINED, GO (5/5 binding) under the registered RULE_CONFIRM.** This is a pass of the low-power retention
+  guard, not a non-inferiority result.
+  - **Pins:** RET_FREEZE.json b32ef148…; sealed draw 864481a3… (375 items = 5 categories × 75); provenance.json
+    4b4a925d… (= DONE.json); RET_RESULTS.json fae050af…; RET_RESULTS.md 1af4c3ac…. The adapter shas match my files
+    (BW_Fdelta_s0 2ed0bb00… / 3038c779…; BW_Pa_v2_s1 ee1c5aec… / f6a2c4ef…).
+  - **Independent check** (`research/RETENTION_5C_COSIGN_CHECK.json`): my own graders, written from DESIGN §4, and
+    my own implementation of the §7 rule, without importing ret_analysis.py.
+    - All 1,077 compared fields reproduce exactly, and the KL/AUROC blocks match.
+    - Freeze 14/14, draw and generation hashes verify; the draw regenerates byte-identically.
+  - **Net vs OFF out of 375, primary / lenient grader.** The pass margin is −15 pooled and −11 per category, and a
+    failure under either grader counts.
+    - BW_Fdelta_s0: −3 / −5.
+    - BW_Pa_v2_s1: +9 / −10. The graders disagree in sign; the lenient CI reaches −20.
+  - **Report-only caveats** (all go into the card; text saved in `research/RETENTION_CARD_TEXT.md`):
+    - **BW_Fdelta_s0 unit_conv −7:** 30 → 23/75, lost 8 / gained 1, Holm 0.195. These are real arithmetic errors.
+      The pass is fragile: without its single gain the result is NO-GO.
+    - **BW_Fdelta_s0 unknown_twin −6 (primary only):** mostly format drift. It answered UNKNOWN on 75/75.
+    - **BW_Pa_v2_s1 abstention 0.933:** 5/75 unanswerable questions got invented values (OFF 1.000).
+    - **Base model:** Titan-Sparse already loses unit conversion against Supa 1.7 (49 → 30, Holm 0.0008), and both
+      adapters add a further, non-significant drop.
+    - **Scope:** 5 of 8 categories; one level each; templated short answers; one seed; each adapter tested alone,
+      under the suite's prompt.
+  - **Release-gate status:** retention ✓ (with caveats); seeds (item 7) pending; F-08 format caveat to add. Vault or
+    HF stays the user's decision.
+  - **Erratum (E-02):** D-68's clone move happened at about 00:23, not about 00:35. Directory mtimes are 00:22:57,
+    and the 00:23:52 re-mint scanned 492 vs 1,300 files.
+  - **D-70 follow-up (B4 exclusions):** add RCX's E11 instance keys to the B4 fresh set's exclusions: E11a test
+    (seed 20261256) and E11b execution (seed 20261258). RCX will send the key-list paths and shas when E11 finishes.
+    The B4 fresh set is NOT generated before that list is in hand.
+- **P-14 (FINAL, registered conditional run H2, run once): Pa_v3 in the frozen B2 S-beam on PlanBench Blocksworld-hard**
+  (`runs/BW_B3_HARD/h2_beam/`, `runs/BW_B3_HARD/B3_HARD_REPORT.json`; freeze `FREEZE_B3_H2.json` = the `FREEZE_B2_beam`
+  args with only `pa` → `runs/BW_Pa_v3_s1/adapter` (48c9d279…); 8 shards, every shard summary matches the freeze;
+  finished 2026-10-11 13:07).
+  - **Result:** **88/110 = 0.800** (Clopper-Pearson 95% CI 0.713-0.870) vs the frozen B2 S-beam **73/110 = 0.664**
+    (0.567-0.751). Paired +20 / −5 (both 68, neither 17), exact McNemar p = 0.0041. VAL agrees on all 110
+    (0 disagreements). Every plan the beam verified in imagination was valid (88/88). All 22 failures were unverified
+    (budget 17, dead end 5).
+  - **Compute** (report-only): about 8.2k proposer tokens and 198 unique F queries per instance, vs 8.0k and 187 for
+    B2. The gain does not come from more search.
+  - **Multiplicity** (report-only; not registered): Holm over the two hard contrasts gives H2 0.0082 and H1 0.039.
+  - **By block count** (report-only; the stratum tests are post hoc):
+    - 6-10 blocks: 34/36 vs 32/36 (+3/−1, p = 0.63);
+    - 11-15 blocks: 54/74 vs 41/74 (+17/−4, p = 0.0072).
+    - Most of H2's gain lies outside the 6-10-block distillation range. H1 is the opposite: 12 of its 13 successes are
+      at 6-10 blocks.
+  - **Leak audit** (two independent read-only audits): no leak.
+    - **No hard problem in the training data:** 0 of the 240 distillation problems is a renaming of a hard
+      (init, goal). The same holds for every row of mix_v3, mix_v2c, distill_rows and the 53,682 v2 rows. Method:
+      exact canonical form, validated against `B.signature` on 3,100 problems.
+    - **Exclusion only:** hard touched the data only through exclusion (10 near-miss candidates rejected, none of
+      them an isomorph).
+    - **Overlap at baseline:** goal-configuration overlap is at the generated-set level (hard 31/36 at ≤ 10 blocks;
+      mirror 33/36; b3fresh 31/36). 17 of the 20 v3-only wins are on instances whose goal is not among the
+      distillation goals.
+    - **No hard reads:** no script reads hard reference plans or hard results.
+    - **Settings and timing:** the H2 args are the B2 beam args, chosen on val_large/val_v2 before any hard run,
+      with only `pa` changed. FREEZE_B3_H2 (10-10 20:29) predates H1 and H2.
+    - **Shard restarts:** both were turn-cap aborts, replayed from cache.
+  - **Published references** (report-only; different regime: zero-shot general models given PDDL text, with no domain
+    training, no learned simulator and no search; unpaired, two-sided Fisher):
+    - DeepSeek-R1 53.6% (59/110), p = 5.2e-5;
+    - o1-preview 23.6% (26/110), p = 2.5e-17.
+    - This does not license "beats o1/R1 at planning".
+  - **Reading:** the frozen B2 world model, search settings and compute are unchanged; swapping in only the
+    self-distilled proposer raises Blocksworld-hard success from 73 to 88/110. Scope:
+    - the registered contrast is Pa_v3 vs the original Pa_v2, so it does not separate the search-plan content from the
+      extra training. There is no Pa_v2c beam arm on hard. On S-direct, the extra-training control alone did nothing
+      (P-11: +6/−3, p = 0.51);
+    - one training seed, one run;
+    - the B3 design (6-10-block hard-style tall-tower goals) was chosen after B2's hard results were known. No mix,
+      step count, adapter or search setting was chosen on hard.
+  - **Allowed claim:** "A frozen 0.6B Rineya with two LoRA adapters (~20M parameters), planning without feedback,
+    solves 88/110 Blocksworld-hard instances (CI 0.713-0.870), vs 73/110 for the same frozen search with the original
+    proposer (paired +20/−5, p = 0.004). It was trained on generated problems of at most 6 blocks and then (proposer
+    only) on generated 6-10-block plans its own learned world model had verified (no simulator labels). Published
+    zero-shot reference: R1 53.6%, o1-preview 23.6% (different regime)."
+    - B2's wording "Trained only on <= 6-block problems" does NOT apply to Pa_v3 (H1 or H2).
+    - Neither the student nor the system may be called "simulator-free". "No simulator labels" covers only the
+      distillation increment (label precision 1.000, 211/211).
+  - **Corrections recorded with this entry:**
+    - (a) **o1-mini 10% is not zero-shot.** It is the LRM-Modulo (verifier-in-loop, 4 iterations) score; o1-mini
+      direct is 0.9% (1/110) (arXiv 2410.02162 Table 5; upstream per-instance file at fc638a1a). P-08's "vs o1-mini
+      10% p = 1.2e-18" is withdrawn as a comparison B2 forbids. PREREG_PLANBENCH.md:117 is hash-frozen, so it gets an
+      erratum, not an edit. The release README:40 and SOLUTIONS_AND_BENCHMARK_PLAN.md:44 must drop the row or restate
+      it as 0.9% direct.
+    - (b) **P-13's reading is scoped.** H1's transfer is within the 6-10-block distillation range: 12 of 13
+      successes, +9 of the +10 discordant pairs, and 1/74 vs 0/74 at 11-15 blocks (B3's registered out-of-range
+      stratum, not "≥ 12").
+      - The 256-token cap can only understate H1 (24 truncated plans are unscored). It is not shown to "limit" it.
+      - H1's 13/110 is below o1-preview's zero-shot 26/110 (Fisher p = 0.033), so the proposer alone is not
+        competitive with the zero-shot LRMs.
+      - P-13's "H2 continues" is superseded by this entry.
+    - (c) **P-11:** "The frozen M = 256 understates Pa_v3" becomes "can only understate Pa_v3".
+    - (d) **"Aggregate only" is false** (B2's published-reference header; release README:42). Upstream per-instance
+      hard results exist at the vendored commit fc638a1a. Paired comparisons against them are post hoc and are not
+      cited until the files are vendored with sha256 and re-scored by the local VAL.
+    - (e) **R1 citation:** cite R1's 53.6% to the PlanBench leaderboard / upstream per-instance file, not "TMLR 2025"
+      (unverified).
+    - (f) **gh-export README:59:** "Trained only on plans its own world model verified" → drop "only".
+  - **Audit record:** `research/H2_LEAK_CLAIMS_AUDIT.json` (leak hunt, claims audit, judge; 3 agents).

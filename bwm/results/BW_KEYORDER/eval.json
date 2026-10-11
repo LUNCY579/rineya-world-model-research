@@ -1,0 +1,106 @@
+{
+ "modes": {
+  "canon": {
+   "n": 240,
+   "F0": 0.9917,
+   "FK": 0.9625,
+   "F0_ci95": [
+    0.9702,
+    0.999
+   ],
+   "FK_ci95": [
+    0.93,
+    0.9827
+   ],
+   "FK_only": 0,
+   "F0_only": 7,
+   "p_mcnemar": 0.015625
+  },
+  "train_order": {
+   "n": 240,
+   "F0": 0.55,
+   "FK": 0.925,
+   "F0_ci95": [
+    0.4847,
+    0.6141
+   ],
+   "FK_ci95": [
+    0.8841,
+    0.9549
+   ],
+   "FK_only": 103,
+   "F0_only": 13,
+   "p_mcnemar": 1.5113338668025928e-18
+  },
+  "heldout_rev": {
+   "n": 240,
+   "F0": 0.4542,
+   "FK": 0.9167,
+   "F0_ci95": [
+    0.39,
+    0.5195
+   ],
+   "FK_ci95": [
+    0.8742,
+    0.9484
+   ],
+   "FK_only": 130,
+   "F0_only": 19,
+   "p_mcnemar": 1.5845286212458735e-21
+  },
+  "heldout_other": {
+   "n": 240,
+   "F0": 0.4958,
+   "FK": 0.95,
+   "F0_ci95": [
+    0.4309,
+    0.5609
+   ],
+   "FK_ci95": [
+    0.9143,
+    0.9739
+   ],
+   "FK_only": 120,
+   "F0_only": 11,
+   "p_mcnemar": 2.561478241341199e-24
+  },
+  "heldout_both": {
+   "n": 240,
+   "F0": 0.4542,
+   "FK": 0.8583,
+   "F0_ci95": [
+    0.39,
+    0.5195
+   ],
+   "FK_ci95": [
+    0.8077,
+    0.8999
+   ],
+   "FK_only": 117,
+   "F0_only": 20,
+   "p_mcnemar": 7.157152153718532e-18
+  }
+ },
+ "reading": "partial",
+ "eval_seed": 20261013,
+ "adapters": {
+  "F0": "runs/BW_Fdelta_s0/adapter",
+  "FK": "runs/BW_Fdelta_ko_s0/adapter"
+ },
+ "provenance": {
+  "adapter_sha256": {
+   "F0": "2ed0bb0064bc6b11ec9c661840a38094e468462cea2ff833cda3bf234ead65ae",
+   "FK": "ed26cbf7372aa837e1a7968fe78f43612248804fc85a4143b6e3d9998c5657e7"
+  },
+  "rows_sha256": "82ec3418cf052f470bf74d5351d769ce36061b4bd36b4b24958abf151729fa42",
+  "script_sha256": "945610442714159fcb7983ea57d3ea01502bc1ef785fc913fefe860338f79c0d",
+  "prereg_sha256": "d2e0d86c3b50849e677e0568a086012d5f0545aa60c382f7fa06091c79207fd6",
+  "items_sha256": "b3126ea61863e080a760fcd6cf4a48121843d1437b20694778a49f264f8c8678",
+  "device": "cuda:0",
+  "versions": {
+   "torch": "2.6.0+cu124",
+   "transformers": "5.14.1",
+   "peft": "0.20.0"
+  }
+ }
+}

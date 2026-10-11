@@ -56,10 +56,23 @@ Single training seed; validation-grade unless marked frozen.
 - **Joint item 3 (PREREG-LB) closed:** RCWM's T2 ledger adapter, used as F inside this planner, plans: 127/180 vs
   14/180 with the adapter off, T2/ORACLE 0.794. That is on its training surface only. BWM re-scored it independently
   (D-61, `code/scripts/lb_rescore.py`).
-- **B3 search distillation, MET (P-11).** Trained only on plans its own world model verified (no simulator labels),
-  the proposer alone, without search, solves 22/110 fresh hard-style problems. A same-training control solves 8/110
-  (paired +18/-4, p = 0.004); the original proposer solves 5/110. Label precision was 1.0. This unlocks the registered
-  hard-set runs H1/H2.
+- **B3 search distillation, MET (P-11).** The proposer kept its original training and was further trained, on
+  half new rows, using generated 6-10-block plans its own world model had verified (no simulator labels). Without
+  search it then solves 22/110 fresh hard-style problems. A same-training control solves 8/110 (paired +18/-4,
+  p = 0.004); label precision was 1.0.
+- **Registered hard-set runs (P-13, P-14).**
+  - **H1:** the proposer alone, without search, solves 13/110 vs 5/110 (+10/-2, p = 0.039). The gain falls within
+    the 6-10-block range it was trained on.
+  - **H2:** the frozen B2 search with only the proposer swapped solves **88/110 = 80.0%** (CI 71.3-87.0%), vs 73/110
+    (paired +20/-5, p = 0.004). Most of the gain is at 11-15 blocks.
+  - **Comparison:** the published zero-shot reference (a different regime) is DeepSeek-R1 53.6% and o1-preview
+    23.6%.
+  - **No leak:** a two-audit check found no route from the hard set into the training data
+    (`docs/research/H2_LEAK_CLAIMS_AUDIT.json`).
+  - **Erratum:** "o1-mini 10%" is its verifier-in-loop score; direct prompting gives 0.9%.
+- **D-54 key-order augmentation, PARTIAL (P-12).** Held-out key orders went from 0.45-0.50 to 0.92-0.95. The cost was
+  the legality check on illegal actions.
+- **5c retention:** both release adapters RETAINED (RCWM R25, independently re-scored by BWM, D-71), with caveats.
 - **In progress:**
   - D-54 key-order augmentation (`docs/PREREG_D54_KEYORDER.md`);
   - B3 H1/H2 on Blocksworld-hard;
