@@ -1,0 +1,32 @@
+{
+  "arm": "N-CFSD",
+  "audit_sha256": "81412faecb638f8a45576df876eeb1176f95d39d0b0ee5ce707ad5eb7a7a9756",
+  "base_sha256": "a28629c9d3454fbf2e884fd7ca442c1b406e7caf4b36d34b2c0614d0add31284",
+  "code_sha256": {
+    "lora_cpu.py": "ca469a13782f00fc8fd13c393e469d7166c57230e04b5a7d06927c541007e2d8",
+    "native_e01.py": "e4f630e0fbe3e1d1699f0ddac7ee498510923e3b0fe57272be85c026ccfcc0a5"
+  },
+  "core": "titan-sparse",
+  "recipe": "D-03 (r16/a32/do0.05; 190x16; lr 1e-4 WSD; AdamW 0.9/0.95) on CPU FP32, unmerged",
+  "regime": "CF_SD",
+  "rows_sha256": "de23a9233785273b429d5debd311b6309fccedfc1964ed61f1d3faedcd72e401",
+  "seed": 1,
+  "train": {
+    "batch_size": 16,
+    "final_loss_avg50": 0.008607841716172347,
+    "guard_wait_s": 501.3,
+    "loss_curve_every50": [
+      0.06804,
+      0.03902,
+      0.01373,
+      0.00695
+    ],
+    "lr_peak": 0.0001,
+    "max_grad_norm": 1.9587862491607666,
+    "rows_available": 1501,
+    "steps": 190,
+    "supervised_tokens": 58267,
+    "tokens_processed": 456410,
+    "wall_s": 6188.7
+  }
+}

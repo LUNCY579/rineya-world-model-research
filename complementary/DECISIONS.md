@@ -364,3 +364,25 @@ and the evidence path.
     2. open-sealed;
     3. evaluate all arms on SEALED;
     4. analyse once.
+- **CX D-28 RSM-001 E11 drafted (`experiments/RCX-E11/`, `rcx/bw/{macros,subgoal}.py`, 13 tests); coordinator
+  decisions on its open questions (about 05:25).**
+  - **Decisions:**
+    - Q1: the primary is E11a with GBFS + A3 at 200 expansions, mined macros vs primitives, by exact McNemar, with
+      Holm-graded controls.
+    - Q2: the per-state A3 hook, to keep exact B4 parity.
+    - Q3: sizes 120 and 96; power is not simulated (stated).
+    - Q4: replicate seeds derived from the E11 block 20261256–59.
+    - Q5: a single clear-to-table achiever.
+    - Q6: the goal-structure holdout is the composition test; the registry's AB/BA template holdout is not run.
+    - Q7: the shuffled-plan control excludes the mined macros (tested).
+    - Q8: the random control excludes the mined macros' full keys (step pattern plus goal annotation) but not bare
+      step patterns. Only 3 sound length-2 patterns exist and the mined library uses 2, so stricter exclusion would make
+      a length-matched random control impossible.
+  - **Teacher data.** BWM `BW_DISTILL_r1/solutions.jsonl` sha256 `fdf80151…`, read-only. All 211 verified plans replay
+    exactly under the simulator. No off-limits file was read.
+  - **Next.** Run the smoke when the CPU lane is free, then freeze `PREREG_E11.md`, then the full run (about 2–4 h).
+- **CX D-29 Confirmation chain progress.**
+  - N-VR s1: adapter `52adbde9…`, 6,084 s.
+  - N-CFSD s1: adapter `8e710e46…`, 6,189 s.
+  - N-VR s2 started at 05:19; N-CFSD s2 follows.
+  - No SEALED access so far: the salt is unread.
