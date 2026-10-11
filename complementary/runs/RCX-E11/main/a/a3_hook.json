@@ -1,0 +1,65 @@
+{
+ "hook": "rcx.bw.b4_hook.LearnedUnmet",
+ "model_file": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-complementary-worktree\\complementary\\runs\\RCX-E07\\main\\models\\gnn_s20261276.pt",
+ "model_sha256": "9cc417a3075391e4fc8022f0dddd811e90fb4647c6a88dcd81361e9bb2c13f04",
+ "sidecar": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-complementary-worktree\\complementary\\runs\\RCX-E07\\main\\models\\gnn_s20261276.json",
+ "sidecar_sha256": "2ccdb2798fc784327c153fe7a6dd5479b2646f0cb29314aad3610eed1aa4a892",
+ "config_source": "sidecar json 'config'",
+ "weights_sha256": "c9b1d376c14a810098e3f1c30605e99670acebfe4cd236e7511104135d61c8e0",
+ "config": {
+  "kind": "gnn",
+  "node_in": 7,
+  "n_rel": 6,
+  "hidden": 48,
+  "rounds": 4,
+  "agg": "sum",
+  "readout": "node_sum",
+  "head_hidden": 64,
+  "share_rounds": false,
+  "n_params": 123969
+ },
+ "derived_edges": false,
+ "invalid_policy": "fallback",
+ "hybrid_lambda": 1.0,
+ "round_to": null,
+ "constants": {
+  "PENALTY": 1000.0,
+  "MODEL_CLIP": 500.0,
+  "FAILSAFE": 1000000.0,
+  "HOOK_THREADS": 1
+ },
+ "cache": {
+  "size": 50000,
+  "entries": 0
+ },
+ "registry": {
+  "goals": 0,
+  "conflicts": 0
+ },
+ "counters": {
+  "calls": 0,
+  "cache_hits": 0,
+  "evaluations": 0,
+  "model_evals": 0,
+  "invalid_states": 0,
+  "fallbacks": 0,
+  "encode_errors": 0,
+  "model_errors": 0,
+  "nonfinite": 0,
+  "clipped": 0,
+  "failsafe": 0,
+  "analysis_errors": 0,
+  "bad_goal_facts": 0,
+  "goal_non_on": 0
+ },
+ "reasons": {},
+ "code_sha256": {
+  "rcx/bw/b4_hook.py": "a0b4f88c32797feba95115d232f733b8dd47610c9e3018af6b90b297bfdeec81",
+  "rcx/bw/encode.py": "32980f141eaf0fac4757ee253d22c59c55f889ae98c26eddd37eef055b928a8a",
+  "rcx/bw/models.py": "4c2e3242eadc4ee155d8ddedb5f4188ac3aa5f70a19061145ff0e2fbee118f52",
+  "rcx/bw/space.py": "29d0b4203156a98521475ce4eda4e7951dcaa2a31bae29b1c3c96c268e015fa4"
+ },
+ "torch": "2.6.0+cu124",
+ "python": "3.11.15",
+ "bwm_planner_pin": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960"
+}
