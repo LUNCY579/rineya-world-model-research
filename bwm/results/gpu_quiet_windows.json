@@ -1,0 +1,12 @@
+{
+ "decision": "D-84",
+ "what": "Agreed GPU-idle night windows: no NEW BWM GPU job starts inside a window (local time, start inclusive, end exclusive); a job already running finishes. Read by scripts/gpu_run.py before every lease and again once the card is ours.",
+ "requested_by": "RCX (E01R CPU LoRA trainings, CX D-41/D-42; needs >= 12.5 GB free RAM; takes %TEMP%/rineya-cpu-lane.json per adapter)",
+ "honoured_also_by": "RCWM (its D-51 night guard, same windows)",
+ "release_marker": "%TEMP%/rineya-quiet-release.rcx.json (RCX writes it when E01R no longer needs the nights; it ends all windows)",
+ "windows": [
+  {"start": "2026-10-12T23:00", "end": "2026-10-13T07:00"},
+  {"start": "2026-10-13T23:00", "end": "2026-10-14T07:00"},
+  {"start": "2026-10-14T23:00", "end": "2026-10-15T07:00"}
+ ]
+}

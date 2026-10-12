@@ -1489,3 +1489,37 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
     about 7.5 GPU-h, so it needs this turn and two more BWM turns (I-21). The screen follows in the turn after.
   - **Canary pre-flight** (optional, unregistered, writes nothing): run on the frozen snapshot copy at 08:45, CPU,
     1 thread. Max |Δ| 0.0, counters match, no failures, torch 2.6.0+cu124 on both sides.
+- **D-84 GPU-idle night windows for RCX's E01R (agreed 2026-10-12; gate live at 16:25 CDT).**
+  - **The request:** RCX asked, operator-approved per RCX (CX D-41/D-42), that no new GPU bundle start 23:00–07:00 on
+    the next 2–3 nights. Its 6 CPU LoRA trainings (about 3 h each) and sealed evals need at least 12.5 GB free RAM,
+    which a GPU bundle leaves at about 10 GB on this 31.2 GB box. A running bundle may finish.
+  - **Peers:** RCWM honours the same windows via its night guard (RCWM D-51; it stops its chain 22:50–07:00). RCX
+    recorded the agreement (COLLABORATION, 9637efe).
+  - **Windows** (`runs/gpu_quiet_windows.json` 5584109f…, local time): 10-12 23:00 → 10-13 07:00, 10-13 23:00 →
+    10-14 07:00, 10-14 23:00 → 10-15 07:00. The list is dated and expires by itself.
+  - **Early end:** RCX's chain writes `%TEMP%/rineya-quiet-release.rcx.json` after its last sealed eval, which ends
+    the windows early.
+  - **Mechanism:** `scripts/gpu_run.py` dbb6950a… → 63fd7f01…; `tests/test_gpu_quiet.py` 3587d03d…, 64 pass. No
+    prereg pins the launcher: the B4 screen pins only `bwmn/__init__`, `lm.py`, `blocks_eval`, `bw_run_tests` and
+    `bw_seeds`.
+    - **No new job inside a window.** The window is re-checked once the card is ours, so a job whose wait for a
+      peer's lease ends inside a window releases the card unused, leaving turn.json untouched.
+    - **Waiting marker kept.** BWM keeps its waiting marker through the window; RCWM confirmed it is harmless.
+    - **Fail-open and visible.** A missing or unreadable list never blocks the card. Every launch logs what it read
+      (window count, malformed entries, next start, RCX release), and an early end is logged with the reason.
+    - **Post-window grace.** If BWM went last, BWM gives RCWM's guard-relaunched chain up to 15 min after 07:00 to
+      claim the turn it is owed. Its guard kills its waiter at 22:50, leaving a dead marker.
+    - **Post-window lane hold** (BWM's own safety courtesy, beyond the agreement). While an RCX CPU-lane block that
+      started inside the window still runs, BWM does not load a GPU job beside it (I-12 memory pressure), for at most
+      4 h. BWM withdraws its waiting marker meanwhile, because RCWM's yield to it is capped at 2700 s. It applies only
+      to holder rcx, checks for pid reuse, and lapses once RCX releases.
+    - **Yield freeze.** A post-reboot one-shot yield's clocks are frozen inside windows, so a window cannot use it up.
+  - **Review:** two adversarial rounds before install.
+    - Round 1 (4 lenses, 14 verifiers). Confirmed: the 07:00 back-to-back-turn race (major), the yield used up
+      inside a window, the silent fail-open, a non-list crash, marker-write failures, and untested rc pass-through.
+      All fixed.
+    - Round 2 (2 lenses, 4 verifiers). Every fix confirmed with no daytime regression. A real flaw found: keeping the
+      marker during the lane hold idled the GPU against RCWM's 2700 s cap, so the marker is now withdrawn. Hardening
+      nits applied.
+  - **Consequences for BWM:** the B4 screen (bundleJ) most likely starts at or after 07:00 on 10-13, unless a BWM turn
+    opens before 23:00.
