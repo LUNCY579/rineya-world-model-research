@@ -14,15 +14,18 @@ Ledger/Blocksworld qualification. G4–G7 remain unqualified;
 confirmation labels remain sealed. See `reports/RECOVERY_STATUS.md`,
 `reports/GATE_STATUS.md` and the exact pending commands in `reports/NATIVE_QUEUE.md`.
 Original test evidence remains in `results/TESTS_FINAL.json`; new records use
-separate paths. The current package passes228 tests and compilation; evidence
-is in `results/recovery-v1/TESTS_CHECKPOINT_11.txt` and
-`results/recovery-v1/PREPARATION_CHECKPOINT_11.json`. The consolidated native
+separate paths. Checkpoint12 passed249 tests and compilation; evidence
+is in `results/recovery-v1/TESTS_CHECKPOINT_12.txt` and
+`results/recovery-v1/PREPARATION_CHECKPOINT_12.json`. Checkpoint11 preserves
+the preceding teacher/student preparation evidence. The consolidated native
 evidence and current integration decisions are in
 `reports/WARM_RESEARCH_REPORT_2026_10_12.md`; the executed MTP architecture is
 documented in `research/IMPLEMENTATION_EVIDENCE_2026_10_12.md`.
 The later [H3 teacher qualification](reports/H3_TEACHER_QUALIFICATION_2026_10_12.md)
 records the native TRAIN collection and its failures. CPU11 student/guard paths
-are prospectively registered; execution awaits the live RDW E06 slot002 release.
+are prospectively registered; warm guard execution began after the RDW E06
+slot002 exit and memory release. Separate Ledger/RP and Block CPU11 copies and
+V3 input freezes are now verified; their native outcomes remain pending.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
 Parent repository baseline: `aeb19ab17128d884c4457ce59db6e926ceb13a7a`.

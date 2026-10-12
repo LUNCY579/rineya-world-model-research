@@ -5,10 +5,11 @@ planning and six-case behavior are complete and published in `aa17d958`.
 Neither predictive arm passes the fixed RegisterWorld gain gate. No larger
 training/confirmation or integration is qualified by that study.
 
-RDW E06 slot002 is now live after the coordinated teacher handoff. Its reserved
-window is expected to finish around2026-10-12 09:35–09:40UTC. No other dsv3wm
-native model is active. Check actual process/lease release before loading;
-an estimate is not permission to expire a live owner. The BWM GPU training
+RDW E06 slot002 exited successfully and released model memory at2026-10-12
+09:38UTC; its reservation helper exited and released. The first warm H3 guard
+readout then started under dsv3wm's own CPU lease. Check actual process/lease
+release before every subsequent load; an estimate cannot expire a live owner.
+The BWM GPU training
 process and its lease remain untouched. No paid/cloud work.
 
 The first H3 teacher launch failed at lease acquisition, before model load or
@@ -36,11 +37,13 @@ This is TRAIN corpus qualification, not a student/native DEV result. Preserve
 the successful outputs and the first failed attempt; no repeat teacher run is
 queued. All predictive gain gates remain unchanged.
 
-After the live peer releases, run one native process at a time from this worktree.
+Run one native process at a time from this worktree.
 Next are warm H3 guards, warm proposer references, then A3/A4/C3/C4. CPU11 is
 separately preregistered for these fixed H3 phases by
-`prereg/RECOVERY_RESOURCE_CLARIFICATION_4.md`. Ledger/Blocksworld retain their
-original resource paths and independent qualification gates.
+`prereg/RECOVERY_RESOURCE_CLARIFICATION_4.md`. The separate Ledger/RP and Block
+CPU11 resource declarations, copied entrypoints and V3 freezes now pass
+checkpoint12's249 tests and hash verification. Their independent qualification
+gates and all original resource paths remain preserved.
 
 ```powershell
 $env:BWM_DEVICE='cpu'
@@ -105,9 +108,9 @@ absent from the original proposal instrument remain unknown.
 Independent Ledger/R/P and Block qualifications remain in the later queue:
 
 ```powershell
-& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/ledger-recovery-v1/B0.resources.json -- dsv3wm/scripts/evaluate_ledger_recovery.py --config dsv3wm/configs/ledger_A0.json --data dsv3wm/datasets/ledger-recovery-v1/dev.jsonl --freeze dsv3wm/prereg/LEDGER_B0_FREEZE_V2.json --out dsv3wm/results/ledger-recovery-v1/B0.json --baseline-only
-& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/ledger-recovery-v1/T2_RP_B0_v2.resources.json -- dsv3wm/scripts/evaluate_rcwm_retention_v2.py --config dsv3wm/configs/rcwm_retention_v1.json --adapter rcwm/experiments/RCWM-T1/runs/t2/t2_s0/adapter --fixtures dsv3wm/datasets/rcwm-retention-v2/fixtures.json --freeze dsv3wm/prereg/RCWM_RETENTION_B0_FREEZE_V2.json --out dsv3wm/results/ledger-recovery-v1/T2_RP_B0_v2.json --model-label T2B0_v2
-& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/block-g1-v1/B0.resources.json -- dsv3wm/scripts/evaluate_block_g1.py --config dsv3wm/datasets/block-g1-v1/config.json --cases dsv3wm/datasets/block-g1-v1/cases.jsonl --manifest dsv3wm/datasets/block-g1-v1/manifest.json --freeze dsv3wm/prereg/BLOCK_G1_FREEZE_V2.json --out dsv3wm/results/block-g1-v1/B0.json
+& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/ledger-recovery-v1/B0_cpu11.resources.json -- dsv3wm/scripts/evaluate_ledger_recovery_cpu11.py --config dsv3wm/configs/ledger_A0.json --data dsv3wm/datasets/ledger-recovery-v1/dev.jsonl --freeze dsv3wm/prereg/LEDGER_B0_FREEZE_V3_CPU11.json --out dsv3wm/results/ledger-recovery-v1/B0_cpu11.json --baseline-only
+& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/ledger-recovery-v1/T2_RP_B0_v2_cpu11.resources.json -- dsv3wm/scripts/evaluate_rcwm_retention_v2_cpu11.py --config dsv3wm/configs/rcwm_retention_v1.json --adapter rcwm/experiments/RCWM-T1/runs/t2/t2_s0/adapter --fixtures dsv3wm/datasets/rcwm-retention-v2/fixtures.json --freeze dsv3wm/prereg/RCWM_RETENTION_B0_FREEZE_V3_CPU11.json --out dsv3wm/results/ledger-recovery-v1/T2_RP_B0_v2_cpu11.json --model-label T2B0_v2_cpu11
+& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/block-g1-v1/B0_cpu11.resources.json -- dsv3wm/scripts/evaluate_block_g1_cpu11.py --config dsv3wm/datasets/block-g1-v1/config.json --cases dsv3wm/datasets/block-g1-v1/cases.jsonl --manifest dsv3wm/datasets/block-g1-v1/manifest.json --freeze dsv3wm/prereg/BLOCK_G1_FREEZE_V3_CPU11.json --out dsv3wm/results/block-g1-v1/B0_cpu11.json
 ```
 
 After qualified Ledger B0, create a new training freeze binding its result/traces

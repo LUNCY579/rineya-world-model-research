@@ -4,9 +4,10 @@ Updated 2026-10-12 UTC after four adapted dynamics readouts and the native
 TRAIN-only H3 teacher qualification. Full research goal remains open; H3 student,
 Ledger and Blocksworld native work remain. The first H3 attempt stopped before
 model loading; its same-input retry completed. See `NATIVE_QUEUE.md`.
-The current package passes228 tests and compilation, with test evidence in
-`results/recovery-v1/TESTS_CHECKPOINT_11.txt`; checkpoint11 verifies the teacher,
-student-training and warm guard/proposer freezes. Prospective Ledger,
+Checkpoint12 passed249 tests and compilation, with test evidence in
+`results/recovery-v1/TESTS_CHECKPOINT_12.txt`. Checkpoint11 verifies the teacher,
+student-training and warm guard/proposer freezes; checkpoint12 verifies the
+separate Ledger/RP and Block CPU11 phase freezes. Prospective Ledger,
 R/P-retention and constructed Blocksworld G1 inputs are frozen; their native
 outcomes are still unknown.
 The consolidated report is `WARM_RESEARCH_REPORT_2026_10_12.md`; it adds actual
@@ -14,9 +15,9 @@ parent exposure, cost/regret denominators, uncertainty and current integration
 decisions without changing the original endpoints or failed gates.
 The H3 retry used a separate prospective CPU11 admission profile after RCX's
 release; prediction/data/gates and historical loaders remain unchanged.
-Separately registered CPU11 student paths await the live RDW E06 slot002 release,
-expected around09:35–09:40UTC; the estimate does not authorize replacing a live
-lease. See `prereg/RECOVERY_RESOURCE_CLARIFICATION_3.md`,
+Separately registered CPU11 warm guard execution started after the RDW E06
+slot002 child exited and released memory at09:38UTC. Later phases still require
+actual CPU-lane release. See `prereg/RECOVERY_RESOURCE_CLARIFICATION_3.md`,
 `prereg/RECOVERY_RESOURCE_CLARIFICATION_4.md` and the current execution queue.
 
 ![Fixed development results](../results/recovery-v1/recovery_counts_v2.png)
