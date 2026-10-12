@@ -1,0 +1,97 @@
+{
+  "schema_version": "dsv3wm-trajectory-v1",
+  "generator": "dsv3wm-fresh-v1",
+  "seed": 202610111,
+  "rows_per_split": 24,
+  "horizons": [
+    1,
+    2,
+    4
+  ],
+  "source_sha256": {
+    "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+    "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+    "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+  },
+  "files": {
+    "train.jsonl": {
+      "sha256": "faf14cb030c0cbb61404c728727d02b497d9f53037e24f43496ad7a97b77fe26",
+      "bytes": 39132
+    },
+    "dev.jsonl": {
+      "sha256": "4b3de6bd3214e052b14452441a4f8d1b501a29421a12da6ff2127876ae2cf2e6",
+      "bytes": 40886
+    },
+    "confirmation.jsonl": {
+      "sha256": "a4936287299b64231c52cee5268ff25b9325f07ba433cb68b8b99bf9d2031742",
+      "bytes": 31986
+    }
+  },
+  "sealed_confirmation": {
+    "location": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\dsv3wm-vault-v1\\confirmation.labels.jsonl",
+    "sha256": "b6c414bc84662adf70b265abf72bcd06f2d7eea8e0e97f9e1c58357c7d442076",
+    "bytes": 41047,
+    "access": "independent verifier only; do not use for tuning"
+  },
+  "integrity": {
+    "counts": {
+      "train": {
+        "rows": 24,
+        "parent_worlds": 18
+      },
+      "dev": {
+        "rows": 24,
+        "parent_worlds": 18
+      },
+      "confirmation": {
+        "rows": 24,
+        "parent_worlds": 19
+      }
+    },
+    "parent_disjoint": true,
+    "exact_disjoint": true,
+    "semantic_disjoint": true,
+    "object_renaming_canonicalization": "exact permutation minimization, <=5 objects"
+  },
+  "stress_counts": {
+    "train": {
+      "id": 21,
+      "invalid_action": 3,
+      "reordered_keys": 0,
+      "object_rename": 0,
+      "unseen_range": 0,
+      "long_actions": 0,
+      "unseen_object_count": 0,
+      "altered_rule_tokens": 0
+    },
+    "dev": {
+      "id": 6,
+      "invalid_action": 6,
+      "reordered_keys": 4,
+      "object_rename": 2,
+      "unseen_range": 0,
+      "long_actions": 3,
+      "unseen_object_count": 0,
+      "altered_rule_tokens": 3
+    },
+    "confirmation": {
+      "id": 6,
+      "invalid_action": 4,
+      "reordered_keys": 3,
+      "object_rename": 2,
+      "unseen_range": 2,
+      "long_actions": 3,
+      "unseen_object_count": 1,
+      "altered_rule_tokens": 3
+    }
+  },
+  "coverage_limitations": [
+    "Dynamics records contain no goals; held-out goal families and hard planning require a separate benchmark.",
+    "Only fixed executor rule families are covered; unseen ranges/counts are fresh parameter stresses, not new transition laws.",
+    "Novel rule-composition withholding is not guaranteed; it needs a separately frozen composition registry.",
+    "Renaming deduplication is exact only for <=5 objects; this generator rejects larger domains.",
+    "Unknown-action legality follows documented wrapper no-op semantics, extending historical parser behavior.",
+    "Stress cohorts use disjoint parents; matched counterfactual probes should use permitted dev parents only.",
+    "Disjointness is checked within this new dataset; historical sealed banks are neither accessed nor cross-compared."
+  ]
+}
