@@ -78,6 +78,12 @@ unknown, and every baseline-correct behavior loss requires explanation.
 
 ## Independent domain qualification queue
 
+An additive [conditional-legality calibration diagnostic](LEGAL_CALIBRATION_PREPARATION_2026_10_12.md)
+is now independently reviewed, tested and prospectively frozen. It has no
+native probability outcome and retains ordinary CPU11 admission. Its report
+contains fresh-path commands; the H3 CPU10.5 profiles cannot admit it. Keep
+primary student/domain qualification priorities and execute one model at a time.
+
 The separate Ledger/RP and Block CPU11 copies and V3 input freezes remain
 qualified implementation paths without native outcomes. They are outside the
 H3 CPU10.5 profiles and retain their independent baseline gates. Execute one

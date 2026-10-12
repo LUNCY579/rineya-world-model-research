@@ -33,8 +33,9 @@ selection or simulator repair was used.
 
 The singleton run preserved rollout h1/h2/h4 at24/24 each, direct h1/h2/h4
 at24/2/0 of24 and behavior at3/6. It uses substantially more physical forward
-calls and takes2.75 times the elapsed script time. The lower working set is a
-batch-geometry tradeoff. Neither cache compression nor useful H5 efficiency
+calls and takes2.75 times the elapsed script time. The lower sampled working
+set is consistent with the batch-geometry tradeoff; these shared-host runs do
+not isolate its cause. Neither cache compression nor useful H5 efficiency
 has been demonstrated. Dedicated GPU memory and physical FLOPs are unmeasured.
 Elapsed times are descriptive runs under a shared host, not controlled latency
 replications.

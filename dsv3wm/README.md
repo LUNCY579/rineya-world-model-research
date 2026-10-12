@@ -37,6 +37,12 @@ Student guards require both warm parity passes; their effects remain unknown.
 Peer slot004 exited1 after a bounded wait; no own native model is active.
 Separate Ledger/RP and Block CPU11 copies and
 V3 input freezes are now verified; their native outcomes remain pending.
+The [full-assignment audit](reports/COMPLETION_AUDIT_2026_10_12.md) preserves
+every required section/gate/deliverable and its remaining evidence. An additive
+[conditional-legality calibration diagnostic](reports/LEGAL_CALIBRATION_PREPARATION_2026_10_12.md)
+passed18 semantic tests, independent review and actual tokenizer/lineage audits;
+its72-member CPU11 freeze is registered. No probabilities or calibration results
+have been measured, and it does not certify generated-state/planning confidence.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
 Parent repository baseline: `aeb19ab17128d884c4457ce59db6e926ceb13a7a`.
@@ -82,10 +88,13 @@ recorded invocation arrays, configs, versions and hashes are in `results/`.
 `train.py` implements A0/A1/A2/A3/A4/A5. A3/A4 require independently re-verified
 TRAIN-only trajectory labels; use `scripts/distill.py --help`. Dedicated direct
 student inference is `scripts/evaluate_student.py --help`: fixed top1 and offline
-pass@k, no verifier reranking. The registered warm H3 continuation uses
-`train_recovery_student_cpu11.py`, `evaluate_recovery_student_cpu11.py` and
-`evaluate_recovery_student_guards_cpu11.py`; the shared27-parent corpus and
-actual A0/A2 parents are bound by `RECOVERY_H3_STUDENT_TRAIN_FREEZE_V3_CPU11.json`.
+pass@k, no verifier reranking. Actual warm H3 A3 training used
+`train_recovery_student_cpu11.py` and `RECOVERY_H3_STUDENT_TRAIN_FREEZE_V3_CPU11.json`.
+Actual A4 retry/C3/C4 used `train_recovery_student_cpu105.py` and the separate
+`RECOVERY_H3_STUDENT_TRAIN_FREEZE_V4_CPU105_TRAINING.json`. Both bind the shared
+27-parent corpus and actual A0/A2 parents. Original CPU11 readout entrypoints are
+`evaluate_recovery_student_cpu11.py` and `evaluate_recovery_student_guards_cpu11.py`;
+the new singleton entrypoints use the separately reviewed CPU10.5 readout profile.
 The fixed warm guards use `RECOVERY_H3_WARM_GUARDS_FREEZE_V3_CPU11.json`.
 Warm proposer references use `RECOVERY_H3_WARM_READOUT_FREEZE_V3_CPU11.json`.
 A3/A4/C3/C4 have completed native training; their student readout outcomes remain
