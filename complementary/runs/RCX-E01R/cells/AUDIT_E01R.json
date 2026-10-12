@@ -1,0 +1,915 @@
+{
+ "ok": true,
+ "failures": [],
+ "control_failures": [],
+ "arms": {
+  "E-R2": {
+   "target": "native",
+   "control_relation": null,
+   "rows": 1501,
+   "parents": 209,
+   "variants": {
+    "base": 200,
+    "rule_flip": 200,
+    "status_swap": 200,
+    "set_swap": 200,
+    "comp_unlisted": 346,
+    "comp_listed": 346,
+    "fill_base": 9
+   },
+   "hard_check_rows": {
+    "frame": 0,
+    "gold": 0,
+    "trace_line1": 0,
+    "readback_hash": 0,
+    "split_words": 0,
+    "probe_words": 0,
+    "excluded_words": 0,
+    "non_train_words": 0,
+    "rcwm_heldout_text": 0,
+    "heldout_template": 0,
+    "heldout_rule_factor": 0,
+    "heldout_magnitude": 0,
+    "pool_wording": 0,
+    "over_max_len": 0
+   },
+   "overlap": {
+    "E01N_DEV": {
+     "semantic": 0,
+     "skeleton": 0
+    },
+    "DEV2": {
+     "semantic": 0,
+     "skeleton": 0
+    },
+    "E01N_SEALED": {
+     "semantic": 0,
+     "skeleton": 0
+    }
+   },
+   "control_mismatch_rows": null,
+   "noop_share": 0.5123,
+   "decisions": {
+    "noop": 769,
+    "apply": 732
+   },
+   "rows_by_rule_type": {
+    "S+": 708,
+    "S-": 551,
+    "composition": 242
+   },
+   "class_balance_by_rule_type": {
+    "AND(S+,AGE)": {
+     "n": 47,
+     "noop": 37,
+     "noop_share": 0.7872
+    },
+    "AND(S+,K+)": {
+     "n": 38,
+     "noop": 24,
+     "noop_share": 0.6316
+    },
+    "AND(S-,AGE)": {
+     "n": 34,
+     "noop": 28,
+     "noop_share": 0.8235
+    },
+    "AND(S-,K+)": {
+     "n": 42,
+     "noop": 28,
+     "noop_share": 0.6667
+    },
+    "OR(S+,ALT)": {
+     "n": 50,
+     "noop": 8,
+     "noop_share": 0.16
+    },
+    "OR(S-,ALT)": {
+     "n": 31,
+     "noop": 4,
+     "noop_share": 0.129
+    },
+    "S+/size1": {
+     "n": 339,
+     "noop": 176,
+     "noop_share": 0.5192
+    },
+    "S+/size2": {
+     "n": 340,
+     "noop": 167,
+     "noop_share": 0.4912
+    },
+    "S+{posted}": {
+     "n": 29,
+     "noop": 15,
+     "noop_share": 0.5172
+    },
+    "S-/size1": {
+     "n": 289,
+     "noop": 151,
+     "noop_share": 0.5225
+    },
+    "S-/size2": {
+     "n": 234,
+     "noop": 116,
+     "noop_share": 0.4957
+    },
+    "S-{posted}": {
+     "n": 28,
+     "noop": 15,
+     "noop_share": 0.5357
+    }
+   },
+   "class_balance_by_rule_kind": {
+    "S+": {
+     "n": 708,
+     "noop": 358,
+     "noop_share": 0.5056
+    },
+    "S-": {
+     "n": 551,
+     "noop": 282,
+     "noop_share": 0.5118
+    },
+    "composition": {
+     "n": 242,
+     "noop": 129,
+     "noop_share": 0.5331
+    }
+   },
+   "class_balance_by_wording_source": {
+    "frame:t*": {
+     "n": 242,
+     "noop": 129,
+     "noop_share": 0.5331
+    },
+    "single:t*": {
+     "n": 1259,
+     "noop": 640,
+     "noop_share": 0.5083
+    }
+   },
+   "class_balance_by_template": {
+    "AND:t0": {
+     "n": 120,
+     "noop": 89,
+     "noop_share": 0.7417
+    },
+    "AND:t1": {
+     "n": 41,
+     "noop": 28,
+     "noop_share": 0.6829
+    },
+    "OR:t0": {
+     "n": 58,
+     "noop": 9,
+     "noop_share": 0.1552
+    },
+    "OR:t1": {
+     "n": 23,
+     "noop": 3,
+     "noop_share": 0.1304
+    },
+    "S+:t0": {
+     "n": 170,
+     "noop": 83,
+     "noop_share": 0.4882
+    },
+    "S+:t1": {
+     "n": 194,
+     "noop": 99,
+     "noop_share": 0.5103
+    },
+    "S+:t2": {
+     "n": 170,
+     "noop": 86,
+     "noop_share": 0.5059
+    },
+    "S+:t3": {
+     "n": 174,
+     "noop": 90,
+     "noop_share": 0.5172
+    },
+    "S-:t0": {
+     "n": 128,
+     "noop": 65,
+     "noop_share": 0.5078
+    },
+    "S-:t1": {
+     "n": 140,
+     "noop": 71,
+     "noop_share": 0.5071
+    },
+    "S-:t2": {
+     "n": 137,
+     "noop": 68,
+     "noop_share": 0.4964
+    },
+    "S-:t3": {
+     "n": 146,
+     "noop": 78,
+     "noop_share": 0.5342
+    }
+   },
+   "class_balance_by_n_accounts": {
+    "3": {
+     "n": 755,
+     "noop": 391,
+     "noop_share": 0.5179
+    },
+    "4": {
+     "n": 746,
+     "noop": 378,
+     "noop_share": 0.5067
+    }
+   },
+   "pooled_rows_by_cell": {},
+   "pool_templates_flagged": {},
+   "anchor_status_counts": {
+    "posted": 133,
+    "void": 90
+   },
+   "distinct_statuses": 264,
+   "target_bytes": {
+    "mean": 25.2,
+    "max": 30
+   },
+   "tokens": {
+    "mean_supervised_per_row": 19.181878747501667,
+    "mean_processed_per_row": 148.21119253830778,
+    "max_processed_per_row": 171,
+    "rows_over_max_len": 0,
+    "max_len": 512,
+    "per_seed": {
+     "0": {
+      "supervised_tokens": 58308,
+      "tokens_processed": 450519
+     },
+     "1": {
+      "supervised_tokens": 58304,
+      "tokens_processed": 450564
+     },
+     "2": {
+      "supervised_tokens": 58321,
+      "tokens_processed": 450570
+     }
+    }
+   }
+  },
+  "E-R3": {
+   "target": "trace",
+   "control_relation": "prompts",
+   "rows": 1501,
+   "parents": 376,
+   "variants": {
+    "base": 376,
+    "rule_flip": 375,
+    "status_swap": 375,
+    "set_swap": 375
+   },
+   "hard_check_rows": {
+    "frame": 0,
+    "gold": 0,
+    "trace_line1": 0,
+    "readback_hash": 0,
+    "split_words": 0,
+    "probe_words": 0,
+    "excluded_words": 0,
+    "non_train_words": 0,
+    "rcwm_heldout_text": 0,
+    "heldout_template": 0,
+    "heldout_rule_factor": 0,
+    "heldout_magnitude": 0,
+    "pool_wording": 0,
+    "over_max_len": 0
+   },
+   "overlap": {
+    "E01N_DEV": {
+     "semantic": 0,
+     "skeleton": 0
+    },
+    "DEV2": {
+     "semantic": 0,
+     "skeleton": 0
+    },
+    "E01N_SEALED": {
+     "semantic": 0,
+     "skeleton": 0
+    }
+   },
+   "control_mismatch_rows": 0,
+   "noop_share": 0.5057,
+   "decisions": {
+    "apply": 742,
+    "noop": 759
+   },
+   "rows_by_rule_type": {
+    "S+": 531,
+    "S-": 526,
+    "composition": 444
+   },
+   "class_balance_by_rule_type": {
+    "AND(S+,AGE)": {
+     "n": 83,
+     "noop": 61,
+     "noop_share": 0.7349
+    },
+    "AND(S+,K+)": {
+     "n": 59,
+     "noop": 44,
+     "noop_share": 0.7458
+    },
+    "AND(S-,AGE)": {
+     "n": 81,
+     "noop": 62,
+     "noop_share": 0.7654
+    },
+    "AND(S-,K+)": {
+     "n": 65,
+     "noop": 47,
+     "noop_share": 0.7231
+    },
+    "OR(S+,ALT)": {
+     "n": 65,
+     "noop": 13,
+     "noop_share": 0.2
+    },
+    "OR(S-,ALT)": {
+     "n": 91,
+     "noop": 18,
+     "noop_share": 0.1978
+    },
+    "S+/size1": {
+     "n": 228,
+     "noop": 115,
+     "noop_share": 0.5044
+    },
+    "S+/size2": {
+     "n": 285,
+     "noop": 133,
+     "noop_share": 0.4667
+    },
+    "S+{posted}": {
+     "n": 18,
+     "noop": 10,
+     "noop_share": 0.5556
+    },
+    "S-/size1": {
+     "n": 230,
+     "noop": 117,
+     "noop_share": 0.5087
+    },
+    "S-/size2": {
+     "n": 271,
+     "noop": 126,
+     "noop_share": 0.4649
+    },
+    "S-{posted}": {
+     "n": 25,
+     "noop": 13,
+     "noop_share": 0.52
+    }
+   },
+   "class_balance_by_rule_kind": {
+    "S+": {
+     "n": 531,
+     "noop": 258,
+     "noop_share": 0.4859
+    },
+    "S-": {
+     "n": 526,
+     "noop": 256,
+     "noop_share": 0.4867
+    },
+    "composition": {
+     "n": 444,
+     "noop": 245,
+     "noop_share": 0.5518
+    }
+   },
+   "class_balance_by_wording_source": {
+    "frame:t*": {
+     "n": 444,
+     "noop": 245,
+     "noop_share": 0.5518
+    },
+    "single:t*": {
+     "n": 1057,
+     "noop": 514,
+     "noop_share": 0.4863
+    }
+   },
+   "class_balance_by_template": {
+    "AND:t0": {
+     "n": 200,
+     "noop": 150,
+     "noop_share": 0.75
+    },
+    "AND:t1": {
+     "n": 88,
+     "noop": 64,
+     "noop_share": 0.7273
+    },
+    "OR:t0": {
+     "n": 112,
+     "noop": 25,
+     "noop_share": 0.2232
+    },
+    "OR:t1": {
+     "n": 44,
+     "noop": 6,
+     "noop_share": 0.1364
+    },
+    "S+:t0": {
+     "n": 151,
+     "noop": 76,
+     "noop_share": 0.5033
+    },
+    "S+:t1": {
+     "n": 129,
+     "noop": 60,
+     "noop_share": 0.4651
+    },
+    "S+:t2": {
+     "n": 120,
+     "noop": 57,
+     "noop_share": 0.475
+    },
+    "S+:t3": {
+     "n": 131,
+     "noop": 65,
+     "noop_share": 0.4962
+    },
+    "S-:t0": {
+     "n": 130,
+     "noop": 52,
+     "noop_share": 0.4
+    },
+    "S-:t1": {
+     "n": 139,
+     "noop": 67,
+     "noop_share": 0.482
+    },
+    "S-:t2": {
+     "n": 126,
+     "noop": 58,
+     "noop_share": 0.4603
+    },
+    "S-:t3": {
+     "n": 131,
+     "noop": 79,
+     "noop_share": 0.6031
+    }
+   },
+   "class_balance_by_n_accounts": {
+    "3": {
+     "n": 756,
+     "noop": 374,
+     "noop_share": 0.4947
+    },
+    "4": {
+     "n": 745,
+     "noop": 385,
+     "noop_share": 0.5168
+    }
+   },
+   "pooled_rows_by_cell": {},
+   "pool_templates_flagged": {},
+   "anchor_status_counts": {
+    "posted": 107,
+    "void": 104
+   },
+   "distinct_statuses": 262,
+   "target_bytes": {
+    "mean": 93.37,
+    "max": 128
+   },
+   "tokens": {
+    "mean_supervised_per_row": 37.026648900732845,
+    "mean_processed_per_row": 167.98934043970687,
+    "max_processed_per_row": 200,
+    "rows_over_max_len": 0,
+    "max_len": 512,
+    "per_seed": {
+     "0": {
+      "supervised_tokens": 112546,
+      "tokens_processed": 510653
+     },
+     "1": {
+      "supervised_tokens": 112581,
+      "tokens_processed": 510724
+     },
+     "2": {
+      "supervised_tokens": 112564,
+      "tokens_processed": 510710
+     }
+    }
+   }
+  }
+ },
+ "control": {
+  "target": "native",
+  "control_relation": null,
+  "rows": 1501,
+  "parents": 376,
+  "variants": {
+   "base": 376,
+   "rule_flip": 375,
+   "status_swap": 375,
+   "set_swap": 375
+  },
+  "hard_check_rows": {
+   "frame": 0,
+   "gold": 0,
+   "trace_line1": 0,
+   "readback_hash": 0,
+   "split_words": 0,
+   "probe_words": 0,
+   "excluded_words": 0,
+   "non_train_words": 0,
+   "rcwm_heldout_text": 0,
+   "heldout_template": 0,
+   "heldout_rule_factor": 0,
+   "heldout_magnitude": 0,
+   "pool_wording": 0,
+   "over_max_len": 0
+  },
+  "overlap": {
+   "E01N_DEV": {
+    "semantic": 0,
+    "skeleton": 0
+   },
+   "DEV2": {
+    "semantic": 0,
+    "skeleton": 0
+   },
+   "E01N_SEALED": {
+    "semantic": 0,
+    "skeleton": 0
+   }
+  },
+  "control_mismatch_rows": null,
+  "noop_share": 0.5057,
+  "decisions": {
+   "apply": 742,
+   "noop": 759
+  },
+  "rows_by_rule_type": {
+   "S+": 531,
+   "S-": 526,
+   "composition": 444
+  },
+  "class_balance_by_rule_type": {
+   "AND(S+,AGE)": {
+    "n": 83,
+    "noop": 61,
+    "noop_share": 0.7349
+   },
+   "AND(S+,K+)": {
+    "n": 59,
+    "noop": 44,
+    "noop_share": 0.7458
+   },
+   "AND(S-,AGE)": {
+    "n": 81,
+    "noop": 62,
+    "noop_share": 0.7654
+   },
+   "AND(S-,K+)": {
+    "n": 65,
+    "noop": 47,
+    "noop_share": 0.7231
+   },
+   "OR(S+,ALT)": {
+    "n": 65,
+    "noop": 13,
+    "noop_share": 0.2
+   },
+   "OR(S-,ALT)": {
+    "n": 91,
+    "noop": 18,
+    "noop_share": 0.1978
+   },
+   "S+/size1": {
+    "n": 228,
+    "noop": 115,
+    "noop_share": 0.5044
+   },
+   "S+/size2": {
+    "n": 285,
+    "noop": 133,
+    "noop_share": 0.4667
+   },
+   "S+{posted}": {
+    "n": 18,
+    "noop": 10,
+    "noop_share": 0.5556
+   },
+   "S-/size1": {
+    "n": 230,
+    "noop": 117,
+    "noop_share": 0.5087
+   },
+   "S-/size2": {
+    "n": 271,
+    "noop": 126,
+    "noop_share": 0.4649
+   },
+   "S-{posted}": {
+    "n": 25,
+    "noop": 13,
+    "noop_share": 0.52
+   }
+  },
+  "class_balance_by_rule_kind": {
+   "S+": {
+    "n": 531,
+    "noop": 258,
+    "noop_share": 0.4859
+   },
+   "S-": {
+    "n": 526,
+    "noop": 256,
+    "noop_share": 0.4867
+   },
+   "composition": {
+    "n": 444,
+    "noop": 245,
+    "noop_share": 0.5518
+   }
+  },
+  "class_balance_by_wording_source": {
+   "frame:t*": {
+    "n": 444,
+    "noop": 245,
+    "noop_share": 0.5518
+   },
+   "single:t*": {
+    "n": 1057,
+    "noop": 514,
+    "noop_share": 0.4863
+   }
+  },
+  "class_balance_by_template": {
+   "AND:t0": {
+    "n": 200,
+    "noop": 150,
+    "noop_share": 0.75
+   },
+   "AND:t1": {
+    "n": 88,
+    "noop": 64,
+    "noop_share": 0.7273
+   },
+   "OR:t0": {
+    "n": 112,
+    "noop": 25,
+    "noop_share": 0.2232
+   },
+   "OR:t1": {
+    "n": 44,
+    "noop": 6,
+    "noop_share": 0.1364
+   },
+   "S+:t0": {
+    "n": 151,
+    "noop": 76,
+    "noop_share": 0.5033
+   },
+   "S+:t1": {
+    "n": 129,
+    "noop": 60,
+    "noop_share": 0.4651
+   },
+   "S+:t2": {
+    "n": 120,
+    "noop": 57,
+    "noop_share": 0.475
+   },
+   "S+:t3": {
+    "n": 131,
+    "noop": 65,
+    "noop_share": 0.4962
+   },
+   "S-:t0": {
+    "n": 130,
+    "noop": 52,
+    "noop_share": 0.4
+   },
+   "S-:t1": {
+    "n": 139,
+    "noop": 67,
+    "noop_share": 0.482
+   },
+   "S-:t2": {
+    "n": 126,
+    "noop": 58,
+    "noop_share": 0.4603
+   },
+   "S-:t3": {
+    "n": 131,
+    "noop": 79,
+    "noop_share": 0.6031
+   }
+  },
+  "class_balance_by_n_accounts": {
+   "3": {
+    "n": 756,
+    "noop": 374,
+    "noop_share": 0.4947
+   },
+   "4": {
+    "n": 745,
+    "noop": 385,
+    "noop_share": 0.5168
+   }
+  },
+  "pooled_rows_by_cell": {},
+  "pool_templates_flagged": {},
+  "anchor_status_counts": {
+   "posted": 107,
+   "void": 104
+  },
+  "distinct_statuses": 262,
+  "target_bytes": {
+   "mean": 25.17,
+   "max": 30
+  },
+  "tokens": {
+   "mean_supervised_per_row": 19.15589606928714,
+   "mean_processed_per_row": 150.11858760826115,
+   "max_processed_per_row": 172,
+   "rows_over_max_len": 0,
+   "max_len": 512,
+   "per_seed": {
+    "0": {
+     "supervised_tokens": 58223,
+     "tokens_processed": 456330
+    },
+    "1": {
+     "supervised_tokens": 58267,
+     "tokens_processed": 456410
+    },
+    "2": {
+     "supervised_tokens": 58234,
+     "tokens_processed": 456380
+    }
+   }
+  }
+ },
+ "matched": {
+  "rows": {
+   "E-R2": 1501,
+   "E-R3": 1501
+  },
+  "n_rows_required": 1501,
+  "steps": 190,
+  "batch": 16,
+  "max_len": 512,
+  "token_covariates_vs_control": {
+   "E-R2": {
+    "0": {
+     "supervised_tokens": {
+      "diff": 85,
+      "ratio": 1.0015
+     },
+     "tokens_processed": {
+      "diff": -5811,
+      "ratio": 0.9873
+     }
+    },
+    "1": {
+     "supervised_tokens": {
+      "diff": 37,
+      "ratio": 1.0006
+     },
+     "tokens_processed": {
+      "diff": -5846,
+      "ratio": 0.9872
+     }
+    },
+    "2": {
+     "supervised_tokens": {
+      "diff": 87,
+      "ratio": 1.0015
+     },
+     "tokens_processed": {
+      "diff": -5810,
+      "ratio": 0.9873
+     }
+    }
+   },
+   "E-R3": {
+    "0": {
+     "supervised_tokens": {
+      "diff": 54323,
+      "ratio": 1.933
+     },
+     "tokens_processed": {
+      "diff": 54323,
+      "ratio": 1.119
+     }
+    },
+    "1": {
+     "supervised_tokens": {
+      "diff": 54314,
+      "ratio": 1.9322
+     },
+     "tokens_processed": {
+      "diff": 54314,
+      "ratio": 1.119
+     }
+    },
+    "2": {
+     "supervised_tokens": {
+      "diff": 54330,
+      "ratio": 1.933
+     },
+     "tokens_processed": {
+      "diff": 54330,
+      "ratio": 1.119
+     }
+    }
+   }
+  }
+ },
+ "design_notes": [
+  "E-R2: 209 parents vs the control's 376; rows by rule type {'S+': 708, 'S-': 551, 'composition': 242} vs {'S+': 531, 'S-': 526, 'composition': 444} (declared covariate)"
+ ],
+ "batteries": {
+  "E01N_DEV": {
+   "n": 6720,
+   "sha256": "556637122b1886b41b9c26fa990fc8f73249254ac4ddae6954a44a25c83170bf"
+  },
+  "DEV2": {
+   "n": 1980,
+   "sha256": "b99d548bd2c9efb10ae36b6cc0eed7e5e046d8e92fdb64a6de5bb7ac990764a2"
+  },
+  "E01N_SEALED": {
+   "n": 2240,
+   "sha256": "c87765eaf275554946bc92513359cecfcc04c5eb16bf0b30d7ec80f33256df48"
+  }
+ },
+ "reader": {
+  "single_templates": 12,
+  "registered": []
+ },
+ "heldout_template_fragments": [
+  ", carry out the event; for any other status, do nothing.",
+  ", do nothing; for any other status, carry out the event.",
+  "An event takes effect when either ",
+  "Balances change only for ",
+  "Both conditions must hold for an event to take effect: ",
+  "Every event takes effect except ",
+  "If the status is "
+ ],
+ "rcwm_heldout_texts": {
+  "prereq paraphrase 4": "Apply the actions in order. Each action fires only when its ",
+  "prereq state sentence 4": "The state is a flag mask ",
+  "prereq state sentence 4 tail": " bits wide",
+  "prereq field name 4 (before)": "\"mask\":",
+  "prereq field name 4 (events)": "\"moves\":",
+  "prereq field name 4 (add)": "\"plus\":",
+  "prereq field name 4 (delete)": "\"minus\":",
+  "prereq field name 4 (pre_on)": "\"must_on\":",
+  "prereq field name 4 (pre_off)": "\"must_off\":",
+  "register paraphrase 4 fragment 0": "Update the registers by applying the single instruction below; every register holds an integer modulo 97. A swap instruction makes the ",
+  "register paraphrase 4 fragment 2": " registers exchange their values at once. An add instruction increases the ",
+  "register paraphrase 4 fragment 4": ". A mix instruction increases the ",
+  "register paraphrase 4 fragment 7": " register. A conditional instruction increases the ",
+  "register paraphrase 4 fragment 12": " when it does not. Every changed register is reduced modulo 97, and every other register stays the same. Respond with nothing but the full set of resulting registers as one JSON object.",
+  "register field name 4 (register)": "\"dest\":",
+  "register field name 4 (other)": "\"peer\":",
+  "register field name 4 (value)": "\"offset\":",
+  "register field name 4 (threshold)": "\"pivot\":",
+  "register field name 4 (kind)": "\"opcode\":",
+  "register field name 4 (before)": "\"memory\":",
+  "register field name 4 (event)": "\"operation\":"
+ },
+ "tokenizer": "Qwen2Tokenizer",
+ "code_sha256": {
+  "audit_e01r.py": "2c4e942a22b865d7f6bb9519743462fc999f77824fb49f8ba4845dda9aba9e82",
+  "trace_target.py": "7e3a3409088ba54b898eb8858f5b1cb914e320f9ed4be8b0fa7cd18071017c54",
+  "audit_tr_pool.py": "be74c2da7f564fabe120d8ed91a537026a7f40a86284110159b20ff02ce2e3c0",
+  "native_e01.py": "e4f630e0fbe3e1d1699f0ddac7ee498510923e3b0fe57272be85c026ccfcc0a5",
+  "native_probe.py": "e8e8723f50d8f1120047661cb9932a6e23d1a6310be9cb347a1909fe6096f8e0",
+  "lora_cpu.py": "ca469a13782f00fc8fd13c393e469d7166c57230e04b5a7d06927c541007e2d8",
+  "gen.py": "fd89a80d90be4a66d4b0e875ec56e01993042d0e2d23de5f56f6508940fae744",
+  "world.py": "51e00a15c57e5ecfcaa53b8395b61d85118908378853d9e1d8cd5f3c56b7501d",
+  "vocab.py": "de9f1adbc0f4eec96939bf5037688ded0ef6f3ee75a7af4bcb3c5708505d8e55",
+  "templates.py": "c0d6f35544100d91bf2f0fec7095a4d7dba4b3dbb7fb79630450ce601eb5f642",
+  "wording_audit.py": "cd6a1ef511e6abad2c94931595b546142c14c8ccd01dde719c819a7c1aee017f"
+ },
+ "arm_ok": {
+  "E-R2": true,
+  "E-R3": true
+ },
+ "out_dir": "runs\\RCX-E01R\\cells",
+ "rows_sha256": {
+  "E-R2": "16325d16cab27c1cd8517702b62e80d0e4178c5bf97851b048365ccf928180f5",
+  "E-R3": "611ed3690432db2f044721c47441fddd05d7431df31054604384ca1aa800c933"
+ },
+ "control_rows_sha256": "de23a9233785273b429d5debd311b6309fccedfc1964ed61f1d3faedcd72e401",
+ "pool": null,
+ "dev2_battery_file_used": true
+}

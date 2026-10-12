@@ -611,3 +611,57 @@ and the evidence path.
 
     The diff against the co-signed DRAFT bytes is confined to the title (DRAFT dropped), the Status row and the
     addendum's prereg-sha row. BWM recorded erratum E-03 (the stale queue text) before any freeze. Code is unchanged.
+- **CX D-41 PREREG_E01R FROZEN in full (2026-10-12 about 09:45; branch B4: E-R2 and E-R3 vs N-CFSD, on sealed P3).**
+  - **Prereg.** `experiments/RCX-E01R/PREREG_E01R.md`, sha256
+    `16e959c54c9b78611c0ae89705fd9ae2ac9d5598c9ac7841d48cbbc4112adfa9`. It is byte-identical to `PREREG_E01R_DRAFT.md` at
+    this commit.
+    - §2 and the R1/R2/R3 specs were frozen in D-37, before any step A output. The only later change before `## 4.` is
+      the mechanical STEP A fill (D-39).
+    - The margins were fixed in D-38. §4–§11 were revised under review (workflows `wf_2e994e7d-35f`, `wf_70955683-6e9`,
+      plus the RCX fix to the §10 missing-cell rule). All of this used no treatment outcome; none exists.
+    - The frozen header's "frozen together with the SEALED commitment" is read per §4: this freeze entry first, then the
+      mint entry, linked by the code digest below.
+  - **Bound code.** Digest (`native_e01r.py code-sha`) `61ed4df6a35f05bed2fba273fd13077fd6de66ff64c73458ba2c5eef78cf48c5`
+    over:
+
+    | File | sha256 (prefix) | File | sha256 (prefix) |
+    |---|---|---|---|
+    | analyze_e01r | 2ce94581 | recipes | be3756c1 |
+    | audit_e01r | 2c4e942a | run_e01r | dff678c1 |
+    | audit_tr_pool | be74c2da | score | 771fd12c |
+    | decide_branch | 6835b040 | stats | 06a30c10 |
+    | gen | fd89a80d | templates | c0d6f355 |
+    | lora_cpu | ca469a13 | trace_target | 7e3a3409 |
+    | native_e01 | e4f630e0 | vocab | de9f1adb |
+    | native_e01r | 4169c3e5 | wording_audit | cd6a1ef5 |
+    | native_probe | e8e8723f | world | 51e00a15 |
+
+    `rcx/lane.py` is not bound.
+  - **Rows and records:**
+
+    | File | sha256 | Notes |
+    |---|---|---|
+    | `train_E-R2.jsonl` | `16325d16…` | 1,501 rows, 209 parents, max 170 tokens |
+    | `train_E-R3.jsonl` | `611ed369…` | 1,501 rows, 376 parents, max 199 tokens |
+    | `TRAIN_MANIFEST_E01R.json` | `8bcea63a…` | `max_new` 160; longest R3 gold 49 tokens |
+    | `AUDIT_E01R.json` | `91258fac…` | ok; `arm_ok` E-R2 and E-R3 true; tokens per seed recorded |
+    | `BRANCH_STEP_A.json` | `03ce8d1b…` | |
+  - **Covariates (declared).**
+    - Supervised tokens per seed: E-R2 about 58.3k; E-R3 about 112.6k, against N-CFSD's 58.2k.
+    - Processed tokens: E-R2 450.5k; E-R3 510.7k.
+    - Rule-type mix, E-R2 vs N-CFSD: S+ 708 vs 531, S− 551 vs 526, compositions 242 vs 444.
+  - **Seeds.** 20261264, 20261265 and 20261268 first appear in git history at 1bb6c32 (the E01R D-37 freeze) or later,
+    so none had prior use.
+  - **Tests (lane free, 2026-10-12 about 09:30), all OK, 170 in total:**
+
+    | File | Tests |
+    |---|---|
+    | test_analyze_e01r | 42 |
+    | test_native_e01r | 36 |
+    | test_e01r_audit | 31 |
+    | test_e01r_recipes | 30 |
+    | test_e01r_trace | 18 |
+    | test_e01r_missing_rule | 7 |
+    | test_e01r_branch | 6 |
+  - **Next.** `mint-commit --expect-code-sha256 61ed4df6…`, before any treatment training. Then training under the lane
+    lock, as RAM allows.

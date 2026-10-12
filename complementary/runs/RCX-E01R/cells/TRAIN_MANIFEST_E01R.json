@@ -1,0 +1,226 @@
+{
+ "experiment": "RCX-E01R",
+ "branch": {
+  "file": "BRANCH_STEP_A.json",
+  "sha256": "03ce8d1bb9ed213bf8b264328b289a41693e31bce1925079e1d36448e7b1eafe",
+  "branch": "B4",
+  "arms": [
+   "R2",
+   "R3"
+  ]
+ },
+ "fallback": null,
+ "reference_rows": {
+  "source": "train_N-CFSD.jsonl",
+  "sha256": "de23a9233785273b429d5debd311b6309fccedfc1964ed61f1d3faedcd72e401"
+ },
+ "r1_pool": null,
+ "arms": {
+  "E-R2": {
+   "path": "train_E-R2.jsonl",
+   "sha256": "16325d16cab27c1cd8517702b62e80d0e4178c5bf97851b048365ccf928180f5",
+   "rows": 1501,
+   "recipe": "R2",
+   "data_seed": 20261264,
+   "noop": 769,
+   "parents": 209,
+   "max_tokens": 170,
+   "mean_tokens": 147.21119253830778,
+   "tokens": {
+    "mean_supervised_per_row": 19.181878747501667,
+    "mean_processed_per_row": 148.21119253830778,
+    "max_processed_per_row": 171,
+    "per_seed": {
+     "0": {
+      "supervised_tokens": 58308,
+      "tokens_processed": 450519
+     },
+     "1": {
+      "supervised_tokens": 58304,
+      "tokens_processed": 450564
+     },
+     "2": {
+      "supervised_tokens": 58321,
+      "tokens_processed": 450570
+     }
+    }
+   },
+   "rows_by_rule_type": {
+    "S+": 708,
+    "S-": 551,
+    "composition": 242
+   },
+   "recipe_stats": {
+    "rows": 1501,
+    "parents": 209,
+    "noop_share": 0.5123,
+    "spos_rows": 708,
+    "spos_unlisted_rows": 358,
+    "spos_unlisted_share": 0.2385,
+    "spos_unlisted_frac_of_spos": 0.5056,
+    "s_pos_noop_unlisted_frac": 0.9555,
+    "rule_type_rows": {
+     "S+": 708,
+     "S-": 551,
+     "composition": 242
+    },
+    "rule_type_parents": {
+     "S+": 85,
+     "S-": 62,
+     "composition": 62
+    },
+    "rule_decisions": {
+     "AND|apply": 44,
+     "AND|noop": 117,
+     "OR|apply": 69,
+     "OR|noop": 12,
+     "S+|apply": 350,
+     "S+|noop": 358,
+     "S-|apply": 269,
+     "S-|noop": 282
+    },
+    "comp_rows": {
+     "S+|comp_listed|apply": 202,
+     "S+|comp_unlisted|noop": 202,
+     "S-|comp_listed|noop": 144,
+     "S-|comp_unlisted|apply": 144
+    },
+    "dup_rows_within_parent": 10,
+    "tids": {
+     "t0": 361,
+     "t1": 398,
+     "t2": 364,
+     "t3": 378
+    },
+    "tid_family": {
+     "t*": 1501
+    },
+    "variants": {
+     "base": 200,
+     "comp_listed": 346,
+     "comp_unlisted": 346,
+     "fill_base": 9,
+     "rule_flip": 200,
+     "set_swap": 200,
+     "status_swap": 200
+    }
+   },
+   "vs_N-CFSD": null
+  },
+  "E-R3": {
+   "path": "train_E-R3.jsonl",
+   "sha256": "611ed3690432db2f044721c47441fddd05d7431df31054604384ca1aa800c933",
+   "rows": 1501,
+   "recipe": "R3",
+   "data_seed": 20261253,
+   "noop": 759,
+   "parents": 376,
+   "max_tokens": 199,
+   "mean_tokens": 166.98934043970687,
+   "tokens": {
+    "mean_supervised_per_row": 37.026648900732845,
+    "mean_processed_per_row": 167.98934043970687,
+    "max_processed_per_row": 200,
+    "per_seed": {
+     "0": {
+      "supervised_tokens": 112546,
+      "tokens_processed": 510653
+     },
+     "1": {
+      "supervised_tokens": 112581,
+      "tokens_processed": 510724
+     },
+     "2": {
+      "supervised_tokens": 112564,
+      "tokens_processed": 510710
+     }
+    }
+   },
+   "rows_by_rule_type": {
+    "S+": 531,
+    "S-": 526,
+    "composition": 444
+   },
+   "recipe_stats": {
+    "rows": 1501,
+    "parents": 376,
+    "noop_share": 0.5057,
+    "spos_rows": 531,
+    "spos_unlisted_rows": 258,
+    "spos_unlisted_share": 0.1719,
+    "spos_unlisted_frac_of_spos": 0.4859,
+    "s_pos_noop_unlisted_frac": 0.8963,
+    "rule_type_rows": {
+     "S+": 531,
+     "S-": 526,
+     "composition": 444
+    },
+    "rule_type_parents": {
+     "S+": 134,
+     "S-": 131,
+     "composition": 111
+    },
+    "rule_decisions": {
+     "AND|apply": 74,
+     "AND|noop": 214,
+     "OR|apply": 125,
+     "OR|noop": 31,
+     "S+|apply": 273,
+     "S+|noop": 258,
+     "S-|apply": 270,
+     "S-|noop": 256
+    },
+    "comp_rows": {},
+    "dup_rows_within_parent": 0,
+    "tids": {
+     "t0": 377,
+     "t1": 400,
+     "t2": 342,
+     "t3": 382
+    },
+    "tid_family": {
+     "t*": 1501
+    },
+    "variants": {
+     "base": 376,
+     "rule_flip": 375,
+     "set_swap": 375,
+     "status_swap": 375
+    }
+   },
+   "vs_N-CFSD": {
+    "rows": 1501,
+    "prompts_identical": 1501,
+    "prompts_changed": 0
+   }
+  }
+ },
+ "max_new": 160,
+ "r3_gold_longest_tokens": {
+  "R3 training targets": 49,
+  "DEV battery 20261240 in, E01R strata": 39
+ },
+ "max_new_rule": "max(160, longest tokenized R3 gold target + 16); every arm",
+ "tokenizer": "Qwen2Tokenizer",
+ "code_sha256": {
+  "native_e01r.py": "4169c3e55c970f9983d083c551f047444542977279f8f39c3c6a2d382c979ae1",
+  "recipes.py": "be3756c1709ce5d16549125e21173d3ef355404ceb0cd426c17515dbb2317184",
+  "trace_target.py": "7e3a3409088ba54b898eb8858f5b1cb914e320f9ed4be8b0fa7cd18071017c54",
+  "audit_e01r.py": "2c4e942a22b865d7f6bb9519743462fc999f77824fb49f8ba4845dda9aba9e82",
+  "audit_tr_pool.py": "be74c2da7f564fabe120d8ed91a537026a7f40a86284110159b20ff02ce2e3c0",
+  "decide_branch.py": "6835b0402120a2847423d8af08814cc89f311292b110365487b39d61636080d6",
+  "run_e01r.py": "dff678c17f76a7badaeaab8045ac026e0568b87c1e3d625c11ce6b58c9c48e45",
+  "native_e01.py": "e4f630e0fbe3e1d1699f0ddac7ee498510923e3b0fe57272be85c026ccfcc0a5",
+  "native_probe.py": "e8e8723f50d8f1120047661cb9932a6e23d1a6310be9cb347a1909fe6096f8e0",
+  "lora_cpu.py": "ca469a13782f00fc8fd13c393e469d7166c57230e04b5a7d06927c541007e2d8",
+  "stats.py": "06a30c10acb6998033619560aac1b1130542a4344d0edf53e85e63386acf24b2",
+  "wording_audit.py": "cd6a1ef511e6abad2c94931595b546142c14c8ccd01dde719c819a7c1aee017f",
+  "gen.py": "fd89a80d90be4a66d4b0e875ec56e01993042d0e2d23de5f56f6508940fae744",
+  "vocab.py": "de9f1adbc0f4eec96939bf5037688ded0ef6f3ee75a7af4bcb3c5708505d8e55",
+  "templates.py": "c0d6f35544100d91bf2f0fec7095a4d7dba4b3dbb7fb79630450ce601eb5f642",
+  "world.py": "51e00a15c57e5ecfcaa53b8395b61d85118908378853d9e1d8cd5f3c56b7501d",
+  "score.py": "771fd12ca3755f054db23df974db753b2a12120da5c9d52d6134293b0477d22e",
+  "analyze_e01r.py": "2ce94581bc3f5177b7e2ab374ad3ff898cd1e457ed74d0292c817fe766c50618"
+ },
+ "built_at": "2026-10-12 08:14:33 Central Daylight Time"
+}
