@@ -584,3 +584,59 @@ clearing pair, `unstack; put-down`.
 - **Smoke disclosure.** The plumbing smoke's 4 + 4 instances may coincide with the first full-run draws; this was
   disclosed at the freeze.
 - **E11b** used one achiever definition, and partial tower goals.
+
+---
+
+## R-10 RCX-E01R step A (DEV2 diagnostic, descriptive): on fresh blind-authored wordings N-CFSD reads half of the positive-rule complements, explicit or implicit alike; frozen branch rule gives **B4 → train R2 + R3** (tier: native-C component artifacts, inference only; DEV), 2026-10-12
+
+**Evidence:**
+- `runs/RCX-E01R/dev2/DIAG_DEV2.md` and `.json`, `BRANCH_STEP_A.json`, `eval_*.json` and `preds_*.jsonl.gz` (commit
+  `f2d12f2`);
+- the battery: seed 20261261, sha `38362338…`;
+- P2_v2: 45 blind-authored wordings, sha `7e625a59…` (CX D-34);
+- the branch rule, frozen before any step A output: PREREG_E01R §2 and `decide_branch.py` `6835b040…` (CX D-37).
+
+**Setup.** No training. The arms are the E01N adapters N-CFSD s0–s2 (pooled) and N-VR s0. Each was evaluated on the
+single-atom strata, on two surfaces:
+- `in`: canonical training wording;
+- `p2`: one fresh P2 wording per parent, stratified by form.
+
+The form is one of EXPLICIT listed-first (LF), EXPLICIT complement-first (CF), or IMPLICIT (IM).
+
+| Decision accuracy | N-CFSD s0–s2 | N-VR s0 |
+|---|---|---|
+| Anchor `in`: no-op items (POS / NEG) | 0.99 / 1.00 | 0.94 / 1.00 |
+| **POS no-op on `p2`** (LF / CF / IM) | **0.51 / 0.35 / 0.64** (pooled 0.50) | 0.27 / 0.06 / 0.21 |
+| POS apply on `p2` (LF / CF / IM) | 0.97 / 0.82 / 0.92 | 1.00 / 1.00 / 1.00 |
+| NEG no-op on `p2` (LF / CF / IM) | 0.92 / 0.75 / 0.67 (pooled 0.78) | 0.58 / 0.36 / 0.27 |
+| NEG apply on `p2` (LF / CF / IM) | 0.74 / 0.62 / 0.67 | 0.92 / 0.70 / 0.78 |
+
+**Branch (`decide_branch.py`, run once).**
+- E − I = −0.21, with template-cluster bootstrap 95% CI [−0.50, +0.08], so B3 does not hold.
+- p̄ = 0.50 < 0.65, so B2 does not hold.
+- a_in = 0.996, so the instrument is sound.
+- The result is **B4: treatment arms R2 (complement-focused twins) and R3 (predicate-first trace)**.
+
+### Reading (descriptive; DEV)
+
+1. **R-08's 14% was partly wording-specific.**
+   - On 45 fresh, blind-authored wordings, N-CFSD decides about half of the required positive-rule no-ops correctly,
+     against 0.14 on the two spent `ho_tpl` wordings.
+   - N-VR s0 manages 0.18. The counterfactual and paraphrase recipe's advantage therefore extends to wordings nobody
+     tuned on.
+2. **The deficit is not "implicit vs explicit".** Implicit positive wordings are read at least as well as explicit ones
+   (E − I < 0).
+   - The weakest form is **complement-first**, the default case stated before the listed case. It is worst for
+     positive no-ops (0.35) and also lowers positive apply decisions (0.82).
+   - So the adapter partly reads a rule by its *first clause*, not by its logical structure.
+3. **Fresh negative wordings are imperfect too:** no-op 0.67–0.92 and apply 0.62–0.74. R-08's 0.96–0.97 on its two
+   negative `ho_tpl` wordings overstated how well negatives are read.
+4. **Consequence (mechanical, CX D-37).** The uniform deficit selects R2 and R3. The confirmation tests both against
+   N-CFSD on the sealed, never-read P3 wordings (PREREG_E01R).
+
+### Limits
+
+- DEV. Only 45 templates, 6–9 per form, so per-form rates partly reflect template difficulty.
+- The P2 wordings were read by the lead (CX D-34).
+- Inference only; no training.
+- These numbers do not test any recipe. They choose the arms of the next, preregistered experiment.

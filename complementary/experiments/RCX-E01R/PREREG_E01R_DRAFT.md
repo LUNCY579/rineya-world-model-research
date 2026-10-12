@@ -154,8 +154,8 @@ tolerance.
   changing the recipe, the arm is dropped before the mint, and the Holm family shrinks to the remaining arm.
 - **After the mint,** no arm is added, replaced or re-specified.
 
-> **PENDING STEP A** (filled from `BRANCH_STEP_A.json` only): branch = ___; p_LF / p_CF / p_IM = ___; p̄ = ___;
-> E − I = ___ [lo, hi]; S = ___; q_f = ___; a_in = ___; treatment arms = ___.
+> **STEP A (filled mechanically from `BRANCH_STEP_A.json`, CX D-39):** branch = **B4**; p_LF / p_CF / p_IM = 0.509 / 0.346 / 0.639; p̄ = 0.496;
+> E − I = −0.213 [−0.504, +0.076]; S = 0.293; q_LF / q_CF / q_IM = 0.917 / 0.747 / 0.667; a_in = 0.996; treatment arms = **R2, R3**.
 
 ### 2.1 P3 coverage check (branch B1 only)
 

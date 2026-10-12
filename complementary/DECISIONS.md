@@ -558,3 +558,17 @@ and the evidence path.
       the minimum; the mint binds the arms to the branch; non-anchor sub-guards are reported.
 
     None depends on step A outcomes.
+- **CX D-39 RCX-E01R step A done; the frozen branch rule gives B4 → treatment arms R2 + R3 (2026-10-12 03:20; R-10).**
+  - **Run.** Step A ran 01:27–03:20 under the CPU-lane lock: N-CFSD s0–s2 and N-VR s0, all rc 0.
+  - **Branch rule.** `decide_branch.py` (`6835b040…`, frozen in D-37) ran once and wrote `BRANCH_STEP_A.json`:
+    - p_LF / p_CF / p_IM = 0.509 / 0.346 / 0.639;
+    - p̄ = 0.496;
+    - E − I = −0.213 [−0.504, +0.076];
+    - S = 0.293;
+    - q_LF / q_CF / q_IM = 0.917 / 0.747 / 0.667;
+    - a_in = 0.996.
+
+    So the branch is **B4**.
+  - **The R1 path is unused.** `audit_tr_pool.py` is never run, so P3 is not read before opening.
+  - **Next.** The remaining E01R review items are resolved for the B4 path. Then the full freeze, row build, audit,
+    SEALED mint (before any training), and 6 adapters (R2 and R3, seeds 0–2), scheduled on the CPU lane with peers.
