@@ -201,6 +201,12 @@ def by_cell_of(templates):
     return {c: sorted(by[c]) for c in M.CELLS}
 
 
+def audit_tokens(arms=("E-R2", "E-R3")):
+    """AUDIT_E01R.json "arms" entries with tokens per training seed, as audit_e01r.py --tok writes them."""
+    return {a: {"tokens": {"per_seed": {str(k): {"supervised_tokens": 1000 + k, "tokens_processed": 9000 + k}
+                                        for k in range(3)}}} for a in arms}
+
+
 def write_branch(path, branch, code_sha=None):
     arms = {"B0": [], "B1": [], "B2": [], "B3": ["R1", "R3"], "B4": ["R2", "R3"]}[branch]
     return write(path, json.dumps({"branch": branch, "arms": arms, "code_sha256": code_sha or M.DECIDE_SHA256}))
@@ -270,7 +276,7 @@ class TestModule(Base):
                                                                  "native_e01") or t.endswith("lora_cpu")})
         inner = {f.name for f in tree.body if isinstance(f, ast.FunctionDef)
                  for n in ast.walk(f) if isinstance(n, (ast.Import, ast.ImportFrom))}
-        self.assertEqual(inner, {"_heavy", "cmd_build", "cmd_smoke", "cmd_eval", "cmd_mint_commit"})
+        self.assertEqual(inner, {"_heavy", "cmd_build", "cmd_smoke", "cmd_eval"})
 
     def test_borrowed_values(self):
         self.assertEqual((M.N_ROWS, M.STEPS, M.BATCH, M.CFSD_SEED, M.R2_SEED), (1501, 190, 16, 20261253, 20261264))
@@ -407,6 +413,49 @@ class TestTrainCall(Base):
         refuse("differs from")
         write(cells / "SEALED_OPEN.json", "{}")
         refuse("no adapter is trained after opening")
+
+    def test_cmd_train_resume_or_refuse(self):
+        """Review item 12: a completed run (adapter AND TRAIN_META.json) is never retrained; an adapter without
+        TRAIN_META.json resumes from its checkpoint, and is refused without one (PREREG_E01R section 10)."""
+        cells = self.tmp / "cells"
+        rows = write(cells / "train_E-R3.jsonl", '{"prompt": "p", "target": "t"}\n')
+        man = write(cells / M.MANIFEST, json.dumps({"arms": {"E-R3": {"sha256": rows}}, "max_new": 176}))
+        aud = write(cells / M.AUDIT, json.dumps({"ok": True, "rows_sha256": {"E-R3": rows}}))
+        write(cells / "SEALED_COMMIT.json", json.dumps({
+            "arms_required": TAGS_R3.split(","), "train_manifest_sha256": man, "rows_sha256": {"E-R3": rows},
+            "audit_e01r_sha256": aud, "code_sha256": M.code_sha256()}))
+        self.hold_lane()
+        a = SimpleNamespace(out=str(cells), arm="E-R3", seed=0)
+        run = cells / "E-R3_s0"
+        write(run / "adapter" / "adapter_model.safetensors", "saved, but TRAIN_META.json was never written")
+        with mock.patch.object(M, "_heavy", side_effect=AssertionError("_heavy reached")), \
+                self.assertRaises(SystemExit) as cm:
+            M.cmd_train(a)
+        self.assertIn("without a resume checkpoint: the run cannot be resumed", str(cm.exception))
+        self.assertIn("E-R3_s0.crashed-<n>", str(cm.exception))
+        write(run / "ckpt" / "state.pt", "checkpoint at step 180")
+        sentinel = RuntimeError("model would load here")
+        with mock.patch.object(M, "_heavy", side_effect=sentinel), self.assertRaises(RuntimeError) as cm:
+            M.cmd_train(a)
+        self.assertIs(cm.exception, sentinel)  # every check passed: it resumes (train_sft reads the checkpoint)
+        base = self.tmp / "base"
+        write(base / "model.safetensors", "not the Titan base")
+        lc = SimpleNamespace(PATHS={"sparse": base}, load_core=mock.Mock(side_effect=AssertionError("loaded")))
+        with mock.patch.object(M, "_heavy", return_value=(SimpleNamespace(need_ram=lambda: None), lc, FakeGuard)), \
+                self.assertRaises(SystemExit):
+            M.cmd_train(a)
+        events = M.read_attempts(cells)
+        self.assertEqual(M.attempt_summary(events, "train", "E-R3_s0"), {"started": 1, "ok": 0, "failed": 1})
+        self.assertEqual((events[0]["resume"], events[0]["n"]), (True, 1))
+        write(run / "TRAIN_META.json", "{}")
+        with mock.patch.object(M, "_heavy", side_effect=AssertionError("_heavy reached")), \
+                contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertIsNone(M.cmd_train(a))
+        self.assertEqual(out.getvalue().strip(), "adapter exists; refusing to retrain under the same id")
+        (run / "adapter" / "adapter_model.safetensors").unlink()
+        with self.assertRaises(SystemExit) as cm:
+            M.cmd_train(a)
+        self.assertIn("TRAIN_META.json without an adapter", str(cm.exception))
 
 
 # ----------------------------------------------------------------------------- build
@@ -631,8 +680,9 @@ class TestSealedProtocol(Base):
                      "E-R3": write(self.cells / "train_E-R3.jsonl", r3_rows)}
         self.branch_sha = write_branch(M.BRANCH_PATH, "B4")  # CX D-39
         self.write_manifest(self.rows)
-        self.audit_sha = write(self.cells / M.AUDIT, json.dumps({"ok": True, "arm_ok": {a: True for a in self.rows},
-                                                                 "rows_sha256": self.rows}))
+        self.audit_sha = write(self.cells / M.AUDIT, json.dumps({"ok": True, "failures": [],
+                                                                 "arm_ok": {a: True for a in self.rows},
+                                                                 "rows_sha256": self.rows, "arms": audit_tokens()}))
         known = {}
         for k in range(3):
             tag = f"N-CFSD_s{k}"
@@ -653,10 +703,19 @@ class TestSealedProtocol(Base):
             "branch": {"file": "BRANCH_STEP_A.json", "sha256": branch_sha or self.branch_sha}, "fallback": fallback,
             "arms": {a: {"sha256": s, "rows": 5} for a, s in rows.items()}, "max_new": 176}))
 
-    def mint(self, tags=TAGS_B4, drop="", reason=""):
+    def mint(self, tags=TAGS_B4, drop="", reason="", expect=None):
+        """mint-commit; expect = --expect-code-sha256 (default: the digest of the current bound code, as the freeze
+        entry would log it)."""
+        expect = M.code_digest(M.code_sha256()) if expect is None else expect
         with contextlib.redirect_stdout(io.StringIO()):
-            M.cmd_mint_commit(SimpleNamespace(out=str(self.cells), arms_required=tags, drop_arm=drop, reason=reason))
+            M.cmd_mint_commit(SimpleNamespace(out=str(self.cells), arms_required=tags, drop_arm=drop, reason=reason,
+                                              expect_code_sha256=expect))
         return M.sha(self.cells / "SEALED_COMMIT.json")
+
+    def drift(self, name="stats.py"):
+        """Simulate a bound file edited after the mint: code_sha256() reports another sha for `name`."""
+        real = M.code_sha256
+        return mock.patch.object(M, "code_sha256", lambda strict=False: dict(real(strict), **{name: "0" * 64}))
 
     def open_(self, commit_sha):
         with contextlib.redirect_stdout(io.StringIO()):
@@ -706,6 +765,8 @@ class TestSealedProtocol(Base):
         for name, path in bound.items():  # the commitment binds the analysis, statistics and audit code
             self.assertEqual(rec["code_sha256"][name], M.sha(path), name)
         self.assertEqual(rec["code_sha256"]["decide_branch.py"], M.DECIDE_SHA256)
+        self.assertNotIn("lane.py", rec["code_sha256"])  # shared lane infrastructure is not bound (review item 1)
+        self.assertEqual(rec["code_sha256_digest"], M.code_digest(rec["code_sha256"]))
         raw = (self.cells / "SEALED_COMMIT.json").read_text(encoding="utf-8")
         self.assertFalse([t for t in self.tpl if t["text"] in raw or t["id"] in raw])
         with self.assertRaises(SystemExit):
@@ -778,7 +839,7 @@ class TestSealedProtocol(Base):
         # E-R2's rows fail the row audit (PREREG section 2): E-R2 may be dropped, only explicitly and with a reason
         self.audit_sha = write(self.cells / M.AUDIT, json.dumps({
             "ok": False, "failures": ["frame:E-R2"], "arm_ok": {"E-R2": False, "E-R3": True},
-            "rows_sha256": self.rows}))
+            "rows_sha256": self.rows, "arms": audit_tokens(("E-R3",))}))
         with self.assertRaises(SystemExit):  # no drop: E-R2's audit failed
             self.mint()
         for tags, drop, reason in ((TAGS_R3, "", ""), (TAGS_R3, "E-R2", ""), (TAGS_R3, "", "rows fail"),
@@ -792,6 +853,64 @@ class TestSealedProtocol(Base):
         self.assertEqual((rec["treatment_arms"], rec["arms_required"]), (["E-R3"], TAGS_R3.split(",")))
         self.assertEqual(rec["dropped_arms"], [{"arm": "E-R2", "reason": "frame check fails on 3 rows; not fixable "
                                                                           "without changing R2"}])
+
+    def test_mint_drop_arm_needs_a_failed_audit(self):
+        """Review item 4: --drop-arm only for an arm whose rows AUDIT_E01R.json failed (arm_ok false, a failure naming
+        it, on the manifest's rows); never for a passing arm, whatever the reason given."""
+        tags_r2 = "N-CFSD_s0,N-CFSD_s1,N-CFSD_s2,E-R2_s0,E-R2_s1,E-R2_s2"
+
+        def refused(audit, tags, drop, needle):
+            write(self.cells / M.AUDIT, json.dumps(audit))
+            with self.assertRaises(SystemExit) as cm:
+                self.mint(tags, drop, "the rows look odd")
+            self.assertIn(needle, str(cm.exception))
+            self.assertFalse((self.cells / "SEALED_COMMIT.json").exists())
+
+        passing = {"ok": True, "failures": [], "arm_ok": {"E-R2": True, "E-R3": True}, "rows_sha256": self.rows,
+                   "arms": audit_tokens()}
+        refused(passing, tags_r2, "E-R3", "arm_ok[E-R3] = false")  # E-R3 passed the audit: no drop
+        refused(passing, TAGS_R3, "E-R2", "arm_ok[E-R2] = false")
+        no_entry = dict(passing, ok=False, failures=["frame:E-R3"], arm_ok={"E-R2": False, "E-R3": False})
+        refused(no_entry, TAGS_R3, "E-R2", "no failure naming E-R2")
+        other_rows = dict(passing, ok=False, failures=["frame:E-R2"], arm_ok={"E-R2": False, "E-R3": True},
+                          rows_sha256=dict(self.rows, **{"E-R2": "0" * 64}))
+        refused(other_rows, TAGS_R3, "E-R2", "did not audit E-R2's manifest rows")
+        write(self.cells / M.AUDIT, json.dumps(dict(other_rows, rows_sha256=self.rows)))
+        self.mint(TAGS_R3, "E-R2", "frame check fails")
+        self.assertEqual(json.loads((self.cells / "SEALED_COMMIT.json").read_text(encoding="utf-8"))["dropped_arms"],
+                         [{"arm": "E-R2", "reason": "frame check fails"}])
+
+    def test_mint_expect_code_sha256_and_tokens(self):
+        """Review items 14 and 15: --expect-code-sha256 must equal code_digest(bound code) (the freeze entry's
+        value), and AUDIT_E01R.json must record tokens per training seed for every kept arm."""
+        code = M.code_sha256(strict=True)
+        canon = json.dumps(code, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+        self.assertEqual(M.code_digest(code), sha_b(canon))  # the definition, spelled out
+        self.assertEqual(M.code_digest(dict(reversed(list(code.items())))), M.code_digest(code))  # order-free
+        for bad in ("", "0" * 64, M.code_digest(dict(code, **{"stats.py": "1" * 64})), M.code_digest(code).upper()):
+            with self.subTest(expect=bad[:8]), self.assertRaises(SystemExit) as cm:
+                self.mint(expect=bad)
+            self.assertIn("--expect-code-sha256", str(cm.exception))
+        with self.drift("recipes.py"), self.assertRaises(SystemExit):  # the code changed after the freeze entry
+            self.mint(expect=M.code_digest(code))
+        aud = json.loads((self.cells / M.AUDIT).read_text(encoding="utf-8"))
+        for arms in ({"E-R2": aud["arms"]["E-R2"]},  # E-R3 has no token record
+                     {"E-R2": aud["arms"]["E-R2"], "E-R3": {"tokens": {"per_seed": {"0": {"supervised_tokens": 1,
+                                                                                          "tokens_processed": 2}}}}},
+                     dict(aud["arms"], **{"E-R3": {"tokens": {"per_seed": {str(k): {"supervised_tokens": None,
+                                                                                    "tokens_processed": 2}
+                                                                           for k in range(3)}}}})):
+            write(self.cells / M.AUDIT, json.dumps(dict(aud, arms=arms)))
+            with self.subTest(arms=sorted(arms)), self.assertRaises(SystemExit) as cm:
+                self.mint()
+            self.assertIn("tokens.per_seed", str(cm.exception))
+        self.assertFalse((self.cells / "SEALED_COMMIT.json").exists() or (self.cells / "SEALED_SALT.secret").exists())
+        write(self.cells / M.AUDIT, json.dumps(aud))
+        self.mint(expect=M.code_digest(code))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            M.cmd_code_sha(SimpleNamespace())
+        self.assertEqual(json.loads(out.getvalue())["expect_code_sha256"], M.code_digest(code))
 
     def test_open_refusals_precede_the_p3_read(self):
         commit_sha = self.mint()
@@ -887,9 +1006,16 @@ class TestSealedProtocol(Base):
         self.assertEqual(M.eval_adapter(self.cells, "N-CFSD", "N-CFSD_s2", opened),
                          (M.E01N_CELLS / "N-CFSD_s2" / "adapter", M.E01N_ADAPTERS["N-CFSD_s2"]))
         self.assertEqual(M.eval_adapter(self.cells, "OFF", "OFF", opened), (None, None))
-        for arm, tag in (("E-R1", "E-R1_s0"), ("E-R3", "E-R3_s3"), ("X", "X_s0")):
+        for arm, tag in (("E-R1", "E-R1_s0"), ("E-R3", "E-R3_s3"), ("X", "X_s0"), ("N-VR", "N-VR_s0")):
             with self.subTest(tag=tag), self.assertRaises(SystemExit):
                 M.eval_adapter(self.cells, arm, tag, opened)
+        for k in range(3):  # review item 2: N-VR is not evaluated (PREREG_E01R section 4), even with its D-30 adapter
+            with self.subTest(nvr=k), self.assertRaises(SystemExit) as cm, \
+                    mock.patch.object(M, "_heavy", side_effect=AssertionError("_heavy reached")), \
+                    mock.patch.object(M, "e01n_adapter", side_effect=AssertionError("N-VR adapter looked up")):
+                M.cmd_eval(SimpleNamespace(out=str(self.cells), arm="N-VR", seed=k, battery="sealed"))
+            self.assertIn("N-VR is not evaluated", str(cm.exception))
+        self.assertFalse(list(self.cells.glob("*N-VR*")))
         write(self.cells / "E-R3_s0" / "adapter" / "adapter_model.safetensors", "tampered")
         with self.assertRaises(SystemExit):
             M.eval_adapter(self.cells, "E-R3", "E-R3_s0", opened)
@@ -949,6 +1075,10 @@ class TestSealedProtocol(Base):
         self.assertEqual((s["scorable_share"], s["exact_share"], s["well_formed_share"]),
                          (49 / 50, 49 / 50, (49 - n_bare) / 50))  # last-line rule scores the bare JSON too
         self.assertEqual(M.smoke_problem(self.cells, "E-R3_s0", s["adapter_sha256"], 176), None)
+        self.assertEqual(s["code_sha256"], M.code_sha256())  # review item 3: the smoke record names its bound code
+        events = M.read_attempts(self.cells)
+        self.assertEqual(M.attempt_summary(events, "smoke", "E-R3_s0"), {"started": 1, "ok": 1, "failed": 0})
+        self.assertEqual(len(events), 2)  # the refused start (lane not held) is not an attempt
         lc2 = FakeLC(script(2))
         self.run_cmd(M.cmd_smoke, lc2, arm="E-R2", seed=1)
         s = json.loads((self.cells / "SMOKE_E-R2_s1.json").read_text(encoding="utf-8"))
@@ -984,12 +1114,22 @@ class TestSealedProtocol(Base):
         shas, bat = self.opened_cells()
         script = self.eval_script(bat)
         lc = FakeLC(script)
-        loaded, _ = self.run_cmd(M.cmd_eval, lc, arm="E-R3", seed=1)
+        loaded, printed = self.run_cmd(M.cmd_eval, lc, arm="E-R3", seed=1)
         self.assertEqual((lc.max_new_seen, lc.loads, loaded), ([176], 1, [self.cells / "E-R3_s1" / "adapter"]))
         ev = json.loads((self.cells / "eval_sealed_E-R3_s1.json").read_text(encoding="utf-8"))
         n_trunc = sum(j % 5 == 4 for j in range(len(bat)))
         self.assertEqual((ev["n"], ev["max_new"], ev["truncated"], ev["adapter_sha256"], ev["parser"]),
                          (1760, 176, n_trunc, shas["E-R3_s1"], "trace_target.parse_last_line"))
+        self.assertIs(ev["truncation_unknown"], False)
+        # review item 13: the console gets completion and counts only, never a score, composite or decision
+        self.assertEqual(printed.strip().splitlines()[-1],
+                         f"[E-R3_s1] eval done: 1760 records, truncated {n_trunc}, {ev['wall_s']:.0f}s; wrote "
+                         "eval_sealed_E-R3_s1.json (no score, composite or decision is printed)")
+        body = printed.replace("(no score, composite or decision is printed)", "")
+        for word in ("composite", "decision", "'in':", "'p3':", "exact", str(ev["composite"]["p3"])):
+            self.assertNotIn(word, body)
+        self.assertEqual(M.attempt_summary(M.read_attempts(self.cells), "eval", "E-R3_s1"),
+                         {"started": 1, "ok": 1, "failed": 0})
         with gzip.open(self.cells / "raw_sealed_E-R3_s1.json.gz", "rt", encoding="utf-8") as f:
             raw = json.load(f)
         self.assertEqual(ev["raw_sha256"], M.sha(self.cells / "raw_sealed_E-R3_s1.json.gz"))
@@ -1029,13 +1169,16 @@ class TestSealedProtocol(Base):
         _, bat = self.opened_cells()
         script = self.eval_script(bat)
         lc = FakeLC(script)
-        with mock.patch.object(M, "map_finished", side_effect=RuntimeError("mapping failed")):
+        crash = RuntimeError("post-processing failed")
+        with mock.patch.object(M.S, "aggregate", side_effect=crash):  # a crash after decoding, while scoring
             with self.assertRaises(RuntimeError):
                 self.run_cmd(M.cmd_eval, lc, arm="E-R3", seed=2)
         raw_p = self.cells / "raw_sealed_E-R3_s2.json.gz"
         self.assertTrue(raw_p.exists())  # the generations survive a failed post-processing
         self.assertFalse((self.cells / "eval_sealed_E-R3_s2.json").exists()
                          or (self.cells / "preds_sealed_E-R3_s2.jsonl.gz").exists())
+        self.assertEqual(M.attempt_summary(M.read_attempts(self.cells), "eval", "E-R3_s2"),
+                         {"started": 1, "ok": 0, "failed": 1})  # a start without an 'ok' end: a failed attempt
         raw_sha = M.sha(raw_p)
         with mock.patch.object(M, "_heavy", side_effect=AssertionError("no model load when resuming")), \
                 contextlib.redirect_stdout(io.StringIO()):
@@ -1043,15 +1186,79 @@ class TestSealedProtocol(Base):
         ev = json.loads((self.cells / "eval_sealed_E-R3_s2.json").read_text(encoding="utf-8"))
         self.assertEqual((ev["truncated"], ev["raw_sha256"], M.sha(raw_p), lc.max_new_seen),
                          (sum(j % 5 == 4 for j in range(len(bat))), raw_sha, raw_sha, [176]))
+        events = M.read_attempts(self.cells)
+        self.assertEqual(M.attempt_summary(events, "eval", "E-R3_s2"), {"started": 2, "ok": 1, "failed": 1})
+        self.assertEqual([e.get("post_process_only") for e in events if e["event"] == "start"], [False, True])
         # a raw file generated for another adapter is never post-processed under this tag
         lc2 = FakeLC(script)
-        with mock.patch.object(M, "map_finished", side_effect=RuntimeError("mapping failed")):
+        with mock.patch.object(M.S, "aggregate", side_effect=crash):
             with self.assertRaises(RuntimeError):
                 self.run_cmd(M.cmd_eval, lc2, arm="E-R2", seed=2)
         os.replace(self.cells / "raw_sealed_E-R2_s2.json.gz", self.cells / "raw_sealed_E-R2_s1.json.gz")
         with self.assertRaises(SystemExit) as cm:
             self.run_cmd(M.cmd_eval, FakeLC(script), arm="E-R2", seed=1)
         self.assertIn("generated for another", str(cm.exception))
+        self.assertEqual(M.attempt_summary(M.read_attempts(self.cells), "eval", "E-R2_s1")["failed"], 1)
+
+    def test_cmd_eval_truncation_unknown(self):
+        """Review item 11: if the decoded rows cannot be mapped to prompts, the eval completes with truncated null and
+        truncation_unknown true (every preds row's `finished` null) instead of failing."""
+        _, bat = self.opened_cells()
+        lc = FakeLC(self.eval_script(bat))
+        with mock.patch.object(M, "map_finished", side_effect=RuntimeError("cannot map decoded rows to prompts")):
+            _, printed = self.run_cmd(M.cmd_eval, lc, arm="E-R2", seed=0)
+        ev = json.loads((self.cells / "eval_sealed_E-R2_s0.json").read_text(encoding="utf-8"))
+        self.assertEqual((ev["truncated"], ev["truncation_unknown"], ev["n"]), (None, True, 1760))
+        with gzip.open(self.cells / "preds_sealed_E-R2_s0.jsonl.gz", "rt", encoding="utf-8") as f:
+            preds = [json.loads(x) for x in f]
+        self.assertEqual({p["finished"] for p in preds}, {None})
+        self.assertIn("truncated unknown", printed)
+        with gzip.open(self.cells / "raw_sealed_E-R2_s0.json.gz", "rt", encoding="utf-8") as f:
+            raw = json.load(f)
+        self.assertEqual(M.raw_finished(raw), [j % 5 != 4 for j in range(len(bat))])  # the real mapping works
+        raw["decode_calls"] = raw["decode_calls"][::-1]
+        self.assertIsNone(M.raw_finished(raw))  # fails closed: unknown, never guessed
+
+    def test_bound_code_drift_refused_after_the_mint(self):
+        """Review item 1: open-sealed (before load_p3), smoke (before the model load) and eval (before decoding, and
+        before post-processing an existing raw file) refuse once a bound file differs from the commitment."""
+        commit_sha = self.mint()
+        self.all_adapters()
+        spy = mock.Mock(side_effect=M.load_p3)
+        with self.drift(), mock.patch.object(M, "load_p3", spy), self.assertRaises(SystemExit) as cm:
+            self.open_(commit_sha)
+        spy.assert_not_called()
+        self.assertIn("open-sealed: bound code differs from SEALED_COMMIT.json: ['stats.py']", str(cm.exception))
+        self.assertFalse((self.cells / "SEALED_OPEN.json").exists())
+        self.hold_lane()
+        (self.cells / "SMOKE_E-R3_s0.json").unlink()
+        lc = FakeLC(lambda j, p: ("{}", True))
+        with self.drift("trace_target.py"), self.assertRaises(SystemExit) as cm:
+            self.run_cmd(M.cmd_smoke, lc, arm="E-R3", seed=0)
+        self.assertIn("smoke: bound code differs from SEALED_COMMIT.json: ['trace_target.py']", str(cm.exception))
+        self.assertEqual((lc.loads, (self.cells / "SMOKE_E-R3_s0.json").exists()), (0, False))
+        self.adapter("E-R3_s0")
+        self.open_(commit_sha)
+        bat = M.sealed_battery(self.cells)[0]
+        lc = FakeLC(self.eval_script(bat))
+        with self.drift("analyze_e01r.py"), self.assertRaises(SystemExit) as cm:
+            self.run_cmd(M.cmd_eval, lc, arm="E-R3", seed=1)
+        self.assertIn("eval: bound code differs from SEALED_COMMIT.json: ['analyze_e01r.py']", str(cm.exception))
+        self.assertEqual((lc.loads, M.raw_path(self.cells, "E-R3_s1").exists()), (0, False))
+        with mock.patch.object(M.S, "aggregate", side_effect=RuntimeError("crash after decoding")), \
+                self.assertRaises(RuntimeError):
+            self.run_cmd(M.cmd_eval, FakeLC(self.eval_script(bat)), arm="E-R3", seed=1)
+        self.assertTrue(M.raw_path(self.cells, "E-R3_s1").exists())
+        post = mock.Mock(side_effect=M.score_outputs)
+        with self.drift(), mock.patch.object(M, "score_outputs", post), self.assertRaises(SystemExit) as cm:
+            self.run_cmd(M.cmd_eval, FakeLC(self.eval_script(bat)), arm="E-R3", seed=1)
+        self.assertIn("eval: bound code differs", str(cm.exception))
+        post.assert_not_called()  # the existing raw file is not post-processed under changed code
+        self.assertFalse((self.cells / "eval_sealed_E-R3_s1.json").exists())
+        self.assertEqual(M.attempt_summary(M.read_attempts(self.cells), "eval", "E-R3_s1"),
+                         {"started": 1, "ok": 0, "failed": 1})  # drift refusals precede the attempt
+        self.assertNotIn("lane.py", M.code_sha256())  # rcx/lane.py is not bound
+        self.assertNotIn(ROOT / "rcx" / "lane.py", [Path(p).resolve() for p in M.bound_code()])
 
     def test_eval_refused_before_opening(self):
         self.mint()
@@ -1162,6 +1369,32 @@ class TestScoringSmokeLane(Base):
         self.assertIsNone(M.smoke_problem(cells, "E-R3_s0", "a", 176))
         self.assertIsNotNone(M.smoke_problem(cells, "E-R3_s0", "b", 176))
         self.assertIsNotNone(M.smoke_problem(cells, "E-R3_s0", "a", 160))
+
+    def test_attempts_log(self):
+        """Review item 5: the append-only attempts log of train/smoke/eval (PREREG_E01R section 10)."""
+        cells = self.tmp / "cells"
+        self.assertEqual(M.read_attempts(cells), [])
+        M.attempt_start(cells, "eval", "E-R2_s0")  # no end: a crash, kill or refusal after the start
+        a2 = M.attempt_start(cells, "eval", "E-R2_s0", post_process_only=True)
+        M.attempt_end(cells, a2, "eval", "E-R2_s0")
+        a3 = M.attempt_start(cells, "smoke", "E-R2_s0")
+        M.attempt_end(cells, a3, "smoke", "E-R2_s0", status="failed")
+        ev = M.read_attempts(cells)
+        self.assertEqual([e["n"] for e in ev if e["event"] == "start"], [1, 2, 1])
+        self.assertEqual(M.attempt_summary(ev, "eval", "E-R2_s0"), {"started": 2, "ok": 1, "failed": 1})
+        self.assertEqual(M.attempt_summary(ev, "smoke", "E-R2_s0"), {"started": 1, "ok": 0, "failed": 1})
+        self.assertEqual(M.attempt_summary(ev, "eval", "E-R3_s0"), {"started": 0, "ok": 0, "failed": 0})
+        before = M.attempts_path(cells).read_bytes()
+        M.attempt_start(cells, "train", "E-R3_s0")
+        self.assertTrue(M.attempts_path(cells).read_bytes().startswith(before))  # appended, never rewritten
+        with open(M.attempts_path(cells), "a", encoding="utf-8") as f:
+            f.write("not json\n")  # a torn line (crash / power loss) is reported and ignored, never fatal
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(len(M.read_attempts(cells)), len(ev) + 1)
+        with open(M.attempts_path(cells), "a", encoding="utf-8") as f:
+            f.write('{"oops": 1}\n')  # well-formed JSON that is not an attempt event still refuses
+        with self.assertRaises(SystemExit), contextlib.redirect_stdout(io.StringIO()):
+            M.read_attempts(cells)
 
     def test_require_lane(self):
         def refused(text):

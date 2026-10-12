@@ -320,8 +320,9 @@ class TestTokenBudget(unittest.TestCase):
         """Review finding 10: every E01R eval uses the committed build-time max_new (>= 160), never generate's 64."""
         doc = " ".join(TT.__doc__.split())
         self.assertNotIn("E01N/E01R evals use the default max_new=64", doc)
-        self.assertIn("every arm (N-CFSD, E-R*, OFF, N-VR) is decoded with the committed build-time max_new (>= 160",
-                      doc)
+        self.assertIn("every arm (N-CFSD, E-R*, OFF) is decoded with the committed build-time max_new (>= 160", doc)
+        self.assertIn("N-VR is not evaluated", doc)  # PREREG_E01R section 4: eval refuses N-VR
+        self.assertNotIn("OFF, N-VR", doc)
 
 
 if __name__ == "__main__":

@@ -35,8 +35,8 @@ Token budget (token_budget_note() reads rcx/native/lora_cpu.py as source; nothin
   at a newline (no stop strings, no stopping criteria), so the "\\n" inside the R3 target is harmless.
 - generate's default max_new=64 (used by the E01N evals) fits the native answer: at most 68 bytes on the DEV battery,
   mean 25-29 bytes in the train regimes. The E01R evals and smoke tests never use that default: every arm (N-CFSD,
-  E-R*, OFF, N-VR) is decoded with the committed build-time max_new (>= 160; see the frozen rule below), recorded in
-  TRAIN_MANIFEST_E01R.json and SEALED_COMMIT.json and passed explicitly by native_e01r.py.
+  E-R*, OFF) is decoded with the committed build-time max_new (>= 160; see the frozen rule below), recorded in
+  TRAIN_MANIFEST_E01R.json and SEALED_COMMIT.json and passed explicitly by native_e01r.py. N-VR is not evaluated.
 - R3 targets are longer: line 1 alone has a mean of 57-68 bytes. Full targets are at most 154 bytes on the DEV battery
   (all 13 strata x 6 surfaces; the longest is an OR composition over 6 word-named accounts) and at most 128 bytes in
   the FX/VR/CF_SD train sets (means 87-97).

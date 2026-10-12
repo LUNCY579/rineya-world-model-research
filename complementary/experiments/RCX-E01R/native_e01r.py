@@ -10,7 +10,8 @@ row_order_for(1501, 190, 16, k), exactly as for N-CFSD_sk):
   E-R2  recipes.make_r2(1501, seed=20261264)                                                   branch B4
   E-R3  gen.make_train("CF_SD", 1501, 20261253); target = trace_target.trace_target(rec)       B3 and B4
   N-CFSD  control: the CX D-30 adapters, read-only from runs/RCX-E01N/cells (sha256 = D-30 value = E01N TRAIN_META.json
-          = E01N SEALED_OPEN.json record); never retrained. N-VR (descriptive) and OFF may also be evaluated.
+          = E01N SEALED_OPEN.json record); never retrained. OFF (no adapter; descriptive) is also evaluated. N-VR is
+          not evaluated on the E01R SEALED battery: eval refuses it (PREREG_E01R section 4).
 Rows are written as runs/RCX-E01R/cells/train_<arm>.jsonl (native_e01.native_rows keys) with TRAIN_MANIFEST_E01R.json,
 which also records max_new = max(160, longest tokenizer-measured R3 gold target + 16) for EVERY arm's SEALED eval.
 
@@ -27,9 +28,9 @@ SEALED battery (surfaces `in` + `p3`, 40 parents per stratum, run_e01r.STRATA = 
   `in` record and every p3 record with tid/input/p3_template = None and its p3_pol, p3_form, p3_j. open-sealed (once,
   write-once SEALED_OPEN.json) is the first P3 read: P3_SEALED_v2.json.secret, sha256 checked against POOL_REFINE.json
   and the commitment BEFORE parsing, per-cell counts checked; templates are registered as templates.SPOS/SNEG['p3:<id>']
-  in memory only. Every other check that can refuse the opening (commitment, salt, skeleton, manifest, row audit, row
-  files and their shas, adapters, smoke records) runs BEFORE that read. No command prints P3 text, and the rendered
-  battery is never written to disk.
+  in memory only. Every other check that can refuse the opening (commitment, bound code, manifest, row audit, row
+  files and their shas, adapters, smoke records, salt, skeleton) runs BEFORE that read. No command prints P3 text,
+  and the rendered battery is never written to disk.
 
 Commands, in operator order (from complementary/). Branch B4 (CX D-39) is shown; B3 would use E-R1 in place of E-R2,
 and the R1 path (E-R1, --r1-fallback) refuses unless BRANCH_STEP_A.json says B3:
@@ -37,24 +38,36 @@ and the R1 path (E-R1, --r1-fallback) refuses unless BRANCH_STEP_A.json says B3:
   python -B experiments/RCX-E01R/native_e01r.py build --arms E-R2,E-R3    (B4; B3: E-R1,E-R3; B1: none; tokenizer only)
   python -B experiments/RCX-E01R/audit_e01r.py --out runs/RCX-E01R/cells --arms E-R2,E-R3 --tok
       -> AUDIT_E01R.json (create-only) {"ok", "arm_ok": {arm: bool}, "rows_sha256": {arm: sha256}} (train/mint need it)
+  python -B experiments/RCX-E01R/native_e01r.py code-sha    (pure: prints the bound-code shas and their digest, the
+      value the freeze entry logs and mint-commit --expect-code-sha256 must equal; see code_digest)
   <full freeze in DECISIONS>
-  python -B experiments/RCX-E01R/native_e01r.py mint-commit --arms-required N-CFSD_s0,N-CFSD_s1,N-CFSD_s2,E-R2_s0,\
-      E-R2_s1,E-R2_s2,E-R3_s0,E-R3_s1,E-R3_s2                         (B1: the three N-CFSD tags only)
-      The treatment arms must equal the manifest's, which must equal BRANCH_STEP_A.json's. One arm may be dropped
-      (PREREG section 2: its rows fail the row audit) only with --drop-arm <arm> --reason "<why>", recorded in
-      SEALED_COMMIT.json. The commitment binds the sha256 of bound_code(), analyze_e01r.py and rcx/stats.py included;
-      train refuses if any bound file's sha256 differs from it (open-sealed records any difference).
+  python -B experiments/RCX-E01R/native_e01r.py mint-commit --expect-code-sha256 <freeze entry value> \
+      --arms-required N-CFSD_s0,N-CFSD_s1,N-CFSD_s2,E-R2_s0,E-R2_s1,E-R2_s2,E-R3_s0,E-R3_s1,E-R3_s2
+      (B1: the three N-CFSD tags only). The treatment arms must equal the manifest's, which must equal
+      BRANCH_STEP_A.json's, and AUDIT_E01R.json must pass every kept arm and record its tokens per training seed. One
+      arm may be dropped (PREREG section 2: its rows fail the row audit) only with --drop-arm <arm> --reason "<why>",
+      and only if AUDIT_E01R.json failed that arm (arm_ok false, with a failure naming it) on its manifest rows;
+      the drop is recorded in SEALED_COMMIT.json. The commitment binds the sha256 of bound_code() (analyze_e01r.py
+      and rcx/stats.py included; rcx/lane.py, shared lane infrastructure that does not touch results, is not bound).
+      train, smoke, open-sealed and eval refuse if any bound file's current sha256 differs from the commitment.
   lane chain: native_e01r.py train --arm E-R2 --seed 0 (... 6 adapters), then smoke --arm E-R2 --seed 0 (... 6)
   python -B experiments/RCX-E01R/native_e01r.py open-sealed --expect-commit-sha <SEALED_COMMIT.json sha256, DECISIONS>
   lane chain: eval --battery sealed --arm N-CFSD --seed 0|1|2 ; --arm E-R2 --seed 0|1|2 ; --arm E-R3 --seed 0|1|2 ;
-      --arm OFF (optional: --arm N-VR --seed 0); then analyze_e01r.py.
+      --arm OFF; then analyze_e01r.py (once). eval refuses N-VR.
 Lane (CX D-36): train, smoke and eval refuse unless the lock %TEMP%/rineya-cpu-lane.json is held by 'rcx', its holder
 pid is alive (a stale lock is refused) and the environment variable RCX_LANE_TOKEN equals the lock's token. The chain
 exports it after acquiring:
   export RCX_LANE_TOKEN=$(python -B -c "from rcx import lane; print(lane.read_lock()['token'])")
+Attempts (PREREG_E01R section 10): train, smoke and eval append to <out>/ATTEMPTS_E01R.jsonl (append-only) a "start"
+event once the environmental gates passed (the lane is held by this chain; RAM suffices for a model load) and an "end"
+event with status "ok" when the cell's outputs are written. Refusals before the start (argument errors, custody
+checks that precede the lane, the lane, RAM) are not attempts. An attempt with no "ok" end (an exception, a refusal
+after the start, a kill, an OOM, a power loss) is a failed attempt; analyze_e01r.py counts them for --missing.
 eval writes the raw generations (raw_sealed_<tag>.json.gz, create-only) right after decoding, before the truncation
 mapping, scoring or any other post-processing; if that later step fails, a rerun post-processes the raw file without
-loading the model or decoding again.
+loading the model or decoding again. If the truncation mapping itself fails, the eval records truncated = null with
+truncation_unknown = true (review item 11) instead of failing. eval prints no score, composite or decision of a SEALED
+cell: only its completion and counts.
 CPU only; model loads refuse below 12 GB available RAM (native_probe.need_ram); rcx.guard between micro-batches.
 """
 import argparse
@@ -65,6 +78,7 @@ import json
 import os
 import random
 import re
+import secrets
 import sys
 import time
 from collections import Counter, defaultdict
@@ -137,6 +151,8 @@ P3_PATH = POOLS / "P3_SEALED_v2.json.secret"  # read only by open-sealed and sea
 P3_SHA256 = "88dd432bf59ba82617035d3a96280be74ef9fce233cfafa03e539cb489bcf052"  # CX D-34; PREREG_E01R section 4
 ANALYZE_PATH = HERE / "analyze_e01r.py"
 MANIFEST, AUDIT = "TRAIN_MANIFEST_E01R.json", "AUDIT_E01R.json"
+ATTEMPTS = "ATTEMPTS_E01R.jsonl"  # append-only start/end events of train, smoke and eval (PREREG_E01R section 10)
+MAX_FURTHER_ATTEMPTS = 2  # PREREG_E01R section 10: at most 2 further attempts per cell after a crash
 BASE_SHA256 = "a28629c9d3454fbf2e884fd7ca442c1b406e7caf4b36d34b2c0614d0add31284"  # Titan-Sparse FP32 model.safetensors
 LANE_TOKEN_ENV = "RCX_LANE_TOKEN"  # exported by the lane chain after rcx.lane acquire (the lock's token)
 E01N_CELLS = ROOT / "runs" / "RCX-E01N" / "cells"
@@ -181,12 +197,12 @@ def read_json(p):
 
 def bound_code():
     """The code whose sha256 the SEALED commitment binds (PREREG_E01R section 4): this module, the recipes, the R3
-    target, the row audits, the frozen branch rule, the step A runner, the E01N code it borrows, lora_cpu, the lane,
-    the rcx.rcl generator/score/wording-audit modules, rcx.stats and the analysis (analyze_e01r.py; must exist at the
-    mint)."""
+    target, the row audits, the frozen branch rule, the step A runner, the E01N code it borrows, lora_cpu, the rcx.rcl
+    generator/score/wording-audit modules, rcx.stats and the analysis (analyze_e01r.py; must exist at the mint).
+    rcx/lane.py is not bound: it is shared lane infrastructure (CX D-36) that has no effect on any result."""
     return [Path(__file__), HERE / "recipes.py", HERE / "trace_target.py", HERE / "audit_e01r.py",
             HERE / "audit_tr_pool.py", HERE / "decide_branch.py", HERE / "run_e01r.py", E01N / "native_e01.py",
-            E01N / "native_probe.py", ROOT / "rcx" / "native" / "lora_cpu.py", ROOT / "rcx" / "lane.py",
+            E01N / "native_probe.py", ROOT / "rcx" / "native" / "lora_cpu.py",
             ROOT / "rcx" / "stats.py", ROOT / "rcx" / "rcl" / "wording_audit.py"] \
         + [Path(m.__file__) for m in (gen, V, T, W, S)] + [ANALYZE_PATH]
 
@@ -201,6 +217,94 @@ def code_sha256(strict=False):
     if len({p.name for p in files}) != len(files):
         raise RuntimeError("bound code file names collide")
     return {p.name: sha(p) for p in files if p.exists()}
+
+
+def code_digest(code):
+    """The --expect-code-sha256 value (review item 14): sha256 (hex) of the canonical JSON of a {file name: sha256}
+    bound-code dict, i.e. of json.dumps(code, sort_keys=True, separators=(",", ":"), ensure_ascii=True) encoded as
+    UTF-8. The freeze entry logs code_digest(code_sha256(strict=True)) (printed by the code-sha command)."""
+    text = json.dumps(code, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _code_diff(rec):
+    """Bound code files whose current sha256 differs from the commitment's (or that only one side has)."""
+    now, then = code_sha256(), rec.get("code_sha256") or {}
+    return sorted(k for k in set(now) | set(then) if now.get(k) != then.get(k))
+
+
+def require_bound_code(rec, what):
+    """PREREG_E01R section 4: train, smoke, open-sealed and eval refuse if any bound file's current sha256 differs
+    from SEALED_COMMIT.json `rec` (bound code is frozen from the mint on)."""
+    drift = _code_diff(rec)
+    if drift:
+        raise SystemExit(f"{what}: bound code differs from SEALED_COMMIT.json: {drift} (PREREG_E01R section 4)")
+
+
+# ----------------------------------------------------------------------------- attempts log (PREREG section 10)
+
+def attempts_path(cells):
+    return Path(cells) / ATTEMPTS
+
+
+def read_attempts(cells):
+    """The events of <cells>/ATTEMPTS_E01R.jsonl in file order ([] if absent); SystemExit on a malformed line."""
+    p = attempts_path(cells)
+    if not p.exists():
+        return []
+    out = []
+    lines = p.read_text(encoding="utf-8").splitlines()
+    last = max((k for k, line in enumerate(lines, 1) if line.strip()), default=0)
+    for k, line in enumerate(lines, 1):
+        if not line.strip():
+            continue
+        try:
+            ev = json.loads(line)
+        except ValueError:
+            if k == last or not line.rstrip().endswith("}"):  # torn by a crash/power loss: reported, not fatal
+                print(f"WARNING: {ATTEMPTS} line {k} is torn (not JSON); ignored", flush=True)
+                continue
+            raise SystemExit(f"{ATTEMPTS} line {k} is not JSON") from None
+        if not isinstance(ev, dict) or ev.get("event") not in ("start", "end") or not ev.get("attempt"):
+            raise SystemExit(f"{ATTEMPTS} line {k} is not an attempt event")
+        out.append(ev)
+    return out
+
+
+def _append_attempt(cells, ev):
+    p = attempts_path(cells)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    torn = p.exists() and p.stat().st_size > 0 and not p.read_bytes().endswith(b"\n")
+    with open(p, "a", encoding="utf-8", newline="\n") as f:  # append-only: events are never rewritten
+        f.write(("\n" if torn else "") + json.dumps(ev, sort_keys=True) + "\n")  # a torn line stays on its own
+        f.flush()
+        os.fsync(f.fileno())
+
+
+def attempt_start(cells, cmd, tag, **info):
+    """Append a 'start' event for cell (cmd, tag) and return its attempt id. Called once the environmental gates have
+    passed (lane held; RAM for a model load), so a refused start is never an attempt (PREREG_E01R section 10)."""
+    n = sum(1 for e in read_attempts(cells) if e["event"] == "start" and (e.get("cmd"), e.get("tag")) == (cmd, tag))
+    aid = secrets.token_hex(8)
+    _append_attempt(cells, {"event": "start", "cmd": cmd, "tag": tag, "attempt": aid, "n": n + 1, "pid": os.getpid(),
+                            "at": time.strftime("%Y-%m-%d %H:%M:%S %Z"), **info})
+    return aid
+
+
+def attempt_end(cells, aid, cmd, tag, status="ok"):
+    """Append the 'end' event of attempt `aid` (written only after the cell's outputs exist)."""
+    _append_attempt(cells, {"event": "end", "cmd": cmd, "tag": tag, "attempt": aid, "status": status,
+                            "at": time.strftime("%Y-%m-%d %H:%M:%S %Z")})
+
+
+def attempt_summary(events, cmd, tag):
+    """{"started", "ok", "failed"} of cell (cmd, tag): failed = started attempts without an 'ok' end (an exception or
+    a refusal after the start, or no end at all: a kill, an OOM, a power loss)."""
+    key = (cmd, tag)
+    starts = [e["attempt"] for e in events if e["event"] == "start" and (e.get("cmd"), e.get("tag")) == key]
+    ok = {e["attempt"] for e in events
+          if e["event"] == "end" and e.get("status") == "ok" and (e.get("cmd"), e.get("tag")) == key}
+    return {"started": len(starts), "ok": sum(a in ok for a in starts), "failed": sum(a not in ok for a in starts)}
 
 
 def _heavy():
@@ -463,9 +567,14 @@ def cmd_build(a):
 # ----------------------------------------------------------------------------- train (D-03, exactly native_e01's)
 
 def cmd_train(a):
+    """Train one treatment adapter (after the mint, before opening). A completed run (adapter AND TRAIN_META.json) is
+    never retrained. An adapter without TRAIN_META.json is a run that stopped after saving the adapter: it resumes
+    from its checkpoint under the same fingerprint (lora_cpu.train_sft refuses a checkpoint of another run); without a
+    checkpoint it is refused (PREREG_E01R section 10: rename the partial directory to <tag>.crashed-<n> first)."""
     tag = treatment_tag(a.arm, a.seed)
     out = Path(a.out) / f"{a.arm}_s{a.seed}"
-    if (out / "adapter" / "adapter_model.safetensors").exists():
+    has_adapter, has_meta = (out / "adapter" / "adapter_model.safetensors").exists(), (out / "TRAIN_META.json").exists()
+    if has_adapter and has_meta:
         print("adapter exists; refusing to retrain under the same id", flush=True)
         return
     commit_p, _, open_p = sealed_paths(a.out)
@@ -473,6 +582,12 @@ def cmd_train(a):
         raise SystemExit("the SEALED battery is open; no adapter is trained after opening (PREREG_E01R section 11)")
     if not commit_p.exists():
         raise SystemExit("no SEALED_COMMIT.json: mint-commit precedes treatment training (PREREG_E01R section 10)")
+    resume = (out / "ckpt" / "state.pt").exists()
+    if has_meta or (has_adapter and not resume):
+        what = ("TRAIN_META.json without an adapter" if has_meta else
+                "an adapter without TRAIN_META.json and without a resume checkpoint")
+        raise SystemExit(f"{tag}: {what}: the run cannot be resumed; rename the partial run directory to "
+                         f"{tag}.crashed-<n> before training it again from step 0 (PREREG_E01R section 10)")
     commit = read_json(commit_p)
     if tag not in commit["arms_required"]:
         raise SystemExit(f"{tag} is not in the committed arms_required {commit['arms_required']}")
@@ -488,13 +603,12 @@ def cmd_train(a):
     audit_sha = require_audit(a.out, a.arm, rows_sha)
     if audit_sha != commit.get("audit_e01r_sha256"):
         raise SystemExit(f"{AUDIT} is not the row audit bound by SEALED_COMMIT.json (changed after the mint)")
-    drift = _code_diff(commit)
-    if drift:
-        raise SystemExit(f"bound code differs from SEALED_COMMIT.json: {drift} (PREREG_E01R section 4)")
+    require_bound_code(commit, "train")
     lock = require_lane()
     code_sha = code_sha256()
     NP, LC, ThermalGuard = _heavy()
     NP.need_ram()
+    attempt = attempt_start(a.out, "train", tag, resume=resume)  # the gates passed: from here on it is an attempt
     base_sha = sha(LC.PATHS["sparse"] / "model.safetensors")
     if base_sha != BASE_SHA256:
         raise SystemExit(f"the base model.safetensors sha256 {base_sha[:12]} is not Titan-Sparse FP32 "
@@ -523,6 +637,7 @@ def cmd_train(a):
     ck = out / "ckpt" / "state.pt"
     if ck.exists():
         ck.unlink()
+    attempt_end(a.out, attempt, "train", tag)
     P(f"done {log['wall_s']}s adapter sha {meta['adapter_sha256'][:12]}")
 
 
@@ -705,6 +820,8 @@ def cmd_smoke(a):
     if not commit_p.exists():
         raise SystemExit("no SEALED_COMMIT.json: the smoke test follows the mint and the training")
     commit = read_json(commit_p)
+    require_bound_code(commit, "smoke")  # before any model load
+    code_sha = code_sha256()
     if tag not in commit["arms_required"]:
         raise SystemExit(f"{tag} is not in the committed arms_required {commit['arms_required']}")
     man_p = cells / MANIFEST
@@ -726,6 +843,7 @@ def cmd_smoke(a):
     lock = require_lane()
     NP, LC, ThermalGuard = _heavy()
     NP.need_ram()
+    attempt = attempt_start(cells, "smoke", tag)
     model, tok = LC.load_core("sparse")
     from peft import PeftModel
     model = PeftModel.from_pretrained(model, info["adapter_dir"], is_trainable=False).eval()
@@ -738,8 +856,10 @@ def cmd_smoke(a):
     wall = round(time.time() - t0, 1)
     rep = smoke_report(a.arm, sel, outs, map_finished(lens, probe.calls, outs))
     rec = {"tag": tag, "adapter_sha256": info["adapter_sha256"], "rows_sha256": info["rows_sha256"],
-           "row_indices": idx, "max_new": max_new, **rep, "outs": outs, "wall_s": wall, "lane": lock}
+           "row_indices": idx, "max_new": max_new, **rep, "outs": outs, "wall_s": wall, "code_sha256": code_sha,
+           "lane": lock}
     NE._write_once(res_p, json.dumps(rec, indent=1))
+    attempt_end(cells, attempt, "smoke", tag)
     print(f"[{tag}] smoke: truncated {rec['truncated']}/{rec['n']}, well-formed {rec['well_formed_share']:.2f}, "
           f"pass {rec['pass']}", flush=True)
 
@@ -857,8 +977,39 @@ def check_arms_required(tags, manifest):
     return arms
 
 
+def drop_problem(aud, arm, rows_sha):
+    """None if AUDIT_E01R.json failed `arm` on these rows, the only reason to drop an arm (PREREG_E01R section 2: its
+    rows fail the training-row audit): arm_ok[arm] is false, a failure names the arm (audit_e01r's '<check>:<arm>')
+    and the audit covered the manifest's rows. Otherwise the reason the drop is refused."""
+    if (aud.get("arm_ok") or {}).get(arm) is not False:
+        return f"{AUDIT} does not record arm_ok[{arm}] = false"
+    if not [f for f in aud.get("failures") or [] if isinstance(f, str) and f.endswith(f":{arm}")]:
+        return f"{AUDIT} records no failure naming {arm}"
+    if (aud.get("rows_sha256") or {}).get(arm) != rows_sha:
+        return f"{AUDIT} did not audit {arm}'s manifest rows"
+    return None
+
+
+def tokens_problem(aud, arm):
+    """None if AUDIT_E01R.json records the supervised and processed tokens of `arm` for training seeds 0, 1 and 2 (the
+    section 3 covariates and section 7's tie-break; audit_e01r.py --tok), else what is missing (review item 15)."""
+    per = ((((aud.get("arms") or {}).get(arm) or {}).get("tokens") or {}).get("per_seed")) or {}
+    bad = [s for s in ("0", "1", "2") if not isinstance(per.get(s), dict) or not all(
+        isinstance(per[s].get(k), (int, float)) and not isinstance(per[s].get(k), bool)
+        for k in ("supervised_tokens", "tokens_processed"))]
+    return f"{AUDIT} lacks tokens.per_seed {bad} for {arm} (run audit_e01r.py with --tok)" if bad else None
+
+
+def cmd_code_sha(a):
+    """Print the bound-code shas and code_digest of them: the value the freeze entry logs and mint-commit
+    --expect-code-sha256 must equal. Pure (no model, no tokenizer, no P3)."""
+    code = code_sha256(strict=True)
+    print(json.dumps({"code_sha256": code, "expect_code_sha256": code_digest(code),
+                      "definition": "sha256 of json.dumps(code_sha256, sort_keys=True, separators=(',', ':'), "
+                                    "ensure_ascii=True) as UTF-8"}, indent=1), flush=True)
+
+
 def cmd_mint_commit(a):
-    import secrets
     cells = Path(a.out)
     commit_p, salt_p, open_p = sealed_paths(cells)
     if commit_p.exists() or salt_p.exists() or open_p.exists():
@@ -875,12 +1026,17 @@ def cmd_mint_commit(a):
     built = list(man.get("arms", {}))
     if sorted(built) != sorted(want):
         raise SystemExit(f"{MANIFEST} arms {built} != the arms of branch {branch}: {want}")
+    aud = read_json(cells / AUDIT) if (cells / AUDIT).exists() else {}
     drop, reason = (getattr(a, "drop_arm", "") or "").strip(), (getattr(a, "reason", "") or "").strip()
     dropped = []
     if drop or reason:
         if drop not in want or not reason:
             raise SystemExit(f"--drop-arm must name one of the branch's arms {want} and --reason must say why "
                              "(PREREG_E01R section 2: an arm whose rows fail the training-row audit)")
+        why = drop_problem(aud, drop, man["arms"][drop].get("sha256"))
+        if why:
+            raise SystemExit(f"--drop-arm {drop} refused: {why} (PREREG_E01R section 2: only an arm whose rows fail "
+                             "the training-row audit may be dropped)")
         dropped = [{"arm": drop, "reason": reason}]
     keep = [x for x in want if x != drop]
     arms = check_arms_required(tags, man)
@@ -896,11 +1052,18 @@ def cmd_mint_commit(a):
         if rows_sha[arm] != man["arms"][arm]["sha256"]:
             raise SystemExit(f"train_{arm}.jsonl differs from {MANIFEST}")
         require_audit(cells, arm, rows_sha[arm])
+        why = tokens_problem(aud, arm)
+        if why:
+            raise SystemExit(f"refusing to mint: {why}")
     if sha(HERE / "decide_branch.py") != DECIDE_SHA256:
         raise SystemExit("decide_branch.py differs from its CX D-37 freeze")
     if not ANALYZE_PATH.exists():
         raise SystemExit(f"{ANALYZE_PATH.name} must exist (frozen) before the mint")
     code = code_sha256(strict=True)
+    if (getattr(a, "expect_code_sha256", "") or "").strip() != code_digest(code):
+        raise SystemExit("--expect-code-sha256 must equal the bound-code digest logged in the freeze entry "
+                         "(code_digest; printed by the code-sha command): it is missing, or the bound code differs "
+                         "from the freeze")
     p3 = p3_reference()
     salt = secrets.token_hex(32)
     skel = build_skeleton(NE.sealed_seed(salt), p3["counts"])  # in memory only, never shown
@@ -911,7 +1074,7 @@ def cmd_mint_commit(a):
            "arms_required": tags, "treatment_arms": arms, "branch": brec, "dropped_arms": dropped,
            "max_new": man["max_new"], "train_manifest_sha256": sha(man_p), "rows_sha256": rows_sha,
            "audit_e01r_sha256": sha(cells / AUDIT) if (cells / AUDIT).exists() else None,
-           "code_sha256": code, "python": sys.version.split()[0],
+           "code_sha256": code, "code_sha256_digest": code_digest(code), "python": sys.version.split()[0],
            "minted_at": time.strftime("%Y-%m-%d %H:%M:%S %Z")}
     NE._write_once(salt_p, salt)
     NE._write_once(commit_p, json.dumps(rec, indent=1))
@@ -954,17 +1117,12 @@ def train_overlap(files, battery):
             "parent_ids": sorted(sem_p | skel_p)}
 
 
-def _code_diff(rec):
-    """Bound code files whose sha256 differs from the commitment's (descriptive; named on a skeleton mismatch)."""
-    now, then = code_sha256(), rec.get("code_sha256", {})
-    return sorted(k for k in set(now) | set(then) if now.get(k) != then.get(k))
-
-
 def cmd_open_sealed(a):
     """Open the SEALED battery once. Every check that can refuse runs BEFORE the first read of P3 (load_p3): the
-    commitment (sha, salt, regenerated skeleton), the manifest, the row audit, the training-row files and their shas,
-    the adapters and their smoke records. The descriptive records (R3 gold byte bound, training overlap) are computed
-    on the skeleton, which carries every P3-independent field of the battery."""
+    commitment's sha, the bound code (no file changed since the mint), the manifest, the row audit, the training-row
+    files and their shas, the adapters and their smoke records, the salt and the regenerated skeleton. The descriptive
+    records (R3 gold byte bound, training overlap) are computed on the skeleton, which carries every P3-independent
+    field of the battery."""
     cells = Path(a.out)
     commit_p, salt_p, open_p = sealed_paths(cells)
     if not commit_p.exists():
@@ -974,6 +1132,7 @@ def cmd_open_sealed(a):
     if not a.expect_commit_sha or a.expect_commit_sha != sha(commit_p):
         raise SystemExit("--expect-commit-sha must equal the SEALED_COMMIT.json sha256 recorded in DECISIONS")
     rec = read_json(commit_p)
+    require_bound_code(rec, "open-sealed")  # long before load_p3
     man_p = cells / MANIFEST
     if not man_p.exists() or sha(man_p) != rec["train_manifest_sha256"]:
         raise SystemExit(f"{MANIFEST} is missing or changed after the mint")
@@ -1028,8 +1187,6 @@ def cmd_open_sealed(a):
     if o["train_overlap"]["parent_ids"]:
         print(f"WARNING: {len(o['train_overlap']['parent_ids'])} SEALED parents overlap training rows; they are "
               "dropped from every arm", flush=True)
-    if o["code_changed_since_mint"]:
-        print(f"NOTE: bound code changed since the mint: {o['code_changed_since_mint']}", flush=True)
 
 
 def sealed_battery(out):
@@ -1056,16 +1213,16 @@ def sealed_battery(out):
 
 # ----------------------------------------------------------------------------- eval (SEALED only)
 
+NVR_REFUSED = "N-VR is not evaluated on the E01R SEALED battery (PREREG_E01R section 4); eval refuses it"
+
+
 def eval_adapter(cells, arm, tag, opened):
     """(adapter dir or None, sha or None) for a SEALED eval. A committed arm (N-CFSD, E-R*) is evaluated only with the
-    adapter fixed at opening; N-VR (descriptive) only as a CX D-30 adapter; OFF has none."""
+    adapter fixed at opening; OFF has none. N-VR is refused (PREREG_E01R section 4)."""
     if arm == "OFF":
         return None, None
     if arm == "N-VR":
-        info, why = e01n_adapter(tag)
-        if why:
-            raise SystemExit(f"{tag}: {why}")
-        return Path(info["adapter_dir"]), info["adapter_sha256"]
+        raise SystemExit(NVR_REFUSED)
     if arm != "N-CFSD" and arm not in TREATMENTS:
         raise SystemExit(f"unknown arm {arm}")
     want = opened["adapters_sha256"].get(tag)
@@ -1100,17 +1257,27 @@ def read_raw(p, want):
     return raw
 
 
+def raw_finished(raw):
+    """Per record, whether its decoded ids held an EOS id: map_finished over a raw file's recorded prompt token lengths
+    and decode log; None if that mapping fails (truncation unknown; review item 11). Pure. analyze_e01r.py re-derives
+    the truncation from the raw file with this function (review item 10)."""
+    try:
+        return map_finished(raw["prompt_tokens"], raw["decode_calls"], raw["outs"])
+    except RuntimeError:
+        return None
+
+
 def score_outputs(battery, raw, arm, parse):
     """(finished, classifications, prediction rows) from raw generations. Pure (no model, no tokenizer): the truncation
-    mapping (map_finished over the recorded prompt token lengths and decode log), then score.classify of each output as
-    parsed by the arm's frozen parser (E-R3: the last non-empty line), plus the R3 line-1 diagnostics."""
+    mapping (raw_finished; None if it fails, then every row's `finished` is None), then score.classify of each output
+    as parsed by the arm's frozen parser (E-R3: the last non-empty line), plus the R3 line-1 diagnostics."""
     outs = raw["outs"]
     if len(outs) != len(battery):
         raise RuntimeError(f"{len(outs)} raw outputs for {len(battery)} battery records")
-    fin = map_finished(raw["prompt_tokens"], raw["decode_calls"], outs)
+    fin = raw_finished(raw)
     res = [S.classify(r, parse(o, list(r["gold"]["after"].keys()))) for r, o in zip(battery, outs)]
     rows = []
-    for i, (r, o, x, fi) in enumerate(zip(battery, outs, res, fin)):
+    for i, (r, o, x, fi) in enumerate(zip(battery, outs, res, fin or [None] * len(outs))):
         row = {"i": i, "out": o, "finished": fi, **x}
         if arm == "E-R3":
             row["trace"] = TT.predicate_consistency(r, o)
@@ -1119,28 +1286,45 @@ def score_outputs(battery, raw, arm, parse):
 
 
 def cmd_eval(a):
+    """One SEALED cell. Refusals before the attempt starts: N-VR or an unknown arm, an unopened battery, bound code
+    changed since the mint (before the battery is rebuilt, any decoding or any post-processing of a raw file), the
+    lane, RAM for a model load. After the start (each failure is a failed attempt, PREREG_E01R section 10): the
+    adapter fixed at opening, the committed max_new, the frozen parser, then decoding (raw file first) or the
+    post-processing of an existing raw file. Prints completion and counts only, never a score of the cell."""
     cells = Path(a.out)
+    if a.arm == "N-VR":
+        raise SystemExit(NVR_REFUSED)
+    if a.arm not in ("OFF", "N-CFSD") and a.arm not in TREATMENTS:
+        raise SystemExit(f"unknown arm {a.arm}")
+    commit_p, _, open_p = sealed_paths(cells)
+    if not open_p.exists() or not commit_p.exists():
+        raise SystemExit("SEALED battery is not open (run open-sealed after all required adapters exist)")
+    require_bound_code(read_json(commit_p), "eval")
     battery, bseed, rec, opened = sealed_battery(cells)
     tag = "OFF" if a.arm == "OFF" else f"{a.arm}_s{a.seed}"
     res_path = cells / f"eval_sealed_{tag}.json"
     if res_path.exists():
         print("eval exists", flush=True)
         return
+    lock = require_lane()
+    raw_p = raw_path(cells, tag)
+    heavy = None
+    if not raw_p.exists():  # a model load follows: RAM is an environmental gate, checked before the attempt starts
+        heavy = _heavy()
+        heavy[0].need_ram()
+    attempt = attempt_start(cells, "eval", tag, post_process_only=heavy is None)
     adapter_dir, adapter_sha = eval_adapter(cells, a.arm, tag, opened)
     if sha(cells / MANIFEST) != rec["train_manifest_sha256"] or opened.get("max_new") != rec["max_new"]:
         raise SystemExit("max_new: the manifest or SEALED_OPEN.json differs from the commitment")
     max_new = rec["max_new"]
     parse, parser = answer_parser(a.arm)
-    lock = require_lane()
-    raw_p = raw_path(cells, tag)
     want = {"tag": tag, "battery_sha256": NE.battery_sha256(battery), "adapter_sha256": adapter_sha,
             "max_new": max_new, "n": len(battery)}
-    if raw_p.exists():  # decoding finished earlier but post-processing did not: never decode again
+    if heavy is None:  # decoding finished earlier but post-processing did not: never decode again
         raw = read_raw(raw_p, want)
         print(f"[{tag}] {raw_p.name} exists; post-processing it without loading the model", flush=True)
     else:
-        NP, LC, ThermalGuard = _heavy()
-        NP.need_ram()
+        NP, LC, ThermalGuard = heavy
         model, tok = LC.load_core("sparse")
         if adapter_dir is not None:
             from peft import PeftModel
@@ -1166,7 +1350,8 @@ def cmd_eval(a):
     out_rec = {"arm": a.arm, "seed": None if a.arm == "OFF" else a.seed, "tag": tag, "battery": "sealed",
                "battery_seed": bseed, "battery_sha256": want["battery_sha256"], "adapter_sha256": adapter_sha,
                "adapter_dir": None if adapter_dir is None else str(adapter_dir), "n": len(battery),
-               "surfaces": list(SURFACES), "max_new": max_new, "parser": parser, "truncated": fin.count(False),
+               "surfaces": list(SURFACES), "max_new": max_new, "parser": parser,
+               "truncated": None if fin is None else fin.count(False), "truncation_unknown": fin is None,
                "wall_s": raw["wall_s"], "composite": {s: S.composite(summ, s) for s in SURFACES},
                "composite_decision": {s: S.composite(summ, s, field="decision") for s in SURFACES}, "cells": summ,
                "raw_file": raw_p.name, "raw_sha256": sha(raw_p), "sealed_open_sha256": sha(sealed_paths(cells)[2]),
@@ -1181,13 +1366,15 @@ def cmd_eval(a):
         with gzip.open(preds_p, "xt", encoding="utf-8") as f:  # create-only
             f.write(text)
     NE._write_once(res_path, json.dumps(out_rec, indent=1))
-    print(f"[{tag}] composite {out_rec['composite']} decision {out_rec['composite_decision']} truncated "
-          f"{out_rec['truncated']} {out_rec['wall_s']:.0f}s", flush=True)
+    attempt_end(cells, attempt, "eval", tag)
+    trunc = "unknown (decoded rows could not be mapped to prompts)" if fin is None else out_rec["truncated"]
+    print(f"[{tag}] eval done: {len(battery)} records, truncated {trunc}, {out_rec['wall_s']:.0f}s; wrote "
+          f"{res_path.name} (no score, composite or decision is printed)", flush=True)
 
 
 def main():
     ap = argparse.ArgumentParser(description="RCX-E01R native cells (see the module docstring)")
-    ap.add_argument("cmd", choices=["build", "train", "smoke", "mint-commit", "open-sealed", "eval"])
+    ap.add_argument("cmd", choices=["build", "train", "smoke", "code-sha", "mint-commit", "open-sealed", "eval"])
     ap.add_argument("--out", default=str(OUT))
     ap.add_argument("--arms", default="", help="build: the treatment arms of BRANCH_STEP_A.json, or none (B1)")
     ap.add_argument("--r1-fallback", dest="r1_fallback", action="store_true",
@@ -1203,9 +1390,12 @@ def main():
     ap.add_argument("--reason", default="", help="mint-commit: why --drop-arm drops the arm")
     ap.add_argument("--expect-commit-sha", dest="expect_commit_sha", default="",
                     help="open-sealed: SEALED_COMMIT.json sha256 as recorded in DECISIONS (mandatory)")
+    ap.add_argument("--expect-code-sha256", dest="expect_code_sha256", default="",
+                    help="mint-commit: the bound-code digest logged in the freeze entry (code_digest; printed by "
+                         "code-sha); mandatory")
     a = ap.parse_args()
-    {"build": cmd_build, "train": cmd_train, "smoke": cmd_smoke, "mint-commit": cmd_mint_commit,
-     "open-sealed": cmd_open_sealed, "eval": cmd_eval}[a.cmd](a)
+    {"build": cmd_build, "train": cmd_train, "smoke": cmd_smoke, "code-sha": cmd_code_sha,
+     "mint-commit": cmd_mint_commit, "open-sealed": cmd_open_sealed, "eval": cmd_eval}[a.cmd](a)
 
 
 if __name__ == "__main__":

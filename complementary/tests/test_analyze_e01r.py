@@ -2,8 +2,10 @@
 torch, no tokenizer, no model. The SEALED battery is the real P3-free skeleton (native_e01r.build_skeleton, a few
 parents per stratum) rendered with fake P3 templates; every prediction is synthetic (scripted per record class and
 seed); the commitment, opening record, adapters, evals, raw generations and covariate files are fakes in a temp dir,
-written in native_e01r's formats (preds rows by native_e01r.score_outputs). A read of a *.secret file outside the temp
-dir fails the test before a byte is read. Bootstraps use few resamples (the prereg's 10,000 are checked as defaults).
+written in native_e01r's formats (preds rows by native_e01r.score_outputs). The SMOKE files are written by
+native_e01r.cmd_smoke, and in one test every eval by native_e01r.cmd_eval, on a fake model (FakeLC / FakeTok; the lane
+lock lives in the temp dir). A read of a *.secret file outside the temp dir fails the test before a byte is read.
+Bootstraps use few resamples (the prereg's 10,000 are checked as defaults).
 
 Run: python -B -m unittest tests.test_analyze_e01r -v   (CPU, single thread)
 """
@@ -16,12 +18,15 @@ import io
 import json
 import os
 import random
+import shutil
 import sys
 import tempfile
+import types
 import unittest
 import warnings
 from collections import Counter, defaultdict
 from pathlib import Path
+from types import SimpleNamespace
 from unittest import mock
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
@@ -36,7 +41,7 @@ import analyze_e01r as A  # noqa: E402
 import native_e01r as M  # noqa: E402
 import recipes as RC  # noqa: E402
 import trace_target as TT  # noqa: E402
-from rcx import stats as ST  # noqa: E402
+from rcx import lane, stats as ST  # noqa: E402
 from rcx.rcl import world as W  # noqa: E402
 
 _HEAVY_AFTER = {m for m in HEAVY if m in sys.modules}
@@ -135,6 +140,23 @@ def outputs(battery, arm, seed, accs, preamble=False):
     return outs
 
 
+def policy_outputs(battery, arm, seed, policy, accs=None):
+    """Per record: the decision policy(r) ('apply' / 'noop'), rendered in the arm's output format; where the policy
+    returns None, the scripted accuracy of outputs()."""
+    base = outputs(battery, arm, seed, accs or {})
+    return [o if policy(r) is None else (r3_out if arm == "E-R3" else native_out)(r, policy(r))
+            for r, o in zip(battery, base)]
+
+
+# Review item 16 / PREREG section 5.4: degenerate policies that win C1 without reading the complement.
+DEGENERATE_POLICIES = {
+    "always no-op": lambda r: "noop",
+    "no-op on p3 only": lambda r: "noop" if r["surface"] == "p3" else None,
+    "no-op iff unlisted (polarity-blind)": lambda r: "apply" if r["gold"]["listed"] else "noop",
+    "apply only on posted (anchor trigger)": lambda r: "apply" if r["event"]["status"] == "posted" else "noop",
+}
+
+
 def make_cells(battery, accs, arms=ARMS, seeds=(0, 1, 2), off=False, preamble=()):
     cells = {}
     for arm in arms:
@@ -210,9 +232,12 @@ class TestModule(unittest.TestCase):
         self.assertEqual(set(A.BOUND_CODE), {
             "native_e01r.py", "analyze_e01r.py", "audit_e01r.py", "decide_branch.py", "recipes.py", "trace_target.py",
             "run_e01r.py", "stats.py", "wording_audit.py", "gen.py", "vocab.py", "templates.py", "world.py",
-            "score.py", "native_e01.py", "native_probe.py", "lora_cpu.py", "lane.py"})  # section 4
+            "score.py", "native_e01.py", "native_probe.py", "lora_cpu.py"})  # section 4; rcx/lane.py is not bound
         for name, rel in A.BOUND_CODE.items():
             self.assertTrue((ROOT / rel).exists() or name == "analyze_e01r.py", name)
+        self.assertLessEqual(set(A.BOUND_CODE), set(M.code_sha256()))  # native_e01r binds every one of them
+        self.assertNotIn("lane.py", M.code_sha256())
+        self.assertEqual(A.OUTPUTS, ("ANALYSIS_E01R.md", "ANALYSIS_E01R.json", "ANALYSIS_E01R.started"))
 
 
 class TestDecide(unittest.TestCase):
@@ -521,6 +546,31 @@ class TestBranches(unittest.TestCase):
         sc = res["secondary"]["r3_stated_decision_c1"]
         self.assertAlmostEqual(sc["diff"], res["estimates"]["E-R3"]["q"]["C1"]["diff"], places=12)
 
+    def test_degenerate_policies_end_stop(self):
+        """Review item 16: each section 5.4 degenerate policy, played by both treatment arms against a control with
+        the complement residual (C1 0.2), wins C1 significantly but ends STOP (degenerate trade-off), and so the
+        experiment ends STOP: never ADVANCE or REVISE."""
+        bat = synth_battery(6)
+        control = make_cells(bat, {"N-CFSD": {"C1": 0.2}}, arms=("N-CFSD",))
+        for name, policy in DEGENERATE_POLICIES.items():
+            cells = dict(control)
+            for arm in ("E-R2", "E-R3"):
+                for k in (0, 1, 2):
+                    outs = policy_outputs(bat, arm, k, policy)
+                    cells[f"{arm}_s{k}"] = A.score_cell(bat, outs, arm, M, finished=[True] * len(outs))
+            res = A.analyze(bat, cells, base_info(), resamples=R)
+            with self.subTest(policy=name):
+                self.assertEqual(res["arm_decisions"], {"E-R2": A.STOP_DEG, "E-R3": A.STOP_DEG})
+                self.assertEqual(res["decision"], "STOP")
+                for x in ("E-R2", "E-R3"):
+                    d = res["decision_trace"][x]
+                    self.assertTrue(d["conditions"]["sig"] and d["conditions"]["d(C1) > 0"])
+                    self.assertTrue(d["conditions"]["degenerate"])
+                    self.assertFalse(d["outcomes"]["ADVANCE"])
+                    self.assertGreater(res["estimates"][x]["q"]["C1"]["diff"], 0.5)  # C1 is won
+                self.assertNotIn(res["decision"], ("ADVANCE", "REVISE"))
+                self.assertIn("STOP (degenerate trade-off)", A.render(res))
+
     def test_template_cluster(self):
         bat = synth_battery(6)
         cells = make_cells(bat, {"N-CFSD": {"C1": 0.0}, "E-R2": {"C1": 1.0}}, arms=("N-CFSD", "E-R2"))
@@ -568,9 +618,89 @@ def gz_lines(p, rows):
     return A.sha(p)
 
 
+EOS = [151645, 151643]
+
+
+class Enc(dict):
+    def __getattr__(self, k):
+        try:
+            return self[k]
+        except KeyError:
+            raise AttributeError(k) from None
+
+
+class FakeTok:
+    """Qwen3 chat-template text (native_e01.render_literal); one token id per 3 UTF-8 bytes, above every special id.
+    Nothing is loaded (as tests/test_native_e01r.py's FakeTok)."""
+    eos_token_id, pad_token_id, BASE = 151645, 151643, 1 << 26
+
+    def apply_chat_template(self, msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False):
+        assert (tokenize, add_generation_prompt, enable_thinking) == (False, True, False)
+        return M.NE.render_literal(msgs[0]["content"], msgs[1]["content"])
+
+    def __call__(self, text, add_special_tokens=False):
+        b = text.encode("utf-8")
+        return Enc(input_ids=[self.BASE + (int.from_bytes(b[i:i + 3], "big") << 2) + len(b[i:i + 3])
+                              for i in range(0, len(b), 3)])
+
+    def decode(self, ids, skip_special_tokens=True):
+        v = [i - self.BASE for i in ids if i >= self.BASE]
+        return b"".join((x >> 2).to_bytes(x & 3, "big") for x in v).decode("utf-8")
+
+
+class FakeLC:
+    """Stand-in for rcx.native.lora_cpu in cmd_smoke / cmd_eval: generate follows lora_cpu.generate's decode order
+    (prompts stably sorted by token length, one tok.decode per row on the proxy it is given); script(j, prompt) ->
+    (text, has_eos)."""
+    EOS_IDS = EOS
+
+    def __init__(self, script, unmappable=False):
+        self.script, self.loads, self.unmappable = script, 0, unmappable
+
+    def load_core(self, name):
+        self.loads += 1
+        return "fake-model", FakeTok()
+
+    def generate(self, model, tok, prompts, max_new=64, max_batch_tokens=3000, guard=None, log=None):
+        assert max_new == MAX_NEW
+        enc = [tok(p, add_special_tokens=False)["input_ids"] for p in prompts]
+        outs = [None] * len(enc)
+        order = sorted(range(len(enc)), key=lambda i: len(enc[i]))
+        for j in (order[::-1] if self.unmappable else order):  # unmappable: a decode order map_finished rejects
+            text, eos = self.script(j, prompts[j])
+            outs[j] = tok.decode(FakeTok()(text)["input_ids"] + (EOS if eos else []), skip_special_tokens=True)
+        return outs
+
+
+class FakeGuard:
+    def __init__(self, log=None):
+        pass
+
+    def check(self):
+        pass
+
+
+def fake_peft():
+    mod = types.ModuleType("peft")
+
+    class PeftModel:
+        @staticmethod
+        def from_pretrained(model, path, is_trainable=True):
+            return SimpleNamespace(eval=lambda: ("adapted", model, str(path)))
+
+    mod.PeftModel = PeftModel
+    return mod
+
+
+R3_ROW_TARGET = 'check status="x" listed=no only-listed:false -> noop\n{"A":1}'
+
+
 class Sealed(unittest.TestCase):
-    """A complete fake SEALED directory: commitment (bound code = the current files), opening record, adapters, every
-    cell's eval / preds / raw generations (preds by native_e01r.score_outputs), TRAIN_META, SMOKE and covariates."""
+    """A complete fake SEALED directory: commitment (bound code = the current files), adapters with TRAIN_META.json as
+    cmd_train writes it, SMOKE_<tag>.json written by native_e01r.cmd_smoke (fake model) before the opening record,
+    every cell's eval / preds / raw generations (preds by native_e01r.score_outputs; or, with via_cmd_eval, by
+    native_e01r.cmd_eval itself on a fake model), the attempts log and the covariate files. The lane lock lives in the
+    temp dir (RINEYA_LANE_DIR) and is held by this process."""
 
     def setUp(self):
         warnings.simplefilter("ignore", ResourceWarning)
@@ -584,9 +714,25 @@ class Sealed(unittest.TestCase):
             pt.start()
             self.addCleanup(pt.stop)
         self.addCleanup(RC.unregister_pool, "p3")
+        (self.tmp / "lane").mkdir()
+        pt = mock.patch.dict(os.environ, {"RINEYA_LANE_DIR": str(self.tmp / "lane")})
+        pt.start()
+        self.addCleanup(pt.stop)
+        lock = lane.try_acquire("E01R analysis test", os.getpid(), 1, party="rcx")
+        self.assertTrue(str(lane.lock_path()).startswith(str(self.tmp)))
+        os.environ[M.LANE_TOKEN_ENV] = lock["token"]  # restored by patch.dict
 
-    def build(self, accs=None, family=("E-R2", "E-R3"), dropped=(), overlap=0, off=True, n_parents=3):
+    def run_model_cmd(self, fn, lc, **args):
+        with mock.patch.object(M, "_heavy", return_value=(SimpleNamespace(need_ram=lambda: None), lc, FakeGuard)), \
+                mock.patch.dict(sys.modules, {"peft": fake_peft()}), contextlib.redirect_stdout(io.StringIO()):
+            fn(SimpleNamespace(out=str(self.cells), battery="sealed", **args))
+
+    def build(self, accs=None, family=("E-R2", "E-R3"), dropped=(), overlap=0, off=True, n_parents=3,
+              via_cmd_eval=False):
         accs = {"N-CFSD": {"C1": 0.2}, "E-R2": {"C1": 0.95}, "E-R3": {"C1": 0.2}} if accs is None else accs
+        for d in (self.cells, self.e01n):  # every build starts from empty directories
+            if d.exists():
+                shutil.rmtree(d)
         p3sha = write(M.P3_PATH, json.dumps({"schema": "rcx-e01r-pool-v1", "templates": fake_p3_templates()}))
         seed = M.NE.sealed_seed(SALT)
         skel = M.build_skeleton(seed, COUNTS, n_parents)
@@ -597,8 +743,11 @@ class Sealed(unittest.TestCase):
                  "prompt": "SYS1<|im_start|>user U2"},
                 {"parent_id": "b", "variant": "status_swap", "semantic_hash": "h3", "prompt": "SYS2<|im_start|>user"},
                 {"parent_id": "b", "variant": "comp_listed", "semantic_hash": "h3", "prompt": "SYS3<|im_start|>user"}]
-        rows_sha = {"E-R2": write(self.cells / "train_E-R2.jsonl", "".join(json.dumps(r) + "\n" for r in rows)),
-                    "E-R3": write(self.cells / "train_E-R3.jsonl", "{}\n")}
+        r3_rows = [{"parent_id": f"c{i}", "variant": "base", "prompt": f"SYS<|im_start|>user R3 row {i}",
+                    "target": R3_ROW_TARGET} for i in range(5)]
+        rows_sha = {"E-R2": write(self.cells / "train_E-R2.jsonl",
+                                  "".join(json.dumps(dict(r, target='{"A":1}')) + "\n" for r in rows)),
+                    "E-R3": write(self.cells / "train_E-R3.jsonl", "".join(json.dumps(r) + "\n" for r in r3_rows))}
         tok = {str(k): {"supervised_tokens": 1000 + k, "tokens_processed": 9000 + k} for k in range(3)}
         man = write(self.cells / A.MANIFEST, json.dumps({"max_new": MAX_NEW, "r3_gold_longest_tokens": {"x": 50},
                                                          "arms": {a: {"sha256": rows_sha[a], "rows": 5,
@@ -616,21 +765,23 @@ class Sealed(unittest.TestCase):
                   "p3": {"file": M.P3_PATH.name, "sha256": p3sha, "n": 48, "counts": COUNTS}, "arms_required": tags,
                   "treatment_arms": list(family), "branch": {"file": "BRANCH_STEP_A.json", "branch": "B4"},
                   "dropped_arms": list(dropped), "max_new": MAX_NEW, "train_manifest_sha256": man,
-                  "rows_sha256": rows_sha, "audit_e01r_sha256": aud, "code_sha256": code, "minted_at": "mint"}
+                  "rows_sha256": rows_sha, "audit_e01r_sha256": aud, "code_sha256": code,
+                  "code_sha256_digest": M.code_digest(code), "minted_at": "mint"}
         self.commit_sha = write(self.cells / "SEALED_COMMIT.json", json.dumps(commit, indent=1))
         battery = M.render_p3(skel, M.load_p3(commit["p3"]))
         bsha = M.NE.battery_sha256(battery)
         adapters = {}
         for t in tags:
-            arm = t.rsplit("_s", 1)[0]
+            arm, k = t.rsplit("_s", 1)
             d = (self.e01n if arm == "N-CFSD" else self.cells) / t
             adapters[t] = write(d / "adapter" / "adapter_model.safetensors", f"adapter {t}")
-            if arm != "N-CFSD":
-                write(d / "TRAIN_META.json",
-                      json.dumps({"arm": arm, "adapter_sha256": adapters[t], "code_sha256": code}))
-                write(self.cells / f"SMOKE_{t}.json", json.dumps({
-                    "adapter_sha256": adapters[t], "max_new": MAX_NEW, "n": 50, "truncated": 0, "truncated_share": 0.0,
-                    "well_formed_share": 1.0, "scorable_share": 1.0, "exact_share": 0.9, "wall_s": 60.0, "pass": True}))
+            if arm != "N-CFSD":  # as cmd_train writes it (after the mint), then the smoke test by cmd_smoke
+                write(d / "TRAIN_META.json", json.dumps({
+                    "arm": arm, "seed": int(k), "adapter_sha256": adapters[t], "rows_sha256": rows_sha[arm],
+                    "train": {"steps": M.STEPS}, "sealed_commit_sha256": self.commit_sha, "audit_sha256": aud,
+                    "base_sha256": M.BASE_SHA256, "code_sha256": code}))
+                target = {r["prompt"]: r["target"] for r in M.load_rows(self.cells, arm)}
+                self.run_model_cmd(M.cmd_smoke, FakeLC(lambda j, p: (target[p], True)), arm=arm, seed=int(k))
         pids = sorted({r["parent_id"] for r in battery})
         opened = {"opened_at": "open", "salt": SALT, "seed": seed, "battery_sha256": bsha, "n_records": len(battery),
                   "sealed_commit_sha256": self.commit_sha, "adapters_sha256": adapters, "max_new": MAX_NEW,
@@ -639,11 +790,13 @@ class Sealed(unittest.TestCase):
         self.open_sha = write(self.cells / "SEALED_OPEN.json", json.dumps(opened, indent=1))
         self.battery, self.code, self.adapters = battery, code, adapters
         for t in tags + (["OFF"] if off else []):
-            self.cell(t, accs)
+            (self.eval_cell if via_cmd_eval else self.cell)(t, accs)
         return battery
 
     def cell(self, tag, accs):
+        """The cell's files in cmd_eval's formats, written directly, with a completed attempt in the attempts log."""
         arm, k = ("OFF", 0) if tag == "OFF" else (tag.rsplit("_s", 1)[0], int(tag.rsplit("_s", 1)[1]))
+        aid = M.attempt_start(self.cells, "eval", tag)
         outs = outputs(self.battery, arm, k, accs)
         n = len(outs)
         bsha = M.NE.battery_sha256(self.battery)
@@ -657,9 +810,24 @@ class Sealed(unittest.TestCase):
         write(self.cells / f"eval_sealed_{tag}.json", json.dumps({
             "arm": arm, "seed": None if arm == "OFF" else k, "tag": tag, "battery": "sealed",
             "battery_seed": M.NE.sealed_seed(SALT), "battery_sha256": bsha, "adapter_sha256": ad, "n": n,
-            "surfaces": ["in", "p3"], "max_new": MAX_NEW, "parser": parser, "truncated": 0, "wall_s": 1.0,
-            "raw_file": M.raw_path(self.cells, tag).name, "raw_sha256": raw_sha, "sealed_open_sha256": self.open_sha,
-            "code_sha256": self.code}))
+            "surfaces": ["in", "p3"], "max_new": MAX_NEW, "parser": parser, "truncated": 0,
+            "truncation_unknown": False, "wall_s": 1.0, "raw_file": M.raw_path(self.cells, tag).name,
+            "raw_sha256": raw_sha, "sealed_open_sha256": self.open_sha, "code_sha256": self.code}))
+        M.attempt_end(self.cells, aid, "eval", tag)
+
+    def eval_cell(self, tag, accs, eos=None, unmappable=False):
+        """The cell evaluated by native_e01r.cmd_eval on a fake model whose outputs follow outputs(); eos(j) False
+        leaves record j without EOS (truncated); unmappable: a decode log that cannot be mapped to prompts."""
+        arm, k = ("OFF", 0) if tag == "OFF" else (tag.rsplit("_s", 1)[0], int(tag.rsplit("_s", 1)[1]))
+        outs = outputs(self.battery, arm, k, accs)
+        lc = FakeLC(lambda j, p: (outs[j], True if eos is None else eos(j)), unmappable)
+        self.run_model_cmd(M.cmd_eval, lc, arm=arm, seed=k)
+        self.assertEqual(lc.loads, 1)
+
+    def failed_attempts(self, tag, n):
+        """n failed eval attempts of `tag` (starts without an 'ok' end), as crashed or refused evals leave them."""
+        for _ in range(n):
+            M.attempt_start(self.cells, "eval", tag)
 
     def load(self, missing=()):
         with contextlib.redirect_stdout(io.StringIO()):
@@ -681,11 +849,16 @@ class Sealed(unittest.TestCase):
 class TestCustody(Sealed):
     def test_end_to_end_main(self):
         self.build()
-        out = self.tmp / "report" / "ANALYSIS_E01R.md"
+        out, jout, marker = (self.cells / name for name in A.OUTPUTS)  # fixed paths next to the sealed records
         with mock.patch.object(A, "RESAMPLES", R), contextlib.redirect_stdout(io.StringIO()) as buf:
-            res = A.main(["--cells", str(self.cells), "--out", str(out)])
+            res = A.main(["--cells", str(self.cells)])
         self.assertEqual((res["decision"], res["arm_decisions"]), ("ADVANCE", {"E-R2": "ADVANCE", "E-R3": "STOP"}))
-        md, js = out.read_text(encoding="utf-8"), out.with_suffix(".json").read_text(encoding="utf-8")
+        md, js = out.read_text(encoding="utf-8"), jout.read_text(encoding="utf-8")
+        started = json.loads(marker.read_text(encoding="utf-8"))
+        self.assertEqual((started["missing"], started["sealed_open_sha256"]), ([], self.open_sha))
+        with self.assertRaises(SystemExit):  # the --out option is gone: the output path is fixed
+            with contextlib.redirect_stderr(io.StringIO()):
+                A.main(["--cells", str(self.cells), "--out", str(self.tmp / "elsewhere.md")])
         self.assertIn("EXPERIMENT DECISION: ADVANCE", md)
         self.assertIn("NOT THE PREREGISTERED ANALYSIS", md)
         self.assertIn("DECISION: ADVANCE", buf.getvalue())
@@ -700,9 +873,76 @@ class TestCustody(Sealed):
         self.assertEqual(set(j["inputs"]["bound_code_sha256"]), set(self.code))
         self.assertEqual(j["inputs"]["warnings"], [])
         self.assertEqual(set(j["inputs"]["cells"]), {f"{a}_s{k}" for a in ARMS for k in range(3)} | {"OFF"})
-        with self.assertRaises(SystemExit) as cm:  # create-only: the analysis runs once
-            A.main(["--cells", str(self.cells), "--out", str(out)])
+        self.assertEqual(j["inputs"]["smoke"]["E-R3_s1"]["pass"], True)  # written by cmd_smoke (fake model)
+        for p in (out, jout):  # even with the outputs gone, the started marker blocks a second run
+            p.unlink()
+        with self.assertRaises(SystemExit) as cm:
+            A.main(["--cells", str(self.cells)])
         self.assertIn("runs once", str(cm.exception))
+        self.assertIn("ANALYSIS_E01R.started", str(cm.exception))
+
+    def test_started_marker_precedes_any_statistic(self):
+        """Review item 5: the create-only marker is written after the custody checks (refusals only) and before any
+        statistic; a crash during the statistics leaves it, and the analysis cannot run again."""
+        self.build()
+        marker = self.cells / "ANALYSIS_E01R.started"
+        with self.assertRaises(SystemExit):  # a custody refusal (an undeclared missing cell name) leaves no marker
+            A.main(["--cells", str(self.cells), "--missing", "N-VR_s0"])
+        self.assertFalse(marker.exists())
+        seen = []
+
+        def crash(*args, **kw):
+            seen.append(marker.exists())
+            raise RuntimeError("crash inside the statistics")
+
+        with mock.patch.object(A, "analyze", side_effect=crash), self.assertRaises(RuntimeError):
+            A.main(["--cells", str(self.cells)])
+        self.assertEqual(seen, [True])  # the marker existed before the first statistic
+        self.assertFalse((self.cells / "ANALYSIS_E01R.md").exists() or (self.cells / "ANALYSIS_E01R.json").exists())
+        with mock.patch.object(A, "load_sealed", side_effect=AssertionError("custody re-run")), \
+                self.assertRaises(SystemExit) as cm:
+            A.main(["--cells", str(self.cells)])
+        self.assertIn("runs once", str(cm.exception))
+
+    def test_cmd_eval_output_feeds_load_sealed(self):
+        """Review item 16: every SEALED cell evaluated by native_e01r.cmd_eval (fake model; smoke by cmd_smoke) is
+        accepted by load_sealed's custody checks, and the analysis decides as on the directly written files. One cell
+        has truncated outputs (re-derived from its raw file), and one a decode log that cannot be mapped to prompts
+        (truncation unknown: accepted and reported, review items 10 and 11)."""
+        bat = self.build(off=False, via_cmd_eval=True)
+        n_trunc = sum(1 for j in range(len(bat)) if j % 7 == 3)
+        for p in (self.cells / "eval_sealed_E-R3_s0.json", M.raw_path(self.cells, "E-R3_s0"),
+                  self.cells / "preds_sealed_E-R3_s0.jsonl.gz"):  # evaluate E-R3_s0 again, now with truncations
+            p.unlink()
+        accs = {"N-CFSD": {"C1": 0.2}, "E-R2": {"C1": 0.95}, "E-R3": {"C1": 0.2}}
+        self.eval_cell("E-R3_s0", accs, eos=lambda j: j % 7 != 3)
+        self.eval_cell("OFF", accs, unmappable=True)
+        ev_off = json.loads((self.cells / "eval_sealed_OFF.json").read_text(encoding="utf-8"))
+        self.assertEqual((ev_off["truncated"], ev_off["truncation_unknown"]), (None, True))
+        events = M.read_attempts(self.cells)
+        for t in [f"{a}_s{k}" for a in ARMS for k in range(3)] + ["OFF"]:
+            self.assertEqual(M.attempt_summary(events, "eval", t)["ok"], 1 + (t == "E-R3_s0"), t)
+        battery, cells, info = self.load()
+        self.assertEqual(set(cells), {f"{a}_s{k}" for a in ARMS for k in range(3)} | {"OFF"})
+        self.assertEqual((info["cells"]["E-R3_s0"]["truncated"], info["cells"]["E-R2_s0"]["truncated"]), (n_trunc, 0))
+        self.assertEqual((info["cells"]["OFF"]["truncated"], info["cells"]["OFF"]["truncation_unknown"]), (None, True))
+        self.assertTrue(any("OFF: truncation unknown" in w for w in info["warnings"]))
+        res = A.analyze(battery, cells, info, resamples=R)
+        self.assertEqual((res["decision"], res["arm_decisions"]), ("ADVANCE", {"E-R2": "ADVANCE", "E-R3": "STOP"}))
+        self.assertEqual(res["secondary"]["cells"]["OFF"]["p3"]["truncated"], None)
+        self.assertEqual(sum(res["secondary"]["cells"]["E-R3_s0"][s]["truncated"] for s in ("in", "p3")), n_trunc)
+        self.assertIn("unknown (mapping failed)", A.render(res))
+        # an eval that claims a truncation count while its raw decode log cannot be mapped is refused
+        self.edit_json(self.cells / "eval_sealed_OFF.json", truncated=0, truncation_unknown=False)
+        self.refused("OFF", "truncation mapping fails")
+        self.edit_json(self.cells / "eval_sealed_OFF.json", truncated=None, truncation_unknown=True)
+        self.load()
+        # the truncation is re-derived from the raw file: a preds `finished` flag that disagrees is refused
+        p = self.cells / "preds_sealed_E-R3_s1.jsonl.gz"
+        rows = A.load_preds(p)
+        rows[0]["finished"] = False
+        gz_lines(p, rows)
+        self.refused("E-R3_s1", "'finished' flags differ from the truncation re-derived")
 
     def test_bound_code_refused_before_anything(self):
         self.build()
@@ -713,11 +953,15 @@ class TestCustody(Sealed):
             with mock.patch.object(M, "sealed_battery", side_effect=AssertionError("battery rebuilt")):
                 self.refused("bound code differs", name)
             cp.write_text(original, encoding="utf-8")
-        self.edit_json(cp, code_sha256={k: v for k, v in self.code.items() if k != "lane.py"})
-        self.refused("does not bind", "lane.py")
+        self.edit_json(cp, code_sha256={k: v for k, v in self.code.items() if k != "world.py"})
+        self.refused("does not bind", "world.py")
         cp.write_text(original, encoding="utf-8")
         self.edit_json(cp, code_sha256=dict(self.code, **{"elsewhere.py": "0" * 64}))
         self.refused("cannot locate", "elsewhere.py")
+        cp.write_text(original, encoding="utf-8")
+        self.assertNotIn("lane.py", self.code)  # review item 1: rcx/lane.py is not bound
+        self.edit_json(cp, code_sha256=dict(self.code, **{"lane.py": "0" * 64}))
+        self.refused("cannot locate", "lane.py")
 
     def test_recorded_code_shas(self):
         self.build()
@@ -780,29 +1024,49 @@ class TestCustody(Sealed):
         self.build()
         (self.cells / "eval_sealed_E-R2_s1.json").unlink()
         self.refused("E-R2_s1", "no eval", "--missing does not name")
+        # review item 5: a cell without an eval is missing only after the first and 2 further attempts failed
+        for n in range(3):
+            msg = self.refused("ATTEMPTS_E01R.jsonl", "attempt limit", "E-R2_s1", missing=["E-R2_s1"])
+            self.assertIn(f"'failed': {n}", msg)
+            self.failed_attempts("E-R2_s1", 1)
         battery, cells, info = self.load(["E-R2_s1"])
+        s = info["missing_attempts"]["E-R2_s1"]
+        self.assertEqual({k: s[k] for k in ("started", "ok", "failed")}, {"started": 4, "ok": 1, "failed": 3})
         self.assertNotIn("E-R2_s1", cells)
         self.assertIn("no eval", info["missing"]["E-R2_s1"])
         res = A.analyze(battery, cells, info, resamples=R)
         self.assertEqual(res["arm_decisions"]["E-R2"], A.INC_MISSING)
         self.assertEqual(res["holm"]["raw_p"]["C1_E-R2"], 1.0)
         self.assertIn("Missing cells", A.render(res))
+        self.assertIn("E-R2_s1: no eval", A.render(res))
+        self.assertIn("(eval attempts: 3 failed, 1 completed)", A.render(res))
         self.refused("which have a complete eval", "E-R3_s0", missing=["E-R2_s1", "E-R3_s0"])
         self.refused("--missing", missing=["E-R2_s1", "N-VR_s0"])
         self.refused("--missing", missing=["E-R2_s1", "E-R2_s1"])
-        # a cell failing an integrity check may be declared missing (section 10, reason 3 or 4)
+        # a cell whose completed eval fails an integrity check may be declared missing (section 10, reason 3 or 4):
+        # its outputs are create-only, so its completed attempt suffices
         write(self.cells / "E-R3_s2" / "adapter" / "adapter_model.safetensors", "lost and not restorable")
         _, cells, info = self.load(["E-R2_s1", "E-R3_s2"])
         self.assertNotIn("E-R3_s2", cells)
         self.assertIn("recorded by open-sealed", info["missing"]["E-R3_s2"])
+        s = info["missing_attempts"]["E-R3_s2"]
+        self.assertEqual({k: s[k] for k in ("started", "ok", "failed")}, {"started": 1, "ok": 1, "failed": 0})
+        self.assertTrue(s["eval_record_exists"] and s["adapter_mismatch"])
+        # ... and so may it when the 'ok' event after the create-only eval record was lost (a crash between the two
+        # writes): the existing eval record and the adapter mismatch are each sufficient (section 10, 6g fix)
+        log = M.attempts_path(self.cells)
+        kept = [x for x in log.read_text(encoding="utf-8").splitlines() if '"E-R3_s2"' not in x]
+        log.write_text("\n".join(kept) + "\n", encoding="utf-8")
+        _, cells, info = self.load(["E-R2_s1", "E-R3_s2"])
+        self.assertNotIn("E-R3_s2", cells)
 
     def test_off_is_descriptive(self):
         self.build(off=False)
-        write(self.cells / "eval_sealed_N-VR_s0.json", "{}")  # section 4: N-VR is not evaluated; never read here
+        write(self.cells / "eval_sealed_E-R1_s0.json", "{}")  # a stray eval of an uncommitted cell: never read
         battery, cells, info = self.load()
         self.assertNotIn("OFF", cells)
         self.assertIn("no eval", info["missing"]["OFF"])
-        self.assertTrue(any("eval_sealed_N-VR_s0.json" in w for w in info["warnings"]))
+        self.assertTrue(any("eval_sealed_E-R1_s0.json" in w for w in info["warnings"]))
         res = A.analyze(battery, cells, info, resamples=R)
         self.assertEqual(res["secondary"]["vs_OFF"], {})
         self.assertEqual(res["arm_decisions"]["E-R2"], "ADVANCE")

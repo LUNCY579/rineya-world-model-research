@@ -3,10 +3,14 @@ SEALED battery (surfaces `in` + `p3`). Run once, after open-sealed and every SEA
 
   python -B experiments/RCX-E01R/analyze_e01r.py [--cells runs/RCX-E01R/cells] [--missing TAG[,TAG...]]
 
-writes <cells>/../ANALYSIS_E01R.md and ANALYSIS_E01R.json (create-only: refuses if either exists). --missing names
-exactly the cells declared missing in DECISIONS (PREREG section 10); default none. Pure Python (no torch, no model, no
-tokenizer); the battery is rebuilt in memory by native_e01r.sealed_battery, the only P3 read, and no P3 text, prompt or
-model output is written or printed.
+Runs once (review item 5). The outputs have a fixed path next to the sealed records: <cells>/ANALYSIS_E01R.md and
+<cells>/ANALYSIS_E01R.json, preceded by the create-only marker <cells>/ANALYSIS_E01R.started. The run refuses if any of
+the three exists. The marker is written after the custody checks below (refusals only: they compute no statistic and
+print or write nothing, so a refused run may be repeated once its cause is fixed) and BEFORE any statistic is computed;
+a marker without outputs is a crashed analysis (a logged deviation). --missing names exactly the cells declared
+missing in DECISIONS (PREREG section 10); default none. Pure Python (no torch, no model, no tokenizer); the battery is
+rebuilt in memory by native_e01r.sealed_battery, the only P3 read, and no P3 text, prompt or model output is written
+or printed.
 
 Order of work. Every refusal is a SystemExit raised before any statistic is computed:
   1. SEALED_COMMIT.json and SEALED_OPEN.json exist; the commitment binds every file of the section 4 bound-code list
@@ -20,9 +24,17 @@ Order of work. Every refusal is a SystemExit raised before any statistic is comp
      the adapter file, the eval and open-sealed agree on the adapter sha; the eval used the committed max_new; no
      eval_sealed_<tag>.json, TRAIN_META.json or SMOKE_<tag>.json records a sha for a bound file that differs from the
      commitment; the raw generations file is the one the eval recorded and holds the preds' outputs; every stored score
-     (and R3 trace diagnostic) equals a re-score of the raw output with the arm's frozen parser;
+     (and R3 trace diagnostic) equals a re-score of the raw output with the arm's frozen parser; the truncation is
+     re-derived from the raw file (native_e01r.raw_finished, i.e. map_finished over its prompt token lengths and
+     decode log) and equals the preds' `finished` flags and the eval's count. If that mapping fails, the eval must
+     record truncated = null and truncation_unknown = true (native_e01r.score_outputs); the cell is accepted and its
+     truncation is reported as unknown (review items 10 and 11);
   5. --missing names exactly the confirmatory cells without a complete (present and passing) eval: a named cell with a
-     complete eval, or an unnamed confirmatory cell without one, is refused. OFF (descriptive) may be absent;
+     complete eval, or an unnamed confirmatory cell without one, is refused. OFF (descriptive) may be absent. Each
+     named cell also needs native_e01r's attempts log (ATTEMPTS_E01R.jsonl) to show the section 10 attempt limit for
+     its eval: at least 1 + 2 failed attempts (an attempt without an 'ok' end). Reading taken: a cell whose eval
+     completed (an 'ok' attempt) and whose outputs later fail an integrity check (section 10 reasons 3 and 4) cannot
+     be re-run, because the eval outputs are create-only, so its completed attempt suffices;
   6. parents in SEALED_OPEN.json train_overlap.parent_ids are dropped from the battery and every cell;
   7. each quantity's variant list and predicate (section 5.2) select the same records, with the stated records per
      parent (check_selection).
@@ -57,6 +69,7 @@ import math
 import os
 import random
 import sys
+import time
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -136,8 +149,8 @@ BOUND_CODE = {
     "native_e01.py": "experiments/RCX-E01N/native_e01.py",
     "native_probe.py": "experiments/RCX-E01N/native_probe.py",
     "lora_cpu.py": "rcx/native/lora_cpu.py",
-    "lane.py": "rcx/lane.py",
-}
+}  # rcx/lane.py is not bound (shared lane infrastructure; no effect on any result)
+OUTPUTS = ("ANALYSIS_E01R.md", "ANALYSIS_E01R.json", "ANALYSIS_E01R.started")  # fixed, next to the sealed records
 
 
 def _ge(x, t):
@@ -421,8 +434,12 @@ def committed_arms(commit):
 
 
 def code_record_problems(recorded, commit_code, label):
-    bad = sorted(n for n, v in (recorded or {}).items() if n in commit_code and v != commit_code[n])
-    return [f"{label} records bound-code shas that differ from the commitment: {bad}"] if bad else []
+    """A record written under the commitment must carry every committed bound-code sha, each equal to the commitment."""
+    if not recorded:
+        return [f"{label} records no bound-code shas"]
+    absent = sorted(n for n in commit_code if n not in recorded)
+    bad = sorted(n for n, v in recorded.items() if n in commit_code and v != commit_code[n])
+    return ([f"{label} lacks bound-code shas {absent}"] if absent else []) +         ([f"{label} records bound-code shas that differ from the commitment: {bad}"] if bad else [])
 
 
 def load_preds(p):
@@ -494,7 +511,24 @@ def check_cell(ne, cells_dir, tag, battery, bsha, bseed, commit, opened, open_sh
         raise CellProblem("the preds' outputs differ from the raw generations")
     if any(not isinstance(o, str) for o in outs):
         raise CellProblem("an output is not text")
-    sc = score_cell(battery, outs, arm, ne, finished=[p.get("finished") for p in preds])
+    fin = ne.raw_finished(raw)  # review item 10: the truncation re-derived from the raw file (map_finished)
+    stored = [p.get("finished") for p in preds]
+    if fin is None:  # review item 11: the decode log cannot be mapped to prompts; truncation unknown
+        if any(f is not None for f in stored) or ev.get("truncated") is not None \
+                or ev.get("truncation_unknown") is not True:
+            raise CellProblem("the raw generations' truncation mapping fails, but the eval or preds record a "
+                              "truncation (want truncated null, truncation_unknown true)")
+        trunc = None
+    else:
+        n_fin = sum(a != b for a, b in zip(stored, fin))
+        if n_fin:
+            raise CellProblem(f"{n_fin} stored 'finished' flags differ from the truncation re-derived from the raw "
+                              "generations")
+        trunc = fin.count(False)
+        if ev.get("truncated") != trunc or ev.get("truncation_unknown", False) is not False:
+            raise CellProblem(f"the eval's truncation count {ev.get('truncated')} != {trunc} unfinished outputs "
+                              "re-derived from the raw generations")
+    sc = score_cell(battery, outs, arm, ne, finished=fin)
     if ev.get("parser") != sc["parser"]:
         raise CellProblem(f"the eval used parser {ev.get('parser')!r}, not the frozen {sc['parser']!r}")
     n_bad = sum({k: p.get(k) for k in SCORE_KEYS} != c for p, c in zip(preds, sc["frozen"]))
@@ -504,12 +538,12 @@ def check_cell(ne, cells_dir, tag, battery, bsha, bseed, commit, opened, open_sh
         n_tr = sum(p.get("trace") != t for p, t in zip(preds, sc["trace"]))
         if n_tr:
             raise CellProblem(f"{n_tr} stored R3 trace diagnostics differ from a re-computation")
-    trunc = sum(p.get("finished") is False for p in preds)
-    if ev.get("truncated") != trunc:
-        raise CellProblem(f"the eval's truncation count {ev.get('truncated')} != {trunc} unfinished outputs")
     info = {"eval_sha256": sha(ep), "preds_sha256": sha(pp), "raw_sha256": sha(rp), "adapter_sha256": adapter,
             "adapter_sha256_at_open": (opened.get("adapters_sha256") or {}).get(tag), "parser": sc["parser"],
-            "truncated": trunc, "n": len(preds), "wall_s": ev.get("wall_s")}
+            "truncated": trunc, "truncation_unknown": trunc is None, "n": len(preds), "wall_s": ev.get("wall_s")}
+    if trunc is None:
+        warnings.append(f"{tag}: truncation unknown (the raw decode log cannot be mapped to prompts); its "
+                        "truncation counts are reported as unknown")
     return sc, info
 
 
@@ -610,6 +644,45 @@ def smoke_profiles(cells_dir, family, opened, commit, warnings):
     return out
 
 
+def adapter_mismatch(ne, cells_dir, tag, opened):
+    """True iff the cell's adapter file is missing or differs from the sha fixed by open-sealed (section 10 reason 3)."""
+    want = ((opened or {}).get("adapters_sha256") or {}).get(tag)
+    arm, _ = split_tag(tag)
+    ad = (ne.E01N_CELLS if arm == "N-CFSD" else Path(cells_dir)) / tag / "adapter" / "adapter_model.safetensors"
+    return want is None or not ad.exists() or sha(ad) != want
+
+
+def missing_attempts(ne, cells_dir, named, problems, opened=None):
+    """Section 10: which cells --missing may name. For each named cell, one of:
+    (a) its eval failed the first attempt and the 2 further attempts (native_e01r's append-only ATTEMPTS_E01R.jsonl:
+        failed >= 1 + MAX_FURTHER_ATTEMPTS);
+    (b) an eval record exists (it is create-only and cannot be re-run) and now fails an integrity check (reason 4),
+        whether or not the 'ok' event that should follow it was written;
+    (c) its adapter file is missing or differs from the sha fixed at opening (reason 3; no attempt limit).
+    Refused otherwise."""
+    if not named:
+        return {}
+    need = 1 + ne.MAX_FURTHER_ATTEMPTS
+    events = ne.read_attempts(cells_dir)
+    out, short = {}, {}
+    for t in named:
+        s = dict(ne.attempt_summary(events, "eval", t))
+        eval_exists = (Path(cells_dir) / f"eval_sealed_{t}.json").exists()
+        s["eval_record_exists"] = eval_exists
+        s["adapter_mismatch"] = adapter_mismatch(ne, cells_dir, t, opened) if t != OFF else False
+        out[t] = s
+        if s["failed"] >= need or (eval_exists and not problems[t].startswith("no eval")) or s["adapter_mismatch"]:
+            continue
+        short[t] = s
+    if short:
+        raise SystemExit(f"--missing names cells that do not reach the section 10 attempt limit in {ne.ATTEMPTS} "
+                         f"and meet no other section 10 condition: {short}. A cell is "
+                         f"missing only after {need} failed eval attempts (the first and {ne.MAX_FURTHER_ATTEMPTS} "
+                         "further), after an existing eval record fails an integrity check, or when its adapter no "
+                         "longer matches the sha fixed at opening (PREREG_E01R section 10)")
+    return out
+
+
 def load_sealed(cells_dir, missing=(), ne=None):
     """Custody checks 1-6 of the module doc, then the train-overlap drop. Returns (battery, cells, info): battery =
     the rebuilt SEALED records after the drop; cells = {tag: score_cell result} of every complete cell; info = custody,
@@ -655,6 +728,7 @@ def load_sealed(cells_dir, missing=(), ne=None):
                          "(PREREG_E01R sections 4 and 10)")
     if OFF in problems and OFF not in named and not problems[OFF].startswith("no eval"):
         raise SystemExit(f"OFF: {problems[OFF]} (name it in --missing if it is declared missing)")
+    attempts = missing_attempts(ne, cells_dir, named, problems, opened)  # 5: section 10
     extra = sorted(p.name for p in cells_dir.glob("eval_sealed_*.json")
                    if p.name[len("eval_sealed_"):-len(".json")] not in conf_tags + [OFF])
     if extra:
@@ -674,7 +748,8 @@ def load_sealed(cells_dir, missing=(), ne=None):
     if OFF in problems and OFF not in named:
         missing_info[OFF] = problems[OFF] + " (descriptive cell; affects nothing)"
     info = {"treatment_arms": family, "dropped_arms": dropped, "confirmatory_cells": conf_tags,
-            "missing": missing_info, "missing_declared": named, "battery_sha256": bsha, "battery_seed": bseed,
+            "missing": missing_info, "missing_declared": named, "missing_attempts": attempts,
+            "battery_sha256": bsha, "battery_seed": bseed,
             "n_records_rebuilt": n_rebuilt, "by_surface_rebuilt": by_surface,
             "dropped_train_overlap_parents": dropped_parents, "sealed_commit_sha256": sha(commit_p),
             "sealed_open_sha256": open_sha, "sha256_salt": commit.get("sha256_salt"),
@@ -1048,7 +1123,8 @@ def describe_cell(battery, cell):
                 "v3_sensitivity": _mean([int(v["pos"]["intent"] != v["neg"]["intent"]) for v in pairs]),
                 "v3_both_exact": _mean([int(v["pos"]["exact"] and v["neg"]["exact"]) for v in pairs]),
                 "verdict": verdict(battery, cl, s),
-                "truncated": sum(1 for r, fi in zip(battery, cell["finished"]) if r["surface"] == s and fi is False),
+                "truncated": (None if any(fi is None for fi in cell["finished"]) else  # None: truncation unknown
+                              sum(1 for r, fi in zip(battery, cell["finished"]) if r["surface"] == s and fi is False)),
                 "records": sum(1 for r in battery if r["surface"] == s)}
     d["parser_disagree"] = cell["parser_disagree"]
     d["parser_disagree_score"] = cell["parser_disagree_score"]
@@ -1192,6 +1268,10 @@ def _yn(b):
     return "yes" if b else "no"
 
 
+def _trunc(k, n):
+    return f"unknown (mapping failed)/{n}" if k is None else f"{k}/{n}"
+
+
 def _p(x):
     return "—" if x is None else (f"{x:.4f}" if x >= 1e-4 else f"{x:.1e}")
 
@@ -1221,8 +1301,10 @@ def render(res):
         L += [f"**NOT THE PREREGISTERED ANALYSIS: {par['resamples']} resamples (PREREG_E01R fixes "
               f"{PREREG_RESAMPLES}).**", ""]
     if inp["missing"]:
+        att = inp.get("missing_attempts") or {}
         L += ["**Missing cells** (declared via --missing, never replaced; section 10): "
-              + "; ".join(f"{t}: {why}" for t, why in inp["missing"].items())
+              + "; ".join(f"{t}: {why}" + (f" (eval attempts: {att[t]['failed']} failed, {att[t]['ok']} completed)"
+                                           if t in att else "") for t, why in inp["missing"].items())
               + ". An arm with a missing confirmatory cell is INCONCLUSIVE (missing); its C1/C2 enter Holm with p = 1.",
               ""]
     L += [f"**Warning:** {w}" for w in inp["warnings"]] + ([""] if inp["warnings"] else [])
@@ -1244,7 +1326,7 @@ def render(res):
     for t, c in inp["cells"].items():
         L.append(f"| {t} | `{c['eval_sha256'][:12]}` | `{c['raw_sha256'][:12]}` | "
                  f"{'—' if not c['adapter_sha256'] else '`' + c['adapter_sha256'][:12] + '`'} | {c['parser']} | "
-                 f"{c['truncated']}/{c['n']} |")
+                 f"{_trunc(c['truncated'], c['n'])} |")
     L += ["", f"- Method: seed × parent paired cluster bootstrap (`rcx.stats.seed_parent_bootstrap_test`), "
           f"{par['resamples']} resamples, seed {par['bootstrap_seed']}; two-sided p = 2·min(share ≤ 0, share ≥ 0) "
           f"(replicates within {par['zero_tol']:g} of 0 count on both sides), floored at {par['p_floor_effective']:g}; "
@@ -1411,7 +1493,7 @@ def render(res):
     for t, d in sec["cells"].items():
         for s in SURFACES:
             L.append(f"| {t} | {s} | " + " | ".join(str(d[s]["errors"][k]) for k in ERR_KINDS)
-                     + f" | {d[s]['truncated']}/{d[s]['records']} |")
+                     + f" | {_trunc(d[s]['truncated'], d[s]['records'])} |")
     if sec["r3_trace"]:
         L += ["", "### R3 trace diagnostics (line 1; never scored)", "",
               "| cell | surface | well-formed | stated decision ok | balances = stated decision | line 1 exact | "
@@ -1481,23 +1563,30 @@ def _write_new(path, text):
         f.write(text)
 
 
+def output_paths(cells):
+    """(report .md, result .json, started marker): fixed paths next to the sealed records (review item 5)."""
+    return tuple(Path(cells) / name for name in OUTPUTS)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="RCX-E01R SEALED analysis (PREREG_E01R sections 5-7; run once)")
     ap.add_argument("--cells", default=str(ROOT / "runs" / "RCX-E01R" / "cells"))
     ap.add_argument("--missing", default="", help="comma-separated cells declared missing in DECISIONS (section 10)")
-    ap.add_argument("--out", default=None, help="markdown report (default <cells>/../ANALYSIS_E01R.md); the JSON "
-                                                "goes next to it with suffix .json")
     a = ap.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     cells = Path(a.cells)
-    out = Path(a.out) if a.out else cells.parent / "ANALYSIS_E01R.md"
-    jout = out.with_suffix(".json")
-    existing = [str(p) for p in (out, jout) if p.exists()]
+    out, jout, marker = output_paths(cells)
+    existing = [p.name for p in (marker, out, jout) if p.exists()]
     if existing:
-        raise SystemExit(f"refusing to overwrite {existing}: the SEALED analysis runs once (create-only)")
+        raise SystemExit(f"refusing: {existing} exist in {cells}: the SEALED analysis runs once (PREREG_E01R section "
+                         "10; a started marker without outputs is a crashed analysis, a logged deviation)")
     missing = [t.strip() for t in a.missing.split(",") if t.strip()]
-    battery, cells_d, info = load_sealed(cells, missing)
+    battery, cells_d, info = load_sealed(cells, missing)  # custody: refusals only, no statistic, nothing written
+    _write_new(marker, json.dumps({"started_at": time.strftime("%Y-%m-%d %H:%M:%S %Z"), "pid": os.getpid(),
+                                   "argv": list(sys.argv[1:] if argv is None else argv), "missing": missing,
+                                   "sealed_open_sha256": info["sealed_open_sha256"],
+                                   "analyze_e01r_sha256": sha(Path(__file__).resolve())}, indent=1) + "\n")
     res = analyze(battery, cells_d, info, resamples=RESAMPLES, seed=BOOT_SEED, template_seed=TEMPLATE_BOOT_SEED)
     txt = render(res)
     _write_new(jout, json.dumps(res, indent=1) + "\n")

@@ -312,6 +312,8 @@ they leave something open, CX D-38, CX D-39 and §4–§11 govern:
   above. §3's "`make_r2` is updated …" is done in code and checked by `tests/test_e01r_recipes.py`. §3's "PENDING
   BUILD" values (rows shas, covariates, R3 tokens) are recorded in `AUDIT_E01R.json`, `TRAIN_MANIFEST_E01R.json` and
   the freeze entry (§11), not in §3.
+- **"Recorded in DECISIONS … together with the SEALED commitment"** (header). This is read as two DECISIONS entries,
+  linked by the code sha: the freeze entry first, the mint entry second (§11).
 
 **Code** (sha256 recorded at the full freeze; PENDING FREEZE):
 - **On the B4 path:**
@@ -320,31 +322,50 @@ they leave something open, CX D-38, CX D-39 and §4–§11 govern:
   - `experiments/RCX-E01R/audit_e01r.py`: the training-row audit, with the E01R reader;
   - `experiments/RCX-E01R/native_e01r.py`: the commands `build`, `train`, `smoke`, `mint-commit`, `open-sealed` and
     `eval`;
-  - `experiments/RCX-E01R/analyze_e01r.py` (**PENDING CODE**): §5–§7, run once;
+  - `experiments/RCX-E01R/analyze_e01r.py`: §5–§7, run once (§10);
   - `experiments/RCX-E01R/decide_branch.py` (frozen, CX D-37, `6835b040…`; it has run once, CX D-39);
-  - tests (fake tokenizer only, no model): `tests/test_e01r_recipes.py`, `test_e01r_trace.py`, `test_e01r_audit.py`,
-    `test_native_e01r.py`, `test_e01r_branch.py` and `test_e01r_analyze.py` (**PENDING CODE**).
+  - tests (a fake tokenizer and a fake model only; no weights or tokenizer files are loaded):
+    `tests/test_e01r_recipes.py`, `test_e01r_trace.py`, `test_e01r_audit.py`, `test_native_e01r.py`,
+    `test_e01r_branch.py` and `test_analyze_e01r.py`.
 - **Imported unchanged, re-hashed at the freeze** (the CX D-26/D-34/D-36 values if unchanged):
   - `rcx/native/lora_cpu.py` (`ca469a13…`);
   - `experiments/RCX-E01N/native_e01.py`;
   - `experiments/RCX-E01N/native_probe.py` (`e8e8723f…`);
   - `rcx/rcl/{world,gen,vocab,templates,score}.py` and `rcx/rcl/wording_audit.py` (`cd6a1ef5…`);
   - `rcx/stats.py` (`06a30c10…`);
-  - `rcx/lane.py` (CX D-36);
+  - `rcx/lane.py` (CX D-36; re-hashed for reference, but not bound: below);
   - `experiments/RCX-E01R/run_e01r.py` (`dff678c1…`).
 - **Not on the B4 path:** `audit_tr_pool.py` and the R1 functions of `recipes.py` (`make_r1`, `audit_pool`,
-  `select_pool`). They stay in the repository and no E01R step runs them.
+  `select_pool`). They stay in the repository and no E01R step runs them. `audit_tr_pool.py` is bound nevertheless.
 
 **Bound code.** `SEALED_COMMIT.json` records the sha256 of every file in this list, and the commitment binds it:
-- `native_e01r.py`, `analyze_e01r.py`, `audit_e01r.py`, `decide_branch.py`, `recipes.py`, `trace_target.py`,
-  `run_e01r.py`;
+- `native_e01r.py`, `analyze_e01r.py`, `audit_e01r.py`, `audit_tr_pool.py`, `decide_branch.py`, `recipes.py`,
+  `trace_target.py`, `run_e01r.py`;
 - `rcx/stats.py`, `rcx/rcl/wording_audit.py`, `rcx/rcl/{gen,vocab,templates,world,score}.py`;
-- `native_e01.py`, `native_probe.py`, `rcx/native/lora_cpu.py` and `rcx/lane.py`.
+- `native_e01.py`, `native_probe.py` and `rcx/native/lora_cpu.py`.
 
-Two commands verify the list:
-- `train` refuses if any bound file's current sha256 differs from the commitment.
-- `analyze_e01r.py` refuses in the same case. It also refuses if any `TRAIN_META.json`, `SMOKE_<tag>.json` or
-  `eval_sealed_<tag>.json` records a sha for a bound file that differs from the commitment.
+**`rcx/lane.py` is not bound.** It is shared CPU-lane infrastructure (CX D-36). It decides only when a job may start,
+and has no effect on rows, adapters, outputs or scores. A peer's fix to the lock must not block E01R.
+
+**Code sha.** The code sha is the sha256 of the canonical JSON of the bound-code map {file name: sha256}: `json.dumps`
+with sorted keys, separators `,` and `:` and ASCII escapes, encoded as UTF-8. `native_e01r.py code-sha` prints it
+(pure; no model, tokenizer or P3). The freeze entry logs it. `mint-commit --expect-code-sha256 <value>` refuses unless
+the current bound files give exactly that value (§11).
+
+**Bound-code drift.** Every command that runs under the commitment refuses if any bound file's current sha256 differs
+from `SEALED_COMMIT.json`:
+- `train` and `smoke`, before the model is loaded;
+- `open-sealed`, before P3 is read;
+- `eval`, before decoding, and before post-processing a stored raw-generations file;
+- `analyze_e01r.py`, before anything else.
+
+The analysis also refuses if a record written under the commitment names a sha for a bound file that differs from the
+commitment. These records are the `TRAIN_META.json` of each E-R2 and E-R3 adapter, every `SMOKE_<tag>.json` and every
+`eval_sealed_<tag>.json`; each of them records the bound-code shas.
+- **The `TRAIN_META.json` check covers E-R2 and E-R3 only.** The control's `TRAIN_META.json` files were written by
+  E01N before the commitment existed. They record E01N-time shas, so they cannot match it.
+- **The control's custody is the CX D-30 adapter-sha chain:** the D-30 value = the adapter file = E01N's
+  `TRAIN_META.json` and `SEALED_OPEN.json` = the E01R opening record = the eval record.
 
 **Pools:**
 - **P2_v2:** `7e625a59…`, 45 wordings. Read by the lead; used only by the DEV2 battery (step A, done).
@@ -388,6 +409,9 @@ Two commands verify the list:
 - **Dropping an arm.** This is possible only at the mint, only for the frozen §2 reason, and only through
   `--drop-arm <arm> --reason "<text>"`. The §2 reason is that the arm's rows fail the training-row audit for a reason
   that cannot be fixed without changing the recipe.
+  - The mint refuses a drop unless `AUDIT_E01R.json` records the arm as failing on its manifest rows: `arm_ok` false
+    for that arm, with a failure entry naming it. An arm that passes the audit cannot be dropped, whatever the reason
+    given.
   - The drop and its reason are logged in DECISIONS (outcomes known: step A only) before the mint, and they are
     recorded in `SEALED_COMMIT.json`.
   - At least one treatment arm must remain. The Holm family then has 2 tests (§6).
@@ -407,46 +431,57 @@ Two commands verify the list:
   - if a commitment, salt or open record already exists;
   - if `arms_required` is not the branch-bound set above (after any logged drop);
   - if an arm's rows differ from the manifest or lack a passing `AUDIT_E01R.json`;
+  - unless `AUDIT_E01R.json` records the per-seed token counts (`tokens.per_seed`: supervised and processed tokens for
+    training seeds 0, 1 and 2) of every kept arm. §7 uses them for the lead-candidate tie-break;
+  - unless `--expect-code-sha256` equals the code sha of the current bound files (above), i.e. the value logged in the
+    freeze entry;
   - if a treatment adapter directory already exists;
   - if `analyze_e01r.py` is missing.
 - **Salt.** It is stored in `runs/RCX-E01R/cells/SEALED_SALT.secret` (git-ignored, write-once).
-- **Records.** `SEALED_COMMIT.json` is committed with the frozen prereg. sha256(salt) and the `SEALED_COMMIT.json`
-  sha256 are logged in DECISIONS.
+- **Records.** The mint follows the freeze entry (§11). `SEALED_COMMIT.json` is committed, and sha256(salt), the
+  `SEALED_COMMIT.json` sha256 and the code sha are logged in a second DECISIONS entry, the mint entry.
 
 **Smoke test** (specified in §3, frozen; procedure in §10). Each treatment adapter is tested after its training and
 before opening, on TRAIN rows only. There is no exemption: one failing adapter means the battery is never opened.
 
-**Open** (`open-sealed --expect-commit-sha <DECISIONS value>`; runs once; `SEALED_OPEN.json` is write-once). It refuses
-unless `TRAIN_MANIFEST_E01R.json` is unchanged since the mint and **every** `arms_required` adapter is a completed,
-untampered run:
-- for the control: the adapter sha equals the D-30 value, E01N's `TRAIN_META.json` and E01N's `SEALED_OPEN.json`
-  record;
-- for the treatments:
-  - `TRAIN_META.json` is present;
-  - the adapter sha matches it;
-  - the rows sha equals `TRAIN_MANIFEST_E01R.json`;
-  - the run has 190 steps and no resume checkpoint;
-  - a passing `SMOKE_<tag>.json` exists for this adapter sha, the committed `max_new` and 50 rows (§10).
-
-There is no partial opening and no opening for descriptive use.
-
-It then:
-1. regenerates the skeleton and checks it against battery_commit. On a mismatch it refuses and names the code files
-   changed since the mint;
-2. reads P3_v2. This is the first read of P3 by any code.
+**Open** (`open-sealed --expect-commit-sha <DECISIONS value>`; runs once; `SEALED_OPEN.json` is write-once). Every
+check that can refuse runs before P3 is read, and reading P3 is the last step. There is no partial opening and no
+opening for descriptive use.
+1. **Refusal checks.** None of them reads P3. `open-sealed` refuses unless all of these hold:
+   - **commitment:** `SEALED_COMMIT.json` exists, its sha256 equals `--expect-commit-sha`, and no `SEALED_OPEN.json`
+     exists;
+   - **manifest and audit:** `TRAIN_MANIFEST_E01R.json` and `AUDIT_E01R.json` are unchanged since the mint, and the
+     manifest's `max_new` equals the committed one;
+   - **row files:** every training-row file (N-CFSD, E-R2 and E-R3) is present and matches its D-30, manifest and
+     commitment sha;
+   - **adapters:** **every** `arms_required` adapter is a completed, untampered run:
+     - for the control: the adapter sha equals the D-30 value, E01N's `TRAIN_META.json` and E01N's `SEALED_OPEN.json`
+       record;
+     - for the treatments: `TRAIN_META.json` is present; the adapter sha matches it; the rows sha equals
+       `TRAIN_MANIFEST_E01R.json`; the run has 190 steps and no resume checkpoint is left;
+   - **smoke:** a passing `SMOKE_<tag>.json` exists for each treatment adapter's sha, the committed `max_new` and 50
+     rows (§10);
+   - **salt:** `SEALED_SALT.secret` exists and its sha256 equals the commitment's;
+   - **skeleton:** the P3-free skeleton, regenerated from the salt's seed and the committed counts, reproduces
+     battery_commit. On a mismatch it refuses and names the bound files changed since the mint;
+   - **bound code:** no bound file differs from the commitment (§4, bound-code drift).
+2. **Descriptive records, computed on the skeleton.** The skeleton carries every field of the battery except the P3
+   wording, so these values are those of the rendered battery:
+   - the UTF-8 byte length of the longest R3 gold target, plus 1 for EOS. The R3 target does not depend on the rule's
+     wording. Since a byte-level BPE token covers at least one byte, this bounds the gold length in tokens. A flag
+     records whether `max_new` covers it (descriptive);
+   - the battery's training overlap with every training-row file: recorded and read-back semantic hashes, skeleton
+     hashes, and status words found in prompts.
+3. **P3 read (last).** `open-sealed` reads P3_v2. This is the first read of P3 by any code.
    - The sha256 is checked against the commitment before parsing; then the ids, the single-slot form and the per-cell
      counts. No error message quotes P3 text.
-   - The wordings are registered as `p3:<id>` in memory only, and `p3` is rendered;
-3. checks every training-row file (N-CFSD, E-R2 and E-R3) against its D-30 or manifest sha;
-4. records:
+   - The wordings are registered as `p3:<id>` in memory only, and `p3` is rendered.
+4. **Record.** `SEALED_OPEN.json` records:
    - the salt, the seed, and the rendered battery's sha256 and per-surface counts;
    - the adapter shas;
-   - `max_new`, and the UTF-8 byte length of the longest R3 gold target on the rendered battery, plus 1 for EOS. Since
-     a byte-level BPE token covers at least one byte, this bounds the gold length in tokens. A flag records whether
-     `max_new` covers it (descriptive);
-   - the battery's training overlap with every training-row file: recorded and read-back semantic hashes, skeleton
-     hashes, and status words found in prompts;
-5. lists the parents with any hash overlap. The analysis drops them from every arm (§5.1) and reports the count.
+   - `max_new`, the R3 gold byte bound and its flag;
+   - the training overlap, with the list of parents that have any hash overlap. The analysis drops them from every arm
+     (§5.1) and reports the count.
 
 `SEALED_OPEN.json` contains the salt. It is committed, with its sha256 logged, before the first SEALED evaluation.
 
@@ -465,7 +500,9 @@ It then:
   - if the battery rebuilt in memory differs from the opening record;
   - for an adapter other than the one recorded at opening;
   - for any cell of a committed arm that was not fixed at opening;
-  - if `max_new` in the manifest or in `SEALED_OPEN.json` differs from the commitment.
+  - if `max_new` in the manifest or in `SEALED_OPEN.json` differs from the commitment;
+  - if any bound file differs from the commitment (§4), both before decoding and before post-processing a stored
+    raw-generations file.
 - **Decoding.**
   - Greedy, through the unchanged `lora_cpu.generate`.
   - Its default batching: batch size = min(32, 3000 // (prompt tokens + `max_new`)).
@@ -476,20 +513,35 @@ It then:
 - **Parsing (frozen §3).** R3 outputs are parsed from the last non-empty line; every other arm's output is parsed whole
   by `native_probe.parse_answer`.
 - **Outputs** (create-only):
-  - the raw generations, stored before any post-processing;
-  - `eval_sealed_<tag>.json`: scores, composites and the truncation count (outputs with no EOS within `max_new`);
+  - the raw generations, with the prompt token lengths and the decode log that map each output to its EOS flag,
+    stored before any post-processing;
+  - `eval_sealed_<tag>.json`: scores, composites, the truncation count (outputs with no EOS within `max_new`) and the
+    bound-code shas;
   - `preds_sealed_<tag>.jsonl.gz`: raw outputs and per-record scores, and for R3 `trace_target.predicate_consistency`.
+- **Unknown truncation.** If the decoded rows cannot be mapped back to the battery's records, the eval does not fail.
+  It records the truncation as unknown (`truncated` null, with a flag), and the analysis accepts and reports it (§5.1).
+- **Console.** `eval` prints only that the cell completed, with its counts (records, truncated outputs, wall time). It
+  prints no score, composite, `p3` outcome or decision.
 - **Lane.** `train`, `smoke` and `eval` refuse unless the CX D-36 lane lock is held by `rcx`.
 
-**Analyse.** `analyze_e01r.py` runs once, and its outputs are create-only. It refuses unless:
+**Analyse** (§10). `analyze_e01r.py` runs once:
+- **No output option.** It writes `ANALYSIS_E01R.md` and `ANALYSIS_E01R.json` at fixed paths in `runs/RCX-E01R/cells/`.
+- **Start marker.** Once the refusal checks below have passed, and before it computes any statistic, it creates the
+  marker `ANALYSIS_E01R.started`, create-only. It refuses at once if the marker or either output already exists.
+
+**Refusal checks.** It refuses unless:
 - every eval names the rendered battery's sha256;
 - every adapter matches the open-sealed record;
 - every eval used the committed `max_new`;
 - every stored score equals a re-score of the raw output;
+- every stored truncation flag equals the one re-derived from the raw file's decode log (`native_e01r.map_finished`).
+  A cell whose eval recorded the truncation as unknown is accepted, and reported as such;
 - the bound code matches the commitment (above);
 - `--missing` names exactly the cells declared missing in DECISIONS (§10):
   - it refuses if a named cell has a complete eval;
-  - it refuses if an unnamed confirmatory cell lacks one.
+  - it refuses if an unnamed confirmatory cell lacks one;
+  - it refuses a named cell unless §10's missing-cell check holds for it: the failed attempts recorded in
+    `ATTEMPTS_E01R.jsonl`, or an adapter or eval-record failure.
 
 **Training-row audit** (`audit_e01r.py`, before the full freeze). `train` and `mint-commit` refuse rows without a
 passing `AUDIT_E01R.json` for their sha. These are E01N's `audit_native` hard checks, applied to E-R2 and E-R3:
@@ -521,9 +573,12 @@ passing `AUDIT_E01R.json` for their sha. These are E01N's `audit_native` hard ch
 - **R3 control match:** prompts byte-identical to N-CFSD's, in order, and line 2 equal to N-CFSD's target;
 - with the tokenizer, no row is longer than `max_len` 512 tokens.
 
-The audit also reports the §3 covariates per arm and for the control. For E-R2 it adds the count of `comp_listed`
-twins that duplicate their parent's base or status_swap record (same wording, rule, state and event). These occur in
-size-2 sets, which the frozen spec does not redraw (§5.5).
+The audit also reports the §3 covariates per arm and for the control, including the supervised and processed tokens
+per training seed (`tokens.per_seed`; the mint requires them for every kept arm).
+
+The count of E-R2 `comp_listed` twins that duplicate their parent's base or status_swap record (same wording, rule,
+state and event) is computed by `analyze_e01r.py` from the committed `train_E-R2.jsonl`. These occur in size-2 sets,
+which the frozen spec does not redraw (§5.5).
 
 **Shared with earlier batteries by design.**
 - **The sealed word pools.** They are also used by the opened E01N SEALED battery (seed 88527345), whose results were
@@ -555,6 +610,10 @@ Every contrast is X − N-CFSD, for X ∈ {E-R2, E-R3} (the committed `treatment
   - truncated outputs (cut at `max_new`) are scored as they stand.
 - **Re-score.** The analysis recomputes every score from the raw output and refuses on any difference from the stored
   score.
+- **Truncation re-check.** The analysis re-derives each output's truncation flag from the raw file's decode log
+  (`native_e01r.map_finished`) and refuses on any difference from the stored flag. Where the eval recorded the
+  truncation as unknown (the decoded rows could not be mapped to records), the cell is accepted and its truncation is
+  reported as unknown. Truncation never enters a score other than through the output text.
 - **Train-overlap drop.** Every parent in `SEALED_OPEN.json` `train_overlap.parent_ids` is removed from every endpoint,
   guard and descriptive quantity, for every arm, before anything is computed. The count is reported.
 
@@ -628,6 +687,23 @@ C1 can be won by degenerate policies, and each is caught by a guard:
 C2 alone guards weakly, because the C1 items carry about a third of its parent weight. A policy that wins C1 at the
 cost of a large G4–G6 loss also cannot reach REVISE: §7 makes it STOP (degenerate trade-off).
 
+**Pinned by tests.** `tests/test_analyze_e01r.py` runs four degenerate policies end to end through
+`analyze_e01r.py`, on synthetic cells: always no-op; no-op on `p3` only; no-op if and only if the status is unlisted;
+and apply only when the status is `posted`. Each must end STOP (degenerate trade-off), and none ADVANCE or REVISE.
+
+**INFO: partial polarity-blind policies** (stated, not acted on; nothing here changes a decision).
+- Suppose a treatment follows the polarity-blind policy ("no-op whenever the status is unlisted") on a share f of the
+  `p3` items, and behaves like the control otherwise.
+- **C1 gain.** Its expected d(C1) is at most f, since each affected item can gain at most 1 (about f × 0.5 at step A's
+  headroom).
+- **G5 loss.** G5's point falls by about f × the control's S− apply level (0.93 on `ho_tpl`, R-08). It reaches the
+  −0.15 degenerate point only from f ≈ 0.16.
+- So a mixture on about 15% of the `p3` items or less is not caught by the degenerate rule:
+  - **It can still reach REVISE**, if its C1 gain is significant. The report then names the failed ADVANCE conditions:
+    d(C1) < +0.25, and G5 whenever its lower bound misses −0.10.
+  - **It never reaches ADVANCE.** Its expected d(C1) is at most 0.15, about 3 SE or more below +0.25 (§7), and as f nears
+    0.15 its G5 lower bound also misses the margin.
+
 **Pre-stated readings (descriptive; they never change a decision):**
 - A treatment whose G4′ or G5′ point contrast is ≤ −0.15 is labelled **"degenerate on non-anchor items"** in the
   report. The label is repeated wherever its outcome is cited.
@@ -653,8 +729,9 @@ cost of a large G4–G6 loss also cannot reach REVISE: §7 makes it STOP (degene
    - The frozen R2 spec redraws a `comp_listed` twin that duplicates its parent's base or status_swap record (same
      wording, rule, state and event) only for size-1 sets.
    - In size-2 sets such duplicates are kept, and they count towards the 1,501 rows.
-   - Their count is reported as a covariate (`AUDIT_E01R.json` and the report), together with `recipe_stats`'
-     `dup_rows_within_parent`.
+   - Their count is computed by `analyze_e01r.py` from the committed `train_E-R2.jsonl` (the file whose sha the
+     commitment binds) and reported as a covariate, together with `recipe_stats`' `dup_rows_within_parent`
+     (`TRAIN_MANIFEST_E01R.json`).
 3. **Declared in §3 (frozen) and repeated here.** R2's parent count and rule-type mix differ from N-CFSD's. R3 adds
    supervised and generated tokens. Neither is matched.
 
@@ -688,7 +765,8 @@ cost of a large G4–G6 loss also cannot reach REVISE: §7 makes it STOP (degene
   - `listed=` accuracy, which tests membership.
 
   On S+ unlisted items, "listed=no only-listed:true" or "-> apply" is the complement-inference error itself.
-- **Generation.** Truncation counts per cell, and each treatment adapter's smoke profile (TRAIN prompts; §10).
+- **Generation.** Truncation counts per cell ("unknown" where the eval could not map its outputs, §5.1), and each
+  treatment adapter's smoke profile (TRAIN prompts; §10).
 - **Covariates** (§3, and §5.5 item 2).
 
 ## 6. Statistics
@@ -984,6 +1062,10 @@ With a true guard effect δ, P(within margin) ≈ Φ((m + δ)/SE − 1.96).
   - 20261264 in `recipes.py`, `native_e01r.py` and their tests (the R2 role);
   - 20261267 in `decide_branch.py` (the §2 bootstrap, FROZEN).
 
+  Re-checked after commit `5b36b9c` (`git grep` for 20261264, 20261265 and 20261268): they now also appear in
+  `analyze_e01r.py` and `tests/test_analyze_e01r.py` (20261265 and 20261268, in their §6 and §5.6 roles) and in
+  `NEXT_STEPS.md` (20261264, the R2 role). There is no other use.
+
   The six readable pool files contain no `202612xx` literal. 20261263 no longer appears in any code: `ca40a38` changed
   `recipes.py`'s R1 default to 20261253.
 - **Git history** (review item 19). `git log --all -S<seed>` over all local and remote branches, one seed per command,
@@ -1034,10 +1116,12 @@ With a true guard effect δ, P(within margin) ≈ Φ((m + δ)/SE − 1.96).
    - `TRAIN_MANIFEST_E01R.json`, with `max_new` and the R3 gold length in tokens.
 
    Then `audit_e01r.py --tok` writes `AUDIT_E01R.json`. Unit tests run only when the lane check prints LANE_FREE.
-3. **Freeze.** Fill the remaining PENDING fields and complete the review. Then freeze: this file's sha256 and the
-   code, rows, manifest and audit shas go into DECISIONS (§11).
-4. **Mint.** Run `mint-commit --arms-required N-CFSD_s0,N-CFSD_s1,N-CFSD_s2,E-R2_s0,E-R2_s1,E-R2_s2,E-R3_s0,E-R3_s1,
-   E-R3_s2` (§4). Use `--drop-arm` only as §4 allows. Commit `SEALED_COMMIT.json` and log its hashes.
+3. **Freeze.** Fill the remaining PENDING fields and complete the review. Then freeze: this file's sha256, the code
+   sha (printed by `native_e01r.py code-sha`) and the code, rows, manifest and audit shas go into DECISIONS (the
+   freeze entry, §11).
+4. **Mint.** Run `mint-commit --expect-code-sha256 <the freeze entry's code sha> --arms-required
+   N-CFSD_s0,N-CFSD_s1,N-CFSD_s2,E-R2_s0,E-R2_s1,E-R2_s2,E-R3_s0,E-R3_s1,E-R3_s2` (§4). Use `--drop-arm` only as §4
+   allows. Commit `SEALED_COMMIT.json` and log its hashes in the mint entry (§11).
 5. **Training and smoke.** In lane chains, train the six treatment adapters (E-R2 s0–s2 and E-R3 s0–s2).
    - Each adapter's smoke test follows its training.
    - **All six adapters are trained whatever the smoke results.** A smoke failure stops neither the chain nor any
@@ -1051,16 +1135,22 @@ With a true guard effect δ, P(within margin) ≈ Φ((m + δ)/SE − 1.96).
 
    N-VR is not evaluated. Each cell's eval files are committed once the cell has ended.
 8. **Analysis.** Run `analyze_e01r.py` once, with `--missing` naming exactly the cells declared missing, if any.
+   - It has no output option: the report and its JSON go to fixed paths (§4).
+   - It creates the create-only marker `ANALYSIS_E01R.started` after its refusal checks pass and before its first
+     statistic, and it refuses if the marker exists. A run that refuses computes, prints and writes no statistic. Such
+     a run is not the analysis, and fixing its cause (for example declaring a cell missing, §10) and running again is
+     allowed.
+   - Once the marker exists, the analysis has run, whether or not it finished.
 
 **Smoke test (procedure for the frozen §3 rule; review item 16).**
 - **When.** After each treatment adapter's training and before `open-sealed`, in the lane chain:
-  `native_e01r.py smoke --arm <arm> --seed k`. `smoke` refuses after opening, and for an adapter that is not a
-  completed run.
+  `native_e01r.py smoke --arm <arm> --seed k`. `smoke` refuses after opening, for an adapter that is not a completed
+  run, and if any bound file differs from the commitment (§4).
 - **Prompts.** 50 rows of the arm's own training file, at fixed indices i × 1501 // 50 for i = 0–49 (no randomness).
   These are TRAIN prompts only, never DEV, DEV2 or SEALED.
 - **Decoding.** Exactly as in the SEALED eval: greedy, `lora_cpu.generate`, the committed `max_new` and the same
   batching.
-- **Logged** in `SMOKE_<tag>.json` (create-only, with the raw outputs):
+- **Logged** in `SMOKE_<tag>.json` (create-only, with the raw outputs and the bound-code shas):
   - the truncated count, i.e. outputs with no EOS within `max_new`;
   - the well-formed share: for R3, both lines parse (`trace_target.parse_trace_answer`); for E-R2, `parse_answer`
     returns balances;
@@ -1082,9 +1172,18 @@ with at most **2 further attempts** per cell. A crash here means an exception, a
 a forced stop.
 - Each attempt is logged in the chain log and in DECISIONS, with "outcomes known: no", or "TRAIN-prompt smoke only" for
   smoke.
-- **What does not count as an attempt:** a refused start (lane held by a peer, RAM below 12 GB) and a ThermalGuard
-  pause.
+- **Attempts log.** `train`, `smoke` and `eval` also record every attempt in `ATTEMPTS_E01R.jsonl`, next to
+  `SEALED_COMMIT.json`. The log is append-only and is never edited or deleted.
+  - A `start` event is appended once the gates have passed (the lane is held by the chain, and RAM suffices for a
+    model load). An `end` event with status ok is appended when the cell's outputs are written.
+  - A `start` without an ok `end` is a failed attempt: an exception or a refusal after the start, a kill, an OOM or a
+    power loss. DECISIONS gives each failed attempt's cause.
+- **What does not count as an attempt:** a refused start (lane held by a peer, RAM below 12 GB), a refusal by a custody
+  check that runs before the lane, and a ThermalGuard pause.
 - **Training.**
+  - `train` returns without training only if both the adapter and its `TRAIN_META.json` exist. An adapter directory
+    without `TRAIN_META.json` is an incomplete run: `train` resumes it from its checkpoint. Without a checkpoint it
+    refuses, and the partial directory is handled as an unreadable checkpoint (below).
   - It resumes from its own checkpoint under the same run fingerprint: the same seed, rows, row order, code, recipe and
     `RCX_THREADS`.
   - If the checkpoint is unreadable, the partial run directory is renamed `<tag>.crashed-<n>` and kept, and the cell
@@ -1102,11 +1201,24 @@ analysis runs:
 2. a SEALED evaluation that still fails after its 2 further attempts;
 3. an adapter whose file no longer matches the sha fixed at opening, and that cannot be restored byte-identically;
 4. raw outputs that are lost or fail the analysis integrity checks (battery sha, adapter sha, `max_new`, bound code,
-   re-score), and cannot be regenerated by a deterministic re-run within the attempt limit.
+   re-score, truncation re-check), and cannot be regenerated by a deterministic re-run within the attempt limit.
 
-No other reason is accepted. In particular, a cell's eval summary (printed by `eval`) is never a reason. A missing
+No other reason is accepted. In particular, a cell's scores are never a reason (`eval` prints none). A missing
 confirmatory cell makes its arm INCONCLUSIVE (missing). A missing control cell makes both arms INCONCLUSIVE
 (missing). A missing OFF cell affects nothing.
+
+**A cell is missing only after the stated further attempts.** `analyze_e01r.py` checks this for every cell named in
+`--missing`. It refuses the name unless one of these holds:
+- `ATTEMPTS_E01R.jsonl` shows at least 3 failed `eval` attempts on the cell: the first attempt and its 2 further
+  attempts (reasons 2 and 4);
+- the cell's adapter file no longer matches the sha fixed at opening (reason 3, which has no attempt limit);
+- the cell's eval record exists but fails an integrity check (reason 4). Eval files are create-only and never
+  overwritten, so such a cell cannot be re-run under its id. The record itself proves the completed attempt, so
+  this holds even if the "ok" event after it was lost in a crash.
+
+A torn line in `ATTEMPTS_E01R.jsonl` (a crash or power loss mid-write) is reported and ignored, and later events are
+appended on a new line. A torn line can only hide an attempt, never add one, so it cannot help a cell reach the
+attempt limit. A well-formed line that is not an attempt event refuses.
 
 **Compute (CPU-lane hours; re-estimated for `max_new` 160; review item 18).**
 - **Basis.** The E01N SEALED evals had 2,240 records each at `max_new` 64.
@@ -1152,23 +1264,30 @@ confirmatory cell makes its arm INCONCLUSIVE (missing). A missing control cell m
 **No retries under the same id beyond the crash rule:**
 - A completed adapter is never retrained, and an eval or smoke file is never overwritten.
 - The mint and open records are write-once.
-- The analysis runs once, and its outputs are create-only.
+- The analysis runs once. Its start marker and outputs are create-only.
+- `ATTEMPTS_E01R.jsonl` is append-only.
 - A cell that cannot be completed is reported as missing and is never replaced by another seed or id.
 - There is no descriptive opening of the battery outside this sequence.
 
 ## 11. Freeze and deviations
 
-At the full freeze, the following are recorded in a new CX D-xx:
-- this file's sha256 and timestamp, with a check that everything before §4 is byte-identical to commit `c4cba9e`;
-- the sha256 of every bound code file (§4) and of every E01R test file;
-- the E-R2 and E-R3 rows shas, `TRAIN_MANIFEST_E01R.json` (with `max_new` and the R3 gold length in tokens) and
-  `AUDIT_E01R.json`, with the §3 and §5.5 covariates;
-- the unit-test result, from a run made only when the lane is free;
-- the §9 seed-history result;
-- the CX D-38 margins, by reference (no guard-power computation is run).
+**Two entries, in order.** The header says this file becomes FROZEN when its final sha256 is "recorded in DECISIONS
+… together with the SEALED commitment". This is read as two CX D-xx entries, linked by the code sha (§4):
+1. **The freeze entry** (first). It records:
+   - this file's sha256 and timestamp, with a check that everything before §4 is byte-identical to commit `c4cba9e`;
+   - the sha256 of every bound code file (§4), the code sha, the sha256 of `rcx/lane.py` (for reference; not bound)
+     and the sha256 of every E01R test file;
+   - the E-R2 and E-R3 rows shas, `TRAIN_MANIFEST_E01R.json` (with `max_new` and the R3 gold length in tokens) and
+     `AUDIT_E01R.json`, with the §3 covariates and the per-seed token counts;
+   - the unit-test result, from a run made only when the lane is free;
+   - the §9 seed-history result;
+   - the CX D-38 margins, by reference (no guard-power computation is run).
+2. **The mint entry** (second). The mint runs with `--expect-code-sha256` equal to the freeze entry's code sha, and
+   refuses otherwise. The entry records sha256(salt), the `SEALED_COMMIT.json` sha256, the code sha and any
+   `--drop-arm` with its reason.
 
-After the mint, a further entry records sha256(salt), the `SEALED_COMMIT.json` sha256 and any `--drop-arm` with its
-reason.
+No bound file changes between the two entries. A change found by the mint's code-sha check means a new freeze entry
+before any mint.
 
 Every deviation is logged with "outcomes known: yes/no". Nothing is rerun under this ID, except as the §10 crash rule
 allows.
@@ -1183,6 +1302,18 @@ allows.
     step A.
   - Step A enters only through CX D-39's branch (the arms) and through the C1 baseline in §7's power notes.
   - The header and §1–§3 are byte-identical to `c4cba9e`.
+- **Consistency revision** (2026-10-12, after commit `5b36b9c`). Outcomes known: step A DEV2 only, as above. No
+  treatment rows, manifest, audit, commitment or adapter exists.
+  - It aligns §4–§11 with the code fixes of the consistency review:
+    - `smoke`, `open-sealed` and `eval` refuse on bound-code drift, and `rcx/lane.py` is unbound;
+    - the opening's refusal checks all precede the P3 read;
+    - the attempts log and the attempt-based missing-cell check;
+    - the run-once analysis (fixed paths, start marker), and the truncation re-check;
+    - `--expect-code-sha256`, `--drop-arm` tied to the audit, and the mint's token-count check;
+    - `eval` prints no outcome.
+  - It adds the §5.4 tests note and the INFO caveat.
+  - No endpoint, estimator, threshold, margin, guard, decision rule or seed changed. The header and §1–§3 are
+    byte-identical to `c4cba9e` and `5b36b9c`.
 
 **Any of the following voids the confirmation:**
 - re-creating or deleting `SEALED_COMMIT.json`, `SEALED_SALT.secret` or `SEALED_OPEN.json`;
@@ -1193,7 +1324,9 @@ allows.
 - adding, dropping, replacing or re-specifying an arm after the mint;
 - evaluating any arm at a `max_new` other than the committed one;
 - evaluating a treatment adapter on any battery before the SEALED analysis (the TRAIN-prompt smoke test excepted);
-- running the analysis more than once, or declaring a cell missing for a reason not listed in §10;
+- running the analysis more than once (deleting its start marker included), or declaring a cell missing for a reason
+  not listed in §10;
+- editing or deleting entries of `ATTEMPTS_E01R.jsonl`;
 - changing §2 after any step A output exists.
 
 ## Open items for review (draft only; to be resolved before the full freeze)
@@ -1217,33 +1350,32 @@ allows.
 - **Mint, post-mint rules and custody:**
   - the mint binds the arms to the branch, with `--drop-arm` only before the mint (§4);
   - the post-mint crash, attempt and missing-cell rules (§10);
-  - the bound-code list, verified by `train` and by the analysis (§4).
+  - the bound-code list, verified by `train`, `smoke`, `open-sealed`, `eval` and the analysis (§4).
 - **Specification:**
   - §5–§7 are now a complete specification of record selection, statistics and the ordered decision rule;
   - the non-anchor sub-quantities (§5.4) and the declared asymmetries (§5.5) are added.
 - **Header and §1–§3** are left byte-identical. Their stale statements are read as §4 says (former item 7).
 
-**Remaining:**
-1. **PENDING CODE** (finalisation workflow; checked against this text by the consistency review):
-   - **`analyze_e01r.py` and `tests/test_e01r_analyze.py`**, implementing §5–§7 exactly:
-     - the predicate-equals-variant-list check;
-     - the train-overlap drop and the re-score check;
-     - the §6 call parameters and Holm with p = 1 for tests that cannot be computed;
-     - the per-seed contrasts;
-     - a `decide()` truth table covering the §7 order, the tolerance, the degenerate rule on point estimates, REVISE's
-       d(C1) > 0 and the missing-cell cases;
-     - `--missing`;
-     - the bound-code check;
-     - the sub-quantity labels and the symmetric re-score.
-   - **`native_e01r.py`:**
-     - the mint binds the arms to `BRANCH_STEP_A.json` and the manifest, with `--drop-arm <arm> --reason`;
-     - the bound-code list in the commitment, verified by `train`;
-     - `eval` refuses N-VR;
-     - no smoke exemption.
-   - **`audit_e01r.py`:** the R2 duplicate-`comp_listed` count as a covariate.
-2. **PENDING BUILD:**
+**Resolved in the consistency revision (2026-10-12; §11 custody):**
+- **Code.** `analyze_e01r.py` with `tests/test_analyze_e01r.py`, and the `native_e01r.py` and `audit_e01r.py`
+  changes, implement this text (former remaining item 1):
+  - bound-code drift refused by every command, and `rcx/lane.py` not bound;
+  - the opening's refusal checks before the P3 read;
+  - the attempts log, the missing-cell attempt check, and the run-once analysis;
+  - the truncation re-check, with unknown truncation flagged;
+  - `--expect-code-sha256`, `--drop-arm` only for an arm that fails the audit, and the token-count check;
+  - `eval` refuses N-VR and prints no outcome;
+  - the R2 duplicate-`comp_listed` count, computed by the analysis (§4, §5.5).
+- **Freeze and mint** are two DECISIONS entries, linked by the code sha (§11).
+- **INFO caveat** on partial polarity-blind policies (§5.4).
+
+**Remaining** (the only open items; nothing else is pending before the full freeze):
+1. **Build** (with the tokenizer only, §10 step 2):
    - the E-R2 and E-R3 rows;
-   - `TRAIN_MANIFEST_E01R.json` (`max_new`, the R3 gold length in tokens);
-   - `AUDIT_E01R.json` and the covariates.
-3. **Seeds.** The git-history search for 20261264, 20261265 and 20261268, one per command, with the lane free (§9).
-4. **Tests.** Every E01R test file is run once with the lane free. The result goes into the freeze entry.
+   - `TRAIN_MANIFEST_E01R.json`, with `max_new` and the R3 gold length in tokens;
+   - `AUDIT_E01R.json`, with the §3 covariates and the per-seed token counts (`tokens.per_seed`) that the mint
+     requires.
+2. **Seeds.** The git-history search for 20261264, 20261265 and 20261268, one seed per command, with the lane free
+   (§9).
+3. **Tests.** Every E01R test file is run once, in full, with the lane free. The result goes into the freeze entry
+   (§11).
