@@ -13,7 +13,8 @@ from goal_conditioned_decision_data.pipelines.common import canonical,digest,fil
 
 class ExperimentCustodyTests(unittest.TestCase):
     def root(self,directory):
-        root=Path(directory).resolve()
+        root=(Path(directory)/'goal_conditioned_decision_data').resolve()
+        root.mkdir()
         (root/'configs').mkdir();(root/'manifests').mkdir();(root/'reports').mkdir()
         spec=json.loads((experiment.ROOT/'configs/v2_experiment.json').read_text())
         (root/'configs/v2_experiment.json').write_text(canonical(spec)+'\n')

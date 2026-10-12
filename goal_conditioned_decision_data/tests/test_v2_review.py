@@ -86,6 +86,22 @@ def without_goal(task):
     return task
 
 
+def historical_bytes(relative):
+    """Read fixed nonsealed v1 fixtures locally or through exact cold custody.
+
+    This changes storage access only; every historical content commitment and
+    mathematical expectation below remains the original reviewer value.
+    """
+    from goal_conditioned_decision_data.pipelines import remote_archive
+    if relative.startswith('data/sealed/'):
+        raise ValueError('historical review fixture must never read sealed gold')
+    return remote_archive.read_bytes(PRODUCTION, relative, max_bytes=8 * 1024 ** 2)
+
+
+def historical_hash(relative):
+    return hashlib.sha256(historical_bytes(relative)).hexdigest()
+
+
 def independent_forest(plan, start, table, max_height):
     """Small hand-defined clear-block executor; never calls production moves."""
     on = deepcopy(start)
@@ -160,8 +176,8 @@ class IndependentV1Compatibility(unittest.TestCase):
     def test_three_predeclared_production_batches_match_ids_candidates_labels_fingerprints(self):
         for seed, split in ((1000000, 'train'), (1000003, 'dev'), (1000004, 'ood')):
             path = PRODUCTION / 'data/accepted' / ('%s-%d.jsonl' % (split, seed))
-            batch = json.loads((PRODUCTION / 'manifests' / ('batch-' + path.stem + '.json')).read_text())
-            persisted = {r['id']: r for r in map(json.loads, path.read_text().splitlines())}
+            batch = json.loads(historical_bytes('manifests/batch-' + path.stem + '.json'))
+            persisted = {r['id']: r for r in map(json.loads, historical_bytes(str(path.relative_to(PRODUCTION))).splitlines())}
             frozen_fingerprints = {r[0]: r[1] for r in batch['protected_index']}
             regenerated = build.generate_group(seed, split=split)
             self.assertEqual({r['id'] for r in regenerated}, set(persisted))
@@ -174,18 +190,26 @@ class IndependentV1Compatibility(unittest.TestCase):
                     self.assertEqual(build.semantic_fingerprint(row), frozen_fingerprints[row['id']])
 
     def test_all_1936_nonsealed_archived_rows_validate_without_rewriting_receipts(self):
-        paths = sorted((PRODUCTION / 'data/accepted').glob('*.jsonl'))
-        before = {str(path.relative_to(PRODUCTION)): file_hash(path) for path in paths}
+        from goal_conditioned_decision_data.pipelines import remote_archive
+        # Preserve the original 66-batch denominator when newer v2 batches
+        # are added. These are the exact legacy seed/split reservations.
+        schedule = ('train', 'train', 'train', 'dev', 'ood', 'train')
+        fixed = {'data/accepted/%s-%d.jsonl' % (schedule[i % 6], 1000000 + i) for i in range(66)}
+        available = set(remote_archive.iter_paths(PRODUCTION, 'data/accepted/*.jsonl'))
+        self.assertLessEqual(fixed, available)
+        paths = [PRODUCTION / relative for relative in sorted(fixed)]
+        before = {str(path.relative_to(PRODUCTION)): historical_hash(str(path.relative_to(PRODUCTION))) for path in paths}
         self.assertEqual(len(paths), 66)
         self.assertEqual(digest(before), PRODUCTION_ACCEPTED_COLLECTION)
         count = 0
         receipt_bytes = {}
         for path in paths:
             manifest_path = PRODUCTION / 'manifests' / ('batch-' + path.stem + '.json')
-            receipt_bytes[str(manifest_path)] = file_hash(manifest_path)
-            manifest = json.loads(manifest_path.read_text())
+            relative_manifest = str(manifest_path.relative_to(PRODUCTION))
+            receipt_bytes[str(manifest_path)] = historical_hash(relative_manifest)
+            manifest = json.loads(historical_bytes(relative_manifest))
             self.assertEqual(manifest['sha256'], before[str(path.relative_to(PRODUCTION))])
-            for line in path.read_text().splitlines():
+            for line in historical_bytes(str(path.relative_to(PRODUCTION))).splitlines():
                 row = json.loads(line)
                 self.assertIn(row['split'], ('train', 'dev', 'ood'))
                 original = canonical(row)
@@ -197,8 +221,8 @@ class IndependentV1Compatibility(unittest.TestCase):
                 self.assertEqual(row['verification']['code_hashes'], source_map)
                 count += 1
         self.assertEqual(count, 1936)
-        self.assertEqual(before, {str(path.relative_to(PRODUCTION)): file_hash(path) for path in paths})
-        self.assertEqual(receipt_bytes, {name: file_hash(name) for name in receipt_bytes})
+        self.assertEqual(before, {str(path.relative_to(PRODUCTION)): historical_hash(str(path.relative_to(PRODUCTION))) for path in paths})
+        self.assertEqual(receipt_bytes, {name: historical_hash(str(Path(name).relative_to(PRODUCTION))) for name in receipt_bytes})
 
 
 class IndependentNamespaceSemantics(unittest.TestCase):
@@ -785,7 +809,8 @@ class IndependentWorkerProfileCustody(unittest.TestCase):
         self.config = json.loads((ROOT / 'configs/production.json').read_text())
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name).resolve()
+        self.root = Path(self.temp.name).resolve() / 'goal_conditioned_decision_data'
+        self.root.mkdir()
         root_patch = patch.object(worker, 'ROOT', self.root)
         root_patch.start(); self.addCleanup(root_patch.stop)
         disk_patch = patch.object(worker.shutil, 'disk_usage',

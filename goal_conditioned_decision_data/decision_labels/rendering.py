@@ -17,6 +17,7 @@ from ..auditors.integrity import (audit_record, recursive_input_check, semantic_
 from ..oracles.primary import evaluate as primary, ORACLE_VERSION as PRIMARY_VERSION
 from ..oracles.independent import evaluate as independent, ORACLE_VERSION as INDEPENDENT_VERSION
 from ..pipelines.common import canonical, digest, file_hash, immutable_bytes, source_hashes
+from ..pipelines import remote_archive
 
 RENDERING_VERSION = 'gcdl-rendering-1.0'
 V2_RENDERING_VERSION = 'gcdl-rendering-2.0'
@@ -35,6 +36,14 @@ MIN_FREE_BYTES = 10 * 1024 ** 3
 MAX_RECORDS = 12000
 BEGIN = 'TASK_JSON_BEGIN\n'
 END = '\nTASK_JSON_END\n'
+
+
+def _archive_call(method,*args,**kwargs):
+    """Keep the public exporter invalid-input contract without relaxing custody."""
+    try:
+        return getattr(remote_archive,method)(*args,**kwargs)
+    except remote_archive.ArchiveError as error:
+        raise ValueError(str(error)) from error
 _FRAMING = (
     'Use the task JSON below to assess the supplied candidate plans under its stated rules, goals, constraints and utility definition.\n',
     'Assess the supplied candidate plans using the rules, goals, constraints and utility definition in this JSON task.\n',
@@ -297,8 +306,10 @@ def _publish(root, path, raw):
         raise ValueError('rendered destination symlink or path escape')
     if path.with_name(path.name + '.tmp').is_symlink():
         raise ValueError('rendered temporary destination cannot be a symlink')
-    if path.exists():
-        if path.read_bytes() != raw:
+    relative=str(path.relative_to(root))
+    if _archive_call('exists',root,relative):
+        info=_archive_call('payload_info',root,relative)
+        if info['bytes']!=len(raw) or info['sha256']!=hashlib.sha256(raw).hexdigest():
             raise ValueError('immutable artifact conflict: ' + str(path))
         return
     _storage_guard(root, len(raw))
@@ -309,7 +320,7 @@ def _source_paths(root, split, source_paths):
     accepted = (root / 'data' / 'accepted').resolve()
     if accepted != root / 'data' / 'accepted':
         raise ValueError('data/accepted must not resolve to a different source directory')
-    paths = sorted(accepted.glob(split + '-*.jsonl')) if source_paths is None else sorted(Path(path) for path in source_paths)
+    paths = [root/path for path in _archive_call('iter_paths',root,'data/accepted/'+split+'-*.jsonl')] if source_paths is None else sorted(Path(path) for path in source_paths)
     checked = []
     for path in paths:
         if not path.is_absolute():
@@ -329,10 +340,10 @@ def _batch_source(root, path, split):
     if not seed_text.isdecimal():
         raise ValueError('source shard name must identify its accepted batch seed')
     manifest_path = root / 'manifests' / ('batch-%s-%s.json' % (split, seed_text))
-    if not manifest_path.is_file() or manifest_path.is_symlink() or manifest_path.resolve() != manifest_path:
+    if not _archive_call('exists',root,str(manifest_path.relative_to(root))) or manifest_path.is_symlink() or manifest_path.resolve() != manifest_path:
         raise ValueError('accepted source batch manifest is missing or unmanaged')
-    batch = json.loads(manifest_path.read_text(encoding='utf-8'))
-    raw = path.read_bytes()
+    batch = json.loads(_archive_call('read_text',root,str(manifest_path.relative_to(root))))
+    raw = _archive_call('read_bytes',root,relative,max_bytes=MAX_SHARD_BYTES)
     actual_hash = hashlib.sha256(raw).hexdigest()
     count = len(raw.splitlines())
     if len(raw) > MAX_SHARD_BYTES or any(not line.strip() for line in raw.splitlines()):
@@ -370,7 +381,7 @@ def _batch_source(root, path, split):
             'source_generation_profile':profile['id'],
             'source_seed': batch['seed'],
             'source_batch_manifest': str(manifest_path.relative_to(root)),
-            'source_batch_manifest_sha256': file_hash(manifest_path),
+            'source_batch_manifest_sha256': _archive_call('payload_info',root,str(manifest_path.relative_to(root)))['sha256'],
             'source_code_hashes': code, 'protected_index': index}
 
 
@@ -388,20 +399,26 @@ def _source_record_provenance(record, source):
         raise ValueError('accepted source verification code hashes disagree with batch manifest')
 
 
-def _records(paths, split, max_records):
+def _records(paths, split, max_records, root=None):
     count = 0
     for path in paths:
-        with path.open(encoding='utf-8') as handle:
-            for line in handle:
-                if count >= max_records:
-                    return
-                if len(line.encode('utf-8')) > MAX_SHARD_BYTES:
-                    raise ValueError('source line exceeds bounded shard size')
-                record = json.loads(line)
-                if record.get('split') != split or record.get('quality_gate', {}).get('status') != 'accepted':
-                    raise ValueError('selected source contains unaccepted or mismatched-split record')
-                count += 1
-                yield path, record
+        if count >= max_records:
+            return
+        base=Path(root) if root is not None else path.parent.parent.parent
+        relative=str(path.relative_to(base))
+        if _archive_call('payload_info',base,relative)['bytes']>MAX_SHARD_BYTES:
+            raise ValueError('source shard exceeds bounded shard size')
+        raw=_archive_call('read_bytes',base,relative,max_bytes=MAX_SHARD_BYTES)
+        for line in raw.splitlines():
+            if count >= max_records:
+                return
+            if len(line) > MAX_SHARD_BYTES:
+                raise ValueError('source line exceeds bounded shard size')
+            record = json.loads(line)
+            if record.get('split') != split or record.get('quality_gate', {}).get('status') != 'accepted':
+                raise ValueError('selected source contains unaccepted or mismatched-split record')
+            count += 1
+            yield path, record
 
 
 def export_rendered_dataset(source_root, split, view, max_records, variant_budget,
@@ -431,7 +448,7 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
     selected, sources = [], {}
     rendering_versions = set()
     seen_ids = set()
-    for path, record in _records(paths, split, max_records):
+    for path, record in _records(paths, split, max_records,root):
         if record['id'] in seen_ids:
             raise ValueError('duplicate selected canonical record id')
         seen_ids.add(record['id'])
@@ -471,7 +488,7 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
         buffer, buffered_rows = bytearray(), 0
 
     examined = 0
-    for index, (path, record) in enumerate(_records(paths, split, max_records)):
+    for index, (path, record) in enumerate(_records(paths, split, max_records,root)):
         if index >= len(selected) or digest(record) != selected[index]['record_sha256']:
             raise ValueError('accepted source changed during rendered export')
         examined += 1
@@ -494,9 +511,9 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
         raise ValueError('accepted source record count changed during rendered export')
     flush()
     for source in sources.values():
-        if file_hash(root / source['path']) != source['sha256']:
+        if _archive_call('payload_info',root,source['path'])['sha256'] != source['sha256']:
             raise ValueError('accepted source hash changed during rendered export')
-        if file_hash(root / source['source_batch_manifest']) != source['source_batch_manifest_sha256']:
+        if _archive_call('payload_info',root,source['source_batch_manifest'])['sha256'] != source['source_batch_manifest_sha256']:
             raise ValueError('accepted source batch manifest changed during rendered export')
     if source_hashes() != code:
         raise ValueError('executable code changed during rendered export')

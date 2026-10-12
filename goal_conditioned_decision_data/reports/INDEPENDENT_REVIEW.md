@@ -1,94 +1,74 @@
-# Independent generator-v2 and profile review
+# Independent GCDL archival review
 
 FINAL_VERDICT: PASS
 
-Reviewer: fresh independent agent `/root/v2_review`, 12 October 2026 UTC. This is a manual, scoped implementation approval after source inspection, adversarial checks, complete regressions, and inspection of the frozen DEV evidence. Executable `PASS` fields alone were not treated as approval.
+Reviewed on 2026-10-11 by the independent archival reviewer. This is a manual, scoped approval of the exact source below, following source inspection and adversarial tests. An executable gate did not author this verdict.
 
-Approved source digest: `fdfd63b45b071928080ac14e730f4f17df107dc6ffa6fd1b950a7ecd5e34b467`, the SHA-256 of canonical JSON of the complete **42-file Python/configuration hash map** appended below. The frozen experiment, the root's complete regression run, and this reviewer's independent complete regression run bind that same map. This reviewer's map was identical before and after its final run.
+The approved source digest is `3cc00cd2c73b37829c8488babe654296aba4df28fada67c459a3b8a2f7c58835` over the complete 54-file map at the end of this report. The reviewed proposal is `/Users/chengli/.codex/gcdl001-host/archive-improvement-worktree/goal_conditioned_decision_data`. Independent full validation passed **329 tests in 96.289 seconds**; the complete source maps before and after that run were exactly equal. The root agent independently reported **329 tests in 96.158 seconds** on the same digest. A further read-only source check matched the same map.
 
-The reviewer authored `tests/test_v2_review.py` with 39 independent methods and this report. At the parent's explicit request, the reviewer also corrected two existing fixtures in `tests/test_adversarial_review.py`: an opaque sealed-byte sentinel now occupies the required temporary sealed path and trusted v1 template, and a malformed-hash fixture now has valid custody metadata so it still tests hash refusal before inventory mutation. The opaque content and original safety assertions are preserved. The reviewer did not implement the profiles, generator, namespace transformer, oracles, worker, renderer, or experiment harness. No production file was written and no production sealed labels were opened.
+## Scope and independence
 
-## Approval boundary and compatibility
+Approval covers the GCDL-only archive provider, custody index and bounded reads, archive-aware worker/rendering/release consumers, runtime snapshots, backup deletion guards, composed archive cycle, and replacement/cleanup of the owned Git store. It is limited to the explicit user-authorized GCDL paths and the qualified `LUNCY579/rineya-world-model-research` repository. It permits the reviewed workflow to remove eligible local payload copies only after the workflow establishes and rechecks exact remote custody. It does not confer approval on later source/configuration changes or bypass the current review, STOP, pause, profile, provenance, publication, or resource guards.
 
-This PASS approves the reviewed profile resolver, v2 generator and namespace policy, explicit job/manifest profile custody, parent-atomic v2 acceptance, v2 goal-bundle rendering policy, bounded experiment harness, and evidence-bound promotion guard. It preserves v1 mathematical semantics and provenance; it does not approve a resource-gate exception, certify dataset readiness, or establish learned planning/generalization.
+I did not implement the archival workflow. I authored `tests/test_archive_review.py` (62 tests) and this report, and adapted only storage retrieval and the named temporary-root fixture in `tests/test_v2_review.py` at the parent agent's request. Historical assertions and captured expected hashes in those tests remain unchanged. Other builders implemented the archive provider, integration, snapshot/backup/orchestration and compaction.
 
-The approved production baseline remains digest `3249586daa51d27188636dfe7e342ad8661ea51fbf40afdc7ef3a2becb738b12`. Twenty-three of its 31 source/configuration files remain byte-identical in the proposal. The eight changed existing files are `auditors/integrity.py`, `auditors/release.py`, `configs/production.json`, `decision_labels/rendering.py`, `pipelines/rendered.py`, `pipelines/worker.py`, and the two fixture-bearing test files. The v1 generator, current v1 curriculum, both executable oracles, transitions, rational labels, record-ID algorithm, and original semantic normalizer remain byte-identical.
+This review performed no production eviction, GitHub publication, production state mutation, model training, paid API operation, sealed production label read, or new official v2 experiment. Disposable fixtures use small manually specified payloads and an in-memory remote, including opaque sealed fixture bytes. Real Git compaction tests use disposable repositories. Operational completion of a live archival cohort must be demonstrated by that cohort's custody, backup, eviction and completed cleanup receipts; this source approval alone does not establish completion.
 
-The v1 curriculum canonical digest remains `d98651723bc9469105627dc55d78f0217eea67b98428020a5b1552452b4ca2f2`; its current and archived file-byte digest remains `c16450547db433d008001e4fd182978697c5b7e8029a2956e9f21145054c3780`. The v1 generator remains `78387f73de0bd8cdda4cbef446d9e735edfea175badb1575bb567fb087e4a575`. Canonical and file-byte hashes are checked separately.
+## Evidence and historical continuity
 
-All **1,936 nonsealed accepted rows in 66 production shards** validated through the archived resolver without changing their canonical bytes or original record/batch source maps. Their collection digest remains `45cb9526e674ec8d2a59c9fa40e219890f40dc3961b48198fd3c9c9f8d294d02`; the nonsealed batch-receipt collection remains `5cb4454f6d927e13b35914814981199771bf1c3c70f98ed61ce85f4bc65fbb07`. The original production source map remains the approved 31-file baseline. Its existing validation receipt and surface review remain byte-identical, respectively SHA-256 `7b122cf562596144146c585be6b77348b715a31fdac3e856a3b3335fbabcf63c` and `0e1a6647ce4834b91852cae059a876a0126ec641739fc27d8dc49a6ce5f3ecac`.
+The full 329-test suite includes the original 189 regressions and 140 added archival tests: 62 independent review, 21 integration, 19 provider, 7 snapshot, 8 cycle, 11 actual Git compaction and 12 compaction refusal tests. The final run had zero failures/errors, with all source bytes held fixed.
 
-Six predeclared v1 TRAIN/DEV/OOD output commitments, including the actual production seed strata, match exactly. Three production batches at TRAIN 1000000, DEV 1000003, and OOD 1000004 reproduce all **86 IDs, ordered candidate bytes, exact targets, provenance, and protected fingerprints**. Nine pointwise/pairwise/listwise fixtures, totaling 129 v1 presentations, match their complete previously captured output commitments and retain `gcdl-rendering-1.0` identities. This is bounded reproduction, not a claim that every archived job was regenerated.
+The read-only historical v1 tests still verify the fixed 66 nonsealed accepted shards containing 1,936 rows. Their byte collection commitment remains `45cb9526e674ec8d2a59c9fa40e219890f40dc3961b48198fd3c9c9f8d294d02`; the captured nonsealed batch-receipt collection commitment remains `5cb4454f6d927e13b35914814981199771bf1c3c70f98ed61ce85f4bc65fbb07`. Record IDs, protected indices, mathematical outcomes, semantic fingerprints, exact v1 generator/config/output commitments and pointwise/pairwise/listwise rendering goldens remain checked. Retrieval now uses bounded `iter_paths/read_bytes` so those same commitments remain enforceable after cold eviction; it explicitly refuses historical sealed gold reads.
 
-## Independent validation
+The earlier bounded production inventory established 2,152 v1 accepted records, including 216 sealed records, with the 149 existing shard/batch/sealed-freeze byte hashes unchanged and 66 pending plus 66 superseded rendered receipts. That inventory was metadata/hash only for sealed artifacts. The new integration tests preserve authoritative accepted counts, queued/completed profile and seed lineage, seen IDs/fingerprints, protected split reservations, batch/source receipts and recovery frontier across missing local payloads. They refuse lost batch custody, profile reinterpretation, missing unarchived bytes and replay conflicts. Metadata-only sealed cold recovery performs no blob read.
 
-The final independent complete suite passed **189 tests in 136.504 seconds**, with zero errors/failures and an unchanged 42-file source map. The root's separate complete run passed the same 189 tests in 75.309 seconds. Reproduction command:
+The v1 generator remains byte-identical at `78387f73de0bd8cdda4cbef446d9e735edfea175badb1575bb567fb087e4a575`; the v1 curriculum raw bytes remain `c16450547db433d008001e4fd182978697c5b7e8029a2956e9f21145054c3780` (canonical config digest `d98651723bc9469105627dc55d78f0217eea67b98428020a5b1552452b4ca2f2`). Generator, environment, oracle, profile/curriculum and official experiment specification bytes were compared with the prior scientific freeze. Rendering changes concern archived storage/receipt access and retain the exact historical output goldens.
 
-```sh
-PYTHONPATH=/Users/chengli/.codex/gcdl001-host/improvement-worktree python3 -m unittest discover -s tests -v
-```
-
-Hand-specified ledger expectations exercise status goals, forbidden statuses, costs, void reversal, and missing worlds with exact fractions. A consistent permutation of status values preserves labels and fingerprint; changing only the semantic role declarations changes the actual dynamics and fingerprint. Explicit ledger/block/table/register mapping fixtures cover state and possible-world references, goals, constraints, every operation argument, and invalid references that must remain invalid. Structural keys and opcodes remain intact.
-
-Independent four-block fixtures verify illegal reverse execution rather than assuming reversal validity. A cheaper supplied prefix remains the exact best candidate when it reaches another endpoint; a legal reverse tie remains in the complete best set. A manually defined clear-block executor separately checks generated utilities. Changing fabricated gold changes canonical record IDs while leaving candidate IDs, order, inference input, and parent identity unchanged.
-
-The checks reject unknown or mixed profile tuples, canonical/file hash confusion, changed archive bytes even when parsed JSON is unchanged, registry tampering, archive/config-directory symlinks, forged namespace maps, missing/noninjective/cross-split mappings, false source commitments, and forged parents. Profile-specific size gates reject invalid ledger/register sizes and seven-block or wrong-reservation forests before calling the factorial normalizer.
-
-Cross-record checks reject incomplete triplets/pairs, duplicate goals/indices, altered non-goal inputs, overlapping best sets, missing full-curriculum families, and mixed profiles. A single corrupted v2 goal quarantines the entire supplied v2 batch. Legacy queued jobs retain v1 when the active default changes; explicit v2 jobs use the same trusted adapter/configuration for both generation runs. An existing batch cannot be replayed under another profile before generation or candidate-cache publication. New manifest-v2 commitments cannot be removed to infer v1, including under a forged legacy header; protected template indices must match the resolved profile. Legacy v1 recovery remains metadata-only and accepts opaque temporary sealed bytes without parsing labels.
-
-The independent scheduler check uses **32 DEV seeds `1000003 + 6k` and 32 OOD seeds `1000004 + 6k`, `k=0..31`**. It verifies exact legal utilities, goal-only triplet equality, disjoint best sets, fixed candidate IDs/order, and all three rendered variants. Rendered candidate order and seeded nested key order remain identical after removing the goal. These fixtures are separate from the official pilot and are not additional independent pilot observations.
-
-Review found and challenged late partial-parent acceptance, changed-profile replay work before refusal, unbounded pre-validation normalization, profile-stripped recovery downgrade, and optional v2 promotion evidence. The final implementation closes these cases and the targeted regressions pass. Approval under active v2 requires both frozen evidence files, their exact hash map named in this report, and matching file hashes; receipt-only rehashing/removal cannot broaden the statement below.
-
-## Frozen DEV experiment
-
-The source, specification, profile, and lexicons were frozen before the one official measurement. Specification SHA-256 is `19d88bd2da381806c481b88ade73dedf411ebcc07d154054b94d8733ed4b5b3a`; lexicon canonical SHA-256 is `5913a57e252ea84e249fdede5fd6ba3dc89b3dd1b2a025c2c26edf6322bf8024`. Completed-result reuse returns the existing committed result rather than rerunning the measurements. This reviewer inspected the frozen spec, source map, result commitments, and all 64 parent receipts and recomputed membership, tie, singleton-recovery, and vocabulary-overlap accounting without rerunning or tuning the official seeds.
-
-Required evidence, verbatim canonical JSON:
+The prior v2 scientific freeze remains bound to its original 42-file source digest `fdfd63b45b071928080ac14e730f4f17df107dc6ffa6fd1b950a7ecd5e34b467`. I rehashed the existing freeze/result bytes and did not rerun or tune the official DEV experiment. This archival approval preserves its required evidence exactly; it makes no new model-quality or generalization claim. The following canonical map is part of this fixed approval statement:
 
 ```json
 {"manifests/V2_EXPERIMENT_FREEZE.json":"b79b718d82040eff44ea5694235ea1329c30b8a98d2a75c02e4066c58c7313f0","reports/V2_CONTROLLED_EXPERIMENT.json":"ba1fe158612645ee017feefa3403676bf4efadc05050834c6e4ed5e7de15daf3"}
 ```
 
-The run used exactly C seeds 420000–420031 and V seeds 421000–421031, no replacement seeds, at most 24 endpoint proposals per C parent, one CPU worker, and **160 tasks in memory**. It completed in **36.249 seconds**, below the 300-second cap. All 32 C parents were valid, with zero exclusions; all 32 vocabulary pairs were valid. There were zero differential-oracle, stored-target, or deterministic-reproduction mismatches, 288 rendered goal-only checks, and zero canonical records published.
+## Destructive-path findings
 
-The parent-receipt check finds 128 distinct semantic task fingerprints: 96 C tasks and 32 lexical parents whose two members intentionally match. There are zero semantic duplicates across different parents.
+No unresolved blocker was found in the final source. The tests separately specify expected raw SHA-256, Git blob SHA-1, lengths, paths, object modes, commit trees and outcomes; success is not inferred from the implementation's own validator.
 
-| Fixed selector | V2 best-membership / 96 | Singleton exact-best-set recovery / 96 |
-|---|---:|---:|
-| Supplied prefix/reverse relationship, opaque-ID tie break | 32 | 29 |
-| First option | 19 | 17 |
-| Shortest plan, then opaque ID | 0 | 0 |
-| Longest plan, then opaque ID | 25 | 23 |
-| Lowest opaque ID | 16 | 15 |
+Remote custody binds each payload and catalogue to both the committed source tree and the durable snapshot tree, the full qualified snapshot reference, and exact raw bytes. Verification rejects absent/truncated/wrong trees, wrong object mode/OID/size/path, same-length byte corruption, moved references, corruption after prior verification and offline proof. The snapshot publisher now uses GitHub's create-reference POST, validates the exact returned reference/type/commit and confirms the server reference afterward. A concurrent actor creating an ancestor reference is refused rather than fast-forwarded. GitHub documents distinct create and update endpoints, so ordinary branch push semantics cannot supply the create-only guarantee. References themselves remain mutable by authorized remote writers; the reviewed workflow repeatedly checks their exact commit identity. [GitHub reference API](https://docs.github.com/en/rest/git/refs#create-a-reference)
 
-The matched v1 relationship selector was best-membership correct for **26/32** and exactly recovered a singleton best set for **21/32**, with five tied tasks. V2 has three tied goal tasks. V1 C supplies five candidates; v2 supplies six, so the v1/v2 comparison includes a changed construction. The clean goal-only comparison is within each v2 triplet: each fixed selector chooses the same ID for three full, distinct, non-initial goals; their exact best sets are disjoint, so membership is structurally bounded by one-third. The observed primary selector meets that bound at 32/96. This says nothing about a selector returning all candidates or a goal-aware model.
+Cold reads authenticate raw bytes and enforce caller/object limits before exposing data, retain only a bounded RAM cache, and do not restore payload files. Default sealed reads refuse before network access; explicit release inspection is a separate caller path. The provider uses raw Git blob media, which GitHub documents as supported by the blob API. [GitHub blob API](https://docs.github.com/en/rest/git/blobs?apiVersion=2022-11-28#get-a-blob)
 
-No rendering or goal task is treated as a new independent parent for uncertainty. For the 32 baseline parents, the descriptive 95% Wilson interval for 26/32 is 64.69%–91.11%; for zero C exclusions among 32 attempts it is 0%–10.72%. These intervals describe this bounded sample. The one-third result is a structural statement, not an IID confidence interval over 96 tasks.
+Locale eviction rechecks the entire cohort remotely before deletion. Present files are bound to byte/stat identities and ordered parent-directory ancestry. Atomic, directory-FD-anchored holding moves permit deletion only of the verified moved inode; symlink, hardlink, inode, ancestor or final-check-to-move substitutions refuse. Interrupted evacuation has a durable custody journal; restoration never overwrites a new destination. Offline retry retains proof and local bytes. Partial progress has immutable custody for already absent files rather than silently treating them as verified anew.
 
-The 32 lexical pairs preserve exact decision labels and normalized fingerprints. Their reserved DEV members exercise 48 distinct complete namespace strings with zero overlap against the TRAIN pools. Familiar controls remain a separate DEV stratum and do not count as lexical holdout. All 384 declared strings across the six namespaces/four splits have the same eight-letter shape, with no global collisions or structural/opcode collisions. Complete-string holdout does not establish unseen tokenizer pieces or natural-language meanings.
+The composed cycle shares the live worker lock, confirms payload/catalogue and custody/index backups before eviction, and freshly rechecks source approval, STOP and the exact original pause at destructive boundaries. A hidden holding copy of the last payload is recovered before any Git staging/backup, even when disk free exceeds the floor. Malformed/orphan journals refuse before authentication or backup. Intentional active-branch removals require absent-byte custody and a durable snapshot; unrelated or staged control deletions refuse before commit/authentication.
 
-## Limits and operational disposition
+Owned Git compaction verifies published history, retained code/control/runtime bytes, runtime and worker-lock inodes, and cold blob OID absence with lazy fetching disabled. A shallow partial clone and sparse layout remove local dataset objects without changing the canonical worktree/state location. Dirty, foreign, untracked/ignored, symlink/hardlink, extra-worktree, wrong-branch/remote and unmirrored-reference cases refuse. Private transaction/pointer identities prevent fixed-name collisions. Pre-install failures roll back; after verified replacement is installed, incomplete old-store removal persists an explicit pending receipt and retries against the healthy replacement. Completion is bound to the exact current archive-index digest.
 
-The proposal retains finite candidate universes, synthetic grammars, small forests, endpoint-derived goals, and shared specification ancestry between separately implemented oracles. Goal-aware terminal-structure shortcuts may remain. No model training, inference service, paid API, research publication, learned transfer, causal generalization, or unbounded optimality result is included in this approval. Same-user filesystem custody is not cryptographic isolation.
+An operator pause changed during remote proof, payload movement or Git cleanup is retained and cannot be overwritten by subsequent status writes. Pending cleanup remains explicitly incomplete and can retry above 10 GiB. Only a pause created by this maintenance operation, or its own cleanup marker after verified completion, may clear; original disk/migration pauses remain. STOP and unrelated pause cases retain their no-op behavior. The automatic fresh cohort stays bounded to 12 files/128 MiB with a 280-second composed budget; the provider's separately bounded manual cohort is at most 128 files/128 MiB and each blob is at most 96 MiB. Metadata cleanup deferral requires an explicit manual CLI invocation.
 
-The real publication guard was tested read-only against production and returned `resource gate: publication would leave fewer than 10 GiB free`; the observed free space was 3,248,496,640 bytes against the 10,737,418,240-byte floor. Successful publication checks used bounded temporary fixtures and explicitly simulated healthy space. Production publishing must remain paused while the real floor fails. This PASS permits the exact reviewed implementation to proceed through the normal promotion workflow; it does not authorize bypassing the pause or changing archived bytes.
+## Operational limits
 
-## Approved source hash map
+The retained controls include code/configuration, authoritative batch and sealed-freeze metadata, queue/runtime state, current review/validation, archive index/custody, STOP/PAUSED and the live lock. Eligible accepted/sealed/quarantined/demo/backup/rendered payloads and historical reports may become cold; active control reports and source files are excluded. Cleanup is confined to the owned GCDL host repository transaction and GCDL payload paths, not unrelated user or agent files.
+
+The workflow trusts the local OS/UID and the authorized GitHub owner. A hostile process with the same UID or an authorized remote writer can alter state beyond application-level immutability; the reviewed ordinary worker/archive paths serialize under the shared lock and reject observed byte/reference/pause changes. Network failure, missing proof and unfinished cleanup fail closed. Storage approval does not assert that enough disk space will remain for publication; the original 10 GiB guards remain binding.
+
+## Complete approved source map
+
+Paths are relative to `goal_conditioned_decision_data`; values are SHA-256 of the exact bytes. The digest above is SHA-256 of this mapping in canonical sorted-key compact JSON.
 
 ```json
 {
   "__init__.py": "64c91b2f24f24214f818c1716c5e181f86625b648914e1eadf6880e82114346e",
   "auditors/integrity.py": "b6fb75a24bb27ac5f0000dd36d8e89968ad39975e21e103bda8658fe830424f9",
-  "auditors/release.py": "23f9e3c3b4055de7b82b3343b0f597e339759dbd5059a455d240113f14359d7f",
+  "auditors/release.py": "8457e67f8222bdce042a5e701b592e9b9d9e0e2b75d9cf9a372b83e31da780a5",
   "configs/curriculum-v1.json": "c16450547db433d008001e4fd182978697c5b7e8029a2956e9f21145054c3780",
   "configs/curriculum-v2.json": "90005d13ea7e0178bc0b96ee43974cd777c5a69b65af50e55bf7fd33e48117cd",
   "configs/curriculum.json": "c16450547db433d008001e4fd182978697c5b7e8029a2956e9f21145054c3780",
   "configs/generation_profiles.json": "f54978838729e85eb849724d2b2c512da65b9969b8bd4e9876aab7271cf9388a",
-  "configs/production.json": "56dfce1076eb8eddf53b1be88a637ca98fc0e05a320f8ac8fcd5dc5179f5065d",
+  "configs/production.json": "9fe42c98d1cc4a701337dff72f634c8123a056badc8fb9dcf1ad04df7011628b",
   "configs/v2_experiment.json": "19d88bd2da381806c481b88ade73dedf411ebcc07d154054b94d8733ed4b5b3a",
   "decision_labels/__init__.py": "c46518068c5e4407e3f5c1a43eed2df9a775977a055773c9263b21bdddf1e637",
-  "decision_labels/rendering.py": "efd1dde1e9e028e7a2ad8bb25d5939bc66e00e3d7c9c02e115e8c8f90be04ed0",
+  "decision_labels/rendering.py": "2b69c373c8f4077addf1aa44052eae6c6be0f5bec313d43c3b6e63de831ee9df",
   "decision_labels/views.py": "3a6851fc7ba836bd66ae6c8b4f1188821c28190c61e5681ac8e75d3bad02372e",
   "environments/__init__.py": "0097b9cfbd6e2cf98c050afad5e9f8f7058739f2095792b336339750af581bc4",
   "environments/core.py": "b4e383c455ba899737a8c034a239a23ac01fbc13279791b3e0bc66acb6ec014d",
@@ -102,23 +82,36 @@ The real publication guard was tested read-only against production and returned 
   "oracles/independent.py": "0453985a3347ea9e503c44dff4eef9ad7f7de1a9efa88537c05d569c96a032ae",
   "oracles/primary.py": "0797623f90d1d53de1034c0c8fb07fbfc56207924b829f9945729dcd52639d19",
   "pipelines/common.py": "26eafc2cccefb424c8aff89b21cbb6cf81e73a67474c97b9749e02b942358b82",
-  "pipelines/rendered.py": "53c0316f785e77d576a657fd439a6a2ac67025db47b2ce12f5e8085221c90827",
-  "pipelines/worker.py": "6365316fc41fd9c08a094f0263d10e56e7318f7c7d9306c9f697dc69de624e9e",
-  "scripts/backup.py": "f0812c0fd9dda0c44250a16ac5c42d2fa908691813fb46065f0528ac4e47eb61",
+  "pipelines/remote_archive.py": "886c0ec958d49198fcc798ae5b748a6334795f6cc8e5c4c8b4d934cae006410e",
+  "pipelines/rendered.py": "e03e35731794c0c2a7e766f1acfbab8643a426b8ac15455243b50d01acb556c3",
+  "pipelines/worker.py": "756c21b6ebf459af2fca99002c25cda4e931547dc20698d54b2074f7f951fae0",
+  "scripts/archive.py": "6aa490a52721e09cd1c4faf9144f7fbd21fb88aa966d356af07d71f99ea56abd",
+  "scripts/archive_cycle.py": "7ddb94cfd2af9f7891a301d37da8b614d32df97fed0646dd7bd9ac175bb1ef01",
+  "scripts/backup.py": "6797b3d6892a39db0c28effe35601d1020807e10bdf7cefb7d9d5aeb24944816",
+  "scripts/compact_git.py": "95b231416f5e299d7d4cfd7b2af654abbbe490d5558ca9ffe5fd0ba1f529c90b",
   "scripts/control.py": "9990ad7a7538dc9ce8fdd10d3db26f9a592f56f04d74ef6138f7f5054f8ea909",
-  "scripts/export.py": "94e319ac4c24e6cdae8e46a0f32edefcf65fc3631f6d6b6e71d5dd63fc84cccb",
+  "scripts/export.py": "9137f4303865a2cb93957a2a7a28b1232c4fa93aa342369b2507b495b49b51d5",
   "scripts/export_training.py": "0aefb65fd8cccc4d3e8086a437db9e8a51c6b65abb96f9803fc9b9a9588fc33f",
   "scripts/run_cycle.py": "39e2f9e5096b87b7c856ea555bb5f07b31f352b1abddba1891ae60f37da9073c",
-  "tests/test_adversarial_review.py": "1ffc7e030588dea8fdbfc5fd6c86cff64b903e8794048757510d6610a5beea8a",
-  "tests/test_experiment_custody.py": "52d99b0b1b119aa28d975aff81c9484e48ba01e57202e154b3142f0b65abc3e6",
+  "scripts/snapshot_state.py": "918ea3f7e2c35c86d0413c4826af1a4b01215ec5efc26dfefac490fcf346d140",
+  "tests/test_adversarial_review.py": "286dc2fe63b81c0bb4f76b59cea84a7c7cdc8ba57a5ef0501c9a2f48fcd3bf8e",
+  "tests/test_archive_cycle.py": "aedcbb0e31da9e86087601c9bdc2d9a5e96d8b60e5564cd6383f76d45feac379",
+  "tests/test_archive_integration.py": "b1c7130e61bf0766b20ab87006e387dcbecfa21a323a17969976b87e18155673",
+  "tests/test_archive_operations.py": "a5f039a5d27a2b6c6629d91d7e00761146fd76bb986d9752a88f900357c6fc66",
+  "tests/test_archive_review.py": "7428ee10cf4934159736908793e915bc45df74d47f278a19705ebf6e6e2fa0c7",
+  "tests/test_compact_git.py": "a5952e844f732c13c30891f45a9815b4c9a13952579ccfbcbf2a2c39395dc7e3",
+  "tests/test_compact_guards.py": "f31918cb969864b7ab5339ed75c3b4a168276fba2957f8cd0c8e548e9b41aec0",
+  "tests/test_experiment_custody.py": "c037c686fb54d9aefd73e594ec4588d1e96d6728396761fd067f5bb982b39141",
   "tests/test_generation.py": "0dbc041d7cbf52d9dd6bc83a7e51efe4e4fc19e6bbbcc00e964affdc436a7341",
-  "tests/test_operations.py": "1241c4c38ea060ccde90a69b091d5ee3e93de68dd2381aaeb1ff5fbe9e094c3a",
+  "tests/test_operations.py": "42a45f67c00147f160209861ffd1f65c357853e07066b45240fd81a127eadc42",
   "tests/test_oracles.py": "e1995c834809e7a0ec45531465cba382408c4e9dfe0d309f72d9c469db340ff1",
   "tests/test_profiles.py": "d1758c6150b3fb2f2dd75b91571fb17a8c3a3c31d94e3a197fb83a8720a9538a",
-  "tests/test_rendered_pipeline.py": "ccf6293e1aedc15896e40aa14c690710001e8ef13e33027009a07ee17fa4847d",
-  "tests/test_rendering.py": "fc97a6b684221b6da7f2b96035bf89aa04d2cbd37146c45dc3545e4f2fc1d9fe",
-  "tests/test_surface_review.py": "79bf0c7bfb76324dd538af54f44818bae314847f4c566c059c6011a82600dc53",
-  "tests/test_v2_review.py": "37420f7cb7856b266f73107d87cfd9f77d543803098c0ff655e7cb9695110971",
+  "tests/test_remote_archive.py": "e5af92bfce0d7a85d763e0899dc2fc336780bb132322868a4589e6f96066c4ca",
+  "tests/test_rendered_pipeline.py": "4cb9642415f5f495fcfe33629330fd50e67e1ea8e12f24eb4a39c5c983954b42",
+  "tests/test_rendering.py": "31a0335a99e7f59b30fa1fc854b473cfccddf02c0747a4ee603b6016931fb5a4",
+  "tests/test_surface_review.py": "c6dbc104a66122ad4a0c7255afb57c423fb7add32a988d9763cde8db05f3fe03",
+  "tests/test_v2_review.py": "adb97f1e6ab879609a13492f346fdbb6afe7e4d11767b3e8f7ffeeb75268e1b0",
   "tests/test_version2.py": "5c58b03e8518932ca3536a212ff0deb4ff18c0ca100bb9f14b54745e934698be"
 }
 ```
+

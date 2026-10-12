@@ -323,7 +323,7 @@ class IndependentOperationsTests(unittest.TestCase):
     def test_guard_stops_low_disk_storage_stop_and_parallelism(self):
         from goal_conditioned_decision_data.pipelines import worker
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            root = Path(directory); (root/'state').mkdir()
+            root = Path(directory)/'goal_conditioned_decision_data'; root.mkdir(); (root/'state').mkdir()
             db = sqlite3.connect(':memory:'); db.execute('CREATE TABLE jobs(accepted INTEGER)')
             config = {'min_free_bytes': 10, 'max_programme_bytes': 1000, 'max_records': 10, 'concurrency': 1,
                       'groups_per_cycle': 1, 'cycle_timeout_seconds': 180, 'max_consecutive_failures': 3}
@@ -342,7 +342,7 @@ class IndependentOperationsTests(unittest.TestCase):
         from goal_conditioned_decision_data.pipelines import worker
         from goal_conditioned_decision_data.generators.profiles import resolve_profile
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            root = Path(directory); (root/'manifests').mkdir(); (root/'data/accepted').mkdir(parents=True)
+            root = Path(directory)/'goal_conditioned_decision_data'; root.mkdir(); (root/'manifests').mkdir(); (root/'data/accepted').mkdir(parents=True)
             (root/'data/accepted/train-1.jsonl').write_bytes(b'tampered\n')
             template = resolve_profile('v1')['config']['split_templates']['train']['template']
             manifest = {'version': 'gcdl-manifest-1', 'seed': 1, 'split': 'train', 'generation_profile': 'v1',
@@ -360,7 +360,7 @@ class IndependentOperationsTests(unittest.TestCase):
     def test_publication_reserves_space_before_writes(self):
         from goal_conditioned_decision_data.pipelines import worker
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            root = Path(directory); (root/'existing').write_bytes(b'x'*900)
+            root = Path(directory)/'goal_conditioned_decision_data'; root.mkdir(); (root/'existing').write_bytes(b'x'*900)
             config = {'max_programme_bytes': 1000, 'min_free_bytes': 100}
             with patch.object(worker, 'ROOT', root), patch.object(worker.shutil, 'disk_usage', return_value=SimpleNamespace(free=1000)):
                 with self.assertRaises(RuntimeError): worker.publication_guard(config, 101)
@@ -371,7 +371,7 @@ class IndependentOperationsTests(unittest.TestCase):
         from goal_conditioned_decision_data.pipelines import worker, common
         from goal_conditioned_decision_data.generators.profiles import resolve_profile
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            root = Path(directory); (root/'manifests').mkdir(); (root/'data/sealed').mkdir(parents=True)
+            root = Path(directory)/'goal_conditioned_decision_data'; root.mkdir(); (root/'manifests').mkdir(); (root/'data/sealed').mkdir(parents=True)
             shard = root/'data/sealed/sealed-1.jsonl'; shard.write_bytes(b'opaque bytes; recovery must not parse labels\n')
             template = resolve_profile('v1')['config']['split_templates']['sealed']['template']
             index = ['independent_id', 'independent_semantic', 'independent_parent', template, 'sealed']
@@ -420,7 +420,8 @@ class IndependentOperationsTests(unittest.TestCase):
                 calls.append(command)
                 return SimpleNamespace(returncode=0, stdout=branch if command[:2] == ['git', 'branch'] else status, stderr='')
             with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-                main_globals['ROOT'] = Path(directory)
+                root = Path(directory)/'goal_conditioned_decision_data'; root.mkdir()
+                main_globals['ROOT'] = root
                 main_globals['execute'] = execute
                 main_globals['atomic_json'] = Mock()
                 self.assertEqual(namespace['main'](), 1)
@@ -441,7 +442,8 @@ class IndependentOperationsTests(unittest.TestCase):
             return SimpleNamespace(returncode=0, stdout='', stderr='')
         captured = io.StringIO(); receipt = Mock()
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            main_globals['ROOT'] = Path(directory); main_globals['execute'] = execute; main_globals['atomic_json'] = receipt
+            root = Path(directory)/'goal_conditioned_decision_data'; root.mkdir()
+            main_globals['ROOT'] = root; main_globals['execute'] = execute; main_globals['atomic_json'] = receipt
             with redirect_stdout(captured), redirect_stderr(captured): self.assertEqual(namespace['main'](), 1)
         self.assertNotIn(fake_token, captured.getvalue())
         self.assertNotIn(fake_token, json.dumps(receipt.call_args.args[1]))
@@ -452,7 +454,7 @@ class IndependentOperationsTests(unittest.TestCase):
         config = json.loads((worker.ROOT/'configs/production.json').read_text())
         config['sealed_seeds'] = [1]
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            root = Path(directory); (root/'configs').mkdir()
+            root = Path(directory)/'goal_conditioned_decision_data'; root.mkdir(); (root/'configs').mkdir()
             (root/'configs/production.json').write_text(json.dumps(config))
             captured = io.StringIO()
             with patch.object(worker, 'ROOT', root), patch.object(worker, 'source_hashes', return_value={'fixed': 'hash'}), patch.object(build, 'generate_group', return_value=[{'original_candidate': 'invalid schema'}]), patch.object(worker.shutil, 'disk_usage', return_value=SimpleNamespace(free=100*1024**3)), redirect_stderr(captured), redirect_stdout(captured):
@@ -468,7 +470,7 @@ class IndependentIntegrityTests(unittest.TestCase):
         from goal_conditioned_decision_data.pipelines.common import digest, file_hash
         sources = {'oracle.py': 'original_oracle_hash', 'config.json': 'original_config_hash'}
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            root = Path(directory); (root/'reports').mkdir(); (root/'manifests').mkdir()
+            root = Path(directory)/'goal_conditioned_decision_data'; root.mkdir(); (root/'reports').mkdir(); (root/'manifests').mkdir()
             review = root/'reports/INDEPENDENT_REVIEW.md'
             original = 'FINAL_VERDICT: PASS\nReviewed source digest: '+digest(sources)+'\n'
             review.write_text(original)

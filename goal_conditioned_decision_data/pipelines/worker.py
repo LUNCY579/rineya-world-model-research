@@ -12,6 +12,7 @@ import time
 import traceback
 from pathlib import Path
 from .common import ROOT, REPO, atomic_json, canonical, digest, file_hash, immutable_bytes, source_hashes
+from . import remote_archive
 
 
 def ensure_job_profiles(db):
@@ -103,14 +104,17 @@ def recover_inventory(db):
     from .rendered import _path
     root=ROOT.resolve()
     recovered=set()
-    for path in sorted((root / 'manifests').glob('batch-*.json')):
-        path=_path(root,str(path.relative_to(root)),('manifests',))
-        manifest = json.loads(path.read_text())
+    committed_shards=set()
+    for relative in remote_archive.iter_paths(root,'manifests/batch-*.json'):
+        path=_path(root,relative,('manifests',))
+        manifest = json.loads(remote_archive.read_text(root,relative))
         if not {'seed','split','protected_index','accepted','quarantined','audit','shard','sha256'}<=set(manifest):
             raise ValueError('missing canonical inventory receipt field')
         seed, split = manifest['seed'], manifest['split']
         if type(seed) is not int or seed<0 or split not in ('train','dev','ood','sealed'):
             raise ValueError('invalid canonical inventory seed/split')
+        if path.parent!=root/'manifests' or path.name!=f'batch-{split}-{seed}.json':
+            raise ValueError('canonical inventory receipt filename mismatch')
         resolved=batch_profile(manifest)
         profile=resolved['id']
         previous=db.execute('SELECT profile FROM jobs WHERE seed=? AND split=?',(seed,split)).fetchone()
@@ -120,8 +124,16 @@ def recover_inventory(db):
         shard=_path(root,manifest['shard'],('data',folder))
         if shard.parent!=root/'data'/folder:
             raise ValueError('canonical shard must be directly in its split directory')
-        if file_hash(shard) != manifest['sha256']:
+        committed_shards.add(manifest['shard'])
+        info=remote_archive.payload_info(root,manifest['shard'])
+        if info['sha256'] != manifest['sha256']:
             raise ValueError('stored shard digest mismatch: ' + str(shard))
+        if 'bytes' in manifest and info['bytes']!=manifest['bytes']:
+            raise ValueError('stored shard byte count mismatch: ' + str(shard))
+        if split=='sealed' and info['archived']:
+            freeze=json.loads((root/'manifests/SEALED_FREEZE.json').read_text())
+            if freeze['shards'].get(manifest['shard'])!=info['sha256']:
+                raise ValueError('archived sealed shard disagrees with local freeze')
         # Recovery reads only manifest indices; never opens sealed target labels.
         if len(manifest['protected_index'])!=manifest['accepted']:
             raise ValueError('manifest protected index count mismatch')
@@ -139,6 +151,10 @@ def recover_inventory(db):
             db.execute('INSERT OR IGNORE INTO seen VALUES (?,?,?,?,?)', tuple(index))
         db.execute('INSERT OR REPLACE INTO jobs (seed,split,status,accepted,quarantined,report,profile) VALUES (?,?,?,?,?,?,?)', (seed,split,'done',manifest['accepted'],manifest['quarantined'],canonical(manifest['audit']),profile))
         recovered.add((seed,split))
+    for pattern in ('data/accepted/*.jsonl','data/sealed/*.jsonl'):
+        for relative in remote_archive.iter_paths(root,pattern):
+            if remote_archive.is_archived(root,relative) and relative not in committed_shards:
+                raise ValueError('archived canonical shard missing its immutable batch receipt')
     if any((seed,split) not in recovered for seed,split in db.execute('SELECT seed,split FROM jobs WHERE status="done"')):
         raise ValueError('completed canonical job missing its immutable batch receipt')
     db.commit()
@@ -151,10 +167,12 @@ def process(seed, split, config, db):
     job=db.execute('SELECT profile FROM jobs WHERE seed=? AND split=?',(seed,split)).fetchone()
     profile=resolve_profile(job[0] if job else config.get('active_generation_profile','v1'))
     from .rendered import _path
-    existing=ROOT.resolve()/'manifests'/f'batch-{split}-{seed}.json'
-    if existing.exists() or existing.is_symlink():
-        existing=_path(ROOT.resolve(),str(existing.relative_to(ROOT.resolve())),('manifests',))
-        stored=batch_profile(json.loads(existing.read_text()))
+    root=ROOT.resolve()
+    existing=root/'manifests'/f'batch-{split}-{seed}.json'
+    relative=str(existing.relative_to(root))
+    if remote_archive.exists(root,relative) or existing.is_symlink():
+        existing=_path(root,relative,('manifests',))
+        stored=batch_profile(json.loads(remote_archive.read_text(root,relative)))
         if stored['id']!=profile['id']:
             raise ValueError('existing batch profile cannot be reinterpreted')
         raise ValueError('completed immutable batch already exists; recover inventory before replay')
@@ -276,16 +294,61 @@ def backup_if_due(config, db):
         raise RuntimeError('remote backup failed; checkpoint retained; bounded retry via resume')
 
 
+def _run_archive_cycle(config,lock_fd):
+    from ..scripts import archive_cycle
+    return archive_cycle.run(root=ROOT,config=config,lock_fd=lock_fd,automatic=True)
+
+
+def _archive_for_resource_pressure(config,*,lock_fd=None):
+    """Policy-authorized eviction never approves code or relaxes publication."""
+    if config.get('archive_enabled') is not True:
+        return None
+    if (ROOT/'state/STOP').exists():
+        return None
+    from ..scripts.archive_cycle import cleanup_pending
+    if shutil.disk_usage(ROOT).free>=config['min_free_bytes'] and not cleanup_pending(ROOT):
+        return None
+    # The composed coordinator checks review under this live lock and at each deletion.
+    if (ROOT/'state/STOP').exists():
+        return None
+    return _run_archive_cycle(config,lock_fd)
+
+
+def _disk_pause(reason):
+    return reason in ('resource gate: fewer than 10 GiB free',
+                      'resource gate: publication would leave fewer than 10 GiB free',
+                      'rendered export would leave fewer than 10 GiB free')
+
+
 def run(args):
+    if (ROOT/'state/STOP').exists():
+        return 0
     config=json.loads((ROOT/'configs/production.json').read_text())
     (ROOT/'state').mkdir(exist_ok=True)
     # A launchd interval can fire while paused. Preserve the original cause
     # without logging repeated errors or expanding a resource-limited database.
-    if (ROOT/'state/STOP').exists() or (ROOT/'state/PAUSED.json').exists():
+    if (ROOT/'state/STOP').exists():
+        return 0
+    marker=ROOT/'state/PAUSED.json'
+    if marker.exists() and (config.get('archive_enabled') is not True
+                            or not (_disk_pause(json.loads(marker.read_text()).get('reason')) or json.loads(marker.read_text()).get('reason')=='archive Git cleanup pending')):
         return 0
     with (ROOT/'state/worker.lock').open('w') as lock:
         try: fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError: return 0
+        paused=ROOT/'state/PAUSED.json'
+        if paused.exists():
+            reason=json.loads(paused.read_text()).get('reason')
+            if _disk_pause(reason) or reason=='archive Git cleanup pending':
+                try: _archive_for_resource_pressure(config,lock_fd=lock.fileno())
+                except Exception as error:
+                    print(str(error),file=sys.stderr)
+                    return 1
+            return 0  # Preserve every pause marker/cause; no implicit resume.
+        try: _archive_for_resource_pressure(config,lock_fd=lock.fileno())
+        except Exception as error:
+            print(str(error),file=sys.stderr)
+            return 1
         db=connection()
         try:
             guard(config,db)

@@ -5,8 +5,9 @@ from pathlib import Path
 
 from ..decision_labels.rendering import (EXPORT_VERSION, RENDERING_POLICY_SET_VERSION,
                                          SUPPORTED_RENDERING_VERSIONS,
-                                         VIEWS, export_rendered_dataset, _storage_guard)
+                                         VIEWS, export_rendered_dataset, _storage_guard, _archive_call)
 from .common import canonical, digest, file_hash, immutable_bytes, source_hashes
+from . import remote_archive
 
 
 def settings(config):
@@ -47,7 +48,7 @@ def _batch(root, relative):
     path = _path(root, relative, ('manifests',))
     if path.parent != root / 'manifests':
         raise ValueError('canonical batch receipt must be directly under manifests')
-    batch = json.loads(path.read_text())
+    batch = json.loads(_archive_call('read_text',root,relative))
     split, seed = batch['split'], batch['seed']
     if split not in ('train', 'dev', 'ood'):
         raise ValueError('sealed or unknown batch cannot enter rendered queue')
@@ -56,7 +57,8 @@ def _batch(root, relative):
     shard = _path(root, batch['shard'], ('data', 'accepted'))
     if shard.parent != root / 'data/accepted' or shard.name != f'{split}-{seed}.jsonl':
         raise ValueError('canonical batch shard path mismatch')
-    if (file_hash(shard) != batch['sha256'] or shard.stat().st_size != batch['bytes']
+    info=_archive_call('payload_info',root,batch['shard'])
+    if (info['sha256'] != batch['sha256'] or info['bytes'] != batch['bytes']
             or batch.get('audit', {}).get('verdict') not in ('PASS', 'PARTIAL_QUARANTINE')
             or (batch.get('audit', {}).get('verdict') == 'PARTIAL_QUARANTINE' and batch.get('quarantined', 0) <= 0)
             or type(batch['accepted']) is not int or not 1 <= batch['accepted'] <= 12000):
@@ -76,16 +78,15 @@ def enqueue(db, root, config):
             'views': cfg['views'], 'variant_budget': cfg['variant_budget'],
             'code_sha256': digest(source_hashes())}
     spec_hash = digest(spec)
-    for path in sorted((root / 'manifests').glob('batch-*.json')):
-        path = _path(root, str(path.relative_to(root)), ('manifests',))
+    for relative in _archive_call('iter_paths',root,'manifests/batch-*.json'):
+        path = _path(root, relative, ('manifests',))
         # Split identification is by receipt data, not reading evaluation rows.
-        metadata = json.loads(path.read_text())
+        metadata = json.loads(_archive_call('read_text',root,relative))
         if metadata.get('split') == 'sealed' or metadata.get('accepted') == 0:
             continue
-        relative = str(path.relative_to(root))
         batch = _batch(root, relative)
         db.execute('INSERT OR IGNORE INTO rendered_jobs VALUES (?,?,?,?,?,?,?)',
-                   (relative, file_hash(path), spec_hash, batch['seed'], batch['split'], 'pending', None))
+                   (relative, _archive_call('payload_info',root,relative)['sha256'], spec_hash, batch['seed'], batch['split'], 'pending', None))
     # A reviewed executable upgrade replaces pending derived work with the new
     # specification; old completed receipts/bytes remain authoritative.
     db.execute('UPDATE rendered_jobs SET status="superseded" WHERE status="pending" AND spec_sha256!=?',(spec_hash,))
@@ -99,9 +100,9 @@ def validate_receipt(root, relative):
     path = _path(root, relative, ('manifests',))
     if path.parent != root / 'manifests' or not path.name.startswith('render-batch-'):
         raise ValueError('unmanaged rendered batch receipt')
-    receipt = json.loads(path.read_text())
+    receipt = json.loads(_archive_call('read_text',root,relative))
     batch = _batch(root, receipt['source_manifest'])
-    if (file_hash(root / receipt['source_manifest']) != receipt['source_sha256']
+    if (_archive_call('payload_info',root,receipt['source_manifest'])['sha256'] != receipt['source_sha256']
             or receipt['source_shard_sha256'] != batch['sha256']
             or receipt['split'] != batch['split'] or receipt['seed'] != batch['seed']
             or digest(receipt['specification']) != receipt['spec_sha256']
@@ -114,9 +115,9 @@ def validate_receipt(root, relative):
     seen = set()
     for item in receipt['datasets']:
         manifest_path = _path(root, item['manifest_path'], ('data', 'rendered'))
-        if file_hash(manifest_path) != item['manifest_sha256']:
+        if _archive_call('payload_info',root,item['manifest_path'])['sha256'] != item['manifest_sha256']:
             raise ValueError('rendered dataset manifest digest mismatch')
-        manifest = json.loads(manifest_path.read_text())
+        manifest = json.loads(_archive_call('read_text',root,item['manifest_path']))
         if (manifest['manifest_path'] != item['manifest_path']
                 or manifest['dataset_id'] in seen or manifest['dataset_id'] != item['dataset_id']
                 or manifest['view'] != item['view'] or manifest['split'] != receipt['split']
@@ -147,9 +148,10 @@ def validate_receipt(root, relative):
         row_count = 0
         for shard in manifest['shards']:
             shard_path = _path(root, shard['path'], ('data', 'rendered'))
+            info=_archive_call('payload_info',root,shard['path'])
             if (shard_path.parent != manifest_path.parent
-                    or file_hash(shard_path) != shard['sha256']
-                    or shard_path.stat().st_size != shard['bytes']
+                    or info['sha256'] != shard['sha256']
+                    or info['bytes'] != shard['bytes']
                     or shard['bytes'] >= 8 * 1024 ** 2):
                 raise ValueError('rendered shard digest/size/path mismatch')
             row_count += shard['rows']
@@ -165,11 +167,11 @@ def recover(db, root):
     ensure_queue(db)
     for (relative,) in db.execute('SELECT receipt FROM rendered_jobs WHERE status="done"').fetchall():
         validate_receipt(root, relative)
-    for path in sorted((root / 'manifests').glob('render-batch-*.json')):
-        receipt, _ = validate_receipt(root, str(path.relative_to(root)))
+    for relative in _archive_call('iter_paths',root,'manifests/render-batch-*.json'):
+        receipt, _ = validate_receipt(root, relative)
         db.execute('INSERT OR REPLACE INTO rendered_jobs VALUES (?,?,?,?,?,?,?)',
                    (receipt['source_manifest'], receipt['source_sha256'], receipt['spec_sha256'],
-                    receipt['seed'], receipt['split'], 'done', str(path.relative_to(root))))
+                    receipt['seed'], receipt['split'], 'done', relative))
     db.commit()
 
 
@@ -193,7 +195,7 @@ def drain(db, root, config, deadline):
         if time.monotonic() >= deadline:
             break
         batch = _batch(root, relative)
-        if file_hash(root / relative) != source_hash:
+        if _archive_call('payload_info',root,relative)['sha256'] != source_hash:
             raise ValueError('queued canonical source receipt changed')
         datasets = []
         for view in cfg['views']:
@@ -236,8 +238,8 @@ def inventory(root):
     counts, eligible = {}, {}
     groups = 0
     specifications = set()
-    for path in sorted((root / 'manifests').glob('render-batch-*.json')):
-        receipt, rows = validate_receipt(root, str(path.relative_to(root)))
+    for relative in _archive_call('iter_paths',root,'manifests/render-batch-*.json'):
+        receipt, rows = validate_receipt(root, relative)
         groups += 1
         specifications.add(receipt['spec_sha256'])
         for item in receipt['datasets']:

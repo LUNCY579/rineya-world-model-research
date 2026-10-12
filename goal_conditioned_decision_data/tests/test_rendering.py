@@ -173,7 +173,8 @@ class ExportTests(unittest.TestCase):
         self.addCleanup(self.disk_patch.stop)
 
     def create_source(self, directory, records=None):
-        root = Path(directory)
+        root = Path(directory)/'goal_conditioned_decision_data'
+        root.mkdir()
         accepted = root / 'data' / 'accepted'
         accepted.mkdir(parents=True)
         records = records or fixtures()[:3]
@@ -347,7 +348,8 @@ class ExportTests(unittest.TestCase):
                 self.assertEqual(json.loads((root / manifest['manifest_path']).read_text()), manifest)
             self.assertEqual(source.read_bytes(), original)
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory)/'goal_conditioned_decision_data'
+            root.mkdir()
             (root / 'data' / 'accepted').mkdir(parents=True)
             with self.assertRaisesRegex(ValueError, 'no selected accepted records'):
                 render.export_rendered_dataset(root, 'dev', 'computation', 1, 1)

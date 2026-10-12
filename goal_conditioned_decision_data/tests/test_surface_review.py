@@ -329,7 +329,7 @@ class IndependentRenderedSemantics(unittest.TestCase):
 class IndependentRenderedExport(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='gcdl-independent-surface-')
-        self.root = Path(self.temp.name) / 'programme'
+        self.root = Path(self.temp.name) / 'goal_conditioned_decision_data'
         self.root.mkdir()
         self.source = fixture_source(self.root)
         # Host currently has <10 GiB free. Simulate healthy storage only for

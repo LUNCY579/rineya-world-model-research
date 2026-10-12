@@ -15,7 +15,8 @@ class RenderedPipelineTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
-        self.root = Path(self.directory.name).resolve()
+        self.root = (Path(self.directory.name)/'goal_conditioned_decision_data').resolve()
+        self.root.mkdir()
         self.config = json.loads((worker.ROOT / 'configs/production.json').read_text())
         self.config.update(rendered_views=['listwise', 'computation', 'distillation'],
                            rendered_variant_budget=3, rendered_groups_per_cycle=12)
