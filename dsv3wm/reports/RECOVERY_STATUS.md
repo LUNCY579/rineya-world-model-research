@@ -1,12 +1,13 @@
 # Registered-interface recovery: interim evidence
 
 Updated 2026-10-12 UTC after the predictive pilot, TRAIN-only H3 teacher, warm
-references and all four H3 continuation training runs. Full research goal remains
+references, all four H3 continuation training runs and partial singleton parity.
+Full research goal remains
 open; H3 student readouts,
 Ledger and Blocksworld native work remain. The first H3 attempt stopped before
 model loading; its same-input retry completed. See `NATIVE_QUEUE.md`.
-Checkpoint13 passed287 tests and compilation, with test evidence in
-`results/recovery-v1/TESTS_CHECKPOINT_13.txt`. Checkpoint11 verifies the teacher,
+Checkpoint14 passed290 tests and compilation, with test evidence in
+`results/recovery-v1/TESTS_CHECKPOINT_14.txt`. Checkpoint11 verifies the teacher,
 student-training and warm guard/proposer freezes; checkpoint12 verifies the
 separate Ledger/RP and Block CPU11 phase freezes. Prospective Ledger,
 R/P-retention and constructed Blocksworld G1 inputs are frozen; their native
@@ -18,9 +19,13 @@ The H3 retry used a separate prospective CPU11 admission profile after RCX's
 release; prediction/data/gates and historical loaders remain unchanged.
 Warm guards/proposers completed after the RDW E06 slot002 release. Peer slot004
 has now exited1 after a bounded wait and its helper released; no own model is
-active. The no-model CPU11 check10.917744GiB physical failed admission. Singleton
-readout source review/parity is pending. See resource clarifications3–6 and the
-current execution queue; no historical loader or measured result was changed.
+active at the latest checkpoint. The no-model CPU11 check10.917744GiB physical
+failed admission. The reviewed and prospectively frozen singleton A0 readout
+completed with exact full raw-trace parity; A2 refused before core load at
+10.067127GiB physical, below its10.5GiB floor. A2 parity and all actual student
+outcomes remain pending. See [singleton evidence](H3_SINGLETON_CHECKPOINT_2026_10_12.md),
+resource clarifications3–6 and the current execution queue. Historical loaders,
+results and admission floors remain unchanged.
 
 ![Fixed development results](../results/recovery-v1/recovery_counts_v2.png)
 

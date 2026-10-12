@@ -21,7 +21,7 @@ Check actual process/lease state before every new load; estimates cannot expire
 live owners. BWM's GPU job/lease and owner files remain untouched. No paid/cloud
 work is authorized by this queue.
 
-Checkpoint13 passed287 tests and compilation. The final offline gate reducer
+Checkpoint14 passed290 tests and compilation. The final offline gate reducer
 checks exact control parent/cohort and six-fixture maps plus deterministic
 sampling from hash-bound128 TRAIN rows/27 positives. Pure tests are not native
 student efficacy evidence.
@@ -41,12 +41,17 @@ A source CPU11 no-model admission probe observed10.917744GiB physical /
 result followed. The training-only CPU10.5 profile cannot be reused as an
 inference loader.
 
-Singleton readout source review/parity is pending under the separate
-`RECOVERY_RESOURCE_CLARIFICATION_6.md`. Before any use, freeze the new entrypoints
-and actual artifacts prospectively. The declared workflow is:
+Singleton readout source review and prospective V4 CPU10.5 warm/proposer freezes
+are complete under `RECOVERY_RESOURCE_CLARIFICATION_6.md`. Warm A0 completed
+with byte-identical raw traces and passed parity. Warm A2's first attempt refused
+before core load at10.067127GiB physical. See
+[the actual singleton checkpoint](H3_SINGLETON_CHECKPOINT_2026_10_12.md).
+The remaining declared workflow is:
 
-1. Bind new singleton warm A0/A2 guard destinations and source/profile closure.
-2. Run those references under the unchanged24 DEV/six-fixture contract, then
+1. Preserve completed A0 and failed A2 paths. After actual post-import physical
+   and commit admission both reach10.5GiB, permit one same-input A2 retry at fresh
+   `warm_A2_guards_cpu105_singleton_retry01.json`; retain its V4 freeze and recipe.
+2. Complete A2 under the unchanged24 DEV/six-fixture contract, then
    require exact raw reply/token/EOS/conditioning/tag parity with the preserved
    broad warm guards. A mismatch preserves both and blocks student guards.
 3. Bind both qualified old/new warm references into the actual student guard
@@ -56,7 +61,7 @@ and actual artifacts prospectively. The declared workflow is:
    Proposer comparisons retain greedy top1, offline pass@4 and fixed-B0 learned
    reranking at the registered budgets; exact scoring follows all generation.
 
-No native singleton result or parity pass is being claimed during preparation.
+A0's raw parity qualifies only that warm artifact; no A2/student result follows.
 No operator should execute a completed-path training/warm command again. All
 CLIs refuse overwrites and preserve failures. A3/C3 warm from final A2; A4/C4
 warm from final A0. Actual A4 output lives in `A4_s0_retry01`, not its failed

@@ -11,13 +11,13 @@ legality fixture. The fixed TRAIN-only H3 teacher qualified27/32 parents, with20
 distinct plans across three limits. Warm proposer references have0/48 valid
 plans and0/12 top1/pass@4/hybrid successes. A3/A4/C3/C4 completed32 native
 updates each; student readout effects remain unknown. Next are resource-qualified
-H3 readouts with new singleton warm-guard parity, followed by independent
+H3 readouts after completing singleton warm A2 parity, followed by independent
 Ledger/Blocksworld qualification. G4–G7 remain unqualified;
 confirmation labels remain sealed. See `reports/RECOVERY_STATUS.md`,
 `reports/GATE_STATUS.md` and the exact pending commands in `reports/NATIVE_QUEUE.md`.
 Original test evidence remains in `results/TESTS_FINAL.json`; new records use
-separate paths. Checkpoint13 passed287 tests and compilation; test evidence
-is in `results/recovery-v1/TESTS_CHECKPOINT_13.txt`. Checkpoint12 preserves
+separate paths. Checkpoint14 passed290 tests and compilation; test evidence
+is in `results/recovery-v1/TESTS_CHECKPOINT_14.txt`. Checkpoint12 preserves
 the preceding domain/CPU11 preparation and checkpoint11 preserves
 the preceding teacher/student preparation evidence. The consolidated native
 evidence and current integration decisions are in
@@ -29,8 +29,11 @@ records the native TRAIN collection and its failures. The
 [completed training checkpoint](reports/H3_TRAINING_CHECKPOINT_2026_10_12.md)
 separate measured artifacts from unknown efficacy. A4's preserved preload
 refusal was followed by its bounded CPU10.5 training retry; C3/C4 used the same
-training-only profile. Student output freezes exist, but CPU11 admission is
-currently below threshold and singleton readout review/parity remains pending.
+training-only profile. Student output freezes and reviewed singleton V4 warm/
+proposer extensions exist. The singleton A0 warm guard completed with exact raw
+parity; A2 refused before loading at10.067GiB, below its10.5GiB floor. See
+[the singleton checkpoint](reports/H3_SINGLETON_CHECKPOINT_2026_10_12.md).
+Student guards require both warm parity passes; their effects remain unknown.
 Peer slot004 exited1 after a bounded wait; no own native model is active.
 Separate Ledger/RP and Block CPU11 copies and
 V3 input freezes are now verified; their native outcomes remain pending.
