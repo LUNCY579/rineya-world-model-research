@@ -104,6 +104,20 @@
    ]
   },
   {
+   "name": "b4s-freeze",
+   "marker": "runs/FREEZE_B4S_a_beam.json",
+   "log": "runs/BW_B4_SCREEN.stdout",
+   "est_s": 120,
+   "cmd": [
+    "scripts/b4_screen.py",
+    "freeze",
+    "--prereg",
+    "research/PREREG_B4_SCREEN.md",
+    "--addendum",
+    "research/PREREG_ITEM7_ADDENDUM_A.md"
+   ]
+  },
+  {
    "name": "i7-run",
    "marker": "runs/BW_SEEDS/.run_done",
    "log": "runs/BW_SEEDS.stdout",
@@ -114,12 +128,32 @@
    ]
   },
   {
+   "name": "i7-a0-hash",
+   "marker": "runs/BW_SEEDS/ADDENDUM_A_INPUTS.json",
+   "log": "runs/BW_SEEDS.stdout",
+   "est_s": 120,
+   "cmd": [
+    "scripts/item7_addendum_a.py",
+    "hash"
+   ]
+  },
+  {
    "name": "i7-analyze",
    "marker": "runs/BW_SEEDS/SEEDS_REPORT.json",
    "log": "runs/BW_SEEDS.stdout",
    "est_s": 60,
    "cmd": [
     "scripts/bw_seeds.py",
+    "analyze"
+   ]
+  },
+  {
+   "name": "i7-addendum-analyze",
+   "marker": "runs/BW_SEEDS/ADDENDUM_A_REPORT.json",
+   "log": "runs/BW_SEEDS.stdout",
+   "est_s": 300,
+   "cmd": [
+    "scripts/item7_addendum_a.py",
     "analyze"
    ]
   }

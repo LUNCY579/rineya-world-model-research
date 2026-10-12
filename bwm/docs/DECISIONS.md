@@ -1397,3 +1397,59 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
       and `i7-run`, holding `i7-analyze` and A.0 until `FREEZE_B4S_a_beam.json` exists. This must not go in before
       (2), or bundleI would fail on the refusing freeze. Deadline: before `i7-freeze`, after Pa_v2_s3, about 2 BWM
       turns away.
+  - **D-80 follow-up:** RCX confirmed the six final shas match the bytes in the bundle and is verifying them edit by
+    edit.
+    - **Agreed:** the canary's torch_version is report-only, not VOID. The binding check is the per-probe |Δ| ≤ 1e-5
+      on the real forward pass in BWM's process.
+    - The runner will record both torch versions in hook.json and the report and flag a mismatch descriptively. This
+      edit is batched with setting `CANARY_SHA256` when RCX sends the canary (after its step A), followed by one
+      re-hash and RCX's check.
+- **D-81 Queue order fixed for the B4 screen (RCX's process finding, medium).**
+  - **Change:** bundleI.json ce998dc8… → d08b3840…, written 02:58, before the bundle resumes and re-reads it. Order:
+    `i7-freeze` → **`b4s-freeze`** (`b4_screen.py freeze --prereg research/PREREG_B4_SCREEN.md --addendum
+    research/PREREG_ITEM7_ADDENDUM_A.md`, the final non-DRAFT names) → `i7-run` → **`i7-a0-hash`**
+    (`item7_addendum_a.py hash`) → `i7-analyze` → **`i7-addendum-analyze`**.
+  - **Why the order is enough:** a failing or refusing `b4s-freeze` stops the bundle before any R0 output exists, so
+    the queue cannot void the screen, and A.0 precedes every reader of the item-7 outputs.
+  - **Precondition:** both texts must be finalised and present under those names, with `CANARY_SHA256` set, before
+    bundleI reaches `i7-freeze` (after Pa_v2_s3, about 1.5 turns). Otherwise `b4s-freeze` fails safely, which costs
+    one bundle attempt.
+  - **Erratum fix queued for the final hash round:** both texts cite "D-79" for BWM's acceptance of the edits and the
+    edit-5 route (P:5, 8, 670; A:5, 12, 298; R:2); it should be D-80. The low-severity hardening items from RCX's
+    re-verification go into the same canary hash round.
+- **I-19 Scheduling note (2026-10-12 06:25).**
+  - **What happened:** RCWM's auto-relaunch failed silently at 03:21 (RCWM I-36). With no RCWM waiter, BWM's
+    bundleI correctly took a second consecutive turn at 05:21 under the no-idle-GPU rule, after Pa_v2_s2 finished
+    at 05:20. Pa_v2_s3 started then.
+  - **Consequence:** this bundle run loaded its job list at 05:21, including D-81's `b4s-freeze`. If Pa_v2_s3
+    finishes with budget left (about 07:52), `i7-freeze` and then `b4s-freeze` run in this turn. Unless the screen
+    texts are finalised under their final names by then, `b4s-freeze` refuses, which is safe because no R0 output
+    is produced. It does use bundleI attempt 1.
+  - **Mitigation:** the final hash round was relaunched at 06:24. If the refusal happens, the orchestrator is
+    restarted after finalisation (resetting the in-memory attempt count, QP-3) before bundleI's next turn, so a
+    second refusal cannot write `bundleI.failed`.
+- **E-03 Erratum to the B4 screen prereg §7.1 and item-7 addendum A §B.3 (stale queue text), recorded before
+  `b4s-freeze` runs (RCX co-sign condition 2, CX D-40).**
+  - **The stale text:** both texts still describe the pre-D-81 queue plan: "if b4s-freeze fails, item 7 is not
+    blocked".
+  - **What governs:** D-81. `b4s-freeze` sits between `i7-freeze` and `i7-run` in bundleI, so a refusing or failing
+    screen freeze stops bundleI before any R0 output exists. Item 7's R0 then waits until the freeze succeeds.
+  - **Why this is harmless:** the actual rule is stricter than the text, and nothing outcome-dependent can arise from
+    the difference. The body text is left unchanged to avoid another hash round.
+- **D-82 B4 futility screen and item-7 addendum A FINALISED, co-signed by RCX (CX D-40, commit ff72d65, 07:00 CDT
+  2026-10-12, on the verified DRAFT bytes c8c7bb8b… / 55a1c37c…).**
+  - **Final texts:**
+    - `research/PREREG_B4_SCREEN.md` **ac70043bd9abcbc5d2bcb51905eac2140adefcb950e2c62c6dac360f405b0506**;
+    - `research/PREREG_ITEM7_ADDENDUM_A.md` **0e73d1f1db8f2c6ef366c009303969c7df66e07bfd857dd7496a039ba7ee66e2**,
+      whose "Screen prereg (final) sha256" row names ac70043b….
+  - **Finalisation diff:** `final-diff` confirms only the title and Status rows changed, plus the addendum's prereg
+    row; nothing outside the header.
+  - **Registered code:**
+    - runner `scripts/b4_screen.py` 0b576b1f…, tests 8d2e2237… (69 pass);
+    - addendum code `scripts/item7_addendum_a.py` 2a78ba81…, tests 1fcc461f…;
+    - canary `B4_HOOK_CANARY.json` 9e9ad339…;
+    - preflight max |Δ| 0.0 on matching torch 2.6.0+cu124.
+  - **Scope:** RCX's co-sign covers the screen and addendum A only, not the full B4. E-03 (stale queue text) was
+    recorded before the freeze.
+  - **Next:** bundleI runs `i7-freeze` → `b4s-freeze` (writes `runs/FREEZE_B4S_a_beam.json` and the RCX snapshot) →
+    `i7-run` → `i7-a0-hash` → `i7-analyze` → `i7-addendum-analyze`, starting when Pa_v2_s3 completes (about 08:05).

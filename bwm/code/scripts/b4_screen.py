@@ -1,5 +1,5 @@
 """B4 futility screen runner -- DRAFT (research/PREREG_B4_SCREEN_DRAFT.md; D-75 decision 1; D-76a; D-77; RCX co-sign
-review 9dd352ee..., 13 required edits accepted in D-79).
+review 9dd352ee..., 13 required edits accepted in D-80; canary 9e9ad339... and RCX's low items, D-80 follow-up / D-81).
 
 One arm, a = RCX's hybrid hook `LearnedUnmet.from_file(gnn_s20261276.pt, invalid_policy="fallback", hybrid_lambda=1.0)`
 (rcx/bw/b4_hook.py, every executed file sha-pinned, loaded from a sha-verified snapshot taken at the freeze) passed as
@@ -82,6 +82,7 @@ BW_SEEDS_LOG_REL = "runs/BW_SEEDS.stdout"       # bundleI's i7-* log (outside ru
 SEEDS_REPORT_REL = "runs/BW_SEEDS/SEEDS_REPORT.json"            # item 7's analysis (bw_seeds.py analyze)
 ADDENDUM_A_INPUTS_REL = "runs/BW_SEEDS/ADDENDUM_A_INPUTS.json"  # addendum A.0 (scripts/item7_addendum_a.py hash)
 CLOSING_MARKERS = (SEEDS_REPORT_REL, ADDENDUM_A_INPUTS_REL)    # edit 9: once either exists, no screen freeze at all
+CLOSING_LOG_MARKER = "release_gate_reading"   # RCX low item 5: bw_seeds.py analyze prints its report into the log
 FREEZE_REL = "runs/FREEZE_B4S_a_beam.json"
 OUT_REL = "runs/BW_B4_SCREEN"
 SNAPSHOT_REL = OUT_REL + "/rcx_snapshot"        # edit 10: sha-verified copies of every RCX file, taken at the freeze
@@ -113,8 +114,10 @@ GNN_SIDECAR_REL = "runs/RCX-E07/main/models/gnn_s20261276.json"
 GNN_SIDECAR_SHA256 = "2ccdb2798fc784327c153fe7a6dd5479b2646f0cb29314aad3610eed1aa4a892"    # D-76a
 E07_INSTANCES_REL = "runs/RCX-E07/main/data/instances.json"                                # GNN train/val/test
 E07_INSTANCES_SHA256 = "1e39f9bbc25a7e857ccbfee97c996638fed63d606c334efef88fc3b7a32f4e31"
-CANARY_REL = "experiments/RCX-B4/canary/B4_HOOK_CANARY.json"   # edit 8: RCX's golden-value file (E07 TEST instances)
-CANARY_SHA256 = None   # PLACEHOLDER until RCX sends the sha (after its step A). freeze and run-shard refuse while None.
+CANARY_REL = "experiments/RCX-B4/canary/B4_HOOK_CANARY.json"   # edit 8: RCX's golden-value file (rel. to the RCX root
+#   or the snapshot; copied into the snapshot at the freeze). 25 probes from E07 test and E07b TEST-B (never
+#   seeds_fresh).
+CANARY_SHA256 = "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a"   # RCX commit 42cbfcc (D-80 f/u)
 CANARY_TOL = 1e-5      # |value - expected| per probe, asserted at every hook shard start, before planning
 HOOK_CLASS = "rcx.bw.b4_hook.LearnedUnmet"
 HOOK_KWARGS = {"invalid_policy": "fallback", "hybrid_lambda": 1.0}                       # D-76a: exactly this call
@@ -145,11 +148,12 @@ WORDING = {
                          "trusted. No decision. Pre-registered consequence: arms c and a are re-run in one GPU turn "
                          "(`run --rerun`) and analysed with `analyze --rerun`."),
     "INSTRUMENT_FAULT_R0_ARGS": ("B4 screen INSTRUMENT FAULT: R0's shard arguments differ from the frozen S-beam "
-                                 "configuration, so R0 is not the registered control and arm a was not run. No "
-                                 "decision. Pre-registered consequence: arms c and a are re-run in one GPU turn "
-                                 "(`run --rerun`) and analysed with `analyze --rerun`."),
-    "INSTRUMENT_FAULT_RERUN": ("B4 screen INSTRUMENT FAULT on the pre-registered re-run as well: no decision; the screen "
-                               "closes without a reading (a new prereg is needed)."),
+                                 "configuration, so R0 is not the registered control (see instrument_fault_reasons "
+                                 "for whether arm a ran). No decision. Pre-registered consequence: arms c and a are "
+                                 "re-run in one GPU turn (`run --rerun`) and analysed with `analyze --rerun`."),
+    "INSTRUMENT_FAULT_RERUN": ("B4 screen INSTRUMENT_FAULT_RERUN: the pre-registered re-run failed the round-1 identity "
+                               "check as well. Terminal: no decision and no further re-run; the screen closes without "
+                               "a reading (a new prereg is needed)."),
 }
 ATTRIBUTION_NOTE = (" Not credited to the learned critic alone: more than 5% of hook calls returned a penalty-band value "
                     "(invalid state or critic error), so c+pen is mandatory in the full B4 (D-76a).")
@@ -560,17 +564,22 @@ def verify_hook(hook, rcx_root=RCX_ROOT) -> dict:
     return d
 
 
-def check_canary(make_hook, canary_path, *, want_sha=None, tol=CANARY_TOL) -> dict:
-    """Edit 8: a FRESH hook (the registered call) must reproduce RCX's golden values within `tol` on every probe of the
-    sha-pinned canary (about 20 consistent and 5 flagged-inconsistent (state, goal) probes from E07 TEST instances,
-    never seeds_fresh), in file order; its counters after all probes must equal the recorded ones. Raises CanaryError
-    (the shard stops before planning; the screen is VOID)."""
+def loaded_torch_version():
+    """torch.__version__ of the torch imported in this process, or None (nothing is imported here)."""
+    t = sys.modules.get("torch")
+    return getattr(t, "__version__", None) if t is not None else None
+
+
+def load_canary(canary_path, *, want_sha=None, tol=CANARY_TOL) -> dict:
+    """Edit 8, torch-free part: the canary file's sha256 must be the registered one, its hook call the D-76a call, its
+    tolerance no looser than `tol`, its pins the screen's, and it must carry probes and the expected counters after
+    all probes (RCX low item 4: a file without them is refused). Returns the parsed record."""
     want_sha = CANARY_SHA256 if want_sha is None else want_sha
     if want_sha is None:
         raise PinError("the RCX canary golden file is not registered yet (CANARY_SHA256 placeholder): refusing")
     check_pin(canary_path, want_sha, "RCX canary")
     c = json.loads(Path(canary_path).read_text(encoding="utf-8"))
-    call = c.get("hook_call", {})
+    call = c.get("hook_call") or {}
     if (not str(call.get("path", "")).replace("\\", "/").endswith(GNN_REL)
             or call.get("invalid_policy") != HOOK_KWARGS["invalid_policy"]
             or float(call.get("hybrid_lambda", float("nan"))) != HOOK_KWARGS["hybrid_lambda"]):
@@ -583,23 +592,45 @@ def check_canary(make_hook, canary_path, *, want_sha=None, tol=CANARY_TOL) -> di
            and sha != pinned[rel]}
     if off:
         raise CanaryError(f"canary was made on other RCX files: {off}")
-    probes = c["probes"]
-    if not probes:
+    if not c.get("probes"):
         raise CanaryError("canary has no probes")
+    exp_c = c.get("expected_counters_after_all")
+    if not isinstance(exp_c, dict) or not exp_c:
+        raise CanaryError("canary has no expected_counters_after_all: the counters are part of the check (edit 8)")
+    return c
+
+
+def check_canary(make_hook, canary_path, *, want_sha=None, tol=CANARY_TOL, host_torch_version=None) -> dict:
+    """Edit 8: a FRESH hook (the registered call) must reproduce RCX's golden values within `tol` on every probe of the
+    sha-pinned canary (25 (state, goal) probes, 20 consistent and 5 flagged-inconsistent, from E07 test and E07b
+    TEST-B instances, never seeds_fresh), in file order; its counters after all probes must equal the recorded ones.
+    Raises CanaryError (the shard stops before planning; the screen is VOID). Report-only (D-80 follow-up): the torch
+    version the canary was made with, the host's (`host_torch_version`, else the torch loaded in this process) and
+    whether they match; a mismatch is never a failure, the binding check is |delta| <= tol per probe."""
+    want_sha = CANARY_SHA256 if want_sha is None else want_sha
+    c = load_canary(canary_path, want_sha=want_sha, tol=tol)
+    probes, exp_c = c["probes"], c["expected_counters_after_all"]
     hook = make_hook()
-    bad, worst = [], 0.0
-    for p in probes:
+    bad, worst, deltas = [], 0.0, {}
+    for k, p in enumerate(probes):
         v = float(hook(frozenset(tuple(f) for f in p["state"]), frozenset(tuple(f) for f in p["goal"])))
         dv = abs(v - float(p["expected"]))
+        deltas[str(p.get("id", k))] = dv
         worst = max(worst, dv) if dv == dv else float("inf")
         if not dv <= tol:                       # NaN-safe
             bad.append({"id": p.get("id"), "value": v, "expected": p["expected"]})
-    exp_c = c.get("expected_counters_after_all")
-    counters_ok = exp_c is None or {k: int(v) for k, v in dict(hook.counters).items()} == \
-        {k: int(v) for k, v in exp_c.items()}
+    counters = {k: int(v) for k, v in dict(hook.counters).items()}
+    counters_ok = counters == {k: int(v) for k, v in exp_c.items()}
+    host_tv = host_torch_version if host_torch_version is not None else loaded_torch_version()
+    canary_tv = c.get("torch_version")
     out = {"file": CANARY_REL, "sha256": want_sha, "probes": len(probes),
            "consistent_probes": sum(bool(p.get("consistent")) for p in probes), "max_abs_delta": worst,
-           "tolerance_abs": tol, "counters_match": counters_ok, "failures": bad}
+           "abs_delta_by_probe": deltas, "tolerance_abs": tol, "counters_after_all": counters,
+           "counters_match": counters_ok, "failures": bad,
+           "canary_torch_version": canary_tv, "canary_torch_threads": c.get("torch_threads"),
+           "host_torch_version": host_tv,
+           "torch_versions_match": None if canary_tv is None or host_tv is None else canary_tv == host_tv,
+           "torch_version_rule": "report-only: a mismatch is flagged, never VOID (D-80 follow-up)"}
     if bad or not counters_ok:
         raise CanaryError(f"hook canary failed: {out}")
     return out
@@ -898,7 +929,8 @@ def merge_hooks(out: Path, k: int, *, require: bool = True) -> dict:
     """The per-shard hook records summed (meter, counters, reasons, canary, executed RCX modules)."""
     hook = {"calls": 0, "penalty_calls": 0, "failsafe_calls": 0, "penalty_calls_invalid_state": 0,
             "penalty_calls_critic_error": 0, "seconds": 0.0, "per_instance": {}, "counters": Counter(),
-            "reasons": Counter(), "shards": [], "canary": {}, "rcx_modules_executed": {}, "torch_version": []}
+            "reasons": Counter(), "shards": [], "canary": {}, "rcx_modules_executed": {}, "torch_version": [],
+            "model_evals_by_shard": {}}
     for i in range(k):
         f = out / f"shard_{i}of{k}" / "hook.json"
         if not f.exists():
@@ -913,6 +945,8 @@ def merge_hooks(out: Path, k: int, *, require: bool = True) -> dict:
         hook["per_instance"].update(m["per_instance"])
         hook["counters"].update(h["describe_end"].get("counters", {}))
         hook["reasons"].update(h["describe_end"].get("reasons", {}))
+        hook["model_evals_by_shard"][f"shard_{i}of{k}"] = int((h["describe_end"].get("counters") or {})
+                                                                 .get("model_evals", 0))
         hook["shards"].append(f"shard_{i}of{k}")
         hook["canary"][f"shard_{i}of{k}"] = h.get("canary")
         hook["rcx_modules_executed"].update(h.get("rcx_modules_executed") or {})
@@ -1210,18 +1244,39 @@ def analyze_pair(ctrl_rows, arm_rows, *, n_expected: int, drop_ids=(), hook=None
 
 
 def void_reasons(hook: dict) -> list:
-    """Edit 8: the screen is VOID (not NO-GO) on any hook model/encode/nonfinite/failsafe error, model_evals = 0 or a
-    shard without a passed canary."""
+    """Edit 8: the screen is VOID (not NO-GO) on any hook model/encode/nonfinite/failsafe error, model_evals = 0 (in
+    the merge or in any hook shard: RCX low item 7) or a shard without a passed canary. A torch-version mismatch
+    between the canary and the host is report-only and never a VOID reason (D-80 follow-up)."""
     c = hook.get("counters", {})
     out = [f"hook {k} = {c.get(k)}" for k in VOID_COUNTERS if c.get(k, 0) > 0]
     if hook.get("failsafe_calls", 0) > 0 and not c.get("failsafe", 0):
         out.append(f"failsafe-band calls = {hook['failsafe_calls']}")
     if c.get("model_evals", 0) == 0:
         out.append("hook model_evals = 0")
+    for sh, n in sorted((hook.get("model_evals_by_shard") or {}).items()):
+        if not n > 0:
+            out.append(f"{sh}: hook model_evals = {n}")
     for sh, can in sorted((hook.get("canary") or {}).items()):
-        if not can or can.get("failures") or not can.get("counters_match"):
+        if not isinstance(can, dict) or can.get("failures") or not can.get("counters_match"):
             out.append(f"{sh}: no passed canary")
     return out
+
+
+def canary_report(hook: dict) -> dict:
+    """Report-only (D-80 follow-up): per hook shard, the canary's max |delta| and the torch versions of the canary and
+    of the host process. A mismatch is flagged descriptively; it is never a VOID reason (the binding check is the
+    per-probe |delta| <= 1e-5 in the GPU process)."""
+    per = {}
+    for sh, can in sorted((hook.get("canary") or {}).items()):
+        can = can if isinstance(can, dict) else {}
+        per[sh] = {"max_abs_delta": can.get("max_abs_delta"), "canary_torch_version": can.get("canary_torch_version"),
+                   "host_torch_version": can.get("host_torch_version"),
+                   "torch_versions_match": can.get("torch_versions_match")}
+    mism = [sh for sh, v in per.items() if v["torch_versions_match"] is False]
+    return {"what": "report-only: canary max |delta| per hook shard and the canary's and the host's torch versions",
+            "shards": per, "torch_version_mismatch_shards": mism,
+            "torch_version_flag": (f"the host's torch differs from the canary's on {mism}; descriptive only, not VOID: "
+                                   "every probe still had to match within the registered tolerance") if mism else None}
 
 
 # ----------------------------------------------------------------------------- pre-check (prereg 4.3)
@@ -1282,7 +1337,8 @@ def precheck(seeds_path=None, e07_path=None, *, check_shas=True) -> dict:
 # ----------------------------------------------------------------------------- registration and finalisation
 
 REGISTERED_ROWS = {"runner": "Runner sha256", "tests": "Tests sha256"}
-FINAL_EDITABLE_ROWS = ("Status", "Screen prereg (final) sha256")
+ADDENDUM_PREREG_ROW = "Screen prereg (final) sha256"   # the addendum's header row naming the final screen prereg
+FINAL_EDITABLE_ROWS = ("Status", ADDENDUM_PREREG_ROW)
 
 
 def registered_shas(text: str) -> dict:
@@ -1310,6 +1366,15 @@ def check_registered_runner(prereg_text: str, addendum_text: str, root=ROOT) -> 
     if runner not in addendum_text:
         raise PinError(f"the addendum does not name the registered runner sha {runner}")
     return {"runner_sha256": runner, "tests_sha256": tests}
+
+
+def addendum_prereg_sha(addendum_text: str) -> str:
+    """RCX low item 2: the sha256 that the addendum's header row '| Screen prereg (final) sha256 | `<hex>` |' names."""
+    hits = re.findall(rf"^\|\s*{re.escape(ADDENDUM_PREREG_ROW)}\s*\|\s*`([0-9a-f]{{64}})`", addendum_text, flags=re.M)
+    if len(hits) != 1:
+        raise PinError(f"the addendum must name the final screen prereg in exactly one '{ADDENDUM_PREREG_ROW}' header "
+                       f"row as a full sha256 in backticks (found {len(hits)})")
+    return hits[0]
 
 
 def finalisation_diff(draft: str, final: str) -> dict:
@@ -1425,7 +1490,8 @@ def check_r0_is_b2(r0_rec: dict, b2_rec: dict):
 
 def build_freeze_record(r0_rec: dict, r0_freeze_sha: str, *, pins: dict, pre: dict, prereg: dict, addendum: dict,
                         seeds_outputs_present: list, runner_sha: str, now: str, registered: dict | None = None,
-                        versions: dict | None = None, snapshot: dict | None = None) -> dict:
+                        versions: dict | None = None, snapshot: dict | None = None,
+                        canary_versions: dict | None = None) -> dict:
     return {"what": "B4 futility screen, arm a: RCX hybrid hook as unmet= in item 7's R0 S-beam configuration",
             "args": dict(r0_rec["args"]),
             "unmet_hook": {"class": HOOK_CLASS, "constructor": "from_file", "model_file": GNN_REL,
@@ -1442,7 +1508,8 @@ def build_freeze_record(r0_rec: dict, r0_freeze_sha: str, *, pins: dict, pre: di
                      "reported_only": list(REPORTED_ONLY), "text": RULE_TEXT},
             "void_rule": {"hook_counters_must_be_zero": list(VOID_COUNTERS), "model_evals_must_be_positive": True,
                           "canary_every_hook_shard": True, "r0_outputs_must_match": ADDENDUM_A_INPUTS_REL},
-            "canary": {"rel": CANARY_REL, "sha256": CANARY_SHA256, "tolerance_abs": CANARY_TOL},
+            "canary": {"rel": CANARY_REL, "sha256": CANARY_SHA256, "tolerance_abs": CANARY_TOL,
+                       **(canary_versions or {})},
             "rcx_snapshot": {"dir": SNAPSHOT_REL, "files": snapshot or {}},
             "versions": versions or {},
             "prereg": prereg, "addendum": addendum, "item7_prereg_sha256": ITEM7_PREREG_SHA256,
@@ -1463,6 +1530,28 @@ def bw_seeds_outputs(root=ROOT) -> list:
     return out
 
 
+def closing_markers(root=ROOT) -> list:
+    """Edit 9: what closes the late-freeze window: item 7's report or addendum A.0's table, or bundleI's log once it
+    holds item 7's reading (RCX low item 5: `bw_seeds.py analyze` prints the report, incl. release_gate_reading)."""
+    root = Path(root)
+    out = [m for m in CLOSING_MARKERS if (root / m).exists()]
+    log = root / BW_SEEDS_LOG_REL
+    if log.exists() and CLOSING_LOG_MARKER in log.read_text(encoding="utf-8", errors="replace"):
+        out.append(f"{BW_SEEDS_LOG_REL} (contains {CLOSING_LOG_MARKER!r})")
+    return out
+
+
+def canary_versions_at_freeze(snapshot_root, host_torch) -> dict:
+    """D-80 follow-up, report-only: the torch version the canary was made with (from the sha-verified, schema-checked
+    snapshot copy; torch-free) beside the host's (package metadata). The freeze warns on a mismatch, never refuses."""
+    c = load_canary(Path(snapshot_root) / CANARY_REL)
+    tv = c.get("torch_version")
+    match = None if tv is None or host_torch is None else tv == host_torch
+    return {"canary_torch_version": tv, "canary_torch_threads": c.get("torch_threads"),
+            "host_torch_version_at_freeze": host_torch, "torch_versions_match_at_freeze": match,
+            "torch_version_rule": "report-only: a mismatch is flagged, never VOID (D-80 follow-up)"}
+
+
 def stage_freeze(a, root=ROOT, rcx_root=RCX_ROOT) -> int:
     root = Path(root)
     frz = root / FREEZE_REL
@@ -1471,7 +1560,7 @@ def stage_freeze(a, root=ROOT, rcx_root=RCX_ROOT) -> int:
     r0f = root / R0_FREEZE_REL
     if not r0f.exists():
         sys.exit(f"{r0f} missing: run `scripts/bw_seeds.py freeze` first (the screen is frozen right after item 7)")
-    closed = [m for m in CLOSING_MARKERS if (root / m).exists()]
+    closed = closing_markers(root)
     if closed:
         sys.exit(f"{closed} exist: the screen can no longer be frozen, not even late (edit 9); the screen is void")
     present = bw_seeds_outputs(root)
@@ -1489,8 +1578,13 @@ def stage_freeze(a, root=ROOT, rcx_root=RCX_ROOT) -> int:
         texts[key] = p.read_text(encoding="utf-8")
     try:  # edit 2: the runner and tests on disk must be the registered bytes, in the late path as well
         registered = check_registered_runner(texts["prereg"], texts["addendum"], root)
+        named = addendum_prereg_sha(texts["addendum"])   # RCX low item 2: the addendum names exactly this prereg
+        if named != docs["prereg"]["sha256"]:
+            raise PinError(f"the addendum's '{ADDENDUM_PREREG_ROW}' row names {named}, but --prereg "
+                           f"{docs['prereg']['path']} has sha256 {docs['prereg']['sha256']}")
         rcx_snapshot_files()
-    except PinError as e:
+        load_canary(Path(rcx_root) / CANARY_REL)          # sha and schema of the canary (torch-free)
+    except (PinError, CanaryError) as e:
         sys.exit(f"freeze refused: {e}")
     pins = current_pins(root, rcx_root)
     r0_rec = json.loads(r0f.read_text())
@@ -1501,11 +1595,17 @@ def stage_freeze(a, root=ROOT, rcx_root=RCX_ROOT) -> int:
     out = root / OUT_REL
     out.mkdir(parents=True, exist_ok=True)
     snapshot = make_snapshot(rcx_root, root / SNAPSHOT_REL)
+    canary_tv = canary_versions_at_freeze(root / SNAPSHOT_REL, versions.get("torch"))
+    if canary_tv["torch_versions_match_at_freeze"] is not True:
+        print(f"[b4s] WARNING (report-only, not a refusal): the canary was made with torch "
+              f"{canary_tv['canary_torch_version']} and this host has torch {versions.get('torch')}; the binding check "
+              "is the per-probe |delta| <= 1e-5 at every hook shard start", flush=True)
     (out / "PRECHECK.json").write_text(json.dumps(pre, indent=1))
     rec = build_freeze_record(r0_rec, sha256_file(r0f), pins=pins, pre=pre, prereg=docs["prereg"],
                               addendum=docs["addendum"], seeds_outputs_present=present,
                               runner_sha=registered["runner_sha256"], registered=registered, versions=versions,
-                              snapshot=snapshot, now=time.strftime("%Y-%m-%d %H:%M:%S %Z"))
+                              snapshot=snapshot, canary_versions=canary_tv,
+                              now=time.strftime("%Y-%m-%d %H:%M:%S %Z"))
     frz.write_text(json.dumps(rec, indent=1))
     print(f"wrote {frz} (precheck drops {pre['drop_ids']}; n = {pre['n_after_drop']}; late {bool(present)})")
     return 0
@@ -1575,7 +1675,7 @@ def r0_args_problems(root, rec: dict) -> list:
     refuse, and analyze reports the fault so that the pre-registered re-run of c and a can follow."""
     try:
         check_r0_shards(root, rec)
-    except (PinError, KeyError, ValueError) as e:
+    except (PinError, KeyError, ValueError, TypeError, AttributeError) as e:
         return [f"R0 shard arguments: {e}"]
     return []
 
@@ -1643,6 +1743,31 @@ def canary_failures(root, arm: str) -> list:
     """Edit 8: a canary failure is final (the screen is VOID); no shard of that arm runs afterwards."""
     return [f"{arm} {e.get('shard')}: canary failed ({str(e.get('error', ''))[:200]})" for e in attempt_events(root)
             if e.get("event") == "canary_failed" and e.get("arm") == arm]
+
+
+def attempts_problems(root, arm: str) -> list:
+    """RCX low item 3: once an arm has run (its directory exists; run-shard creates the shard directory before the
+    canary), ATTEMPTS.jsonl must exist, hold a start event for every shard directory of the arm and exactly one end
+    event per completed shard (summary.json) and none for an incomplete one. So deleting it cannot erase a canary-failure
+    VOID: run-shard and analyze refuse instead (an edit that removes only a canary_failed line is not detected here).
+    Returns the problems (empty = OK)."""
+    root = Path(root)
+    d = root / OUT_REL / ARMS[arm]["dir"]
+    if not d.exists():
+        return []
+    if not (root / ATTEMPTS_REL).exists():
+        return [f"{ATTEMPTS_REL} missing although arm {arm} has run ({ARMS[arm]['dir']} exists)"]
+    ev = [e for e in attempt_events(root) if e.get("stage") == "run-shard" and e.get("arm") == arm]
+    probs = []
+    for i in range(SHARDS):
+        sd, sh = d / f"shard_{i}of{SHARDS}", f"{i}/{SHARDS}"
+        if sd.exists() and not any(e.get("event") == "start" and e.get("shard") == sh for e in ev):
+            probs.append(f"{ATTEMPTS_REL}: no start event for arm {arm} shard {sh}, whose directory exists")
+        ends = sum(e.get("event") == "end" and e.get("shard") == sh for e in ev)
+        want = int((sd / "summary.json").exists())
+        if ends != want:
+            probs.append(f"{ATTEMPTS_REL}: {ends} end events for arm {arm} shard {sh} (want {want})")
+    return probs
 
 
 # ----------------------------------------------------------------------------- GPU stages
@@ -1720,11 +1845,16 @@ def stage_run_shard(a, root=ROOT) -> int:
     failed = canary_failures(root, a.arm)
     if failed:
         sys.exit(f"screen VOID: {failed}")
+    att = attempts_problems(root, a.arm)    # RCX low item 3: a deleted ATTEMPTS.jsonl cannot erase a canary failure
+    if att:
+        sys.exit(f"refusing: {att}")
     args = rec["args"]
     inst = [it for it in load_screen_instances(root) if shard_of(it["id"], sk) == si]
     fc = dst / "fcache.jsonl"
-    log_attempt(root, stage="run-shard", arm=a.arm, shard=a.shard, event="start", warm_fcache=fc.exists(),
-                fcache_lines=len(fc.read_text(encoding="utf-8").splitlines()) if fc.exists() else 0)
+    warm = fc.exists()
+    dst.mkdir(parents=True, exist_ok=True)  # the arm has run from here on: ATTEMPTS.jsonl is required (item 3)
+    log_attempt(root, stage="run-shard", arm=a.arm, shard=a.shard, event="start", warm_fcache=warm,
+                fcache_lines=len(fc.read_text(encoding="utf-8").splitlines()) if warm else 0)
     B, BP, model, tok, torch = load_gpu_stack(root, args)
     vers = runtime_versions()
     check_versions(rec["versions"], vers, torch)
@@ -1734,7 +1864,8 @@ def stage_run_shard(a, root=ROOT) -> int:
         hook_mod, imp = load_rcx_hook_module(snap)
         cuda_before = (torch.cuda.is_available, torch.cuda.device_count, os.environ.get("CUDA_VISIBLE_DEVICES"))
         try:
-            canary = check_canary(lambda: make_registered_hook(hook_mod, snap), snap / CANARY_REL)
+            canary = check_canary(lambda: make_registered_hook(hook_mod, snap), snap / CANARY_REL,
+                                  host_torch_version=torch.__version__)
         except (CanaryError, PinError) as e:
             log_attempt(root, stage="run-shard", arm=a.arm, shard=a.shard, event="canary_failed", error=str(e)[:2000])
             raise
@@ -1828,11 +1959,69 @@ def attempts_report(root) -> dict:
                           "cache): cost figures for these shards are lower bounds") if warm else None}
 
 
+def _refusal_problems(root, rec: dict, ctrl: Path, arm: Path, rerun: bool, arm_keys) -> tuple:
+    """Every refusal check of the analysis (edit 1), collected instead of raised, so that a VOID and then an INSTRUMENT
+    FAULT take precedence over a refusal (RCX low item 1: VOID > INSTRUMENT FAULT > refusal). Returns (problems,
+    r0_args_problems, shards, hook, ctrl_rows, arm_rows); an output whose check could not run is None."""
+    probs, shards, hook, ctrl_rows, arm_rows = [], None, None, None, None
+    for k in arm_keys:
+        probs += attempts_problems(root, k)                       # RCX low item 3
+    r0_args = [] if rerun else r0_args_problems(root, rec)       # edit 7: an INSTRUMENT FAULT, not a refusal
+    if rerun:
+        for i in range(SHARDS):
+            try:
+                s = json.loads((ctrl / f"shard_{i}of{SHARDS}" / "summary.json").read_text())
+                bad_c = (s.get("args") != rec["args"] or s.get("shard") != f"{i}/{SHARDS}"
+                         or s.get("arm") != "rerun_c")
+            except (OSError, ValueError, AttributeError) as e:
+                probs.append(f"re-run c shard {i}: {e}")
+                continue
+            if bad_c:
+                probs.append(f"re-run c shard {i}: args/shard differ from the freeze")
+    malformed = (PinError, OSError, ValueError, KeyError, TypeError, AttributeError)   # collected, never raised
+    try:
+        shards = require_hook_shards(arm, rec)                    # edit 1
+    except malformed as e:
+        probs.append(f"hook shard records: {e}")
+    try:
+        hook = json.loads((arm / "hook_merged.json").read_text())
+        if json.loads(json.dumps(merge_hooks(arm, SHARDS))) != hook:   # edits 1/8: VOID is read from the shards
+            probs.append(f"{arm / 'hook_merged.json'} differs from the merge of the {SHARDS} shard hook records")
+    except malformed as e:
+        probs.append(f"hook_merged.json: {e}")
+        hook = None
+    try:
+        ctrl_rows, arm_rows = _rows(ctrl / "plans.jsonl"), _rows(arm / "plans.jsonl")
+        require_val(ctrl_rows, "control")
+        require_val(arm_rows, "arm")
+    except malformed as e:
+        probs.append(f"plans: {e}")
+    try:
+        if hook is not None and shards is not None and arm_rows is not None and (
+                hook.get("calls", 0) < len(arm_rows) or hook.get("calls") != sum(v["calls"] for v in shards.values())):
+            probs.append("merged hook calls inconsistent with the shard records")
+    except malformed:
+        probs.append("merged hook calls inconsistent with the shard records")
+    return probs, r0_args, shards, hook, ctrl_rows, arm_rows
+
+
+def _write_report(rep: dict, root, rep_json: Path, rep_md: Path, meta: dict) -> int:
+    rep.setdefault("rule", RULE_TEXT)
+    rep["attempts"] = attempts_report(root)
+    rep["meta"] = meta
+    rep_json.write_text(json.dumps(rep, indent=1))
+    rep_md.write_text(render_md(rep))
+    print(rep["wording"])
+    return 0
+
+
 def stage_analyze(a, root=ROOT, rcx_root=None) -> int:
     """Edit 1: the analysis verifies what the run stage verifies, takes the rule constants and drop_ids from the frozen
-    record, asserts R0's shard args, requires the 4 hook records (and hook_merged.json = their merge) and a VAL verdict
-    on every row, and never overwrites its report. Edits 7-9: VOID and INSTRUMENT_FAULT statuses (an R0 shard-argument
-    failure, on which run refuses, is reported as an INSTRUMENT_FAULT so that the pre-registered re-run can follow)."""
+    record, asserts R0's shard args, requires the 4 hook records (and hook_merged.json = their merge), ATTEMPTS.jsonl
+    once the arm has run, and a VAL verdict on every row, and never overwrites its report. Edits 7-9: VOID and
+    INSTRUMENT_FAULT statuses (an R0 shard-argument failure, on which run refuses, is reported as an INSTRUMENT_FAULT so
+    that the pre-registered re-run can follow). Precedence (RCX low item 1): VOID > INSTRUMENT FAULT > refusal, so a
+    VOID report is written even when a later check would refuse."""
     root = Path(root)
     rerun = bool(getattr(a, "rerun", False))
     out = root / OUT_REL
@@ -1850,28 +2039,32 @@ def stage_analyze(a, root=ROOT, rcx_root=None) -> int:
         sys.exit("--rerun analyses the pre-registered re-run after an INSTRUMENT_FAULT only")
     ctrl = (out / ARMS["rerun_c"]["dir"]) if rerun else (root / R0_OUT_REL)
     arm_key = "rerun_a" if rerun else "a"
+    arm_keys = ("rerun_c", "rerun_a") if rerun else ("a",)
     arm = out / ARMS[arm_key]["dir"]
     early = ([] if rerun else r0_matches_addendum(root)) + canary_failures(root, arm_key)
     arm_done = (arm / "summary.json").exists()
-    fault = [] if (rerun or arm_done) else r0_args_problems(root, rec)   # edit 7: R0's shard args (run refuses)
-    if (early or fault) and not arm_done:                         # the run refused: the report records why
-        meta0 = {"freeze_sha256": sha256_file(root / FREEZE_REL), "prereg": rec["prereg"],
-                 "runner_sha256": sha256_file(Path(__file__)), "rerun": rerun,
-                 "written": time.strftime("%Y-%m-%d %H:%M:%S %Z")}
-        if early:                                                 # VOID takes precedence over INSTRUMENT FAULT
+    meta = {"freeze_sha256": sha256_file(root / FREEZE_REL), "prereg": rec["prereg"],
+            "runner_sha256": sha256_file(Path(__file__)), "rerun": rerun,
+            "written": time.strftime("%Y-%m-%d %H:%M:%S %Z")}
+    if not arm_done:                                              # the run refused or has not finished
+        att = [p for k in arm_keys for p in attempts_problems(root, k)]
+        fault = [] if rerun else r0_args_problems(root, rec)     # edit 7: R0's shard args (run refuses)
+        if early:                                                 # VOID > INSTRUMENT FAULT > refusal
             rep = {"status": "VOID", "void_reasons": early + [f"arm {arm_key} was not completed (run refuses on "
                                                               "these)"], "wording": WORDING["VOID"]}
             if fault:
                 rep["r0_args_problems"] = fault
-        else:                                                     # edit 7: no decision; `run --rerun` is unlocked
+            if att:
+                rep["refusal_problems_report_only"] = att
+        elif att:                                                 # it could hide a canary-failure VOID
+            sys.exit(f"refusing: {att}")
+        elif fault:                                               # edit 7: no decision; `run --rerun` is unlocked
             rep = {"status": "INSTRUMENT_FAULT", "decision": None,
                    "instrument_fault_reasons": fault + [f"arm {arm_key} was not run (run refuses on this)"],
                    "wording": WORDING["INSTRUMENT_FAULT_R0_ARGS"]}
-        rep.update(rule=RULE_TEXT, attempts=attempts_report(root), meta=meta0)
-        rep_json.write_text(json.dumps(rep, indent=1))
-        rep_md.write_text(render_md(rep))
-        print(rep["wording"])
-        return 0
+        else:
+            sys.exit(f"{arm / 'summary.json'} missing: arm {arm_key} is not complete")
+        return _write_report(rep, root, rep_json, rep_md, meta)
     files = [ctrl / "plans.jsonl", ctrl / "summary.json", arm / "plans.jsonl", arm / "summary.json",
              arm / "hook_merged.json", out / "PRECHECK.json", root / FREEZE_REL]
     for d in (ctrl, arm):
@@ -1881,74 +2074,85 @@ def stage_analyze(a, root=ROOT, rcx_root=None) -> int:
     files += [arm / f"shard_{i}of{SHARDS}" / "hook.json" for i in range(SHARDS)]
     files += [p for p in (root / ADDENDUM_A_INPUTS_REL, root / ATTEMPTS_REL, root / SNAPSHOT_REL / CANARY_REL)
               if p.exists()]
-    missing = [str(p) for p in files if not p.exists()]
-    if missing:
+    missing = [str(p.relative_to(root)).replace("\\", "/") for p in files if not p.exists()]
+    if missing and not early:
         sys.exit(f"inputs missing: {missing[:5]}")
-    inputs = {str(p.relative_to(root)).replace("\\", "/"): sha256_file(p) for p in files}  # hashed before any parse
+    inputs = {str(p.relative_to(root)).replace("\\", "/"): sha256_file(p) for p in files if p.exists()}  # before parse
     inp_path = out / ("ANALYSIS_INPUTS_RERUN.json" if rerun else "ANALYSIS_INPUTS.json")
     if inp_path.exists() and json.loads(inp_path.read_text()) != inputs:
         sys.exit(f"{inp_path} exists with other shas: the inputs changed since a previous analysis attempt")
     inp_path.write_text(json.dumps(inputs, indent=1))
-    meta = {"freeze_sha256": inputs[FREEZE_REL], "prereg": rec["prereg"], "runner_sha256": sha256_file(Path(__file__)),
-            "inputs": inp_path.name, "rerun": rerun, "written": time.strftime("%Y-%m-%d %H:%M:%S %Z")}
-    void = []
-    if not rerun:
-        void += r0_matches_addendum(root)       # edit 9
-        check_r0_shards(root, rec)              # edit 7 / edit 1
-    else:
-        for i in range(SHARDS):
-            s = json.loads((ctrl / f"shard_{i}of{SHARDS}" / "summary.json").read_text())
-            if s.get("args") != rec["args"] or s.get("shard") != f"{i}/{SHARDS}" or s.get("arm") != "rerun_c":
-                sys.exit(f"re-run c shard {i}: args/shard differ from the freeze")
-    shards = require_hook_shards(arm, rec)       # edit 1
-    hook = json.loads((arm / "hook_merged.json").read_text())
-    if json.loads(json.dumps(merge_hooks(arm, SHARDS))) != hook:   # edits 1/8: VOID is read from the shard records
-        sys.exit(f"{arm / 'hook_merged.json'} differs from the merge of the {SHARDS} shard hook records: refusing")
-    ctrl_rows, arm_rows = _rows(ctrl / "plans.jsonl"), _rows(arm / "plans.jsonl")
-    require_val(ctrl_rows, "control")
-    require_val(arm_rows, "arm")
-    if hook["calls"] < len(arm_rows) or hook["calls"] != sum(v["calls"] for v in shards.values()):
-        sys.exit("merged hook calls inconsistent with the shard records")
-    void += void_reasons(hook) + canary_failures(root, arm_key)    # edit 8
-    if void:
-        rep = {"status": "VOID", "void_reasons": void, "wording": WORDING["VOID"], "rule": RULE_TEXT,
-               "hook_shards": shards, "meta": meta}
-    else:
-        hook_mod, imp = load_rcx_hook_module(rcx_root or root / SNAPSHOT_REL)
-        try:
-            from bwmn import blocks as B
-            check_pin(B.__file__, BLOCKS_SHA256, BLOCKS_REL)
-            rep = analyze_pair(ctrl_rows, arm_rows, n_expected=N_FRESH, drop_ids=rec["precheck"]["drop_ids"],
-                               hook=hook, instances=load_screen_instances(root), B=B, hook_mod=hook_mod,
-                               ctrl_caches=sorted(ctrl.glob("shard_*/fcache.jsonl")),
-                               arm_caches=sorted(arm.glob("shard_*/fcache.jsonl")),
-                               arm_caches_by_shard={i: arm / f"shard_{i}of{SHARDS}" / "fcache.jsonl"
-                                                    for i in range(SHARDS)},
-                               labels=("c", "a") if rerun else ("R0", "a"), go_min_net=rule["go_min_net"],
-                               penalty_share_max=rule["penalty_share_max"],
-                               fault_status="INSTRUMENT_FAULT_RERUN" if rerun else "INSTRUMENT_FAULT")
-        finally:
-            unload_rcx(imp)
-        rep["hook_shards"] = shards
-        rep["cost"] = {k: {x: json.loads((d / "summary.json").read_text())["summary"].get(x)
-                           for x in ("f_queries_per_instance", "proposer_tokens_per_instance", "wall_s",
-                                     "f_model_queries")}
-                       for k, d in (("control", ctrl), ("a", arm))}
-        rep["meta"] = meta
-    rep["attempts"] = attempts_report(root)
-    rep_json.write_text(json.dumps(rep, indent=1))
-    rep_md.write_text(render_md(rep))
-    print(rep["wording"])
-    return 0
+    meta.update(freeze_sha256=inputs[FREEZE_REL], inputs=inp_path.name)
+    void, hook_shards_merge = list(early), None
+    try:                                  # edit 8: the VOID counters and canaries are read from the shard records
+        hook_shards_merge = json.loads(json.dumps(merge_hooks(arm, SHARDS, require=False)))
+        void += void_reasons(hook_shards_merge)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        pass                              # malformed records: refused below unless a VOID already holds
+    probs, r0_args, shards, hook, ctrl_rows, arm_rows = _refusal_problems(root, rec, ctrl, arm, rerun, arm_keys)
+    if void:                              # VOID first (RCX low item 1), whatever the later checks say
+        rep = {"status": "VOID", "void_reasons": void, "wording": WORDING["VOID"]}
+        for k, v in (("inputs_missing", missing), ("r0_args_problems", r0_args),
+                     ("refusal_problems_report_only", probs), ("hook_shards", shards)):
+            if v:
+                rep[k] = v
+        if hook_shards_merge is not None:
+            rep["canary_report_only"] = canary_report(hook_shards_merge)
+        return _write_report(rep, root, rep_json, rep_md, meta)
+    if r0_args:                           # edit 7, also after the arm ran: R0 is not the registered control
+        rep = {"status": "INSTRUMENT_FAULT", "decision": None, "instrument_fault_reasons": r0_args,
+               "wording": WORDING["INSTRUMENT_FAULT_R0_ARGS"]}
+        if probs:
+            rep["refusal_problems_report_only"] = probs
+        if hook_shards_merge is not None:
+            rep["canary_report_only"] = canary_report(hook_shards_merge)
+        return _write_report(rep, root, rep_json, rep_md, meta)
+    if probs:
+        sys.exit(f"refusing: {probs}")
+    hook_mod, imp = load_rcx_hook_module(rcx_root or root / SNAPSHOT_REL)
+    try:
+        from bwmn import blocks as B
+        check_pin(B.__file__, BLOCKS_SHA256, BLOCKS_REL)
+        rep = analyze_pair(ctrl_rows, arm_rows, n_expected=N_FRESH, drop_ids=rec["precheck"]["drop_ids"],
+                           hook=hook, instances=load_screen_instances(root), B=B, hook_mod=hook_mod,
+                           ctrl_caches=sorted(ctrl.glob("shard_*/fcache.jsonl")),
+                           arm_caches=sorted(arm.glob("shard_*/fcache.jsonl")),
+                           arm_caches_by_shard={i: arm / f"shard_{i}of{SHARDS}" / "fcache.jsonl"
+                                                for i in range(SHARDS)},
+                           labels=("c", "a") if rerun else ("R0", "a"), go_min_net=rule["go_min_net"],
+                           penalty_share_max=rule["penalty_share_max"],
+                           fault_status="INSTRUMENT_FAULT_RERUN" if rerun else "INSTRUMENT_FAULT")
+    finally:
+        unload_rcx(imp)
+    rep["hook_shards"] = shards
+    rep["canary_report_only"] = canary_report(hook)
+    rep["cost"] = {k: {x: json.loads((d / "summary.json").read_text())["summary"].get(x)
+                       for x in ("f_queries_per_instance", "proposer_tokens_per_instance", "wall_s",
+                                 "f_model_queries")}
+                   for k, d in (("control", ctrl), ("a", arm))}
+    return _write_report(rep, root, rep_json, rep_md, meta)
+
+
+def _canary_md(rep: dict) -> list:
+    cr = rep.get("canary_report_only") or {}
+    if not cr.get("shards"):
+        return []
+    L = ["", "Canary per hook shard (the torch versions are report-only; the binding check is |delta| <= 1e-5 per "
+             "probe):", "", "| shard | max abs delta | canary torch | host torch | match |", "|---|---|---|---|---|"]
+    L += [f"| {sh} | {v['max_abs_delta']} | {v['canary_torch_version']} | {v['host_torch_version']} | "
+          f"{v['torch_versions_match']} |" for sh, v in cr["shards"].items()]
+    if cr.get("torch_version_flag"):
+        L += ["", f"Flag (descriptive, not VOID): {cr['torch_version_flag']}"]
+    return L
 
 
 def render_md(rep: dict, title="B4 futility screen (arm a vs R0, seeds_fresh)") -> str:
     L = [f"# {title}", "", f"**Status: {rep['status']}.** {rep['wording']}", "", f"Rule: {rep['rule']}", ""]
     if rep["status"] == "VOID":
-        return "\n".join(L + ["Void reasons:", ""] + [f"- {r}" for r in rep["void_reasons"]]) + "\n"
-    if "paired" not in rep:          # an INSTRUMENT FAULT found before the arm ran (R0's shard arguments, edit 7)
+        return "\n".join(L + ["Void reasons:", ""] + [f"- {r}" for r in rep["void_reasons"]] + _canary_md(rep)) + "\n"
+    if "paired" not in rep:          # an INSTRUMENT FAULT on R0's shard arguments (edit 7): no paired table
         return "\n".join(L + ["Instrument fault reasons:", ""]
-                         + [f"- {r}" for r in rep.get("instrument_fault_reasons", [])]) + "\n"
+                         + [f"- {r}" for r in rep.get("instrument_fault_reasons", [])] + _canary_md(rep)) + "\n"
     d, p = rep.get("decision"), rep["paired"]
     L += ["| | value |", "|---|---|"] + [f"| {k} | {v} |" for k, v in p.items()]
     if d:
@@ -1965,7 +2169,7 @@ def render_md(rep: dict, title="B4 futility screen (arm a vs R0, seeds_fresh)") 
         L += ["", f"Hook: {h.get('calls')} calls; penalty band (invalid state or critic error) share "
                   f"{h['penalty_share_calls']} (max {h['penalty_share_max']}; split {h['penalty_split_calls']}); "
                   f"GO credited to the critic: {h['go_credited_to_critic']}."]
-    return "\n".join(L) + "\n"
+    return "\n".join(L + _canary_md(rep)) + "\n"
 
 
 # ----------------------------------------------------------------------------- dry run

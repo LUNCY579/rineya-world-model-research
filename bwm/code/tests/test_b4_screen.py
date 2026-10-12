@@ -1,5 +1,7 @@
 """Stub tests for scripts/b4_screen.py (B4 futility screen runner, DRAFT; research/PREREG_B4_SCREEN_DRAFT.md; RCX
-co-sign review 9dd352ee..., 13 required edits).
+co-sign review 9dd352ee..., 13 required edits, D-80; the canary 9e9ad339... and RCX's low items, D-80 follow-up / D-81).
+The registered canary file is read torch-free (schema, probes, counters); its values are checked only by the CPU
+pre-flight `b4_screen.py canary`, never here.
 
 CPU only, pure python: no torch/transformers/peft and no model. The pinned planner is executed from its sha-verified
 bytes with a stub bwmn.lm; the RCX hook module is loaded through the runner's sha-verifying importer and its GNN forward
@@ -278,31 +280,87 @@ def _write_canary(path, hook_factory, probes_states, **over):
 
 
 @NEEDS_RCX
-def test_check_canary(tmp_path, hook_mod, planner, monkeypatch):                 # edit 8
+def test_check_canary(tmp_path, hook_mod, planner, monkeypatch):                 # edit 8; D-80 follow-up
     B, _ = planner
     Stub = S.make_stub_hook_class(hook_mod)
     objs, init, goal = _goal_instance(B)
     on = sorted(f for f in init if f[0] == "on")
     states = [(init, goal, True), (B.step(init, ("unstack", on[0][1], on[0][2]))[0] if B.applicable(
         init, ("unstack", on[0][1], on[0][2])) else init, goal, True), (init | {("ontable", on[0][1])}, goal, False)]
-    sha, rec = _write_canary(tmp_path / "c.json", lambda: Stub(**S.HOOK_KWARGS), states)
+    sha, rec = _write_canary(tmp_path / "c.json", lambda: Stub(**S.HOOK_KWARGS), states, torch_version="2.6.0+cu124")
     r = S.check_canary(lambda: Stub(**S.HOOK_KWARGS), tmp_path / "c.json", want_sha=sha)
     assert r["probes"] == 3 and r["max_abs_delta"] == 0.0 and r["counters_match"] and r["failures"] == []
+    assert r["abs_delta_by_probe"] == {"p00": 0.0, "p01": 0.0, "p02": 0.0}
+    assert r["counters_after_all"]["calls"] == 3 and r["counters_after_all"]["invalid_states"] == 1
+    assert r["canary_torch_version"] == "2.6.0+cu124" and r["host_torch_version"] is None   # torch is not loaded here
+    assert r["torch_versions_match"] is None and _no_heavy() == []
+    r = S.check_canary(lambda: Stub(**S.HOOK_KWARGS), tmp_path / "c.json", want_sha=sha, host_torch_version="2.5.1")
+    assert r["torch_versions_match"] is False and r["failures"] == []           # a mismatch is report-only: passes
+    r = S.check_canary(lambda: Stub(**S.HOOK_KWARGS), tmp_path / "c.json", want_sha=sha,
+                       host_torch_version="2.6.0+cu124")
+    assert r["torch_versions_match"] is True
     with pytest.raises(S.PinError):                                              # other bytes than registered
         S.check_canary(lambda: Stub(**S.HOOK_KWARGS), tmp_path / "c.json", want_sha="0" * 64)
     monkeypatch.setattr(S, "CANARY_SHA256", None)
     with pytest.raises(S.PinError, match="placeholder"):                         # no registered canary: refuse
         S.check_canary(lambda: Stub(**S.HOOK_KWARGS), tmp_path / "c.json")
+    with pytest.raises(S.PinError, match="placeholder"):
+        S.load_canary(tmp_path / "c.json")
     rec["probes"][0]["expected"] += 2e-5                                          # beyond 1e-5
     (tmp_path / "d.json").write_text(json.dumps(rec))
-    with pytest.raises(S.CanaryError):
+    with pytest.raises(S.CanaryError, match="p00"):
         S.check_canary(lambda: Stub(**S.HOOK_KWARGS), tmp_path / "d.json", want_sha=S.sha256_file(tmp_path / "d.json"))
     for over in ({"hook_call": {"path": S.GNN_REL, "invalid_policy": "raw", "hybrid_lambda": 1.0}},
                  {"tolerance_abs": 1e-3}, {"expected_counters_after_all": {"calls": 99}},
-                 {"pins_sha256": {"rcx/bw/encode.py": "0" * 64}}):
+                 {"expected_counters_after_all": None}, {"expected_counters_after_all": {}},   # RCX low item 4
+                 {"probes": []}, {"pins_sha256": {"rcx/bw/encode.py": "0" * 64}}):
         sha2, _ = _write_canary(tmp_path / "e.json", lambda: Stub(**S.HOOK_KWARGS), states, **over)
         with pytest.raises(S.CanaryError):
             S.check_canary(lambda: Stub(**S.HOOK_KWARGS), tmp_path / "e.json", want_sha=sha2)
+    _, rec3 = _write_canary(tmp_path / "f.json", lambda: Stub(**S.HOOK_KWARGS), states)
+    rec3.pop("expected_counters_after_all")                                       # the key absent altogether
+    (tmp_path / "f.json").write_text(json.dumps(rec3))
+    made = []
+    with pytest.raises(S.CanaryError, match="expected_counters_after_all"):
+        S.check_canary(lambda: made.append(1) or Stub(**S.HOOK_KWARGS), tmp_path / "f.json",
+                       want_sha=S.sha256_file(tmp_path / "f.json"))
+    assert made == []                                                              # refused before any hook is built
+
+
+@NEEDS_RCX
+def test_real_canary_file_schema_torch_free(hook_mod):                          # RCX low item 8; D-80 follow-up
+    """The registered canary (RCX commit 42cbfcc) read without torch: sha, D-76a call, tolerance, pins, the 25 probes
+    (20 consistent from E07 test and E07b TEST-B, 5 flagged inconsistent) and the expected counters."""
+    p = S.RCX_ROOT / S.CANARY_REL
+    assert S.CANARY_SHA256 == "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a"
+    c = S.load_canary(p)                                                           # sha + schema, torch-free
+    assert S.sha256_file(p) == S.CANARY_SHA256 and float(c["tolerance_abs"]) == S.CANARY_TOL
+    assert c["hook_call"] == {"path": S.GNN_REL, **S.HOOK_KWARGS}
+    pins = {**S.RCX_CODE_PINS, S.GNN_REL: S.GNN_SHA256, S.GNN_SIDECAR_REL: S.GNN_SIDECAR_SHA256,
+            S.E07_INSTANCES_REL: S.E07_INSTANCES_SHA256}
+    assert c["pins_sha256"] == pins
+    probes = c["probes"]
+    ids = [x["id"] for x in probes]
+    assert len(probes) == 25 and len(set(ids)) == 25
+    assert sum(bool(x["consistent"]) for x in probes) == 20
+    exp = c["expected_counters_after_all"]
+    assert set(exp) == set(hook_mod.COUNTERS)
+    assert {k: exp[k] for k in ("calls", "evaluations", "model_evals", "invalid_states", "fallbacks")} == \
+        {"calls": 25, "evaluations": 25, "model_evals": 20, "invalid_states": 5, "fallbacks": 5}
+    assert all(exp[k] == 0 for k in ("encode_errors", "model_errors", "nonfinite", "failsafe", "analysis_errors"))
+    assert c["torch_version"] == "2.6.0+cu124" and c["torch_threads"] == 1
+    sf = json.loads((ROOT / S.SEEDS_FRESH_REL).read_text())
+    sf_keys = {json.dumps((sorted(r["objs"]), sorted(map(list, r["goal"])))) for r in sf}
+    for x in probes:
+        state, goal = frozenset(map(tuple, x["state"])), frozenset(map(tuple, x["goal"]))
+        ok, _ = hook_mod.is_consistent(state, goal)
+        assert ok is bool(x["consistent"])                                         # the flag is the hook's own
+        assert (x["expected"] >= hook_mod.PENALTY) is (not x["consistent"])      # penalty band iff inconsistent
+        assert x["expected"] < hook_mod.FAILSAFE
+        assert x["instance_id"].split("/")[0] in ("test", "testb")               # never seeds_fresh
+        assert json.dumps((sorted(x["objs"]), sorted(map(list, goal)))) not in sf_keys
+    assert sum(x["instance_id"].startswith("testb/") for x in probes) == 10
+    assert _no_heavy() == []
 
 
 # ----------------------------------------------------------------------------- dry-run models
@@ -546,6 +604,16 @@ def test_void_reasons():                                                 # edit 
         assert S.void_reasons(dict(ok, counters={"model_evals": 10, k: 1})) == [f"hook {k} = 1"]
     assert S.void_reasons(dict(ok, counters={"model_evals": 0})) == ["hook model_evals = 0"]
     assert S.void_reasons(dict(ok, canary={"shard_0of4": None})) == ["shard_0of4: no passed canary"]
+    assert S.void_reasons(dict(ok, canary={"shard_0of4": ["x"]})) == ["shard_0of4: no passed canary"]  # malformed
+    assert S.canary_report({"canary": {"shard_0of4": ["x"]}})["shards"]["shard_0of4"]["max_abs_delta"] is None
+    per = {"shard_0of4": 7, "shard_1of4": 0}                              # RCX low item 7: per shard as well
+    assert S.void_reasons(dict(ok, model_evals_by_shard=per)) == ["shard_1of4: hook model_evals = 0"]
+    can = {"failures": [], "counters_match": True, "max_abs_delta": 0.0, "canary_torch_version": "2.6.0+cu124",
+           "host_torch_version": "2.7.0", "torch_versions_match": False}
+    assert S.void_reasons(dict(ok, canary={"shard_0of4": can})) == []    # a torch mismatch is never VOID
+    cr = S.canary_report({"canary": {"shard_0of4": can}})
+    assert cr["torch_version_mismatch_shards"] == ["shard_0of4"] and "not VOID" in cr["torch_version_flag"]
+    assert cr["shards"]["shard_0of4"]["max_abs_delta"] == 0.0
 
 
 def test_merge_shards_uses_item7_merge_after_hook_merged(tmp_path, monkeypatch):
@@ -573,6 +641,7 @@ def test_merge_shards_uses_item7_merge_after_hook_merged(tmp_path, monkeypatch):
     summ = json.loads((tmp_path / "summary.json").read_text())["summary"]
     assert summ["n"] == 3 and summ["val_success"] == pytest.approx(2 / 3) and summ["f_model_queries"] == 20
     assert hook["calls"] == 6 and hook["penalty_calls"] == 1 and hook["counters"] == {"calls": 6}
+    assert hook["model_evals_by_shard"] == {"shard_0of2": 0, "shard_1of2": 0}
     assert hook["penalty_calls_invalid_state"] == 1 and set(hook["canary"]) == {"shard_0of2", "shard_1of2"}
     (tmp_path / "shard_1of2" / "hook.json").unlink()
     with pytest.raises(S.PinError):                                      # every hook shard must have its record
@@ -699,9 +768,14 @@ def test_freeze_guard_covers_all_item7_outputs(tmp_path):              # edit 9
         with pytest.raises(SystemExit, match="can no longer be frozen"):
             S.stage_freeze(_ns(tmp_path, allow_after_r0=True), root=tmp_path, rcx_root=tmp_path)
         (tmp_path / marker).unlink()
+    assert S.closing_markers(tmp_path) == []
+    log.write_text(log.read_text() + '{\n "systems": {},\n "release_gate_reading": "not replicated"\n}\n')
+    assert S.closing_markers(tmp_path) == [f"{S.BW_SEEDS_LOG_REL} (contains 'release_gate_reading')"]  # low item 5
+    with pytest.raises(SystemExit, match="can no longer be frozen"):     # item 7's reading is in the log
+        S.stage_freeze(_ns(tmp_path, allow_after_r0=True), root=tmp_path, rcx_root=tmp_path)
 
 
-def _registered_texts(tmp_path, runner=None, tests=None, addendum_runner=None):
+def _registered_texts(tmp_path, runner=None, tests=None, addendum_runner=None, addendum_prereg=None):
     tests_file = tmp_path / S.TESTS_REL
     tests_file.parent.mkdir(parents=True, exist_ok=True)
     if not tests_file.exists():
@@ -709,18 +783,33 @@ def _registered_texts(tmp_path, runner=None, tests=None, addendum_runner=None):
     runner = runner or S.sha256_file(Path(S.__file__))
     tests = tests or S.sha256_file(tests_file)
     (tmp_path / "PREREG_B4_SCREEN.md").write_text("\n".join(_HEAD).format(r=runner, t=tests))
-    (tmp_path / "PREREG_ITEM7_ADDENDUM_A.md").write_text(f"runner `{addendum_runner or runner}`\n")
+    prereg_sha = addendum_prereg or S.sha256_file(tmp_path / "PREREG_B4_SCREEN.md")
+    (tmp_path / "PREREG_ITEM7_ADDENDUM_A.md").write_text(f"| | |\n|---|---|\n| Screen prereg (final) sha256 | "
+                                                          f"`{prereg_sha}` |\n\nrunner `{addendum_runner or runner}`\n")
     return _ns(tmp_path, prereg="PREREG_B4_SCREEN.md", addendum="PREREG_ITEM7_ADDENDUM_A.md")
 
 
-def test_freeze_refuses_unregistered_runner_also_late(tmp_path, monkeypatch):   # edit 2
+def test_addendum_prereg_row():                                          # RCX low item 2
+    row = "| Screen prereg (final) sha256 | `" + "a" * 64 + "` |"
+    assert S.addendum_prereg_sha("| | |\n|---|---|\n" + row + "\n") == "a" * 64
+    for bad in ("| Screen prereg (final) sha256 | recorded at finalisation |", row + "\n" + row, ""):
+        with pytest.raises(S.PinError):
+            S.addendum_prereg_sha(bad)
+    draft = ROOT / "research/PREREG_ITEM7_ADDENDUM_A_DRAFT.md"
+    if draft.exists():                                                   # the draft cannot be frozen against
+        with pytest.raises(S.PinError):
+            S.addendum_prereg_sha(draft.read_text(encoding="utf-8"))
+
+
+def test_freeze_refuses_unregistered_runner_also_late(tmp_path, monkeypatch):   # edit 2; RCX low item 2
     r0, _ = _r0_record_as_bw_seeds_writes_it()
     (tmp_path / "runs").mkdir()
     (tmp_path / S.R0_FREEZE_REL).write_text(json.dumps(r0))
     d = tmp_path / S.R0_OUT_REL / "shard_0of4"
     d.mkdir(parents=True)
     (d / "progress.txt").write_text("x\n")                               # late: R0 has started
-    for kw in ({"runner": "0" * 64}, {"tests": "1" * 64}, {"addendum_runner": "2" * 64}):
+    for kw in ({"runner": "0" * 64}, {"tests": "1" * 64}, {"addendum_runner": "2" * 64},
+               {"addendum_prereg": "3" * 64}):                         # the addendum names another prereg
         ns = _registered_texts(tmp_path, **kw)
         ns.allow_after_r0 = True
         with pytest.raises(SystemExit, match="freeze refused"):
@@ -733,33 +822,52 @@ def test_freeze_refuses_unregistered_runner_also_late(tmp_path, monkeypatch):   
     assert not (tmp_path / S.FREEZE_REL).exists() and not (tmp_path / S.OUT_REL).exists()
 
 
-def _copy_rcx(dst, canary_text="{}"):
+def _schema_canary(torch_version="2.6.0+cu124"):
+    """A canary record that passes load_canary's schema check (its values are never computed: the freeze does not run
+    the hook)."""
+    return json.dumps({"what": "schema-only test canary", "tolerance_abs": 1e-5, "torch_version": torch_version,
+                       "hook_call": {"path": S.GNN_REL, "invalid_policy": "fallback", "hybrid_lambda": 1.0},
+                       "expected_counters_after_all": {"calls": 1}, "pins_sha256": dict(S.RCX_CODE_PINS),
+                       "probes": [{"id": "p0", "state": [["handempty"]], "goal": [], "consistent": True,
+                                   "expected": 0.0}]})
+
+
+def _copy_rcx(dst, canary_text=None):
     for rel in {**S.RCX_CODE_PINS, S.GNN_REL: 0, S.GNN_SIDECAR_REL: 0, S.E07_INSTANCES_REL: 0}:
         (dst / rel).parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(S.RCX_ROOT / rel, dst / rel)
     (dst / S.CANARY_REL).parent.mkdir(parents=True, exist_ok=True)
-    (dst / S.CANARY_REL).write_text(canary_text)
+    (dst / S.CANARY_REL).write_text(_schema_canary() if canary_text is None else canary_text)
     return S.sha256_file(dst / S.CANARY_REL)
 
 
 @NEEDS_RCX
-def test_freeze_success_snapshot_and_reverify(tmp_path, monkeypatch):     # edits 2, 6, 9, 10
+def test_freeze_success_snapshot_and_reverify(tmp_path, monkeypatch, capsys):     # edits 2, 6, 9, 10
     root, rcx = tmp_path / "root", tmp_path / "rcx"
     (root / "runs").mkdir(parents=True)
     r0, b2 = _r0_record_as_bw_seeds_writes_it()
     (root / S.R0_FREEZE_REL).write_text(json.dumps(r0))
     shutil.copyfile(ROOT / S.B2_BEAM_FREEZE_REL, root / S.B2_BEAM_FREEZE_REL)
-    monkeypatch.setattr(S, "CANARY_SHA256", _copy_rcx(rcx, '{"probes": []}'))
+    bad_sha = _copy_rcx(tmp_path / "rcx_bad", '{"probes": []}')        # a canary that fails the schema check
+    monkeypatch.setattr(S, "CANARY_SHA256", bad_sha)
     monkeypatch.setattr(S, "current_pins", lambda r, x, **k: {"stub": "pins"})
     monkeypatch.setattr(S, "precheck", lambda *a, **k: {"drop_ids": [], "n_after_drop": 40})
     monkeypatch.setattr(S, "check_adapters", lambda r, rec: None)
     monkeypatch.setattr(S, "runtime_versions", lambda: {"torch": "t", "nvidia_driver": "d"})
     ns = _registered_texts(root)
+    with pytest.raises(SystemExit, match="freeze refused"):
+        S.stage_freeze(ns, root=root, rcx_root=tmp_path / "rcx_bad")
+    assert not (root / S.FREEZE_REL).exists() and not (root / S.OUT_REL).exists()
+    monkeypatch.setattr(S, "CANARY_SHA256", _copy_rcx(rcx))
     assert S.stage_freeze(ns, root=root, rcx_root=rcx) == 0
+    assert "WARNING (report-only, not a refusal)" in capsys.readouterr().out   # canary torch 2.6.0+cu124 vs host "t"
     rec = json.loads((root / S.FREEZE_REL).read_text())
     assert "go_max_p_one_sided" not in rec["rule"] and rec["late_freeze"] is False
     assert rec["registered"]["runner_sha256"] == S.sha256_file(Path(S.__file__)) == rec["runner_sha256"]
     assert rec["versions"] == {"torch": "t", "nvidia_driver": "d"} and rec["canary"]["sha256"] == S.CANARY_SHA256
+    assert rec["canary"]["canary_torch_version"] == "2.6.0+cu124" and rec["canary"]["host_torch_version_at_freeze"] == "t"
+    assert rec["canary"]["torch_versions_match_at_freeze"] is False                # recorded, not refused
+    assert rec["prereg"]["sha256"] == S.sha256_file(root / "PREREG_B4_SCREEN.md")
     assert set(rec["rcx_snapshot"]["files"]) == set(S.rcx_snapshot_files())
     for rel, sha in rec["rcx_snapshot"]["files"].items():
         assert S.sha256_file(root / S.SNAPSHOT_REL / rel) == sha
@@ -767,6 +875,12 @@ def test_freeze_success_snapshot_and_reverify(tmp_path, monkeypatch):     # edit
     with pytest.raises(SystemExit, match="written once"):
         S.stage_freeze(ns, root=root, rcx_root=rcx)
     assert S.load_and_verify_freeze(root)["runner_sha256"] == rec["runner_sha256"]
+    with monkeypatch.context() as mp:                                    # RCX low item 8: the placeholder path
+        mp.setattr(S, "CANARY_SHA256", None)
+        with pytest.raises(S.PinError, match="canary"):
+            S.load_and_verify_freeze(root)
+        with pytest.raises(S.PinError, match="placeholder"):
+            S.rcx_snapshot_files()
     mod, imp = S.load_rcx_hook_module(root / S.SNAPSHOT_REL)              # run and analyze load from the snapshot
     try:
         assert Path(mod.__file__).resolve() == (root / S.SNAPSHOT_REL / "rcx/bw/b4_hook.py").resolve()
@@ -843,10 +957,11 @@ def screen_tree(tmp_path_factory):
         probes = [(it["init"], it["goal"], True) for it in inst[:3]]
         on = sorted(f for f in inst[0]["init"] if f[0] == "on") or [("on", "x", "y")]
         probes.append((inst[0]["init"] | {("holding", on[0][1])}, inst[0]["goal"], False))
-        canary_sha, _ = _write_canary(snap / S.CANARY_REL, lambda: _registered_stub(mod, snap), probes)
+        canary_sha, _ = _write_canary(snap / S.CANARY_REL, lambda: _registered_stub(mod, snap), probes,
+                                      torch_version="2.6.0+cu124")          # != the stub torch: report-only flag
     finally:
         S.unload_rcx(imp)
-    captured, made, hold = [], [], {}
+    captured, made, hold, roots = [], [], {}, []
     real_plan_beam = BP.plan_beam
 
     def spy(*a, **k):
@@ -854,6 +969,8 @@ def screen_tree(tmp_path_factory):
         return real_plan_beam(*a, **k)
 
     def fake_loader(rcx_root=None, pins=None):
+        roots.append(rcx_root)
+        assert Path(rcx_root).resolve() == snap.resolve()               # run-shard loads RCX code from the snapshot
         if hold.get("imp"):
             S.unload_rcx(hold["imp"])
         m, i2 = REAL_LOADER(S.RCX_ROOT)
@@ -903,18 +1020,22 @@ def screen_tree(tmp_path_factory):
             if hold.get("imp"):
                 S.unload_rcx(hold["imp"])
         S.merge_shards(root / S.OUT_REL / "a_beam", S.SHARDS)
-    yield {"root": root, "inst": inst, "rec": rec, "captured": captured, "made": made, "B": B}
+    yield {"root": root, "inst": inst, "rec": rec, "captured": captured, "made": made, "B": B, "roots": roots}
 
 
 def test_stage_run_shard_passes_the_meter_and_counts_match(screen_tree):  # edit 13
     root, captured, made = screen_tree["root"], screen_tree["captured"], screen_tree["made"]
     assert len(captured) == S.SHARDS and len(made) == 2 * S.SHARDS       # per shard: the canary hook, the run hook
+    assert len(screen_tree["roots"]) == S.SHARDS                         # every shard loaded from the snapshot
     for i, unmet in enumerate(captured):
         assert isinstance(unmet, S.HookMeter) and unmet.hook is made[2 * i + 1] and unmet.classify is not None
         h = json.loads((root / S.OUT_REL / f"a_beam/shard_{i}of4/hook.json").read_text())
         assert h["meter"]["calls"] == unmet.calls == h["describe_end"]["counters"]["calls"] > 0
         assert h["describe_start"]["counters"]["calls"] == 0
         assert h["canary"]["probes"] == 4 and h["canary"]["counters_match"] and h["canary"]["failures"] == []
+        assert h["canary"]["canary_torch_version"] == "2.6.0+cu124"      # D-80 follow-up: both versions recorded
+        assert h["canary"]["host_torch_version"] == STUB_VERSIONS["torch"] and h["canary"]["torch_versions_match"] is False
+        assert h["canary"]["max_abs_delta"] == 0.0 and len(h["canary"]["abs_delta_by_probe"]) == 4
         assert "rcx/bw/models.py" in h["rcx_modules_executed"] and h["torch_version"] == STUB_VERSIONS["torch"]
         s = json.loads((root / S.OUT_REL / f"a_beam/shard_{i}of4/summary.json").read_text())
         assert s["args"] == screen_tree["rec"]["args"] and s["shard"] == f"{i}/4" and s["arm"] == "a"
@@ -953,8 +1074,14 @@ def test_stage_analyze_end_to_end(screen_tree, tmp_path, monkeypatch):     # edi
     assert "control_failures_unmet_at_submitted_prefix" in rep and "arm_failures_unmet_at_submitted_prefix" in rep
     assert rep["attempts"]["starts_per_shard"] == {f"a {i}/4": 1 for i in range(4)}
     inputs = json.loads((root / S.OUT_REL / "ANALYSIS_INPUTS.json").read_text())
-    assert set(S.r0_files(root)) <= set(inputs) and S.ADDENDUM_A_INPUTS_REL in inputs
-    assert (root / S.OUT_REL / "B4S_REPORT.md").read_text().startswith("# B4 futility screen")
+    assert set(S.r0_files(root)) <= set(inputs) and S.ADDENDUM_A_INPUTS_REL in inputs and S.ATTEMPTS_REL in inputs
+    cr = rep["canary_report_only"]                                        # D-80 follow-up: report-only, never VOID
+    assert set(cr["shards"]) == {f"shard_{i}of4" for i in range(4)}
+    assert all(v["max_abs_delta"] == 0.0 and v["canary_torch_version"] == "2.6.0+cu124"
+               and v["host_torch_version"] == STUB_VERSIONS["torch"] for v in cr["shards"].values())
+    assert cr["torch_version_mismatch_shards"] == sorted(cr["shards"]) and "not VOID" in cr["torch_version_flag"]
+    md = (root / S.OUT_REL / "B4S_REPORT.md").read_text()
+    assert md.startswith("# B4 futility screen") and "| shard_0of4 | 0.0 | 2.6.0+cu124 |" in md
     with pytest.raises(SystemExit, match="written once"):
         S.stage_analyze(argparse.Namespace(rerun=False), root=root, rcx_root=S.RCX_ROOT)
     with pytest.raises(SystemExit, match="INSTRUMENT_FAULT"):            # no re-run without a fault report
@@ -991,12 +1118,18 @@ REFUSALS = {   # edit 1: each of these refuses (no report is written)
     "hook_json_missing": lambda r: (r / A / "shard_2of4/hook.json").unlink(),
     "hook_calls_below_n": lambda r: _edit_json(r / A / "shard_1of4/hook.json", lambda d: d["meter"].update(calls=1)),
     "arm_row_without_val": lambda r: _edit_rows(r / A / "plans.jsonl", lambda rows: rows[0].pop("val")),
-    "r0_shard_args": lambda r: _edit_json(r / S.R0_OUT_REL / "shard_0of4/summary.json",
-                                          lambda d: d["args"].update(W=8)),
     "arm_shard_args": lambda r: _edit_json(r / A / "shard_3of4/summary.json", lambda d: d["args"].update(E=48)),
     "not_the_registered_hook": lambda r: _edit_json(r / A / "shard_0of4/hook.json",
                                                     lambda d: d["describe_end"].update(hybrid_lambda=0.0)),
+    "attempts_deleted": lambda r: (r / S.ATTEMPTS_REL).unlink(),         # RCX low item 3
+    "attempts_end_event_missing": lambda r: (r / S.ATTEMPTS_REL).write_text(
+        "".join(x + "\n" for x in (r / S.ATTEMPTS_REL).read_text().splitlines()[:-1])),
+    "attempts_end_event_twice": lambda r: S.log_attempt(r, stage="run-shard", arm="a", shard="2/4", event="end"),
 }
+
+
+def _r0_shard_args_changed(r):
+    _edit_json(r / S.R0_OUT_REL / "shard_0of4/summary.json", lambda d: d["args"].update(W=8))
 
 
 @pytest.mark.parametrize("case", sorted(REFUSALS))
@@ -1027,10 +1160,22 @@ VOIDS = {   # edits 8 and 9: a VOID report, never a GO/NO-GO (hook cases: in the
     "model_errors": lambda r: _edit_shard_hooks(r, lambda d: d["describe_end"]["counters"].update(model_errors=2),
                                                 shards=[2]),
     "model_evals_zero": lambda r: _edit_shard_hooks(r, lambda d: d["describe_end"]["counters"].update(model_evals=0)),
+    "model_evals_zero_in_one_shard": lambda r: _edit_shard_hooks(       # RCX low item 7
+        r, lambda d: d["describe_end"]["counters"].update(model_evals=0), shards=[1]),
     "canary_missing": lambda r: _edit_shard_hooks(r, lambda d: d.update(canary=None), shards=[0]),
     "addendum_a0_missing": lambda r: (r / S.ADDENDUM_A_INPUTS_REL).unlink(),
     "canary_failed_event": lambda r: S.log_attempt(r, stage="run-shard", arm="a", shard="1/4", event="canary_failed",
                                                    error="probe c03"),
+    # RCX low item 1: R0's shard summary changed after A.0 -> VOID, although check_r0_shards would also refuse
+    "r0_shard_summary_changed_after_a0": _r0_shard_args_changed,
+    # a VOID wins over refusals: model errors in a shard record and a hook_merged.json that differs from the shards
+    "void_with_refusal": lambda r: (_edit_shard_hooks(r, lambda d: d["describe_end"]["counters"].update(model_errors=1),
+                                                      shards=[3]),
+                                    _edit_json(r / A / "hook_merged.json", lambda d: d.update(calls=0))),
+    # ... also when a shard hook record is malformed (wrong JSON shape): collected as a refusal, never raised
+    "void_with_malformed_hook_record": lambda r: (VOIDS["r0_differs_from_addendum_a0"](r),
+                                                  _edit_json(r / A / "shard_0of4/hook.json",
+                                                             lambda d: d.update(describe_end=None))),
 }
 
 
@@ -1041,6 +1186,19 @@ def test_stage_analyze_void(screen_tree, tmp_path, monkeypatch, case):
     rep = _analyze(root, monkeypatch, screen_tree)
     assert rep["status"] == "VOID" and rep["void_reasons"] and "decision" not in rep
     assert rep["wording"] == S.WORDING["VOID"]
+    if case == "model_evals_zero_in_one_shard":
+        assert rep["void_reasons"] == ["shard_1of4: hook model_evals = 0"]
+    if case == "r0_shard_summary_changed_after_a0":
+        assert any("sha256 differs" in x for x in rep["void_reasons"])
+        assert any("'W': (8, 4)" in x for x in rep["r0_args_problems"])
+    if case == "void_with_refusal":
+        assert rep["void_reasons"] == ["hook model_errors = 1"]
+        assert any("hook_merged.json" in x for x in rep["refusal_problems_report_only"])
+    if case == "void_with_malformed_hook_record":
+        assert any("sha256 differs" in x for x in rep["void_reasons"])
+        assert any("hook shard records" in x for x in rep["refusal_problems_report_only"])
+    if case not in ("canary_missing", "void_with_malformed_hook_record"):
+        assert set(rep["canary_report_only"]["shards"]) == {f"shard_{i}of4" for i in range(4)}
 
 
 def test_void_report_when_the_arm_never_ran_and_canary_failure_is_final(screen_tree, tmp_path, monkeypatch):
@@ -1052,10 +1210,30 @@ def test_void_report_when_the_arm_never_ran_and_canary_failure_is_final(screen_t
         assert rep["status"] == "VOID" and any("not completed" in x for x in rep["void_reasons"])
     r = _copy_tree(screen_tree, tmp_path / "rerun_after_canary")             # no shard runs after a canary failure
     (r / A / "shard_1of4" / "summary.json").unlink()
+    _edit_rows(r / S.ATTEMPTS_REL, lambda ev: ev.remove(next(e for e in ev if e["event"] == "end"
+                                                             and e["shard"] == "1/4")))
     VOIDS["canary_failed_event"](r)
     monkeypatch.setattr(S, "load_and_verify_freeze", lambda root: screen_tree["rec"])
     with pytest.raises(SystemExit, match="screen VOID"):
         S.stage_run_shard(argparse.Namespace(arm="a", shard="1/4"), root=r)
+    rep = _analyze(_copy_tree({"root": r}, tmp_path / "void_copy"), monkeypatch, screen_tree)
+    assert rep["status"] == "VOID" and any("canary failed" in x for x in rep["void_reasons"])
+    (r / S.ATTEMPTS_REL).unlink()                                        # RCX low item 3: deleting the record
+    monkeypatch.setattr(S.subprocess, "call", lambda *a, **k: pytest.fail("no shard may start"))
+    with pytest.raises(SystemExit, match="ATTEMPTS.jsonl missing"):      # ... does not erase the canary failure
+        S.stage_run_shard(argparse.Namespace(arm="a", shard="1/4"), root=r)
+    with pytest.raises(SystemExit):                                      # a refusal, never a reading
+        _analyze(r, monkeypatch, screen_tree)
+    assert not (r / S.OUT_REL / "B4S_REPORT.json").exists()
+    r2 = _copy_tree(screen_tree, tmp_path / "canary_first_shard")          # a canary failure on the very first shard
+    shutil.rmtree(r2 / A)
+    (r2 / S.ATTEMPTS_REL).unlink()
+    (r2 / A / "shard_0of4").mkdir(parents=True)                           # run-shard creates it before the canary
+    S.log_attempt(r2, stage="run-shard", arm="a", shard="0/4", event="start", warm_fcache=False, fcache_lines=0)
+    VOIDS["canary_failed_event"](r2)
+    (r2 / S.ATTEMPTS_REL).unlink()
+    with pytest.raises(SystemExit, match="ATTEMPTS.jsonl missing"):
+        S.stage_run_shard(argparse.Namespace(arm="a", shard="0/4"), root=r2)
 
 
 def test_stage_analyze_instrument_fault(screen_tree, tmp_path, monkeypatch):   # edit 7
@@ -1079,7 +1257,7 @@ def test_stage_run_guards(screen_tree, tmp_path, monkeypatch):           # edits
         with pytest.raises(SystemExit, match="screen VOID"):
             S.stage_run(argparse.Namespace(rerun=False), root=r)
     r = _copy_tree(screen_tree, tmp_path / "args")
-    REFUSALS["r0_shard_args"](r)
+    _r0_shard_args_changed(r)
     with pytest.raises(S.PinError):
         S.stage_run(argparse.Namespace(rerun=False), root=r)
 
@@ -1115,18 +1293,37 @@ def test_r0_args_fault_is_an_instrument_fault_that_unlocks_the_rerun(screen_tree
         _edit_json(r2 / S.R0_OUT_REL / f"shard_{i}of4/summary.json", lambda d: d["args"].update(W=8))
     rep = _analyze(r2, monkeypatch, screen_tree)
     assert rep["status"] == "VOID" and rep["r0_args_problems"]
+    r3 = _copy_tree(screen_tree, tmp_path / "after_the_arm")            # R0's args fail although arm a ran and A.0
+    for i in range(S.SHARDS):                                            # matches: INSTRUMENT FAULT > refusal
+        _edit_json(r3 / S.R0_OUT_REL / f"shard_{i}of4/summary.json", lambda d: d["args"].update(W=8))
+    table = {rel: {"sha256": S.sha256_file(r3 / rel)} for rel in S.r0_files(r3)}
+    (r3 / S.ADDENDUM_A_INPUTS_REL).write_text(json.dumps({"files": table}))
+    rep = _analyze(r3, monkeypatch, screen_tree)
+    assert rep["status"] == "INSTRUMENT_FAULT" and rep["decision"] is None and "paired" not in rep
+    assert rep["wording"] == S.WORDING["INSTRUMENT_FAULT_R0_ARGS"] and S._rerun_allowed(r3)
+    assert set(rep["canary_report_only"]["shards"]) == {f"shard_{i}of4" for i in range(4)}   # the arm ran: shown
+    assert "| shard_0of4 | 0.0 | 2.6.0+cu124 |" in (r3 / S.OUT_REL / "B4S_REPORT.md").read_text()
+
+
+def _stand_in_rerun_shards(root, rec):
+    """Stand-ins for the re-run shards (the GPU path is tested above), with the attempt records run-shard writes."""
+    out = root / S.OUT_REL
+    for i in range(S.SHARDS):
+        dc, da = out / f"rerun/c_beam/shard_{i}of4", out / f"rerun/a_beam/shard_{i}of4"
+        shutil.copytree(root / S.R0_OUT_REL / f"shard_{i}of4", dc)
+        _edit_json(dc / "summary.json", lambda d, i=i: d.update(args=rec["args"], arm="rerun_c", shard=f"{i}/4"))
+        shutil.copytree(out / f"a_beam/shard_{i}of4", da)
+        for arm in ("rerun_c", "rerun_a"):
+            for ev in ("start", "end"):
+                S.log_attempt(root, stage="run-shard", arm=arm, shard=f"{i}/4", event=ev)
+    return out
 
 
 def test_rerun_after_instrument_fault(screen_tree, tmp_path, monkeypatch):   # edit 7: c and a re-run, then analysed
     root = _copy_tree(screen_tree, tmp_path)
     _edit_rows(root / A / "plans.jsonl", _first_arm_round1_mismatch)
     assert _analyze(root, monkeypatch, screen_tree)["status"] == "INSTRUMENT_FAULT"
-    out, rec = root / S.OUT_REL, screen_tree["rec"]
-    for i in range(S.SHARDS):                     # stand-ins for the re-run shards (the GPU path is tested above)
-        dc, da = out / f"rerun/c_beam/shard_{i}of4", out / f"rerun/a_beam/shard_{i}of4"
-        shutil.copytree(root / S.R0_OUT_REL / f"shard_{i}of4", dc)
-        _edit_json(dc / "summary.json", lambda d, i=i: d.update(args=rec["args"], arm="rerun_c", shard=f"{i}/4"))
-        shutil.copytree(out / f"a_beam/shard_{i}of4", da)
+    out = _stand_in_rerun_shards(root, screen_tree["rec"])
     monkeypatch.setattr(S.subprocess, "call", lambda *a, **k: pytest.fail("no shard may start"))
     assert S.stage_run(argparse.Namespace(rerun=True), root=root) == 0
     assert (out / "rerun/c_beam/summary.json").exists() and not (out / "rerun/c_beam/hook_merged.json").exists()
@@ -1135,6 +1332,24 @@ def test_rerun_after_instrument_fault(screen_tree, tmp_path, monkeypatch):   # e
     rr = json.loads((out / "B4S_REPORT_RERUN.json").read_text())
     assert rr["status"] in ("GO", "NO-GO") and set(rr["arms"]) == {"c", "a"} and rr["meta"]["rerun"]
     assert (out / "ANALYSIS_INPUTS_RERUN.json").exists()
+
+
+def test_rerun_identity_fault_is_terminal(screen_tree, tmp_path, monkeypatch):   # RCX low item 6: one name
+    root = _copy_tree(screen_tree, tmp_path)
+    _edit_rows(root / A / "plans.jsonl", _first_arm_round1_mismatch)
+    assert _analyze(root, monkeypatch, screen_tree)["status"] == "INSTRUMENT_FAULT"
+    out = _stand_in_rerun_shards(root, screen_tree["rec"])
+    monkeypatch.setattr(S.subprocess, "call", lambda *a, **k: pytest.fail("no shard may start"))
+    S.stage_run(argparse.Namespace(rerun=True), root=root)
+    _edit_rows(out / "rerun/a_beam/plans.jsonl", _first_arm_round1_mismatch)
+    S.stage_analyze(argparse.Namespace(rerun=True), root=root, rcx_root=S.RCX_ROOT)
+    rr = json.loads((out / "B4S_REPORT_RERUN.json").read_text())
+    assert rr["status"] == "INSTRUMENT_FAULT_RERUN" and rr["decision"] is None
+    assert rr["wording"] == S.WORDING["INSTRUMENT_FAULT_RERUN"] and "INSTRUMENT_FAULT_RERUN" in rr["wording"]
+    assert "no further re-run" in rr["wording"]
+    assert S.stage_run(argparse.Namespace(rerun=True), root=root) == 0   # the re-run shards ran once: nothing starts
+    with pytest.raises(SystemExit, match="written once"):
+        S.stage_analyze(argparse.Namespace(rerun=True), root=root, rcx_root=S.RCX_ROOT)
 
 
 # ----------------------------------------------------------------------------- pre-check and hygiene (prereg 4.2-4.3)

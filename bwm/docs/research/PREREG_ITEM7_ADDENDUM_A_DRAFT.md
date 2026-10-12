@@ -2,14 +2,14 @@
 
 | | |
 |---|---|
-| Status | **DRAFT**, written 2026-10-11 ~20:50 CDT; revised 2026-10-12 ~02:30 CDT for RCX's co-sign review (`COSIGN_REVIEW_B4_SCREEN.md`, commit 2657079, `9dd352ee…`; 13 required edits). BWM accepted all 13 as D-79, as recorded in RCX's `complementary/COLLABORATION.md` (commit f3031f6; the lead adds it to BWM's DECISIONS). Not registered. Becomes `research/PREREG_ITEM7_ADDENDUM_A.md` when its sha256 is recorded in DECISIONS. §B also needs RCX's co-signature (D-76a), which binds to the final shas in this header (§E). |
-| Screen prereg (final) sha256 | recorded at finalisation: the sha256 of `research/PREREG_B4_SCREEN.md`, which is finalised first |
+| Status | **DRAFT**, written 2026-10-11 ~20:50 CDT; revised 2026-10-12 ~02:30 CDT for RCX's co-sign review (`COSIGN_REVIEW_B4_SCREEN.md`, commit 2657079, `9dd352ee…`; 13 required edits). BWM accepted all 13 as D-80 (DECISIONS.md; also recorded in RCX's `complementary/COLLABORATION.md`, commits f3031f6 and af969cf). Revised again 2026-10-12 ~06:50 CDT for the final hash round (D-80 follow-up, D-81): the screen runner's canary sha set and RCX's low-severity items applied. Not registered. Becomes `research/PREREG_ITEM7_ADDENDUM_A.md` when its sha256 is recorded in DECISIONS. §B also needs RCX's co-signature (D-76a), which binds to the final shas in this header (§E). |
+| Screen prereg (final) sha256 | recorded at finalisation: the sha256 of `research/PREREG_B4_SCREEN.md`, which is finalised first, written as the full sha256 in backticks (the screen's freeze refuses unless this row names the sha256 of its `--prereg` file) |
 | Deadline | Registered before `scripts/bw_seeds.py freeze` writes any `runs/FREEZE_I7_*` (panel `top_now_cpu` item 6). |
 | State at writing | Re-checked 2026-10-12 01:41 CDT. `runs/FREEZE_I7_*`: none. `runs/BW_SEEDS/`: absent (no item-7 evaluation output exists). `BW_Fdelta_s1`, `BW_Fdelta_s2`: trained. `BW_Pa_v2_s2`: step 300/1000, cut by the 21:54 reboot, resumes from its checkpoint. `BW_Pa_v2_s3`: not trained. |
 | Base prereg | `PREREG_ITEM7_SEEDS.md`, sha256 `956a0dc4117c948065f40258be3a7a3e418f51c2b199c4bbb8e7f1337d88985d`. **It stays byte-identical.** |
 | Addendum code | `scripts/item7_addendum_a.py` sha256 `2a78ba81d6d905ad4cd1feda29057b3a0d43fbca7a9b281c14c2789f8ec8f4e7`; tests `tests/test_item7_addendum_a.py` (9 pass) sha256 `1fcc461f039fb74ccb2d8ab144518bbb493833268a7d2d1ebc91b75af2669479` |
-| Screen runner | `scripts/b4_screen.py` sha256 `3ca01448fbffb91d42c6167a0a90a3146366e401c7b4eca72cae54498f404489`; tests `tests/test_b4_screen.py` sha256 `0349b70b8a810432131de920bc4103ef699e38ba548002361b478d8f470fe440`. These are the same rows as the screen prereg's header, and they replace every earlier runner and test sha. The screen's freeze refuses unless this text names this runner sha. |
-| Decision source | D-75 (user, ~16:10: decision 1, GPU order with the B4 screen first after item 7); D-76a (RCX agreement on the screen); D-77; D-79; F-09; `research/NEXT_ANALYSIS_PANEL_2026-10-11.json` `final.top_now_cpu` items 2, 3 and 6. |
+| Screen runner | `scripts/b4_screen.py` sha256 `0b576b1f4136f7ced9b12bdc71219a6435cdd1733bd733d1908d241469df750f`; tests `tests/test_b4_screen.py` sha256 `8d2e2237a7de68cce2aed4c4909ed2452e578315bf09fe1a8944846a857824fc`. These are the same rows as the screen prereg's header, and they replace every earlier runner and test sha. The screen's freeze refuses unless this text names this runner sha. |
+| Decision source | D-75 (user, ~16:10: decision 1, GPU order with the B4 screen first after item 7); D-76a (RCX agreement on the screen); D-77; D-80 and its follow-up; D-81; F-09; `research/NEXT_ANALYSIS_PANEL_2026-10-11.json` `final.top_now_cpu` items 2, 3 and 6. |
 
 ## 0. What this addendum does and does not change
 
@@ -238,17 +238,21 @@ plus three short S-direct runs. The job resumes per shard, so it works; plan for
 - **The guard.** The freeze refuses if any item-7 output exists. That means any file under `runs/BW_SEEDS/` (R0_direct
   reveals per-instance outcomes, and a running shard's `progress.txt` shows per-round solve counts), or bundleI's log
   `runs/BW_SEEDS.stdout` once it shows that a run has started.
-- **Late freeze is mandatory, not optional.** If `b4s-freeze` fails, the late freeze (`--allow-after-r0`) is
-  mandatory, and it records the files present. There is no "or dropped".
-- **The window closes.** Once `runs/BW_SEEDS/SEEDS_REPORT.json` or `runs/BW_SEEDS/ADDENDUM_A_INPUTS.json` exists, the
-  freeze refuses outright, and the screen is void. A.0 therefore refuses unless the screen is frozen (§A.0).
+- **Late freeze is mandatory, not optional.** If `b4s-freeze` fails because an item-7 output exists, the late freeze
+  (`--allow-after-r0`) is mandatory, and it records the files present. There is no "or dropped".
+- **The window closes.** Once `runs/BW_SEEDS/SEEDS_REPORT.json` or `runs/BW_SEEDS/ADDENDUM_A_INPUTS.json` exists, or
+  bundleI's log `runs/BW_SEEDS.stdout` contains item 7's `release_gate_reading`, the freeze refuses outright, and the
+  screen is void. A.0 therefore refuses unless the screen is frozen (§A.0).
 - **The screen runs whatever item 7's outcome is.**
 - **Nothing can be chosen after R0's outputs are known, even with a late freeze.** Everything about the arm is fixed by
   the screen prereg: module, call, args, instances, drop rule, decision rule and VOID rule.
-- **Queue (the lead's change, not made by this draft).**
-  - Insert `b4s-freeze` between bundleI's `i7-freeze` and `i7-run`.
-  - If it fails, item 7 proceeds unchanged; the release gate is never blocked by the screen.
-  - The lead then holds `i7-analyze` and A.0 until the late freeze exists.
+- **Queue (the lead's change, D-81; not made by this draft).**
+  - bundleI runs `i7-freeze` → `b4s-freeze` → `i7-run` → `i7-a0-hash` (§A.0) → `i7-analyze` →
+    `i7-addendum-analyze`.
+  - A failing or refusing `b4s-freeze` stops the bundle before any R0 output exists, so the queue cannot void the
+    screen.
+  - Should an item-7 output nevertheless exist before the screen is frozen, the late freeze must come before
+    `i7-analyze` and A.0.
 
 ### B.4 The decision rule (verbatim from the screen prereg §5.2)
 
@@ -256,9 +260,10 @@ plus three short S-direct runs. The job resumes per shard, so it works; plan for
 > is always NO-GO). The one-sided sign p and the two-sided McNemar p are reported only and are not part of the rule
 > (D-77). If more than 5% of hook calls return a value in the penalty band (invalid state or critic error;
 > value ≥ 1,000), a GO is not credited to the learned critic alone and c+pen is mandatory in the full B4 (D-76a). The
-> screen is VOID on any hook model, encode, nonfinite or failsafe error, model_evals = 0, a failed canary, or R0
-> outputs that differ from §A.0's table; it is an INSTRUMENT FAULT if the round-1 identity check or the R0
-> shard-argument check fails. Precedence: VOID > INSTRUMENT FAULT > GO/NO-GO.
+> screen is VOID on any hook model, encode, nonfinite or failsafe error, model_evals = 0 (in any hook shard), a
+> failed canary, or R0 outputs that differ from §A.0's table; it is an INSTRUMENT FAULT if the round-1 identity check
+> or the R0 shard-argument check fails, and INSTRUMENT_FAULT_RERUN (terminal, no reading) if the pre-registered re-run
+> fails the identity check again. Precedence: VOID > INSTRUMENT FAULT > GO/NO-GO.
 
 The net ≥ 3 with p ≤ 0.20 rule of the earlier draft is superseded (D-77) and is not part of the frozen rule. The null
 false-GO rate of the registered rule is about 0.30-0.36 at plausible discordance and at most 0.44 at any discordance
@@ -295,7 +300,7 @@ false-GO rate of the registered rule is about 0.30-0.36 at plausible discordance
 - The screen's 40 are never pooled into B4.
 - B4's n, α, Holm family, arms and endpoints are not changed on screen data, and the screen's net and p are not
   quoted as effect estimates.
-- **Co-signing the screen does not co-sign B4.** Route (D-79): B4's prereg declares the screen's outcome as known at its
+- **Co-signing the screen does not co-sign B4.** Route (D-80): B4's prereg declares the screen's outcome as known at its
   registration and forbids any change to arm (a): its module, call and pins (screen prereg §8.1).
 
 ### B.8 Outcomes known at registration (co-sign edit 12)
@@ -312,13 +317,13 @@ As listed in the screen prereg §0.
 1. **Registration.**
    - Finalise `PREREG_B4_SCREEN.md`, then this addendum (its header takes the screen prereg's final sha).
    - Record both shas in DECISIONS.
-   - RCX co-signs §B and the screen prereg on the final shas (§E). Before that, RCX sends the canary sha, BWM writes it
-     into the runner, and the runner/test shas in both headers are updated.
-2. **bundleI:** train `BW_Pa_v2_s2` and `BW_Pa_v2_s3` → `bw_seeds.py freeze` → `b4_screen.py freeze` → `bw_seeds.py
-   run` → `bw_seeds.py analyze` (the registered item-7 tests). If `b4_screen.py freeze` failed, the late freeze comes
-   before `bw_seeds.py analyze`.
-3. **CPU, after item 7's analysis:** the A.0 hashing step (`item7_addendum_a.py hash`), then A.1-A.4
-   (`item7_addendum_a.py analyze`).
+   - RCX co-signs §B and the screen prereg on the final shas (§E). Before that: RCX sent the canary (`9e9ad339…`,
+     commit 42cbfcc), BWM wrote its sha into the runner, BWM's CPU pre-flight reproduced every probe exactly (screen
+     prereg §10), and the runner/test shas in both headers were updated (D-80 follow-up).
+2. **bundleI (D-81):** train `BW_Pa_v2_s2` and `BW_Pa_v2_s3` → `bw_seeds.py freeze` → `b4_screen.py freeze` →
+   `bw_seeds.py run` → the A.0 hashing step (`item7_addendum_a.py hash`) → `bw_seeds.py analyze` (the registered
+   item-7 tests). A failing `b4_screen.py freeze` stops the bundle before `bw_seeds.py run`.
+3. **CPU, in the same bundle after item 7's analysis:** A.1-A.4 (`item7_addendum_a.py analyze`).
 4. **The next BWM GPU turn:** `b4_screen.py run` (about 3.5 GPU-h), then `b4_screen.py analyze` (CPU), then
    `item7_addendum_a.py faudit-screen` (CPU). Then B6 (D-75.1).
 
@@ -337,3 +342,5 @@ As listed in the screen prereg §0.
 - **What finalisation may change.** Finalisation drops "DRAFT" from the title and changes only the Status row and the
   "Screen prereg (final) sha256" row of this header. `scripts/b4_screen.py final-diff --draft D --final F` refuses any
   other change, and RCX re-verifies that diff.
+- **The binding is checked.** The screen's freeze refuses unless the "Screen prereg (final) sha256" row names, as a
+  full sha256 in backticks, the sha256 of the screen prereg it is given (`--prereg`).

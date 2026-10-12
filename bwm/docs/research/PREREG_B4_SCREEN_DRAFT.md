@@ -2,13 +2,13 @@
 
 | | |
 |---|---|
-| Status | **DRAFT**, written 2026-10-11 ~20:45 CDT; revised 2026-10-12 ~02:30 CDT for RCX's co-sign review (`rineya-complementary-worktree/complementary/experiments/RCX-B4/COSIGN_REVIEW_B4_SCREEN.md`, commit 2657079, sha256 `9dd352ee…`: "co-sign with edits", 13 required edits). BWM accepted all 13 as D-79, as recorded in RCX's `complementary/COLLABORATION.md` (2026-10-12 ~01:50, commit f3031f6). BWM's DECISIONS.md D-79 entry does not carry it yet; the lead adds it there. Not frozen. Joint BWM-001 × RCX. BWM owns execution, the instances and the final text. RCX owns arm (a)'s module and co-signs (D-76a). The co-signature binds to the final shas in this header and to nothing else (§11). |
+| Status | **DRAFT**, written 2026-10-11 ~20:45 CDT; revised 2026-10-12 ~02:30 CDT for RCX's co-sign review (`rineya-complementary-worktree/complementary/experiments/RCX-B4/COSIGN_REVIEW_B4_SCREEN.md`, commit 2657079, sha256 `9dd352ee…`: "co-sign with edits", 13 required edits). BWM accepted all 13 as D-80 (DECISIONS.md; also recorded in RCX's `complementary/COLLABORATION.md`, commits f3031f6 and af969cf). Revised again 2026-10-12 ~06:50 CDT for the final hash round (D-80 follow-up, D-81): RCX's canary (commit 42cbfcc) registered and pre-flighted, the torch version made report-only, and RCX's low-severity items applied. Not frozen. Joint BWM-001 × RCX. BWM owns execution, the instances and the final text. RCX owns arm (a)'s module and co-signs (D-76a). The co-signature binds to the final shas in this header and to nothing else (§11). |
 | Written before | `runs/FREEZE_I7_*` exists and before any item-7 evaluation output exists. Re-checked at the revision (2026-10-12 01:41 CDT): no `runs/FREEZE_I7_*`, no `runs/BW_SEEDS/`, `BW_Pa_v2_s2` at step 300/1000, `BW_Pa_v2_s3` not trained. |
 | Registered by | `research/PREREG_ITEM7_ADDENDUM_A.md` §B (drafted as `research/PREREG_ITEM7_ADDENDUM_A_DRAFT.md`), the item-7 addendum that names R0's beam run as this screen's control. Both are finalised (DRAFT dropped from the names), hashed into DECISIONS and co-signed before `scripts/bw_seeds.py freeze` runs. |
-| Decision source | D-75.1 (user: a one-turn B4 futility screen after item 7, then B6, then item 9). D-76a (RCX agreement: pins, call, hygiene, attribution rule, NO-GO floor). D-77 (BWM: GO iff net ≥ 2). D-79 as sent to RCX (the 13 co-sign edits accepted; edit-5 route: B4 declares the screen's outcome as known and forbids any change to arm (a)). Panel `research/NEXT_ANALYSIS_PANEL_2026-10-11.json` (`final.gpu_sequence`, B4-screen step; `top_now_cpu` item 6). |
-| Runner | `scripts/b4_screen.py` with stub tests `tests/test_b4_screen.py` (60 pass). Their sha256s are in the next two rows, and they replace every earlier runner and test sha, including the bytes RCX reviewed (`14ef3d99…`, `d09301e7…`). `b4_screen.py freeze` refuses unless the runner and tests on disk are exactly these bytes and the addendum names the same runner sha, in the late-freeze path as well (edit 2). The runner's canary sha is still a placeholder (§2.4). When RCX sends it, BWM writes it into the runner, and these two rows change once more, before RCX co-signs. |
-| Runner sha256 | `3ca01448fbffb91d42c6167a0a90a3146366e401c7b4eca72cae54498f404489` |
-| Tests sha256 | `0349b70b8a810432131de920bc4103ef699e38ba548002361b478d8f470fe440` |
+| Decision source | D-75.1 (user: a one-turn B4 futility screen after item 7, then B6, then item 9). D-76a (RCX agreement: pins, call, hygiene, attribution rule, NO-GO floor). D-77 (BWM: GO iff net ≥ 2). D-80 (the 13 co-sign edits accepted; edit-5 route: B4 declares the screen's outcome as known and forbids any change to arm (a)); D-80 follow-up (the canary's torch version is report-only). D-81 (queue order; this round's erratum and RCX's low-severity items). Panel `research/NEXT_ANALYSIS_PANEL_2026-10-11.json` (`final.gpu_sequence`, B4-screen step; `top_now_cpu` item 6). |
+| Runner | `scripts/b4_screen.py` with stub tests `tests/test_b4_screen.py` (69 pass). Their sha256s are in the next two rows, and they replace every earlier runner and test sha, including the bytes RCX reviewed (`14ef3d99…`, `d09301e7…`) and the D-80 round's (`3ca01448…`, `0349b70b…`). `b4_screen.py freeze` refuses unless the runner and tests on disk are exactly these bytes and the addendum names the same runner sha, in the late-freeze path as well (edit 2). The runner's canary sha is RCX's `9e9ad339…` (§2.4); these two rows were updated after it was set, for RCX's re-check before it co-signs. |
+| Runner sha256 | `0b576b1f4136f7ced9b12bdc71219a6435cdd1733bd733d1908d241469df750f` |
+| Tests sha256 | `8d2e2237a7de68cce2aed4c4909ed2452e578315bf09fe1a8944846a857824fc` |
 | Tier | B: the treatment is an external CPU module (RCX's GNN value + misplaced_blocks) inside BWM's frozen LM planner. |
 
 ## 0. Outcomes known at registration (co-sign edit 12)
@@ -32,7 +32,8 @@
     misplaced_blocks 54/75 at 2,000 expansions and 39 vs 19 at 200.
   - E11 (X-07).
   - All of these use GBFS with exact dynamics, not this beam.
-- **This screen's own work:** the stub dry runs (§10) and the D-77 operating-characteristics simulation (§5.3).
+- **This screen's own work:** the stub dry runs (§10), the D-77 operating-characteristics simulation (§5.3) and the
+  CPU canary pre-flight on RCX's 25 probes from E07 test and E07b TEST-B (§10: every |Δ| = 0).
 
 **Not known:**
 - Any item-7 output (no freeze record, no evaluation).
@@ -144,7 +145,7 @@ snapshot, §2.3):
 | `rcx/bw/__init__.py` | `4f403acd75709867f8dc7f6952a4e63e702ebaa40001dc2cb7024a6feb1440aa` | BWM addition (docstring only) |
 | `rcx/__init__.py` | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` (empty) | BWM addition |
 | `runs/RCX-E07/main/data/instances.json` | `1e39f9bbc25a7e857ccbfee97c996638fed63d606c334efef88fc3b7a32f4e31` | BWM addition: the GNN's train/val/test instances, used only by the pre-check (§4.3) |
-| `experiments/RCX-B4/canary/B4_HOOK_CANARY.json` | **placeholder**: RCX sends the sha after its step A (generator `experiments/RCX-B4/make_canary.py`, commit c45ca0a) | edit 8: golden values (§2.4) |
+| `experiments/RCX-B4/canary/B4_HOOK_CANARY.json` | `9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a` (RCX commit 42cbfcc; generator `experiments/RCX-B4/make_canary.py` as of commit a63b1c6, first committed in c45ca0a) | edit 8: golden values (§2.4) |
 
 RCX recomputed all ten D-76a and BWM-addition pins at review and found that they match. That includes the four BWM
 additions.
@@ -194,45 +195,65 @@ The tests check that the meter passes values through unchanged, and that the arm
 **`hook.json` per shard.** Each hook shard writes, before its `plans.jsonl` and `summary.json`:
 - `describe()` at the start and at the end;
 - the meter;
-- the canary result;
+- the canary result: |Δ| per probe and its maximum, the counters, and the torch version the canary was made with
+  beside the host's (report-only, §2.4);
 - the RCX modules actually executed (the importer's `executed` map);
 - `torch.__version__` and the recorded versions.
 
 ### 2.4 Canary and VOID rule (co-sign edit 8)
 
-**Canary.** RCX supplies a sha-pinned golden file, `experiments/RCX-B4/canary/B4_HOOK_CANARY.json`. It holds about 20
-consistent and 5 flagged-inconsistent (state, goal) probes:
-- The probes are taken from RCX-E07 **test** instances, never from seeds_fresh.
-- The expected values were computed with exactly the D-76a call, on a fresh hook, in file order.
-- The file also records the expected hook counters after all probes.
+**Canary.** RCX supplied the sha-pinned golden file `experiments/RCX-B4/canary/B4_HOOK_CANARY.json` (RCX commit
+42cbfcc, sha256 `9e9ad339…`, §2.2). Like every RCX file it is copied into the snapshot at the freeze. It holds 25
+(state, goal) probes, never from seeds_fresh:
+- 20 consistent probes: 10 from RCX-E07 **test** instances and 10 from E07b's **TEST-B** instances with n = 14 or 15
+  blocks (seeds_fresh's largest sizes);
+- 5 flagged-inconsistent probes (corrupted E07 test states).
+- The expected values were computed with exactly the D-76a call, on a fresh hook, in file order, with torch
+  2.6.0+cu124 on CPU at 1 thread. Tolerance 1e-5.
+- The file records the expected hook counters after all probes: calls 25, evaluations 25, model_evals 20,
+  invalid_states 5, fallbacks 5, every error counter 0.
 
-The runner's `CANARY_SHA256` is a placeholder until RCX sends the sha. While it is a placeholder, `freeze` and
-`run-shard` refuse.
+The runner's `CANARY_SHA256` is this sha. (While it was a placeholder, `freeze` and `run-shard` refused; they still
+refuse if it is unset.)
 
 **The check.** At the start of every hook shard, before any planning:
 1. A **fresh** hook (the registered call, from the snapshot) scores every probe.
 2. The shard asserts |value − expected| ≤ 1e-5 per probe.
 3. It asserts that the counters after all probes equal the recorded ones.
-4. It also checks that the file's hook call is the D-76a call and that its tolerance is no looser than 1e-5.
+4. It also checks that the file's hook call is the D-76a call, that its tolerance is no looser than 1e-5 and that it
+   records the expected counters; a file without them is refused (RCX low item 4).
+
+**Torch version: report-only (D-80 follow-up).** The canary records the torch version it was made with. Every hook
+shard's `hook.json` records it beside the host process's `torch.__version__`, and the report shows, per hook shard,
+the canary's max |Δ| and both versions. A mismatch is flagged descriptively and is **never** VOID; the binding check
+is the per-probe |Δ| ≤ 1e-5 on the real forward pass in BWM's process. The freeze records both versions (the host's
+from package metadata) and warns on a mismatch; it does not refuse.
 
 A canary failure stops the shard before planning, and the screen is **VOID**.
 - The failure is logged in `ATTEMPTS.jsonl` and is final: no shard of that arm runs afterwards.
 - `analyze` then writes the VOID report even though the arm is incomplete.
-- The canary's own hook is separate from the run's hook, so the run hook's counters contain planning calls only. `b4_screen.py canary` runs the same check as a
-CPU pre-flight; it is not part of the registration.
+- `ATTEMPTS.jsonl` is required once the arm has run (RCX low item 3). `run-shard` creates the shard directory before
+  the canary, and from then on `run-shard` and `analyze` refuse unless the file exists, holds a start event for every
+  shard directory and exactly one end event per completed shard. Deleting the file therefore cannot erase a canary
+  failure.
+- The canary's own hook is separate from the run's hook, so the run hook's counters contain planning calls only.
+- `b4_screen.py canary` runs the same check as a CPU pre-flight; it is not part of the registration (result: §10).
 
 **VOID rule.** The screen is **VOID**, which is not NO-GO, if any of the following holds:
 - The arm's hook counters, merged from the 4 shard records, show `model_errors`, `encode_errors`, `nonfinite` or
   `failsafe` > 0 (`failsafe` includes analysis errors). `analyze` recomputes the merge from the shard `hook.json` files
   and refuses if `hook_merged.json` differs from it.
-- `model_evals` = 0.
+- `model_evals` = 0, in the merge or in any hook shard (RCX low item 7).
 - Any hook shard lacks a passed canary record.
 - The R0 outputs the screen reads do not match addendum A.0's sha table (§7.1, edit 9).
 
 When the screen is VOID:
 - The report states VOID and the reasons, with no GO/NO-GO reading.
 - A void screen needs a new prereg.
-- VOID takes precedence over INSTRUMENT FAULT, which takes precedence over GO/NO-GO.
+- VOID takes precedence over INSTRUMENT FAULT, which takes precedence over GO/NO-GO. Both take precedence over a
+  refusal of `analyze` (RCX low item 1): once the freeze, the frozen rule and the pre-check are re-verified, the VOID
+  conditions are evaluated first, and a VOID report is written even when a later check would refuse (for example an
+  R0 shard summary changed after A.0). The refusals found are listed in the report, descriptively.
 
 ## 3. Arm and control
 
@@ -256,14 +277,17 @@ is exposed to the ranking key.
 - **R0's arguments.** Each R0 shard's `summary.json` records `blocks_eval.py`'s full argument namespace. It must equal
   the frozen S-beam configuration on `seeds_fresh`, with shard `i/4`, `--val`, the R0 freeze record and R0's shard
   directory, and have no other key. This is asserted before the GPU run (`run` and every `run-shard` refuse on a
-  failure, so arm a is not run) and again in `analyze`, which then writes the INSTRUMENT FAULT report below.
+  failure, so arm a is not run) and again in `analyze`, which then writes the INSTRUMENT FAULT report below (also if
+  arm a has run, unless a VOID condition holds).
 - **Round-1 identity check.** An instance solved (verified) in round 1 by **either** arm must be solved in round 1 by
   both arms, with the same plan and the same proposer tokens.
 - **Pre-registered consequence of a failure of either check: INSTRUMENT FAULT.**
   - No decision is read.
   - Arms c (the default key) and a are re-run in **one** GPU turn by this runner (`run --rerun`, writing
     `runs/BW_B4_SCREEN/rerun/{c,a}_beam/`), and analysed with `analyze --rerun` under the same rule.
-  - If the re-run also fails the identity check, the screen closes without a reading, and a new prereg is needed.
+  - If the re-run also fails the identity check, its status is **INSTRUMENT_FAULT_RERUN**: terminal, with no decision
+    and no further re-run. The screen closes without a reading, and a new prereg is needed. (A VOID condition on the
+    re-run gives VOID, as everywhere.)
 
 **Control = c, certified as c+pen.**
 - B4's primary contrasts are against c+pen: the default key plus RCX's invalid-state penalty.
@@ -370,7 +394,8 @@ from the **frozen record** and refuses if `PRECHECK.json` differs from it (edit 
 - The rule constants (net ≥ 2, the 5% attribution threshold) and the pre-check drop_ids are read from the **frozen
   record** by `analyze` (edit 1). It refuses on any mismatch with the runner's constants or with `PRECHECK.json`, and if
   the frozen rule carries a p-value term.
-- **Precedence:** VOID (§2.4) > INSTRUMENT FAULT (§3) > GO/NO-GO.
+- **Precedence:** VOID (§2.4) > INSTRUMENT FAULT (§3) > GO/NO-GO; VOID and INSTRUMENT FAULT also take precedence over
+  a refusal of `analyze` (§2.4).
 
 **Attribution (D-76a).**
 - If more than 5% of hook calls return a value in the **penalty band (invalid state or critic error;
@@ -474,7 +499,8 @@ The earlier draft gave these reasons for the superseded rule. They are recorded,
 `runs/BW_B4_SCREEN/B4S_REPORT.{json,md}`, written once by `b4_screen.py analyze`. A second analysis refuses.
 
 **Status and pairing:**
-- the status (GO / NO-GO / VOID / INSTRUMENT_FAULT) with its wording;
+- the status (GO / NO-GO / VOID / INSTRUMENT_FAULT; on the re-run, INSTRUMENT_FAULT_RERUN instead of INSTRUMENT_FAULT)
+  with its wording;
 - the round-1 identity check;
 - per arm: success with a Clopper-Pearson 95% CI;
 - the paired table, net, the one-sided sign p and the two-sided exact McNemar p (reported only);
@@ -494,7 +520,9 @@ The earlier draft gave these reasons for the superseded rule. They are recorded,
 
 **Hook:**
 - counters and inconsistency reasons;
-- the **penalty band (invalid state or critic error)**, split at call and evaluation level (§5.2).
+- the **penalty band (invalid state or critic error)**, split at call and evaluation level (§5.2);
+- the canary per hook shard: max |Δ|, the canary's torch version and the host's. A mismatch is flagged
+  descriptively, never VOID (§2.4).
 
 **Anytime curves:**
 - success within r rounds, r = 1..12. This is exact (D-48c/D-50: the first r rounds do not depend on any later cap);
@@ -555,7 +583,7 @@ including in B4 (§8.1).
 **The freeze record** is written once. It holds:
 - the R0 args verbatim, the hook spec (registry off) and the control's freeze sha;
 - every pin of §2, including the code path;
-- the snapshot's file shas and the canary sha;
+- the snapshot's file shas and the canary sha, with the canary's torch version beside the host's (report-only);
 - the library and driver versions;
 - the rule constants: net ≥ 2 and the 5% threshold, with no p-value term;
 - the VOID rule and the pre-check result;
@@ -566,19 +594,25 @@ including in B4 (§8.1).
 **The freeze refuses:**
 - if the runner or tests on disk differ from the registered shas in this header, or if the addendum does not name the
   same runner sha. This applies in the late path too (edit 2);
-- while the canary sha is the placeholder (edit 8);
+- unless the addendum's "Screen prereg (final) sha256" header row names, as a full sha256 in backticks, the sha256 of
+  the `--prereg` file (RCX low item 2);
+- if the canary sha is unset (edit 8), or the canary file fails its torch-free check (sha, D-76a call, tolerance,
+  pins, probes, expected counters);
 - if a file is named DRAFT, unless `--allow-draft` is passed;
 - if any pin, the snapshot copy or `check_r0_is_b2` fails.
+
+It **warns, and does not refuse,** if the canary's torch version differs from the host's (§2.4).
 
 **No forking after R0 (co-sign edit 9).**
 - **The guard covers all item-7 outputs.** That means every file under `runs/BW_SEEDS/`, because R0_direct reveals
   per-instance outcomes and a running shard's `progress.txt` shows per-round solve counts. It also covers bundleI's log
   `runs/BW_SEEDS.stdout` once it shows that an item-7 run has started.
-- **If such a file exists, the freeze refuses unless `--allow-after-r0` is passed.** If `b4s-freeze` fails, the late
-  freeze with `--allow-after-r0` is **mandatory**, and it records the files present. The screen is never "dropped" by
+- **If such a file exists, the freeze refuses unless `--allow-after-r0` is passed.** If `b4s-freeze` fails for this
+  reason, the late freeze with `--allow-after-r0` is **mandatory**, and it records the files present. The screen is never "dropped" by
   choice.
-- **Once `runs/BW_SEEDS/SEEDS_REPORT.json` or `runs/BW_SEEDS/ADDENDUM_A_INPUTS.json` exists, the freeze refuses
-  outright.** The screen can then never run, and it is void.
+- **Once `runs/BW_SEEDS/SEEDS_REPORT.json` or `runs/BW_SEEDS/ADDENDUM_A_INPUTS.json` exists, or bundleI's log
+  `runs/BW_SEEDS.stdout` contains item 7's `release_gate_reading` (which `bw_seeds.py analyze` prints; RCX low
+  item 5), the freeze refuses outright.** The screen can then never run, and it is void.
 - **The screen runs whatever item 7's outcome is.** It uses only R0 outputs whose sha256 equals addendum A.0's table
   (`ADDENDUM_A_INPUTS.json`). That covers R0's merged and per-shard `plans.jsonl` and `summary.json` and the shard
   `fcache.jsonl`. Otherwise the screen is VOID: `run` and `run-shard` refuse, and `analyze` writes a VOID report
@@ -590,6 +624,8 @@ including in B4 (§8.1).
 - re-verifies the freeze: R0's freeze sha and args, the runner sha, the canary sha, every pin (RCX files in the
   snapshot), the code path and the adapter shas;
 - checks the versions, R0's shard args and R0's A.0 shas;
+- refuses after a logged canary failure of its arm, and refuses unless `ATTEMPTS.jsonl` is consistent once the arm has
+  run (§2.4);
 - runs the canary;
 - refuses if its own `summary.json` exists, so it runs once.
 
@@ -602,21 +638,26 @@ Ordering and recovery:
 **Analyze guards (co-sign edit 1).** `analyze`:
 - calls `load_and_verify_freeze` (the same checks as run);
 - takes the rule constants and drop_ids from the frozen record (§5.2);
-- asserts R0's shard args. If they fail and arm a was therefore never run, it writes the INSTRUMENT FAULT report of
-  §3 (VOID first, if a VOID condition also holds), which unlocks `run --rerun`;
+- asserts R0's shard args. If they fail, it writes the INSTRUMENT FAULT report of §3 (VOID first, if a VOID condition
+  also holds), which unlocks `run --rerun`;
 - requires all 4 `hook.json`, each with calls > 0, calls ≥ the shard's instances, meter calls = hook calls, the
   registered hook record and `models.py` actually executed;
 - refuses unless `hook_merged.json` equals the merge of the 4 shard records;
 - requires the arm shards' own args;
+- requires `ATTEMPTS.jsonl` once the arm has run, with one end event per completed shard (§2.4);
 - requires `val` on every row;
 - refuses to overwrite `B4S_REPORT.json`.
 
-**Lead's queue change (not made by this draft):**
-- Insert a `b4s-freeze` job between bundleI's `i7-freeze` and `i7-run` (marker `runs/FREEZE_B4S_a_beam.json`,
-  est 30 s).
-- If `b4s-freeze` fails, item 7 is not blocked: the release gate never waits for the screen. The late freeze is then
-  mandatory and must come before `i7-analyze` and before addendum A.0, because both of their outputs close the window.
-  So the lead holds `i7-analyze` (and A.0) until `runs/FREEZE_B4S_a_beam.json` exists.
+Every one of these refusals, except the freeze re-verification, the frozen rule and pre-check checks and the refusal to
+overwrite a report, yields to a VOID and then to an INSTRUMENT FAULT (§2.4, RCX low item 1).
+
+**Queue (the lead's change, D-81; not made by this draft):**
+- bundleI runs `i7-freeze` → `b4s-freeze` (this freeze, on the final file names; marker
+  `runs/FREEZE_B4S_a_beam.json`) → `i7-run` → `i7-a0-hash` (addendum A.0) → `i7-analyze` → `i7-addendum-analyze`.
+- A failing or refusing `b4s-freeze` stops the bundle before any R0 output exists, so the queue cannot void the
+  screen, and A.0 precedes every reader of the item-7 outputs.
+- Should an item-7 output nevertheless exist before the screen is frozen, the late freeze above is mandatory and
+  must come before `i7-analyze` and A.0, because both of their outputs close the window.
 
 ### 7.2 GPU cost estimate
 
@@ -654,7 +695,8 @@ imported in this CPU track).
   - The wording is "B4 arm (a) not supported at screen (seeds_fresh-40, paired vs R0, pre-set futility rule)".
   - Arms a0 and b are not run under B4, and B6 proceeds (D-75.1). A different module needs a new prereg.
 - **VOID:** no reading. B4 is neither unlocked nor closed by this screen, and a new prereg is needed for any screen.
-- **INSTRUMENT FAULT:** the pre-registered re-run of §3. If that fails too, VOID applies.
+- **INSTRUMENT FAULT:** the pre-registered re-run of §3. If the re-run fails the identity check too, the status is
+  INSTRUMENT_FAULT_RERUN: terminal, no reading, and a new prereg is needed (a VOID condition on the re-run gives VOID).
 - **In every case:** the result and the per-instance records go to RCX (D-70 §7). The records cover arm, n, success,
   F queries, expansions, plan and hook counters.
 
@@ -667,7 +709,7 @@ imported in this CPU track).
 - **B4's design is fixed independently.** B4's n (110), α (Holm m = 2, first step 0.025), Holm family (a vs c+pen,
   b vs c+pen), arms (c, c+pen, a0, a, b) and endpoints are **not changed on screen data**.
 - **No effect estimates.** The screen's net and p are not quoted as effect estimates, in B4 or anywhere else.
-- **Co-signing the screen does not co-sign B4.** Route chosen by BWM (D-79):
+- **Co-signing the screen does not co-sign B4.** Route chosen by BWM (D-80):
   - B4's prereg declares the screen's outcome as **known** at its registration;
   - it **forbids any change to arm (a)**: the module, the D-76a call and the pins of §2.2 stay exactly as they are.
 
@@ -728,19 +770,36 @@ runner on 2026-10-12. Outputs are in scratch, under `%TEMP%/claude/bwm_b4cosign_
 **Outcomes.** The dry-run outcomes (exact stub: control 6/8, arm 5/8; 5% stub: control 5/8, arm 6/8) mean nothing
 about B4. A dry run has no canary, so the would-be VOID check lists only "no passed canary".
 
+**Canary pre-flight (2026-10-12 ~06:30 CDT; not part of the registration).** `python -B scripts/b4_screen.py canary`,
+CPU only (`CUDA_VISIBLE_DEVICES=''`, 1 torch thread), on RCX's tree (no snapshot exists yet), with the registered
+D-76a call on the real GNN:
+- the file's sha256 equals `9e9ad339…`, and its hook call, tolerance, pins and expected counters pass the check;
+- all 25 probes reproduce the golden values exactly: |Δ| = 0.0 on every probe (max 0.0; tolerance 1e-5);
+- the counters after all probes equal the recorded ones (calls 25, evaluations 25, model_evals 20, invalid_states 5,
+  fallbacks 5, cache_hits 0, every error counter 0);
+- torch 2.6.0+cu124 on the host, the same as the canary's (report-only);
+- nothing was written, and RCX's worktree is unchanged.
+
 **Tests.**
-- `python -B -m pytest tests/test_b4_screen.py -q -p no:cacheprovider` → 60 passed.
+- `python -B -m pytest tests/test_b4_screen.py -q -p no:cacheprovider` → 69 passed.
 - They cover the 13 edits, including the GPU path end to end with model loading stubbed (edit 13): run-shard ×4 →
   merge → analyze, the refusal cases, the VOID cases (including a run that never completed), the instrument fault
   (round-1 identity and R0 arguments), the re-run, the freeze and the snapshot.
-- Together with `tests/test_item7_addendum_a.py` (9) and `tests/test_domain_planner.py` (28), 97 pass in either
-  order. The whole `tests/` directory passes too (234).
+- They also cover this round: the canary's torch versions (recorded, flagged on a mismatch, never VOID), a canary
+  without expected counters, the real canary file read torch-free (sha, schema, 25 probes, counters, the consistency
+  flags against the hook's own `is_consistent`, no seeds_fresh instance), the placeholder path, the snapshot root of
+  every hook shard, the addendum's prereg-sha row, the log closing marker, `ATTEMPTS.jsonl` deleted or inconsistent,
+  `model_evals` = 0 in one shard, a VOID that wins over refusals (also over a malformed shard hook record), an
+  R0-argument fault after the arm ran (with the canary report), and the terminal INSTRUMENT_FAULT_RERUN.
+- Together with `tests/test_item7_addendum_a.py` (9) and `tests/test_domain_planner.py` (28), 106 pass in either
+  order. The whole `tests/` directory passes too (243).
 
 ## 11. For RCX's co-signature
 
 1. The pins, including the four BWM additions (recomputed by RCX), the code-path pins and the versions (§2.1-2.2); the
    loader, snapshot and identity checks (§2.3).
-2. The canary and the VOID rule (§2.4). RCX supplies the canary and its sha.
+2. The canary and the VOID rule (§2.4). RCX supplied the canary (`9e9ad339…`, commit 42cbfcc); BWM's CPU pre-flight
+   reproduced every probe exactly (§10).
 3. The pre-check rule and its drafting result (§4.3: no drops), and the hygiene statement (§4.2).
 4. The decision rule and the attribution rule (§5); the D-76a floor is implied. The operating characteristics (§5.3).
 5. Control = item 7's R0 run, with the c ≡ c+pen certificate, the round-1 identity check and its consequence (§3).
@@ -750,5 +809,6 @@ about B4. A dry run has no canary, so the would-be VOID check lists only "no pas
 sha256 and to the addendum's.
 - **Finalisation** drops "DRAFT" from the title and changes the Status row only. `b4_screen.py final-diff --draft D
   --final F` refuses any other change, and RCX re-verifies that diff.
-- **RCX's commitments:** the canary file; receiving the per-instance records; keeping its pinned files byte-stable
-  until BWM's freeze has copied them into the snapshot (§2.3). RCX commits no GPU and no CPU-lane time.
+- **RCX's commitments:** the canary file (delivered); receiving the per-instance records; keeping its pinned files,
+  the canary included, byte-stable until BWM's freeze has copied them into the snapshot (§2.3). RCX commits no GPU and
+  no CPU-lane time.
