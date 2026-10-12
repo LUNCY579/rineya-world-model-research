@@ -1,0 +1,33 @@
+{
+  "status": "complete",
+  "started_at_utc": "2026-10-12T08:48:06.582174+00:00",
+  "command": [
+    "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+    "dsv3wm/scripts/collect_recovery_teacher_cpu11.py",
+    "--config",
+    "dsv3wm/configs/recovery_A0.json",
+    "--adapter",
+    "../Rineya_BWM_001_Research_Bundle/native_v1/runs/F_titan_main/adapter",
+    "--tasks",
+    "dsv3wm/datasets/recovery-h3-v1/planning_train.jsonl",
+    "--train",
+    "dsv3wm/datasets/recovery-v1/train.jsonl",
+    "--freeze",
+    "dsv3wm/prereg/RECOVERY_H3_TEACHER_FREEZE_V4_CPU11.json",
+    "--out",
+    "dsv3wm/artifacts/recovery-h3-v1/teacher_B0_retry01"
+  ],
+  "cwd": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree",
+  "wrapper_sha256": "0b10d654cd68269d1bb615721cdd03ccd24c77be5f5e9af0cec29340f22079bc",
+  "sample_interval_s": 0.5,
+  "peak_sampled_process_tree_rss_bytes": 5147717632,
+  "per_process_peak_wset_bytes": {
+    "140608": 5369856,
+    "141164": 5142777856
+  },
+  "peak_gpu_bytes": null,
+  "scope": "local subprocess tree host RAM; GPU memory is not measured by this wrapper",
+  "root_pid": 140608,
+  "exit_code": 0,
+  "wall_duration_s": 843.8317301000025
+}

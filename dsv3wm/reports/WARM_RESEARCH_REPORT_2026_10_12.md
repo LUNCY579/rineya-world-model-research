@@ -12,6 +12,10 @@ The initial cold rank-4 report remains unchanged in `REPORT.md`. Current raw
 records, failed attempts and freezes remain separate. No confirmation labels,
 historical frozen plans or owner weights were used to revise these outcomes.
 
+A later [H3 teacher-qualification checkpoint](H3_TEACHER_QUALIFICATION_2026_10_12.md)
+records the completed TRAIN-only collection. It does not establish a student or
+native DEV effect; the pilot endpoints and conclusions below remain unchanged.
+
 ## Paper mechanism and actual experiment
 
 The executed A1 uses sequential local residual bottlenecks, shared frozen token

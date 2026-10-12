@@ -7,15 +7,22 @@ has 24/24 exact four-step development rollouts, with all intermediate states
 correct. Adapted A0/A1/A2/A5 scored24/22/24/23; direct four-step accuracy is0/24
 for each. Neither predictive arm meets the fixed gain gate. Planning scored
 12/12 for B0/A0/A1/A2 and11/12 for A5; A1/A2 also lose a retained boundary
-legality fixture. H3/Ledger/Blocksworld execution is next. G4–G7 remain unqualified;
+legality fixture. The fixed TRAIN-only H3 teacher qualified27/32 parents, with20
+distinct plans across three limits; student and native DEV effects remain unknown.
+Next are H3 warm-parent guards/proposals and A3/A4/C3/C4, followed by independent
+Ledger/Blocksworld qualification. G4–G7 remain unqualified;
 confirmation labels remain sealed. See `reports/RECOVERY_STATUS.md`,
 `reports/GATE_STATUS.md` and the exact pending commands in `reports/NATIVE_QUEUE.md`.
 Original test evidence remains in `results/TESTS_FINAL.json`; new records use
-separate paths. The current package passes221 tests and compilation, recorded
-in `results/recovery-v1/PREPARATION_CHECKPOINT_10.json`. The consolidated native
+separate paths. The current package passes228 tests and compilation; evidence
+is in `results/recovery-v1/TESTS_CHECKPOINT_11.txt` and
+`results/recovery-v1/PREPARATION_CHECKPOINT_11.json`. The consolidated native
 evidence and current integration decisions are in
 `reports/WARM_RESEARCH_REPORT_2026_10_12.md`; the executed MTP architecture is
 documented in `research/IMPLEMENTATION_EVIDENCE_2026_10_12.md`.
+The later [H3 teacher qualification](reports/H3_TEACHER_QUALIFICATION_2026_10_12.md)
+records the native TRAIN collection and its failures. CPU11 student/guard paths
+are prospectively registered; execution awaits the live RDW E06 slot002 release.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
 Parent repository baseline: `aeb19ab17128d884c4457ce59db6e926ceb13a7a`.
@@ -61,7 +68,13 @@ recorded invocation arrays, configs, versions and hashes are in `results/`.
 `train.py` implements A0/A1/A2/A3/A4/A5. A3/A4 require independently re-verified
 TRAIN-only trajectory labels; use `scripts/distill.py --help`. Dedicated direct
 student inference is `scripts/evaluate_student.py --help`: fixed top1 and offline
-pass@k, no verifier reranking. A3/A4 have no native training outcome yet. Stored
+pass@k, no verifier reranking. The registered warm H3 continuation uses
+`train_recovery_student_cpu11.py`, `evaluate_recovery_student_cpu11.py` and
+`evaluate_recovery_student_guards_cpu11.py`; the shared27-parent corpus and
+actual A0/A2 parents are bound by `RECOVERY_H3_STUDENT_TRAIN_FREEZE_V3_CPU11.json`.
+The fixed warm guards use `RECOVERY_H3_WARM_GUARDS_FREEZE_V3_CPU11.json`.
+Warm proposer references use `RECOVERY_H3_WARM_READOUT_FREEZE_V3_CPU11.json`.
+A3/A4/C3/C4 have no native training outcome yet. Stored
 adapters remain unmerged. MTP/legality training heads are omitted in inference.
 The original no-cache instrument is preserved; the explicit cached instrument
 requires a passed native parity probe and complete source/config/data freeze.

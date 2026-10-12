@@ -1,19 +1,50 @@
 # Registered-interface recovery: interim evidence
 
-Updated 2026-10-12 UTC after four adapted dynamics readouts. Full research goal
-remains open; H3, Ledger and Blocksworld native work remain. The first H3 attempt
-stopped before model loading when RCX acquired the CPU lane; see `NATIVE_QUEUE.md`.
-The current package passes221 tests and compilation. Prospective Ledger,
+Updated 2026-10-12 UTC after four adapted dynamics readouts and the native
+TRAIN-only H3 teacher qualification. Full research goal remains open; H3 student,
+Ledger and Blocksworld native work remain. The first H3 attempt stopped before
+model loading; its same-input retry completed. See `NATIVE_QUEUE.md`.
+The current package passes228 tests and compilation, with test evidence in
+`results/recovery-v1/TESTS_CHECKPOINT_11.txt`; checkpoint11 verifies the teacher,
+student-training and warm guard/proposer freezes. Prospective Ledger,
 R/P-retention and constructed Blocksworld G1 inputs are frozen; their native
 outcomes are still unknown.
 The consolidated report is `WARM_RESEARCH_REPORT_2026_10_12.md`; it adds actual
 parent exposure, cost/regret denominators, uncertainty and current integration
 decisions without changing the original endpoints or failed gates.
-The H3 retry has a separate prospective CPU11 admission profile after RCX's
-release; prediction/data/gates and historical loaders remain unchanged. See
-`prereg/RECOVERY_RESOURCE_CLARIFICATION_3.md` and the current execution queue.
+The H3 retry used a separate prospective CPU11 admission profile after RCX's
+release; prediction/data/gates and historical loaders remain unchanged.
+Separately registered CPU11 student paths await the live RDW E06 slot002 release,
+expected around09:35–09:40UTC; the estimate does not authorize replacing a live
+lease. See `prereg/RECOVERY_RESOURCE_CLARIFICATION_3.md`,
+`prereg/RECOVERY_RESOURCE_CLARIFICATION_4.md` and the current execution queue.
 
 ![Fixed development results](../results/recovery-v1/recovery_counts_v2.png)
+
+## Qualified TRAIN-only H3 teacher
+
+The unchanged32-parent TRAIN task pool produced27 independently verified
+retained plans,20 distinct action sequences and all three limits24/32/40. The
+fixed corpus gate passed; five failed parents and all negatives remain preserved.
+Learned searches/rankings were fixed before independent exact verification.
+All retained plans use the registered final-finish contract. This qualifies
+the training corpus, without establishing student, DEV or confirmation benefit.
+
+The successful retry took841.880s and960 learned transition queries. CPU11
+admission observed11.766GiB physical and19.535GiB commit availability after
+imports; sampled process-tree peak was5,147,717,632 bytes (4.794GiB).
+Verified corpus SHA256:
+`3a2a25a33b7dc983b422b67fc1a1977d7315896e42c72132a454012c27f1841b`.
+See [the qualification report](H3_TEACHER_QUALIFICATION_2026_10_12.md) for the
+full failure, cost and provenance audit.
+
+Actual A0/A2 warm artifacts and this shared corpus are now bound by
+`RECOVERY_H3_STUDENT_TRAIN_FREEZE_V3_CPU11.json`; fixed warm dynamics/behavior
+guards are bound by `RECOVERY_H3_WARM_GUARDS_FREEZE_V3_CPU11.json`, and warm
+proposer references by `RECOVERY_H3_WARM_READOUT_FREEZE_V3_CPU11.json`. Next are
+warm-parent guards/proposals and the unchanged A3/A4/C3/C4 continuation recipes.
+There are no student/native DEV outcomes yet. The failed RegisterWorld predictive
+gain gate, sealed confirmation bank and integration restrictions remain intact.
 
 ## Completed adapted dynamics pilot
 
