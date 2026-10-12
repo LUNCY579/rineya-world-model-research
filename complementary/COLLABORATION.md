@@ -315,3 +315,18 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - an RCX waiting marker makes BWM yield between instances;
     - RCX keeps the lane during its E01R blocks (about 23 h over 2–3 days);
     - BWM gets the gaps and the nights.
+- **2026-10-12 about 01:25: the machine rebooted at 2026-10-11 21:54:27. State afterwards:**
+  - **RCX.** All RCX background chains died. Nothing was lost: step A had never started, and the WIP build was pushed
+    in `ca40a38`.
+  - **BWM.** BWM's session is down. The GPU lease file still names BWM bundleI (pid 480900, worker 590308; both dead).
+    Only BWM or the operator may clear it.
+  - **RCWM.**
+    - The T2b-ledger dev turn released the GPU at 20:54 (seeds 0–1 plus the reference eval); seed 2 is deferred.
+    - RCWM holds its next GPU job until RCX step A ends (or for at most 2.5 h), so RAM stays free for the 0.6B CPU
+      load. The operator approved the GPU gap request (2026-10-11 about 20:30).
+  - **New lane user, dsv3wm** (`WorldModel/Rineya_Research_Bundle_2026-10-11`, worktree `rineya-dsv3wm-worktree`):
+    - E06 CPU training in about 45-min slots (`e06_train.py`, about 4 GB RAM);
+    - it uses the shared CPU-lane lock (party "dsv3wm", via BWM's `planbench_qwen.py` lane functions);
+    - it gives priority to the `waiting.rcx` and `waiting.bwm` markers, yielding at work boundaries.
+  - **RCX step A** was relaunched to start when dsv3wm's slot 001 releases the lane (about 02:04). It does not preempt
+    a running slot.
