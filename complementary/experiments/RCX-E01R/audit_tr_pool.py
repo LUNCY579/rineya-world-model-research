@@ -1,6 +1,10 @@
 """RCX-E01R R1 training-pool audit (PREREG_E01R section 3, R1 "Audit, by code" and "P3 custody"; review item 6).
 
     python -B experiments/RCX-E01R/audit_tr_pool.py            (defaults: the real files below; every path is an option)
+Branch gate (PREREG_E01R section 2; CX D-39). The R1 path exists only under branch B3. Before reading anything else, the
+audit refuses unless runs/RCX-E01R/dev2/BRANCH_STEP_A.json (--branch) exists, was written by the frozen decide_branch.py
+(code_sha256 = DECIDE_SHA256, CX D-37) and says branch B3 with arms R1, R3. Step A gave B4 (CX D-39), so under the
+current record this script refuses and P3 is not read before the SEALED opening.
 Reads:
   pools/TR_v1_candidates.json      the blind-authored training candidates (visible)
   pools/P2_DEV_v2.json             P2_v2, the DEV2 battery pool (sha256 = POOL_REFINE.json outputs.P2.sha256)
@@ -8,6 +12,9 @@ Reads:
                                    and recipes.audit_pool refuses near-duplicates of them
   pools/P3_SEALED_v2.json.secret   read at run time only: its sha256 must equal POOL_REFINE.json outputs.P3.sha256 (and
                                    its count and per-cell counts the committed ones) before it is parsed
+Visible checks run first. If any cell has fewer than 6 survivors of the visible checks (status, ref, p2), P3 cannot
+lift it to the minimum: the P3 file is NOT opened, only <tag>_AUDIT.json is written (p3_read and meets_minimum false),
+and the section 2 top-up / fallback applies.
 A candidate is dropped for the first reason that applies, in this order:
   status   a status-like word (wording_audit.vocab_hits), an inflection of a real one (stem_hits, CX D-34) or a
            multi-word EXCLUDED phrase
@@ -24,8 +31,10 @@ any sha or count mismatch, an existing output.
 P3 custody. Nothing prints or writes a P3 id, text or pairing. Errors about the P3 file never quote it. Outputs (create-
 only, in --out-dir, default pools/; <tag> from the candidates file name, e.g. TR_v1):
   <tag>_audited.json         surviving candidates (visible; no P3 text, safe to commit)
-  <tag>_P3_drops.json.secret candidates dropped for p3 (training wordings only; git-ignored)
-  <tag>_AUDIT.json           counts per cell and per reason, the minimum check (>= 6 per cell), sha256 of inputs/outputs
+  <tag>_P3_drops.json.secret candidates dropped for p3 (training wordings only; git-ignored). Its sha256 is never
+                             published (only its count): a sha would let anyone confirm a guessed drop list.
+  <tag>_AUDIT.json           counts per cell and per reason, the minimum check (>= 6 per cell), sha256 of the inputs
+                             and of the audited pool
 The survivors are visible, so which candidates were dropped for p3 can be inferred by re-running the visible checks.
 That is accepted: it reveals only that some P3 wording shares >= 35% of word types or a 4-word sequence with a training
 wording, never which one.
@@ -46,6 +55,8 @@ if str(ROOT) not in sys.path:
 from rcx.rcl import vocab as V, wording_audit as WA  # noqa: E402
 
 POOLS = Path(__file__).resolve().parent / "pools"
+BRANCH_PATH = ROOT / "runs" / "RCX-E01R" / "dev2" / "BRANCH_STEP_A.json"
+DECIDE_SHA256 = "6835b0402120a2847423d8af08814cc89f311292b110365487b39d61636080d6"  # decide_branch.py, CX D-37
 FORMS = ("EXPLICIT_LISTED_FIRST", "EXPLICIT_COMPLEMENT_FIRST", "IMPLICIT")
 CELLS = [f"{p}/{f}" for p in ("POS", "NEG") for f in FORMS]
 REF = {"jac": 0.5, "n": 5}       # D-34 audit against RCX wordings
@@ -115,9 +126,10 @@ def visible_drops(cands, p2_texts, p2_v1_texts=(), refs=None):
     return out
 
 
-def audit(cands, p2_texts, p3_texts, p2_v1_texts=()):
-    """-> (survivors in candidate order, {id: reason}). p3 is tested only on candidates passing the visible checks."""
-    drops = visible_drops(cands, p2_texts, p2_v1_texts)
+def audit(cands, p2_texts, p3_texts, p2_v1_texts=(), visible=None):
+    """-> (survivors in candidate order, {id: reason}). p3 is tested only on candidates passing the visible checks
+    (`visible`: their precomputed visible_drops)."""
+    drops = dict(visible_drops(cands, p2_texts, p2_v1_texts) if visible is None else visible)
     for t in cands:
         if t["id"] not in drops and any(WA.near_dup(t["text"], x, **STRICT) for x in p3_texts):
             drops[t["id"]] = "p3"
@@ -134,6 +146,26 @@ def counts_by_cell(cands, drops):
         why = Counter(drops[i] for i in ids if i in drops)
         out[c] = {"candidates": len(ids), **{r: why[r] for r in REASONS}, "kept": len(ids) - sum(why.values())}
     return out
+
+
+def visible_kept_by_cell(cands, visible):
+    """Per cell: candidates surviving the visible checks (an upper bound on what survives the P3 and cluster steps)."""
+    return {c: sum(cell(t) == c and t["id"] not in visible for t in cands) for c in CELLS}
+
+
+def require_b3(path):
+    """Refuse (SystemExit) unless BRANCH_STEP_A.json exists, comes from the frozen decide_branch.py and says B3."""
+    p = Path(path)
+    if not p.exists():
+        raise SystemExit(f"{p.name} missing: the R1 pool audit runs only after step A, under branch B3")
+    raw = p.read_bytes()
+    q = json.loads(raw)
+    if q.get("code_sha256") != DECIDE_SHA256:
+        raise SystemExit(f"{p.name} was not written by the frozen decide_branch.py (CX D-37)")
+    if q.get("branch") != "B3" or q.get("arms") != ["R1", "R3"]:
+        raise SystemExit(f"the R1 pool audit runs only under branch B3 (arms R1, R3); {p.name} says "
+                         f"{q.get('branch')} {q.get('arms')}. P3 is not read.")
+    return {"file": p.name, "sha256": sha(raw), "branch": "B3"}
 
 
 def read_p3(path, refine):
@@ -179,7 +211,9 @@ def main(argv=None):
     ap.add_argument("--refine", default=str(POOLS / "POOL_REFINE.json"))
     ap.add_argument("--split", default=str(POOLS / "POOL_SPLIT.json"))
     ap.add_argument("--out-dir", default=str(POOLS))
+    ap.add_argument("--branch", default=str(BRANCH_PATH))
     a = ap.parse_args(argv)
+    branch = require_b3(a.branch)  # before anything else is read
     cand_p = Path(a.candidates)
     m = re.fullmatch(r"(TR_v[0-9]+)_candidates\.json", cand_p.name)
     if not m:
@@ -203,8 +237,30 @@ def main(argv=None):
     split = json.loads(Path(a.split).read_text(encoding="utf-8"))
     p2_raw, p2 = read_visible(a.p2, refine["outputs"]["P2"]["sha256"], "P2_v2")
     p1_raw, p1 = read_visible(a.p2_v1, split["p2_sha256"], "P2_v1")
+    p2_texts, p1_texts = [t["text"] for t in p2], [t["text"] for t in p1]
+    visible = visible_drops(cands, p2_texts, p1_texts)
+    vis_kept = visible_kept_by_cell(cands, visible)
+    inputs = {"candidates": {"file": cand_p.name, "sha256": sha(cand_raw), "n": len(cands)},
+              "P2_v2": {"file": Path(a.p2).name, "sha256": sha(p2_raw), "n": len(p2)},
+              "P2_v1": {"file": Path(a.p2_v1).name, "sha256": sha(p1_raw), "n": len(p1)}}
+    common = {"experiment": "RCX-E01R", "spec": "PREREG_E01R section 3, R1 audit (CX D-37)", "branch": branch,
+              "thresholds": {"ref_and_p2_v1": REF, "p2_v2_and_p3": STRICT, "pool_cluster": POOL},
+              "reasons_in_order": list(REASONS), "min_per_cell": MIN_PER_CELL, "visible_kept_by_cell": vis_kept}
+    code = {p.name: sha(p.read_bytes()) for p in (Path(__file__), ROOT / "rcx/rcl/wording_audit.py",
+                                                   ROOT / "rcx/rcl/templates.py", ROOT / "rcx/rcl/vocab.py")}
+    short_vis = [c for c in CELLS if vis_kept[c] < MIN_PER_CELL]
+    if short_vis:  # P3 cannot lift a cell to the minimum: it is never opened
+        by_cell = counts_by_cell(cands, visible)
+        meta = {**common, "p3_read": False, "inputs": inputs, "by_cell": by_cell,
+                "totals": {r: sum(v[r] for v in by_cell.values()) for r in ("candidates", *REASONS, "kept")},
+                "meets_minimum": False, "cells_below_minimum": short_vis, "outputs": {}, "code_sha256": code}
+        out.mkdir(parents=True, exist_ok=True)
+        write_new(outs["audit"], json.dumps(meta, indent=1) + "\n")
+        print(json.dumps({"p3_read": False, "visible_kept_by_cell": vis_kept, "meets_minimum": False,
+                          "cells_below_minimum": short_vis}, indent=1))
+        return meta
     p3_texts = read_p3(a.p3, refine)
-    survivors, drops = audit(cands, [t["text"] for t in p2], p3_texts, [t["text"] for t in p1])
+    survivors, drops = audit(cands, p2_texts, p3_texts, p1_texts, visible=visible)
     p3_drops = [t for t in cands if drops.get(t["id"]) == "p3"]
     by_cell = counts_by_cell(cands, drops)
     short = [c for c in CELLS if by_cell[c]["kept"] < MIN_PER_CELL]
@@ -214,22 +270,16 @@ def main(argv=None):
              "p3_drops": json.dumps({"schema": "rcx-e01r-pool-v1", "pool": f"{tag}_P3_drops",
                                      "note": "training candidates dropped as near-duplicates of a P3_v2 wording; "
                                              "nothing about P3 itself", "templates": p3_drops}) + "\n"}
-    meta = {"experiment": "RCX-E01R", "spec": "PREREG_E01R section 3, R1 audit (CX D-37)",
-            "thresholds": {"ref_and_p2_v1": REF, "p2_v2_and_p3": STRICT, "pool_cluster": POOL},
-            "reasons_in_order": list(REASONS),
-            "inputs": {"candidates": {"file": cand_p.name, "sha256": sha(cand_raw), "n": len(cands)},
-                       "P2_v2": {"file": Path(a.p2).name, "sha256": sha(p2_raw), "n": len(p2)},
-                       "P2_v1": {"file": Path(a.p2_v1).name, "sha256": sha(p1_raw), "n": len(p1)},
-                       "P3_v2": {"file": Path(a.p3).name, "sha256": refine["outputs"]["P3"]["sha256"],
-                                 "n": len(p3_texts), "verified": "sha256, count and per-cell counts"}},
+    meta = {**common, "p3_read": True,
+            "inputs": {**inputs, "P3_v2": {"file": Path(a.p3).name, "sha256": refine["outputs"]["P3"]["sha256"],
+                                           "n": len(p3_texts), "verified": "sha256, count and per-cell counts"}},
             "by_cell": by_cell, "totals": {r: sum(v[r] for v in by_cell.values()) for r in
                                            ("candidates", *REASONS, "kept")},
-            "min_per_cell": MIN_PER_CELL, "meets_minimum": not short, "cells_below_minimum": short,
-            "outputs": {k: {"file": outs[k].name, "sha256": sha(texts[k].encode()),
-                            "n": len(survivors) if k == "audited" else len(p3_drops)} for k in texts},
-            "code_sha256": {p.name: sha(p.read_bytes()) for p in (Path(__file__), ROOT / "rcx/rcl/wording_audit.py",
-                                                                   ROOT / "rcx/rcl/templates.py",
-                                                                   ROOT / "rcx/rcl/vocab.py")}}
+            "meets_minimum": not short, "cells_below_minimum": short,
+            "outputs": {"audited": {"file": outs["audited"].name, "sha256": sha(texts["audited"].encode()),
+                                    "n": len(survivors)},
+                        "p3_drops": {"file": outs["p3_drops"].name, "n": len(p3_drops)}},  # no sha256 (see doc)
+            "code_sha256": code}
     out.mkdir(parents=True, exist_ok=True)
     write_new(outs["p3_drops"], texts["p3_drops"])
     write_new(outs["audited"], texts["audited"])

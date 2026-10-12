@@ -33,19 +33,23 @@ Token budget (token_budget_note() reads rcx/native/lora_cpu.py as source; nothin
   It calls model.generate(max_new_tokens=max_new, eos_token_id=EOS_IDS=[151645, 151643], do_sample=False).
 - A row stops only at <|im_end|> / <|endoftext|> or after max_new new tokens. Nothing stops at the end of the JSON or
   at a newline (no stop strings, no stopping criteria), so the "\\n" inside the R3 target is harmless.
-- The E01N/E01R evals use the default max_new=64, which fits the native answer: at most 68 bytes on the DEV battery,
-  mean 25-29 bytes in the train regimes.
+- generate's default max_new=64 (used by the E01N evals) fits the native answer: at most 68 bytes on the DEV battery,
+  mean 25-29 bytes in the train regimes. The E01R evals and smoke tests never use that default: every arm (N-CFSD,
+  E-R*, OFF, N-VR) is decoded with the committed build-time max_new (>= 160; see the frozen rule below), recorded in
+  TRAIN_MANIFEST_E01R.json and SEALED_COMMIT.json and passed explicitly by native_e01r.py.
 - R3 targets are longer: line 1 alone has a mean of 57-68 bytes. Full targets are at most 154 bytes on the DEV battery
   (all 13 strata x 6 surfaces; the longest is an OR composition over 6 word-named accounts) and at most 128 bytes in
   the FX/VR/CF_SD train sets (means 87-97).
 - Token counts were not measured: this step may not load a tokenizer. Qwen's byte-level BPE gives fewer tokens than
   bytes (digits are single tokens), but compositions on many-account or large-value surfaces can plausibly pass 64.
   A truncated output loses line 2 and scores as a format error.
-- generate accepts max_new as a keyword, so the R3 eval needs no change to lora_cpu.py:
-  LC.generate(model, tok, prompts, guard=..., log=..., **generate_kwargs_for_trace(...)).
+- generate accepts max_new as a keyword, so no E01R eval needs a change to lora_cpu.py: native_e01r.py calls
+  LC.generate(model, tok, prompts, max_new=<committed max_new>, guard=..., log=...) for every arm, never with the
+  default 64 (generate_kwargs_for_trace() gives the same keyword form).
 - FROZEN rule (PREREG_E01R section 3, R3 "Generation length"; review item 15): max_new = max(160, the
-  tokenizer-measured longest R3 gold target + 16) = trace_max_new(targets, tok). It is one value for every arm, recorded
-  at build time.
+  tokenizer-measured longest R3 gold target + 16) = trace_max_new(targets, tok). It is one value (>= 160) for every
+  arm, measured and recorded at build time (TRAIN_MANIFEST_E01R.json), bound by the SEALED commitment, and used by
+  every E01R SEALED eval and smoke test.
   - TRACE_MAX_NEW = 160 is the floor: the DEV battery's longest R3 target is 154 UTF-8 bytes (+1 EOS, rounded up).
     The UTF-8 byte length of a target bounds its byte-level-BPE token count from above, so the floor alone covers that
     draw. It is an empirical maximum over the generator's draws, not a proof for unseen vocabulary.

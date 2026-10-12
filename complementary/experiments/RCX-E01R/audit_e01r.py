@@ -5,13 +5,18 @@ reports per-arm covariates. Pure Python: native_e01, native_probe and lora_cpu i
 executed from their own source (_borrow); nothing loads a model, and a tokenizer only with the CLI's --tok. P3 is never
 read here (R1's P3 check is audit_tr_pool.py).
 
-    python -B experiments/RCX-E01R/audit_e01r.py --out runs/RCX-E01R/cells --arms E-R1,E-R3 [--tok] \
-        [--pool experiments/RCX-E01R/pools/TR_v1_audited.json]          (the default pool; B4: --arms E-R2,E-R3)
+    python -B experiments/RCX-E01R/audit_e01r.py --out runs/RCX-E01R/cells --arms E-R2,E-R3 --tok      (branch B4)
+    (B3 only: --arms E-R1,E-R3 [--pool experiments/RCX-E01R/pools/TR_v1_audited.json]; E-R1 refuses unless
+     runs/RCX-E01R/dev2/BRANCH_STEP_A.json (--branch) comes from the frozen decide_branch.py and says B3)
 Reads <out>/train_<arm>.jsonl and <out>/TRAIN_MANIFEST_E01R.json (native_e01r.py build; arm names as there, R1/R2/R3
 accepted as aliases), the R1 pool with its <tag>_AUDIT.json (audit_tr_pool.py), and the control rows
 runs/RCX-E01N/cells/train_N-CFSD.jsonl (sha256 checked against that directory's TRAIN_MANIFEST.json). Writes
-<out>/AUDIT_E01R.json {"ok", "rows_sha256": {arm: sha256}, ...}, which native_e01r.require_audit (and
-require_audit_e01r here) checks before training and the mint.
+<out>/AUDIT_E01R.json {"ok", "arm_ok": {arm: bool}, "rows_sha256": {arm: sha256}, ...}, which native_e01r.require_audit
+(and require_audit_e01r here) checks before training and the mint; arm_ok[arm] is true iff no failure names that arm
+and no failure is arm-independent (so an arm dropped before the mint, PREREG section 2, does not block the other).
+AUDIT_E01R.json is CREATE-ONLY: the audit refuses if it exists (a failed record is kept; re-auditing before the mint
+means removing it, a logged deviation) and refuses outright once <out>/SEALED_COMMIT.json exists (the mint binds the
+audit's sha256; train and the SEALED opening check it).
 
 E01R reader (review item 5). world._SINGLE is compiled from SPOS/SNEG at import, so templates registered later
 (recipes.register_pool: 'tr:<id>') are invisible to world.parse_rule and to native_e01.read_back. make_reader() compiles
@@ -79,6 +84,8 @@ N_ROWS, STEPS, BATCH, MAX_LEN = 1501, 190, 16, 512
 E01N_SEALED_SEED = 88527345  # opened (CX D-30); 2,240 records over in + ho_tpl
 ARM_SPEC = {"E-R1": ("native", "wording"), "E-R2": ("native", None), "E-R3": ("trace", "prompts")}  # = native_e01r
 R1_POOL = POOLS / "TR_v1_audited.json"
+BRANCH_PATH = DEV2_DIR / "BRANCH_STEP_A.json"
+DECIDE_SHA256 = "6835b0402120a2847423d8af08814cc89f311292b110365487b39d61636080d6"  # decide_branch.py, CX D-37
 HARD_FLAGS = ("frame", "gold", "trace_line1", "readback_hash", "split_words", "probe_words", "excluded_words",
               "non_train_words", "rcwm_heldout_text", "heldout_template", "heldout_rule_factor", "heldout_magnitude",
               "pool_wording", "over_max_len")
@@ -485,12 +492,32 @@ def load_rows(p):
 
 
 def require_audit_e01r(out_dir, arm, rows_sha):
-    """Refuse to train on rows that have not passed audit_e01r (returns the AUDIT_E01R.json sha)."""
+    """Refuse to train on rows that have not passed audit_e01r: ok, or arm_ok[arm], for these rows (returns the
+    AUDIT_E01R.json sha)."""
     p = Path(out_dir) / "AUDIT_E01R.json"
     aud = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
-    if not aud.get("ok") or aud.get("rows_sha256", {}).get(arm) != rows_sha:
-        raise SystemExit(f"refusing to train {arm}: AUDIT_E01R.json is missing, failed, or audited other rows")
+    passed = aud.get("ok") is True or (aud.get("arm_ok") or {}).get(arm) is True
+    if not passed or aud.get("rows_sha256", {}).get(arm) != rows_sha:
+        raise SystemExit(f"refusing to train {arm}: AUDIT_E01R.json is missing, failed for this arm, or audited "
+                         "other rows")
     return sha_bytes(p.read_bytes())
+
+
+def arm_ok(failures, names):
+    """{arm: True iff no failure names the arm (suffix ':<arm>') and no failure is arm-independent}."""
+    own = {a: [f for f in failures if f.endswith(f":{a}")] for a in names}
+    shared = [f for f in failures if not any(f.endswith(f":{a}") for a in names)]
+    return {a: not shared and not own[a] for a in names}
+
+
+def require_r1_branch(path):
+    """E-R1 (the R1 pool) is audited only under branch B3: BRANCH_STEP_A.json from the frozen decide_branch.py."""
+    p = Path(path)
+    q = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    if q.get("code_sha256") != DECIDE_SHA256 or q.get("branch") != "B3":
+        raise SystemExit(f"E-R1 is audited only under branch B3; {p.name} "
+                         f"{'is missing' if not q else 'says ' + str(q.get('branch'))}"
+                         f"{'' if q.get('code_sha256') in (None, DECIDE_SHA256) else ' (not the frozen rule)'}")
 
 
 def main(argv=None):
@@ -500,11 +527,20 @@ def main(argv=None):
     ap.add_argument("--pool", default=str(R1_POOL), help="E-R1: the audited training pool (audit_tr_pool.py output)")
     ap.add_argument("--control-dir", default=str(CONTROL_DIR))
     ap.add_argument("--tok", action="store_true", help="load the Titan tokenizer for token covariates (no weights)")
+    ap.add_argument("--branch", default=str(BRANCH_PATH), help="BRANCH_STEP_A.json (E-R1 needs branch B3)")
     a = ap.parse_args(argv)
     out = Path(a.out)
+    audit_p = out / "AUDIT_E01R.json"
+    if (out / "SEALED_COMMIT.json").exists():
+        raise SystemExit("the SEALED commitment exists: the row audit it binds is never rewritten after the mint")
+    if audit_p.exists():
+        raise SystemExit(f"{audit_p.name} exists; it is create-only (a failed audit is removed only before the mint, "
+                         "as a logged deviation)")
     names = [x if x.startswith("E-") else f"E-{x}" for x in (y.strip() for y in a.arms.split(",")) if x]
     if not names or set(names) - set(ARM_SPEC) or len(set(names)) != len(names):
         raise SystemExit(f"--arms must be a subset of {sorted(ARM_SPEC)}")
+    if "E-R1" in names:
+        require_r1_branch(a.branch)
     man_p = out / "TRAIN_MANIFEST_E01R.json"
     man = json.loads(man_p.read_text(encoding="utf-8")) if man_p.exists() else {}
     fail, pool_cells, pool_info = [] if man else ["manifest_missing"], None, None
@@ -556,10 +592,12 @@ def main(argv=None):
     res = audit_e01r(arms, control=load_rows(ctl_p), tok=tok, batteries=batteries, pool_cells=pool_cells)
     res["failures"] = fail + res["failures"]
     res["ok"] = not res["failures"]
+    res["arm_ok"] = arm_ok(res["failures"], names)
     res.update({"out_dir": str(out), "rows_sha256": rows_sha, "control_rows_sha256": ctl_sha, "pool": pool_info,
                 "dev2_battery_file_used": dev2_file})
-    (out / "AUDIT_E01R.json").write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8", newline="\n")
-    print(json.dumps({k: res[k] for k in ("ok", "failures", "control_failures", "design_notes")}, indent=1))
+    with open(audit_p, "x", encoding="utf-8", newline="\n") as f:  # create-only
+        f.write(json.dumps(res, indent=1) + "\n")
+    print(json.dumps({k: res[k] for k in ("ok", "arm_ok", "failures", "control_failures", "design_notes")}, indent=1))
     for name, v in res["arms"].items():
         print(name, "rows", v["rows"], "noop", v["noop_share"], "by type", v["rows_by_rule_type"], "sources",
               {k: c["n"] for k, c in v["class_balance_by_wording_source"].items()}, "tokens",

@@ -3,7 +3,8 @@
 
 The pool audit runs only on fake TR/P2/P3 files in a temporary directory: no sealed file is opened. Otherwise read-only:
 pools/P2_DEV.json and pools/P2_DEV_v2.json, the RCWM reference tree, the DEV2 battery file (CLI test) and, if present,
-runs/RCX-E01N/cells/train_N-CFSD.jsonl.
+runs/RCX-E01N/cells/train_N-CFSD.jsonl and runs/RCX-E01R/dev2/BRANCH_STEP_A.json (the real B4 record must stop the pool
+audit before any pool is read). Branch records for the gates are fakes in the temporary directory.
 Run: python -B -m unittest tests.test_e01r_audit -v   (CPU, single thread; about 10 s)
 """
 import ast
@@ -18,6 +19,7 @@ import tempfile
 import types
 import unittest
 from pathlib import Path
+from unittest import mock
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 sys.dont_write_bytecode = True
@@ -38,6 +40,7 @@ from rcx.rcl import gen, templates as T, wording_audit as WA, world as W  # noqa
 _HEAVY_AFTER = {m for m in HEAVY if m in sys.modules}
 E01N = ROOT / "experiments" / "RCX-E01N"
 CF_SEED = 20261253  # N-CFSD's data seed
+DECIDE_SHA = "6835b0402120a2847423d8af08814cc89f311292b110365487b39d61636080d6"  # decide_branch.py, CX D-37
 CELLS = [(p, f) for p in ("POS", "NEG") for f in ATP.FORMS]
 LETTERS = "cwxyqhj"  # no nonce word uses these letters; 3-letter words cannot be status stems (>= 4 letters)
 
@@ -472,6 +475,8 @@ class TestCli(unittest.TestCase):
         (self.cdir / "train_N-CFSD.jsonl").write_bytes(data)
         (self.cdir / "TRAIN_MANIFEST.json").write_text(json.dumps({"N-CFSD": {
             "sha256": hashlib.sha256(data).hexdigest(), "rows": len(self.control)}}), encoding="utf-8")
+        self.branch = d / "BRANCH_STEP_A.json"
+        self.write_branch("B3")
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -490,10 +495,16 @@ class TestCli(unittest.TestCase):
                                                                 "meets_minimum": meets}), encoding="utf-8")
         return sha
 
+    def write_branch(self, branch, code_sha=None):
+        arms = {"B3": ["R1", "R3"], "B4": ["R2", "R3"], "B1": []}[branch]
+        self.branch.write_text(json.dumps({"branch": branch, "arms": arms, "code_sha256": code_sha or DECIDE_SHA}),
+                               encoding="utf-8")
+
     def main(self, *extra):
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            return AE.main(["--out", str(self.out), "--control-dir", str(self.cdir), *extra]), buf.getvalue()
+            return AE.main(["--out", str(self.out), "--control-dir", str(self.cdir), "--branch", str(self.branch),
+                            *extra]), buf.getvalue()
 
     def test_cli_pass_and_require(self):
         res, out = self.main("--arms", "E-R1,R3", "--pool", str(self.pdir / "TR_v9_audited.json"))  # R3 = alias
@@ -519,14 +530,65 @@ class TestCli(unittest.TestCase):
         saved = json.loads((self.out / "AUDIT_E01R.json").read_text(encoding="utf-8"))
         self.assertFalse(saved["ok"])
         self.assertEqual(saved["failures"], ["pool_audit", "pool_manifest", "manifest_sha:E-R3"])
-        with self.assertRaises(SystemExit):
-            AE.require_audit_e01r(self.out, "E-R3", self.man["E-R3"]["sha256"])
+        self.assertEqual(saved["arm_ok"], {"E-R1": False, "E-R3": False})  # pool failures are arm-independent
+        for arm in ("E-R1", "E-R3"):
+            with self.assertRaises(SystemExit):
+                AE.require_audit_e01r(self.out, arm, self.man[arm]["sha256"])
         (self.pdir / "pool.json").write_bytes((self.pdir / "TR_v9_audited.json").read_bytes())
         for argv in (("--arms", "E-R1", "--pool", str(self.pdir / "pool.json")),
                      ("--arms", "E-R1", "--pool", str(self.pdir / "TR_v9_audited.json.secret")),
                      ("--arms", "E-R4"), ("--arms", ""), ("--arms", "E-R3,R3")):
-            with self.assertRaises(SystemExit):
+            (self.out / "AUDIT_E01R.json").unlink(missing_ok=True)  # each refusal on its own merits
+            with self.subTest(argv=argv), self.assertRaises(SystemExit):
                 self.main(*argv)
+            self.assertFalse((self.out / "AUDIT_E01R.json").exists())
+
+    def test_cli_arm_ok_isolates_an_arm_failure(self):
+        self.write_manifest(dict(self.man, **{"E-R3": dict(self.man["E-R3"], rows=1500)}))
+        with self.assertRaises(SystemExit):
+            self.main("--arms", "E-R1,E-R3", "--pool", str(self.pdir / "TR_v9_audited.json"))
+        saved = json.loads((self.out / "AUDIT_E01R.json").read_text(encoding="utf-8"))
+        self.assertEqual((saved["ok"], saved["failures"], saved["arm_ok"]),
+                         (False, ["manifest_sha:E-R3"], {"E-R1": True, "E-R3": False}))
+        AE.require_audit_e01r(self.out, "E-R1", self.man["E-R1"]["sha256"])  # the other arm stays usable
+        with self.assertRaises(SystemExit):
+            AE.require_audit_e01r(self.out, "E-R3", self.man["E-R3"]["sha256"])
+        with self.assertRaises(SystemExit):  # passed, but for other rows
+            AE.require_audit_e01r(self.out, "E-R1", "0" * 64)
+        self.assertEqual(AE.arm_ok(["semantic_overlap:DEV2:E-R3", "frame:E-R2"], ["E-R2", "E-R3", "E-R1"]),
+                         {"E-R2": False, "E-R3": False, "E-R1": True})
+        self.assertEqual(AE.arm_ok(["control_sha"], ["E-R2"]), {"E-R2": False})
+
+    def test_cli_create_only_and_after_mint(self):
+        res, _ = self.main("--arms", "E-R3")
+        self.assertTrue(res["ok"], res["failures"])
+        before = (self.out / "AUDIT_E01R.json").read_bytes()
+        with self.assertRaises(SystemExit) as cm:  # create-only: a passing audit is never rewritten
+            self.main("--arms", "E-R3")
+        self.assertIn("create-only", str(cm.exception))
+        self.assertEqual((self.out / "AUDIT_E01R.json").read_bytes(), before)
+        (self.out / "SEALED_COMMIT.json").write_text("{}", encoding="utf-8")
+        (self.out / "AUDIT_E01R.json").unlink()
+        with self.assertRaises(SystemExit) as cm:  # after the mint: never, even with the file gone
+            self.main("--arms", "E-R3")
+        self.assertIn("after the mint", str(cm.exception))
+        self.assertFalse((self.out / "AUDIT_E01R.json").exists())
+
+    def test_cli_r1_only_under_b3(self):
+        for branch, code_sha in (("B4", None), ("B1", None), ("B3", "0" * 64)):
+            self.write_branch(branch, code_sha)
+            with self.subTest(branch=branch, code_sha=code_sha), self.assertRaises(SystemExit) as cm:
+                self.main("--arms", "E-R1,E-R3", "--pool", str(self.pdir / "TR_v9_audited.json"))
+            self.assertIn("only under branch B3", str(cm.exception))
+            self.assertFalse((self.out / "AUDIT_E01R.json").exists())
+            self.assertFalse([t for t in T.SPOS if t.startswith("tr:")])  # the R1 pool was not even registered
+        self.branch.unlink()
+        with self.assertRaises(SystemExit):
+            self.main("--arms", "E-R1", "--pool", str(self.pdir / "TR_v9_audited.json"))
+        self.write_branch("B4")  # the B4 arms need no branch gate here
+        res, _ = self.main("--arms", "E-R3")
+        self.assertTrue(res["ok"], res["failures"])
+        self.assertEqual(res["arm_ok"], {"E-R3": True})
 
 
 # ----------------------------------------------------------------------------- R1 training-pool audit (fake files)
@@ -572,12 +634,19 @@ class TestTrPool(unittest.TestCase):
                   "kept_by_cell": {"P3": {"POS/IMPLICIT": 1, "NEG/EXPLICIT_LISTED_FIRST": 1}}}
         (d / "POOL_REFINE.json").write_text(json.dumps(refine), encoding="utf-8")
         (d / "POOL_SPLIT.json").write_text(json.dumps({"p2_sha256": sha("P2_DEV.json")}), encoding="utf-8")
+        self.write_branch("B3")
+
+    def write_branch(self, branch, code_sha=None):
+        arms = {"B3": ["R1", "R3"], "B4": ["R2", "R3"], "B1": []}[branch]
+        (self.d / "BRANCH_STEP_A.json").write_text(json.dumps({"branch": branch, "arms": arms,
+                                                               "code_sha256": code_sha or DECIDE_SHA}),
+                                                   encoding="utf-8")
 
     def argv(self, **over):
         d = self.d
         a = {"--candidates": d / "TR_v1_candidates.json", "--p2": d / "P2_DEV_v2.json", "--p2-v1": d / "P2_DEV.json",
              "--p3": d / "P3_SEALED_v2.json.secret", "--refine": d / "POOL_REFINE.json",
-             "--split": d / "POOL_SPLIT.json", "--out-dir": d / "out"}
+             "--split": d / "POOL_SPLIT.json", "--out-dir": d / "out", "--branch": d / "BRANCH_STEP_A.json"}
         a.update(over)
         for v in a.values():  # every path is inside the temp dir: no real (sealed) file is ever opened
             self.assertTrue(Path(v).resolve().is_relative_to(d.resolve()), v)
@@ -605,8 +674,12 @@ class TestTrPool(unittest.TestCase):
                                           "kept": 43})
         self.assertEqual(meta["by_cell"]["POS/IMPLICIT"]["kept"], 8)
         self.assertTrue(meta["meets_minimum"])
-        for name, k in (("TR_v1_audited.json", "audited"), ("TR_v1_P3_drops.json.secret", "p3_drops")):
-            self.assertEqual(meta["outputs"][k]["sha256"], hashlib.sha256((o / name).read_bytes()).hexdigest())
+        self.assertEqual((meta["p3_read"], meta["branch"]["branch"]), (True, "B3"))
+        self.assertEqual(meta["outputs"]["audited"]["sha256"],
+                         hashlib.sha256((o / "TR_v1_audited.json").read_bytes()).hexdigest())
+        secret_sha = hashlib.sha256((o / "TR_v1_P3_drops.json.secret").read_bytes()).hexdigest()
+        self.assertEqual(meta["outputs"]["p3_drops"], {"file": "TR_v1_P3_drops.json.secret", "n": 1})  # no sha256
+        self.assertNotIn(secret_sha, out + aud_text)  # the secret file's sha256 is never published
         self.assertEqual(meta["inputs"]["P3_v2"]["n"], 2)
         tokens = lambda s: set(re.findall(r"[a-z0-9_]+", s.lower()))  # noqa: E731
         visible = out + aud_text + (o / "TR_v1_audited.json").read_text(encoding="utf-8")
@@ -623,11 +696,52 @@ class TestTrPool(unittest.TestCase):
     def test_minimum_per_cell(self):
         self.cands = [t for t in self.cands if not (t["pol"] == "NEG" and t["form"] == "IMPLICIT" and t["id"] > "r52")]
         self.write_inputs()
-        meta, out = self.main()
-        self.assertFalse(meta["meets_minimum"])
+        with mock.patch.object(ATP, "read_p3", side_effect=AssertionError("P3 read")):
+            meta, out = self.main()  # 3 visible survivors in NEG/IMPLICIT: P3 cannot help, so it is never opened
+        self.assertFalse(meta["meets_minimum"] or meta["p3_read"])
         self.assertEqual(meta["cells_below_minimum"], ["NEG/IMPLICIT"])
         self.assertEqual(meta["by_cell"]["NEG/IMPLICIT"]["kept"], 3)
+        self.assertEqual(meta["visible_kept_by_cell"]["NEG/IMPLICIT"], 3)
+        self.assertNotIn("P3_v2", meta["inputs"])
         self.assertIn('"meets_minimum": false', out)
+        self.assertEqual(sorted(p.name for p in (self.d / "out").iterdir()), ["TR_v1_AUDIT.json"])
+
+    def test_p3_read_only_when_visible_minimum_met(self):
+        # NEG/LF: 5 r-candidates plus x9, a near-duplicate of the NEG/LF P3 wording: 6 visible survivors, so P3 is
+        # read, and its drop takes the cell to 5
+        self.cands = [t for t in self.cands if t["id"] not in ("r35", "r36")] + [
+            {"id": "x9", "text": wording(46, range(230, 238)), "pol": "NEG", "form": "EXPLICIT_LISTED_FIRST",
+             "author": "T"}]
+        self.write_inputs()
+        meta, _ = self.main()
+        self.assertEqual((meta["p3_read"], meta["meets_minimum"], meta["cells_below_minimum"]),
+                         (True, False, ["NEG/EXPLICIT_LISTED_FIRST"]))
+        self.assertEqual(meta["visible_kept_by_cell"]["NEG/EXPLICIT_LISTED_FIRST"], 6)
+        self.assertEqual(meta["by_cell"]["NEG/EXPLICIT_LISTED_FIRST"]["p3"], 1)
+
+    def test_branch_gate(self):
+        for branch, code_sha in (("B4", None), ("B1", None), ("B3", "0" * 64)):
+            self.write_branch(branch, code_sha)
+            with self.subTest(branch=branch), mock.patch.object(ATP, "read_p3", side_effect=AssertionError("read")), \
+                    self.assertRaises(SystemExit) as cm:
+                self.main()
+            self.assertIn("decide_branch" if code_sha else "only under branch B3", str(cm.exception))
+            self.assertFalse((self.d / "out").exists())
+        (self.d / "BRANCH_STEP_A.json").unlink()
+        with self.assertRaises(SystemExit):
+            self.main()
+        self.assertEqual(ATP.DECIDE_SHA256, hashlib.sha256((HERE / "decide_branch.py").read_bytes()).hexdigest())
+
+    @unittest.skipUnless((ROOT / "runs/RCX-E01R/dev2/BRANCH_STEP_A.json").exists(), "no step A branch record")
+    def test_real_branch_record_refuses_before_reading(self):
+        """CX D-39: the real BRANCH_STEP_A.json says B4, so the default audit refuses before reading any pool."""
+        with mock.patch.object(ATP, "read_p3", side_effect=AssertionError("P3 read")), \
+                mock.patch.object(ATP, "read_visible", side_effect=AssertionError("pool read")), \
+                self.assertRaises(SystemExit) as cm:
+            ATP.main(["--out-dir", str(self.d / "out")])
+        self.assertIn("only under branch B3", str(cm.exception))
+        self.assertIn("B4", str(cm.exception))
+        self.assertFalse((self.d / "out").exists())
 
     def test_p3_custody_refusals(self):
         tokens = lambda s: set(re.findall(r"[a-z0-9_]+", s.lower()))  # noqa: E731
