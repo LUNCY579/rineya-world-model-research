@@ -3,9 +3,12 @@
 Updated 2026-10-12 UTC after four adapted dynamics readouts. Full research goal
 remains open; H3, Ledger and Blocksworld native work remain. The first H3 attempt
 stopped before model loading when RCX acquired the CPU lane; see `NATIVE_QUEUE.md`.
-The current package passes175 tests and compilation. Prospective Ledger,
+The current package passes212 tests and compilation. Prospective Ledger,
 R/P-retention and constructed Blocksworld G1 inputs are frozen; their native
 outcomes are still unknown.
+The consolidated report is `WARM_RESEARCH_REPORT_2026_10_12.md`; it adds actual
+parent exposure, cost/regret denominators, uncertainty and current integration
+decisions without changing the original endpoints or failed gates.
 
 ![Fixed development results](../results/recovery-v1/recovery_counts_v2.png)
 
@@ -57,7 +60,8 @@ final-finish contract is stricter and must remain separately reported.
 Posthoc unused-branch audits find own-input state/legality errors even with
 perfect selected-plan success. Correct queries out of360: B0 358,A0 356,A1 349,
 A2 358,A5 349; A1 has4 malformed/unknown cases. These are dependent repeated
-queries (245 unique conditionings,12 parents), not360 independent trials.
+queries (245 unique conditionings in B0/A0/A1/A2,240 in A5;12 parents),
+not360 independent trials.
 All72 finish queries per arm predict termination correctly. Calibration remains
 unknown. Original P2 and selection are unchanged.
 
@@ -86,7 +90,9 @@ prompt is byte-identical to `rw2`. No core or owner artifact was modified.
 
 Fresh recovery manifest SHA-256:
 `20c593a683fed07e21c226fa77189b1b4be7cea92c186ff27881c4c21d65b9fe`.
-TRAIN has 128 independent parents. DEV has 12 ID parents using seen one-step keys
+TRAIN offers128 independent parents; the32-step arms actually draw29 distinct
+parents and A5 draws64 in96 updates. TRAIN limits are24/32/40. DEV has12
+teacher-known ID parents using inherited-F one-step keys
 and 12 unseen-limit parents at limits 80/96, including six starts outside inherited
 numerical support. The ID cohort tests new compositions of seen transitions.
 This is not proof of unseen parent-backbone arithmetic.

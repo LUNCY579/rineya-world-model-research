@@ -11,8 +11,11 @@ legality fixture. H3/Ledger/Blocksworld execution is next. G4–G7 remain unqual
 confirmation labels remain sealed. See `reports/RECOVERY_STATUS.md`,
 `reports/GATE_STATUS.md` and the exact pending commands in `reports/NATIVE_QUEUE.md`.
 Original test evidence remains in `results/TESTS_FINAL.json`; new records use
-separate paths. The current package passes175 tests and compilation, recorded
-in `results/recovery-v1/PREPARATION_CHECKPOINT_07.json`.
+separate paths. The current package passes212 tests and compilation, recorded
+in `results/recovery-v1/PREPARATION_CHECKPOINT_09.json`. The consolidated native
+evidence and current integration decisions are in
+`reports/WARM_RESEARCH_REPORT_2026_10_12.md`; the executed MTP architecture is
+documented in `research/IMPLEMENTATION_EVIDENCE_2026_10_12.md`.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
 Parent repository baseline: `aeb19ab17128d884c4457ce59db6e926ceb13a7a`.

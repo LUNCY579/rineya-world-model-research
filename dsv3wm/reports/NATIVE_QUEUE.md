@@ -46,6 +46,27 @@ Extend subsequent student and Ledger training/readout freezes with the same
 `freeze_execution_dependencies.py` before execution. Preserve their originals
 and retain the actual B0 qualification-freeze reference.
 
+The H3 dynamics/behavior guard evaluator is a separate new instrument accepting
+the full StudentConfig. Its unchanged warm-parent guard inputs are already
+bound by `RECOVERY_H3_WARM_GUARDS_FREEZE_V2.json`. Once the teacher qualifies,
+run these two warm references before accepting student guard comparisons:
+
+```powershell
+& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/recovery-h3-v1/warm_A0_guards.resources.json -- dsv3wm/scripts/evaluate_recovery_student_guards.py --config dsv3wm/configs/recovery_student_A4.json --adapter dsv3wm/artifacts/recovery-v1/A0_s0/adapter --run dsv3wm/artifacts/recovery-v1/A0_s0/run.json --data dsv3wm/datasets/recovery-v1/dev.jsonl --fixtures dsv3wm/results/retention_core_v1.fixtures.json --freeze dsv3wm/prereg/RECOVERY_H3_WARM_GUARDS_FREEZE_V2.json --out dsv3wm/results/recovery-h3-v1/warm_A0_guards.json --warm-baseline --train dsv3wm/datasets/recovery-v1/train.jsonl
+& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/recovery-h3-v1/warm_A2_guards.resources.json -- dsv3wm/scripts/evaluate_recovery_student_guards.py --config dsv3wm/configs/recovery_student_A3.json --adapter dsv3wm/artifacts/recovery-v1/A2_s0/adapter --run dsv3wm/artifacts/recovery-v1/A2_s0/run.json --data dsv3wm/datasets/recovery-v1/dev.jsonl --fixtures dsv3wm/results/retention_core_v1.fixtures.json --freeze dsv3wm/prereg/RECOVERY_H3_WARM_GUARDS_FREEZE_V2.json --out dsv3wm/results/recovery-h3-v1/warm_A2_guards.json --warm-baseline --train dsv3wm/datasets/recovery-v1/train.jsonl
+```
+
+After completed A3/A4/C3/C4 training, `freeze_recovery_student_guards.py`
+requires each actual `--student-dir` and its own `--baseline` warm guard record.
+Extend that new freeze's execution closure and pass the same baseline to the
+guard evaluator. Never substitute an old RecoveryConfig readout for this new
+lineage/trace/counter instrument or infer retention from a warm-baseline failure.
+After genuine proposer/rerank readouts, run `analyze_recovery_student_costs.py`
+with each `--input` and a new `--out`; use the registered `--tokenizer-json` for
+tokenization-only verification of forward input/position totals. Keep pure,
+offline pass@4 coverage and learned-rerank costs separate. Physical counters
+absent from the original proposal instrument remain unknown.
+
 After qualified Ledger B0, create a new training freeze binding its result/traces
 and original qualification-freeze reference, then run the fixed four-arm recipes.
 Measure paired R/P behavior on the frozen24-case V2 supplement using

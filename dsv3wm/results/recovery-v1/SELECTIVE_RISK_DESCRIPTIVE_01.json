@@ -1,0 +1,576 @@
+{
+  "analyzed_at_utc": "2026-10-12T07:40:07.789279+00:00",
+  "scope": "posthoc fixed DEV seed0; structural deferral, not calibrated uncertainty or confirmation",
+  "native_model_loaded": false,
+  "confirmation_access": false,
+  "horizon": 4,
+  "input_sha256": {
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\B0_qualification.json": "6f19403eabdf993d687e9b574efc37439a7689b0d8bee71edf594cf457da853a",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A0_dynamics.json": "42313d10f87ee862b058032bf4a8223218e0c240861b9f12bce6c20762f1722a",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A1_dynamics.json": "a94acda482950edcf387676b5613a01dba978a607ebccae5f792ffb5d5570fc3",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A2_dynamics.json": "33b61b7fa902b81171d81d7fb9fc0a9a359fa6357881ec119717e9d35cb678f3",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A5_dynamics.json": "e5312d5f8ab9f431508d7080a49f49c4739236e4f15527d4c3c3ca1a7a81137c"
+  },
+  "source_sha256": {
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\analyze_recovery_selective_risk.py": "6e3235d5e6f9b6dc1392517a524dd156a84e877cf0e5186138d2da98811d8d11",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\stats.py": "85e64a1276541d93aaf35c3e24b07547c2a15166953456c2fa66dd58b02efddd"
+  },
+  "arms": {
+    "B0": {
+      "rollout": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 12,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.2424940066552408
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 12,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.2424940066552408
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 24,
+          "rejected": 0,
+          "accepted_correct": 24,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.13797620467498012
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      },
+      "direct": {
+        "id": {
+          "status": "not-measured",
+          "n": 12
+        },
+        "ood": {
+          "status": "not-measured",
+          "n": 12
+        },
+        "all": {
+          "status": "not-measured",
+          "n": 24
+        }
+      }
+    },
+    "A0": {
+      "rollout": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 12,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.2424940066552408
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 12,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.2424940066552408
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 24,
+          "rejected": 0,
+          "accepted_correct": 24,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.13797620467498012
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      },
+      "direct": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 5,
+          "rejected": 7,
+          "accepted_correct": 0,
+          "accepted_errors": 5,
+          "all_case_errors": 12,
+          "coverage": 0.4166666666666667,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.5655175352168254,
+            1.0
+          ],
+          "detected_errors": 7,
+          "error_detection_recall": 0.5833333333333334,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 9,
+          "rejected": 3,
+          "accepted_correct": 0,
+          "accepted_errors": 9,
+          "all_case_errors": 12,
+          "coverage": 0.75,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.7008549515804562,
+            1.0
+          ],
+          "detected_errors": 3,
+          "error_detection_recall": 0.25,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 14,
+          "rejected": 10,
+          "accepted_correct": 0,
+          "accepted_errors": 14,
+          "all_case_errors": 24,
+          "coverage": 0.5833333333333334,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.7846891972623643,
+            1.0
+          ],
+          "detected_errors": 10,
+          "error_detection_recall": 0.4166666666666667,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      }
+    },
+    "A1": {
+      "rollout": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 12,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.2424940066552408
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 11,
+          "rejected": 1,
+          "accepted_correct": 10,
+          "accepted_errors": 1,
+          "all_case_errors": 2,
+          "coverage": 0.9166666666666666,
+          "accepted_error_risk": 0.09090909090909091,
+          "accepted_error_risk_wilson95": [
+            0.016232172885884827,
+            0.3773584364515956
+          ],
+          "detected_errors": 1,
+          "error_detection_recall": 0.5,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 23,
+          "rejected": 1,
+          "accepted_correct": 22,
+          "accepted_errors": 1,
+          "all_case_errors": 2,
+          "coverage": 0.9583333333333334,
+          "accepted_error_risk": 0.043478260869565216,
+          "accepted_error_risk_wilson95": [
+            0.007716666143453135,
+            0.20991155070258866
+          ],
+          "detected_errors": 1,
+          "error_detection_recall": 0.5,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      },
+      "direct": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 0,
+          "accepted_errors": 12,
+          "all_case_errors": 12,
+          "coverage": 1.0,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.7575059933447593,
+            1.0
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": 0.0,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 0,
+          "accepted_errors": 12,
+          "all_case_errors": 12,
+          "coverage": 1.0,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.7575059933447593,
+            1.0
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": 0.0,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 24,
+          "rejected": 0,
+          "accepted_correct": 0,
+          "accepted_errors": 24,
+          "all_case_errors": 24,
+          "coverage": 1.0,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.8620237953250198,
+            1.0
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": 0.0,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      }
+    },
+    "A2": {
+      "rollout": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 12,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.2424940066552408
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 12,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.2424940066552408
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 24,
+          "rejected": 0,
+          "accepted_correct": 24,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.13797620467498012
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      },
+      "direct": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 0,
+          "accepted_errors": 12,
+          "all_case_errors": 12,
+          "coverage": 1.0,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.7575059933447593,
+            1.0
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": 0.0,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 0,
+          "accepted_errors": 12,
+          "all_case_errors": 12,
+          "coverage": 1.0,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.7575059933447593,
+            1.0
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": 0.0,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 24,
+          "rejected": 0,
+          "accepted_correct": 0,
+          "accepted_errors": 24,
+          "all_case_errors": 24,
+          "coverage": 1.0,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.8620237953250198,
+            1.0
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": 0.0,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      }
+    },
+    "A5": {
+      "rollout": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 12,
+          "accepted_errors": 0,
+          "all_case_errors": 0,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.0,
+          "accepted_error_risk_wilson95": [
+            0.0,
+            0.2424940066552408
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": null,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 12,
+          "rejected": 0,
+          "accepted_correct": 11,
+          "accepted_errors": 1,
+          "all_case_errors": 1,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.08333333333333333,
+          "accepted_error_risk_wilson95": [
+            0.014865094404917123,
+            0.3538799111411169
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": 0.0,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 24,
+          "rejected": 0,
+          "accepted_correct": 23,
+          "accepted_errors": 1,
+          "all_case_errors": 1,
+          "coverage": 1.0,
+          "accepted_error_risk": 0.041666666666666664,
+          "accepted_error_risk_wilson95": [
+            0.00739345616550581,
+            0.20241806478655933
+          ],
+          "detected_errors": 0,
+          "error_detection_recall": 0.0,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      },
+      "direct": {
+        "id": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 4,
+          "rejected": 8,
+          "accepted_correct": 0,
+          "accepted_errors": 4,
+          "all_case_errors": 12,
+          "coverage": 0.3333333333333333,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.5101091635454027,
+            1.0
+          ],
+          "detected_errors": 8,
+          "error_detection_recall": 0.6666666666666666,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "ood": {
+          "status": "measured",
+          "n": 12,
+          "accepted": 3,
+          "rejected": 9,
+          "accepted_correct": 0,
+          "accepted_errors": 3,
+          "all_case_errors": 12,
+          "coverage": 0.25,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.4385029682449546,
+            1.0
+          ],
+          "detected_errors": 9,
+          "error_detection_recall": 0.75,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        },
+        "all": {
+          "status": "measured",
+          "n": 24,
+          "accepted": 7,
+          "rejected": 17,
+          "accepted_correct": 0,
+          "accepted_errors": 7,
+          "all_case_errors": 24,
+          "coverage": 0.2916666666666667,
+          "accepted_error_risk": 1.0,
+          "accepted_error_risk_wilson95": [
+            0.6456695649333126,
+            1.0
+          ],
+          "detected_errors": 17,
+          "error_detection_recall": 0.7083333333333334,
+          "rejection_rule": "reject only frozen malformed reply; no new confidence threshold",
+          "probability_calibration": "unmeasured; no predictive probabilities/logits captured"
+        }
+      }
+    }
+  },
+  "uncertainty_scope": "Wilson intervals describe case outcomes only; one seed and shared rule families do not establish seed or broad-world uncertainty"
+}
