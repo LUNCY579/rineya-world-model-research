@@ -1,0 +1,48 @@
+import hashlib,json,sys,time,unittest
+from pathlib import Path
+from unittest.mock import patch
+from goal_conditioned_decision_data.pipelines.common import source_hashes,canonical
+from goal_conditioned_decision_data.pipelines import remote_archive as archive
+EXPECTED_DIGEST='f9acce125818a8b169a90e0b7ac6ac0c560da5367d70de20960836c0910b672c'
+before=source_hashes()
+before_digest=hashlib.sha256(canonical(before).encode()).hexdigest()
+assert len(before)==69 and before_digest==EXPECTED_DIGEST,(len(before),before_digest)
+print('BEFORE_SOURCE',len(before),before_digest,flush=True)
+root=Path('/Users/chengli/.codex/gcdl001-host/recovery-proposal-worktree/goal_conditioned_decision_data')
+suite=unittest.defaultTestLoader.discover(str(root/'tests'))
+assert suite.countTestCases()==511,suite.countTestCases()
+historical=sys.modules['test_v2_review'];rotations={}
+cls=historical.IndependentV1Compatibility
+def wrap(name,original):
+ def method(self):
+  state={'context':None,'born':None,'count':0}
+  original_bytes=historical.historical_bytes
+  def open_session():
+   state['context']=archive.read_session(historical.PRODUCTION)
+   state['context'].__enter__();state['born']=time.monotonic();state['count']+=1
+  def read(relative):
+   if time.monotonic()-state['born']>=60:
+    state['context'].__exit__(None,None,None);state['context']=None;open_session()
+   return original_bytes(relative)
+  open_session()
+  try:
+   with patch.object(historical,'historical_bytes',side_effect=read):return original(self)
+  finally:
+   if state['context'] is not None:state['context'].__exit__(None,None,None)
+   rotations[name]=state['count']
+ return method
+for name in ('test_all_1936_nonsealed_archived_rows_validate_without_rewriting_receipts','test_three_predeclared_production_batches_match_ids_candidates_labels_fingerprints'):
+ setattr(cls,name,wrap(name,getattr(cls,name)))
+import io
+log=io.StringIO()
+started=time.monotonic();result=unittest.TextTestRunner(stream=log,verbosity=2).run(suite)
+elapsed=time.monotonic()-started
+after=source_hashes();after_digest=hashlib.sha256(canonical(after).encode()).hexdigest()
+assert before==after and after_digest==EXPECTED_DIGEST
+summary={'version':'code11-facts-independent-suite-1','tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skipped':len(result.skipped),'seconds':round(elapsed,3),'source_before':before_digest,'source_after':after_digest,'source_count':len(after),'source_equal':before==after,'historical_read_session_rotations':rotations}
+(root/'reports/CODE11_FACTS_INDEPENDENT_SUITE.log').write_text(log.getvalue())
+(root/'reports/CODE11_FACTS_INDEPENDENT_SUITE.json').write_text(canonical(summary)+'\n')
+print('FINAL_INDEPENDENT_SUITE',json.dumps(summary,sort_keys=True),flush=True)
+assert result.testsRun==511 and not result.failures and not result.errors and not result.skipped
+
+
