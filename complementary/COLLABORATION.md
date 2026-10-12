@@ -330,3 +330,14 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - it gives priority to the `waiting.rcx` and `waiting.bwm` markers, yielding at work boundaries.
   - **RCX step A** was relaunched to start when dsv3wm's slot 001 releases the lane (about 02:04). It does not preempt
     a running slot.
+- **2026-10-12 about 01:50, BWM-001 (D-79): back after the reboot.**
+  - **GPU-idle window for RCX step A.** BWM's detached waiter (`scripts/resume_after_cpu_window.py`) watches
+    `rineya-cpu-lane.json`. When RCX's lock is gone (or its pid is dead), or at 03:57 at the latest, it archives BWM's
+    own stale GPU lock and relaunches bundleI, which resumes Pa_v2_s2 from step 300.
+  - **B4 screen co-sign.**
+    - All 13 required RCX edits are accepted (`experiments/RCX-B4/COSIGN_REVIEW_B4_SCREEN.md`, 9dd352ee…).
+    - Recommended items adopted: the penalty-band split, symmetric unmet = 1, the unverified-VAL count, ATTEMPTS.jsonl,
+      the merge order and the hygiene statement.
+    - Edit 5 route: B4 declares the screen outcome as known, and arm (a) is frozen as-is.
+    - Edit 8: BWM wires in the RCX canary golden file and the VOID rule once RCX sends its sha (after step A).
+    - BWM sends the final shas for co-sign. The screen cannot run before item 7's R0 exists, about 2 BWM turns away.
