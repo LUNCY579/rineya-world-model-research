@@ -1,0 +1,3700 @@
+{
+  "schema": "dsv3wm-posthoc-source-terminal-regret-v1",
+  "status": "offline posthoc terminal-contract audit",
+  "contract": {
+    "reward_id": "register-v2-success-step-violation",
+    "terminal_goal_reward": 1.0,
+    "executed_step_cost": 0.01,
+    "executed_illegal_cost": 0.1,
+    "action_cap": 6,
+    "universal_return_lower_bound": -0.66,
+    "optimal_return": "1-.01*(optimal_moves+1)",
+    "normalized_regret": "(optimal_return-source_return)/(optimal_return+.66)",
+    "normalization_scope": "universal conservative cap6 bound, not attainable worst for every parent; not RCWM candidate-mean regret",
+    "missing_plan_policy": "strict refusal; no null/malformed/incomplete to empty-plan substitution",
+    "empty_plan_policy": "recorded [] with complete empty labels and initial final_state has zero executed reward",
+    "original_P2_unchanged": true,
+    "posthoc": true,
+    "numerical_bound_tolerance": 1e-12
+  },
+  "per_arm": {
+    "B0": [
+      {
+        "task_id": "a028e725671b54b1e0284ca987f6302fdbeac279b6170532a37e4bfaaf0f9330",
+        "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "b279f9fbe9914429d80c631636d2b7861e9eabf2eba23ac8ca30813a973af8a5",
+        "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 6,
+        "original_success_conditional_excess_cost": 0.5,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -10,
+        "executed_steps": 6,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.06,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6273291925465839
+      },
+      {
+        "task_id": "ec7349751aff33d231218fb33098223a24fbc34357104c79a4a3fe55e8de7698",
+        "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.6666666666666666,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 30,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6234567901234568
+      },
+      {
+        "task_id": "4d31c18ebee2920c77e3ab8270e6a62bffd07498049e5916bc1723e3628bcd65",
+        "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 40,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 5,
+        "optimal_terminal_return": 0.94,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6187499999999999
+      },
+      {
+        "task_id": "c916c23693f477be9077b590f624c67c3847a113fed5699de95a8eae978d32d7",
+        "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "double",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.25,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 39,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6211180124223603
+      },
+      {
+        "task_id": "b195d2428d5e1ed9539187647636e74d83a7dbb20669c72e2cd59cc980113a70",
+        "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "8c6b12db1a840bb5a042baad9fc4a7540bcab5218048ef9f99f4685c5d1d300a",
+        "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -63,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "6dadf92fee9b633ee3a313918e27a9c273c693c0cd8451826faacc8b96b84e27",
+        "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -74,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "2ff978091e92bbdfc04be11226fec9525b53640a96c00f30a3026023aaf904c7",
+        "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -79,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "d74a4c7e8f273d7ddcfa228496afaa92419777e0d642f81a21395033e4f4d94c",
+        "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 63,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "01f5769cc912cd61af597745cd83a7510adc7b5769d58710e9835dcfb209254a",
+        "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -40,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "d5aef5b38fcc6973e09b0b189a1ac17107e1b442237b4873eac8031cd1fde987",
+        "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "halve",
+          "halve",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 18,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      }
+    ],
+    "A0": [
+      {
+        "task_id": "a028e725671b54b1e0284ca987f6302fdbeac279b6170532a37e4bfaaf0f9330",
+        "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "b279f9fbe9914429d80c631636d2b7861e9eabf2eba23ac8ca30813a973af8a5",
+        "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 6,
+        "original_success_conditional_excess_cost": 0.5,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -10,
+        "executed_steps": 6,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.06,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6273291925465839
+      },
+      {
+        "task_id": "ec7349751aff33d231218fb33098223a24fbc34357104c79a4a3fe55e8de7698",
+        "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.6666666666666666,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 30,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6234567901234568
+      },
+      {
+        "task_id": "4d31c18ebee2920c77e3ab8270e6a62bffd07498049e5916bc1723e3628bcd65",
+        "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 40,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 5,
+        "optimal_terminal_return": 0.94,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6187499999999999
+      },
+      {
+        "task_id": "c916c23693f477be9077b590f624c67c3847a113fed5699de95a8eae978d32d7",
+        "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "double",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.25,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 39,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6211180124223603
+      },
+      {
+        "task_id": "b195d2428d5e1ed9539187647636e74d83a7dbb20669c72e2cd59cc980113a70",
+        "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "8c6b12db1a840bb5a042baad9fc4a7540bcab5218048ef9f99f4685c5d1d300a",
+        "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -63,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "6dadf92fee9b633ee3a313918e27a9c273c693c0cd8451826faacc8b96b84e27",
+        "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -74,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "2ff978091e92bbdfc04be11226fec9525b53640a96c00f30a3026023aaf904c7",
+        "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -79,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "d74a4c7e8f273d7ddcfa228496afaa92419777e0d642f81a21395033e4f4d94c",
+        "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 63,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "01f5769cc912cd61af597745cd83a7510adc7b5769d58710e9835dcfb209254a",
+        "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -40,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "d5aef5b38fcc6973e09b0b189a1ac17107e1b442237b4873eac8031cd1fde987",
+        "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "halve",
+          "halve",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 18,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      }
+    ],
+    "A1": [
+      {
+        "task_id": "a028e725671b54b1e0284ca987f6302fdbeac279b6170532a37e4bfaaf0f9330",
+        "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "b279f9fbe9914429d80c631636d2b7861e9eabf2eba23ac8ca30813a973af8a5",
+        "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 6,
+        "original_success_conditional_excess_cost": 0.5,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -10,
+        "executed_steps": 6,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.06,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6273291925465839
+      },
+      {
+        "task_id": "ec7349751aff33d231218fb33098223a24fbc34357104c79a4a3fe55e8de7698",
+        "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.6666666666666666,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 30,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6234567901234568
+      },
+      {
+        "task_id": "4d31c18ebee2920c77e3ab8270e6a62bffd07498049e5916bc1723e3628bcd65",
+        "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 40,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 5,
+        "optimal_terminal_return": 0.94,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6187499999999999
+      },
+      {
+        "task_id": "c916c23693f477be9077b590f624c67c3847a113fed5699de95a8eae978d32d7",
+        "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "double",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.25,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 39,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6211180124223603
+      },
+      {
+        "task_id": "b195d2428d5e1ed9539187647636e74d83a7dbb20669c72e2cd59cc980113a70",
+        "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "8c6b12db1a840bb5a042baad9fc4a7540bcab5218048ef9f99f4685c5d1d300a",
+        "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -63,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "6dadf92fee9b633ee3a313918e27a9c273c693c0cd8451826faacc8b96b84e27",
+        "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -74,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "2ff978091e92bbdfc04be11226fec9525b53640a96c00f30a3026023aaf904c7",
+        "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -79,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "d74a4c7e8f273d7ddcfa228496afaa92419777e0d642f81a21395033e4f4d94c",
+        "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 63,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "01f5769cc912cd61af597745cd83a7510adc7b5769d58710e9835dcfb209254a",
+        "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -40,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "d5aef5b38fcc6973e09b0b189a1ac17107e1b442237b4873eac8031cd1fde987",
+        "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "halve",
+          "halve",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 18,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      }
+    ],
+    "A2": [
+      {
+        "task_id": "a028e725671b54b1e0284ca987f6302fdbeac279b6170532a37e4bfaaf0f9330",
+        "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "b279f9fbe9914429d80c631636d2b7861e9eabf2eba23ac8ca30813a973af8a5",
+        "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 6,
+        "original_success_conditional_excess_cost": 0.5,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -10,
+        "executed_steps": 6,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.06,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6273291925465839
+      },
+      {
+        "task_id": "ec7349751aff33d231218fb33098223a24fbc34357104c79a4a3fe55e8de7698",
+        "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.6666666666666666,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 30,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6234567901234568
+      },
+      {
+        "task_id": "4d31c18ebee2920c77e3ab8270e6a62bffd07498049e5916bc1723e3628bcd65",
+        "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 40,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 5,
+        "optimal_terminal_return": 0.94,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6187499999999999
+      },
+      {
+        "task_id": "c916c23693f477be9077b590f624c67c3847a113fed5699de95a8eae978d32d7",
+        "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "double",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.25,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 39,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6211180124223603
+      },
+      {
+        "task_id": "b195d2428d5e1ed9539187647636e74d83a7dbb20669c72e2cd59cc980113a70",
+        "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "8c6b12db1a840bb5a042baad9fc4a7540bcab5218048ef9f99f4685c5d1d300a",
+        "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -63,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "6dadf92fee9b633ee3a313918e27a9c273c693c0cd8451826faacc8b96b84e27",
+        "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -74,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "2ff978091e92bbdfc04be11226fec9525b53640a96c00f30a3026023aaf904c7",
+        "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -79,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "d74a4c7e8f273d7ddcfa228496afaa92419777e0d642f81a21395033e4f4d94c",
+        "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 63,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "01f5769cc912cd61af597745cd83a7510adc7b5769d58710e9835dcfb209254a",
+        "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -40,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "d5aef5b38fcc6973e09b0b189a1ac17107e1b442237b4873eac8031cd1fde987",
+        "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "halve",
+          "halve",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 18,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      }
+    ],
+    "A5": [
+      {
+        "task_id": "a028e725671b54b1e0284ca987f6302fdbeac279b6170532a37e4bfaaf0f9330",
+        "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "b279f9fbe9914429d80c631636d2b7861e9eabf2eba23ac8ca30813a973af8a5",
+        "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 6,
+        "original_success_conditional_excess_cost": 0.5,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -10,
+        "executed_steps": 6,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.06,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6273291925465839
+      },
+      {
+        "task_id": "ec7349751aff33d231218fb33098223a24fbc34357104c79a4a3fe55e8de7698",
+        "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.6666666666666666,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 30,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.01,
+        "normalized_terminal_regret": 0.6234567901234568
+      },
+      {
+        "task_id": "4d31c18ebee2920c77e3ab8270e6a62bffd07498049e5916bc1723e3628bcd65",
+        "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 40,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 5,
+        "optimal_terminal_return": 0.94,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6187499999999999
+      },
+      {
+        "task_id": "c916c23693f477be9077b590f624c67c3847a113fed5699de95a8eae978d32d7",
+        "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "double",
+          "double",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 5,
+        "original_success_conditional_excess_cost": 0.25,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 39,
+        "executed_steps": 5,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.05,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6211180124223603
+      },
+      {
+        "task_id": "b195d2428d5e1ed9539187647636e74d83a7dbb20669c72e2cd59cc980113a70",
+        "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+        "cohort": "recovery_id_teacher_known",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -24,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "8c6b12db1a840bb5a042baad9fc4a7540bcab5218048ef9f99f4685c5d1d300a",
+        "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "add1",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -63,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      },
+      {
+        "task_id": "6dadf92fee9b633ee3a313918e27a9c273c693c0cd8451826faacc8b96b84e27",
+        "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -74,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "2ff978091e92bbdfc04be11226fec9525b53640a96c00f30a3026023aaf904c7",
+        "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "finish"
+        ],
+        "original_P2_goal_only_success": false,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": null,
+        "original_success_conditional_excess_cost": null,
+        "terminal_goal_success": false,
+        "terminated": true,
+        "final_x": -77,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.98,
+        "normalized_terminal_regret": 0.6086956521739131
+      },
+      {
+        "task_id": "d74a4c7e8f273d7ddcfa228496afaa92419777e0d642f81a21395033e4f4d94c",
+        "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "sub1",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 3,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 63,
+        "executed_steps": 3,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.03,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.611111111111111
+      },
+      {
+        "task_id": "01f5769cc912cd61af597745cd83a7510adc7b5769d58710e9835dcfb209254a",
+        "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "add1",
+          "halve",
+          "sub1",
+          "sub1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.3333333333333333,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": -40,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 3,
+        "optimal_terminal_return": 0.96,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 1.0,
+        "normalized_terminal_regret": 0.6172839506172839
+      },
+      {
+        "task_id": "d5aef5b38fcc6973e09b0b189a1ac17107e1b442237b4873eac8031cd1fde987",
+        "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+        "cohort": "recovery_ood_limit",
+        "recorded_choice": [
+          "halve",
+          "halve",
+          "add1",
+          "add1"
+        ],
+        "original_P2_goal_only_success": true,
+        "original_P2_all_legal": true,
+        "original_success_conditional_move_cost": 4,
+        "original_success_conditional_excess_cost": 0.0,
+        "terminal_goal_success": false,
+        "terminated": false,
+        "final_x": 18,
+        "executed_steps": 4,
+        "executed_illegal_steps": 0,
+        "ignored_after_finish": 0,
+        "optimal_moves": 4,
+        "optimal_terminal_return": 0.95,
+        "source_terminal_return": -0.04,
+        "source_terminal_return_regret": 0.99,
+        "normalized_terminal_regret": 0.6149068322981367
+      }
+    ]
+  },
+  "summaries": {
+    "B0": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 28,
+        "mean_source_terminal_return": -0.04666666666666666,
+        "mean_source_terminal_return_regret": 1.0,
+        "mean_normalized_terminal_regret": 0.6198415094701327
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 22,
+        "mean_source_terminal_return": -0.036666666666666674,
+        "mean_source_terminal_return_regret": 0.9916666666666667,
+        "mean_normalized_terminal_regret": 0.614037778288986
+      },
+      "all": {
+        "n": 12,
+        "evaluable": 12,
+        "unevaluable": 0,
+        "original_P2_successes": 12,
+        "terminal_goal_successes": 0,
+        "executed_steps": 50,
+        "mean_source_terminal_return": -0.04166666666666666,
+        "mean_source_terminal_return_regret": 0.9958333333333335,
+        "mean_normalized_terminal_regret": 0.6169396438795592
+      }
+    },
+    "A0": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 28,
+        "mean_source_terminal_return": -0.04666666666666666,
+        "mean_source_terminal_return_regret": 1.0,
+        "mean_normalized_terminal_regret": 0.6198415094701327
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 22,
+        "mean_source_terminal_return": -0.036666666666666674,
+        "mean_source_terminal_return_regret": 0.9916666666666667,
+        "mean_normalized_terminal_regret": 0.614037778288986
+      },
+      "all": {
+        "n": 12,
+        "evaluable": 12,
+        "unevaluable": 0,
+        "original_P2_successes": 12,
+        "terminal_goal_successes": 0,
+        "executed_steps": 50,
+        "mean_source_terminal_return": -0.04166666666666666,
+        "mean_source_terminal_return_regret": 0.9958333333333335,
+        "mean_normalized_terminal_regret": 0.6169396438795592
+      }
+    },
+    "A1": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 28,
+        "mean_source_terminal_return": -0.04666666666666666,
+        "mean_source_terminal_return_regret": 1.0,
+        "mean_normalized_terminal_regret": 0.6198415094701327
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 22,
+        "mean_source_terminal_return": -0.036666666666666674,
+        "mean_source_terminal_return_regret": 0.9916666666666667,
+        "mean_normalized_terminal_regret": 0.614037778288986
+      },
+      "all": {
+        "n": 12,
+        "evaluable": 12,
+        "unevaluable": 0,
+        "original_P2_successes": 12,
+        "terminal_goal_successes": 0,
+        "executed_steps": 50,
+        "mean_source_terminal_return": -0.04166666666666666,
+        "mean_source_terminal_return_regret": 0.9958333333333335,
+        "mean_normalized_terminal_regret": 0.6169396438795592
+      }
+    },
+    "A2": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 28,
+        "mean_source_terminal_return": -0.04666666666666666,
+        "mean_source_terminal_return_regret": 1.0,
+        "mean_normalized_terminal_regret": 0.6198415094701327
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 22,
+        "mean_source_terminal_return": -0.036666666666666674,
+        "mean_source_terminal_return_regret": 0.9916666666666667,
+        "mean_normalized_terminal_regret": 0.614037778288986
+      },
+      "all": {
+        "n": 12,
+        "evaluable": 12,
+        "unevaluable": 0,
+        "original_P2_successes": 12,
+        "terminal_goal_successes": 0,
+        "executed_steps": 50,
+        "mean_source_terminal_return": -0.04166666666666666,
+        "mean_source_terminal_return_regret": 0.9958333333333335,
+        "mean_normalized_terminal_regret": 0.6169396438795592
+      }
+    },
+    "A5": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 6,
+        "terminal_goal_successes": 0,
+        "executed_steps": 28,
+        "mean_source_terminal_return": -0.04666666666666666,
+        "mean_source_terminal_return_regret": 1.0,
+        "mean_normalized_terminal_regret": 0.6198415094701327
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "evaluable": 6,
+        "unevaluable": 0,
+        "original_P2_successes": 5,
+        "terminal_goal_successes": 0,
+        "executed_steps": 21,
+        "mean_source_terminal_return": -0.035,
+        "mean_source_terminal_return_regret": 0.9900000000000001,
+        "mean_normalized_terminal_regret": 0.6130025816016155
+      },
+      "all": {
+        "n": 12,
+        "evaluable": 12,
+        "unevaluable": 0,
+        "original_P2_successes": 11,
+        "terminal_goal_successes": 0,
+        "executed_steps": 49,
+        "mean_source_terminal_return": -0.04083333333333333,
+        "mean_source_terminal_return_regret": 0.9950000000000001,
+        "mean_normalized_terminal_regret": 0.616422045535874
+      }
+    }
+  },
+  "paired_all_cases": {
+    "B0_to_A0": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    },
+    "B0_to_A1": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    },
+    "B0_to_A2": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    },
+    "B0_to_A5": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.001666666666666667,
+            "ci": [
+              0.0,
+              0.005000000000000001
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": -0.001666666666666668,
+            "ci": [
+              -0.0050000000000000044,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": -0.0010351966873706024,
+            "ci": [
+              -0.003105590062111807,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0008333333333333335,
+            "ci": [
+              0.0,
+              0.0025000000000000005
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": -0.000833333333333334,
+            "ci": [
+              -0.0025000000000000022,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": -0.0005175983436853012,
+            "ci": [
+              -0.0015527950310559036,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    },
+    "A0_to_A1": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    },
+    "A0_to_A2": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    },
+    "A0_to_A5": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.001666666666666667,
+            "ci": [
+              0.0,
+              0.005000000000000001
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": -0.001666666666666668,
+            "ci": [
+              -0.0050000000000000044,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": -0.0010351966873706024,
+            "ci": [
+              -0.003105590062111807,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0008333333333333335,
+            "ci": [
+              0.0,
+              0.0025000000000000005
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": -0.000833333333333334,
+            "ci": [
+              -0.0025000000000000022,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": -0.0005175983436853012,
+            "ci": [
+              -0.0015527950310559036,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    },
+    "A5_to_A1": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": -0.001666666666666667,
+            "ci": [
+              -0.005000000000000001,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.001666666666666668,
+            "ci": [
+              0.0,
+              0.0050000000000000044
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0010351966873706024,
+            "ci": [
+              0.0,
+              0.003105590062111807
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": -0.0008333333333333335,
+            "ci": [
+              -0.0025000000000000005,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.000833333333333334,
+            "ci": [
+              0.0,
+              0.0025000000000000022
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0005175983436853012,
+            "ci": [
+              0.0,
+              0.0015527950310559036
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    },
+    "A5_to_A2": {
+      "recovery_id_teacher_known": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "recovery_ood_limit": {
+        "n": 6,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": -0.001666666666666667,
+            "ci": [
+              -0.005000000000000001,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.001666666666666668,
+            "ci": [
+              0.0,
+              0.0050000000000000044
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0010351966873706024,
+            "ci": [
+              0.0,
+              0.003105590062111807
+            ],
+            "confidence": 0.95,
+            "parent_count": 6,
+            "seed_count": 1,
+            "trajectory_count": 6,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      },
+      "all": {
+        "n": 12,
+        "all_case_parent_ids": [
+          "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+          "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+          "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+          "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+          "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+          "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+          "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+          "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+          "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+          "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+          "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+          "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7"
+        ],
+        "candidate_minus_baseline": {
+          "source_terminal_return": {
+            "difference": -0.0008333333333333335,
+            "ci": [
+              -0.0025000000000000005,
+              0.0
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "source_terminal_return_regret": {
+            "difference": 0.000833333333333334,
+            "ci": [
+              0.0,
+              0.0025000000000000022
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          },
+          "normalized_terminal_regret": {
+            "difference": 0.0005175983436853012,
+            "ci": [
+              0.0,
+              0.0015527950310559036
+            ],
+            "confidence": 0.95,
+            "parent_count": 12,
+            "seed_count": 1,
+            "trajectory_count": 12,
+            "repetitions": 2000,
+            "random_seed": 20261012,
+            "unit": "all matched fixed DEV parents, one seed; descriptive parent bootstrap",
+            "limitations": "posthoc; no equivalence, promotion or confirmatory family",
+            "training_seed_uncertainty_estimated": false
+          }
+        }
+      }
+    }
+  },
+  "confirmation_access": false,
+  "oracle_called": false,
+  "model_loaded": false,
+  "original_P2_unchanged": true,
+  "scope": "derived source terminal reward, not original goal-only P2 or stricter H3 whole-plan validity",
+  "limitations": [
+    "Conservative universal bound is not an attainable worst return for every parent.",
+    "One seed and12 fixed DEV parents; bootstrap does not estimate training-seed uncertainty or prove equivalence.",
+    "Reward is reconstructed from recorded execution labels only; no finish appended and no simulator replay.",
+    "Null/malformed/incomplete records are refused rather than imputed as abstentions or penalties."
+  ],
+  "command": [
+    "dsv3wm/scripts/analyze_recovery_terminal_regret.py",
+    "--tasks",
+    "dsv3wm/datasets/recovery-v1/planning_dev.jsonl",
+    "--arm",
+    "B0=dsv3wm/results/recovery-v1/B0_planning.json",
+    "--arm",
+    "A0=dsv3wm/results/recovery-v1/A0_planning.json",
+    "--arm",
+    "A1=dsv3wm/results/recovery-v1/A1_planning.json",
+    "--arm",
+    "A2=dsv3wm/results/recovery-v1/A2_planning.json",
+    "--arm",
+    "A5=dsv3wm/results/recovery-v1/A5_planning.json",
+    "--out",
+    "dsv3wm/results/recovery-v1/POSTHOC_TERMINAL_REGRET_01.json"
+  ],
+  "input_sha256": {
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\gpu_lease.py": "f4def04fcd20de389de0ce991ac146793d0ffa404a79100064aefa86fb4549c2",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\scripts\\planbench_qwen.py": "ef17c4d4fbb6be84de03bbcc2a2f108e7e405741ffe649e3a201d09038af688e",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A0_s0\\adapter\\adapter_config.json": "4e915143131cbe5047ec8e3291071f7ef0a37a53f2a174734f65070dfe8ed025",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A0_s0\\adapter\\adapter_model.safetensors": "9b6ff87157ba7418fd328e1325c1461a7bbf305e01d13381d6225c4f8332cfe9",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A0_s0\\run.json": "dee487770751d62d8056295062908dfeb1264e7e98920bc205d49e2036e4492c",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A1_s0\\adapter\\adapter_config.json": "e95473a48c201fdf907296e3795c16df1a85c789ca1d68e97914bd577b588828",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A1_s0\\adapter\\adapter_model.safetensors": "21e837bc0e49047a0e6e42a2307ce46860f1be4ddf75e6af10d5c54347ae9957",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A1_s0\\run.json": "ea3877fd0ef0b1ef793b6d75c5bba2ea316a17aaa75c31e1da9f8da13e745ddf",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A2_s0\\adapter\\adapter_config.json": "c3684172cbae3bb1570fbd482aa492406e1f136249ee674a79f9becde82b61aa",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A2_s0\\adapter\\adapter_model.safetensors": "905d52126ed6f4774f935642ccda2c3edd0d00c38eb2a9bad03628698f7dcd97",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A2_s0\\run.json": "814a655e1fccfde21327367d585dba8fd2a72afb079fc4804b8e19c91b80ac65",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A5_s0\\adapter\\adapter_config.json": "8776c00a844608d95b6705acd22e75cf3f73d3f09ce731401f8e391f71a8478c",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A5_s0\\adapter\\adapter_model.safetensors": "af3d4ff209960923f92d6688a40cc81771ca554b405deff2315978f976379333",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\recovery-v1\\A5_s0\\run.json": "131692374f713c37f0dc08fc79b930f0397a53d818eb9a7a202a4894a034cbaa",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\configs\\recovery_A0.json": "41e011d5f4f17bd089d856e8e27214e3cfcb1262cedb5d463799932aafde1286",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\configs\\recovery_A1.json": "0700206e709262886c1df8bee70e644d1734822dca8a7578401ab39cb468cf03",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\configs\\recovery_A2.json": "8c8509529a900e652016dc05dfb7d9f764b15e42a415e6b9a0f4704fc8e04334",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\configs\\recovery_A5.json": "cdd3f79a71e77cd4cc0979f916ba4049c39b396e71ff367a8a4c4b9d25de51fa",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\datasets\\recovery-v1\\planning_dev.jsonl": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\datasets\\recovery-v1\\planning_scoring.json": "074146e8110b08d86058a01e2b2c970922c2399d8484c56928f27264506853ab",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\prereg\\RECOVERY_ALL_ARMS_READOUT_FREEZE_V3.json": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\prereg\\RECOVERY_TRAIN_FREEZE_V2.json": "0d52132ee1f39c3fc5aa4210066790031ab2b363ab0e871f2454175263cb3ab3",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A0_planning.json": "23de09ac40d5486088efaf95332365ce14b487709281b860b6ea2862db066ecf",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A0_planning.traces.json": "10f19f82c3e21fbbacbe234d4d89e0aed9f5adfb74ca004096d0dbf089b2e0da",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A1_planning.json": "1593fa2f65ced7fc4ba442afc500997d08f8608abb6070d64879f95d1048f38c",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A1_planning.traces.json": "30c63ff2e5cda890ce425bc8f0bef0fc38c05f9cac670f2a865d118f4a6d6608",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A2_planning.json": "acc34223d3874f8baf81179d76ff4029fc1716f587939d7a3ed163b99c58855f",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A2_planning.traces.json": "b0aa83d2cdf57d35be4a956dfe5bb5cfd715d3b140aa515ecdc46c92e6ad4d7f",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A5_planning.json": "17badad23f1942442382fc48a44cbeaa981cb1a5c4dc0e86c3cd69429c1f763d",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\A5_planning.traces.json": "8738ff0fd29b4428ba75b8ee199729ea17a64c93346a55913a67a0045dba43ae",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\B0_planning.json": "fdf098704efa4ef5e7c9cd5bae6c1725327a3a6be968edefd0e7754104af91cc",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\B0_planning.traces.json": "b0aa83d2cdf57d35be4a956dfe5bb5cfd715d3b140aa515ecdc46c92e6ad4d7f",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\B0_qualification.json": "6f19403eabdf993d687e9b574efc37439a7689b0d8bee71edf594cf457da853a",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_planning.py": "d2df4eb797bbd2db0459e16e49cc072473dc1a7a5ccb834994f4b77fcc82b6c3",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\planning.py": "09fe47251f5c6afa2312ec57e1f1578355cfe0d030abbc41f908e36ac34a16c7",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_planning.py": "3197c147bacba964a6e57241b4ab958ffd53cef73ce636b90d5973f4dfd987b1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\rcwm\\experiments\\RCWM-T1\\rcwmt\\env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\F_titan_main\\adapter\\adapter_config.json": "55b8fb922c8957573cfd36910ad64bbf4e328f23f00a58dcb889b899b64ca065",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\F_titan_main\\adapter\\adapter_model.safetensors": "c465356f85ead24b609af2b8b1cb0a14799e6d2d16116944c9c607c933e66466"
+  },
+  "source_sha256": {
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\analyze_recovery_terminal_regret.py": "ef87e31b46e10c4e4f19267ea880dc5d0675b2e5ac5c898cdc1210a891542af3",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\analyze_recovery_planning_costs.py": "cc7c804fe027377c75670286b83ff99c6a29f03e9686574959d526b4302e1d10",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\freeze_recovery_readout.py": "70b3c719f5c749d20a766877d71b60ea019330d644830d99617919f7529f72da",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\prereg\\POSTHOC_TERMINAL_REWARD_REGRET_V1.md": "08855b9a61a34238e1a3ce1ee4bc1eb8c2e8979ca08889b012ab9701e2452a1a",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\stats.py": "85e64a1276541d93aaf35c3e24b07547c2a15166953456c2fa66dd58b02efddd",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\config.py": "1e8dc59d1782dd63445b22d85657143ad6d47725229d5699c1a9d79e66a3f267",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\__init__.py": "a6cbad6c0d65c50bee0ebf989a9d1cca34b1721777f64b6ffa2066686235a058",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9"
+  },
+  "execution_provenance": {
+    "B0": {
+      "config_sha256": "41e011d5f4f17bd089d856e8e27214e3cfcb1262cedb5d463799932aafde1286",
+      "tasks_sha256": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c",
+      "scoring_sha256": "074146e8110b08d86058a01e2b2c970922c2399d8484c56928f27264506853ab",
+      "adapter_sha256": "c465356f85ead24b609af2b8b1cb0a14799e6d2d16116944c9c607c933e66466",
+      "adapter_config_sha256": "55b8fb922c8957573cfd36910ad64bbf4e328f23f00a58dcb889b899b64ca065",
+      "freeze_sha256": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+      "traces_sha256": "b0aa83d2cdf57d35be4a956dfe5bb5cfd715d3b140aa515ecdc46c92e6ad4d7f",
+      "source_sha256": {
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_planning.py": "d2df4eb797bbd2db0459e16e49cc072473dc1a7a5ccb834994f4b77fcc82b6c3",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_planning.py": "3197c147bacba964a6e57241b4ab958ffd53cef73ce636b90d5973f4dfd987b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\planning.py": "09fe47251f5c6afa2312ec57e1f1578355cfe0d030abbc41f908e36ac34a16c7",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\gpu_lease.py": "f4def04fcd20de389de0ce991ac146793d0ffa404a79100064aefa86fb4549c2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\scripts\\planbench_qwen.py": "ef17c4d4fbb6be84de03bbcc2a2f108e7e405741ffe649e3a201d09038af688e"
+      }
+    },
+    "A0": {
+      "config_sha256": "41e011d5f4f17bd089d856e8e27214e3cfcb1262cedb5d463799932aafde1286",
+      "tasks_sha256": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c",
+      "scoring_sha256": "074146e8110b08d86058a01e2b2c970922c2399d8484c56928f27264506853ab",
+      "adapter_sha256": "9b6ff87157ba7418fd328e1325c1461a7bbf305e01d13381d6225c4f8332cfe9",
+      "adapter_config_sha256": "4e915143131cbe5047ec8e3291071f7ef0a37a53f2a174734f65070dfe8ed025",
+      "freeze_sha256": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+      "traces_sha256": "10f19f82c3e21fbbacbe234d4d89e0aed9f5adfb74ca004096d0dbf089b2e0da",
+      "source_sha256": {
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_planning.py": "d2df4eb797bbd2db0459e16e49cc072473dc1a7a5ccb834994f4b77fcc82b6c3",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_planning.py": "3197c147bacba964a6e57241b4ab958ffd53cef73ce636b90d5973f4dfd987b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\planning.py": "09fe47251f5c6afa2312ec57e1f1578355cfe0d030abbc41f908e36ac34a16c7",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\gpu_lease.py": "f4def04fcd20de389de0ce991ac146793d0ffa404a79100064aefa86fb4549c2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\scripts\\planbench_qwen.py": "ef17c4d4fbb6be84de03bbcc2a2f108e7e405741ffe649e3a201d09038af688e"
+      }
+    },
+    "A1": {
+      "config_sha256": "0700206e709262886c1df8bee70e644d1734822dca8a7578401ab39cb468cf03",
+      "tasks_sha256": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c",
+      "scoring_sha256": "074146e8110b08d86058a01e2b2c970922c2399d8484c56928f27264506853ab",
+      "adapter_sha256": "21e837bc0e49047a0e6e42a2307ce46860f1be4ddf75e6af10d5c54347ae9957",
+      "adapter_config_sha256": "e95473a48c201fdf907296e3795c16df1a85c789ca1d68e97914bd577b588828",
+      "freeze_sha256": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+      "traces_sha256": "30c63ff2e5cda890ce425bc8f0bef0fc38c05f9cac670f2a865d118f4a6d6608",
+      "source_sha256": {
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_planning.py": "d2df4eb797bbd2db0459e16e49cc072473dc1a7a5ccb834994f4b77fcc82b6c3",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_planning.py": "3197c147bacba964a6e57241b4ab958ffd53cef73ce636b90d5973f4dfd987b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\planning.py": "09fe47251f5c6afa2312ec57e1f1578355cfe0d030abbc41f908e36ac34a16c7",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\gpu_lease.py": "f4def04fcd20de389de0ce991ac146793d0ffa404a79100064aefa86fb4549c2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\scripts\\planbench_qwen.py": "ef17c4d4fbb6be84de03bbcc2a2f108e7e405741ffe649e3a201d09038af688e"
+      }
+    },
+    "A2": {
+      "config_sha256": "8c8509529a900e652016dc05dfb7d9f764b15e42a415e6b9a0f4704fc8e04334",
+      "tasks_sha256": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c",
+      "scoring_sha256": "074146e8110b08d86058a01e2b2c970922c2399d8484c56928f27264506853ab",
+      "adapter_sha256": "905d52126ed6f4774f935642ccda2c3edd0d00c38eb2a9bad03628698f7dcd97",
+      "adapter_config_sha256": "c3684172cbae3bb1570fbd482aa492406e1f136249ee674a79f9becde82b61aa",
+      "freeze_sha256": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+      "traces_sha256": "b0aa83d2cdf57d35be4a956dfe5bb5cfd715d3b140aa515ecdc46c92e6ad4d7f",
+      "source_sha256": {
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_planning.py": "d2df4eb797bbd2db0459e16e49cc072473dc1a7a5ccb834994f4b77fcc82b6c3",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_planning.py": "3197c147bacba964a6e57241b4ab958ffd53cef73ce636b90d5973f4dfd987b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\planning.py": "09fe47251f5c6afa2312ec57e1f1578355cfe0d030abbc41f908e36ac34a16c7",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\gpu_lease.py": "f4def04fcd20de389de0ce991ac146793d0ffa404a79100064aefa86fb4549c2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\scripts\\planbench_qwen.py": "ef17c4d4fbb6be84de03bbcc2a2f108e7e405741ffe649e3a201d09038af688e"
+      }
+    },
+    "A5": {
+      "config_sha256": "cdd3f79a71e77cd4cc0979f916ba4049c39b396e71ff367a8a4c4b9d25de51fa",
+      "tasks_sha256": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c",
+      "scoring_sha256": "074146e8110b08d86058a01e2b2c970922c2399d8484c56928f27264506853ab",
+      "adapter_sha256": "af3d4ff209960923f92d6688a40cc81771ca554b405deff2315978f976379333",
+      "adapter_config_sha256": "8776c00a844608d95b6705acd22e75cf3f73d3f09ce731401f8e391f71a8478c",
+      "freeze_sha256": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+      "traces_sha256": "8738ff0fd29b4428ba75b8ee199729ea17a64c93346a55913a67a0045dba43ae",
+      "source_sha256": {
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_planning.py": "d2df4eb797bbd2db0459e16e49cc072473dc1a7a5ccb834994f4b77fcc82b6c3",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_planning.py": "3197c147bacba964a6e57241b4ab958ffd53cef73ce636b90d5973f4dfd987b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\planning.py": "09fe47251f5c6afa2312ec57e1f1578355cfe0d030abbc41f908e36ac34a16c7",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\gpu_lease.py": "f4def04fcd20de389de0ce991ac146793d0ffa404a79100064aefa86fb4549c2",
+        "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\scripts\\planbench_qwen.py": "ef17c4d4fbb6be84de03bbcc2a2f108e7e405741ffe649e3a201d09038af688e"
+      }
+    }
+  }
+}

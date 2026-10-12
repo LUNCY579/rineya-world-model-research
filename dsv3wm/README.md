@@ -46,6 +46,10 @@ have been measured, and it does not certify generated-state/planning confidence.
 One [shuffled-MTP2 control](reports/SHUFFLED_AUX_PREPARATION_2026_10_12.md) is
 separately registered under the original12GiB floor; it is untrained and leaves
 the failed predictive gain gate unchanged.
+A [posthoc terminal-reward audit](reports/POSTHOC_TERMINAL_REGRET_2026_10_12.md)
+now derives all60 preserved episodes' return and bound-normalized regret. It
+preserves original goal-only success/cost fields and provides no new model or
+confirmation result; nine targeted semantic tests passed.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
 Parent repository baseline: `aeb19ab17128d884c4457ce59db6e926ceb13a7a`.
