@@ -28,6 +28,7 @@ DISK_REASONS={'resource gate: fewer than 10 GiB free',
  'rendered export would leave fewer than 10 GiB free'}
 MIGRATION='archive migration: verified GitHub custody and reviewed archive-aware code required'
 CLEANUP='archive Git cleanup pending'
+RENDER_MIGRATION='cold rendered metadata recovery exceeds cycle budget; reviewed operational metadata index required'
 
 def cleanup_pending(root):
     root=archive._root(root)
@@ -104,6 +105,118 @@ def _local_payloads(root):
             archive._path(root,relative)
             found.append(relative)
     return sorted(found)
+
+def _select_payloads(root,index,priority):
+    """Keep completed rendering cohorts together so their controls precede eviction."""
+    present=set(_local_payloads(root))
+    fresh=present-set(index['files'])
+    units=[];managed=set()
+    for relative in archive.iter_paths(root,'manifests/render-batch-*.json'):
+        receipt=archive._json(archive.read_bytes(root,relative))
+        datasets=receipt['datasets']
+        folders=[]
+        for item in datasets:
+            logical=archive._relative(item['manifest_path'])
+            path=Path(logical)
+            if (len(path.parts)!=4 or path.parts[:2]!=('data','rendered')
+                    or path.name!='manifest.json' or path.parent.name!=item['dataset_id']):
+                raise RuntimeError('unmanaged completed rendering cohort')
+            archive._path(root,logical)
+            folders.append(path.parent.as_posix()+'/')
+        local={path for path in present if any(path.startswith(folder) for folder in folders)}
+        if not local:continue
+        cohort=set()
+        for item in datasets:
+            logical=item['manifest_path']
+            if archive.payload_info(root,logical)['sha256']!=item['manifest_sha256']:
+                raise RuntimeError('completed rendering cohort manifest changed')
+            manifest=archive._json(archive.read_bytes(root,logical))
+            cohort.add(logical)
+            for shard in manifest['shards']:
+                path=archive._relative(shard['path'])
+                if Path(path).parent!=Path(logical).parent:
+                    raise RuntimeError('completed rendering cohort shard path changed')
+                info=archive.payload_info(root,path)
+                if info['sha256']!=shard['sha256'] or info['bytes']!=shard['bytes']:
+                    raise RuntimeError('completed rendering cohort shard changed')
+                cohort.add(path)
+        if local-cohort:
+            raise RuntimeError('uncommitted payload in completed rendering cohort')
+        managed.update(cohort)
+        pending=sorted(cohort & fresh)
+        if pending:
+            # Finish a previously partial snapshot before opening a new cohort.
+            units.append((0 if cohort & set(index['files']) else 1,relative,pending))
+    ordered=[[path] for path in priority if path in fresh]
+    ordered.extend(unit for _,_,unit in sorted(units))
+    ordered.extend([path] for path in sorted(fresh-managed-set(priority)))
+    selected=[];total=0
+    for unit in ordered:
+        sizes=[archive._path(root,path).stat().st_size for path in unit]
+        if any(size>archive.MAX_BLOB_BYTES for size in sizes):
+            raise RuntimeError('payload exceeds GitHub archive object budget')
+        if len(unit)>MAX_FILES or sum(sizes)>MAX_BYTES:
+            raise RuntimeError('completed rendering cohort exceeds archive batch bounds')
+        if len(selected)+len(unit)>MAX_FILES or total+sum(sizes)>MAX_BYTES:continue
+        selected.extend(unit);total+=sum(sizes)
+    return selected
+
+def _publish_render_controls(root,deadline,transport,lock_fd,*,max_receipts=None):
+    """Qualify bounded label-free recovery controls before their raw headers leave."""
+    from ..pipelines import render_controls
+    with archive.read_session(root,deadline=deadline):
+        archive._check_stop(root)
+        pause=archive._path(root,'state/PAUSED.json')
+        expected=archive._local(root,'state/PAUSED.json',archive.MAX_INDEX_BYTES)[0] if pause.exists() else None
+        reason=archive._json(expected).get('reason') if expected else None
+        if reason not in DISK_REASONS|{None,CLEANUP,MIGRATION,RENDER_MIGRATION,'archive maintenance in progress'}:
+            raise RuntimeError('render control publication cannot override another pause')
+        pending=render_controls.pending(root,transport=transport)
+        if not pending:return None
+        def gate():
+            archive._check_stop(root)
+            now=archive._local(root,'state/PAUSED.json',archive.MAX_INDEX_BYTES)[0] if pause.exists() else None
+            if now!=expected:raise RuntimeError('pause changed during render control publication')
+            if not current_independent_review(deadline=deadline):
+                archive.check_read_deadline(root)
+                raise RuntimeError('independent review changed during render control publication')
+        gate()
+        if max_receipts is not None and (type(max_receipts) is not int
+                or not 1<=max_receipts<=render_controls.MAX_NEW_RECEIPTS):
+            raise RuntimeError('invalid render control publication bound')
+        if max_receipts is None and len(pending)>render_controls.MAX_NEW_RECEIPTS:
+            raise RuntimeError('render control backfill required before automatic eviction')
+        pending=pending[:max_receipts or render_controls.MAX_NEW_RECEIPTS]
+        capsules=render_controls.prepare(root,pending,deadline=deadline,
+                                        transport=transport,lock_fd=lock_fd)
+        plan=render_controls.plan_bundle(root,capsules,transport=transport,lock_fd=lock_fd)
+        gate()
+        commit=_backup(root,deadline)
+        gate()
+        _publish_snapshot(root,commit,deadline,transport)
+        gate()
+        authority=render_controls.activate(root,plan['bundle_path'],commit,
+                  transport=transport,deadline=deadline,lock_fd=lock_fd,
+                  publication_guard=gate)
+        gate()
+        _backup(root,deadline)
+        gate()
+        return authority
+
+def _require_render_controls(root,receipt,deadline):
+    """An interrupted partial cohort cannot evade qualification through recovery."""
+    from ..pipelines import rendered,render_controls
+    candidates=[path for path in receipt['files'] if path.startswith('data/rendered/')]
+    if not candidates:return
+    with archive.read_session(root,deadline=deadline):
+        for relative in archive.iter_paths(root,'manifests/render-batch-*.json'):
+            completed=archive._json(archive.read_bytes(root,relative))
+            folders=[str(Path(item['manifest_path']).parent)+'/' for item in completed['datasets']]
+            if not any(path.startswith(folder) for path in candidates for folder in folders):continue
+            batch=rendered._batch(root,completed['source_manifest'])
+            if render_controls.try_projection(root,relative,completed,batch) is None:
+                raise RuntimeError('completed rendering cohort requires qualified controls before eviction')
+            rendered.validate_receipt(root,relative)
 
 def _development_copy(root):
     source=root/'state/development_archive.tar.gz'
@@ -252,13 +365,7 @@ def run(root=ROOT,config=None,*,lock_fd=None,automatic=True,transport=None,compa
                 runtime=snapshot_state.snapshot(root)
                 priority=[runtime['payload']]
                 if development:priority.append(development)
-                selected=[]
-                total=0
-                for relative in priority+[path for path in _local_payloads(root) if path not in priority and path not in index['files']]:
-                    size=archive._path(root,relative).stat().st_size
-                    if size>archive.MAX_BLOB_BYTES:raise RuntimeError('payload exceeds GitHub archive object budget')
-                    if len(selected)>=MAX_FILES or total+size>MAX_BYTES:break
-                    selected.append(relative);total+=size
+                selected=_select_payloads(root,index,priority)
                 _backup(root,deadline)  # Commit and confirm every new payload before planning.
                 catalog=archive.plan_archive(root,selected,lock_fd=lock_fd)
                 commit=_backup(root,deadline)  # Catalog and exact payload tree on GitHub.
@@ -268,6 +375,12 @@ def run(root=ROOT,config=None,*,lock_fd=None,automatic=True,transport=None,compa
                 _backup(root,deadline)  # Persist custody/index remotely before local eviction.
             if receipt:
                 remote=remote or archive.GitHubTransport(root,seconds=min(180,deadline-time.monotonic()))
+                _publish_render_controls(root,deadline,remote,lock_fd)
+                # Qualification has its own bounded transport. Destructive
+                # proof gets a fresh provider within the original cycle limit.
+                if transport is None:
+                    remote=archive.GitHubTransport(root,seconds=min(180,deadline-time.monotonic()))
+                _require_render_controls(root,receipt,deadline)
                 _deletion_gate(root,expected_pause,deadline)
                 eviction=archive.evict_verified(root,receipt,transport=remote,lock_fd=lock_fd,deletion_guard=lambda:_deletion_gate(root,expected_pause,deadline))
             index=archive.load_index(root)

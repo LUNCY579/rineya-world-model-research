@@ -94,7 +94,7 @@ def enqueue(db, root, config):
     return db.execute('SELECT COUNT(*) FROM rendered_jobs WHERE status="pending"').fetchone()[0]
 
 
-def validate_receipt(root, relative):
+def validate_receipt(root, relative, *, use_controls=True):
     """Authenticate only committed exports; unfinished directories are excluded."""
     root = Path(root).resolve()
     path = _path(root, relative, ('manifests',))
@@ -111,17 +111,25 @@ def validate_receipt(root, relative):
     expected_views = receipt['specification']['views']
     if [item['view'] for item in receipt['datasets']] != expected_views:
         raise ValueError('rendered receipt view inventory mismatch')
+    # Unqualified/new exports retain the full raw path. Controls never supply
+    # deletion custody and builder derivation explicitly bypasses this branch.
+    projected = None
+    if use_controls:
+        from .render_controls import try_projection
+        projected = try_projection(root, relative, receipt, batch)
     counts = {}
     seen = set()
-    for item in receipt['datasets']:
+    for position, item in enumerate(receipt['datasets']):
         manifest_path = _path(root, item['manifest_path'], ('data', 'rendered'))
         if _archive_call('payload_info',root,item['manifest_path'])['sha256'] != item['manifest_sha256']:
             raise ValueError('rendered dataset manifest digest mismatch')
-        manifest = json.loads(_archive_call('read_text',root,item['manifest_path']))
+        manifest = (projected[position] if projected is not None else
+                    json.loads(_archive_call('read_text',root,item['manifest_path'])))
         if (manifest['manifest_path'] != item['manifest_path']
                 or manifest['dataset_id'] in seen or manifest['dataset_id'] != item['dataset_id']
                 or manifest['view'] != item['view'] or manifest['split'] != receipt['split']
                 or manifest['source_records_examined'] != batch['accepted']
+                or manifest['eligible_source_records'] != item['eligible_source_records']
                 or manifest['code_hashes'] != receipt['code_hashes']
                 or manifest['variant_budget'] != receipt['specification']['variant_budget']
                 or manifest['export_version'] != receipt['specification']['export_version']
