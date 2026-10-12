@@ -1,7 +1,9 @@
-# RCX-E05 DESIGN (rev 2): goal-conditioned successor features for zero-shot re-ranking under new goal weights (RVM-001)
+# RCX-E05 DESIGN (rev 3): goal-conditioned successor features for zero-shot re-ranking under new goal weights (RVM-001)
 
-**Status:** DESIGN rev 2, 2026-10-12, written after CX D-43. It revises rev 1 (sha256 `94d315246ac7…`, the text
-critiqued in `CRITIQUE_RVM_DESIGNS.md`, workflow wf_ad10715d-8d6). It resolves critique items F1–F9 and records F10–F12.
+**Status:** DESIGN rev 3, 2026-10-12. Rev 2 (sha256 `8e5e91bcff89…`) was written after CX D-43 and revised rev 1
+(sha256 `94d315246ac7…`, the text critiqued in `CRITIQUE_RVM_DESIGNS.md`, workflow wf_ad10715d-8d6); it resolved
+critique items F1–F9 and recorded F10–F12. Rev 3 resolves the adversarial review of the prereg draft
+(`REVIEW_PREREG_E05_DRAFT.md`, workflow wf_317f243c-6eb: B1–B4, M1–M6, L1–L10) and follows CX D-44.
 - Nothing is frozen, no E05 code exists, nothing has run, and no outcome has been seen.
 - This is read-only work. No model or tokenizer was loaded and nothing was trained. The only code run was trivial
   arithmetic (< 10 s, 1 thread): the power and FLOP tables below.
@@ -12,7 +14,8 @@ the mechanical PILOT FILL (§11). Where the draft is more specific than this fil
 **Details pinned while drafting the prereg (2026-10-12, no outcome exists):** starts are hand-empty (§3); the bootstrap
 resamples H-ID-S and H-ID-U as separate strata (§6.4); STOP-F applies even when P1's significance conditions hold
 (§6.5); at most two VOID redraws (§6.5); the 48-parent subset takes 8 parents per H-ID stratum (§4.4); the n_ID
-lookup table in §6.6 was recomputed (one row was an arithmetic slip; the formula is unchanged).
+lookup table in §6.6 was recomputed (one row was an arithmetic slip; the formula is unchanged). Rev 3 adds the review
+resolutions listed in "Changes from rev 2"; the prereg draft carries the same text in more detail and binds.
 
 **Bundle mapping.**
 - RCI-001 registry **E05 "Goal-factorized value transfer"** (track RVM-001, P0): "Successor features versus scalar value
@@ -41,15 +44,40 @@ lookup table in §6.6 was recomputed (one row was an arithmetic slip; the formul
 | F1 | Seed collision with E04; the selection seed was also a replicate seed | E05 keeps 20261242–50 (CX D-43; E04 moved to 20261206–14). 20261245 is now **selection only**. The replicates are 20261246–48, bootstraps use 20261250, and unit tests use literal seeds (App. A) |
 | F2 | Power was computed for a rule other than the one used | The rule is now "Holm-adjusted p < 0.05 (so the CI excludes 0) **and** point ≥ 0.03". Power is computed for that rule at the planned effect 0.05, and a pilot-based resizing rule is fixed now (§6.6) |
 | F3 | P1 was partly true by construction | **Chosen:** P1 must also hold on H-ID alone (intersection–union test, no extra Holm cost), reported per family. UVFA-wide/SF-wide arms are deferred, with reasons (§6.2) |
-| F4 | The per-goal comparator risked being a strawman | PGV gets stabilizer augmentation and a DEV-tuned grid. A new FT-UVFA_400 arm fine-tunes the UVFA on the same 400 labels. Competence gate: DEV-ID nreg ≤ GREEDY − 0.20. P2's comparator is the better competent arm, fixed before the freeze (§5.2, G-P3) |
-| F5 | Guard G1 was weak on H-NEG | ENUM± enumerates negated targets (falsifier menus) and charges penalties that persist. A new STOP-D branch is added (§5.3, §6.5) |
+| F4 | The per-goal comparator risked being a strawman | PGV gets stabilizer augmentation and a DEV-tuned grid. A new FT-UVFA_400 arm fine-tunes the UVFA on the same 400 labels. Competence gate: DEV-ID nreg ≤ GREEDY − 0.20 (rev 3: replaced by the fixed bar DEV-ID nreg ≤ 0.50, plus TEST validity conditions; B2, B3). P2's comparator is the better competent arm, fixed before the freeze (§5.2, G-P3) |
+| F5 | Guard G1 was weak on H-NEG | ENUM± enumerates negated targets (falsifier menus) and charges penalties that persist. A new STOP-D branch is added (§5.3, §6.5). Rev 3: complete menus and a holding-aware admissible ĥ (L1, B1) |
 | F6 | Compute was under-costed | A FLOP-based budget from R-04 throughput. Batched multi-model PGV/FT is measured in Phase 1 (G-P5). Protected cut: PGV_400 on all primary parents, PGV_1600/6400 on a fixed random 48-parent subset (§9) |
 | F7 | The dsv3wm overlap was missed | Cited above and in §1.2/§7. The boundary note was sent and cross-reading offered |
 | F8 | H-ID mostly re-weights seen patterns | One parent per support class in every TEST family, so the support class is the cluster. H-ID is stratified into seen (H-ID-S) and unseen (H-ID-U) supports, and only H-ID-U can carry the "new direction" wording (§4.3, §6.5) |
 | F9 | The learnability gate could pass by copying the state | G-P4 gates on value error < c/2 and one-step top-1, each relative to the copy-state floor; for ranking that floor is GREEDY (App. B) |
 | F10 | Flat MLPs are weak here; GPI's max adds an upward bias | A learnability readout (SF-L and SF-noGPI vs EXACT-GPI(L)) and the GPI optimism bias become named secondaries. The equivariant SF stays optional and descriptive (§5.5, §6.3) |
-| F11 | Claim wording | Every claim says "policy-conditional endpoint-and-length predictor learned from exact Monte Carlo targets, no TD" (§1.3, §3) |
+| F11 | Claim wording | Every claim says "goal-conditioned endpoint-and-length successor features (exact Monte Carlo targets, no TD)", i.e. a policy-conditional endpoint-and-length predictor learned by supervised regression (§1.3, §3) |
 | F12 | No consumer yet | Framed as a mechanism and instrument study. G1/STOP-D and k\* are the deliverables that drive decisions (§1.3, §8) |
+
+## Changes from rev 2 (review item → resolution)
+
+| # | Review finding | Resolution (where) |
+|---|---|---|
+| B1 | ENUM-MIS± degenerate on H-NEG: `misplaced_compact` returns 0 for any goal with a `holding` fact (`space.py` line 208), so a holding-falsifier target tied all moves | ĥ_MIS(s′, G) = max(`misplaced_compact`(s′, G∖H), h_hold(s′, G)), admissible. The review's minimal fix (G∖H alone) still ties on a 4-block hand case, hence h_hold. Enum tests: hand case through ENUM-MIS± itself, admissibility vs h\*, a non-tie assertion; pilot check Q9 vs GREEDY on DEV-OOD H-NEG (§5.3, App. B) |
+| B2 | GREEDY ≡ STOP on positive families from hand-empty starts; Q7 VOID trap; competence bar ≤ 0.80 hollow | Q7 = ORACLE exactly 0, STOP exactly 1, RAND < 1 on the primary macro; GREEDY's identity checked and disclosed, not a gate. Competence bar fixed at DEV-ID nreg ≤ 0.50 (justified in §5.2). FT early stopping includes step 0. Rationale corrected (§3, §5.2, App. B) |
+| B3 | Decision rule open to degenerate comparators | G-P4b terminal branch (P1 comparator-invalid → ADVANCE unavailable); TEST validity V-P1 (UVFA H-ID ≤ 0.50) and V-P2 (PG400 TEST macro ≤ 0.50) evaluated before the rule; ADVANCE needs SF-GPI ≤ 0.50 in every primary family; cannot-ADVANCE tests (§6.5, §10) |
+| B4 | VOID after T4 could depend on outcomes | All VOID checks in `oracle-test` before any learned-arm TEST computation; later defects → INCONCLUSIVE (defect) + design review, no redraw (§6.5, §11) |
+| M1 | Lane rules stale after D-44 | `rcx/lane.py`, `rcx/guard.py` not pinned (reference shas only); windows read from files at every phase start; day mode needs no live GPU holder; night-tail mode needs E01R to have no remaining block; D-43's RAM < 11 GB rule retired; 4 GB RAM floor (§9.3) |
+| M2 | Safe points not ≤ 2 min apart | Time-triggered checks inside batches; units ≤ 30 s at G-P5 rates; tested (§9.3, §10) |
+| M3 | Bootstrap equivalence test could not pass | `random.Random(derive(20261250, "boot:<stratum>"))` in `rcx.stats` draw and summation order; exact equality test (§6.4) |
+| M4 | G-P3 "PGV training is fixed" open-ended | One pre-specified escalation R_ext for the k-curve; if it fails too, k\* is descriptive only (§5.2, App. B) |
+| M5 | P2 planning SD from DEV-ID only | Selected PG400 also on the 24 DEV-OOD H-K/H-NEG parents; σ_plan,2 = 1.15·max(σ̂₂,ID, σ̂₂,OOD) (§6.6) |
+| M6 | Disjointness ignored scale equivalence | Parent key on the primitive integer vector of 8·w̄ (§4.3) |
+| L1 | Incomplete on(a,b) menu | Menus = every single fact implying ¬f (14 for on(a,b) at n = 7) (§5.3) |
+| L2 | Planned effect above predicted H-ID gap | P1-ID power at 0.03/0.04 tabulated and stated (§6.6) |
+| L3 | Seed variance not resampled | Inference stated as conditional on the 3 replicates; condition 4 extended to H-ID (§6.2) |
+| L4 | STOP-F/STOP-M gaps | "Did not pass" includes dropped and TEST-invalid; STOP-M narrowed to "neither test counts" (§6.5) |
+| L5 | `eval` could run on an uncommitted sha | TEST subcommands and analysis refuse unless the sha is in the committed `DECISIONS.md` (§10) |
+| L6 | Exclusions on label rows/banks; fail-closed after T3 | Both added (§4.5) |
+| L7 | Pilot report if abandoned; n = 6 wording | Both added (§1.3, §11) |
+| L8 | Consistency | RSS < 1.5 GB everywhere; §6.6 wording; per-stratum streams; one F11 string; copy-floor acc½ = 0 disclosed; Stab wording; protected-core vs cut items; §9.3 rewritten |
+| L9 | Lane and thermal details | 4.0 GB start floor; BWM asked at T1 to confirm the residual overlap and thermal note (§9.3) |
+| L10 | Open items | T1 D-entry pending; E04 seeds re-checked (now 20261206–14); B4 fresh set pending (§12) |
 
 ---
 
@@ -72,13 +100,16 @@ targets. For an unseen weight w′ it re-ranks candidate moves zero-shot by gene
   alone**.
 - **P2 (zero vs 400 new labels).** SF-GPI must be non-inferior to the stronger *competent* per-goal scalar critic
   given 400 fresh exact labels of each held-out goal. That critic is either PGV_400, trained from scratch, or the UVFA
-  fine-tuned on those labels.
+  fine-tuned on those labels. Competent means nreg ≤ 0.50 on DEV-ID (pilot) and on the TEST primary macro.
+- A P1 or P2 pass counts only if its comparator passes that bar on TEST (for the UVFA: on H-ID), and ADVANCE also
+  needs SF-GPI ≤ 0.50 in every primary family (§6.5).
 
-**Guards.** ENUM-MIS± is a zero-label symbolic enumeration planner that now handles penalties. If it dominates SF-GPI,
-the outcome is STOP.
+**Guards.** ENUM-MIS± is a zero-label symbolic enumeration planner that now handles penalties, with a holding-aware
+admissible distance bound. If it dominates SF-GPI, the outcome is STOP.
 
-**Budget.** About 16 CPU-min for the pilot (cap 30), plus 60–150 CPU-min for the confirmation, at ≤ 4 threads and
-< 1.5 GB RSS. It runs in lane slices of ≤ 15 min that yield to every other party (§9).
+**Budget.** About 16–22 CPU-min for the pilot (cap 30), plus 60–150 CPU-min for the confirmation, at ≤ 4 threads and
+< 1.5 GB RSS. It runs in lane slices of ≤ 15 min that yield to every other party, only when no GPU job is live or in
+the tail of a quiet window that E01R can no longer use (§9).
 
 **Feasibility: FEASIBLE.** Everything comes from an exact oracle already on disk, and no peer data is needed.
 
@@ -90,14 +121,17 @@ the outcome is STOP.
 
 ### 1.1 Falsifiable hypothesis
 
-**H-E05.** The domain has fixed dynamics, and preferences are linear in observable fact features. A goal-conditioned
-successor-feature critic ψθ(s, z) is trained once on exact labels from 64 training goal weights and composed by GPI.
-On held-out goal weights it achieves:
+**H-E05.** The domain has fixed dynamics (Blocksworld, n = 7; n = 6 if the G-P4 fallback is taken, fixed before the
+freeze and then substituted throughout the claim), and preferences are linear in observable fact features. A
+goal-conditioned successor-feature critic ψθ(s, z) is trained once on exact labels from 64 training goal weights and
+composed by GPI. On held-out goal weights it achieves:
 - **(P1)** lower normalized closed-loop regret than a matched-capacity UVFA trained on the *identical* (state, weight)
   label set. This must hold **both** for the macro over the three primary families **and** on H-ID alone. Each needs a
-  point estimate ≥ 0.03 and an interval that excludes 0; the planned effect is 0.05;
+  point estimate ≥ 0.03 and an interval that excludes 0; the planned effect is 0.05. The UVFA must be a valid
+  comparator (nreg ≤ 0.50 on DEV-ID and on TEST H-ID);
 - **(P2)** regret non-inferior, within a margin δ_NI = 0.05, to the stronger competent per-goal scalar critic trained
-  with 400 fresh exact labels *of each held-out goal* (PG400; §5.2).
+  with 400 fresh exact labels *of each held-out goal* (PG400; §5.2; nreg ≤ 0.50 on DEV-ID and on the TEST primary
+  macro).
 
 The SF critic needs **zero** labels per new goal.
 
@@ -106,7 +140,7 @@ The SF critic needs **zero** labels per new goal.
 - **P2 fails:** the one-sided upper bound of D2 is ≥ δ_NI;
 - **dominated:** the zero-label ENUM-MIS± beats SF-GPI by ≥ 0.05, with the interval excluding 0 (STOP-D);
 - **mechanism misfit:** the exact (learning-free) GPI ceiling over the library has normalized regret ≥ 0.5 on the
-  primary families (STOP-M).
+  primary families and neither P1 nor P2 counts (STOP-M).
 
 ### 1.2 Why this complements Rineya and its world models
 
@@ -130,8 +164,8 @@ critics do not scale to that.
 
 **Wording constraint (F11).** In this deterministic, undiscounted episodic setting, ψ^π(s) = (φ(endpoint), length) of a
 deterministic policy. It is learned by **supervised regression on exact rollout (Monte Carlo) targets, with no TD
-learning**. Every claim says "goal-conditioned endpoint-and-length successor features (exact MC targets)". dsv3wm's own
-E08 card warns about exactly this naming.
+learning**. Every claim says "goal-conditioned endpoint-and-length successor features (exact Monte Carlo targets, no
+TD)". dsv3wm's own E08 card warns about exactly this naming.
 
 **Framing (F12).** There is no current consumer:
 - BWM goals are hard `on` facts;
@@ -144,11 +178,12 @@ E05 is therefore a **mechanism and instrument study**. Its **decision-driving de
 
 P1 and P2 are the scientific tests.
 
-A positive result (ADVANCE) **would establish, at mechanism tier (tier-B specialist, exact dynamics, n = 7):**
+A positive result (ADVANCE) **would establish, at mechanism tier (tier-B specialist, exact dynamics, n = 7; n = 6
+only under the G-P4 fallback):**
 - A learned endpoint-and-length SF critic composed by GPI transfers zero-shot to unseen preference weights inside the
-  feature span.
-- It beats a scalar goal-conditioned critic trained on the same oracle labels, **including on in-distribution weights**,
-  so the gain is not only extrapolation outside the UVFA's input support.
+  feature span, with regret ≤ 0.50 in every primary family.
+- It beats a competent scalar goal-conditioned critic trained on the same oracle labels, **including on
+  in-distribution weights**, so the gain is not only extrapolation outside the UVFA's input support.
 - It matches the best competent per-goal scalar critic that gets 400 fresh labels per new goal.
 - It is not dominated by a zero-label symbolic planner.
 - It yields a measured label exchange rate k\*.
@@ -157,7 +192,7 @@ A positive result (ADVANCE) **would establish, at mechanism tier (tier-B special
 
 It **would not establish:**
 - any Rineya native ability;
-- transfer across object counts or domains (n is fixed at 7);
+- transfer across object counts or domains (n is fixed at 7, or at 6 under the G-P4 fallback);
 - robustness to LM-imagined states or LM-proposed candidates;
 - value for **hard conjunctive goals** (H-CONJ, outside the linear span) or under changed dynamics (H-DYN);
 - that BWM's beam or any LM planner gains;
@@ -179,9 +214,11 @@ It **would not establish:**
    - The advantage is largest on H-K and H-NEG. Part of it is by construction: those weights are outside the UVFA's
      training input support (disclosed per family).
    - On H-ID it is near parity, about +0.00 to +0.04. **The H-ID conjunct is therefore the binding constraint on P1.**
+     This range lies below the planned effect 0.05, so P1-ID power at the predicted gap is low (0.22–0.35 at a true
+     0.03 with σ = 0.20; §6.6). Stated, not hidden.
 3. **Attribution.** UVFA+aux closes part of the gap on H-ID.
-4. **Guard.** ENUM-MIS± is within ±0.05 of SF-GPI on H-ID and H-K, and much better than rev 1's positive-only ENUM-MIS
-   on H-NEG.
+4. **Guard.** With the rev 3 ĥ (B1), ENUM-MIS± is within ±0.05 of SF-GPI on H-ID and H-K, and much better than rev 1's
+   positive-only ENUM-MIS and rev 2's holding-bound-0 ENUM-MIS± on H-NEG.
 5. **P2.** FT-UVFA_400 is the likelier P2 comparator, and the stronger one.
 6. **Assumption boundary.** On H-CONJ and H-DYN, SF-GPI degrades to ENUM-MIS± level or worse. ENUM-H\* and GNN-ENUM do
    well on H-CONJ.
@@ -271,6 +308,12 @@ With exact ψ, Barreto's theorem gives Q^{π_GPI} ≥ max over z of Q^{π_z}.
   - Starts are **hand-empty** states (BWM instances start with an empty hand), drawn uniformly without replacement from
     the qualifying, non-excluded hand-empty states; 16 per parent. A parent with fewer than 16 is rejected and logged.
     H-DYN starts must also satisfy the height limit. (Pinned for the prereg draft, 2026-10-12.)
+  - **Consequence, disclosed (rev 3, B2): GREEDY ≡ STOP on positive families.** From a hand-empty state every move
+    (pick-up, unstack) only removes on/ontable facts and can add only `clear` facts. For goals with non-negative
+    on/ontable weights and no `clear` weight (DEV-ID, H-ID, H-K, H-COST, H-DYN and H-CONJ's linearization), every move
+    scores w′·φ(s′) − c′ < w′·φ(s0), so GREEDY stops at s0 with nreg **exactly 1** at every start. GREEDY carries
+    information only on H-NEG, H-KN, H-SPAN and the holding states of the one-step bank. It is therefore removed from
+    every gate and competence bar; the identity is checked as part of Q7 (a failure is an instrument bug).
 - **One-step re-ranking** (secondary): regret1(s) = (max over a of Q\*(s, a) − Q\*(s, â)) / c, plus the top-1
   optimal-action rate.
   - It uses a fixed bank of 64 states per parent, drawn uniformly from the states where STOP is not optimal.
@@ -288,7 +331,8 @@ With exact ψ, Barreto's theorem gives Q^{π_GPI} ≥ max over z of Q^{π_z}.
 | BWM simulator and signatures | via `rcx/bw/bwm_import.py` → BWM `native_v1/bwmn/blocks.py` (read-only, `dont_write_bytecode`) | Exclusion invariants and signatures only |
 | Exclusions | `experiments/RCX-E07/EXCLUSIONS.json` (sha `2f211de3…`) plus `rcx/bw/excl.py` (`eb31d9eb…`: `row_exclusion_reason`, `exclusion_reason`, `with_selection_sets`, `load_exclusions`) | Leakage control (§4.5) |
 | R-04 GNN value (baseline only) | `runs/RCX-E07/main/models/gnn_s20261276.pt` (`9cc417a3…`), `rcx/bw/models.py` (`4c2e3242…`), `rcx/bw/encode.py` (`32980f14…`) | GNN-ENUM± baseline, frozen, inference only |
-| Statistics, lane, guard | `rcx/stats.py` (`06a30c10…`), `rcx/lane.py` (`03f93d59…`), `rcx/guard.py` (`08fa782d…`) | `bootstrap_p_two_sided`, `holm`, `mcnemar_exact`; lane lock; thermal and RAM guard |
+| Statistics | `rcx/stats.py` (`06a30c10…`) | `bootstrap_p_two_sided`, `holm`, `mcnemar_exact`, `_interval`, `seed_parent_bootstrap_test` |
+| Lane and guard (**operational, not pinned**, M1) | `rcx/lane.py` (`4a1bc447…` after CX D-44; rev 2's `03f93d59…` is superseded), `rcx/guard.py` (`08fa782d…`) | Lane lock and `pid_alive`; thermal and RAM guard. Shared infrastructure that other parties' decisions change (lane.py is "not bound code" per D-41/D-44). They decide when a phase runs, never what it computes, so they are outside the code digest; their shas are recorded per phase for reference |
 
 **No dataset file is consumed.** All E05 data are generated by the exact oracle at run time from the seeds in App. A.
 
@@ -322,7 +366,11 @@ exact-GPI ceiling only. They are an oracle-information reference, not a competit
 **Fact universe.** F_on (42), F_tab (7), F_clr (7).
 
 **Keys (all canonical under block renaming S_7: the minimum over the 5,040 permutations, vectorized).**
-- **Parent key (weighted class):** (w, c, reward type). Renamed copies are the same task.
+- **Parent key (weighted class; rev 3, M6):** (v, reward type, dynamics), where v is the primitive integer vector of
+  8·w̄ = (8w, −8c) (divided by the gcd of its entries; 8·w̄ is integral because c ∈ {0.125, 0.25, 0.75}), canonical
+  under renaming. Renamed copies are the same task, and so are scaled copies: (w, c) and (λw, λc) have identical
+  policies and nreg. Examples: all-1 weights at c = 0.125 ≡ all-2 at c = 0.25; all-3 at c = 0.75 ≡ all-1 at c = 0.25.
+  For H-CONJ, v is the class of G with the primitive vector of (8R, −8c); dynamics is "free" or "height-3".
 - **Support class (F8):** the unweighted fact set supp(w). For families with negative weights it is **signed**: the set
   of (fact, sign w_f). For H-CONJ it is the class of G.
 - **Seen support:** the support class of at least one library goal in L.
@@ -353,7 +401,7 @@ is asserted at generation.
 |---|---|---|---|
 | TRAIN library | 64 (+49 single-fact base policies only if G-P2 triggers; then every learned arm gets their labels too) | 400 labelled states (uniform over S) | 25,600 labels |
 | DEV-ID | 32 (16 seen + 16 unseen support) | 16 starts, 64 one-step states, 400 per-goal labels; 1,600/6,400 labels on 8 parents | selection, G-P3, G-P4, σ̂ |
-| DEV-OOD | 48 | 16 starts | σ̂_OOD (H-K and H-NEG parents), pipeline check |
+| DEV-OOD | 48 | 16 starts; 400 per-goal labels on the 24 H-K and H-NEG parents | σ̂_OOD and σ̂₂,OOD (H-K and H-NEG parents; the selected PG400 is fitted there, M5), pipeline check |
 | **TEST primary** | **H-ID n_ID ∈ [96, 152]; H-K and H-NEG n_K = n_NEG ∈ {56, 72}** (§6.6), so n_P ∈ [208, 296] | 16 starts, 64 one-step states | base plan 96 + 56 + 56 = 208 |
 | TEST secondary | H-COST 40, H-SPAN 40, H-KN 24, H-CONJ 40, H-DYN 40 (184) | 16 starts, 64 one-step states | reported per family, never pooled with the primary |
 | Per-goal labels | PGV_400 and FT_400: **all** primary TEST parents. PGV_1600 and PGV_6400: a **fixed random subset of 48** primary parents (16 per family; within H-ID, 8 per stratum), drawn with TEST and listed in its manifest | 400 / 1,600 / 6,400 (nested) | label accounting in §5.5 |
@@ -370,7 +418,8 @@ is asserted at generation.
 ### 4.5 Leakage and OOD controls
 
 1. **Parent and support disjointness.**
-   - Weighted classes are disjoint across TRAIN, DEV-ID, DEV-OOD and every TEST family (asserted).
+   - Weighted classes (the scale-canonical parent key of §4.3) are disjoint across TRAIN, DEV-ID, DEV-OOD and every
+     TEST family (asserted).
    - Within each TEST family, support classes are unique (asserted).
    - The H-ID-U supports are disjoint from supports(L) ∪ supports(DEV-ID) (asserted).
    - H-ID-S re-weights supports seen in training. It is reported separately and can never carry the "new direction"
@@ -380,16 +429,24 @@ is asserted at generation.
    - The zero-shot learned arms get renaming augmentation: a joint random σ on s and w.
    - The per-goal arms (PGV, FT, SF-FT) get the **stabilizer augmentation**: σ ∈ Stab(w′) = {σ : σw′ = w′}. It is
      free, exact and label-preserving (F4). Stab(w′) is enumerated over the 5,040 permutations at parent creation, and
-     its size is logged (it is 1 for asymmetric goals).
+     its size is logged. |Stab(w′)| ≥ (7 − m)! for a goal mentioning m blocks, since the blocks it does not mention
+     permute freely; it is 1 only for goals mentioning ≥ 6 blocks with no internal symmetry (rev 3 correction, L8).
 3. **Peer exclusions (read-only, through the existing file; never evaluated on).**
-   - Every TRAIN label row and every DEV/TEST start is read as a BWM instance (state, goal⁺), where goal⁺ is the set of
+   - Every TRAIN label row, every per-goal label row (DEV and TEST), every one-step bank state and every DEV/TEST start
+     (rev 3 adds label rows and bank states, L6) is read as a BWM instance (state, goal⁺), where goal⁺ is the set of
      positive `on`/`ontable` facts. Each is checked with `excl.row_exclusion_reason` on
      `with_selection_sets(load_exclusions())`. Every H-CONJ (start, G) is checked with `excl.exclusion_reason`.
+     Excluded states are removed from each parent's sampling pool before drawing, so counts stay fixed.
    - This covers 677 invariants and 349 signatures. At n = 7, 35 instances are reserved: hard110 1, val_large 2,
      mirror 1, b3fresh 1 and distill 30.
-   - If BWM's full B4 fresh set (seed 20261410) exists by the freeze, it is added through `excl.EXTRA_RESERVED_FILES`
-     and the sha is re-pinned.
+   - If BWM's full B4 fresh set (seed 20261410, n = 110) exists by the freeze, it is added through
+     `excl.EXTRA_RESERVED_FILES` (which already holds `instances_seeds_fresh.json`) and the sha is re-pinned.
    - Matches are dropped and counted, never silently.
+   - **`load_exclusions` failing closed after T3 (L6).** Before `draw-test`: refuse, then restore the pinned inputs or
+     re-pin by a logged deviation ("outcomes known: no") in a CX D-entry. Between `draw-test` and `oracle-test`'s PASS:
+     `oracle-test` records VOID and the attempt is redrawn after the re-pin. After the first learned-arm TEST
+     computation exclusions are never reloaded; a later source change, or a reserved set that appears after T3, is
+     reported descriptively as a post hoc collision count, not a defect.
 4. **RCX's own evaluation sets** (E07 test n ∈ {5, 6, 8, 10, 12}; E07b TEST-B n 10–15; E11a/b n 10–15) contain no n = 7
    instance. This is asserted by block count.
 5. **Never opened:**
@@ -421,7 +478,8 @@ is asserted at generation.
 
 ## 5. Models and baselines
 
-All learned models are CPU MLPs with ≤ 200k parameters, run with ≤ 4 torch threads and < 1 GB RSS.
+All learned models are CPU MLPs with ≤ 200k parameters, run with ≤ 4 torch threads and < 1.5 GB RSS per process (the
+same bound as everywhere else in this file and the prereg).
 
 **Inputs.**
 - State x_s (70 dims): the on-matrix (49), ontable (7), holding (7) and clear (7).
@@ -456,22 +514,41 @@ All learned models are CPU MLPs with ≤ 200k parameters, run with ≤ 4 torch t
 | SF-GPI-5 | C = {w′} plus the 4 nearest library codes (cosine) | Compute-matched view |
 | SF-shuffled | SF trained with ψ targets permuted across states within each weight (replicate 20261246) | Shuffled-label control |
 | **PGV_400** | Per-goal V_θ(x_s) with no goal input, trained from scratch for each held-out parent on its 400 labels. Uses stabilizer augmentation and early stopping on 40 of the 400 labels (checked every 100 steps; the best is kept). **Grid, tuned once on DEV-ID, never per goal:** width {64, 256} × steps {500, 2,000} at batch 64. The 500-step setting is the 500-step checkpoint of the 2,000-step run | P2 candidate |
-| **FT-UVFA_400** (new, F4) | Each UVFA replicate (20261246–48), fine-tuned on the same 400 labels with the goal input fixed to w̄′. All parameters are trained, with AdamW lr 3e-4, batch 64 and stabilizer augmentation. **Grid:** steps {100, 400} (the 100-step setting is a checkpoint). Early stopping on the same 40 labels. Three fits per parent, averaged within the parent | P2 candidate: the realistic competitor ("a scalar critic adapted with 400 labels") |
-| PGV_1600, PGV_6400 | Width 256; batch 128 / 256; 2,000 / 2,500 steps; stabilizer augmentation; early stopping on 10%. Not tuned | Label-cost curve and k\* (48-parent subset) |
+| **FT-UVFA_400** (new, F4) | Each UVFA replicate (20261246–48), fine-tuned on the same 400 labels with the goal input fixed to w̄′. All parameters are trained, with AdamW lr 3e-4, batch 64 and stabilizer augmentation. **Grid:** steps {100, 400} (the 100-step setting is a checkpoint). Early stopping on the same 40 labels, checked at **step 0 (the zero-shot UVFA; rev 3, B2)** and every 25 steps, best kept, ties to the earlier step, so FT is never worse than its starting point on the validation labels. Three fits per parent, averaged within the parent | P2 candidate: the realistic competitor ("a scalar critic adapted with 400 labels") |
+| PGV_1600, PGV_6400 | Width 256; batch 128 / 256; 2,000 / 2,500 steps; stabilizer augmentation; early stopping on 10%. Not tuned; only the single pre-specified escalation R_ext of G-P3b (below; M4) | Label-cost curve and k\* (48-parent subset) |
 | SF-FT_400 (descriptive) | SF replicate 20261246 fine-tuned on the ψ targets of the same 400 labels (FT-UVFA's selected step count) | How much SF gains from labels. Cut-list item 2 |
 | GNN-ENUM± | Frozen R-04 RelGNN `gnn_s20261276` as ĥ(s′, G) inside the ENUM± target enumeration (§5.3). Zero new labels | The existing RCX critic, used zero-shot |
 
 **P2 comparator PG400 (fixed at the pilot, before the freeze; G-P3).**
-- A candidate is *competent* if its DEV-ID macro nreg ≤ nreg(GREEDY) − 0.20.
-  - The 0.20 margin is pre-set. GREEDY is expected to stop early on most starts with a gap ≥ 1.0, so a smaller margin
-    would accept near-floor critics.
+- A candidate is *competent* if its DEV-ID nreg ≤ **0.50** (rev 3, B2; the same bar b = 0.50 is used for the UVFA and
+  for the TEST validity conditions of §6.5).
+  - **Rationale, corrected.** Rev 2 used "≤ nreg(GREEDY) − 0.20" and said GREEDY "is expected to stop early on most
+    starts". In fact GREEDY stops at s0 on **every** DEV-ID start (§3), so nreg(GREEDY) = 1 exactly and that bar was
+    ≤ 0.80, nearly floor level.
+  - **Why 0.50.** It is fixed now and outcome-free; neither floor meets it (STOP and GREEDY are exactly 1 on DEV-ID,
+    RAND is expected near 1); it means "recovers at least half of the available gain on average"; and it is the scale
+    STOP-M and G-P2 already use.
+  - **Alternatives rejected.** "≤ ENUM-MIS± on DEV-ID" would tie the comparator's existence to the guard under test
+    (B1 showed how the guard's quality can fail) and is unknown now, so it could be trivially lax or unreachable.
+    "≤ BEST-SINGLE(L)" depends on the library composition (G-P2).
 - PG400 is the competent candidate with the lower DEV-ID nreg; ties go to FT-UVFA_400.
 - If neither is competent, each grid is extended **once**:
   - PGV: width 128, 4,000 steps, lr 3e-4;
   - FT: 1,000 steps, lr 1e-4.
-- If still neither is competent, **P2 is dropped**. The Holm family is then {P1}, ADVANCE is unavailable and the best
-  possible outcome is REVISE. This is recorded before the freeze.
+- If still neither is competent, **P2 is dropped**. P2 then leaves the Holm family, ADVANCE is unavailable and the best
+  possible outcome is REVISE (or none, if P1 is also comparator-invalid). This is recorded before the freeze.
+- **M5.** Pilot B fits the selected PG400 config (selection seed; for FT, the selection UVFA) on the 24 DEV-OOD H-K and
+  H-NEG parents too, giving σ̂₂,OOD for the P2 sizing (§6.6). Not run if P2 is dropped.
+- **TEST validity (B3).** A P2 pass counts only if PG400's TEST primary macro nreg ≤ 0.50 (§6.5).
 - PGV_400 runs on all primary parents in every case. The non-selected candidate is reported descriptively.
+
+**k-curve sanity and its single escalation (G-P3b; rev 3, M4).** On the 8 DEV-ID parents, PGV_6400 mean nreg must be
+≤ 0.25 and the mean nreg non-increasing over k = 400, 1,600, 6,400. If not, one pre-specified recipe R_ext is tried on
+the same 8 parents, identical for all three k: width 128, lr 3e-4, 4,000 steps, batch 64 / 128 / 256 for k = 400 /
+1,600 / 6,400, stabilizer augmentation, early stopping on 10% every 200 steps (the PGV grid-extension settings). If R_ext
+passes, the TEST k-curve uses R_ext for all three k (PGV_400 on all primary parents keeps its G-P3 config for P2). If
+R_ext also fails, the original recipe is kept and **k\* is descriptive only**. No other change to per-goal training is
+allowed after DEV is seen. (R_ext costs 462 GFLOP per subset parent, below the original 815.)
 
 **UVFA-wide and SF-wide arms (F3 alternative): not adopted.**
 - They would change the training-weight distribution, the library and the exact-GPI ceiling at once.
@@ -486,13 +563,17 @@ All learned models are CPU MLPs with ≤ 200k parameters, run with ≤ 4 torch t
 **ENUM± target enumeration (shared by ENUM-MIS±, ENUM-H\*± and GNN-ENUM±).** Let w′ have positive facts P and
 negative facts N.
 
-**Falsifier menus (fixed).**
+**Falsifier menus (fixed; rev 3 completes them, L1).** M(f) is every single fact that implies ¬f. Each menu covers ¬f:
+every state where f is false satisfies at least one menu fact (unit test).
 
 | Negative fact | Menu M(f) |
 |---|---|
-| on(a,b) | {ontable(a), holding(a), clear(b)} |
+| on(a,b) | {ontable(a), holding(a), clear(b), holding(b)} ∪ {on(a,x) : x ∉ {a,b}} ∪ {on(x,b) : x ∉ {a,b}} (14 facts at n = 7; rev 2 had only the first three) |
 | ontable(a) | {holding(a)} ∪ {on(a,x) : x ≠ a} |
 | clear(a) | {holding(a)} ∪ {on(x,a) : x ≠ a} |
+
+A missing falsifier can only lower a move's max over targets, i.e. weaken the guard and favour SF in D_G, which is why
+the menus are completed rather than the gap disclosed.
 
 **Targets.** G = G⁺ ∪ R, where:
 - G⁺ ⊆ P;
@@ -500,13 +581,14 @@ negative facts N.
 - G is kept only if `CompiledGoal(G).consistent` and `goal_mask(G).any()`, an exact satisfiability check computed once
   per parent.
 
-For positive-only goals (H-ID, H-K), ENUM± equals rev 1's ENUM. Target counts per parent:
+For positive-only goals (H-ID, H-K), ENUM± equals rev 1's ENUM. Target counts per parent, before satisfiability
+pruning (each negative on-fact has 15 options: accept or 14 falsifiers; each negative ontable-fact 8):
 
 | Family | Targets |
 |---|---|
-| H-NEG | ≤ 2³ × 8² = 512 |
+| H-NEG | ≤ 2² × 15² = 900 (K = 4 with two negative on-facts) |
 | H-K | ≤ 2⁶ = 64 |
-| H-KN | ≤ 4,096 |
+| H-KN | ≤ 2⁴ × 15² = 3,600 |
 
 **Predicted terminal utility.**
 
@@ -518,13 +600,38 @@ are false now and might become true are ignored; this is optimistic, and disclos
 **Score.**
 - score(s′) = max over G of [ U(G; s′) − c′·(1 + ĥ(s′, G)) ].
 - STOP is scored exactly as w′·φ(s), with the common tie rule.
+- For every ENUM± arm, the share of decisions with ≥ 2 legal moves whose move scores are all equal is logged per
+  family (a degeneracy diagnostic).
+
+**ĥ for ENUM-MIS± (rev 3, B1).** Let H be the `holding` facts of G. Then
+
+  ĥ_MIS(s′, G) = max( `misplaced_compact`(s′, G∖H)[1], h_hold(s′, G) ),
+
+where h_hold = 0 if H is empty or s′ holds the block H requires, 1 if the hand is empty, and 2 if s′ holds another
+block.
+- **Admissible.** A state satisfying G satisfies G∖H, so h\*(s′, G∖H) ≤ h\*(s′, G); a required holding needs a pick-up
+  or unstack, preceded by a put-down or stack if another block is held. The max of two admissible bounds is admissible.
+  Goals without `holding` facts get exactly rev 2's bound.
+- **The bug it fixes (confirmed in `rcx/bw/space.py`).** `misplaced_compact` returns a bound of 0 for any goal with a
+  `holding` fact (`if g.has_holding or not g.consistent: return not_done, 0, holding`, line 208). The menus offer
+  holding(a) for every negative on(a,b) and ontable(a), so whenever a is unconstrained by P the target P ∪ {holding(a)}
+  is satisfiable, scores U = Σw(P) − c′ for *every* successor with no penalty charged, and beats every other target.
+  All moves tie, the tie rule takes the lowest action code, and rev 2's ENUM-MIS± behaved like STOP on H-NEG (G1
+  almost automatic, STOP-D almost unreachable).
+- **Why h_hold, beyond the review's minimal fix.** Hand case (n = 4, hand empty, a on b, c and d on the table;
+  w′: on(a,b) = −2, ontable(d) = +1; c′ = 0.25; optimum: unstack(a,b), then STOP holding a, V\* = 0.75). Rev 2's ĥ ties
+  all three successors at 0.75. `misplaced_compact`(s′, G∖H) alone still ties unstack(a,b) with pick-up(c) at 0.75,
+  and the tie rule (PICK = 0 < UNSTACK = 3) picks pick-up(c). With h_hold the scores are 0.75 / 0.25 / 0.25 and
+  ENUM-MIS± plays the optimum. This case is a unit test, run through ENUM-MIS± itself (§10).
+- **Pilot check (Q9, App. B).** On the 12 DEV-OOD H-NEG parents, ENUM-MIS± must beat GREEDY and have an all-tied
+  decision share < 0.5.
 
 | Arm | Definition | Information tier |
 |---|---|---|
-| **ENUM-MIS±** | ĥ = admissible `misplaced_compact` lower bound. It falls back to 0 for `holding` targets, per `space.py` | Symbolic only, zero labels. **Guard G1 and STOP-D** |
+| **ENUM-MIS±** | ĥ = ĥ_MIS above (admissible, holding-aware) | Symbolic only, zero labels. **Guard G1 and STOP-D** |
 | ENUM-H\*± | ĥ = exact h\*(·, G) by one `backward_bfs` per target | Oracle-information reference |
 | GNN-ENUM± | ĥ = R-04 GNN (§5.2). Goal facts other than `on` are out of distribution for it | Learned, zero new labels |
-| GREEDY | One-step lookahead on w′·φ(s′) − c′, plus the STOP rule. It is also the copy-state floor for ranking: ψ_copy(s′) = (φ(s′), 0) | Floor |
+| GREEDY | One-step lookahead on w′·φ(s′) − c′, plus the STOP rule. It is also the copy-state floor for ranking: ψ_copy(s′) = (φ(s′), 0). ≡ STOP on positive families from hand-empty starts (§3) | Floor (ranking floor in G-P4 only; in no gate or bar) |
 | STOP | Always stop (nreg = 1) | Constant floor |
 | RAND | Uniform over {STOP} ∪ moves (stream `20261244:rand`) | Random floor |
 | EXACT-GPI(L) | GPI over the exact library policy tables | Mechanism ceiling |
@@ -557,8 +664,11 @@ Two further card rules also hold:
 - Selection is per arm, on DEV-ID closed-loop nreg, with **selection seed 20261245 only**.
 - Confirmation trains **fresh replicates 20261246, 20261247 and 20261248** at the selected config. The selection models
   are never evaluated on TEST.
-- **UVFA competence (G-P4b).** If the UVFA fails it, its grid is extended once with {80 epochs, lr 3e-4} before the
-  freeze, so P1's comparator is not a strawman.
+- **UVFA validity (G-P4b; rev 3 adds the nreg bar and a terminal branch, B3).** The UVFA passes if acc½(UVFA) −
+  acc½(copy) ≥ 0.20 **and** its DEV-ID nreg ≤ 0.50. If it fails, its grid is extended once with {80 epochs, lr 3e-4}
+  before the freeze. If it still fails, **P1 is declared comparator-invalid** in the PILOT FILL: P1 leaves the Holm
+  family and is reported descriptively, ADVANCE is unavailable, and the confirmation still runs for P2, G1/STOP-D and
+  k\*. On TEST, a P1 pass counts only if the UVFA's H-ID nreg ≤ 0.50 (§6.5).
 
 **Per-goal arms.** Their grids are tuned on DEV-ID with selection seed 20261245 and the DEV label streams (§5.2, G-P3).
 PGV is never tuned per goal.
@@ -620,7 +730,11 @@ decision.
   - both points are ≥ 0.03;
   - both 95% CI lower bounds are > 0. With ties = 'both' and 10,000 resamples this follows from p < 0.05, and it is
     checked anyway;
-  - the macro D1 is > 0 for each matched replicate pair (SF sₖ vs UVFA sₖ).
+  - the macro D1 **and the H-ID D1** are > 0 for each matched replicate pair (SF sₖ vs UVFA sₖ) (rev 3 extends this to
+    H-ID, the binding conjunct, L3).
+- **Conditional inference (L3).** The parent bootstrap does not resample replicates, so P1/P2 inference is conditional
+  on the 3 trained replicates (and the one PGV fit per parent), and is reported as such. The replicate sign check is
+  the only seed-level safeguard; the §6.6 power figures ignore it.
 - **Why the 0.03 floor.** The planned effect stays 0.05 and is what power is computed for. The 0.03 floor stops a
   significant but trivial effect from passing.
 - Per-family D1 is always reported. H-K and H-NEG are labelled "includes extrapolation outside UVFA's training weight
@@ -631,7 +745,9 @@ decision.
 - p_P2 = max(1/R, share of bootstrap replicates with D2\* ≥ δ_NI), with δ_NI = 0.05 and a one-sided test.
 - **P2 passes** if the Holm-adjusted p_P2 < 0.05. Equivalently, at the Holm level, the one-sided upper bound of D2 is
   < 0.05.
-- If P2 was dropped at the pilot, the Holm family is {P1}.
+- If P2 was dropped at the pilot, the Holm family is {P1}; if P1 was declared comparator-invalid, it is {P2}; if both,
+  it is empty. The TEST validity conditions (§6.5) never change the Holm family; they only decide whether a pass
+  counts.
 
 **Guard G1 (not in Holm; point condition).**
 - D_G = nreg(SF-GPI) − nreg(ENUM-MIS±) (macro).
@@ -652,8 +768,10 @@ decision.
   - the **learnability readout (F10):** SF-L vs EXACT-GPI(L) and SF-noGPI vs ORACLE;
   - the **GPI optimism bias (F10):** on the bank, the mean of max_z ŵ·ψ̂ minus the exact Q of the chosen action, by
     |C| ∈ {1, 5, 65}.
-- **Other arms:** the compute-matched SF-GPI-5; GNN-ENUM±, ENUM-MIS± and ENUM-H\*± on every family; and rev 1's
-  positive-only ENUM-MIS on H-NEG, to show the size of the F5 fix.
+- **Other arms:** the compute-matched SF-GPI-5; ENUM-MIS± on every retained family, GNN-ENUM± and ENUM-H\*± wherever
+  not cut (§9.2); rev 1's positive-only ENUM-MIS and rev 2's holding-bound-0 ENUM-MIS± on H-NEG, to show the size of
+  the F5 and B1 fixes; the ENUM± all-tied decision shares.
+- **Validity margins:** PG400's TEST nreg per family (and its DEV-OOD value), the UVFA's H-ID nreg.
 - **Secondary families:** H-SPAN, H-COST, H-KN, H-CONJ and H-DYN, labelled "assumption boundary" where predicted.
 - **Model quality on TEST states:** endpoint-fact accuracy, T MAE, value MAE and the c/2 value-exact rate for every
   learned arm, against the copy-state floor.
@@ -668,10 +786,18 @@ decision.
     the family means and macro are recomputed. There are R = 10,000 resamples. The strata are the families, except
     that H-ID is resampled within H-ID-S and H-ID-U separately (their sizes are fixed by design); the H-ID mean is
     the parent-weighted mean of the two.
-  - The seed is **20261250**. One index stream per family is shared by every contrast (common random numbers).
-  - The CI is the 95% percentile interval.
-  - It is implemented in `analyze_e05.py`, because `rcx.stats` does not stratify. A unit test checks that it equals
-    `rcx.stats.seed_parent_bootstrap_test` on a single family.
+  - **Index streams (rev 3, M3).** One stream per **stratum** h (H-ID-S, H-ID-U, H-K, H-NEG, and each secondary
+    family): `random.Random(derive(20261250, "boot:<h>"))`, shared by every contrast (common random numbers). It is
+    drawn exactly as `rcx.stats` draws: the stratum's parents in `rcx.stats._order` (sorted canonical keys), R
+    resamples of n_h `randrange(n_h)` calls each. The first prereg draft's numpy PCG64 stream could never reproduce
+    `rcx.stats`, so its equivalence test could not pass.
+  - **Arithmetic order.** Parent values as `rcx.stats` computes them (per replicate, mean over starts; then mean over
+    replicates in seed order); a contrast is resampled on the per-parent paired difference (b − a), summed with Python
+    `sum` in draw order and divided by n_h.
+  - The CI is the 95% percentile interval of `rcx.stats._interval`.
+  - It is implemented in `analyze_e05.py`, because `rcx.stats` does not stratify. A unit test checks that, on a single
+    stratum with seed `derive(20261250, "boot:<h>")`, it equals `rcx.stats.seed_parent_bootstrap_test(...,
+    resamples=10000, p_floor=1e-4, ties='both')` **exactly** (diff, lo, hi, p).
 - **p-values.**
   - Two-sided p comes from `rcx.stats.bootstrap_p_two_sided(boot, floor=1/R, ties='both')`.
   - The one-sided NI p is as in §6.2.
@@ -680,35 +806,58 @@ decision.
 - **Attempt log.** Every confirmation attempt, including VOID reruns on a fresh TEST draw, is logged in
   `runs/RCX-E05/ATTEMPTS.jsonl`. A rerun is never called a fresh confirmation of the same bank.
 
-### 6.5 Decision rule (tested in this order; the first that holds is the decision)
+### 6.5 Decision rule
 
-1. **VOID.** An instrument gate fails. That covers:
-   - the App. B checks on the TEST oracle;
-   - ORACLE nreg ≠ 0 or STOP ≠ 1 exactly;
-   - floors not separated from the oracle;
-   - a disjointness, support-uniqueness or exclusion assertion;
-   - a TEST manifest or code-digest mismatch.
+**Determinations made before the rule (rev 3, B3).** `analyze_e05.py` computes these from the PILOT FILL and the TEST
+evaluation before testing any branch:
+- competence bar b = 0.50 nreg;
+- **P1-valid** iff P1 was not declared comparator-invalid at the pilot (G-P4b) and (V-P1) the UVFA's TEST H-ID nreg
+  (3-replicate mean) ≤ b; **P2-valid** iff P2 was not dropped at the pilot (G-P3) and (V-P2) PG400's TEST primary macro
+  nreg ≤ b;
+- **P1 counts** iff P1-valid and P1 passes; **P2 counts** iff P2-valid and P2 passes;
+- validity conditions only stop a pass from counting: they never change the Holm family and never block a STOP branch
+  (futility or misfit against a weak comparator is still futility or misfit);
+- G1 (§6.2) and the STOP-D condition (D_G ≥ +0.05 with its 95% CI lower bound > 0);
+- **SF floor:** SF-GPI's family-mean nreg ≤ b on each of H-ID, H-K and H-NEG.
 
-   Fix the fault, redraw TEST from `20261242:test:<attempt+1>`, and log the attempt. At most two redraws: a third
-   VOID ends E05 as INCONCLUSIVE pending a design review. Replicates are not retrained (they never see TEST); per-goal
-   fits are redone on the new parents.
-2. **INCONCLUSIVE (missing).** A protected-core cell (§9.2) is missing. Report descriptively and apply no other rule.
-3. **STOP-D (dominated, F5).** D_G ≥ +0.05 with its 95% CI lower bound > 0. A zero-label symbolic planner beats the
-   learned SF, so the SF line stops on this testbed. Any P1/P2 results are reported as mechanism findings only.
-4. **ADVANCE.** P1 passes, P2 passes (it must not have been dropped), and G1 holds.
-5. **STOP-M (mechanism misfit).** The EXACT-GPI(L) primary macro nreg is ≥ 0.5.
-   - Rev 1 placed this before ADVANCE. It now comes after ADVANCE, because a learned SF that passes P1 and P2 through
-     the z = w′ index should not be stopped by a library ceiling. The GPI qualifier below then applies.
-6. **STOP-F (futile).** P2 did not pass **and** P1 is futile, meaning the macro D1's upper 95% bound is < 0.05 or H-ID
-   D1's is. The first case means no advantage at all. The second means the advantage is confined to weights outside
-   UVFA's support, which is the by-construction part (F3). STOP-F applies even if P1's significance conditions hold:
-   an interval entirely below 0.05 excludes the planned effect (the E01N convention).
-7. **REVISE.** P1 or P2 passes, but not ADVANCE. This includes:
+**Ordered rule (tested in this order; the first that holds is the decision).**
+
+1. **VOID.** Declared **only by `oracle-test`, before any learned-arm TEST computation** (rev 3, B4), when one of its
+   checks fails: Q3, Q4, Q7 (ORACLE exactly 0 and STOP exactly 1 at every start, RAND < 1 on the primary macro, the
+   GREEDY identity) and Q8 on TEST; a disjointness, support-uniqueness, unseen-ness or exclusion assertion; a manifest
+   sha that differs from, or is absent from, the committed `DECISIONS.md`; a code-digest mismatch. A VOID attempt is
+   never analyzed. Fix the fault, redraw TEST from `20261242:test:<attempt+1>`, and log the attempt. At most two
+   redraws: a third VOID ends E05 as INCONCLUSIVE pending a design review. Nothing learned has touched TEST at that
+   point, so replicates are kept and no per-goal fit has started.
+2. **INCONCLUSIVE (defect or missing).** A defect found after the first learned-arm TEST computation (the first `pgv`,
+   `ft`, `eval` or `extras` call), or a missing protected-core cell (§9.2). The attempt is reported in full,
+   descriptively; no other rule is applied; there is no redraw under E05; a defect triggers a design review.
+3. **STOP-D (dominated, F5).** The STOP-D condition holds. A zero-label symbolic planner beats the learned SF, so the
+   SF line stops on this testbed. Any P1/P2 results are reported as mechanism findings only.
+4. **ADVANCE.** P1 counts, P2 counts, G1 holds, and the SF floor holds.
+5. **STOP-M (mechanism misfit).** The EXACT-GPI(L) primary macro nreg is ≥ 0.5 **and neither P1 nor P2 counts** (rev 3,
+   L4).
+   - Rev 1 placed this before ADVANCE. Rev 2 moved it after ADVANCE because a learned SF that passes through the
+     z = w′ index should not be stopped by a library ceiling. Rev 3 applies that rationale consistently: a single
+     counting test also goes to REVISE (with the library-ceiling note and the GPI qualifier), not to STOP-M.
+6. **STOP-F (futile).** P2 does not count (it failed, was dropped at the pilot, or is comparator-invalid on TEST; rev 3,
+   L4) **and** P1 is futile, meaning the macro D1's upper 95% bound is < 0.05 or H-ID D1's is. The first case means no
+   advantage at all. The second means the advantage is confined to weights outside UVFA's support, which is the
+   by-construction part (F3). STOP-F applies even if P1's significance conditions hold (an interval entirely below
+   0.05 excludes the planned effect; the E01N convention), and whatever P1's validity.
+7. **REVISE.** P1 counts or P2 counts, but not ADVANCE. The report names every failed ADVANCE condition, including:
    - G1 failing in the middle zone (D_G ≥ 0.05 with a CI that includes 0);
-   - "only the label-cost claim holds";
-   - "P1-M passes, P1-ID does not, and P2 passes". The follow-up is then the UVFA-wide/SF-wide design (§5.2).
+   - the SF floor;
+   - "only the label-cost claim holds" (P2 counts, P1 does not), or "P1 counts, P2 does not";
+   - a pass that does not count (comparator-invalid, with the comparator's nreg);
+   - "P1-M passes, P1-ID does not, and P2 counts". The follow-up is then the UVFA-wide/SF-wide design (§5.2);
+   - if EXACT-GPI(L) ≥ 0.5: "library ceiling ≥ 0.5; any gain is through the z = w′ index".
 8. **INCONCLUSIVE.** Otherwise. A positive point estimate with a wide interval is not a pass, and a nonsignificant loss
    is not equivalence.
+
+If P1 was comparator-invalid at the pilot, ADVANCE cannot result; if P2 was also dropped, neither ADVANCE nor REVISE
+can result. Unit tests show that a copy-state SF (SF-GPI = GREEDY, exactly 1 on H-ID and H-K), a constant UVFA, a
+PG400 that collapses on TEST, and a pilot-invalid UVFA can never yield ADVANCE (§10).
 
 **Qualifiers** change the claim wording, never the decision:
 - **Attribution:** if macro nreg(UVFA+aux) ≤ nreg(SF-GPI) + 0.02, the gain is credited to vector consequence
@@ -717,7 +866,10 @@ decision.
   linearly", not "GPI".
 - **New directions (F8):** the words "new preference directions" need H-ID-U D1 point ≥ 0.03 with its CI lower bound
   > 0 and H-ID-U D2 upper bound < 0.05 (unadjusted). Otherwise the wording is "re-weighting of seen fact patterns".
-- **Naming (F11):** "endpoint-and-length successor features (exact MC targets)".
+- **Naming (F11):** "goal-conditioned endpoint-and-length successor features (exact Monte Carlo targets, no TD)".
+- **Guard quality:** if Q9 failed at the pilot without a bug being found, G1 statements add "against a guard that
+  failed its DEV sanity check on H-NEG".
+- **k\*:** if G-P3b failed twice, k\* is labelled "descriptive only".
 
 ### 6.6 Power and sizing (F2)
 
@@ -748,6 +900,18 @@ whatever n. With 56 parents per family, 80% power needs a true effect of 0.060, 
 | 120 | 0.99 | 0.92 | 0.69 | 0.48 |
 | 152 | 0.99 | 0.95 | **0.80** | 0.59 |
 
+**P1-ID power below the planned effect (rev 3, L2; same formula).** The predicted H-ID gap (§1.5) is +0.00 to +0.04,
+below the planned 0.05.
+
+| n_ID | true 0.03: σ = 0.10 / 0.15 / 0.20 / 0.25 | true 0.04: σ = 0.10 / 0.15 / 0.20 / 0.25 |
+|---|---|---|
+| 96 | 0.50 / 0.39 / 0.22 / 0.14 | 0.84 / 0.64 / 0.39 / 0.25 |
+| 120 | 0.50 / 0.48 / 0.27 / 0.18 | 0.86 / 0.75 / 0.48 / 0.31 |
+| 152 | 0.50 / 0.50 / 0.35 / 0.22 | 0.89 / 0.79 / 0.59 / 0.39 |
+
+At a true 0.03 the power can never exceed 0.5, because the point estimate must reach 0.03. The design is sized for
+0.05 and will usually miss an H-ID effect at the low end of the prediction; this is stated, not hidden.
+
 Joint P1 power lies between max(0, a + b − 1) and min(a, b). H-ID is a third of the macro, so the two conjuncts are
 positively correlated and the joint power is close to the weaker conjunct.
 
@@ -764,11 +928,13 @@ positively correlated and the joint power is close to the weaker conjunct.
 1. **Estimate σ̂** from the selection-seed models at the selected configs:
    - σ̂_ID = SD over the 32 DEV-ID parents of d1(p) = y_UVFA(p) − y_SF(p);
    - σ̂_OOD = the same over the 24 DEV-OOD H-K and H-NEG parents;
-   - σ̂₂ = the SD over DEV-ID of y_SF(p) − y_PG400(p).
+   - σ̂₂,ID = the SD over DEV-ID of y_SF(p) − y_PG400(p);
+   - σ̂₂,OOD (rev 3, M5) = the same over the 24 DEV-OOD H-K and H-NEG parents, where pilot B fits the selected PG400.
 
    These are single-model differences, while the confirmation averages 3 replicates, so σ̂ is conservative.
-2. **Plan with σ_plan = 1.15·σ̂.** 1.15 is about the 80% upper-confidence factor for an SD from 24–32 parents (1.16 at
-   23 df, 1.13 at 31 df).
+2. **Plan with σ_plan = 1.15·σ̂**, and σ_plan,2 = 1.15·max(σ̂₂,ID, σ̂₂,OOD) for P2 (D2 is a macro over H-ID, H-K and
+   H-NEG, so a DEV-ID-only SD could overstate P2's power on the OOD families). 1.15 is about the 80% upper-confidence
+   factor for an SD from 24–32 parents (1.16 at 23 df, 1.13 at 31 df).
 3. **Set n_ID** = min(152, max(96, ⌈3,802·σ²_plan,ID⌉)), where 3,802 = ((2.2414 + 0.8416)/0.05)².
 
    | σ̂_ID | n_ID |
@@ -786,8 +952,8 @@ positively correlated and the joint power is close to the weaker conjunct.
    - the planned P2 power at a true D2 = 0 with σ_plan,2.
 5. **Caps.** If the protected core does not fit 150 CPU-min at the G-P5-measured rates, n_ID is reduced toward 96, then
    n_K and n_NEG toward 56. The same happens if fewer distinct unseen support classes exist than H-ID-U needs. The
-   planned powers are recomputed and written into the PILOT FILL. **Power above the cap is stated, not hidden.** For
-   example, the P1-ID power is 0.59 at σ = 0.25 with n_ID = 152.
+   planned powers are recomputed and written into the PILOT FILL. **Power below 0.80 at the cap is stated, not
+   hidden.** For example, the P1-ID power is 0.59 at σ = 0.25 with n_ID = 152.
 
 ---
 
@@ -795,16 +961,16 @@ positively correlated and the joint power is close to the weaker conjunct.
 
 | Item | Finding | Status |
 |---|---|---|
-| `rcx/bw/space.py` | sha `29d0b420…` (matches the HSTAR-recipe and B4 pins). It provides `StateSpace` (CSR forward and reverse), `CompiledGoal` with on/ontable/clear/holding, `goal_mask`, `backward_bfs` and `misplaced_compact` (the `clear` goal handling is in `is_done`; `holding` goals fall back to a bound of 0). **Missing:** max-plus value iteration, policy tables, GPI, the height-limit mask. New code: `rcx/bw/soft.py` | OK (extension needed) |
+| `rcx/bw/space.py` | sha `29d0b420…` (matches the HSTAR-recipe and B4 pins). It provides `StateSpace` (CSR forward and reverse), `CompiledGoal` with on/ontable/clear/holding, `goal_mask`, `backward_bfs` and `misplaced_compact` (the `clear` goal handling is in `is_done`; any goal with a `holding` fact gets a bound of 0, line 208, which made rev 2's ENUM-MIS± degenerate; rev 3 strips holding facts and adds h_hold, §5.3). **Missing:** max-plus value iteration, policy tables, GPI, the height-limit mask. New code: `rcx/bw/soft.py` | OK (extension needed) |
 | State and edge counts | n = 7: 65,990 states (37,633 + 28,357) and 186,578 edges; `space.py` asserts the count | OK |
 | Oracle cost | n = 7 build about 0.25 s, plus 9 ms per backward BFS (HSTAR recipe era). Value iteration is estimated at about 0.05–0.2 s per weight and is measured in Phase 1 | OK |
 | **Training throughput (R-04, measured)** | `runs/RCX-E07/main/REPORT.md`: FlatMLP (158,721 parameters, batch 64) ran 20,724 steps in 26.1–66.1 s at 4 threads, which is 19–48 GFLOP/s effective (6 × parameters × samples). The RelGNN ran the same steps in about 160 s (about 8.3k samples/s). §9 plans at 19 GFLOP/s (pessimistic) and 48 (optimistic), and G-P5 measures the real rates | OK, used in §9 |
 | R-04 GNN | `gnn_s20261276.pt` sha `9cc417a3…` = the B4 pin; `models.py` `4c2e3242…` and `encode.py` `32980f14…` match. The encoder accepts on/ontable/clear/holding goal facts, but training used on-only goals | OK (OOD disclosed) |
 | Exclusions | `EXCLUSIONS.json` `2f211de3…`: 677 invariants and 349 signatures. `excl.py` `eb31d9eb…` | OK |
-| Statistics, lane, guard | `rcx/stats.py` `06a30c10…` (`seed_parent_bootstrap_test`, `bootstrap_p_two_sided`, `holm`, `mcnemar_exact`; no stratified bootstrap, so `analyze_e05.py` adds one); `rcx/lane.py` `03f93d59…` (`try_acquire`, `read_lock`, `release`, `waiting_path`); `rcx/guard.py` `08fa782d…` | OK |
+| Statistics, lane, guard | `rcx/stats.py` `06a30c10…` (`seed_parent_bootstrap_test`, `bootstrap_p_two_sided`, `holm`, `mcnemar_exact`; `_boot_means` draws with `random.Random(seed).randrange`, which fixes E05's bootstrap stream, M3; no stratified bootstrap, so `analyze_e05.py` adds one). `rcx/lane.py` is `4a1bc447…` after CX D-44 (`try_acquire`, `read_lock`, `release`, `waiting_path`, `pid_alive`, `load_windows`, `window_ok`), and `rcx/guard.py` `08fa782d…`: both operational, recorded for reference, not pinned (M1) | OK |
 | **Peer overlap (corrected, F7)** | No BWM or RCWM SF/UVFA/goal-weight work. **dsv3wm RDW E07/E08** is adjacent: ledger domain, native features, 184 parents, factorized vs scalar readouts, status `FACTORIZED_NATIVE_FEATURE_STUDY_PREPARED_DEPENDENCIES_PENDING`. The boundary note was sent on 2026-10-12. E05 reads none of its data or code | OK (boundary declared) |
-| **Seeds (F1)** | A grep on 2026-10-12 found 20261242–50 only in DECISIONS.md (D-43), the E05 docs and `experiments/RCX-E04/DESIGN.md`. That E04 file still lists 20261242–48 from before D-43; **E04's revision must apply D-43's move to 20261206–14** | OK for E05; E04 text flagged |
-| CPU lane | E01R training and SEALED evaluations have priority. E01R's chain waits for ≥ 12.5 GB free RAM without a marker | Schedule constraint (§9.3) |
+| **Seeds (F1)** | Rev 2's grep found 20261242–48 still listed in `experiments/RCX-E04/DESIGN.md`. **Re-checked for rev 3 (2026-10-12, L10):** that file now uses seeds from the 20261206–14 block, and 20261242–50 occur only in `DECISIONS.md` (D-43) and the E05 files. Re-checked again at T1 | OK |
+| CPU lane | E01R training and SEALED evaluations have priority. Since CX D-44, E01R's v2 chains take lane blocks only inside the quiet windows (`runs/RCX-E01R/quiet_windows.json`, 23:00–07:00) and only if a block ends ≥ 5 min before the window closes; they need ≥ 12.5 GB free RAM and write no marker outside a window. GPU bundles (BWM, RCWM) run outside the windows, and BWM's D-84 request is that no CPU model job runs beside them | Schedule constraint (§9.3) |
 
 **Verdict: FEASIBLE.**
 - Every input exists. No peer data, no GPU and no 0.6B load are needed.
@@ -816,7 +982,9 @@ positively correlated and the joint power is close to the weaker conjunct.
 2. **Per-goal fit cost.** This is the dominant cost (§9). It is measured in G-P5, with the protected cut.
 3. **H-ID-U supply.** The count of distinct unseen support classes is checked at the pilot. The estimate is about 20
    at K = 3 and well over 100 at K = 4.
-4. **Lane availability:** about 10–12 slices of 15 min (§9.3).
+4. **Lane availability:** about 10–12 slices of 15 min (§9.3). Under the rev 3 lane rule E05 runs only when no GPU
+   job is live or in a window tail E01R cannot use, so the calendar may stretch; nothing in the design depends on
+   when slices run.
 
 ---
 
@@ -852,17 +1020,17 @@ outcome.
 |---|---|---|---|---|
 | 0 | Code and unit tests on n = 3–5 (each < 5 s). Not a lane job | < 1 | < 1 | – |
 | 1a | Pilot A: draw TRAIN/DEV; oracle and library tables; selection training (3 arms × 1 run of 40 epochs = 3.3 TFLOP); DEV evaluation of the zero-shot arms; G-P1, G-P2, G-P4 | ≈ 5 | ≈ 2.5 | 1 |
-| 1b | Pilot B: PGV_400 grid (32 parents × 126 GFLOP) and FT grid (32 × 25.5 GFLOP) on DEV-ID; PGV_1600/6400 on 8 DEV-ID parents (6.5 TFLOP); G-P3; throughput timing (G-P5); σ̂ | ≈ 11.5 | ≈ 5 | 1 |
+| 1b | Pilot B: PGV_400 grid (32 parents × 126 GFLOP) and FT grid (32 × 25.5 GFLOP) on DEV-ID; PGV_1600/6400 on 8 DEV-ID parents (6.5 TFLOP); G-P3; the selected PG400 on the 24 DEV-OOD H-K/H-NEG parents (≤ 2.8 TFLOP, M5); R_ext on 8 DEV-ID parents only if G-P3b escalates (3.7 TFLOP, M4); throughput timing (G-P5); σ̂ | ≈ 14 (+ 3.2 if R_ext) | ≈ 6 (+ 1.3) | 1–2 |
 | — | **Prereg freeze** (PILOT FILL; shas); then `draw-test` and the manifest-sha commit | 0 | 0 | – |
 | 2 | TEST draw and oracle (n_P + 184 goals), starts, banks, exclusions, label indices | ≈ 3 | ≈ 2 | 1 (shared) |
 | 3 | 9 confirmation runs (3 arms × 3 replicates, 1.11 TFLOP each) plus SF-shuffled | ≈ 10 | ≈ 4 | 1 |
 | 4 | PGV_400 on all primary parents. Worst case is width 256 with 2,000 steps (116 GFLOP per fit); width 64 is about 3 min | ≈ 21 (n_P 208) – 30 (296) | ≈ 8.5–12 | 2 |
 | 5 | FT-UVFA_400 × 3 replicates on all primary parents (worst case 400 steps, 25.5 GFLOP per fit) | ≈ 14–20 | ≈ 5.5–8 | 1–2 |
-| 6 | PGV_1600 and PGV_6400 on the 48-parent subset (815 GFLOP per parent) | ≈ 34 | ≈ 14 | 3 |
-| 7 | Evaluation. A per-replicate library ψ̂ cache (≤ 1.5 TFLOP, float16, ≤ 0.5 GB) serves SF-GPI, SF-L and SF-GPI-5. Also all other arms and families; ENUM-MIS± (Python, about 5 min), ENUM-H\*± (about 8), GNN-ENUM± (about 10) | ≈ 32–36 | ≈ 20–22 | 3 |
+| 6 | PGV_1600 and PGV_6400 on the 48-parent subset (815 GFLOP per parent; 462 under R_ext, which also refits k = 400) | ≈ 34 (≈ 19.5 under R_ext) | ≈ 14 (≈ 8) | 3 |
+| 7 | Evaluation. A per-replicate library ψ̂ cache (≤ 1.5 TFLOP, float16, ≤ 0.5 GB) serves SF-GPI, SF-L and SF-GPI-5. Also all other arms and families; ENUM-MIS± (Python, about 5 min), ENUM-H\*± (about 8), GNN-ENUM± (about 10), each before the L1 menu extension, which raises target counts on H-NEG and H-KN by about 2–4× there (G-P5 measures it; cut items 4 and 6 absorb it) | ≈ 32–36 | ≈ 20–22 | 3 |
 | 8 | Descriptive extras: budget curve (≈ 8), SF-FT_400 (≈ 5), optional equivariant SF | ≈ 13 | ≈ 5.5 | 1 |
 | 9 | Analysis (create-only outputs) | ≈ 1 | ≈ 1 | (shared) |
-| | **Pilot total** | **≈ 16.5** (cap 30) | ≈ 7.5 | 2 |
+| | **Pilot total** | **≈ 19–22** (cap 30) | ≈ 8.5–10 | 2–3 |
 | | **Confirmation total** | **≈ 128 (n_P 208) – 147 (n_P 296)** (cap 150) | ≈ 60–70 | ≈ 10–12 |
 
 Peak RSS is < 1.5 GB: the ψ̂ cache is ≤ 0.5 GB, V\* tables are streamed per parent, and the models are small.
@@ -876,8 +1044,9 @@ Peak RSS is < 1.5 GB: the ψ̂ cache is ≤ 0.5 GB, V\* tables are streamed per 
 - SF-shuffled;
 - **PGV_400 on all primary parents**;
 - PG400 on all primary parents (3 replicates if it is FT);
-- **PGV_1600 and PGV_6400 on the fixed 48-parent subset**;
-- ENUM-MIS±, GREEDY, STOP, RAND, ORACLE, EXACT-GPI(L) and BEST-SINGLE(L) on every family;
+- **the k-curve on the fixed 48-parent subset** (PGV_1600 and PGV_6400; also PGV_400 under R_ext);
+- ENUM-MIS±, GREEDY, STOP, RAND, ORACLE, EXACT-GPI(L) and BEST-SINGLE(L) on every primary family and on every secondary
+  family not removed by cut items 3 (H-KN) or 7 (H-DYN) (rev 3, L8: "every family" conflicted with those cuts);
 - ENUM-H\*± and GNN-ENUM± on H-ID and H-K;
 - the one-step banks.
 
@@ -894,36 +1063,77 @@ If the protected core alone exceeds 150, sizes shrink as in §6.6 step 5, before
 150, the coordinator records a CX D-entry, which either raises the cap (for time reasons only) or postpones. The
 protected core is never cut after TEST is drawn.
 
-### 9.3 Lane rules (binding; CX D-43)
+### 9.3 Lane rules (binding; CX D-43 as amended by CX D-44 and BWM D-84; rev 3 rule recorded at T1)
+
+**Where the rules live (rev 3, M1).** In `experiments/RCX-E05/lane_e05.py`, an operational module outside the outcome
+code digest (like `rcx/lane.py` and `rcx/guard.py`, whose shas are recorded per phase for reference only). It imports
+nothing from the outcome code; a change to it is a logged operational deviation that needs `test_e05_lane.py` to pass.
+Nothing about dates is hard-coded.
 
 **Party and markers.** The job holds the lane as party `rcx-e05` through `rcx.lane.try_acquire` only. It **never writes
-a waiting marker**, so it never calls `rcx.lane.acquire`, which writes one.
+a waiting marker**, so it never calls `rcx.lane.acquire`, which writes one. It never writes any `rineya-gpu-0.*` file
+or the quiet-release file.
 
-**Start condition.** `run_e05.py` checks all of the following before each phase:
-1. **The lane is free:** no lock, after stale-pid reclaim, and **no `rineya-cpu-lane.waiting.*` marker of any party**
-   (`waiting.rcx`, `waiting.bwm`, `waiting.dsv3wm`, …).
-2. **E01R protection.** Available RAM must be **< 11.0 GB** while any E01R adapter remains untrained. The same applies
-   until E01R's SEALED evaluations are done, since they also need ≥ 12 GB for 0.6B loads and outrank E05. E01R's
-   12.5 GB start condition then cannot be met during the phase anyway.
-3. **Night windows.** It is not inside a night window: **22:50–07:00 on the nights starting 10-12, 10-13 and 10-14**
-   (the last ends 10-15 07:00). The phase's projected end (G-P5 rate + 20%) must also fall before 22:50.
-4. **Thermal guard:** `rcx.guard` reports tz01 < 97 °C (or it has resumed at ≤ 93 °C), and no `.thermal_pause` file
+**Inputs, read at every phase start and at every safe point.**
+- **Windows:** `runs/RCX-E01R/quiet_windows.json` (the D-84/D-51 windows; at rev 3, 23:00–07:00 on the nights starting
+  10-12, 10-13 and 10-14), united with `runs/RCX-E05/extra_windows.json`, where the coordinator copies any window agreed
+  later in a DECISIONS or COLLABORATION entry before it reaches `quiet_windows.json` (e.g. the 10-15/16 and 10-16/17
+  nights BWM accepted at 16:40, once the operator approves). Unreadable or unparseable → refuse; an absent extras file
+  means no extra windows.
+- **GPU lease** `%TEMP%/rineya-gpu-0.lock`, read only. It has a **live holder** iff its `pid` or any of its
+  `worker_pids` is alive (`rcx.lane.pid_alive`). No file means no holder; an unreadable file → refuse.
+- **E01R state:** `%TEMP%/rineya-quiet-release.rcx.json`; `runs/RCX-E01R/cells/train_chain.log` and
+  `post_train_chain.log`; the lane lock's holder.
+
+**Start condition.** All of the following, before each phase:
+1. **The lane is free:** no lock, after stale-pid reclaim, and **no `rineya-cpu-lane.waiting.*` marker of any party**.
+2. **Free RAM ≥ 4.0 GB** (`rcx.guard.available_ram_gb`; unknown → refuse). This is the lower floor L9 asked for; E05
+   itself stays < 1.5 GB RSS, and the guard pauses below its own 3.0 GB floor.
+3. **Thermal guard:** `rcx.guard` reports tz01 < 97 °C (or it has resumed at ≤ 93 °C), and no `.thermal_pause` file
    exists.
-5. **No stray python process** (`Get-CimInstance Win32_Process`).
-6. **Length.** The projected phase length is ≤ 15 min, and `expected_end` = start + 15 min.
+4. **No stray python process** (`Get-CimInstance Win32_Process`).
+5. **Length.** The projected phase length L (G-P5 rate, or 19 GFLOP/s before G-P5, plus 20%) is ≤ 15 min, and
+   `expected_end` = start + 15 min.
+6. **Time and peers: either day mode or night-tail mode.**
+   - **Day mode:** now is outside every window; the GPU lease has **no live holder** (BWM D-84: no CPU model job
+     beside a GPU bundle); and start + L ≤ next window start − 10 min.
+   - **Night-tail mode:** now is inside window W; **E01R has no remaining block in W**; the GPU lease has no live
+     holder; and start + L ≤ W.end − 5 min (the windows' `end_margin_min`). "E01R has no remaining block in W" iff the
+     quiet-release file exists, or the newest `lane:` line of E01R's active chain log (the post-train log once it has
+     started, else the training log) is `rcx.lane.acquire`'s refusal "inside the window ending ⟨W.end⟩, but a … block
+     would end too late" and E01R does not hold the lane. Anything else, including an unreadable log, counts as "has a
+     remaining block".
 
-**Safe points and yielding.**
-- Safe points come after each training run, each PGV/FT batch of ≤ 64 models, and every 8 evaluation parents. They
-  are at most about 2 min apart.
-- At each safe point the job checkpoints, releases the lane and exits if any of these holds:
+**Retired rule.** D-43's "available RAM < 11.0 GB while E01R is pending" no longer applies to E05 (recorded at T1). It
+assumed E01R might start whenever ≥ 12.5 GB was free. Since D-44, E01R takes blocks only inside windows, so the rule
+protected nothing outside them; and in daytime it would starve E05, because RAM is plentiful exactly when no GPU job
+holds it, which is when D-84 allows E05 to run. Inside windows its purpose (E05 never uses time E01R could use) is
+served by the night-tail condition.
+
+**Safe points and yielding (rev 3, M2).**
+- A safe-point check runs after every optimizer step or evaluation cell once ≥ 60 s have passed since the previous
+  check, and at every epoch end and batch end. Units are sized from the G-P5 rates so that no uninterruptible unit
+  (one optimizer step of a `BatchedMLP` batch; one (arm, parent, start) evaluation cell) exceeds 30 s. Checks are then
+  ≤ 90 s apart at the measured rate and ≤ 120 s at half of it. (Rev 2's "batches of ≤ 64 models" would have been
+  about 6.5 min per PGV_400 batch and 11 min per 16-parent PGV_6400 batch at 19 GFLOP/s.)
+- At a check the job writes a checkpoint (every model's weights, AdamW states, early-stopping snapshots, data-order RNG
+  state and step count), releases the lane and exits if any of these holds:
   - any `waiting.*` marker exists;
   - 15 min have elapsed;
-  - the clock is within a night window;
-  - the guard asks it to pause.
-- The next phase resumes from the checkpoint. Outputs are keyed and append-only, so nothing is redone.
+  - in day mode: the GPU lease has a live holder, or the next window opens within 10 min;
+  - in night-tail mode: W.end − 5 min is reached;
+  - the guard asks it to pause (including free RAM below 3.0 GB).
+- The next phase resumes from the checkpoint; resumption reproduces the uninterrupted run (tested). Outputs are keyed
+  and append-only, so nothing is redone.
 
-**Interaction with E01R.** If RAM rises during a phase, the E01R chain finds the lane held, writes `waiting.rcx`, and
-E05 yields within about 2 min.
+**Interaction with E01R and the GPU peers (rewritten for D-44).** E05 stops ≥ 10 min before each window opens and
+enters a window only after E01R has declared that its next block cannot fit, so E01R should never find E05 holding the
+lane when it could start a block. If it ever does (a clock or log anomaly), E01R's `acquire` writes `waiting.rcx` and
+E05 yields at its next check. A GPU bundle that starts mid-phase overlaps E05 until the next check (≤ 2 min).
+
+**BWM confirmation at T1 (L9).** BWM is asked to confirm under D-84: (a) the ≤ 2-min residual overlap with a newly
+started GPU bundle; (b) the thermal note: tz01 idles at 94–96 °C, and E05's 4-thread slices obey the guard (pause at
+97 °C, resume at ≤ 93 °C). If BWM does not accept (a), E05 runs in night-tail mode only.
 
 **Threads and devices.**
 - Torch threads ≤ 4, and `OPENBLAS_NUM_THREADS=1` for the numpy oracle.
@@ -936,10 +1146,10 @@ runs.
 
 | When | Step |
 |---|---|
-| 10-12 | DESIGN rev 2 and the PREREG draft (this file and `PREREG_E05_DRAFT.md`); coordinator review; CX D-entry adoption |
+| 10-12 | DESIGN rev 3 and the PREREG draft (this file and `PREREG_E05_DRAFT.md`); review resolved; CX D-entry adoption with the lane rule and the BWM message |
 | 10-12/13, daytime | Code and unit tests (§10), no lane. Pilot code digest recorded |
-| 10-13, daytime, when the start condition holds | Phases 1a and 1b, then PILOT FILL, prereg freeze, `draw-test` and the manifest commit |
-| 10-13/14 daytime gaps, then after E01R completes | Phases 2–9 in 10–12 slices |
+| From 10-13, whenever the start condition holds (no live GPU holder in daytime, or a window tail E01R cannot use) | Phases 1a and 1b, then PILOT FILL, prereg freeze, `draw-test` and the manifest commit |
+| Later gaps of the same kind, and whole windows once E01R has written its quiet-release file | Phases 2–9 in 10–12 slices. The calendar is indicative: GPU-busy days may stretch it |
 
 ---
 
@@ -949,21 +1159,22 @@ runs.
 |---|---|
 | `rcx/bw/soft.py` | `phi_table(space)` (65,990 × 56 uint8); `soft_values(space, w, c, edge_mask=None)` (max-plus VI); `policy_table(space, V, w, c)` (greedy with the tie rule; pointer doubling gives endpoints and lengths); `sf_table` (ψ for all states); `gpi_scores`; `height_limit_mask(space, h=3)`; `conj_values(space, G, R, c)` via `backward_bfs` |
 | `experiments/RCX-E05/families_e05.py` | Generators for every family; `canon_key(w, c, rtype)`; `support_key(w, signed)`; `stabilizer(w)`; `rename_state` / `rename_weight`; seen/unseen quotas; one-parent-per-support assertion; the exclusion adaptor (`excl.row_exclusion_reason`, `exclusion_reason`); derived-stream helper `derive(seed, tag)` (sha256-based) |
-| `experiments/RCX-E05/enum_e05.py` | ENUM± target enumeration (falsifier menus, satisfiability, the U(G; s′) persistence rule); scorers for ENUM-MIS±, ENUM-H\*± and GNN-ENUM±; GREEDY, RAND, STOP, EXACT-GPI(L), BEST-SINGLE(L), ORACLE |
-| `experiments/RCX-E05/learners_e05.py` | SF, UVFA and UVFA+aux MLPs; `BatchedMLP` for PGV and FT; augmentation (renaming, stabilizer); trainer with checkpoints at 20/40 epochs and 100/500 steps; the library ψ̂ cache |
-| `experiments/RCX-E05/run_e05.py` | Subcommands `pilot-a`, `pilot-b`, `pilot-report`, `draw-test --expect-prereg-sha --expect-code-digest`, `oracle-test`, `train`, `pgv`, `ft`, `eval`, `extras`, `code-digest`. Also the lane gate (§9.3), keyed append-only outputs, `ATTEMPTS.jsonl` and a provenance manifest (shas, seeds, versions) |
-| `experiments/RCX-E05/analyze_e05.py` | Stratified paired cluster bootstrap; IUT P1; NI P2; Holm; decision rule §6.5 with qualifiers; per-family and strata tables; k\*; create-only report. It refuses unless every eval names `TEST_MANIFEST` sha and the frozen code digest |
+| `experiments/RCX-E05/enum_e05.py` | ENUM± target enumeration (complete falsifier menus, satisfiability, the U(G; s′) persistence rule); scorers for ENUM-MIS± (ĥ_MIS with h_hold), ENUM-H\*± and GNN-ENUM±; all-tied diagnostics; GREEDY, RAND, STOP, EXACT-GPI(L), BEST-SINGLE(L), ORACLE |
+| `experiments/RCX-E05/learners_e05.py` | SF, UVFA and UVFA+aux MLPs; `BatchedMLP` for PGV and FT; augmentation (renaming, stabilizer); trainer with checkpoints at 20/40 epochs and 100/500 steps, at batch ends and at mid-batch safe points; early stopping with step 0 among FT's candidates; the library ψ̂ cache |
+| `experiments/RCX-E05/run_e05.py` | Subcommands `pilot-a`, `pilot-b`, `pilot-report`, `draw-test --expect-prereg-sha --expect-code-digest`, `oracle-test` (every VOID check; writes `ORACLE_TEST_REPORT.json`), `train`, `pgv`, `ft`, `eval`, `extras`, `code-digest`. Calls the lane gate of `lane_e05.py`; keyed append-only outputs, `ATTEMPTS.jsonl` and a provenance manifest (shas, seeds, versions, reference shas of the operational files). `oracle-test`, `pgv`, `ft`, `eval` and `extras` refuse unless the TEST manifest sha is in the **committed** `DECISIONS.md` (`git show HEAD:…`, L5); `pgv`, `ft`, `eval` and `extras` also refuse unless `ORACLE_TEST_REPORT.json` says PASS (B4) |
+| `experiments/RCX-E05/lane_e05.py` | Operational (outside the code digest): start condition, safe-point checks, readers for the windows files, the GPU lease, the E01R logs and the quiet-release file (§9.3) |
+| `experiments/RCX-E05/analyze_e05.py` | Stratified paired cluster bootstrap (`rcx.stats` stream and order); IUT P1; NI P2; Holm; the validity determinations and decision rule of §6.5 with qualifiers; per-family and strata tables; k\*; create-only report. It refuses unless every eval names the `TEST_MANIFEST` sha and the frozen code digest, the sha is in the committed `DECISIONS.md`, and the oracle-test report says PASS |
 
 **Tests** (all < 5 s on n = 3–5; literal seeds; never reported):
 
 | Test file | Covers |
 |---|---|
-| `tests/test_e05_oracle.py` | Q1 (VI = brute force over all-pairs BFS on n = 5, 200 random w incl. negatives, `clear`, three c values); Q2 (H-CONJ vs `GoalLabels` at n = 5; the n = 6 version runs in the pilot); Q3 (rollouts = tables, V = w̄·ψ exactly); Q4 (GPI ≥ max over i of V^{π_i}); Q5 (value renaming invariance exact; the conjugate-policy ψ identity w̄_σ·σψ = V\*_{σw}(σs)); Q6 (height-limit mask = a direct rule check, n = 5 all states) |
-| `tests/test_e05_families.py` | Canonical keys invariant under random σ; support keys (9 two-fact on/ontable classes; signed keys); stabilizer correctness (σw = w, group closure); split and support disjointness; one-parent-per-support; quotas; the exclusion adaptor on synthetic reserved signatures; derived-stream determinism |
-| `tests/test_e05_enum.py` | Falsifier menus; satisfiability pruning; hand cases where a penalty must be avoided (ENUM± avoids it, rev 1's ENUM does not); `holding` targets; ENUM-H\*± = ORACLE on single-target goals; positive-only goals reduce to rev 1's ENUM |
-| `tests/test_e05_learners.py` | `BatchedMLP` equals B independent models (same init and data order, 50 steps, max abs diff < 1e-5); per-model early stopping; augmentation preserves labels exactly; the 20-epoch checkpoint equals an independent 20-epoch run; SF-shuffled permutes within weight only; the CUDA-off patch |
-| `tests/test_e05_analyze.py` | Stratified bootstrap = `rcx.stats.seed_parent_bootstrap_test` on one family; IUT p = max; NI p; Holm with a dropped P2; every decision branch on synthetic inputs (VOID, missing, STOP-D, ADVANCE, STOP-M, STOP-F, REVISE incl. the P1-M-only case, INCONCLUSIVE); qualifiers; 1e-9 tolerance; refusal on a manifest or digest mismatch |
-| `tests/test_e05_lane.py` | With a temporary `RINEYA_LANE_DIR`, an injected clock and an injected RAM function: refuses with any `waiting.*` marker, with RAM ≥ 11 GB while E01R is pending, inside or running into a night window, and with the lane held; never writes a marker; yields at a safe point when a marker appears; caps the phase at 15 min |
+| `tests/test_e05_oracle.py` | Q1 (VI = brute force over all-pairs BFS on n = 5, 200 random w incl. negatives, `clear`, three c values); Q2 (H-CONJ vs `GoalLabels` at n = 5; the n = 6 version runs in the pilot); Q3 (rollouts = tables, V = w̄·ψ exactly); Q4 (GPI ≥ max over i of V^{π_i}); Q5 (value renaming invariance exact; the conjugate-policy ψ identity w̄_σ·σψ = V\*_{σw}(σs)); Q6 (height-limit mask = a direct rule check, n = 5 all states); Q7 identities (ORACLE = 0, STOP = 1, GREEDY = 1 at hand-empty starts of positive goals) |
+| `tests/test_e05_families.py` | Canonical keys invariant under random σ; **scale-equivalent (w, c) and (λw, λc) share a key, w and 2w at the same c do not (M6)**; support keys (9 two-fact on/ontable classes; signed keys); stabilizer correctness (σw = w, group closure, \|Stab\| ≥ (n − m)!); split and support disjointness on the primitive key; one-parent-per-support; quotas; the exclusion adaptor on synthetic reserved signatures (starts, bank states, label rows); derived-stream determinism |
+| `tests/test_e05_enum.py` | Menus complete (each menu fact implies ¬f; on random n = 5 states f is false iff some menu fact holds); satisfiability pruning; hand cases where a penalty must be avoided (ENUM± avoids it, rev 1's ENUM does not); `holding` targets; **ĥ_MIS ≤ h\* on 500 random (s, G) at n = 5 incl. holding targets; the B1 hand case of §5.3 run through ENUM-MIS± itself (plays the optimum, scores not all tied; rev 2's ĥ and misplaced-on-G∖H-alone controls tie); non-tie assertion over 20 random H-NEG weights × 20 hand-empty starts at n = 5 (all-tied share ≤ 0.5 and below the rev-2 control's; every weight has a start with ≥ 2 distinct scores)**; ENUM-H\*± = ORACLE on single-target goals; positive-only goals reduce to rev 1's ENUM |
+| `tests/test_e05_learners.py` | `BatchedMLP` equals B independent models (same init and data order, 50 steps, max abs diff < 1e-5); per-model early stopping; **FT's step-0 candidate (no improvement → the zero-shot weights exactly)**; augmentation preserves labels exactly; the 20-epoch checkpoint equals an independent 20-epoch run; **mid-batch checkpoint + resume = uninterrupted run (≤ 1e-6)**; SF-shuffled permutes within weight only; the CUDA-off patch |
+| `tests/test_e05_analyze.py` | Stratified bootstrap = `rcx.stats.seed_parent_bootstrap_test` **exactly** on one stratum (seed `derive(20261250, "boot:<h>")`); IUT p = max; NI p; Holm with a dropped P2 and with a pilot-invalid P1; validity conditions never change the Holm family; every decision branch on synthetic inputs (INCONCLUSIVE defect and missing, STOP-D, ADVANCE, STOP-M only when neither test counts, STOP-F incl. a dropped or TEST-invalid P2, REVISE incl. the P1-M-only case, a failed SF floor and a library ceiling ≥ 0.5, INCONCLUSIVE); **cannot-ADVANCE cases: copy-state SF (= GREEDY), constant UVFA, PG400 collapsed on TEST, pilot-invalid UVFA**; replicate sign check on macro and H-ID; qualifiers; 1e-9 tolerance; refusal on a non-PASS oracle-test report, a manifest or digest mismatch, or a sha absent from the committed `DECISIONS.md` |
+| `tests/test_e05_lane.py` | With temporary `RINEYA_LANE_DIR` and `%TEMP%`, injected clock, RAM, windows files, GPU lease, E01R logs and pid liveness: refuses with any `waiting.*` marker, with the lane held, with an unreadable windows or lease file, with free RAM < 4.0 GB or unknown, in day mode with a live GPU holder or a projected end later than 10 min before the next window, inside a window unless E01R has no remaining block there and the phase ends ≥ 5 min before the window closes; never writes a marker, a GPU file or the release file; yields at a check on a marker, a new live GPU holder, the pre-window mark, 15 min elapsed or a guard pause; **safe-point spacing ≤ 90 s at the planning rate and ≤ 120 s at half of it for every planned unit, units > 30 s rejected (M2)** |
 
 ---
 
@@ -971,25 +1182,37 @@ runs.
 
 | Point | What is fixed | Recorded in |
 |---|---|---|
-| **T0 (now)** | Nothing. DESIGN rev 2 and `PREREG_E05_DRAFT.md` are drafts | – |
-| **T1 adoption** | Scope, the dsv3wm boundary, seeds 20261242–50 (D-43), and E04 independence | CX D-entry |
-| **T2 pilot-code freeze** (before Phase 1) | The sha256 digest of `soft.py`, `families_e05.py`, `enum_e05.py`, `learners_e05.py` and `run_e05.py` plus the pinned existing files (§4.1; digest definition in the prereg draft §2.1), with all tests passing. TRAIN and DEV are drawn by this code | DECISIONS ("E05 pilot code digest") |
+| **T0 (now)** | Nothing. DESIGN rev 3 and `PREREG_E05_DRAFT.md` are drafts | – |
+| **T1 adoption** | Scope, the dsv3wm boundary, seeds 20261242–50 (D-43), E04 independence, the §9.3 lane rule (retiring D-43's RAM < 11 GB rule for E05), DESIGN rev 3's sha; the BWM confirmation request (L9) | CX D-entry |
+| **T2 pilot-code freeze** (before Phase 1) | The sha256 digest of `soft.py`, `families_e05.py`, `enum_e05.py`, `learners_e05.py` and `run_e05.py` plus the pinned existing files (§4.1; digest definition in the prereg draft §2.1), with all tests passing. Not in the digest: `lane_e05.py`, `rcx/lane.py`, `rcx/guard.py` (operational; shas recorded). TRAIN and DEV are drawn by this code | DECISIONS ("E05 pilot code digest") |
 | **T3 prereg freeze** (after Phase 1) | `PREREG_E05.md` = the draft plus the PILOT FILL only: selected configs, PG400 identity (or "P2 dropped"), library composition, n_ID/n_K/n_NEG, H-ID-S size, planned powers, measured rates and cut depth, and the DEV results known. Also the full code digest **including `analyze_e05.py`**. All thresholds, the decision rule, the resizing formula and the cut order are already fixed in the draft and do not change | DECISIONS (prereg sha + code digest) |
 | **T4 TEST draw** | `TEST_MANIFEST.json` from `20261242:test:1`. Its sha is committed before any arm is evaluated on TEST | DECISIONS |
-| **T5 confirmation** | Replicates 20261246–48 are trained after T3. Per-goal fits, evaluation and **one** analysis run | `runs/RCX-E05/…`, ATTEMPTS.jsonl |
+| **T5 confirmation** | `oracle-test` (the only place a VOID can be declared). Replicates 20261246–48 are trained after T3. Per-goal fits, evaluation and **one** analysis run | `runs/RCX-E05/…`, ATTEMPTS.jsonl |
 | **T6 report** | EXPERIMENT_RESULTS R-nn; DECISIONS entry; FYI to BWM, RCWM and (relayed) dsv3wm | – |
 
-After T3, any change to a bound file is a logged deviation, marked "outcomes known: yes/no". After T4, a change that
-could affect TEST outcomes voids the attempt.
+After T3, any change to a bound file is a logged deviation, marked "outcomes known: yes/no". **Rev 3 (B4):** between
+T4 and `oracle-test`'s PASS, a fault that could affect TEST outcomes VOIDs the attempt (redraw). After the first
+learned-arm TEST computation there is no VOID: an outcome-affecting change, a selection model evaluated on TEST, an
+edited or re-created committed manifest, a retrained replicate or a second analysis run gives INCONCLUSIVE (defect)
+and a design review, with no redraw and full reporting of the attempt.
+
+**Pilot report if E05 stops early (L7).** If E05 is abandoned or postponed after the pilot for any reason, including a
+large DEV contrast, `PILOT_REPORT.json` and a short descriptive note ("pilot, DEV only, not a confirmation") are still
+published as an EXPERIMENT_RESULTS entry and referenced in DECISIONS.
 
 ---
 
 ## 12. Open items before the prereg freeze
 
-1. CX D-entry adoption (T1). E05 runs before E04.
-2. The E04 DESIGN.md seed table still shows 20261242–48. E04's own revision applies D-43, and E05 does not edit E04.
+1. CX D-entry adoption (T1), still to be recorded, with the lane rule and the BWM message. E05 runs before E04.
+2. ~~The E04 DESIGN.md seed table still shows 20261242–48.~~ Re-checked for rev 3: E04 now uses the 20261206–14 block;
+   20261242–50 occur only in `DECISIONS.md` and the E05 files. Re-checked at T1.
 3. Whether the optional equivariant SF fits the lane time (descriptive only).
-4. Whether BWM's B4 fresh set exists by T3, which would re-pin the exclusions.
+4. Whether BWM's B4 fresh hard-style set (seed 20261410, n = 110) exists by T3, which would re-pin the exclusions.
+   `EXTRA_RESERVED_FILES` already holds `instances_seeds_fresh.json` (D-16); the B4 file is a different one and is
+   not yet in `EXCLUSIONS.json`.
+5. The extra E01R nights (10-15/16, 10-16/17) await the operator's approval; once approved they reach E05 through the
+   windows files (§9.3) without a code change.
 
 ---
 
@@ -1002,8 +1225,8 @@ could affect TEST outcomes voids the attempt.
 | 20261244 | Starts and one-step banks (DEV and TEST, derived per split); RAND's stream |
 | **20261245** | **Selection only:** pilot model initialization for config selection, the per-goal grids on DEV, G-P3/G-P4 and σ̂. Never a TEST replicate |
 | **20261246, 20261247, 20261248** | **Confirmation replicates** for SF, UVFA and UVFA+aux, and FT-UVFA_400 from each. SF-shuffled, the budget curve and SF-FT_400 use 20261246 |
-| 20261249 | Per-goal label sampling (nested 400 ⊂ 1,600 ⊂ 6,400, shared by PGV, FT and SF-FT) and PGV initialization. Derived per parent and k |
-| 20261250 | Analysis bootstraps |
+| 20261249 | Per-goal label sampling (nested 400 ⊂ 1,600 ⊂ 6,400, shared by PGV, FT and SF-FT; also the 400 labels of the 24 DEV-OOD H-K/H-NEG parents, M5) and PGV initialization. Derived per parent and k |
+| 20261250 | Analysis bootstraps: one `random.Random(derive(20261250, "boot:<stratum>"))` stream per stratum (§6.4) |
 
 **Derived streams.** derive(seed, tag) = int.from_bytes(sha256(f"{seed}:{tag}")[:8], "big"). Unit tests use literal
 seeds 0–9.
@@ -1018,15 +1241,17 @@ seeds 0–9.
 | Q4 | EXACT-GPI(L) value ≥ the max over i of V^{π_i}_{w′} at every start |
 | Q5 | V\*_{σw}(σs) = V\*_w(s) for 500 random σ; canonical keys invariant; w̄_σ·σψ^{π_w}(s) = V\*_{σw}(σs) |
 | Q6 | The height-limit successor mask equals a direct rule check (n = 5, all states) |
-| Q7 | Floors separated: ORACLE nreg = 0, STOP = 1, RAND and GREEDY strictly between (on DEV and TEST) |
-| Q8 | Split hygiene: class disjointness, support uniqueness and H-ID-U unseen-ness, exclusion counts, the n = 7 assertion vs RCX test sets, and the TEST sha committed before evaluation |
+| Q7 | **Rev 3 (B2).** ORACLE nreg = 0 and STOP nreg = 1 **exactly** at every start of every family; RAND's **primary macro** nreg < 1 (DEV: over DEV-ID, DEV-OOD H-K and DEV-OOD H-NEG; TEST: over H-ID, H-K and H-NEG); GREEDY nreg = 1 exactly at every start of the positive families (§3; an identity, so a failure is an instrument bug). Rev 2 also required RAND and GREEDY to lie strictly between the floors, which fails by construction because GREEDY ≡ STOP on positive families: a VOID trap. On DEV (pilot) and TEST (inside `oracle-test`) |
+| Q8 | Split hygiene: class disjointness on the scale-canonical key (M6), support uniqueness and H-ID-U unseen-ness, exclusion counts (starts, bank states, per-goal label rows), the n = 7 assertion vs RCX test sets, the 48-parent subset as drawn, and the TEST sha committed (present in the committed `DECISIONS.md`) before evaluation |
+| Q9 | **ENUM-MIS± sanity (rev 3, B1; pilot only).** On the 12 DEV-OOD H-NEG parents, ENUM-MIS± mean nreg < GREEDY's (strict) and its all-tied decision share < 0.5. Not a TEST check: on TEST the guard's quality is an outcome, so it is reported, never a VOID condition |
 
 **Pilot gates** (DEV only, before the freeze; engineering decisions, recorded with outcomes known on DEV):
 
 | Gate | Condition |
 |---|---|
-| G-P1 | Q1–Q8 pass |
+| G-P1 | Q1–Q9 pass. A Q9 failure triggers an audit of `enum_e05.py` against its tests: a bug found is fixed (T2 digest re-recorded, the affected pilot phase re-run, logged); if none is found, ENUM-MIS± stays as specified (the guard is never redesigned after DEV is seen), the failure goes into the PILOT FILL, and the guard-quality qualifier applies |
 | G-P2 | DEV-ID exact-GPI(L) ceiling. If it is ≥ 0.5, the 49 single-fact base policies are added to L for every learned arm, before the freeze |
-| **G-P3 (F4)** | **Per-goal competence.** Each candidate's best grid config must reach DEV-ID nreg ≤ nreg(GREEDY) − 0.20. PG400 is the better competent candidate (ties to FT), with one grid extension if neither is competent, else P2 is dropped (§5.2). Also, on the 8 DEV-ID parents, PGV_6400 nreg ≤ 0.25 and PGV is monotone in k (if not, PGV training is fixed before the freeze) |
-| **G-P4 (F9)** | **Learnability against the copy-state floor**, on the DEV-ID one-step bank pairs (32 × 64), with selection-seed models at the selected configs. The value-exact rate acc½(arm) is the share of pairs with \|V̂ − V\*\| < c/2. V̂ is w̄·ψ̂(s, w) for SF (own index), V_θ(s, w) for UVFA, and w·φ(s) for the copy-state floor, whose acc½ is the share of STOP-optimal pairs. **(a) SF:** acc½(SF) − acc½(copy) ≥ 0.40 **and** top-1(SF-noGPI) − top-1(GREEDY) ≥ 0.20. GREEDY is the copy-state ranking floor. **(b) UVFA:** acc½(UVFA) − acc½(copy) ≥ 0.20, or one grid extension (§5.5). Mean value error is reported for all arms. If (a) fails: 64 × 800 labels for every arm; if it fails again, n = 6. Both fallbacks are engineering decisions recorded before the freeze |
-| G-P5 (F6) | **Measured compute.** Steps/s for each model size at its batch size (single and batched B ∈ {16, 64}), VI seconds per weight, and evaluation decisions per second. These give the projected confirmation CPU-min at the sizes from §6.6; the cuts of §9.2 are applied until the projection is ≤ 150. The projection and cut depth go into the PILOT FILL |
+| **G-P3 (F4; rev 3, B2/M5)** | **Per-goal competence.** Each candidate's best grid config must reach DEV-ID nreg ≤ **0.50**. PG400 is the better competent candidate (ties to FT), with one grid extension if neither is competent, else P2 is dropped (§5.2). The selected PG400 is then fitted on the 24 DEV-OOD H-K/H-NEG parents for σ̂₂,OOD |
+| **G-P3b (rev 3, M4)** | **k-curve sanity.** On the 8 DEV-ID parents, PGV_6400 nreg ≤ 0.25 and the mean nreg non-increasing over k. If not, the single pre-specified escalation R_ext (§5.2), applied identically to all three k, re-checked once; if it fails too, the original recipe is kept and k\* is descriptive only. Rev 2's "PGV training is fixed before the freeze" was open-ended |
+| **G-P4 (F9)** | **Learnability against the copy-state floor**, on the DEV-ID one-step bank pairs (32 × 64), with selection-seed models at the selected configs. The value-exact rate acc½(arm) is the share of pairs with \|V̂ − V\*\| < c/2. V̂ is w̄·ψ̂(s, w) for SF (own index), V_θ(s, w) for UVFA, and w·φ(s) for the copy-state floor. **Correction (rev 3, L8):** rev 2 said the copy floor's acc½ is the share of STOP-optimal pairs, but the bank excludes those; on DEV-ID (c = 0.25, integer weights) V\* − w·φ(s) is then a positive multiple of 0.25 > c/2, so acc½(copy) = 0 exactly and the thresholds are effectively absolute. GREEDY's top-1 is 0 on hand-empty bank states of positive goals, so the ranking condition bites on holding states. **(a) SF:** acc½(SF) − acc½(copy) ≥ 0.40 **and** top-1(SF-noGPI) − top-1(GREEDY) ≥ 0.20. GREEDY is the copy-state ranking floor. **(b) UVFA (rev 3, B3):** acc½(UVFA) − acc½(copy) ≥ 0.20 **and** DEV-ID nreg(UVFA) ≤ 0.50, or one grid extension (§5.5); if it still fails, P1 is declared comparator-invalid. Mean value error is reported for all arms. If (a) fails: 64 × 800 labels for every arm; if it fails again, n = 6 (and the claim is restated for n = 6, §1.1). Both fallbacks are engineering decisions recorded before the freeze |
+| G-P5 (F6) | **Measured compute.** Steps/s for each model size at its batch size (single and batched B ∈ {16, 64}), VI seconds per weight, and evaluation seconds per (arm, parent, start) cell, including the extended ENUM± menus. These give the projected confirmation CPU-min at the sizes from §6.6; the cuts of §9.2 are applied until the projection is ≤ 150. They also size the safe-point units (none > 30 s, §9.3). The projection and cut depth go into the PILOT FILL |

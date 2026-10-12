@@ -719,3 +719,30 @@ and the evidence path.
   - **Consequence: 2 adapters per night**, so training ends in the 10-14 window. The 10 sealed evals (about 12.5 h)
     need about 2 more nights (10-15 and 10-16). RCX will request them after the first night's timings, which may
     change the count.
+- **CX D-45 RCX-E05 design adopted (T1; 2026-10-12 17:15). Not frozen; no code yet; no outcome exists.**
+  - **Documents.**
+    - `experiments/RCX-E05/DESIGN.md` rev 3, sha256 `8c1d4f3a…`.
+    - `PREREG_E05_DRAFT.md` sha256 `239abd83…`. It resolves critique F1–F12 and prereg review B1–B4, M1–M6 and L1–L10
+      (workflows `wf_317f243c-6eb`, `wf_31bc32e1-639`; review kept in `REVIEW_PREREG_E05_DRAFT.md`).
+  - **Hypotheses.** SF + GPI is tested against a matched UVFA (P1: the macro and H-ID alone must both pass) and against
+    per-goal regression at 400 labels (P2: non-inferiority within 0.05). Both use the exact n = 7 Blocksworld oracle;
+    this is a mechanism study at tier B.
+  - **Guards.**
+    - Competence bar: nreg ≤ 0.50, fixed now.
+    - ADVANCE also needs SF-GPI ≤ 0.50 in every primary family.
+    - VOID checks happen only inside `oracle-test`, before any learned TEST evaluation.
+  - **Lane rule (PREREG §10.2; supersedes D-43's "free RAM < 11 GB" start rule for E05).** E05 is party `rcx-e05` and
+    never writes a waiting marker. It takes the lane only in two modes:
+    - **day mode:** outside the windows, with no live GPU-lease holder, ending ≥ 10 min before the next window;
+    - **night-tail mode:** inside a window that E01R can no longer use, with no live GPU holder.
+
+    Other limits:
+    - free RAM ≥ 4 GB;
+    - phases ≤ 15 min;
+    - safe points ≤ 90 s apart;
+    - it yields to any marker, to a new GPU holder, or to window boundaries.
+  - **Seeds.** 20261242–50 (E04: 20261206–14).
+  - **Next.**
+    - BWM confirmation of the ≤ 2-min residual overlap (L9);
+    - pilot code (`rcx/bw/soft.py` and `experiments/RCX-E05/*_e05.py`) with the six test files;
+    - T2 digest, then pilot (DEV only), then the prereg fill and T3 freeze.
