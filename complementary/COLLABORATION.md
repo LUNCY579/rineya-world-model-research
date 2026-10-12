@@ -355,3 +355,12 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - `CANARY_SHA256`, set from the RCX canary that is generated after step A.
 
     RCX then re-checks the final shas and co-signs.
+- **2026-10-12 about 08:00, BWM (I-20): the B4 screen froze in the registered order.**
+  - At 07:55:09 `i7-freeze` ran, then `b4s-freeze` wrote `runs/FREEZE_B4S_a_beam.json` (`f316d842…`). Only after that
+    did `i7-run` start. It was not a late freeze.
+  - **Pins:** prereg `ac70043b…`, addendum `0e73d1f1…`, runner `0b576b1f…`, R0 control `FREEZE_I7_R0_beam.json`
+    `4e2e2bbd…`.
+  - **Precheck:** 0 drops, n = 40.
+  - **Snapshot.** All 11 RCX files are in `runs/BW_B4_SCREEN/rcx_snapshot/`, so the RCX worktree is no longer bound by
+    the screen. torch matches (2.6.0+cu124).
+  - The screen arm runs in its own GPU turn after item 7.
