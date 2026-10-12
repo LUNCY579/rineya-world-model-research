@@ -11,6 +11,7 @@ from itertools import combinations
 import json
 from pathlib import Path
 import shutil
+import time
 
 from ..auditors.integrity import (audit_record, recursive_input_check, semantic_fingerprint, validate_auxiliary,
                                   validate_decision, validate_schema)
@@ -42,8 +43,14 @@ def _archive_call(method,*args,**kwargs):
     """Keep the public exporter invalid-input contract without relaxing custody."""
     try:
         return getattr(remote_archive,method)(*args,**kwargs)
+    except remote_archive.ReadDeadlineExceeded:
+        raise
     except remote_archive.ArchiveError as error:
         raise ValueError(str(error)) from error
+
+def _check_deadline(deadline):
+    if deadline is not None and time.monotonic()>=deadline:
+        raise remote_archive.ReadDeadlineExceeded('rendered publication cycle deadline exceeded')
 _FRAMING = (
     'Use the task JSON below to assess the supplied candidate plans under its stated rules, goals, constraints and utility definition.\n',
     'Assess the supplied candidate plans using the rules, goals, constraints and utility definition in this JSON task.\n',
@@ -300,7 +307,8 @@ def _storage_guard(root, additional_bytes=0):
         raise RuntimeError('rendered export would leave fewer than 10 GiB free')
 
 
-def _publish(root, path, raw):
+def _publish(root, path, raw, deadline=None):
+    _check_deadline(deadline)
     base = root / 'data' / 'rendered'
     if path.resolve() != path or base not in path.parents or path.is_symlink():
         raise ValueError('rendered destination symlink or path escape')
@@ -399,9 +407,10 @@ def _source_record_provenance(record, source):
         raise ValueError('accepted source verification code hashes disagree with batch manifest')
 
 
-def _records(paths, split, max_records, root=None):
+def _records(paths, split, max_records, root=None, deadline=None):
     count = 0
     for path in paths:
+        _check_deadline(deadline)
         if count >= max_records:
             return
         base=Path(root) if root is not None else path.parent.parent.parent
@@ -410,6 +419,7 @@ def _records(paths, split, max_records, root=None):
             raise ValueError('source shard exceeds bounded shard size')
         raw=_archive_call('read_bytes',base,relative,max_bytes=MAX_SHARD_BYTES)
         for line in raw.splitlines():
+            _check_deadline(deadline)
             if count >= max_records:
                 return
             if len(line) > MAX_SHARD_BYTES:
@@ -422,7 +432,22 @@ def _records(paths, split, max_records, root=None):
 
 
 def export_rendered_dataset(source_root, split, view, max_records, variant_budget,
-                            output_dir=None, source_paths=None):
+                            output_dir=None, source_paths=None, *, deadline=None):
+    _bounds(view,max_records,variant_budget)
+    if split not in ('train','dev','ood'):
+        raise ValueError('sealed or unknown split cannot be exported')
+    try:
+        with remote_archive.read_session(source_root,deadline=deadline):
+            return _export_rendered_dataset(source_root,split,view,max_records,variant_budget,
+                                            output_dir,source_paths,deadline=deadline)
+    except remote_archive.ReadDeadlineExceeded:
+        raise
+    except remote_archive.ArchiveError as error:
+        raise ValueError(str(error)) from error
+
+
+def _export_rendered_dataset(source_root, split, view, max_records, variant_budget,
+                            output_dir=None, source_paths=None, *, deadline=None):
     """Publish deterministic immutable shards plus a hash/version manifest.
 
     max_records caps accepted source records examined, including records that
@@ -431,6 +456,7 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
     beneath data/rendered, so this function cannot overwrite canonical gold.
     """
     _bounds(view, max_records, variant_budget)
+    _check_deadline(deadline)
     if split not in ('train', 'dev', 'ood'):
         raise ValueError('sealed or unknown split cannot be exported')
     root = Path(source_root).resolve()
@@ -448,7 +474,7 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
     selected, sources = [], {}
     rendering_versions = set()
     seen_ids = set()
-    for path, record in _records(paths, split, max_records,root):
+    for path, record in _records(paths, split, max_records,root,deadline):
         if record['id'] in seen_ids:
             raise ValueError('duplicate selected canonical record id')
         seen_ids.add(record['id'])
@@ -482,18 +508,19 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
             return
         path = destination / ('shard-%05d.jsonl' % len(shards))
         raw = bytes(buffer)
-        _publish(root, path, raw)
+        _publish(root, path, raw,deadline)
         shards.append({'path': str(path.relative_to(root)), 'sha256': hashlib.sha256(raw).hexdigest(),
                        'bytes': len(raw), 'rows': buffered_rows})
         buffer, buffered_rows = bytearray(), 0
 
     examined = 0
-    for index, (path, record) in enumerate(_records(paths, split, max_records,root)):
+    for index, (path, record) in enumerate(_records(paths, split, max_records,root,deadline)):
         if index >= len(selected) or digest(record) != selected[index]['record_sha256']:
             raise ValueError('accepted source changed during rendered export')
         examined += 1
         produced = False
         for item in render_training_views(record, view, variant_budget):
+            _check_deadline(deadline)
             raw = (canonical(item) + '\n').encode('utf-8')
             if len(raw) > MAX_SHARD_BYTES:
                 raise ValueError('single rendered example exceeds bounded shard size')
@@ -529,5 +556,5 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
                 'training_launched': False}
     manifest_path = destination / 'manifest.json'
     manifest['manifest_path'] = str(manifest_path.relative_to(root))
-    _publish(root, manifest_path, (canonical(manifest) + '\n').encode('utf-8'))
+    _publish(root, manifest_path, (canonical(manifest) + '\n').encode('utf-8'),deadline)
     return manifest

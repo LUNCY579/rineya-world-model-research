@@ -106,6 +106,7 @@ def recover_inventory(db):
     recovered=set()
     committed_shards=set()
     for relative in remote_archive.iter_paths(root,'manifests/batch-*.json'):
+        remote_archive.check_read_deadline(root)
         path=_path(root,relative,('manifests',))
         manifest = json.loads(remote_archive.read_text(root,relative))
         if not {'seed','split','protected_index','accepted','quarantined','audit','shard','sha256'}<=set(manifest):
@@ -161,6 +162,7 @@ def recover_inventory(db):
 
 
 def process(seed, split, config, db):
+    remote_archive.check_read_deadline(ROOT)
     ensure_job_profiles(db)
     before_source=source_hashes()
     from ..generators.profiles import resolve_profile
@@ -184,6 +186,7 @@ def process(seed, split, config, db):
     started = time.monotonic()
     candidates = generate_group(seed, config=profile['config'], split=split)
     rerun = generate_group(seed, config=profile['config'], split=split)
+    remote_archive.check_read_deadline(ROOT)
     if canonical(candidates) != canonical(rerun):
         raise ValueError('reproducibility mismatch')
     raw_candidates = ('\n'.join(canonical(r) for r in candidates) + '\n').encode()
@@ -191,6 +194,7 @@ def process(seed, split, config, db):
     publication_guard(config,len(raw_candidates))
     immutable_bytes(ROOT / 'data/candidates' / f'{split}-{seed}.jsonl', raw_candidates)
     accepted, rejected, report = audit_group(candidates, db)
+    remote_archive.check_read_deadline(ROOT)
     from ..generators.profiles import resolve_record_profile
     if any(resolve_record_profile(row['provenance'])['id']!=profile['id'] for row in accepted):
         raise RuntimeError('generator adapter emitted a different generation profile')
@@ -220,6 +224,7 @@ def process(seed, split, config, db):
         raise RuntimeError('sealed quality gate failed; no freeze publication permitted')
     from ..generators.build import measure_search_runtime
     runtime_evidence={r['id']:measure_search_runtime(r['input']) for r in accepted if 'search' in r['targets']}
+    remote_archive.check_read_deadline(ROOT)
     if time.monotonic() - started > config['cycle_timeout_seconds']:
         raise TimeoutError('batch time budget exceeded before acceptance')
     source = source_hashes()
@@ -283,12 +288,23 @@ def summary(db):
     return result
 
 
-def backup_if_due(config, db):
+def backup_if_due(config, db, *, deadline=None):
     p = ROOT/'state/backup.json'
     last=json.loads(p.read_text()) if p.exists() else {}
     if time.time()-last.get('last_success_epoch',0)<config['backup_interval_seconds']:
         return
-    r=subprocess.run([sys.executable,str(ROOT/'scripts/backup.py')],capture_output=True,text=True,timeout=150)
+    remaining=150 if deadline is None else min(150,deadline-time.monotonic())
+    if remaining<=1:
+        raise remote_archive.ReadDeadlineExceeded('cycle backup reservation exhausted')
+    environment=os.environ.copy()
+    environment['GCDL_BACKUP_TIMEOUT_SECONDS']=str(min(140,remaining-1))
+    try:
+        r=subprocess.run([sys.executable,str(ROOT/'scripts/backup.py')],capture_output=True,text=True,
+                         timeout=remaining,env=environment)
+    except subprocess.TimeoutExpired:
+        if deadline is not None and time.monotonic()>=deadline:
+            raise remote_archive.ReadDeadlineExceeded('cycle backup deadline exceeded') from None
+        raise
     if r.returncode:
         event(db,'backup_failure',{'exit_code':r.returncode,'detail':r.stderr[-2000:]})
         raise RuntimeError('remote backup failed; checkpoint retained; bounded retry via resume')
@@ -321,6 +337,7 @@ def _disk_pause(reason):
 
 
 def run(args):
+    cycle_started=time.monotonic()
     if (ROOT/'state/STOP').exists():
         return 0
     config=json.loads((ROOT/'configs/production.json').read_text())
@@ -340,86 +357,134 @@ def run(args):
         if paused.exists():
             reason=json.loads(paused.read_text()).get('reason')
             if _disk_pause(reason) or reason=='archive Git cleanup pending':
-                try: _archive_for_resource_pressure(config,lock_fd=lock.fileno())
+                try: archive_result=_archive_for_resource_pressure(config,lock_fd=lock.fileno())
                 except Exception as error:
                     print(str(error),file=sys.stderr)
                     return 1
             return 0  # Preserve every pause marker/cause; no implicit resume.
-        try: _archive_for_resource_pressure(config,lock_fd=lock.fileno())
+        try: archive_result=_archive_for_resource_pressure(config,lock_fd=lock.fileno())
         except Exception as error:
             print(str(error),file=sys.stderr)
             return 1
-        db=connection()
+        if archive_result is not None:
+            if shutil.disk_usage(ROOT).free<config['min_free_bytes']:
+                reason='resource gate: fewer than 10 GiB free'
+                if not marker.exists():atomic_json(marker,{'reason':reason,'utc_epoch':time.time()})
+                heartbeat('paused',reason=json.loads(marker.read_text()).get('reason',reason))
+                return 1
+            heartbeat('archived',archive_status=archive_result.get('status','completed'))
+            print(canonical({'status':'archived','archive_status':archive_result.get('status','completed')}))
+            return 0  # Archive has its own bounded budget; no generation follows.
+        finish_deadline=cycle_started+config['cycle_timeout_seconds']+140
+        processing_deadline=cycle_started+config['cycle_timeout_seconds']
         try:
-            guard(config,db)
-            approved=ROOT/'manifests/VALIDATED_CODE.json'
-            if not args.no_backup:
-                from ..auditors.release import current_independent_review
-                if not approved.exists() or not current_independent_review():
-                    raise RuntimeError('code/config changed since final validation; independent review required')
-                if not (ROOT/'manifests/SEALED_FREEZE.json').exists():
-                    raise RuntimeError('sealed evaluation freeze required before unattended operation')
-            heartbeat('recovering')
-            recover_inventory(db)
-            from . import rendered
-            rendered.recover(db, ROOT)
-            if args.seal:
-                if (ROOT/'manifests/SEALED_FREEZE.json').exists():
-                    heartbeat('sealed_already_frozen'); return 0
-                seeds=[(s,'sealed') for s in config['sealed_seeds']]
-            elif getattr(args, 'render_only', False):
-                seeds=[]
-            else:
-                existing = db.execute('SELECT MAX(seed) FROM jobs WHERE split!="sealed"').fetchone()[0]
-                start=max(config['seed_start'],(existing+1) if existing is not None else 0)
-                seeds=[(start+i,config['production_splits'][(start-config['seed_start']+i)%len(config['production_splits'])]) for i in range(args.groups or config['groups_per_cycle'])]
-            for seed,split in seeds:
-                profile='v1' if args.seal else config.get('active_generation_profile','v1')
-                db.execute('INSERT OR IGNORE INTO jobs (seed,split,status,profile) VALUES (?,?,?,?)',(seed,split,'pending',profile))
-            db.commit()
-            jobs=[] if getattr(args, 'render_only', False) else db.execute('SELECT seed,split FROM jobs WHERE status!="done" AND '+('split="sealed"' if args.seal else 'split!="sealed"')+' ORDER BY seed').fetchall()
-            started=time.monotonic()
-            for seed,split in jobs:
-                if time.monotonic()-started>config['cycle_timeout_seconds']*.8: break
-                guard(config,db)
-                if not args.no_backup and json.loads(approved.read_text())['code_hashes']!=source_hashes():
-                    raise RuntimeError('reviewed source/config changed between batches')
-                heartbeat('generating',seed=seed,split=split)
-                process(seed,split,config,db)
-                recent=db.execute('SELECT accepted,quarantined,report FROM jobs WHERE status="done" AND split!="sealed" ORDER BY seed DESC LIMIT ?', (config['max_consecutive_failures'],)).fetchall()
-                if len(recent)==config['max_consecutive_failures'] and all(a==0 and q>0 for a,q,_ in recent):
-                    raise RuntimeError('novelty/quality gate: repeated unproductive batches; coverage/validator improvement needed')
-                if recent and any('oracle disagreement' in cause for cause in json.loads(recent[0][2]).get('causes',{})):
-                    raise RuntimeError('oracle disagreement quarantined; investigation required')
-            if not args.seal:
-                if not args.no_backup and not current_independent_review():
-                    raise RuntimeError('independent source approval changed before rendered publication')
-                rendered.enqueue(db, ROOT, config)
-                heartbeat('rendering')
-                published=rendered.drain(db, ROOT, config, started+config['cycle_timeout_seconds']*.8)
-                if published:
-                    event(db, 'rendered_batch', {'receipts':published})
-                if not args.no_backup and not current_independent_review():
-                    raise RuntimeError('independent source approval changed after rendered publication')
-            if args.seal:
-                frozen = {str(p.relative_to(ROOT)):file_hash(p) for p in sorted((ROOT/'data/sealed').glob('*.jsonl'))}
-                expected={f'data/sealed/sealed-{s}.jsonl' for s in config['sealed_seeds']}
-                if set(frozen)!=expected or any(db.execute('SELECT accepted,quarantined FROM jobs WHERE seed=? AND split="sealed"',(s,)).fetchone() is None or db.execute('SELECT accepted,quarantined FROM jobs WHERE seed=? AND split="sealed"',(s,)).fetchone()[0]==0 or db.execute('SELECT accepted,quarantined FROM jobs WHERE seed=? AND split="sealed"',(s,)).fetchone()[1]!=0 for s in config['sealed_seeds']):
-                    raise RuntimeError('seal incomplete/failed; resume seal before production')
-                immutable_bytes(ROOT/'manifests/SEALED_FREEZE.json',(canonical({'version':'seal-1','shards':frozen,'seeds':config['sealed_seeds'],'code_hashes':source_hashes(),'policy':'producer never reads sealed labels; same-user filesystem access is procedural isolation'})+'\n').encode())
-                os.chmod(ROOT/'data/sealed',0o700)
-            metrics=summary(db)
-            if not args.no_backup: backup_if_due(config,db)
-            heartbeat('healthy',metrics=metrics)
-            print(canonical({'status':'healthy','accepted':metrics['accepted'],'splits':metrics['splits']}))
+            with remote_archive.read_session(ROOT,deadline=processing_deadline) as reads:
+                return _produce(args,config,cycle_started,finish_deadline,reads)
+        except remote_archive.ReadDeadlineExceeded:
+            heartbeat('yielded',reason='bounded_cycle_time')
+            print(canonical({'status':'yielded','reason':'bounded_cycle_time'}))
             return 0
-        except Exception as error:
-            event(db,'error',{'class':type(error).__name__,'message':str(error),'diagnostics':getattr(error,'diagnostics',None),'traceback':traceback.format_exc()})
-            pause(db,str(error))
-            print(str(error),file=sys.stderr)
-            return 1
-        finally: db.close()
 
+
+def _produce(args,config,cycle_started,finish_deadline,reads):
+    db=connection()
+    processing_deadline=cycle_started+config['cycle_timeout_seconds']
+    try:
+        guard(config,db)
+        approved=ROOT/'manifests/VALIDATED_CODE.json'
+        if not args.no_backup:
+            from ..auditors.release import current_independent_review
+            valid=approved.exists() and current_independent_review(deadline=processing_deadline)
+            remote_archive.check_read_deadline(ROOT)
+            if not valid:
+                raise RuntimeError('code/config changed since final validation; independent review required')
+            if not (ROOT/'manifests/SEALED_FREEZE.json').exists():
+                raise RuntimeError('sealed evaluation freeze required before unattended operation')
+        heartbeat('recovering')
+        remote_archive.check_read_deadline(ROOT)
+        recover_inventory(db)
+        from . import rendered
+        rendered.recover(db, ROOT)
+        remote_archive.check_read_deadline(ROOT)
+        if time.monotonic()>=cycle_started+config['cycle_timeout_seconds']*.8:
+            raise remote_archive.ReadDeadlineExceeded('cycle recovery consumed publication budget')
+        if args.seal:
+            if (ROOT/'manifests/SEALED_FREEZE.json').exists():
+                heartbeat('sealed_already_frozen'); return 0
+            seeds=[(s,'sealed') for s in config['sealed_seeds']]
+        elif getattr(args, 'render_only', False):
+            seeds=[]
+        else:
+            existing = db.execute('SELECT MAX(seed) FROM jobs WHERE split!="sealed"').fetchone()[0]
+            start=max(config['seed_start'],(existing+1) if existing is not None else 0)
+            seeds=[(start+i,config['production_splits'][(start-config['seed_start']+i)%len(config['production_splits'])]) for i in range(args.groups or config['groups_per_cycle'])]
+        for seed,split in seeds:
+            profile='v1' if args.seal else config.get('active_generation_profile','v1')
+            db.execute('INSERT OR IGNORE INTO jobs (seed,split,status,profile) VALUES (?,?,?,?)',(seed,split,'pending',profile))
+        db.commit()
+        jobs=[] if getattr(args, 'render_only', False) else db.execute('SELECT seed,split FROM jobs WHERE status!="done" AND '+('split="sealed"' if args.seal else 'split!="sealed"')+' ORDER BY seed').fetchall()
+        started=cycle_started
+        for seed,split in jobs:
+            if time.monotonic()-started>config['cycle_timeout_seconds']*.8: break
+            guard(config,db)
+            if not args.no_backup and json.loads(approved.read_text())['code_hashes']!=source_hashes():
+                raise RuntimeError('reviewed source/config changed between batches')
+            heartbeat('generating',seed=seed,split=split)
+            process(seed,split,config,db)
+            recent=db.execute('SELECT accepted,quarantined,report FROM jobs WHERE status="done" AND split!="sealed" ORDER BY seed DESC LIMIT ?', (config['max_consecutive_failures'],)).fetchall()
+            if len(recent)==config['max_consecutive_failures'] and all(a==0 and q>0 for a,q,_ in recent):
+                raise RuntimeError('novelty/quality gate: repeated unproductive batches; coverage/validator improvement needed')
+            if recent and any('oracle disagreement' in cause for cause in json.loads(recent[0][2]).get('causes',{})):
+                raise RuntimeError('oracle disagreement quarantined; investigation required')
+        if not args.seal:
+            valid=args.no_backup or current_independent_review(deadline=processing_deadline)
+            remote_archive.check_read_deadline(ROOT)
+            if not valid:
+                raise RuntimeError('independent source approval changed before rendered publication')
+            rendered.enqueue(db, ROOT, config)
+            heartbeat('rendering')
+            published=rendered.drain(db, ROOT, config, started+config['cycle_timeout_seconds']*.8)
+            if published:
+                event(db, 'rendered_batch', {'receipts':published})
+            valid=args.no_backup or current_independent_review(deadline=processing_deadline)
+            remote_archive.check_read_deadline(ROOT)
+            if not valid:
+                raise RuntimeError('independent source approval changed after rendered publication')
+        if args.seal:
+            frozen = {str(p.relative_to(ROOT)):file_hash(p) for p in sorted((ROOT/'data/sealed').glob('*.jsonl'))}
+            expected={f'data/sealed/sealed-{s}.jsonl' for s in config['sealed_seeds']}
+            if set(frozen)!=expected or any(db.execute('SELECT accepted,quarantined FROM jobs WHERE seed=? AND split="sealed"',(s,)).fetchone() is None or db.execute('SELECT accepted,quarantined FROM jobs WHERE seed=? AND split="sealed"',(s,)).fetchone()[0]==0 or db.execute('SELECT accepted,quarantined FROM jobs WHERE seed=? AND split="sealed"',(s,)).fetchone()[1]!=0 for s in config['sealed_seeds']):
+                raise RuntimeError('seal incomplete/failed; resume seal before production')
+            immutable_bytes(ROOT/'manifests/SEALED_FREEZE.json',(canonical({'version':'seal-1','shards':frozen,'seeds':config['sealed_seeds'],'code_hashes':source_hashes(),'policy':'producer never reads sealed labels; same-user filesystem access is procedural isolation'})+'\n').encode())
+            os.chmod(ROOT/'data/sealed',0o700)
+        remote_archive.check_read_deadline(ROOT)
+        metrics=summary(db)
+        remote_archive.check_read_deadline(ROOT)
+        if not args.no_backup:
+            # Existing watchdog reserve: processing <= configured180s and
+            # backup/last review <=140s, always below the unchanged340s watchdog.
+            reads.deadline=finish_deadline
+            backup_if_due(config,db,deadline=finish_deadline)
+            valid=current_independent_review(deadline=finish_deadline)
+            remote_archive.check_read_deadline(ROOT)
+            if not valid:
+                raise RuntimeError('independent source approval changed after backup')
+        remote_archive.check_read_deadline(ROOT)
+        heartbeat('healthy',metrics=metrics)
+        print(canonical({'status':'healthy','accepted':metrics['accepted'],'splits':metrics['splits']}))
+        return 0
+    except remote_archive.ReadDeadlineExceeded:
+        counts=db.execute('SELECT COALESCE(SUM(accepted),0) FROM jobs').fetchone()[0]
+        event(db,'cycle_budget_yield',{'accepted':counts})
+        heartbeat('yielded',reason='bounded_cycle_time',accepted=counts)
+        print(canonical({'status':'yielded','reason':'bounded_cycle_time','accepted':counts}))
+        return 0
+    except Exception as error:
+        event(db,'error',{'class':type(error).__name__,'message':str(error),'diagnostics':getattr(error,'diagnostics',None),'traceback':traceback.format_exc()})
+        pause(db,str(error))
+        print(str(error),file=sys.stderr)
+        return 1
+    finally: db.close()
 
 def main():
     parser=argparse.ArgumentParser()

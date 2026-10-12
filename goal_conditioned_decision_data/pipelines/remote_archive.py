@@ -8,6 +8,7 @@ https://docs.github.com/en/rest/git/blobs#get-a-blob .
 """
 from collections import OrderedDict
 from contextlib import contextmanager
+from contextvars import ContextVar
 import fcntl
 import fnmatch
 import hashlib
@@ -32,10 +33,13 @@ MAX_BATCH_BYTES = 128 * 1024 ** 2
 MAX_BATCH_FILES = 128
 MAX_INDEX_BYTES = 8 * 1024 ** 2
 RAM_CACHE_BYTES = 16 * 1024 ** 2
+TREE_CACHE_BYTES = 4 * 1024 ** 2
+CATALOG_CACHE_BYTES = 4 * 1024 ** 2
 REQUEST_SECONDS = 20
 OPERATION_SECONDS = 180
 _CACHE = OrderedDict()
 _CACHE_SIZE = 0
+_READ_SESSION = ContextVar('gcdl_archive_read_session', default=None)
 _HEX40 = re.compile(r'^[0-9a-f]{40}$')
 _HEX64 = re.compile(r'^[0-9a-f]{64}$')
 _PREFIXES = ('data/accepted/', 'data/sealed/', 'data/quarantined/', 'data/quarantine/',
@@ -49,6 +53,82 @@ _META = {'commit', 'git_blob_sha1', 'sha256', 'bytes'}
 
 class ArchiveError(RuntimeError):
     pass
+
+
+class ReadDeadlineExceeded(ArchiveError):
+    """A bounded read/publication cycle exhausted its time allowance."""
+
+
+class _ReadSession:
+    def __init__(self, root, deadline):
+        self.root = root; self.deadline = deadline; self._transport = None
+        self.catalogs = OrderedDict(); self.catalog_bytes = 0
+
+    def check(self):
+        if self.deadline is not None and time.monotonic() >= self.deadline:
+            raise ReadDeadlineExceeded('archive read/publication cycle deadline exceeded')
+
+    @property
+    def transport(self):
+        self.check()
+        if self._transport is None or time.monotonic() >= self._transport.deadline:
+            self.catalogs.clear(); self.catalog_bytes = 0
+            seconds = OPERATION_SECONDS if self.deadline is None else min(OPERATION_SECONDS, self.deadline-time.monotonic())
+            self._transport = GitHubTransport(self.root, seconds=seconds)
+        if self.deadline is not None:
+            self._transport.deadline = min(self._transport.deadline, self.deadline)
+        return self._transport
+
+
+def check_read_deadline(root=None):
+    session = _READ_SESSION.get()
+    if session is not None:
+        if root is not None and _root(root) != session.root:
+            raise ArchiveError('archive read session root mismatch')
+        session.check()
+
+
+def read_transport(root, *, deadline=None):
+    root = _root(root); check_read_deadline(root)
+    if deadline is not None and time.monotonic() >= deadline:
+        raise ReadDeadlineExceeded('archive read deadline exceeded')
+    session = _READ_SESSION.get()
+    if session is not None:
+        transport=session.transport
+    else:
+        transport=GitHubTransport(root, seconds=OPERATION_SECONDS if deadline is None else min(OPERATION_SECONDS, deadline-time.monotonic()))
+    if deadline is not None:transport.deadline=min(transport.deadline,deadline)
+    return transport
+
+
+@contextmanager
+def read_session(root, *, deadline=None):
+    """Share bounded RAM-only read metadata; evacuation proof stays separate.
+
+    Mutable index/control files are still freshly validated for every read.
+    Nested sessions must name the same programme and cannot extend the deadline.
+    """
+    root = _root(root)
+    if deadline is not None and (type(deadline) not in (int,float) or not deadline < float('inf')):
+        raise ArchiveError('invalid archive read session deadline')
+    previous = _READ_SESSION.get()
+    if previous is not None:
+        if previous.root != root:
+            raise ArchiveError('archive read session root mismatch')
+        old_deadline = previous.deadline
+        if deadline is not None:
+            previous.deadline = deadline if old_deadline is None else min(old_deadline, deadline)
+        try:
+            previous.check(); yield previous
+        finally:
+            previous.deadline = old_deadline
+        return
+    session = _ReadSession(root, deadline); token = _READ_SESSION.set(session)
+    try:
+        session.check(); yield session
+    finally:
+        session.catalogs.clear(); session.catalog_bytes = 0
+        _READ_SESSION.reset(token)
 
 
 def _canonical(value):
@@ -353,7 +433,7 @@ class GitHubTransport:
     """Read-only, deadline-bounded gh API; owner credentials stay process-local."""
     def __init__(self, root, seconds=OPERATION_SECONDS):
         self.root = _root(root); self.deadline = time.monotonic() + min(seconds, OPERATION_SECONDS)
-        self._env = None; self._trees = {}
+        self._env = None; self._trees = OrderedDict(); self._tree_bytes = 0
 
     def _environment(self):
         if self._env is None:
@@ -388,7 +468,8 @@ class GitHubTransport:
         if not _HEX40.fullmatch(str(commit)):
             raise ArchiveError('invalid pinned commit')
         if commit in self._trees:
-            return self._trees[commit]
+            mapping = self._trees.pop(commit); self._trees[commit] = mapping
+            return mapping
         info = self._api('git/commits/' + commit, MAX_READ_BYTES)
         if info.get('sha') != commit or not _HEX40.fullmatch(str(info.get('tree', {}).get('sha', ''))):
             raise ArchiveError('GitHub commit identity mismatch')
@@ -409,7 +490,12 @@ class GitHubTransport:
             if path in mapping:
                 raise ArchiveError('duplicate GitHub tree path')
             mapping[path] = entry
-        self._trees[commit] = mapping
+        size = len(_canonical(mapping).encode())
+        if size <= TREE_CACHE_BYTES:
+            while self._trees and self._tree_bytes + size > TREE_CACHE_BYTES:
+                _, removed = self._trees.popitem(last=False)
+                self._tree_bytes -= len(_canonical(removed).encode())
+            self._trees[commit] = mapping; self._tree_bytes += size
         return mapping
 
     def fetch_blob(self, oid, max_bytes=MAX_BLOB_BYTES):
@@ -473,6 +559,7 @@ def _receipt(receipt):
 
 def load_index(root):
     root = _root(root)
+    check_read_deadline(root)
     if not _path(root, INDEX_PATH).exists():
         return _empty_index()
     raw = _local(root, INDEX_PATH, MAX_INDEX_BYTES)[0]; index = _json(raw)
@@ -486,6 +573,7 @@ def load_index(root):
         raise ArchiveError('archive index missing its immutable snapshot')
     catalogs, receipts = {}, {}
     for identifier, descriptor in index['catalogs'].items():
+        check_read_deadline(root)
         if (not isinstance(descriptor, dict) or set(descriptor) != {'catalog_commit', 'archive_ref', 'catalog_path', 'catalog_sha256', 'catalog_git_blob_sha1'}
                 or descriptor['catalog_path'] != catalog_path(identifier) or descriptor['archive_ref'] != archive_ref(descriptor['catalog_commit'])
                 or not _HEX64.fullmatch(str(descriptor['catalog_sha256'])) or not _HEX40.fullmatch(str(descriptor['catalog_git_blob_sha1']))):
@@ -497,6 +585,7 @@ def load_index(root):
         if catalogs[identifier]['catalog_id'] != identifier:
             raise ArchiveError('catalog pointer identity mismatch')
     for identifier, descriptor in index['receipts'].items():
+        check_read_deadline(root)
         if (not isinstance(descriptor, dict) or set(descriptor) != {'path', 'sha256'} or not _HEX64.fullmatch(str(identifier))
                 or not _HEX64.fullmatch(str(descriptor['sha256'])) or descriptor['path'] != 'manifests/remote_custody/custody-' + identifier + '.json'):
             raise ArchiveError('invalid custody receipt pointer')
@@ -519,7 +608,7 @@ def load_index(root):
                 or receipt['catalog_id'] != entry['catalog_id']
                 or any(receipt[key] != value for key, value in index['catalogs'][entry['catalog_id']].items())):
             raise ArchiveError('unbound archive index payload/custody entry')
-    return index
+    check_read_deadline(root); return index
 
 
 def deletion_custody(root, relative):
@@ -552,6 +641,7 @@ def payload_info(root, relative):
 
 def exists(root, relative):
     root = _root(root); relative = _relative(relative)
+    check_read_deadline(root)
     if _path(root, relative).exists():
         return True
     return relative in load_index(root)['files']
@@ -577,7 +667,22 @@ def _remote_entry(root, relative, index, transport):
         raise ArchiveError('immutable archive snapshot ref changed or missing')
     catalog_meta = {'commit': descriptor['catalog_commit'], 'git_blob_sha1': descriptor['catalog_git_blob_sha1'],
                     'sha256': descriptor['catalog_sha256'], 'bytes': len(_local(root, descriptor['catalog_path'], MAX_INDEX_BYTES)[0])}
-    body = _tree_blob(transport, descriptor['catalog_commit'], descriptor['catalog_path'], catalog_meta)
+    session = _READ_SESSION.get()
+    if session is not None and transport is not session._transport:
+        session = None  # Explicit providers keep their own verification boundary.
+    # Catalog proofs are reused only inside this read session, for this exact
+    # provider and immutable commit/blob/hash tuple. Ref checks remain fresh.
+    key = (transport, REPOSITORY, descriptor['catalog_commit'], descriptor['catalog_path'],
+           descriptor['catalog_git_blob_sha1'], descriptor['catalog_sha256'], catalog_meta['bytes'])
+    body = session.catalogs.pop(key, None) if session is not None else None
+    if body is None:
+        body = _tree_blob(transport, descriptor['catalog_commit'], descriptor['catalog_path'], catalog_meta)
+        if session is not None and len(body) <= CATALOG_CACHE_BYTES:
+            while session.catalogs and session.catalog_bytes + len(body) > CATALOG_CACHE_BYTES:
+                _, removed = session.catalogs.popitem(last=False); session.catalog_bytes -= len(removed)
+            session.catalogs[key] = body; session.catalog_bytes += len(body)
+    else:
+        session.catalogs[key] = body; _matches(body, catalog_meta)
     catalog = _catalog(_json(body))
     meta = {key: entry[key] for key in _META}
     if catalog['files'].get(relative) != meta:
@@ -591,7 +696,7 @@ def _remote_entry(root, relative, index, transport):
 
 def read_bytes(root, relative, *, max_bytes=MAX_READ_BYTES, allow_sealed=False, transport=None):
     global _CACHE_SIZE
-    root = _root(root); relative = _relative(relative)
+    root = _root(root); relative = _relative(relative); check_read_deadline(root)
     if type(max_bytes) is not int or not 0 <= max_bytes <= MAX_BLOB_BYTES:
         raise ArchiveError('invalid bounded read size')
     if relative.startswith('data/sealed/') and not allow_sealed:
@@ -601,7 +706,7 @@ def read_bytes(root, relative, *, max_bytes=MAX_READ_BYTES, allow_sealed=False, 
         entry = load_index(root)['files'].get(relative)
         if entry and any(meta[key] != entry[key] for key in ('sha256', 'bytes', 'git_blob_sha1')):
             raise ArchiveError('local archive payload corruption')
-        return raw
+        check_read_deadline(root); return raw
     index = load_index(root); entry = index['files'].get(relative)
     if entry is None:
         raise FileNotFoundError(str(root / relative))
@@ -610,8 +715,13 @@ def read_bytes(root, relative, *, max_bytes=MAX_READ_BYTES, allow_sealed=False, 
     key = (str(root), relative, _digest(entry), _digest(index['catalogs'][entry['catalog_id']]))
     if key in _CACHE:
         raw = _CACHE.pop(key); _CACHE[key] = raw; _matches(raw, entry)
-        return raw
-    raw = _remote_entry(root, relative, index, transport or GitHubTransport(root))
+        check_read_deadline(root); return raw
+    try:
+        raw = _remote_entry(root, relative, index, transport if transport is not None else read_transport(root))
+    except ArchiveError:
+        check_read_deadline(root)
+        raise
+    check_read_deadline(root)
     if len(raw) <= RAM_CACHE_BYTES:
         while _CACHE and _CACHE_SIZE + len(raw) > RAM_CACHE_BYTES:
             _, removed = _CACHE.popitem(last=False); _CACHE_SIZE -= len(removed)

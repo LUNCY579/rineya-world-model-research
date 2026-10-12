@@ -15,7 +15,7 @@ def current_independent_review(*,deadline=None):
     """A prior PASS is valid only for its exact reviewed source and receipt."""
     try:
         if deadline is not None and time.monotonic()>=deadline:return False
-        reads={} if deadline is None else {'transport':remote_archive.GitHubTransport(ROOT,seconds=min(180,deadline-time.monotonic()))}
+        reads={} if deadline is None else {'transport':remote_archive.read_transport(ROOT,deadline=deadline)}
         review_bytes=remote_archive.read_bytes(ROOT,'reports/INDEPENDENT_REVIEW.md',**reads)
         review_text=review_bytes.decode('utf-8')
         receipt=json.loads((ROOT/'manifests/VALIDATED_CODE.json').read_text())

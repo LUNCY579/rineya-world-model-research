@@ -90,7 +90,9 @@ def revalidate_deletion_custody(custody,git,env):
 
 def main():
     global DEADLINE
-    DEADLINE=time.monotonic()+140
+    budget=float(os.environ.get('GCDL_BACKUP_TIMEOUT_SECONDS','140'))
+    if not 0<budget<=140:raise RuntimeError('invalid bounded backup deadline')
+    DEADLINE=time.monotonic()+budget
     token=None
     state=ROOT/'state/backup.json'
     old=json.loads(state.read_text()) if state.exists() else {}

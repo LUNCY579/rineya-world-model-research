@@ -201,8 +201,12 @@ def drain(db, root, config, deadline):
         for view in cfg['views']:
             if time.monotonic() >= deadline:
                 return completed  # Partial exports stay pending and replay deterministically.
-            manifest = export_rendered_dataset(root, split, view, batch['accepted'],
-                                               cfg['variant_budget'], source_paths=[root / batch['shard']])
+            try:
+                manifest = export_rendered_dataset(root, split, view, batch['accepted'],
+                                                   cfg['variant_budget'], source_paths=[root / batch['shard']],
+                                                   deadline=deadline)
+            except remote_archive.ReadDeadlineExceeded:
+                return completed  # Only finished immutable receipts advance jobs.
             datasets.append({'view': view, 'dataset_id': manifest['dataset_id'],
                              'manifest_path': manifest['manifest_path'],
                              'manifest_sha256': file_hash(root / manifest['manifest_path']),
@@ -220,6 +224,7 @@ def drain(db, root, config, deadline):
         if receipt_path.with_name(receipt_path.name + '.tmp').is_symlink():
             raise ValueError('rendered receipt temporary path cannot be a symlink')
         raw_receipt = (canonical(receipt) + '\n').encode()
+        if time.monotonic()>=deadline:return completed
         _storage_guard(root, 0 if receipt_path.exists() else len(raw_receipt))
         immutable_bytes(receipt_path, raw_receipt)
         receipt_relative = str(receipt_path.relative_to(root))
