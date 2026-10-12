@@ -14,6 +14,20 @@ def current_independent_review():
         review=ROOT/'reports/INDEPENDENT_REVIEW.md'
         receipt=json.loads((ROOT/'manifests/VALIDATED_CODE.json').read_text())
         current=source_hashes()
+        evidence=receipt.get('required_evidence',{})
+        if type(evidence) is not dict:return False
+        config_path=ROOT/'configs/production.json'
+        active=json.loads(config_path.read_text()).get('active_generation_profile','v1') if config_path.exists() else 'v1'
+        if active=='v2' and not {'manifests/V2_EXPERIMENT_FREEZE.json','reports/V2_CONTROLLED_EXPERIMENT.json'}<=set(evidence):
+            return False
+        if active=='v2' and canonical(evidence) not in review.read_text():
+            return False  # Receipt hashes cannot broaden the fixed reviewer statement.
+        for relative,expected in evidence.items():
+            if type(relative) is not str or type(expected) is not str or len(expected)!=64:return False
+            path=Path(relative)
+            if path.is_absolute() or '..' in path.parts: return False
+            full=ROOT/path
+            if full.is_symlink() or full.resolve()!=full or file_hash(full)!=expected: return False
         return ('FINAL_VERDICT: PASS' in review.read_text()
             and receipt['code_hashes']==current
             and receipt['source_digest']==digest(current)
@@ -28,6 +42,10 @@ def audit(include_sealed=False):
     groups={};templates={};signatures={};semantic={};ids=set();rows=[];errors=[];counts=collections.Counter();families=collections.Counter();difficulty=collections.Counter();tags=collections.Counter();positions=collections.Counter();uncertainty=collections.Counter();sources=set();unique_rules=set();unique_goals=set()
     for path in manifests:
         m=json.loads(path.read_text());shard=ROOT/m['shard']
+        from ..pipelines.worker import batch_profile
+        try: profile=batch_profile(m)
+        except Exception as error:
+            errors.append({'artifact':str(path),'reason':'generation profile commitment: '+str(error)});continue
         if file_hash(shard)!=m['sha256']:errors.append({'artifact':str(shard),'reason':'hash mismatch'});continue
         if m['bytes']!=shard.stat().st_size or m['bytes']>8388608:errors.append({'artifact':str(shard),'reason':'size mismatch/limit'})
         if m['split']=='sealed' and not include_sealed:
@@ -41,12 +59,19 @@ def audit(include_sealed=False):
             continue
         parsed=[json.loads(line) for line in shard.read_text().splitlines()]
         if len(parsed)!=m['accepted']:errors.append({'reason':'manifest count mismatch'})
+        if profile['id']=='v2' and parsed:
+            from .integrity import validate_v2_group
+            try: validate_v2_group(parsed,require_full_curriculum=True)
+            except Exception as error: errors.append({'artifact':str(shard),'reason':'v2 parent integrity: '+str(error)})
         for row in parsed:
             try:
                 if row['quality_gate']['status']!='accepted':raise ValueError('quarantined row in accepted shard')
                 checks=audit_record(row)
                 if row['verification']['evidence_sha256']!=checks['evidence_sha256']:raise ValueError('evidence hash mismatch')
                 p=row['provenance'];split=row['split'];fingerprint=semantic_fingerprint(row)
+                from ..generators.profiles import resolve_record_profile
+                if resolve_record_profile(p)['id']!=profile['id']:
+                    raise ValueError('canonical record/batch generation profile mismatch')
                 if row['id'] in ids:raise ValueError('duplicate ID')
                 ids.add(row['id'])
                 for table,key in [(groups,p['parent_world_id']),(templates,p['template_group_id']),(signatures,template_signature(row['input']))]:

@@ -13,7 +13,7 @@ class OperationsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);(root/'configs').mkdir();(root/'state').mkdir();(root/'manifests').mkdir()
             config=json.loads((worker.ROOT/'configs/production.json').read_text())
-            config.update(groups_per_cycle=3,seed_start=100,production_splits=['train'])
+            config.update(groups_per_cycle=3,seed_start=100,production_splits=['train'],active_generation_profile='v1')
             (root/'configs/production.json').write_text(json.dumps(config))
             with patch.object(worker,'ROOT',root),patch.object(worker.shutil,'disk_usage',return_value=type('Disk',(),{'free':1<<40})()),patch('goal_conditioned_decision_data.generators.build.generate_group',return_value=[{'invalid_fixture':True}]):
                 self.assertEqual(worker.run(argparse.Namespace(no_backup=True,seal=False,groups=3)),1)
@@ -27,6 +27,7 @@ class OperationsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);(root/'state').mkdir()
             config=json.loads((worker.ROOT/'configs/production.json').read_text())
+            config['active_generation_profile']='v1'
             with patch.object(worker,'ROOT',root),patch.object(worker.shutil,'disk_usage',return_value=type('Disk',(),{'free':1<<40})()),patch.object(worker,'source_hashes',side_effect=[{'code':'before'},{'code':'after'}]),patch('goal_conditioned_decision_data.generators.build.generate_group',return_value=[]),patch('goal_conditioned_decision_data.auditors.integrity.audit_group',return_value=([],[],{})):
                 db=worker.connection()
                 with self.assertRaisesRegex(RuntimeError,'changed during batch'):worker.process(101,'train',config,db)
@@ -61,7 +62,7 @@ class OperationsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);(root/'manifests').mkdir();(root/'data/sealed').mkdir(parents=True)
             shard=root/'data/sealed/one.jsonl';shard.write_bytes(b'sealed bytes never parsed by producer\n')
-            index=['id1','semantic1','parent1','template1','sealed']
+            index=['id1','semantic1','parent1','cost_cap_and_five_block','sealed']
             m={'seed':880000,'split':'sealed','shard':'data/sealed/one.jsonl','sha256':common.file_hash(shard),'accepted':1,'quarantined':0,'audit':{},'protected_index':[index]}
             (root/'manifests/batch-sealed-880000.json').write_text(json.dumps(m))
             with patch.object(worker,'ROOT',root):

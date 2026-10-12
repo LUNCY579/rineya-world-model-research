@@ -14,11 +14,18 @@ from pathlib import Path
 from .common import ROOT, REPO, atomic_json, canonical, digest, file_hash, immutable_bytes, source_hashes
 
 
+def ensure_job_profiles(db):
+    db.execute('CREATE TABLE IF NOT EXISTS jobs (seed INTEGER, split TEXT, status TEXT, accepted INTEGER DEFAULT 0, quarantined INTEGER DEFAULT 0, report TEXT, PRIMARY KEY(seed,split))')
+    if 'profile' not in {row[1] for row in db.execute('PRAGMA table_info(jobs)')}:
+        db.execute('ALTER TABLE jobs ADD COLUMN profile TEXT NOT NULL DEFAULT "v1"')
+    db.commit()
+
+
 def connection():
     (ROOT / 'state').mkdir(exist_ok=True)
     db = sqlite3.connect(ROOT / 'state/queue.sqlite', timeout=5)
     db.execute('PRAGMA journal_mode=WAL')
-    db.execute('CREATE TABLE IF NOT EXISTS jobs (seed INTEGER, split TEXT, status TEXT, accepted INTEGER DEFAULT 0, quarantined INTEGER DEFAULT 0, report TEXT, PRIMARY KEY(seed,split))')
+    ensure_job_profiles(db)
     db.execute('CREATE TABLE IF NOT EXISTS seen (id TEXT PRIMARY KEY, semantic TEXT, parent TEXT, template TEXT, split TEXT)')
     db.execute('CREATE TABLE IF NOT EXISTS events (at REAL, kind TEXT, detail TEXT)')
     db.commit()
@@ -26,6 +33,8 @@ def connection():
 
 
 def guard(config, db):
+    from ..generators.profiles import resolve_profile
+    resolve_profile(config.get('active_generation_profile', 'v1'))
     from .rendered import settings
     settings(config)
     if not 1<=config['groups_per_cycle']<=32 or not 10<=config['cycle_timeout_seconds']<=600:
@@ -71,21 +80,56 @@ def pause(db, reason):
     event(db, 'paused', {'reason': reason})
 
 
+def batch_profile(manifest):
+    from ..generators.profiles import resolve_profile
+    name=manifest.get('generation_profile','v1')
+    resolved=resolve_profile(name)
+    declared=manifest.get('generation_profile_evidence')
+    version=manifest.get('version','gcdl-manifest-1')
+    if version not in ('gcdl-manifest-1','gcdl-manifest-2'):
+        raise ValueError('unsupported canonical batch manifest version')
+    if version=='gcdl-manifest-2' and ('generation_profile' not in manifest or declared is None):
+        raise ValueError('versioned batch missing explicit generation profile commitment')
+    expected={k:resolved[k] for k in ('id','generator_version','environment_version','config_version','config_hash','config_file_sha256')}
+    if (name=='v2' and declared is None) or (declared is not None and declared!=expected):
+        raise ValueError('stored generation profile commitment mismatch')
+    return resolved
+
+
 def recover_inventory(db):
     """Files become authoritative only after immutable shard + manifest are complete."""
+    ensure_job_profiles(db)
     from ..auditors.integrity import semantic_fingerprint
-    for path in sorted((ROOT / 'manifests').glob('batch-*.json')):
+    from .rendered import _path
+    root=ROOT.resolve()
+    recovered=set()
+    for path in sorted((root / 'manifests').glob('batch-*.json')):
+        path=_path(root,str(path.relative_to(root)),('manifests',))
         manifest = json.loads(path.read_text())
-        shard = ROOT / manifest['shard']
+        if not {'seed','split','protected_index','accepted','quarantined','audit','shard','sha256'}<=set(manifest):
+            raise ValueError('missing canonical inventory receipt field')
+        seed, split = manifest['seed'], manifest['split']
+        if type(seed) is not int or seed<0 or split not in ('train','dev','ood','sealed'):
+            raise ValueError('invalid canonical inventory seed/split')
+        resolved=batch_profile(manifest)
+        profile=resolved['id']
+        previous=db.execute('SELECT profile FROM jobs WHERE seed=? AND split=?',(seed,split)).fetchone()
+        if previous and previous[0]!=profile:
+            raise ValueError('recovery cannot reinterpret job generation profile')
+        folder='sealed' if split=='sealed' else 'accepted'
+        shard=_path(root,manifest['shard'],('data',folder))
+        if shard.parent!=root/'data'/folder:
+            raise ValueError('canonical shard must be directly in its split directory')
         if file_hash(shard) != manifest['sha256']:
             raise ValueError('stored shard digest mismatch: ' + str(shard))
-        seed, split = manifest['seed'], manifest['split']
         # Recovery reads only manifest indices; never opens sealed target labels.
         if len(manifest['protected_index'])!=manifest['accepted']:
             raise ValueError('manifest protected index count mismatch')
         for index in manifest['protected_index']:
             if len(index)!=5 or index[-1]!=split:
                 raise ValueError('manifest split/index mismatch')
+            if index[3]!=resolved['config']['split_templates'][split]['template']:
+                raise ValueError('protected template disagrees with generation profile')
             existing=db.execute('SELECT id,semantic,parent,template,split FROM seen WHERE id=?',(index[0],)).fetchone()
             if existing and tuple(index)!=existing:
                 raise ValueError('recovery database/index conflict')
@@ -93,17 +137,35 @@ def recover_inventory(db):
             if any(found[0]!=split for found in overlaps):
                 raise ValueError('recovery protected split overlap')
             db.execute('INSERT OR IGNORE INTO seen VALUES (?,?,?,?,?)', tuple(index))
-        db.execute('INSERT OR REPLACE INTO jobs VALUES (?,?,?,?,?,?)', (seed,split,'done',manifest['accepted'],manifest['quarantined'],canonical(manifest['audit'])))
+        db.execute('INSERT OR REPLACE INTO jobs (seed,split,status,accepted,quarantined,report,profile) VALUES (?,?,?,?,?,?,?)', (seed,split,'done',manifest['accepted'],manifest['quarantined'],canonical(manifest['audit']),profile))
+        recovered.add((seed,split))
+    if any((seed,split) not in recovered for seed,split in db.execute('SELECT seed,split FROM jobs WHERE status="done"')):
+        raise ValueError('completed canonical job missing its immutable batch receipt')
     db.commit()
 
 
 def process(seed, split, config, db):
+    ensure_job_profiles(db)
     before_source=source_hashes()
-    from ..generators.build import generate_group
+    from ..generators.profiles import resolve_profile
+    job=db.execute('SELECT profile FROM jobs WHERE seed=? AND split=?',(seed,split)).fetchone()
+    profile=resolve_profile(job[0] if job else config.get('active_generation_profile','v1'))
+    from .rendered import _path
+    existing=ROOT.resolve()/'manifests'/f'batch-{split}-{seed}.json'
+    if existing.exists() or existing.is_symlink():
+        existing=_path(ROOT.resolve(),str(existing.relative_to(ROOT.resolve())),('manifests',))
+        stored=batch_profile(json.loads(existing.read_text()))
+        if stored['id']!=profile['id']:
+            raise ValueError('existing batch profile cannot be reinterpreted')
+        raise ValueError('completed immutable batch already exists; recover inventory before replay')
+    if profile['id']=='v1':
+        from ..generators.build import generate_group
+    else:
+        from ..generators.version2 import generate_group
     from ..auditors.integrity import audit_group, semantic_fingerprint
     started = time.monotonic()
-    candidates = generate_group(seed, split=split)
-    rerun = generate_group(seed, split=split)
+    candidates = generate_group(seed, config=profile['config'], split=split)
+    rerun = generate_group(seed, config=profile['config'], split=split)
     if canonical(candidates) != canonical(rerun):
         raise ValueError('reproducibility mismatch')
     raw_candidates = ('\n'.join(canonical(r) for r in candidates) + '\n').encode()
@@ -111,6 +173,30 @@ def process(seed, split, config, db):
     publication_guard(config,len(raw_candidates))
     immutable_bytes(ROOT / 'data/candidates' / f'{split}-{seed}.jsonl', raw_candidates)
     accepted, rejected, report = audit_group(candidates, db)
+    from ..generators.profiles import resolve_record_profile
+    if any(resolve_record_profile(row['provenance'])['id']!=profile['id'] for row in accepted):
+        raise RuntimeError('generator adapter emitted a different generation profile')
+    if profile['id']=='v2':
+        group_error=None
+        if not rejected:
+            from ..auditors.integrity import validate_v2_group
+            try:
+                validate_v2_group(accepted,require_full_curriculum=True)
+            except Exception as error:
+                group_error=type(error).__name__+': '+str(error)
+        if rejected or group_error:
+            reason='v2 parent atomicity: '+(group_error or 'a sibling failed authoritative acceptance')
+            original_report=json.loads(canonical(report))
+            moved=len(accepted)
+            for row in accepted:
+                row['quality_gate']={'status':'quarantined','rejection_reasons':[reason]}
+            rejected.extend(accepted)
+            accepted=[]
+            report.update(verdict='PARTIAL_QUARANTINE',accepted=0,quarantined=len(rejected),
+                          oracle_agreement_on_accepted=None,schema_pass_rate_on_accepted=None,
+                          family_counts={},difficulty_counts={},perturbation_tags={},unique_task_fingerprints=0,
+                          original_record_audit=original_report,atomic_parent_gate='FAIL')
+            report['causes'][reason]=moved
     if split=='sealed' and (not accepted or rejected):
         immutable_bytes(ROOT/'data/quarantined'/f'failed-seal-{seed}.jsonl', ('\n'.join(canonical(r) for r in rejected)+'\n').encode())
         raise RuntimeError('sealed quality gate failed; no freeze publication permitted')
@@ -134,7 +220,9 @@ def process(seed, split, config, db):
     rejected_raw = ('\n'.join(canonical(r) for r in rejected) + ('\n' if rejected else '')).encode()
     if rejected:
         immutable_bytes(ROOT / 'data/quarantined' / f'{split}-{seed}.jsonl', rejected_raw)
-    manifest = {'version':'gcdl-manifest-1','seed':seed,'split':split,'shard':str(shard.relative_to(ROOT)),
+    manifest = {'version':'gcdl-manifest-2','seed':seed,'split':split,'shard':str(shard.relative_to(ROOT)),
+        'generation_profile':profile['id'],
+        'generation_profile_evidence':{k:profile[k] for k in ('id','generator_version','environment_version','config_version','config_hash','config_file_sha256')},
         'sha256':file_hash(shard),'bytes':len(raw),'candidate_sha256':candidate_hash,'accepted':len(accepted),
         'quarantined':len(rejected),'audit':report,'code_hashes':source,'config':config,
         'runtime_evidence':runtime_evidence,'runtime_is_canonical_target':False,
@@ -148,7 +236,7 @@ def process(seed, split, config, db):
         db.execute('INSERT OR IGNORE INTO seen VALUES (?,?,?,?,?)', (row['id'],semantic_fingerprint(row),p['parent_world_id'],p['template_group_id'],split))
     db.execute('UPDATE jobs SET status=?,accepted=?,quarantined=?,report=? WHERE seed=? AND split=?', ('done',len(accepted),len(rejected),canonical(report),seed,split))
     db.commit()
-    atomic_json(ROOT / 'state/checkpoint.json', {'seed':seed,'split':split,'manifest':str((ROOT/'manifests'/f'batch-{split}-{seed}.json').relative_to(ROOT)), 'utc_epoch':time.time()})
+    atomic_json(ROOT / 'state/checkpoint.json', {'seed':seed,'split':split,'generation_profile':profile['id'],'manifest':str((ROOT/'manifests'/f'batch-{split}-{seed}.json').relative_to(ROOT)), 'utc_epoch':time.time()})
     event(db,'batch',{'seed':seed,'split':split,'accepted':len(accepted),'quarantined':len(rejected),'elapsed_seconds':time.monotonic()-started})
     return manifest
 
@@ -158,13 +246,14 @@ def summary(db):
     events = db.execute('SELECT SUM(json_extract(detail,"$.elapsed_seconds")) FROM events WHERE kind="batch"').fetchone()[0] or 0
     accepted = sum(r['accepted'] for r in by_split.values())
     families=collections.Counter();difficulty=collections.Counter();causes=collections.Counter();tags=collections.Counter()
+    profiles={r[0]:{'groups':r[1],'accepted':r[2]} for r in db.execute('SELECT profile,COUNT(*),SUM(accepted) FROM jobs WHERE status="done" GROUP BY profile')}
     for (raw,) in db.execute('SELECT report FROM jobs WHERE status="done"'):
         report=json.loads(raw);families.update(report.get('family_counts',{}));difficulty.update(report.get('difficulty_counts',{}));causes.update(report.get('causes',{}));tags.update(report.get('perturbation_tags',{}))
     result = {'version':'production-stats-1','splits':by_split,'accepted':accepted,'quarantined':sum(r['quarantined'] for r in by_split.values()),'active_generation_seconds':events,
         'accepted_per_active_hour':accepted*3600/events if events else None,'queue_size':db.execute('SELECT COUNT(*) FROM jobs WHERE status!="done"').fetchone()[0],
         'disk_bytes':sum(p.stat().st_size for p in ROOT.rglob('*') if p.is_file()),'free_bytes':shutil.disk_usage(ROOT).free,
         'quality_classification':'experimental synthetic pilot; no model generalization demonstrated',
-        'family_counts':dict(families),'difficulty_counts':dict(difficulty),'quarantine_causes':dict(causes),'perturbation_tags':dict(tags),
+        'family_counts':dict(families),'difficulty_counts':dict(difficulty),'quarantine_causes':dict(causes),'perturbation_tags':dict(tags),'generation_profiles':profiles,
         'oracle_agreement_on_accepted':1.0 if accepted else None,'schema_pass_rate_on_accepted':1.0 if accepted else None,
         'audit_seconds_per_accepted_record':events/accepted if accepted else None,
         'last_healthy_checkpoint':json.loads((ROOT/'state/checkpoint.json').read_text()) if (ROOT/'state/checkpoint.json').exists() else None}
@@ -222,7 +311,8 @@ def run(args):
                 start=max(config['seed_start'],(existing+1) if existing is not None else 0)
                 seeds=[(start+i,config['production_splits'][(start-config['seed_start']+i)%len(config['production_splits'])]) for i in range(args.groups or config['groups_per_cycle'])]
             for seed,split in seeds:
-                db.execute('INSERT OR IGNORE INTO jobs (seed,split,status) VALUES (?,?,?)',(seed,split,'pending'))
+                profile='v1' if args.seal else config.get('active_generation_profile','v1')
+                db.execute('INSERT OR IGNORE INTO jobs (seed,split,status,profile) VALUES (?,?,?,?)',(seed,split,'pending',profile))
             db.commit()
             jobs=[] if getattr(args, 'render_only', False) else db.execute('SELECT seed,split FROM jobs WHERE status!="done" AND '+('split="sealed"' if args.seal else 'split!="sealed"')+' ORDER BY seed').fetchall()
             started=time.monotonic()
@@ -261,7 +351,7 @@ def run(args):
             print(canonical({'status':'healthy','accepted':metrics['accepted'],'splits':metrics['splits']}))
             return 0
         except Exception as error:
-            event(db,'error',{'class':type(error).__name__,'message':str(error),'traceback':traceback.format_exc()})
+            event(db,'error',{'class':type(error).__name__,'message':str(error),'diagnostics':getattr(error,'diagnostics',None),'traceback':traceback.format_exc()})
             pause(db,str(error))
             print(str(error),file=sys.stderr)
             return 1

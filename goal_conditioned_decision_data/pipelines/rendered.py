@@ -3,7 +3,8 @@ import json
 import time
 from pathlib import Path
 
-from ..decision_labels.rendering import (EXPORT_VERSION, RENDERING_VERSION,
+from ..decision_labels.rendering import (EXPORT_VERSION, RENDERING_POLICY_SET_VERSION,
+                                         SUPPORTED_RENDERING_VERSIONS,
                                          VIEWS, export_rendered_dataset, _storage_guard)
 from .common import canonical, digest, file_hash, immutable_bytes, source_hashes
 
@@ -70,7 +71,8 @@ def enqueue(db, root, config):
     cfg = settings(config)
     if not cfg['views']:
         return 0
-    spec = {'export_version': EXPORT_VERSION, 'rendering_version': RENDERING_VERSION,
+    spec = {'export_version': EXPORT_VERSION, 'rendering_version': RENDERING_POLICY_SET_VERSION,
+            'supported_rendering_versions':list(SUPPORTED_RENDERING_VERSIONS),
             'views': cfg['views'], 'variant_budget': cfg['variant_budget'],
             'code_sha256': digest(source_hashes())}
     spec_hash = digest(spec)
@@ -84,8 +86,11 @@ def enqueue(db, root, config):
         batch = _batch(root, relative)
         db.execute('INSERT OR IGNORE INTO rendered_jobs VALUES (?,?,?,?,?,?,?)',
                    (relative, file_hash(path), spec_hash, batch['seed'], batch['split'], 'pending', None))
+    # A reviewed executable upgrade replaces pending derived work with the new
+    # specification; old completed receipts/bytes remain authoritative.
+    db.execute('UPDATE rendered_jobs SET status="superseded" WHERE status="pending" AND spec_sha256!=?',(spec_hash,))
     db.commit()
-    return db.execute('SELECT COUNT(*) FROM rendered_jobs WHERE status!="done"').fetchone()[0]
+    return db.execute('SELECT COUNT(*) FROM rendered_jobs WHERE status="pending"').fetchone()[0]
 
 
 def validate_receipt(root, relative):
@@ -119,10 +124,18 @@ def validate_receipt(root, relative):
                 or manifest['code_hashes'] != receipt['code_hashes']
                 or manifest['variant_budget'] != receipt['specification']['variant_budget']
                 or manifest['export_version'] != receipt['specification']['export_version']
-                or manifest['rendering_version'] != receipt['specification']['rendering_version']
                 or manifest['training_launched'] is not False
                 or len(manifest['sources']) != 1):
             raise ValueError('rendered dataset identity or provenance mismatch')
+        if 'supported_rendering_versions' in receipt['specification']:
+            versions=manifest.get('rendering_versions',[])
+            if (not versions or versions!=sorted(set(versions))
+                    or any(v not in receipt['specification']['supported_rendering_versions'] for v in versions)
+                    or manifest.get('rendering_policy_set_version')!=receipt['specification']['rendering_version']
+                    or manifest['rendering_version']!=(versions[0] if len(versions)==1 else 'mixed')):
+                raise ValueError('rendered policy version inventory mismatch')
+        elif manifest['rendering_version']!=receipt['specification']['rendering_version']:
+            raise ValueError('legacy rendered policy version mismatch')
         source = manifest['sources'][0]
         if (source['path'] != batch['shard'] or source['sha256'] != batch['sha256']
                 or source['source_batch_manifest'] != receipt['source_manifest']
@@ -167,7 +180,8 @@ def drain(db, root, config, deadline):
     if not cfg['views']:
         return []
     code = source_hashes()
-    spec = {'export_version': EXPORT_VERSION, 'rendering_version': RENDERING_VERSION,
+    spec = {'export_version': EXPORT_VERSION, 'rendering_version': RENDERING_POLICY_SET_VERSION,
+            'supported_rendering_versions':list(SUPPORTED_RENDERING_VERSIONS),
             'views': cfg['views'], 'variant_budget': cfg['variant_budget'],
             'code_sha256': digest(code)}
     spec_hash = digest(spec)

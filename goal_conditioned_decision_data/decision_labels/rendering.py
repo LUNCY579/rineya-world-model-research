@@ -19,7 +19,10 @@ from ..oracles.independent import evaluate as independent, ORACLE_VERSION as IND
 from ..pipelines.common import canonical, digest, file_hash, immutable_bytes, source_hashes
 
 RENDERING_VERSION = 'gcdl-rendering-1.0'
-EXPORT_VERSION = 'gcdl-rendered-export-1.0'
+V2_RENDERING_VERSION = 'gcdl-rendering-2.0'
+RENDERING_POLICY_SET_VERSION = 'gcdl-rendering-policies-2.0'
+SUPPORTED_RENDERING_VERSIONS = (RENDERING_VERSION, V2_RENDERING_VERSION)
+EXPORT_VERSION = 'gcdl-rendered-export-2.0'
 VIEWS = ('pointwise', 'pairwise', 'listwise', 'computation', 'distillation')
 VARIANTS = (
     {'name': 'canonical_compact', 'key_order': 'canonical', 'layout': 'compact', 'framing': 0},
@@ -190,15 +193,30 @@ def _verify_target(task, target, view, oracle):
             validate_auxiliary({'input': task, 'targets': target})
 
 
+def _rendering_identity(record):
+    """Preserve v1 exactly; v2 goal triplets share a gold-independent surface."""
+    provenance = record['provenance']
+    if provenance['generator_version'] != 'generator-2.0':
+        return RENDERING_VERSION, provenance['record_index'], False
+    if record['family'] == 'C':
+        from ..generators.version2 import bundle_identity
+        bundle = record['metadata'].get('goal_bundle_id')
+        if bundle != bundle_identity(record['input']):
+            raise ValueError('v2 goal-bundle surface identity mismatch')
+        return V2_RENDERING_VERSION, bundle, True
+    return V2_RENDERING_VERSION, provenance['record_index'], False
+
+
 def _variant_task(record, task, target, view, variant):
     rendered, projected = deepcopy(task), deepcopy(target)
     permutable = view in ('pairwise', 'listwise', 'distillation') and 'search' not in record['targets']
     if permutable:
         provenance = record['provenance']
+        _, order_identity, _ = _rendering_identity(record)
         # No decision labels, optimal choice, record_id (which hashes targets),
         # family or split enters this ordering function.
         rendered['candidates'].sort(key=lambda candidate: digest([
-            provenance['seed'], provenance['record_index'], variant['name'],
+            provenance['seed'], order_identity, variant['name'],
             'candidate_order', candidate['id']]))
         ids = [candidate['id'] for candidate in rendered['candidates']]
         by_id = {candidate['id']: candidate for candidate in record['targets']['decision']['candidates']}
@@ -233,11 +251,12 @@ def render_training_views(record, view='listwise', variant_budget=3):
     """
     _bounds(view, variant_budget=variant_budget)
     original = _accepted_source(record)
+    version, order_identity, bundled = _rendering_identity(record)
     original_by_id = {candidate['id']: candidate for candidate in original['candidates']}
     for task, target in _subviews(record, view):
         candidate_ids = [candidate['id'] for candidate in task['candidates']]
-        seed = digest([RENDERING_VERSION, record['provenance']['seed'],
-                       record['provenance']['record_index'], view, candidate_ids])
+        seed = digest([version, record['provenance']['seed'],
+                       order_identity, view, candidate_ids])
         for variant in VARIANTS[:variant_budget]:
             rendered, rendered_target, permutable = _variant_task(record, task, target, view, variant)
             expected = deepcopy(original)
@@ -251,11 +270,11 @@ def render_training_views(record, view='listwise', variant_budget=3):
                 raise ValueError('rendered task changed original candidate-subset outcomes')
             _verify_target(parsed, rendered_target, view, b)
             yield {'record_id': record['id'],
-                   'view_id': 'gcdlv_' + digest([RENDERING_VERSION, record['id'], view, candidate_ids, variant['name']]),
+                   'view_id': 'gcdlv_' + digest([version, record['id'], view, candidate_ids, variant['name']]),
                    'view': view, 'input_text': input_text, 'target': rendered_target,
                    'split': record['split'], 'provenance': deepcopy(record['provenance']),
-                   'surface': {'rendering_version': RENDERING_VERSION, **variant,
-                               'candidate_order': 'gold_independent_sha256' if permutable else 'source_order_preserved'},
+                   'surface': {'rendering_version': version, **variant,
+                               'candidate_order': ('goal_bundle_sha256' if bundled else 'gold_independent_sha256') if permutable else 'source_order_preserved'},
                    'verification': {'input_round_trip': 'PASS', 'original_subset_oracle_match': 'PASS',
                                     'differential_oracle': 'PASS', 'unchanged_target': 'PASS',
                                     'source_equivalence': 'exact_except_candidate_permutation',
@@ -338,6 +357,8 @@ def _batch_source(root, path, split):
                 or row.get('quality_gate', {}).get('status') != 'accepted'):
             raise ValueError('accepted source shard contains unaccepted or mismatched-split record')
     code = batch.get('code_hashes')
+    from ..pipelines.worker import batch_profile
+    profile = batch_profile(batch)
     index = batch.get('protected_index')
     if not isinstance(code, dict) or not code or not isinstance(index, list) or len(index) != count:
         raise ValueError('accepted source manifest lacks code or protected provenance')
@@ -346,6 +367,7 @@ def _batch_source(root, path, split):
     if len({row[0] for row in index}) != count:
         raise ValueError('duplicate canonical record in source protected index')
     return {'path': relative, 'sha256': actual_hash, 'selected_records': 0,
+            'source_generation_profile':profile['id'],
             'source_seed': batch['seed'],
             'source_batch_manifest': str(manifest_path.relative_to(root)),
             'source_batch_manifest_sha256': file_hash(manifest_path),
@@ -355,6 +377,9 @@ def _batch_source(root, path, split):
 def _source_record_provenance(record, source):
     index = next((row for row in source['protected_index'] if row[0] == record['id']), None)
     provenance = record['provenance']
+    from ..generators.profiles import resolve_record_profile
+    if resolve_record_profile(provenance)['id']!=source['source_generation_profile']:
+        raise ValueError('accepted source record/batch generation profile mismatch')
     if index is None or index[2:] != [provenance['parent_world_id'], provenance['template_group_id'], record['split']]:
         raise ValueError('accepted source canonical ID/parent/split provenance mismatch')
     if provenance['seed'] != source['source_seed'] or index[1] != semantic_fingerprint(record):
@@ -404,6 +429,7 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
     _storage_guard(root)
     paths = _source_paths(root, split, source_paths)
     selected, sources = [], {}
+    rendering_versions = set()
     seen_ids = set()
     for path, record in _records(paths, split, max_records):
         if record['id'] in seen_ids:
@@ -413,6 +439,7 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
         if relative not in sources:
             sources[relative] = _batch_source(root, path, split)
         _source_record_provenance(record, sources[relative])
+        rendering_versions.add(_rendering_identity(record)[0])
         sources[relative]['selected_records'] += 1
         selected.append({'record_id': record['id'], 'record_sha256': digest(record),
                          'parent_world_id': record['provenance']['parent_world_id'],
@@ -421,7 +448,10 @@ def export_rendered_dataset(source_root, split, view, max_records, variant_budge
     if not selected:
         raise ValueError('no selected accepted records')
     code = source_hashes()
-    specification = {'export_version': EXPORT_VERSION, 'rendering_version': RENDERING_VERSION,
+    versions = sorted(rendering_versions)
+    specification = {'export_version': EXPORT_VERSION,
+                     'rendering_version': versions[0] if len(versions)==1 else 'mixed',
+                     'rendering_versions': versions, 'rendering_policy_set_version': RENDERING_POLICY_SET_VERSION,
                      'split': split, 'view': view, 'max_records': max_records, 'variant_budget': variant_budget,
                      'selected_records': selected, 'sources': list(sources.values()), 'code_sha256': digest(code)}
     dataset_id = 'gcdl_rendered_' + digest(specification)[:32]

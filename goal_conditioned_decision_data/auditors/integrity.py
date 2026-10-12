@@ -2,7 +2,6 @@
 from copy import deepcopy
 from fractions import Fraction
 from itertools import product
-import json
 import math
 from collections import Counter
 from ..pipelines.common import canonical, digest
@@ -44,7 +43,40 @@ def semantic_fingerprint(record):
     # Bounded exhaustive entity canonicalization has a separate template-size
     # gate below; shared serialization is not shared transition/scoring logic.
     from ..generators.build import semantic_fingerprint as normalize
-    return normalize(record)
+    from ..generators.profiles import resolve_record_profile
+    profile=resolve_record_profile(record['provenance'])
+    _validate_profile_world_size(record['input'],profile['config'],record['split'])
+    if profile['id']=='v1':
+        # Every stored V1 fingerprint and unknown-reference marker is an
+        # immutable recovery authority. Do not alter the original normalizer.
+        return normalize(record)
+    from ..generators.version2 import restore_source_names
+    restored=deepcopy(record)
+    restored['input']=restore_source_names(record,config=profile['config'])
+    _validate_profile_world_size(restored['input'],profile['config'],record['split'])
+    return normalize(restored)
+
+
+def _validate_profile_world_size(task, config, split):
+    """Bound factorial namespace work before normalization of untrusted rows."""
+    if split not in config['split_templates'] or type(task) is not dict:
+        raise ValueError('unknown reserved-template split or task')
+    spec=config['split_templates'][split]
+    state=task.get('initial_state')
+    if state is None:
+        worlds=task.get('possible_worlds')
+        state=worlds[0] if type(worlds) is list and worlds else None
+    if type(state) is not dict:
+        raise ValueError('reserved-template state must be an object')
+    environment=task.get('environment')
+    fields={'ledger':(('accounts',spec['accounts']),('entries',spec['entries'])),
+            'blocksworld':(('on',spec['blocks']),),
+            'register':(('registers',spec['accounts']),)}
+    if environment not in fields:
+        raise ValueError('unsupported reserved-template environment')
+    if any(type(state.get(field)) is not dict or len(state[field])!=size
+           for field,size in fields[environment]):
+        raise ValueError(environment+' reserved-template world-size violation')
 
 
 def validate_schema(record):
@@ -81,20 +113,123 @@ def validate_schema(record):
     from ..generators.build import record_id
     if record_id(record)!=record['id']:raise ValueError('stable ID mismatch')
     if template_signature(task)!=record['metadata']['protected_template_signature']:raise ValueError('template signature not derived from task')
-    # Reconstruct reserved structural partition rather than trusting its name.
-    cfg=json.loads((__import__('pathlib').Path(__file__).resolve().parents[1]/'configs/curriculum.json').read_text())
+    # Resolve the record's exact trusted archived profile, never the current
+    # default. V1 identities and split reservations remain valid under V2 code.
+    from ..generators.profiles import resolve_record_profile
+    profile=resolve_record_profile(p)
+    cfg=profile['config']
     spec=cfg['split_templates'][record['split']]
-    if p['config_hash']!=digest(cfg) or p['config_version']!=cfg['version'] or p['generator_version']!=cfg['generator_version'] or p['environment_version']!='environments-1.0' or p['template_id']!=spec['template']:
+    if record['schema_version']!=profile['schema_version'] or p['template_id']!=spec['template']:
         raise ValueError('provenance version/config mismatch')
-    state=task.get('initial_state', task.get('possible_worlds',[{}])[0].get('state'))
-    if task['environment']=='ledger':
-        if [len(state['accounts']),len(state['entries'])]!=[spec['accounts'],spec['entries']]:raise ValueError('ledger reserved-template split violation')
-    elif task['environment']=='blocksworld':
-        if len(state['on'])!=spec['blocks']:raise ValueError('Blocksworld reserved-template split violation')
-    elif task['environment']=='register':
-        if len(state['registers'])!=spec['accounts']:raise ValueError('register reserved-template split violation')
+    _validate_profile_world_size(task,cfg,record['split'])
     if p['template_group_id']!=spec['template'] or p['lineage_id']!=spec['template']:raise ValueError('lineage split partition mismatch')
+    if profile['id']=='v2':
+        metadata=record['metadata']
+        if record['family']=='C':
+            _validate_v2_c_record(record)
+        elif ({'goal_bundle_id','goal_index'} & set(metadata)
+              or 'fixed_candidate_goal_triplet' in metadata.get('tags',[])):
+            raise ValueError('v2 C bundle metadata must describe family C')
+        from ..generators.version2 import validate_vocabulary
+        validate_vocabulary(record,config=cfg)
     canonical(record)
+
+
+def _validate_v2_c_record(record):
+    task,metadata=record['input'],record['metadata']
+    if task['environment']!='blocksworld':
+        raise ValueError('v2 C requires Blocksworld')
+    state=task.get('initial_state')
+    goal=task['goal']
+    if (type(state) is not dict or type(state.get('on')) is not dict
+            or type(goal) is not dict or set(goal)!={'on'} or type(goal['on']) is not dict
+            or set(goal['on'])!=set(state['on'])):
+        raise ValueError('v2 C requires a full-forest goal')
+    if goal['on']==state['on']:
+        raise ValueError('v2 C goal must differ from initial state')
+    if len(task['candidates'])!=6:
+        raise ValueError('v2 C requires exactly six supplied candidates')
+    index=metadata.get('goal_index')
+    if type(index) is not int or not 0<=index<=2:
+        raise ValueError('v2 C goal_index must be an integer from zero to two')
+    # Reconstruct the identity independently using only the fixed inference
+    # bundle. Goal, targets, record ID, indices and audit metadata are excluded.
+    identity=digest({key:task[key] for key in ('environment','initial_state','rules',
+                                             'constraints','candidates','utility_definition')})
+    if metadata.get('goal_bundle_id')!=identity:
+        raise ValueError('v2 C goal bundle identity does not match fixed model input')
+
+
+def validate_v2_group(records, require_full_curriculum=False):
+    """Check V2 atomic goal/vocabulary groups after authoritative row audits.
+
+    Caller must first run ``audit_record`` on every row. This helper adds
+    cross-record custody/contrast checks; it does not replace oracle auditing.
+    Any failure requires the worker to quarantine the complete V2 batch.
+    """
+    from ..generators.profiles import resolve_record_profile
+    from ..generators.version2 import restore_source_names
+    if not records:
+        raise ValueError('empty v2 group')
+    if type(require_full_curriculum) is not bool:
+        raise ValueError('require_full_curriculum must be boolean')
+    profiles=[resolve_record_profile(row['provenance']) for row in records]
+    if any(profile['id']!='v2' for profile in profiles):
+        raise ValueError('v2 group cannot mix generation profiles')
+    if len({row['id'] for row in records})!=len(records):
+        raise ValueError('duplicate canonical record in v2 group')
+    for row in records:
+        validate_schema(row)
+    if require_full_curriculum:
+        counts=Counter(row['family'] for row in records)
+        if any(counts[family]<minimum for family,minimum in profiles[0]['config']['family_minimums'].items()):
+            raise ValueError('v2 group lacks required full-curriculum families')
+    bundles={};pairs={}
+    for row in records:
+        metadata=row['metadata'];p=row['provenance']
+        if row['family']=='C':
+            bundles.setdefault(metadata['goal_bundle_id'],[]).append(row)
+        vocabulary=metadata['vocabulary']
+        if ('vocabulary_matched_control' in metadata.get('tags',[])
+                or metadata.get('perturbation',{}).get('kind')=='vocabulary_matched_control'
+                or vocabulary['stratum']=='familiar_control'):
+            pairs.setdefault(p['parent_world_id'],[]).append(row)
+    if not bundles and not pairs:
+        raise ValueError('v2 group lacks a controlled goal bundle or vocabulary pair')
+    for rows in bundles.values():
+        if len(rows)!=3 or {row['metadata']['goal_index'] for row in rows}!={0,1,2}:
+            raise ValueError('v2 C bundle must contain exactly indices zero, one and two')
+        custody={(row['split'],row['provenance']['seed'],row['provenance']['parent_world_id'],
+                  row['provenance']['template_group_id'],row['provenance']['lineage_id'],
+                  row['metadata']['counterfactual_group_id']) for row in rows}
+        if len(custody)!=1 or any(row['metadata']['counterfactual_group_id']!=row['provenance']['parent_world_id'] for row in rows):
+            raise ValueError('v2 C bundle parent/split custody mismatch')
+        non_goal=[]
+        for row in rows:
+            task=deepcopy(row['input']);task.pop('goal');non_goal.append(canonical(task))
+        if len(set(non_goal))!=1 or len({canonical(row['input']['goal']) for row in rows})!=3:
+            raise ValueError('v2 C bundle must change only its three distinct goals')
+        best=[set(row['targets']['decision']['best_candidate_ids']) for row in rows]
+        if any(not ids for ids in best) or any(best[a]&best[b] for a in range(3) for b in range(a)):
+            raise ValueError('v2 C bundle requires disjoint nonempty exact best sets')
+        for row,ids in zip(rows,best):
+            if not any(candidate['id'] in ids and rational(candidate['feasible_probability'])==1
+                       and rational(candidate['success_probability'])==1
+                       for candidate in row['targets']['decision']['candidates']):
+                raise ValueError('v2 C bundle requires a feasible successful best candidate per goal')
+    for rows in pairs.values():
+        if (len(rows)!=2 or {row['metadata']['vocabulary']['stratum'] for row in rows}
+                !={'familiar_control','reserved_dev'}):
+            raise ValueError('matched vocabulary group requires both DEV strata')
+        if any(row['split']!='dev' or row['family']!='D' for row in rows):
+            raise ValueError('matched vocabulary pair must be DEV family D')
+        custody={(row['provenance']['seed'],row['provenance']['template_group_id'],
+                  row['provenance']['lineage_id'],row['metadata']['counterfactual_group_id']) for row in rows}
+        if len(custody)!=1 or any(row['metadata']['counterfactual_group_id']!=row['provenance']['parent_world_id'] for row in rows):
+            raise ValueError('matched vocabulary pair parent custody mismatch')
+        restored=[canonical(restore_source_names(row,config=profiles[0]['config'])) for row in rows]
+        if len(set(restored))!=1 or rows[0]['targets']['decision']!=rows[1]['targets']['decision']:
+            raise ValueError('matched vocabulary pair changed source task or exact decision labels')
 
 
 def validate_decision(labels,oracle):

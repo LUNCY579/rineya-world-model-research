@@ -340,13 +340,21 @@ class IndependentOperationsTests(unittest.TestCase):
 
     def test_recovery_checks_shard_hash_before_inventory(self):
         from goal_conditioned_decision_data.pipelines import worker
+        from goal_conditioned_decision_data.generators.profiles import resolve_profile
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            root = Path(directory); (root/'manifests').mkdir(); (root/'data').mkdir()
-            (root/'data/sample.jsonl').write_bytes(b'tampered\n')
-            (root/'manifests/batch-train-1.json').write_text(json.dumps({'shard': 'data/sample.jsonl', 'sha256': '0'*64}))
+            root = Path(directory); (root/'manifests').mkdir(); (root/'data/accepted').mkdir(parents=True)
+            (root/'data/accepted/train-1.jsonl').write_bytes(b'tampered\n')
+            template = resolve_profile('v1')['config']['split_templates']['train']['template']
+            manifest = {'version': 'gcdl-manifest-1', 'seed': 1, 'split': 'train', 'generation_profile': 'v1',
+                        'shard': 'data/accepted/train-1.jsonl', 'sha256': '0'*64,
+                        'accepted': 1, 'quarantined': 0, 'audit': {'verdict': 'PASS'},
+                        'protected_index': [['independent_id', 'independent_semantic', 'independent_parent', template, 'train']]}
+            (root/'manifests/batch-train-1.json').write_text(json.dumps(manifest))
             db = sqlite3.connect(':memory:')
+            db.execute('CREATE TABLE seen(id TEXT PRIMARY KEY, semantic TEXT, parent TEXT, template TEXT, split TEXT)')
             with patch.object(worker, 'ROOT', root):
-                with self.assertRaises(ValueError): worker.recover_inventory(db)
+                with self.assertRaisesRegex(ValueError, 'shard digest mismatch'): worker.recover_inventory(db)
+                self.assertEqual(db.execute('SELECT COUNT(*) FROM seen').fetchone()[0], 0)
             db.close()
 
     def test_publication_reserves_space_before_writes(self):
@@ -361,11 +369,13 @@ class IndependentOperationsTests(unittest.TestCase):
 
     def test_metadata_only_recovery_replays_and_rejects_conflicts(self):
         from goal_conditioned_decision_data.pipelines import worker, common
+        from goal_conditioned_decision_data.generators.profiles import resolve_profile
         with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
-            root = Path(directory); (root/'manifests').mkdir(); (root/'data').mkdir()
-            shard = root/'data/not-json-sealed.bytes'; shard.write_bytes(b'opaque bytes; recovery must not parse labels\n')
-            index = ['independent_id', 'independent_semantic', 'independent_parent', 'independent_template', 'sealed']
-            manifest = {'shard': 'data/not-json-sealed.bytes', 'sha256': common.file_hash(shard),
+            root = Path(directory); (root/'manifests').mkdir(); (root/'data/sealed').mkdir(parents=True)
+            shard = root/'data/sealed/sealed-1.jsonl'; shard.write_bytes(b'opaque bytes; recovery must not parse labels\n')
+            template = resolve_profile('v1')['config']['split_templates']['sealed']['template']
+            index = ['independent_id', 'independent_semantic', 'independent_parent', template, 'sealed']
+            manifest = {'version': 'gcdl-manifest-1', 'shard': 'data/sealed/sealed-1.jsonl', 'sha256': common.file_hash(shard),
                         'seed': 1, 'split': 'sealed', 'accepted': 1, 'quarantined': 0,
                         'protected_index': [index], 'audit': {'verdict': 'PASS'}}
             (root/'manifests/batch-sealed-1.json').write_text(json.dumps(manifest))
