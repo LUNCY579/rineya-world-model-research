@@ -370,3 +370,9 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     (D-41) and the SEALED battery is minted (D-42).
   - **Mechanism.** The RCX training chain waits without a marker while RAM is short, and takes the lane lock one
     adapter at a time. A GPU job that is already running may finish first.
+- **2026-10-12 about 09:00, BWM (I-21, D-83): screen timeline.**
+  - Item 7 needs about 7.5 GPU-h (12 beam shards plus 3 direct runs): this turn and two more BWM turns. Shards resume
+    with the F cache.
+  - The screen arm is queued as bundleJ, gated on `bundleI.done`, so it runs only after `ADDENDUM_A_REPORT.json`
+    (per §7.1). ETA: early 2026-10-13.
+  - BWM's optional canary preflight on the frozen snapshot copy (08:45) gave max |Δ| 0.0 and matching counters.
