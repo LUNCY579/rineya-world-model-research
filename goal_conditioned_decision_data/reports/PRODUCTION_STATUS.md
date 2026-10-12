@@ -1,30 +1,38 @@
 # GCDL-001 production status
 
-Snapshot: 2026-10-11T19:01:23-05:00. The canonical host runner is healthy. This is an experimental verified synthetic pilot; no model training or learned-transfer claim.
+Snapshot: 2026-10-12T00:49:36.430810+00:00. The canonical worker is **resource-paused**, with its checkpoint and registered launchd schedule preserved. This remains an experimental verified synthetic pilot; no model was trained or evaluated.
 
-| Split | Accepted | Groups | Production quarantines |
+| Split | Accepted | Groups | Natural production quarantines |
 |---|---:|---:|---:|
-| train | 480 | 16 | 0 |
-| dev | 108 | 4 | 0 |
+| train | 1320 | 44 | 0 |
+| dev | 297 | 11 | 0 |
 | sealed | 216 | 8 | 0 |
-| ood | 116 | 4 | 0 |
+| ood | 319 | 11 | 0 |
 
-Total accepted: 920. Four separate deliberately corrupted records were quarantined and excluded from training exports and natural production failure rates.
+Total accepted: **2,152**, up from the earlier 920-record status snapshot. Four deliberately corrupted demonstration records remain quarantined separately; they are excluded from training and natural rejection rates. All 66 nonsealed accepted shards and all eight frozen sealed shards were byte-preserved during promotion.
 
-All 58 regression tests pass, including 33 independently authored adversarial/semantic/operations tests. Oracle properties cover 4,272 plans and detect deliberate transition/scoring/cost errors. The release auditor rechecks accepted labels/evidence and protected splits; its independent-review gate binds the exact current source hashes and independent review receipt bytes. The independent reviewer did not inspect sealed gold. Its initial hand-calculated audit sampled 12 distinct seed clusters, with zero issues and a conditional one-sided 95% IID error upper bound of 22.1%; this does not bound correlated specification errors.
+The full canonical release audit rechecked all 2,152 accepted records, including sealed gold through the explicit auditor path, with zero errors, all A–H families present, and every release gate passing. This validates executable evidence and the implemented split/fingerprint checks; it does not establish model generalization or complete shortcut resistance. Sealed answers were not used for adaptation. QUALITY_REPORT.json contains the current complete result, actual counts and sampling limitations.
 
-All A–H families are present. QUALITY_REPORT.json contains current counts, difficulty, normalized uniqueness, uncertainty, option-position coverage and release gates. Independent review approves the code and the narrow DEV position correction: 32/0/0/0 winners before, 8/8/8/8 after, zero semantic/label changes. ID-only lexical choice was 9/32; no broad shortcut or model-performance claim follows.
+## Reviewed training-view improvement
 
-Active generation/audit time recorded: 43.789 seconds. This differs from wall-clock throughput. Each search manifest retains cheap/expanded runtime samples plus exact attempted-transition and candidate execution counts. These CPU simulator costs do not predict future language-model inference cost. No paid APIs, inference service or model training are used.
+The promoted source digest is `3249586daa51d27188636dfe7e342ad8661ea51fbf40afdc7ef3a2becb738b12`. All **114 regression tests** pass in the canonical host checkout; 58 preserve the original core, 16 test the renderer, nine test integration, and 31 were authored by the fresh independent reviewer. The independent scope is code, regression and mechanical evidence. The original core receipt/review and historical quality report remain byte-preserved under `manifests/validation_history/` and `reports/review_history/`.
 
-## Live host evidence
+The versioned exporter provides pointwise, pairwise, listwise, computation and distillation views with separate `input_text` and `target` fields. Only `input_text` enters the model. Three actual JSON key/layout/framing variants survive outer JSONL serialization. Gold-independent candidate permutation rechecks pair signs and exact labels; search-prefix records retain their policy order. Computation/distillation expose the previously omitted exact search/proof targets, with their finite optimality scope preserved.
 
-The canonical isolated worktree is `/Users/chengli/.codex/gcdl001-host/worktree`, backed by its own 9 MiB shallow sparse repository. Launchd `com.rineya.gcdl001` completed a real generation/checkpoint/Git-backup cycle. Checkpoint advanced from 1000011 / 568 accepted to 1000017 / 744; a later verified cycle reached 1000023 / 920. The daemon itself confirmed local and remote commit equality. HOST_DEPLOYMENT.json preserves that observed evidence. Long-term uptime is not inferred from two successful cycles.
+The automatic queue publishes listwise, computation and distillation views for at most twelve nonsealed source groups per bounded cycle. Accepted-subset batches remain usable when other candidates are quarantined; zero-eligible auxiliary views have explicit zero-row manifests. Immutable canonical receipts, derived manifests, source hashes and per-batch completion receipts support replay after interruption and reject corrupt/symlinked paths. Counts distinguish rendered presentations from new reasoning worlds.
 
-A startup PATH omission was corrected and tested. The original daemon stalled opening its script under Downloads, so the host runner uses an unprotected isolated checkout and its own Git metadata. Its redundant initial development checkout was byte-verified into a 441,667-byte archive (99 files, SHA-256 manifest), then retired to reclaim 729 MiB. Existing native research/other-agent workspaces remain intact. Accepted shards are preserved both locally and remotely.
+A fresh independent comparison used the actual production stride-six DEV/OOD shards: **616 accepted source records -> 1,848 serialized/reparsed listwise presentations**, with zero parse, oracle, label or mutation mismatches and three surviving key orders per source. In the actual close-call samples, DEV's fixed slots 0/11 become 18/15; OOD's 11/0 become 13/20 across three presentations per source. A separate 32-group-per-split reviewer experiment corroborates reduced position concentration. Individual variants still have imbalance; exact balance is not claimed.
 
-The host's free space briefly fell below the 10 GiB floor and the runner correctly paused. Free space recovered; the guarded runner resumed. Current free space at this snapshot: 13.50 GiB. The guard is unchanged.
+The shared entity/status vocabulary and goal-blind C plan-relationship heuristic remain unresolved. In actual DEV, that C heuristic still selects a best-set member in 11/11 sources and 33/33 renderings. These findings and a future generator-version hypothesis are documented, with no model-performance claim. See CONTROLLED_SURFACE_COMPARISON.md, SURFACE_RENDERING_DESIGN.md and INDEPENDENT_REVIEW.md.
 
-One CPU worker runs six groups every five minutes, with 180 seconds of production plus bounded Git backup, a 512 MiB programme ceiling and 12,000 accepted-record ceiling. Three unproductive batches, oracle disagreements, source drift, unsafe publication or failed bounded backup preserve a checkpoint and pause. Paused launchd invocations are no-ops. Accepted data is never deleted to meet a quota.
+## Current host and recovery state
 
-The launchd user session must remain logged in and awake. A quiet two-hour Codex follow-up monitors actionable failures and can run bounded independently reviewed improvements when the agent service is available. The AI agent itself is not active continuously. Stop markers are preserved. README.md provides exact start/stop/status/resume/export commands. State heartbeat, metrics, SQLite ledger, checkpoint and backup receipts hold live evidence; manifests and immutable shards provide remote-recoverable scientific evidence.
+The canonical isolated worktree is `/Users/chengli/.codex/gcdl001-host/worktree`, backed by its own sparse repository on `research/goal-conditioned-decision-data-v1`. Native RCWM/BWM/complementary and other-agent folders remain untouched. The retired initial checkout's 99-file byte-verified archive remains preserved.
+
+Checkpoint: train seed **1000065**. The canonical generation queue is empty. **66 nonsealed source groups are queued for rendered backfill; zero real rendered datasets have been published** because the resource gate remains closed. The real new export CLI independently refused publication under the current free-space condition. Successful export tests used small temporary fixtures with simulated healthy free space and dedicated refusal checks; they are not evidence of live production publication.
+
+At this snapshot, free space was **9.02 GiB**, below the required **10 GiB**; programme storage was 30,409,483 bytes under its 512 MiB ceiling. The pause cause is retained in state/PAUSED.json. Accepted data is never deleted to meet a quota. Launchd `com.rineya.gcdl001` remains registered at five-minute intervals, and paused invocations are no-ops.
+
+The quiet two-hour Codex follow-up now rechecks a disk-only pause and may resume once real space and all other review/resource/integrity gates pass. It preserves operator STOP and unresolved quality/backup pauses. After recovery, a bounded `python3 -m goal_conditioned_decision_data.pipelines.worker --render-only` cycle can catch up historical views. README.md contains exact control/export commands. The host must be logged in and awake; neither the AI service nor future uptime is assumed.
+
+Git backups remain restricted to this programme and its dedicated branch, with scoped changes, bounded transport retries and confirmed remote/local commit equality. The final backup receipt is in state/backup.json. No global authentication changes, paid APIs, model weights or training were used.

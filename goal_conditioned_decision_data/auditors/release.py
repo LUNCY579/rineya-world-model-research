@@ -81,12 +81,20 @@ def audit(include_sealed=False):
     review=ROOT/'reports/INDEPENDENT_REVIEW.md'
     # Independent reviewer gate is an explicit scoped written verdict, not inferred from LLM agreement.
     independent_pass=current_independent_review()
+    from ..pipelines.rendered import inventory
+    try:
+        rendered_inventory=inventory(ROOT)
+        rendered_pass=True
+    except Exception as error:
+        rendered_inventory={'error':str(error)}
+        rendered_pass=False
+        errors.append({'reason':'rendered inventory integrity failure: '+str(error)})
     gates={'schema':not errors,'authoritative_evidence':not errors,'zero_oracle_disagreements':not errors,
         'split_integrity':not errors,'no_known_supported_fingerprint_leakage':not errors,
         'sealed_immutable':freeze.exists() and not any('sealed' in e['reason'] for e in errors),
         'all_families_present':set(families)==set('ABCDEFGH'),'independent_agent_review':independent_pass,
         'reproducibility':all(json.loads(p.read_text())['reproducibility']=='PASS' for p in manifests),
-        'quarantine_excluded':not errors}
+        'quarantine_excluded':not errors,'rendered_export_integrity':rendered_pass}
     return {'dataset_version':'GCDL-001-v0.1','classification':'experimental verified synthetic pilot; no trained-model evaluation or transfer claim',
         'verdict':'PASS' if all(gates.values()) else 'FAIL','release_gates':gates,'checked_sealed_targets':include_sealed,
         'counts_by_split':dict(counts),'accepted_verified':len(rows),'unique_task_fingerprints':len(semantic),'protected_parent_worlds':len(groups),
@@ -95,6 +103,7 @@ def audit(include_sealed=False):
         'random_parent_audit':{'sampling_seed':7011,'parents_sampled':n,'observed_errors':0,'sample_record_ids':[r['id'] for r in sampled],
             'one_sided_95_percent_error_upper_bound':1-0.05**(1/n) if n else None,
             'interpretation':'zero observed mechanical mismatches, sampled one row per parent; interval assumes independent representative parents and does not bound correlated oracle specification errors'},
+        'rendered_datasets':rendered_inventory,
         'errors':errors,'limits':['same-user procedural seal','shared oracle specification and engineer; separate reviewer mitigates correlated mistakes',
         'limited synthetic environments and bounded candidate search; no global/unbounded optimality','semantic fingerprint covers bounded entity aliases/order, not arbitrary logical equivalence',
         'future model prediction errors and retention require a separately authorized model evaluation'],

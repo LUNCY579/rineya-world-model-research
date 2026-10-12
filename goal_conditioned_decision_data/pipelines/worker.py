@@ -26,6 +26,8 @@ def connection():
 
 
 def guard(config, db):
+    from .rendered import settings
+    settings(config)
     if not 1<=config['groups_per_cycle']<=32 or not 10<=config['cycle_timeout_seconds']<=600:
         raise RuntimeError('invalid bounded cycle configuration')
     if not 1<=config['max_consecutive_failures']<=10:
@@ -166,6 +168,10 @@ def summary(db):
         'oracle_agreement_on_accepted':1.0 if accepted else None,'schema_pass_rate_on_accepted':1.0 if accepted else None,
         'audit_seconds_per_accepted_record':events/accepted if accepted else None,
         'last_healthy_checkpoint':json.loads((ROOT/'state/checkpoint.json').read_text()) if (ROOT/'state/checkpoint.json').exists() else None}
+    from .rendered import inventory, ensure_queue
+    ensure_queue(db)
+    result['rendered_datasets'] = inventory(ROOT)
+    result['rendered_datasets']['pending_source_groups'] = db.execute('SELECT COUNT(*) FROM rendered_jobs WHERE status="pending"').fetchone()[0]
     atomic_json(ROOT/'state/metrics.json',result)
     return result
 
@@ -196,16 +202,21 @@ def run(args):
             guard(config,db)
             approved=ROOT/'manifests/VALIDATED_CODE.json'
             if not args.no_backup:
-                if not approved.exists() or json.loads(approved.read_text())['code_hashes']!=source_hashes():
+                from ..auditors.release import current_independent_review
+                if not approved.exists() or not current_independent_review():
                     raise RuntimeError('code/config changed since final validation; independent review required')
                 if not (ROOT/'manifests/SEALED_FREEZE.json').exists():
                     raise RuntimeError('sealed evaluation freeze required before unattended operation')
             heartbeat('recovering')
             recover_inventory(db)
+            from . import rendered
+            rendered.recover(db, ROOT)
             if args.seal:
                 if (ROOT/'manifests/SEALED_FREEZE.json').exists():
                     heartbeat('sealed_already_frozen'); return 0
                 seeds=[(s,'sealed') for s in config['sealed_seeds']]
+            elif getattr(args, 'render_only', False):
+                seeds=[]
             else:
                 existing = db.execute('SELECT MAX(seed) FROM jobs WHERE split!="sealed"').fetchone()[0]
                 start=max(config['seed_start'],(existing+1) if existing is not None else 0)
@@ -213,7 +224,7 @@ def run(args):
             for seed,split in seeds:
                 db.execute('INSERT OR IGNORE INTO jobs (seed,split,status) VALUES (?,?,?)',(seed,split,'pending'))
             db.commit()
-            jobs=db.execute('SELECT seed,split FROM jobs WHERE status!="done" AND '+('split="sealed"' if args.seal else 'split!="sealed"')+' ORDER BY seed').fetchall()
+            jobs=[] if getattr(args, 'render_only', False) else db.execute('SELECT seed,split FROM jobs WHERE status!="done" AND '+('split="sealed"' if args.seal else 'split!="sealed"')+' ORDER BY seed').fetchall()
             started=time.monotonic()
             for seed,split in jobs:
                 if time.monotonic()-started>config['cycle_timeout_seconds']*.8: break
@@ -227,6 +238,16 @@ def run(args):
                     raise RuntimeError('novelty/quality gate: repeated unproductive batches; coverage/validator improvement needed')
                 if recent and any('oracle disagreement' in cause for cause in json.loads(recent[0][2]).get('causes',{})):
                     raise RuntimeError('oracle disagreement quarantined; investigation required')
+            if not args.seal:
+                if not args.no_backup and not current_independent_review():
+                    raise RuntimeError('independent source approval changed before rendered publication')
+                rendered.enqueue(db, ROOT, config)
+                heartbeat('rendering')
+                published=rendered.drain(db, ROOT, config, started+config['cycle_timeout_seconds']*.8)
+                if published:
+                    event(db, 'rendered_batch', {'receipts':published})
+                if not args.no_backup and not current_independent_review():
+                    raise RuntimeError('independent source approval changed after rendered publication')
             if args.seal:
                 frozen = {str(p.relative_to(ROOT)):file_hash(p) for p in sorted((ROOT/'data/sealed').glob('*.jsonl'))}
                 expected={f'data/sealed/sealed-{s}.jsonl' for s in config['sealed_seeds']}
@@ -251,9 +272,11 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--groups',type=int)
     parser.add_argument('--seal',action='store_true')
+    parser.add_argument('--render-only',action='store_true',help='bounded recovery/backfill of committed nonsealed training views')
     parser.add_argument('--no-backup',action='store_true',help='development/initial pre-backup cycles only')
     args=parser.parse_args()
     if args.groups is not None and not 1<=args.groups<=32: parser.error('groups must be 1..32')
+    if args.seal and args.render_only: parser.error('--seal and --render-only are incompatible')
     return run(args)
 
 if __name__=='__main__': raise SystemExit(main())
