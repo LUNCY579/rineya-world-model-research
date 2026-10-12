@@ -30,10 +30,10 @@ Single training seed; validation-grade unless marked frozen.
   generated 8-, 10- and 15-block transitions exactly (delta format: 1.000 at 15 blocks).
 - **The world model plus search rescues larger problems (P-06, selection).** On generated hard-style 6-15-block
   problems, beam search under the learned F solves 0.63, against 0.13 for the same proposer without F. Every plan the
-  F verified was valid.
+  F verified was valid (with the delta-consistency check; P-15).
 - **FINAL, frozen, run once: PlanBench Blocksworld-hard (110; 6-15 blocks).** World model + beam search
   solves **73/110 = 66.4%** (95% CI 56.7-75.1%); the same proposer without the world model solves 5/110 = 4.5%.
-  Paired comparison: +68 / -0, p = 6.8e-21. VAL agrees on every plan. Every plan the system verified was valid.
+  Paired comparison: +68 / -0, p = 6.8e-21. VAL agrees on every plan. Every plan the system verified was valid (verified by the learned world model plus a domain-agnostic delta-consistency check; P-15).
   Training saw <= 6 blocks. Published zero-shot references (a different regime): o1-preview 23.6% (p = 2.4e-10),
   DeepSeek-R1 53.6% (two-sided p = 0.073, so not established). Details: `docs/DECISIONS.md` P-08.
 - **RegisterWorld (F-01/F-03/F-04/F-06; P-03/P-04/P-05).**
@@ -57,7 +57,7 @@ Single training seed; validation-grade unless marked frozen.
   14/180 with the adapter off, T2/ORACLE 0.794. That is on its training surface only. BWM re-scored it independently
   (D-61, `code/scripts/lb_rescore.py`).
 - **B3 search distillation, MET (P-11).** The proposer kept its original training and was further trained, on
-  half new rows, using generated 6-10-block plans its own world model had verified (no simulator labels). Without
+  half new rows, using generated 6-10-block plans its own world model had verified, with the delta-consistency check (no simulator labels). Without
   search it then solves 22/110 fresh hard-style problems. A same-training control solves 8/110 (paired +18/-4,
   p = 0.004); label precision was 1.0.
 - **Registered hard-set runs (P-13, P-14).**
@@ -73,6 +73,12 @@ Single training seed; validation-grade unless marked frozen.
 - **D-54 key-order augmentation, PARTIAL (P-12).** Held-out key orders went from 0.45-0.50 to 0.92-0.95. The cost was
   the legality check on illegal actions.
 - **5c retention:** both release adapters RETAINED (RCWM R25, independently re-scored by BWM, D-71), with caveats.
+- **World-model audit (P-15, registered; independently reproduced).** No plan-affecting F error occurred on any
+  queried key: 0 illegal actions accepted and 0 wrong states. The exact-F ceiling on hard is at most the observed
+  73/88. But F's own `legal` flag is wrong on 13-28% of illegal proposals; those are caught by a domain-agnostic
+  check (a predicted deletion must be a fact of the state). Claims are worded accordingly.
+- **Published per-instance comparison (P-16, POST HOC, different regime).** On the same 110 hard instances:
+  H2 vs DeepSeek-R1 +36/-7 (Holm p 5.4e-5); B2 vs R1 +30/-16 (not significant); the proposer alone is far below R1.
 - **In progress:**
   - D-54 key-order augmentation (`docs/PREREG_D54_KEYORDER.md`);
   - B3 H1/H2 on Blocksworld-hard;

@@ -30,16 +30,40 @@ Scorers (free-text answer -> PDDL plan, then local VAL):
 
 Instances: load_instances (PlanBench query + PDDL problem + mapping), stratified_subset (seeded, strata = block count x
 optimal plan length).
+
+Blocksworld-hard (110 instances, 6-15 blocks; ids "hard/instance-N" as in scripts/blocks_eval.py): load_hard_instances
+reads the zero-shot PDDL prompt that DeepSeek-R1, o1-preview and o1-mini were sent (user turn only: upstream's
+send_query_with_feedback comments the system message out for o1-*/deepseek-r1 engines) from the sha-pinned upstream
+per-instance result files (llm_planning_analysis/results_backprompting/blocksworld_hard at fc638a1a; the vendored copy
+under bench/planbench/results/blocksworld_hard is used if present, else research/audit_evidence/bwm_h2_scratch/
+dl_upstream_hard; a file whose sha256 differs from HARD_RESULT_SHA is refused, never skipped) and refuses to run unless
+every file's step-0 user message is byte-identical to the upstream query builder (hard_query, a port of
+per_instance_output_pddl) applied to the local problem file. Answers are PDDL action lists:
+- extract_pddl_plan (primary): rule-based; s-expressions "(unstack d b)" at the start of a line (after list/step
+  markers and markdown; several on one line are read in order, trailing commentary is ignored) or a line that is
+  exactly one bare action over instance objects ("2. unstack d b"); region = the later of the last fenced code block
+  and the last plan section ("Plan:", "Final answer:", "[PLAN]") that carry actions, else every action line up to a
+  verification/explanation heading; wrong-arity actions are dropped and logged; pickup/pick_up-style names are
+  normalised (counted).
+- upstream_pddl_text (second scorer): a faithful port of upstream's save_gpt3_response (lines that start with '(',
+  minus '()' / 'no actions' lines, lowercased and stripped) on the stripped answer, as send_query_with_feedback
+  returns it; upstream wrote that text to the plan file and ran VAL on it unchanged, and val_check_text runs the local
+  VAL on the same text. Reproduces the published step-0 llm_plan of all 330 R1/o1 records (selftest, tests).
+systematic_subset: deterministic centred systematic sample over a sort key (hard: block count, optimal length, id).
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import random
 import re
+import subprocess
+import tempfile
 from pathlib import Path
 
 from . import blocks as B
 
+ROOT = Path(__file__).resolve().parents[1]
 RES = B.BENCH / "results"
 SETS = {"generated_basic_3": "blocksworld_3", "generated_basic": "blocksworld"}  # instance dir -> results subdir
 SET_ALIAS = {"all": ("generated_basic_3", "generated_basic"), "bw3": ("generated_basic_3",), "bw": ("generated_basic",)}
@@ -337,7 +361,11 @@ def _parse_clause(cl: str, st: dict, issues: list) -> list[tuple]:
 def _line_info(raw: str, st: dict, issues: list, table: bool = False) -> dict:
     indent = len(raw) - len(raw.lstrip(" "))
     s = raw.strip()
-    open_end = bool(s) and not re.search(r"[.!?:;)\]]$", s.rstrip(" *_`"))  # sentence runs on to the next line
+    # sentence runs on to the next line. A trailing Markdown hard break ("\") is not text, and a line that is one bold
+    # title ("7. **Pick up the red block from the table**") is complete: an indented line under it is commentary.
+    tail = re.sub(r"\\+$", "", s).rstrip()
+    open_end = bool(s) and not re.search(r"[.!?:;)\]]$", tail.rstrip(" *_`")) and not re.fullmatch(
+        r"\*\*[^*]+\*\*:?", _LIST_MARK.sub("", tail.lstrip("#").strip().lstrip(">").strip(), count=1).strip())
     md = len(s) - len(s.lstrip("#"))
     s = s.lstrip("#").strip().lstrip(">").strip()
     bold_line = bool(re.fullmatch(r"\*\*[^*]+\*\*:?", s))
@@ -649,9 +677,9 @@ def load_instances(sets=("generated_basic_3", "generated_basic"), prompt_type: s
                 continue
             objs, init, goal = B.parse_problem(p)
             cmap, minfo = infer_mapping(r["query"], objs, init, goal, r)
-            out.append({"id": f"{inst_dir}/instance-{r['instance_id']}", "set": inst_dir,
-                        "instance_id": int(r["instance_id"]), "query": r["query"], "path": p, "objs": objs,
-                        "init": init, "goal": goal, "cmap": cmap, "map_info": minfo, "record": r})
+            out.append({"id": f"{inst_dir}/instance-{r['instance_id']}", "set": inst_dir, "fmt": "nl",
+                        "instance_id": int(r["instance_id"]), "query": r["query"], "path": p, "domain": B.DOMAIN_PDDL,
+                        "objs": objs, "init": init, "goal": goal, "cmap": cmap, "map_info": minfo, "record": r})
     return out
 
 
@@ -690,3 +718,304 @@ def stratified_subset(insts: list[dict], n: int, seed: int = 0, key=stratum) -> 
         chosen |= {i["id"] for i in rng.sample(strata[k], alloc[k])}
     assert len(chosen) == n, (len(chosen), n)
     return [i for i in insts if i["id"] in chosen], {k: (len(strata[k]), alloc[k]) for k in keys}
+
+
+# ----------------------------------------------------------------------------- Blocksworld-hard: PDDL prompts
+
+HARD_DIR = B.BENCH / "blocksworld_hard"
+HARD_DOMAIN = HARD_DIR / "generated_domain.pddl"
+HARD_TASK = ("task_1_plan_generation_backprompting_zero_shot_pddl_sound_verifier_sound_critique_zero_shot_val_form_1_"
+             "history_feedback_type_1_tv0.0_tg1.0.json")
+HARD_MODELS = ("deepseek-r1-api", "o1-preview_chat", "o1-mini_chat")
+# sha256 of the upstream per-instance result files (llm_planning_analysis/results_backprompting/blocksworld_hard at
+# fc638a1a, downloaded for the H2 audit and preserved by D-74; the vendored bench copy is byte-identical).
+HARD_RESULT_SHA = {
+    "deepseek-r1-api": "332b0f8ec03f337b4f320e4986b3d758c0fbb6efd223c7cfef05534e8202740e",
+    "o1-preview_chat": "b8fdc9ba2b7cbd3f1f26a3e4aabe2be5ac108a1499916ef91809a88b1a51478c",
+    "o1-mini_chat": "928497901fc3e4be5b78fe26a5afdfa2939dec6c5b6e291c5cd67211fd71bc44",
+}
+HARD_AUDIT_DIR = ROOT / "research" / "audit_evidence" / "bwm_h2_scratch" / "dl_upstream_hard"
+# llm_planning_analysis/back_prompting_parallel.py per_instance_output_pddl (fc638a1a), verbatim
+HARD_QUERY_HEAD = ("The following is a PDDL specification of a planning problem. The first part, under the heading "
+                   "[DOMAIN], is the domain file. The second part, under the heading [QUERY PROBLEM], is the problem "
+                   "file. Using this information, which is correct, and no further assumptions, find a plan which, "
+                   "when run from the specified initial state, satisfies the specified goal. Provide your answer as a "
+                   "sequence of actions in PDDL format. An action ACTION which acts on two objects OBJ1 and OBJ2 "
+                   "would be written (ACTION OBJ1 OBJ2). Do not provide anything else in your answer.\n")
+
+
+def hard_query(problem_text: str, domain_text: str) -> str:
+    """Upstream's zero-shot PDDL query (port of per_instance_output_pddl at fc638a1a): the header, "[DOMAIN]" + the
+    stripped domain file, "[QUERY PROBLEM]" + the problem from its "(define" with the file's last character dropped,
+    then "[PLAN]". Upstream's .replace("obfuscated_randomized_blocksworld", <random>) cannot fire on Blocksworld (the
+    loader asserts the string is absent)."""
+    query = HARD_QUERY_HEAD + "[DOMAIN]\n" + domain_text.strip() + "\n\n"
+    problem = "(define" + problem_text.split("(define")[1][:-1].strip() + "\n)"
+    return query + "[QUERY PROBLEM]\n" + problem.strip() + "\n\n[PLAN]"
+
+
+def hard_result_path(model: str) -> Path:
+    """The sha-pinned upstream result file of `model`: the vendored copy if present, else the audit-evidence copy. A
+    present copy with another sha256 raises (a modified file is never skipped over)."""
+    want = HARD_RESULT_SHA[model]
+    for p in (RES / "blocksworld_hard" / model / HARD_TASK, HARD_AUDIT_DIR / f"{model}.json"):
+        if p.exists():
+            got = hashlib.sha256(p.read_bytes()).hexdigest()
+            if got != want:
+                raise ValueError(f"{p}: sha256 {got[:16]}... differs from the pinned {want[:16]}...")
+            return p
+    raise FileNotFoundError(f"no upstream blocksworld_hard result file for {model} (vendored or audit-evidence copy)")
+
+
+def load_hard_results(model: str) -> dict:
+    return json.loads(hard_result_path(model).read_text(encoding="utf-8"))
+
+
+def hard_step0(record: dict) -> tuple[str, str, bool | None]:
+    """(response content, published llm_plan, published VAL verdict) of an upstream record's step 0, the direct
+    zero-shot attempt. The verdict is step 0's sound_verifier_json; records without one (o1-preview's correct-at-once
+    instances) carry it as act_correct with steps == 1; otherwise None."""
+    import ast
+    s0 = record["step_wise_dict"]["0"]
+    content = s0["response_object"]["choices"][0]["message"]["content"] or ""
+    sv = s0.get("sound_verifier_json")
+    if sv is not None:
+        sv = sv if isinstance(sv, dict) else ast.literal_eval(sv)
+        verdict = bool(sv["validation_info"]["is_valid_plan"])
+    elif int(record.get("steps", 0)) == 1:
+        verdict = bool(record.get("act_correct"))
+    else:
+        verdict = None
+    return content, s0.get("llm_plan") or "", verdict
+
+
+def hard_info() -> dict:
+    """bench/planbench/blocksworld_hard/info.json: per instance the reference plan and its (optimal) length."""
+    return json.loads((HARD_DIR / "info.json").read_text())
+
+
+def load_hard_instances(models=HARD_MODELS) -> list[dict]:
+    """The 110 Blocksworld-hard instances, ids "hard/instance-N" in numeric order (as scripts/blocks_eval.py), each with
+    the exact zero-shot query the upstream files record as sent (step-0 user message; o1/R1 got no system message).
+    Raises unless every listed model's file holds all 110 instances and its user turn (and step-0 sent_messages, where
+    recorded) is byte-identical to hard_query(local problem file, local domain file)."""
+    domain_text = HARD_DOMAIN.read_text()
+    info = hard_info()
+    recs = {m: {int(r["instance_id"]): r for r in load_hard_results(m)["instances"]} for m in models}
+    files = sorted((HARD_DIR / "generated").glob("instance-*.pddl"), key=lambda p: int(p.stem.split("-")[1]))
+    out = []
+    for p in files:
+        n = int(p.stem.split("-")[1])
+        q = hard_query(p.read_text(), domain_text)
+        if "obfuscated_randomized_blocksworld" in q:
+            raise ValueError(f"{p}: upstream's obfuscation placeholder would be replaced")
+        for m in models:
+            r = recs[m].get(n)
+            if r is None:
+                raise ValueError(f"{m}: no record for instance-{n}")
+            first = r["messages"][0]
+            if first.get("role") != "user" or first.get("content") != q:
+                raise ValueError(f"{m} instance-{n}: recorded user query differs from hard_query(local problem)")
+            sent = ((r.get("step_wise_dict") or {}).get("0") or {}).get("sent_messages")
+            if sent is not None and [(x.get("role"), x.get("content")) for x in sent] != [("user", q)]:
+                raise ValueError(f"{m} instance-{n}: step-0 sent_messages are not exactly the one user query")
+        objs, init, goal = B.parse_problem(p)
+        out.append({"id": f"hard/instance-{n}", "set": "hard", "fmt": "pddl", "instance_id": n, "query": q, "path": p,
+                    "domain": HARD_DOMAIN, "objs": objs, "init": init, "goal": goal, "cmap": {o: o for o in objs},
+                    "map_info": {"source": "pddl", "n_consistent": 1, "canonical": True}, "n_blocks": len(objs),
+                    "opt_len": int(info[p.name]["length"])})
+    ids = {i["instance_id"] for i in out}
+    if len(out) != 110 or any(set(r) != ids for r in recs.values()):
+        raise ValueError(f"expected the same 110 hard instances locally and upstream, got {len(out)} local")
+    return out
+
+
+# --- PDDL answer -> plan (primary)
+
+PDDL_ARITY = {"pick-up": 1, "put-down": 1, "stack": 2, "unstack": 2}
+_PDDL_ALIAS = {"pickup": "pick-up", "pick_up": "pick-up", "putdown": "put-down", "put_down": "put-down"}
+_SEXPR = re.compile(r"\(\s*([a-z][a-z0-9_-]*)((?:\s+[a-z0-9][a-z0-9_-]*)*)\s*\)")
+_SEXPR_SEP = re.compile(r"[\s,;]*")
+_BARE = re.compile(r"(pick-up|pick_up|pickup|put-down|put_down|putdown|unstack|stack)((?:\s+[a-z0-9][a-z0-9_-]*){1,3})"
+                   r"\s*[.,;]?")
+_PDDL_MARK = re.compile(r"^(?:[-+•·]\s+|\(?\d{1,3}[.)]\s*|(?:step|action)\s*\d+\s*[:.)\-]?\s*)")
+_LABEL_COLON = re.compile(r"([^():]{1,80}):\s*(?=\()")
+# A PDDL answer's plan heading may mention preconditions/effects ("The exact valid PDDL sequence adhering to
+# preconditions and effects is:"); only state descriptions are excluded (stop sections are handled separately).
+_PDDL_NEG = re.compile(r"\b(?:initial|goal state|current state|state after|final state|resulting state)\b")
+
+
+def _pddl_line(raw: str, objs) -> dict:
+    """One answer line -> {acts, bad, norm, heading, plan_head, stop}. Markdown (#, >, *, `) and list/step markers are
+    stripped first; then the line is an action line if it starts with s-expressions (read in order while they name a
+    domain action; the rest of the line is commentary) or is exactly one bare action over instance objects."""
+    t = raw.strip()
+    md = t.startswith("#")
+    bold_line = bool(re.fullmatch(r"\*\*[^*]+\*\*:?", t))
+    s = re.sub(r"[*`]+", "", t.lstrip("#").strip().lstrip(">").strip()).strip()
+    prev = None
+    while prev != s:
+        prev, s = s, _PDDL_MARK.sub("", s, count=1).strip()
+    acts, bad, norm, labelled = [], [], 0, False
+    body = s
+    lm = _LABEL_COLON.match(s)
+    if lm and _PLAN_LABEL.fullmatch(lm.group(1).strip(" ,.-")) and not _PDDL_NEG.search(lm.group(1)):
+        body, labelled = s[lm.end():], True  # "Plan: (unstack d b) (put-down d)"
+    if body.startswith("("):
+        pos = 0
+        while True:
+            pos = _SEXPR_SEP.match(body, pos).end()
+            m = _SEXPR.match(body, pos)
+            if not m:
+                break
+            name, args = m.group(1), m.group(2).split()
+            if name in _PDDL_ALIAS:
+                name, norm = _PDDL_ALIAS[name], norm + 1
+            if name not in PDDL_ARITY:
+                break  # "(on a b)", "(define ...": not an action; the rest of the line is not read
+            if len(args) == PDDL_ARITY[name]:
+                acts.append((name,) + tuple(args))
+            else:
+                bad.append(m.group(0))
+            pos = m.end()
+    else:
+        m = _BARE.fullmatch(body)
+        if m and (objs is None or all(x in objs for x in m.group(2).split())):
+            name, args = m.group(1), m.group(2).split()
+            if name in _PDDL_ALIAS:
+                name, norm = _PDDL_ALIAS[name], norm + 1
+            if len(args) == PDDL_ARITY[name]:
+                acts.append((name,) + tuple(args))
+            else:
+                bad.append(body)
+    has = bool(acts or bad)
+    heading = (not has) and bool(s) and (md or bold_line or s.endswith(":") or s in ("[plan]", "[plan end]"))
+    stop = heading and (bool(_STOP_KW.search(s)) or s == "[plan end]")
+    plan_head = (heading and not stop and bool(_PLAN_KW.search(s)) and not _PDDL_NEG.search(s)
+                 and not re.match(r"step\s*\d", s)) or (labelled and has)
+    return {"acts": acts, "bad": bad, "norm": norm, "heading": heading, "plan_head": plan_head, "stop": stop,
+            "text": s}
+
+
+def extract_pddl_plan(text: str, objs=None, thinking: bool = False) -> tuple[list[tuple], dict]:
+    """PDDL-format answer -> list of action tuples (see the module docstring). objs: the instance's objects (bare
+    actions are accepted only over them; s-expression arguments are kept as written, VAL rejects unknown ones).
+    Sections: a heading outside a code fence opens a plan, stop (verification, explanation, [PLAN END]) or other
+    section; fenced blocks inside a stop section are never the plan region."""
+    ans, src = answer_text(text or "", thinking)
+    objs = set(objs) if objs is not None else None
+    lines, fence, n_fence, section = [], None, 0, None
+    for raw in _normalize(ans).split("\n"):
+        if raw.strip().startswith("```"):
+            if fence is None:
+                n_fence += 1
+                fence = n_fence
+            else:
+                fence = None
+            continue
+        L = _pddl_line(raw, objs)
+        if fence is None and L["heading"]:
+            section = "plan" if L["plan_head"] else ("stop" if L["stop"] else "other")
+        elif fence is None and L["plan_head"]:
+            section = "plan"
+        L["fence"], L["section"] = fence, section
+        lines.append(L)
+    has = [bool(L["acts"] or L["bad"]) for L in lines]
+    cand = []
+    fids = [L["fence"] for L, h in zip(lines, has) if h and L["fence"] is not None and L["section"] != "stop"]
+    if fids:
+        idx = [i for i, L in enumerate(lines) if L["fence"] == fids[-1]]
+        cand.append((idx[0], idx[-1] + 1, f"fence:{fids[-1]}"))
+    for h in reversed([i for i, L in enumerate(lines) if L["plan_head"]]):
+        end, seen = len(lines), has[h]
+        for j in range(h + 1, len(lines)):
+            if has[j]:
+                seen = True
+            elif seen and lines[j]["heading"] and lines[j]["fence"] is None:
+                end = j
+                break
+        if seen:
+            cand.append((h, end, f"plan_section:{lines[h]['text'][:50]}"))
+            break
+    if cand:
+        start, stop, region = max(cand, key=lambda c: c[0])
+        pick = range(start, stop)
+    else:
+        region = "all_outside_stop_sections"
+        pick = [i for i, L in enumerate(lines) if L["section"] != "stop"]
+    plan, bad, norm, n_lines = [], [], 0, 0
+    for i in pick:
+        if has[i]:
+            n_lines += 1
+            plan += lines[i]["acts"]
+            bad += lines[i]["bad"]
+            norm += lines[i]["norm"]
+    unknown = sorted({x for a in plan for x in a[1:] if objs is not None and x not in objs})
+    info = {"answer_source": src, "region": region, "n_action_lines": n_lines, "n_actions": len(plan),
+            "n_action_lines_total": sum(has), "fences": n_fence, "dropped_arity": len(bad),
+            "normalized_names": norm, "unknown_objects": unknown,
+            "issues": [f"wrong arity dropped: {b!r}" for b in bad][:20]}
+    return plan, info
+
+
+# --- PDDL answer -> plan text (second scorer: upstream's own extraction, then VAL on that text)
+
+def save_gpt3_response_text(response: str) -> str:
+    """Port of llm_utils.save_gpt3_response (LLMs-Planning llm_planning_analysis, fc638a1a, MIT) without the file write:
+    the plan text upstream wrote to its plan file and validated with VAL."""
+    plan = []
+    for line in response.split('\n'):
+        if not line.startswith('('):
+            continue
+        if '()' in line:
+            continue
+        if 'no actions' in line:
+            continue
+        plan.append(line.lower().strip())
+    return '\n'.join(plan)
+
+
+def upstream_pddl_text(text: str, thinking: bool = False) -> str:
+    """Second scorer: save_gpt3_response on the stripped answer part of a completion (send_query_with_feedback returns
+    text_response.strip(); for API reasoning models the reasoning is not in the content, here it is cut at </think>)."""
+    ans, _ = answer_text(text or "", thinking)
+    return save_gpt3_response_text(ans.strip())
+
+
+def pddl_text_actions(plan_text: str) -> list[tuple]:
+    """Every action s-expression in a plan text, in order (report-only reading of a second-scorer plan; the verdict is
+    VAL's on the text itself)."""
+    return [(m.group(1),) + tuple(m.group(2).split()) for m in _SEXPR.finditer(plan_text.lower())]
+
+
+def val_check_text(problem_path: Path, plan_text: str, domain_path: Path = B.DOMAIN_PDDL) -> bool:
+    """Local VAL on a plan file holding exactly plan_text (bytes as written by upstream, no newline translation);
+    True iff VAL reports 'Plan valid' (the test upstream's get_val_feedback applies)."""
+    with tempfile.TemporaryDirectory() as d:
+        pp = Path(d) / "plan.txt"
+        pp.write_bytes(plan_text.encode("utf-8"))
+        out = subprocess.run([str(B.VAL_EXE), str(domain_path), str(problem_path), str(pp)], capture_output=True,
+                             text=True, timeout=60).stdout
+    return "Plan valid" in out
+
+
+def hard_sort_key(inst: dict) -> tuple:
+    return inst["n_blocks"], inst["opt_len"], inst["instance_id"]
+
+
+def systematic_subset(insts: list[dict], n: int, key=hard_sort_key) -> tuple[list[dict], dict]:
+    """Centred systematic sample of n instances: sort by key (which must end with a unique id) and take sorted
+    positions floor((2k+1) N / (2n)), k = 0..n-1. Deterministic, no seed; strata of the key's first component are
+    represented in proportion. Returns (subset in input order, {first key component: (size, drawn)})."""
+    N = len(insts)
+    if not 0 < n <= N:
+        raise ValueError(f"subset size {n} not in [1, {N}]")
+    order = sorted(insts, key=key)
+    pick = {order[(2 * k + 1) * N // (2 * n)]["id"] for k in range(n)}
+    assert len(pick) == n, (len(pick), n)
+    table: dict = {}
+    for i in insts:
+        s = key(i)[0]
+        size, drawn = table.get(s, (0, 0))
+        table[s] = (size + 1, drawn + (i["id"] in pick))
+    return [i for i in insts if i["id"] in pick], dict(sorted(table.items()))

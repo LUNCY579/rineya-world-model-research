@@ -1236,3 +1236,114 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
      different regime; never "beats".
   4. **Qwen3-4B:** run the same-harness Qwen3-4B comparator on CPU (about 25-45 CPU-h), only while no BWM model is
      loaded, with RAM floors, and coordinated with RCX's CPU lane (one heavy CPU job at a time, I-12).
+  - **F-09 follow-up (RCWM):** the joint PREREG-LB result does NOT rest on a support check. LedgerF returns
+    (state, True) for every parsed answer; None comes only from a parse failure or a changed account set; and the
+    range guard refused 0 keys in every arm. LB's verified-plan precision (T2 0.952) is therefore F's own state-error
+    channel. RCWM adopted "report F-flag accuracy separately from parser checks" for future domains.
+- **D-76 Agreements with RCX (2026-10-11 ~16:30):**
+  - **(a) B4 futility screen.** RCX agrees, and will co-sign the item-7 addendum that registers it.
+    - **Pins** (read-only, sha256):
+      - `rcx/bw/b4_hook.py` a0b4f88c…;
+      - `runs/RCX-E07/main/models/gnn_s20261276.pt` 9cc417a3…, sidecar `.json` 2ccdb279…;
+      - `rcx/bw/models.py` 4c2e3242…;
+      - `rcx/bw/encode.py` 32980f14…;
+      - `rcx/bw/space.py` 29d0b420….
+    - **Call:** `LearnedUnmet.from_file(pt, invalid_policy="fallback", hybrid_lambda=1.0)`, used exactly where `unmet`
+      ranks children, at the frozen W4/E24. No other change.
+    - **Hygiene:** seeds_fresh was excluded from the GNN's training and selection data.
+    - **Adopted for the addendum:**
+      - report the hook counters (invalid_states, fallbacks, failsafe);
+      - if more than 5% of hook calls hit the penalty, a GO is not credited to the critic alone and c+pen stays
+        mandatory in full B4;
+      - the futility rule is fixed in advance: NO-GO if successes(a) ≤ successes(R0) or a-only ≤ R0-only on the paired
+        40;
+      - report the subset of R0 failures stalled at 1 unmet fact.
+  - **(b) Shared CPU-lane lock (I-12 single lane).**
+    - **Lock:** `%TEMP%/rineya-cpu-lane.json` {holder, job, pid, started, expected_end}, written before and deleted
+      after each heavy CPU job.
+    - **Waiting:** a party that needs the lane writes `rineya-cpu-lane.waiting.<party>`, and the BWM Qwen comparator
+      yields between instances when `waiting.rcx` exists.
+    - **Staleness:** a dead holder pid makes the lock reclaimable.
+    - **Priority:** RCX keeps the lane during its E01R training blocks; BWM's comparator gets the gaps plus overnight
+      when no RCX block is queued.
+    - **RAM:** Qwen3-4B on CPU needs about 8 GB in bf16, so it mostly runs in GPU-idle gaps.
+  - **D-76 follow-up (CPU-lane lock implementation spec, RCX `rcx/lane.py`, CX D-36):**
+    - The lock is created with O_CREAT|O_EXCL and has fields {holder, job, pid (long-lived owner), started,
+      expected_end, token}.
+    - Stale means a dead pid: rename to `.stale-<pid>.bak`, then reclaim.
+    - Liveness uses psutil.pid_exists or OpenProcess, never `os.kill(pid, 0)` on Windows.
+    - `waiting.rcx` means: yield at the next instance boundary, and don't re-acquire while the marker or RCX's lock
+      exists.
+    - BWM's Qwen runner must implement this same protocol before its first run.
+- **P-15 (REGISTERED CPU replay, PREREG_FREPLAY 994d74c0…; `runs/FREPLAY/FREPLAY.json` 66e18cd9…; script 866ca5b6…).
+  F-09 is confirmed on every logged F query; an independent second implementation from the prereg text alone
+  reproduced all 40,365 compared fields with 0 numeric mismatches.**
+  - **Unique keys:** b2_hard 20,530; b2_mirror 23,752; b2_pb602 871; h2_hard 22,895; distill 15,030.
+  - **Plan-harmful errors:** 0 false-legal-accepted and 0 wrong states anywhere. False-illegal: 6 (b2_hard), 1
+    (mirror), 5 (h2_hard), all of the subtype "F said legal:false on a legal action".
+  - **R2, support-check dependence** (share of illegal queried actions rejected only by `parse_forward_delta`'s
+    support check): b2_hard 19.6% [18.4, 20.9]; mirror 24.0%; PB-602 13.0%; h2_hard 27.8% [26.0, 29.7]; distill
+    22.0%. Mostly pick-up: 36.6% of illegal pick-ups on B2-hard and 58.0% on H2-hard.
+  - **Registered wording consequence, triggered (R2 > 5% in every set):**
+    - Every "every verified plan was valid" / label-precision statement (P-08, P-10, P-11, P-14) is scoped to "verified
+      by the learned F plus a domain-agnostic delta-consistency check (a predicted deletion must be a fact of the
+      state)".
+    - "The domain rules are known only to the learned F" is withdrawn from all non-frozen documents. The pinned planner
+      docstring stays as is, noted here.
+  - **R1, oracle-equivalence:**
+    - The exact-F ceiling is AT MOST the observed 73 (B2-hard) and 88 (H2-hard), with bounds [72, 73] and [87, 88].
+      hard/instance-102 is flagged but solved in both runs.
+    - Mirror: [61, 62]. mirror/103 is flagged and was not solved.
+    - PB-602 and distill are fully oracle-equivalent.
+    - "F is not the bottleneck" therefore holds for hard; for the mirror it needs this one-instance caveat.
+- **P-16 (POST HOC, DIFFERENT REGIME; user decision D-75.3): paired comparison against published per-instance
+  Blocksworld-hard results.**
+  - **Data:** upstream step-0 (direct) answers vendored at LLMs-Planning fc638a1a with git-blob-verified shas
+    (bench/planbench/SOURCE.md): R1 332b0f8e…, o1-preview b8fdc9ba…, o1-mini 92849790…. Re-scored with the local
+    VAL, which agrees with upstream's recorded verdicts on 330/330. Script `scripts/hard_published_paired.py`;
+    report `runs/HARD_PUBLISHED_PAIRED/REPORT.json`.
+  - **Independent check:** a stdlib-only verifier reproduced every count, p-value and CI.
+  - **Solved (of 110):** H2 88, B2 S-beam 73, R1 59, o1-preview 26, H1 13, B2 S-direct 5, o1-mini 1.
+  - **Paired exact McNemar (system-only / published-only), Holm over 12 contrasts:**
+    - H2 vs R1 +36/−7, p 9.0e-6 (Holm 5.4e-5);
+    - B2 S-beam vs R1 +30/−16, p 0.054 (Holm 0.108; NOT significant);
+    - H2 vs o1-preview +64/−2;
+    - B2 S-beam vs o1-preview +52/−5;
+    - H1 vs R1 +2/−48 (the proposer alone is far below R1).
+  - **R1 solves but H2 does not:** 7 instances, all at 10-15 blocks.
+  - **Wording:** always "post hoc, different regime (zero-shot generalist vs domain-trained specialist with a learned
+    simulator and search)", never "beats".
+  - **Report fixes for the next rebuild:** the H1 CI in REPORT.md is double-rounded (0.065 should read 0.064), and the
+    Holm family label needs correcting.
+  - **Compute:** BWM FLOPs are still open.
+- **D-77 B4 futility screen and item-7 addendum A, ready for RCX co-sign.**
+  - **Drafts:** `research/PREREG_B4_SCREEN_DRAFT.md` (b83b4b16…) and `research/PREREG_ITEM7_ADDENDUM_A_DRAFT.md`
+    (8cf90aa8…).
+  - **Runner:** `scripts/b4_screen.py` (14ef3d99…), 24 stub tests passing (d09301e7…). The verifier fixed 2 runner
+    defects (the certificate's `objs`, and an R0-output guard).
+  - **R0 is a valid paired control:** identical config and code path to blocks_eval except the hook.
+  - **BWM decision on the GO rule:** **GO iff (arm-only − R0-only) ≥ 2**, with the sign and McNemar p reported but
+    not gating. It sits between RCX's D-76a floor (net ≥ 1) and the panel's net ≥ 3 with p ≤ 0.20.
+    - P(GO) by exact enumeration at n = 40: null 0.13-0.33; +9 pp 0.76-0.82; +13.6 pp 0.92.
+    - A false GO costs GPU but not validity, since the full B4 carries its own registered test.
+  - **D-76a attribution rule kept:** if the penalty share is above 5%, a GO is not credited to the critic alone.
+  - **To do before `i7-freeze`:**
+    - RCX co-sign;
+    - finalise both files (drop DRAFT);
+    - hash them into DECISIONS;
+    - insert a `b4s-freeze` job into bundleI between `i7-freeze` and `i7-run`;
+    - implement addendum A's code (A.0 hashing first; taxonomy; anytime curves; FLOPs ledger).
+- **D-78 Qwen3-4B comparator (D-75.4): runner ready, not yet run.**
+  - **Runner:** `scripts/planbench_qwen.py`, `bwmn/planbench_extract.py`, `bwmn/flops.py` and
+    `tests/test_planbench_qwen.py` (78 pass). The selftest and 4 dry-runs pass with no model loaded. Blocksworld-hard
+    support uses PlanBench's own queries, the same VAL and blocks_eval ids.
+  - **Iso-FLOP budget:** derived from H2's MEAN per-instance compute (17 of 40 instances individually exceed it).
+  - **CPU-lane lock:** the D-76 protocol is implemented with fake-pid tests.
+  - **Still to do before any run:**
+    - `PREREG_LOCAL_COMPARATORS.md` (decisions D1-D4; the PB-600 iso-FLOP headline is impossible and is replaced by
+      hard);
+    - a KV-cache continuation sanity check on the first instance;
+    - refresh the `planbench_extract` sha in P-16's report.
+  - **Practical blocker:** Qwen3-4B bf16 needs about 12.5-13 GB free host RAM, but free RAM is about 9-11 GB while
+    either session's GPU job runs. Strict alternation keeps the GPU busy, so CPU windows are rare. Raised with the
+    user.

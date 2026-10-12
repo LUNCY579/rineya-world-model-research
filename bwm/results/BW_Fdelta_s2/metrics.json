@@ -1,0 +1,42 @@
+{
+ "core": "titan-sparse",
+ "args": {
+  "core": "titan-sparse",
+  "rows": "runs/BW_data/forward_delta_train.jsonl",
+  "steps": 600,
+  "batch": 16,
+  "lr": 0.0001,
+  "seed": 2,
+  "max_len": 256,
+  "filter": "",
+  "init_adapter": "",
+  "out": "runs/BW_Fdelta_s2"
+ },
+ "rows": 12000,
+ "train": {
+  "steps": 600,
+  "batch_size": 16,
+  "rows_available": 12000,
+  "lr_peak": 0.0001,
+  "final_loss_avg50": 0.0003087510625664436,
+  "loss_curve_every50": [
+   0.80711,
+   0.03295,
+   0.01096,
+   0.01228,
+   0.00782,
+   0.00668,
+   0.00592,
+   0.00296,
+   0.00279,
+   0.00072,
+   0.00288,
+   0.00031
+  ],
+  "max_grad_norm": 13.245813369750977,
+  "tokens_processed": 1551019,
+  "supervised_tokens": 174984,
+  "wall_s": 5797.5,
+  "peak_mem_gib": 2.646641731262207
+ }
+}

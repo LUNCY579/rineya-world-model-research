@@ -1,0 +1,40 @@
+{
+ "bwmn_lm_loaded": false,
+ "byte_identical_own_labels": false,
+ "byte_identical_registered_labels": true,
+ "classify_calls_memo_size": 77432,
+ "computed_field_diff_list": [],
+ "computed_field_diffs": 0,
+ "independence": "fresh agent context; written from the prereg text, bwmn/blocks.py, the pinned blocks_planner.py (cache loading only, not imported) and the input formats; scripts/freplay.py not read and not imported; same model family as the first implementation; field names and list orders were read from the registered FREPLAY.json (schema only) so that a byte compare is possible",
+ "independent_core_file_sha256": "466234178d2989db42914e889153e661f268fa115755fcddbbcb67a4cae3bfb5",
+ "independent_core_sha256_own_labels": "466234178d2989db42914e889153e661f268fa115755fcddbbcb67a4cae3bfb5",
+ "independent_core_sha256_registered_labels": "9413d13c18f40cac56049926b47839bbe2d468a92fc8fc1c4158779628c305f8",
+ "inputs_verified": 29,
+ "key_id": "reproduced by convention sha256(canonical(key_json))[:16] on all 8 registered harmful keys",
+ "label_fields_differing": [
+  {
+   "independent": "\"P-08/P-10 hard: \\\"every plan S-beam verified in imagination was valid\\\"\"",
+   "path": "/sets/b2_hard/R2/claim",
+   "registered": "\"P-08/P-10 hard: 'every plan S-beam verified in imagination was valid'\""
+  },
+  {
+   "independent": "\"P-11 / B3: label precision 1.000 (211/211), \\\"no simulator labels\\\"\"",
+   "path": "/sets/distill_r1/R2/claim",
+   "registered": "\"P-11 / B3: label precision 1.000 (211/211), 'no simulator labels'\""
+  },
+  {
+   "independent": "\"P-14: \\\"every plan the beam verified in imagination was valid (88/88)\\\"\"",
+   "path": "/sets/h2_hard/R2/claim",
+   "registered": "\"P-14: 'every plan the beam verified in imagination was valid (88/88)'\""
+  }
+ ],
+ "prereg_sha256": "994d74c0b721724a49cd24774b5ecf0fc12027d058718575f276b100b3e975f8",
+ "registered_core_leaf_fields": 43676,
+ "registered_core_sha256": "9413d13c18f40cac56049926b47839bbe2d468a92fc8fc1c4158779628c305f8",
+ "script": "runs/FREPLAY/independent/freplay_indep.py",
+ "script_sha256": "274a293806bb610688330949680abff36635243e2a7350669d203fd5ff6a7cc9",
+ "torch_loaded": false,
+ "wall_s": 6.6,
+ "what": "independent second implementation of PREREG_FREPLAY sections 2-7 vs the registered core",
+ "written": "2026-10-11 20:27:21 Central Daylight Time"
+}
