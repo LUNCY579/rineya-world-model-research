@@ -83,6 +83,11 @@ is now independently reviewed, tested and prospectively frozen. It has no
 native probability outcome and retains ordinary CPU11 admission. Its report
 contains fresh-path commands; the H3 CPU10.5 profiles cannot admit it. Keep
 primary student/domain qualification priorities and execute one model at a time.
+One [exploratory shuffled-MTP2 control](SHUFFLED_AUX_PREPARATION_2026_10_12.md)
+also has a fresh86-member registration and one-boolean config change. It remains
+untrained and uses the original12GiB physical floor. It cannot reopen failed G3
+or use the H3 resource profiles; execute its pending command only after ordinary
+admission, with separate actual-output/readout namespaces.
 
 The separate Ledger/RP and Block CPU11 copies and V3 input freezes remain
 qualified implementation paths without native outcomes. They are outside the

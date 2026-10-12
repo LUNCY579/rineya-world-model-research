@@ -43,6 +43,9 @@ every required section/gate/deliverable and its remaining evidence. An additive
 passed18 semantic tests, independent review and actual tokenizer/lineage audits;
 its72-member CPU11 freeze is registered. No probabilities or calibration results
 have been measured, and it does not certify generated-state/planning confidence.
+One [shuffled-MTP2 control](reports/SHUFFLED_AUX_PREPARATION_2026_10_12.md) is
+separately registered under the original12GiB floor; it is untrained and leaves
+the failed predictive gain gate unchanged.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
 Parent repository baseline: `aeb19ab17128d884c4457ce59db6e926ceb13a7a`.

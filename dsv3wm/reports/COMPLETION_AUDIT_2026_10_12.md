@@ -79,6 +79,9 @@ All paths below are inside `dsv3wm/` unless a repository path is explicit.
   recovery results. Copy/first-last-action/prompt-cue signatures are posthoc
   observations. Any resource-feasible subset needs prospective causal controls,
   without repairing/redrawing frozen results to manufacture benefit.
+  One [shuffled-MTP2 alignment diagnostic](SHUFFLED_AUX_PREPARATION_2026_10_12.md)
+  is now prospectively registered with unchanged original admission/source;
+  it has no trained model or native causal outcome and does not reopen G3.
 - **Secondary/retention:** six behavior cases do not establish broad preservation;
   inherited F fails all three Ledger cases and A2 already loses one Register
   boundary case. R/P baseline/adapted behavior is still pending. Boolean flags
