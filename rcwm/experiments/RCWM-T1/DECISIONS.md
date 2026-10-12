@@ -1042,3 +1042,52 @@ Times are local (CDT). Entries are append-only.
     - 57 hidden-state / log-prob `.npy` arrays (4.9 GB) and the L8-15 build (2.2 GB). All are regenerable deterministically (FP32) from the frozen code and pinned models.
     - One 0.2 MB demo `.pt`.
   - **Not done without the user's choice:** no second local copy of those binaries. The disk is single and has 35 GB free, and a same-disk copy would not protect against disk failure. An off-machine copy (external drive or cloud) is the user's call.
+  - **Scope check on "no weights" (2026-10-11).**
+    - BWM confirmed the user's "records + code (no weights)" choice (2026-10-08, BWM D-51) covers BWM's own export only. The off-machine OneDrive choice (2026-10-11) is likewise BWM-scoped.
+    - No user decision covers RCWM's adapters, so RCWM's D-31/D-50 policy (unmerged LoRA adapters ≤ 50 MB in the private repo) stands unless the user says otherwise.
+    - No history rewrite of the shared repo is made without the user's explicit go-ahead.
+- **Note on BWM F-09 (exploratory): what "verified" rests on in PREREG-LB.**
+  - **BWM's finding:** in Blocksworld, F's own `legal` flag is wrong on 20–28% of illegal proposals. The parser's support check catches them, because every precondition there is deleted.
+  - **For PREREG-LB this check does not apply:**
+    - The ledger has no illegal events (LedgerF returns legal = True for every parsed answer), and LedgerF has no support or delta check. None comes only from a parse failure or a changed account set.
+    - The registered range guard refused 0 keys in every arm.
+    - So LB's verified-plan precision (T2 0.952) measures F's own state errors directly, with no hidden check inflating "verified".
+  - **Future domains:** any RCWM domain with persistent guards (e.g. a ledger variant with standing preconditions) should report F-flag accuracy separately from any parser check, as BWM recommends.
+- **R28 B-bits seeds 1 and 2 completed; I-35 reboot (2026-10-11 21:54:27).**
+  - **B-bits seeds:** `runs/t2bp/sd_s1` (done 10:35) and `sd_s2` (done 14:33), both rc 0, same rows and recipe as the 5a winner. Their per-seed numbers are summarised descriptively when the P-format seeds are combined for PREREG-4; there is no verdict here.
+  - **T2b-ledger dev screen (hook 88):** turn 1 ran 17:58–20:54 (reference E0, seeds 0 and 1 trained and evaluated). Seed 1's training took 6,656 s against 2,426 s planned, so seed 2 was deferred by the cap (rc 5, as designed). Seed 2 remains.
+  - **The reboot at 21:54:27 killed:** BWM's bundleI turn, which started 20:54 (its lock is stale; pid 480900 and worker 590308 dead), RCWM's waiting chain, and the watchdog.
+  - **Recovery (01:21, 2026-10-12):**
+    - The watchdog was relaunched.
+    - RCWM's chain is NOT relaunched yet. At RCX's request, RCWM's next GPU job waits until RCX's E01R step A (a CPU evaluation needing an idle GPU and RAM ≥ 12.5 GB) has run.
+    - BWM's stale lock is left to BWM or the user: last time's authorisation does not carry over.
+    - The CPU lane is held by "dsv3wm" (`dsv3wm/scripts/reserve_cpu.py`), a project outside RCWM, BWM and RCX. RCX was asked about it.
+- **I-36 RCWM relaunch waiter failed silently; one RCWM turn lost (2026-10-12 03:21–06:22).**
+  - **What happened:** the scratch waiter `relaunch_after_bwm.sh` was meant to relaunch RCWM's chain once BWM's resumed lease appeared. It saw the lease at 03:21 but reported "chain already alive" and did nothing.
+    - Its PowerShell liveness check matched `CommandLine -match 'master_chain'`, and the PowerShell process's own command line contains that string. So it matched itself.
+  - **Effect:** no RCWM waiter existed. BWM's resumed turn ended, and BWM correctly took the next turn (lease about 05:21). RCWM lost one turn to its own bug. No other process was affected.
+  - **Found and fixed:** found at 06:21. The chain was relaunched at 06:22, and T2b-ledger dev seed 2 is the single RCWM waiter behind BWM.
+  - **Lesson:** liveness checks must filter on process name (`Name -eq 'bash.exe'`) and a specific script path, never on a substring that the checking command itself contains.
+  - **RCX note:** E01R training also needs ≥ 12.5 GB of free RAM, so it runs in GPU-idle gaps or overnight. RCX will propose a schedule after E01R is frozen; no holds are requested now.
+- **R29 T2b-ledger dev gate: STOP (PARTIAL), pattern heldout_posted_twins (10:31, 2026-10-12; dev screen, not a confirmation).**
+  - **Run:** `runs/t2bl/dev` over two RCWM turns (17:58–20:54 and 09:51–10:31; seeds 0–2 and the E0 reference). The gate ran once under frozen revision 2: `GATE.json` eef7e401…, `.md` e8fd8b31….
+  - **Registered verdict (verbatim):** "Neither PROCEED nor TRIGGER WIDENED: the posted twins on the held-out surface below 0.80 or copied above 0.10 (accuracy s0 0.54, s1 0.40, s2 0.42; copied s0 0.16, s1 0.31, s2 0.35)."
+    - G1, G1b, G1c, G2 and G4 pass in all three seeds; G3 fails in all three.
+    - Per the pre-stated revision path, no confirmation is drafted from this kit.
+  - **Descriptive results (T2 s0 → T2b-ledger s0 / s1 / s2):**
+    - Token-novel held-out status words (H_words): 0.03 → 0.99 / 1.00 / 1.00. On the combined held-out surface (HS_words): 0.18 → 0.98 / 0.99 / 0.98.
+    - PREREG-3's 16 strings: 0.18 → 0.90 / 0.94 / 0.99. Every word kind is ≥ 0.90.
+    - In distribution: ID_posted 0.92 → 0.95–0.99, ID_void 0.99 → 1.00 (G2 +0.02 to +0.04).
+    - Single held-out factors: names 0.95–0.97, account count 0.93–0.99, paraphrase 0.98–0.99, inner key orders 0.77–0.87.
+    - The failures: posted twins on the combined held-out surface 0.40–0.54 with 16–35% copied (LB's rendering similar, 0.40–0.48); amounts beyond the trained band 0.06–0.49.
+  - **Reading (exploratory):**
+    - Fixed-rule surface diversification fixes PREREG-3's trigger. The frame's no-op rule now holds for unseen, token-novel status words, at no in-distribution cost.
+    - What does not hold is applying events (arithmetic) when every held-out factor is stacked at once. It degrades to copying the input. This is the same pattern as 5a B-bits (R20: no-ops kept, applies drop) and BWM D-54 (R24).
+    - Suspected main contributor: the combined surface also reverses the top-level JSON order (events before balances), which training never varied, a pure extrapolation factor. This is untested.
+  - **Next (pre-stated revision path: only training data may change; fresh dev bank, new seed, same thresholds):** a revision-3 data kit that adds top-level key-order variation and more posted rows under stacked surface variation. This is RCWM's next item after the night windows (D-51).
+- **D-51 GPU-idle night windows for RCX (operator-approved, requested by RCX 2026-10-12).**
+  - **Window:** 22:50–07:00 on the nights of 10-12, 10-13 and 10-14, so RCX's CPU LoRA trainings get ≥ 12.5 GB of free RAM.
+  - **How RCWM honours it:** `scripts/night_guard.sh` (launched hidden at 11:22, ends 10-15 07:05, log `runs/night_guard_log.txt`).
+    - In the window it stops RCWM's chain whenever RCWM holds no lease. A running RCWM turn may finish, after which the chain is stopped.
+    - It relaunches the chain after 07:00.
+  - **Process checks:** they match on the program name and exact script path (I-36 lesson).

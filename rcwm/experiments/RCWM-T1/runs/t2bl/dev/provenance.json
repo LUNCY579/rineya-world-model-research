@@ -1,0 +1,297 @@
+{
+ "tag": "dev",
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "steps": 190,
+ "lr": 0.0001,
+ "data_sha256": {
+  "t2bl_train.jsonl": "89d6a01e280080f7559e6a597dad3ceaa43f51d50a4801337ff04750ff53eb39",
+  "t2bl_dev.jsonl": "f710b17e228b3865c9b7993082966a07d2ab5306f137978768b09bd179390c78"
+ },
+ "dev_subset": null,
+ "n_dev_rows": 1801,
+ "dev_ids_sha256": "720de542a80fbc3a8708a370fdf8db82bca7abf9975fcb2fa182f2cf98ad456d",
+ "lease_label": "rcwm-t1:t2b-ledger",
+ "code_sha256": {
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+  "scripts/confirm2_gen.py": "4253a42039c4a1bb95f412666ad4bc1804244d5b10e6e9fa393c99a488659380",
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+  "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+  "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+  "vendor_bwm/scripts/train_generic.py": "816d2f562946177397a5f186e9fcadd7febd2b49c894afc9abafe9474665ad61",
+  "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57"
+ },
+ "gate_rule_sha256": "06ec07dd72fd489cb4059c3d6db1b61093df9296fc18df64c2f061b02b443a22",
+ "t2s0": {
+  "adapter_model.safetensors": "92bc7c7497c3cb2fc0c7c917b4f3b6bb931f0ed108144d969b26b18b42670b8a",
+  "adapter_config.json": "50d9a776e093a952ac440a77c9cd7cd8e51eb22a85eb93b383aee1eacc185d9d"
+ },
+ "stages": {
+  "s0": {
+   "T": {
+    "turn": 0,
+    "seconds": 1525.6,
+    "planned_s": 2425.6,
+    "seed": 0,
+    "rows": "t2bl_train.jsonl",
+    "finished_unix": 1791761033.3249297,
+    "files": {
+     "s0/train/adapter/adapter_model.safetensors": "b2ddd31e4f48eeb58a25d573d6d04b736f97c150f6ed4badce713ef23a8336d5",
+     "s0/train/adapter/adapter_config.json": "3d47d41fe28afde14106bbba0de532fee19d22488247d3e975a9089ac6198bd1"
+    }
+   },
+   "E": {
+    "turn": 0,
+    "seconds": 470.7,
+    "planned_s": 782.0,
+    "sides": {
+     "on": {
+      "start_unix": 1791762223.0301476,
+      "end_unix": 1791762693.7701087,
+      "pid": 481588
+     }
+    },
+    "generations": 1801,
+    "seed": 0,
+    "finished_unix": 1791762693.7746112,
+    "files": {
+     "s0/dev_on.jsonl": "69bdf3cb992a50b380d6462c9e134d58b54bc7e46b4ed039f245f15a41629f27"
+    }
+   }
+  },
+  "ref": {
+   "E0": {
+    "turn": 0,
+    "seconds": 857.7,
+    "planned_s": 1564.0,
+    "sides": {
+     "off": {
+      "start_unix": 1791761365.3117318,
+      "end_unix": 1791761789.2449365,
+      "pid": 481588
+     },
+     "t2s0": {
+      "start_unix": 1791761789.2449365,
+      "end_unix": 1791762223.005344,
+      "pid": 481588
+     }
+    },
+    "generations": 3602,
+    "finished_unix": 1791762223.015025,
+    "files": {
+     "ref/dev_off.jsonl": "7c7381a09495a38d191acd7f5fdc3d18a03335fa095c80a2f0fc30cc60189d96",
+     "ref/dev_t2s0.jsonl": "acc4369c740471609b6260c193413da9f438a626d6ce46289609a414a7e04a03"
+    }
+   }
+  },
+  "s1": {
+   "T": {
+    "turn": 0,
+    "seconds": 6656.3,
+    "planned_s": 2425.6,
+    "seed": 1,
+    "rows": "t2bl_train.jsonl",
+    "finished_unix": 1791769351.9449742,
+    "files": {
+     "s1/train/adapter/adapter_model.safetensors": "d844f98b013b1747b88d71d0a1acf4cccb535cba84409c47788ee968fd0638f7",
+     "s1/train/adapter/adapter_config.json": "3d47d41fe28afde14106bbba0de532fee19d22488247d3e975a9089ac6198bd1"
+    }
+   },
+   "E": {
+    "turn": 0,
+    "seconds": 687.2,
+    "planned_s": 782.0,
+    "sides": {
+     "on": {
+      "start_unix": 1791769354.0240405,
+      "end_unix": 1791770041.1832151,
+      "pid": 481588
+     }
+    },
+    "generations": 1801,
+    "seed": 1,
+    "finished_unix": 1791770041.1889102,
+    "files": {
+     "s1/dev_on.jsonl": "dade6dd2a02012b5c839d41198ff5b349c56a6438e4500164d7508d679bcc937"
+    }
+   }
+  },
+  "s2": {
+   "T": {
+    "turn": 1,
+    "seconds": 1594.6,
+    "planned_s": 2425.6,
+    "seed": 2,
+    "rows": "t2bl_train.jsonl",
+    "finished_unix": 1791818298.5014374,
+    "files": {
+     "s2/train/adapter/adapter_model.safetensors": "c5a967afd6504a6e60fdd94d67dab0f0b797fd108d4e83fd73b0366224e11618",
+     "s2/train/adapter/adapter_config.json": "9b0abfff62a19d0bb0d542362774ed385d01ca09bb9272671c2df81891ff9a76"
+    }
+   },
+   "E": {
+    "turn": 1,
+    "seconds": 457.2,
+    "planned_s": 782.0,
+    "sides": {
+     "on": {
+      "start_unix": 1791818609.035286,
+      "end_unix": 1791819066.2306828,
+      "pid": 164060
+     }
+    },
+    "generations": 1801,
+    "seed": 2,
+    "finished_unix": 1791819066.2355459,
+    "files": {
+     "s2/dev_on.jsonl": "8a9cdf5190df8351e1153e8719205d53e2b334e16a6ff939fdb9ae6cdcbb462c"
+    }
+   }
+  }
+ },
+ "turns": [
+  {
+   "pid": 481588,
+   "acquired_unix": 1791759507.586564,
+   "acquired_source": "lock record",
+   "entered_unix": 1791759507.7071738,
+   "stages_run": [
+    "s0:T",
+    "ref:E0",
+    "s0:E",
+    "s1:T",
+    "s1:E"
+   ],
+   "deferred": [
+    "s2:T",
+    "s2:E"
+   ],
+   "device": "cuda",
+   "prompts_checked": 1500,
+   "loads": [
+    {
+     "unit": "s0",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     },
+     "with_on": true
+    },
+    {
+     "unit": "s1",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     },
+     "with_on": true
+    }
+   ],
+   "anchor": {
+    "pid": 481588,
+    "unix": 1791761035.5302784,
+    "n": 208,
+    "off": {
+     "identical_states": 1.0,
+     "identical_texts": 1.0,
+     "start_unix": 1791761035.5302784,
+     "end_unix": 1791761188.3349395,
+     "generations": 829
+    },
+    "t2s0": {
+     "identical_states": 1.0,
+     "identical_texts": 1.0,
+     "start_unix": 1791761188.3349395,
+     "end_unix": 1791761365.310732,
+     "generations": 829
+    },
+    "pass": true,
+    "seconds": 329.8
+   },
+   "released_unix": 1791770042.0572977,
+   "no_progress": false
+  },
+  {
+   "pid": 164060,
+   "acquired_unix": 1791816703.8069806,
+   "acquired_source": "lock record",
+   "entered_unix": 1791816703.9222724,
+   "stages_run": [
+    "s2:T",
+    "s2:E"
+   ],
+   "deferred": [],
+   "device": "cuda",
+   "prompts_checked": 1500,
+   "loads": [
+    {
+     "unit": "s2",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     },
+     "with_on": true
+    }
+   ],
+   "anchor": {
+    "pid": 164060,
+    "unix": 1791818300.5431972,
+    "n": 208,
+    "off": {
+     "identical_states": 1.0,
+     "identical_texts": 1.0,
+     "start_unix": 1791818300.5431972,
+     "end_unix": 1791818439.455063,
+     "generations": 829
+    },
+    "t2s0": {
+     "identical_states": 1.0,
+     "identical_texts": 1.0,
+     "start_unix": 1791818439.455063,
+     "end_unix": 1791818609.0316503,
+     "generations": 829
+    },
+    "pass": true,
+    "seconds": 308.5
+   },
+   "released_unix": 1791819066.382327,
+   "no_progress": false
+  }
+ ],
+ "no_progress_turns": 0
+}
