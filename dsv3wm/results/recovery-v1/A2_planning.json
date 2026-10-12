@@ -1,0 +1,1316 @@
+{
+  "status": "development-evaluated",
+  "instrument": "legacy learned batches/W1/depth6/query30/dev-only",
+  "command": [
+    "dsv3wm/scripts/evaluate_recovery_planning.py",
+    "--config",
+    "dsv3wm/configs/recovery_A2.json",
+    "--adapter",
+    "dsv3wm/artifacts/recovery-v1/A2_s0/adapter",
+    "--tasks",
+    "dsv3wm/datasets/recovery-v1/planning_dev.jsonl",
+    "--scoring",
+    "dsv3wm/datasets/recovery-v1/planning_scoring.json",
+    "--freeze",
+    "dsv3wm/prereg/RECOVERY_ALL_ARMS_READOUT_FREEZE_V3.json",
+    "--out",
+    "dsv3wm/results/recovery-v1/A2_planning.json"
+  ],
+  "config": {
+    "arm": "A2",
+    "seed": 0,
+    "steps": 32,
+    "batch_size": 1,
+    "lr": 2e-05,
+    "rank": 16,
+    "max_length": 512,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.1,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.0,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cpu",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 32
+  },
+  "config_sha256": "8c8509529a900e652016dc05dfb7d9f764b15e42a415e6b9a0f4704fc8e04334",
+  "tasks_sha256": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c",
+  "scoring_sha256": "074146e8110b08d86058a01e2b2c970922c2399d8484c56928f27264506853ab",
+  "adapter_sha256": "905d52126ed6f4774f935642ccda2c3edd0d00c38eb2a9bad03628698f7dcd97",
+  "adapter_config_sha256": "c3684172cbae3bb1570fbd482aa492406e1f136249ee674a79f9becde82b61aa",
+  "freeze_sha256": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+  "source_sha256": {
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_planning.py": "d2df4eb797bbd2db0459e16e49cc072473dc1a7a5ccb834994f4b77fcc82b6c3",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_planning.py": "3197c147bacba964a6e57241b4ab958ffd53cef73ce636b90d5973f4dfd987b1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\planning.py": "09fe47251f5c6afa2312ec57e1f1578355cfe0d030abbc41f908e36ac34a16c7",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\gpu_lease.py": "f4def04fcd20de389de0ce991ac146793d0ffa404a79100064aefa86fb4549c2",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\scripts\\planbench_qwen.py": "ef17c4d4fbb6be84de03bbcc2a2f108e7e405741ffe649e3a201d09038af688e"
+  },
+  "oracle_feedback": false,
+  "confirmation_access": false,
+  "scope": "G3 development planning, not efficacy confirmation",
+  "per_parent": [
+    {
+      "task_id": "a028e725671b54b1e0284ca987f6302fdbeac279b6170532a37e4bfaaf0f9330",
+      "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+      "choice": [
+        "sub1",
+        "sub1",
+        "sub1"
+      ],
+      "predicted_state": {
+        "x": -24
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 9,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_id_teacher_known",
+      "optimal_moves": 3,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 3,
+      "optimal_success": true,
+      "independently_verified_optimal_moves": 3,
+      "first_action": "sub1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 2,
+      "first_action_optimal": true,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.0,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": -24
+        },
+        "labels": {
+          "states": [
+            {
+              "x": -22
+            },
+            {
+              "x": -23
+            },
+            {
+              "x": -24
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "b279f9fbe9914429d80c631636d2b7861e9eabf2eba23ac8ca30813a973af8a5",
+      "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+      "choice": [
+        "add1",
+        "halve",
+        "add1",
+        "halve",
+        "sub1",
+        "sub1"
+      ],
+      "predicted_state": {
+        "x": -10
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3548,
+      "output_tokens": 442,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 3990,
+      "malformed_predictions": 0,
+      "illegal_predictions": 5,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_id_teacher_known",
+      "optimal_moves": 4,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 6,
+      "optimal_success": false,
+      "independently_verified_optimal_moves": 4,
+      "first_action": "add1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 4,
+      "first_action_optimal": false,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.5,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": -10
+        },
+        "labels": {
+          "states": [
+            {
+              "x": -34
+            },
+            {
+              "x": -17
+            },
+            {
+              "x": -16
+            },
+            {
+              "x": -8
+            },
+            {
+              "x": -9
+            },
+            {
+              "x": -10
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "ec7349751aff33d231218fb33098223a24fbc34357104c79a4a3fe55e8de7698",
+      "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+      "choice": [
+        "double",
+        "add1",
+        "add1",
+        "add1",
+        "add1"
+      ],
+      "predicted_state": {
+        "x": 30
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 8,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_id_teacher_known",
+      "optimal_moves": 3,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 5,
+      "optimal_success": false,
+      "independently_verified_optimal_moves": 3,
+      "first_action": "double",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 4,
+      "first_action_optimal": false,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.6666666666666666,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": 30
+        },
+        "labels": {
+          "states": [
+            {
+              "x": 26
+            },
+            {
+              "x": 27
+            },
+            {
+              "x": 28
+            },
+            {
+              "x": 29
+            },
+            {
+              "x": 30
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "4d31c18ebee2920c77e3ab8270e6a62bffd07498049e5916bc1723e3628bcd65",
+      "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+      "choice": [
+        "sub1",
+        "sub1",
+        "sub1",
+        "sub1",
+        "sub1"
+      ],
+      "predicted_state": {
+        "x": 40
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 9,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_id_teacher_known",
+      "optimal_moves": 5,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 5,
+      "optimal_success": true,
+      "independently_verified_optimal_moves": 5,
+      "first_action": "sub1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 4,
+      "first_action_optimal": true,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.0,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": 40
+        },
+        "labels": {
+          "states": [
+            {
+              "x": 44
+            },
+            {
+              "x": 43
+            },
+            {
+              "x": 42
+            },
+            {
+              "x": 41
+            },
+            {
+              "x": 40
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "c916c23693f477be9077b590f624c67c3847a113fed5699de95a8eae978d32d7",
+      "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+      "choice": [
+        "double",
+        "double",
+        "add1",
+        "add1",
+        "add1"
+      ],
+      "predicted_state": {
+        "x": 39
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3553,
+      "output_tokens": 446,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 3999,
+      "malformed_predictions": 0,
+      "illegal_predictions": 7,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_id_teacher_known",
+      "optimal_moves": 4,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 5,
+      "optimal_success": false,
+      "independently_verified_optimal_moves": 4,
+      "first_action": "double",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 3,
+      "first_action_optimal": true,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.25,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": 39
+        },
+        "labels": {
+          "states": [
+            {
+              "x": 18
+            },
+            {
+              "x": 36
+            },
+            {
+              "x": 37
+            },
+            {
+              "x": 38
+            },
+            {
+              "x": 39
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "b195d2428d5e1ed9539187647636e74d83a7dbb20669c72e2cd59cc980113a70",
+      "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+      "choice": [
+        "add1",
+        "halve",
+        "sub1",
+        "sub1"
+      ],
+      "predicted_state": {
+        "x": -24
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 5,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_id_teacher_known",
+      "optimal_moves": 3,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 4,
+      "optimal_success": false,
+      "independently_verified_optimal_moves": 3,
+      "first_action": "add1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 3,
+      "first_action_optimal": false,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.3333333333333333,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": -24
+        },
+        "labels": {
+          "states": [
+            {
+              "x": -44
+            },
+            {
+              "x": -22
+            },
+            {
+              "x": -23
+            },
+            {
+              "x": -24
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "8c6b12db1a840bb5a042baad9fc4a7540bcab5218048ef9f99f4685c5d1d300a",
+      "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+      "choice": [
+        "add1",
+        "add1",
+        "add1",
+        "add1"
+      ],
+      "predicted_state": {
+        "x": -63
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 9,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_ood_limit",
+      "optimal_moves": 4,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 4,
+      "optimal_success": true,
+      "independently_verified_optimal_moves": 4,
+      "first_action": "add1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 3,
+      "first_action_optimal": true,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.0,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": -63
+        },
+        "labels": {
+          "states": [
+            {
+              "x": -66
+            },
+            {
+              "x": -65
+            },
+            {
+              "x": -64
+            },
+            {
+              "x": -63
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "6dadf92fee9b633ee3a313918e27a9c273c693c0cd8451826faacc8b96b84e27",
+      "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+      "choice": [
+        "sub1",
+        "sub1",
+        "sub1"
+      ],
+      "predicted_state": {
+        "x": -74
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 9,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_ood_limit",
+      "optimal_moves": 3,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 3,
+      "optimal_success": true,
+      "independently_verified_optimal_moves": 3,
+      "first_action": "sub1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 2,
+      "first_action_optimal": true,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.0,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": -74
+        },
+        "labels": {
+          "states": [
+            {
+              "x": -72
+            },
+            {
+              "x": -73
+            },
+            {
+              "x": -74
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "2ff978091e92bbdfc04be11226fec9525b53640a96c00f30a3026023aaf904c7",
+      "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+      "choice": [
+        "sub1",
+        "sub1",
+        "sub1",
+        "sub1"
+      ],
+      "predicted_state": {
+        "x": -79
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 9,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_ood_limit",
+      "optimal_moves": 4,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 4,
+      "optimal_success": true,
+      "independently_verified_optimal_moves": 4,
+      "first_action": "sub1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 3,
+      "first_action_optimal": true,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.0,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": -79
+        },
+        "labels": {
+          "states": [
+            {
+              "x": -76
+            },
+            {
+              "x": -77
+            },
+            {
+              "x": -78
+            },
+            {
+              "x": -79
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "d74a4c7e8f273d7ddcfa228496afaa92419777e0d642f81a21395033e4f4d94c",
+      "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+      "choice": [
+        "sub1",
+        "sub1",
+        "sub1"
+      ],
+      "predicted_state": {
+        "x": 63
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 9,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_ood_limit",
+      "optimal_moves": 3,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 3,
+      "optimal_success": true,
+      "independently_verified_optimal_moves": 3,
+      "first_action": "sub1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 2,
+      "first_action_optimal": true,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.0,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": 63
+        },
+        "labels": {
+          "states": [
+            {
+              "x": 65
+            },
+            {
+              "x": 64
+            },
+            {
+              "x": 63
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "01f5769cc912cd61af597745cd83a7510adc7b5769d58710e9835dcfb209254a",
+      "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+      "choice": [
+        "add1",
+        "halve",
+        "sub1",
+        "sub1"
+      ],
+      "predicted_state": {
+        "x": -40
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 450,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4008,
+      "malformed_predictions": 0,
+      "illegal_predictions": 7,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_ood_limit",
+      "optimal_moves": 3,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 4,
+      "optimal_success": false,
+      "independently_verified_optimal_moves": 3,
+      "first_action": "add1",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 3,
+      "first_action_optimal": false,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.3333333333333333,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": -40
+        },
+        "labels": {
+          "states": [
+            {
+              "x": -76
+            },
+            {
+              "x": -38
+            },
+            {
+              "x": -39
+            },
+            {
+              "x": -40
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    },
+    {
+      "task_id": "d5aef5b38fcc6973e09b0b189a1ac17107e1b442237b4873eac8031cd1fde987",
+      "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+      "choice": [
+        "halve",
+        "halve",
+        "add1",
+        "add1"
+      ],
+      "predicted_state": {
+        "x": 18
+      },
+      "predicted_success": true,
+      "query_attempts": 30,
+      "model_queries": 30,
+      "input_tokens": 3558,
+      "output_tokens": 448,
+      "processed_positions_upper_bound": 4020,
+      "unpadded_processed_positions_upper_bound": 4006,
+      "malformed_predictions": 0,
+      "illegal_predictions": 3,
+      "overlength_refusals": 0,
+      "budget_refusals": 0,
+      "cohort": "recovery_ood_limit",
+      "optimal_moves": 4,
+      "success": true,
+      "all_legal": true,
+      "actual_move_cost": 4,
+      "optimal_success": true,
+      "independently_verified_optimal_moves": 4,
+      "first_action": "halve",
+      "first_action_present": true,
+      "first_action_legal": true,
+      "first_action_remaining_distance": 3,
+      "first_action_optimal": true,
+      "first_action_scoring_policy": "post-choice exact legality and shortest-distance decrease; missing proposals count false",
+      "normalized_excess_cost": 0.0,
+      "regret_failure_policy": "unsolved cases have null cost/regret and remain failures",
+      "verification": {
+        "verified": true,
+        "success": true,
+        "all_legal": true,
+        "final_state": {
+          "x": 18
+        },
+        "labels": {
+          "states": [
+            {
+              "x": 32
+            },
+            {
+              "x": 16
+            },
+            {
+              "x": 17
+            },
+            {
+              "x": 18
+            }
+          ],
+          "legal": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "terminated": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "failed": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "invalid": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "executed": [
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        "verifier_sha256": {
+          "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+          "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+          "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "recovery_id_teacher_known": {
+      "n": 6,
+      "successes": 6,
+      "optimal_successes": 2,
+      "first_action_optimal": 3,
+      "first_action_present": 6,
+      "queries": 180,
+      "query_attempts": 180,
+      "input_tokens": 21333,
+      "output_tokens": 2688,
+      "processed_positions_upper_bound": 24120
+    },
+    "recovery_ood_limit": {
+      "n": 6,
+      "successes": 6,
+      "optimal_successes": 5,
+      "first_action_optimal": 5,
+      "first_action_present": 6,
+      "queries": 180,
+      "query_attempts": 180,
+      "input_tokens": 21348,
+      "output_tokens": 2698,
+      "processed_positions_upper_bound": 24120
+    },
+    "all": {
+      "n": 12,
+      "successes": 12,
+      "optimal_successes": 7,
+      "first_action_optimal": 8,
+      "first_action_present": 12,
+      "queries": 360,
+      "query_attempts": 360,
+      "input_tokens": 42681,
+      "output_tokens": 5386,
+      "processed_positions_upper_bound": 48240
+    }
+  },
+  "budget": {
+    "max_depth": 6,
+    "max_model_calls": 30,
+    "beam_width": 1,
+    "max_processed_positions": 120000
+  },
+  "preflight_proof": {
+    "max_prompt_tokens": 512,
+    "generation_tokens": 32,
+    "max_task_positions": 16320,
+    "padding_policy": "every row charged the broad batch prompt/generation maxima"
+  },
+  "all_choices_fixed_before_scoring": true,
+  "traces_sha256": "b0aa83d2cdf57d35be4a956dfe5bb5cfd715d3b140aa515ecdc46c92e6ad4d7f",
+  "legacy_batch_processed_positions_upper_bound": 47880,
+  "legacy_decoder_forwards_lower_bound": 90,
+  "legacy_decoder_forwards_scope": "Lower bound/estimate: lm.sample_crn can internally split broad batches; processed-position padding bound remains conservative.",
+  "duration_s": 249.93153540000094
+}

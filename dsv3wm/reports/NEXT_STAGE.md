@@ -5,13 +5,14 @@ assignment. The original pilot/report records remain immutable evidence.
 
 ## Immediate resource state
 
-RDW E02 completed and released its CPU slot. CPU is currently reserved for the
-user-authorized RDW E05 peer under our helper PID71844, token in
-`results/CPU_RESERVATION_RDW_E05.json`. The peer must create
-`../Rineya_Research_Bundle_2026-10-11/execution/coordination/E05_rule_diagnosis_released_001.json`
-only after native process exit/model RAM release. Helper exec session 79610 watches
-this marker and releases its own shared Temp CPU token. Do not run another native
-model until release is verified. Do not modify the peer bundle.
+RDW E02/E05 completed and released their CPU slots. The recovery programme is
+finished its bounded planning/retention block after four trained-arm dynamics
+readouts. RDW E06's first10-update slot is now reserved by helper session2633;
+see `results/CPU_RESERVATION_RDW_E06_SLOT_001.json`. Check the live
+`rineya-cpu-lane.json` before loading any model; do not
+infer a free lane from this static document. The next peer E06 slot awaits its
+source review and explicit token/marker coordination. Its reservation
+must end only after native child exit/RAM release. Do not modify the peer bundle.
 
 The GPU lock remains held by the BWM bundle record with a nonempty worker list;
 do not reclaim it outside the established coordination rules.
@@ -24,10 +25,11 @@ development cohort: 24/24 exact states at every rollout horizon. See
 show preservation, not improvement over inherited F. Training exposure is in
 `RECOVERY_TRAINING_EXPOSURE.md`.
 
-Next execute frozen warm A0/A1/A2 32-step and A5 96-step recipes using
-`prereg/RECOVERY_TRAIN_FREEZE_V2.json`, then bind actual trained artifacts in new
-prospective readout freezes. Preserve 24 dynamics/12 planning parents and six
-fixed behavioral fixtures; report direct and own-state rollout outcomes. H3
+Frozen warm A0/A1/A2 32-step and A5 96-step recipes completed using
+`prereg/RECOVERY_TRAIN_FREEZE_V2.json`; actual artifacts were prospectively bound
+in `RECOVERY_ALL_ARMS_READOUT_FREEZE_V3.json`. Fixed h4 rollouts scored24/22/24/23,
+and directh4 scored0/24 for all. The predictive gain gate fails for both A1/A2.
+Planning/behavior completed; retain all outcomes. H3
 requires independently verified TRAIN-only plans from at least 16 distinct
 parents and byte-identical registered proposer templates. Native Ledger-world
 and Blocksworld studies, successful-pilot seed replication, and complete fresh

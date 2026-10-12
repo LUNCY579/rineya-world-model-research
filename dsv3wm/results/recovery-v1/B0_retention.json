@@ -1,0 +1,154 @@
+{
+  "status": "development-evaluated",
+  "command": [
+    "dsv3wm/scripts/evaluate_recovery_retention.py",
+    "--config",
+    "dsv3wm/configs/recovery_A0.json",
+    "--adapter",
+    "../Rineya_BWM_001_Research_Bundle/native_v1/runs/F_titan_main/adapter",
+    "--fixtures",
+    "dsv3wm/results/retention_core_v1.fixtures.json",
+    "--freeze",
+    "dsv3wm/prereg/RECOVERY_ALL_ARMS_READOUT_FREEZE_V3.json",
+    "--out",
+    "dsv3wm/results/recovery-v1/B0_retention.json"
+  ],
+  "config": {
+    "arm": "A0",
+    "seed": 0,
+    "steps": 32,
+    "batch_size": 1,
+    "lr": 2e-05,
+    "rank": 16,
+    "max_length": 512,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.1,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.0,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cpu",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 32
+  },
+  "freeze_sha256": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+  "fixture_sha256": "0fd6dff4dc88e25c0588897cda93e18757116c6b4dfce603e0a02c9ecd32b9ba",
+  "adapter_sha256": "c465356f85ead24b609af2b8b1cb0a14799e6d2d16116944c9c607c933e66466",
+  "parent_sha256": "a28629c9d3454fbf2e884fd7ca442c1b406e7caf4b36d34b2c0614d0add31284",
+  "oracle_feedback": false,
+  "scope": "six fixed constructed cases; narrow behavioral retention, no broad skill pass",
+  "retention_pass": null,
+  "rows": [
+    {
+      "id": "rw-odd-halving",
+      "domain": "register",
+      "generated": {
+        "text": "{\"legal\":false,\"terminated\":false,\"x\":3}",
+        "n_tokens": 14,
+        "hit_eos": true
+      },
+      "parsed": {
+        "legal": false,
+        "terminated": false,
+        "x": 3
+      },
+      "schema_valid": true,
+      "correct": true
+    },
+    {
+      "id": "rw-limit-boundary",
+      "domain": "register",
+      "generated": {
+        "text": "{\"legal\":false,\"terminated\":false,\"x\":32}",
+        "n_tokens": 15,
+        "hit_eos": true
+      },
+      "parsed": {
+        "legal": false,
+        "terminated": false,
+        "x": 32
+      },
+      "schema_valid": true,
+      "correct": true
+    },
+    {
+      "id": "rw-negative-double",
+      "domain": "register",
+      "generated": {
+        "text": "{\"legal\":true,\"terminated\":false,\"x\":-8}",
+        "n_tokens": 14,
+        "hit_eos": true
+      },
+      "parsed": {
+        "legal": true,
+        "terminated": false,
+        "x": -8
+      },
+      "schema_valid": true,
+      "correct": true
+    },
+    {
+      "id": "ledger-posted-transfer",
+      "domain": "ledger",
+      "generated": {
+        "text": "{\"A\":5,\"B\":-6,\"C\":3,\"D\":0}",
+        "n_tokens": 18,
+        "hit_eos": true
+      },
+      "parsed": {
+        "A": 5,
+        "B": -6,
+        "C": 3,
+        "D": 0
+      },
+      "schema_valid": true,
+      "correct": false
+    },
+    {
+      "id": "ledger-cancelled-scale",
+      "domain": "ledger",
+      "generated": {
+        "text": "{\"A\":-15,\"B\":8,\"C\":-1,\"D\":2}",
+        "n_tokens": 19,
+        "hit_eos": true
+      },
+      "parsed": {
+        "A": -15,
+        "B": 8,
+        "C": -1,
+        "D": 2
+      },
+      "schema_valid": true,
+      "correct": false
+    },
+    {
+      "id": "ledger-posted-negative-scale",
+      "domain": "ledger",
+      "generated": {
+        "text": "{\"A\":-6,\"B\":1,\"C\":7,\"D\":0}",
+        "n_tokens": 18,
+        "hit_eos": true
+      },
+      "parsed": {
+        "A": -6,
+        "B": 1,
+        "C": 7,
+        "D": 0
+      },
+      "schema_valid": true,
+      "correct": false
+    }
+  ],
+  "model_queries": 6,
+  "input_tokens": 705,
+  "output_tokens": 98,
+  "processed_positions_upper_bound": 906,
+  "correct": 3,
+  "schema_valid": 6,
+  "duration_s": 16.88321300000098
+}

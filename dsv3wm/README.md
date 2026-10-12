@@ -4,8 +4,10 @@ Status: **active research; native-CPU pilots, efficacy inconclusive**.
 The initial cold A0/A1/A2/A5 screen returned state 0/2 and planning 0/1.
 Recovery reuses the registered unmerged rank-16 forward adapter: inherited B0
 has 24/24 exact four-step development rollouts, with all intermediate states
-correct. This fixed cohort is at ceiling; adapted comparisons are pending and
-cannot show an accuracy gain over B0. G4–G7 remain unqualified; confirmation
+correct. Adapted A0/A1/A2/A5 scored24/22/24/23; direct four-step accuracy is0/24
+for each. Neither predictive arm meets the fixed gain gate. Planning scored
+12/12 for B0/A0/A1/A2 and11/12 for A5; A1/A2 also lose a retained boundary
+legality fixture. H3/Ledger execution is next. G4–G7 remain unqualified; confirmation
 labels remain sealed. See `reports/RECOVERY_STATUS.md` and `reports/NEXT_STAGE.md`.
 Original test evidence remains in `results/TESTS_FINAL.json`; new records use
 separate paths.

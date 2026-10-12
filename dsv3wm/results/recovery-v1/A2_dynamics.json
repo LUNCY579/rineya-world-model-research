@@ -1,0 +1,781 @@
+{
+  "status": "development-evaluated",
+  "config": {
+    "arm": "A2",
+    "seed": 0,
+    "steps": 32,
+    "batch_size": 1,
+    "lr": 2e-05,
+    "rank": 16,
+    "max_length": 512,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.1,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.0,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cpu",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 32
+  },
+  "command": [
+    "dsv3wm/scripts/evaluate_recovery.py",
+    "--config",
+    "dsv3wm/configs/recovery_A2.json",
+    "--data",
+    "dsv3wm/datasets/recovery-v1/dev.jsonl",
+    "--adapter",
+    "dsv3wm/artifacts/recovery-v1/A2_s0/adapter",
+    "--freeze",
+    "dsv3wm/prereg/RECOVERY_ALL_ARMS_READOUT_FREEZE_V3.json",
+    "--out",
+    "dsv3wm/results/recovery-v1/A2_dynamics.json"
+  ],
+  "data_sha256": "7fe3c996a8ab4d00fe623edc8ad99f643ebc44f7b36f4a8935bd3c21ea012cc3",
+  "freeze_sha256": "85197b13627df6796a3fd9b75003d56ae9c4f7da6afe98a61a535091c28926ad",
+  "adapter_sha256": "905d52126ed6f4774f935642ccda2c3edd0d00c38eb2a9bad03628698f7dcd97",
+  "oracle_feedback": false,
+  "instrument": "legacy registered-F interface / standard KV / batched greedy",
+  "per_parent": [
+    {
+      "parent_world_id": "2dc71d00d967bedcefb8d95445e548ab7cd609aeb3fbbc72d3276d8821ebf150",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "a1ce32bcdebecae1869ae93f03159329b36c8e5732bfef4bc697776414e31c80",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "1ca9973c523672a9b1ffbd8ac65eb5aa020b61d69c002709e7eb05c305f15f59",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "54661adca923f0a46f66ba6dde1f5738ec84c9725db23927baa4825cbc82f1e2",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "b2f45d7b298aad02b3f3f922a7776f038bbcee1752655ba9aa932ccf221c0f0a",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "70d5c716986bdf85c8366d19ce4b69f6c368580039c992c28e0b8fe18ac19bc6",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "cff810ab2ed7b8fdc371608039e3471364c50410539c4053ada752964ff881ed",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "e6c26947eea761c3c881b045761e0d13b26daaa5dcd8953e2e1997b802030002",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "434b5933452acf3180ef67d8b2f4e358b5f77fc8ef5cb9a23fa88a40162682a0",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "9cec094f041998d0e48c41fe54c88ee29251de7e3ce9c1778a479321f3baf720",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "5681af8b546569456afc9037d5c80b03b60fe78b52583733ef3efaebe401e280",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+      "cohort": "ood",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    },
+    {
+      "parent_world_id": "b3f0e716c3347742fe4cf97a9221bb2d159e55aeea5500b5203f3fc6a49ab348",
+      "cohort": "id",
+      "horizons": {
+        "1": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "2": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": true,
+          "direct_malformed": false,
+          "legality_correct": true
+        },
+        "4": {
+          "rollout_correct": true,
+          "rollout_malformed": false,
+          "direct_correct": false,
+          "direct_malformed": false,
+          "legality_correct": true
+        }
+      }
+    }
+  ],
+  "summary": {
+    "id": {
+      "1": {
+        "n": 12,
+        "rollout_correct": 12,
+        "rollout_malformed": 0,
+        "direct_correct": 12,
+        "direct_malformed": 0,
+        "legality_correct": 12
+      },
+      "2": {
+        "n": 12,
+        "rollout_correct": 12,
+        "rollout_malformed": 0,
+        "direct_correct": 2,
+        "direct_malformed": 0,
+        "legality_correct": 12
+      },
+      "4": {
+        "n": 12,
+        "rollout_correct": 12,
+        "rollout_malformed": 0,
+        "direct_correct": 0,
+        "direct_malformed": 0,
+        "legality_correct": 12
+      }
+    },
+    "ood": {
+      "1": {
+        "n": 12,
+        "rollout_correct": 12,
+        "rollout_malformed": 0,
+        "direct_correct": 12,
+        "direct_malformed": 0,
+        "legality_correct": 12
+      },
+      "2": {
+        "n": 12,
+        "rollout_correct": 12,
+        "rollout_malformed": 0,
+        "direct_correct": 1,
+        "direct_malformed": 0,
+        "legality_correct": 12
+      },
+      "4": {
+        "n": 12,
+        "rollout_correct": 12,
+        "rollout_malformed": 0,
+        "direct_correct": 0,
+        "direct_malformed": 0,
+        "legality_correct": 12
+      }
+    },
+    "all": {
+      "1": {
+        "n": 24,
+        "rollout_correct": 24,
+        "rollout_malformed": 0,
+        "direct_correct": 24,
+        "direct_malformed": 0,
+        "legality_correct": 24
+      },
+      "2": {
+        "n": 24,
+        "rollout_correct": 24,
+        "rollout_malformed": 0,
+        "direct_correct": 3,
+        "direct_malformed": 0,
+        "legality_correct": 24
+      },
+      "4": {
+        "n": 24,
+        "rollout_correct": 24,
+        "rollout_malformed": 0,
+        "direct_correct": 0,
+        "direct_malformed": 0,
+        "legality_correct": 24
+      }
+    }
+  },
+  "model_queries": 168,
+  "input_tokens": 23669,
+  "output_tokens": 2504,
+  "processed_positions_upper_bound": 26088,
+  "traces_sha256": "b7c93ac1761d3aca1388f817dbaf6dda38c3519b1e5e53b15cc31f5f5ad63b2f",
+  "baseline_qualified": true,
+  "duration_s": 138.54871580000145
+}

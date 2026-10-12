@@ -1,0 +1,2313 @@
+{
+  "analysis_status": "posthoc supplementary; no native efficacy/confirmation inference",
+  "scope": "preserved generated text and DEV labels; no model, simulator, oracle transition or repair",
+  "P1_scope": "original four-step final-state-only metric unchanged; this is additional trace analysis",
+  "mapping": {
+    "policy": "strict source order / active batched rollout / declared direct schedule",
+    "trace_count": 167,
+    "direct_horizons": [
+      1,
+      2,
+      4
+    ],
+    "ambiguous_mapping": "reject mismatches, unknown cohorts, missing/trailing traces and conflicting identical inputs"
+  },
+  "calibration": {
+    "status": "unknown",
+    "reason": "no probability/logit captures; boolean legality is not calibrated confidence"
+  },
+  "summary": {
+    "id": {
+      "n": 12,
+      "correct_final_wrong_intermediate": 0,
+      "steps": {
+        "1": {
+          "state_correct": 12,
+          "legality_correct": 12,
+          "termination_correct": 12,
+          "failure_known": 12,
+          "cumulative_failure_correct": 12,
+          "malformed": 0,
+          "attempted": 12,
+          "n": 12,
+          "failure_unknown": 0,
+          "skipped": 0,
+          "attempted_legality_correct": 12
+        },
+        "2": {
+          "state_correct": 12,
+          "legality_correct": 12,
+          "termination_correct": 12,
+          "failure_known": 12,
+          "cumulative_failure_correct": 12,
+          "malformed": 0,
+          "attempted": 12,
+          "n": 12,
+          "failure_unknown": 0,
+          "skipped": 0,
+          "attempted_legality_correct": 12
+        },
+        "3": {
+          "state_correct": 12,
+          "legality_correct": 12,
+          "termination_correct": 12,
+          "failure_known": 12,
+          "cumulative_failure_correct": 12,
+          "malformed": 0,
+          "attempted": 12,
+          "n": 12,
+          "failure_unknown": 0,
+          "skipped": 0,
+          "attempted_legality_correct": 12
+        },
+        "4": {
+          "state_correct": 12,
+          "legality_correct": 12,
+          "termination_correct": 12,
+          "failure_known": 12,
+          "cumulative_failure_correct": 12,
+          "malformed": 0,
+          "attempted": 12,
+          "n": 12,
+          "failure_unknown": 0,
+          "skipped": 0,
+          "attempted_legality_correct": 12
+        }
+      }
+    },
+    "ood": {
+      "n": 12,
+      "correct_final_wrong_intermediate": 0,
+      "steps": {
+        "1": {
+          "state_correct": 12,
+          "legality_correct": 12,
+          "termination_correct": 12,
+          "failure_known": 12,
+          "cumulative_failure_correct": 12,
+          "malformed": 0,
+          "attempted": 12,
+          "n": 12,
+          "failure_unknown": 0,
+          "skipped": 0,
+          "attempted_legality_correct": 12
+        },
+        "2": {
+          "state_correct": 12,
+          "legality_correct": 12,
+          "termination_correct": 12,
+          "failure_known": 12,
+          "cumulative_failure_correct": 12,
+          "malformed": 0,
+          "attempted": 12,
+          "n": 12,
+          "failure_unknown": 0,
+          "skipped": 0,
+          "attempted_legality_correct": 12
+        },
+        "3": {
+          "state_correct": 11,
+          "legality_correct": 11,
+          "termination_correct": 11,
+          "failure_known": 11,
+          "cumulative_failure_correct": 11,
+          "malformed": 1,
+          "attempted": 12,
+          "n": 12,
+          "failure_unknown": 1,
+          "skipped": 0,
+          "attempted_legality_correct": 11
+        },
+        "4": {
+          "state_correct": 10,
+          "legality_correct": 10,
+          "termination_correct": 11,
+          "failure_known": 11,
+          "cumulative_failure_correct": 10,
+          "malformed": 1,
+          "attempted": 11,
+          "n": 12,
+          "failure_unknown": 1,
+          "skipped": 0,
+          "attempted_legality_correct": 10
+        }
+      }
+    },
+    "all": {
+      "n": 24,
+      "correct_final_wrong_intermediate": 0,
+      "steps": {
+        "1": {
+          "state_correct": 24,
+          "legality_correct": 24,
+          "termination_correct": 24,
+          "failure_known": 24,
+          "cumulative_failure_correct": 24,
+          "malformed": 0,
+          "attempted": 24,
+          "n": 24,
+          "failure_unknown": 0,
+          "skipped": 0,
+          "attempted_legality_correct": 24
+        },
+        "2": {
+          "state_correct": 24,
+          "legality_correct": 24,
+          "termination_correct": 24,
+          "failure_known": 24,
+          "cumulative_failure_correct": 24,
+          "malformed": 0,
+          "attempted": 24,
+          "n": 24,
+          "failure_unknown": 0,
+          "skipped": 0,
+          "attempted_legality_correct": 24
+        },
+        "3": {
+          "state_correct": 23,
+          "legality_correct": 23,
+          "termination_correct": 23,
+          "failure_known": 23,
+          "cumulative_failure_correct": 23,
+          "malformed": 1,
+          "attempted": 24,
+          "n": 24,
+          "failure_unknown": 1,
+          "skipped": 0,
+          "attempted_legality_correct": 23
+        },
+        "4": {
+          "state_correct": 22,
+          "legality_correct": 22,
+          "termination_correct": 23,
+          "failure_known": 23,
+          "cumulative_failure_correct": 22,
+          "malformed": 1,
+          "attempted": 23,
+          "n": 24,
+          "failure_unknown": 1,
+          "skipped": 0,
+          "attempted_legality_correct": 22
+        }
+      }
+    }
+  },
+  "per_parent": [
+    {
+      "parent_world_id": "2dc71d00d967bedcefb8d95445e548ab7cd609aeb3fbbc72d3276d8821ebf150",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": 28
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 14
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 28
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 27
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": -76
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -76
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -75
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -75
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": -66
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -66
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -33
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -33
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "a1ce32bcdebecae1869ae93f03159329b36c8e5732bfef4bc697776414e31c80",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": 9
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 18
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 19
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 38
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": true,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": -46
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -47
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -46
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -23
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "1ca9973c523672a9b1ffbd8ac65eb5aa020b61d69c002709e7eb05c305f15f59",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": 41
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 40
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 39
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 39
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": true,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "54661adca923f0a46f66ba6dde1f5738ec84c9725db23927baa4825cbc82f1e2",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": -9
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -9
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -18
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -19
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": true,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": -36
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -18
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -9
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -9
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "b2f45d7b298aad02b3f3f922a7776f038bbcee1752655ba9aa932ccf221c0f0a",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": -63
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -62
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -61
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -30
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": false,
+          "legality_correct": false,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": false
+        }
+      ],
+      "P1_final_state_correct": false,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": 33
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 32
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 31
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 62
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "70d5c716986bdf85c8366d19ce4b69f6c368580039c992c28e0b8fe18ac19bc6",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": 19
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 38
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 19
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 20
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": -75
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -74
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -74
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -73
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": true,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "cff810ab2ed7b8fdc371608039e3471364c50410539c4053ada752964ff881ed",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": 80
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 40
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 20
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 21
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": true,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": 12
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 13
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 12
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 11
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "e6c26947eea761c3c881b045761e0d13b26daaa5dcd8953e2e1997b802030002",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": -22
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -23
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -24
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -25
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "434b5933452acf3180ef67d8b2f4e358b5f77fc8ef5cb9a23fa88a40162682a0",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": -50
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -25
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": null,
+          "legal": null,
+          "terminated": null,
+          "attempted": true,
+          "malformed": true,
+          "failed": null,
+          "state_correct": false,
+          "legality_correct": false,
+          "termination_correct": false,
+          "failure_known": false,
+          "cumulative_failure_correct": false
+        },
+        {
+          "state": null,
+          "legal": null,
+          "terminated": null,
+          "failed": null,
+          "attempted": false,
+          "abstained": true,
+          "malformed": true,
+          "state_correct": false,
+          "legality_correct": false,
+          "termination_correct": false,
+          "failure_known": false,
+          "cumulative_failure_correct": false
+        }
+      ],
+      "P1_final_state_correct": false,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "9cec094f041998d0e48c41fe54c88ee29251de7e3ce9c1778a479321f3baf720",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": 43
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 44
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 45
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 45
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": true,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": 9
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 18
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 17
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 34
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": true,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "5681af8b546569456afc9037d5c80b03b60fe78b52583733ef3efaebe401e280",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": -44
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -45
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -46
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -47
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": 44
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 43
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 43
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 43
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": -22
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -21
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -20
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -10
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": 65
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 65
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 65
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": 66
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+      "cohort": "ood",
+      "steps": [
+        {
+          "state": {
+            "x": -72
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -73
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": false,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -73
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -73
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": false,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    },
+    {
+      "parent_world_id": "b3f0e716c3347742fe4cf97a9221bb2d159e55aeea5500b5203f3fc6a49ab348",
+      "cohort": "id",
+      "steps": [
+        {
+          "state": {
+            "x": -11
+          },
+          "legal": false,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -10
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -5
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        },
+        {
+          "state": {
+            "x": -6
+          },
+          "legal": true,
+          "terminated": false,
+          "failed": true,
+          "attempted": true,
+          "malformed": false,
+          "state_correct": true,
+          "legality_correct": true,
+          "termination_correct": true,
+          "failure_known": true,
+          "cumulative_failure_correct": true
+        }
+      ],
+      "P1_final_state_correct": true,
+      "correct_final_wrong_intermediate": false,
+      "direct_diagnostics": {
+        "1": {
+          "malformed": false,
+          "state_correct": true,
+          "cumulative_failure": true,
+          "cumulative_failure_scope": "single attempted prediction"
+        },
+        "2": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        },
+        "4": {
+          "malformed": false,
+          "state_correct": false,
+          "cumulative_failure": null,
+          "cumulative_failure_scope": "unknown: direct last-action legality is not multi-step cumulative failure"
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "data_sha256": "7fe3c996a8ab4d00fe623edc8ad99f643ebc44f7b36f4a8935bd3c21ea012cc3",
+    "traces_sha256": "ce67597ad3c55b0386dadcebd7a2f7c044c4d32f9aca8b9fc78e4d8d3dfd9db7",
+    "original_result_sha256": "a94acda482950edcf387676b5613a01dba978a607ebccae5f792ffb5d5570fc3",
+    "analysis_sha256": "da5c8419d6144a6ed3e120635c07cb6b02c9799fafc7f2b11dfeecaa5a5eb6f3",
+    "original_P1_verified_unchanged": true
+  }
+}

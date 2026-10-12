@@ -1,6 +1,76 @@
 # Registered-interface recovery: interim evidence
 
-Recorded 2026-10-12 UTC. Full research goal remains open.
+Updated 2026-10-12 UTC after four adapted dynamics readouts. Full research goal
+remains open; H3 and Ledger native work remain.
+
+## Completed adapted dynamics pilot
+
+| Arm | Updates | Train positions | Supervised / auxiliary tokens | Training seconds | Rollout h4 | Direct h4 | Direct h4 malformed |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| A0 | 32 | 4,252 | 466 / 0 | 63.745 | 24/24 | 0/24 | 10/24 |
+| A1 | 32 | 4,252 | 466 / 434 | 71.395 | 22/24 | 0/24 | 0/24 |
+| A2 | 32 | 17,716 | 1,404 / 0 | 238.580 | 24/24 | 0/24 | 0/24 |
+| A5 | 96 | 12,768 | 1,410 / 0 | 185.035 | 23/24 | 0/24 | 17/24 |
+
+All four scored 24/24 at rollout h1/h2. Direct h2 was 2/24,3/24,3/24,1/24,
+respectively. A1 loses two unseen-limit rollout cases; A5 loses one. A0/A2
+preserve the inherited B0 state ceiling. Neither A1 nor A2 meets the fixed
+>=2/24 paired rollout-gain continuation gate. No efficacy, equivalence or
+larger RegisterWorld training qualification follows from these outcomes.
+
+A1/A2 improve direct-reply grammar without learning accepted four-step states.
+This separates format learning from dynamics learning. Final-state evaluation
+and posthoc trace audits remain unchanged; speculative explanations require
+further independently registered interventions, not repair of these outputs.
+
+Every inference arm activates 606,142,464 parent+LoRA parameters. Training has
+10,092,544 LoRA parameters; A1 adds 51,200 auxiliary parameters omitted at
+inference. A2 uses96 nominal forwards, as does A5, but processes38.8% more
+positions and takes28.9% more measured training time. The conventional parameter-
+token estimate is a rough proxy, not measured FLOPs. Training peak working sets
+were about3.77–3.79GB; dynamics process-tree sampled peaks about4.83–4.84GB.
+GPU memory is unmeasured. Resource counts include the declared single-seed scope.
+
+## Planning and behavioral retention
+
+| Arm | Goal-only planning | Optimal move counts | First action optimal | Six-fixture behavior |
+|---|---:|---:|---:|---:|
+| B0 | 12/12 | 7/12 | 8/12 | 3/6 |
+| A0 | 12/12 | 7/12 | 8/12 | 3/6 |
+| A1 | 12/12 | 7/12 | 8/12 | 2/6 |
+| A2 | 12/12 | 7/12 | 8/12 | 2/6 |
+| A5 | 11/12 | 6/12 | 8/12 | 3/6 |
+
+All used360 learned transition queries,42,681 prompt tokens and the common
+depth6/query30 per-parent caps. Actual planning time was about250–254s, with
+sampled process-tree peaks about5.21GB. Caps do not imply equal realized cost.
+The selected successful paths have no wrong intermediate states. Every success
+is nonterminating goal achievement under the registered P2 predicate; H3's
+final-finish contract is stricter and must remain separately reported.
+
+Posthoc unused-branch audits find own-input state/legality errors even with
+perfect selected-plan success. Correct queries out of360: B0 358,A0 356,A1 349,
+A2 358,A5 349; A1 has4 malformed/unknown cases. These are dependent repeated
+queries (245 unique conditionings,12 parents), not360 independent trials.
+All72 finish queries per arm predict termination correctly. Calibration remains
+unknown. Original P2 and selection are unchanged.
+
+The six behavior fixtures comprise three RegisterWorld and three Ledger cases.
+B0/A0/A5 preserve3/3 Register cases and score0/3 Ledger cases; there is no
+inherited Ledger success here to certify retention. A1/A2 lose the known boundary
+legality case: add1 at x32/limit32 returns unchanged x32 but incorrectly legal=true.
+Thus state-only P1 can mask a retained-legality regression. No broad retention
+pass follows from these six cases.
+
+A0 and A5's first32 loss values and step32 adapter weight SHA are identical:
+`9b6ff87157ba7418fd328e1325c1461a7bbf305e01d13381d6225c4f8332cfe9`.
+This is concrete native training-prefix parity, not multi-seed replication.
+
+Sources: `results/recovery-v1/TRAINING_SUMMARY_01.json`, four `*_dynamics.json`
+and posthoc/resource supplements; prospective
+`prereg/RECOVERY_ALL_ARMS_READOUT_FREEZE_V3.json`. Original B0 evidence follows.
+
+## Inherited baseline evidence
 
 The native 596,049,920-parameter Titan-Sparse parent loaded in FP32, TF32 off,
 with the unmerged registered `F_titan_main` adapter. Adapter SHA-256:
@@ -42,11 +112,10 @@ It does not establish H1/H2/H3. The fixed 24-parent P1 cohort is at ceiling for
 B0. A1/A2 beating a degraded A0 would show adaptation preservation, not accuracy
 improvement beyond inherited F. No parents will be redrawn to manufacture a gain.
 
-Warm A0/A1/A2 32-step and A5 96-step recipes are frozen in
-`RECOVERY_TRAIN_FREEZE_V2.json`. No adapted recovery training has executed at
-this checkpoint; the CPU slot is temporarily reserved for coordinated RDW E05.
-The next step is training, prospective trained-artifact readout freezes, and
-fixed dynamics/planning/behavioral retention evaluation.
+Warm A0/A1/A2 32-step and A5 96-step recipes used
+`RECOVERY_TRAIN_FREEZE_V2.json`. RDW E05 completed/released before these jobs.
+Planning and fixed behavioral retention completed. G4/G5 remain
+unqualified for this RegisterWorld predictive recipe.
 
 V1's editorial `term` spelling was clarified to actual `terminated` before B0
 results were read and before recovery training. Explicit AdamW defaults/no

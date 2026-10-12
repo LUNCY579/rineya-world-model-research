@@ -1,0 +1,31 @@
+{
+  "status": "complete",
+  "started_at_utc": "2026-10-12T05:17:58.676490+00:00",
+  "command": [
+    "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+    "dsv3wm/scripts/train_recovery.py",
+    "--config",
+    "dsv3wm/configs/recovery_A2.json",
+    "--train",
+    "dsv3wm/datasets/recovery-v1/train.jsonl",
+    "--freeze",
+    "dsv3wm/prereg/RECOVERY_TRAIN_FREEZE_V2.json",
+    "--qualification",
+    "dsv3wm/results/recovery-v1/B0_qualification.json",
+    "--out",
+    "dsv3wm/artifacts/recovery-v1/A2_s0"
+  ],
+  "cwd": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree",
+  "wrapper_sha256": "0b10d654cd68269d1bb615721cdd03ccd24c77be5f5e9af0cec29340f22079bc",
+  "sample_interval_s": 0.5,
+  "peak_sampled_process_tree_rss_bytes": 3786924032,
+  "per_process_peak_wset_bytes": {
+    "80300": 5316608,
+    "79768": 3790077952
+  },
+  "peak_gpu_bytes": null,
+  "scope": "local subprocess tree host RAM; GPU memory is not measured by this wrapper",
+  "root_pid": 80300,
+  "exit_code": 0,
+  "wall_duration_s": 252.21904840000025
+}
