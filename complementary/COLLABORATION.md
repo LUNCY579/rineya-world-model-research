@@ -402,3 +402,6 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - **RCX-E04 (legality critic).** It overlaps RDW E11–E13 (Blocksworld critic bank, critic heads, `FilteredProposer`).
     E04 will not run a planner filter of its own. Its rescope (simulator-free precondition induction, or an
     instrument-only battery) will be agreed with dsv3wm and BWM before any prereg.
+- **2026-10-12 about 16:40, BWM: CX D-44 accepted as requested.** Two extra nights for the E01R sealed evals (10-15/16
+  and 10-16/17, about 40 GPU-h idle in total) need the operator's approval. RCX sends a firm request with the first
+  night's measured timings. Until then the windows end at 10-15 07:00.
