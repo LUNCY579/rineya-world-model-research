@@ -2,8 +2,9 @@
 
     python -B experiments/RCX-B4/make_canary.py      (1 CPU thread; writes experiments/RCX-B4/canary/B4_HOOK_CANARY.json)
 
-Probes come from RCX-E07 *test* instances (never seeds_fresh): 20 consistent states reached by seeded random legal walks
-from each instance's init (BWM blocks.py via the pinned importer), plus 5 inconsistent states made by corrupting a
+Probes come from RCX *test* instances only (never seeds_fresh): 10 from RCX-E07 test (n <= 12) and 10 from RCX-E07b
+TEST-B with n in {14, 15} (so the 13-15-block sizes of seeds_fresh are exercised). 20 consistent states are reached by
+seeded random legal walks from each instance's init (BWM blocks.py via the pinned importer), plus 5 inconsistent states made by corrupting a
 consistent one in a way `b4_hook.is_consistent` flags (holding + handempty, a block on two blocks, a block both on a
 block and on the table, two blocks on one block, a held block that is also on another). Expected values are computed
 with exactly the pinned call LearnedUnmet.from_file(gnn_s20261276.pt, invalid_policy="fallback", hybrid_lambda=1.0),
@@ -32,6 +33,8 @@ from rcx.bw import bwm_import as BI  # noqa: E402
 SEED = 20261241
 MODEL = ROOT / "runs/RCX-E07/main/models/gnn_s20261276.pt"
 OUT = Path(__file__).resolve().parent / "canary" / "B4_HOOK_CANARY.json"
+E07_TEST = "runs/RCX-E07/main/data/instances.json"
+TESTB = "runs/RCX-E07/e07b/data/testb_instances.json"
 PINNED = ("rcx/bw/b4_hook.py", "rcx/bw/models.py", "rcx/bw/encode.py", "rcx/bw/space.py", "rcx/bw/bwm_import.py",
           "rcx/bw/__init__.py", "rcx/__init__.py", "runs/RCX-E07/main/models/gnn_s20261276.pt",
           "runs/RCX-E07/main/models/gnn_s20261276.json", "runs/RCX-E07/main/data/instances.json")
@@ -96,10 +99,10 @@ def main():
     if OUT.exists():
         raise SystemExit(f"{OUT} exists (create-only)")
     B, _ = BI.load()
-    insts = [x for x in json.loads((ROOT / "runs/RCX-E07/main/data/instances.json").read_text(encoding="utf-8"))
-             if x["split"] == "test"]
+    e07 = [x for x in json.loads((ROOT / E07_TEST).read_text(encoding="utf-8")) if x["split"] == "test"]
+    tb = [x for x in json.loads((ROOT / TESTB).read_text(encoding="utf-8")) if x["n"] in (14, 15)]
     rng = random.Random(SEED)
-    picks = rng.sample(insts, 20)
+    picks = rng.sample(e07, 10) + rng.sample(tb, 10)
     probes = []
     for k, it in enumerate(picks):
         objs, goal = list(it["objs"]), fs(it["goal"])
@@ -134,7 +137,9 @@ def main():
            "evaluation": "fresh hook, probes in file order, state and goal as frozensets of tuples",
            "expected_counters_after_all": dict(hook.counters),
            "torch_version": torch.__version__, "torch_threads": torch.get_num_threads(),
-           "pins_sha256": {p: sha(ROOT / p) for p in PINNED}, "probes": probes}
+           "pins_sha256": {p: sha(ROOT / p) for p in PINNED},
+           "probe_sources_sha256": {E07_TEST: sha(ROOT / E07_TEST), TESTB: sha(ROOT / TESTB)},
+           "probe_n": sorted({p["n"] for p in probes}), "probes": probes}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT, "x", encoding="utf-8", newline="\n") as f:
         f.write(json.dumps(rec, indent=1) + "\n")
