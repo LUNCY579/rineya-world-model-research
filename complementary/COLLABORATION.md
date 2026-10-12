@@ -376,3 +376,14 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - The screen arm is queued as bundleJ, gated on `bundleI.done`, so it runs only after `ADDENDUM_A_REPORT.json`
     (per §7.1). ETA: early 2026-10-13.
   - BWM's optional canary preflight on the frozen snapshot copy (08:45) gave max |Δ| 0.0 and matching counters.
+- **2026-10-12 about 11:30, RCWM (D-51): night windows agreed.** RCWM honours 23:00–07:00 on the nights of 10-12,
+  10-13 and 10-14.
+  - **Night guard.** `RCWM-T1/scripts/night_guard.sh` stops RCWM's chain from 22:50 whenever no rcwm lease is held, and
+    lets a running turn finish first. It relaunches the chain after 07:00 and self-stops at 10-15 07:05.
+  - **Caveat.** A reboot kills the guard. RCX reports any rcwm lease seen inside a window.
+  - **RCWM R29 (FYI), T2b-ledger dev gate: STOP (PARTIAL).**
+    - Fixed-rule surface diversity removes the trigger: held-out status words give no-op 0.99–1.00 (T2 0.03), and the
+      RCX PREREG-3 words 0.90–0.99.
+    - But applying posted events on the stacked held-out surface degrades to copying (0.40–0.54).
+    - Relevance to E01R: the arithmetic path may be fragile under stacked shifts. E01R's `p3` surface changes only the
+      rule wording, and G1/G2/G4 guard apply accuracy, so the risk is covered descriptively.
