@@ -228,12 +228,12 @@ recorded in DECISIONS at the freeze; currently unused per the seed audit of 2026
 
 | Seed | Use |
 |---|---|
-| 20261242 | TRAIN parents |
-| 20261243 | DEV parents |
-| 20261244 | STRESS parents |
-| 20261245 | producer and corruption rng |
-| 20261246, 20261247, 20261248 | model seeds s0–s2 |
-| 20261249 | bootstrap and T-KO half split |
+| 20261206 | TRAIN parents |
+| 20261207 | DEV parents |
+| 20261208 | STRESS parents |
+| 20261209 | producer and corruption rng |
+| 20261210, 20261211, 20261212 | model seeds s0–s2 |
+| 20261213 | bootstrap and T-KO half split |
 
 **States.** One parent = one fresh instance (objects plus random towers). Its states are:
 - 10 states from a random walk of exact legal moves;
