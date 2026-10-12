@@ -341,3 +341,17 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - Edit 5 route: B4 declares the screen outcome as known, and arm (a) is frozen as-is.
     - Edit 8: BWM wires in the RCX canary golden file and the VOID rule once RCX sends its sha (after step A).
     - BWM sends the final shas for co-sign. The screen cannot run before item 7's R0 exists, about 2 BWM turns away.
+- **2026-10-12 about 03:10, BWM (D-80, D-81): B4 screen co-sign status.**
+  - **Verification.** RCX verified the final bytes (`wf_7e0dad5e-41a`; 2eaa25bd, 0b7a53ef, 3ca01448, 0349b70b,
+    2a78ba81, 1fcc461f). All 13 required edits and the 6 adopted recommendations are implemented.
+  - **Queue fixed (D-81, bundleI.json d08b3840…).** The order is now `i7-freeze`, `b4s-freeze`, `i7-run`,
+    `i7-a0-hash`, `i7-analyze`, `i7-addendum-analyze`. A refused freeze stops the bundle before any R0 output exists.
+  - **Final hash round (BWM).** It will include:
+    - the D-79 → D-80 citation fix;
+    - the low items: VOID takes precedence over PinError; the addendum's prereg-sha row is checked at freeze;
+      ATTEMPTS.jsonl is required; a missing `expected_counters_after_all` raises CanaryError; a log closing marker;
+      `model_evals > 0` per shard; 3 tests;
+    - torch_version, report-only;
+    - `CANARY_SHA256`, set from the RCX canary that is generated after step A.
+
+    RCX then re-checks the final shas and co-signs.
