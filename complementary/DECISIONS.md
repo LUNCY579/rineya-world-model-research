@@ -494,3 +494,39 @@ and the evidence path.
   - **Priority:** RCX's E01R blocks take precedence. BWM gets the gaps and the nights.
   - **Step A restarted under the lock** (`step_a_chain_v2.sh`). The v1 chain was stopped while still waiting for RAM,
     before any eval; nothing was lost.
+- **CX D-37 PREREG_E01R §2 (the arm choice) and the R1/R2/R3 recipe specifications FROZEN before any step A output
+  (2026-10-11 20:22).**
+  - **State at the freeze.** `step_a_chain.log` has 0 START lines and no DEV2 prediction file exists. The chain has
+    been waiting for RAM since 15:31 (last at 11.5 GB < 12.5 GB).
+  - **Frozen artifacts:**
+
+    | File | sha256 |
+    |---|---|
+    | `experiments/RCX-E01R/PREREG_E01R_DRAFT.md` | `4ceb8250de737d4a0fe55feb7d4303ebb27773008ac552436f230423d9b23700` (only §2 and the R1/R2/R3 specifications are frozen; §4–§11 remain a draft) |
+    | `experiments/RCX-E01R/decide_branch.py` | `6835b0402120a2847423d8af08814cc89f311292b110365487b39d61636080d6`, with 6 tests |
+    | `experiments/RCX-E01R/recipes.py` | `fbc5e309…` (R2's mirrored S− pairs are still to be added, per the frozen spec) |
+    | `experiments/RCX-E01R/trace_target.py` | `8800a07d…` |
+    | `pools/TR_v1_candidates.json` | `b8e46463…` |
+    | `pools/VERIFIER_CALIBRATION.json` | `b9f42451…` |
+  - **Branches, in order:**
+    1. **B0** instrument fault: a missing or sha-mismatched N-CFSD seed, n = 0, or a_in < 0.85;
+    2. **B1** H-alt: min_f p_f ≥ 0.80, leading to the P3 coverage check;
+    3. **B3** E − I ≥ 0.15 with the template-cluster bootstrap lower bound > 0, leading to R1 + R3;
+    4. **B2** p̄ ≥ 0.65, no training;
+    5. **B4** otherwise, leading to R2 + R3.
+  - **Review fixes adopted** (workflow wf_b87c2ed3-8e0, reviewer items 1–4, 7 and 9):
+    - B3 is tested before B2, with a directional criterion and a cluster bootstrap;
+    - all 3 seeds are required;
+    - R2 is mirrored for S− parents, and its rule-type shift is a declared confound;
+    - R3 is scored from the last non-empty line, with a pre-run smoke test on TRAIN prompts only;
+    - R1 uses the TR_v1 pool, audited against P2_v2 and P3_v2 with stricter thresholds (Jaccard ≥ 0.35, or a shared
+      4-gram), with counts only for P3.
+  - **Verifier calibration.** In one label-blind run (3 verifiers), the protocol:
+    - rejected **12/12 planted ambiguous** wordings;
+    - passed **11/11 clear decoys** and **23/23 P2_v2 re-tests**;
+    - passed 141/141 TR_v1 training candidates.
+
+    This removes the D-34 limitation: the verifiers' ambiguity sensitivity is now measured.
+  - **Remaining review items** (5, 6, 8, 10–19: the E01R row reader, guard power, the degenerate-REVISE rule, P3
+    leakage hardening in `audit_pool`, seeds against git history, eval-time re-estimate, and others) are resolved
+    before the full freeze. They do not depend on step A.

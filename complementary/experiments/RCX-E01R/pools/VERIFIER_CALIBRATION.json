@@ -1,0 +1,659 @@
+{
+ "workflow": "wf_b87c2ed3-8e0",
+ "sensitivity": {
+  "ambiguous_plants": 12,
+  "ambiguous_slipped_through_as_intended": 0,
+  "ambiguous_consistent_with_some_polarity": 0,
+  "clear_plants": 11,
+  "clear_passed": 11,
+  "p2_retest": 23,
+  "p2_retest_passed": 23
+ },
+ "plants": [
+  {
+   "text": "Events that are not {L} take effect.",
+   "kind": "plant_amb",
+   "intended": "NEG",
+   "trap": "negation scope over an or list: for sizes 2-3, not x or y can mean not (x or y) or (not x) or y; also says nothing explicit about listed events",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "Skip every event that is not {L}.",
+   "kind": "plant_amb",
+   "intended": "POS",
+   "trap": "negation scope over an or list: skip events that are neither x nor y, versus skip events that are not x plus events that are y",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "unclear",
+     "b": "no_effect",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "no_effect",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "unclear",
+     "b": "no_effect",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "An event takes effect if its status is {L}.",
+   "kind": "plant_amb",
+   "intended": "POS",
+   "trap": "if without only if: the listed case is covered but events with unlisted statuses are left undetermined",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "unclear",
+     "b": "takes_effect",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "unclear",
+     "b": "takes_effect",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "Events with status {L} are ignored.",
+   "kind": "plant_amb",
+   "intended": "NEG",
+   "trap": "no exclusivity or default: says listed events are ignored but never says what happens to events with unlisted statuses",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "no_effect",
+     "b": "unclear",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "no_effect",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "no_effect",
+     "b": "unclear",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Events take effect and are logged unless they are {L}.",
+   "kind": "plant_amb",
+   "intended": "NEG",
+   "trap": "unless attachment: it may scope over both take effect and are logged (listed events have no effect) or only over are logged (listed events still take effect)",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "Events with status {L} only take effect.",
+   "kind": "plant_amb",
+   "intended": "POS",
+   "trap": "only placement: it may restrict the subject (only listed events take effect) or the verb (listed events just take effect), which leaves unlisted events undetermined",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "takes_effect",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Compare events with status {L} against the remaining events; they are the ones that take effect.",
+   "kind": "plant_amb",
+   "intended": "POS",
+   "trap": "pronoun reference: they may refer to the listed events or to the remaining (unlisted) events, which flips the polarity",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "Do not ignore no event whose status is {L}.",
+   "kind": "plant_amb",
+   "intended": "POS",
+   "trap": "double negation: the negative-concord reading is do not ignore any listed event, while the logical reading is ignore at least one listed event; unlisted events are also not covered",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Apply all events after checking them, except those with status {L}.",
+   "kind": "plant_amb",
+   "intended": "NEG",
+   "trap": "except attachment: it may attach to apply (listed events are not applied) or to checking (listed events are applied without being checked)",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "unclear",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "All events with status {L} do not take effect.",
+   "kind": "plant_amb",
+   "intended": "NEG",
+   "trap": "all...not quantifier scope: none of the listed events take effect, versus not all of them do; unlisted events are not covered",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "no_effect",
+     "b": "unclear",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Any event with status {L} may take effect.",
+   "kind": "plant_amb",
+   "intended": "POS",
+   "trap": "modal may expresses permission or possibility, not requirement, so it is unclear whether listed events actually take effect; unlisted events are not covered",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "Events with status {L} need not take effect.",
+   "kind": "plant_amb",
+   "intended": "NEG",
+   "trap": "need not means not required, not forbidden, so the listed outcome is undetermined; unlisted events are not covered",
+   "pass_intended": false,
+   "consistent_any": false,
+   "answers": [
+    {
+     "v": 0,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "unclear",
+     "b": "unclear",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Every event takes effect except those whose status is {L}, which leave the balances unchanged.",
+   "kind": "plant_clear",
+   "intended": "NEG",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "An event with status {L} leaves every balance unchanged; an event with any other status changes the balances as its kind dictates.",
+   "kind": "plant_clear",
+   "intended": "NEG",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Events with any status other than {L} fail to take effect, and they are the only events that fail.",
+   "kind": "plant_clear",
+   "intended": "POS",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "Ignore an event exactly when its status is anything other than {L}; otherwise apply it.",
+   "kind": "plant_clear",
+   "intended": "POS",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "It is never the case that an event with status {L} fails to take effect, and no other event takes effect.",
+   "kind": "plant_clear",
+   "intended": "POS",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "Skipping applies to every event whose status is {L} and to no other event; skipped events have no effect.",
+   "kind": "plant_clear",
+   "intended": "NEG",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Unless an event has status {L}, it takes effect; if it does have such a status, it does not.",
+   "kind": "plant_clear",
+   "intended": "NEG",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "No event with status {L} is prevented from taking effect, and every event with any other status is prevented.",
+   "kind": "plant_clear",
+   "intended": "POS",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Except for events with status {L}, which have no effect, every event takes effect.",
+   "kind": "plant_clear",
+   "intended": "NEG",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    }
+   ]
+  },
+  {
+   "text": "Whether an event takes effect depends only on its status: it takes effect if the status is {L} and does not otherwise.",
+   "kind": "plant_clear",
+   "intended": "POS",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": true
+    },
+    {
+     "v": 1,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": false
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": true
+    }
+   ]
+  },
+  {
+   "text": "Not a single event with status {L} takes effect, while every event without such a status takes effect.",
+   "kind": "plant_clear",
+   "intended": "NEG",
+   "trap": "none",
+   "pass_intended": true,
+   "consistent_any": true,
+   "answers": [
+    {
+     "v": 0,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    },
+    {
+     "v": 1,
+     "a": "no_effect",
+     "b": "takes_effect",
+     "aListed": true
+    },
+    {
+     "v": 2,
+     "a": "takes_effect",
+     "b": "no_effect",
+     "aListed": false
+    }
+   ]
+  }
+ ],
+ "p2_retest_failures": []
+}

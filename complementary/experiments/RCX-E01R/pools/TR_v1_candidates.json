@@ -1,0 +1,994 @@
+{
+ "schema": "rcx-e01r-pool-v1",
+ "pool": "TR_v1 (training candidates; not yet audited against P2/P3)",
+ "source": "workflow wf_b87c2ed3-8e0, 2 blind authors, unanimous label-blind verification (3 verifiers)",
+ "templates": [
+  {
+   "id": "r001",
+   "text": "Events whose status is {L} take effect; events with any other status leave the balances unchanged.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r002",
+   "text": "If an event has status {L}, apply it to the balances. Otherwise, ignore it.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r003",
+   "text": "An event marked {L} changes the balances as usual, whereas an event with a different status has no effect at all.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r004",
+   "text": "Apply every event whose status is {L}, and skip all the rest without touching any balance.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r005",
+   "text": "Events carrying the status {L} are processed normally; every other event is disregarded and changes nothing.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r006",
+   "text": "Status {L}: the event takes effect. Any other status: the event has no effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r007",
+   "text": "Treat events labeled {L} as effective, and treat all remaining events as having no effect on any balance.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r008",
+   "text": "Only events with status {L} take effect, and events with other statuses leave the balances untouched.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r009",
+   "text": "Should an event carry the status {L}, it is applied; should it carry any other status, the balances remain exactly as they were.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r010",
+   "text": "Count an event if its status is {L}; if its status is anything else, the event counts for nothing and no balance moves.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r011",
+   "text": "Events labeled {L} go through and update the balances, while events labeled anything else are dropped with no effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r012",
+   "text": "For the team: an event with status {L} gets applied. An event with some other status is a no-op and must not alter any balance.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r013",
+   "text": "By default an event has no effect on the balances; it takes effect only if its status is {L}.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r014",
+   "text": "Events normally leave the balances untouched, but an event whose status is {L} takes effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r015",
+   "text": "Treat every event as having no effect, except that an event with status {L} does take effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r016",
+   "text": "Skip any event whose status falls outside the following list, and apply any event whose status is {L}.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r017",
+   "text": "The default outcome for any event is no change at all; events whose status is {L} are the exception and take effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r018",
+   "text": "No event affects the balances, with one exception: an event whose status is {L} takes effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r019",
+   "text": "Events with an unlisted status do nothing. Those whose status is {L} take effect as usual.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r020",
+   "text": "Do not let an event touch the balances unless its status is {L}, in which case it takes effect normally.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r021",
+   "text": "Events that lack a qualifying status are left out of the balances; an event qualifies, and takes effect, if its status is {L}.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r022",
+   "text": "Our default is to ignore events. The exception: if an event has status {L}, it takes effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r023",
+   "text": "In general, an event leaves every balance as it was; an event changes the balances only when its status is {L}.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r024",
+   "text": "Events are ignored by default and leave the balances as they are; the ones that do take effect are those whose status is {L}.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r025",
+   "text": "Only events whose status is {L} take effect.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r026",
+   "text": "An event takes effect only if its status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r027",
+   "text": "No event changes the balances unless its status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r028",
+   "text": "Ignore every event except those whose status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r029",
+   "text": "The balances are changed solely by events with status {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r030",
+   "text": "Apply an event if and only if its status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r031",
+   "text": "Nothing but an event marked {L} may move the balances.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r032",
+   "text": "Events with status {L} are the only ones that take effect.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r033",
+   "text": "An event is disregarded unless it has status {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r034",
+   "text": "Balance changes come exclusively from events whose status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r035",
+   "text": "Leave the balances untouched for every event other than one whose status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r036",
+   "text": "Quick note: the only events that should touch the balances are those with status {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r037",
+   "text": "Events whose status is {L} have no effect; every other event takes effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r038",
+   "text": "If an event has status {L}, ignore it. Otherwise, apply it to the balances as usual.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r039",
+   "text": "An event marked {L} leaves all balances unchanged, whereas an event with any other status takes effect normally.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r040",
+   "text": "Skip any event whose status is {L}, and apply all the rest.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r041",
+   "text": "Events carrying the status {L} are disregarded and change nothing; all remaining events are processed in the ordinary way.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r042",
+   "text": "Status {L}: the event has no effect. Any other status: the event takes effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r043",
+   "text": "When an event has status {L}, the balances stay as they are. Events with a different status take effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r044",
+   "text": "Treat events labeled {L} as no-ops, and let every other event change the balances as it normally would.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r045",
+   "text": "Should an event carry the status {L}, it is dropped without effect; should it carry any other status, it is applied.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r046",
+   "text": "Do not count an event whose status is {L}, but do count every event whose status is something else.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r047",
+   "text": "Events with status {L} are kept out of the balances, while everything else goes through and takes effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r048",
+   "text": "Heads up: anything marked {L} gets ignored and changes no balance. Everything else is applied as normal.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r049",
+   "text": "All events take effect, except that those with status {L} leave the balances unchanged.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r050",
+   "text": "Normally an event takes effect; however, an event whose status is {L} has no effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r051",
+   "text": "By default, apply every event to the balances. If an event has status {L}, though, ignore it.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r052",
+   "text": "Events generally change the balances; the exception is an event marked {L}, which changes nothing.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r053",
+   "text": "Every event counts, with one exception: events whose status is {L} are disregarded.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r054",
+   "text": "Apply events as usual, but skip any event carrying the status {L}.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r055",
+   "text": "As a rule, an event takes effect. An event labeled {L} is the exception and leaves every balance as it was.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r056",
+   "text": "Let every event through to the balances unless its status is {L}, in which case it has no effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r057",
+   "text": "The standard treatment is that events take effect; events whose status is {L} are excluded from this and do nothing.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r058",
+   "text": "Process all incoming events in the usual way. The ones with status {L} are the exception: they are ignored entirely.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r059",
+   "text": "Events with an unlisted status take effect. Those whose status is {L} have no effect at all.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r060",
+   "text": "In the ordinary case an event moves the balances, but for an event whose status is {L} nothing changes.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T1"
+  },
+  {
+   "id": "r061",
+   "text": "Every event takes effect except those whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r062",
+   "text": "An event takes effect unless its status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r063",
+   "text": "Only events with status {L} fail to take effect.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r064",
+   "text": "Apply every event other than one whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r065",
+   "text": "Events whose status is {L} are the only ones that have no effect.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r066",
+   "text": "All events change the balances, save for those marked {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r067",
+   "text": "The sole events that leave the balances untouched are those with status {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r068",
+   "text": "No event is ignored unless its status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r069",
+   "text": "Process everything, excluding any event whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r070",
+   "text": "Quick note: the only events we skip are the ones marked {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r071",
+   "text": "With the exception of events whose status is {L}, every event changes the balances.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r072",
+   "text": "Ignore an event only if its status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T1"
+  },
+  {
+   "id": "r073",
+   "text": "An event whose status is {L} takes effect; an event with any other status has no effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r074",
+   "text": "If an event's status is {L}, the event takes effect. Otherwise, it leaves every balance unchanged.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r075",
+   "text": "Events with status {L} change the balances as usual, while events carrying any other status are ignored entirely.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r076",
+   "text": "When the status of an event is {L}, that event is applied; events whose status is anything else are skipped and change nothing.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r077",
+   "text": "Events marked {L} are carried out. All remaining events are disregarded and leave the balances untouched.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r078",
+   "text": "It is the events whose status is {L} that take effect, and every other event is treated as having no effect at all.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r079",
+   "text": "Any event bearing the status {L} is processed normally, whereas an event bearing a different status does nothing to the balances.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r080",
+   "text": "Events with status {L} are applied to the balances. Events with other statuses are discarded without altering anything.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r081",
+   "text": "Should an event have status {L}, it takes effect; should it have some other status, it is dropped and no balance moves.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r082",
+   "text": "The balances are updated by every event whose status is {L} and by no other event.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r083",
+   "text": "An event takes effect provided its status is {L}; if its status is anything else, the event counts for nothing.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r084",
+   "text": "Events labeled {L} go through and change the balances, but an event with an unlisted status is silently ignored.",
+   "pol": "POS",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r085",
+   "text": "By default, an event has no effect; however, an event whose status is {L} takes effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r086",
+   "text": "Events leave the balances unchanged, except that an event with status {L} is applied.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r087",
+   "text": "An event with any status other than {L} is ignored, while an event whose status is in that list takes effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r088",
+   "text": "Ordinarily an event changes nothing. If its status is {L}, though, it takes effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r089",
+   "text": "Events are disregarded unless their status is {L}, in which case they take effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r090",
+   "text": "No event alters the balances by default; it is only when an event's status is {L} that the event takes effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r091",
+   "text": "Every event is treated as inert, with one exception: an event whose status is {L} does take effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r092",
+   "text": "Leave the balances untouched for any event, except where the event's status is {L}; such an event is applied normally.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r093",
+   "text": "Events normally pass without changing any balance. Those whose status is {L}, on the other hand, are carried out in full.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r094",
+   "text": "The default is that an event is skipped; an event is applied instead if its status is {L}.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r095",
+   "text": "An event is dropped and changes nothing, but if its status turns out to be {L}, the event takes effect.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r096",
+   "text": "For an event of unlisted status, the balances stay as they are; for an event whose status is {L}, the change goes through.",
+   "pol": "POS",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r097",
+   "text": "An event takes effect only when its status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r098",
+   "text": "Events whose status is {L} are the only ones that take effect.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r099",
+   "text": "The balances are changed exclusively by events with status {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r100",
+   "text": "Every event is ignored except those whose status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r101",
+   "text": "It is only events marked {L} that are applied.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r102",
+   "text": "Apart from events whose status is {L}, events have no effect.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r103",
+   "text": "Nothing but an event with status {L} can alter a balance.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r104",
+   "text": "Of all the events, solely those whose status is {L} are carried out.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r105",
+   "text": "Unless an event's status is {L}, it is disregarded.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r106",
+   "text": "The sole events with any effect on the balances are those whose status is {L}.",
+   "pol": "POS",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r107",
+   "text": "An event whose status is {L} has no effect; an event with any other status takes effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r108",
+   "text": "If an event's status is {L}, it is ignored. Otherwise, the event takes effect normally.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r109",
+   "text": "Events with status {L} leave every balance unchanged, while all other events change the balances as usual.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r110",
+   "text": "Events marked {L} are skipped, and every remaining event is applied.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r111",
+   "text": "When an event carries the status {L}, nothing happens to the balances; any event with a different status takes effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r112",
+   "text": "It is events whose status is {L} that are disregarded; all the others go through.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r113",
+   "text": "Should an event's status be {L}, the event is dropped; should it be anything else, the event is carried out.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r114",
+   "text": "Any event bearing the status {L} is discarded without altering the balances. Events bearing other statuses take effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r115",
+   "text": "The balances are left untouched by events whose status is {L} and are updated by every other event.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r116",
+   "text": "Events whose status is {L} count for nothing, whereas events of any other status are processed in full.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r117",
+   "text": "An event with status {L} is treated as inert; an event with an unlisted status is applied.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r118",
+   "text": "For an event whose status is {L}, no balance changes; for every other event, the change goes ahead.",
+   "pol": "NEG",
+   "form": "EXPLICIT_LISTED_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r119",
+   "text": "By default, an event takes effect; however, an event whose status is {L} has no effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r120",
+   "text": "Events change the balances as usual, except that an event with status {L} is ignored.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r121",
+   "text": "Every event is applied unless its status is {L}, in which case it leaves the balances unchanged.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r122",
+   "text": "Ordinarily an event takes effect. If its status is {L}, though, the event does nothing.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r123",
+   "text": "All events go through normally, with one exception: those whose status is {L} are skipped.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r124",
+   "text": "An event is processed in the usual way, but when its status is {L}, the event is discarded and no balance changes.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r125",
+   "text": "The default is that each event alters the balances; an event whose status is {L} is instead disregarded.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r126",
+   "text": "Events normally update the balances. Those marked {L}, on the other hand, are dropped without effect.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r127",
+   "text": "Apply every event, except where the event's status is {L}; such an event is treated as inert.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r128",
+   "text": "Any event of unlisted status takes effect, while an event whose status is {L} leaves every balance as it is.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r129",
+   "text": "Events are carried out in general, yet an event bearing the status {L} counts for nothing.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r130",
+   "text": "Each event changes the balances as expected; the exception is any event whose status is {L}, which has no effect at all.",
+   "pol": "NEG",
+   "form": "EXPLICIT_COMPLEMENT_FIRST",
+   "author": "T2"
+  },
+  {
+   "id": "r131",
+   "text": "Only events whose status is {L} are ignored.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r132",
+   "text": "Every event takes effect unless its status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r133",
+   "text": "All events take effect except those whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r134",
+   "text": "With the exception of events marked {L}, every event changes the balances.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r135",
+   "text": "The sole events left unapplied are those whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r136",
+   "text": "Unless an event's status is {L}, it is applied to the balances.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r137",
+   "text": "Every event is carried out, save for any whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r138",
+   "text": "It is only events with status {L} that are skipped.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r139",
+   "text": "The balances are changed by every event apart from those whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r140",
+   "text": "No event is disregarded except those whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  },
+  {
+   "id": "r141",
+   "text": "Every event changes the balances, barring those whose status is {L}.",
+   "pol": "NEG",
+   "form": "IMPLICIT",
+   "author": "T2"
+  }
+ ]
+}
