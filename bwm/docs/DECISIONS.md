@@ -1347,3 +1347,53 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
   - **Practical blocker:** Qwen3-4B bf16 needs about 12.5-13 GB free host RAM, but free RAM is about 9-11 GB while
     either session's GPU job runs. Strict alternation keeps the GPU busy, so CPU windows are rare. Raised with the
     user.
+- **I-18 / D-79 Third reboot (2026-10-11 21:54:27) and an operator-approved GPU-idle window for RCX.**
+  - **What the reboot cut:** bundleI had held the card since 20:54. The reboot cut it after 60 min, with BW_Pa_v2_s2
+    at step 300/1000 and checkpointed every 50 steps.
+  - **State on return (01:35):** BWM's dead lock (pid 480900, worker 590308) had kept the GPU idle since the reboot.
+    RCX had asked, with operator approval, for a GPU-idle window for its CPU job E01R step A, which has held the
+    CPU-lane lock since 01:27 (expected end 03:17). RCWM's chain was not running; only its watchdog was.
+  - **Decision:** keep the GPU idle until RCX's lane lock is released, or until 03:57 at the latest (RCX's 2.5 h
+    fallback).
+  - **Mechanism:** the detached `scripts/resume_after_cpu_window.py` (launched 01:36). When the window ends, it
+    archives BWM's own stale lock (only if every pid is dead) and relaunches the orchestrator. bundleI then resumes
+    Pa_v2_s2 from its checkpoint. turn.last = rcwm, so BWM's interrupted turn continues, matching the precedent for
+    cut-short turns.
+  - **Also:** the health logger was relaunched at 01:35.
+- **D-80 RCX co-sign review of the B4 screen and item-7 addendum A: all 13 required edits and all recommended items
+  applied** (review `COSIGN_REVIEW_B4_SCREEN.md` @2657079, 9dd352ee…). An implement → independent verify workflow;
+  the verifier failed edits 7, 8 (with 1) and 11, fixed them, and added an addendum A.4 bound fix.
+  - **Tests:** 60 (screen) + 9 (addendum) pass; the whole `tests/` directory passes 234. A 62-probe guard-breaking
+    run on temp trees found no further hole.
+  - **Final shas (still DRAFT):**
+
+    | File | sha256 |
+    |---|---|
+    | `research/PREREG_B4_SCREEN_DRAFT.md` | 2eaa25bd… |
+    | `research/PREREG_ITEM7_ADDENDUM_A_DRAFT.md` | 0b7a53ef… |
+    | `scripts/b4_screen.py` | 3ca01448… |
+    | `tests/test_b4_screen.py` | 0349b70b… |
+    | `scripts/item7_addendum_a.py` | 2a78ba81… |
+    | `tests/test_item7_addendum_a.py` | 1fcc461f… |
+
+  - **Key mechanics now registered:**
+    - analyze re-verifies the freeze and takes the rule from it;
+    - the whole paired code path is pinned, and library and driver versions are checked;
+    - a round-1 identity and R0-args instrument fault means no decision, then one re-run of a and c in a single turn;
+    - the RCX canary and VOID rule;
+    - no forking after R0: the late freeze is mandatory and the guard covers all of `runs/BW_SEEDS/`;
+    - the RCX snapshot at freeze;
+    - finalisation may only drop "(DRAFT)" from the title and edit the status/header lines;
+    - an "outcomes known at registration" section;
+    - the GO rule stays net ≥ 2, with the honest null false-GO of about 0.30-0.36 at plausible discordance (≤ 0.44 at
+      any).
+  - **Independence route (edit 5):** B4 declares the screen outcome known and forbids changes to arm (a).
+    `PREREG_B4_DRAFT.md` must adopt this before B4's freeze.
+  - **Open:**
+    - (1) RCX re-verifies the final shas.
+    - (2) RCX supplies the canary golden file. `CANARY_SHA256` is a placeholder, so freeze and run refuse until it is
+      set; that changes the runner sha, which then needs one more hash round and RCX's re-check.
+    - (3) Then finalise (drop DRAFT), hash into DECISIONS and insert `b4s-freeze` into bundleI between `i7-freeze`
+      and `i7-run`, holding `i7-analyze` and A.0 until `FREEZE_B4S_a_beam.json` exists. This must not go in before
+      (2), or bundleI would fail on the refusing freeze. Deadline: before `i7-freeze`, after Pa_v2_s3, about 2 BWM
+      turns away.
