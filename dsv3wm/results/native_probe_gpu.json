@@ -1,0 +1,35 @@
+{
+  "status": "failed",
+  "config": {
+    "arm": "A0",
+    "seed": 0,
+    "steps": 1,
+    "batch_size": 1,
+    "lr": 0.0001,
+    "rank": 4,
+    "max_length": 384,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.3,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.1,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cuda",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 128
+  },
+  "command": [
+    "dsv3wm/scripts/native_probe.py",
+    "--device",
+    "cuda",
+    "--out",
+    "dsv3wm/results/native_probe_gpu.json"
+  ],
+  "error": "LeaseError('could not acquire C:\\\\Users\\\\clclc\\\\AppData\\\\Local\\\\Temp\\\\rineya-gpu-0.lock within 0s')",
+  "duration_s": 2.3458398000000216
+}

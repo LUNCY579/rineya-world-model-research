@@ -52,6 +52,8 @@ class Config:
                 raise ValueError(f"{key} must be boolean")
         if self.core != "titan-sparse":
             raise ValueError("this protocol binds the Titan-Sparse parent")
+        if self.threads > 4:
+            raise ValueError("shared native CPU lane permits at most four threads")
 
     @classmethod
     def read(cls, path):

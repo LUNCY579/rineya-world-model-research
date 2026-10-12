@@ -2,7 +2,7 @@ import copy
 import unittest
 from unittest.mock import patch
 
-from dsv3wm.domains import rules_for
+from dsv3wm.domains import rules_for, parent_world_key
 from dsv3wm.planning import (PlanningBudget, action_library, distill_ranked, learned_beam_search,
                              rank_candidates, verify_distillation_row, verify_plan)
 from dsv3wm.stats import clustered_bootstrap, holm, paired_mcnemar, wilson_interval
@@ -27,7 +27,7 @@ class PlanningTests(unittest.TestCase):
         self.conditioning = {"domain": "register", "rules": rules_for("register"),
                              "s0": {"x": 0}, "actions": []}
         self.goal = {"kind": "state", "state": {"x": 2}}
-        self.row = {**self.conditioning, "split": "train", "parent_world_id": "training-parent"}
+        self.row = {**self.conditioning, "split": "train", "parent_world_id": parent_world_key('register', self.conditioning['s0'], self.conditioning['rules'])}
 
     def test_search_and_ranking_have_no_exact_executor(self):
         with patch("dsv3wm.domains.rollout_labels", side_effect=AssertionError("oracle forbidden")):
@@ -53,6 +53,9 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(len(retained["verified"]), 1)
         self.assertEqual(len(retained["hard_negatives"]), 1)
         self.assertTrue(verify_distillation_row(retained["verified"][0]))
+        self.assertTrue(verify_distillation_row(retained['verified'][0], allowed_training_rows=[self.row]))
+        self.assertFalse(verify_distillation_row(retained['verified'][0], allowed_training_rows=[]))
+        self.assertFalse(verify_distillation_row(retained['verified'][0], allowed_training_rows=[{**self.row,'split':'dev'}]))
         self.assertFalse(verify_distillation_row(retained["hard_negatives"][0]))
         tampered = copy.deepcopy(retained["verified"][0])
         tampered["plan"] = ["sub1", "sub1"]
@@ -62,6 +65,9 @@ class PlanningTests(unittest.TestCase):
         self.assertFalse(verify_distillation_row(tampered))
         tampered = copy.deepcopy(retained["verified"][0])
         tampered["target"] = '["add1"]'
+        self.assertFalse(verify_distillation_row(tampered))
+        tampered = copy.deepcopy(retained['verified'][0])
+        tampered['parent_world_id'] = 'forged'
         self.assertFalse(verify_distillation_row(tampered))
 
     def test_budget_and_malformed_fail_closed(self):

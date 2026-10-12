@@ -299,15 +299,24 @@ def distill_ranked(training_row: dict, goal: dict, ranked_result: dict, *, keep:
     return {"verified": positive, "hard_negatives": negative}
 
 
-def verify_distillation_row(row: dict) -> bool:
+def verify_distillation_row(row: dict, allowed_training_rows: list[dict] | None = None) -> bool:
     """Fail-closed re-execution gate for native A3/A4 training input."""
     try:
         if row.get("split") != "train" or row.get("verified") is not True:
             return False
         conditioning = {key: row[key] for key in ("domain", "rules", "s0")}
         conditioning["actions"] = []
-        if not isinstance(row.get("parent_world_id"), str) or not row["parent_world_id"]:
+        from .domains import parent_world_key, sha256
+        parent = parent_world_key(row['domain'], row['s0'], row['rules'])
+        if row.get('parent_world_id') != parent:
             return False
+        if allowed_training_rows is not None:
+            approved = {sha256(r):r for r in allowed_training_rows if r.get('split') == 'train'}
+            source = approved.get(row['provenance']['training_input_sha256'])
+            if source is None or source['parent_world_id'] != parent:
+                return False
+            if any(source[key] != row[key] for key in ('domain','s0','rules')):
+                return False
         if row["prompt"] != planning_prompt(conditioning, row["goal"]) or row["target"] != _json(row["plan"]):
             return False
         verification = verify_plan(conditioning, row["goal"], row["plan"])

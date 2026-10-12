@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 
 def main():
     from dsv3wm.config import Config
-    from dsv3wm.native import runtime, load, Predictor, sha256, response_prompt
+    from dsv3wm.native import runtime, load, Predictor, sha256, response_prompt, verify_freeze
     from dsv3wm.data import conditioning, target
     from dsv3wm.evaluation import score_dynamics
     parser = argparse.ArgumentParser()
@@ -21,8 +21,10 @@ def main():
     parser.add_argument('--domain', choices=['register','ledger','blocks'])
     parser.add_argument('--limit', type=int, default=4)
     parser.add_argument('--horizons', default='1,2,4')
+    parser.add_argument('--freeze', default=str(Path(__file__).resolve().parents[1]/'prereg/EVALUATION_FREEZE_V2.json'))
     args = parser.parse_args()
     cfg = Config.read(args.config)
+    freeze_sha = verify_freeze(args.freeze)
     rows = [json.loads(line) for line in Path(args.data).read_text(encoding='utf-8').splitlines()]
     if any(r.get('split') != 'dev' for r in rows):
         raise ValueError('only labelled dev allowed; confirmation registration not yet complete')
@@ -41,6 +43,7 @@ def main():
     if out.exists():
         raise ValueError('evaluation record exists')
     result = {'status':'started', 'config':cfg.dict(), 'data_sha256':sha256(args.data), 'command':sys.argv,
+              'freeze_sha256':freeze_sha, 'evaluated_unique_parents':len({r['parent_world_id'] for r in rows}),
               'instrument':'new development / no simulator feedback / greedy / use_cache=False'}
     started = time.perf_counter()
     try:
@@ -64,6 +67,7 @@ def main():
             result.update(score_dynamics(predictor, rows, horizons))
             result.update(status='pilot-evaluated', teacher_forced_one_step_ce=sum(ces)/len(ces),
                           forward_model_calls=predictor.calls, input_tokens=predictor.input_tokens, output_tokens=predictor.output_tokens,
+                          autoregressive_decoder_forwards=predictor.output_tokens, decoder_token_positions=predictor.decoder_token_positions,
                           peak_gpu_allocated_bytes=torch.cuda.max_memory_allocated() if cfg.device=='cuda' else 0)
             if args.adapter:
                 result['adapter_sha256'] = sha256(Path(args.adapter)/'adapter_model.safetensors')

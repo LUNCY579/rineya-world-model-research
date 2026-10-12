@@ -11,15 +11,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 
 def main():
     from dsv3wm.config import Config
-    from dsv3wm.native import runtime, load, response_prompt, sha256
+    from dsv3wm.native import runtime, load, response_prompt, sha256, boundary, verify_freeze
     from dsv3wm.data import conditioning, target
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', required=True)
     parser.add_argument('--train', required=True)
     parser.add_argument('--out', required=True)
     parser.add_argument('--distill', help='independently verified TRAIN-only trajectories for A3/A4')
+    parser.add_argument('--freeze', help='verify source/config/data freeze before execution')
     args = parser.parse_args()
     cfg = Config.read(args.config)
+    freeze_sha = verify_freeze(args.freeze) if args.freeze else None
     rows = [json.loads(line) for line in Path(args.train).read_text(encoding='utf-8').splitlines()]
     if not rows or any(r.get('split') != 'train' for r in rows):
         raise ValueError('training accepts only labelled training rows')
@@ -31,12 +33,13 @@ def main():
         if not distill or any(r.get('split') != 'train' or r.get('verified') is not True for r in distill):
             raise ValueError('unverified/nontraining trajectory forbidden')
         from dsv3wm.planning import verify_distillation_row
-        if not all(verify_distillation_row(r) for r in distill):
+        if not all(verify_distillation_row(r, allowed_training_rows=rows) for r in distill):
             raise ValueError('distillation exact re-verification failed')
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=False)
     provenance = {'config': cfg.dict(), 'config_sha256': sha256(args.config), 'data_sha256': sha256(args.train),
-                  'status': 'started', 'command': sys.argv, 'started_unix': time.time()}
+                  'status': 'started', 'command': sys.argv, 'started_unix': time.time(), 'freeze_sha256':freeze_sha,
+                  'script_sha256':sha256(__file__)}
     if args.distill:
         provenance['distill_sha256'] = sha256(args.distill)
     (out / 'run.json').write_text(json.dumps(provenance, indent=2), encoding='utf-8')
@@ -72,6 +75,7 @@ def main():
             started = time.perf_counter()
             pm.train()
             for step in range(cfg.steps):
+                boundary(cfg)
                 lm.thermal_guard()
                 optimizer.zero_grad(set_to_none=True)
                 for index in order[step * cfg.batch_size:(step + 1) * cfg.batch_size]:
@@ -135,7 +139,7 @@ def main():
                 parent_parameters=sum(p.numel() for p in model.parameters()) - sum(p.numel() for p in pm.parameters() if p.requires_grad),
                 training_duration_s=time.perf_counter() - started, loss_curve=log,
                 decoder_flops_proxy=6 * 596049920 * counts['input_tokens'],
-                flops_proxy_scope='dense decoder only; excludes auxiliary/head/vocabulary operations and recomputation',
+                flops_proxy_scope='6 x total parent parameters x input tokens; crude parameter-token proxy, excludes checkpoint recomputation and auxiliary costs',
                 peak_gpu_allocated_bytes=torch.cuda.max_memory_allocated() if cfg.device == 'cuda' else 0,
                 peak_gpu_reserved_bytes=torch.cuda.max_memory_reserved() if cfg.device == 'cuda' else 0,
                 versions={'python':sys.version, 'torch':torch.__version__, 'transformers':__import__('transformers').__version__,
