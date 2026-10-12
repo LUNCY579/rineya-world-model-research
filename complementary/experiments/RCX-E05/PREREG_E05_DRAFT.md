@@ -702,7 +702,8 @@ the weaker one.
 - **Start condition** (all must hold; otherwise the phase does not start and nothing is written):
   1. The lane is free (no lock after stale-pid reclaim) and **no `rineya-cpu-lane.waiting.*` marker of any party**
      exists.
-  2. **Free RAM ≥ 4.0 GB** (`rcx.guard.available_ram_gb`; unknown → refuse) (L9 floor; E05 stays < 1.5 GB RSS).
+  2. **Free RAM ≥ 10.0 GB** (`rcx.guard.available_ram_gb`; unknown → refuse). This is BWM's D-84 condition, so that a
+     GPU bundle of about 8 GB starting mid-phase cannot push the box below the shared 6 GB floor. E05 stays < 1.5 GB RSS.
   3. `rcx.guard`: tz01 < 97 °C (or resumed at ≤ 93 °C) and no `.thermal_pause` file.
   4. No stray python process.
   5. Projected phase length L = work at the G-P5 rate (19 GFLOP/s before G-P5 exists) × 1.2 ≤ 15 min;
@@ -726,13 +727,16 @@ the weaker one.
   were 6.5 min per PGV_400 batch at 19 GFLOP/s.) At a check, the job checkpoints (every model's weights, AdamW
   states, early-stopping snapshots, data-order RNG state and step count), releases the lane and exits if any of these
   holds: a `waiting.*` marker exists; 15 min have elapsed; in day mode, the GPU lease has a live holder or the next
-  window opens within 10 min; in night-tail mode, W.end − 5 min is reached; the guard asks to pause (incl. free RAM
-  below its 3.0 GB floor). Resumption reproduces the uninterrupted run (tested). Outputs are keyed and append-only.
+  window opens within 10 min; in night-tail mode, W.end − 5 min is reached; the guard asks to pause; **free RAM < 6.0 GB** (the
+  shared "≥ 6 GB free while any GPU job runs" rule, BWM D-84 condition). Resumption reproduces the uninterrupted run (tested). Outputs are keyed and append-only.
 - **Interaction with others.** E05 stops ≥ 10 min before each window opens and enters a window only after E01R has
   declared that its next block cannot fit, so E01R should never find E05 holding the lane when it could start a block;
   if it does, its `acquire` writes `waiting.rcx` and E05 yields at the next check. Overlap with a GPU bundle is limited
   to a bundle that starts mid-phase, until the next check (≤ 2 min).
-- **BWM confirmation at T1 (L9).** BWM is asked to confirm under D-84 (a) that this ≤ 2-min residual overlap with a
+- **BWM confirmation (2026-10-12):** accepted, with the RAM conditions above. E05 holds the lane as party `rcx-e05`, so
+  BWM's post-07:00 hold (which watches holder `rcx`) never treats an E05 phase as an E01R adapter. E05 still exits
+  ≥ 5 min before every window end.
+- **BWM confirmation at T1 (L9, as asked).** BWM is asked to confirm under D-84 (a) that this ≤ 2-min residual overlap with a
   newly started GPU bundle is acceptable, and (b) the thermal note: tz01 idles at 94–96 °C, and E05's 4-thread slices
   obey the guard (pause at 97 °C, resume at ≤ 93 °C). If BWM does not accept (a), E05 runs in night-tail mode only.
 - Torch threads ≤ 4; `OPENBLAS_NUM_THREADS=1` for the oracle; `CUDA_VISIBLE_DEVICES=""` and the torch.cuda patch before
