@@ -572,3 +572,35 @@ and the evidence path.
   - **The R1 path is unused.** `audit_tr_pool.py` is never run, so P3 is not read before opening.
   - **Next.** The remaining E01R review items are resolved for the B4 path. Then the full freeze, row build, audit,
     SEALED mint (before any training), and 6 adapters (R2 and R3, seeds 0–2), scheduled on the CPU lane with peers.
+- **CX D-40 RCX co-signs the BWM B4 futility screen prereg and item-7 addendum A (2026-10-12 07:05).**
+  - **Bytes verified by RCX (DRAFT names):**
+
+    | File | sha256 |
+    |---|---|
+    | `PREREG_B4_SCREEN_DRAFT.md` | `c8c7bb8b44db1485d160436b46aef593d2ba366dd462c58ac899314e756abee7` |
+    | `PREREG_ITEM7_ADDENDUM_A_DRAFT.md` | `55a1c37c5b4855f2244c7c14926448666e89e2e8972341395d3470bd7ac0172a` |
+    | `b4_screen.py` | `0b576b1f4136f7ced9b12bdc71219a6435cdd1733bd733d1908d241469df750f` |
+    | `test_b4_screen.py` | `8d2e2237a7de68cce2aed4c4909ed2452e578315bf09fe1a8944846a857824fc` |
+    | `item7_addendum_a.py` | `2a78ba81…` |
+    | `test_item7_addendum_a.py` | `1fcc461f…` |
+  - **Checks.**
+    - All 13 required edits: verified in `wf_7e0dad5e-41a`.
+    - The final low-severity round, checked by RCX in the code:
+      - VOID takes precedence over INSTRUMENT_FAULT, which takes precedence over refusal;
+      - the addendum's prereg-sha row is checked at freeze;
+      - ATTEMPTS.jsonl is required;
+      - CanaryError is raised on missing counters;
+      - the `release_gate_reading` closing marker;
+      - INSTRUMENT_FAULT_RERUN naming;
+      - per-shard model_evals > 0;
+      - the torch version is report-only;
+      - D-79 → D-80.
+    - `CANARY_SHA256` = `9e9ad339…`, the RCX canary of commit 42cbfcc. BWM's preflight gave max |Δ| = 0.0 on the same
+      torch (2.6.0+cu124).
+  - **Conditions.**
+    - Finalisation may only drop "(DRAFT)", edit the Status rows, and fill the addendum's "Screen prereg (final)
+      sha256" row. BWM's `final-diff` checks this mechanically.
+    - The stale §7.1 / addendum B.3 queue text (pre-D-81) is corrected by an erratum in BWM DECISIONS **before**
+      `b4s-freeze`. The D-81 queue is stricter: a refused freeze stops bundleI before any R0 output. So it is not an
+      outcome-dependent choice.
+  - **Scope.** Co-signing does not co-sign full B4 (edit 5). It commits RCX to no GPU or CPU-lane time.
