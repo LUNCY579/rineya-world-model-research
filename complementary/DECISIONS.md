@@ -530,3 +530,31 @@ and the evidence path.
   - **Remaining review items** (5, 6, 8, 10–19: the E01R row reader, guard power, the degenerate-REVISE rule, P3
     leakage hardening in `audit_pool`, seeds against git history, eval-time re-estimate, and others) are resolved
     before the full freeze. They do not depend on step A.
+- **CX D-38 PREREG_E01R guard margins, C1 threshold, guard count and degenerate rule FIXED before any step A END line
+  (2026-10-12 01:55). The values come from design constants only; no step A or DEV2 output was read.**
+  - **What it replaces.** The "PENDING STEP A" margin revision in §7 of the reviewed draft (sha `ac50a4ab…`, committed
+    together with this entry) is superseded. The margins are fixed now from the expected SEALED parent counts, with
+    an assumed per-parent SD of 0.2 and correlation 0. The pass condition is |m| ≥ 3.24·SE, which gives P(pass | true 0)
+    ≥ 0.90.
+
+    | Guard | Margin | Basis |
+    |---|---|---|
+    | G1 | −0.03 | unchanged |
+    | G2 | −0.05 | unchanged |
+    | G3 | +0.02 | unchanged |
+    | G4 (≈ 340 parents) | **−0.05** | |
+    | G5 (≈ 100) | **−0.10** | SE ≈ 0.028 |
+    | G6 (≈ 140) | **−0.08** | SE ≈ 0.024 |
+
+  - **C1 threshold and guards.** The C1 ADVANCE threshold stays **+0.25** under every branch, and the six guards are
+    fixed. The B3 high-p̄ case (headroom near +0.25) is an accepted limitation, not a later decision.
+  - **Degenerate trade-off.** "STOP (degenerate trade-off)" triggers when a G4–G6 **point estimate** is ≤ −0.15, not
+    a CI bound (prereg reviewer finding 4).
+  - **REVISE** also requires a C1 point estimate > 0 (prereg reviewer finding 9).
+  - **Remaining items** from the E01R build reviews are resolved before the full freeze:
+    - prereg findings 2, 3, 5–8 and 10–16;
+    - code findings 1–10 and T1–T6;
+    - in particular: no smoke exemption (a smoke failure means no opening); P3 read only if the visible R1 audit meets
+      the minimum; the mint binds the arms to the branch; non-anchor sub-guards are reported.
+
+    None depends on step A outcomes.
