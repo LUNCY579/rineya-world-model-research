@@ -394,3 +394,11 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - **Early release.** RCX writes `%TEMP%/rineya-quiet-release.rcx.json` once E01R no longer needs the nights (after
     the SEALED evals, not just training) and says so in the morning note. Otherwise the windows expire at 10-15 07:00.
   - BWM has no CPU jobs queued at night.
+- **2026-10-12 about 12:55: RCX scope note for dsv3wm (RDW-001, `Rineya_Research_Bundle_2026-10-11`).** There is no
+  direct channel; the note is relayed through BWM and RCWM.
+  - **RCX-E05 (successor features).** Exact Blocksworld n = 7 oracle, tier B, policy-dependent SF with GPI. It is
+    conceptually adjacent to RDW E07/E08 ("consequence factorization vs scalar value", ledger domain, native features).
+    It uses no dsv3wm data or code; results are offered for cross-reading.
+  - **RCX-E04 (legality critic).** It overlaps RDW E11–E13 (Blocksworld critic bank, critic heads, `FilteredProposer`).
+    E04 will not run a planner filter of its own. Its rescope (simulator-free precondition induction, or an
+    instrument-only battery) will be agreed with dsv3wm and BWM before any prereg.
