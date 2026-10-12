@@ -1,0 +1,120 @@
+{
+  "status": "resource-blocked-observation",
+  "observed_at_utc": "2026-10-12T13:08:10.497460+00:00",
+  "available_physical_gib_before_imports": 9.956165313720703,
+  "required_h3_postimport_physical_gib": 10.5,
+  "required_h3_postimport_commit_gib": 10.5,
+  "postimport_admission_performed": false,
+  "native_model_loaded_by_this_turn": false,
+  "a2_retry01_launched": false,
+  "student_readouts_launched": false,
+  "confirmation_access": false,
+  "completed_process": {
+    "pid": 153532,
+    "live": false,
+    "scope": "BWM train_generic seed3 exited; owner log reports1000/1000,done9204.6"
+  },
+  "live_external_processes": [
+    {
+      "pid": 156540,
+      "creation_time_unix": 1791800464.2145731,
+      "rss_bytes": 14798848,
+      "command": [
+        "C:\\Users\\clclc\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "scripts/gpu_run.py",
+        "bundleI",
+        "--",
+        "scripts/bundle.py",
+        "runs/bundles/bundleI.json"
+      ],
+      "status": "running"
+    },
+    {
+      "pid": 159156,
+      "creation_time_unix": 1791809875.4890027,
+      "rss_bytes": 1465827328,
+      "command": [
+        "C:\\Users\\clclc\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "scripts/blocks_eval.py",
+        "--set",
+        "seeds_fresh",
+        "--val",
+        "--out",
+        "runs\\BW_SEEDS\\R0_beam\\shard_0of4",
+        "--freeze",
+        "runs/FREEZE_I7_R0_beam.json",
+        "--proposer",
+        "lm",
+        "--pa",
+        "runs/BW_Pa_v2_s1/adapter",
+        "--mode",
+        "actions",
+        "--fwd",
+        "lm",
+        "--fwd-adapter",
+        "runs/BW_Fdelta_s0/adapter",
+        "--fwd-fmt",
+        "delta",
+        "--K",
+        "8",
+        "--eval-seed",
+        "0",
+        "--planner",
+        "beam",
+        "--W",
+        "4",
+        "--E",
+        "24",
+        "--max-depth",
+        "80",
+        "--step-cap",
+        "24",
+        "--R",
+        "12",
+        "--M",
+        "80",
+        "--P",
+        "1",
+        "--shard",
+        "0/4"
+      ],
+      "status": "running"
+    },
+    {
+      "pid": 164060,
+      "creation_time_unix": 1791804117.6856422,
+      "rss_bytes": 635351040,
+      "command": [
+        "C:\\Users\\clclc\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "-u",
+        "scripts/t2bl_run.py"
+      ],
+      "status": "running"
+    }
+  ],
+  "owner_process_state_changed": false,
+  "gpu_lease_observation": {
+    "path": "C:\\Users\\clclc\\AppData\\Local\\Temp\\rineya-gpu-0.lock",
+    "exists": true,
+    "contents": {
+      "created": 1791800496.3544893,
+      "pid": 156540,
+      "token": "f43d5296823e4c42ad3b265fa2798b69",
+      "label": "bwm:bundle-bundleI",
+      "job": "scripts/bundle.py runs/bundles/bundleI.json",
+      "worker_pids": [
+        11188
+      ],
+      "orphan_after_unix": 1791801396.3544893,
+      "staleness_rule": "reclaimable ONLY if holder pid dead AND worker_pids empty AND orphan_after_unix passed AND no live process carries this label",
+      "bundle_start": 1791800496.3544893,
+      "bundle_budget_s": 16200
+    }
+  },
+  "cpu_lane_observation": {
+    "path": "C:\\Users\\clclc\\AppData\\Local\\Temp\\rineya-cpu-lane.json",
+    "exists": false,
+    "contents": null
+  },
+  "scope": "Specific external processes verified live now; stage changed from training to BWM evaluation while GPU lease remainslive. Preimport memory screen only, no native admission/model/efficacy or predicted end-time claim."
+}

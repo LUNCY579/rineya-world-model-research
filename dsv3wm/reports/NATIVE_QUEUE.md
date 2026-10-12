@@ -76,6 +76,59 @@ must preserve the same source/corpus/draw order. Pass@4 is offline coverage,
 not verifier-assisted deployment efficacy. Unknown physical counters remain
 unknown, and every baseline-correct behavior loss requires explanation.
 
+## Exact pending H3 invocation sequence
+
+These commands are not executed results. Check current post-import physical and
+commit admission before a load; every CLI retains its own10.5GiB checks and the
+shared CPU lane. Completed A0, failed A2 and all historical paths are immutable.
+The source-bound DEV eligibility audit confirms published optimal nonfinish
+distances3/4/5 for6/5/1 tasks: all12 fit the unchanged six-action cap including
+final `finish`. See `results/recovery-h3-v1/DEV_ELIGIBILITY_AUDIT_01.json`.
+No model/solver was executed and no task or denominator was changed.
+Execute the single A2 retry only in its fresh registered destination:
+
+```powershell
+$env:BWM_DEVICE='cpu'
+$env:PYTHONPATH='dsv3wm/src'
+$nativePython='C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe'
+& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/recovery-h3-v1/warm_A2_guards_cpu105_singleton_retry01.resources.json -- dsv3wm/scripts/evaluate_recovery_student_guards_cpu105_readout.py --config dsv3wm/configs/recovery_student_A3.json --adapter dsv3wm/artifacts/recovery-v1/A2_s0/adapter --run dsv3wm/artifacts/recovery-v1/A2_s0/run.json --data dsv3wm/datasets/recovery-v1/dev.jsonl --fixtures dsv3wm/results/retention_core_v1.fixtures.json --freeze dsv3wm/prereg/RECOVERY_H3_WARM_GUARDS_FREEZE_V4_CPU105_SINGLETON.json --out dsv3wm/results/recovery-h3-v1/warm_A2_guards_cpu105_singleton_retry01.json --warm-baseline --train dsv3wm/datasets/recovery-v1/train.jsonl
+if ($LASTEXITCODE -ne 0) { throw 'Stop and preserve the A2 retry' }
+```
+
+Only a completed A2 readout with exact raw parity permits the following guard
+freeze. The helper checks raw old/new A0 and A2 traces and cross-binds them to
+every actual student/control warm artifact. A mismatch stops before any guard
+freeze or student generation; do not repair, redraw or rerun a completed path.
+
+```powershell
+& $nativePython dsv3wm/scripts/freeze_recovery_student_cpu105_readout.py --freeze dsv3wm/prereg/RECOVERY_H3_STUDENT_GUARDS_FREEZE_V3_CPU11.json --out dsv3wm/prereg/RECOVERY_H3_STUDENT_GUARDS_FREEZE_V4_CPU105_SINGLETON.json --old-warm-guard dsv3wm/results/recovery-h3-v1/warm_A0_guards.json --new-warm-guard dsv3wm/results/recovery-h3-v1/warm_A0_guards_cpu105_singleton.json --old-warm-guard dsv3wm/results/recovery-h3-v1/warm_A2_guards.json --new-warm-guard dsv3wm/results/recovery-h3-v1/warm_A2_guards_cpu105_singleton_retry01.json
+if ($LASTEXITCODE -ne 0) { throw 'Stop: warm raw parity or lineage did not qualify' }
+```
+
+After the actual guard freeze exists and resource admission qualifies each
+process, use the full trained configs and fresh paths below. All proposer calls
+include `--rerank`, required by the registered hybrid gate. Actual A4 lives in
+`A4_s0_retry01`; the failed `A4_s0` directory is never selected. Student calls
+omit warm-only flags. Own warm guard baselines are A2 for A3/C3 and A0 for A4/C4.
+
+```powershell
+foreach ($arm in @('A3','A4','C3','C4')) {
+  $taskDirectory=if ($arm -eq 'A4') { 'A4_s0_retry01' } else { "${arm}_s0" }
+  $taskBaseline=if ($arm -in @('A3','C3')) { 'warm_A2_guards_cpu105_singleton_retry01.json' } else { 'warm_A0_guards_cpu105_singleton.json' }
+  & $nativePython dsv3wm/scripts/run_measured.py --out "dsv3wm/results/recovery-h3-v1/${arm}_cpu105_singleton_guards.resources.json" -- dsv3wm/scripts/evaluate_recovery_student_guards_cpu105_readout.py --config "dsv3wm/configs/recovery_student_${arm}.json" --adapter "dsv3wm/artifacts/recovery-h3-v1/${taskDirectory}/adapter" --run "dsv3wm/artifacts/recovery-h3-v1/${taskDirectory}/run.json" --data dsv3wm/datasets/recovery-v1/dev.jsonl --fixtures dsv3wm/results/retention_core_v1.fixtures.json --freeze dsv3wm/prereg/RECOVERY_H3_STUDENT_GUARDS_FREEZE_V4_CPU105_SINGLETON.json --baseline "dsv3wm/results/recovery-h3-v1/${taskBaseline}" --out "dsv3wm/results/recovery-h3-v1/${arm}_cpu105_singleton_guards.json"
+  if ($LASTEXITCODE -ne 0) { throw "Stop and preserve ${arm} guards" }
+  & $nativePython dsv3wm/scripts/run_measured.py --out "dsv3wm/results/recovery-h3-v1/${arm}_cpu105_singleton_proposer.resources.json" -- dsv3wm/scripts/evaluate_recovery_student_cpu105_readout.py --config "dsv3wm/configs/recovery_student_${arm}.json" --adapter "dsv3wm/artifacts/recovery-h3-v1/${taskDirectory}/adapter" --run "dsv3wm/artifacts/recovery-h3-v1/${taskDirectory}/run.json" --tasks dsv3wm/datasets/recovery-v1/planning_dev.jsonl --freeze dsv3wm/prereg/RECOVERY_H3_STUDENT_READOUT_FREEZE_V4_CPU105_SINGLETON.json --out "dsv3wm/results/recovery-h3-v1/${arm}_cpu105_singleton_proposer.json" --rerank
+  if ($LASTEXITCODE -ne 0) { throw "Stop and preserve ${arm} proposer" }
+}
+```
+
+Generate all actual output before cost/gate reduction. Use each own warm proposer
+(`warm_A2_proposer.json` or `warm_A0_proposer.json`) and the paired singleton guard.
+Add C3 to A3 and C4 to A4 through both `--control-proposer` and `--control-guards`;
+neither control can masquerade as a planning-trained student. Reduce costs with
+the pinned tokenizer and preserve unknown physical counters. These commands do
+not open confirmation or certify a successful pilot.
+
 ## Independent domain qualification queue
 
 An additive [conditional-legality calibration diagnostic](LEGAL_CALIBRATION_PREPARATION_2026_10_12.md)
