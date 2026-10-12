@@ -1,0 +1,100 @@
+{
+ "experiment": "RCX-E01R",
+ "sha256_salt": "37b7476389839244b47e8fbfa744913c6dae067353e67961af518acc25439f0b",
+ "battery_commit": "59482ced052a4cd3fd9d1bfc82b3c72d263ecd1c76d67044bd52ce0df4c79916",
+ "skeleton_records": 1760,
+ "n_parents": 40,
+ "strata": [
+  "F1_void",
+  "F2_unseen_real",
+  "F3_unseen_nonce",
+  "F4_nearmiss",
+  "F5_postedlike",
+  "V1_pos",
+  "V2_neg",
+  "V3_inverted",
+  "V5_posted_override",
+  "V7_bigset"
+ ],
+ "surfaces": [
+  "in",
+  "p3"
+ ],
+ "forms": [
+  "EXPLICIT_LISTED_FIRST",
+  "EXPLICIT_COMPLEMENT_FIRST",
+  "IMPLICIT"
+ ],
+ "split": "sealed",
+ "world": "arith",
+ "derivation": "seed = int(sha256(salt)[:8], 16) % 10**8; in = gen.make_battery('sealed', n_parents, seed, strata, surfaces=('in',)); skeleton = in + p3 copies (tid/input/p3_template None; p3_pol, p3_form, p3_j); battery_commit = sha256(salt + ':' + sha256(skeleton jsonl bytes))",
+ "p3_draw": "per parent in battery order: form = FORMS[rank % 3] (rank within its stratum; no draw); rng = random.Random(f'{seed}-{parent_id}'); j_POS = rng.randrange(n[POS/form]); j_NEG = rng.randrange(n[NEG/form]); a p3 record of polarity P uses the j_P-th template of cell P/form, id-sorted",
+ "p3": {
+  "file": "P3_SEALED_v2.json.secret",
+  "sha256": "88dd432bf59ba82617035d3a96280be74ef9fce233cfafa03e539cb489bcf052",
+  "n": 48,
+  "counts": {
+   "POS/EXPLICIT_LISTED_FIRST": 7,
+   "POS/EXPLICIT_COMPLEMENT_FIRST": 10,
+   "POS/IMPLICIT": 6,
+   "NEG/EXPLICIT_LISTED_FIRST": 7,
+   "NEG/EXPLICIT_COMPLEMENT_FIRST": 9,
+   "NEG/IMPLICIT": 9
+  }
+ },
+ "arms_required": [
+  "N-CFSD_s0",
+  "N-CFSD_s1",
+  "N-CFSD_s2",
+  "E-R2_s0",
+  "E-R2_s1",
+  "E-R2_s2",
+  "E-R3_s0",
+  "E-R3_s1",
+  "E-R3_s2"
+ ],
+ "treatment_arms": [
+  "E-R2",
+  "E-R3"
+ ],
+ "branch": {
+  "file": "BRANCH_STEP_A.json",
+  "sha256": "03ce8d1bb9ed213bf8b264328b289a41693e31bce1925079e1d36448e7b1eafe",
+  "branch": "B4",
+  "arms": [
+   "R2",
+   "R3"
+  ]
+ },
+ "dropped_arms": [],
+ "max_new": 160,
+ "train_manifest_sha256": "8bcea63ab6c51bf42259a1c9b02c6ae2f3e9a66c74f30285b62157809f099c02",
+ "rows_sha256": {
+  "E-R2": "16325d16cab27c1cd8517702b62e80d0e4178c5bf97851b048365ccf928180f5",
+  "E-R3": "611ed3690432db2f044721c47441fddd05d7431df31054604384ca1aa800c933"
+ },
+ "audit_e01r_sha256": "91258fac24507e861fae1f07731f4cb74c8fa3bd91cd541916db6209feb05f09",
+ "code_sha256": {
+  "native_e01r.py": "4169c3e55c970f9983d083c551f047444542977279f8f39c3c6a2d382c979ae1",
+  "recipes.py": "be3756c1709ce5d16549125e21173d3ef355404ceb0cd426c17515dbb2317184",
+  "trace_target.py": "7e3a3409088ba54b898eb8858f5b1cb914e320f9ed4be8b0fa7cd18071017c54",
+  "audit_e01r.py": "2c4e942a22b865d7f6bb9519743462fc999f77824fb49f8ba4845dda9aba9e82",
+  "audit_tr_pool.py": "be74c2da7f564fabe120d8ed91a537026a7f40a86284110159b20ff02ce2e3c0",
+  "decide_branch.py": "6835b0402120a2847423d8af08814cc89f311292b110365487b39d61636080d6",
+  "run_e01r.py": "dff678c17f76a7badaeaab8045ac026e0568b87c1e3d625c11ce6b58c9c48e45",
+  "native_e01.py": "e4f630e0fbe3e1d1699f0ddac7ee498510923e3b0fe57272be85c026ccfcc0a5",
+  "native_probe.py": "e8e8723f50d8f1120047661cb9932a6e23d1a6310be9cb347a1909fe6096f8e0",
+  "lora_cpu.py": "ca469a13782f00fc8fd13c393e469d7166c57230e04b5a7d06927c541007e2d8",
+  "stats.py": "06a30c10acb6998033619560aac1b1130542a4344d0edf53e85e63386acf24b2",
+  "wording_audit.py": "cd6a1ef511e6abad2c94931595b546142c14c8ccd01dde719c819a7c1aee017f",
+  "gen.py": "fd89a80d90be4a66d4b0e875ec56e01993042d0e2d23de5f56f6508940fae744",
+  "vocab.py": "de9f1adbc0f4eec96939bf5037688ded0ef6f3ee75a7af4bcb3c5708505d8e55",
+  "templates.py": "c0d6f35544100d91bf2f0fec7095a4d7dba4b3dbb7fb79630450ce601eb5f642",
+  "world.py": "51e00a15c57e5ecfcaa53b8395b61d85118908378853d9e1d8cd5f3c56b7501d",
+  "score.py": "771fd12ca3755f054db23df974db753b2a12120da5c9d52d6134293b0477d22e",
+  "analyze_e01r.py": "2ce94581bc3f5177b7e2ab374ad3ff898cd1e457ed74d0292c817fe766c50618"
+ },
+ "code_sha256_digest": "61ed4df6a35f05bed2fba273fd13077fd6de66ff64c73458ba2c5eef78cf48c5",
+ "python": "3.11.15",
+ "minted_at": "2026-10-12 08:16:08 Central Daylight Time"
+}

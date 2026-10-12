@@ -611,7 +611,7 @@ and the evidence path.
 
     The diff against the co-signed DRAFT bytes is confined to the title (DRAFT dropped), the Status row and the
     addendum's prereg-sha row. BWM recorded erratum E-03 (the stale queue text) before any freeze. Code is unchanged.
-- **CX D-41 PREREG_E01R FROZEN in full (2026-10-12 about 09:45; branch B4: E-R2 and E-R3 vs N-CFSD, on sealed P3).**
+- **CX D-41 PREREG_E01R FROZEN in full (2026-10-12 08:15; branch B4: E-R2 and E-R3 vs N-CFSD, on sealed P3).**
   - **Prereg.** `experiments/RCX-E01R/PREREG_E01R.md`, sha256
     `16e959c54c9b78611c0ae89705fd9ae2ac9d5598c9ac7841d48cbbc4112adfa9`. It is byte-identical to `PREREG_E01R_DRAFT.md` at
     this commit.
@@ -652,7 +652,7 @@ and the evidence path.
     - Rule-type mix, E-R2 vs N-CFSD: S+ 708 vs 531, S− 551 vs 526, compositions 242 vs 444.
   - **Seeds.** 20261264, 20261265 and 20261268 first appear in git history at 1bb6c32 (the E01R D-37 freeze) or later,
     so none had prior use.
-  - **Tests (lane free, 2026-10-12 about 09:30), all OK, 170 in total:**
+  - **Tests (lane free, 2026-10-12 about 08:10), all OK, 170 in total:**
 
     | File | Tests |
     |---|---|
@@ -665,3 +665,13 @@ and the evidence path.
     | test_e01r_branch | 6 |
   - **Next.** `mint-commit --expect-code-sha256 61ed4df6…`, before any treatment training. Then training under the lane
     lock, as RAM allows.
+- **CX D-42 RCX-E01R SEALED commitment minted (2026-10-12 08:16:08), before any treatment training.**
+  - **Arms required:** N-CFSD s0–s2, E-R2 s0–s2, E-R3 s0–s2.
+  - **Commitment.**
+    - `SEALED_COMMIT.json` sha256 `d4635e4292cd0e2ca2026f899d3a1cea75591c3168cb3fb67df766db323a92f2`. This value is
+      passed to `open-sealed --expect-commit-sha`.
+    - sha256(salt) `37b7476389839244b47e8fbfa744913c6dae067353e67961af518acc25439f0b`.
+    - Code digest `61ed4df6…`, equal to D-41.
+  - **Secrecy.** The salt stays in the git-ignored `SEALED_SALT.secret`. P3 is still unread.
+  - **Correction to D-41's time.** D-41's timestamps were first written as "about 09:45" and "about 09:30". The true
+    times are 08:15 (commit bb42a69) and about 08:10.
