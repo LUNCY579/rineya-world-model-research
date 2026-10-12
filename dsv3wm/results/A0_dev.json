@@ -1,0 +1,231 @@
+{
+  "status": "pilot-evaluated",
+  "config": {
+    "arm": "A0",
+    "seed": 0,
+    "steps": 4,
+    "batch_size": 1,
+    "lr": 0.0001,
+    "rank": 4,
+    "max_length": 384,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.3,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.0,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cpu",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 64
+  },
+  "data_sha256": "4b3de6bd3214e052b14452441a4f8d1b501a29421a12da6ff2127876ae2cf2e6",
+  "command": [
+    "dsv3wm/scripts/evaluate.py",
+    "--config",
+    "dsv3wm/configs/A0_pilot.json",
+    "--data",
+    "dsv3wm/datasets/pilot-v1/dev.jsonl",
+    "--domain",
+    "register",
+    "--limit",
+    "2",
+    "--adapter",
+    "dsv3wm/artifacts/A0_s0/adapter",
+    "--out",
+    "dsv3wm/results/A0_dev.json"
+  ],
+  "freeze_sha256": "2352695eea6571c68335b0a098116a171a4900a86e13c778e05254578e809a55",
+  "evaluated_unique_parents": 2,
+  "instrument": "new development / no simulator feedback / greedy / use_cache=False",
+  "summary": {
+    "1": {
+      "n": 2,
+      "direct_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "rollout_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "legality_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "direct_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "rollout_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "copy_correct": {
+        "count": 2,
+        "rate": 1.0
+      }
+    },
+    "2": {
+      "n": 2,
+      "direct_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "rollout_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "legality_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "direct_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "rollout_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "copy_correct": {
+        "count": 0,
+        "rate": 0.0
+      }
+    },
+    "4": {
+      "n": 2,
+      "direct_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "rollout_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "legality_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "direct_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "rollout_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "copy_correct": {
+        "count": 0,
+        "rate": 0.0
+      }
+    }
+  },
+  "per_parent": [
+    {
+      "id": "ccf5baad78d59d8c0a130bfb16f8f801a9747c738e6a1cc6948bbfc339d0b242",
+      "parent_world_id": "9a28fb7ff39a4d4c1c6b290634f316ae504bcec83bf98909b852309f168408f6",
+      "domain": "register",
+      "stress": [
+        "id"
+      ],
+      "horizons": {
+        "1": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": true,
+          "elapsed_s": 132.12173710000002
+        },
+        "2": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": false,
+          "elapsed_s": 123.62192890000006
+        },
+        "4": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": false,
+          "elapsed_s": 102.33358829999997
+        }
+      }
+    },
+    {
+      "id": "63cfd8b3575da3c7a978c09d6e81e65f3582b87242ce0b8a4554ec68b1dfbce2",
+      "parent_world_id": "4de6197ce3a51077db34d316e7b2d017df3a62f8e24f6f7efecd5fee24d31a14",
+      "domain": "register",
+      "stress": [
+        "invalid_action"
+      ],
+      "horizons": {
+        "1": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": true,
+          "elapsed_s": 81.627297
+        },
+        "2": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": false,
+          "elapsed_s": 82.90169079999987
+        },
+        "4": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": false,
+          "elapsed_s": 99.22541909999995
+        }
+      }
+    }
+  ],
+  "teacher_forced_one_step_ce": 1.7700854539871216,
+  "forward_model_calls": 12,
+  "input_tokens": 1917,
+  "output_tokens": 768,
+  "autoregressive_decoder_forwards": 768,
+  "decoder_token_positions": 146880,
+  "peak_gpu_allocated_bytes": 0,
+  "adapter_sha256": "b135f985534d95fc04e27d999d20a793009489e612affb52d6ec5fd2aa762e45",
+  "duration_s": 635.7497185
+}

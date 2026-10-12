@@ -1,0 +1,238 @@
+{
+  "status": "pilot-evaluated",
+  "config": {
+    "arm": "A0",
+    "seed": 0,
+    "steps": 4,
+    "batch_size": 1,
+    "lr": 0.0001,
+    "rank": 4,
+    "max_length": 384,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.3,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.0,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cpu",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 64
+  },
+  "config_sha256": "3b5c7021624807b880837c8ab4b19c803dc324275a6319b693551f9af28a7edd",
+  "data_sha256": "4b3de6bd3214e052b14452441a4f8d1b501a29421a12da6ff2127876ae2cf2e6",
+  "adapter_sha256": "b135f985534d95fc04e27d999d20a793009489e612affb52d6ec5fd2aa762e45",
+  "freeze_sha256": "6139bbf5539c7ba297a11156a5e707dcb001c3e13f3a5e4436f5ba3a3fcc178b",
+  "probe_sha256": "3bb3cff750f6b13c89459087645be825403e04f06ac0553d232b07b3146a7255",
+  "command": [
+    "dsv3wm/scripts/cached_pilot.py",
+    "--config",
+    "dsv3wm/configs/A0_pilot.json",
+    "--adapter",
+    "dsv3wm/artifacts/A0_s0/adapter",
+    "--data",
+    "dsv3wm/datasets/pilot-v1/dev.jsonl",
+    "--out",
+    "dsv3wm/results/A0_cached_dev.json",
+    "--freeze",
+    "dsv3wm/prereg/CACHE_FREEZE_V3.json",
+    "--probe",
+    "dsv3wm/results/cache_probe_cpu.json"
+  ],
+  "prompt_style": "plain",
+  "cache_policy": "standard BWM KV / FP32 / no compression",
+  "script_sha256": "9d9a319bc1037fed612ece7dadd38b6678577f7239e6a60ecc3182543da50ae0",
+  "oracle_feedback": false,
+  "summary": {
+    "1": {
+      "n": 2,
+      "direct_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "rollout_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "legality_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "direct_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "rollout_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "copy_correct": {
+        "count": 2,
+        "rate": 1.0
+      }
+    },
+    "2": {
+      "n": 2,
+      "direct_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "rollout_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "legality_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "direct_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "rollout_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "copy_correct": {
+        "count": 0,
+        "rate": 0.0
+      }
+    },
+    "4": {
+      "n": 2,
+      "direct_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "rollout_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "legality_correct": {
+        "count": 0,
+        "rate": 0.0
+      },
+      "direct_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "rollout_malformed": {
+        "count": 2,
+        "rate": 1.0
+      },
+      "copy_correct": {
+        "count": 0,
+        "rate": 0.0
+      }
+    }
+  },
+  "per_parent": [
+    {
+      "id": "ccf5baad78d59d8c0a130bfb16f8f801a9747c738e6a1cc6948bbfc339d0b242",
+      "parent_world_id": "9a28fb7ff39a4d4c1c6b290634f316ae504bcec83bf98909b852309f168408f6",
+      "domain": "register",
+      "stress": [
+        "id"
+      ],
+      "horizons": {
+        "1": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": true,
+          "elapsed_s": 18.44807989999981
+        },
+        "2": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": false,
+          "elapsed_s": 18.03709489999983
+        },
+        "4": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": false,
+          "elapsed_s": 18.169495599999664
+        }
+      }
+    },
+    {
+      "id": "63cfd8b3575da3c7a978c09d6e81e65f3582b87242ce0b8a4554ec68b1dfbce2",
+      "parent_world_id": "4de6197ce3a51077db34d316e7b2d017df3a62f8e24f6f7efecd5fee24d31a14",
+      "domain": "register",
+      "stress": [
+        "invalid_action"
+      ],
+      "horizons": {
+        "1": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": true,
+          "elapsed_s": 18.34053219999987
+        },
+        "2": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": false,
+          "elapsed_s": 18.105640799999946
+        },
+        "4": {
+          "direct_correct": false,
+          "rollout_correct": false,
+          "legality_correct": false,
+          "direct_malformed": true,
+          "rollout_malformed": true,
+          "intermediate_correct": [
+            false
+          ],
+          "copy_correct": false,
+          "elapsed_s": 18.120648500000243
+        }
+      }
+    }
+  ],
+  "teacher_forced_one_step_ce": 1.7700854539871216,
+  "forward_model_calls": 12,
+  "input_tokens": 1917,
+  "output_tokens": 768,
+  "autoregressive_decoder_forwards": 780,
+  "decoder_token_positions": 2685,
+  "kv_cache_peak_bytes_estimate": 52985856,
+  "kv_cache_estimate_scope": "resident K/V tensors only, excludes allocation transients/weights",
+  "budget_exhausted": false,
+  "traces_sha256": "1dc72ad182af3c376cf9e1fc091db7975f8b7dd6010e118e27b584717c232733",
+  "duration_s": 123.35656689999996
+}

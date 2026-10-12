@@ -33,7 +33,7 @@ class Config:
             raise ValueError("unknown arm")
         if self.device not in {"cpu", "cuda"} or self.target_mode not in {"full", "delta", "mixed"}:
             raise ValueError("invalid device/target_mode")
-        if self.mtp_tokens not in {1, 2, 4}:
+        if type(self.mtp_tokens) is not int or self.mtp_tokens not in {1, 2, 4}:
             raise ValueError("mtp_tokens counts main head and must be 1, 2 or 4")
         for key in ("steps", "batch_size", "rank", "max_length", "ce_chunk", "mtp_rank", "threads", "generation_tokens"):
             if type(getattr(self, key)) is not int or getattr(self, key) <= 0:
