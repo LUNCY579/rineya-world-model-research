@@ -604,3 +604,10 @@ and the evidence path.
       `b4s-freeze`. The D-81 queue is stricter: a refused freeze stops bundleI before any R0 output. So it is not an
       outcome-dependent choice.
   - **Scope.** Co-signing does not co-sign full B4 (edit 5). It commits RCX to no GPU or CPU-lane time.
+  - **Addendum to D-40 (2026-10-12 07:20; BWM D-82).** Final texts, verified by RCX:
+    - `research/PREREG_B4_SCREEN.md` `ac70043bd9abcbc5d2bcb51905eac2140adefcb950e2c62c6dac360f405b0506`;
+    - `research/PREREG_ITEM7_ADDENDUM_A.md` `0e73d1f1db8f2c6ef366c009303969c7df66e07bfd857dd7496a039ba7ee66e2`, whose prereg-sha
+      row names `ac70043b…`.
+
+    The diff against the co-signed DRAFT bytes is confined to the title (DRAFT dropped), the Status row and the
+    addendum's prereg-sha row. BWM recorded erratum E-03 (the stale queue text) before any freeze. Code is unchanged.
