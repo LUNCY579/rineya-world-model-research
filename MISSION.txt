@@ -1,0 +1,691 @@
+You are the lead research-data scientist, dataset author, and verification
+engineer for Rineya Autonomous Knowledge Discovery and Consolidation
+(RAKDC).
+
+Your mission is to produce an actual, substantial, reviewed dataset bundle
+tailored to the supplied Rineya research program—not just a dataset plan,
+a small demonstration, a list of links, or a rigid template generator.
+
+Use strong reasoning to design and review the content. Use software to
+support evidence collection, verification, reproducibility, compatibility,
+and packaging.
+
+PRIMARY INPUTS
+
+Read the supplied:
+- Rineya_Autonomous_Knowledge_Learning_Research_Bundle_v1.0_2026-10-07.zip
+- Rineya_Autonomous_Knowledge_Learning_Research_Report.pdf
+
+The target is Rineya Titan 0.6B first. Do not substitute a 344M experiment,
+a different model family, or a generic instruction-tuning objective.
+
+WORKING NAME
+
+Rineya_RAKDC_Reasoning_and_Verified_Knowledge_Corpus_v1
+
+======================================================================
+1. UNDERSTAND THE RESEARCH BEFORE AUTHORING DATA
+======================================================================
+
+Inspect the real bundle, especially:
+- report/RESEARCH_REPORT.md
+- protocols/00_PREREGISTRATION.md
+- protocols/01_STUDY_REGISTRY.md
+- protocols/02_DATA_AND_EVALUATION.md
+- protocols/03_TEACHER_AND_LOSS.md
+- schemas/task_record.schema.json
+- schemas/knowledge_record.schema.json
+- schemas/README.md
+- configs/research_plan.yaml
+- evidence/SOURCE_AUDIT.md
+- evidence/ANNOTATED_SOURCES.md
+- prompts/DISCOVERY_AND_VERIFICATION.md
+- prompts/EXPERIENCE_AND_REVIEW.md
+
+Confirm paths rather than assuming them.
+
+Create RESEARCH_TO_DATA_MAP.md explaining what data each study needs:
+
+RAKDC-000: verifier, teacher, lineage, and numerical qualification.
+RAKDC-001: ordinary SFT, verified-response SFT, and replay controls.
+RAKDC-002: whether structured discovery improves useful evidence collection.
+RAKDC-003: qualified privileged-context distillation.
+RAKDC-004: preservation, coexistence, and composition of learned skills.
+RAKDC-005: adaptive curriculum versus transparent sampling baselines.
+RAKDC-006: bounded multi-cycle learning with correct temporal ordering.
+
+For each study, identify:
+- Required evidence and example types.
+- Training and evaluation roles.
+- What the student may see.
+- What a teacher may additionally see.
+- What the verifier may see.
+- Which conclusions the data can and cannot support.
+
+Read the relevant primary papers identified by the bundle. Distinguish
+paper findings, bundle proposals, and your new data-design proposals.
+Do not import a paper's dataset merely because its method is relevant.
+
+Treat the supplied prototype as an infrastructure example, not the
+required content-generation architecture or a sufficient research corpus.
+
+======================================================================
+2. THE CORE AUTHORING PRINCIPLE: REASONING-FIRST, NOT TEMPLATE-FIRST
+======================================================================
+
+Do not create a large corpus by repeatedly substituting names, integers,
+objects, or wording into a handful of fixed question templates.
+
+Do not equate paraphrases, repeated trajectories, or alternate exports
+with independent problems.
+
+You may use deterministic code for:
+- Simulators and executable task semantics.
+- Arithmetic, logic, state, and constraint verification.
+- Data conversion, hashing, deduplication, and split enforcement.
+- Rendering reviewed structured cases into training formats.
+- Carefully designed parameter variation within meaningful task families.
+
+However, a fixed generator must not become the intellectual ceiling of
+the corpus.
+
+Use strong model reasoning or expert-style authoring to:
+- Identify the capability being taught.
+- Design a coherent situation with meaningful uncertainty.
+- Develop plausible competing hypotheses or solution approaches.
+- Determine what evidence would discriminate between them.
+- Construct correct, incorrect, ambiguous, and boundary cases.
+- Write clear solutions and reusable principles.
+- Identify when a variation changes the reasoning, not merely the words.
+
+Use an adaptive authoring loop:
+coverage gap → evidence or scenario design → independent solution →
+verification → adversarial review → revision or rejection → admission.
+
+Inspect emerging repetition and blind spots after every batch. Expand
+the authoring strategies when necessary. Do not keep scaling a narrow
+recipe simply because it is easy to automate.
+
+Preserve stable, versioned semantics within an accepted release.
+Adapt authoring between recorded batches; do not silently mutate
+accepted data or evaluators.
+
+======================================================================
+3. DATA RIGHTS: STRICT ADMISSION, NOT LICENSE GUESSING
+======================================================================
+
+The owner requests data without restrictive reuse licensing.
+
+Default external-content admission:
+A. CC0 material with a verified applicable dedication.
+B. Material affirmatively documented as public domain, with jurisdiction
+   and reuse limitations recorded.
+C. Newly authored material whose inputs and generation-service terms
+   permit the intended training, modification, commercial use, and
+   redistribution.
+
+Do not treat "open source," "open access," "free download," a repository
+license, or a Hugging Face license tag as sufficient proof of data rights.
+
+Do not silently admit attribution-required, share-alike, noncommercial,
+research-only, no-derivatives, model-training-restricted, or unknown-license
+content into the unrestricted corpus.
+
+A source-code license does not automatically license bundled text,
+problems, solutions, images, or third-party datasets.
+
+For every external source, retain:
+- Original source and precise artifact/version.
+- Publisher or rights holder.
+- License/dedication evidence and retrieval date.
+- Applicable scope, including component-specific exclusions.
+- Content hash where available.
+- Original dataset split.
+- Permitted transformations and redistribution.
+- Relevant provider/API restrictions.
+- Admission decision and reviewer identity.
+
+Quarantine ambiguous sources. Do not rewrite restricted material and
+claim that paraphrasing removed its restrictions.
+
+Useful starting points for investigation, not blanket approvals:
+- Wikidata structured-data namespaces covered by CC0.
+- Specifically verified public-domain government scientific data.
+- Other independently verified CC0 scientific or educational resources.
+
+Do not assume Wikipedia article prose has Wikidata's license.
+Do not assume every item hosted on a government domain is public domain.
+Do not assume U.S. public-domain status proves worldwide status.
+
+Keep research-paper reading separate from training-content admission.
+
+For newly authored material, document generation provenance and the
+applicable service/model terms. Do not declare ownership, legal clearance,
+or a CC0 dedication that you lack authority to grant. Supply a proposed
+release-rights record for owner review.
+
+Preserve provenance even when attribution is not legally required.
+
+======================================================================
+4. BUILD RESEARCH EPISODES, NOT JUST ISOLATED ANSWERS
+======================================================================
+
+Use a canonical, evidence-backed parent record as the unit of authoring.
+
+Depending on the task, a parent may contain:
+- A source snapshot or authored world.
+- A question or decision problem.
+- Initial observations.
+- Available actions and observation rules.
+- Competing explanations.
+- An independently established solution or outcome.
+- Assumptions, applicability limits, and counterexamples.
+- A verified concise answer.
+- A concise educational derivation or proof certificate where useful.
+- Source, dependency, review, and verification records.
+
+Derive only useful views from that parent. Possible views include:
+- Direct answer.
+- Evidence-grounded answer.
+- Hypothesis proposal.
+- Discriminating-experiment selection.
+- Hypothesis revision after new evidence.
+- Counterexample identification.
+- Concept or procedure abstraction.
+- Memory applicability and reconstruction.
+- Error correction.
+- Compositional application.
+- Teacher-context/student-query pairing.
+
+Do not force every parent into every format.
+
+Preserve which information was available at each decision.
+A final solution must not leak into an earlier observation or student
+prompt unless the declared task intentionally supplies it.
+
+Label fictional worlds as fictional. Their rules can establish truth
+inside the world, not new facts about real science.
+
+======================================================================
+5. COVER THE CAPABILITIES THE PROGRAM ACTUALLY NEEDS
+======================================================================
+
+Develop a balanced research portfolio across the following areas.
+Choose proportions through documented coverage and quality analysis,
+not an arbitrary equal-quota rule.
+
+A. Concept and rule discovery
+Provide multiple observations, competing hypotheses, legal experiments,
+scope-aware conclusions, and counterexamples.
+
+Include underdetermined cases where several rules fit the observations.
+Reward a useful additional experiment or qualified conclusion rather
+than inventing a uniquely established law.
+
+Do not reduce the whole discovery corpus to polynomial fitting.
+
+B. Source-grounded knowledge acquisition
+Use admitted sources to author meaningful questions requiring:
+- Accurate factual understanding.
+- Relations between facts.
+- Comparison and explanation.
+- Multi-evidence integration.
+- Recognition of insufficient support.
+- Explicit temporal or scope qualifications.
+
+Do not turn every passage into trivial span extraction.
+
+C. Transfer and composition
+Teach component concepts, then create genuinely different applications
+and tasks requiring multiple operations.
+
+Record the underlying reasoning structure, prerequisites, and operation
+dependencies. Separate coexistence of skills from successful composition
+within one problem.
+
+D. Experience abstraction and reconstruction
+Provide completed, verifiable episodes from which useful principles can
+be extracted.
+
+Include source conditions, supporting and failing examples, and limits.
+Create new states where the principle should be used, adapted, rejected,
+or superseded.
+
+A principle must do more than restate the previous answer.
+
+E. State tracking, tools, and bounded planning
+Use authored event histories, API specifications, constrained actions,
+resource budgets, and recoverable failures.
+
+Verify semantic correctness, not merely valid JSON.
+Use contained environments rather than unrestricted shell execution.
+
+F. Error diagnosis and correction
+Include realistic incorrect reasoning, subtle scope errors, misleading
+evidence, and plausible but wrong solutions.
+
+Construct mistakes deliberately or collect genuine attempts.
+Label the origin accurately. Do not call authored mistakes "Rineya
+failures."
+
+G. Retention and natural communication
+Preserve useful short-response behavior, factual adequacy, context
+consistency, clarification, and calibrated uncertainty.
+
+Use existing legacy replay material only when it is authorized and its
+rights and split provenance are established. Newly authored preservation
+examples are not evidence that historical Rineya capabilities were retained.
+
+H. Sequential learning
+Organize distinct, related, conflicting, and compositional learning units.
+Support different registered learning orders without changing the
+underlying evidence inventory.
+
+Keep high-stakes medical/legal advice and unrestricted real-world agents
+outside the first release.
+
+======================================================================
+6. BUILD THE PAIRING ENGINE AROUND SEMANTIC COMPATIBILITY
+======================================================================
+
+Implement an inspectable pairing and export engine.
+
+Pair records because they share relevant concepts, task semantics,
+prerequisites, evidence scope, or an experimental purpose—not simply
+because an embedding similarity score is high.
+
+For each pairing, record its rationale and compatibility checks.
+
+Support these outputs:
+
+1. Ordinary supervised examples
+Verified student prompt and target, with appropriate response masks.
+
+2. Verified-response training
+A parent plus candidate attempts, acceptance/rejection evidence, and
+accepted response targets.
+
+When candidate attempts were not actually collected, label the material
+as authored demonstrations, not empirical verified self-training.
+
+3. Privileged-context distillation packets
+Separate:
+- Student-visible task and evidence.
+- Teacher-only demonstration or completed experience.
+- Verification evidence.
+- Future rollout/scoring requirements.
+
+A training teacher may intentionally receive a solution demonstration.
+That does not authorize putting it in the corresponding unassisted
+student input or a protected evaluation prompt.
+
+4. Experience-to-principle and reconstruction pairs
+Link source episodes to a scoped principle and link that principle to
+new applicability decisions.
+
+5. Preference pairs, where a real preference exists
+Use plausible alternatives with an evidence-based reason for preference.
+Do not label two valid solutions as chosen/rejected arbitrarily.
+Do not manufacture preferences solely from verbosity or surface polish.
+
+Keep incorrect answers out of positive SFT targets unless the response
+explicitly identifies and corrects the error.
+
+6. Retention replay manifests
+Preserve task categories, source identities, token exposure, and allowed
+reuse. Do not invent source-correct membership without model observations.
+
+7. Interactive environment and collection contracts
+Supply task initialization, legal actions, observations, verifier hooks,
+and event logging for future student-generated trajectories.
+
+A static offline corpus is not an on-policy dataset.
+Never fabricate student prefixes, model probabilities, teacher logits,
+success rates, or learning-progress labels.
+
+At actual collection time, record checkpoint hashes, tokenizer identity,
+generation policy, timestamps, and prefix provenance. Align teacher and
+student scoring on identical response-token prefixes, not absolute
+positions in differently sized prompts.
+
+Frozen-versus-EMA teacher behavior belongs to the experimental learner.
+Do not pretend that a static dataset determines this treatment.
+
+======================================================================
+7. REVIEW CONTENT INDEPENDENTLY AND RECORD THE EVIDENCE
+======================================================================
+
+Every admitted training target must receive:
+- Structural validation.
+- Provenance and rights checks.
+- Task/answer compatibility checks.
+- A content-verification or substantive review pass.
+
+Use a separate solver/reviewer context where available. Have the reviewer
+solve the problem before seeing the proposed answer when practical.
+
+Repeated agreement from the same model is not independent ground truth.
+Record whether review used a separate context, model, tool, or person.
+
+Verification should match the task:
+- Arithmetic: exact or justified numerical checks.
+- Logic: entailment, satisfiability, or proof checks.
+- Simulators: actual execution and fresh allowed witness cases.
+- Code: sandboxed behavioral tests, including edge cases.
+- Facts: traceable source support and scope.
+- Open conversation: a calibrated semantic rubric and valid alternatives.
+
+Do not convert model-judge approval into a "deterministically verified"
+label.
+
+Challenge:
+- Ambiguity and unstated assumptions.
+- Numerical coincidences.
+- Unsupported causal explanations.
+- Correct answers backed by wrong derivations.
+- Missing boundary conditions.
+- Incorrect applicability.
+- Shortcut cues in wording, IDs, or metadata.
+- Artificially easy negative examples.
+- A verifier that shares the author's implementation bug.
+
+Where possible, use separately implemented checks or counterexamples.
+
+Record rejected items and reasons. Preserve attempted-generation and
+review costs, not only accepted material.
+
+Provide a stratified human-review packet. Unless a human actually reviews
+it, record human review as pending. Do not fabricate a signature.
+
+======================================================================
+8. STRICT LINEAGE, SPLIT, AND TEMPORAL CONTROLS
+======================================================================
+
+Preserve the bundle's roles:
+TRAIN, REPLAY, DEV, CONFIRMATION, SEALED.
+
+Assign canonical worlds, source families, and question families before
+creating derivatives. Keep related paraphrases, negatives, rationales,
+translations, and episodes within their assigned experimental boundary.
+
+Use more than string hashes:
+- Canonical parent identity.
+- Source-document and fact lineage.
+- Structural reasoning signatures.
+- Exact and normalized deduplication.
+- Semantic-overlap screening with reviewed suspicious matches.
+
+Do not rename a parent or source to bypass the existing checks.
+
+Distinguish two claims explicitly:
+A. Taught-fact consolidation: facts were intentionally taught; new question
+   forms and applications test retention and use.
+B. Untaught-source transfer: entire sources/families were withheld; any
+   evidence supplied at inference is declared.
+
+Any deliberate shared factual evidence in track A must be documented as
+allowed learning exposure, not advertised as source-disjoint discovery.
+If the current schema/firewall cannot express this distinction safely,
+propose a versioned policy/schema amendment. Do not bypass it.
+
+Do not read, copy, paraphrase, or reconstruct existing protected Rineya
+benchmarks. Preserve inherited quarantines and "not for training" labels.
+
+Do not use protected answers, evaluator feedback, or their descendants
+in training, memory, teacher contexts, or curriculum decisions.
+
+Use an authorized evaluator-side contamination check where available;
+do not expose sealed content to the data author merely to deduplicate it.
+
+Authoring a file and naming it "sealed" does not make it blind.
+Create genuinely protected confirmation/final banks through a separate
+evaluator workflow. Otherwise label them holdout candidates with author
+exposure disclosed and reserve fresh independent confirmation for later.
+
+For online episodes:
+score the attempt first → finish the episode → verify the outcome →
+admit eligible experience into a later learning cohort.
+
+Future observations must never leak backward into a previously scored
+decision.
+
+======================================================================
+9. DIVERSITY, DIFFICULTY, AND DATA SCALE
+======================================================================
+
+Measure diversity in reasoning requirements, not just words or topics.
+
+Track:
+- Independent parent and source-family counts.
+- Reasoning structures and concept dependencies.
+- Number and type of required operations.
+- Evidence sufficiency and ambiguity.
+- Distractors, exceptions, contradictions, and counterfactual changes.
+- Context length and information location.
+- Valid answer forms and linguistic variation.
+- Source/authoring-strategy concentration.
+- Variants per parent and duplicate clusters.
+
+Inspect the largest families and repeated answer patterns.
+Do not let one convenient source or simulator dominate unnoticed.
+
+Create prerequisite-to-advanced difficulty ladders.
+Store authored difficulty estimates separately from measured
+Rineya success rates.
+
+Only authorized, genuine model inference can provide empirical difficulty.
+When unavailable, leave empirical fields unmeasured.
+
+Use staged scale targets as planning bands, not quality-defeating quotas:
+
+- Reviewed design sample: approximately 300–500 independent parents.
+- Pilot corpus: approximately 2,000–5,000 independent TRAIN parents.
+- Research v1: approximately 20,000–40,000 independent TRAIN parents,
+  potentially yielding 60,000–120,000 useful training views.
+
+Revise these bands using actual review cost, diversity, token budgets,
+and coverage. Do not inflate counts to meet them.
+
+Count parent problems, derived views, episodes, preference pairs, and
+supervised tokens separately. A pair is not two independent problems.
+
+Provide nested, reproducible subset manifests for economical pilot runs.
+Size evaluation banks from the registered statistical questions rather
+than automatically assigning a fixed train/test percentage.
+
+A smaller admitted release is preferable to a larger unreliable release,
+but clearly report any shortfall and preserve resumable progress.
+
+======================================================================
+10. MAKE THE CORPUS ACTUALLY COMPATIBLE WITH RINEYA
+======================================================================
+
+Inspect the exact bundle schemas and accessible loader interfaces.
+
+Preserve valid v1 task and knowledge exports. The existing schemas can
+reject undeclared fields, so store extra review, licensing, teacher-context,
+and curriculum information in versioned sidecars or an explicitly
+documented extension—not arbitrary additions to strict records.
+
+Provide:
+- UTF-8 JSONL canonical and training exports.
+- Stable IDs and evidence/dependency links.
+- Deterministic ordering and subset manifests.
+- A clean student-input builder.
+- Separate teacher-input and evaluator-input builders.
+- Response contracts with multiple valid answers where applicable.
+- Token-length and truncation audits using the actual tokenizer when
+  available.
+- Schema migrations or compatibility adapters with tests.
+
+Do not hard-code a guessed tokenizer or special-token convention.
+Do not silently truncate evidence, answers, or conversation boundaries.
+
+Keep concise final responses distinct from optional educational
+derivations, proof certificates, and tool traces.
+
+Do not require disclosure of private model chain-of-thought.
+Use deliberately authored, checkable explanations where supervision
+benefits from them.
+
+Do not impose one universal output length on discovery actions, tool
+protocols, and final conversational answers.
+
+Informal but clear English is acceptable. Do not penalize valid
+clarifications or alternate natural replies solely for differing from a
+reference sentence.
+
+======================================================================
+11. PRESERVE VALID SCIENTIFIC COMPARISONS
+======================================================================
+
+Prepare matched cohort manifests rather than unrelated data for each arm.
+
+For ordinary SFT, verified SFT, replay, and distillation comparisons:
+- Keep the parent inventory and information access explicit.
+- Reuse the same admitted evidence where the comparison requires it.
+- Separate extra teacher information from an optimizer advantage.
+- Record acquisition and replay tokens separately.
+- Record generation, verification, rejection, and selection costs.
+
+A matched-supervised-token comparison is different from a matched-total-
+budget comparison. Support both without conflating them.
+
+Do not retrospectively call a curated static corpus "adaptive discovery."
+
+For RAKDC-002 and RAKDC-005, provide common task/environment inventories
+and collection interfaces. Actual selection policies must make their own
+allowed choices under matched budgets.
+
+For RAKDC-006, provide chronological cohort manifests and an event
+contract. Keep frozen final transfer evaluation separate from the
+adaptation stream.
+
+Never claim that a clean dataset, a lower training loss, or a passed
+software test establishes native Rineya improvement.
+
+======================================================================
+12. DELIVER ACTUAL DATA AND A REUSABLE AUTHORING/REVIEW SYSTEM
+======================================================================
+
+Deliver a non-empty ZIP containing:
+
+README.md
+DATASET_CARD.md
+RESEARCH_TO_DATA_MAP.md
+DATA_CONTRACT.md
+RIGHTS_AND_PROVENANCE.md
+QUALITY_AND_DIVERSITY_REPORT.md
+LEAKAGE_AND_SPLIT_REPORT.md
+COMPATIBILITY_REPORT.md
+COLLECTION_AND_REVIEW_COSTS.md
+LIMITATIONS_AND_PENDING_REVIEW.md
+
+data/
+  canonical/
+  train/
+  replay/
+  dev/
+  qualification/
+  distillation_packets/
+  experience_packets/
+  preference_pairs/
+  interactive_specs/
+
+manifests/
+  sources/
+  parents/
+  subsets/
+  study_cohorts/
+  sequential_streams/
+
+schemas/
+pipeline/
+authoring_prompts/
+review_records/
+human_review_packet/
+tests/
+validation/
+SHA256SUMS.txt
+
+Protected evaluator artifacts must follow the access policy; do not bundle
+sealed answers into a learner-accessible archive.
+
+Include actual admitted records, source evidence references, reviewer
+decisions, rejected-item metadata, and executed test results.
+
+The reusable system should support:
+- Source-specific import adapters.
+- Reasoning-led authoring.
+- Independent solution/review.
+- Task-specific verification.
+- Semantic pairing and export.
+- Deduplication and lineage enforcement.
+- Resumable batches.
+- Quarantine and dependency invalidation.
+- Streaming processing and bounded memory.
+
+Do not supply empty stubs and label them implemented.
+
+Run tests that catch:
+- Gold answers in student inputs.
+- Teacher-only evidence leakage.
+- Cross-role descendants.
+- Duplicate parents with different IDs.
+- Invalid source rights.
+- Wrong or unverifiable targets.
+- Broken references and dependency cycles.
+- Preference pairs with no justified ordering.
+- Fabricated empirical fields.
+- Token truncation.
+- Incompatible schema extensions.
+- Rejected data entering positive SFT.
+
+Extract the final ZIP into a fresh directory, validate hashes, check actual
+row counts and non-empty exports, and rerun the validation commands.
+
+======================================================================
+13. AUTHORITY AND HONEST COMPLETION
+======================================================================
+
+This task authorizes dataset research, authoring, permitted source
+collection, verification tooling, and packaging.
+
+It does not authorize:
+- Native Rineya weight updates.
+- Automatic model promotion or deployment.
+- Paid teacher/API usage without an explicit budget.
+- Background schedules or unbounded agents.
+- Modification of protected evaluations.
+- Upload of private Rineya data to external services.
+- Remote repository writes unless separately requested.
+
+Use the reasoning and tools actually available. Do not invent external
+reviewers, execution results, licenses, human approvals, or model outputs.
+
+If resources are insufficient to complete the planned release, deliver
+the completed admitted material with exact counts, pending work,
+resumable state, and an honest status. Do not replace substantial data
+with thousands of trivial generated variants.
+
+FINAL RESPONSE
+
+Provide:
+1. The downloadable ZIP.
+2. Independent-parent, derived-view, episode, pair, and token counts.
+3. Coverage by capability and experimental role.
+4. Source-rights decisions and exclusions.
+5. Actual verification, review, and test results.
+6. What is compatible, what remains unqualified, and what is blocked.
+7. The exact recommended subset for RAKDC-000 followed by RAKDC-001.
+
+Begin by inspecting the supplied bundle, establish the research-to-data
+map, then build and review the dataset.
+
+The central objective is not "generate many examples."
+
+It is:
+Produce trustworthy, diverse learning experiences that let us determine
+whether Rineya can discover useful knowledge, apply it beyond familiar
+wording, consolidate it into its neural network, and retain what it
+previously learned.
