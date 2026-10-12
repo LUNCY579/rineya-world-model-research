@@ -1,0 +1,15 @@
+{
+  "version": "curriculum-1.0",
+  "generator_version": "generator-1.0",
+  "candidate_order": "balanced",
+  "family_minimums": {"A": 1, "B": 1, "C": 1, "D": 1, "E": 1, "F": 1, "G": 1, "H": 1},
+  "split_templates": {
+    "train": {"template": "primitive_ledger_and_three_block", "accounts": 2, "entries": 1, "blocks": 3, "magnitude_min": 2, "magnitude_max": 19, "horizon": 3, "constraint_composition": "none"},
+    "dev": {"template": "minimum_balance_and_four_block", "accounts": 3, "entries": 2, "blocks": 4, "magnitude_min": 20, "magnitude_max": 39, "horizon": 4, "constraint_composition": "minimum"},
+    "sealed": {"template": "cost_cap_and_five_block", "accounts": 3, "entries": 3, "blocks": 5, "magnitude_min": 40, "magnitude_max": 59, "horizon": 5, "constraint_composition": "cost"},
+    "ood": {"template": "withheld_constraint_conjunction_and_six_block", "accounts": 4, "entries": 4, "blocks": 6, "magnitude_min": 1000, "magnitude_max": 1200, "horizon": 6, "constraint_composition": "minimum_cost_status"}
+  },
+  "split_policy": "All goals, counterfactuals, surface perturbations, and rule reversals of one parent/template bundle stay together. Templates are reserved before seed sampling; OOD withholds the simultaneous minimum-balance + cost-cap + forbidden-status conjunction.",
+  "exhaustive_search": {"max_horizon": 2, "max_actions": 5},
+  "controlled_experiment": {"split": "dev", "seed_start": 410000, "groups": 32, "hypothesis": "Semantics-preserving winner rotation reduces option-position imbalance without changing any verified decision."}
+}

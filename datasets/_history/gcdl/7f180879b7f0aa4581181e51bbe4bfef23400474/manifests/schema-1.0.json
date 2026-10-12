@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rineya:gcdl:1.0",
+  "title": "GCDL canonical record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "family",
+    "difficulty",
+    "split",
+    "provenance",
+    "input",
+    "targets",
+    "metadata"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "gcdl-1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^gcdl_[a-f0-9]{32}$"
+    },
+    "family": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+      ]
+    },
+    "difficulty": {
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "adversarial"
+      ]
+    },
+    "split": {
+      "enum": [
+        "train",
+        "dev",
+        "sealed",
+        "ood"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "seed",
+        "generator_version",
+        "environment_version",
+        "config_version",
+        "config_hash",
+        "template_id",
+        "template_group_id",
+        "parent_world_id",
+        "lineage_id",
+        "record_index"
+      ],
+      "properties": {
+        "seed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "record_index": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "environment",
+        "rules",
+        "goal",
+        "constraints",
+        "candidates",
+        "utility_definition"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "initial_state"
+          ]
+        },
+        {
+          "required": [
+            "possible_worlds"
+          ]
+        }
+      ],
+      "properties": {
+        "environment": {
+          "enum": [
+            "ledger",
+            "blocksworld",
+            "register"
+          ]
+        },
+        "rules": {
+          "type": "object"
+        },
+        "goal": {
+          "type": "object"
+        },
+        "constraints": {
+          "type": "object"
+        },
+        "initial_state": {
+          "type": "object"
+        },
+        "possible_worlds": {
+          "type": "array",
+          "minItems": 1
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "plan"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "plan": {
+                "type": "array",
+                "maxItems": 12,
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "utility_definition": {
+          "type": "object"
+        }
+      }
+    },
+    "targets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "oracle",
+        "decision"
+      ],
+      "properties": {
+        "oracle": {
+          "type": "object"
+        },
+        "decision": {
+          "type": "object"
+        },
+        "search": {
+          "type": "object"
+        },
+        "bounded_proof": {
+          "type": "object"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "protected_template_signature",
+        "counterfactual_group_id",
+        "perturbation",
+        "tags"
+      ]
+    },
+    "verification": {
+      "type": "object"
+    },
+    "quality_gate": {
+      "type": "object",
+      "required": [
+        "status",
+        "rejection_reasons"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "accepted",
+            "quarantined",
+            "rejected"
+          ]
+        },
+        "rejection_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

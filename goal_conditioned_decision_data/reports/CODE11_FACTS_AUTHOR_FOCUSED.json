@@ -1,0 +1,28 @@
+{
+  "amendment_sha256": "e38126079a4d655e3664e4402661283832a7f818271e03ce11431d3ea7126291",
+  "canonical_mutation": false,
+  "commit_or_push": false,
+  "contract": "Every original local/hash/binding check and fresh JSON parse remains; reuse only exact-byte successful structural validator facts by same parser/validator identity inside one same-root read session; raw-byte-LRU4MiB/128 retention limit, not data/history cap; no decoded object or remote authority cache",
+  "diff": "diff --git a/goal_conditioned_decision_data/pipelines/remote_archive.py b/goal_conditioned_decision_data/pipelines/remote_archive.py\nindex fb6ca90..14faa31 100644\n--- a/goal_conditioned_decision_data/pipelines/remote_archive.py\n+++ b/goal_conditioned_decision_data/pipelines/remote_archive.py\n@@ -63,6 +63,7 @@ class _ReadSession:\n     def __init__(self, root, deadline):\n         self.root = root; self.deadline = deadline; self._transport = None\n         self.catalogs = OrderedDict(); self.catalog_bytes = 0\n+        self.local_control_facts = OrderedDict(); self.local_control_bytes = 0\n \n     def check(self):\n         if self.deadline is not None and time.monotonic() >= self.deadline:\n@@ -128,6 +129,7 @@ def read_session(root, *, deadline=None):\n         session.check(); yield session\n     finally:\n         session.catalogs.clear(); session.catalog_bytes = 0\n+        session.local_control_facts.clear(); session.local_control_bytes = 0\n         _READ_SESSION.reset(token)\n \n \n@@ -557,6 +559,36 @@ def _receipt(receipt):\n     return receipt\n \n \n+def _local_control_value(root, body, validator):\n+    \"\"\"Reuse only a successful structural fact for exact freshly read bytes.\n+\n+    JSON objects are always newly decoded. All local file/hash and index binding\n+    checks stay with the caller; these bounded session facts supply no custody.\n+    \"\"\"\n+    parser = _json\n+    value = parser(body)\n+    session = _READ_SESSION.get()\n+    if session is None:\n+        return validator(value)\n+    if session.root != root:\n+        raise ArchiveError('archive read session root mismatch')\n+    session.check()\n+    if type(body) is not bytes or len(body) > CATALOG_CACHE_BYTES or MAX_BATCH_FILES < 1:\n+        return validator(value)\n+    key = (validator, parser, body)\n+    facts = session.local_control_facts\n+    if key in facts:\n+        facts.move_to_end(key)\n+        return value\n+    value = validator(value)  # A failure is never retained.\n+    while facts and (len(facts) >= MAX_BATCH_FILES or session.local_control_bytes + len(body) > CATALOG_CACHE_BYTES):\n+        removed, _ = facts.popitem(last=False)\n+        session.local_control_bytes -= len(removed[2])\n+    facts[key] = True\n+    session.local_control_bytes += len(body)\n+    return value\n+\n+\n def load_index(root):\n     root = _root(root)\n     check_read_deadline(root)\n@@ -581,7 +613,7 @@ def load_index(root):\n         body = _local(root, descriptor['catalog_path'], MAX_INDEX_BYTES)[0]\n         if hashlib.sha256(body).hexdigest() != descriptor['catalog_sha256'] or git_blob_sha1(body) != descriptor['catalog_git_blob_sha1']:\n             raise ArchiveError('local committed catalog commitment mismatch')\n-        catalogs[identifier] = _catalog(_json(body))\n+        catalogs[identifier] = _local_control_value(root, body, _catalog)\n         if catalogs[identifier]['catalog_id'] != identifier:\n             raise ArchiveError('catalog pointer identity mismatch')\n     for identifier, descriptor in index['receipts'].items():\n@@ -592,7 +624,7 @@ def load_index(root):\n         body = _local(root, descriptor['path'], MAX_INDEX_BYTES)[0]\n         if hashlib.sha256(body).hexdigest() != descriptor['sha256']:\n             raise ArchiveError('custody receipt hash mismatch')\n-        receipts[identifier] = _receipt(_json(body))\n+        receipts[identifier] = _local_control_value(root, body, _receipt)\n         if receipts[identifier]['receipt_id'] != identifier:\n             raise ArchiveError('custody pointer identity mismatch')\n         receipt = receipts[identifier]; cat = catalogs.get(receipt['catalog_id'])\n",
+  "errors": 0,
+  "failures": 0,
+  "network": false,
+  "new_sha256": "c4c52b65fb498a48b329aa806a03beba9f8e394faeb9a42543645f0751d2387b",
+  "old_sha256": "ff31136f45a22a90d2ceb138f0e9d63d7fc94bfec137d4244d592ad27c4ba7c2",
+  "recover_order_changed": false,
+  "recovery_restored_sha256": "ae1e322fa40f7917ebb0f15eb01e2096ba5777c4174dfbb1c3b7f29ae5239014",
+  "sealed_targets_read": false,
+  "seconds": 15.601,
+  "skips": 0,
+  "source_path": "/Users/chengli/.codex/gcdl001-host/recovery-proposal-worktree/goal_conditioned_decision_data/pipelines/remote_archive.py",
+  "status": "PASS",
+  "test_modules": [
+    "goal_conditioned_decision_data.tests.test_remote_archive",
+    "goal_conditioned_decision_data.tests.test_archive_read_session",
+    "goal_conditioned_decision_data.tests.test_runtime_session_review",
+    "goal_conditioned_decision_data.tests.test_rendered_metadata_review",
+    "goal_conditioned_decision_data.tests.test_rendered_pipeline"
+  ],
+  "tests_run": 85,
+  "version": "source11-memo-author-focused-1"
+}

@@ -1,0 +1,22 @@
+{
+  "archive_authorization": "user-authorized-gcdl-only-2026-10-11",
+  "archive_cycle": "scripts/archive_cycle.py",
+  "archive_index": "manifests/REMOTE_ARCHIVE.json",
+  "archive_scope": "GCDL-001 only",
+  "archive_trigger_free_bytes": 10737418240,
+  "automation_id": "rineya-gcdl-quality-follow-up",
+  "automation_interval_hours": 2,
+  "automation_kind": "thread_heartbeat",
+  "development_archive": "data/backups/development_archive.tar.gz",
+  "development_archive_pre_migration": "state/development_archive.tar.gz",
+  "development_worktree": "/Users/chengli/Downloads/Rineya_World_Model/.rineya-gcdl-worktree",
+  "development_worktree_retired": true,
+  "host_integration_scope": "new programme runner/heartbeat only; existing runners and repository-global configuration untouched",
+  "isolated_sparse_repository": "/Users/chengli/.codex/gcdl001-host/repository",
+  "launchd_label": "com.rineya.gcdl001",
+  "launchd_plist": "/Users/chengli/Library/LaunchAgents/com.rineya.gcdl001.plist",
+  "relocation_reason": "Original launchd Python stalled opening source under Downloads; host runner uses its own unprotected sparse checkout and Git metadata.",
+  "stop": "scripts/control.py stop preserves queue/data; follow-up must respect STOP marker",
+  "version": "operations-wiring-1",
+  "worktree": "/Users/chengli/.codex/gcdl001-host/worktree"
+}

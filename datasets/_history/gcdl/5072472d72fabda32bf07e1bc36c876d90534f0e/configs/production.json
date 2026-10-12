@@ -1,0 +1,40 @@
+{
+  "version": "production-1",
+  "active_generation_profile": "v2",
+  "archive_enabled": true,
+  "archive_authorization": "user-authorized-gcdl-only-2026-10-11",
+  "archive_trigger_free_bytes": 10737418240,
+  "groups_per_cycle": 6,
+  "cycle_timeout_seconds": 180,
+  "interval_seconds": 300,
+  "max_programme_bytes": 536870912,
+  "min_free_bytes": 10737418240,
+  "max_shard_bytes": 8388608,
+  "max_records": 12000,
+  "max_consecutive_failures": 3,
+  "backup_interval_seconds": 1800,
+  "concurrency": 1,
+  "seed_start": 1000000,
+  "sealed_seeds": [
+    880000,
+    880001,
+    880002,
+    880003,
+    880004,
+    880005,
+    880006,
+    880007
+  ],
+  "production_splits": [
+    "train",
+    "train",
+    "train",
+    "dev",
+    "ood",
+    "train"
+  ],
+  "backup_transport_attempts": 3,
+  "rendered_views": ["listwise", "computation", "distillation"],
+  "rendered_variant_budget": 3,
+  "rendered_groups_per_cycle": 12
+}

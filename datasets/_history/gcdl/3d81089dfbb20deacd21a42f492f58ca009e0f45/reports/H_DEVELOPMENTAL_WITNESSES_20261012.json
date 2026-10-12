@@ -1,0 +1,6647 @@
+{
+  "all_candidates_legal": true,
+  "cases": [
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 10,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 4,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "copy_early",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 10,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "p"
+      ],
+      "name": "order_goal_0",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "copy_early",
+            "plan": [
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 10
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 10,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 4,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "copy_early",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 10,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "q"
+      ],
+      "name": "order_goal_1",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "copy_early",
+            "plan": [
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 7,
+            "b": 7
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 10,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 4,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "copy_early",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 10,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "copy_early"
+      ],
+      "name": "order_goal_2",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "copy_early",
+            "plan": [
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 2
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "swap_add",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "add_swap",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 5,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "copy_add",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "swap_prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-1"
+          ],
+          "violations": []
+        },
+        {
+          "id": "add_prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-1"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "swap_add"
+      ],
+      "name": "swap_goal_3",
+      "task": {
+        "candidates": [
+          {
+            "id": "swap_add",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "add_swap",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              }
+            ]
+          },
+          {
+            "id": "copy_add",
+            "plan": [
+              {
+                "destination": "a",
+                "op": "copy",
+                "source": "b"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "swap_prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              }
+            ]
+          },
+          {
+            "id": "add_prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 2
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "swap_add",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "add_swap",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 5,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "copy_add",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "swap_prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-1"
+          ],
+          "violations": []
+        },
+        {
+          "id": "add_prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-1"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "add_swap"
+      ],
+      "name": "swap_goal_4",
+      "task": {
+        "candidates": [
+          {
+            "id": "swap_add",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "add_swap",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              }
+            ]
+          },
+          {
+            "id": "copy_add",
+            "plan": [
+              {
+                "destination": "a",
+                "op": "copy",
+                "source": "b"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "swap_prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              }
+            ]
+          },
+          {
+            "id": "add_prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 7,
+            "b": 5
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "swap_add",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "add_swap",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 5,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "copy_add",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "swap_prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-1"
+          ],
+          "violations": []
+        },
+        {
+          "id": "add_prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-1"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "copy_add"
+      ],
+      "name": "swap_goal_5",
+      "task": {
+        "candidates": [
+          {
+            "id": "swap_add",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "add_swap",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              }
+            ]
+          },
+          {
+            "id": "copy_add",
+            "plan": [
+              {
+                "destination": "a",
+                "op": "copy",
+                "source": "b"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "swap_prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              }
+            ]
+          },
+          {
+            "id": "add_prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 7
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 12
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 12
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 12
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-6"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-8"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q_rev",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-8"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "p"
+      ],
+      "name": "constraint_none",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": -2
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "c",
+                "value": 2
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "c"
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              }
+            ]
+          },
+          {
+            "id": "q_rev",
+            "plan": [
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 12
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 3,
+            "c": 6
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "0",
+            "2",
+            "-3"
+          ],
+          "violations": [
+            {
+              "constraint": "maximum_value:a",
+              "step": 1
+            },
+            {
+              "constraint": "maximum_value:a",
+              "step": 2
+            }
+          ]
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 12
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 12
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 12
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-6"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-8"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q_rev",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-8"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "0",
+            "1",
+            "-2"
+          ],
+          "violations": [
+            {
+              "constraint": "maximum_value:a",
+              "step": 1
+            },
+            {
+              "constraint": "maximum_value:a",
+              "step": 2
+            }
+          ]
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "r"
+      ],
+      "name": "constraint_maximum",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": -2
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "c",
+                "value": 2
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "c"
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              }
+            ]
+          },
+          {
+            "id": "q_rev",
+            "plan": [
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {
+          "maximum_values": {
+            "a": 10
+          }
+        },
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 12
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 3,
+            "c": 6
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 12
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 12
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 12
+            }
+          ],
+          "utility": [
+            "0",
+            "2",
+            "-6"
+          ],
+          "violations": [
+            {
+              "constraint": "protected_register:c",
+              "step": 1
+            },
+            {
+              "constraint": "protected_register:c",
+              "step": 2
+            },
+            {
+              "constraint": "protected_register:c",
+              "step": 3
+            }
+          ]
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-8"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q_rev",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-8"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "p"
+      ],
+      "name": "constraint_protected",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": -2
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "c",
+                "value": 2
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "c"
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              }
+            ]
+          },
+          {
+            "id": "q_rev",
+            "plan": [
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {
+          "protected_registers": [
+            "c"
+          ]
+        },
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 12
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 3,
+            "c": 6
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "0",
+            "2",
+            "-3"
+          ],
+          "violations": [
+            {
+              "constraint": "maximum_value:a",
+              "step": 1
+            },
+            {
+              "constraint": "maximum_value:a",
+              "step": 2
+            }
+          ]
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 12
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 12
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 12
+            }
+          ],
+          "utility": [
+            "0",
+            "2",
+            "-6"
+          ],
+          "violations": [
+            {
+              "constraint": "protected_register:c",
+              "step": 1
+            },
+            {
+              "constraint": "protected_register:c",
+              "step": 2
+            },
+            {
+              "constraint": "protected_register:c",
+              "step": 3
+            }
+          ]
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-8"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q_rev",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-8"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "0",
+            "1",
+            "-2"
+          ],
+          "violations": [
+            {
+              "constraint": "maximum_value:a",
+              "step": 1
+            },
+            {
+              "constraint": "maximum_value:a",
+              "step": 2
+            }
+          ]
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "q",
+        "q_rev"
+      ],
+      "name": "constraint_joint",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": -2
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "c",
+                "value": 2
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "c"
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              }
+            ]
+          },
+          {
+            "id": "q_rev",
+            "plan": [
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {
+          "maximum_values": {
+            "a": 10
+          },
+          "protected_registers": [
+            "c"
+          ]
+        },
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 12
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 3,
+            "c": 6
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "0",
+            "2",
+            "-3"
+          ],
+          "violations": [
+            {
+              "constraint": "max_cost",
+              "step": 3
+            }
+          ]
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 12
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 12
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 12
+            }
+          ],
+          "utility": [
+            "0",
+            "2",
+            "-6"
+          ],
+          "violations": [
+            {
+              "constraint": "max_cost",
+              "step": 3
+            }
+          ]
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "0",
+            "2",
+            "-8"
+          ],
+          "violations": [
+            {
+              "constraint": "max_cost",
+              "step": 1
+            },
+            {
+              "constraint": "max_cost",
+              "step": 2
+            }
+          ]
+        },
+        {
+          "id": "q_rev",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 12,
+              "c": 6
+            },
+            {
+              "a": 10,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "0",
+            "2",
+            "-8"
+          ],
+          "violations": [
+            {
+              "constraint": "max_cost",
+              "step": 1
+            },
+            {
+              "constraint": "max_cost",
+              "step": 2
+            }
+          ]
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 12,
+              "b": 12,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            },
+            {
+              "a": 2,
+              "b": 3,
+              "c": 6
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "prefix"
+      ],
+      "name": "constraint_cost_partial",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "op": "add",
+                "register": "a",
+                "value": -2
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "c",
+                "value": 2
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "c"
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              }
+            ]
+          },
+          {
+            "id": "q_rev",
+            "plan": [
+              {
+                "op": "set",
+                "register": "b",
+                "value": 12
+              },
+              {
+                "op": "set",
+                "register": "a",
+                "value": 10
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "op": "add",
+                "register": "a",
+                "value": 10
+              },
+              {
+                "destination": "b",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {
+          "max_cost": 2
+        },
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 10,
+            "b": 12
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 3,
+            "c": 6
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 14
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 4,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 4,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 4,
+              "c": 7
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 2
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 2
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 2
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 7,
+              "c": 14
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "p"
+      ],
+      "name": "strong_G_x2_y7_m2_goal0",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 14
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 14,
+            "b": 2,
+            "c": 14
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 14
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 4,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 4,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 4,
+              "c": 7
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 2
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 2
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 2
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 7,
+              "c": 14
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "q"
+      ],
+      "name": "strong_G_x2_y7_m2_goal1",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 14
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 7,
+            "b": 4,
+            "c": 7
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 14
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 4,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 4,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 4,
+              "c": 7
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 2
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 2
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 2
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 7,
+              "c": 14
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 7,
+              "b": 2,
+              "c": 0
+            },
+            {
+              "a": 14,
+              "b": 2,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            },
+            {
+              "a": 2,
+              "b": 7,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "r"
+      ],
+      "name": "strong_G_x2_y7_m2_goal2",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 14
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 14,
+            "b": 2,
+            "c": 2
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 2,
+            "b": 7,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 27
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 9
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 3,
+              "b": 9,
+              "c": 3
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 3
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 3
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 9,
+              "c": 27
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "p"
+      ],
+      "name": "strong_G_x3_y9_m3_goal0",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 27
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 27,
+            "b": 3,
+            "c": 27
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 3,
+            "b": 9,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 27
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 9
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 3,
+              "b": 9,
+              "c": 3
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 3
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 3
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 9,
+              "c": 27
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "q"
+      ],
+      "name": "strong_G_x3_y9_m3_goal1",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 27
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 9,
+            "b": 9,
+            "c": 9
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 3,
+            "b": 9,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 27
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 9,
+              "c": 9
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 3,
+              "b": 9,
+              "c": 3
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 3
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 3
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 9,
+              "c": 27
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 9,
+              "b": 3,
+              "c": 0
+            },
+            {
+              "a": 27,
+              "b": 3,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            },
+            {
+              "a": 3,
+              "b": 9,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "r"
+      ],
+      "name": "strong_G_x3_y9_m3_goal2",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 27
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 27,
+            "b": 3,
+            "c": 3
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 3,
+            "b": 9,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 22
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 10,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 10,
+              "c": 11
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 11,
+              "c": 5
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 5
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 5
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 11,
+              "c": 22
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "p"
+      ],
+      "name": "strong_G_x5_y11_m2_goal0",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 22
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 22,
+            "b": 5,
+            "c": 22
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 5,
+            "b": 11,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 22
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 10,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 10,
+              "c": 11
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 11,
+              "c": 5
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 5
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 5
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 11,
+              "c": 22
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "q"
+      ],
+      "name": "strong_G_x5_y11_m2_goal1",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 22
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 11,
+            "b": 10,
+            "c": 11
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 5,
+            "b": 11,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "candidates": [
+        {
+          "id": "p",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 22
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "q",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 10,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 10,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 10,
+              "c": 11
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "r",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 11,
+              "c": 5
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 5
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 5
+            }
+          ],
+          "utility": [
+            "1",
+            "3",
+            "-3"
+          ],
+          "violations": []
+        },
+        {
+          "id": "direct",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 11,
+              "c": 22
+            }
+          ],
+          "utility": [
+            "1",
+            "1",
+            "-5"
+          ],
+          "violations": []
+        },
+        {
+          "id": "prefix",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 11,
+              "b": 5,
+              "c": 0
+            },
+            {
+              "a": 22,
+              "b": 5,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "2",
+            "-2"
+          ],
+          "violations": []
+        },
+        {
+          "id": "noop",
+          "trajectory": [
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            },
+            {
+              "a": 5,
+              "b": 11,
+              "c": 0
+            }
+          ],
+          "utility": [
+            "1",
+            "0",
+            "0"
+          ],
+          "violations": []
+        }
+      ],
+      "expected_best": [
+        "r"
+      ],
+      "name": "strong_G_x5_y11_m2_goal2",
+      "task": {
+        "candidates": [
+          {
+            "id": "p",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "q",
+            "plan": [
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "r",
+            "plan": [
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              },
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "direct",
+            "plan": [
+              {
+                "op": "set",
+                "register": "a",
+                "value": 22
+              },
+              {
+                "destination": "c",
+                "op": "copy",
+                "source": "a"
+              }
+            ]
+          },
+          {
+            "id": "prefix",
+            "plan": [
+              {
+                "left": "a",
+                "op": "swap",
+                "right": "b"
+              },
+              {
+                "op": "multiply",
+                "register": "a",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "id": "noop",
+            "plan": [
+              {
+                "op": "noop"
+              }
+            ]
+          }
+        ],
+        "constraints": {},
+        "environment": "register",
+        "goal": {
+          "values": {
+            "a": 22,
+            "b": 5,
+            "c": 5
+          }
+        },
+        "initial_state": {
+          "registers": {
+            "a": 5,
+            "b": 11,
+            "c": 0
+          }
+        },
+        "rules": {
+          "action_costs": {
+            "add": 1,
+            "copy": 1,
+            "multiply": 1,
+            "noop": 0,
+            "set": 4,
+            "swap": 1
+          },
+          "operations": [
+            "add",
+            "multiply",
+            "set",
+            "copy",
+            "swap",
+            "noop"
+          ],
+          "overflow": "reject",
+          "value_bounds": [
+            -32,
+            32
+          ]
+        }
+      }
+    }
+  ],
+  "floors": {
+    "constraint_blind": {
+      "cases": [
+        {
+          "correct": true,
+          "name": "order_goal_0",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "order_goal_1",
+          "predicted": [
+            "q"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "order_goal_2",
+          "predicted": [
+            "copy_early"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "swap_goal_3",
+          "predicted": [
+            "swap_add"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "swap_goal_4",
+          "predicted": [
+            "add_swap"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "swap_goal_5",
+          "predicted": [
+            "copy_add"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "constraint_none",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_maximum",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "constraint_protected",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_joint",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_cost_partial",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x2_y7_m2_goal0",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x2_y7_m2_goal1",
+          "predicted": [
+            "q"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x2_y7_m2_goal2",
+          "predicted": [
+            "r"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x3_y9_m3_goal0",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x3_y9_m3_goal1",
+          "predicted": [
+            "q"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x3_y9_m3_goal2",
+          "predicted": [
+            "r"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x5_y11_m2_goal0",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x5_y11_m2_goal1",
+          "predicted": [
+            "q"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x5_y11_m2_goal2",
+          "predicted": [
+            "r"
+          ]
+        }
+      ],
+      "correct": 17,
+      "total": 20
+    },
+    "one_action": {
+      "cases": [
+        {
+          "correct": false,
+          "name": "order_goal_0",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "order_goal_1",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "order_goal_2",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "swap_goal_3",
+          "predicted": [
+            "swap_prefix"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "swap_goal_4",
+          "predicted": [
+            "swap_prefix"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "swap_goal_5",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_none",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_maximum",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_protected",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_joint",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_cost_partial",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x2_y7_m2_goal0",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x2_y7_m2_goal1",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x2_y7_m2_goal2",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x3_y9_m3_goal0",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x3_y9_m3_goal1",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x3_y9_m3_goal2",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x5_y11_m2_goal0",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x5_y11_m2_goal1",
+          "predicted": [
+            "noop"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "strong_G_x5_y11_m2_goal2",
+          "predicted": [
+            "noop"
+          ]
+        }
+      ],
+      "correct": 0,
+      "total": 20
+    },
+    "terminal_only": {
+      "cases": [
+        {
+          "correct": true,
+          "name": "order_goal_0",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "order_goal_1",
+          "predicted": [
+            "q"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "order_goal_2",
+          "predicted": [
+            "copy_early"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "swap_goal_3",
+          "predicted": [
+            "swap_add"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "swap_goal_4",
+          "predicted": [
+            "add_swap"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "swap_goal_5",
+          "predicted": [
+            "copy_add"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "constraint_none",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_maximum",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "constraint_protected",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": false,
+          "name": "constraint_joint",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "constraint_cost_partial",
+          "predicted": [
+            "prefix"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x2_y7_m2_goal0",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x2_y7_m2_goal1",
+          "predicted": [
+            "q"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x2_y7_m2_goal2",
+          "predicted": [
+            "r"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x3_y9_m3_goal0",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x3_y9_m3_goal1",
+          "predicted": [
+            "q"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x3_y9_m3_goal2",
+          "predicted": [
+            "r"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x5_y11_m2_goal0",
+          "predicted": [
+            "p"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x5_y11_m2_goal1",
+          "predicted": [
+            "q"
+          ]
+        },
+        {
+          "correct": true,
+          "name": "strong_G_x5_y11_m2_goal2",
+          "predicted": [
+            "r"
+          ]
+        }
+      ],
+      "correct": 18,
+      "total": 20
+    }
+  },
+  "note": "Development witnesses only; no production/accepted/sealed changes",
+  "primary_independent_equal": true,
+  "status": "PASS",
+  "strong_G_tasks": 9,
+  "task_count": 20
+}
