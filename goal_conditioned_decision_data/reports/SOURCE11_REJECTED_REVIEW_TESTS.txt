@@ -1,0 +1,579 @@
+"""Independent recovery/transaction tests with hand-specified metadata only.
+
+Use the actual receipt validator and SQLite, but supply an already-attested
+label-free projection at its existing boundary. No accepted/rendered/sealed
+payload body, scientific generator, production root or remote API is read.
+The frozen old loop is retained solely for explicit success/fault comparisons.
+"""
+from collections import Counter
+from contextlib import ExitStack
+from copy import deepcopy
+import hashlib
+import json
+from pathlib import Path
+import socket
+import sqlite3
+import subprocess
+import tempfile
+import unittest
+from unittest.mock import patch
+
+from goal_conditioned_decision_data.pipelines import rendered, render_controls, remote_archive, worker
+
+
+def raw_json(value):
+    return (json.dumps(value, sort_keys=True, separators=(',', ':'),
+                       ensure_ascii=False, allow_nan=False) + '\n').encode()
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def identity(value):
+    return sha(raw_json(value)[:-1])
+
+
+def old_recover(db, root):
+    """Exact pre-optimization loop, before/after source commitments unchanged."""
+    root = Path(root).resolve()
+    rendered.ensure_queue(db)
+    for (relative,) in db.execute('SELECT receipt FROM rendered_jobs WHERE status="done"').fetchall():
+        rendered.validate_receipt(root, relative)
+    for relative in rendered._archive_call('iter_paths', root, 'manifests/render-batch-*.json'):
+        receipt, _ = rendered.validate_receipt(root, relative)
+        db.execute('INSERT OR REPLACE INTO rendered_jobs VALUES (?,?,?,?,?,?,?)',
+                   (receipt['source_manifest'], receipt['source_sha256'], receipt['spec_sha256'],
+                    receipt['seed'], receipt['split'], 'done', relative))
+    db.commit()
+
+
+class TraceConnection(sqlite3.Connection):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.upserts = []
+        self.commits = 0
+        self.rollbacks = 0
+
+    def execute(self, sql, parameters=(), /):
+        if sql.startswith('INSERT OR REPLACE INTO rendered_jobs'):
+            self.upserts.append(tuple(parameters))
+        return super().execute(sql, parameters)
+
+    def commit(self):
+        self.commits += 1
+        return super().commit()
+
+    def rollback(self):
+        self.rollbacks += 1
+        return super().rollback()
+
+    def reset_trace(self):
+        self.upserts.clear()
+        self.commits = self.rollbacks = 0
+
+
+class IndependentRecoveryOnceReview(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix='gcdl-recovery-once-review-')
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name).resolve() / 'goal_conditioned_decision_data'
+        self.root.mkdir()
+        self.projections = {}
+        self.payload_metadata = {}
+        self.discovery = []
+        self.after_discovery = None
+        self.discoveries = 0
+        self.validation_calls = []
+        self.database_number = 0
+        self.a = self.cohort(113)
+        self.b = self.cohort(114)
+        self.db, self.observer = self.database()
+        stack = ExitStack()
+        self.addCleanup(stack.close)
+        stack.enter_context(patch.object(rendered, '_archive_call', side_effect=self.archive_call))
+        stack.enter_context(patch.object(render_controls, 'try_projection', side_effect=self.project))
+        original_validate = rendered.validate_receipt
+
+        def checked_validate(root, relative, **kwargs):
+            self.validation_calls.append(relative)
+            return original_validate(root, relative, **kwargs)
+
+        stack.enter_context(patch.object(rendered, 'validate_receipt', side_effect=checked_validate))
+        forbidden = AssertionError('metadata-only recovery fixture forbids raw/network access')
+        for owner, name in ((remote_archive, '_run'), (remote_archive, 'GitHubTransport'),
+                            (remote_archive, 'read_bytes'), (subprocess, 'run'),
+                            (socket, 'create_connection')):
+            stack.enter_context(patch.object(owner, name, side_effect=forbidden))
+
+    def database(self):
+        self.database_number += 1
+        path = self.root / ('queue-fixture-%d.sqlite' % self.database_number)
+        db = sqlite3.connect(path, factory=TraceConnection)
+        observer = sqlite3.connect(path)
+        self.addCleanup(db.close)
+        self.addCleanup(observer.close)
+        rendered.ensure_queue(db)
+        db.execute('CREATE TABLE events (at REAL,kind TEXT,detail TEXT)')
+        db.commit()
+        db.reset_trace()
+        return db, observer
+
+    def write(self, relative, value):
+        path = self.root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(value if isinstance(value, bytes) else raw_json(value))
+
+    def cohort(self, seed):
+        code = {'manual-metadata-fixture.py': '1' * 64}
+        protected = [['manual-id-%d' % seed, 'manual-fingerprint-%d' % seed,
+                      'manual-parent-%d' % seed, 'manual-template', 'dev']]
+        source = 'data/accepted/dev-%d.jsonl' % seed
+        source_sha = identity(['opaque-source-commitment', seed])
+        self.payload_metadata[source] = {'sha256': source_sha, 'bytes': 99}
+        batch_path = 'manifests/batch-dev-%d.json' % seed
+        batch = {'seed': seed, 'split': 'dev', 'shard': source, 'sha256': source_sha,
+                 'bytes': 99, 'accepted': 1, 'audit': {'verdict': 'PASS'},
+                 'quarantined': 0, 'code_hashes': code, 'protected_index': protected}
+        self.write(batch_path, batch)
+        batch_sha = sha(raw_json(batch))
+        specification = {'export_version': 'manual-export-v1', 'rendering_version': 'manual-render-v1',
+                         'views': ['listwise'], 'variant_budget': 3, 'code_sha256': identity(code)}
+        spec_sha = identity(specification)
+        dataset_id = 'gcdl_rendered_' + identity(['dataset', seed])[:32]
+        header = 'data/rendered/' + dataset_id + '/manifest.json'
+        shard = 'data/rendered/' + dataset_id + '/shard-00000.jsonl'
+        shard_sha = identity(['opaque-derived-shard-commitment', seed])
+        self.payload_metadata[shard] = {'sha256': shard_sha, 'bytes': 155}
+        manifest = {'manifest_path': header, 'dataset_id': dataset_id, 'view': 'listwise',
+                    'split': 'dev', 'source_records_examined': 1, 'eligible_source_records': 1,
+                    'code_hashes': code, 'variant_budget': 3, 'export_version': 'manual-export-v1',
+                    'training_launched': False, 'rendering_version': 'manual-render-v1',
+                    'sources': [{'path': source, 'sha256': source_sha,
+                                 'source_batch_manifest': batch_path,
+                                 'source_batch_manifest_sha256': batch_sha,
+                                 'source_code_hashes': code, 'protected_index': protected}],
+                    'shards': [{'path': shard, 'sha256': shard_sha, 'bytes': 155, 'rows': 3}],
+                    'rendered_rows': 3}
+        header_sha = identity(['attested-header-commitment', seed])
+        self.payload_metadata[header] = {'sha256': header_sha, 'bytes': 1111}
+        receipt = {'version': 'gcdl-rendered-batch-1', 'seed': seed, 'split': 'dev',
+                   'source_manifest': batch_path, 'source_sha256': batch_sha,
+                   'source_shard_sha256': source_sha, 'specification': specification,
+                   'spec_sha256': spec_sha, 'code_hashes': code,
+                   'datasets': [{'view': 'listwise', 'dataset_id': dataset_id,
+                                 'manifest_path': header, 'manifest_sha256': header_sha,
+                                 'rendered_rows': 3, 'eligible_source_records': 1}]}
+        relative = 'manifests/render-batch-dev-%d-%s.json' % (seed, spec_sha[:16])
+        self.write(relative, receipt)
+        self.projections[relative] = [manifest]
+        self.discovery.append(relative)
+        return {'path': relative, 'receipt': receipt, 'manifest': manifest}
+
+    def archive_call(self, operation, root, relative):
+        self.assertEqual(Path(root).resolve(), self.root)
+        if operation == 'iter_paths':
+            self.assertEqual(relative, 'manifests/render-batch-*.json')
+            self.discoveries += 1
+            result = list(self.discovery)
+            if self.after_discovery is not None:
+                self.after_discovery()
+            return result
+        if operation == 'read_text':
+            self.assertTrue(isinstance(relative, str) and relative.startswith('manifests/'))
+            self.assertNotIn('..', Path(relative).parts)
+            return (self.root / relative).read_text()
+        if operation == 'payload_info':
+            if relative.startswith('manifests/'):
+                raw = (self.root / relative).read_bytes()
+                return {'sha256': sha(raw), 'bytes': len(raw)}
+            self.assertFalse(relative.startswith('data/sealed/'))
+            return deepcopy(self.payload_metadata[relative])
+        self.fail('unexpected archive operation: ' + operation)
+
+    def project(self, root, relative, receipt, batch):
+        self.assertEqual(Path(root).resolve(), self.root)
+        return deepcopy(self.projections[relative])
+
+    @staticmethod
+    def expected(cohort, status='done', pointer=None):
+        receipt = cohort['receipt']
+        return (receipt['source_manifest'], receipt['source_sha256'], receipt['spec_sha256'],
+                receipt['seed'], receipt['split'], status,
+                cohort['path'] if pointer is None else pointer)
+
+    def insert(self, db, cohort, status='done', pointer=None):
+        db.execute('INSERT INTO rendered_jobs VALUES (?,?,?,?,?,?,?)',
+                   self.expected(cohort, status, pointer))
+        db.commit()
+        db.reset_trace()
+
+    @staticmethod
+    def rows(db):
+        return db.execute('SELECT * FROM rendered_jobs ORDER BY source_manifest,source_sha256,spec_sha256').fetchall()
+
+    def corrupt(self, cohort, key='source_sha256'):
+        receipt = deepcopy(cohort['receipt'])
+        receipt[key] = 'f' * 64
+        self.write(cohort['path'], receipt)
+
+    def test_empty_inventory_preserves_pending_and_superseded_rows(self):
+        self.discovery = []
+        self.insert(self.db, self.a, status='pending')
+        self.insert(self.db, self.b, status='superseded')
+        before = self.rows(self.db)
+        rendered.recover(self.db, self.root)
+        self.assertEqual(self.rows(self.db), before)
+        self.assertEqual(self.rows(self.observer), before)
+        self.assertEqual(self.validation_calls, [])
+        self.assertEqual(self.discoveries, 1)
+
+    def test_valid_discovery_repairs_exact_manual_rows(self):
+        rendered.recover(self.db, self.root)
+        expected = [self.expected(self.a), self.expected(self.b)]
+        self.assertEqual(self.rows(self.db), expected)
+        self.assertEqual(self.rows(self.observer), expected)
+        self.assertEqual(len(self.db.upserts), 2)
+        self.assertFalse(self.db.in_transaction)
+
+    def test_done_and_discovered_receipts_are_freshly_validated_once(self):
+        self.insert(self.db, self.a)
+        self.insert(self.db, self.b)
+        rendered.recover(self.db, self.root)
+        self.assertEqual(Counter(self.validation_calls), {self.a['path']: 1, self.b['path']: 1})
+        self.assertEqual(self.discoveries, 1)
+        self.assertEqual(self.rows(self.db), [self.expected(self.a), self.expected(self.b)])
+
+    def test_all_valid_inventory_matches_old_success_and_manual_expected_rows(self):
+        old_db, _ = self.database()
+        for db in (old_db, self.db):
+            self.insert(db, self.a)
+            self.insert(db, self.b, status='pending')
+        old_recover(old_db, self.root)
+        self.validation_calls.clear()
+        rendered.recover(self.db, self.root)
+        expected = [self.expected(self.a), self.expected(self.b)]
+        self.assertEqual(self.rows(old_db), expected)
+        self.assertEqual(self.rows(self.db), expected)
+        self.assertEqual(Counter(self.validation_calls), {self.a['path']: 1, self.b['path']: 1})
+
+    def test_null_and_malformed_absent_done_pointers_refuse_before_upsert(self):
+        bad = [None, '', '../render-batch-escape.json', '/tmp/render-batch-escape.json',
+               'data/sealed/sealed-880000.jsonl', 'manifests/not-rendered.json',
+               'manifests/nested/render-batch-escape.json']
+        for pointer in bad:
+            with self.subTest(pointer=pointer):
+                db, observer = self.database()
+                row = list(self.expected(self.a)); row[-1] = pointer
+                db.execute('INSERT INTO rendered_jobs VALUES (?,?,?,?,?,?,?)', row); db.commit(); db.reset_trace()
+                before = self.rows(db)
+                with self.assertRaises((TypeError, ValueError, OSError)):
+                    rendered.recover(db, self.root)
+                self.assertEqual(db.upserts, [])
+                self.assertEqual(db.commits, 1)
+                self.assertEqual(self.rows(db), before)
+                self.assertEqual(self.rows(observer), before)
+
+    def test_orphan_done_pointer_absent_from_discovery_refuses_before_any_upsert(self):
+        self.insert(self.db, self.a, pointer='manifests/render-batch-dev-missing.json')
+        before = self.rows(self.db)
+        with self.assertRaises(FileNotFoundError):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.upserts, [])
+        self.assertEqual(self.rows(self.db), before)
+        self.assertEqual(self.rows(self.observer), before)
+
+    def test_valid_done_pointer_omitted_from_discovery_still_authenticates(self):
+        self.insert(self.db, self.a)
+        self.discovery = [self.b['path']]
+        rendered.recover(self.db, self.root)
+        self.assertEqual(self.validation_calls, [self.a['path'], self.b['path']])
+        self.assertEqual(self.db.upserts, [self.expected(self.b)])
+        self.assertEqual(self.rows(self.db), [self.expected(self.a), self.expected(self.b)])
+
+    def test_duplicate_done_pointers_retain_old_rows_without_inventing_cleanup(self):
+        self.insert(self.db, self.a)
+        duplicate = list(self.expected(self.a)); duplicate[0] = 'manifests/batch-dev-foreign-key.json'
+        duplicate[3] = 999
+        self.db.execute('INSERT INTO rendered_jobs VALUES (?,?,?,?,?,?,?)', duplicate)
+        self.db.commit(); self.db.reset_trace()
+        rendered.recover(self.db, self.root)
+        expected = sorted([self.expected(self.a), self.expected(self.b), tuple(duplicate)])
+        self.assertEqual(self.rows(self.db), expected)
+        self.assertEqual(Counter(self.validation_calls), {self.a['path']: 1, self.b['path']: 1})
+
+    def test_discovery_duplicates_are_each_freshly_validated_and_idempotent(self):
+        self.discovery = [self.a['path'], self.a['path']]
+        rendered.recover(self.db, self.root)
+        self.assertEqual(self.validation_calls, self.discovery)
+        self.assertEqual(self.db.upserts, [self.expected(self.a), self.expected(self.a)])
+        self.assertEqual(self.rows(self.db), [self.expected(self.a)])
+
+    def test_receipt_mutation_after_discovery_is_not_hidden_by_done_pointer(self):
+        self.insert(self.db, self.a)
+        self.discovery = [self.a['path']]
+        self.after_discovery = lambda: self.corrupt(self.a)
+        with self.assertRaisesRegex(ValueError, 'source/specification'):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.upserts, [])
+        self.assertEqual(self.rows(self.observer), [self.expected(self.a)])
+
+    def test_semantic_projection_corruption_reaches_original_validator(self):
+        self.discovery = [self.a['path']]
+        good = deepcopy(self.projections[self.a['path']])
+        alterations = [lambda m: m.update(training_launched=True),
+                       lambda m: m.update(source_records_examined=9),
+                       lambda m: m.update(eligible_source_records=9),
+                       lambda m: m.update(split='sealed'),
+                       lambda m: m['sources'][0].update(protected_index=[]),
+                       lambda m: m['shards'][0].update(rows=4),
+                       lambda m: m['shards'][0].update(path='data/rendered/foreign/shard.jsonl')]
+        for alteration in alterations:
+            with self.subTest(alteration=alteration):
+                self.projections[self.a['path']] = deepcopy(good)
+                alteration(self.projections[self.a['path']][0])
+                with self.assertRaises((ValueError, KeyError)):
+                    rendered.recover(self.db, self.root)
+                self.assertEqual(self.db.upserts, [])
+                self.assertEqual(self.rows(self.observer), [])
+        self.projections[self.a['path']] = good
+
+    def test_corrupt_discovered_json_refuses_without_receipt_cache(self):
+        self.discovery = [self.a['path']]
+        self.write(self.a['path'], b'{invalid json\n')
+        with self.assertRaises(json.JSONDecodeError):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.upserts, [])
+        self.assertEqual(self.rows(self.observer), [])
+
+    def test_bad_discovered_path_cannot_read_or_change_outside_programme(self):
+        outside = self.root.parent / 'outside-control.json'
+        outside.write_bytes(b'outside sentinel\n')
+        self.discovery = ['../outside-control.json']
+        with self.assertRaisesRegex(ValueError, 'unmanaged'):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(outside.read_bytes(), b'outside sentinel\n')
+        self.assertEqual(self.db.upserts, [])
+
+    def test_discovery_failure_has_no_upsert_or_final_recovery_commit(self):
+        self.after_discovery = lambda: (_ for _ in ()).throw(OSError('independent discovery failure'))
+        with self.assertRaisesRegex(OSError, 'discovery failure'):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.upserts, [])
+        self.assertEqual(self.db.commits, 1)
+        self.assertEqual(self.rows(self.observer), [])
+
+    def test_late_new_corrupt_receipt_leaves_uncommitted_prefix_and_rollback_restores(self):
+        self.corrupt(self.b)
+        with self.assertRaises(ValueError):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.upserts, [self.expected(self.a)])
+        self.assertEqual(self.db.commits, 1)
+        self.assertTrue(self.db.in_transaction)
+        self.assertEqual(self.rows(self.db), [self.expected(self.a)])
+        self.assertEqual(self.rows(self.observer), [])
+        self.db.rollback()
+        self.assertEqual(self.rows(self.db), [])
+        self.assertFalse(self.db.in_transaction)
+
+    def test_error_event_commits_only_authenticated_prefix_for_new_corrupt_receipt(self):
+        old_db, old_observer = self.database()
+        self.corrupt(self.b)
+        for recover, db, observer in ((old_recover, old_db, old_observer),
+                                     (rendered.recover, self.db, self.observer)):
+            with self.assertRaises(ValueError):
+                recover(db, self.root)
+            self.assertEqual(self.rows(observer), [])
+            worker.event(db, 'error', {'fixture': 'new-corrupt-discovered'})
+            self.assertEqual(self.rows(observer), [self.expected(self.a)])
+            self.assertEqual(self.rows(db), [self.expected(self.a)])
+
+    def test_late_corrupt_existing_done_rolls_back_and_matches_old_error_event_state(self):
+        """The initial candidate diverged here; conservative revision must match."""
+        old_db, old_observer = self.database()
+        for db in (old_db, self.db):
+            self.insert(db, self.a, status='pending')
+            self.insert(db, self.b, status='done')
+        before = [self.expected(self.a, status='pending'), self.expected(self.b)]
+        self.corrupt(self.b)
+        with self.assertRaises(ValueError):
+            old_recover(old_db, self.root)
+        self.assertEqual(old_db.upserts, [])
+        worker.event(old_db, 'error', {'fixture': 'existing-corrupt-done'})
+        self.assertEqual(self.rows(old_observer), before)
+        with self.assertRaises(ValueError):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.upserts, [self.expected(self.a)])
+        self.assertEqual(self.db.rollbacks, 1)
+        self.assertFalse(self.db.in_transaction)
+        self.assertEqual(self.rows(self.observer), before)
+        worker.event(self.db, 'error', {'fixture': 'existing-corrupt-done'})
+        self.assertEqual(self.rows(self.observer), before)
+        self.assertEqual(self.rows(old_observer), self.rows(self.observer))
+
+    def test_mutation_between_old_done_preflight_and_discovery_is_detected_by_both(self):
+        old_db, _ = self.database()
+        for db in (old_db, self.db):
+            self.insert(db, self.a)
+        self.discovery = [self.a['path']]
+        for recover, db in ((old_recover, old_db), (rendered.recover, self.db)):
+            self.write(self.a['path'], self.a['receipt'])
+            self.after_discovery = lambda: self.corrupt(self.a)
+            with self.assertRaisesRegex(ValueError, 'source/specification'):
+                recover(db, self.root)
+            self.assertEqual(db.upserts, [])
+
+    def test_budget_expiry_after_prefix_has_no_final_commit_and_can_rollback(self):
+        real_validate = rendered.validate_receipt
+        def expiry(root, relative, **kwargs):
+            if relative == self.b['path']:
+                raise remote_archive.ReadDeadlineExceeded('independent recovery expiry')
+            return real_validate(root, relative, **kwargs)
+        with patch.object(rendered, 'validate_receipt', side_effect=expiry):
+            with self.assertRaises(remote_archive.ReadDeadlineExceeded):
+                rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.commits, 1)
+        self.assertEqual(self.rows(self.observer), [])
+        self.db.rollback()
+        self.assertEqual(self.rows(self.db), [])
+
+    def test_success_keeps_initial_setup_and_single_final_commit(self):
+        rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.commits, 2)
+        self.assertFalse(self.db.in_transaction)
+        self.assertEqual(self.rows(self.observer), [self.expected(self.a), self.expected(self.b)])
+
+    def test_repeat_recovery_revalidates_current_bytes_without_persistent_cache(self):
+        rendered.recover(self.db, self.root)
+        self.validation_calls.clear()
+        self.db.reset_trace()
+        self.corrupt(self.a)
+        with self.assertRaises(ValueError):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(self.validation_calls, [self.a['path']])
+        self.assertEqual(self.db.upserts, [])
+        self.assertEqual(self.rows(self.observer), [self.expected(self.a), self.expected(self.b)])
+
+    def test_prior_unrelated_caller_work_committed_by_setup_survives_done_rollback(self):
+        self.insert(self.db, self.b)
+        self.db.execute('INSERT INTO rendered_jobs VALUES (?,?,?,?,?,?,?)',
+                        self.expected(self.a, status='pending'))
+        self.assertTrue(self.db.in_transaction)
+        self.assertEqual(self.rows(self.observer), [self.expected(self.b)])
+        self.corrupt(self.b)
+        with self.assertRaises(ValueError):
+            rendered.recover(self.db, self.root)
+        expected = [self.expected(self.a, status='pending'), self.expected(self.b)]
+        self.assertEqual(self.db.commits, 1)
+        self.assertEqual(self.db.rollbacks, 1)
+        self.assertEqual(self.rows(self.db), expected)
+        self.assertEqual(self.rows(self.observer), expected)
+
+    def test_previous_done_validator_baseexceptions_rollback_and_reraise_exact_instance(self):
+        errors = [ValueError('existing-done invalid'), RuntimeError('existing-done failure'),
+                  remote_archive.ReadDeadlineExceeded('existing-done expiry'),
+                  KeyboardInterrupt('existing-done interrupt'), SystemExit(7)]
+        real_validate = rendered.validate_receipt
+        for error in errors:
+            with self.subTest(error=type(error).__name__):
+                db, observer = self.database()
+                self.insert(db, self.a, status='pending')
+                self.insert(db, self.b)
+                expected = self.rows(db)
+                def fail_done(root, relative, **kwargs):
+                    if relative == self.b['path']:
+                        raise error
+                    return real_validate(root, relative, **kwargs)
+                with patch.object(rendered, 'validate_receipt', side_effect=fail_done):
+                    with self.assertRaises(BaseException) as caught:
+                        rendered.recover(db, self.root)
+                self.assertIs(caught.exception, error)
+                self.assertEqual(db.upserts, [self.expected(self.a)])
+                self.assertEqual(db.rollbacks, 1)
+                self.assertEqual(db.commits, 1)
+                self.assertFalse(db.in_transaction)
+                self.assertEqual(self.rows(db), expected)
+                self.assertEqual(self.rows(observer), expected)
+
+    def test_new_discovered_interrupt_retains_original_uncommitted_prefix(self):
+        error = KeyboardInterrupt('new-discovered interrupt')
+        real_validate = rendered.validate_receipt
+        def fail_new(root, relative, **kwargs):
+            if relative == self.b['path']:
+                raise error
+            return real_validate(root, relative, **kwargs)
+        with patch.object(rendered, 'validate_receipt', side_effect=fail_new):
+            with self.assertRaises(KeyboardInterrupt) as caught:
+                rendered.recover(self.db, self.root)
+        self.assertIs(caught.exception, error)
+        self.assertEqual(self.db.rollbacks, 0)
+        self.assertTrue(self.db.in_transaction)
+        self.assertEqual(self.rows(self.db), [self.expected(self.a)])
+        self.assertEqual(self.rows(self.observer), [])
+        self.db.rollback()
+        self.assertEqual(self.rows(self.db), [])
+
+    def test_upsert_failure_is_outside_validator_rollback_scope_in_both_versions(self):
+        old_db, old_observer = self.database()
+        for db in (old_db, self.db):
+            self.insert(db, self.a, status='pending')
+            self.insert(db, self.b)
+        for recover, db, observer in ((old_recover, old_db, old_observer),
+                                     (rendered.recover, self.db, self.observer)):
+            real_execute = db.execute
+            error = sqlite3.OperationalError('independent upsert fault')
+            def fail_upsert(sql, parameters=()):
+                if (sql.startswith('INSERT OR REPLACE INTO rendered_jobs')
+                        and parameters[-1] == self.b['path']):
+                    raise error
+                return real_execute(sql, parameters)
+            with patch.object(db, 'execute', side_effect=fail_upsert):
+                with self.assertRaises(sqlite3.OperationalError) as caught:
+                    recover(db, self.root)
+                self.assertIs(caught.exception, error)
+                self.assertEqual(db.rollbacks, 0)
+                self.assertTrue(db.in_transaction)
+                self.assertEqual(self.rows(observer),
+                                 [self.expected(self.a, status='pending'), self.expected(self.b)])
+                worker.event(db, 'error', {'fixture': 'upsert-fault'})
+            self.assertEqual(self.rows(observer), [self.expected(self.a), self.expected(self.b)])
+
+    def test_done_snapshot_before_discovery_prevents_late_status_change_bypassing_rollback(self):
+        self.insert(self.db, self.a, status='pending')
+        self.insert(self.db, self.b)
+        before = self.rows(self.db)
+        def alter_after_snapshot():
+            self.db.execute('UPDATE rendered_jobs SET status="pending" WHERE source_manifest=?',
+                            (self.b['receipt']['source_manifest'],))
+            self.corrupt(self.b)
+        self.after_discovery = alter_after_snapshot
+        with self.assertRaises(ValueError):
+            rendered.recover(self.db, self.root)
+        self.assertEqual(self.db.upserts, [self.expected(self.a)])
+        self.assertEqual(self.db.rollbacks, 1)
+        self.assertEqual(self.rows(self.db), before)
+        self.assertEqual(self.rows(self.observer), before)
+
+    def test_duplicate_done_receipt_late_mutation_is_fresh_and_rolls_back_prefix(self):
+        self.insert(self.db, self.a)
+        self.discovery = [self.b['path'], self.a['path'], self.a['path']]
+        real_validate = rendered.validate_receipt
+        a_checks = []
+        def mutate_after_first_a(root, relative, **kwargs):
+            result = real_validate(root, relative, **kwargs)
+            if relative == self.a['path'] and not a_checks:
+                a_checks.append(True)
+                self.corrupt(self.a)
+            return result
+        with patch.object(rendered, 'validate_receipt', side_effect=mutate_after_first_a):
+            with self.assertRaises(ValueError):
+                rendered.recover(self.db, self.root)
+        self.assertEqual(self.validation_calls, self.discovery)
+        self.assertEqual(self.db.upserts, [self.expected(self.b), self.expected(self.a)])
+        self.assertEqual(self.db.rollbacks, 1)
+        self.assertEqual(self.rows(self.db), [self.expected(self.a)])
+        self.assertEqual(self.rows(self.observer), [self.expected(self.a)])
+
+
+if __name__ == '__main__':
+    unittest.main()
