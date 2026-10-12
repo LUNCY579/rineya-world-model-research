@@ -1,0 +1,96 @@
+{
+ "lease": "rcwm-t1:t2b-ledger",
+ "cap_h": 4.5,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "steps": 190,
+ "stage_rule": "a seed's training starts only if 1.25 x its whole remaining pair (training + model load + [A0 + E0 if due] + its evaluation) fits the turn and never within 0.5 h of the cap; each evaluation stage starts only if 1.25 x its estimate fits; otherwise exit 5 and resume next turn (re-anchored)",
+ "timing_model": {
+  "train": "T2 190-step training (planning max 2191 s; observed mean 1902 s) x tokens/row / 152.76",
+  "generation": "planning 2.7 gens/s, observed 4.88 gens/s (PREREG-3 S1), both x (answer tokens + 1) / 21",
+  "load_s": 120.0
+ },
+ "planning": {
+  "stage_s": {
+   "T": 2425.6,
+   "A0": 616.3,
+   "E0": 1564.0,
+   "E": 782.0,
+   "load": 120.0
+  },
+  "generations": {
+   "A0": 1664,
+   "E0": 3602,
+   "E": 1801
+  },
+  "inputs": {
+   "train_row_tokens": 160.73,
+   "dev_answer_tokens": 23.62,
+   "n_rows": 1801,
+   "n_anchor_steps": 832
+  },
+  "turns": [
+   {
+    "stages": [
+     "s0:T",
+     "A0",
+     "E0",
+     "s0:E",
+     "s1:T",
+     "s1:E",
+     "s2:T",
+     "s2:E"
+    ],
+    "projected_h": 3.38
+   }
+  ],
+  "gpu_h": 3.38,
+  "per_seed_pair_h": 0.92
+ },
+ "observed": {
+  "stage_s": {
+   "T": 2121.4,
+   "A0": 340.8,
+   "E0": 865.0,
+   "E": 432.5,
+   "load": 120.0
+  },
+  "generations": {
+   "A0": 1664,
+   "E0": 3602,
+   "E": 1801
+  },
+  "inputs": {
+   "train_row_tokens": 160.73,
+   "dev_answer_tokens": 23.62,
+   "n_rows": 1801,
+   "n_anchor_steps": 832
+  },
+  "turns": [
+   {
+    "stages": [
+     "s0:T",
+     "A0",
+     "E0",
+     "s0:E",
+     "s1:T",
+     "s1:E",
+     "s2:T",
+     "s2:E"
+    ],
+    "projected_h": 2.56
+   }
+  ],
+  "gpu_h": 2.56,
+  "per_seed_pair_h": 0.74
+ },
+ "generations_total": 10669,
+ "torch_imported": false,
+ "train_source_sha256": "c07159c538e6ca750a438fd6d518c3a161dcd0324b20c20e3627db70cd6646ff",
+ "code_sha256": {
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670"
+ }
+}

@@ -1,6 +1,20 @@
 {
  "record": "T2BL_AUDIT",
- "kit_revision": 2,
+ "kit_revision": 3,
+ "seeds": {
+  "train": 20261165,
+  "dev": 20261166,
+  "heldout_orders": 20261163
+ },
+ "spent": {
+  "seeds": [
+   20261161,
+   20261162
+  ],
+  "runs": [
+   "runs/t2bl/dev"
+  ]
+ },
  "audit": {
   "ok": true,
   "problems": [],
@@ -10,29 +24,30 @@
    "n_fragments_checked": 107,
    "classes": {
     "para": {
-     "canonical": 715,
-     "train": 785
+     "canonical": 633,
+     "train": 867
     },
     "top": {
-     "canonical": 1500
+     "canonical": 694,
+     "reversed": 806
     },
     "event": {
-     "canonical": 693,
-     "train": 807
+     "canonical": 626,
+     "train": 874
     },
     "before": {
-     "canonical": 696,
-     "train": 804
+     "canonical": 630,
+     "train": 870
     },
     "names": {
-     "canonical": 633,
-     "canonical_plus_train_letters": 171,
-     "train_letters": 287,
-     "train_words": 409
+     "canonical": 557,
+     "canonical_plus_train_letters": 63,
+     "train_letters": 439,
+     "train_words": 441
     },
     "count": {
-     "canonical": 1043,
-     "train": 457
+     "canonical": 1033,
+     "train": 467
     },
     "status": {
      "posted": 750,
@@ -40,12 +55,12 @@
      "void": 150
     },
     "bal": {
-     "t2": 917,
-     "wide": 583
+     "t2": 942,
+     "wide": 558
     },
     "amt": {
-     "t2": 1129,
-     "wide": 371
+     "t2": 1125,
+     "wide": 375
     }
    },
    "composition": {
@@ -54,8 +69,27 @@
     "nonposted": 750,
     "canon_block": 300,
     "pairs": 400,
-    "fully_canonical_rows": 378,
-    "max_abs_value": 9974
+    "fully_canonical_rows": 356,
+    "max_abs_value": 9962,
+    "top_orders": {
+     "canonical": {
+      "posted": 347,
+      "nonposted": 347,
+      "rows": 694
+     },
+     "reversed": {
+      "posted": 403,
+      "nonposted": 403,
+      "rows": 806
+     }
+    },
+    "stacked_surface": {
+     "rows": 600,
+     "posted": 300,
+     "nonposted": 300,
+     "share_of_posted_rows": 0.4,
+     "posted_share_within": 0.5
+    }
    },
    "n_prompts_read_back": 1500
   },
@@ -976,7 +1010,47 @@
     "void_trigger": 0.55
    }
   },
-  "note": "apply_regardless == ignore_status (apply every event as if posted); by_block is descriptive (the canonical block is 2/3 posted, the diversified block 11/24 posted; a 'copy on an unfamiliar surface' cue is what the dev gate's clause G3 tests on the held-out posted twins: accuracy and copy rate)"
+  "surface_subsets": {
+   "stacked_surface": {
+    "n": 600,
+    "posted": 300,
+    "binding": true,
+    "copy": 0.5,
+    "apply_regardless": 0.5,
+    "void_trigger": 0.5867
+   },
+   "top_reversed": {
+    "n": 806,
+    "posted": 403,
+    "binding": true,
+    "copy": 0.5,
+    "apply_regardless": 0.5,
+    "void_trigger": 0.5819
+   },
+   "top_reversed_not_stacked": {
+    "n": 206,
+    "posted": 103,
+    "binding": false,
+    "copy": 0.5,
+    "apply_regardless": 0.5,
+    "void_trigger": 0.568
+   },
+   "canonical_surface": {
+    "n": 490,
+    "posted": 245,
+    "binding": false,
+    "copy": 0.5,
+    "apply_regardless": 0.5,
+    "void_trigger": 0.7571
+   }
+  },
+  "surface_subset_bounds": [
+   0.49,
+   0.51
+  ],
+  "stacked_posted_share_of_posted": 0.4,
+  "min_stacked_posted_share": 0.3333333333333333,
+  "note": "apply_regardless == ignore_status (apply every event as if posted); by_block is descriptive (the canonical block is 2/3 posted, the diversified block 11/24 posted; a 'copy on an unfamiliar surface' cue is what the dev gate's clause G3 tests on the held-out posted twins: accuracy and copy rate). Kit revision 3 (operator decision 2026-10-12) binds copy and apply-regardless within the subset bounds [0.49, 0.51] on the stacked-surface and on the reversed-top rows (the builder makes posted and non-posted exactly equal there, so both score 0.50), and at least 1/3 of the posted rows on the stacked surface. The first revision-3 build (superseded, never used) was 0.457 posted on both subsets under bounds [0.40, 0.60]."
  },
  "dev_bank_heuristics_descriptive": {
   "ID_posted": {
@@ -1230,15 +1304,15 @@
  "token_stats": {
   "available": true,
   "train": {
-   "mean_row_tokens_incl_eos": 160.73,
-   "max_row_tokens": 222,
-   "mean_target_tokens": 25.23,
-   "max_target_tokens": 49
+   "mean_row_tokens_incl_eos": 160.78,
+   "max_row_tokens": 215,
+   "mean_target_tokens": 25.1,
+   "max_target_tokens": 50
   },
   "dev": {
-   "mean_prompt_tokens": 131.43,
-   "max_prompt_tokens": 157,
-   "mean_target_tokens": 23.62,
+   "mean_prompt_tokens": 131.58,
+   "max_prompt_tokens": 156,
+   "mean_target_tokens": 23.73,
    "max_target_tokens": 42
   },
   "t2_ledger_reference": {
@@ -1262,29 +1336,30 @@
  "composition": {
   "n": 1500,
   "para": {
-   "canonical": 715,
-   "train": 785
+   "canonical": 633,
+   "train": 867
   },
   "top": {
-   "canonical": 1500
+   "canonical": 694,
+   "train": 806
   },
   "event": {
-   "canonical": 693,
-   "train": 807
+   "canonical": 626,
+   "train": 874
   },
   "before": {
-   "canonical": 696,
-   "train": 804
+   "canonical": 630,
+   "train": 870
   },
   "names": {
-   "canonical": 633,
-   "canonical_plus_train_letters": 171,
-   "train_letters": 287,
-   "train_words": 409
+   "canonical": 557,
+   "canonical_plus_train_letters": 63,
+   "train_letters": 439,
+   "train_words": 441
   },
   "count": {
-   "canonical": 1043,
-   "train": 457
+   "canonical": 1033,
+   "train": 467
   },
   "status": {
    "posted": 750,
@@ -1292,14 +1367,14 @@
    "void": 150
   },
   "bal": {
-   "b3": 391,
-   "b4": 192,
-   "t2": 917
+   "b3": 368,
+   "b4": 190,
+   "t2": 942
   },
   "amt": {
-   "a2": 209,
-   "a3": 162,
-   "t2": 1129
+   "a2": 198,
+   "a3": 177,
+   "t2": 1125
   },
   "status_kind": {
    "neutral": 150,
@@ -1311,9 +1386,9 @@
    "void_variant": 60
   },
   "kinds": {
-   "add": 321,
-   "scale": 503,
-   "transfer": 676
+   "add": 326,
+   "scale": 497,
+   "transfer": 677
   },
   "blocks": {
    "canon": 300,
@@ -1321,10 +1396,10 @@
   },
   "pairs": 400,
   "n_accounts": {
-   "4": 1043,
+   "4": 1033,
    "5": 165,
-   "6": 128,
-   "7": 164
+   "6": 173,
+   "7": 129
   },
   "words_rows": {
    "VOId": 10,
@@ -1370,22 +1445,78 @@
    "zorp": 15,
    "zposted": 15
   },
-  "fully_canonical_surface_rows": 378,
+  "fully_canonical_surface_rows": 356,
   "canonical_surface_status_kinds": {
-   "neutral": 18,
-   "nonce": 14,
-   "not_applied": 18,
-   "posted": 271,
-   "posted_like": 12,
-   "void": 107,
-   "void_variant": 11
+   "neutral": 29,
+   "nonce": 21,
+   "not_applied": 51,
+   "posted": 245,
+   "posted_like": 18,
+   "void": 111,
+   "void_variant": 15
   },
-  "canonical_surface_void_trigger_accuracy": 0.8625,
-  "distinct_event_orders": 398,
-  "max_abs_balance": 9974,
-  "max_abs_value_inputs_and_targets": 9974,
-  "max_abs_scale_row_balance": 998,
-  "max_abs_amount_add_transfer": 994,
+  "canonical_surface_void_trigger_accuracy": 0.7571,
+  "surface_modes": {
+   "canon_block": 300,
+   "canonical": 190,
+   "free": 410,
+   "stacked": 600
+  },
+  "surface_modes_by_status": {
+   "canon_block": {
+    "nonposted": 100,
+    "posted": 200
+   },
+   "canonical": {
+    "nonposted": 145,
+    "posted": 45
+   },
+   "free": {
+    "nonposted": 205,
+    "posted": 205
+   },
+   "stacked": {
+    "nonposted": 300,
+    "posted": 300
+   }
+  },
+  "stacked_surface": {
+   "rows": 600,
+   "posted": 300,
+   "nonposted": 300,
+   "share_of_all_rows": 0.4,
+   "share_of_posted_rows": 0.4,
+   "posted_share_within": 0.5
+  },
+  "top_reversed": {
+   "rows": 806,
+   "posted": 403,
+   "nonposted": 403,
+   "share_of_all_rows": 0.5373,
+   "share_of_posted_rows": 0.5373,
+   "posted_share_within": 0.5
+  },
+  "top_sorted": {
+   "rows": 694,
+   "posted": 347,
+   "nonposted": 347,
+   "share_of_all_rows": 0.4627,
+   "share_of_posted_rows": 0.4627,
+   "posted_share_within": 0.5
+  },
+  "canonical_surface": {
+   "rows": 490,
+   "posted": 245,
+   "nonposted": 245,
+   "share_of_all_rows": 0.3267,
+   "share_of_posted_rows": 0.3267,
+   "posted_share_within": 0.5
+  },
+  "distinct_event_orders": 425,
+  "max_abs_balance": 9962,
+  "max_abs_value_inputs_and_targets": 9962,
+  "max_abs_scale_row_balance": 999,
+  "max_abs_amount_add_transfer": 995,
   "scale_amounts": [
    -9,
    -8,
@@ -1410,13 +1541,13 @@
   ]
  },
  "files": {
-  "dev": "f710b17e228b3865c9b7993082966a07d2ab5306f137978768b09bd179390c78",
-  "train": "89d6a01e280080f7559e6a597dad3ceaa43f51d50a4801337ff04750ff53eb39"
+  "dev": "731bbc6a041799ec43b832ae9540cee8db2324fd48ab2dbacc420f37831c5ba8",
+  "train": "88f04e6b17c2c0e50b0e655f4f59e747232cc2ce8db0f49f189b406fd4fc8ba4"
  },
  "union": {
-  "rule": "lbeam_problems.load_exclusions(extra_data=False) (l1_make_ood.harvest_historical skips HSKILL_CONFIRM_V2* by name, never opened; rcwmt.bank.load_exclusions() NOT called; every pinned source; data/bank_p3_oor.jsonl) + every payload and rolled-out multi-event transition of every other data/**/*.json[l] file except t2bl_* + the binding transitions of docs/ledger_beam/dev_set.jsonl, docs/ledger_beam/dev2_primary.jsonl, docs/ledger_beam/dev2_oor.jsonl, docs/ledger_beam/LB_CONFIRM_DRAW.jsonl + every {before, event} payload under docs/ except docs/t2b/ledger/",
-  "n_payloads": 329532,
-  "n_operative": 320334,
+  "rule": "lbeam_problems.load_exclusions(extra_data=False) (l1_make_ood.harvest_historical skips HSKILL_CONFIRM_V2* by name, never opened; rcwmt.bank.load_exclusions() NOT called; every pinned source; data/bank_p3_oor.jsonl) + every payload and rolled-out multi-event transition of every other data/**/*.json[l] file except the top-level data/t2bl_* files (data/t2bl_superseded_rev*/ included) + the binding transitions of docs/ledger_beam/dev_set.jsonl, docs/ledger_beam/dev2_primary.jsonl, docs/ledger_beam/dev2_oor.jsonl, docs/ledger_beam/LB_CONFIRM_DRAW.jsonl + every {before, event} payload under docs/ except docs/t2b/ledger/",
+  "n_payloads": 338271,
+  "n_operative": 322546,
   "errors": [],
   "skipped_by_name_never_opened": [
    "hskill-views-002/HSKILL_CONFIRM_V2.jsonl",
@@ -1520,6 +1651,76 @@
    "payloads": 0,
    "operative": 0,
    "sha256": "240ffddc7f50f7996716260ad2efe96756a2eacfd983f99f2878b93854ffdef6",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev0/build_1445/t2bl_dev.jsonl": {
+   "payloads": 1733,
+   "operative": 467,
+   "sha256": "befcd7132ef84a71cc354b9209bd5c549bc31ae1dce968490f3efe9bd36752bd",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev0/build_1445/t2bl_train.jsonl": {
+   "payloads": 2378,
+   "operative": 720,
+   "sha256": "8e646cafdfb7ab84d4921b425b9a55270315c371996f627383f860a62826376b",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev0/build_1455/t2bl_dev.jsonl": {
+   "payloads": 1733,
+   "operative": 467,
+   "sha256": "befcd7132ef84a71cc354b9209bd5c549bc31ae1dce968490f3efe9bd36752bd",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev0/build_1455/t2bl_train.jsonl": {
+   "payloads": 2266,
+   "operative": 804,
+   "sha256": "8faa6a5d24e545ccf7273a042631fb9d77a6a3a7f4d25545a58799f4fda3f94b",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev0/t2bl_dev.jsonl": {
+   "payloads": 1733,
+   "operative": 467,
+   "sha256": "9fc0e76a09686896116c1159399450e35f78ee636384c932efa5de10285d17e4",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev0/t2bl_train.jsonl": {
+   "payloads": 2378,
+   "operative": 720,
+   "sha256": "38da88fab74ee44bce20f49506e1b0249e7983b257b9962e41c3e5dfd2e335b2",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev1/t2bl_dev.jsonl": {
+   "payloads": 1733,
+   "operative": 467,
+   "sha256": "befcd7132ef84a71cc354b9209bd5c549bc31ae1dce968490f3efe9bd36752bd",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev1/t2bl_train.jsonl": {
+   "payloads": 2266,
+   "operative": 804,
+   "sha256": "8faa6a5d24e545ccf7273a042631fb9d77a6a3a7f4d25545a58799f4fda3f94b",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev2/t2bl_dev.jsonl": {
+   "payloads": 1877,
+   "operative": 601,
+   "sha256": "f710b17e228b3865c9b7993082966a07d2ab5306f137978768b09bd179390c78",
+   "multi_event_objects": 0,
+   "multi_event_transitions": 0
+  },
+  "data/t2bl_superseded_rev2/t2bl_train.jsonl": {
+   "payloads": 2270,
+   "operative": 804,
+   "sha256": "89d6a01e280080f7559e6a597dad3ceaa43f51d50a4801337ff04750ff53eb39",
    "multi_event_objects": 0,
    "multi_event_transitions": 0
   },
@@ -1990,16 +2191,16 @@
   }
  },
  "code_sha256": {
-  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
-  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
-  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_common.py": "f431ffb79235c5996f96bf7990abb3b3481269127ab6b5d1c7d71f729d6b3286",
+  "scripts/t2bl_make_data.py": "4cbe9eac1dc2d2bd804f31a7ee3c891db365cb2b9aa1188f0f10b025cab437c4",
+  "scripts/t2bl_audit.py": "d0ff1a3e32c9272b49c79806760e07c92f1dc99f269615bdb0ae80e3165ce348",
   "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
   "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
  },
  "build_log": [
-  "[20:21:56] [lbeam] exclusion union: 310446 payloads, 302643 operative contents from 17 sources (53s)",
-  "[20:21:58] [t2bl] freshness union: 329532 payloads, 320334 operative contents from 85 sources (55s)",
-  "[20:21:59] built 1801 dev rows and 1500 training rows (0s)",
-  "[20:22:02] wrote C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\t2bl_dev.jsonl (sha f710b17e228b3865) and C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\t2bl_train.jsonl (sha 89d6a01e280080f7)"
+  "[16:42:41] [lbeam] exclusion union: 310446 payloads, 302643 operative contents from 17 sources (35s)",
+  "[16:42:43] [t2bl] freshness union: 338271 payloads, 322546 operative contents from 95 sources (38s)",
+  "[16:42:44] built 1801 dev rows and 1500 training rows (0s)",
+  "[16:42:46] wrote C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\t2bl_dev.jsonl (sha 731bbc6a041799ec) and C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\data\\t2bl_train.jsonl (sha 88f04e6b17c2c0e5)"
  ]
 }

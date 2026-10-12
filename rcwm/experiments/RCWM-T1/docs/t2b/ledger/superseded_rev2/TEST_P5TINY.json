@@ -1,0 +1,154 @@
+{
+ "part": "p5tiny",
+ "ok": true,
+ "n_checks": 26,
+ "n_pass": 26,
+ "checks": [
+  {
+   "check": "real tiny generation: A0, M1, P1-P4 in the first call (exit 5: C1 pending), C1 then DONE in the second",
+   "ok": true,
+   "detail": "[5, 0]"
+  },
+  {
+   "check": "C1 ran on the CPU outside the lease, in a process that had not initialised CUDA",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "one lease 'rcwm-t1:prereg5' per GPU turn; the C1 call took no lease",
+   "ok": true,
+   "detail": "[('lease', 'rcwm-t1:prereg5')]"
+  },
+  {
+   "check": "A0: anchor (OFF and T2 s0 vs references), adapter identity (each T2b-ledger seed vs its own single-adapter answers) and batch invariance all pass with four adapters loaded",
+   "ok": true,
+   "detail": "({'n': 3, 'identical_states': 1.0, 'identical_texts': 1.0}, {'s0': {'identical_states': 1.0, 'identical_texts': 1.0}, 's1': {'identical_states': 1.0, 'identical_texts': 1.0}, 's2': {'identical_states': 1.0, 'identical_texts': 1.0}}, {'T2BL@canon': 1.0, 'T2BL@HS': 1.0})"
+  },
+  {
+   "check": "M1 wrote one answer per map row for each of the five sides, in bank order",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the five sides are distinct models (OFF, T2 s0 and three T2b-ledger seeds give different answers)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "stub run completes (exit 5 then 0)",
+   "ok": true,
+   "detail": "[5, 0]"
+  },
+  {
+   "check": "stub planning: the rule-following T2b-ledger plans on the held-out rendering at ORACLE's level; the void-trigger T2 s0 loses there ('cancelled' is applied as posted)",
+   "ok": true,
+   "detail": "{'T2BL@HS': 10, 'T2s0@HS': 4, 'T2BL@canon': 10, 'T2s0@canon': 10, 'ORACLE': 10}"
+  },
+  {
+   "check": "a crash inside P2 propagates; the resume orphans the partial P2, re-runs A0 and completes with outputs identical to the uninterrupted run",
+   "ok": true,
+   "detail": "([0], True)"
+  },
+  {
+   "check": "the crashed attempt records its exception (it counts as failed); every attempt records pid and boot time",
+   "ok": true,
+   "detail": "{'turn': 0, 'where': 'gpu', 'pid': 211336, 'boot_time': 1791659362.212814, 'start_unix': 1791683020.775669, 'exception': 'RuntimeError: simulated crash inside P2', 'end_unix': 1791683020.7814362}"
+  },
+  {
+   "check": "a recorded planning stage keeps its generation count and the start estimate it was admitted on",
+   "ok": true,
+   "detail": "{'generations': 560, 'start_estimate_s': 385.2}"
+  },
+  {
+   "check": "nothing fits (cap 0.45 h): exit 5 without loading the model; the second turn without progress stops the job (exit 3, persisted)",
+   "ok": true,
+   "detail": "[5, 3]"
+  },
+  {
+   "check": "a stale DONE.json.partial is moved aside (never deleted) and DONE.json is written",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a mid-run deferral after A0 and M1 (exit 5) resumes next call with an A0 re-check and completes",
+   "ok": true,
+   "detail": "(5, [0])"
+  },
+  {
+   "check": "three P1 attempts cut off by a reboot (an earlier boot, no exception) are not counted: the job completes",
+   "ok": true,
+   "detail": "([0], {'failed': 0, 'interrupted_by_reboot': 3})"
+  },
+  {
+   "check": "two recorded exceptions and one silent death in this boot count as three failures: the job stops (persisted)",
+   "ok": true,
+   "detail": "([3], '[prereg5] stage P1 failed 3 attempts (limit 3; 0 more were cut off by a reboot and not counted): stop (deviation policy: investigate, log)')"
+  },
+  {
+   "check": "an anchor failure stops before any output (persisted; no eligible part)",
+   "ok": true,
+   "detail": "([3], \"[prereg5] ANCHOR FAILED {'n': 3, 'identical_states': 0.0, 'identical_texts': 1.0\")"
+  },
+  {
+   "check": "an adapter-identity failure (a seed does not reproduce its dev answers) stops before any output",
+   "ok": true,
+   "detail": "[3]"
+  },
+  {
+   "check": "a batch-invariance failure stops before any output",
+   "ok": true,
+   "detail": "[3]"
+  },
+  {
+   "check": "an A0 re-check failure on a later turn stops; part (a) (A0 + M1 recorded) stays verdict-eligible",
+   "ok": true,
+   "detail": "(5, 3, ['a'])"
+  },
+  {
+   "check": "a fingerprint mismatch stops (exit 3)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a runtime drift stops before anything is generated",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a recorded output whose hash changed stops the job",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "an adapter that changed between invocations stops the job",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "one-waiter rule: a live RCWM waiter refuses (exit 3, not persisted)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the registered job refuses without a freeze (not persisted)",
+   "ok": true,
+   "detail": "refusing to run the PREREG-5 job: PREREG_5_FREEZE.json does not exist or is unreadable (PREREG-5 is a draft)"
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
+  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
+  "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09",
+  "scripts/t2bl_test.py": "b58b21fbb9b2578ccd67e72d784823650da37fdd11ba778da8caf0d1d560d29f"
+ },
+ "draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b",
+ "hook_draft_sha256": "c546ccfa4142bfc05eb961a3868030022edcee6263acd11fc96d6264f2eb484e",
+ "hook_draft_t2bl_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
+ "peak_mb": 804.1,
+ "recorded_local": "2026-10-10 20:44:22 -0500"
+}

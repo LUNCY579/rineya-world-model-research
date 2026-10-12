@@ -1,0 +1,140 @@
+{
+ "record": "T2BL_GATE_FREEZE_READY",
+ "frozen": false,
+ "ready": true,
+ "kit_revision": 3,
+ "rule_version": 2,
+ "rule_text_sha256": "6d1efa95577cfc6278b8fb82f17881602909156a4f6838b87cb951bae9902fff",
+ "revision2_rule_text_sha256": "6d1efa95577cfc6278b8fb82f17881602909156a4f6838b87cb951bae9902fff",
+ "thresholds": {
+  "BAR_HS": 0.8,
+  "KIND_FLOOR": 0.6,
+  "NI_MARGIN": 0.05,
+  "TWIN_BAR": 0.8,
+  "COPY_CAP": 0.1,
+  "ALIGN_MARGIN": 0.1,
+  "TRIGGER_TRAINED_MIN": 0.8,
+  "TRIGGER_HELDOUT_MAX": 0.3
+ },
+ "seeds": {
+  "train": 20261165,
+  "dev": 20261166,
+  "heldout_orders": 20261163
+ },
+ "run_dir": "runs/t2bl/dev_rev3",
+ "spent": {
+  "seeds": [
+   20261161,
+   20261162
+  ],
+  "runs": [
+   "runs/t2bl/dev"
+  ],
+  "why": "DECISIONS R29: the revision-2 dev gate stopped (PARTIAL, heldout_posted_twins); under the rule's revision path that dev bank and every adapter trained on the revision-2 data are spent",
+  "train": {
+   "file": "data/t2bl_superseded_rev2/t2bl_train.jsonl",
+   "seed": 20261161,
+   "sha256": "89d6a01e280080f7559e6a597dad3ceaa43f51d50a4801337ff04750ff53eb39"
+  },
+  "dev": {
+   "file": "data/t2bl_superseded_rev2/t2bl_dev.jsonl",
+   "seed": 20261162,
+   "sha256": "f710b17e228b3865c9b7993082966a07d2ab5306f137978768b09bd179390c78"
+  },
+  "adapters_sha256": {
+   "s0": {
+    "s0/train/adapter/adapter_model.safetensors": "b2ddd31e4f48eeb58a25d573d6d04b736f97c150f6ed4badce713ef23a8336d5",
+    "s0/train/adapter/adapter_config.json": "3d47d41fe28afde14106bbba0de532fee19d22488247d3e975a9089ac6198bd1"
+   },
+   "s1": {
+    "s1/train/adapter/adapter_model.safetensors": "d844f98b013b1747b88d71d0a1acf4cccb535cba84409c47788ee968fd0638f7",
+    "s1/train/adapter/adapter_config.json": "3d47d41fe28afde14106bbba0de532fee19d22488247d3e975a9089ac6198bd1"
+   },
+   "s2": {
+    "s2/train/adapter/adapter_model.safetensors": "c5a967afd6504a6e60fdd94d67dab0f0b797fd108d4e83fd73b0366224e11618",
+    "s2/train/adapter/adapter_config.json": "9b0abfff62a19d0bb0d542362774ed385d01ca09bb9272671c2df81891ff9a76"
+   }
+  },
+  "revision2_gate_rule_record": {
+   "file": "docs/t2b/ledger/superseded_rev2/GATE_RULE.json",
+   "sha256": "06ec07dd72fd489cb4059c3d6db1b61093df9296fc18df64c2f061b02b443a22"
+  }
+ },
+ "revision_note": "Kit revision 3 (2026-10-12; DECISIONS R29; the rule's pre-stated revision path). The rule text and every threshold are byte-identical to the revision-2 rule frozen on 2026-10-10 (D-48; docs/t2b/ledger/superseded_rev2/GATE_RULE.json). Only the training data changed (data/t2bl_train.jsonl, seed 20261165: both top-level key orders trained; half of the diversified slots on the stacked training surface; posted and non-posted rows exactly equal on the stacked-surface and on the reversed-top rows), and the dev bank was drawn FRESH under a new seed by the same builder and strata (data/t2bl_dev.jsonl, seed 20261166; the DEV half of every held-out partition, unchanged). It replaces the bank of seed 20261162 that the rule text names, which is spent together with every adapter trained on the revision-2 data (runs/t2bl/dev; seeds 20261161 and 20261162). The dev run is tag dev in runs/t2bl/dev_rev3. Since kit revision 3 the top-level {before, event} object is trained in both orders, so 'every object in a held-out key order' in the HS_words definition holds for the event and before objects, and the reversed top order of HS_words, HS_posted and H_order is a trained level there: a deliberate consequence of the revision path, not a new held-out factor. The rule text's 'pre-stated on 2026-10-10 before any T2b-ledger adapter or output exists' is likewise revision 2's: revision 2's adapters and outputs exist (spent), and for this kit revision the unchanged rule is frozen before any adapter trained on its data and before any output of its dev screen exists.",
+ "preconditions": {
+  "GATE_RULE.json is absent (the rule is not frozen yet)": true,
+  "no output of this revision's dev screen exists (runs/t2bl/dev_rev3)": true,
+  "the rule text is byte-identical to the revision-2 freeze (D-48)": true,
+  "GATE_RULE.md is the current render and contains the rule text verbatim": true,
+  "the scorer self-test on the dev bank passes": true,
+  "the training set and the dev bank equal their SOURCE records": true,
+  "the SOURCE records name this revision's seeds (train 20261165, dev 20261166) and kit revision 3": true,
+  "every frozen input exists": true,
+  "PREREG_5_DRAFT.md exists": true
+ },
+ "selftest": {
+  "ok": true,
+  "rows": 1801,
+  "gold_renderings": 12607,
+  "gold_correct": 12607,
+  "negatives": 16209,
+  "negatives_wrong": 16209,
+  "error_classes_right": 16209,
+  "copy_scores_copy_floor": true,
+  "parse_general_equals_env_parse_state_on_A_D": "16016/16016",
+  "bank_sha256": "731bbc6a041799ec43b832ae9540cee8db2324fd48ab2dbacc420f37831c5ba8"
+ },
+ "would_pin": {
+  "inputs": {
+   "scripts/t2bl_common.py": "f431ffb79235c5996f96bf7990abb3b3481269127ab6b5d1c7d71f729d6b3286",
+   "scripts/t2bl_make_data.py": "4cbe9eac1dc2d2bd804f31a7ee3c891db365cb2b9aa1188f0f10b025cab437c4",
+   "scripts/t2bl_audit.py": "d0ff1a3e32c9272b49c79806760e07c92f1dc99f269615bdb0ae80e3165ce348",
+   "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15",
+   "scripts/t2bl_gate.py": "ddce555c8476ec6c8ef1553faf0c06ba2f7ccc59d6431b8424407979ce499f71",
+   "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+   "scripts/confirm2_gen.py": "4253a42039c4a1bb95f412666ad4bc1804244d5b10e6e9fa393c99a488659380",
+   "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+   "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+   "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+   "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+   "vendor_bwm/scripts/train_generic.py": "816d2f562946177397a5f186e9fcadd7febd2b49c894afc9abafe9474665ad61",
+   "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57",
+   "data/t2bl_train.jsonl": "88f04e6b17c2c0e50b0e655f4f59e747232cc2ce8db0f49f189b406fd4fc8ba4",
+   "data/t2bl_train.SOURCE.json": "3da4fde08e0124f1fbaece2cf80f1ab9988fe829a03182ce296f697e38802ac6",
+   "data/t2bl_dev.jsonl": "731bbc6a041799ec43b832ae9540cee8db2324fd48ab2dbacc420f37831c5ba8",
+   "data/t2bl_dev.SOURCE.json": "3f7ed6f656bdc399846c538a07c931a572814575a54867ba8e95c228c8ad1bc0",
+   "docs/t2b/ledger/GATE_RULE.md": "df65424514ec9ad236e4145c24b3cbda6f9acd9fd2972a6ba81f5d2b4a5e1ae3",
+   "docs/t2b/ledger/queue_hook_t2bl.sh.draft": "764fe712f87c81359dffea02851be54e679be253f27681eac0e9be2bdb6ec798"
+  },
+  "prereg5_rules": {
+   "sha256": "71dd593804c83220272346661b7063a4ad456bb9b87d0fa4b131c8d841c68218",
+   "n_strings": 70
+  },
+  "prereg5_code": {
+   "files": {
+    "scripts/t2bl_common.py": "f431ffb79235c5996f96bf7990abb3b3481269127ab6b5d1c7d71f729d6b3286",
+    "scripts/t2bl_make_data.py": "4cbe9eac1dc2d2bd804f31a7ee3c891db365cb2b9aa1188f0f10b025cab437c4",
+    "scripts/t2bl_audit.py": "d0ff1a3e32c9272b49c79806760e07c92f1dc99f269615bdb0ae80e3165ce348",
+    "scripts/t2bl_confirm_bank.py": "90d1cb078ffba1c47fbe56ca183d3f8b9844c37e50fac7261b842c1ea214ec26",
+    "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3",
+    "scripts/t2bl_confirm_analysis.py": "5c39e17cda6b12ba4babaca13aa9256b8783acbcdb2b71f1fcd428bb5a3b5efb"
+   },
+   "sha256": "1408be8ae4c80a9a90f560441cbe3fbf35fe207a6972629a2d9490a053cba195"
+  },
+  "prereg5_draft_sha256": "5e0b008158bde171273da811c9bfbd239317fd88d8835e939cf91b1e36395919"
+ },
+ "hook": {
+  "draft": "docs/t2b/ledger/queue_hook_t2bl.sh.draft",
+  "draft_sha256": "764fe712f87c81359dffea02851be54e679be253f27681eac0e9be2bdb6ec798",
+  "installed": {
+   "scripts/queue_hooks/88_t2bl.sh": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b"
+  },
+  "revision2_draft_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
+  "install_needed_after_the_freeze": true,
+  "install_command": "cp docs/t2b/ledger/queue_hook_t2bl.sh.draft scripts/queue_hooks/88_t2bl.sh && sha256sum docs/t2b/ledger/queue_hook_t2bl.sh.draft scripts/queue_hooks/88_t2bl.sh",
+  "install_when": "only after --freeze-rule (logged in DECISIONS.md): an IN-PLACE replacement of revision 2's 88_t2bl.sh at a waiting point (the live chain's step waiting for the lease, holding none) or with the chain stopped, then ONE fresh chain (scripts/launch_master.cmd, hidden) only if no master_chain.sh / confirm_chain.sh process is alive (the draft's WHEN IT RUNS)"
+ },
+ "freeze_command": "python -B scripts/t2bl_gate.py --freeze-rule --approval \"<operator>, <YYYY-MM-DD HH:MM>, DECISIONS D-<n>: T2b-ledger kit revision 3 (R29 revision path), dev gate rule revision 2 unchanged\"",
+ "note": "NOT a freeze. t2bl_run.py refuses to start without docs/t2b/ledger/GATE_RULE.json (written only by --freeze-rule, an operator step logged in DECISIONS.md); the hook is installed only after it.",
+ "written_local": "2026-10-12 16:55:48 -0500"
+}

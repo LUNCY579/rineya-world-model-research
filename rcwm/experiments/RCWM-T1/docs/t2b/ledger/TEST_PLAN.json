@@ -1,8 +1,8 @@
 {
  "part": "plan",
  "ok": true,
- "n_checks": 10,
- "n_pass": 10,
+ "n_checks": 11,
+ "n_pass": 11,
  "checks": [
   {
    "check": "both --plan paths exit 0 without importing torch",
@@ -12,7 +12,7 @@
   {
    "check": "dev screen: one 4.5 h turn at the planning and at the observed rate",
    "ok": true,
-   "detail": "(3.38, 2.56)"
+   "detail": "(3.38, 2.57)"
   },
   {
    "check": "each seed's whole pair (training, load, A0, E0, its evaluation) x 1.25 fits an empty turn",
@@ -27,7 +27,7 @@
   {
    "check": "PREREG-5: every simulated schedule (expected / ceiling sizes; observed, planning and a 2.5 generations/s rate) completes under the runner's own start rule and no turn exceeds 4.5 h",
    "ok": true,
-   "detail": "{'expected sizes, observed rates': (5.33, 3.19), 'expected sizes, planning rates': (8.13, 3.3), 'ceiling sizes, observed rates': (6.98, 3.94), 'ceiling sizes, planning rates': (10.83, 3.93), 'ceiling sizes, 2.5 generations/s (below the planning rate)': (12.03, 2.47)}"
+   "detail": "{'expected sizes, observed rates': (5.33, 3.19), 'expected sizes, planning rates': (8.13, 3.3), 'ceiling sizes, observed rates': (6.98, 3.94), 'ceiling sizes, planning rates': (10.83, 3.93), 'ceiling sizes, 2.5 generations/s (below the planning rate)': (12.04, 2.47)}"
   },
   {
    "check": "PREREG-5: 2 turns at the observed rate (expected sizes), at most 5 at 2.5 generations/s",
@@ -45,7 +45,12 @@
    "detail": ""
   },
   {
-   "check": "the plan records the lease labels and the 1.25 x / 0.5 h stage rule with the ceiling bound",
+   "check": "the plan records the lease labels and the 1.25 x / 0.5 h stage rule with the ceiling bound; the dev plan is kit revision 3's (its run directory, its training file)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the default dev run directory is kit revision 3's, never revision 2's spent runs/t2bl/dev",
    "ok": true,
    "detail": ""
   },
@@ -56,24 +61,24 @@
   }
  ],
  "code_sha256": {
-  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
-  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
-  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
-  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
-  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
-  "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
-  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
-  "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09",
-  "scripts/t2bl_test.py": "b58b21fbb9b2578ccd67e72d784823650da37fdd11ba778da8caf0d1d560d29f"
+  "scripts/t2bl_common.py": "f431ffb79235c5996f96bf7990abb3b3481269127ab6b5d1c7d71f729d6b3286",
+  "scripts/t2bl_make_data.py": "4cbe9eac1dc2d2bd804f31a7ee3c891db365cb2b9aa1188f0f10b025cab437c4",
+  "scripts/t2bl_audit.py": "d0ff1a3e32c9272b49c79806760e07c92f1dc99f269615bdb0ae80e3165ce348",
+  "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15",
+  "scripts/t2bl_gate.py": "ddce555c8476ec6c8ef1553faf0c06ba2f7ccc59d6431b8424407979ce499f71",
+  "scripts/t2bl_confirm_bank.py": "90d1cb078ffba1c47fbe56ca183d3f8b9844c37e50fac7261b842c1ea214ec26",
+  "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3",
+  "scripts/t2bl_confirm_analysis.py": "5c39e17cda6b12ba4babaca13aa9256b8783acbcdb2b71f1fcd428bb5a3b5efb",
+  "scripts/t2bl_test.py": "b82aaed06a1930cc75de7a42a488d4c4c0d22bf53f7b2d1e0cad6ee78231f0f2"
  },
- "draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b",
- "hook_draft_sha256": "c546ccfa4142bfc05eb961a3868030022edcee6263acd11fc96d6264f2eb484e",
- "hook_draft_t2bl_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
- "peak_mb": 41.3,
- "recorded_local": "2026-10-10 20:41:28 -0500",
+ "draft_sha256": "5e0b008158bde171273da811c9bfbd239317fd88d8835e939cf91b1e36395919",
+ "hook_draft_sha256": "4f5cee1f2914deb48c2da956aaae0d64cef85a908af2ce1c0769682d615e9d7e",
+ "hook_draft_t2bl_sha256": "764fe712f87c81359dffea02851be54e679be253f27681eac0e9be2bdb6ec798",
+ "peak_mb": 42.3,
+ "recorded_local": "2026-10-12 16:50:08 -0500",
  "dev_gpu_h": {
   "planning": 3.38,
-  "observed": 2.56
+  "observed": 2.57
  },
  "p5_schedules": {
   "expected sizes, observed rates": {
@@ -154,7 +159,7 @@
    ]
   },
   "ceiling sizes, 2.5 generations/s (below the planning rate)": {
-   "gpu_h": 12.03,
+   "gpu_h": 12.04,
    "max_turn_h": 2.47,
    "turns": [
     [

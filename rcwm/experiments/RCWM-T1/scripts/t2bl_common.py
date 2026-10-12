@@ -1,6 +1,23 @@
 """T2b-ledger kit: shared definitions (torch-free). A surface-diversified ledger rule adapter on the T2 recipe, its dev
 screen (scripts/t2bl_run.py, scripts/t2bl_gate.py) and the sealed confirmation PREREG-5 (scripts/t2bl_confirm_*.py,
-PREREG_5_DRAFT.md). Design: docs/t2b/ledger/DESIGN.md (kit revision 2).
+PREREG_5_DRAFT.md). Design: docs/t2b/ledger/DESIGN.md (kit revision 3).
+
+Kit revision 3 (2026-10-12; DECISIONS R29, the gate rule's pre-stated revision path: only the training data change, a
+fresh dev bank under a new seed, the same thresholds). The revision-2 dev screen (runs/t2bl/dev) stopped PARTIAL
+(heldout_posted_twins): its training set (seed 20261161) and dev bank (seed 20261162) and every adapter trained on them
+are SPENT (data/t2bl_superseded_rev2/). Revision 3 changes the training composition only: (a) the 2-key top-level object
+of the user JSON is trained in BOTH orders (TOP_TRAIN_PERMS; revision 2 never varied it, so the reversed top order that
+the dev bank's H_order and combined held-out surface carry was an untrained extrapolation factor there; it is now a
+trained level, deliberately, NOT a new held-out factor); (b) half of the diversified slots are rendered on the STACKED
+training surface (a training paraphrase 1-3, training names, non-sorted training orders of the event and before
+objects and the reversed top order at once), so posted rows under stacked variation rise. Operator decision at kit
+revision 3 (2026-10-12, before any freeze or training): posted and non-posted rows are EXACTLY balanced on the
+stacked-surface rows and on the reversed-top rows (300 / 300 and 403 / 403; binding band [0.49, 0.51]), so there is no
+surface-to-status cue on those surfaces. The first revision-3 build (kept in docs/t2b/ledger/superseded_rev3_preop/,
+never trained on) was 0.457 posted on both and did NOT meet that; its 'no surface-to-status cue' wording was wrong.
+Vocabularies, magnitude bands, paraphrases and every held-out partition (words, names,
+event / before orders, paraphrases 4 / 5, the 8-account count, the magnitude bands) are unchanged and disjoint from
+training. The dev bank is redrawn by the same builder under a new seed into a new run directory (DEV_RUN).
 
 Why (REPORT 3c, 3d; DECISIONS D-34/D-35/D-45). T2 s0 learned the literal token 'void' as the ledger no-op cue (PREREG-3
 STATUS: TRIGGER; unseen statuses 0.01-0.18), fails out of range on magnitudes, reordered keys and word account names,
@@ -14,10 +31,11 @@ Held-out halves (revision 2). Every held-out partition that the dev gate reads (
 of the event and before objects, the rule paraphrase) is split into a DEV half (the dev bank and the dev gate only) and
 a CONFIRM half (PREREG-5's sealed map bank only); both halves are excluded from training. So the confirmation tests
 held-out items the dev gate never conditioned on. Not split (stated limits): the top-level order (its only other order,
-reversed, is in both banks), the 8-account count and the magnitude bands (the gate reads neither; the confirmation's
-values are freshly drawn), and PREREG-LB's rendering (bank / card / cash / fees, keys reversed, 'cancelled'), which both
-banks carry only in report-only strata. Every held-out status word is token-novel under Titan's tokenizer: it contains
-neither the token 'void' nor the token 'posted', and not all of its tokens occur in trained statuses (t2bl_audit, binding).
+reversed, is in both banks; since kit revision 3 it is a TRAINED order, not held out), the 8-account count and the
+magnitude bands (the gate reads neither; the confirmation's values are freshly drawn), and PREREG-LB's rendering (bank /
+card / cash / fees, keys reversed, 'cancelled'), which both banks carry only in report-only strata. Every held-out
+status word is token-novel under Titan's tokenizer: it contains neither the token 'void' nor the token 'posted', and not
+all of its tokens occur in trained statuses (t2bl_audit, binding).
 
 Frame. Titan's one-step ledger frame family: a system text (one of six paraphrases of the frame's rule; paraphrase 0 is
 rcwmt.env.SYSTEM_ONE['ledger_replay'] verbatim) and a compact JSON user turn {"before": {...}, "event": {...}} whose
@@ -27,8 +45,13 @@ accounts A-D, posted / void, |b| <= 98, trained amounts) messages() == rcwmt.env
 Gold. p3_common.gold_of: rcwmt.env.step (every status other than the exact string 'posted' is a no-op), asserted equal
 to the explicit rule implementation p3_common.rule_gold and to the validated FDS oracle on every row.
 
-Seeds (grep over the RCWM, BWM and complementary trees on 2026-10-10: unused; RCX owns 202612xx, D-39):
-  20261161 training set, 20261162 dev bank, 20261163 held-out key orders, 20261164 tests only (never a registered set).
+Seeds (grep over the RCWM, BWM and complementary trees: unused when taken; RCX owns 202612xx, D-39):
+  20261165 training set (kit revision 3; regenerated under the SAME seed at the operator decision of 2026-10-12: every
+  sub-stream is derived from the seed exactly as before, only the plan's quotas changed; t2bl_make_data GEN_VERSION
+  t2bl-data-v3.1), 20261166 dev bank (kit revision 3; byte-identical across that regeneration). A grep over every tree
+  under WorldModel/ on 2026-10-12 (HSKILL_CONFIRM_V2* excluded by name) found 20261165-20261179 unused. 20261163
+  held-out key orders (unchanged: the held-out partitions are unchanged), 20261164 tests only (never a registered set).
+  SPENT (revision 2): 20261161 training set, 20261162 dev bank.
 The PREREG-5 confirmation bank and planning draw are minted at its freeze from a commit-reveal seed (BWM's salt).
 """
 from __future__ import annotations
@@ -55,18 +78,23 @@ for _p in (str(ROOT), str(ROOT / "scripts")):
 from rcwmt import env  # noqa: E402  (torch-free)
 import p3_common as P3  # noqa: E402  (PREREG-3's frame helpers, parser, scorer and gold; torch-free, read-only)
 
-KIT_REVISION = 2
+KIT_REVISION = 3
 LEDGER = "ledger_replay"
 DATA = ROOT / "data"
 DOCS = ROOT / "docs" / "t2b" / "ledger"
 OUT_ROOT = ROOT / "runs" / "t2bl"
+RUN_NAME = "dev_rev3"                            # this kit revision's dev-screen directory (t2bl_run.py tag 'dev')
+DEV_RUN = OUT_ROOT / RUN_NAME
+DEV_RUN_REL = f"runs/t2bl/{RUN_NAME}"
+SPENT_RUNS = ("runs/t2bl/dev",)                  # revision 2's dev screen (R29): spent, never an input
 TOKENIZER_DIR = Path(r"C:/Users/clclc/BusinessProject/Chat-Bubble/Rineya_Published_Cores/"
                      r"Rineya-Titan-Sparse-Experimental-1.0.0-devfreeze")
 TOKENIZER_JSON = TOKENIZER_DIR / "tokenizer.json"
-SEED_TRAIN = 20261161
-SEED_DEV = 20261162
+SEED_TRAIN = 20261165                            # kit revision 3
+SEED_DEV = 20261166                              # kit revision 3
 ORDER_SEED = 20261163
 TEST_SEED = 20261164
+SPENT_KIT_SEEDS = (20261161, 20261162)           # revision 2's training set and dev bank (spent, R29)
 RESERVED_PREFIX = "HSKILL_CONFIRM_V2"            # never opened or hashed (DECISIONS I-28)
 
 TRAIN = DATA / "t2bl_train.jsonl"
@@ -197,6 +225,12 @@ N_HELDOUT_PERMS = 6                                # per object: the reversal + 
 MIN_KENDALL = 2                                    # a random held-out order is >= 2 adjacent swaps from the sorted one
 DEV_PERM_IDX = (1, 2, 3)                           # three random orders: the dev half
 CONFIRM_PERM_IDX = (0, 4, 5)                       # the reversal + two random orders: the confirm half
+# The 2-key top-level object {before, event} has two orders. Kit revision 2 trained only the sorted one and held the
+# reversal out (shared by both halves); kit revision 3 trains BOTH (R29: the reversal was an untrained factor of every
+# H_order and combined-surface row). The top object therefore has no held-out order since revision 3.
+TOP_TRAIN_PERMS = ((0, 1), (1, 0))
+P_TOP_REVERSED = 0.5                               # the reversed top order: an exact half of the 'free' slots of each
+                                                   # DIV slot type (t2bl_make_data.train_plan; kit revision 3)
 
 
 def kendall(p) -> int:
@@ -218,11 +252,12 @@ def _held_out_perms(n: int, rng: random.Random) -> list:
 
 
 def derive_heldout_orders() -> dict:
-    """Regenerated from ORDER_SEED (the audit and the tests re-derive it independently): top {before, event} -> the
-    reversed order only (2 keys; shared by both halves); event (6 keys) and before (n accounts, n = 4..8, as position
-    permutations of the sorted names) -> 6 each (the reversal + 5 random), split DEV (indices 1-3) / CONFIRM (0, 4, 5)."""
+    """Regenerated from ORDER_SEED (the audit and the tests re-derive it independently): event (6 keys) and before (n
+    accounts, n = 4..8, as position permutations of the sorted names) -> 6 each (the reversal + 5 random), split DEV
+    (indices 1-3) / CONFIRM (0, 4, 5). The top object has no held-out order since kit revision 3 (both trained; revision
+    2's 'top' entry drew nothing from the RNG, so every event / before order is the same as in revision 2)."""
     rng = random.Random(ORDER_SEED)
-    out = {"top": [(1, 0)], "event": _held_out_perms(len(EVENT_KEYS), rng)}
+    out = {"event": _held_out_perms(len(EVENT_KEYS), rng)}
     for n in sorted(set(TRAIN_COUNTS + HELDOUT_COUNTS)):
         out[f"before{n}"] = _held_out_perms(n, rng)
     return out
@@ -237,9 +272,9 @@ def perm_key(n: int) -> str:
 
 
 def split_perms(split: str, key: str) -> list:
-    """The held-out permutations of one half for an object key ('top' is shared)."""
+    """The held-out permutations of one half for an object key (event, before<n>; the top object has none)."""
     if key == "top":
-        return list(HELDOUT_PERMS["top"])
+        raise ValueError("the top-level object has no held-out order since kit revision 3 (both orders are trained)")
     idx = DEV_PERM_IDX if split == "dev" else CONFIRM_PERM_IDX
     return [HELDOUT_PERMS[key][i] for i in idx]
 
@@ -260,20 +295,29 @@ _TRAIN_PERMS: dict = {}
 
 
 def train_perms(obj: str, n: int | None = None) -> list:
-    """Every permutation of the object's positions that is NOT held out (identity included), sorted."""
-    k = obj if obj in ("top", "event") else perm_key(n)
+    """Every permutation of the object's positions that is NOT held out (identity included), sorted. The top object:
+    both orders (kit revision 3)."""
+    if obj == "top":
+        return list(TOP_TRAIN_PERMS)
+    k = obj if obj == "event" else perm_key(n)
     if k not in _TRAIN_PERMS:
-        size = {"top": 2, "event": len(EVENT_KEYS)}.get(k) or int(k[6:])
+        size = len(EVENT_KEYS) if k == "event" else int(k[6:])
         ho = set(HELDOUT_PERMS[k])
         _TRAIN_PERMS[k] = [p for p in itertools.permutations(range(size)) if p not in ho]
     return _TRAIN_PERMS[k]
 
 
 def draw_train_perm(rng: random.Random, obj: str, n: int | None = None, allow_canon: bool = True) -> tuple:
-    size = {"top": 2, "event": len(EVENT_KEYS)}.get(obj) or n
-    ident = tuple(range(size))
+    """A training order of one object: event / before: the identity w.p. P_CANON_ORDER (if allowed), otherwise a
+    uniformly drawn non-identity training permutation; top (kit revision 3): reversed w.p. P_TOP_REVERSED (always
+    reversed if allow_canon is False). The training builder no longer draws the top order of a 'free' slot here (its
+    plan assigns it by exact quota); the stacked mode still calls it with allow_canon=False (no draw)."""
     if obj == "top":
-        return ident                               # the 2-key top object is never augmented (its only other order is held out)
+        if not allow_canon or rng.random() < P_TOP_REVERSED:
+            return (1, 0)
+        return (0, 1)
+    size = len(EVENT_KEYS) if obj == "event" else n
+    ident = tuple(range(size))
     if allow_canon and rng.random() < P_CANON_ORDER:
         return ident
     pool = [p for p in train_perms(obj, n) if p != ident]
@@ -289,12 +333,12 @@ def perm_of(order, keys_sorted) -> tuple:
 
 
 def order_class(obj: str, perm: tuple, n: int | None = None) -> str:
-    """'canonical' (identity), 'heldout' (top reversed; shared), 'heldout_dev' / 'heldout_confirm' (a held-out
-    permutation of that half) or 'train'."""
+    """'canonical' (identity), 'heldout_dev' / 'heldout_confirm' (a held-out permutation of that half) or 'train' (the
+    reversed top order is 'train' since kit revision 3)."""
     if perm == tuple(range(len(perm))):
         return "canonical"
     if obj == "top":
-        return "heldout"
+        return "train" if tuple(perm) in TOP_TRAIN_PERMS else "other"
     k = obj if obj == "event" else perm_key(n)
     ho = HELDOUT_PERMS[k]
     if tuple(perm) in ho:
@@ -397,6 +441,13 @@ def heuristic_states(before: dict, ev: dict) -> dict:
 BINDING_HEURISTICS = {"copy": (0.48, 0.52), "apply_regardless": (0.48, 0.52), "void_trigger": (0.0, 0.70)}
 STRING_HEURISTIC_MAX = 0.95                        # every non-rule string cue is wrong on >= 5% of training rows
 RULE_EQUIVALENT = ("exact", "ci_posted")
+# Kit revision 3 (binding; operator decision 2026-10-12): no surface-to-status cue on the revised surfaces. On the
+# stacked-surface rows and on the reversed-top rows the builder makes posted and non-posted EXACTLY equal (copy and
+# apply-regardless 0.50 each); the audit binds the posted share, copy and apply-regardless there within these bounds, so
+# 'copy on an unfamiliar surface' and 'apply on an unfamiliar surface' are each wrong on half of those rows. (The first
+# revision-3 build had (0.40, 0.60) and was 0.457 posted on both subsets: a residual cue; superseded unused.)
+SURFACE_SUBSET_BOUNDS = (0.49, 0.51)
+MIN_STACKED_POSTED_SHARE = 1 / 3                   # binding: >= 1/3 of the posted training rows on the stacked surface
 
 # ================================================================================ strata (dev bank and PREREG-5 map)
 # name -> (factor, gold rule, surface class, description). gold rule 'noop' = gold equals before; 'mixed' = posted on
@@ -420,9 +471,9 @@ STRATA = OrderedDict([
                                                          "/ transfer bases only; trained-variant control)")),
     ("H_words", ("words", "noop", "canonical", "a HELD-OUT non-posted word of the bank's half (kind by base index mod 5; "
                                                 "4 words per kind), canonical surface otherwise")),
-    ("H_order", ("order", "mixed", "heldout_order", "every object in a held-out key order: top reversed, event and "
-                                                     "before in held-out orders of the bank's half; posted (even bases) "
-                                                     "or a training word (odd)")),
+    ("H_order", ("order", "mixed", "heldout_order", "event and before in held-out orders of the bank's half, top "
+                                                     "reversed (a trained order since kit revision 3); posted (even "
+                                                     "bases) or a training word (odd)")),
     ("H_names", ("names", "mixed", "heldout_names", "accounts renamed to held-out names of the bank's half (4 letters or "
                                                      "4 of 8 words, sorted); posted (even bases) or a training word (odd)")),
     ("H_count", ("count", "mixed", "heldout_count", "8 accounts (held-out count): A-D plus 4 training letters with "
@@ -433,10 +484,13 @@ STRATA = OrderedDict([
     ("H_amt", ("magnitude", "apply", "heldout_amt", "posted, the amount redrawn in the held-out 4-digit band (add / "
                                                      "transfer bases only)")),
     ("HS_words", ("combined", "noop", "heldout_combined", "the COMBINED held-out surface of the bank's half (its "
-                  "paraphrase, its names, held-out key orders) with a held-out non-posted word of that half")),
+                  "paraphrase, its names, held-out event and before orders; top reversed, a trained order since kit "
+                  "revision 3) with a held-out non-posted word of that half")),
     ("HS_posted", ("combined", "apply", "heldout_combined", "the same combined held-out surface, posted (the twins)")),
     ("H_order_top", ("order_detail", "mixed", "heldout_order", "report-only: ONLY the top-level object reversed (event "
-                                                               "and before sorted); posted / training word by base parity")),
+                                                               "and before sorted; a TRAINED order since kit revision 3, "
+                                                               "so a trained-variant report); posted / training word by "
+                                                               "base parity")),
     ("H_order_inner", ("order_detail", "mixed", "heldout_order", "report-only: top sorted, event and before in held-out "
                                                                  "orders of the bank's half; posted / training word by "
                                                                  "base parity")),
@@ -572,11 +626,19 @@ def surface_classes(surface: dict, before: dict, ev: dict) -> dict:
 TRAINED_AMOUNTS = frozenset(set(range(-9, 13)) - {-3})   # the recorded marginal's 21 values (-9..12 without -3)
 
 
+def stacked_surface(sc: dict) -> bool:
+    """Kit revision 3's STACKED training surface (from a row's classes): a training paraphrase (1-3), training names
+    (training letters or training words, not the A-D-based sets), non-sorted training orders of the event and before
+    objects and the reversed top order, all at once: the training-surface analogue of the combined held-out surface."""
+    return (sc["para"] == "train" and sc["names"] in ("train_letters", "train_words") and sc["event"] == "train"
+            and sc["before"] == "train" and sc["top"] == "train")
+
+
 def heldout_factors(sc: dict) -> list:
     """The held-out factors present in a row's classes (empty for every training row)."""
     out = []
     for k in ("para", "top", "event", "before"):
-        if sc[k].startswith("heldout"):
+        if sc[k].startswith("heldout") or sc[k] == "other":
             out.append(k)
     if sc["names"].startswith("heldout") or sc["names"] in ("lb", "other"):
         out.append("names")
@@ -710,15 +772,18 @@ def write_create(path: Path, text: str, stale_partial: str = "refuse") -> Path:
 
 
 def run_outputs(out_root: Path | None = None) -> list:
-    d = Path(out_root or OUT_ROOT)
+    """Every file of THIS kit revision's dev screen (DEV_RUN; a spent earlier revision's run directory, runs/t2bl/dev,
+    is not this revision's output and does not count)."""
+    d = Path(out_root or DEV_RUN)
     return sorted(str(p) for p in d.rglob("*") if p.is_file()) if d.is_dir() else []
 
 
 # PREREG-5's pre-freeze records: the freeze binds them (each must carry the current code, draft and hook draft), so they
 # are REWRITTEN in place by every rerun until PREREG_5_FREEZE.json exists, including after the dev screen's outputs exist
 # (the documented path to the freeze reruns the tests after --render-draft). Every other kit record (the data audit,
-# the dev gate's rule document and dry run, the dev plan, the dev-screen test records) is rewritten only while no
-# runs/t2bl output exists; afterwards a rerun writes a new record next to the old one with a UTC timestamp suffix.
+# the dev gate's rule document and dry run, the dev plan, the dev-screen test records) is rewritten only while no output
+# of this revision's dev screen (runs/t2bl/<RUN_NAME>) exists; afterwards a rerun writes a new record next to the old one
+# with a UTC timestamp suffix.
 PREFREEZE_DOCS = ("TEST_P5ANALYSIS.json", "TEST_P5TINY.json", "TEST_P5FREEZE.json", "TEST_PLAN.json", "TEST_HOOK.json",
                   "TEST_REHEARSAL.json", "P5_DRYRUN.json", "P5_DRYRUN.md", "P5_GEN_PLAN.json", "P5_POWER.json",
                   "P5_POWER_DEV.json")
@@ -734,7 +799,7 @@ def write_doc(name: str, text: str, docs: Path | None = None) -> Path:
         if name in PREFREEZE_DOCS:
             if (root / "PREREG_5_FREEZE.json").exists():
                 p = d / f"{p.stem}.{_stamp()}{p.suffix}"
-        elif run_outputs(root / "runs" / "t2bl"):
+        elif run_outputs(root / "runs" / "t2bl" / RUN_NAME):
             p = d / f"{p.stem}.{_stamp()}{p.suffix}"
     tmp = p.with_name(p.name + ".partial")
     with open(tmp, "w", encoding="utf-8", newline="\n") as f:

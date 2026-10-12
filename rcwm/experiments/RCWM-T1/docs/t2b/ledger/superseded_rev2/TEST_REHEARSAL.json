@@ -1,0 +1,66 @@
+{
+ "part": "rehearsal",
+ "ok": true,
+ "n_checks": 5,
+ "n_pass": 5,
+ "checks": [
+  {
+   "check": "the real freshness union (skip_prefix=None: T2b-ledger's training set and dev bank included) builds without a source error",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the full-size map bank mints from the CONFIRM half: 28 strata, 2,701 rows, the stratum audit passes, 0 payload / operative overlaps, regenerates from (seed, rejections)",
+   "ok": true,
+   "detail": "(2701, 2)"
+  },
+  {
+   "check": "the full-size planning draw mints: 180 instances, 36 per optimal depth, verifies, 0 overlaps, regenerates",
+   "ok": true,
+   "detail": "(180, 0)"
+  },
+  {
+   "check": "the stand-in tags give other seeds than the registered tags would on the same inputs",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "torch was never imported by the rehearsal",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
+  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
+  "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09",
+  "scripts/t2bl_test.py": "b58b21fbb9b2578ccd67e72d784823650da37fdd11ba778da8caf0d1d560d29f"
+ },
+ "draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b",
+ "hook_draft_sha256": "c546ccfa4142bfc05eb961a3868030022edcee6263acd11fc96d6264f2eb484e",
+ "hook_draft_t2bl_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
+ "peak_mb": 339.0,
+ "recorded_local": "2026-10-10 20:46:03 -0500",
+ "union": {
+  "digest_at_rehearsal": "7d24710828757742511c4382f49e521a06e04492cf4727f2a0c9ff2ef80ea4e2",
+  "seconds": 48.3
+ },
+ "map": {
+  "rows": 2701,
+  "strata": 28,
+  "fresh_rejections": 2,
+  "rejection_counts": {
+   "operative content in an exclusion source": 2
+  }
+ },
+ "plan": {
+  "instances": 180,
+  "fresh_rejections": 0
+ },
+ "mint_seconds": 12.6
+}

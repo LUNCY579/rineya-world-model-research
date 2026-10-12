@@ -1,0 +1,159 @@
+{
+ "part": "gate",
+ "ok": true,
+ "n_checks": 23,
+ "n_pass": 23,
+ "checks": [
+  {
+   "check": "scorer self-test on the dev bank: gold renderings scored correct, negatives wrong, error classes, copy floor, parser identity with env.parse_state on A-D rows",
+   "ok": true,
+   "detail": "{'gold_renderings': 12607, 'negatives': 16209, 'parse_general_equals_env_parse_state_on_A_D': '16016/16016'}"
+  },
+  {
+   "check": "every dev-gate case gives its pre-stated verdict (22 cases)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "every verdict and every named pattern is realised",
+   "ok": true,
+   "detail": "(['NO_VERDICT_INSTRUMENT', 'PARTIAL', 'PROCEED', 'TRIGGER_WIDENED'], ['heldout_below_bar', 'heldout_posted_twins', 'in_distribution_cost', 'not_aligned_with_own_canonical', 'seed_disagreement', 'trained_words_below_bar', 'word_kind_below_floor'])"
+  },
+  {
+   "check": "GATE_RULE.md is rendered from the code's rule text (verbatim, pre-stated, revision 2)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "state: the gate rule is NOT frozen (GATE_RULE.json absent): its verification reports the missing record",
+   "ok": true,
+   "detail": "['docs/t2b/ledger/GATE_RULE.json is missing or not a gate-rule record (t2bl_gate.py --freeze-rule)']"
+  },
+  {
+   "check": "state: the runner refuses before the lease while the rule is not frozen (exit 3, not persisted)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "freeze-rule refuses an approval that names nobody",
+   "ok": true,
+   "detail": "--approval must name who approved, when, and the DECISIONS entry"
+  },
+  {
+   "check": "freeze-rule refuses once an output of this revision's dev screen exists",
+   "ok": true,
+   "detail": "a runs/t2bl/dev_rev3 output exists: the rule can no longer be frozen"
+  },
+  {
+   "check": "freeze-rule writes GATE_RULE.json with every frozen input and pins PREREG-5's rules digest AND decision code; it records kit revision 3, its seeds, its run directory and the spent revision-2 artifacts",
+   "ok": true,
+   "detail": "['data/t2bl_dev.SOURCE.json', 'data/t2bl_dev.jsonl', 'data/t2bl_train.SOURCE.json', 'data/t2bl_train.jsonl']"
+  },
+  {
+   "check": "the frozen record verifies against the current files",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "a changed frozen input is reported",
+   "ok": true,
+   "detail": "['data/t2bl_dev.jsonl: differs from the frozen gate rule (sha256)']"
+  },
+  {
+   "check": "freeze-rule is create-only",
+   "ok": true,
+   "detail": "GATE_RULE.json exists (create-only)"
+  },
+  {
+   "check": "a stopped dev run gets a NO VERDICT record (GATE.md and GATE.json written, the reason quoted)",
+   "ok": true,
+   "detail": "No gate verdict: the dev run stopped before completing ([t2bl] ANCHOR FAILED (test))."
+  },
+  {
+   "check": "an orphan GATE.md (no GATE.json) and a stale GATE.json.partial are moved aside, never deleted, and the analysis completes",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the gate analysis is create-only (GATE.json exists)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "P(PROCEED) is high at a true held-out-word accuracy of 0.95 and near 0 at 0.85 (G4 aligns the gate with PREREG-5's non-inferiority)",
+   "ok": true,
+   "detail": "(0.9733333333333334, 0.0)"
+  },
+  {
+   "check": "the hook identity rule: an installed hook that differs from the draft is refused",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the hook glob: every installed *t2bl*.sh must be the draft (none installed: fine; a second, different copy under another name: refused)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the real scripts/queue_hooks (read-only scan): no t2bl hook, the revision-3 draft, or revision 2's spent hook awaiting reinstall after the freeze (then the runner refuses until it is the revision-3 draft)",
+   "ok": true,
+   "detail": "revision 2's hook, reinstall pending"
+  },
+  {
+   "check": "the rule text is byte-identical to the revision-2 rule frozen in D-48 and every threshold equals revision 2's",
+   "ok": true,
+   "detail": "{'BAR_HS': True, 'KIND_FLOOR': True, 'NI_MARGIN': True, 'TWIN_BAR': True, 'COPY_CAP': True, 'ALIGN_MARGIN': True, 'TRIGGER_TRAINED_MIN': True, 'TRIGGER_HELDOUT_MAX': True, 'RULE_VERSION': True}"
+  },
+  {
+   "check": "GATE_RULE.md and every GATE.md carry the kit-revision-3 inputs note (fresh seed, run directory, spent revision 2, the top-level order trained)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "freeze-ready record (not a freeze): every precondition holds, it would pin exactly the frozen-input set, PREREG-5's rules and code digests and the draft, and no GATE_RULE.json is written",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "torch was never imported by the gate part",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "ed1f9b179a432eefd24bb9249cc6d033a1b5521439f3a0b07b88cd03d6bb8db7",
+  "scripts/t2bl_make_data.py": "1ed81dad606cd86f05464e75205398595bae223ee99c764eb6d6eb369872e06e",
+  "scripts/t2bl_audit.py": "8bf4b3a52ffca8a1bfdb73ce9aee52503be57a8054baf272feb5c0b5028913bf",
+  "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15",
+  "scripts/t2bl_gate.py": "b938702c68b5623113eafad54816e0cde639768420e7b293a323a970a757f6bc",
+  "scripts/t2bl_confirm_bank.py": "90d1cb078ffba1c47fbe56ca183d3f8b9844c37e50fac7261b842c1ea214ec26",
+  "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3",
+  "scripts/t2bl_confirm_analysis.py": "b42bd69aa149771aceae5567f26498f9d7be2e722a16f7b6ce96de8b39ecbdd6",
+  "scripts/t2bl_test.py": "4d85753d66847592e34282c1a76a1257019e335da4bbd5184897f31798251f63"
+ },
+ "draft_sha256": "10e09a2596eb9fb58d46e6865f61265ac880256d99e54b7d5c39225d0f4d170c",
+ "hook_draft_sha256": "4f5cee1f2914deb48c2da956aaae0d64cef85a908af2ce1c0769682d615e9d7e",
+ "hook_draft_t2bl_sha256": "b73a05f8647398b447c2a201269bfba5ab4818f8f507542288df123ce6da3a04",
+ "peak_mb": 66.5,
+ "recorded_local": "2026-10-12 11:47:56 -0500",
+ "verdicts": [
+  "NO_VERDICT_INSTRUMENT",
+  "PARTIAL",
+  "PROCEED",
+  "TRIGGER_WIDENED"
+ ],
+ "patterns": [
+  "heldout_below_bar",
+  "heldout_posted_twins",
+  "in_distribution_cost",
+  "not_aligned_with_own_canonical",
+  "seed_disagreement",
+  "trained_words_below_bar",
+  "word_kind_below_floor"
+ ],
+ "gate_frozen": false,
+ "P_PROCEED": {
+  "0.95": 0.9733333333333334,
+  "0.85": 0.0
+ }
+}

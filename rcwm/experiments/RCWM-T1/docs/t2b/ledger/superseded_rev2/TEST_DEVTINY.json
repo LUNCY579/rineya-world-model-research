@@ -1,0 +1,154 @@
+{
+ "part": "devtiny",
+ "ok": true,
+ "n_checks": 26,
+ "n_pass": 26,
+ "checks": [
+  {
+   "check": "render_chat == tok.apply_chat_template on all 1,500 training prompts and on dev rows of every stratum",
+   "ok": true,
+   "detail": "(1500, 57, 57)"
+  },
+  {
+   "check": "full tiny run: exit 0, DONE.json, every stage recorded (E0, s0-s2 T and E)",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "check": "one lease 'rcwm-t1:t2b-ledger' for the whole turn; the real vendored trainer ran seeds 0, 1, 2 in order",
+   "ok": true,
+   "detail": "([('lease', 'rcwm-t1:t2b-ledger')], ['s0', 's1', 's2'])"
+  },
+  {
+   "check": "each seed trains before its evaluation load (D-22 pairing)",
+   "ok": true,
+   "detail": "['train', 'load', 'train', 'load', 'train', 'load']"
+  },
+  {
+   "check": "the anchor passed and was recorded for the turn",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "ON answers differ from OFF (the trained adapter is active), and adapters are unmerged directories",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a rerun of a complete run is a no-op (exit 0)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the gate analysis reads the tiny run (complete, anchored) and renders a verdict",
+   "ok": true,
+   "detail": "DEV GATE: STOP (PARTIAL)"
+  },
+  {
+   "check": "the gate analysis is create-only",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a crash inside training propagates (exit 1 for the hook) and releases the lease",
+   "ok": true,
+   "detail": "simulated crash inside training"
+  },
+  {
+   "check": "the resumed call orphans the partial training directory and completes",
+   "ok": true,
+   "detail": "(0, [WindowsPath('C:/Users/clclc/AppData/Local/Temp/claude/C--Users-clclc-BusinessProject-WorldModel-Rineya-Consequence-World-Model-Bundle-2026-10-05/4c2a936e-32bf-4e01-aa62-961d6b162be5/scratchpad/t2bl_devtiny_zhally5l/crash/_orphans/s1_T_20261010_204201_208660')])"
+  },
+  {
+   "check": "outputs after crash + resume equal the uninterrupted run byte for byte",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a crash inside E0 (stray .partial) is orphaned and E0 is redone; outputs equal the uninterrupted run",
+   "ok": true,
+   "detail": "(True, 0)"
+  },
+  {
+   "check": "nothing fits (cap 0.45 h): exit 5, no training, no model load",
+   "ok": true,
+   "detail": "5"
+  },
+  {
+   "check": "a second consecutive turn without a recorded stage stops the job (exit 3, persisted)",
+   "ok": true,
+   "detail": "(3, \"[t2bl] no stage was recorded in 2 consecutive turns (deferred ['ref:E0', 's0:T', 's0:E', 's1:T', 's1:E', 's2:T', 's2:E']): stop (a cap or rate amendment is needed; investigate, log)\")"
+  },
+  {
+   "check": "a seed whose pair no longer fits is deferred (exit 5); the next call re-anchors and completes with outputs identical to the uninterrupted run",
+   "ok": true,
+   "detail": "(5, 0, ['s1:T', 's1:E', 's2:T', 's2:E'])"
+  },
+  {
+   "check": "a stale DONE.json.partial is moved aside (never deleted) and DONE.json is written",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "one-waiter rule: a live RCWM waiter refuses (not persisted)",
+   "ok": true,
+   "detail": "[t2bl] another RCWM job waits for the GPU lease (rcwm-t1:other, pid 209836): one-waiter rule (R14). Start only when no other RCWM GPU job runs or waits"
+  },
+  {
+   "check": "a live BWM holder passes, a live RCWM holder refuses, a dead RCWM marker passes",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a live run lock refuses (not persisted); a stale one is reclaimed",
+   "ok": true,
+   "detail": "[t2bl] another t2bl_run.py holds the run lock {'pid': 209836, 'create_time': 1791682888.1635172}"
+  },
+  {
+   "check": "an anchor failure stops the job (exit 3, persisted STOPPED.json) before any evaluation output",
+   "ok": true,
+   "detail": "3"
+  },
+  {
+   "check": "a Titan-Sparse fingerprint mismatch stops the job",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a runtime drift stops the job before anything is evaluated",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a recorded output whose hash changed stops the job",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a missing frozen gate rule refuses before the lease (not persisted)",
+   "ok": true,
+   "detail": "[t2bl] the dev gate rule is not frozen or a frozen input changed (run nothing until it verifies): docs/t2b/ledger/GATE_RULE.json is missing or not a gate-rule record (t2bl_gate.py --freeze-rule)"
+  },
+  {
+   "check": "the trainer and the evaluation never merged an adapter (D-28: PEFT state checked before every side)",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
+  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
+  "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09",
+  "scripts/t2bl_test.py": "b58b21fbb9b2578ccd67e72d784823650da37fdd11ba778da8caf0d1d560d29f"
+ },
+ "draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b",
+ "hook_draft_sha256": "c546ccfa4142bfc05eb961a3868030022edcee6263acd11fc96d6264f2eb484e",
+ "hook_draft_t2bl_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
+ "peak_mb": 997.8,
+ "recorded_local": "2026-10-10 20:42:49 -0500"
+}

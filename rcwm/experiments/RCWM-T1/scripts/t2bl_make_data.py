@@ -8,29 +8,49 @@ call, model output or torch (the `tokenizers` library reads tokenizer.json for t
                                                       # byte, rebuilds the freshness union, re-runs the audit; writes nothing
   python -B scripts/t2bl_make_data.py --no-harvest    # tests only: an empty union (the SOURCE says so; never registered)
 
-TRAINING SET (data/t2bl_train.jsonl; 1,500 ledger one-step rows on the T2 recipe's frame family; target env.dumps(after)):
+TRAINING SET (data/t2bl_train.jsonl; kit revision 3, seed 20261165; 1,500 ledger one-step rows on the T2 recipe's frame
+family; target env.dumps(after)):
   CANON block   300 rows in the exact canonical T2 surface (paraphrase 0, sorted keys, accounts A-D, |b| <= 98,
                 trained amounts, statuses posted / void): 100 posted/void twin pairs + 100 posted singles. It anchors
                 the in-distribution behaviour the dev gate's non-inferiority clause tests.
   DIV block     1,200 rows: 300 twin pairs (posted + a non-posted member, same base and surface) + 250 posted and 350
-                non-posted singles. 15% of DIV slots use the exact canonical T2 surface with the slot's own status (so the
-                training words also occur on the canonical frame). Otherwise every factor is drawn from its TRAINING
-                partition only (t2bl_common): paraphrases 0-3, training key orders (canonical w.p. 0.25), account names
-                (A-D-based 0.35, training letters 0.30, training words 0.35) with 4-7 accounts (4 w.p. 0.55), balances
-                and amounts by digit class (balances t2 / 3-digit / 4-digit 0.40 / 0.30 / 0.30, scale rows t2 / 3-digit
-                0.50 / 0.50; add/transfer amounts t2 / 2-digit / 3-digit 0.45 / 0.30 / 0.25; scale factors always the
-                recorded marginal), every input and posted-gold value at most 4 digits (redrawn otherwise), non-posted
-                statuses void 50 and 600 TRAINING words (not-applied 180, neutral 150, nonce 120, case / spelling
-                variants of void 60, posted look-alikes 90; 15 rows per word, 10 per void variant).
+                non-posted singles. Each DIV slot has a SURFACE MODE, by exact counts within each slot type (kit
+                revision 3; SURFACE_MODE_COUNTS): 'canonical' (the exact canonical T2 surface with the slot's own
+                status, so the training words also occur on the canonical frame), 'stacked' (every surface factor at a
+                non-canonical TRAINING level at once: paraphrase 1-3, training letters or training words as names,
+                non-sorted training orders of the event and before objects, the reversed top-level order) and 'free'
+                (every factor drawn independently from its TRAINING partition: paraphrases 0-3, event / before orders
+                canonical w.p. 0.25, account names A-D-based 0.35, training letters 0.30, training words 0.35; the
+                top-level order reversed on an exact half of the free slots of each slot type; conditioned on NOT
+                being the full stack, which is the stacked mode's). Counts canonical / stacked / free: pairs 45 / 150
+                / 105, posted singles 0 / 150 / 100, non-posted singles 100 / 150 / 100 (DIV rows 190 / 600 / 410).
+                Stacked and free slots draw 4-7 accounts (4 w.p. 0.55), balances and amounts by digit class (balances
+                t2 / 3-digit / 4-digit 0.40 / 0.30 / 0.30, scale rows t2 / 3-digit 0.50 / 0.50; add/transfer amounts
+                t2 / 2-digit / 3-digit 0.45 / 0.30 / 0.25; scale factors always the recorded marginal), every input
+                and posted-gold value at most 4 digits (redrawn otherwise). Non-posted statuses: void 50 and 600
+                TRAINING words (not-applied 180,
+                neutral 150, nonce 120, case / spelling variants of void 60, posted look-alikes 90; 15 rows per word, 10
+                per void variant). Operator decision (kit revision 3, 2026-10-12): the counts are status-symmetric
+                wherever the surface is revised, so posted and non-posted rows are EXACTLY equal on the stacked rows
+                (300 / 300), on the reversed-top rows (403 / 403) and, with the CANON block, on the canonical surface
+                (245 / 245): no surface-to-status cue on those surfaces (audited; binding band [0.49, 0.51]).
   Totals: posted 750 / non-posted 750; event kinds by PREREG-3's quota (transfer 0.45, scale 0.33, add 0.22); every
   posted event changes the state (so copy and apply-regardless score exactly 0.50).
-DEV BANK (data/t2bl_dev.jsonl; seed 20261162; the DEV half of every split held-out partition): 100 bases (env.gen_start
+  Kit revision 2 (spent; seed 20261161) differed only in the surfaces: the top-level order was never varied and the
+  canonical / free choice was a 0.15 coin per slot, with no stacked mode. The first revision-3 build (generator
+  t2bl-data-v3, same seed; superseded before any training or freeze, docs/t2b/ledger/superseded_rev3_preop/) assigned
+  the modes by one quota 0.15 / 0.50 / 0.35 for every slot type and drew the free slots' top order by a 0.5 coin, so
+  its stacked and reversed-top rows were 0.457 posted (a residual surface-to-status cue its records failed to call one).
+DEV BANK (data/t2bl_dev.jsonl; kit revision 3, seed 20261166, the builder and strata of revision 2 unchanged; the DEV
+  half of every split held-out partition): 100 bases (env.gen_start
   balances, |b| <= 98, accounts A-D; an env.gen_event-style event with a trained amount whose posted version changes the
   state; kind quota 45/33/22), every stratum the same base with ONE factor changed (or, for the combined surfaces, one
   surface), t2bl_common.DEV_STRATA: 19 strata, 1,801 rows (S_bal, S_amt, H_amt only on the 67 add/transfer bases).
 FRESHNESS (binding): no (before, event) payload and no FDS operative content of any training or dev row equals one of
-  the union (lbeam_problems.load_exclusions without data/t2bl_*: the name-skipping historical harvest, every pinned
-  source, PREREG-3's bank; every other data/**/*.json[l] payload and rolled-out multi-event transition; the binding
+  the union (lbeam_problems.load_exclusions: the name-skipping historical harvest, every pinned source, PREREG-3's bank;
+  every other data/**/*.json[l] payload and rolled-out multi-event transition, except this kit's own top-level
+  data/t2bl_* files; since kit revision 3 the superseded and spent kit files in data/t2bl_superseded_rev*/ ARE in the
+  union, so the fresh dev bank shares nothing with the spent revision-2 dev bank or training set; the binding
   transitions of the spent PREREG-LB dev sets AND of the spent PREREG-LB confirmation draw; every {before, event}
   payload under docs/ except docs/t2b/ledger/). HSKILL_CONFIRM_V2* files are skipped by NAME, never opened or hashed;
   rcwmt.bank.load_exclusions() is NOT called (I-28). Dev rows also exclude each other across bases; training rows
@@ -63,7 +83,7 @@ if hasattr(sys.stdout, "reconfigure"):
 import t2bl_common as C  # noqa: E402
 from rcwmt import env  # noqa: E402
 
-GEN_VERSION = "t2bl-data-v2"
+GEN_VERSION = "t2bl-data-v3.1"                   # t2bl-data-v3: the first revision-3 build (superseded, never used)
 BUILD_CODE = ("scripts/t2bl_common.py", "scripts/t2bl_make_data.py", "scripts/t2bl_audit.py", "scripts/p3_common.py",
               "rcwmt/env.py")
 MAX_ATTEMPTS = 200
@@ -90,7 +110,25 @@ P_AMT_LEVEL = (("t2", 0.45), ("a2", 0.30), ("a3", 0.25))
 # trained amounts) with the slot's own status mix, so that non-void training words also occur on the canonical surface:
 # otherwise the canonical frame would only ever pair with posted / void and a surface-conditioned 'void' cue would fit
 # the training set (canonical frame -> void trigger; any other surface -> read the status).
-P_CANON_SURFACE = 0.15
+# Kit revision 3 (R29): surface modes by EXACT COUNTS within each DIV slot type. 'stacked' renders every surface factor
+# at a non-canonical training level at once (the training analogue of the combined held-out surface, on which revision
+# 2's posted twins degraded to copying). Operator decision (2026-10-12): the counts are status-symmetric wherever the
+# surface is revised. Posted and non-posted singles get the same number of stacked slots (150 each) and of free slots
+# (100 each; the free slots' top order is reversed on an exact half of each type, FREE_TOP_QUOTA), pair members share
+# their surface, and the 100 extra non-posted singles (the DIV block is 550 posted / 650 non-posted, offsetting the
+# CANON block's 200 / 100) sit on the canonical surface. So posted = non-posted on the stacked rows (300 / 300), on the
+# reversed-top rows (403 / 403), on the free rows (205 / 205) and on the canonical surface (245 / 245 with the CANON
+# block). A 'free' slot is never the full stack (redrawn otherwise), so the stacked surface is exactly the stacked mode.
+# The first revision-3 build used one quota 0.15 / 0.50 / 0.35 for every slot type and a 0.5 coin for the free slots'
+# top order (0.457 posted on the stacked and reversed-top rows); the pair counts are unchanged from it.
+SURFACE_MODE_COUNTS = OrderedDict([
+    ("pair", OrderedDict([("canonical", 45), ("stacked", 150), ("free", 105)])),
+    ("posted_single", OrderedDict([("canonical", 0), ("stacked", 150), ("free", 100)])),
+    ("nonposted_single", OrderedDict([("canonical", 100), ("stacked", 150), ("free", 100)])),
+])
+FREE_TOP_QUOTA = OrderedDict([("reversed", C.P_TOP_REVERSED), ("sorted", 1 - C.P_TOP_REVERSED)])
+TOP_OF = {"reversed": (1, 0), "sorted": (0, 1)}
+P_NAMES_STACKED = (("train_letters", 0.30 / 0.65), ("train_words", 0.35 / 0.65))
 
 
 def _pick(rng: random.Random, table) -> object:
@@ -144,8 +182,8 @@ def build_union(root: Path = ROOT, historical: bool = True, skip_prefix: str = O
             continue
         if p.name.endswith(".SOURCE.json") or p.name in P.NON_PAYLOAD_DATA or (p.parent == d and p.name in P.COVERED_DATA):
             continue
-        if skip_prefix and p.name.startswith(skip_prefix):
-            continue
+        if skip_prefix and p.parent == d and p.name.startswith(skip_prefix):
+            continue                                  # this kit's own current files only (superseded kit files count)
         rel = str(p.relative_to(root)).replace("\\", "/")
         if rel in extra_skip:
             continue
@@ -186,7 +224,8 @@ def build_union(root: Path = ROOT, historical: bool = True, skip_prefix: str = O
     excl["rule"] = ("lbeam_problems.load_exclusions(extra_data=False) (l1_make_ood.harvest_historical skips "
                     "HSKILL_CONFIRM_V2* by name, never opened; rcwmt.bank.load_exclusions() NOT called; every pinned "
                     "source; data/bank_p3_oor.jsonl) + every payload and rolled-out multi-event transition of every other "
-                    "data/**/*.json[l] file" + (f" except {skip_prefix}*" if skip_prefix else "") +
+                    "data/**/*.json[l] file" + (f" except the top-level data/{skip_prefix}* files (data/t2bl_superseded_rev*/ "
+                                                "included)" if skip_prefix else "") +
                     " + the binding transitions of " + ", ".join(SPENT_LB_SETS) +
                     " + every {before, event} payload under docs/ except " + ", ".join(DOCS_SKIP))
     excl["skip_prefix"] = skip_prefix
@@ -250,6 +289,13 @@ def _schedule(rng: random.Random, n: int, quota: dict) -> list:
     for k in sorted(raw, key=lambda k: -(raw[k] - cnt[k]))[: n - sum(cnt.values())]:
         cnt[k] += 1
     out = [k for k, c in cnt.items() for _ in range(c)]
+    rng.shuffle(out)
+    return out
+
+
+def _schedule_counts(rng: random.Random, counts: dict) -> list:
+    """Exactly counts[k] items k (in the dict's order), shuffled (the same shuffle as _schedule for the same length)."""
+    out = [k for k, c in counts.items() for _ in range(c)]
     rng.shuffle(out)
     return out
 
@@ -442,12 +488,16 @@ def build_bank(seed: int, strata: tuple, excl: dict, prefix: str, tag: str, extr
 
 # ============================================================================================== training rows
 def train_plan(seed: int) -> list:
-    """The slot list: block, slot, kind, members (statuses). Deterministic from the seed."""
+    """The slot list: block, slot, kind, members (statuses), surface mode (DIV: canonical / stacked / free by exact counts
+    within each slot type, SURFACE_MODE_COUNTS; CANON: canon_block) and, on free DIV slots, the top-level order (an
+    exact half reversed per slot type, FREE_TOP_QUOTA, drawn after everything else from the same plan stream).
+    Deterministic from the seed."""
     rng = random.Random(f"t2bl-train-plan|{seed}")
     slots = []
     ck = _schedule(rng, CANON_PAIRS + CANON_SINGLES, C.KIND_QUOTA)
     for j in range(CANON_PAIRS + CANON_SINGLES):
-        slots.append({"block": "canon", "slot": j, "kind": ck[j], "members": ["posted", "void"] if j < CANON_PAIRS else ["posted"]})
+        slots.append({"block": "canon", "slot": j, "kind": ck[j], "members": ["posted", "void"] if j < CANON_PAIRS else ["posted"],
+                      "surface_mode": "canon_block"})
     n_div = DIV_PAIRS + DIV_POSTED_SINGLES + DIV_NONPOSTED_SINGLES
     dk = _schedule(rng, n_div, C.KIND_QUOTA)
     words = []
@@ -467,18 +517,39 @@ def train_plan(seed: int) -> list:
         else:
             mem = ["posted"] if single_kinds[j - DIV_PAIRS] == "posted" else [next(it)]
         slots.append({"block": "div", "slot": j, "kind": dk[j], "members": mem})
+    div = [s for s in slots if s["block"] == "div"]
+    types = OrderedDict([("pair", [s for s in div if len(s["members"]) == 2]),
+                         ("posted_single", [s for s in div if s["members"] == ["posted"]]),
+                         ("nonposted_single", [s for s in div if len(s["members"]) == 1 and s["members"] != ["posted"]])])
+    for typ, ss in types.items():                     # exact counts per slot type (status-symmetric where revised)
+        counts = SURFACE_MODE_COUNTS[typ]
+        if sum(counts.values()) != len(ss):
+            raise RuntimeError(f"surface mode counts of {typ}: {sum(counts.values())} != {len(ss)} slots")
+        for s, mode in zip(ss, _schedule_counts(rng, counts)):
+            s["surface_mode"] = mode
+    for typ, ss in types.items():                     # free slots: the top order, an exact half reversed per type
+        free = [s for s in ss if s["surface_mode"] == "free"]
+        for s, top in zip(free, _schedule(rng, len(free), FREE_TOP_QUOTA)):
+            s["free_top"] = top
     return slots
 
 
-def draw_div(rng: random.Random, kind: str, m, pool: list) -> tuple:
-    """(before, posted event, surface, meta) of a DIV slot: every factor from its training partition; with probability
-    P_CANON_SURFACE the whole surface is the canonical T2 one (the status still comes from the slot)."""
-    if rng.random() < P_CANON_SURFACE:
+def draw_div(rng: random.Random, kind: str, m, pool: list, mode: str = "free", top: str | None = None) -> tuple:
+    """(before, posted event, surface, meta) of a DIV slot in its surface mode: 'canonical' = the canonical T2 surface
+    (the status still comes from the slot); 'stacked' = every surface factor at a non-canonical training level at once
+    (paraphrase 1-3, training letters / words, non-sorted training event and before orders, the reversed top order);
+    'free' = every factor drawn independently from its training partition, the top order given by the plan ('reversed'
+    / 'sorted'), and the paraphrase and the event / before orders redrawn while the surface would be the full stack (the
+    stacked mode's combination), so the stacked training surface is exactly the stacked mode."""
+    if mode == "canonical":
         before, ev = draw_base(rng, kind, m, pool)
         return before, ev, C.canonical_surface(before), {"names_kind": "canonical", "n_accounts": 4, "bal_level": "t2",
-                                                         "amt_level": "t2", "para": 0, "canonical_surface": True}
+                                                         "amt_level": "t2", "para": 0, "canonical_surface": True,
+                                                         "surface_mode": "canonical"}
+    if mode not in ("stacked", "free"):
+        raise ValueError(mode)
     n = _pick(rng, P_COUNT)
-    nk = _pick(rng, P_NAMES)
+    nk = _pick(rng, P_NAMES_STACKED if mode == "stacked" else P_NAMES)
     if nk == "canonical":
         names = sorted(list(C.CANON_NAMES) + rng.sample(C.TRAIN_LETTERS, n - 4))
     elif nk == "train_letters":
@@ -507,9 +578,24 @@ def draw_div(rng: random.Random, kind: str, m, pool: list) -> tuple:
             break
     else:
         raise RuntimeError("no effective in-range event")
-    para = rng.choice(C.TRAIN_PARA)
-    surf = C.surface_with(before, para, (0, 1), C.draw_train_perm(rng, "event"), C.draw_train_perm(rng, "before", n))
-    return before, ev, surf, {"names_kind": nk, "n_accounts": n, "bal_level": level, "amt_level": alevel, "para": para}
+    if mode == "stacked":
+        para = rng.choice(C.TRAIN_PARA[1:])
+        surf = C.surface_with(before, para, C.draw_train_perm(rng, "top", allow_canon=False),
+                              C.draw_train_perm(rng, "event", allow_canon=False),
+                              C.draw_train_perm(rng, "before", n, allow_canon=False))
+    else:
+        if top not in TOP_OF:
+            raise ValueError(f"a free slot needs its planned top order, got {top!r}")
+        for _ in range(1000):
+            para = rng.choice(C.TRAIN_PARA)
+            surf = C.surface_with(before, para, TOP_OF[top], C.draw_train_perm(rng, "event"),
+                                  C.draw_train_perm(rng, "before", n))
+            if not C.stacked_surface(C.surface_classes(surf, before, ev)):
+                break
+        else:
+            raise RuntimeError("free slot: no draw off the full stack")
+    return before, ev, surf, {"names_kind": nk, "n_accounts": n, "bal_level": level, "amt_level": alevel, "para": para,
+                              "surface_mode": mode}
 
 
 def train_row(slot: dict, member: str, attempt: int, before, ev, surf, meta) -> dict:
@@ -535,9 +621,11 @@ def build_train(seed: int, excl: dict, extra_pay=(), extra_ops=(), replay=None) 
             if slot["block"] == "canon":
                 before, ev = draw_base(rng, slot["kind"], m, pool)
                 surf, meta = C.canonical_surface(before), {"names_kind": "canonical", "n_accounts": 4,
-                                                           "bal_level": "t2", "amt_level": "t2", "para": 0}
+                                                           "bal_level": "t2", "amt_level": "t2", "para": 0,
+                                                           "surface_mode": "canon_block"}
             else:
-                before, ev, surf, meta = draw_div(rng, slot["kind"], m, pool)
+                before, ev, surf, meta = draw_div(rng, slot["kind"], m, pool, slot["surface_mode"],
+                                                  slot.get("free_top"))
             mem_rows = [train_row(slot, "posted" if st == "posted" else "nonposted", attempt, before,
                                   _with_status(ev, st), surf, meta) for st in slot["members"]]
             items = [(r["before"], r["event"]) for r in mem_rows]
@@ -579,6 +667,21 @@ def composition(rows: list) -> dict:
     out["canonical_surface_void_trigger_accuracy"] = round(sum(
         ("void" in r["event"]["status"].lower()) == (r["event"]["status"] != "posted") for r in canon_rows)
         / max(1, len(canon_rows)), 4)
+    out["surface_modes"] = dict(sorted(Counter((r.get("meta") or {}).get("surface_mode", "?") for r in rows).items()))
+    out["surface_modes_by_status"] = {m: dict(sorted(Counter(
+        "posted" if r["event"]["status"] == "posted" else "nonposted" for r in rows
+        if (r.get("meta") or {}).get("surface_mode", "?") == m).items())) for m in sorted(out["surface_modes"])}
+    n_posted = sum(r["event"]["status"] == "posted" for r in rows)
+    for label, sel in (("stacked_surface", lambda c: C.stacked_surface(c)), ("top_reversed", lambda c: c["top"] == "train"),
+                       ("top_sorted", lambda c: c["top"] == "canonical"),
+                       ("canonical_surface", lambda c: all(c[k] == "canonical" for k in ("para", "top", "event", "before",
+                                                                                         "names", "count")))):
+        sub = [r for r, c in zip(rows, cl) if sel(c)]
+        k = sum(r["event"]["status"] == "posted" for r in sub)
+        out[label] = {"rows": len(sub), "posted": k, "nonposted": len(sub) - k,
+                      "share_of_all_rows": round(len(sub) / max(1, len(rows)), 4),
+                      "share_of_posted_rows": round(k / max(1, n_posted), 4),
+                      "posted_share_within": round(k / max(1, len(sub)), 4)}
     out["distinct_event_orders"] = len({tuple(r["surface"]["event"]) for r in rows})
     out["max_abs_balance"] = max(abs(v) for r in rows for v in r["before"].values())
     out["max_abs_value_inputs_and_targets"] = max(abs(v) for r in rows for v in list(r["before"].values()) +
@@ -616,12 +719,54 @@ def heuristic_scores(rows: list) -> dict:
     for k in C.RULE_EQUIVALENT:
         if sc[k] != 1.0:
             probs.append(f"{k} (the rule) scores {sc[k]} != 1.0")
+    # kit revision 3 (binding; operator decision 2026-10-12): copy and apply-regardless within [0.49, 0.51] on the
+    # revised surfaces (built exactly 0.50: no surface-to-status cue), and the share of posted rows on the stacked
+    # training surface (>= 1/3)
+    subsets: dict = {}
+    lo, hi = C.SURFACE_SUBSET_BOUNDS
+    cls = [C.surface_classes(r["surface"], r["before"], r["event"]) for r in rows]
+    n_posted = sum(r["event"]["status"] == "posted" for r in rows)
+    for label, sel, binding in (("stacked_surface", C.stacked_surface, True),
+                                ("top_reversed", lambda c: c["top"] == "train", True),
+                                ("top_reversed_not_stacked", lambda c: c["top"] == "train" and not C.stacked_surface(c), False),
+                                ("canonical_surface", lambda c: all(c[k] == "canonical" for k in ("para", "top", "event",
+                                                                                                   "before", "names",
+                                                                                                   "count")), False)):
+        sub = [r for r, c in zip(rows, cls) if sel(c)]
+        if not sub:
+            subsets[label] = {"n": 0}
+            if binding:
+                probs.append(f"no training row on the {label} surface")
+            continue
+        hc: Counter = Counter()
+        for r in sub:
+            gold = json.loads(r["target"])
+            for k, st in C.heuristic_states(r["before"], r["event"]).items():
+                hc[k] += int(st == gold)
+        d = {"n": len(sub), "posted": sum(r["event"]["status"] == "posted" for r in sub), "binding": binding,
+             **{k: round(hc[k] / len(sub), 4) for k in ("copy", "apply_regardless", "void_trigger")}}
+        subsets[label] = d
+        if binding:
+            for k in ("copy", "apply_regardless"):
+                if not lo <= d[k] <= hi:
+                    probs.append(f"heuristic {k} scores {d[k]} on the {label} rows, outside [{lo}, {hi}]")
+    stacked_posted = subsets["stacked_surface"].get("posted", 0)
+    share = round(stacked_posted / max(1, n_posted), 4)
+    if share < C.MIN_STACKED_POSTED_SHARE:
+        probs.append(f"only {share} of the posted rows are on the stacked training surface (< {C.MIN_STACKED_POSTED_SHARE})")
     return {"scores": sc, "binding": {k: list(v) for k, v in C.BINDING_HEURISTICS.items()},
             "string_cue_max": C.STRING_HEURISTIC_MAX, "problems": probs, "ok": not probs,
             "by_block_descriptive": descr,
+            "surface_subsets": subsets, "surface_subset_bounds": list(C.SURFACE_SUBSET_BOUNDS),
+            "stacked_posted_share_of_posted": share, "min_stacked_posted_share": C.MIN_STACKED_POSTED_SHARE,
             "note": "apply_regardless == ignore_status (apply every event as if posted); by_block is descriptive (the "
                     "canonical block is 2/3 posted, the diversified block 11/24 posted; a 'copy on an unfamiliar surface' "
-                    "cue is what the dev gate's clause G3 tests on the held-out posted twins: accuracy and copy rate)"}
+                    "cue is what the dev gate's clause G3 tests on the held-out posted twins: accuracy and copy rate). "
+                    "Kit revision 3 (operator decision 2026-10-12) binds copy and apply-regardless within the subset "
+                    "bounds [0.49, 0.51] on the stacked-surface and on the reversed-top rows (the builder makes posted and "
+                    "non-posted exactly equal there, so both score 0.50), and at least 1/3 of the posted rows on the "
+                    "stacked surface. The first revision-3 build (superseded, never used) was 0.457 posted on both "
+                    "subsets under bounds [0.40, 0.60]."}
 
 
 def bank_heuristics(rows: list) -> dict:
@@ -735,7 +880,15 @@ def write_all(out_dir: Path, excl: dict, harvest: bool, lines: list) -> dict:
     ts = token_stats(B["train"], B["dev"])
     bh = bank_heuristics(B["dev"])
     code = C.code_hashes(BUILD_CODE)
-    common = {"gen_version": GEN_VERSION, "code_sha256": code, "harvest": harvest, "union": _source_summary(excl),
+    common = {"gen_version": GEN_VERSION, "kit_revision": C.KIT_REVISION,
+              "spent": {"seeds": list(C.SPENT_KIT_SEEDS), "runs": list(C.SPENT_RUNS),
+                        "files": "data/t2bl_superseded_rev2/ (revision 2's training set and dev bank; R29)"},
+              "superseded_unused": "docs/t2b/ledger/superseded_rev3_preop/: the first revision-3 build (generator "
+                                   "t2bl-data-v3, the same seeds; 0.457 posted on the stacked and reversed-top rows), "
+                                   "replaced at the operator decision of 2026-10-12 before any freeze or training; never "
+                                   "trained on or evaluated, so not spent and outside every freshness union (its dev "
+                                   "bank equals this one byte for byte)",
+              "code_sha256": code, "harvest": harvest, "union": _source_summary(excl),
               "regenerates_from_seed_and_rejections": regen, "built_local": time.strftime("%Y-%m-%d %H:%M:%S %z"),
               "no_model_call": True, "torch_imported": "torch" in sys.modules}
     dev_sha = C.sha256_text(dev_text)
@@ -745,8 +898,9 @@ def write_all(out_dir: Path, excl: dict, harvest: bool, lines: list) -> dict:
                               "gold_rule": C.STRATA[s][1], "surface": C.STRATA[s][2], "description": C.STRATA[s][3]}
                           for s in C.DEV_STRATA},
                "overlap": ov_dev, "heuristics_by_stratum_descriptive": bh,
-               "use": "T2b-ledger dev screen (t2bl_run.py E0/E stages; t2bl_gate.py). Never the PREREG-5 confirmation "
-                      "bank (minted at its freeze from the CONFIRM half of the held-out partitions, fresh against this file).",
+               "use": f"T2b-ledger dev screen of kit revision {C.KIT_REVISION} (t2bl_run.py E0/E stages into "
+                      f"{C.DEV_RUN_REL}; t2bl_gate.py). Never the PREREG-5 confirmation bank (minted at its freeze from "
+                      "the CONFIRM half of the held-out partitions, fresh against this file).",
                **common}
     train_src = {"record": "T2BL_TRAIN_SOURCE", "file": C.TRAIN.name, "file_sha256": train_sha, **B["train_rec"],
                  "composition": composition(B["train"]), "heuristics": heur, "token_stats": ts,
@@ -788,8 +942,13 @@ def partitions_record() -> dict:
             "key_orders": {"order_seed": C.ORDER_SEED, "min_kendall_from_sorted": C.MIN_KENDALL,
                            "heldout_position_permutations": {k: [list(p) for p in v] for k, v in C.HELDOUT_PERMS.items()},
                            "dev_indices": list(C.DEV_PERM_IDX), "confirm_indices": list(C.CONFIRM_PERM_IDX),
-                           "train": "every other permutation (the identity w.p. 0.25); the 2-key top object is never "
-                                    "augmented (its only other order, reversed, is held out and shared by both halves)",
+                           "train": "event / before: every other permutation (the identity w.p. 0.25 on free slots, "
+                                    "redrawn where a free slot would be the full stack; never on stacked slots); the 2-key "
+                                    "top object: BOTH orders (kit revision 3; reversed on an exact half of the free slots "
+                                    "of each DIV slot type and on every stacked slot; revision 2 held the reversal out)",
+                           "top_train_perms": [list(p) for p in C.TOP_TRAIN_PERMS],
+                           "top_heldout": "none since kit revision 3 (the bank strata still reverse the top object; it is "
+                                          "a trained level there)",
                            "lb_heldout_combined": {"top": list(C.LB_ORDER["top"]), "event": list(C.LB_ORDER["event"]),
                                                    "before": "reversed (the confirm half's index 0)"}},
             "paraphrases": {"train": list(C.TRAIN_PARA), "heldout": {"dev": C.HELDOUT_PARA_DEV, "confirm": C.HELDOUT_PARA_CONFIRM},
@@ -845,7 +1004,10 @@ def main() -> int:
         raise SystemExit(f"union sources failed: {union_errors(excl)}")
     res = write_all(out, excl, not a.no_harvest, lines)
     if out == C.DATA:
-        rec = {"record": "T2BL_AUDIT", "kit_revision": C.KIT_REVISION, "audit": res["audit"], "heuristics": res["heuristics"],
+        rec = {"record": "T2BL_AUDIT", "kit_revision": C.KIT_REVISION,
+               "seeds": {"train": C.SEED_TRAIN, "dev": C.SEED_DEV, "heldout_orders": C.ORDER_SEED},
+               "spent": {"seeds": list(C.SPENT_KIT_SEEDS), "runs": list(C.SPENT_RUNS)},
+               "audit": res["audit"], "heuristics": res["heuristics"],
                "dev_bank_heuristics_descriptive": res["dev_heuristics"],
                "token_stats": res["token_stats"], "overlap": res["overlap"], "composition": res["composition"],
                "files": {"dev": res["dev_sha256"], "train": res["train_sha256"]},

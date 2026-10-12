@@ -1,0 +1,154 @@
+{
+ "part": "hook",
+ "ok": true,
+ "n_checks": 26,
+ "n_pass": 26,
+ "checks": [
+  {
+   "check": "queue_hook_t2bl.sh.draft parses under bash -n",
+   "ok": true,
+   "detail": "b''"
+  },
+  {
+   "check": "queue_hook_t2bl.sh.draft has LF line endings only",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "queue_hook_prereg5.sh.draft parses under bash -n",
+   "ok": true,
+   "detail": "b''"
+  },
+  {
+   "check": "queue_hook_prereg5.sh.draft has LF line endings only",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "t2bl hook: no frozen gate rule: nothing runs",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "t2bl hook: complete in one call, then the gate once",
+   "ok": true,
+   "detail": "['step scripts/t2bl_run.py', 'step scripts/t2bl_gate.py']"
+  },
+  {
+   "check": "t2bl hook: deferral: sleep 60 s BEFORE the re-call, then complete and the gate",
+   "ok": true,
+   "detail": "['step scripts/t2bl_run.py', 'sleep 60', 'step scripts/t2bl_run.py', 'step scripts/t2bl_gate.py']"
+  },
+  {
+   "check": "t2bl hook: persisted stop: never retried; the gate writes its NO VERDICT record",
+   "ok": true,
+   "detail": "['step scripts/t2bl_run.py', 'step scripts/t2bl_gate.py']"
+  },
+  {
+   "check": "t2bl hook: idempotent: STOPPED and GATE exist, nothing runs",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "t2bl hook: non-persisted stop (another RCWM job): no retry in this pass",
+   "ok": true,
+   "detail": "['step scripts/t2bl_run.py']"
+  },
+  {
+   "check": "t2bl hook: a crash is retried once",
+   "ok": true,
+   "detail": "['step scripts/t2bl_run.py', 'step scripts/t2bl_run.py', 'step scripts/t2bl_gate.py']"
+  },
+  {
+   "check": "t2bl hook: two crashes: no third call",
+   "ok": true,
+   "detail": "['step scripts/t2bl_run.py', 'step scripts/t2bl_run.py']"
+  },
+  {
+   "check": "t2bl hook: three deferrals: at most three calls, a sleep before each re-call",
+   "ok": true,
+   "detail": "['step scripts/t2bl_run.py', 'sleep 60', 'step scripts/t2bl_run.py', 'sleep 60', 'step scripts/t2bl_run.py', 'sleep 60']"
+  },
+  {
+   "check": "t2bl hook: idempotent: DONE and GATE exist, nothing runs",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "t2bl hook: DONE exists, gate missing: only the gate",
+   "ok": true,
+   "detail": "['step scripts/t2bl_gate.py']"
+  },
+  {
+   "check": "PREREG-5 hook: not frozen: nothing runs",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "PREREG-5 hook: full path: deferral (sleep 60 s first), C1 call, retention minted once, its deferral (sleep 60 s), analysis, binding, the registered analysis",
+   "ok": true,
+   "detail": "['step scripts/t2bl_confirm_run.py', 'sleep 60', 'step scripts/t2bl_confirm_run.py', 'step scripts/t2bl_confirm_run.py --ret-mint', 'step scripts/ret_run.py --mode confirm --draw docs/retention/draws/confirm_123.jsonl --extra-adapter t2bl_s0=runs/t2bl/dev_rev3/s0/train/adapter', 'sleep 60', 'step scripts/ret_run.py --mode confirm --draw docs/retention/draws/confirm_123.jsonl --extra-adapter t2bl_s"
+  },
+  {
+   "check": "PREREG-5 hook: a verdict-eligible stop still runs part (c) and the analysis",
+   "ok": true,
+   "detail": "['step scripts/t2bl_confirm_run.py', 'step scripts/t2bl_confirm_run.py --ret-mint', 'step scripts/ret_run.py --mode confirm --draw docs/retention/draws/confirm_123.jsonl --extra-adapter t2bl_s0=runs/t2bl/dev_rev3/s0/train/adapter', 'step scripts/ret_analysis.py analyze --run runs/retention/confirm_123', 'step scripts/t2bl_confirm_run.py --ret-record', 'step scripts/t2bl_confirm_analysis.py']"
+  },
+  {
+   "check": "PREREG-5 hook: a stop that is not verdict-eligible: nothing after it",
+   "ok": true,
+   "detail": "['step scripts/t2bl_confirm_run.py']"
+  },
+  {
+   "check": "PREREG-5 hook: a retention run that stops (persisted) is bound as stopped, then the analysis",
+   "ok": true,
+   "detail": "['step scripts/t2bl_confirm_run.py --ret-mint', 'step scripts/ret_run.py --mode confirm --draw docs/retention/draws/confirm_123.jsonl --extra-adapter t2bl_s0=runs/t2bl/dev_rev3/s0/train/adapter', 'step scripts/t2bl_confirm_run.py --ret-record', 'step scripts/t2bl_confirm_analysis.py']"
+  },
+  {
+   "check": "PREREG-5 hook: a crash of the GPU job is retried once",
+   "ok": true,
+   "detail": "['step scripts/t2bl_confirm_run.py', 'step scripts/t2bl_confirm_run.py', 'step scripts/t2bl_confirm_run.py --ret-mint', 'step scripts/ret_run.py --mode confirm --draw docs/retention/draws/confirm_123.jsonl --extra-adapter t2bl_s0=runs/t2bl/dev_rev3/s0/train/adapter', 'step scripts/ret_analysis.py analyze --run runs/retention/confirm_123', 'step scripts/t2bl_confirm_run.py --ret-record', 'step scri"
+  },
+  {
+   "check": "PREREG-5 hook: idempotent: every output exists, nothing runs",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "PREREG-5 hook: six deferrals: at most six GPU calls per pass, a sleep before each re-call",
+   "ok": true,
+   "detail": "['step scripts/t2bl_confirm_run.py', 'sleep 60', 'step scripts/t2bl_confirm_run.py', 'sleep 60', 'step scripts/t2bl_confirm_run.py', 'sleep 60', 'step scripts/t2bl_confirm_run.py', 'sleep 60', 'step scripts/t2bl_confirm_run.py', 'sleep 60', 'step scripts/t2bl_confirm_run.py', 'sleep 60']"
+  },
+  {
+   "check": "PREREG-5 hook: the analysis waits for part (c) to be bound",
+   "ok": true,
+   "detail": "['step scripts/t2bl_confirm_run.py --ret-record']"
+  },
+  {
+   "check": "queue_hook_t2bl.sh.draft: every exit-5 branch sleeps 60 s before the next call",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "queue_hook_prereg5.sh.draft: every exit-5 branch sleeps 60 s before the next call",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "ed1f9b179a432eefd24bb9249cc6d033a1b5521439f3a0b07b88cd03d6bb8db7",
+  "scripts/t2bl_make_data.py": "1ed81dad606cd86f05464e75205398595bae223ee99c764eb6d6eb369872e06e",
+  "scripts/t2bl_audit.py": "8bf4b3a52ffca8a1bfdb73ce9aee52503be57a8054baf272feb5c0b5028913bf",
+  "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15",
+  "scripts/t2bl_gate.py": "b938702c68b5623113eafad54816e0cde639768420e7b293a323a970a757f6bc",
+  "scripts/t2bl_confirm_bank.py": "90d1cb078ffba1c47fbe56ca183d3f8b9844c37e50fac7261b842c1ea214ec26",
+  "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3",
+  "scripts/t2bl_confirm_analysis.py": "b42bd69aa149771aceae5567f26498f9d7be2e722a16f7b6ce96de8b39ecbdd6",
+  "scripts/t2bl_test.py": "4d85753d66847592e34282c1a76a1257019e335da4bbd5184897f31798251f63"
+ },
+ "draft_sha256": "10e09a2596eb9fb58d46e6865f61265ac880256d99e54b7d5c39225d0f4d170c",
+ "hook_draft_sha256": "4f5cee1f2914deb48c2da956aaae0d64cef85a908af2ce1c0769682d615e9d7e",
+ "hook_draft_t2bl_sha256": "b73a05f8647398b447c2a201269bfba5ab4818f8f507542288df123ce6da3a04",
+ "peak_mb": 31.2,
+ "recorded_local": "2026-10-12 11:48:31 -0500"
+}

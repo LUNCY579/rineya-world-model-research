@@ -10,7 +10,7 @@
   "bi_batched": 128,
   "bi_batch1": 128,
   "map_gens": 13505,
-  "answer_tokens": 23.62
+  "answer_tokens": 23.73
  },
  "sizing_new_keys_per_instance": {
   "T2BL@HS": 69.91,
@@ -42,10 +42,10 @@
    "what": "part (a): the map bank (2701 rows) x OFF, T2s0, T2BL s0-s2",
    "generations_expected": 13505,
    "generations_ceiling": 13505,
-   "h_planning": 1.63,
+   "h_planning": 1.64,
    "h_observed": 0.9,
-   "h_ceiling_planning": 1.63,
-   "h_start_estimate_first": 1.63
+   "h_ceiling_planning": 1.64,
+   "h_start_estimate_first": 1.64
   },
   {
    "stage": "P1",
@@ -91,7 +91,7 @@
  "cpu_stage": "C1 (ORACLE and IGNORE_STATUS at enum W2 E12): CPU only, never under the lease, at the start of the invocation after the one that records A0; about 1 CPU-min",
  "retention_part_c": "a separate RCWM turn under lease 'rcwm-t1:retention' (ret_run.py --mode confirm with --extra-adapter t2bl_s0=...): 0.46-1.11 GPU-h by the 5c plan (docs/retention/RET_PLAN.json scale; one extra Titan-Sparse side)",
  "stage_rule": "no stage starts within 0.5 h of the 4.5 h cap; a stage starts only if 1.25 x its start estimate fits (A0, M1: expected time at the registered rates; P1-P4: the CEILING generation count x the slowest seconds per generation measured on a recorded planning stage, or the registered planning rate before the first); every turn after the first re-runs A0 before any stage; the start-of-turn check adds the model load and the longest A0 measured so far, and the model is not loaded if the first remaining stage does not fit",
- "dev_answer_tokens": 23.62,
+ "dev_answer_tokens": 23.73,
  "dev_source_present": true,
  "schedules": [
   {
@@ -231,7 +231,7 @@
       "A0",
       "M1"
      ],
-     "projected_h": 2.15
+     "projected_h": 2.16
     },
     {
      "stages": [
@@ -262,7 +262,7 @@
      "projected_h": 2.47
     }
    ],
-   "gpu_h": 12.03,
+   "gpu_h": 12.04,
    "max_turn_h": 2.47
   }
  ],
@@ -277,6 +277,6 @@
   "torch_imported": false
  },
  "code_sha256": {
-  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209"
+  "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3"
  }
 }

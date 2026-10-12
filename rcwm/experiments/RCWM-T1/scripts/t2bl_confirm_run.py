@@ -1,6 +1,7 @@
 """PREREG-5 runner, freeze tool and freeze verifier (the sealed confirmation of T2b-ledger; PREREG_5_DRAFT.md sections 3,
 7 and 10). DRAFT KIT: nothing here runs on the GPU before PREREG-5 is frozen, and the freeze needs the dev gate's
-PROCEED (runs/t2bl/dev/analysis/GATE.json) and BWM's co-sign with a salt commitment. Modelled on scripts/lbeam_run.py
+PROCEED (runs/t2bl/dev_rev3/analysis/GATE.json: kit revision 3's dev screen; revision 2's runs/t2bl/dev is spent, R29)
+and BWM's co-sign with a salt commitment. Modelled on scripts/lbeam_run.py
 (PREREG-LB), whose torch-free helpers it imports read-only (anchor, chain rows, episode rows, accounting, the pinned BWM
 planner import, the BWM module hashes), and on scripts/t2bl_run.py.
 
@@ -38,7 +39,7 @@ turn: Titan-Sparse FP32 + T2 s0 (PEFT adapter 't2', PREREG-2's pins) + T2b-ledge
       (a) PREREG-2's anchor (lbeam_run.run_anchor: 208 pilot TEST ledger chain_one chains, OFF and T2 s0 against
           runs/t2/t2_s0 gen_chain_one_base.jsonl / gen_chain_one.jsonl): identical states on >= 99% per side;
       (b) adapter identity: per T2b-ledger seed, the first 50 ID_posted and the first 50 HS_words rows of the dev bank
-          regenerated ON and compared with the dev screen's recorded answers (runs/t2bl/dev/s<k>/dev_on.jsonl, hashed in
+          regenerated ON and compared with the dev screen's recorded answers (runs/t2bl/dev_rev3/s<k>/dev_on.jsonl, hashed in
           the freeze): identical parsed states on >= 97% per seed (it shows that adapter 't2bl<k>' is seed k's adapter
           and that loading four adapters changes nothing);
       (c) batch invariance of the planning F: 64 keys (init x vocabulary of the first 8 instances of the SPENT dev set
@@ -123,13 +124,13 @@ PLAN_DRAW_REL, PLAN_SOURCE_REL = CB.PLAN_REL, CB.PLAN_SOURCE_REL
 SEALED = (MAP_BANK_REL, MAP_SOURCE_REL, PLAN_DRAW_REL, PLAN_SOURCE_REL)
 HOOK_DRAFT_REL = "docs/t2b/ledger/queue_hook_prereg5.sh.draft"
 HOOK_INSTALLED_REL = "scripts/queue_hooks/90_prereg5.sh"
-DEV_RUN_REL = "runs/t2bl/dev"
-GATE_REL = "runs/t2bl/dev/analysis/GATE.json"
+DEV_RUN_REL = C.DEV_RUN_REL                      # kit revision 3's dev screen (runs/t2bl/dev_rev3; runs/t2bl/dev is spent)
+GATE_REL = f"{DEV_RUN_REL}/analysis/GATE.json"
 GATE_RULE_REL = "docs/t2b/ledger/GATE_RULE.json"
 T2S0_REL = "runs/t2/t2_s0/adapter"
 SEEDS = (0, 1, 2)
-T2BL_RELS = {s: f"runs/t2bl/dev/s{s}/train/adapter" for s in SEEDS}
-DEV_ON_RELS = {s: f"runs/t2bl/dev/s{s}/dev_on.jsonl" for s in SEEDS}
+T2BL_RELS = {s: f"{DEV_RUN_REL}/s{s}/train/adapter" for s in SEEDS}
+DEV_ON_RELS = {s: f"{DEV_RUN_REL}/s{s}/dev_on.jsonl" for s in SEEDS}
 ADAPTER_FILES = ("adapter_model.safetensors", "adapter_config.json")
 ADAPTER_NAMES = {"t2s0": "t2", "t2bl0": "t2bl0", "t2bl1": "t2bl1", "t2bl2": "t2bl2"}
 MAP_SIDES = ("off", "t2s0", "t2bl0", "t2bl1", "t2bl2")
@@ -698,7 +699,7 @@ def prefreeze_checks(root: Path) -> dict:
     out["queue hook draft present"] = (root / HOOK_DRAFT_REL).is_file()
     gs = dev_gate_status(root)
     out["the dev gate rule was frozen before the dev screen (GATE_RULE.json)"] = gs["gate_rule_frozen"]
-    out["the dev screen completed (runs/t2bl/dev/DONE.json)"] = gs["dev_run_done"]
+    out[f"the dev screen completed ({DEV_RUN_REL}/DONE.json)"] = gs["dev_run_done"]
     out["the registered dev gate says PROCEED"] = gs["verdict"] == "PROCEED" and gs["registered"]
     out["T2b-ledger adapters of seeds 0, 1, 2 present"] = all((root / T2BL_RELS[s] / f).is_file() for s in SEEDS
                                                              for f in ADAPTER_FILES)

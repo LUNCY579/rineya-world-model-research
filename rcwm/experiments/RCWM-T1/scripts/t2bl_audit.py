@@ -15,11 +15,17 @@ trained-token lookup can tell a held-out word from posted). Also reported: PRERE
 Training checks (binding): the composition (1,500 rows; posted 750 / non-posted 750; 300 canonical-block rows in the
 exact canonical T2 frame; pair members share before, event fields other than status, and surface); the read-back of
 every prompt equals the row's own payload and surface; NO held-out factor of either half in any training prompt
-(paraphrases 4 and 5, the reversed top order, a held-out event / before order, a held-out or PREREG-LB name, an
-8-account object, a held-out, PREREG-3 or excluded status, a 5-digit balance, a 4-digit amount, a scale factor outside
-the recorded marginal); no number with more than 4 digits in any prompt or target; none of the held-out text fragments
-(the held-out paraphrases' phrases, '"status":"<w>"' for every held-out / PREREG-3 / excluded string, '"<name>":' for
-every held-out and PREREG-LB name) in any prompt or target; every target equals the independent gold.
+(paraphrases 4 and 5, a held-out event / before order, a held-out or PREREG-LB name, an 8-account object, a held-out,
+PREREG-3 or excluded status, a 5-digit balance, a 4-digit amount, a scale factor outside the recorded marginal); no
+number with more than 4 digits in any prompt or target; none of the held-out text fragments (the held-out paraphrases'
+phrases, '"status":"<w>"' for every held-out / PREREG-3 / excluded string, '"<name>":' for every held-out and PREREG-LB
+name) in any prompt or target; every target equals the independent gold. Kit revision 3: the reversed top-level order
+is a TRAINING level (revision 2 held it out); both top orders occur on at least MIN_TOP_ORDER_ROWS training rows each,
+and at least t2bl_common.MIN_STACKED_POSTED_SHARE (1/3) of the posted rows are on the STACKED training surface, read back
+here from the prompt text (a training paraphrase 1-3, training letters or words as names, non-sorted training event and
+before orders, the reversed top order, at once); on the stacked-surface rows and on the reversed-top rows the posted
+share is within t2bl_common.SURFACE_SUBSET_BOUNDS ([0.49, 0.51] since the operator decision of 2026-10-12; the builder
+makes it exactly 0.50), so neither surface cues the status.
 Bank checks (binding; the dev bank here, PREREG-5's map bank at its freeze): every row is its stratum's declared factor
 change of its base and nothing else, rendering the bank's own half of every held-out partition (classified from the
 rendered text), mixed strata carry posted on even bases and the base's training word (its S_words word) on odd bases,
@@ -66,9 +72,9 @@ def _inversions(p) -> int:
 def regen_heldout() -> dict:
     """Independent copy of the documented procedure (t2bl_common.derive_heldout_orders): random.Random(ORDER_SEED);
     event: the reversal, then shuffles of range(6) until 5 new permutations with >= 2 inversions; then before4..before8
-    the same way, in that order."""
+    the same way, in that order. (No top-level entry: both top orders are trained since kit revision 3.)"""
     rng = random.Random(C.ORDER_SEED)
-    out = {"top": [(1, 0)]}
+    out = {}
     for name, n in [("event", 6)] + [(f"before{k}", k) for k in range(4, 9)]:
         lst = [tuple(reversed(range(n)))]
         while len(lst) < 6:
@@ -83,6 +89,7 @@ def regen_heldout() -> dict:
 
 HELD = regen_heldout()
 DEV_IDX, CONFIRM_IDX = (1, 2, 3), (0, 4, 5)          # the documented split of each object's six held-out orders
+MIN_TOP_ORDER_ROWS = 300                             # kit revision 3: each top-level order on >= 300 training rows
 
 
 def read_back(prompt: str) -> dict:
@@ -128,7 +135,7 @@ def classify(rb: dict) -> dict:
     out = {}
     out["para"] = "unknown" if rb["para"] is None else "canonical" if rb["para"] == 0 else \
         "heldout_dev" if rb["para"] == 4 else "heldout_confirm" if rb["para"] == 5 else "train"
-    out["top"] = "canonical" if rb["top"] == ["before", "event"] else "heldout"
+    out["top"] = "canonical" if rb["top"] == ["before", "event"] else "reversed"     # both trained (kit revision 3)
     out["event"] = _perm_level("event", _perm(rb["event_order"], C.EVENT_KEYS)) \
         if sorted(rb["event_order"]) == sorted(C.EVENT_KEYS) else "malformed"
     out["before"] = _perm_level(f"before{n}", _perm(rb["before_order"], b))
@@ -173,7 +180,7 @@ def classify(rb: dict) -> dict:
     return out
 
 
-HELDOUT_LEVEL = {"para": ("heldout_dev", "heldout_confirm", "unknown"), "top": ("heldout",),
+HELDOUT_LEVEL = {"para": ("heldout_dev", "heldout_confirm", "unknown"), "top": (),     # no held-out top order (rev 3)
                  "event": ("heldout_dev", "heldout_confirm", "malformed", "other"),
                  "before": ("heldout_dev", "heldout_confirm", "other"),
                  "names": ("heldout_dev", "heldout_confirm", "lb", "other"), "count": ("heldout", "other"),
@@ -314,6 +321,8 @@ def audit_train(rows: list) -> dict:
     cl_counts: dict = {}
     n_fully_canon = 0
     max_abs = 0
+    stacked = Counter()                               # kit revision 3: the stacked training surface, from the TEXT
+    top_orders = Counter()
     for r in rows:
         try:
             rb = read_back(r["prompt"])
@@ -347,6 +356,11 @@ def audit_train(rows: list) -> dict:
                                             ("before", "canonical"), ("names", "canonical"), ("bal", "t2"), ("amt", "t2")))
         canon = canon and cl["status"] in ("posted", "void")
         n_fully_canon += canon
+        is_posted = rb["event"]["status"] == "posted"
+        top_orders[(cl["top"], "posted" if is_posted else "nonposted")] += 1
+        if cl["para"] == "train" and cl["names"] in ("train_letters", "train_words") and cl["event"] == "train" and \
+                cl["before"] == "train" and cl["top"] == "reversed":
+            stacked["posted" if is_posted else "nonposted"] += 1
         if r["block"] == "canon" and not (canon and _canon_msgs_ok(r)):
             probs.append(f"{r['id']}: a canonical-block row is not Titan's exact canonical frame")
     if frag_hits:
@@ -372,6 +386,25 @@ def audit_train(rows: list) -> dict:
             probs.append(f"composition {k} = {comp[k]} != {v}")
     if len({C.payload(r["before"], r["event"]) for r in rows}) != len(rows):
         probs.append("duplicate training payloads")
+    # kit revision 3 (binding): both top-level orders trained; posted rows on the stacked training surface
+    tops = {t: {"posted": top_orders[(t, "posted")], "nonposted": top_orders[(t, "nonposted")],
+                "rows": top_orders[(t, "posted")] + top_orders[(t, "nonposted")]} for t in ("canonical", "reversed")}
+    for t, d in tops.items():
+        if d["rows"] < MIN_TOP_ORDER_ROWS:
+            probs.append(f"top-level order {t} on {d['rows']} training rows (< {MIN_TOP_ORDER_ROWS}): both orders must be trained")
+    st = {"rows": stacked["posted"] + stacked["nonposted"], "posted": stacked["posted"], "nonposted": stacked["nonposted"],
+          "share_of_posted_rows": round(stacked["posted"] / max(1, posted), 4),
+          "posted_share_within": round(stacked["posted"] / max(1, stacked["posted"] + stacked["nonposted"]), 4)}
+    if st["share_of_posted_rows"] < C.MIN_STACKED_POSTED_SHARE:
+        probs.append(f"only {st['share_of_posted_rows']} of the posted training rows are on the stacked training surface "
+                     f"(< {C.MIN_STACKED_POSTED_SHARE})")
+    lo, hi = C.SURFACE_SUBSET_BOUNDS
+    for label, d in (("stacked surface", st), ("reversed top", tops["reversed"])):
+        ps = d["posted"] / max(1, d["rows"])
+        if not lo <= ps <= hi:
+            probs.append(f"the {label} rows are {ps:.3f} posted, outside [{lo}, {hi}] (a surface-to-status cue)")
+    comp["top_orders"] = tops
+    comp["stacked_surface"] = st
     return {"problems": probs, "heldout_factor_hits": dict(hits), "fragment_hits": dict(frag_hits),
             "n_fragments_checked": len(frags), "classes": {k: dict(sorted(v.items())) for k, v in cl_counts.items()},
             "composition": comp, "n_prompts_read_back": len(rows)}
@@ -391,20 +424,20 @@ DECLARED = {
     "S_bal": {"bal": ("wide",)},
     "S_amt": {"amt": ("wide",)},
     "H_words": {"status": ("HOW",)},
-    "H_order": {"top": ("heldout",), "event": ("HO",), "before": ("HO",), "status": MIXED},
-    "H_order_top": {"top": ("heldout",), "status": MIXED},
+    "H_order": {"top": ("reversed",), "event": ("HO",), "before": ("HO",), "status": MIXED},
+    "H_order_top": {"top": ("reversed",), "status": MIXED},
     "H_order_inner": {"event": ("HO",), "before": ("HO",), "status": MIXED},
     "H_names": {"names": ("HO",), "status": MIXED},
     "H_count": {"count": ("heldout",), "names": ("canonical_plus_train_letters",), "status": MIXED},
     "H_para": {"para": ("HO",), "status": MIXED},
     "H_bal": {"bal": ("heldout",)},
     "H_amt": {"amt": ("heldout",)},
-    "HS_words": {"para": ("HO",), "top": ("heldout",), "event": ("HO",), "before": ("HO",), "names": ("HO",),
+    "HS_words": {"para": ("HO",), "top": ("reversed",), "event": ("HO",), "before": ("HO",), "names": ("HO",),
                  "status": ("HOW",)},
-    "HS_posted": {"para": ("HO",), "top": ("heldout",), "event": ("HO",), "before": ("HO",), "names": ("HO",)},
-    "LB_void": {"top": ("heldout",), "event": ("heldout_confirm",), "before": ("heldout_confirm",), "names": ("lb",),
+    "HS_posted": {"para": ("HO",), "top": ("reversed",), "event": ("HO",), "before": ("HO",), "names": ("HO",)},
+    "LB_void": {"top": ("reversed",), "event": ("heldout_confirm",), "before": ("heldout_confirm",), "names": ("lb",),
                 "status": ("p3_word",)},
-    "LB_posted": {"top": ("heldout",), "event": ("heldout_confirm",), "before": ("heldout_confirm",), "names": ("lb",)},
+    "LB_posted": {"top": ("reversed",), "event": ("heldout_confirm",), "before": ("heldout_confirm",), "names": ("lb",)},
     "P3_words": {"status": ("p3_word",)},
 }
 for _s in C.P3.UNSEEN_STATUS_STRATA:

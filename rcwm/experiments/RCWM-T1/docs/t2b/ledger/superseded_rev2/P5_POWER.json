@@ -1,0 +1,1593 @@
+{
+ "method": "simulation through the registered rules (map: per cell, P(BAR and GAIN in all three seeds and NI) under nested and independent cell-vs-twin correlation and three seed regimes (independent, 80% shared, identical), Holm bounded by alpha / 27 and alpha; in-distribution control: P(ID_NI) under nested and independent T2b-ledger-vs-T2 s0 correlation and the same seed regimes; planning: P(GENERALISES) through decide_plan with nested success sets and with success sets independent within ORACLE's, and the exact P(primary PASS) under independence; the dev gate: P(PROCEED) against P(GENERALISES) on the held-out-word cells). The strata share bases, so joint figures over factors are not products of these.",
+ "assumption_source": "scenarios",
+ "twin_accuracy_assumed": {
+  "noop": 0.99,
+  "apply": 0.93,
+  "mixed": 0.95
+ },
+ "id_ni": {
+  "seed_acc_0.90_vs_t2s0_0.93": {
+   "seeds independent, nested": 0.835,
+   "seeds independent, independent": 0.3,
+   "seeds 80% shared, nested": 0.615,
+   "seeds 80% shared, independent": 0.2225,
+   "seeds identical, nested": 0.6125,
+   "seeds identical, independent": 0.22
+  },
+  "seed_acc_0.93_vs_t2s0_0.93": {
+   "seeds independent, nested": 1.0,
+   "seeds independent, independent": 0.82,
+   "seeds 80% shared, nested": 1.0,
+   "seeds 80% shared, independent": 0.7075,
+   "seeds identical, nested": 1.0,
+   "seeds identical, independent": 0.7
+  },
+  "seed_acc_0.96_vs_t2s0_0.93": {
+   "seeds independent, nested": 1.0,
+   "seeds independent, independent": 1.0,
+   "seeds 80% shared, nested": 1.0,
+   "seeds 80% shared, independent": 0.99,
+   "seeds identical, nested": 1.0,
+   "seeds identical, independent": 0.9875
+  }
+ },
+ "plan": [
+  {
+   "p_t2bl_hs": 0.3,
+   "p_t2bl_canon": 0.7,
+   "p_t2s0_hs": 0.0278,
+   "p_oracle": 0.889,
+   "n": 180,
+   "reps": 300,
+   "P_primary_PASS_exact_independent": 0.9817355657187082,
+   "nested": {
+    "P_GENERALISES": 0.0,
+    "P_PARTIAL": 1.0,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 0.98
+   },
+   "independent_within_oracle": {
+    "P_GENERALISES": 0.0,
+    "P_PARTIAL": 1.0,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 0.99
+   }
+  },
+  {
+   "p_t2bl_hs": 0.5,
+   "p_t2bl_canon": 0.7,
+   "p_t2s0_hs": 0.0278,
+   "p_oracle": 0.889,
+   "n": 180,
+   "reps": 300,
+   "P_primary_PASS_exact_independent": 0.9999999999986997,
+   "nested": {
+    "P_GENERALISES": 0.0,
+    "P_PARTIAL": 1.0,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   },
+   "independent_within_oracle": {
+    "P_GENERALISES": 0.0,
+    "P_PARTIAL": 1.0,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   }
+  },
+  {
+   "p_t2bl_hs": 0.6,
+   "p_t2bl_canon": 0.7,
+   "p_t2s0_hs": 0.0278,
+   "p_oracle": 0.889,
+   "n": 180,
+   "reps": 300,
+   "P_primary_PASS_exact_independent": 0.9999999999999762,
+   "nested": {
+    "P_GENERALISES": 0.03666666666666667,
+    "P_PARTIAL": 0.9633333333333334,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   },
+   "independent_within_oracle": {
+    "P_GENERALISES": 0.056666666666666664,
+    "P_PARTIAL": 0.9433333333333334,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   }
+  },
+  {
+   "p_t2bl_hs": 0.65,
+   "p_t2bl_canon": 0.7,
+   "p_t2s0_hs": 0.0278,
+   "p_oracle": 0.889,
+   "n": 180,
+   "reps": 300,
+   "P_primary_PASS_exact_independent": 0.9999999999999695,
+   "nested": {
+    "P_GENERALISES": 0.77,
+    "P_PARTIAL": 0.23,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   },
+   "independent_within_oracle": {
+    "P_GENERALISES": 0.3566666666666667,
+    "P_PARTIAL": 0.6433333333333333,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   }
+  },
+  {
+   "p_t2bl_hs": 0.7,
+   "p_t2bl_canon": 0.75,
+   "p_t2s0_hs": 0.0278,
+   "p_oracle": 0.889,
+   "n": 180,
+   "reps": 300,
+   "P_primary_PASS_exact_independent": 0.9999999999999684,
+   "nested": {
+    "P_GENERALISES": 0.8966666666666666,
+    "P_PARTIAL": 0.10333333333333333,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   },
+   "independent_within_oracle": {
+    "P_GENERALISES": 0.4166666666666667,
+    "P_PARTIAL": 0.5833333333333334,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   }
+  }
+ ],
+ "plan_note": "T2 s0's held-out-surface planning success is taken as 5/180 (PREREG-LB's registered D-35 audit, REPORT 3d) and its canonical success as 0.706 (PREREG-LB); ORACLE 0.889 (PREREG-LB); N = 180 is PREREG-LB's and was not chosen from it.",
+ "map": [
+  {
+   "factor": "words",
+   "cell": "H_words",
+   "n": 100,
+   "p_on": 0.85,
+   "p_twin": 0.99,
+   "p_t2s0": 0.1,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.815,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.835,
+      "P_ni": 0.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.86,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0025,
+      "P_generalises_best_case_holm": 0.0025,
+      "P_bar_all_seeds": 0.8825,
+      "P_ni": 0.0025
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.005,
+      "P_generalises_best_case_holm": 0.005,
+      "P_bar_all_seeds": 0.9425,
+      "P_ni": 0.005
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.01,
+      "P_generalises_best_case_holm": 0.01,
+      "P_bar_all_seeds": 0.9325,
+      "P_ni": 0.01
+     }
+    }
+   }
+  },
+  {
+   "factor": "words",
+   "cell": "H_words",
+   "n": 100,
+   "p_on": 0.9,
+   "p_twin": 0.99,
+   "p_t2s0": 0.1,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.145,
+      "P_generalises_best_case_holm": 0.145,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.145
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.1525,
+      "P_generalises_best_case_holm": 0.1525,
+      "P_bar_all_seeds": 0.995,
+      "P_ni": 0.1525
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.145,
+      "P_generalises_best_case_holm": 0.145,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.145
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.155,
+      "P_generalises_best_case_holm": 0.155,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.155
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.185,
+      "P_generalises_best_case_holm": 0.185,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.185
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.13,
+      "P_generalises_best_case_holm": 0.13,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.13
+     }
+    }
+   }
+  },
+  {
+   "factor": "words",
+   "cell": "H_words",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.99,
+   "p_t2s0": 0.1,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9875,
+      "P_generalises_best_case_holm": 0.9875,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9675,
+      "P_generalises_best_case_holm": 0.9675,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9675
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9125,
+      "P_generalises_best_case_holm": 0.9125,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9125
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.85,
+      "P_generalises_best_case_holm": 0.85,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.85
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.8925,
+      "P_generalises_best_case_holm": 0.8925,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.8925
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.785,
+      "P_generalises_best_case_holm": 0.785,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.785
+     }
+    }
+   }
+  },
+  {
+   "factor": "order",
+   "cell": "H_order",
+   "n": 100,
+   "p_on": 0.85,
+   "p_twin": 0.95,
+   "p_t2s0": 0.25,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.05,
+      "P_generalises_best_case_holm": 0.05,
+      "P_bar_all_seeds": 0.7925,
+      "P_ni": 0.05
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.055,
+      "P_generalises_best_case_holm": 0.055,
+      "P_bar_all_seeds": 0.835,
+      "P_ni": 0.055
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0875,
+      "P_generalises_best_case_holm": 0.0875,
+      "P_bar_all_seeds": 0.8575,
+      "P_ni": 0.0875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.075,
+      "P_generalises_best_case_holm": 0.075,
+      "P_bar_all_seeds": 0.8625,
+      "P_ni": 0.075
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.095,
+      "P_generalises_best_case_holm": 0.095,
+      "P_bar_all_seeds": 0.945,
+      "P_ni": 0.095
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.065,
+      "P_generalises_best_case_holm": 0.065,
+      "P_bar_all_seeds": 0.9425,
+      "P_ni": 0.065
+     }
+    }
+   }
+  },
+  {
+   "factor": "order",
+   "cell": "H_order",
+   "n": 100,
+   "p_on": 0.9,
+   "p_twin": 0.95,
+   "p_t2s0": 0.25,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.94,
+      "P_generalises_best_case_holm": 0.94,
+      "P_bar_all_seeds": 0.99,
+      "P_ni": 0.9425
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.69,
+      "P_generalises_best_case_holm": 0.69,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.69
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.7475,
+      "P_generalises_best_case_holm": 0.7475,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.7475
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.4625,
+      "P_generalises_best_case_holm": 0.4625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.4625
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.735,
+      "P_generalises_best_case_holm": 0.735,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.735
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.465,
+      "P_generalises_best_case_holm": 0.465,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.465
+     }
+    }
+   }
+  },
+  {
+   "factor": "order",
+   "cell": "H_order",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.95,
+   "p_t2s0": 0.25,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.975,
+      "P_generalises_best_case_holm": 0.975,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.975
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.955,
+      "P_generalises_best_case_holm": 0.955,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.955
+     }
+    }
+   }
+  },
+  {
+   "factor": "names",
+   "cell": "H_names",
+   "n": 100,
+   "p_on": 0.85,
+   "p_twin": 0.95,
+   "p_t2s0": 0.35,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.05,
+      "P_generalises_best_case_holm": 0.05,
+      "P_bar_all_seeds": 0.7925,
+      "P_ni": 0.05
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.055,
+      "P_generalises_best_case_holm": 0.055,
+      "P_bar_all_seeds": 0.835,
+      "P_ni": 0.055
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0875,
+      "P_generalises_best_case_holm": 0.0875,
+      "P_bar_all_seeds": 0.8575,
+      "P_ni": 0.0875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.075,
+      "P_generalises_best_case_holm": 0.075,
+      "P_bar_all_seeds": 0.8625,
+      "P_ni": 0.075
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.095,
+      "P_generalises_best_case_holm": 0.095,
+      "P_bar_all_seeds": 0.945,
+      "P_ni": 0.095
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.065,
+      "P_generalises_best_case_holm": 0.065,
+      "P_bar_all_seeds": 0.9425,
+      "P_ni": 0.065
+     }
+    }
+   }
+  },
+  {
+   "factor": "names",
+   "cell": "H_names",
+   "n": 100,
+   "p_on": 0.9,
+   "p_twin": 0.95,
+   "p_t2s0": 0.35,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.94,
+      "P_generalises_best_case_holm": 0.94,
+      "P_bar_all_seeds": 0.99,
+      "P_ni": 0.9425
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.69,
+      "P_generalises_best_case_holm": 0.69,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.69
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.7475,
+      "P_generalises_best_case_holm": 0.7475,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.7475
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.4625,
+      "P_generalises_best_case_holm": 0.4625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.4625
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.735,
+      "P_generalises_best_case_holm": 0.735,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.735
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.465,
+      "P_generalises_best_case_holm": 0.465,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.465
+     }
+    }
+   }
+  },
+  {
+   "factor": "names",
+   "cell": "H_names",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.95,
+   "p_t2s0": 0.35,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.975,
+      "P_generalises_best_case_holm": 0.975,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.975
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.955,
+      "P_generalises_best_case_holm": 0.955,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.955
+     }
+    }
+   }
+  },
+  {
+   "factor": "count",
+   "cell": "H_count",
+   "n": 100,
+   "p_on": 0.85,
+   "p_twin": 0.95,
+   "p_t2s0": 0.47,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.05,
+      "P_generalises_best_case_holm": 0.05,
+      "P_bar_all_seeds": 0.7925,
+      "P_ni": 0.05
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.055,
+      "P_generalises_best_case_holm": 0.055,
+      "P_bar_all_seeds": 0.835,
+      "P_ni": 0.055
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0875,
+      "P_generalises_best_case_holm": 0.0875,
+      "P_bar_all_seeds": 0.8575,
+      "P_ni": 0.0875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.075,
+      "P_generalises_best_case_holm": 0.075,
+      "P_bar_all_seeds": 0.8625,
+      "P_ni": 0.075
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.095,
+      "P_generalises_best_case_holm": 0.095,
+      "P_bar_all_seeds": 0.945,
+      "P_ni": 0.095
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.065,
+      "P_generalises_best_case_holm": 0.065,
+      "P_bar_all_seeds": 0.9425,
+      "P_ni": 0.065
+     }
+    }
+   }
+  },
+  {
+   "factor": "count",
+   "cell": "H_count",
+   "n": 100,
+   "p_on": 0.9,
+   "p_twin": 0.95,
+   "p_t2s0": 0.47,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.94,
+      "P_generalises_best_case_holm": 0.94,
+      "P_bar_all_seeds": 0.99,
+      "P_ni": 0.9425
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.69,
+      "P_generalises_best_case_holm": 0.69,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.69
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.7475,
+      "P_generalises_best_case_holm": 0.7475,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.7475
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.4625,
+      "P_generalises_best_case_holm": 0.4625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.4625
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.735,
+      "P_generalises_best_case_holm": 0.735,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.735
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.465,
+      "P_generalises_best_case_holm": 0.465,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.465
+     }
+    }
+   }
+  },
+  {
+   "factor": "count",
+   "cell": "H_count",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.95,
+   "p_t2s0": 0.47,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.975,
+      "P_generalises_best_case_holm": 0.975,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.975
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.955,
+      "P_generalises_best_case_holm": 0.955,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.955
+     }
+    }
+   }
+  },
+  {
+   "factor": "para",
+   "cell": "H_para",
+   "n": 100,
+   "p_on": 0.85,
+   "p_twin": 0.95,
+   "p_t2s0": 0.35,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.05,
+      "P_generalises_best_case_holm": 0.05,
+      "P_bar_all_seeds": 0.7925,
+      "P_ni": 0.05
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.055,
+      "P_generalises_best_case_holm": 0.055,
+      "P_bar_all_seeds": 0.835,
+      "P_ni": 0.055
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0875,
+      "P_generalises_best_case_holm": 0.0875,
+      "P_bar_all_seeds": 0.8575,
+      "P_ni": 0.0875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.075,
+      "P_generalises_best_case_holm": 0.075,
+      "P_bar_all_seeds": 0.8625,
+      "P_ni": 0.075
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.095,
+      "P_generalises_best_case_holm": 0.095,
+      "P_bar_all_seeds": 0.945,
+      "P_ni": 0.095
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.065,
+      "P_generalises_best_case_holm": 0.065,
+      "P_bar_all_seeds": 0.9425,
+      "P_ni": 0.065
+     }
+    }
+   }
+  },
+  {
+   "factor": "para",
+   "cell": "H_para",
+   "n": 100,
+   "p_on": 0.9,
+   "p_twin": 0.95,
+   "p_t2s0": 0.35,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.94,
+      "P_generalises_best_case_holm": 0.94,
+      "P_bar_all_seeds": 0.99,
+      "P_ni": 0.9425
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.69,
+      "P_generalises_best_case_holm": 0.69,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.69
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.7475,
+      "P_generalises_best_case_holm": 0.7475,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.7475
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.4625,
+      "P_generalises_best_case_holm": 0.4625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.4625
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.735,
+      "P_generalises_best_case_holm": 0.735,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.735
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.465,
+      "P_generalises_best_case_holm": 0.465,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.465
+     }
+    }
+   }
+  },
+  {
+   "factor": "para",
+   "cell": "H_para",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.95,
+   "p_t2s0": 0.35,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.975,
+      "P_generalises_best_case_holm": 0.975,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.975
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.955,
+      "P_generalises_best_case_holm": 0.955,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.955
+     }
+    }
+   }
+  },
+  {
+   "factor": "magnitude",
+   "cell": "H_bal",
+   "n": 67,
+   "p_on": 0.85,
+   "p_twin": 0.93,
+   "p_t2s0": 0.5,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.2025,
+      "P_generalises_best_case_holm": 0.235,
+      "P_bar_all_seeds": 0.565,
+      "P_ni": 0.2725
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.13,
+      "P_generalises_best_case_holm": 0.15,
+      "P_bar_all_seeds": 0.4575,
+      "P_ni": 0.17
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.23,
+      "P_generalises_best_case_holm": 0.245,
+      "P_bar_all_seeds": 0.64,
+      "P_ni": 0.2625
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.12,
+      "P_generalises_best_case_holm": 0.1275,
+      "P_bar_all_seeds": 0.6075,
+      "P_ni": 0.13
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.2075,
+      "P_generalises_best_case_holm": 0.2125,
+      "P_bar_all_seeds": 0.805,
+      "P_ni": 0.215
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.12,
+      "P_generalises_best_case_holm": 0.12,
+      "P_bar_all_seeds": 0.8225,
+      "P_ni": 0.12
+     }
+    }
+   }
+  },
+  {
+   "factor": "magnitude",
+   "cell": "H_bal",
+   "n": 67,
+   "p_on": 0.9,
+   "p_twin": 0.93,
+   "p_t2s0": 0.5,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9,
+      "P_generalises_best_case_holm": 0.9475,
+      "P_bar_all_seeds": 0.9525,
+      "P_ni": 0.9875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.6825,
+      "P_generalises_best_case_holm": 0.7075,
+      "P_bar_all_seeds": 0.9525,
+      "P_ni": 0.7125
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.8975,
+      "P_generalises_best_case_holm": 0.9175,
+      "P_bar_all_seeds": 0.975,
+      "P_ni": 0.9375
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.52,
+      "P_generalises_best_case_holm": 0.525,
+      "P_bar_all_seeds": 0.9575,
+      "P_ni": 0.525
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.8525,
+      "P_generalises_best_case_holm": 0.8675,
+      "P_bar_all_seeds": 0.995,
+      "P_ni": 0.87
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.42,
+      "P_generalises_best_case_holm": 0.42,
+      "P_bar_all_seeds": 0.985,
+      "P_ni": 0.42
+     }
+    }
+   }
+  },
+  {
+   "factor": "magnitude",
+   "cell": "H_bal",
+   "n": 67,
+   "p_on": 0.95,
+   "p_twin": 0.93,
+   "p_t2s0": 0.5,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9975,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.96,
+      "P_generalises_best_case_holm": 0.9625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9625
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9275,
+      "P_generalises_best_case_holm": 0.9275,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9275
+     }
+    }
+   }
+  },
+  {
+   "factor": "magnitude",
+   "cell": "H_amt",
+   "n": 67,
+   "p_on": 0.85,
+   "p_twin": 0.93,
+   "p_t2s0": 0.15,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.235,
+      "P_generalises_best_case_holm": 0.235,
+      "P_bar_all_seeds": 0.565,
+      "P_ni": 0.2725
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.15,
+      "P_generalises_best_case_holm": 0.15,
+      "P_bar_all_seeds": 0.4575,
+      "P_ni": 0.17
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.245,
+      "P_generalises_best_case_holm": 0.245,
+      "P_bar_all_seeds": 0.64,
+      "P_ni": 0.2625
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.1275,
+      "P_generalises_best_case_holm": 0.1275,
+      "P_bar_all_seeds": 0.6075,
+      "P_ni": 0.13
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.2125,
+      "P_generalises_best_case_holm": 0.2125,
+      "P_bar_all_seeds": 0.805,
+      "P_ni": 0.215
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.12,
+      "P_generalises_best_case_holm": 0.12,
+      "P_bar_all_seeds": 0.8225,
+      "P_ni": 0.12
+     }
+    }
+   }
+  },
+  {
+   "factor": "magnitude",
+   "cell": "H_amt",
+   "n": 67,
+   "p_on": 0.9,
+   "p_twin": 0.93,
+   "p_t2s0": 0.15,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9475,
+      "P_generalises_best_case_holm": 0.9475,
+      "P_bar_all_seeds": 0.9525,
+      "P_ni": 0.9875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.71,
+      "P_generalises_best_case_holm": 0.71,
+      "P_bar_all_seeds": 0.9525,
+      "P_ni": 0.7125
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9175,
+      "P_generalises_best_case_holm": 0.9175,
+      "P_bar_all_seeds": 0.975,
+      "P_ni": 0.9375
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.525,
+      "P_generalises_best_case_holm": 0.525,
+      "P_bar_all_seeds": 0.9575,
+      "P_ni": 0.525
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.8675,
+      "P_generalises_best_case_holm": 0.8675,
+      "P_bar_all_seeds": 0.995,
+      "P_ni": 0.87
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.42,
+      "P_generalises_best_case_holm": 0.42,
+      "P_bar_all_seeds": 0.985,
+      "P_ni": 0.42
+     }
+    }
+   }
+  },
+  {
+   "factor": "magnitude",
+   "cell": "H_amt",
+   "n": 67,
+   "p_on": 0.95,
+   "p_twin": 0.93,
+   "p_t2s0": 0.15,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9625,
+      "P_generalises_best_case_holm": 0.9625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9625
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9275,
+      "P_generalises_best_case_holm": 0.9275,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9275
+     }
+    }
+   }
+  },
+  {
+   "factor": "combined",
+   "cell": "HS_words",
+   "n": 100,
+   "p_on": 0.85,
+   "p_twin": 0.99,
+   "p_t2s0": 0.05,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.815,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.835,
+      "P_ni": 0.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.86,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0025,
+      "P_generalises_best_case_holm": 0.0025,
+      "P_bar_all_seeds": 0.8825,
+      "P_ni": 0.0025
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.005,
+      "P_generalises_best_case_holm": 0.005,
+      "P_bar_all_seeds": 0.9425,
+      "P_ni": 0.005
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.01,
+      "P_generalises_best_case_holm": 0.01,
+      "P_bar_all_seeds": 0.9325,
+      "P_ni": 0.01
+     }
+    }
+   }
+  },
+  {
+   "factor": "combined",
+   "cell": "HS_words",
+   "n": 100,
+   "p_on": 0.9,
+   "p_twin": 0.99,
+   "p_t2s0": 0.05,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.145,
+      "P_generalises_best_case_holm": 0.145,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.145
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.1525,
+      "P_generalises_best_case_holm": 0.1525,
+      "P_bar_all_seeds": 0.995,
+      "P_ni": 0.1525
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.145,
+      "P_generalises_best_case_holm": 0.145,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.145
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.155,
+      "P_generalises_best_case_holm": 0.155,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.155
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.185,
+      "P_generalises_best_case_holm": 0.185,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.185
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.13,
+      "P_generalises_best_case_holm": 0.13,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.13
+     }
+    }
+   }
+  },
+  {
+   "factor": "combined",
+   "cell": "HS_words",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.99,
+   "p_t2s0": 0.05,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9875,
+      "P_generalises_best_case_holm": 0.9875,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9675,
+      "P_generalises_best_case_holm": 0.9675,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9675
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9125,
+      "P_generalises_best_case_holm": 0.9125,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9125
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.85,
+      "P_generalises_best_case_holm": 0.85,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.85
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.8925,
+      "P_generalises_best_case_holm": 0.8925,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.8925
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.785,
+      "P_generalises_best_case_holm": 0.785,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.785
+     }
+    }
+   }
+  },
+  {
+   "factor": "combined",
+   "cell": "HS_posted",
+   "n": 100,
+   "p_on": 0.85,
+   "p_twin": 0.93,
+   "p_t2s0": 0.2,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.3525,
+      "P_generalises_best_case_holm": 0.3525,
+      "P_bar_all_seeds": 0.825,
+      "P_ni": 0.3775
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.195,
+      "P_generalises_best_case_holm": 0.195,
+      "P_bar_all_seeds": 0.82,
+      "P_ni": 0.195
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.235,
+      "P_generalises_best_case_holm": 0.235,
+      "P_bar_all_seeds": 0.8875,
+      "P_ni": 0.2375
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.165,
+      "P_generalises_best_case_holm": 0.165,
+      "P_bar_all_seeds": 0.86,
+      "P_ni": 0.1675
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.285,
+      "P_generalises_best_case_holm": 0.285,
+      "P_bar_all_seeds": 0.9475,
+      "P_ni": 0.285
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.1725,
+      "P_generalises_best_case_holm": 0.1725,
+      "P_bar_all_seeds": 0.93,
+      "P_ni": 0.1725
+     }
+    }
+   }
+  },
+  {
+   "factor": "combined",
+   "cell": "HS_posted",
+   "n": 100,
+   "p_on": 0.9,
+   "p_twin": 0.93,
+   "p_t2s0": 0.2,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9975,
+      "P_generalises_best_case_holm": 0.9975,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.87,
+      "P_generalises_best_case_holm": 0.87,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.87
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.975,
+      "P_generalises_best_case_holm": 0.975,
+      "P_bar_all_seeds": 0.9975,
+      "P_ni": 0.9775
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.665,
+      "P_generalises_best_case_holm": 0.665,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.665
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9625,
+      "P_generalises_best_case_holm": 0.9625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9625
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.5675,
+      "P_generalises_best_case_holm": 0.5675,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.5675
+     }
+    }
+   }
+  },
+  {
+   "factor": "combined",
+   "cell": "HS_posted",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.93,
+   "p_t2s0": 0.2,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9925,
+      "P_generalises_best_case_holm": 0.9925,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9925
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9925,
+      "P_generalises_best_case_holm": 0.9925,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9925
+     }
+    }
+   }
+  }
+ ],
+ "gate_alignment": [
+  {
+   "p_true": 0.85,
+   "seeds": "seeds independent",
+   "P_PROCEED": 0.0,
+   "P_GENERALISES_H_words_nested": 0.0,
+   "P_GENERALISES_HS_words_nested": 0.0
+  },
+  {
+   "p_true": 0.85,
+   "seeds": "seeds 80% shared",
+   "P_PROCEED": 0.005,
+   "P_GENERALISES_H_words_nested": 0.0,
+   "P_GENERALISES_HS_words_nested": 0.0
+  },
+  {
+   "p_true": 0.9,
+   "seeds": "seeds independent",
+   "P_PROCEED": 0.119,
+   "P_GENERALISES_H_words_nested": 0.145,
+   "P_GENERALISES_HS_words_nested": 0.145
+  },
+  {
+   "p_true": 0.9,
+   "seeds": "seeds 80% shared",
+   "P_PROCEED": 0.284,
+   "P_GENERALISES_H_words_nested": 0.145,
+   "P_GENERALISES_HS_words_nested": 0.145
+  },
+  {
+   "p_true": 0.95,
+   "seeds": "seeds independent",
+   "P_PROCEED": 0.9615,
+   "P_GENERALISES_H_words_nested": 0.9875,
+   "P_GENERALISES_HS_words_nested": 0.9875
+  },
+  {
+   "p_true": 0.95,
+   "seeds": "seeds 80% shared",
+   "P_PROCEED": 0.97,
+   "P_GENERALISES_H_words_nested": 0.9125,
+   "P_GENERALISES_HS_words_nested": 0.9125
+  }
+ ]
+}

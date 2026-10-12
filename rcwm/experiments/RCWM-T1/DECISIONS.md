@@ -1091,3 +1091,29 @@ Times are local (CDT). Entries are append-only.
     - In the window it stops RCWM's chain whenever RCWM holds no lease. A running RCWM turn may finish, after which the chain is stopped.
     - It relaunches the chain after 07:00.
   - **Process checks:** they match on the program name and exact script path (I-36 lesson).
+- **Queue note (2026-10-12 afternoon).** While the T2b-ledger kit was under revision 3, hook 88 was a no-op: GATE_RULE.json was set aside, and `runs/t2bl/dev` already had its gate. So the live chain went on to the old pilot items. RCWM's afternoon turn ran `run_lik.py --arm supa` (the Supa likelihood ranking; released about 15:53). The next old item (`run_pvr` stage 1) is waiting behind BWM.
+  - **Plan:** after the revision-3 freeze and the hook replacement, the chain is relaunched at a waiting point so that the T2b-ledger screen precedes the remaining pilot items.
+- **Correction to RCWM's message to BWM about the night windows (2026-10-12).**
+  - **What RCWM said:** "RCWM has no 45-min rule".
+  - **What is true:** `rcwmt/runtime.py` `alternate_turn(label, max_wait_s=2700)` caps RCWM's yield to a live BWM waiting marker at 45 min. After that, RCWM proceeds to the lease, which it can only acquire if no lock is held.
+  - **Why it is harmless under D-51:** RCWM's chain is stopped inside the windows, and BWM withdraws its marker during its post-07:00 lane hold.
+  - **BWM's D-84 gate:** at 07:00, if turn.last == bwm, BWM waits up to 15 min for RCWM's relaunched chain to claim the card, so a dead RCWM marker does not hand BWM two turns in a row. BWM also holds off the GPU until 11:00 at most if an RCX CPU block started inside the window is still running.
+- **D-52 T2b-ledger kit revision 3 accepted and its dev gate frozen (2026-10-12 about 17:15), under the R29 revision path.**
+  - **Builds:** wf_65d3bdcc-dd5 (build plus independent check: minor issues), then pre-freeze fixes wf_cfbf2a27-e31 (fix plus independent check: sound). Tests 236/236.
+  - **What changed, training data only:**
+    - (a) The top-level JSON key order is varied in training: 806 rows reversed, 694 sorted.
+    - (b) 600 stacked-surface rows (training paraphrase + names + inner orders + reversed top, all at once). 300 of the 750 posted rows are stacked.
+    - (c) Posted/non-posted is EXACTLY 50/50 on the stacked and reversed-top subsets (audit band [0.49, 0.51]), which removes the first build's 0.457 surface-to-status cue.
+    - Unchanged: magnitude bands, vocabularies and held-out partitions. 1,500 rows, 2.03 epochs.
+  - **Seeds:** training 20261165 (generator t2bl-data-v3.1), fresh dev bank 20261166 (sha 731bbc6a…; it is unchanged by the fixes).
+  - **Spent:** the revision-2 data and dev bank (seeds 20261161/62) and the three revision-2 adapters in `runs/t2bl/dev`. The revision-3 run goes to `runs/t2bl/dev_rev3`.
+  - **Gate rule:** text and thresholds byte-identical to revision 2 (rule-text sha 6d1efa95…). Its four revision-2-specific statements (seed, tag, "before any output exists", "every object in a held-out key order") are kept verbatim and superseded by a recorded revision-3 note.
+  - **PREREG-5 draft:** Appendix A records every registered-string and code change made after the revision-2 dev outputs existed. Digests: rules 37b96032… → 71dd5938…, code 148d180c… → 1408be8a….
+  - **New limit:** the top-level key order is no longer held out anywhere, so key-order claims cover inner orders only.
+  - **D-22 scope (restated from D-48):** the dev screen runs three train+eval pairs plus E0 under one lease, in one turn (about 2.2–2.6 h).
+  - **Disclosure:** one fix-time check imported torch with `CUDA_VISIBLE_DEVICES=""` but without the is_available patch. No CUDA call was made and no model was loaded.
+  - **Executed (17:11–17:14):**
+    - `t2bl_gate.py --freeze-rule`: GATE_RULE.json sha e7ad14ee…. It records kit revision 3 and run directory `runs/t2bl/dev_rev3`, and pins training 88f04e6b…, dev bank 731bbc6a…, PREREG-5 rules 71dd5938…, code 1408be8a… and draft 5e0b0081….
+    - `scripts/queue_hooks/88_t2bl.sh` replaced in place: e389df78… (revision 2) → 764fe712… (identical to the revision-3 draft).
+    - The chain was stopped while its `run_pvr` waiter was waiting (BWM's bundleI held the lease), then relaunched at 17:12.
+    - The revision-3 dev screen (`rcwm-t1:t2b-ledger`) is the single RCWM waiter, with all stages pending.

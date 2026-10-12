@@ -164,11 +164,20 @@ LIMITS = (
     "and a token no trained status has), letters E-H and 8 held-out word names, held-out orders of the event and before "
     "objects (the reversal and two random orders each) and rule paraphrase 5, none of which the dev screen used. A pass "
     "is transfer to these items, not to every surface.",
-    "Shared with the dev screen: the reversed top-level order (the 2-key top object is never varied in training and has "
-    "one other order, so every H_order and combined-surface row reverses it; H_order_top and H_order_inner report the "
-    "top-level reversal and the inner orders separately), the 8-account count and the magnitude bands (the dev gate read "
-    "neither; the confirmation's values are freshly drawn), and PREREG-LB's rendering (names bank / card / cash / fees, "
-    "keys reversed, 'cancelled'), which both one-step banks carry only in report-only strata.",
+    "Shared with the dev screen: the 8-account count and the magnitude bands (the dev gate read neither; the "
+    "confirmation's values are freshly drawn), and PREREG-LB's rendering (names bank / card / cash / fees, keys "
+    "reversed, 'cancelled'), which both one-step banks carry only in report-only strata. The reversed top-level order is "
+    "a TRAINED level since kit revision 3 (both orders of the 2-key top object are trained), so H_order and the "
+    "combined-surface cells test held-out event and before orders under a trained top-level reversal; H_order_top is a "
+    "trained-variant report and H_order_inner reports the held-out inner orders alone.",
+    "The top-level key order is held out nowhere since kit revision 3: both orders of the 2-key top-level object (before "
+    "and event) are trained, and the dev bank, this map bank and PREREG-LB's rendering use only those two orders. Every key-order "
+    "claim of PREREG-5 ('unseen key orders', H_order, H_order_inner and the combined-surface cells) therefore covers the "
+    "inner orders of the event and before objects only; nothing here tests an unseen top-level order.",
+    "Kit revision 3: the training data were revised after the revision-2 dev screen stopped (DECISIONS R29: the posted "
+    "twins on the combined held-out surface degraded to copying), with knowledge of that screen's aggregate results, "
+    "under the dev gate rule's pre-stated revision path (training data only, a fresh dev bank under a new seed, the "
+    "same thresholds). The revision-2 dev bank and adapters are spent; neither dev screen used the confirm half.",
     "Every held-out event or before order is a few adjacent swaps from some trained order (every other permutation is "
     "trained; the random held-out orders are at least two swaps from the sorted order, the most trained one).",
     "Field names (before, event, account, amount, kind, other, status, tick) and the kind words are never varied. "
@@ -209,8 +218,8 @@ NOT_EVALUABLE_REASONS = {"stopped": "the run ended by a deterministic stop befor
                          "missing": "this part's stages are not recorded"}
 RULES_SENTENCE = {
     True: ("The decision rules of parts (a)-(c), the wording templates, the limits and the decision code are "
-           "byte-identical to those recorded when the dev gate rule was frozen ({when}), before any T2b-ledger adapter "
-           "existed."),
+           "byte-identical to those recorded when the dev gate rule was frozen ({when}), before any adapter trained on "
+           "this kit revision's data existed."),
     False: ("The decision rules, wording templates, limits or decision code differ from those recorded when the dev "
             "gate rule was frozen ({when}); the changes were made after the dev screen's outputs existed and are "
             "listed, with their reasons, in PREREG_5.md Appendix A."),

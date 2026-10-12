@@ -4,17 +4,25 @@
                                                            # parser identity) -> docs/t2b/ledger/SCORER_SELFTEST.json
   python -B scripts/t2bl_gate.py --dryrun [--record]       # every gate branch on synthetic outcomes through the real
                                                            # scorer, metrics, decide() and wording() -> GATE_DRYRUN.json
-  python -B scripts/t2bl_gate.py --write-rule-md           # docs/t2b/ledger/GATE_RULE.md from RULE_TEXT (refused once a
-                                                           # runs/t2bl output exists)
+  python -B scripts/t2bl_gate.py --write-rule-md           # docs/t2b/ledger/GATE_RULE.md from RULE_TEXT (refused once
+                                                           # this revision's run directory has an output)
+  python -B scripts/t2bl_gate.py --freeze-ready            # docs/t2b/ledger/GATE_FREEZE_READY.json: what the freeze
+                                                           # WOULD pin now (every input's sha256, PREREG-5's rules and
+                                                           # code digests, the draft), the preconditions and the exact
+                                                           # freeze command. Not a freeze: the runner ignores it.
   python -B scripts/t2bl_gate.py --freeze-rule --approval "<who, when, DECISIONS entry>"
                                                            # GATE_RULE.json: sha256 of every frozen input (create-only;
-                                                           # refused if any runs/t2bl output exists). NOT run by the kit
-                                                           # build: freezing is the operator's step.
-  python -B scripts/t2bl_gate.py [--run runs/t2bl/dev]     # the registered analysis (once; create-only): GATE.md, then
+                                                           # refused if this revision's run directory has an output).
+                                                           # NOT run by the kit build: freezing is the operator's step.
+  python -B scripts/t2bl_gate.py [--run runs/t2bl/dev_rev3] # the registered analysis (once; create-only): GATE.md, then
                                                            # GATE.json (the completion marker); a stopped run gets a
                                                            # NO VERDICT record
 
 Before any output is read: the frozen rule record verifies (registered mode) and the scorer self-test passes.
+Kit revision 3 (R29): the rule text and every threshold are unchanged (byte-identical to the revision-2 rule frozen in
+D-48); under its revision path only the training data changed and the dev bank was redrawn under a new seed
+(t2bl_common.SEED_DEV) into a new run directory (t2bl_common.DEV_RUN). Revision 2's dev bank and adapters
+(runs/t2bl/dev) are spent; this module never reads their outputs.
 """
 from __future__ import annotations
 
@@ -92,6 +100,28 @@ VARIANT_KEYS = {"S_words": "word_kind", "H_words": "word_kind", "HS_words": "wor
                 "H_names": "names_kind", "HS_posted": "names_kind", "H_order": "event_order", "H_count": "status_kind",
                 "H_para": "status_kind", "P3_words": "word", "S_surface_posted": "names_kind"}
 ANALYSIS_CODE = ("scripts/t2bl_gate.py", "scripts/t2bl_common.py", "scripts/p3_common.py", "rcwmt/env.py")
+REV2_RULE_RECORD = C.DOCS / "superseded_rev2" / "GATE_RULE.json"     # the revision-2 freeze (D-48), kept for the record
+
+
+def revision_note() -> str:
+    """The inputs of this kit revision under the rule's pre-stated revision path (rendered into GATE_RULE.md and every
+    GATE.md; the rule text itself is unchanged)."""
+    return (f"Kit revision {C.KIT_REVISION} (2026-10-12; DECISIONS R29; the rule's pre-stated revision path). The rule text "
+            "and every threshold are byte-identical to the revision-2 rule frozen on 2026-10-10 (D-48; "
+            "docs/t2b/ledger/superseded_rev2/GATE_RULE.json). Only the training data changed (data/t2bl_train.jsonl, seed "
+            f"{C.SEED_TRAIN}: both top-level key orders trained; half of the diversified slots on the stacked training "
+            "surface; posted and non-posted rows exactly equal on the stacked-surface and on the reversed-top rows), and "
+            "the dev bank was drawn FRESH under a new seed by the same builder and strata "
+            f"(data/t2bl_dev.jsonl, seed {C.SEED_DEV}; the DEV half of every held-out partition, unchanged). It replaces the "
+            f"bank of seed {C.SPENT_KIT_SEEDS[1]} that the rule text names, which is spent together with every adapter "
+            f"trained on the revision-2 data ({', '.join(C.SPENT_RUNS)}; seeds {C.SPENT_KIT_SEEDS[0]} and "
+            f"{C.SPENT_KIT_SEEDS[1]}). The dev run is tag dev in {C.DEV_RUN_REL}. Since kit revision 3 the top-level "
+            "{before, event} object is trained in both orders, so 'every object in a held-out key order' in the HS_words "
+            "definition holds for the event and before objects, and the reversed top order of HS_words, HS_posted and "
+            "H_order is a trained level there: a deliberate consequence of the revision path, not a new held-out factor. "
+            "The rule text's 'pre-stated on 2026-10-10 before any T2b-ledger adapter or output exists' is likewise "
+            "revision 2's: revision 2's adapters and outputs exist (spent), and for this kit revision the unchanged rule "
+            "is frozen before any adapter trained on its data and before any output of its dev screen exists.")
 
 
 class GateError(Exception):
@@ -343,7 +373,8 @@ def wording(D: dict, M: dict | None) -> dict:
 
 def render_md(res: dict) -> str:
     L = [f"# T2b-ledger dev gate: {res['wording']['headline']}", "", res["wording"]["sentence"], "",
-         res["wording"]["next"], "", "## Pre-stated rule (verbatim)", "", "> " + RULE_TEXT, ""]
+         res["wording"]["next"], "", "## Pre-stated rule (verbatim)", "", "> " + RULE_TEXT, "",
+         "## Inputs of this kit revision", "", res.get("revision_note") or revision_note(), ""]
     M = res.get("metrics")
     per = res["decision"].get("per_seed") or {}
     if per:
@@ -443,7 +474,9 @@ def analyze(run: Path, registered: bool = True, rows: list | None = None, out_di
         M = metrics(rows, texts)
     D = decide(M, inst)
     W = wording(D, M)
-    res = {"record": "T2BL_GATE", "rule_version": RULE_VERSION, "rule": RULE_TEXT, "decision": D, "wording": W,
+    res = {"record": "T2BL_GATE", "rule_version": RULE_VERSION, "rule": RULE_TEXT, "kit_revision": C.KIT_REVISION,
+           "dev_bank_seed": C.SEED_DEV, "train_seed": C.SEED_TRAIN, "revision_note": revision_note(),
+           "decision": D, "wording": W,
            "metrics": M, "instrument": inst, "selftest": {k: v for k, v in st.items() if k != "failures"},
            "registered": registered, "code_sha256": C.code_hashes(ANALYSIS_CODE), "run": str(run),
            "analysed_local": time.strftime("%Y-%m-%d %H:%M:%S %z")}
@@ -630,7 +663,9 @@ def rule_md() -> str:
             "the runner refuses to start without it. The same record pins the sha256 of PREREG-5's decision rules, wording "
             "templates, limits and thresholds (`t2bl_confirm_analysis.rules_digest()`) and of PREREG-5's decision code "
             "(`t2bl_confirm_analysis.PINNED_CODE`), so PREREG-5's freeze can show whether either changed after the dev "
-            "screen's outputs existed (and refuses an unlisted change).\n\n## Rule (verbatim; `t2bl_gate.RULE_TEXT`)\n\n> "
+            "screen's outputs existed (and refuses an unlisted change).\n\n## Inputs of this kit revision\n\n"
+            + revision_note() +
+            "\n\n## Rule (verbatim; `t2bl_gate.RULE_TEXT`)\n\n> "
             + RULE_TEXT +
             "\n\n## Thresholds\n\n| clause | quantity | threshold |\n|---|---|---|\n"
             f"| G1 | ON accuracy, HS_words (held-out words, combined held-out surface) | >= {BAR_HS:.2f} |\n"
@@ -664,10 +699,89 @@ def rule_md() -> str:
             "uses only the confirm half, so the confirmation does not re-test the items this gate conditioned on.\n")
 
 
+def spent_record() -> dict:
+    """Revision 2's spent training set, dev bank and adapters (hashes from their own SOURCE / DONE records; no model output
+    is read)."""
+    sup = C.DATA / "t2bl_superseded_rev2"
+    out = {"seeds": list(C.SPENT_KIT_SEEDS), "runs": list(C.SPENT_RUNS),
+           "why": "DECISIONS R29: the revision-2 dev gate stopped (PARTIAL, heldout_posted_twins); under the rule's revision "
+                  "path that dev bank and every adapter trained on the revision-2 data are spent"}
+    for k, n in (("train", "t2bl_train"), ("dev", "t2bl_dev")):
+        src = C.read_json(sup / f"{n}.SOURCE.json") or {}
+        out[k] = {"file": f"data/t2bl_superseded_rev2/{n}.jsonl", "seed": src.get("seed"), "sha256": src.get("file_sha256")}
+    done = C.read_json(C.ROOT / C.SPENT_RUNS[0] / "DONE.json") or {}
+    out["adapters_sha256"] = {u: v["T"] for u, v in sorted((done.get("files") or {}).items()) if isinstance(v, dict) and v.get("T")}
+    out["revision2_gate_rule_record"] = {"file": str(REV2_RULE_RECORD.relative_to(C.ROOT)).replace("\\", "/"),
+                                         "sha256": C.sha256(REV2_RULE_RECORD) if REV2_RULE_RECORD.is_file() else None}
+    return out
+
+
+def freeze_ready() -> dict:
+    """What `--freeze-rule` would pin NOW, with its preconditions and the exact command (no GATE_RULE.json is written; the
+    runner ignores this record). If nothing changes before the freeze, the freeze's input hashes equal 'would_pin'."""
+    import t2bl_run as R
+    import t2bl_confirm_analysis as CA               # numpy only
+    p = C.DOCS / "GATE_RULE.json"
+    files = R.frozen_files(R.Cfg(rule_record=p))
+    md = C.DOCS / "GATE_RULE.md"
+    md_text = md.read_text(encoding="utf-8") if md.exists() else ""
+    st = selftest(C.load_jsonl(C.DEV)) if C.DEV.is_file() else {"ok": False}
+    rev2 = C.read_json(REV2_RULE_RECORD) or {}
+    src_t, src_d = C.read_json(C.TRAIN_SOURCE) or {}, C.read_json(C.DEV_SOURCE) or {}
+    draft = C.ROOT / "PREREG_5_DRAFT.md"
+    pre = OrderedDict([
+        ("GATE_RULE.json is absent (the rule is not frozen yet)", not p.exists()),
+        (f"no output of this revision's dev screen exists ({C.DEV_RUN_REL})", not C.run_outputs()),
+        ("the rule text is byte-identical to the revision-2 freeze (D-48)", rev2.get("rule_text") == RULE_TEXT),
+        ("GATE_RULE.md is the current render and contains the rule text verbatim", md_text == rule_md() and RULE_TEXT in md_text),
+        ("the scorer self-test on the dev bank passes", bool(st.get("ok"))),
+        ("the training set and the dev bank equal their SOURCE records",
+         C.TRAIN.is_file() and C.DEV.is_file() and C.sha256(C.TRAIN) == src_t.get("file_sha256") and
+         C.sha256(C.DEV) == src_d.get("file_sha256")),
+        (f"the SOURCE records name this revision's seeds (train {C.SEED_TRAIN}, dev {C.SEED_DEV}) and kit revision "
+         f"{C.KIT_REVISION}", src_t.get("seed") == C.SEED_TRAIN and src_d.get("seed") == C.SEED_DEV and
+         src_t.get("kit_revision") == C.KIT_REVISION and src_d.get("kit_revision") == C.KIT_REVISION),
+        ("every frozen input exists", all(Path(f).is_file() for f in files.values())),
+        ("PREREG_5_DRAFT.md exists", draft.is_file()),
+    ])
+    hooks = sorted(R.HOOK_INSTALLED.parent.glob("*t2bl*.sh"))
+    rev2_draft = C.DOCS / "superseded_rev2" / "queue_hook_t2bl.sh.draft"
+    hook_state = {"draft": "docs/t2b/ledger/queue_hook_t2bl.sh.draft", "draft_sha256": C.sha256(R.HOOK_DRAFT),
+                  "installed": {str(h.relative_to(C.ROOT)).replace("\\", "/"): C.sha256(h) for h in hooks},
+                  "revision2_draft_sha256": C.sha256(rev2_draft) if rev2_draft.is_file() else None,
+                  "install_needed_after_the_freeze": R.hook_problem() is not None or not hooks,
+                  "install_command": "cp docs/t2b/ledger/queue_hook_t2bl.sh.draft scripts/queue_hooks/88_t2bl.sh && "
+                                     "sha256sum docs/t2b/ledger/queue_hook_t2bl.sh.draft scripts/queue_hooks/88_t2bl.sh",
+                  "install_when": "only after --freeze-rule (logged in DECISIONS.md): an IN-PLACE replacement of "
+                                  "revision 2's 88_t2bl.sh at a waiting point (the live chain's step waiting for the "
+                                  "lease, holding none) or with the chain stopped, then ONE fresh chain "
+                                  "(scripts/launch_master.cmd, hidden) only if no master_chain.sh / confirm_chain.sh "
+                                  "process is alive (the draft's WHEN IT RUNS)"}
+    thresholds = {"BAR_HS": BAR_HS, "KIND_FLOOR": KIND_FLOOR, "NI_MARGIN": NI_MARGIN, "TWIN_BAR": TWIN_BAR,
+                  "COPY_CAP": COPY_CAP, "ALIGN_MARGIN": ALIGN_MARGIN, "TRIGGER_TRAINED_MIN": TRIGGER_TRAINED_MIN,
+                  "TRIGGER_HELDOUT_MAX": TRIGGER_HELDOUT_MAX}
+    return {"record": "T2BL_GATE_FREEZE_READY", "frozen": False, "ready": all(pre.values()),
+            "kit_revision": C.KIT_REVISION, "rule_version": RULE_VERSION, "rule_text_sha256": C.sha256_text(RULE_TEXT),
+            "revision2_rule_text_sha256": C.sha256_text(rev2["rule_text"]) if rev2.get("rule_text") else None,
+            "thresholds": thresholds, "seeds": {"train": C.SEED_TRAIN, "dev": C.SEED_DEV, "heldout_orders": C.ORDER_SEED},
+            "run_dir": C.DEV_RUN_REL, "spent": spent_record(), "revision_note": revision_note(),
+            "preconditions": pre, "selftest": {k: v for k, v in st.items() if k != "failures"},
+            "would_pin": {"inputs": {rel: C.sha256(f) if Path(f).is_file() else None for rel, f in files.items()},
+                          "prereg5_rules": CA.rules_digest(), "prereg5_code": CA.code_digest(),
+                          "prereg5_draft_sha256": C.sha256(draft) if draft.is_file() else None},
+            "hook": hook_state,
+            "freeze_command": ('python -B scripts/t2bl_gate.py --freeze-rule --approval "<operator>, <YYYY-MM-DD HH:MM>, '
+                               'DECISIONS D-<n>: T2b-ledger kit revision 3 (R29 revision path), dev gate rule revision 2 '
+                               'unchanged"'),
+            "note": "NOT a freeze. t2bl_run.py refuses to start without docs/t2b/ledger/GATE_RULE.json (written only by "
+                    "--freeze-rule, an operator step logged in DECISIONS.md); the hook is installed only after it.",
+            "written_local": time.strftime("%Y-%m-%d %H:%M:%S %z")}
+
+
 def freeze_rule(approval: str) -> dict:
     import t2bl_run as R
     need(len(approval.strip()) >= 12, "--approval must name who approved, when, and the DECISIONS entry")
-    need(not C.run_outputs(), "a runs/t2bl output exists: the rule can no longer be frozen")
+    need(not C.run_outputs(), f"a {C.DEV_RUN_REL} output exists: the rule can no longer be frozen")
     p = C.DOCS / "GATE_RULE.json"
     need(not p.exists(), "GATE_RULE.json exists (create-only)")
     md = C.DOCS / "GATE_RULE.md"
@@ -677,6 +791,9 @@ def freeze_rule(approval: str) -> dict:
     files = R.frozen_files(R.Cfg(rule_record=p))
     import t2bl_confirm_analysis as CA               # numpy only: PREREG-5's rules and code are pinned before any output
     rec = {"record": "T2BL_GATE_RULE", "rule_version": RULE_VERSION, "rule_text": RULE_TEXT, "approval": approval,
+           "kit_revision": C.KIT_REVISION, "revision_note": revision_note(),
+           "seeds": {"train": C.SEED_TRAIN, "dev": C.SEED_DEV, "heldout_orders": C.ORDER_SEED},
+           "run_dir": C.DEV_RUN_REL, "spent": spent_record(),
            "frozen_local": time.strftime("%Y-%m-%d %H:%M:%S %z"), "inputs": {rel: C.sha256(f) for rel, f in files.items()},
            "prereg5_rules": {**CA.rules_digest(), "note": "sha256 of PREREG-5's registered rules, wording templates, "
                                                           "limits and thresholds (t2bl_confirm_analysis.rules_digest) at "
@@ -697,7 +814,8 @@ def main() -> int:
     ap.add_argument("--write-rule-md", action="store_true")
     ap.add_argument("--freeze-rule", action="store_true")
     ap.add_argument("--approval", default="")
-    ap.add_argument("--run", default=str(C.OUT_ROOT / "dev"))
+    ap.add_argument("--freeze-ready", action="store_true")
+    ap.add_argument("--run", default=str(C.DEV_RUN))
     a = ap.parse_args()
     try:
         if a.selftest:
@@ -714,9 +832,14 @@ def main() -> int:
                 print("wrote", C.write_doc("GATE_DRYRUN.json", json.dumps(res, indent=1) + "\n"))
             return 0 if res["ok"] else 1
         if a.write_rule_md:
-            need(not C.run_outputs(), "a runs/t2bl output exists: the rule document is not rewritten")
+            need(not C.run_outputs(), f"a {C.DEV_RUN_REL} output exists: the rule document is not rewritten")
             print("wrote", C.write_doc("GATE_RULE.md", rule_md()))
             return 0
+        if a.freeze_ready:
+            rec = freeze_ready()
+            print(json.dumps({k: v for k, v in rec.items() if k not in ("would_pin", "revision_note")}, indent=1))
+            print("wrote", C.write_doc("GATE_FREEZE_READY.json", json.dumps(rec, indent=1) + "\n"))
+            return 0 if rec["ready"] else 1
         if a.freeze_rule:
             rec = freeze_rule(a.approval)
             print(json.dumps({k: v for k, v in rec.items() if k != "rule_text"}, indent=1))

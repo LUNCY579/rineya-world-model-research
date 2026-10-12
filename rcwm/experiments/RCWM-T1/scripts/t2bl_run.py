@@ -2,10 +2,13 @@
 
   python -B scripts/t2bl_run.py --plan      # CPU only, no torch, no model, no lease file read: generations, GPU time
                                             # per stage and per 4.5 h turn (planning and observed rates); writes
-                                            # docs/t2b/ledger/GEN_PLAN.json (refused once a runs/t2bl output exists)
-  python -B scripts/t2bl_run.py             # the GPU job (tag 'dev', seeds 0,1,2). Refuses before the lease unless the
-                                            # dev gate rule is frozen (docs/t2b/ledger/GATE_RULE.json, written by
+                                            # docs/t2b/ledger/GEN_PLAN.json (refused once this revision's run
+                                            # directory runs/t2bl/dev_rev3 has an output)
+  python -B scripts/t2bl_run.py             # the GPU job (tag 'dev', seeds 0,1,2; kit revision 3: outputs under
+                                            # runs/t2bl/dev_rev3, t2bl_common.DEV_RUN). Refuses before the lease unless
+                                            # the dev gate rule is frozen (docs/t2b/ledger/GATE_RULE.json, written by
                                             # `t2bl_gate.py --freeze-rule`) and every frozen input matches it.
+Kit revision 3 (R29): runs/t2bl/dev is revision 2's SPENT dev screen; this runner never reads or writes it.
 
 Recipe (T2, DECISIONS D-15/D-16, unchanged): the vendored BWM-001 trainer (vendor_bwm/scripts/train_generic.py, pinned,
 invoked exactly as scripts/run_t2.py invokes it): LoRA r16 / alpha 32 / dropout 0.05 on q,k,v,o,gate,up,down of
@@ -37,11 +40,11 @@ Before the lease (exit 3, not persisted): the frozen gate rule and every frozen 
 installed scripts/queue_hooks/*t2bl*.sh, documented name 88_t2bl.sh, must be that draft byte for byte); the training file and dev bank
 equal their SOURCE records; T2 s0's adapter equals PREREG-2's pins; the vendored trainer is the pinned one; every
 training prompt == tok.apply_chat_template(messages(row)); the one-waiter rule (R14: another RCWM job waiting for or
-holding the GPU lease refuses this one; BWM jobs are waited for in the lease); a one-runner lock on runs/t2bl/<tag>/.
+holding the GPU lease refuses this one; BWM jobs are waited for in the lease); a one-runner lock on the run directory.
 A resumed run refuses if a frozen code file differs from the hashes recorded at its first turn. Outputs are create-only
-under runs/t2bl/<tag>/; a stage is DONE only if its files exist AND provenance.json records them with matching sha256;
-anything else a stage wrote is PARTIAL: moved to _orphans/ (never deleted) and redone in full. A recorded output whose
-hash changes stops the job.
+under runs/t2bl/dev_rev3/ (t2bl_common.DEV_RUN); a stage is DONE only if its files exist AND provenance.json records
+them with matching sha256; anything else a stage wrote is PARTIAL: moved to _orphans/ (never deleted) and redone in
+full. A recorded output whose hash changes stops the job.
 
 Two consecutive turns that record no stage stop the job (persisted; a cap or rate amendment is needed). --cap-h is
 clamped to 4.5 h (the agreed turn cap).
@@ -171,8 +174,8 @@ class Cfg:
     rule_record: Path | None = GATE_RULE_JSON      # tests pass a temporary record (or None for mechanics only)
 
     def __post_init__(self):
-        if self.out is None:
-            self.out = C.OUT_ROOT / self.tag
+        if self.out is None:                       # this kit revision's directory (never revision 2's spent runs/t2bl/dev)
+            self.out = C.DEV_RUN if self.tag == TAG else C.OUT_ROOT / f"{self.tag}_rev{C.KIT_REVISION}"
 
 
 def pilot_anchor_chains() -> list:
@@ -264,7 +267,8 @@ def simulate_turns(cfg: Cfg, est: dict | None = None) -> list:
 
 
 def plan(verbose: bool = True) -> dict:
-    res = {"lease": LEASE_LABEL, "cap_h": CAP_H, "seeds": list(SEEDS), "steps": STEPS,
+    res = {"lease": LEASE_LABEL, "cap_h": CAP_H, "seeds": list(SEEDS), "steps": STEPS, "kit_revision": C.KIT_REVISION,
+           "run_dir": C.DEV_RUN_REL, "tag": TAG,
            "stage_rule": (f"a seed's training starts only if {G2.STAGE_SAFETY} x its whole remaining pair (training + "
                           "model load + [A0 + E0 if due] + its evaluation) fits the turn and never within "
                           f"{G2.STAGE_MARGIN_H} h of the cap; each evaluation stage starts only if {G2.STAGE_SAFETY} x "
@@ -697,7 +701,8 @@ def _run_locked(cfg, backend, out, shas, dev_rows, anchor_chains, tok, n_checked
         need(not changed, f"code changed since the run's first turn ({changed}): a resumed run uses the code it started "
              "with; restore it, or move the run aside and log it in DECISIONS.md", persist=False)
     else:
-        prov = {"tag": cfg.tag, "seeds": list(cfg.seeds), "steps": cfg.steps, "lr": cfg.lr, "data_sha256": shas,
+        prov = {"tag": cfg.tag, "kit_revision": C.KIT_REVISION, "seeds": list(cfg.seeds), "steps": cfg.steps, "lr": cfg.lr,
+                "data_sha256": shas,
                 "dev_subset": cfg.dev_subset, "n_dev_rows": len(dev_rows), "dev_ids_sha256": C.sha256_text(
                     "\n".join(r["id"] for r in dev_rows)), "lease_label": LEASE_LABEL, "code_sha256": code_hashes(),
                 "gate_rule_sha256": C.sha256(cfg.rule_record) if cfg.rule_record and Path(cfg.rule_record).is_file() else None,
@@ -895,7 +900,7 @@ def main() -> int:
         res["train_source_sha256"] = C.sha256(C.TRAIN_SOURCE) if C.TRAIN_SOURCE.exists() else None
         res["code_sha256"] = {"scripts/t2bl_run.py": C.sha256(Path(__file__))}
         if C.run_outputs():
-            print("[t2bl] a runs/t2bl output exists: GEN_PLAN.json is not rewritten (printed only)")
+            print(f"[t2bl] a {C.DEV_RUN_REL} output exists: GEN_PLAN.json is not rewritten (printed only)")
             print(json.dumps(res, indent=1))
             return 0
         print("wrote", C.write_doc("GEN_PLAN.json", json.dumps(res, indent=1) + "\n"))

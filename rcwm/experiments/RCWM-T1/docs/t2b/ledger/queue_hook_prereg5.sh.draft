@@ -3,6 +3,8 @@
 # installed scripts/queue_hooks/*prereg5*.sh is not this file byte for byte. Install only AFTER the freeze (which needs
 # the dev gate's PROCEED and BWM's co-sign), by the RCWM-T1 operator on the user's go-ahead, logged in DECISIONS.md:
 #   cp docs/t2b/ledger/queue_hook_prereg5.sh.draft scripts/queue_hooks/90_prereg5.sh   (then compare the two sha256 values)
+# KIT REVISION 3 (DECISIONS R29): the T2b-ledger adapters are kit revision 3's (runs/t2bl/dev_rev3/s<k>/train/adapter);
+# revision 2's runs/t2bl/dev is spent and is never an input here.
 # WHEN IT RUNS. master_chain.sh expands its hook glob ONCE, when execution enters that loop: a new hook runs only in a FRESH
 # chain started when no chain process is alive. One RCWM waiter at a time (R14): the steps below are sequential, and each
 # runner refuses (exit 3, not persisted) while another RCWM job holds or waits for the GPU lease.
@@ -48,7 +50,7 @@ if [ -f PREREG_5_FREEZE.json ]; then
       p5_rcalls=0
       while [ -n "$p5_ret_id" ] && [ "$p5_rcalls" -lt 3 ] && [ ! -f "$p5_ret_dir/DONE.json" ] && [ ! -f "$p5_ret_dir/STOPPED.json" ]; do
         step scripts/ret_run.py --mode confirm --draw "docs/retention/draws/$p5_ret_id.jsonl" \
-          --extra-adapter "t2bl_s0=runs/t2bl/dev/s0/train/adapter"
+          --extra-adapter "t2bl_s0=runs/t2bl/dev_rev3/s0/train/adapter"
         p5_ret_rc=$?
         p5_rcalls=$((p5_rcalls + 1))
         if [ "$p5_ret_rc" -eq 0 ] || [ "$p5_ret_rc" -eq 3 ]; then

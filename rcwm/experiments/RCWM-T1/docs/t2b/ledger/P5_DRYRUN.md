@@ -370,7 +370,7 @@
   - T2b-ledger PLANS ON THE UNSEEN SURFACE: 120/180 vs T2 s0's 5/180 on PREREG-LB's held-out combined rendering (delta +0.639, discordant 115/0, exact McNemar p <0.0001; status PASS); 0.750 of ORACLE's success (>= 0.70) and within the margin of its own canonical success (125/180; difference -0.028, lower bound -0.050).
   - Report-only: on the canonical surface T2b-ledger 125/180 vs T2 s0 127/180 (difference -0.011, 95% paired bootstrap CI [-0.028, +0.000], exact McNemar p 0.5000); ORACLE 160/180; IGNORE_STATUS 0/180.
   - Retention guard (5c, draw confirm_test): GO (5/5 binding): T2b-ledger s0 retains against Titan-Sparse.
-  - The decision rules of parts (a)-(c), the wording templates, the limits and the decision code are byte-identical to those recorded when the dev gate rule was frozen (2026-10-11 09:00:00 -0500), before any T2b-ledger adapter existed.
+  - The decision rules of parts (a)-(c), the wording templates, the limits and the decision code are byte-identical to those recorded when the dev gate rule was frozen (2026-10-11 09:00:00 -0500), before any adapter trained on this kit revision's data existed.
 
 ## PASS: rules or code changed after the dev gate
 - PREREG-5 (a): not evaluable (this part's stages are not recorded).

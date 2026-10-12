@@ -1,0 +1,74 @@
+{
+ "part": "p5analysis",
+ "ok": true,
+ "n_checks": 9,
+ "n_pass": 9,
+ "checks": [
+  {
+   "check": "every PREREG-5 dry-run case gives its registered reading (35 cases)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "every registered rule, limit and template (69) appears verbatim in the draft",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the draft is exactly the render of its template with the current power and plan records",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "a draft missing one registered template is detected",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the rules digest is deterministic and covers every registered string",
+   "ok": true,
+   "detail": "{'sha256': '67ebb7de263ef61dac0244ccd1de43bf48b0f675a1d1bbc298d40618d95a835b', 'n_strings': 69}"
+  },
+  {
+   "check": "the code digest covers PREREG-5's decision code (common, make_data, audit, confirm bank / run / analysis)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the power record covers every primary cell under three seed regimes (independent, 80% shared, identical) and two cell-vs-twin correlations, the in-distribution control under the same regimes, planning with nested and independent-within-ORACLE success sets, and P(dev gate PROCEED) against P(GENERALISES)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "power from the dev screen's outcomes (--from-gate): every primary cell (with the seed regimes), the in-distribution control and the planning scenario are computed from a GATE.json",
+   "ok": true,
+   "detail": "[('H_words', 0.95), ('H_order', 0.95), ('H_names', 0.95)]"
+  },
+  {
+   "check": "the analysis never imports torch",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "ed1f9b179a432eefd24bb9249cc6d033a1b5521439f3a0b07b88cd03d6bb8db7",
+  "scripts/t2bl_make_data.py": "1ed81dad606cd86f05464e75205398595bae223ee99c764eb6d6eb369872e06e",
+  "scripts/t2bl_audit.py": "8bf4b3a52ffca8a1bfdb73ce9aee52503be57a8054baf272feb5c0b5028913bf",
+  "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15",
+  "scripts/t2bl_gate.py": "b938702c68b5623113eafad54816e0cde639768420e7b293a323a970a757f6bc",
+  "scripts/t2bl_confirm_bank.py": "90d1cb078ffba1c47fbe56ca183d3f8b9844c37e50fac7261b842c1ea214ec26",
+  "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3",
+  "scripts/t2bl_confirm_analysis.py": "b42bd69aa149771aceae5567f26498f9d7be2e722a16f7b6ce96de8b39ecbdd6",
+  "scripts/t2bl_test.py": "4d85753d66847592e34282c1a76a1257019e335da4bbd5184897f31798251f63"
+ },
+ "draft_sha256": "10e09a2596eb9fb58d46e6865f61265ac880256d99e54b7d5c39225d0f4d170c",
+ "hook_draft_sha256": "4f5cee1f2914deb48c2da956aaae0d64cef85a908af2ce1c0769682d615e9d7e",
+ "hook_draft_t2bl_sha256": "b73a05f8647398b447c2a201269bfba5ab4818f8f507542288df123ce6da3a04",
+ "peak_mb": 64.9,
+ "recorded_local": "2026-10-12 11:48:24 -0500",
+ "n_cases": 35,
+ "rules_digest": {
+  "sha256": "67ebb7de263ef61dac0244ccd1de43bf48b0f675a1d1bbc298d40618d95a835b",
+  "n_strings": 69
+ }
+}

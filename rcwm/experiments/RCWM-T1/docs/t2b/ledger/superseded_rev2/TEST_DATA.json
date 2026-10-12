@@ -1,0 +1,352 @@
+{
+ "part": "data",
+ "ok": true,
+ "n_checks": 48,
+ "n_pass": 48,
+ "checks": [
+  {
+   "check": "the real training set and dev bank pass the independent audit",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "1,500 rows: posted 750 / non-posted 750, 300 canonical-block rows, 400 pairs",
+   "ok": true,
+   "detail": "{'rows': 1500, 'posted': 750, 'nonposted': 750, 'canon_block': 300, 'pairs': 400, 'fully_canonical_rows': 378, 'max_abs_value': 9974}"
+  },
+  {
+   "check": "no held-out factor of either half read back from any of the 1,500 training prompts (independent parser)",
+   "ok": true,
+   "detail": "{}"
+  },
+  {
+   "check": "none of the held-out text fragments (both halves, PREREG-3, PREREG-LB names) occurs in any training prompt or target",
+   "ok": true,
+   "detail": "107"
+  },
+  {
+   "check": "no number with more than 4 digits in any training prompt or target (so a 5-digit balance is an unseen length)",
+   "ok": true,
+   "detail": "9974"
+  },
+  {
+   "check": "token audit (binding): all 40 held-out words are token-novel (no 'void' / 'posted' token; a token no trained status has)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the token audit refuses anchor-token and trained-token-only held-out words (voidd, xvoid, postedq)",
+   "ok": true,
+   "detail": "[\"held-out status 'voidd' (dev) contains the anchor token(s) ['void']\", \"held-out status 'xvoid' (dev) contains the anchor token(s) ['void']\", \"held-out status 'xvoid' (dev) consists only of trained status tokens ['x', 'void']\"]"
+  },
+  {
+   "check": "dev bank: 19 strata, 1,801 rows, every row its stratum's declared change of its base in the DEV half",
+   "ok": true,
+   "detail": "{'ID_posted': 100, 'ID_void': 100, 'S_words': 100, 'S_surface_posted': 100, 'S_surface_words': 100, 'S_bal': 67, 'S_amt': 67, 'H_words': 100, 'H_order': 100, 'H_names': 100, 'H_count': 100, 'H_para': 100, 'H_bal': 100, 'H_amt': 67, 'HS_words': 100, 'HS_posted': 100, 'LB_void': 100, 'LB_posted': 100, 'P3_words': 100}"
+  },
+  {
+   "check": "both files regenerate byte for byte from (seed, recorded rejections) (MD.verify without the union)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "freshness (the build's union): 0 payload and 0 operative overlaps for both files; no union source errors",
+   "ok": true,
+   "detail": "({'items': 1500, 'payload_overlap': 0, 'operative_overlap': 0}, 329532)"
+  },
+  {
+   "check": "the harvest skipped only HSKILL_CONFIRM_V2* files, by name",
+   "ok": true,
+   "detail": "['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']"
+  },
+  {
+   "check": "heuristics balanced: copy and apply-regardless (= ignore-status) 0.50, void trigger <= 0.70, string cues <= 0.95, the rule 1.00",
+   "ok": true,
+   "detail": "{'apply_regardless': 0.5, 'ci_posted': 1.0, 'contains_posted': 0.94, 'copy': 0.5, 'endswith_ed': 0.8, 'exact': 1.0, 'len6': 0.94, 'semantic': 0.76, 'startswith_p': 0.95, 'void_trigger': 0.64}"
+  },
+  {
+   "check": "held-out words defeat the widened triggers: on H_words and HS_words the anchor-token trigger and the 'void' token score 0.00, T2's void substring cue <= 0.05, the token-overlap trigger <= 0.30",
+   "ok": true,
+   "detail": "{'H_words': {'anchor_trigger': 0.0, 'apply_regardless': 0.0, 'contains_posted': 0.8, 'copy': 1.0, 'endswith_ed': 0.55, 'len6': 0.95, 'semantic': 0.4, 'startswith_p': 0.95, 'token_overlap': 0.3, 'void_token': 0.0, 'void_trigger': 0.05}}"
+  },
+  {
+   "check": "the mixed factor cells need the rule: copy and apply-regardless score 0.50 on H_order, H_names, H_count, H_para",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the trained-surface controls use in-range values (|b| <= 98, trained amounts) and 5-7 accounts",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the magnitude controls (S_bal, S_amt) are add / transfer rows in the TRAINED bands (67 each)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "non-void training words occur on the canonical surface (no surface-conditioned void cue fits)",
+   "ok": true,
+   "detail": "{'neutral': 18, 'nonce': 14, 'not_applied': 18, 'posted': 271, 'posted_like': 12, 'void': 107, 'void_variant': 11}"
+  },
+  {
+   "check": "training scale rows keep balances of at most 3 digits",
+   "ok": true,
+   "detail": "998"
+  },
+  {
+   "check": "the canonical renderer reproduces all 501 stored T2 ledger prompts and targets",
+   "ok": true,
+   "detail": "{'t2_ledger_rows': 501, 'mismatches': 0, 'ok': True}"
+  },
+  {
+   "check": "partition tables: train, dev half, confirm half and PREREG-3 disjoint (exactly and after lower-casing, except 'void' itself); names, paraphrases and order halves consistent",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "no held-out string lower-cases to 'void'; the training case variants are VOId and vOid",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "PREREG-3's 16 strings, both held-out halves and the excluded strings never occur as a training status",
+   "ok": true,
+   "detail": "['posted']"
+  },
+  {
+   "check": "the dev bank's held-out words are exactly the DEV half (20 words); no CONFIRM-half word, name, order or paraphrase 5 appears in the dev bank",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "held-out key orders regenerate from seed 20261163 (three independent derivations agree); every random one is >= 2 swaps from the sorted order",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "audit refuses a training row with a paraphrase 4 (dev half)",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['para']\", 'held-out text fragments found: {\"held-out paraphrase: \\'Here are some account balances\\'\": 1, \\'held-out paraphrase: \"Unless the event\\\\\\'s status is posted\"\\': 1, \"held-out paraphrase: \\'Answer with nothing but a JSON object\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a paraphrase 5 (confirm half)",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['para']\", 'held-out text fragments found: {\"held-out paraphrase: \\'Apply one event to the account balances\\'\": 1, \"held-out paraphrase: \\'anything other than posted\\'\": 1, \"held-out paraphrase: \\'Give only a JSON object with all of the balances\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a reversed top order",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['top']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a dev-half event order",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['event']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a confirm-half event order",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['event']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a held-out before order",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['before']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a dev-half letter names",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['names']\", 'held-out text fragments found: {\"name \\'W\\' as a key\": 1, \"name \\'X\\' as a key\": 1, \"name \\'Y\\' as a key\": 1, \"name \\'Z\\' as a key\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a confirm-half word names",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['names']\", 'held-out text fragments found: {\"name \\'fund\\' as a key\": 1, \"name \\'loan\\' as a key\": 1, \"name \\'rent\\' as a key\": 1, \"name \\'wage\\' as a key\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a PREREG-LB names",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['names']\", 'held-out text fragments found: {\"name \\'bank\\' as a key\": 1, \"name \\'card\\' as a key\": 1, \"name \\'cash\\' as a key\": 1, \"name \\'fees\\' as a key\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a 8 accounts",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['count']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a dev-half status word",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['status']\", 'held-out text fragments found: {\"status \\'rescinded\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a confirm-half status word",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['status']\", 'held-out text fragments found: {\"status \\'postedy\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a PREREG-3 status string",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['status']\", 'held-out text fragments found: {\"status \\'pending\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a excluded status string",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['status']\", 'held-out text fragments found: {\"status \\'settled\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a 5-digit balance",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['bal']\", 't2bl-tr-div-0749-posted: a number with more than 4 digits in a training prompt or target (54322)']"
+  },
+  {
+   "check": "audit refuses a training row with a 4-digit amount",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: held-out factor(s) in a training prompt: ['amt']\"]"
+  },
+  {
+   "check": "audit refuses a training row whose target has a 5-digit value (inputs of 4 digits)",
+   "ok": true,
+   "detail": "['t2bl-tr-div-0749-posted: a number with more than 4 digits in a training prompt or target (10890)']"
+  },
+  {
+   "check": "audit refuses a scale factor outside the recorded marginal",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0413-posted: held-out factor(s) in a training prompt: ['amt']\"]"
+  },
+  {
+   "check": "audit refuses a prompt whose key order differs from its recorded surface",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0749-posted: the prompt text does not encode the row's own payload and surface\"]"
+  },
+  {
+   "check": "audit refuses a wrong target",
+   "ok": true,
+   "detail": "['t2bl-tr-div-0749-posted: target differs from the independent gold']"
+  },
+  {
+   "check": "audit refuses a pair whose members differ in more than the status",
+   "ok": true,
+   "detail": "[\"pair ('div', 175): members differ in more than the status, or are not posted + non-posted\"]"
+  },
+  {
+   "check": "dev audit refuses an H_words row with a TRAINING word, one with a CONFIRM-half word, an HS row in paraphrase 5, and a mixed row with 'void' instead of its training word",
+   "ok": true,
+   "detail": "[\"t2bl-dev-H_words-000: status is train_word, declared ('heldout_dev_word',)\", \"t2bl-dev-H_words-001: status is heldout_confirm_word, declared ('heldout_dev_word',)\"]"
+  },
+  {
+   "check": "no CRLF in any kit file, record, data file or the draft",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "torch was never imported by the data part",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "e805758be14522306531526b485986b51f42fd20a50e2504732585bdfcd0a325",
+  "scripts/t2bl_make_data.py": "14ba36957d2f570d71d64239f3c33dbfc7b7b478e92a08a6b4935ab00784af30",
+  "scripts/t2bl_audit.py": "2e4fd600f6096eb1fd9de9318b782de8fe04f086afbd5a011253020e47a20caa",
+  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670",
+  "scripts/t2bl_gate.py": "9dceb470d0d9b0fdaff0686d7cd9ab7512392ae00de998a73fe97f3812f202d7",
+  "scripts/t2bl_confirm_bank.py": "d618f77835de7ad07b18a2f1ca8cde911d9bd0424d368aabaee86301b95375c8",
+  "scripts/t2bl_confirm_run.py": "042a8e5ef5ecd03e544530b403c49bf2b0957e1cfa8df2f016b89ae432ba5209",
+  "scripts/t2bl_confirm_analysis.py": "d57150c1b2099b0d0267536e4aeaec7d1f68840556106bb03df66ece13810c09",
+  "scripts/t2bl_test.py": "b58b21fbb9b2578ccd67e72d784823650da37fdd11ba778da8caf0d1d560d29f"
+ },
+ "draft_sha256": "a06dc9a85870fb5be5a189cd88bd6880ff542e8b2f03a5b7b6654b17e7bf071b",
+ "hook_draft_sha256": "c546ccfa4142bfc05eb961a3868030022edcee6263acd11fc96d6264f2eb484e",
+ "hook_draft_t2bl_sha256": "e389df78aafb71fa1e88d1f57caa297977af31f8c48716a696d8369870962f7b",
+ "peak_mb": 167.2,
+ "recorded_local": "2026-10-10 20:41:00 -0500",
+ "train_sha256": "89d6a01e280080f7559e6a597dad3ceaa43f51d50a4801337ff04750ff53eb39",
+ "dev_sha256": "f710b17e228b3865c9b7993082966a07d2ab5306f137978768b09bd179390c78",
+ "heuristics": {
+  "apply_regardless": 0.5,
+  "ci_posted": 1.0,
+  "contains_posted": 0.94,
+  "copy": 0.5,
+  "endswith_ed": 0.8,
+  "exact": 1.0,
+  "len6": 0.94,
+  "semantic": 0.76,
+  "startswith_p": 0.95,
+  "void_trigger": 0.64
+ },
+ "dev_heuristics_heldout_words": {
+  "H_words": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.55,
+   "len6": 0.95,
+   "semantic": 0.4,
+   "startswith_p": 0.95,
+   "token_overlap": 0.3,
+   "void_token": 0.0,
+   "void_trigger": 0.05
+  },
+  "HS_words": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.55,
+   "len6": 0.95,
+   "semantic": 0.4,
+   "startswith_p": 0.95,
+   "token_overlap": 0.3,
+   "void_token": 0.0,
+   "void_trigger": 0.05
+  }
+ },
+ "composition": {
+  "status_kind": {
+   "neutral": 150,
+   "nonce": 120,
+   "not_applied": 180,
+   "posted": 750,
+   "posted_like": 90,
+   "void": 150,
+   "void_variant": 60
+  },
+  "names": {
+   "canonical": 633,
+   "canonical_plus_train_letters": 171,
+   "train_letters": 287,
+   "train_words": 409
+  },
+  "count": {
+   "canonical": 1043,
+   "train": 457
+  },
+  "bal": {
+   "b3": 391,
+   "b4": 192,
+   "t2": 917
+  },
+  "amt": {
+   "a2": 209,
+   "a3": 162,
+   "t2": 1129
+  },
+  "para": {
+   "canonical": 715,
+   "train": 785
+  },
+  "canonical_surface_status_kinds": {
+   "neutral": 18,
+   "nonce": 14,
+   "not_applied": 18,
+   "posted": 271,
+   "posted_like": 12,
+   "void": 107,
+   "void_variant": 11
+  },
+  "max_abs_value_inputs_and_targets": 9974,
+  "max_abs_scale_row_balance": 998
+ }
+}

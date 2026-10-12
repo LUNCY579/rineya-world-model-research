@@ -7,6 +7,9 @@
   2
  ],
  "steps": 190,
+ "kit_revision": 3,
+ "run_dir": "runs/t2bl/dev_rev3",
+ "tag": "dev",
  "stage_rule": "a seed's training starts only if 1.25 x its whole remaining pair (training + model load + [A0 + E0 if due] + its evaluation) fits the turn and never within 0.5 h of the cap; each evaluation stage starts only if 1.25 x its estimate fits; otherwise exit 5 and resume next turn (re-anchored)",
  "timing_model": {
   "train": "T2 190-step training (planning max 2191 s; observed mean 1902 s) x tokens/row / 152.76",
@@ -15,10 +18,10 @@
  },
  "planning": {
   "stage_s": {
-   "T": 2425.6,
+   "T": 2426.3,
    "A0": 616.3,
-   "E0": 1564.0,
-   "E": 782.0,
+   "E0": 1571.0,
+   "E": 785.5,
    "load": 120.0
   },
   "generations": {
@@ -27,8 +30,8 @@
    "E": 1801
   },
   "inputs": {
-   "train_row_tokens": 160.73,
-   "dev_answer_tokens": 23.62,
+   "train_row_tokens": 160.78,
+   "dev_answer_tokens": 23.73,
    "n_rows": 1801,
    "n_anchor_steps": 832
   },
@@ -48,14 +51,14 @@
    }
   ],
   "gpu_h": 3.38,
-  "per_seed_pair_h": 0.92
+  "per_seed_pair_h": 0.93
  },
  "observed": {
   "stage_s": {
-   "T": 2121.4,
+   "T": 2122.1,
    "A0": 340.8,
-   "E0": 865.0,
-   "E": 432.5,
+   "E0": 868.9,
+   "E": 434.4,
    "load": 120.0
   },
   "generations": {
@@ -64,8 +67,8 @@
    "E": 1801
   },
   "inputs": {
-   "train_row_tokens": 160.73,
-   "dev_answer_tokens": 23.62,
+   "train_row_tokens": 160.78,
+   "dev_answer_tokens": 23.73,
    "n_rows": 1801,
    "n_anchor_steps": 832
   },
@@ -81,16 +84,16 @@
      "s2:T",
      "s2:E"
     ],
-    "projected_h": 2.56
+    "projected_h": 2.57
    }
   ],
-  "gpu_h": 2.56,
+  "gpu_h": 2.57,
   "per_seed_pair_h": 0.74
  },
  "generations_total": 10669,
  "torch_imported": false,
- "train_source_sha256": "c07159c538e6ca750a438fd6d518c3a161dcd0324b20c20e3627db70cd6646ff",
+ "train_source_sha256": "3da4fde08e0124f1fbaece2cf80f1ab9988fe829a03182ce296f697e38802ac6",
  "code_sha256": {
-  "scripts/t2bl_run.py": "291be17c5f111f7b7269ce6a81f8d888d227b57202803f4263a8367ab34e1670"
+  "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15"
  }
 }
