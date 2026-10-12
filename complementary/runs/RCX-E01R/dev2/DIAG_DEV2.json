@@ -1,0 +1,308 @@
+{
+ "battery": {
+  "seed": 20261261,
+  "n_parents_per_stratum": 30,
+  "strata": [
+   "F1_void",
+   "F2_unseen_real",
+   "F3_unseen_nonce",
+   "F4_nearmiss",
+   "F5_postedlike",
+   "V1_pos",
+   "V2_neg",
+   "V3_inverted",
+   "V5_posted_override",
+   "V7_bigset"
+  ],
+  "n": 1320,
+  "by_surface": {
+   "in": 660,
+   "p2": 660
+  },
+  "battery_sha256": "38362338b7716af4acd647c0cd426f8bca28cfe8aca4e8de7ed69ebf94a1da4f",
+  "p2_sha256": "7e625a590004798e7ddd3b2828cd8f9009744abf14c996774a2ad890ccb7f64e",
+  "templates_used": 45,
+  "code_sha256": "dff678c17f76a7badaeaab8045ac026e0568b87c1e3d625c11ce6b58c9c48e45"
+ },
+ "arms": [
+  "N-CFSD_s0",
+  "N-CFSD_s1",
+  "N-CFSD_s2",
+  "N-VR_s0"
+ ],
+ "cells": {
+  "N-CFSD (s0-s2 pooled)": {
+   "in|POS|-": {
+    "noop": [
+     668,
+     672
+    ],
+    "apply": [
+     748,
+     762
+    ],
+    "exact": [
+     1397,
+     1434
+    ]
+   },
+   "in|NEG|-": {
+    "noop": [
+     318,
+     318
+    ],
+    "apply": [
+     218,
+     228
+    ],
+    "exact": [
+     534,
+     546
+    ]
+   },
+   "p2|POS|EXPLICIT_LISTED_FIRST": {
+    "noop": [
+     113,
+     222
+    ],
+    "apply": [
+     245,
+     252
+    ],
+    "exact": [
+     350,
+     474
+    ]
+   },
+   "p2|POS|EXPLICIT_COMPLEMENT_FIRST": {
+    "noop": [
+     80,
+     231
+    ],
+    "apply": [
+     214,
+     261
+    ],
+    "exact": [
+     293,
+     492
+    ]
+   },
+   "p2|POS|IMPLICIT": {
+    "noop": [
+     140,
+     219
+    ],
+    "apply": [
+     230,
+     249
+    ],
+    "exact": [
+     366,
+     468
+    ]
+   },
+   "p2|NEG|EXPLICIT_LISTED_FIRST": {
+    "noop": [
+     99,
+     108
+    ],
+    "apply": [
+     58,
+     78
+    ],
+    "exact": [
+     157,
+     186
+    ]
+   },
+   "p2|NEG|EXPLICIT_COMPLEMENT_FIRST": {
+    "noop": [
+     74,
+     99
+    ],
+    "apply": [
+     43,
+     69
+    ],
+    "exact": [
+     117,
+     168
+    ]
+   },
+   "p2|NEG|IMPLICIT": {
+    "noop": [
+     74,
+     111
+    ],
+    "apply": [
+     54,
+     81
+    ],
+    "exact": [
+     128,
+     192
+    ]
+   }
+  },
+  "N-VR s0": {
+   "in|POS|-": {
+    "noop": [
+     210,
+     224
+    ],
+    "apply": [
+     254,
+     254
+    ],
+    "exact": [
+     463,
+     478
+    ]
+   },
+   "in|NEG|-": {
+    "noop": [
+     106,
+     106
+    ],
+    "apply": [
+     75,
+     76
+    ],
+    "exact": [
+     181,
+     182
+    ]
+   },
+   "p2|POS|EXPLICIT_LISTED_FIRST": {
+    "noop": [
+     20,
+     74
+    ],
+    "apply": [
+     84,
+     84
+    ],
+    "exact": [
+     102,
+     158
+    ]
+   },
+   "p2|POS|EXPLICIT_COMPLEMENT_FIRST": {
+    "noop": [
+     5,
+     77
+    ],
+    "apply": [
+     87,
+     87
+    ],
+    "exact": [
+     92,
+     164
+    ]
+   },
+   "p2|POS|IMPLICIT": {
+    "noop": [
+     15,
+     73
+    ],
+    "apply": [
+     83,
+     83
+    ],
+    "exact": [
+     97,
+     156
+    ]
+   },
+   "p2|NEG|EXPLICIT_LISTED_FIRST": {
+    "noop": [
+     21,
+     36
+    ],
+    "apply": [
+     24,
+     26
+    ],
+    "exact": [
+     45,
+     62
+    ]
+   },
+   "p2|NEG|EXPLICIT_COMPLEMENT_FIRST": {
+    "noop": [
+     12,
+     33
+    ],
+    "apply": [
+     16,
+     23
+    ],
+    "exact": [
+     28,
+     56
+    ]
+   },
+   "p2|NEG|IMPLICIT": {
+    "noop": [
+     10,
+     37
+    ],
+    "apply": [
+     21,
+     27
+    ],
+    "exact": [
+     31,
+     64
+    ]
+   }
+  }
+ },
+ "contrasts": {
+  "N-CFSD (s0-s2 pooled)|POS-NEG noop|EXPLICIT_LISTED_FIRST": {
+   "diff": -0.4076576576576576,
+   "lo": -0.5250250250250249,
+   "hi": -0.28478478478478475,
+   "parents_pos": 74,
+   "parents_neg": 36
+  },
+  "N-CFSD (s0-s2 pooled)|POS-NEG noop|EXPLICIT_COMPLEMENT_FIRST": {
+   "diff": -0.4011544011544014,
+   "lo": -0.5454545454545454,
+   "hi": -0.25252525252525226,
+   "parents_pos": 77,
+   "parents_neg": 33
+  },
+  "N-CFSD (s0-s2 pooled)|POS-NEG noop|IMPLICIT": {
+   "diff": -0.027397260273972823,
+   "lo": -0.18116746883870172,
+   "hi": 0.1269900037023325,
+   "parents_pos": 73,
+   "parents_neg": 37
+  },
+  "N-VR s0|POS-NEG noop|EXPLICIT_LISTED_FIRST": {
+   "diff": -0.3130630630630631,
+   "lo": -0.49324324324324326,
+   "hi": -0.12012012012012008,
+   "parents_pos": 74,
+   "parents_neg": 36
+  },
+  "N-VR s0|POS-NEG noop|EXPLICIT_COMPLEMENT_FIRST": {
+   "diff": -0.2987012987012987,
+   "lo": -0.48051948051948046,
+   "hi": -0.12987012987012986,
+   "parents_pos": 77,
+   "parents_neg": 33
+  },
+  "N-VR s0|POS-NEG noop|IMPLICIT": {
+   "diff": -0.06479081821547578,
+   "lo": -0.24102184376156982,
+   "hi": 0.09811181044057754,
+   "parents_pos": 73,
+   "parents_neg": 37
+  }
+ },
+ "reading": "intermediate"
+}
