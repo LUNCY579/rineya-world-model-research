@@ -1,14 +1,19 @@
 # DeepSeek-inspired Rineya world-model research
 
-Status: **implemented and native-CPU pilot-tested; efficacy inconclusive**.
-A0/A1/A2/A5 trained on the actual 596M parent. State results were 0/2 and
-planning 0/1 for each arm on the tiny development screen. G4–G7 are deferred;
-confirmation labels remain sealed. Final test evidence is in `results/TESTS_FINAL.json`.
+Status: **active research; native-CPU pilots, efficacy inconclusive**.
+The initial cold A0/A1/A2/A5 screen returned state 0/2 and planning 0/1.
+Recovery reuses the registered unmerged rank-16 forward adapter: inherited B0
+has 24/24 exact four-step development rollouts, with all intermediate states
+correct. This fixed cohort is at ceiling; adapted comparisons are pending and
+cannot show an accuracy gain over B0. G4–G7 remain unqualified; confirmation
+labels remain sealed. See `reports/RECOVERY_STATUS.md` and `reports/NEXT_STAGE.md`.
+Original test evidence remains in `results/TESTS_FINAL.json`; new records use
+separate paths.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
 Parent repository baseline: `aeb19ab17128d884c4457ce59db6e926ceb13a7a`.
 See `research/DEEPSEEK_TRANSFER.md`, `reports/BASELINE_INVENTORY.md`, and
-`prereg/PILOT_V1.md`. Final executed status is in `reports/REPORT.md`.
+`prereg/PILOT_V1.md`. The interim report is in `reports/REPORT.md`.
 
 From repository root with the existing native Python environment, reproduce
 without replacing any original output:

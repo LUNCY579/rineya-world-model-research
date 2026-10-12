@@ -1,0 +1,133 @@
+{
+  "all_primary_h4_changed": true,
+  "confirmation_labels_accessed": false,
+  "confirmation_rows": 0,
+  "counts": {
+    "dev": 24,
+    "dev_invalid": 4,
+    "planning_dev": 12,
+    "planning_train": 16,
+    "train": 128
+  },
+  "coverage_limitations": [
+    "ID32/48/64 one-step keys were exposed to the original F; this is novel trajectory composition, not teacher-unseen one-step generalization.",
+    "OOD80/96 are unseen old-F rule limits; six OOD initial states have abs(x)>=65. Recovery student training uses24/32/40.",
+    "Balanced legality deliberately changes the training distribution; transfer to natural action frequencies is unmeasured.",
+    "Only RegisterWorld is collected. Goal distances select development/teacher tasks, not a sealed hard-planning benchmark.",
+    "Task inputs contain desired goals but no labels, distances, candidate plans or solver traces; scoring metadata is separate.",
+    "No confirmation split or scientific efficacy inference is authorized by this recovery collection.",
+    "Old sealed banks and vault labels are never inspected; exclusion checks use new v1 public inputs only."
+  ],
+  "dev_cohorts": {
+    "recovery_id_teacher_known": {
+      "abs_x_65_plus": 0,
+      "first_illegal": 4,
+      "first_legal_changed": 8,
+      "limits": [
+        32,
+        48,
+        64
+      ],
+      "rows": 12
+    },
+    "recovery_ood_limit": {
+      "abs_x_65_plus": 6,
+      "first_illegal": 4,
+      "first_legal_changed": 8,
+      "limits": [
+        80,
+        96
+      ],
+      "rows": 12
+    }
+  },
+  "excluded_prior_parent_count": 55,
+  "files": {
+    "dev.jsonl": {
+      "bytes": 45347,
+      "sha256": "7fe3c996a8ab4d00fe623edc8ad99f643ebc44f7b36f4a8935bd3c21ea012cc3"
+    },
+    "dev_invalid.jsonl": {
+      "bytes": 7345,
+      "sha256": "1b65c07e18e6473e3166521ef92f3ee45d16639c6c8f8efa8cb92434a5903124"
+    },
+    "parent_registry.json": {
+      "bytes": 20467,
+      "sha256": "0c9857c59f7f22d598ef6b8ed18c0a22a428f97a36aa2a35da2a6ad51affa7c8"
+    },
+    "planning_dev.jsonl": {
+      "bytes": 18925,
+      "sha256": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c"
+    },
+    "planning_scoring.json": {
+      "bytes": 11177,
+      "sha256": "074146e8110b08d86058a01e2b2c970922c2399d8484c56928f27264506853ab"
+    },
+    "planning_train.jsonl": {
+      "bytes": 25256,
+      "sha256": "fd4753496fc4a14b1d0561864a6f3343b74b9a5db2779f814e03bc437128b8a8"
+    },
+    "train.jsonl": {
+      "bytes": 239578,
+      "sha256": "520aa6e48a441bba09b05b3dfddad5564009f69d0615333424f042c2f7c24a74"
+    }
+  },
+  "generator": "dsv3wm-register-recovery-v1",
+  "horizons": [
+    1,
+    2,
+    4
+  ],
+  "integrity": {
+    "counts": {
+      "dev": {
+        "parent_worlds": 28,
+        "rows": 28
+      },
+      "train": {
+        "parent_worlds": 128,
+        "rows": 128
+      }
+    },
+    "exact_disjoint": true,
+    "object_renaming_canonicalization": "exact permutation minimization, <=5 objects",
+    "parent_disjoint": true,
+    "semantic_disjoint": true
+  },
+  "primary_parent_counts": {
+    "dev": 24,
+    "train": 128
+  },
+  "prior_public_sources": {
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\datasets\\pilot-v1\\confirmation.jsonl": {
+      "bytes": 31986,
+      "sha256": "a4936287299b64231c52cee5268ff25b9325f07ba433cb68b8b99bf9d2031742"
+    },
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\datasets\\pilot-v1\\dev.jsonl": {
+      "bytes": 40886,
+      "sha256": "4b3de6bd3214e052b14452441a4f8d1b501a29421a12da6ff2127876ae2cf2e6"
+    },
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\datasets\\pilot-v1\\train.jsonl": {
+      "bytes": 39132,
+      "sha256": "faf14cb030c0cbb61404c728727d02b497d9f53037e24f43496ad7a97b77fe26"
+    }
+  },
+  "seed": 202610112,
+  "source_sha256": {
+    "bwm/code/bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+    "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+    "dsv3wm/scripts/build_recovery_data.py": "8072c23af61cd99caa21dc5e491730fa7e80c41c7c2734c74e171320e402e088",
+    "dsv3wm/src/dsv3wm/data.py": "aa6c0c863f65370b8766c14241d17195acbbbf77e6f42bc0abd6adf00fa61d97",
+    "dsv3wm/src/dsv3wm/domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+    "dsv3wm/src/dsv3wm/recovery_data.py": "a296b2b6e9bf911fa986614ece904786a783e85ca3f97bdd52a7d85df77e1aca",
+    "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+  },
+  "split_ownership": "explicit recovery parent registry; excludes every prior public parent in every split",
+  "status": "frozen G3 TRAIN/DEV collection; no confirmation generated",
+  "train_legality": {
+    "all_illegal": 256,
+    "all_legal": 256,
+    "first_illegal": 64,
+    "first_legal": 64
+  }
+}
