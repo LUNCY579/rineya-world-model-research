@@ -1,5 +1,11 @@
 # Native continuation queue
 
+Native execution is resource-blocked after the fresh no-model check measured
+9.739582GiB physical /14.915798GiB commit against the unchanged10.5GiB H3 floor.
+See [the blocker checkpoint](RESOURCE_BLOCKED_CHECKPOINT_2026_10_12.md).
+No pending native command below has been executed by this check. Resume only
+after actual admission/lane qualification; all source/input/gain gates remain.
+
 All four registered H3 continuations completed32 updates: A3_s0,
 A4_s0_retry01, C3_s0 and C4_s0. Actual public run/resource records and costs are
 in [the training checkpoint](H3_TRAINING_CHECKPOINT_2026_10_12.md).

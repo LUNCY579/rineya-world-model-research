@@ -1,0 +1,222 @@
+{
+  "observed_at_utc": "2026-10-12T13:43:22.119878+00:00",
+  "native_model_loaded": false,
+  "confirmation_access": false,
+  "goal_completion": false,
+  "probe_only": true,
+  "a2_retry01_launched": false,
+  "resource_profile": {
+    "name": "dsv3wm-cpu105-h3-singleton-readout-v1",
+    "device": "cpu",
+    "threads": 4,
+    "load_free_host_ram_floor_gib": 10.5,
+    "admission_memory_kinds": [
+      "physical",
+      "commit"
+    ],
+    "historical_load_free_host_ram_floor_gib": 12,
+    "previous_cpu11_load_floor_gib": 11,
+    "unchanged_boundary_free_host_ram_floor_gib": 4,
+    "readout_only": true,
+    "allowed_config_kinds": [
+      "A3",
+      "A4",
+      "C3",
+      "C4"
+    ],
+    "seed": 0,
+    "readout_geometry": "h3-singleton-requests-v1",
+    "max_sampler_requests_per_call": 1,
+    "sampler_cpu_batch_tokens_parameter": 8000,
+    "sampler_ram_floor_gib": 8,
+    "sampler_batch_geometry": "one unchanged sampler request per call; inherited heuristic unmodified",
+    "runtime": "dsv3wm.native.runtime",
+    "boundary": "dsv3wm.native.boundary",
+    "prediction_contract_change": false,
+    "scoring_change": false,
+    "geometry_change": "guard batches become singleton; proposer already singleton",
+    "environment": {
+      "BWM_CPU_BATCH_TOKENS": null,
+      "BWM_RAM_FLOOR_GB": null
+    }
+  },
+  "blocking_condition": "registered physical RAM/admission availability; no uncontrolled model load or floor reduction",
+  "phase_history": [
+    "c88d86a:calibration/shuffled preparation completed; A2 lacked admission",
+    "73594ae:H3 command/eligibility evidence completed; memory admission still unavailable",
+    "c6428d6:actual offline terminal-regret audit completed; memory admission still unavailable"
+  ],
+  "independent_audit": "papers_protocol: no concrete required model-free work remains before native/pilot-gated next experiments",
+  "postimport_physical_available_gib": 9.739582061767578,
+  "postimport_commit_available_gib": 14.91579818725586,
+  "required_physical_gib": 10.5,
+  "required_commit_gib": 10.5,
+  "physical_qualified": false,
+  "commit_qualified": true,
+  "admission_qualified": false,
+  "measurement_stage": "after BWM/torch imports, no core hashing/loading or tensor/model construction",
+  "external_live_processes": [
+    {
+      "pid": 156540,
+      "creation_time_unix": 1791800464.2145731,
+      "command": [
+        "C:\\Users\\clclc\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "scripts/gpu_run.py",
+        "bundleI",
+        "--",
+        "scripts/bundle.py",
+        "runs/bundles/bundleI.json"
+      ],
+      "rss_bytes": 14798848,
+      "live_children": [
+        {
+          "pid": 11188,
+          "command": [
+            "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+            "scripts/bundle.py",
+            "runs/bundles/bundleI.json"
+          ],
+          "created_unix": 1791800496.3559391
+        },
+        {
+          "pid": 158732,
+          "command": [
+            "C:\\Users\\clclc\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+            "scripts/bundle.py",
+            "runs/bundles/bundleI.json"
+          ],
+          "created_unix": 1791800496.3696153
+        },
+        {
+          "pid": 200220,
+          "command": [
+            "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+            "scripts/bw_seeds.py",
+            "run"
+          ],
+          "created_unix": 1791809709.6732683
+        },
+        {
+          "pid": 197712,
+          "command": [
+            "C:\\Users\\clclc\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+            "scripts/bw_seeds.py",
+            "run"
+          ],
+          "created_unix": 1791809709.6891818
+        },
+        {
+          "pid": 210892,
+          "command": [
+            "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+            "scripts/blocks_eval.py",
+            "--set",
+            "seeds_fresh",
+            "--val",
+            "--out",
+            "runs\\BW_SEEDS\\R0_beam\\shard_1of4",
+            "--freeze",
+            "runs/FREEZE_I7_R0_beam.json",
+            "--proposer",
+            "lm",
+            "--pa",
+            "runs/BW_Pa_v2_s1/adapter",
+            "--mode",
+            "actions",
+            "--fwd",
+            "lm",
+            "--fwd-adapter",
+            "runs/BW_Fdelta_s0/adapter",
+            "--fwd-fmt",
+            "delta",
+            "--K",
+            "8",
+            "--eval-seed",
+            "0",
+            "--planner",
+            "beam",
+            "--W",
+            "4",
+            "--E",
+            "24",
+            "--max-depth",
+            "80",
+            "--step-cap",
+            "24",
+            "--R",
+            "12",
+            "--M",
+            "80",
+            "--P",
+            "1",
+            "--shard",
+            "1/4"
+          ],
+          "created_unix": 1791812059.9562488
+        },
+        {
+          "pid": 210584,
+          "command": [
+            "C:\\Users\\clclc\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+            "scripts/blocks_eval.py",
+            "--set",
+            "seeds_fresh",
+            "--val",
+            "--out",
+            "runs\\BW_SEEDS\\R0_beam\\shard_1of4",
+            "--freeze",
+            "runs/FREEZE_I7_R0_beam.json",
+            "--proposer",
+            "lm",
+            "--pa",
+            "runs/BW_Pa_v2_s1/adapter",
+            "--mode",
+            "actions",
+            "--fwd",
+            "lm",
+            "--fwd-adapter",
+            "runs/BW_Fdelta_s0/adapter",
+            "--fwd-fmt",
+            "delta",
+            "--K",
+            "8",
+            "--eval-seed",
+            "0",
+            "--planner",
+            "beam",
+            "--W",
+            "4",
+            "--E",
+            "24",
+            "--max-depth",
+            "80",
+            "--step-cap",
+            "24",
+            "--R",
+            "12",
+            "--M",
+            "80",
+            "--P",
+            "1",
+            "--shard",
+            "1/4"
+          ],
+          "created_unix": 1791812059.9752035
+        }
+      ]
+    },
+    {
+      "pid": 164060,
+      "creation_time_unix": 1791804117.6856422,
+      "command": [
+        "C:\\Users\\clclc\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+        "-u",
+        "scripts/t2bl_run.py"
+      ],
+      "rss_bytes": 635351040,
+      "live_children": []
+    }
+  ],
+  "resume_condition": "Actual post-import physical and commit availability both>=10.5GiB and registered shared lane/priority/boundary checks; execute existing fresh A2singleton retry01 then raw parity/student readouts. Other phases retain11/12GiB floors.",
+  "scope": "Third consecutive goal-turn resource-block audit after all currently executable offline preparation/measurements; full scientific requirements remain open. No external process or owner asset changed."
+}

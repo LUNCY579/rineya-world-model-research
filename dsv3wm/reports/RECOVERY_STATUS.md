@@ -1,5 +1,12 @@
 # Registered-interface recovery: interim evidence
 
+Execution is now resource-blocked after a fresh CPU-lane no-model probe failed
+physical admission at9.739582GiB (commit14.915798GiB). The full goal remains
+incomplete. [The resource checkpoint](RESOURCE_BLOCKED_CHECKPOINT_2026_10_12.md)
+preserves the three-turn audit and exact registered resumption sequence. The
+new [terminal-reward audit](POSTHOC_TERMINAL_REGRET_2026_10_12.md) supplies actual
+all-case offline measurements without changing native P2 or adding student results.
+
 Updated 2026-10-12 UTC after the predictive pilot, TRAIN-only H3 teacher, warm
 references, all four H3 continuation training runs and partial singleton parity.
 Full research goal remains

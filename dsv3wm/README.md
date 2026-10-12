@@ -1,6 +1,9 @@
 # DeepSeek-inspired Rineya world-model research
 
-Status: **active research; native-CPU pilots, efficacy inconclusive**.
+Status: **research incomplete; native execution resource-blocked, efficacy inconclusive**.
+The [resource checkpoint](reports/RESOURCE_BLOCKED_CHECKPOINT_2026_10_12.md)
+records the fresh failed admission and exact resumption conditions. Source and
+offline measurements are preserved; the full objective has not been completed.
 The initial cold A0/A1/A2/A5 screen returned state 0/2 and planning 0/1.
 Recovery reuses the registered unmerged rank-16 forward adapter: inherited B0
 has 24/24 exact four-step development rollouts, with all intermediate states
