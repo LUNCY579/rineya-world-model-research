@@ -8,7 +8,7 @@ The primary reasoning-first training-data mission remains active. Preserve its p
 
 Use LUNCY579/rineya-world-model-research and freshly confirm the owner, repository identity, private visibility and write access. Use a unique backup ID, dedicated backups/rakdc/<id> branch and rakdc-backup-<id> release tag for every cycle. Preserve earlier backups. Do not modify main, force-push or change unrelated chats, roots or automations.
 
-The small current recovery pointer is backup_control/GITHUB_BACKUP_RECOVERY.LATEST.json. Preserve versioned recovery and verification receipts. The Root-owned administrative engine is backup_control/OWN_ROOT_VERIFIED_GITHUB_BACKUP.v1.5.py; specify a fresh --backup-id, and preserve any failed attempts. Before a future cycle, create a fresh backup_control/PREBACKUP_CHECKPOINT.<id>.json describing current progress and pending work; do not overwrite the original checkpoint.
+The small current recovery pointer is backup_control/GITHUB_BACKUP_RECOVERY.LATEST.json. Preserve versioned recovery and verification receipts. The Root-owned administrative engine is backup_control/OWN_ROOT_VERIFIED_GITHUB_BACKUP.v1.6.py; specify a fresh --backup-id, and preserve any failed attempts. Before a future cycle, create a fresh backup_control/PREBACKUP_CHECKPOINT.<id>.json describing current progress and pending work; do not overwrite the original checkpoint.
 
 ## Verification and cleanup
 
@@ -40,3 +40,5 @@ Restore only the files needed for current authorized work, verify them against t
 Enable the hourly heartbeat only after the first manual backup and exact cleanup pass. Stay quiet while storage is healthy or the state is unchanged. Notify only on meaningful verified completion, failure or required user action. If disk pressure comes from outside this scope or no eligible data remains, leave other roots untouched and report the actionable limitation once. Desktop scheduled work requires this computer and the Codex app to be running.
 
 The v1.5 engine also selects explicitly named closed Root research DATA receipts in backup_control (ROOT_R51, ROOT_R52, ROOT_R53, ROOT_R54 and R51_R52_MINIMUM_RESTORE prefixes). It keeps recovery indices, current progress pointers, checkpoints, policy, backup administration and every Source program locally. This selection broadens evidence preservation without granting foreign Source-body access.
+
+The v1.6 engine uses a uniquely identified authenticated read when locating a just-created draft release. This prevents reuse of an indistinguishable old release-list response without bypassing authentication, access restrictions or rate limits. A missing lookup still requires exact remote-state inspection; never repeat release creation blindly. The v1.5 lookup failure and recovery remain preserved.
