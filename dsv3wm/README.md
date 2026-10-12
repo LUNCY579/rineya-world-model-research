@@ -8,23 +8,31 @@ correct. Adapted A0/A1/A2/A5 scored24/22/24/23; direct four-step accuracy is0/24
 for each. Neither predictive arm meets the fixed gain gate. Planning scored
 12/12 for B0/A0/A1/A2 and11/12 for A5; A1/A2 also lose a retained boundary
 legality fixture. The fixed TRAIN-only H3 teacher qualified27/32 parents, with20
-distinct plans across three limits; student and native DEV effects remain unknown.
-Next are H3 warm-parent guards/proposals and A3/A4/C3/C4, followed by independent
+distinct plans across three limits. Warm proposer references have0/48 valid
+plans and0/12 top1/pass@4/hybrid successes. A3/A4/C3/C4 completed32 native
+updates each; student readout effects remain unknown. Next are resource-qualified
+H3 readouts with new singleton warm-guard parity, followed by independent
 Ledger/Blocksworld qualification. G4–G7 remain unqualified;
 confirmation labels remain sealed. See `reports/RECOVERY_STATUS.md`,
 `reports/GATE_STATUS.md` and the exact pending commands in `reports/NATIVE_QUEUE.md`.
 Original test evidence remains in `results/TESTS_FINAL.json`; new records use
-separate paths. Checkpoint12 passed249 tests and compilation; evidence
-is in `results/recovery-v1/TESTS_CHECKPOINT_12.txt` and
-`results/recovery-v1/PREPARATION_CHECKPOINT_12.json`. Checkpoint11 preserves
+separate paths. Checkpoint13 passed287 tests and compilation; test evidence
+is in `results/recovery-v1/TESTS_CHECKPOINT_13.txt`. Checkpoint12 preserves
+the preceding domain/CPU11 preparation and checkpoint11 preserves
 the preceding teacher/student preparation evidence. The consolidated native
 evidence and current integration decisions are in
 `reports/WARM_RESEARCH_REPORT_2026_10_12.md`; the executed MTP architecture is
 documented in `research/IMPLEMENTATION_EVIDENCE_2026_10_12.md`.
 The later [H3 teacher qualification](reports/H3_TEACHER_QUALIFICATION_2026_10_12.md)
-records the native TRAIN collection and its failures. CPU11 student/guard paths
-are prospectively registered; warm guard execution began after the RDW E06
-slot002 exit and memory release. Separate Ledger/RP and Block CPU11 copies and
+records the native TRAIN collection and its failures. The
+[warm references](reports/H3_WARM_REFERENCES_2026_10_12.md) and
+[completed training checkpoint](reports/H3_TRAINING_CHECKPOINT_2026_10_12.md)
+separate measured artifacts from unknown efficacy. A4's preserved preload
+refusal was followed by its bounded CPU10.5 training retry; C3/C4 used the same
+training-only profile. Student output freezes exist, but CPU11 admission is
+currently below threshold and singleton readout review/parity remains pending.
+Peer slot004 exited1 after a bounded wait; no own native model is active.
+Separate Ledger/RP and Block CPU11 copies and
 V3 input freezes are now verified; their native outcomes remain pending.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
@@ -77,7 +85,10 @@ pass@k, no verifier reranking. The registered warm H3 continuation uses
 actual A0/A2 parents are bound by `RECOVERY_H3_STUDENT_TRAIN_FREEZE_V3_CPU11.json`.
 The fixed warm guards use `RECOVERY_H3_WARM_GUARDS_FREEZE_V3_CPU11.json`.
 Warm proposer references use `RECOVERY_H3_WARM_READOUT_FREEZE_V3_CPU11.json`.
-A3/A4/C3/C4 have no native training outcome yet. Stored
+A3/A4/C3/C4 have completed native training; their student readout outcomes remain
+unknown. Actual output readout/guard V3 CPU11 freezes bind the four new artifacts.
+Any singleton readout requires its separate prospective resource/parity extension.
+Stored
 adapters remain unmerged. MTP/legality training heads are omitted in inference.
 The original no-cache instrument is preserved; the explicit cached instrument
 requires a passed native parity probe and complete source/config/data freeze.

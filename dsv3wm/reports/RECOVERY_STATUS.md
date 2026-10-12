@@ -1,11 +1,12 @@
 # Registered-interface recovery: interim evidence
 
-Updated 2026-10-12 UTC after four adapted dynamics readouts and the native
-TRAIN-only H3 teacher qualification. Full research goal remains open; H3 student,
+Updated 2026-10-12 UTC after the predictive pilot, TRAIN-only H3 teacher, warm
+references and all four H3 continuation training runs. Full research goal remains
+open; H3 student readouts,
 Ledger and Blocksworld native work remain. The first H3 attempt stopped before
 model loading; its same-input retry completed. See `NATIVE_QUEUE.md`.
-Checkpoint12 passed249 tests and compilation, with test evidence in
-`results/recovery-v1/TESTS_CHECKPOINT_12.txt`. Checkpoint11 verifies the teacher,
+Checkpoint13 passed287 tests and compilation, with test evidence in
+`results/recovery-v1/TESTS_CHECKPOINT_13.txt`. Checkpoint11 verifies the teacher,
 student-training and warm guard/proposer freezes; checkpoint12 verifies the
 separate Ledger/RP and Block CPU11 phase freezes. Prospective Ledger,
 R/P-retention and constructed Blocksworld G1 inputs are frozen; their native
@@ -15,10 +16,11 @@ parent exposure, cost/regret denominators, uncertainty and current integration
 decisions without changing the original endpoints or failed gates.
 The H3 retry used a separate prospective CPU11 admission profile after RCX's
 release; prediction/data/gates and historical loaders remain unchanged.
-Separately registered CPU11 warm guard execution started after the RDW E06
-slot002 child exited and released memory at09:38UTC. Later phases still require
-actual CPU-lane release. See `prereg/RECOVERY_RESOURCE_CLARIFICATION_3.md`,
-`prereg/RECOVERY_RESOURCE_CLARIFICATION_4.md` and the current execution queue.
+Warm guards/proposers completed after the RDW E06 slot002 release. Peer slot004
+has now exited1 after a bounded wait and its helper released; no own model is
+active. The no-model CPU11 check10.917744GiB physical failed admission. Singleton
+readout source review/parity is pending. See resource clarifications3–6 and the
+current execution queue; no historical loader or measured result was changed.
 
 ![Fixed development results](../results/recovery-v1/recovery_counts_v2.png)
 
@@ -42,9 +44,17 @@ full failure, cost and provenance audit.
 Actual A0/A2 warm artifacts and this shared corpus are now bound by
 `RECOVERY_H3_STUDENT_TRAIN_FREEZE_V3_CPU11.json`; fixed warm dynamics/behavior
 guards are bound by `RECOVERY_H3_WARM_GUARDS_FREEZE_V3_CPU11.json`, and warm
-proposer references by `RECOVERY_H3_WARM_READOUT_FREEZE_V3_CPU11.json`. Next are
-warm-parent guards/proposals and the unchanged A3/A4/C3/C4 continuation recipes.
-There are no student/native DEV outcomes yet. The failed RegisterWorld predictive
+proposer references by `RECOVERY_H3_WARM_READOUT_FREEZE_V3_CPU11.json`. Those warm
+readouts completed: both have24/24 rollouts, but0/48 valid complete plans and
+0/12 top1/pass@4/hybrid success. See [warm references](H3_WARM_REFERENCES_2026_10_12.md).
+
+A3/A4/C3/C4 then completed32 updates each. Nominal forwards are128/64/128/64;
+input/supervised tokens are21,884/1,938;8,420/1,000;21,968/1,870;8,504/932.
+A3 used CPU11; A4's initial zero-update preload refusal is preserved, and its
+bounded retry plus C3/C4 used the separately frozen CPU10.5 training-only path.
+Actual output readout/guard V3 CPU11 freezes now exist. See
+[the training checkpoint](H3_TRAINING_CHECKPOINT_2026_10_12.md) for costs and hashes.
+There are no student DEV readout outcomes yet. The failed RegisterWorld predictive
 gain gate, sealed confirmation bank and integration restrictions remain intact.
 
 ## Completed adapted dynamics pilot
