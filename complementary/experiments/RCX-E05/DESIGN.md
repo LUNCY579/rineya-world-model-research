@@ -7,7 +7,12 @@ critiqued in `CRITIQUE_RVM_DESIGNS.md`, workflow wf_ad10715d-8d6). It resolves c
   arithmetic (< 10 s, 1 thread): the power and FLOP tables below.
 
 **Companion:** `PREREG_E05_DRAFT.md`. It freezes after the Phase-1 DEV pilot. The only change allowed at the freeze is
-the mechanical PILOT FILL (§11).
+the mechanical PILOT FILL (§11). Where the draft is more specific than this file, the draft binds.
+
+**Details pinned while drafting the prereg (2026-10-12, no outcome exists):** starts are hand-empty (§3); the bootstrap
+resamples H-ID-S and H-ID-U as separate strata (§6.4); STOP-F applies even when P1's significance conditions hold
+(§6.5); at most two VOID redraws (§6.5); the 48-parent subset takes 8 parents per H-ID stratum (§4.4); the n_ID
+lookup table in §6.6 was recomputed (one row was an arithmetic slip; the formula is unchanged).
 
 **Bundle mapping.**
 - RCI-001 registry **E05 "Goal-factorized value transfer"** (track RVM-001, P0): "Successor features versus scalar value
@@ -263,6 +268,9 @@ With exact ψ, Barreto's theorem gives Q^{π_GPI} ≥ max over z of Q^{π_z}.
   - It is 0 when optimal and 1 when no better than stopping immediately.
   - Starts need a gap V\* − w′·φ(s0) ≥ 1.0, which is at least 4 steps of cost at c = 0.25. This filter comes from the
     oracle and is outcome-free.
+  - Starts are **hand-empty** states (BWM instances start with an empty hand), drawn uniformly without replacement from
+    the qualifying, non-excluded hand-empty states; 16 per parent. A parent with fewer than 16 is rejected and logged.
+    H-DYN starts must also satisfy the height limit. (Pinned for the prereg draft, 2026-10-12.)
 - **One-step re-ranking** (secondary): regret1(s) = (max over a of Q\*(s, a) − Q\*(s, â)) / c, plus the top-1
   optimal-action rate.
   - It uses a fixed bank of 64 states per parent, drawn uniformly from the states where STOP is not optimal.
@@ -348,7 +356,7 @@ is asserted at generation.
 | DEV-OOD | 48 | 16 starts | σ̂_OOD (H-K and H-NEG parents), pipeline check |
 | **TEST primary** | **H-ID n_ID ∈ [96, 152]; H-K and H-NEG n_K = n_NEG ∈ {56, 72}** (§6.6), so n_P ∈ [208, 296] | 16 starts, 64 one-step states | base plan 96 + 56 + 56 = 208 |
 | TEST secondary | H-COST 40, H-SPAN 40, H-KN 24, H-CONJ 40, H-DYN 40 (184) | 16 starts, 64 one-step states | reported per family, never pooled with the primary |
-| Per-goal labels | PGV_400 and FT_400: **all** primary TEST parents. PGV_1600 and PGV_6400: a **fixed random subset of 48** primary parents (16 per family), drawn with TEST and listed in its manifest | 400 / 1,600 / 6,400 (nested) | label accounting in §5.5 |
+| Per-goal labels | PGV_400 and FT_400: **all** primary TEST parents. PGV_1600 and PGV_6400: a **fixed random subset of 48** primary parents (16 per family; within H-ID, 8 per stratum), drawn with TEST and listed in its manifest | 400 / 1,600 / 6,400 (nested) | label accounting in §5.5 |
 
 **Allocation order.**
 - TRAIN and DEV are drawn at the pilot (Phase 1), by the pilot-frozen code.
@@ -656,8 +664,10 @@ decision.
 - **Unit of independence: the parent.** Each TEST family has one parent per (signed) support class, so a parent is a
   support-class cluster (F8). Starts, one-step states, renamed variants and replicates are within-cluster repeats.
 - **Bootstrap.**
-  - It is a **stratified paired cluster bootstrap**: within each family, parents are resampled with replacement, and
-    the family means and macro are recomputed. There are R = 10,000 resamples.
+  - It is a **stratified paired cluster bootstrap**: within each stratum, parents are resampled with replacement, and
+    the family means and macro are recomputed. There are R = 10,000 resamples. The strata are the families, except
+    that H-ID is resampled within H-ID-S and H-ID-U separately (their sizes are fixed by design); the H-ID mean is
+    the parent-weighted mean of the two.
   - The seed is **20261250**. One index stream per family is shared by every contrast (common random numbers).
   - The CI is the 95% percentile interval.
   - It is implemented in `analyze_e05.py`, because `rcx.stats` does not stratify. A unit test checks that it equals
@@ -679,7 +689,9 @@ decision.
    - a disjointness, support-uniqueness or exclusion assertion;
    - a TEST manifest or code-digest mismatch.
 
-   Fix the fault, redraw TEST from `20261242:test:<attempt+1>`, and log the attempt.
+   Fix the fault, redraw TEST from `20261242:test:<attempt+1>`, and log the attempt. At most two redraws: a third
+   VOID ends E05 as INCONCLUSIVE pending a design review. Replicates are not retrained (they never see TEST); per-goal
+   fits are redone on the new parents.
 2. **INCONCLUSIVE (missing).** A protected-core cell (§9.2) is missing. Report descriptively and apply no other rule.
 3. **STOP-D (dominated, F5).** D_G ≥ +0.05 with its 95% CI lower bound > 0. A zero-label symbolic planner beats the
    learned SF, so the SF line stops on this testbed. Any P1/P2 results are reported as mechanism findings only.
@@ -689,7 +701,8 @@ decision.
      the z = w′ index should not be stopped by a library ceiling. The GPI qualifier below then applies.
 6. **STOP-F (futile).** P2 did not pass **and** P1 is futile, meaning the macro D1's upper 95% bound is < 0.05 or H-ID
    D1's is. The first case means no advantage at all. The second means the advantage is confined to weights outside
-   UVFA's support, which is the by-construction part (F3).
+   UVFA's support, which is the by-construction part (F3). STOP-F applies even if P1's significance conditions hold:
+   an interval entirely below 0.05 excludes the planned effect (the E01N convention).
 7. **REVISE.** P1 or P2 passes, but not ADVANCE. This includes:
    - G1 failing in the middle zone (D_G ≥ 0.05 with a CI that includes 0);
    - "only the label-cost claim holds";
@@ -760,9 +773,14 @@ positively correlated and the joint power is close to the weaker conjunct.
 
    | σ̂_ID | n_ID |
    |---|---|
-   | ≤ 0.13 | 96 |
+   | ≤ 0.138 | 96 |
    | 0.15 | 114 |
-   | ≥ 0.155 | 152 (cap) |
+   | 0.16 | 129 |
+   | 0.17 | 146 |
+   | ≥ 0.174 | 152 (cap) |
+
+   (Recomputed 2026-10-12 for the prereg draft; the earlier row "≥ 0.155 → 152" was an arithmetic slip. The formula,
+   not the table, is binding.)
 4. **Set n_K = n_NEG = 56.** Raise both to 72 if, at the chosen n_ID, either is < 0.80:
    - the planned P1-M power with σ_plan = 1.15·max(σ̂_ID, σ̂_OOD);
    - the planned P2 power at a true D2 = 0 with σ_plan,2.
@@ -955,7 +973,7 @@ runs.
 |---|---|---|
 | **T0 (now)** | Nothing. DESIGN rev 2 and `PREREG_E05_DRAFT.md` are drafts | – |
 | **T1 adoption** | Scope, the dsv3wm boundary, seeds 20261242–50 (D-43), and E04 independence | CX D-entry |
-| **T2 pilot-code freeze** (before Phase 1) | The sha256 digest of `soft.py`, `families_e05.py`, `enum_e05.py`, `learners_e05.py` and `run_e05.py`, with all tests passing. TRAIN and DEV are drawn by this code | DECISIONS ("E05 pilot code digest") |
+| **T2 pilot-code freeze** (before Phase 1) | The sha256 digest of `soft.py`, `families_e05.py`, `enum_e05.py`, `learners_e05.py` and `run_e05.py` plus the pinned existing files (§4.1; digest definition in the prereg draft §2.1), with all tests passing. TRAIN and DEV are drawn by this code | DECISIONS ("E05 pilot code digest") |
 | **T3 prereg freeze** (after Phase 1) | `PREREG_E05.md` = the draft plus the PILOT FILL only: selected configs, PG400 identity (or "P2 dropped"), library composition, n_ID/n_K/n_NEG, H-ID-S size, planned powers, measured rates and cut depth, and the DEV results known. Also the full code digest **including `analyze_e05.py`**. All thresholds, the decision rule, the resizing formula and the cut order are already fixed in the draft and do not change | DECISIONS (prereg sha + code digest) |
 | **T4 TEST draw** | `TEST_MANIFEST.json` from `20261242:test:1`. Its sha is committed before any arm is evaluated on TEST | DECISIONS |
 | **T5 confirmation** | Replicates 20261246–48 are trained after T3. Per-goal fits, evaluation and **one** analysis run | `runs/RCX-E05/…`, ATTEMPTS.jsonl |
