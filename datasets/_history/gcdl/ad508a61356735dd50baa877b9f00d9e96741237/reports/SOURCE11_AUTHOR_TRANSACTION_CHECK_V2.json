@@ -1,0 +1,451 @@
+{
+  "cases": [
+    {
+      "PASS": true,
+      "case": "valid",
+      "old": {
+        "committed_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ],
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ],
+        "error": null,
+        "in_transaction_after_recover": false,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "b",
+          "a",
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ],
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ]
+      },
+      "revised_candidate": {
+        "committed_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ],
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ],
+        "error": null,
+        "in_transaction_after_recover": false,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "a",
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ],
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ]
+      }
+    },
+    {
+      "PASS": true,
+      "case": "done_fault",
+      "old": {
+        "committed_rows": [
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ],
+        "error": "ValueError",
+        "in_transaction_after_recover": false,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ]
+      },
+      "revised_candidate": {
+        "committed_rows": [
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ],
+        "error": "ValueError",
+        "in_transaction_after_recover": false,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "a",
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ]
+      }
+    },
+    {
+      "PASS": true,
+      "case": "new_fault",
+      "old": {
+        "committed_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ]
+        ],
+        "error": "ValueError",
+        "in_transaction_after_recover": true,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "a",
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ]
+        ]
+      },
+      "revised_candidate": {
+        "committed_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ]
+        ],
+        "error": "ValueError",
+        "in_transaction_after_recover": true,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "a",
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ]
+        ]
+      }
+    },
+    {
+      "PASS": true,
+      "case": "upsert_fault",
+      "old": {
+        "committed_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ],
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ],
+        "error": "IntegrityError",
+        "in_transaction_after_recover": true,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "b",
+          "a",
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ],
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ]
+      },
+      "revised_candidate": {
+        "committed_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ],
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ],
+        "error": "IntegrityError",
+        "in_transaction_after_recover": true,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "a",
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-a",
+            "hash-a",
+            "spec-a",
+            1,
+            "train",
+            "done",
+            "a"
+          ],
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ]
+      }
+    },
+    {
+      "PASS": true,
+      "case": "done_keyboard_interrupt",
+      "old": {
+        "committed_rows": [
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ],
+        "error": "KeyboardInterrupt",
+        "in_transaction_after_recover": false,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ]
+      },
+      "revised_candidate": {
+        "committed_rows": [
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ],
+        "error": "KeyboardInterrupt",
+        "in_transaction_after_recover": false,
+        "prior_work": [
+          [
+            "keep"
+          ]
+        ],
+        "validator_calls": [
+          "a",
+          "b"
+        ],
+        "visible_rows": [
+          [
+            "source-b",
+            "hash-b",
+            "spec-b",
+            2,
+            "train",
+            "done",
+            "b"
+          ]
+        ]
+      }
+    }
+  ],
+  "network": false,
+  "production_mutation": false,
+  "sealed_reads": false,
+  "status": "PASS",
+  "version": "source11-author-transaction-check-v2"
+}

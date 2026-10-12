@@ -63,6 +63,7 @@ class _ReadSession:
     def __init__(self, root, deadline):
         self.root = root; self.deadline = deadline; self._transport = None
         self.catalogs = OrderedDict(); self.catalog_bytes = 0
+        self.local_control_facts = OrderedDict(); self.local_control_bytes = 0
 
     def check(self):
         if self.deadline is not None and time.monotonic() >= self.deadline:
@@ -128,6 +129,7 @@ def read_session(root, *, deadline=None):
         session.check(); yield session
     finally:
         session.catalogs.clear(); session.catalog_bytes = 0
+        session.local_control_facts.clear(); session.local_control_bytes = 0
         _READ_SESSION.reset(token)
 
 
@@ -557,6 +559,36 @@ def _receipt(receipt):
     return receipt
 
 
+def _local_control_value(root, body, validator):
+    """Reuse only a successful structural fact for exact freshly read bytes.
+
+    JSON objects are always newly decoded. All local file/hash and index binding
+    checks stay with the caller; these bounded session facts supply no custody.
+    """
+    parser = _json
+    value = parser(body)
+    session = _READ_SESSION.get()
+    if session is None:
+        return validator(value)
+    if session.root != root:
+        raise ArchiveError('archive read session root mismatch')
+    session.check()
+    if type(body) is not bytes or len(body) > CATALOG_CACHE_BYTES or MAX_BATCH_FILES < 1:
+        return validator(value)
+    key = (validator, parser, body)
+    facts = session.local_control_facts
+    if key in facts:
+        facts.move_to_end(key)
+        return value
+    value = validator(value)  # A failure is never retained.
+    while facts and (len(facts) >= MAX_BATCH_FILES or session.local_control_bytes + len(body) > CATALOG_CACHE_BYTES):
+        removed, _ = facts.popitem(last=False)
+        session.local_control_bytes -= len(removed[2])
+    facts[key] = True
+    session.local_control_bytes += len(body)
+    return value
+
+
 def load_index(root):
     root = _root(root)
     check_read_deadline(root)
@@ -581,7 +613,7 @@ def load_index(root):
         body = _local(root, descriptor['catalog_path'], MAX_INDEX_BYTES)[0]
         if hashlib.sha256(body).hexdigest() != descriptor['catalog_sha256'] or git_blob_sha1(body) != descriptor['catalog_git_blob_sha1']:
             raise ArchiveError('local committed catalog commitment mismatch')
-        catalogs[identifier] = _catalog(_json(body))
+        catalogs[identifier] = _local_control_value(root, body, _catalog)
         if catalogs[identifier]['catalog_id'] != identifier:
             raise ArchiveError('catalog pointer identity mismatch')
     for identifier, descriptor in index['receipts'].items():
@@ -592,7 +624,7 @@ def load_index(root):
         body = _local(root, descriptor['path'], MAX_INDEX_BYTES)[0]
         if hashlib.sha256(body).hexdigest() != descriptor['sha256']:
             raise ArchiveError('custody receipt hash mismatch')
-        receipts[identifier] = _receipt(_json(body))
+        receipts[identifier] = _local_control_value(root, body, _receipt)
         if receipts[identifier]['receipt_id'] != identifier:
             raise ArchiveError('custody pointer identity mismatch')
         receipt = receipts[identifier]; cat = catalogs.get(receipt['catalog_id'])
