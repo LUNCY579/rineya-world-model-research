@@ -1,0 +1,27 @@
+{
+ "budget_s": 16200,
+ "jobs": [
+  {
+   "name": "b4s-run",
+   "marker": "runs/BW_B4_SCREEN/a_beam/summary.json",
+   "log": "runs/BW_B4_SCREEN.stdout",
+   "est_s": 12600,
+   "cmd": [
+    "-B",
+    "scripts/b4_screen.py",
+    "run"
+   ]
+  },
+  {
+   "name": "b4s-analyze",
+   "marker": "runs/BW_B4_SCREEN/B4S_REPORT.json",
+   "log": "runs/BW_B4_SCREEN.stdout",
+   "est_s": 300,
+   "cmd": [
+    "-B",
+    "scripts/b4_screen.py",
+    "analyze"
+   ]
+  }
+ ]
+}

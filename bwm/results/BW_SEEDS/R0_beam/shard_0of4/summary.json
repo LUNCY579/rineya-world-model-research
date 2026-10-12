@@ -1,0 +1,50 @@
+{
+ "args": {
+  "set": "seeds_fresh",
+  "planner": "beam",
+  "W": 4,
+  "E": 24,
+  "max_depth": 80,
+  "step_cap": 24,
+  "R": 12,
+  "fwd_fmt": "delta",
+  "max_batch_tokens": 5000,
+  "M": 80,
+  "P": 1,
+  "prop_batch_tokens": 6000,
+  "freeze": "runs/FREEZE_I7_R0_beam.json",
+  "shard": "0/4",
+  "n": 0,
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v2_s1/adapter",
+  "mode": "actions",
+  "fwd": "lm",
+  "fwd_adapter": "runs/BW_Fdelta_s0/adapter",
+  "K": 8,
+  "eval_seed": 0,
+  "val": true,
+  "out": "runs\\BW_SEEDS\\R0_beam\\shard_0of4"
+ },
+ "summary": {
+  "success": 0.8,
+  "n": 10,
+  "verified_rate": 0.8,
+  "verification_precision": 1.0,
+  "wall_s": 2176.4,
+  "f_model_queries": 1613,
+  "f_queries_per_instance": 161.3,
+  "proposer_tokens_per_instance": 6599.0,
+  "expansions_per_instance": 12.8,
+  "val_success": 0.8,
+  "val_disagreements": 0,
+  "success_by_blocks": {
+   "6": 1.0,
+   "9": 0.5,
+   "10": 1.0,
+   "11": 1.0,
+   "12": 1.0,
+   "13": 1.0,
+   "14": 0.5
+  }
+ }
+}

@@ -1466,3 +1466,26 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
     - All 11 RCX files snapshotted to `runs/BW_B4_SCREEN/rcx_snapshot/`.
     - torch 2.6.0+cu124 for both the canary and the host.
   - **Item 7 underway:** `i7-run` started at 07:55:09 with 6987 s of budget left.
+- **I-21 Item-7 run-time estimate was wrong (2026-10-12 08:10). This is a scheduling matter only; no protocol
+  change.**
+  - **The error:** bundleI's `est_s` of 600 for `i7-run` badly underestimates the work: 3 systems × (S-direct + 4
+    S-beam shards of 10 instances). For comparison, B2's hard beam took about 1.3–1.5 h per 14-instance shard; R0's
+    shard 0 round 1 took about 3 min.
+  - **Projection:** about 5–8 h of GPU time, so `i7-run` will hit the 09:51 cap. bundle.py then exits 75 ("resumes
+    next turn"), which the orchestrator requeues, not counted as a failure.
+  - **Resume path:** `bw_seeds.py run` skips finished shards (`summary.json`). A killed shard restarts and reloads its
+    `fcache.jsonl`, the same path the B2 hard runs used.
+  - **Effect:** item 7, A.0 and the analyses finish in a later BWM turn, after RCWM's turn. The screen arm needs a
+    turn after that.
+  - **est_s:** `est_s` only gates non-first jobs within a turn, and `i7-run` will be first next turn, so no edit to
+    bundleI.json is needed.
+- **D-83 Queue: B4 screen arm as bundleJ, gated on bundleI (2026-10-12 08:50). Implements PREREG_B4_SCREEN §7.1
+  ("run: the BWM GPU turn after item 7's analysis and addendum A.0").**
+  - **bundleJ:** `runs/bundles/bundleJ.json` (0ede29c3…) runs `b4_screen.py run` (est. 12600 s; §7.2 expects about
+    3.5 GPU-h), then `b4_screen.py analyze`.
+  - **Gate:** the `runs/jobs.json` entry has `after: runs/bundles/bundleI.done`. It can therefore start only in a new
+    lease, after `i7-addendum-analyze` has written `ADDENDUM_A_REPORT.json`.
+  - **Timing:** R0's beam shard 0 took 36 min (07:57:57–08:34:19). Item 7 is about 12 shards plus 3 direct runs,
+    about 7.5 GPU-h, so it needs this turn and two more BWM turns (I-21). The screen follows in the turn after.
+  - **Canary pre-flight** (optional, unregistered, writes nothing): run on the frozen snapshot copy at 08:45, CPU,
+    1 thread. Max |Δ| 0.0, counters match, no failures, torch 2.6.0+cu124 on both sides.
