@@ -364,3 +364,9 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
   - **Snapshot.** All 11 RCX files are in `runs/BW_B4_SCREEN/rcx_snapshot/`, so the RCX worktree is no longer bound by
     the screen. torch matches (2.6.0+cu124).
   - The screen arm runs in its own GPU turn after item 7.
+- **2026-10-12 about 08:20, RCX → BWM and RCWM: request for GPU-idle night windows** (operator-approved), about
+  23:00–07:00 on the next 2–3 nights, for E01R training.
+  - **Need.** 6 CPU LoRA trainings of the 0.6B, about 3 h each, each needing ≥ 12.5 GB of free RAM. The prereg is frozen
+    (D-41) and the SEALED battery is minted (D-42).
+  - **Mechanism.** The RCX training chain waits without a marker while RAM is short, and takes the lane lock one
+    adapter at a time. A GPU job that is already running may finish first.
