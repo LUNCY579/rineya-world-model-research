@@ -1,0 +1,50 @@
+{
+ "core": "titan-sparse",
+ "args": {
+  "core": "titan-sparse",
+  "rows": "runs/BW_data_v2/proposer_actions_train.jsonl",
+  "steps": 1000,
+  "batch": 16,
+  "lr": 0.0001,
+  "seed": 3,
+  "max_len": 256,
+  "filter": "",
+  "init_adapter": "",
+  "out": "runs/BW_Pa_v2_s3"
+ },
+ "rows": 53682,
+ "train": {
+  "steps": 1000,
+  "batch_size": 16,
+  "rows_available": 53682,
+  "lr_peak": 0.0001,
+  "final_loss_avg50": 0.03528706981567666,
+  "loss_curve_every50": [
+   0.65024,
+   0.18966,
+   0.12383,
+   0.09836,
+   0.09209,
+   0.08235,
+   0.07957,
+   0.06982,
+   0.07567,
+   0.06351,
+   0.06524,
+   0.05836,
+   0.05589,
+   0.05295,
+   0.04583,
+   0.05053,
+   0.04046,
+   0.04663,
+   0.04324,
+   0.03529
+  ],
+  "max_grad_norm": 8.498156547546387,
+  "tokens_processed": 2781963,
+  "supervised_tokens": 476813,
+  "wall_s": 9192.8,
+  "peak_mem_gib": 2.9190115928649902
+ }
+}

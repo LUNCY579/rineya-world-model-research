@@ -1,0 +1,157 @@
+{
+ "what": "B4 futility screen, arm a: RCX hybrid hook as unmet= in item 7's R0 S-beam configuration",
+ "args": {
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v2_s1/adapter",
+  "mode": "actions",
+  "eval_seed": 0,
+  "max_depth": 80,
+  "step_cap": 24,
+  "fwd": "lm",
+  "fwd_adapter": "runs/BW_Fdelta_s0/adapter",
+  "fwd_fmt": "delta",
+  "K": 8,
+  "planner": "beam",
+  "W": 4,
+  "E": 24,
+  "R": 12,
+  "M": 80,
+  "P": 1
+ },
+ "unmet_hook": {
+  "class": "rcx.bw.b4_hook.LearnedUnmet",
+  "constructor": "from_file",
+  "model_file": "runs/RCX-E07/main/models/gnn_s20261276.pt",
+  "kwargs": {
+   "invalid_policy": "fallback",
+   "hybrid_lambda": 1.0
+  },
+  "registry": "off (no instances= in the D-76a call)",
+  "loaded_from": "runs/BW_B4_SCREEN/rcx_snapshot"
+ },
+ "control": {
+  "system": "R0",
+  "freeze": "runs/FREEZE_I7_R0_beam.json",
+  "freeze_sha256": "4e2e2bbdde426d40b97e59128b12205ba4cd71b0d6244f881edbb4ad163a546c",
+  "out": "runs/BW_SEEDS/R0_beam"
+ },
+ "set": {
+  "name": "seeds_fresh",
+  "path": "runs/BW_val_large/instances_seeds_fresh.json",
+  "sha256": "6fccb94547184d8ba44a2fdc19ad6c3f1fca584c67c906964281746c0541b3fc",
+  "n": 40,
+  "shards": 4
+ },
+ "pa_sha256": "ee1c5aec5e4a55e30f6df0e30a3cd68242c928cd158f9e5cf06184f409108110",
+ "fwd_sha256": "2ed0bb0064bc6b11ec9c661840a38094e468462cea2ff833cda3bf234ead65ae",
+ "pins": {
+  "bwmn/blocks_planner.py": "18a5f22b94e5304f9dfe117d3afa7d89e5f21596b86ec0412b25d0b24b9ab960",
+  "bwmn/blocks.py": "b1e28ed55e34d2621007f8b22a45213769da316f8957a628b279f872f9c22d83",
+  "runs/FREEZE_B2_beam.json": "412a6ee51af1cbc6f464a7d27d0150526dac90fd32c76b2e370b590084b41c94",
+  "PREREG_ITEM7_SEEDS.md": "956a0dc4117c948065f40258be3a7a3e418f51c2b199c4bbb8e7f1337d88985d",
+  "runs/BW_val_large/instances_seeds_fresh.json": "6fccb94547184d8ba44a2fdc19ad6c3f1fca584c67c906964281746c0541b3fc",
+  "bwmn/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "bwmn/lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+  "scripts/blocks_eval.py": "b3666424151c78368500535d2571f0eb5b9e546b11764696d99f427a7794acb6",
+  "scripts/bw_run_tests.py": "de7022d1eacebab271f7624e962d40d58aeee435494da079a622a03f80a34542",
+  "scripts/bw_seeds.py": "b783a1916bce655cf93e3d55bedcb276dae3dab2bbdc214e00ff633c828f3b08",
+  "rcx:rcx/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "rcx:rcx/bw/__init__.py": "4f403acd75709867f8dc7f6952a4e63e702ebaa40001dc2cb7024a6feb1440aa",
+  "rcx:rcx/bw/b4_hook.py": "a0b4f88c32797feba95115d232f733b8dd47610c9e3018af6b90b297bfdeec81",
+  "rcx:rcx/bw/bwm_import.py": "84140c7ea91e4066ea3f9ada6a95b6b329b665329b1c52ea38d305e3ee517b9e",
+  "rcx:rcx/bw/encode.py": "32980f141eaf0fac4757ee253d22c59c55f889ae98c26eddd37eef055b928a8a",
+  "rcx:rcx/bw/space.py": "29d0b4203156a98521475ce4eda4e7951dcaa2a31bae29b1c3c96c268e015fa4",
+  "rcx:rcx/bw/models.py": "4c2e3242eadc4ee155d8ddedb5f4188ac3aa5f70a19061145ff0e2fbee118f52",
+  "rcx:runs/RCX-E07/main/models/gnn_s20261276.pt": "9cc417a3075391e4fc8022f0dddd811e90fb4647c6a88dcd81361e9bb2c13f04",
+  "rcx:runs/RCX-E07/main/models/gnn_s20261276.json": "2ccdb2798fc784327c153fe7a6dd5479b2646f0cb29314aad3610eed1aa4a892",
+  "rcx:runs/RCX-E07/main/data/instances.json": "1e39f9bbc25a7e857ccbfee97c996638fed63d606c334efef88fc3b7a32f4e31",
+  "rcx:experiments/RCX-B4/canary/B4_HOOK_CANARY.json": "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a"
+ },
+ "code_path_pins": {
+  "bwmn/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "bwmn/lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+  "scripts/blocks_eval.py": "b3666424151c78368500535d2571f0eb5b9e546b11764696d99f427a7794acb6",
+  "scripts/bw_run_tests.py": "de7022d1eacebab271f7624e962d40d58aeee435494da079a622a03f80a34542",
+  "scripts/bw_seeds.py": "b783a1916bce655cf93e3d55bedcb276dae3dab2bbdc214e00ff633c828f3b08"
+ },
+ "precheck": {
+  "drop_ids": [],
+  "n_after_drop": 40
+ },
+ "rule": {
+  "go_min_net": 2,
+  "penalty_share_max": 0.05,
+  "penalty_band": "value >= PENALTY (1000): invalid state or critic error",
+  "reported_only": [
+   "p_one_sided_sign",
+   "p_mcnemar_two_sided"
+  ],
+  "text": "GO iff (a_only - R0_only) >= 2; otherwise NO-GO (net <= 1 is always NO-GO). The exact one-sided sign-test p and the two-sided McNemar p are reported only and do not gate (D-77). If more than 5% of hook calls return a penalty-band value (invalid state or critic error; value >= PENALTY = 1000), a GO is not credited to the learned critic alone and c+pen is mandatory in the full B4 (D-76a). The screen is VOID (no GO/NO-GO) on any hook model/encode/nonfinite/failsafe error, model_evals = 0, a canary failure or R0 outputs that do not match ADDENDUM_A_INPUTS; it is an INSTRUMENT FAULT (no decision; a and c re-run in one turn) if the round-1 identity check or the R0 shard-argument check fails."
+ },
+ "void_rule": {
+  "hook_counters_must_be_zero": [
+   "model_errors",
+   "encode_errors",
+   "nonfinite",
+   "failsafe"
+  ],
+  "model_evals_must_be_positive": true,
+  "canary_every_hook_shard": true,
+  "r0_outputs_must_match": "runs/BW_SEEDS/ADDENDUM_A_INPUTS.json"
+ },
+ "canary": {
+  "rel": "experiments/RCX-B4/canary/B4_HOOK_CANARY.json",
+  "sha256": "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a",
+  "tolerance_abs": 1e-05,
+  "canary_torch_version": "2.6.0+cu124",
+  "canary_torch_threads": 1,
+  "host_torch_version_at_freeze": "2.6.0+cu124",
+  "torch_versions_match_at_freeze": true,
+  "torch_version_rule": "report-only: a mismatch is flagged, never VOID (D-80 follow-up)"
+ },
+ "rcx_snapshot": {
+  "dir": "runs/BW_B4_SCREEN/rcx_snapshot",
+  "files": {
+   "rcx/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "rcx/bw/__init__.py": "4f403acd75709867f8dc7f6952a4e63e702ebaa40001dc2cb7024a6feb1440aa",
+   "rcx/bw/b4_hook.py": "a0b4f88c32797feba95115d232f733b8dd47610c9e3018af6b90b297bfdeec81",
+   "rcx/bw/bwm_import.py": "84140c7ea91e4066ea3f9ada6a95b6b329b665329b1c52ea38d305e3ee517b9e",
+   "rcx/bw/encode.py": "32980f141eaf0fac4757ee253d22c59c55f889ae98c26eddd37eef055b928a8a",
+   "rcx/bw/space.py": "29d0b4203156a98521475ce4eda4e7951dcaa2a31bae29b1c3c96c268e015fa4",
+   "rcx/bw/models.py": "4c2e3242eadc4ee155d8ddedb5f4188ac3aa5f70a19061145ff0e2fbee118f52",
+   "runs/RCX-E07/main/models/gnn_s20261276.pt": "9cc417a3075391e4fc8022f0dddd811e90fb4647c6a88dcd81361e9bb2c13f04",
+   "runs/RCX-E07/main/models/gnn_s20261276.json": "2ccdb2798fc784327c153fe7a6dd5479b2646f0cb29314aad3610eed1aa4a892",
+   "runs/RCX-E07/main/data/instances.json": "1e39f9bbc25a7e857ccbfee97c996638fed63d606c334efef88fc3b7a32f4e31",
+   "experiments/RCX-B4/canary/B4_HOOK_CANARY.json": "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a"
+  }
+ },
+ "versions": {
+  "python": "3.11.15",
+  "torch": "2.6.0+cu124",
+  "transformers": "5.14.1",
+  "peft": "0.20.0",
+  "accelerate": "1.14.0",
+  "tokenizers": "0.22.2",
+  "safetensors": "0.8.0",
+  "numpy": "2.4.6",
+  "nvidia_driver": "566.07"
+ },
+ "prereg": {
+  "path": "research\\PREREG_B4_SCREEN.md",
+  "sha256": "ac70043bd9abcbc5d2bcb51905eac2140adefcb950e2c62c6dac360f405b0506"
+ },
+ "addendum": {
+  "path": "research\\PREREG_ITEM7_ADDENDUM_A.md",
+  "sha256": "0e73d1f1db8f2c6ef366c009303969c7df66e07bfd857dd7496a039ba7ee66e2"
+ },
+ "item7_prereg_sha256": "956a0dc4117c948065f40258be3a7a3e418f51c2b199c4bbb8e7f1337d88985d",
+ "runner": "scripts/b4_screen.py",
+ "runner_sha256": "0b576b1f4136f7ced9b12bdc71219a6435cdd1733bd733d1908d241469df750f",
+ "registered": {
+  "runner_sha256": "0b576b1f4136f7ced9b12bdc71219a6435cdd1733bd733d1908d241469df750f",
+  "tests_sha256": "8d2e2237a7de68cce2aed4c4909ed2452e578315bf09fe1a8944846a857824fc"
+ },
+ "late_freeze": false,
+ "item7_outputs_present_at_freeze": [],
+ "written": "2026-10-12 07:55:09 Central Daylight Time"
+}

@@ -1453,3 +1453,16 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
     recorded before the freeze.
   - **Next:** bundleI runs `i7-freeze` → `b4s-freeze` (writes `runs/FREEZE_B4S_a_beam.json` and the RCX snapshot) →
     `i7-run` → `i7-a0-hash` → `i7-analyze` → `i7-addendum-analyze`, starting when Pa_v2_s3 completes (about 08:05).
+- **I-20 Freezes executed in bundleI (2026-10-12 07:55:09 CDT), in the registered order.**
+  - **Before the freezes:** `train-Pa_v2-s3` finished in 9212 s. A read-only dry check at 07:10 found every pin of
+    the screen freeze already passing.
+  - **i7-freeze:** `i7-freeze` (`bw_seeds.py freeze`) wrote 6 records. `FREEZE_I7_R0_beam.json` is 4e2e2bbd…, with
+    R0 = B2's adapters, Fdelta_s0 + Pa_v2_s1.
+  - **b4s-freeze:** `b4s-freeze` then wrote `runs/FREEZE_B4S_a_beam.json`
+    **f316d84266a8bf88c68b13c8c09f80fb7b1160af52e13c73fe49868c1f29bc68**.
+    - Not a late freeze; no item-7 outputs were present.
+    - Pins: prereg ac70043b…, addendum 0e73d1f1…, runner 0b576b1f…, control R0 freeze 4e2e2bbd….
+    - Precheck: 0 drops, n = 40.
+    - All 11 RCX files snapshotted to `runs/BW_B4_SCREEN/rcx_snapshot/`.
+    - torch 2.6.0+cu124 for both the canary and the host.
+  - **Item 7 underway:** `i7-run` started at 07:55:09 with 6987 s of budget left.
