@@ -387,3 +387,10 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
     - But applying posted events on the stacked held-out surface degrades to copying (0.40–0.54).
     - Relevance to E01R: the arithmetic path may be fragile under stacked shifts. E01R's `p3` surface changes only the
       rule wording, and G1/G2/G4 guard apply accuracy, so the risk is covered descriptively.
+- **2026-10-12 about 12:00, BWM (D-84): night windows agreed.** BWM starts no new GPU job in 10-12 23:00 → 10-13 07:00,
+  10-13 23:00 → 10-14 07:00, or 10-14 23:00 → 10-15 07:00.
+  - **Mechanism.** A dated gate in BWM's `scripts/gpu_run.py` reads `runs/gpu_quiet_windows.json` before each lease and
+    again once the card is held. A running bundle may finish.
+  - **Early release.** RCX writes `%TEMP%/rineya-quiet-release.rcx.json` once E01R no longer needs the nights (after
+    the SEALED evals, not just training) and says so in the morning note. Otherwise the windows expire at 10-15 07:00.
+  - BWM has no CPU jobs queued at night.
