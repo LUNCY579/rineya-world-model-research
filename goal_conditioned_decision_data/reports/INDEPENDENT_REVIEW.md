@@ -1,130 +1,132 @@
-# Independent CODE9 standalone-entry review
+# Independent CODE10 Git-store custody review
 
 FINAL_VERDICT: PASS
 
-This is a fresh, narrowly scoped approval of the exact 67 Python/configuration files below. CODE9 repairs the two lazy package-relative imports in the archive CLI and adds two standalone-context regression tests. Both complete 449-test runs passed with identical before/after source maps. I independently inspected the complete diff, challenged the entry-mode and custody boundaries, reproduced both original failures in an empty owned fixture, verified the fixed evidence, and checked preservation of the actual production commitments and counts.
+This is a fresh, scoped approval of the exact 68 Python/configuration files below and the separately hashed archive-policy change. Both complete 476-test runs passed with identical source maps before and after execution. I independently reviewed the selector, catalogue history, default full-byte consumers, object-inventory races, pending cleanup, ownership, alias and pause boundaries; challenged two initially incomplete deletion sets; and verified the fixed evidence and original production commitments.
 
-Candidate: /Users/chengli/.codex/gcdl001-host/cli-proposal-worktree/goal_conditioned_decision_data.
+Candidate: /Users/chengli/.codex/gcdl001-host/store-proof-proposal-worktree/goal_conditioned_decision_data.
 
-Approved source-map SHA256: 00cc8253898f8f1c108632817663d5868257e297facf33c47bcc0aa4f99fdedd.
+Approved canonical source-map SHA256: 866bb13ee7f3df468a1718c81a15ee3d06788b9fd40d3e41eba4a920846c69ab.
 
-This approval authorizes only the reviewed source and its existing guarded operations. It does not state that CODE9 has already been promoted, that a destructive production command has been executed against it, or that a new scientific experiment has run. Production remained read only for this review. The worker's preserved migration pause and ordinary review, custody, STOP, resource and publication gates remain applicable.
+ARCHIVE_POLICY.md: 7,259 bytes; SHA256 52cd074feb13d9b86a01be8164e51f3beed963824c92d28bae5f74633d60b36e. Markdown policy is outside the 68-file Python/configuration map and must be copied and byte-verified separately during promotion.
 
-## Problem, exact change and independence
+Approval is based on the exact implementation and evidence, not inferred from a preceding PASS. No production eviction, store replacement, code promotion, scientific pilot or training was performed by this reviewer. Actual CODE10 deployment and GitHub compaction timing are not claimed here. The reviewed resource, STOP, source/evidence approval, pause, backup and custody gates remain required.
 
-The actual CODE8 standalone command python3 -B scripts/archive_cycle.py --manual reached _publish_render_controls with no package context and raised ImportError: attempted relative import with no known parent package. _require_render_controls had the same lazy-import defect. The preceding CODE8 suite covered packaged invocation and custody behavior but missed this standalone helper import mode. Root reported that the actual attempt stopped after remote catalogue verification and custody backup, before eviction, leaving all eleven selected payloads intact. The reviewed packaged -m invocation subsequently completed that already-authorized cleanup under unchanged CODE8 approval.
+## Problem and exact scope
 
-The complete CODE9 diff from the independently frozen CODE8 source map is exactly:
+The live CODE9 system had already evicted the local raw payload files but still retained archived blobs in the owned Git object database. A fresh complete raw reproof of all 366 historical indexed payloads was reported to exceed the existing 180-second compactor bound before store mutation. Repeating raw downloads for payload blobs absent from the owned store did not correspond to another removal of those local bytes.
 
-- scripts/archive_cycle.py: _publish_render_controls imports render_controls from goal_conditioned_decision_data.pipelines; _require_render_controls imports rendered and render_controls from the same absolute package. No other line or existing source file changes.
-- tests/test_archive_standalone_review.py: one new file containing exactly two targeted tests.
+CODE10 permits only the owned Git-store compactor to select raw blobs that are actually present in the store it will replace. Every immutable catalogue reference, complete raw catalogue and every payload entry in both snapshot and original source trees is still freshly proved. Full raw byte verification remains mandatory for every selected present archived blob. Already absent historical payload bytes are not removed again.
 
-The script already establishes ROOT.parent on sys.path and uses this absolute package convention at its top level. The two replacements therefore preserve the static module allowlist and helper behavior for both standalone and packaged invocation. They do not introduce dynamic imports, a configurable module path, a custody exception, a source-approval bypass, or a publication-limit change. Static inspection found no other package-relative import in the CLI scripts.
+The exact diff from live CODE9 consists of pipelines/remote_archive.py, scripts/compact_git.py, the new tests/test_store_proof_review.py, and the additional paragraph in ARCHIVE_POLICY.md. No other existing Python/configuration file changes or disappears. The Python/configuration source count grows from 67 to 68 because of the one new test file. Scientific generators, oracles, environments, profiles, configurations, label renderers, H/v2 evidence and producer behavior remain byte-identical to CODE9.
 
-The changed script SHA256 is 155cd58e8316cf8f47c68cde92c1ba4f18ab057c8ae6cc05bcb8c1143771e330. The new test file is 6,229 bytes, SHA256 6215e0fe206726782a9eef98be01d5966ae4675127c9ef365b5ae28afbbb1266. All other 65 existing Python/configuration files match the previously reviewed CODE8 map exactly; none is removed. The frozen candidate receipt reports/CODE9_CANDIDATE_SOURCE.json is 6,727 bytes, SHA256 fac29c136b013585f45c877133df0dbd8d1a00cc7c7e23644f2ec6273c0ea57d.
+The candidate source inventory is reports/CODE10_CANDIDATE_SOURCE.json, 7,063 bytes, SHA256 e112df6cd26697bfff7d2016c4478617018a8bce091ce2316595f1c9a0880017. The complete approved map is included below rather than inferred from this diff.
 
-I did not implement the import replacements or author the two new test cases. A separate independent reviewer authored the tests. I reviewed their fixture boundaries and assertions, reproduced the old errors separately, and ran the full final suite with my own runner. No source or test file was changed during final review.
+A separate implementation author owns the two Python changes and policy text. A separate independent tester authored the new adversarial tests. I authored no implementation or test change; I reviewed the actual source and fixtures, identified missing deletion-set cases before freeze, and ran a separate full suite. Only this final review artifact was written by this reviewer.
 
-## Standalone regression and custody checks
+## Proof selector and unchanged full-byte consumers
 
-Both new tests load the actual script with runpy.run_path under a non-package run name. They assert an empty/None __package__ in the loaded script/function globals, reproducing the failing import context without executing a destructive production main routine.
+The private _remote_proof helper accepts a keyword-only required_blob_ids selector. A supplied selector must be an exact set/frozenset of lowercase 40-character hexadecimal OIDs, with every OID covered by that validated catalogue. Unsupported container/value types, malformed IDs and uncovered IDs are refused before remote requests. The compactor supplies the exact per-catalogue intersection with the captured present archived-object set.
 
-The first invokes the real _publish_render_controls against an empty, resolved, owned temporary GCDL root. It uses the real empty pending inventory and expects None. Preparation, remote transport, archive subprocesses and eviction are forbidden; the programme remains empty.
+The default None mode retains the original complete raw proof. Public verify_archive and evict_verified do not expose or supply a selective mode: they continue to verify the complete returned bytes of every payload in the cohort before granting custody or unlinking local files. Their default behavior is explicitly tested after prior successful verification and with either old or new remote bytes corrupted. The selector does not create partial archive custody, change receipt/index schemas, alter the eviction allowlist or authorize a metadata-only unlink.
 
-The second supplies a matching completed rendered receipt using the existing gcdl_rendered_<32 lowercase hexadecimal digits> folder grammar. Its source batch points to an opaque, nonsealed accepted-shard fixture and binds the exact raw SHA256 and byte length. The real archive local IO and real rendered._batch admission execute before the mocked missing projection. The real helper must raise the exact existing qualified-controls RuntimeError. try_projection receives the exact parsed source batch; full receipt validation, remote/network/subprocess boundaries and eviction remain uncalled; every temporary programme file retains its exact bytes.
+In either mode, _remote_proof confirms the qualified snapshot ref, fetches/checks complete canonical catalogue bytes, proves every snapshot tree entry, proves every original source tree entry, and confirms the snapshot ref again. Tree checks retain path, blob type, allowed regular-file mode, exact OID and exact integer byte size. Raw selected paths additionally require exact length, SHA256 and Git-blob SHA1. A selected OID used by multiple catalogue paths still receives the path-specific byte/commitment checks; there is no first-path-only exemption.
 
-This second case prevents an import-only or nonrender no-op test from concealing loss of the guard needed before raw cohort eviction. The opaque source fixture is never parsed as a scientific record. The tests do not inspect production, fetch sealed payloads, produce official DEV cases or contact GitHub.
+An empty selector therefore authenticates the full catalogue and all source/snapshot metadata while fetching no payload raw bodies. It can be used by the compactor only when the captured owned-store inventory contains none of that catalogue's archived objects. Missing/moved refs, catalogue corruption and changed unselected tree entries still refuse the operation. It does not rehash all historical raw payloads at a fresh replacement when their local blobs are already absent; explicit full archive verification, eviction and audits remain the paths for complete raw rechecking.
 
-I also loaded the unchanged live CODE8 script under a standalone runpy context and invoked each failing helper with an empty owned temporary programme, forbidding network and archive actions. Both independently reproduced the same ImportError before any fixture mutation. The new complete suite passes both helpers under the repaired imports while retaining all previous guard tests. This is targeted coverage of the lazy import boundaries, not an actual destructive production run of the candidate.
+The return shape stays the existing descriptor. Its selective use is confined to the reviewed compactor call site and bounded by the exact approved source. It is not a new externally configurable deletion authority.
 
-## Complete frozen regression results
+## Complete historical deletion set and object races
 
-| Run | Result | Duration |
+The deletion cold-ID universe is the union of latest index-file OIDs and every OID in all validated immutable catalogue histories. It is not restricted to the current path index. This matters when an eligible historical report path has been reused: the latest index can name a newer version while an older catalogued blob still occupies the local Git store.
+
+The universe is used consistently for current-HEAD alias refusal, present-object selection, repeated object-inventory comparisons, replacement/installed-store absence checks and removal counters. An archived blob required by active HEAD under any code/configuration/control path refuses before replacement, including older archived versions absent from the latest path index. No reference or byte alias is silently discarded.
+
+Object enumeration uses the actual owned common Git store with lazy fetching/network materialization disabled. The original branch, exact origin mirror, clean owned primary/worktree layout, confirmed backup, remote owner, allowed worktree set and indexed custody gates remain intact. The selected set is captured from the actual existing objects, not from a declared count or guessed file size.
+
+The compactor re-enumerates archived objects after remote proof/authentication and again immediately before the first store rename. Any change to the captured present cold set refuses before mutation. This prevents a historical archived OID materialized during proof/preparation from being deleted without its required raw reproof. The clone and installed store must contain none of the complete historical cold universe. The existing source/runtime bytes, live worktree/state/lock inodes, pause bytes, branch identity, rollback checks and durable committed-cleanup behavior remain enforced.
+
+Two initially incomplete cases were raised during independent design review. First, selection from only current index.files would skip older catalogue versions of a reused path. The final implementation includes the validated historical union and tests both successful removal/counting and refusal on old-version corruption or active-HEAD alias. Second, active-store inventory alone cannot prove a retired store left after replacement; the pending path uses the full proof described next. Both corrections landed before source freeze without weakening existing assertions.
+
+## Pending retired-store cleanup
+
+The read-only _pending_cleanup_record helper first validates the existing journal's repository/programme, original HEAD, archive-index digest, exact managed transaction name, transaction identity, allowed children and any still-present retired/worktree identities. It makes no deletion while deciding the proof mode.
+
+Any validated compacted_cleanup_pending record retains full raw proof for all catalogue payloads. It never treats the empty healthy replacement inventory as evidence that old retired blobs are absent. This remains true when partial cleanup has removed retired .git/HEAD or other metadata. Corrupt/missing/offline raw proof preserves remaining retired bytes and the healthy active store.
+
+After proof, the validated pending record must still equal the initially captured record before cleanup. A newly introduced or changed pending journal cannot turn a selective proof into permission to delete a retired store. Object inventory is also checked again. The original durable receipt, no-rollback-after-partial-cleanup rule, identity guards and per-removal pause/deadline checks remain in place.
+
+This is deliberately a conservative fallback. Pending cleanup does not receive the fresh-swap download reduction. On a large historical archive, its complete proof may still exceed the existing 180-second bound and leave cleanup safely incomplete. This review does not guarantee fast resumed cleanup or authorize a weaker proof, longer timeout, inferred empty retired store or journal rewrite. A future bounded retired-OID proof design would require separate review.
+
+## Independent adversarial and complete regressions
+
+| Validation | Result | Duration |
 | --- | --- | --- |
-| Root complete final suite | 449 passed; 0 failures, 0 errors, 0 skipped | 349.635 seconds |
-| Independent complete final suite | 449 passed; 0 failures, 0 errors, 0 skipped | 351.690 seconds |
-| Separately authored focused standalone cases | 2 passed | 0.034 seconds |
+| Root complete frozen suite | 476 passed; 0 failures, 0 errors, 0 skipped | 366.959 seconds |
+| Independent complete frozen suite | 476 passed; 0 failures, 0 errors, 0 skipped | 372.079 seconds |
+| New independently authored focused suite | 27 passed | 9.171 seconds |
+| Original focused archive/store tests | 42 passed | 12.941 seconds |
 
-The 449 cases are the prior 447 cases plus the two standalone tests. Every original assertion executes. No case is removed, skipped, weakened or replaced. The exact 67-file map above was checked before and after both complete suites, and again after independent evidence and commitment inspection.
+The new test file is 32,979 bytes, SHA256 68c5266672ca94f528b90fbec5ad4541a78ea7555ad037571b4f6805d354a44c. It uses independently computed canonical JSON/SHA256/Git-blob expectations, opaque hand-specified bytes, an in-memory remote and disposable actual local Git repositories/bare snapshots. It uses no production data, credentials, paid API, real GitHub transport, model or scientific experiment.
 
-The root result is reports/CODE9_ROOT_SUITE.json, 639 bytes, SHA256 f34a614b653f0bea84e73bc4bf153fb95269d1ce63a854346ad1997008baaab1. Its count, zero failure/error/skip fields, identical source digests and historical-session counts match the final root outcome. The root runner is retained as reports/CODE9_ROOT_HARNESS.txt, SHA256 01603f9e66d50acf32b9e5f84ef9d7496a3eb1ba63cd6428b948636c3ce427e8. The root log SHA256 is 0369f1763ed9de66f310c876bbd3aaac2b264be03eff52d8a8b001cf2347ca94.
+The 27 cases cover default/public full raw proof, selected same-length/short/overlong/hash corruption, exact per-catalogue selection, malformed/unknown selectors, empty selector, moved refs, raw catalogue corruption, missing/type/mode/OID/size changes on unselected source and snapshot trees, actual shared-store object removal, historical reused-path versions, old-version HEAD alias, original store preservation on transport/corruption, late cold-object appearance, pending retired-only corruption, partial retired metadata loss, malformed/replaced pending transactions and a late valid journal introduced after selective proof.
 
-The independent runner was separate and used direct tests-directory discovery. An initial runner preflight using the package parent as unittest top_level_dir refused the namespace tests directory before executing any test. Corrected discovery loads all 449 cases and wraps the actual discovered historical module. No repository file, test assertion or scientific expectation was edited to resolve that runner issue.
+The complete 476 count is the unchanged previous 449 cases plus these 27. Every original assertion executes; no case is removed, skipped, replaced or weakened. The final source map was compared before and after both complete runs, after evidence inspection, and before this report was frozen. The suite also retains the previous standalone import regression, archive eviction races/recovery, sparse Git cleanup/rollback, immutable snapshot creation, profile/batch replay, metadata-only sealed recovery, deadline/source/pause refusal, render-control qualification, goal-only rendered comparisons and historical scientific/custody checks.
 
-Both final suites used the previously declared RAM-only public read-session accommodation for only two original production compatibility methods:
+The root result reports/CODE10_ROOT_SUITE.json is 640 bytes, SHA256 60ec6e8432b2327f27cd47cadac12d2722c37ac6041ad77a90b2c831d99802a0. The root harness SHA256 is 769ac42899c5cb559a9a68c7a1293c8ad65c4f30763dd0f8c2f7dc2d8ba4f7ff and log SHA256 2affdd011d0747c839a1a7d7bab59be208588a970201de9ba41b741cf42c29ac. Their recorded counts, zero failure/error/skip fields and before/after map match the final outcome.
+
+The independent runner was separate, passed through stdin, and left no runner file in the proposal. Both complete runs used the declared public RAM read-session accommodation only for these two unchanged production fixture methods:
 
 - IndependentV1Compatibility.test_all_1936_nonsealed_archived_rows_validate_without_rewriting_receipts
 - IndependentV1Compatibility.test_three_predeclared_production_batches_match_ids_candidates_labels_fingerprints
 
-A session may be replaced after 60 seconds only between completed historical reads. In each final run the all-corpus method used five sessions and the three-batch method one. All original byte commitments, IDs, labels, candidate order, fingerprints and receipt assertions still execute, including every one of the 1,936 original nonsealed v1 rows. No other test or temporary fixture runs inside this accommodation. It writes no disk cache and changes no source byte, transport bound, production global deadline, test denominator or mathematical expectation.
+A replacement session opens after 60 seconds only between completed historical reads. Each run used five sessions for the all-corpus method and one for the three-batch method. Every original row, byte hash, ID, candidate, label, fingerprint and receipt assertion executes. No other test or temporary root is wrapped. No source edit, disk cache, production global deadline change or scientific expectation adjustment is made by this harness.
 
-The complete suite continues to exercise archive tamper/missing/offline/ref movement, custody before unlink, interrupted move restoration, path/inode/ancestry checks, sparse-Git cleanup and rollback, immutable snapshot creation, historical source/receipt lineage, sealed metadata-only recovery, atomic v2 triplets, goal-only rendered comparisons, proof/root/session/deadline refusal, late operator-pause/source changes, and the CODE8 metadata-control qualification lifecycle. PASS is a manually scoped conclusion from those results and this source/custody inspection, rather than an automatic inference from a test counter or older report.
+## Fresh production preservation and observed inventory
 
-## Production byte commitments and counts
+I reread the archived CODE8_IMMUTABLE_BEFORE control through bounded authenticated read-through into RAM. Its raw SHA256 remains 2f2360e1b340d2b9deaf2a454ece5ebe4eed1c8080e52ba7d558f67296d975c0 and its 173-entry canonical map digest bc386b68aed8b32b82870b244d88a894cf8f8ae271c4ccfbb57bf1865a0fbad2.
 
-I retrieved only the already archived reports/CODE8_IMMUTABLE_BEFORE.json control through bounded authenticated read-through into RAM, then compared its entire 173-entry map with current production. All 86 canonical shard SHA256 commitments, all 86 exact raw batch-control SHA256 values and the SEALED_FREEZE control SHA256 matched.
+Every entry matched current production: 86 canonical shard commitments through public metadata, 86 exact retained raw batch-control hashes, and the SEALED_FREEZE control hash. All eight sealed shards were absent locally, and a guard explicitly forbade data/sealed/ local-byte-reader calls; network subprocesses were forbidden during this commitment comparison. No production sealed payload was opened, fetched or decoded. This proves stored commitment preservation, not a new sealed-target evaluation.
 
-The inventory file SHA256 is 2f2360e1b340d2b9deaf2a454ece5ebe4eed1c8080e52ba7d558f67296d975c0. Its 173-entry canonical map digest remains bc386b68aed8b32b82870b244d88a894cf8f8ae271c4ccfbb57bf1865a0fbad2.
+Current metadata-only totals are 2,904 accepted records in 98 canonical groups: v1 2,152/74 groups and v2 752/24 groups, with zero quarantine. Accepted split counts are train 1,832, dev 413, ood 443, sealed 216. The 32 completed render groups contain 3,984 derived rows: train listwise/computation/distillation 1,872/300/360; dev 510/90/108; ood 546/90/108. These surfaces repeat canonical worlds and are not extra independent worlds. No current row payload was read for this counting step.
 
-Shard comparison used public payload_info metadata. The eight sealed shard paths were absent locally; a guard explicitly refused every data/sealed/ local-byte-reader call. During the commitment comparison, remote subprocess calls were also forbidden. The batch and freeze controls were hashed as their exact retained raw bytes. No sealed payload was opened, decoded or fetched. This checks custody commitments, not sealed outcome correctness.
+The current archive index is 366 paths across 13 catalogues, digest 6a8f9d086d7fdc94c6163b63b72030d765d09b655e1c0e61fa2e21d1583fba2c. A separate read-only, no-lazy-fetch Git metadata inventory found 70 present archived OIDs; their unique raw lengths sum to 15,747,931 bytes. None of those present OIDs belongs to a sealed path. All current catalogue histories have 366 entries and 363 distinct archived OIDs, with no historical-only present OID in this particular live inventory. The defensive historical-union tests remain necessary even though the current live sample has no reused-path version difference.
 
-The current archive index has 289 paths and digest 0f24960361d854a7b02e1ba626269140e98f268ee2f89125fcdea5a77a46ce20. Root's C4 snapshot was 2baa84e8e2dbbbc44034b978b07366bb2d75c368, closing the eleven-payload cohort under unchanged CODE8 packaged execution. My metadata-only historical comparison after that cleanup still matched all 173 entries.
+These are metadata observations, not a download or execution benchmark of CODE10. A raw OID can require multiple path/catalogue checks, and the complete catalogue/tree/ref proof still runs. Actual compaction may fail its existing bound and preserve the store; a successful production cleanup is not asserted before deployment.
 
-I separately summed the retained production batch and rendered-receipt metadata, without reading row payloads. The exact current totals remain:
+All scientific files match CODE9; this review's historical compatibility method again checked all 1,936 original nonsealed v1 rows against their captured commitments. It does not newly audit every current nonsealed row or infer a generalization result from the increased operational corpus counts.
 
-| Inventory | Count |
-| --- | --- |
-| Canonical groups | 86 |
-| v1 groups / accepted records | 74 / 2,152 |
-| v2 groups / accepted records | 12 / 376 |
-| All accepted canonical records | 2,528 |
-| Quarantined records | 0 |
-| Accepted train / dev / ood / sealed | 1,576 / 355 / 381 / 216 |
-| Completed rendered groups / derived rows | 24 / 2,976 |
+## Unchanged gates and scientific scope
 
-Derived rows retain the original split/view accounting: dev listwise/computation/distillation 336/60/72; ood 360/60/72; train 1,488/240/288. These surfaces repeat canonical worlds and are not counted as additional independent scientific examples. No canonical or rendered publication occurred in this review.
+CODE10 introduces no new archive authorization, deletion path outside the owned Git store, filesystem allowlist, sealed reservation, data generator, label logic, training operation or external publication target. Canonical/raw eviction retains complete fresh raw proof. Only fresh owned-store replacement may avoid downloading already absent archived objects.
 
-## Unchanged operations and bounded scope
+The programme ceiling stays 512 MiB, accepted/rendered publication floor 10 GiB, processing/compaction bound 180 seconds, rendering allowance 144 seconds and watchdog 340 seconds. The render-control limits remain 16 KiB per capsule, 8 MiB aggregate, 32 MiB total controls, two 8 MiB RAM proof-cache units, four new receipts per activation and the original metadata reserve. The ordinary owner/lock/OS trust boundary is unchanged; this review does not claim resistance to arbitrary same-UID code/memory tampering outside that protocol.
 
-The CODE8 projection authority, raw derivation, remote proofs, lifecycle and storage behavior are byte-identical in CODE9. Prepared self-hashed capsules remain untrusted. Every newly activated receipt is rederived with the original full raw validator and use_controls=False; previous qualified capsules must be inherited exactly. The qualified aggregate binds a fixed snapshot ref/commit, tree mode/OID/length, raw SHA256 and Git-blob SHA1, with pre/post control and original payload catalogue ref checks. Relevant current receipt/source/specification/protected-index/custody descriptors are compared on each projected lookup. Unrelated archived cohorts do not invalidate a valid historical projection; changed covered lineage refuses it. Unprojected exports retain their full raw fallback.
+The H prototype remains inactive and DEV-only. Its once-only 800-case measurement belongs to the original 61-file source freeze 4a4c0c9cbe233dba9a9857e5d70963dfd04e4b436df9448be14493afb896cd3e. H module SHA256 remains 18751b15853905d79ed644c6ced6ce4e21a46300a189defc54465b564d3621f0 and spec SHA256 dc2a17a16860c5087ca3a8a583bd7fd3a3c6abfb7c8b08ebc697252102ce7ea9. This later operations map does not retrospectively become its freeze.
 
-Only label-free scalar/lineage metadata is persisted. Source prompts, targets, per-record labels, selected-record arrays and full provenance/gold do not enter the projection capsule. Session reuse remains root/provider/authority/deadline bounded and rehashes local aggregate bytes; a new session establishes remote proof again. This does not assert detection of every arbitrary remote mutation on every lookup after a completed session proof.
+The fixed H result retains zero mismatches in 800 DEV cases (96 goal, 128 constraint, 544 atom ablation, 32 baseline), 96 three-step goal winners, all 544 changed nonempty exact ablation best sets, 32 complete-conjunction Q/Q-reverse ties and baseline success 32/32. Its recorded simple blind-positive-add membership is 7/96, highest/longest shortcut 32/96, and constraint-blind/terminal-only membership 64/128. Full baseline generation of 928 rows with 896 unused remains separate from the 800 evaluated-case denominator.
 
-The two alternating local aggregate slots preserve the active pointer until exact new derivation, predecessor identity, remote proof and final publication guards succeed. The ordinary lock protocol and qualified owner/same-user OS trust boundary remain unchanged. CODE9 does not claim protection from arbitrary same-UID code/memory replacement outside that protocol.
+Developmental index overlap, seed-driven identity/order, literal a/b/c vocabulary, register/reject semantics, formula-aware shortcuts and supplied-candidate optimality remain the stated limits. No learned held-out generalization, transfer, global-plan optimum, production H profile, model training or sealed scientific result is claimed.
 
-The reviewed ceilings remain 16 KiB per capsule, 8 MiB per aggregate, 32 MiB total controls, two 8 MiB RAM proof-cache units, four new receipts per activation, 4,096 covered receipt entries, 1 MiB metadata reserve, 512 MiB total programme storage, a 10 GiB accepted/rendered publication floor, 180-second processing budget, 144-second rendering allowance and 340-second watchdog. Hitting a gate refuses work and retains raw payloads; no unlimited history or specification-upgrade guarantee is added.
+The v2 confirmation retains its original 42-file source freeze fdfd63b45b071928080ac14e730f4f17df107dc6ffa6fd1b950a7ecd5e34b467, exact evidence and prior accounting/interpretation. Neither H nor v2 was rerun here. Their custody and replay regressions remain part of the full suite.
 
-STOP, exact initial pause bytes, current independent source/evidence approval and the shared deadline still guard preparation, backup, create-only snapshot publication, activation and pointer installation. Completed rendering cohorts still require attested controls before raw eviction, including resumed partial cohorts. No admission rule, deletion allowlist, cleanup journal, backup qualification, source guard or sealed reservation changes in this patch.
+## Exact scientific evidence commitments
 
-Root reported the actual CODE8 24-group control migration complete, bounded cold recovery in 37.849 seconds, and a full 2,312-row nonsealed release check passing eleven gates in 146.801 seconds. Those are prior operational observations under CODE8, not new independent throughput measurements or experiments under CODE9. The present approval's new runtime claim is the repaired standalone import boundary plus the final complete regressions.
-
-## Frozen scientific evidence remains historical
-
-All scientific generators, profiles, configurations, environments and oracles retain the exact CODE8 bytes. The inactive H prototype remains DEV-only; no production H profile, training, canonical prototype publication or new sealed evaluation is introduced.
-
-The once-only H measurement remains tied to its original 61-file source freeze 4a4c0c9cbe233dba9a9857e5d70963dfd04e4b436df9448be14493afb896cd3e. The H module SHA256 remains 18751b15853905d79ed644c6ced6ce4e21a46300a189defc54465b564d3621f0 and its spec SHA256 dc2a17a16860c5087ca3a8a583bd7fd3a3c6abfb7c8b08ebc697252102ce7ea9. This later operations source map does not retrospectively become its experimental freeze.
-
-The preserved H result is PASS for 800 evaluated DEV cases in 5.722628 seconds with zero mismatches: 96 goal cases, 128 constraint cases, 544 atom ablations and 32 baseline cases. It retains all 96 three-step goal winners, all 544 changed nonempty exact ablation best sets, the 32 complete-conjunction Q/Q-reverse ties and baseline success 32/32. Recorded goal-blind positive-add/lowest-ID membership is 7/96, the highest/longest shortcut 32/96, and constraint-blind/terminal-only membership 64/128. Baseline generation of 928 v2 rows with 896 unused rows remains explicitly separate from the 800 evaluated-case denominator.
-
-These are mechanical checks of supplied candidate plans. Dynamics depend on developmental index, with developmental overlap disclosed; seed mainly controls identities/order. Literal a/b/c vocabulary supplies no vocabulary holdout, register/reject cases supply no ledger transfer result, and supplied-plan optima supply no global action-space claim. Formula-aware shortcuts remain possible. There is no claim of held-out learned generalization, model improvement, training, transfer or prototype production readiness.
-
-The v2 confirmation likewise retains the original 42-file freeze fdfd63b45b071928080ac14e730f4f17df107dc6ffa6fd1b950a7ecd5e34b467 and its recorded results/limits. H and v2 were not rerun in this review; their raw custody, accounting and replay regressions remain in the complete suite.
-
-I reread all five required evidence files through the bounded read-through interface and verified their exact raw SHA256. Byte lengths remain H freeze 25,929; H STARTED 251; v2 freeze 6,375; H result 805,131; v2 result 112,806. The sole literal required_evidence map authorized by this report is:
+All five required evidence files were reread through the bounded interface and matched exact raw SHA256. Byte lengths are H freeze 25,929; H STARTED 251; v2 freeze 6,375; H result 805,131; v2 result 112,806. The sole literal required_evidence map authorized by this report is:
 
 ```json
 {"manifests/H_COMPOSITION_EXPERIMENT_FREEZE.json":"3b22f95b23189bc6fa92439559c67259d6d6eef916a8a9546c28ed12aa98101c","manifests/H_COMPOSITION_EXPERIMENT_STARTED.json":"45722e9caa95880ed6cb26b0849a75c1c6da0d758a25e42e951275d4d38940ab","manifests/V2_EXPERIMENT_FREEZE.json":"b79b718d82040eff44ea5694235ea1329c30b8a98d2a75c02e4066c58c7313f0","reports/H_COMPOSITION_CONTROLLED_EXPERIMENT.json":"4e4ec400a1aba413ce0112e7b43cd8bfd220a3fd5bbbbede70b08f1a031f27ca","reports/V2_CONTROLLED_EXPERIMENT.json":"ba1fe158612645ee017feefa3403676bf4efadc05050834c6e4ed5e7de15daf3"}
 ```
 
-Any changed/missing evidence, changed reviewed source byte or changed active report invalidates this scoped approval under the existing review guard. Historical catalogue, index and custody evidence remains separately bound and cannot silently broaden the statement.
+Missing or changed evidence, reviewed source bytes or active review invalidates this approval under the existing source/evidence guard. The separately pinned policy bytes must also match the approved promotion. Historical catalogue/index/custody records remain separately bound; they cannot broaden this statement or turn selective store proof into partial file-eviction custody.
 
-## Exact approved source map
+## Complete approved source map
 
-Python/configuration count: 67.
+Python/configuration count: 68.
 
-Canonical SHA256 of the complete map: 00cc8253898f8f1c108632817663d5868257e297facf33c47bcc0aa4f99fdedd.
+Canonical map SHA256: 866bb13ee7f3df468a1718c81a15ee3d06788b9fd40d3e41eba4a920846c69ab.
 
-The complete map is listed here, not inferred from the two-line diff. Operational result artifacts and this report remain separately pinned by the validation receipt; they are not silently included in the Python/configuration source-map digest.
+This complete map, the fixed review bytes, the five-path evidence map and the separately hashed policy define the approval scope. Operational result artifacts are not silently added to the source-map digest.
 
 ```json
 {
@@ -154,14 +156,14 @@ The complete map is listed here, not inferred from the two-line diff. Operationa
   "oracles/independent.py": "0453985a3347ea9e503c44dff4eef9ad7f7de1a9efa88537c05d569c96a032ae",
   "oracles/primary.py": "0797623f90d1d53de1034c0c8fb07fbfc56207924b829f9945729dcd52639d19",
   "pipelines/common.py": "26eafc2cccefb424c8aff89b21cbb6cf81e73a67474c97b9749e02b942358b82",
-  "pipelines/remote_archive.py": "3f4d71088cfc9968a6bf030921c1f8cd4d43b033bcaf4683afbdb16f7b4ed4a3",
+  "pipelines/remote_archive.py": "ff31136f45a22a90d2ceb138f0e9d63d7fc94bfec137d4244d592ad27c4ba7c2",
   "pipelines/render_controls.py": "069d1228ab0213e669b27ebc5130e529594c1d1a08b36f43c9f387e79298b001",
   "pipelines/rendered.py": "ae1e322fa40f7917ebb0f15eb01e2096ba5777c4174dfbb1c3b7f29ae5239014",
   "pipelines/worker.py": "143056de86e910a62148ff534dac4f6545f83c4edb147d35f26c78149510764f",
   "scripts/archive.py": "6aa490a52721e09cd1c4faf9144f7fbd21fb88aa966d356af07d71f99ea56abd",
   "scripts/archive_cycle.py": "155cd58e8316cf8f47c68cde92c1ba4f18ab057c8ae6cc05bcb8c1143771e330",
   "scripts/backup.py": "ab3155c896b10475bf4ebc58be7fc8fc00f70796d397f11b0111707ca14931c8",
-  "scripts/compact_git.py": "95b231416f5e299d7d4cfd7b2af654abbbe490d5558ca9ffe5fd0ba1f529c90b",
+  "scripts/compact_git.py": "c7d4710a4029e60fb8436bb1bfd3582ddf7c9e328980244e48300df47785f092",
   "scripts/control.py": "9990ad7a7538dc9ce8fdd10d3db26f9a592f56f04d74ef6138f7f5054f8ea909",
   "scripts/export.py": "9137f4303865a2cb93957a2a7a28b1232c4fa93aa342369b2507b495b49b51d5",
   "scripts/export_training.py": "0aefb65fd8cccc4d3e8086a437db9e8a51c6b65abb96f9803fc9b9a9588fc33f",
@@ -192,6 +194,7 @@ The complete map is listed here, not inferred from the two-line diff. Operationa
   "tests/test_rendered_pipeline.py": "4cb9642415f5f495fcfe33629330fd50e67e1ea8e12f24eb4a39c5c983954b42",
   "tests/test_rendering.py": "31a0335a99e7f59b30fa1fc854b473cfccddf02c0747a4ee603b6016931fb5a4",
   "tests/test_runtime_session_review.py": "3a0ff8514b8c77052b53d3be1b772d9eac0f89dffdaa407074bccdf49522f65b",
+  "tests/test_store_proof_review.py": "68c5266672ca94f528b90fbec5ad4541a78ea7555ad037571b4f6805d354a44c",
   "tests/test_surface_review.py": "c6dbc104a66122ad4a0c7255afb57c423fb7add32a988d9763cde8db05f3fe03",
   "tests/test_v2_review.py": "adb97f1e6ab879609a13492f346fdbb6afe7e4d11767b3e8f7ffeeb75268e1b0",
   "tests/test_version2.py": "5c58b03e8518932ca3536a212ff0deb4ff18c0ca100bb9f14b54745e934698be"

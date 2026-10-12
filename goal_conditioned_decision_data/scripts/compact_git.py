@@ -209,7 +209,8 @@ def _remove_tree(path):
 def _write_receipt(root,record):
     archive._write(root,'state/git_compaction.json',(archive._canonical(record)+'\n').encode(),immutable=False)
 
-def _cleanup_pending(root,host,head,index_digest):
+def _pending_cleanup_record(root,host,head,index_digest):
+    """Validate a pending retired-store receipt without removing any bytes."""
     if not archive._path(root,'state/git_compaction.json').exists():return None
     record=json.loads(archive.read_text(root,'state/git_compaction.json'))
     if record.get('status')!='compacted_cleanup_pending':return None
@@ -222,6 +223,16 @@ def _cleanup_pending(root,host,head,index_digest):
         raise RuntimeError('retired-store transaction directory replaced')
     if set(path.name for path in transaction.iterdir())-{'retired','worktree'}:
         raise RuntimeError('unexpected files in retired-store transaction')
+    for name,key in (('retired','retired_identity'),('worktree','temporary_identity')):
+        path=transaction/name
+        if (path.exists() or path.is_symlink()) and _directory(path)!=record.get(key):
+            raise RuntimeError('pending retired-store path replaced; unrelated bytes retained')
+    return record
+
+def _cleanup_pending(root,host,head,index_digest):
+    record=_pending_cleanup_record(root,host,head,index_digest)
+    if record is None:return None
+    transaction=host/record['transaction']
     _paused(root)
     try:
         _cleanup_tree(transaction/'retired',record['retired_identity'])
@@ -287,16 +298,36 @@ def _compact(root,*,lock_fd,transport):
         index_digest=index.get('digest')
         if not isinstance(index_digest,str) or not re.fullmatch('[0-9a-f]{64}',index_digest):
             raise RuntimeError('invalid archive index digest for Git compaction')
+        # The current path index can point at a newer archived version. Older
+        # catalogued bytes still belong to custody and may remain in Git history.
+        for descriptor in index['catalogs'].values():
+            catalog=archive._catalog(json.loads(archive.read_text(root,descriptor['catalog_path'])))
+            cold_ids.update(meta['git_blob_sha1'] for meta in catalog['files'].values())
+        if cold_ids.intersection(head_blobs):
+            raise RuntimeError('archived byte alias remains required by active HEAD; full eviction impossible')
+        pending_record=_pending_cleanup_record(root,host,head,index_digest)
+        present_cold_ids=cold_ids.intersection(before_objects)
         remote=transport or archive.GitHubTransport(root,seconds=_remaining(180))
         for identifier,descriptor in index['catalogs'].items():
             catalog=json.loads(archive.read_text(root,descriptor['catalog_path']))
-            archive._remote_proof(root,catalog,descriptor['catalog_commit'],remote)
+            if pending_record is not None:
+                # A partially removed retired store may no longer have usable
+                # Git metadata. Never infer that its last payload bytes vanished
+                # from the empty replacement inventory: keep full raw proof.
+                archive._remote_proof(root,catalog,descriptor['catalog_commit'],remote)
+            else:
+                required={meta['git_blob_sha1'] for meta in catalog['files'].values()} & present_cold_ids
+                archive._remote_proof(root,catalog,descriptor['catalog_commit'],remote,required_blob_ids=required)
         _paused(root)
         env=_owner_environment();server=_server_heads(repo,env)
         primary_head=_git(old_repository,['rev-parse','HEAD']).decode().strip()
         if (server.get('refs/heads/'+BRANCH)!=head or not _primary_reachable(repo,primary_head,refs,server)
                 or any(server.get(reference)!=oid for reference,oid in refs.items())):
             raise RuntimeError('local branch/detached HEAD is not confirmed on GitHub')
+        if cold_ids.intersection(_object_ids(repo))!=present_cold_ids:
+            raise RuntimeError('archived Git objects changed during proof; original store retained')
+        if _pending_cleanup_record(root,host,head,index_digest)!=pending_record:
+            raise RuntimeError('retired-store cleanup receipt changed during proof; remaining bytes retained')
         pending_cleanup=_cleanup_pending(root,host,head,index_digest)
         if pending_cleanup is not None and pending_cleanup['status']=='compacted_cleanup_pending':return pending_cleanup
         if not cold_ids.intersection(before_objects):
@@ -347,6 +378,8 @@ def _compact(root,*,lock_fd,transport):
             if (_directory(transaction)!=transaction_identity or _directory(replacement)!=replacement_identity
                     or retired.exists() or retired.is_symlink()):
                 raise RuntimeError('Git replacement collision; every original byte retained')
+            if cold_ids.intersection(_object_ids(repo))!=present_cold_ids:
+                raise RuntimeError('archived Git objects changed during preparation; original store retained')
             os.rename(old_repository,retired);retired_moved=True
             os.rename(replacement,old_repository)
             fd=os.open(pending,os.O_WRONLY|os.O_CREAT|os.O_EXCL|getattr(os,'O_NOFOLLOW',0),0o600)

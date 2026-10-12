@@ -765,7 +765,20 @@ def plan_archive(root, paths=None, commit=None, *, max_files=MAX_BATCH_FILES, ma
         return catalog
 
 
-def _remote_proof(root, catalog, catalog_commit, transport):
+def _remote_proof(root, catalog, catalog_commit, transport, *, required_blob_ids=None):
+    """Prove custody; only owned Git compaction may select present raw blobs.
+
+    The catalog and every snapshot/source tree entry remain fully checked.
+    Public archive verification and eviction omit the selector and therefore
+    verify complete returned bytes for every payload.
+    """
+    if required_blob_ids is not None:
+        if (type(required_blob_ids) not in (set, frozenset)
+                or any(type(oid) is not str or not _HEX40.fullmatch(oid) for oid in required_blob_ids)):
+            raise ArchiveError('invalid required archive blob selector')
+        required_blob_ids = frozenset(required_blob_ids)
+        if not required_blob_ids.issubset({meta['git_blob_sha1'] for meta in catalog['files'].values()}):
+            raise ArchiveError('required archive blob selector is outside catalog')
     reference = archive_ref(catalog_commit)
     if transport.fetch_ref(reference) != catalog_commit:
         raise ArchiveError('archive snapshot ref is missing or not immutable commit')
@@ -776,7 +789,10 @@ def _remote_proof(root, catalog, catalog_commit, transport):
         # The durable snapshot itself retains the exact payload tree entry.
         # An unreferenced source commit is insufficient remote custody.
         _tree_entry(transport, catalog_commit, relative, expected)
-        _tree_blob(transport, expected['commit'], relative, expected)
+        if required_blob_ids is None or expected['git_blob_sha1'] in required_blob_ids:
+            _tree_blob(transport, expected['commit'], relative, expected)
+        else:
+            _tree_entry(transport, expected['commit'], relative, expected)
     if transport.fetch_ref(reference) != catalog_commit:
         raise ArchiveError('archive snapshot ref changed during raw-byte proof')
     return {'catalog_commit': catalog_commit, 'archive_ref': reference, 'catalog_path': catalog_path(catalog['catalog_id']),
