@@ -417,7 +417,7 @@ No LM tokens are involved.
 
   Wrong deltas (17 claims) are outside a legality predicate's scope. A\*'s reachable recall is therefore about 0.97.
 - **S2: producer identity.** T-KO keys are split into halves A and B (120 each, stratified by n × legality; seed
-  20261249). CR-F0 is trained on half A and tested on FK's half-B claims, and CR-FK the reverse. Both are compared with
+  20261213). CR-F0 is trained on half A and tested on FK's half-B claims, and CR-FK the reverse. Both are compared with
   CR-PROC and with the claim-blind A\* on the same half-B claims. Reading: identity learning if a CR arm's recall on the
   opposite-polarity class is < 0.5 while A\*'s is ≥ 0.9. Small n (FK has 46 unique invalid keys), so this is
   descriptive only.
@@ -441,7 +441,7 @@ No LM tokens are involved.
 
 ### 4.3 Statistics
 
-- **Bootstrap.** Clustered over problems (T-PA: 240) or keys (T-KO: 240); 10,000 resamples; seed 20261249; percentile
+- **Bootstrap.** Clustered over problems (T-PA: 240) or keys (T-KO: 240); 10,000 resamples; seed 20261213; percentile
   95% intervals.
 - **Seeds.** Endpoints are computed per seed. The pooled statistic is the seed-mean within each resample. Per-seed
   values are always shown.
