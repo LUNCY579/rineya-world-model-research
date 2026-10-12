@@ -163,7 +163,7 @@ def _select_payloads(root,index,priority):
 
 def _publish_render_controls(root,deadline,transport,lock_fd,*,max_receipts=None):
     """Qualify bounded label-free recovery controls before their raw headers leave."""
-    from ..pipelines import render_controls
+    from goal_conditioned_decision_data.pipelines import render_controls
     with archive.read_session(root,deadline=deadline):
         archive._check_stop(root)
         pause=archive._path(root,'state/PAUSED.json')
@@ -205,7 +205,7 @@ def _publish_render_controls(root,deadline,transport,lock_fd,*,max_receipts=None
 
 def _require_render_controls(root,receipt,deadline):
     """An interrupted partial cohort cannot evade qualification through recovery."""
-    from ..pipelines import rendered,render_controls
+    from goal_conditioned_decision_data.pipelines import rendered,render_controls
     candidates=[path for path in receipt['files'] if path.startswith('data/rendered/')]
     if not candidates:return
     with archive.read_session(root,deadline=deadline):
