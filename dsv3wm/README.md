@@ -7,10 +7,12 @@ has 24/24 exact four-step development rollouts, with all intermediate states
 correct. Adapted A0/A1/A2/A5 scored24/22/24/23; direct four-step accuracy is0/24
 for each. Neither predictive arm meets the fixed gain gate. Planning scored
 12/12 for B0/A0/A1/A2 and11/12 for A5; A1/A2 also lose a retained boundary
-legality fixture. H3/Ledger execution is next. G4–G7 remain unqualified; confirmation
-labels remain sealed. See `reports/RECOVERY_STATUS.md` and `reports/NEXT_STAGE.md`.
+legality fixture. H3/Ledger/Blocksworld execution is next. G4–G7 remain unqualified;
+confirmation labels remain sealed. See `reports/RECOVERY_STATUS.md`,
+`reports/GATE_STATUS.md` and the exact pending commands in `reports/NATIVE_QUEUE.md`.
 Original test evidence remains in `results/TESTS_FINAL.json`; new records use
-separate paths.
+separate paths. The current package passes175 tests and compilation, recorded
+in `results/recovery-v1/PREPARATION_CHECKPOINT_07.json`.
 
 Dedicated experiment, isolated from BWM/RCWM. No core/model release or promotion.
 Parent repository baseline: `aeb19ab17128d884c4457ce59db6e926ceb13a7a`.

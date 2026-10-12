@@ -298,6 +298,8 @@ def admit_readout_lineage(adapter, run_path, cfg, *, warm_baseline=False, train_
             or record.get("adapter_sha256") != sha256(adapter / "adapter_model.safetensors")
             or not isinstance(record.get("adapter_config_sha256"), str)):
         raise ValueError("H3-trained status/arm/weight/config-hash lineage required; use --warm-baseline for A0/A2")
+    if json.dumps(record["config"], sort_keys=True, separators=(",", ":"), allow_nan=False) != json.dumps(cfg.dict(), sort_keys=True, separators=(",", ":"), allow_nan=False):
+        raise ValueError("full trained student/control configuration differs from readout configuration")
     assert_adapter_configuration(adapter / "adapter_config.json", recorded_sha256=record["adapter_config_sha256"])
     kind = ("h3-continuation-control-C3" if cfg.arm == "A3" else "h3-continuation-control-C4") if record["config"].get("control_extra_one_step") is True else "h3-trained-student-proposer"
     return record, [], kind

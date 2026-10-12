@@ -5,14 +5,14 @@ assignment. The original pilot/report records remain immutable evidence.
 
 ## Immediate resource state
 
-RDW E02/E05 completed and released their CPU slots. The recovery programme is
-finished its bounded planning/retention block after four trained-arm dynamics
-readouts. RDW E06's first10-update slot is now reserved by helper session2633;
-see `results/CPU_RESERVATION_RDW_E06_SLOT_001.json`. Check the live
-`rineya-cpu-lane.json` before loading any model; do not
-infer a free lane from this static document. The next peer E06 slot awaits its
-source review and explicit token/marker coordination. Its reservation
-must end only after native child exit/RAM release. Do not modify the peer bundle.
+RDW E02/E05 released their CPU slots. Recovery finished its bounded
+planning/retention block after four trained-arm dynamics readouts. RDW E06's
+first10-update slot completed and helper2633 released. RCX acquired the CPU
+lane; H3's first launch failed before model load. See `NATIVE_QUEUE.md` for
+evidence, frozen jobs and bounded retry paths. Check live `rineya-cpu-lane.json`
+before loading any model; never infer a free lane from this static document.
+Peer slots require explicit token/marker coordination and must end only after
+native child exit/RAM release. Do not modify the peer bundle.
 
 The GPU lock remains held by the BWM bundle record with a nonempty worker list;
 do not reclaim it outside the established coordination rules.

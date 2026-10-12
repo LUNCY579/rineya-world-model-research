@@ -1,7 +1,13 @@
 # Registered-interface recovery: interim evidence
 
 Updated 2026-10-12 UTC after four adapted dynamics readouts. Full research goal
-remains open; H3 and Ledger native work remain.
+remains open; H3, Ledger and Blocksworld native work remain. The first H3 attempt
+stopped before model loading when RCX acquired the CPU lane; see `NATIVE_QUEUE.md`.
+The current package passes175 tests and compilation. Prospective Ledger,
+R/P-retention and constructed Blocksworld G1 inputs are frozen; their native
+outcomes are still unknown.
+
+![Fixed development results](../results/recovery-v1/recovery_counts_v2.png)
 
 ## Completed adapted dynamics pilot
 
@@ -97,8 +103,8 @@ This is not proof of unseen parent-backbone arithmetic.
 Qualification took 88.196 seconds including loading/hashes, with 120 learned
 queries, 14,246 prompt tokens and 1,789 output tokens. The conservative processed
 position upper bound is 15,960. These are native CPU measurements. Direct h2/h4
-was not measured in B0's qualification schedule. Planning and behavioral
-retention are pending.
+was not measured in B0's qualification schedule. Its later planning and
+behavioral retention results are reported above.
 
 Source: `results/recovery-v1/B0_qualification.json`, prospectively frozen by
 `prereg/RECOVERY_FREEZE_V1.json`. The posthoc supplement reconstructs all 120
