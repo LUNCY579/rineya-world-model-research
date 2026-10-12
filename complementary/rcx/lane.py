@@ -82,12 +82,51 @@ def try_acquire(job, pid, expected_min, party=PARTY):
     return rec
 
 
-def acquire(job, pid, expected_min, need_ram=None, poll_s=60, log=print, party=PARTY, ram_fn=None, max_wait_s=None):
-    """Block until the lane is ours; returns the lock record."""
+def load_windows(path):
+    """Quiet windows agreed with the GPU peers (BWM D-84, RCWM D-51): JSON {"windows": [[start, end], ...],
+    "end_margin_min": m} with local ISO times ("2026-10-12T23:00"). Returns (list of (start, end) datetimes, margin)."""
+    import datetime as dt
+    d = json.loads(Path(path).read_text(encoding="utf-8"))
+    ws = [(dt.datetime.fromisoformat(a), dt.datetime.fromisoformat(b)) for a, b in d["windows"]]
+    return ws, float(d.get("end_margin_min", 5))
+
+
+def window_ok(windows, expected_min, now=None, margin_min=5.0):
+    """(True, '') iff `now` lies inside a window and a block of `expected_min` minutes started now ends at least
+    `margin_min` before that window closes; otherwise (False, reason). No block may straddle a window's end or start
+    outside the windows (BWM D-84 request: avoids a CPU model job running beside a GPU bundle)."""
+    import datetime as dt
+    now = now or dt.datetime.now()
+    for a, b in windows:
+        if a <= now < b:
+            if now + dt.timedelta(minutes=expected_min) <= b - dt.timedelta(minutes=margin_min):
+                return True, ""
+            return False, f"inside the window ending {b:%m-%d %H:%M}, but a {expected_min:g}-min block would end too late"
+    nxt = min((a for a, _ in windows if a > now), default=None)
+    return False, ("outside the quiet windows; next opens " + (f"{nxt:%m-%d %H:%M}" if nxt else "never (all expired)"))
+
+
+def acquire(job, pid, expected_min, need_ram=None, poll_s=60, log=print, party=PARTY, ram_fn=None, max_wait_s=None,
+            windows=None, margin_min=5.0, now_fn=None):
+    """Block until the lane is ours; returns the lock record. With `windows`, the lane is taken only inside a quiet
+    window and only if the block (expected_min) ends at least margin_min before the window closes; outside that, no
+    waiting marker is written (nobody is asked to yield for a block that may not start)."""
     if ram_fn is None and need_ram is not None:
         from rcx.guard import available_ram_gb as ram_fn
     t0, said = time.time(), None
     while True:
+        if windows is not None:
+            ok, why = window_ok(windows, expected_min, now_fn() if now_fn else None, margin_min)
+            if not ok:
+                waiting_path(party).unlink(missing_ok=True)
+                msg = f"lane: not acquiring ({why}); waiting (no marker)"
+                if msg != said:
+                    log(msg)
+                    said = msg
+                if max_wait_s is not None and time.time() - t0 > max_wait_s:
+                    raise TimeoutError(msg)
+                time.sleep(poll_s)
+                continue
         lock = read_lock()
         if lock and _reclaim_if_stale(lock):
             log(f"lane: reclaimed stale lock of {lock.get('holder')} pid {lock.get('pid')}")
@@ -109,7 +148,7 @@ def acquire(job, pid, expected_min, need_ram=None, poll_s=60, log=print, party=P
                     return rec
                 continue
             waiting_path(party).unlink(missing_ok=True)
-            msg = f"lane: free, but RAM {ram:.1f} GB < {need_ram} GB; waiting (no marker)"
+            msg = f"lane: free, but RAM {round((ram or 0) * 2) / 2:.1f} GB < {need_ram} GB; waiting (no marker)"
         if msg != said:
             log(msg)
             said = msg
@@ -134,6 +173,7 @@ def main():
     a.add_argument("--pid", type=int, required=True)
     a.add_argument("--expected-min", type=float, required=True)
     a.add_argument("--need-ram", type=float, default=None)
+    a.add_argument("--windows", default=None, help="quiet-windows JSON (load_windows); acquire only inside them")
     r = sub.add_parser("release")
     r.add_argument("--pid", type=int, required=True)
     sub.add_parser("status")
@@ -141,7 +181,8 @@ def main():
     if args.cmd == "acquire":
         def log(m):
             print(time.strftime("%H:%M:%S"), m, flush=True)
-        acquire(args.job, args.pid, args.expected_min, args.need_ram, log=log)
+        ws, margin = load_windows(args.windows) if args.windows else (None, 5.0)
+        acquire(args.job, args.pid, args.expected_min, args.need_ram, log=log, windows=ws, margin_min=margin)
     elif args.cmd == "release":
         print("released" if release(args.pid) else "not held by this pid")
     else:

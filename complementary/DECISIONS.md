@@ -710,3 +710,12 @@ and the evidence path.
 
     E01R keeps priority.
   - The critique is kept in `experiments/RCX-E05/CRITIQUE_RVM_DESIGNS.md`.
+- **CX D-44 E01R lane blocks only inside the quiet windows (2026-10-12 16:24; BWM D-84 request).**
+  - `rcx/lane.py` (not bound code, per D-41) gains `--windows` (`runs/RCX-E01R/quiet_windows.json`, the D-84/D-51
+    windows). A block is acquired only inside a window, and only if its expected length ends ≥ 5 min before the window
+    closes. No waiting marker is written outside a window. 3 new tests.
+  - The chains were replaced by `train_chain_v2.sh` and `post_train_chain_v2.sh` before any block was taken. Expected
+    block lengths: E-R2 170 min, E-R3 200 min, smoke × 6 40 min, each sealed eval 75 min.
+  - **Consequence: 2 adapters per night**, so training ends in the 10-14 window. The 10 sealed evals (about 12.5 h)
+    need about 2 more nights (10-15 and 10-16). RCX will request them after the first night's timings, which may
+    change the count.
