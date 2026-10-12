@@ -1,0 +1,37 @@
+{
+  "status": "complete",
+  "started_at_utc": "2026-10-12T10:22:31.751363+00:00",
+  "command": [
+    "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe",
+    "dsv3wm/scripts/train_recovery_student_cpu105.py",
+    "--config",
+    "dsv3wm/configs/recovery_student_A4.json",
+    "--train",
+    "dsv3wm/datasets/recovery-v1/train.jsonl",
+    "--tasks",
+    "dsv3wm/datasets/recovery-h3-v1/planning_train.jsonl",
+    "--teacher-dir",
+    "dsv3wm/artifacts/recovery-h3-v1/teacher_B0_retry01",
+    "--warm-dir",
+    "dsv3wm/artifacts/recovery-v1/A0_s0",
+    "--qualification",
+    "dsv3wm/results/recovery-v1/B0_qualification.json",
+    "--freeze",
+    "dsv3wm/prereg/RECOVERY_H3_STUDENT_TRAIN_FREEZE_V4_CPU105_TRAINING.json",
+    "--out",
+    "dsv3wm/artifacts/recovery-h3-v1/A4_s0_retry01"
+  ],
+  "cwd": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree",
+  "wrapper_sha256": "0b10d654cd68269d1bb615721cdd03ccd24c77be5f5e9af0cec29340f22079bc",
+  "sample_interval_s": 0.5,
+  "peak_sampled_process_tree_rss_bytes": 3774160896,
+  "per_process_peak_wset_bytes": {
+    "148320": 5316608,
+    "152592": 3768918016
+  },
+  "peak_gpu_bytes": null,
+  "scope": "local subprocess tree host RAM; GPU memory is not measured by this wrapper",
+  "root_pid": 148320,
+  "exit_code": 0,
+  "wall_duration_s": 198.76813319999928
+}

@@ -1,0 +1,1692 @@
+{
+  "resource_admission_profile": {
+    "name": "dsv3wm-cpu11-v1",
+    "device": "cpu",
+    "threads": 4,
+    "load_free_host_ram_floor_gib": 11,
+    "admission_memory_kinds": [
+      "physical",
+      "commit"
+    ],
+    "historical_load_free_host_ram_floor_gib": 12,
+    "unchanged_boundary_free_host_ram_floor_gib": 4,
+    "runtime": "dsv3wm.native.runtime",
+    "boundary": "dsv3wm.native.boundary",
+    "sampler_cpu_batch_tokens_parameter": 8000,
+    "sampler_batch_geometry": "unchanged inherited heuristic; not a hard padded-token cap",
+    "sampler_ram_floor_gib": 8,
+    "prediction_change": false,
+    "environment": {
+      "BWM_CPU_BATCH_TOKENS": null,
+      "BWM_RAM_FLOOR_GB": null
+    }
+  },
+  "status": "development-evaluated",
+  "config": {
+    "arm": "A4",
+    "seed": 0,
+    "steps": 32,
+    "batch_size": 1,
+    "lr": 2e-05,
+    "rank": 16,
+    "max_length": 512,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.1,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.0,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cpu",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 32,
+    "plan_weight": 1.0,
+    "control_extra_one_step": false,
+    "student_tokens": 80,
+    "student_k": 4,
+    "student_temperature": 1.0,
+    "student_top_p": 0.95
+  },
+  "command": [
+    "dsv3wm\\scripts\\evaluate_recovery_student_cpu11.py",
+    "--config",
+    "dsv3wm\\configs\\recovery_student_A4.json",
+    "--adapter",
+    "dsv3wm\\artifacts\\recovery-v1\\A0_s0\\adapter",
+    "--run",
+    "dsv3wm\\artifacts\\recovery-v1\\A0_s0\\run.json",
+    "--tasks",
+    "dsv3wm\\datasets\\recovery-v1\\planning_dev.jsonl",
+    "--freeze",
+    "dsv3wm\\prereg\\RECOVERY_H3_WARM_READOUT_FREEZE_V3_CPU11.json",
+    "--out",
+    "dsv3wm\\results\\recovery-h3-v1\\warm_A0_proposer.json",
+    "--warm-baseline",
+    "--train",
+    "dsv3wm\\datasets\\recovery-v1\\train.jsonl",
+    "--rerank"
+  ],
+  "freeze_sha256": "4170f6ad5ffbabcf526109fe3c9a7e69991ad8cf268363afb166576fe0142f2f",
+  "tasks_sha256": "7cc5b60412ef1d9793dd38ebeb05067b722e3b54010ff1113695e915594cc69c",
+  "config_sha256": "e7f7992585e8029ab07d3bea410ac3b16d21166e280dd486475fe4cdd63b5dd5",
+  "run_sha256": "dee487770751d62d8056295062908dfeb1264e7e98920bc205d49e2036e4492c",
+  "adapter_sha256": "9b6ff87157ba7418fd328e1325c1461a7bbf305e01d13381d6225c4f8332cfe9",
+  "source_sha256": {
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_student_cpu11.py": "f56dbed907b36960241938e38a8f494e9c729f9852eddb21c97db64b83f3d6b7",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_student.py": "dd271f1960cc385781da48a9bb043dd22a02e39781d9ee53cae76347ef4ce079",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery.py": "7ff1d72e04e28aea5931f7a221ed8a23baeeebb7472a6934bb3648cd9f141b62",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\recovery_planning.py": "3197c147bacba964a6e57241b4ab958ffd53cef73ce636b90d5973f4dfd987b1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\proposer.py": "c71930f3d29c57db7c7e25da6a6240b8ad220dd1123628d178cb50c54ab0a590",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native_cpu11.py": "075b7fdea2199a5f8f564022e48742b3b3064c58b8bec877ed7c0198d8c4f884",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\provenance.py": "22fd4809ffdc1fd8bd1d0ba10afa9b31287437417ae000bb856925f1f83d60c1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\planning.py": "09fe47251f5c6afa2312ec57e1f1578355cfe0d030abbc41f908e36ac34a16c7",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\config.py": "1e8dc59d1782dd63445b22d85657143ad6d47725229d5699c1a9d79e66a3f267",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\gpu_lease.py": "f4def04fcd20de389de0ce991ac146793d0ffa404a79100064aefa86fb4549c2",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\scripts\\planbench_qwen.py": "ef17c4d4fbb6be84de03bbcc2a2f108e7e405741ffe649e3a201d09038af688e",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\evaluate_recovery_student.py": "60ba9bed75d6225b2675925b63460a177bbfdca57ee6957141edfde0ddf6a363"
+  },
+  "readout_kind": "warm-parent-proposer-baseline",
+  "artifact_arm": "A0",
+  "artifact_training_config": {
+    "arm": "A0",
+    "seed": 0,
+    "steps": 32,
+    "batch_size": 1,
+    "lr": 2e-05,
+    "rank": 16,
+    "max_length": 512,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.1,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.0,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cpu",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 32
+  },
+  "artifact_training_status": "pilot-trained",
+  "artifact_training_freeze_sha256": "0d52132ee1f39c3fc5aa4210066790031ab2b363ab0e871f2454175263cb3ab3",
+  "artifact_source_inputs_sha256": {
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\configs\\recovery_A0.json": "41e011d5f4f17bd089d856e8e27214e3cfcb1262cedb5d463799932aafde1286",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\datasets\\recovery-v1\\train.jsonl": "520aa6e48a441bba09b05b3dfddad5564009f69d0615333424f042c2f7c24a74",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\prereg\\RECOVERY_TRAIN_FREEZE_V2.json": "0d52132ee1f39c3fc5aa4210066790031ab2b363ab0e871f2454175263cb3ab3",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\recovery-v1\\B0_qualification.json": "6f19403eabdf993d687e9b574efc37439a7689b0d8bee71edf594cf457da853a"
+  },
+  "adapter_config_sha256": "4e915143131cbe5047ec8e3291071f7ef0a37a53f2a174734f65070dfe8ed025",
+  "registered_adapter_config_sha256": "55b8fb922c8957573cfd36910ad64bbf4e328f23f00a58dcb889b899b64ca065",
+  "oracle_feedback": false,
+  "confirmation_access": false,
+  "scope": "H3 development feasibility; not efficacy confirmation",
+  "with_search_status": "fixed-B0 learned candidate reranking enabled",
+  "admission_check": {
+    "physical_available_gib": 11.212085723876953,
+    "commit_available_gib": 19.07610321044922,
+    "required_physical_gib": 11,
+    "required_commit_gib": 11,
+    "physical_qualified": true,
+    "commit_qualified": true,
+    "passed": true,
+    "status": "admitted",
+    "measurement_stage": "after BWM/torch imports; before core hash/load"
+  },
+  "forward_adapter_sha256": "c465356f85ead24b609af2b8b1cb0a14799e6d2d16116944c9c607c933e66466",
+  "adapter_switch": {
+    "student_adapter": "default",
+    "forward_adapter": "h3_fixed_B0",
+    "student_adapter_restored": true
+  },
+  "inference_kind": "hybrid warm-parent-proposer-baseline + fixed-B0 learned dynamics; no exact selection",
+  "n": 12,
+  "outcomes": [
+    {
+      "task_id": "a028e725671b54b1e0284ca987f6302fdbeac279b6170532a37e4bfaaf0f9330",
+      "parent_world_id": "29641acb2e11edf885319d0bc448c4a69a64e3cd41a7dbe4777d6d3650526e55",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":-24,\"limit\":32,\"outcome\":\"success\",\"x\":-21}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-21}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-21}"
+        },
+        {
+          "index": 1,
+          "seed": 277974859449431644,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-21}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-21}"
+        },
+        {
+          "index": 2,
+          "seed": 830756974095502686,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-21}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-21}"
+        },
+        {
+          "index": 3,
+          "seed": 396164867230215542,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-21}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-21}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "a028e725671b54b1e0284ca987f6302fdbeac279b6170532a37e4bfaaf0f9330",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "b279f9fbe9914429d80c631636d2b7861e9eabf2eba23ac8ca30813a973af8a5",
+      "parent_world_id": "2109e2efa72c450ab556e8f614fc45fda1c19ae8ae4bd555e6dd5e4762560782",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":-10,\"limit\":48,\"outcome\":\"success\",\"x\":-35}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-35}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-35}"
+        },
+        {
+          "index": 1,
+          "seed": 565863040100721443,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-35}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-35}"
+        },
+        {
+          "index": 2,
+          "seed": 485492282013993838,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-35}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-35}"
+        },
+        {
+          "index": 3,
+          "seed": 916450114375191236,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-35}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-35}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "b279f9fbe9914429d80c631636d2b7861e9eabf2eba23ac8ca30813a973af8a5",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "ec7349751aff33d231218fb33098223a24fbc34357104c79a4a3fe55e8de7698",
+      "parent_world_id": "a0ba738330b4cda055fe3aab32fcabd15222b608c905d331e89c2b929735cb70",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":30,\"limit\":32,\"outcome\":\"success\",\"x\":13}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":13}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":13}"
+        },
+        {
+          "index": 1,
+          "seed": 797782135265450331,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":13}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":13}"
+        },
+        {
+          "index": 2,
+          "seed": 912231205284870105,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":13}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":13}"
+        },
+        {
+          "index": 3,
+          "seed": 156098251518584204,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":13}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":13}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "ec7349751aff33d231218fb33098223a24fbc34357104c79a4a3fe55e8de7698",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "4d31c18ebee2920c77e3ab8270e6a62bffd07498049e5916bc1723e3628bcd65",
+      "parent_world_id": "644c7b5246eeeecd6eaf41d1c09bee562bb795325c9dca6fe27687ed223ce9b5",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":40,\"limit\":64,\"outcome\":\"success\",\"x\":45}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":45}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":45}"
+        },
+        {
+          "index": 1,
+          "seed": 961305659406486663,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":45}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":45}"
+        },
+        {
+          "index": 2,
+          "seed": 63721459373914919,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":45}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":45}"
+        },
+        {
+          "index": 3,
+          "seed": 398096135208302566,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":45}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":45}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "4d31c18ebee2920c77e3ab8270e6a62bffd07498049e5916bc1723e3628bcd65",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "c916c23693f477be9077b590f624c67c3847a113fed5699de95a8eae978d32d7",
+      "parent_world_id": "afed584e0a79dc87e3e7b05faa8b7b2067d335fe127d0f9f631d9fdcbc243470",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":39,\"limit\":48,\"outcome\":\"success\",\"x\":9}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":9}",
+            "n_tokens": 14,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 113,
+            "decoder_forwards": 14,
+            "decoder_token_positions": 126
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":9}"
+        },
+        {
+          "index": 1,
+          "seed": 908421156925829650,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":9}",
+            "n_tokens": 14,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 113,
+            "decoder_forwards": 14,
+            "decoder_token_positions": 126
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":9}"
+        },
+        {
+          "index": 2,
+          "seed": 723763535509799183,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":9}",
+            "n_tokens": 14,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 113,
+            "decoder_forwards": 14,
+            "decoder_token_positions": 126
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":9}"
+        },
+        {
+          "index": 3,
+          "seed": 93507037764086890,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":9}",
+            "n_tokens": 14,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 113,
+            "decoder_forwards": 14,
+            "decoder_token_positions": 126
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":9}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 452,
+      "output_tokens": 56,
+      "processed_positions": 504,
+      "decoder_forwards": 56,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "c916c23693f477be9077b590f624c67c3847a113fed5699de95a8eae978d32d7",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 504,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "b195d2428d5e1ed9539187647636e74d83a7dbb20669c72e2cd59cc980113a70",
+      "parent_world_id": "18e39134a7e64642dc289c7527a688aa03890ba6a098abf184cabf2e8668e934",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":-24,\"limit\":48,\"outcome\":\"success\",\"x\":-45}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-45}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-45}"
+        },
+        {
+          "index": 1,
+          "seed": 83050856409765097,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-45}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-45}"
+        },
+        {
+          "index": 2,
+          "seed": 180732370111897466,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":-45}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":-45}"
+        },
+        {
+          "index": 3,
+          "seed": 668361662010863902,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":-45}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":-45}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "b195d2428d5e1ed9539187647636e74d83a7dbb20669c72e2cd59cc980113a70",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "8c6b12db1a840bb5a042baad9fc4a7540bcab5218048ef9f99f4685c5d1d300a",
+      "parent_world_id": "d3920b841e5b80a36dc35babdecef05d76d4a2579a65f272c810d3f44da15b22",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":-63,\"limit\":96,\"outcome\":\"success\",\"x\":-67}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-67}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-67}"
+        },
+        {
+          "index": 1,
+          "seed": 547109065582213971,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-67}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-67}"
+        },
+        {
+          "index": 2,
+          "seed": 1096835722308809171,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-67}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-67}"
+        },
+        {
+          "index": 3,
+          "seed": 805302526956989609,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-67}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-67}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "8c6b12db1a840bb5a042baad9fc4a7540bcab5218048ef9f99f4685c5d1d300a",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "6dadf92fee9b633ee3a313918e27a9c273c693c0cd8451826faacc8b96b84e27",
+      "parent_world_id": "a2933b53d69e7a9a0d197d3c414aad0ac51885e3fb455aa16339bf3802113f0f",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":-74,\"limit\":96,\"outcome\":\"success\",\"x\":-71}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-71}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-71}"
+        },
+        {
+          "index": 1,
+          "seed": 496780419711134248,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-71}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-71}"
+        },
+        {
+          "index": 2,
+          "seed": 421345189195420486,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-71}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-71}"
+        },
+        {
+          "index": 3,
+          "seed": 255726526794047865,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-71}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-71}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "6dadf92fee9b633ee3a313918e27a9c273c693c0cd8451826faacc8b96b84e27",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "2ff978091e92bbdfc04be11226fec9525b53640a96c00f30a3026023aaf904c7",
+      "parent_world_id": "cc6872e3c155a88213eb73d01c4a76d67edcb20baa9c5e2c8c04ea780b0605a8",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":-79,\"limit\":80,\"outcome\":\"success\",\"x\":-75}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-75}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-75}"
+        },
+        {
+          "index": 1,
+          "seed": 740264770208838991,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-75}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-75}"
+        },
+        {
+          "index": 2,
+          "seed": 607872978816857501,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-75}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-75}"
+        },
+        {
+          "index": 3,
+          "seed": 428042730840237950,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-75}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-75}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "2ff978091e92bbdfc04be11226fec9525b53640a96c00f30a3026023aaf904c7",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "d74a4c7e8f273d7ddcfa228496afaa92419777e0d642f81a21395033e4f4d94c",
+      "parent_world_id": "e5624fb3f257b1bf5a52354cfcd5d5cf5b6e53dc010094bd5a0a090f4303bcc7",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":63,\"limit\":80,\"outcome\":\"success\",\"x\":66}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":66}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":66}"
+        },
+        {
+          "index": 1,
+          "seed": 1103970482366023450,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":66}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":66}"
+        },
+        {
+          "index": 2,
+          "seed": 879356154519747806,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":66}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":66}"
+        },
+        {
+          "index": 3,
+          "seed": 636128518660296625,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":66}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":66}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "d74a4c7e8f273d7ddcfa228496afaa92419777e0d642f81a21395033e4f4d94c",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "01f5769cc912cd61af597745cd83a7510adc7b5769d58710e9835dcfb209254a",
+      "parent_world_id": "920527251af76235e3997b885859b953dfa60b2433f62ac7753f7a302d3a6b13",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":-40,\"limit\":96,\"outcome\":\"success\",\"x\":-77}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":-77}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":-77}"
+        },
+        {
+          "index": 1,
+          "seed": 405732458945310837,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":-77}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":-77}"
+        },
+        {
+          "index": 2,
+          "seed": 851215964850970526,
+          "raw": {
+            "text": "{\"legal\":false,\"terminated\":true,\"x\":-77}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":false,\"terminated\":true,\"x\":-77}"
+        },
+        {
+          "index": 3,
+          "seed": 619581888269851295,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":-77}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":-77}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "01f5769cc912cd61af597745cd83a7510adc7b5769d58710e9835dcfb209254a",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    },
+    {
+      "task_id": "d5aef5b38fcc6973e09b0b189a1ac17107e1b442237b4873eac8031cd1fde987",
+      "parent_world_id": "086a23be64bdf810ee00a6e2964b7c4725f8f193ca9cb9bc57d55ce773f49676",
+      "prompt": "<|im_start|>system\nRegisterWorld planner. add1: x+1. sub1: x-1. double: 2x. halve: x/2, illegal if x is odd. Moves past |x|>limit are illegal. finish ends the episode. Reach the goal, then finish, within budget actions. Reply with a JSON plan for the requested outcome.<|im_end|>\n<|im_start|>user\n{\"budget\":6,\"goal\":18,\"limit\":80,\"outcome\":\"success\",\"x\":64}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "candidates": [
+        {
+          "index": 0,
+          "seed": null,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":64}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":64}"
+        },
+        {
+          "index": 1,
+          "seed": 473489717172519905,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":64}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":64}"
+        },
+        {
+          "index": 2,
+          "seed": 806785897890503869,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":64}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":64}"
+        },
+        {
+          "index": 3,
+          "seed": 886897053348589096,
+          "raw": {
+            "text": "{\"legal\":true,\"terminated\":false,\"x\":64}",
+            "n_tokens": 15,
+            "hit_eos": true,
+            "model_calls": 1,
+            "input_tokens": 114,
+            "decoder_forwards": 15,
+            "decoder_token_positions": 128
+          },
+          "malformed": true,
+          "plan": null,
+          "text": "{\"legal\":true,\"terminated\":false,\"x\":64}"
+        }
+      ],
+      "selected_index": 0,
+      "selected_plan": null,
+      "model_queries": 4,
+      "input_tokens": 456,
+      "output_tokens": 60,
+      "processed_positions": 512,
+      "decoder_forwards": 60,
+      "valid_syntax_count": 0,
+      "unique_valid_plans": 0,
+      "diversity_fraction": 0.0,
+      "oracle_feedback": false,
+      "top1_success": false,
+      "pass_at_4": false,
+      "unique_exact_valid_plans": 0,
+      "first_action_legal": false,
+      "first_action_optimal": false,
+      "scores": [
+        {
+          "index": 0,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 1,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 2,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        },
+        {
+          "index": 3,
+          "success": false,
+          "all_legal": false,
+          "verification": null
+        }
+      ],
+      "scope": "pure no-search top1; pass@4 offline coverage; exact scoring after generation",
+      "learned_reranking": {
+        "task_id": "d5aef5b38fcc6973e09b0b189a1ac17107e1b442237b4873eac8031cd1fde987",
+        "selected_index": null,
+        "selected_plan": null,
+        "ranked": [],
+        "forward_queries": 0,
+        "total_model_queries": 4,
+        "processed_positions": 512,
+        "oracle_feedback": false,
+        "forward_traces": [],
+        "instrument": "learned candidate reranking; fixed B0; no exact feedback",
+        "success": false
+      }
+    }
+  ],
+  "all_generation_and_learned_reranking_fixed_before_exact_scoring": true,
+  "top1_successes": 0,
+  "pass_at_4_successes": 0,
+  "first_action_optimal": 0,
+  "valid_syntax_count": 0,
+  "proposal_queries": 48,
+  "proposal_input_tokens": 5468,
+  "proposal_output_tokens": 716,
+  "proposal_processed_positions": 6136,
+  "with_search_successes": 0,
+  "reranking_forward_queries": 0,
+  "duration_s": 161.77788979999968
+}

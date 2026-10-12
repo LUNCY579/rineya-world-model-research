@@ -1,0 +1,68 @@
+{
+  "status": "passed",
+  "verified_at_utc": "2026-10-12T11:10:44.999292+00:00",
+  "native_model_loaded_by_audit": false,
+  "confirmation_access": false,
+  "source_and_input_freezes": {
+    "RECOVERY_H3_STUDENT_TRAIN_FREEZE_V4_CPU105_TRAINING.json": "493ef2ba76210f6dd5c71d3b17724db909bbc7aebe1a94acc60e204c154763ef",
+    "RECOVERY_H3_STUDENT_READOUT_FREEZE_V3_CPU11.json": "10a88c0bb31cab3e413e7af95c98968a6524dd5efff77a68e938f22404250546",
+    "RECOVERY_H3_STUDENT_GUARDS_FREEZE_V3_CPU11.json": "18323febfab44c1f78e13699fd43b7d00c4df12f2efdb332784a9a1423b5b4d3"
+  },
+  "completed_native_training": {
+    "A3_s0": {
+      "training_kind": "A3",
+      "run_sha256": "e4b3e83aee6a7b5e1b6e6e6187fef66ee49273e6a2a8abc9d6149337a7f12213",
+      "adapter_sha256": "79a0d09dc9e8834a953eb777ec9be746a72cbbfc2700486e3a5c5d1c5c08b29e",
+      "counts": {
+        "input_tokens": 21884,
+        "supervised_tokens": 1938,
+        "decoder_forwards": 128,
+        "dynamics_examples": 96,
+        "plan_examples": 32,
+        "extra_one_step_examples": 0
+      }
+    },
+    "A4_s0_retry01": {
+      "training_kind": "A4",
+      "run_sha256": "daebc066979dbfd599387f08ef3d969567bbf1ce0292f3e319bec8b56034078f",
+      "adapter_sha256": "79cf22d21673b9ea2792be9faf6a9e93bf3f0ce781638536ca52936bf0c0b72d",
+      "counts": {
+        "input_tokens": 8420,
+        "supervised_tokens": 1000,
+        "decoder_forwards": 64,
+        "dynamics_examples": 32,
+        "plan_examples": 32,
+        "extra_one_step_examples": 0
+      }
+    },
+    "C3_s0": {
+      "training_kind": "C3",
+      "run_sha256": "1b3039ed9f89542fa26bc9d2046c27df143c2eaf29d7319b15dd7874cc10f77f",
+      "adapter_sha256": "9d0bbb10bcfbb8c91744188441a7d81efa0a080d823046996d990778387b7145",
+      "counts": {
+        "input_tokens": 21968,
+        "supervised_tokens": 1870,
+        "decoder_forwards": 128,
+        "dynamics_examples": 96,
+        "plan_examples": 0,
+        "extra_one_step_examples": 32
+      }
+    },
+    "C4_s0": {
+      "training_kind": "C4",
+      "run_sha256": "6d240853e88487225d36166de9c01b5409372e58ed1648e3526ee61f0e2e1e3d",
+      "adapter_sha256": "d6e5fc3c5fe92c26d7488462fe7a1bc4e4f4b8d7023a66d8855b5d1d81ba7d38",
+      "counts": {
+        "input_tokens": 8504,
+        "supervised_tokens": 932,
+        "decoder_forwards": 64,
+        "dynamics_examples": 32,
+        "plan_examples": 0,
+        "extra_one_step_examples": 32
+      }
+    }
+  },
+  "test_count": 287,
+  "tests_sha256": "15103381a659d77858d2e87c490e856451e28b30a1451579634f460162a819f3",
+  "scope": "actual completed H3 training and prospective output admission; no student efficacy or broad retention; singleton source review/parity pending"
+}
