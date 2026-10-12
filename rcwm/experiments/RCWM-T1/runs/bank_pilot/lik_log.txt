@@ -1,79 +1,0 @@
-=== 2026-10-06T13:43:30-05:00 start lik sparse
-[sparse] 5824 items, 27755 scored sequences
-[yield] waiting for peer lease 'bwm:eval-pilot-400' to run and release (max 2400s)
-=== 2026-10-06T13:44:16-05:00 start lik sparse
-[sparse] 5824 items, 27755 scored sequences
-[yield] waiting for peer lease 'bwm:eval-pilot-400' to run and release (max 2400s)
-[yield] already honoured by another job of this session
-  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:lik:sparse token=aba44b64
-Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<00:36,  8.52it/s]Loading weights:  12%|#2        | 38/310 [00:00<00:01, 200.04it/s]Loading weights:  25%|##4       | 77/310 [00:00<00:00, 281.72it/s]Loading weights:  37%|###6      | 114/310 [00:00<00:00, 311.14it/s]Loading weights:  50%|####9     | 154/310 [00:00<00:00, 338.42it/s]Loading weights:  61%|######1   | 190/310 [00:00<00:00, 342.31it/s]Loading weights:  73%|#######2  | 225/310 [00:00<00:00, 341.73it/s]Loading weights:  85%|########4 | 262/310 [00:00<00:00, 347.76it/s]Loading weights:  96%|#########5| 297/310 [00:00<00:00, 346.90it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 318.13it/s]
-  [gpu-lease] released rineya-gpu-0.lock
-Traceback (most recent call last):
-  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_lik.py", line 135, in <module>
-    main()
-  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_lik.py", line 123, in main
-    lp = score(model, tok, seqs)
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\utils\_contextlib.py", line 116, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_lik.py", line 86, in score
-    flush(b); b, cur_max = [], 0
-    ^^^^^^^^
-  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_lik.py", line 76, in flush
-    hid = model.model(input_ids=ids.cuda(), attention_mask=att.cuda()).last_hidden_state
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\utils\generic.py", line 1040, in wrapper
-    output = func(self, *args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\utils\output_capturing.py", line 262, in wrapper
-    outputs = func(self, *args, **kwargs)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 424, in forward
-    hidden_states = decoder_layer(
-                    ^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\modeling_layers.py", line 110, in __call__
-    return super().__call__(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 318, in forward
-    hidden_states, _ = self.self_attn(
-                       ^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 264, in forward
-    key_states = self.k_norm(self.k_proj(hidden_states).view(hidden_shape)).transpose(1, 2)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 63, in forward
-    hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)
-                    ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-RuntimeError: CUDA error: unknown error
-CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
-For debugging consider passing CUDA_LAUNCH_BLOCKING=1
-Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
-
-=== 2026-10-06T14:02:31-05:00 exit rc=0 lik sparse
-=== 2026-10-06T14:02:31-05:00 start lik supa
-[supa] 5824 items, 27755 scored sequences
-  [gpu-lease] waiting: foreign python pid 12020 (1.04 GiB) on the card

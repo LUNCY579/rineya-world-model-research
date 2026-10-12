@@ -1,13 +1,0 @@
-[09:19:18] items: reproduced runs\bank_pilot\steer_cpu\steer_cpu_results.json _meta.items (144 ids, same order)
-[09:19:38] 12 items in 3 batches; mismatch donors: len(donor)-len(item) counts {'0': 9, '1': 3}
-[09:19:38] done earlier: none
-[09:19:38] pending: base:supa, base:sparse, T2S_last@16, T2S_all@16, S2T_all@16, T2S_all_mis@16
-Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 3664.06it/s]
-[09:19:44] loaded sparse on CPU (818be9c6b6a3, 5s, 3.5 GiB free before load)
-[09:21:52] sanity T2T all@16: PASS (12/12 texts identical, patch max|d| 0.0, hook: {'prefill_patches': 3, 'batches': 3, 'decode_calls_unpatched': 38, 'generated_tokens': 41, 'positions_patched': 1508})
-[09:22:42] captured Titan states: same-item layers [16], mismatch layers [16] (50s)
-Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:01<07:38,  1.48s/it]Loading weights:  90%|████████▉ | 278/310 [00:01<00:00, 231.78it/s]Loading weights: 100%|██████████| 310/310 [00:01<00:00, 175.23it/s]
-[09:22:46] loaded supa on CPU (a9952c55f5a1, 2s, 3.8 GiB free before load)
-[09:22:47] blocks bit-identical across arms: [0, 1, 2, 3, 4, 5, 6, 7]; patch is an exact no-op at L in []
-[09:26:08] sanity S2S all@16: PASS (12/12 texts identical, patch max|d| 0.0, hook: {'prefill_patches': 3, 'batches': 3, 'decode_calls_unpatched': 94, 'generated_tokens': 97, 'positions_patched': 1508})
-[09:27:54] base:supa          ledger len 0.000 chg 0.000 parse 1.00 | prereq len 0.250 chg 0.000 parse 1.00 | regist len 0.000 chg 0.000 parse 0.50 (106s)

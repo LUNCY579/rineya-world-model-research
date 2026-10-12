@@ -1,7 +1,0 @@
-# RGM v0003 archival backup completed
-
-Commit `82787689fef4e50f7a35cfee505c290b2f6a6d78`, sole parent `bc5198e11273cb6ea69659b6d3a8b5dc312b6f00`, preserves **2303 files /928,914,914 bytes** from spec `caf6e0e4d0a0569206cec8c725130cbb4150160eb79f74be8113f18f8d496708`. Root's completed actual remote proof `83f5ad7628b3748504a8dac73fafb045d8c7f7acdb5c7d1c481205741d092f2f` verified **1895 unique GitHub blobs**. Backup manager's separate actual gzip proof `21912e37c1e959e009a0eb80497be30a213a85d813e71d330868eff12d853de1` fetched **24 new remote payloads**, decoded byte-for-byte to **1,188,634,377 preserved raw bytes**.
-
-Joined receipt `backup_logs/RGM_V0003_FINAL_REVIEW_JOINED_CUSTODY.json` SHA256 `3ec1e2f75e42e827eff483fff190f349ceedee2d6b20dcc4619a315f16fa0bb1`. Fresh read-only source/target/index/commit checks, private ADMIN, sole parent/tree/branch and six original Git baselines passed. All2095 parent paths and210 immutable release files remain preserved. Root ran copy/stage/push/full verification; `/root/backup_manager` authored the join and ran the separate gzip verification. Same inherited model; no model diversity or data-quality approval claim.
-
-Only the frozen2303-file scope is claimed backed up. Postinventory proofs/ledgers/spec/this addendum and deferred or newborn BELIEF V4 official/adversarial/architect work remain local for the next checkpoint. Historical pending/failure receipts and exact frozen spec remain unchanged. No Git mutation by this join.

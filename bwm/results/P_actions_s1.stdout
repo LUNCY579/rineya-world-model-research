@@ -1,26 +1,0 @@
-  [gpu-lease] acquired rineya-gpu-0.lock label=bwm:train-P-actions-s1 token=8982c3f7
-rows 92608 outcomes {'success': 30698, 'failure': 61910} policies {'opt': 30090, 'noisy': 26904, 'random': 35614}
-Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<03:39,  1.41it/s]Loading weights:   5%|4         | 15/310 [00:00<00:12, 23.89it/s]Loading weights:  11%|#         | 33/310 [00:00<00:05, 52.95it/s]Loading weights:  15%|#5        | 48/310 [00:01<00:03, 73.25it/s]Loading weights:  21%|##1       | 66/310 [00:01<00:02, 95.99it/s]Loading weights:  26%|##6       | 82/310 [00:01<00:02, 108.36it/s]Loading weights:  33%|###2      | 102/310 [00:01<00:01, 128.00it/s]Loading weights:  38%|###8      | 118/310 [00:01<00:01, 136.14it/s]Loading weights:  44%|####3     | 135/310 [00:01<00:01, 143.13it/s]Loading weights:  49%|####8     | 151/310 [00:01<00:01, 146.41it/s]Loading weights:  54%|#####3    | 167/310 [00:01<00:00, 146.38it/s]Loading weights:  59%|#####9    | 183/310 [00:01<00:00, 137.90it/s]Loading weights:  64%|######3   | 198/310 [00:02<00:00, 136.60it/s]Loading weights:  69%|######8   | 213/310 [00:02<00:00, 137.32it/s]Loading weights:  74%|#######3  | 228/310 [00:02<00:00, 137.32it/s]Loading weights:  78%|#######8  | 242/310 [00:02<00:00, 137.01it/s]Loading weights:  83%|########2 | 256/310 [00:02<00:00, 132.26it/s]Loading weights:  87%|########7 | 270/310 [00:02<00:00, 124.84it/s]Loading weights:  92%|#########1| 284/310 [00:02<00:00, 128.45it/s]Loading weights:  97%|#########6| 300/310 [00:02<00:00, 125.26it/s]Loading weights: 100%|##########| 310/310 [00:02<00:00, 107.75it/s]
-trainable 10092544 / 606142464
-[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
-step 1/800 loss 2.2778 lr 1.25e-06 gn 14.81 3s peak 2.89GiB
-step 50/800 loss 0.8800 lr 6.25e-05 gn 1.87 101s peak 3.06GiB
-step 100/800 loss 0.4211 lr 1.00e-04 gn 1.62 198s peak 3.06GiB
-step 150/800 loss 0.4059 lr 1.00e-04 gn 1.12 294s peak 3.07GiB
-step 200/800 loss 0.3872 lr 1.00e-04 gn 0.92 389s peak 3.07GiB
-step 250/800 loss 0.3784 lr 1.00e-04 gn 0.96 486s peak 3.07GiB
-step 300/800 loss 0.3778 lr 1.00e-04 gn 0.59 581s peak 3.07GiB
-step 350/800 loss 0.3615 lr 1.00e-04 gn 1.23 676s peak 3.07GiB
-saved intermediate adapter at step 400
-step 400/800 loss 0.3608 lr 1.00e-04 gn 0.37 771s peak 3.07GiB
-step 450/800 loss 0.3496 lr 1.00e-04 gn 0.91 865s peak 3.07GiB
-step 500/800 loss 0.3534 lr 1.00e-04 gn 0.82 959s peak 3.07GiB
-step 550/800 loss 0.3335 lr 1.00e-04 gn 0.75 1052s peak 3.07GiB
-step 600/800 loss 0.3387 lr 1.00e-04 gn 0.63 1145s peak 3.07GiB
-step 650/800 loss 0.3454 lr 9.49e-05 gn 1.12 1239s peak 3.07GiB
-step 700/800 loss 0.3349 lr 6.68e-05 gn 0.75 1332s peak 3.08GiB
-step 750/800 loss 0.3372 lr 3.87e-05 gn 0.53 1425s peak 3.08GiB
-step 800/800 loss 0.3250 lr 1.06e-05 gn 0.48 1520s peak 3.08GiB
-train done {"steps": 800, "batch_size": 16, "rows_available": 92608, "lr_peak": 0.0001, "final_loss_avg50": 0.3250220111012459, "max_grad_norm": 15.658538818359375, "tokens_processed": 1644542, "supervised_tokens": 187666, "wall_s": 1519.7, "peak_mem_gib": 3.0770187377929688}
-total s 1546.8
-  [gpu-lease] released rineya-gpu-0.lock

@@ -1,9 +1,0 @@
-{
-  "ticket": "RGM-FIX-003",
-  "observed_problem": "RGM difficulty based on proposed replay can understate difficulty of requested fresh optimal plan",
-  "evidence": "expert semantic_inspection_v2.md p0028: partial replay but optimum6",
-  "root_cause": "Replay horizon used without goal-planning horizon",
-  "proposed_change": "Include shortest_plan length and branching in structural complexity; keep explicit empty/first-error labels separate",
-  "regression": "Assert fresh plans>2 imply structural difficulty>=4 when shortest-plan requested",
-  "resolution": "Fixed generator1.2.0 and independently accepted pilot-v3; fresh optimal horizon now contributes to structural difficulty. Regression passes."
-}

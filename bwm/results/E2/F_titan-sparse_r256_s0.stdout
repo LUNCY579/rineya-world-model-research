@@ -1,62 +1,0 @@
-  [gpu-run] alternation: last turn was ours and RCWM (rcwm-t1:sparse) is waiting; yielding
-  [gpu-lease] waiting: foreign python pid 212580 (1.35 GiB) on the card
-  [gpu-lease] reclaimed a stale lock from dead pid 212580; backed up to rineya-gpu-0.lock.stale-212580.bak
-  [gpu-lease] acquired rineya-gpu-0.lock label=bwm:e2-titan-sparse-r256 token=6b5b78ca
-unique transitions available 1169; training on 256; illegal 47; finish 51
-Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<02:45,  1.87it/s]Loading weights:   6%|6         | 20/310 [00:00<00:07, 41.38it/s]Loading weights:  12%|#2        | 38/310 [00:00<00:03, 72.83it/s]Loading weights:  19%|#9        | 59/310 [00:00<00:02, 104.66it/s]Loading weights:  26%|##5       | 80/310 [00:00<00:01, 131.24it/s]Loading weights:  32%|###1      | 98/310 [00:01<00:01, 142.90it/s]Loading weights:  37%|###7      | 116/310 [00:01<00:01, 149.52it/s]Loading weights:  46%|####6     | 144/310 [00:01<00:00, 184.32it/s]Loading weights:  54%|#####3    | 166/310 [00:01<00:00, 193.55it/s]Loading weights:  60%|######    | 187/310 [00:01<00:00, 194.50it/s]Loading weights:  68%|######8   | 212/310 [00:01<00:00, 206.26it/s]Loading weights:  75%|#######5  | 234/310 [00:01<00:00, 196.76it/s]Loading weights:  82%|########2 | 255/310 [00:01<00:00, 197.76it/s]Loading weights:  89%|########9 | 276/310 [00:01<00:00, 192.14it/s]Loading weights:  96%|#########5| 297/310 [00:02<00:00, 192.63it/s]Loading weights: 100%|##########| 310/310 [00:02<00:00, 148.40it/s]
-[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
-  [thermal] 17:49:12 GPU 68 C
-step 1/200 loss 2.3623 lr 5.00e-06 gn 8.34 16s peak 2.47GiB
-  [thermal] 17:52:08 paused 5s, GPU now 66 C
-  [thermal] 17:53:51 paused 10s, GPU now 66 C
-  [thermal] 17:54:19 GPU 67 C
-  [thermal] 17:55:49 paused 5s, GPU now 66 C
-  [thermal] 17:56:34 paused 5s, GPU now 66 C
-  [thermal] 17:57:49 paused 10s, GPU now 66 C
-  [thermal] 17:58:10 paused 5s, GPU now 66 C
-  [thermal] 17:59:25 paused 5s, GPU now 67 C
-  [thermal] 17:59:27 GPU 69 C
-  [thermal] 17:59:35 paused 5s, GPU now 65 C
-  [thermal] 18:00:35 paused 10s, GPU now 66 C
-  [thermal] 18:02:57 paused 5s, GPU now 66 C
-  [thermal] 18:03:39 paused 5s, GPU now 66 C
-step 50/200 loss 0.4427 lr 1.00e-04 gn 0.11 876s peak 2.55GiB
-  [thermal] 18:04:14 paused 5s, GPU now 66 C
-  [thermal] 18:04:32 GPU 66 C
-  [thermal] 18:06:17 paused 5s, GPU now 66 C
-  [thermal] 18:08:45 paused 5s, GPU now 66 C
-  [thermal] 18:09:35 GPU 67 C
-  [thermal] 18:14:42 GPU 67 C
-  [thermal] 18:14:51 paused 5s, GPU now 66 C
-step 100/200 loss 0.0095 lr 1.00e-04 gn 0.29 1660s peak 2.55GiB
-  [thermal] 18:17:08 paused 5s, GPU now 66 C
-  [thermal] 18:19:48 GPU 67 C
-  [thermal] 18:20:50 paused 5s, GPU now 66 C
-  [thermal] 18:21:06 paused 5s, GPU now 66 C
-  [thermal] 18:21:28 paused 5s, GPU now 65 C
-  [thermal] 18:23:06 paused 5s, GPU now 66 C
-  [thermal] 18:23:40 paused 5s, GPU now 66 C
-  [thermal] 18:24:19 paused 5s, GPU now 65 C
-  [thermal] 18:24:50 GPU 66 C
-  [thermal] 18:26:21 paused 5s, GPU now 65 C
-  [thermal] 18:26:36 paused 5s, GPU now 65 C
-  [thermal] 18:26:59 paused 5s, GPU now 65 C
-  [thermal] 18:29:07 paused 5s, GPU now 65 C
-  [thermal] 18:29:23 paused 5s, GPU now 65 C
-  [thermal] 18:29:52 GPU 66 C
-step 150/200 loss 0.0039 lr 1.00e-04 gn 0.00 2513s peak 2.55GiB
-  [thermal] 18:33:13 paused 5s, GPU now 66 C
-  [thermal] 18:35:00 GPU 66 C
-  [thermal] 18:36:06 paused 5s, GPU now 66 C
-  [thermal] 18:36:37 paused 5s, GPU now 66 C
-  [thermal] 18:40:03 GPU 68 C
-  [thermal] 18:40:22 paused 10s, GPU now 66 C
-  [thermal] 18:42:01 paused 10s, GPU now 66 C
-  [thermal] 18:43:27 paused 5s, GPU now 66 C
-  [thermal] 18:45:13 GPU 67 C
-step 200/200 loss 0.0023 lr 1.23e-05 gn 0.01 3382s peak 2.55GiB
-train done {"steps": 200, "batch_size": 16, "rows_available": 256, "lr_peak": 0.0001, "final_loss_avg50": 0.0023235192133506644, "max_grad_norm": 8.337555885314941, "tokens_processed": 425776, "supervised_tokens": 47140, "wall_s": 3382.2, "peak_mem_gib": 2.548859119415283}
-  [thermal] 18:50:20 GPU 66 C
-  [thermal] 18:55:22 GPU 66 C
-  [thermal] 19:00:30 GPU 67 C
-  [gpu-lease] released rineya-gpu-0.lock

@@ -1,7 +1,0 @@
-# Actual input-first stage: RUNNING
-
-Actual role `/root/research_architect`, input-first adjudicator baseline. This first observed file is not a completed FIRST freeze or data judgment. Only the authorized eight-field target-free packet/custody/root readback, six public sources, canonical/common public schema and own prior public preparation/helpers are permitted. Full candidate/gold, private producer/solver/controls/results and other reviewers' current predictions/first/final evidence remain unread.
-
-Freeze new source/config, actual packet/public/original helper raw bytes, resolved Python and loaded standard-library files before any new own source import/solver execution/prediction. Then recompute every actual row's typed result, independently traverse its original fresh trace and check event-prefix/budget/continuation agreement. Inspect actual task/control relationships, retained bindings/callers/branches and input-only split/cue limits. INITIAL judgments retain target correctness UNKNOWN and grant no approval. Freeze all216 predictions and INITIAL judgments in FIRST before separately authorized canonical comparison; stop writes after actual FINAL.
-
-Disclosures: original public task/curriculum author, prior public metadata reviewer and multi-track/legacy exposure, possible later adjudicator; root guided public corrections, same-model/common-guidance correlation, own earlier solver/simulator reuse, finite supplied programs and exposed development. No novelty, private metadata truth, production acceptance, training or efficacy claim.
