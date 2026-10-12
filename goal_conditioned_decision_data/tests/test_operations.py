@@ -15,7 +15,7 @@ class OperationsTests(unittest.TestCase):
             config=json.loads((worker.ROOT/'configs/production.json').read_text())
             config.update(groups_per_cycle=3,seed_start=100,production_splits=['train'])
             (root/'configs/production.json').write_text(json.dumps(config))
-            with patch.object(worker,'ROOT',root),patch('goal_conditioned_decision_data.generators.build.generate_group',return_value=[{'invalid_fixture':True}]):
+            with patch.object(worker,'ROOT',root),patch.object(worker.shutil,'disk_usage',return_value=type('Disk',(),{'free':1<<40})()),patch('goal_conditioned_decision_data.generators.build.generate_group',return_value=[{'invalid_fixture':True}]):
                 self.assertEqual(worker.run(argparse.Namespace(no_backup=True,seal=False,groups=3)),1)
                 db=worker.connection()
                 self.assertEqual(db.execute('SELECT COUNT(*) FROM jobs WHERE status="done"').fetchone()[0],3)
@@ -27,7 +27,7 @@ class OperationsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);(root/'state').mkdir()
             config=json.loads((worker.ROOT/'configs/production.json').read_text())
-            with patch.object(worker,'ROOT',root),patch.object(worker,'source_hashes',side_effect=[{'code':'before'},{'code':'after'}]),patch('goal_conditioned_decision_data.generators.build.generate_group',return_value=[]),patch('goal_conditioned_decision_data.auditors.integrity.audit_group',return_value=([],[],{})):
+            with patch.object(worker,'ROOT',root),patch.object(worker.shutil,'disk_usage',return_value=type('Disk',(),{'free':1<<40})()),patch.object(worker,'source_hashes',side_effect=[{'code':'before'},{'code':'after'}]),patch('goal_conditioned_decision_data.generators.build.generate_group',return_value=[]),patch('goal_conditioned_decision_data.auditors.integrity.audit_group',return_value=([],[],{})):
                 db=worker.connection()
                 with self.assertRaisesRegex(RuntimeError,'changed during batch'):worker.process(101,'train',config,db)
                 db.close()

@@ -12,7 +12,7 @@ Canonical records separate `input` from `targets`, provenance and audit evidence
 
 ## Commands on this host
 
-The initial development checkout is `/Users/chengli/Downloads/Rineya_World_Model/.rineya-gcdl-worktree`. For host persistence, the canonical runner worktree is `/Users/chengli/.codex/gcdl001-host/worktree`; run the commands there. It uses an isolated shallow, sparse clone of the same confirmed branch so a daemon need not access Downloads or another programme’s Git metadata. No model weights or native experiment folders are fetched.
+The initial development checkout was `/Users/chengli/Downloads/Rineya_World_Model/.rineya-gcdl-worktree`. Its programme/state were byte-verified into `state/development_archive.tar.gz` (manifested), then this self-created redundant checkout was retired to reclaim 729 MiB. Existing main/other-agent research folders remain intact. For host persistence, the canonical runner worktree is `/Users/chengli/.codex/gcdl001-host/worktree`; run the commands there. It uses an isolated shallow, sparse clone of the same confirmed branch so a daemon need not access Downloads or another programme’s Git metadata. No model weights or native experiment folders are fetched.
 
 ```sh
 python3 -m unittest discover -s goal_conditioned_decision_data/tests -v

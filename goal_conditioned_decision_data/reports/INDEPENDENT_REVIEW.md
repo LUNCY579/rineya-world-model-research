@@ -21,7 +21,7 @@ python3 -m unittest goal_conditioned_decision_data.tests.test_adversarial_review
 python3 -m unittest discover -s goal_conditioned_decision_data/tests -v
 ```
 
-The independent suite passes **32/32 tests**: 14 semantic, 8 integrity and 10 operations tests. The final complete suite passes **57/57 tests**, with no skipped cases or expected failures hiding a failing gate.
+The independent suite passes **33/33 tests**: 14 semantic, 9 integrity and 10 operations tests. The final complete suite passes **58/58 tests**, with no skipped cases or expected failures hiding a failing gate.
 
 Independent tests verify reverse/retain semantics; literal `void` meaning settled while another token means void; signed entries; unchanged dynamics under goal reversal; uniform three-world success probability 1/3; duplicate/contradictory world rejection; invalid booleans/bounds/statuses/cycles/branching; genuine ties; all-infeasible abstention even when the final state repairs an initial violation; unrepaired historical constraint violations; illegal-prefix termination and successful-action-only cost; Blocksworld clearance; register add/multiply/set/copy/swap and reject/clamp/wrap controls.
 
@@ -80,7 +80,7 @@ Promotion is supported **only for removing this option-position correlation in o
 
 SHA-256 digest of the canonical `source_hashes()` map covering 25 Python/configuration files:
 
-`6ab9696269e42a9aeaee1198d24a6cb49e6b3e39b3102e0b4056488fc47b265a`
+`51e28002089b43743c1f889425222590c581fea182a85e3c49a55e1ab54a4df7`
 
 Operations must retain the matching full map in `manifests/VALIDATED_CODE.json`. Key pins:
 
@@ -91,9 +91,10 @@ Operations must retain the matching full map in `manifests/VALIDATED_CODE.json`.
 | `environments/core.py` | `b4e383c455ba899737a8c034a239a23ac01fbc13279791b3e0bc66acb6ec014d` |
 | `generators/build.py` | `78387f73de0bd8cdda4cbef446d9e735edfea175badb1575bb567fb087e4a575` |
 | `auditors/integrity.py` | `1ce9a68a04d2eb71c3d3bcb8188dd3d392af69cda105b0caa408be9c6c53a62d` |
+| `auditors/release.py` | `f120a65b840b8a5a0a5e707ec8fc6897aa95dd9f48e213afd090752d7d73e2be` |
 | `pipelines/worker.py` | `4130b27b7332c6fba9d0c58decd4e950d240817bc044a9823f96d1f8e40ee076` |
 | `scripts/control.py` | `9990ad7a7538dc9ce8fdd10d3db26f9a592f56f04d74ef6138f7f5054f8ea909` |
-| `tests/test_adversarial_review.py` | `73338da3288cb55fde3c6f22e3fa454f90de1296f455b100d440458d069e0d70` |
+| `tests/test_adversarial_review.py` | `9dca1face6426a079b5c0b001b0e63eb68e2cfb3463e069784be6d22fc16ad59` |
 | `DATA_CONTRACT.md` | `e92b9e720aa70cd46589eb1c2c8c0ee7d7523f36e338d3f1581ab20fba7f5762` |
 | `manifests/schema-1.0.json` | `2a0e5540ccbb444cd7d4083874ac0ce94050e2f7a6ac10ecfb8a9fa3e321afa0` |
 
@@ -110,3 +111,15 @@ An initial host activation attempt exposed launchd's sanitized default PATH, whi
 The only runtime-source correction in this follow-up is `scripts/control.py` recording the installer's PATH in the plist. The new independent test constructs executable fake `gh` and `git` files in a temporary configured tool directory, installs an isolated plist, and confirms both tools resolve through its stored PATH. It also verifies that only PATH and PYTHONUNBUFFERED are copied; a fake GH_TOKEN is excluded. All 57 tests pass after this correction. This report's source digest and test pin were refreshed accordingly; oracle/generator/data semantics are unchanged.
 
 An already loaded launchd job retains its cached environment when merely kickstarted. The reviewed activation procedure for environment/interval changes is explicit stop/bootout followed by resume/bootstrap. The PATH fix does not by itself establish a successful live cycle or resolve a possible Downloads privacy restriction. Startup diagnosis and actual checkpoint advancement remain outside this code-only PASS until operations records them.
+
+## Final host and review-binding follow-up
+
+The canonical host checkout is now `/Users/chengli/.codex/gcdl001-host/worktree`, an isolated worktree of a small sparse clone on the same dedicated branch. The coordinator reported byte verification of the archived original programme before removal of its self-created Downloads worktree; this reviewer did not independently inspect the archive. No other programme was modified by this reviewer.
+
+The reviewer read the relocated checkpoint and backup receipts: checkpoint seed 1000017 and 744 accepted records, with confirmed local/remote commit `bd35ed9aa95e407366b12f8d8e3d968b5f8cc396`. The latter matches the locally resolved Git HEAD. This supports one completed host production/backup cycle; it is not proof of indefinite operation. The original 568-record bootstrap sample audit above remains its own historical scope, and no sealed targets were parsed during this follow-up.
+
+The final runtime-source change is the release auditor binding independent PASS to `VALIDATED_CODE.json`, its exact current code-hash map and digest, the digest stated in this report, and this report's SHA-256. The new independent temporary-state regression verifies valid receipt → PASS, edited source → FAIL, edited report bytes → FAIL, and missing receipt → FAIL. This closes the earlier possibility of an old PASS substring approving changed source. The source digest and pins above include this correction.
+
+All 58 tests pass on the relocated checkout. Two operations fault fixtures initially encountered the real disk floor before reaching their intended faults; their author isolated free-space state with a test-only mock and reran them. Actual runtime guards and configuration remain unchanged.
+
+At review time, `df` reported 8,278,748 KiB free (approximately 7.90 GiB), below the required 10 GiB floor. Further generation must remain paused until the genuine resource guard admits it; operations manages the durable resource-pause receipt. This is a resource block, not a failed correctness gate. The final PASS remains limited to reviewed synthetic infrastructure and the measured DEV improvement, and does not authorize bypassing the storage/free-space guard.

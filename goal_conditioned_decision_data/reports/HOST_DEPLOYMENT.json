@@ -1,0 +1,33 @@
+{
+  "type": "observed_host_deployment",
+  "canonical_worktree": "/Users/chengli/.codex/gcdl001-host/worktree",
+  "git_repository": "/Users/chengli/.codex/gcdl001-host/repository",
+  "sparse_clone_bytes_approx": 9437184,
+  "no_native_experiment_or_model_weight_checkout": true,
+  "first_daemon_cycle": {
+    "accepted_before": 568,
+    "accepted_after": 744,
+    "checkpoint_seed": 1000017,
+    "heartbeat_status": "healthy",
+    "confirmed_remote_commit": "bd35ed9aa95e407366b12f8d8e3d968b5f8cc396",
+    "confirmed_local_commit": "bd35ed9aa95e407366b12f8d8e3d968b5f8cc396",
+    "backup_executed_by_daemon": true
+  },
+  "startup_findings": [
+    "Default launchd PATH omitted Homebrew gh; corrected and independently tested",
+    "Python daemon stalled at script open under Downloads; isolated sparse host checkout reached worker",
+    "Host free disk fell below10GiB; guard paused before generation; verified archive/removal of self-created redundant checkout reclaimed729MiB"
+  ],
+  "stop_resume": "Observed launchd bootout/bootstrap and checkpoint-safe resume; five-minute interval configured; host must remain awake and user logged in",
+  "limits": [
+    "Long-term uptime cannot be inferred from one successful cycle",
+    "Future resource/quality failures must pause and be reported by heartbeat"
+  ],
+  "latest_checkpoint": {
+    "seed": 1000023,
+    "accepted": 920,
+    "status": "healthy"
+  },
+  "resource_gate_observed_then_resumed": true,
+  "free_gib_at_report": 13.498126983642578
+}

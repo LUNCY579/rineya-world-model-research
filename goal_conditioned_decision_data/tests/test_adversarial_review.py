@@ -453,6 +453,28 @@ class IndependentOperationsTests(unittest.TestCase):
 
 
 class IndependentIntegrityTests(unittest.TestCase):
+    def test_release_review_requires_current_source_and_receipt_hash(self):
+        from goal_conditioned_decision_data.auditors import release
+        from goal_conditioned_decision_data.pipelines.common import digest, file_hash
+        sources = {'oracle.py': 'original_oracle_hash', 'config.json': 'original_config_hash'}
+        with tempfile.TemporaryDirectory(prefix='gcdl-independent-') as directory:
+            root = Path(directory); (root/'reports').mkdir(); (root/'manifests').mkdir()
+            review = root/'reports/INDEPENDENT_REVIEW.md'
+            original = 'FINAL_VERDICT: PASS\nReviewed source digest: '+digest(sources)+'\n'
+            review.write_text(original)
+            receipt = root/'manifests/VALIDATED_CODE.json'
+            receipt.write_text(json.dumps({'code_hashes': sources, 'source_digest': digest(sources),
+                                           'independent_review_sha256': file_hash(review)}))
+            with patch.object(release, 'ROOT', root), patch.object(release, 'source_hashes', return_value=sources):
+                self.assertTrue(release.current_independent_review())
+                with patch.object(release, 'source_hashes', return_value={**sources, 'oracle.py': 'edited_hash'}):
+                    self.assertFalse(release.current_independent_review())
+                review.write_text(original+'Unreviewed edit to the receipt text.\n')
+                self.assertFalse(release.current_independent_review())
+                review.write_text(original)
+                receipt.unlink()
+                self.assertFalse(release.current_independent_review())
+
     def test_schema_rejects_false_provenance_and_utility_declaration(self):
         from goal_conditioned_decision_data.auditors.integrity import validate_schema
         from goal_conditioned_decision_data.generators.build import record_id

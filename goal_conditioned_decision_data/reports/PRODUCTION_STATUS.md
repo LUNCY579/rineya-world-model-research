@@ -1,28 +1,30 @@
 # GCDL-001 production status
 
-Snapshot: 2026-10-11T18:44:26-05:00. Experimental verified synthetic pilot; no model training or learned-transfer claim.
+Snapshot: 2026-10-11T19:01:23-05:00. The canonical host runner is healthy. This is an experimental verified synthetic pilot; no model training or learned-transfer claim.
 
 | Split | Accepted | Groups | Production quarantines |
 |---|---:|---:|---:|
-| train | 240 | 8 | 0 |
-| dev | 54 | 2 | 0 |
+| train | 480 | 16 | 0 |
+| dev | 108 | 4 | 0 |
 | sealed | 216 | 8 | 0 |
-| ood | 58 | 2 | 0 |
+| ood | 116 | 4 | 0 |
 
-Total accepted: 568. Four separate deliberate corruptions were quarantined to demonstrate failed-outcome, ranking, leakage and uncertainty gates; they are excluded from training exports and natural production failure rates.
+Total accepted: 920. Four separate deliberately corrupted records were quarantined and excluded from training exports and natural production failure rates.
 
-The final suite passes 56 tests, including 31 independently authored adversarial/semantic/operations tests. Oracle properties cover 4,272 plans and detect deliberate transition/scoring/cost errors. The release auditor rechecks every accepted row; independent review reads nonsealed labels only and separately verifies sealed manifest hashes and protected groups. All 20 bootstrap groups reproduce exactly from stored seeds/configurations.
+All 58 regression tests pass, including 33 independently authored adversarial/semantic/operations tests. Oracle properties cover 4,272 plans and detect deliberate transition/scoring/cost errors. The release auditor rechecks accepted labels/evidence and protected splits; its independent-review gate binds the exact current source hashes and independent review receipt bytes. The independent reviewer did not inspect sealed gold. Its initial hand-calculated audit sampled 12 distinct seed clusters, with zero issues and a conditional one-sided 95% IID error upper bound of 22.1%; this does not bound correlated specification errors.
 
-Families A–H are represented. Dataset coverage, difficulty, normalized uniqueness, uncertainty categories, source versions, option-position distributions and release gates are in QUALITY_REPORT.json. Independent manual review sampled 12 distinct seed clusters, four cases per environment, with no observed issues. Its conditional one-sided 95% IID error-rate upper bound is about 22.1%; shared specification errors remain outside that estimate.
+All A–H families are present. QUALITY_REPORT.json contains current counts, difficulty, normalized uniqueness, uncertainty, option-position coverage and release gates. Independent review approves the code and the narrow DEV position correction: 32/0/0/0 winners before, 8/8/8/8 after, zero semantic/label changes. ID-only lexical choice was 9/32; no broad shortcut or model-performance claim follows.
 
-The DEV option-position comparison contains 32 paired cases: 32/0/0/0 before versus 8/8/8/8 after; zero semantic or decision-label changes. This supports the narrow correction. ID-only lexical choice was 9/32; no broader shortcut or model-performance claim follows.
+Active generation/audit time recorded: 43.789 seconds. This differs from wall-clock throughput. Each search manifest retains cheap/expanded runtime samples plus exact attempted-transition and candidate execution counts. These CPU simulator costs do not predict future language-model inference cost. No paid APIs, inference service or model training are used.
 
-Bootstrap active generation/audit time: 17.001 seconds. Active-time throughput is distinct from wall-clock production. Runtime manifests record separate cheap/expanded simulator nanosecond samples and exact attempted-transition/candidate counts; these CPU timings do not represent future language-model inference cost. No paid APIs or model inference are used.
+## Live host evidence
 
-Resource settings: one worker; six groups every five minutes; 180-second production budget plus bounded Git backup; 512 MiB programme ceiling; 12,000 accepted-record ceiling; minimum 10 GiB free disk. Three consecutive unproductive batches, mismatched oracle evidence, source drift, unsafe publication, or a failed bounded backup preserve a checkpoint and pause. Paused invocations do not grow logs.
+The canonical isolated worktree is `/Users/chengli/.codex/gcdl001-host/worktree`, backed by its own 9 MiB shallow sparse repository. Launchd `com.rineya.gcdl001` completed a real generation/checkpoint/Git-backup cycle. Checkpoint advanced from 1000011 / 568 accepted to 1000017 / 744; a later verified cycle reached 1000023 / 920. The daemon itself confirmed local and remote commit equality. HOST_DEPLOYMENT.json preserves that observed evidence. Long-term uptime is not inferred from two successful cycles.
 
-## Host activation evidence
+A startup PATH omission was corrected and tested. The original daemon stalled opening its script under Downloads, so the host runner uses an unprotected isolated checkout and its own Git metadata. Its redundant initial development checkout was byte-verified into a 441,667-byte archive (99 files, SHA-256 manifest), then retired to reclaim 729 MiB. Existing native research/other-agent workspaces remain intact. Accepted shards are preserved both locally and remotely.
 
-Pending final receipt, remote confirmation and live launchd cycle. The CPU runner executes while logged in and awake. The separate two-hour Codex follow-up is scheduled and respects operator stops; neither guarantees AI-service availability.
+The host's free space briefly fell below the 10 GiB floor and the runner correctly paused. Free space recovered; the guarded runner resumed. Current free space at this snapshot: 13.50 GiB. The guard is unchanged.
 
-Exact lifecycle and recovery commands are in README.md. State/heartbeat.json, metrics.json, checkpoint.json, queue.sqlite and backup.json retain current operational evidence; shards and manifests retain remote-recoverable scientific evidence.
+One CPU worker runs six groups every five minutes, with 180 seconds of production plus bounded Git backup, a 512 MiB programme ceiling and 12,000 accepted-record ceiling. Three unproductive batches, oracle disagreements, source drift, unsafe publication or failed bounded backup preserve a checkpoint and pause. Paused launchd invocations are no-ops. Accepted data is never deleted to meet a quota.
+
+The launchd user session must remain logged in and awake. A quiet two-hour Codex follow-up monitors actionable failures and can run bounded independently reviewed improvements when the agent service is available. The AI agent itself is not active continuously. Stop markers are preserved. README.md provides exact start/stop/status/resume/export commands. State heartbeat, metrics, SQLite ledger, checkpoint and backup receipts hold live evidence; manifests and immutable shards provide remote-recoverable scientific evidence.

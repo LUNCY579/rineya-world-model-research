@@ -5,7 +5,22 @@ import json
 import random
 from pathlib import Path
 from .integrity import audit_record, semantic_fingerprint, template_signature
-from ..pipelines.common import ROOT, atomic_json, digest, file_hash, canonical
+from ..pipelines.common import ROOT, atomic_json, digest, file_hash, canonical, source_hashes
+
+
+def current_independent_review():
+    """A prior PASS is valid only for its exact reviewed source and receipt."""
+    try:
+        review=ROOT/'reports/INDEPENDENT_REVIEW.md'
+        receipt=json.loads((ROOT/'manifests/VALIDATED_CODE.json').read_text())
+        current=source_hashes()
+        return ('FINAL_VERDICT: PASS' in review.read_text()
+            and receipt['code_hashes']==current
+            and receipt['source_digest']==digest(current)
+            and receipt['source_digest'] in review.read_text()
+            and receipt['independent_review_sha256']==file_hash(review))
+    except (OSError,ValueError,KeyError):
+        return False
 
 
 def audit(include_sealed=False):
@@ -65,7 +80,7 @@ def audit(include_sealed=False):
     n=len(sampled)
     review=ROOT/'reports/INDEPENDENT_REVIEW.md'
     # Independent reviewer gate is an explicit scoped written verdict, not inferred from LLM agreement.
-    independent_pass=review.exists() and 'FINAL_VERDICT: PASS' in review.read_text()
+    independent_pass=current_independent_review()
     gates={'schema':not errors,'authoritative_evidence':not errors,'zero_oracle_disagreements':not errors,
         'split_integrity':not errors,'no_known_supported_fingerprint_leakage':not errors,
         'sealed_immutable':freeze.exists() and not any('sealed' in e['reason'] for e in errors),
