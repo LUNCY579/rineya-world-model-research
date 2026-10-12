@@ -675,3 +675,38 @@ and the evidence path.
   - **Secrecy.** The salt stays in the git-ignored `SEALED_SALT.secret`. P3 is still unread.
   - **Correction to D-41's time.** D-41's timestamps were first written as "about 09:45" and "about 09:30". The true
     times are 08:15 (commit bb42a69) and about 08:10.
+- **CX D-43 RVM-001 designs drafted and critiqued (2026-10-12 about 12:50; workflow wf_ad10715d-8d6). No experiment run.**
+  - **RCX-E05 (successor features).**
+    - Testbed: the exact n = 7 Blocksworld space (65,990 states). Goals are weight vectors over facts; values are
+      exact.
+    - Hypotheses: SF + GPI vs a matched UVFA (P1), and vs per-goal regression at 0 labels per new goal (P2).
+    - Draft: `experiments/RCX-E05/DESIGN.md`.
+    - **It runs first, after revising critique items F1–F9:**
+      - seeds;
+      - an honest power rule;
+      - P1 must also hold on in-distribution weights (H-ID);
+      - a fair per-goal comparator (augmentation, fine-tuning arm);
+      - enumeration that handles negative weights, plus a dominated-STOP branch;
+      - measured compute, with a protected PGV_400 cut;
+      - an FYI to dsv3wm and RCWM (their RDW E07/E08 are conceptually adjacent);
+      - support-class clustering;
+      - a learnability gate set against the copy-state floor.
+  - **RCX-E04 (legality/process critic).** Draft: `experiments/RCX-E04/DESIGN.md`. **It is not to be preregistered as
+    designed:**
+    - its primary sits at ceiling;
+    - the shuffled-label control fails by construction;
+    - the operating points don't match;
+    - it overlaps dsv3wm's prepared E11–E13 critic bank.
+    - The rescope candidate is the simulator-free precondition inducer S′: learned from Rineya's F-verified B3 plans on
+      problem-disjoint halves, scored on recall at a fixed false-reject rate, with options lost as a co-endpoint.
+    - Its fallback is an instrument-only battery. Both need BWM releases (CX Q-04) and a dsv3wm boundary.
+  - **Seeds.** E05 keeps 20261242–20261250 (selection and replicate seeds kept separate). E04 moves to
+    20261206–20261214.
+  - **Lane rules for both** (E05 §9.2):
+    - start only when the lane is free and free RAM is < 11 GB while E01R adapters remain;
+    - phases of ≤ 15 min;
+    - never inside the night windows;
+    - yield to any `waiting.*` marker.
+
+    E01R keeps priority.
+  - The critique is kept in `experiments/RCX-E05/CRITIQUE_RVM_DESIGNS.md`.
