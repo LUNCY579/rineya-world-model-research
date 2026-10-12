@@ -1,0 +1,322 @@
+[
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":5},\"legal\":{\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 5. The action halve is allowed. The episode ends. \n\nThe action halve is allowed. The state changes from -11 to 5.",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":5},\"legal\":{\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 5. The action halve is allowed. The episode ends. \n\nThe action halve is allowed. The state changes from -11 to 5."
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":5},\"legal\":{\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 5. The action halve is allowed. The episode ends. \n\nThe action halve is allowed. The state changes from -11 to 5.",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":5},\"legal\":{\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 5. The action halve is allowed. The episode ends. \n\nThe action halve is allowed. The state changes from -11 to 5."
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve",
+        "double"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":11},\"legal\":[\"halve\",\"double\"],\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 11. The actions halve and double are legal. The episode ends. \n\nThe state changes from -11 to 11. The actions",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":11},\"legal\":[\"halve\",\"double\"],\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 11. The actions halve and double are legal. The episode ends. \n\nThe state changes from -11 to 11. The actions"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":5},\"legal\":{\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 5. The action halve is allowed. The episode ends. \n\nThe action halve is allowed. The state changes from -11 to 5.",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":5},\"legal\":{\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 5. The action halve is allowed. The episode ends. \n\nThe action halve is allowed. The state changes from -11 to 5."
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve",
+        "double",
+        "add1",
+        "double"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":11},\"legal\":{\"halve\",\"double\",\"add1\",\"double\"},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 11. The actions are valid. The episode ends. \n\nThe state changes from -11 to 11. The",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":11},\"legal\":{\"halve\",\"double\",\"add1\",\"double\"},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 11. The actions are valid. The episode ends. \n\nThe state changes from -11 to 11. The"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":5},\"legal\":{\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 5. The action halve is allowed. The episode ends. \n\nThe action halve is allowed. The state changes from -11 to 5.",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":5},\"legal\":{\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -11 to 5. The action halve is allowed. The episode ends. \n\nThe action halve is allowed. The state changes from -11 to 5."
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":-12},\"legal:false,\"terminated\":false,\"failed\":false} \n\nThe action teleport is legal. The state remains unchanged. The episode continues. \n\n{\"domain\":\"register\",\"rules\":{\"semantics\":\"bwm-register-v2\",\"limit\":40,\"text\":\"add1 adds 1",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":-12},\"legal:false,\"terminated\":false,\"failed\":false} \n\nThe action teleport is legal. The state remains unchanged. The episode continues. \n\n{\"domain\":\"register\",\"rules\":{\"semantics\":\"bwm-register-v2\",\"limit\":40,\"text\":\"add1 adds 1"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":-12},\"legal:false,\"terminated\":false,\"failed\":false} \n\nThe action teleport is legal. The state remains unchanged. The episode continues. \n\n{\"domain\":\"register\",\"rules\":{\"semantics\":\"bwm-register-v2\",\"limit\":40,\"text\":\"add1 adds 1",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":-12},\"legal:false,\"terminated\":false,\"failed\":false} \n\nThe action teleport is legal. The state remains unchanged. The episode continues. \n\n{\"domain\":\"register\",\"rules\":{\"semantics\":\"bwm-register-v2\",\"limit\":40,\"text\":\"add1 adds 1"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport",
+        "halve"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":12},\"legal\":{\"teleport\":true,\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -12 to 12. The teleport and halve actions are legal. The episode ends. \n\nThe state changes from -12 to ",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":12},\"legal\":{\"teleport\":true,\"halve\":true},\"terminated\":false,\"failed\":false} \n\nThe state changes from -12 to 12. The teleport and halve actions are legal. The episode ends. \n\nThe state changes from -12 to"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":-12},\"legal:false,\"terminated\":false,\"failed\":false} \n\nThe action teleport is legal. The state remains unchanged. The episode continues. \n\n{\"domain\":\"register\",\"rules\":{\"semantics\":\"bwm-register-v2\",\"limit\":40,\"text\":\"add1 adds 1",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":-12},\"legal:false,\"terminated\":false,\"failed\":false} \n\nThe action teleport is legal. The state remains unchanged. The episode continues. \n\n{\"domain\":\"register\",\"rules\":{\"semantics\":\"bwm-register-v2\",\"limit\":40,\"text\":\"add1 adds 1"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport",
+        "halve",
+        "sub1",
+        "sub1"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":-12},\"legal\":[\"teleport\",\"halve\",\"sub1\",\"sub1\"],\"terminated\":false,\"failed\":false} \n\nThe state remains unchanged. \n\nThe actions are executed. \n\nThe state changes to {\"x\":6}. \n\nThe state changes to {\"x\":6}. \n\nThe",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":-12},\"legal\":[\"teleport\",\"halve\",\"sub1\",\"sub1\"],\"terminated\":false,\"failed\":false} \n\nThe state remains unchanged. \n\nThe actions are executed. \n\nThe state changes to {\"x\":6}. \n\nThe state changes to {\"x\":6}. \n\nThe"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport"
+      ]
+    },
+    "prompt_style": "plain",
+    "generated": {
+      "text": " {\"state\":{\"x\":-12},\"legal:false,\"terminated\":false,\"failed\":false} \n\nThe action teleport is legal. The state remains unchanged. The episode continues. \n\n{\"domain\":\"register\",\"rules\":{\"semantics\":\"bwm-register-v2\",\"limit\":40,\"text\":\"add1 adds 1",
+      "n_tokens": 64,
+      "hit_eos": false
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"state\":{\"x\":-12},\"legal:false,\"terminated\":false,\"failed\":false} \n\nThe action teleport is legal. The state remains unchanged. The episode continues. \n\n{\"domain\":\"register\",\"rules\":{\"semantics\":\"bwm-register-v2\",\"limit\":40,\"text\":\"add1 adds 1"
+    }
+  }
+]

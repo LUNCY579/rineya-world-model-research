@@ -1,0 +1,322 @@
+[
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-11,\"y\":11}",
+      "n_tokens": 12,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-11,\"y\":11}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-11,\"y\":11}",
+      "n_tokens": 12,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-11,\"y\":11}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve",
+        "double"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":55,\"legal\":true,\"terminated\":false,\"failed\":false}",
+      "n_tokens": 19,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":55,\"legal\":true,\"terminated\":false,\"failed\":false}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-11,\"y\":11}",
+      "n_tokens": 12,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-11,\"y\":11}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve",
+        "double",
+        "add1",
+        "double"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":11,\"state\":\"active\"}",
+      "n_tokens": 11,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":11,\"state\":\"active\"}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -11
+      },
+      "actions": [
+        "halve"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-11,\"y\":11}",
+      "n_tokens": 12,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-11,\"y\":11}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}",
+      "n_tokens": 19,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}",
+      "n_tokens": 19,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport",
+        "halve"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-6}",
+      "n_tokens": 6,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-6}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}",
+      "n_tokens": 19,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport",
+        "halve",
+        "sub1",
+        "sub1"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}",
+      "n_tokens": 19,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}"
+    }
+  },
+  {
+    "conditioning": {
+      "domain": "register",
+      "rules": {
+        "semantics": "bwm-register-v2",
+        "limit": 40,
+        "text": "add1 adds 1; sub1 subtracts 1; double multiplies x by 2; halve divides even x by 2. Odd halving or exceeding abs(x)<=limit is illegal. finish ends the episode; later actions are ignored (executed=false, legal=false), with an absorbing state. Malformed or unknown actions are illegal no-ops. Illegal actions leave the state unchanged."
+      },
+      "s0": {
+        "x": -12
+      },
+      "actions": [
+        "teleport"
+      ]
+    },
+    "prompt_style": "chat",
+    "generated": {
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}",
+      "n_tokens": 19,
+      "hit_eos": true
+    },
+    "parsed": {
+      "malformed": true,
+      "text": "{\"x\":-12,\"legal\":true,\"terminated\":false,\"failed\":false}"
+    }
+  }
+]

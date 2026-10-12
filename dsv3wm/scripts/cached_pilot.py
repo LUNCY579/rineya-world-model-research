@@ -27,10 +27,16 @@ def main():
     required={'dsv3wm/src/dsv3wm/cached_native.py','dsv3wm/scripts/cached_pilot.py','dsv3wm/scripts/cache_probe.py',
               'dsv3wm/prereg/PILOT_AMENDMENT_2_CACHE.md','bwm/code/bwmn/lm.py'}
     members={key.replace('\\','/') for key in frozen['files']}
-    if frozen.get('instrument')!='native-standard-kv-v3' or not required<=members:
-        raise ValueError('complete standard-KV v3 source/instrument freeze required')
+    required.add('dsv3wm/src/dsv3wm/provenance.py')
+    if frozen.get('instrument')!='native-standard-kv-v4' or not required<=members:
+        raise ValueError('complete standard-KV v4 source/instrument/input freeze required')
+    from dsv3wm.provenance import verify_bound_inputs
+    verify_bound_inputs(a.freeze,[a.config,a.data,Path(a.adapter)/'adapter_model.safetensors',
+                                 Path(a.adapter)/'adapter_config.json',a.probe])
     probe=json.loads(Path(a.probe).read_text(encoding='utf-8'))
-    if probe.get('status')!='passed' or probe.get('script_sha256')!=sha256(Path(__file__).parent/'cache_probe.py'):
+    from dsv3wm.native import EXPECTED_CORE_SHA
+    if (probe.get('status')!='passed' or probe.get('parent_sha256')!=EXPECTED_CORE_SHA
+        or probe.get('script_sha256')!=sha256(Path(__file__).parent/'cache_probe.py')):
         raise ValueError('qualified native cache probe with unchanged source required')
     rows=[r for r in load_records(a.data,expected_split='dev') if r['domain']=='register']
     out=Path(a.out)

@@ -1,0 +1,176 @@
+{
+  "claim_scope": "Teacher-forced CE on old prompt formats only; no behavioral retention pass or skill-wide guarantee.",
+  "construction": "six fresh fixed inputs; no bank or marginal access",
+  "fixture_count": 6,
+  "fixtures": [
+    {
+      "domain": "register",
+      "format": "bwmn.rw2.forward_prompt/forward_target",
+      "fresh_input": {
+        "action": "halve",
+        "limit": 32,
+        "x": 3
+      },
+      "id": "rw-odd-halving",
+      "messages": [
+        {
+          "content": "You simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.",
+          "role": "system"
+        },
+        {
+          "content": "{\"action\":\"halve\",\"limit\":32,\"x\":3}",
+          "role": "user"
+        }
+      ],
+      "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"halve\",\"limit\":32,\"x\":3}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "target": "{\"legal\":false,\"terminated\":false,\"x\":3}"
+    },
+    {
+      "domain": "register",
+      "format": "bwmn.rw2.forward_prompt/forward_target",
+      "fresh_input": {
+        "action": "add1",
+        "limit": 32,
+        "x": 32
+      },
+      "id": "rw-limit-boundary",
+      "messages": [
+        {
+          "content": "You simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.",
+          "role": "system"
+        },
+        {
+          "content": "{\"action\":\"add1\",\"limit\":32,\"x\":32}",
+          "role": "user"
+        }
+      ],
+      "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"add1\",\"limit\":32,\"x\":32}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "target": "{\"legal\":false,\"terminated\":false,\"x\":32}"
+    },
+    {
+      "domain": "register",
+      "format": "bwmn.rw2.forward_prompt/forward_target",
+      "fresh_input": {
+        "action": "double",
+        "limit": 32,
+        "x": -4
+      },
+      "id": "rw-negative-double",
+      "messages": [
+        {
+          "content": "You simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.",
+          "role": "system"
+        },
+        {
+          "content": "{\"action\":\"double\",\"limit\":32,\"x\":-4}",
+          "role": "user"
+        }
+      ],
+      "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"double\",\"limit\":32,\"x\":-4}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "target": "{\"legal\":true,\"terminated\":false,\"x\":-8}"
+    },
+    {
+      "domain": "ledger",
+      "format": "rcwmt.env.SYSTEM_ONE[ledger_replay], compact chat",
+      "fresh_input": {
+        "before": {
+          "A": 9,
+          "B": -2,
+          "C": 3,
+          "D": 0
+        },
+        "event": {
+          "account": "A",
+          "amount": 4,
+          "kind": "transfer",
+          "other": "B",
+          "status": "posted"
+        }
+      },
+      "id": "ledger-posted-transfer",
+      "messages": [
+        {
+          "content": "Apply one event to the supplied account balances. If status is not posted, leave all balances unchanged. add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.",
+          "role": "system"
+        },
+        {
+          "content": "{\"before\":{\"A\":9,\"B\":-2,\"C\":3,\"D\":0},\"event\":{\"account\":\"A\",\"amount\":4,\"kind\":\"transfer\",\"other\":\"B\",\"status\":\"posted\"}}",
+          "role": "user"
+        }
+      ],
+      "prompt": "<|im_start|>system\nApply one event to the supplied account balances. If status is not posted, leave all balances unchanged. add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.<|im_end|>\n<|im_start|>user\n{\"before\":{\"A\":9,\"B\":-2,\"C\":3,\"D\":0},\"event\":{\"account\":\"A\",\"amount\":4,\"kind\":\"transfer\",\"other\":\"B\",\"status\":\"posted\"}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "target": "{\"A\":5,\"B\":2,\"C\":3,\"D\":0}"
+    },
+    {
+      "domain": "ledger",
+      "format": "rcwmt.env.SYSTEM_ONE[ledger_replay], compact chat",
+      "fresh_input": {
+        "before": {
+          "A": 3,
+          "B": 8,
+          "C": -1,
+          "D": 2
+        },
+        "event": {
+          "account": "A",
+          "amount": -5,
+          "kind": "scale",
+          "other": "C",
+          "status": "cancelled"
+        }
+      },
+      "id": "ledger-cancelled-scale",
+      "messages": [
+        {
+          "content": "Apply one event to the supplied account balances. If status is not posted, leave all balances unchanged. add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.",
+          "role": "system"
+        },
+        {
+          "content": "{\"before\":{\"A\":3,\"B\":8,\"C\":-1,\"D\":2},\"event\":{\"account\":\"A\",\"amount\":-5,\"kind\":\"scale\",\"other\":\"C\",\"status\":\"cancelled\"}}",
+          "role": "user"
+        }
+      ],
+      "prompt": "<|im_start|>system\nApply one event to the supplied account balances. If status is not posted, leave all balances unchanged. add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.<|im_end|>\n<|im_start|>user\n{\"before\":{\"A\":3,\"B\":8,\"C\":-1,\"D\":2},\"event\":{\"account\":\"A\",\"amount\":-5,\"kind\":\"scale\",\"other\":\"C\",\"status\":\"cancelled\"}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "target": "{\"A\":3,\"B\":8,\"C\":-1,\"D\":2}"
+    },
+    {
+      "domain": "ledger",
+      "format": "rcwmt.env.SYSTEM_ONE[ledger_replay], compact chat",
+      "fresh_input": {
+        "before": {
+          "A": -3,
+          "B": 1,
+          "C": 7,
+          "D": 0
+        },
+        "event": {
+          "account": "A",
+          "amount": -2,
+          "kind": "scale",
+          "other": "D",
+          "status": "posted"
+        }
+      },
+      "id": "ledger-posted-negative-scale",
+      "messages": [
+        {
+          "content": "Apply one event to the supplied account balances. If status is not posted, leave all balances unchanged. add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.",
+          "role": "system"
+        },
+        {
+          "content": "{\"before\":{\"A\":-3,\"B\":1,\"C\":7,\"D\":0},\"event\":{\"account\":\"A\",\"amount\":-2,\"kind\":\"scale\",\"other\":\"D\",\"status\":\"posted\"}}",
+          "role": "user"
+        }
+      ],
+      "prompt": "<|im_start|>system\nApply one event to the supplied account balances. If status is not posted, leave all balances unchanged. add: add amount to account. scale: multiply account by amount. transfer: subtract amount from account and add it to other, simultaneously. Return only the complete resulting balances as a JSON object.<|im_end|>\n<|im_start|>user\n{\"before\":{\"A\":-3,\"B\":1,\"C\":7,\"D\":0},\"event\":{\"account\":\"A\",\"amount\":-2,\"kind\":\"scale\",\"other\":\"D\",\"status\":\"posted\"}}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "target": "{\"A\":6,\"B\":1,\"C\":7,\"D\":0}"
+    }
+  ],
+  "schema": "dsv3wm-retention-fixtures-v1",
+  "source_sha256": {
+    "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+    "dsv3wm/scripts/audit_retention.py": "5599f7165a24cd68cd93b8b4888a6ca4c3cc1dff0b965709e02fd56d41bd54ef",
+    "dsv3wm/src/dsv3wm/domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+    "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+  }
+}

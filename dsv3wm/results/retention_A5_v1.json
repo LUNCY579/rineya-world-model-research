@@ -1,0 +1,217 @@
+{
+  "schema": "dsv3wm-native-retention-loss-v1",
+  "status": "complete",
+  "claim_scope": "Teacher-forced CE on old prompt formats only; no behavioral retention pass or skill-wide guarantee.",
+  "retention_pass": null,
+  "config": {
+    "arm": "A5",
+    "seed": 0,
+    "steps": 12,
+    "batch_size": 1,
+    "lr": 0.0001,
+    "rank": 4,
+    "max_length": 384,
+    "ce_chunk": 8,
+    "mtp_tokens": 2,
+    "mtp_rank": 16,
+    "mtp_weight": 0.3,
+    "lambda2": 0.5,
+    "lambda4": 0.5,
+    "legality_weight": 0.0,
+    "target_mode": "full",
+    "shuffled_aux": false,
+    "share_aux": false,
+    "device": "cpu",
+    "threads": 4,
+    "core": "titan-sparse",
+    "generation_tokens": 64
+  },
+  "config_sha256": "4f36d4e7190e8b60d60ac467c9af0c933b8ef9cd18f72637762888189ff57821",
+  "command": [
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\audit_retention.py",
+    "--config",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\configs\\A5_pilot.json",
+    "--adapter",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\A5_s0\\adapter",
+    "--baseline",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\retention_core_v1.json",
+    "--out",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\retention_A5_v1.json"
+  ],
+  "model_kind": "unmerged_adapter",
+  "adapter": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\artifacts\\A5_s0\\adapter",
+  "fixture_file": "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\retention_A5_v1.fixtures.json",
+  "fixture_sha256": "0fd6dff4dc88e25c0588897cda93e18757116c6b4dfce603e0a02c9ecd32b9ba",
+  "fixtures_frozen_before_native_load": true,
+  "teacher_forced": true,
+  "generated_behavior_accuracy_measured": false,
+  "precision": "FP32",
+  "tf32": false,
+  "rows": [
+    {
+      "id": "rw-odd-halving",
+      "domain": "register",
+      "token_mean_ce": 2.4728798866271973,
+      "supervised_tokens": 14,
+      "input_tokens": 132,
+      "target_includes_eos": true,
+      "encoded_sha256": "3657051ebd65c99df845098bee29f63b9877625dc1e6771c63f5dc6bcc3bd67d"
+    },
+    {
+      "id": "rw-limit-boundary",
+      "domain": "register",
+      "token_mean_ce": 2.472306728363037,
+      "supervised_tokens": 15,
+      "input_tokens": 134,
+      "target_includes_eos": true,
+      "encoded_sha256": "5df1e4b75923b52663a20b8ab01a2e1238eca7deca55060392e317aab195d5cd"
+    },
+    {
+      "id": "rw-negative-double",
+      "domain": "register",
+      "token_mean_ce": 2.387359619140625,
+      "supervised_tokens": 14,
+      "input_tokens": 131,
+      "target_includes_eos": true,
+      "encoded_sha256": "6ebd1d04302f550ffbb7923e8b5174d572d736c5c3b2af2a13056514acea36d9"
+    },
+    {
+      "id": "ledger-posted-transfer",
+      "domain": "ledger",
+      "token_mean_ce": 0.3115428388118744,
+      "supervised_tokens": 18,
+      "input_tokens": 135,
+      "target_includes_eos": true,
+      "encoded_sha256": "06395b845d7bb5b509f3551e8d094a7bb10e8333455fddc9bb961eccee456110"
+    },
+    {
+      "id": "ledger-cancelled-scale",
+      "domain": "ledger",
+      "token_mean_ce": 0.2505561113357544,
+      "supervised_tokens": 18,
+      "input_tokens": 135,
+      "target_includes_eos": true,
+      "encoded_sha256": "2ed7ba26715084e5fce095be3cb7c2fede1696b8851eef256157994162be1fc0"
+    },
+    {
+      "id": "ledger-posted-negative-scale",
+      "domain": "ledger",
+      "token_mean_ce": 0.013246359303593636,
+      "supervised_tokens": 18,
+      "input_tokens": 135,
+      "target_includes_eos": true,
+      "encoded_sha256": "a530475508c3212d7e28e8e8343391eed2f17bbf5ffed051a46c959f3ce26057"
+    }
+  ],
+  "fixture_source_sha256": {
+    "dsv3wm/scripts/audit_retention.py": "5599f7165a24cd68cd93b8b4888a6ca4c3cc1dff0b965709e02fd56d41bd54ef",
+    "dsv3wm/src/dsv3wm/domains.py": "c0db8fe62a396819e86df9eb2ac84744554452f254ed2af786305d39468968b1",
+    "bwm/code/bwmn/rw2.py": "1195ea10044b28cecb7f30244aa2e51628222748c1e15d6bebb68ad5d11d3da9",
+    "rcwm/experiments/RCWM-T1/rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2"
+  },
+  "adapter_files_sha256": {
+    "adapter_config.json": "98d4589c6ce174d1adb4f3f785382fb049b2f66d084b6b9154d40eb6a0cbe34d",
+    "adapter_model.safetensors": "799795ab24b2af987fa210e8f376c52372ff8223f6b2fed122b4a3eacf83f46f",
+    "README.md": "a97b7757291b9516945f36a11af832ecd76b7a41f253488284cd55f10e39be69"
+  },
+  "baseline_file_sha256": "9061cdecb76ccaf19c985978603d11045f91e5b7f0f8bc890dce9078c6abd848",
+  "parent_checkpoint_sha256": "a28629c9d3454fbf2e884fd7ca442c1b406e7caf4b36d34b2c0614d0add31284",
+  "native_provenance": {
+    "python": "3.11.15 (main, Jun  2 2026, 22:29:49) [MSC v.1944 64 bit (AMD64)]",
+    "libraries": {
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "peft": "0.20.0",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.22.2"
+    },
+    "loaded_source_sha256": {
+      "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\torch\\__init__.py": "0901a8ad92b30f947405e28fc98dd21c578cfbe8796b0173de931f42079b1f89",
+      "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\transformers\\__init__.py": "67b01cb68df95d42da0661ea120535f33bb618225622e9523bd32e3b7741f9e1",
+      "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\peft\\__init__.py": "a01f167e830f9795a5312d78746536b593b080dd32bbb4c5ebc1224736ecec3f",
+      "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\safetensors\\__init__.py": "3bc1e524ebaba28b4de3b3ebad1edfc623190a1d4fc34e76b900fa34e0c37bbd",
+      "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\tokenizers\\__init__.py": "510d5e23458612433da9f1fe430b5009fb88ba90508ee4340d2397b32c319080",
+      "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\peft\\peft_model.py": "c07bf9545b3b17ea0363263b11fc25d0a2ebe814e3f8083da3fa08adaa824879",
+      "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Lib\\site-packages\\transformers\\models\\qwen3\\modeling_qwen3.py": "fbdcfeeb1b54135ca67ba7df924da92f4b264e1252b517eea2de989289ebaeab",
+      "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\bwm\\code\\bwmn\\lm.py": "88a1e3a26b518cebd17e0b8197d1dd10872d549a4a27a69744ed59266895c0ac",
+      "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\native.py": "110f5cfd1ee57fc717703cc36c316954a45ec40d63870b316a397d0da4f9f3e2",
+      "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\src\\dsv3wm\\config.py": "1e8dc59d1782dd63445b22d85657143ad6d47725229d5699c1a9d79e66a3f267"
+    },
+    "parent_sidecars_sha256": {
+      "config.json": "25ace0268b891881bf1d5a95d18611a74ce1896922107d10adc526257a1962e8",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101"
+    },
+    "parent_hash_and_sidecars_verified_by_native_load": true
+  },
+  "tokenizer_chat_template_sha256": "41d5929bf73796beb66809ac700b2cf3ff81694f933e5c14d52b7fd6963c947d",
+  "summary": {
+    "overall": {
+      "fixtures": 6,
+      "supervised_tokens": 97,
+      "token_mean_ce": 1.1905584492403822
+    },
+    "by_domain": {
+      "ledger": {
+        "fixtures": 3,
+        "supervised_tokens": 54,
+        "token_mean_ce": 0.19178176981707415
+      },
+      "register": {
+        "fixtures": 3,
+        "supervised_tokens": 43,
+        "token_mean_ce": 2.444836139678955
+      }
+    }
+  },
+  "paired_core_loss_comparison": {
+    "interpretation": "Positive CE delta means higher teacher-forced loss; this does not establish behavioral forgetting.",
+    "rows": [
+      {
+        "id": "rw-odd-halving",
+        "domain": "register",
+        "core_ce": 2.662686824798584,
+        "current_ce": 2.4728798866271973,
+        "delta_ce": -0.18980693817138672
+      },
+      {
+        "id": "rw-limit-boundary",
+        "domain": "register",
+        "core_ce": 2.656564235687256,
+        "current_ce": 2.472306728363037,
+        "delta_ce": -0.18425750732421875
+      },
+      {
+        "id": "rw-negative-double",
+        "domain": "register",
+        "core_ce": 2.5594918727874756,
+        "current_ce": 2.387359619140625,
+        "delta_ce": -0.17213225364685059
+      },
+      {
+        "id": "ledger-posted-transfer",
+        "domain": "ledger",
+        "core_ce": 0.3108704388141632,
+        "current_ce": 0.3115428388118744,
+        "delta_ce": 0.0006723999977111816
+      },
+      {
+        "id": "ledger-cancelled-scale",
+        "domain": "ledger",
+        "core_ce": 0.2628653347492218,
+        "current_ce": 0.2505561113357544,
+        "delta_ce": -0.012309223413467407
+      },
+      {
+        "id": "ledger-posted-negative-scale",
+        "domain": "ledger",
+        "core_ce": 0.012547001242637634,
+        "current_ce": 0.013246359303593636,
+        "delta_ce": 0.0006993580609560013
+      }
+    ],
+    "overall_delta_ce": -0.08276170795572169,
+    "retention_pass": null
+  },
+  "duration_seconds": 13.886730899999748
+}

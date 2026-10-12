@@ -1,0 +1,68 @@
+[
+  {
+    "x": 3,
+    "action": "halve",
+    "limit": 32,
+    "expected": [
+      3,
+      false,
+      false
+    ],
+    "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"halve\",\"limit\":32,\"x\":3}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+  },
+  {
+    "x": 32,
+    "action": "add1",
+    "limit": 32,
+    "expected": [
+      32,
+      false,
+      false
+    ],
+    "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"add1\",\"limit\":32,\"x\":32}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+  },
+  {
+    "x": 4,
+    "action": "double",
+    "limit": 16,
+    "expected": [
+      8,
+      true,
+      false
+    ],
+    "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"double\",\"limit\":16,\"x\":4}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+  },
+  {
+    "x": -4,
+    "action": "double",
+    "limit": 32,
+    "expected": [
+      -8,
+      true,
+      false
+    ],
+    "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"double\",\"limit\":32,\"x\":-4}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+  },
+  {
+    "x": 0,
+    "action": "add1",
+    "limit": 24,
+    "expected": [
+      1,
+      true,
+      false
+    ],
+    "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"add1\",\"limit\":24,\"x\":0}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+  },
+  {
+    "x": 2,
+    "action": "finish",
+    "limit": 16,
+    "expected": [
+      2,
+      true,
+      true
+    ],
+    "prompt": "<|im_start|>system\nYou simulate RegisterWorld. A register holds an integer x. Actions: add1 (x+1), sub1 (x-1), double (2x), halve (x/2; illegal when x is odd), finish (ends the episode). A move that would make |x| exceed the limit is illegal and leaves x unchanged. Given x, the limit and one action, reply with the resulting JSON state.<|im_end|>\n<|im_start|>user\n{\"action\":\"finish\",\"limit\":16,\"x\":2}<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+  }
+]

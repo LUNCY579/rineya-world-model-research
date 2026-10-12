@@ -1,0 +1,98 @@
+{
+  "status": "passed",
+  "command": [
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\scripts\\registered_forward_probe.py",
+    "--adapter",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\F_titan_main\\adapter",
+    "--out",
+    "C:\\Users\\clclc\\BusinessProject\\WorldModel\\rineya-dsv3wm-worktree\\dsv3wm\\results\\registered_forward_probe_cpu.json"
+  ],
+  "scope": "constructed original-format smoke cases; not historical sealed benchmark or nonoverlap claim",
+  "fixtures_sha256": "faa0cc7e984ff42d6ef15661e2a61d0ec7fa718f53b37b1196a77144bb4bea97",
+  "n": 6,
+  "correct": 6,
+  "rows": [
+    {
+      "input": {
+        "x": 3,
+        "action": "halve",
+        "limit": 32
+      },
+      "generated": {
+        "text": "{\"legal\":false,\"terminated\":false,\"x\":3}",
+        "n_tokens": 14,
+        "hit_eos": true
+      },
+      "correct": true
+    },
+    {
+      "input": {
+        "x": 32,
+        "action": "add1",
+        "limit": 32
+      },
+      "generated": {
+        "text": "{\"legal\":false,\"terminated\":false,\"x\":32}",
+        "n_tokens": 15,
+        "hit_eos": true
+      },
+      "correct": true
+    },
+    {
+      "input": {
+        "x": 4,
+        "action": "double",
+        "limit": 16
+      },
+      "generated": {
+        "text": "{\"legal\":true,\"terminated\":false,\"x\":8}",
+        "n_tokens": 14,
+        "hit_eos": true
+      },
+      "correct": true
+    },
+    {
+      "input": {
+        "x": -4,
+        "action": "double",
+        "limit": 32
+      },
+      "generated": {
+        "text": "{\"legal\":true,\"terminated\":false,\"x\":-8}",
+        "n_tokens": 14,
+        "hit_eos": true
+      },
+      "correct": true
+    },
+    {
+      "input": {
+        "x": 0,
+        "action": "add1",
+        "limit": 24
+      },
+      "generated": {
+        "text": "{\"legal\":true,\"terminated\":false,\"x\":1}",
+        "n_tokens": 14,
+        "hit_eos": true
+      },
+      "correct": true
+    },
+    {
+      "input": {
+        "x": 2,
+        "action": "finish",
+        "limit": 16
+      },
+      "generated": {
+        "text": "{\"legal\":true,\"terminated\":true,\"x\":2}",
+        "n_tokens": 14,
+        "hit_eos": true
+      },
+      "correct": true
+    }
+  ],
+  "adapter_sha256": "c465356f85ead24b609af2b8b1cb0a14799e6d2d16116944c9c607c933e66466",
+  "parent_sha256": "a28629c9d3454fbf2e884fd7ca442c1b406e7caf4b36d34b2c0614d0add31284",
+  "script_sha256": "fc8cb5c04fc8625f59fdb36afa3c17b09bf3ec906ad2528ac5c944a428748d73",
+  "duration_s": 17.811875800000053
+}
