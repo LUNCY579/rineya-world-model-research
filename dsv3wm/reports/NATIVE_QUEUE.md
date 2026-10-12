@@ -17,8 +17,13 @@ prediction. Private failed manifest is
 `results/recovery-v1/H3_teacher_B0.resources.json`. Preserve both. A same-input
 bounded retry uses NEW paths after release; do not reinterpret resource failure
 as failed label quality or redraw the frozen32-parent pool.
-The retry uses V3's additional shared execution dependency pins; its model,
-configuration, task pool, prediction and scoring code are unchanged. Ledger
+RCX subsequently exited and released the lane. A new BWM GPU training process
+uses host RAM, leaving approximately11.9 GiB before torch imports. The H3-only
+retry now uses the separate CPU11 loader/entrypoint and V4 CPU11 freeze in
+`RECOVERY_RESOURCE_CLARIFICATION_3.md`: physical and commit floors11 GiB after
+imports, unchanged four-GiB boundary, model/math/sampler/data/gates. Both old
+loaders/collectors/freezes remain unchanged. Its V3 shared dependency pins are
+retained; original source history still verifies. Ledger
 B0 and Block G1 likewise use new extended V2 freezes. Original freezes remain
 unchanged; see `prereg/EXECUTION_SOURCE_CLOSURE_V1.md`.
 
@@ -28,7 +33,7 @@ Run one native process at a time from this worktree:
 $env:BWM_DEVICE='cpu'
 $env:PYTHONPATH='dsv3wm/src'
 $nativePython='C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe'
-& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/recovery-v1/H3_teacher_B0_retry01.resources.json -- dsv3wm/scripts/collect_recovery_teacher.py --config dsv3wm/configs/recovery_A0.json --adapter ../Rineya_BWM_001_Research_Bundle/native_v1/runs/F_titan_main/adapter --tasks dsv3wm/datasets/recovery-h3-v1/planning_train.jsonl --train dsv3wm/datasets/recovery-v1/train.jsonl --freeze dsv3wm/prereg/RECOVERY_H3_TEACHER_FREEZE_V3.json --out dsv3wm/artifacts/recovery-h3-v1/teacher_B0_retry01
+& $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/recovery-v1/H3_teacher_B0_retry01.resources.json -- dsv3wm/scripts/collect_recovery_teacher_cpu11.py --config dsv3wm/configs/recovery_A0.json --adapter ../Rineya_BWM_001_Research_Bundle/native_v1/runs/F_titan_main/adapter --tasks dsv3wm/datasets/recovery-h3-v1/planning_train.jsonl --train dsv3wm/datasets/recovery-v1/train.jsonl --freeze dsv3wm/prereg/RECOVERY_H3_TEACHER_FREEZE_V4_CPU11.json --out dsv3wm/artifacts/recovery-h3-v1/teacher_B0_retry01
 & $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/ledger-recovery-v1/B0.resources.json -- dsv3wm/scripts/evaluate_ledger_recovery.py --config dsv3wm/configs/ledger_A0.json --data dsv3wm/datasets/ledger-recovery-v1/dev.jsonl --freeze dsv3wm/prereg/LEDGER_B0_FREEZE_V2.json --out dsv3wm/results/ledger-recovery-v1/B0.json --baseline-only
 & $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/ledger-recovery-v1/T2_RP_B0_v2.resources.json -- dsv3wm/scripts/evaluate_rcwm_retention_v2.py --config dsv3wm/configs/rcwm_retention_v1.json --adapter rcwm/experiments/RCWM-T1/runs/t2/t2_s0/adapter --fixtures dsv3wm/datasets/rcwm-retention-v2/fixtures.json --freeze dsv3wm/prereg/RCWM_RETENTION_B0_FREEZE_V2.json --out dsv3wm/results/ledger-recovery-v1/T2_RP_B0_v2.json --model-label T2B0_v2
 & $nativePython dsv3wm/scripts/run_measured.py --out dsv3wm/results/block-g1-v1/B0.resources.json -- dsv3wm/scripts/evaluate_block_g1.py --config dsv3wm/datasets/block-g1-v1/config.json --cases dsv3wm/datasets/block-g1-v1/cases.jsonl --manifest dsv3wm/datasets/block-g1-v1/manifest.json --freeze dsv3wm/prereg/BLOCK_G1_FREEZE_V2.json --out dsv3wm/results/block-g1-v1/B0.json

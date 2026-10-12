@@ -3,12 +3,15 @@
 Updated 2026-10-12 UTC after four adapted dynamics readouts. Full research goal
 remains open; H3, Ledger and Blocksworld native work remain. The first H3 attempt
 stopped before model loading when RCX acquired the CPU lane; see `NATIVE_QUEUE.md`.
-The current package passes212 tests and compilation. Prospective Ledger,
+The current package passes221 tests and compilation. Prospective Ledger,
 R/P-retention and constructed Blocksworld G1 inputs are frozen; their native
 outcomes are still unknown.
 The consolidated report is `WARM_RESEARCH_REPORT_2026_10_12.md`; it adds actual
 parent exposure, cost/regret denominators, uncertainty and current integration
 decisions without changing the original endpoints or failed gates.
+The H3 retry has a separate prospective CPU11 admission profile after RCX's
+release; prediction/data/gates and historical loaders remain unchanged. See
+`prereg/RECOVERY_RESOURCE_CLARIFICATION_3.md` and the current execution queue.
 
 ![Fixed development results](../results/recovery-v1/recovery_counts_v2.png)
 
