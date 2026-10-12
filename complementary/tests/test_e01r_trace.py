@@ -211,6 +211,37 @@ class TestParsing(unittest.TestCase):
                    line1 + "\n" + line2 + ".", line1 + '\n{"after":' + line2 + "}", line1 + "\n " + rev):
             self.assertEqual(TT.parse_trace_answer(ok, keys), (gold, "apply", True), ok)
 
+    def test_parse_last_line_frozen_rule(self):
+        line1, line2, keys = self.parts(self.comp)
+        gold = self.comp["gold"]["after"]
+        rev = json.dumps({k: gold[k] for k in reversed(sorted(gold))})
+        ok = [line1 + "\n" + line2, line2, "  " + line2 + "  ", line1 + "\n" + line2 + "\n\n \t\n",
+              line1 + "\r\n" + line2 + "\r\n", "\n\n" + line1 + "\n\n" + line2, line1 + "\nJUNK\n" + line2,
+              "check nonsense -> noop\n" + line2, line2 + ".", line1 + '\n{"after":' + line2 + "}", line1 + "\n" + rev,
+              line2 + "\n" + line2]
+        for t in ok:
+            self.assertEqual(TT.parse_last_line(t, keys), gold, t)
+        k0 = sorted(gold)[0]
+        bad = ["", " \n\t\n", line1, line2 + "\n" + line1, line1 + "\n" + line2 + "\nmore", line1 + "\n" + line2 + " x",
+               line1 + "\n" + json.dumps(gold, indent=1), line1 + "\n{}", "[" + line2 + "]",
+               line1 + "\n{" + f'"{k0}":{gold[k0] + 1},' + line2[1:],  # duplicate key (native parse_answer refuses)
+               line1 + "\n" + line2.replace(f'"{k0}":{gold[k0]}', f'"{k0}":true')]
+        for t in bad:
+            self.assertIsNone(TT.parse_last_line(t, keys), t)
+
+    def test_parse_last_line_vs_native_and_strict_readings(self):
+        for r in battery():
+            t = TT.trace_target(r)
+            keys = list(r["gold"]["after"])
+            after = TT.parse_last_line(t, keys)
+            self.assertEqual(after, TT.parse_trace_answer(t, keys)[0])     # well-formed traces: the same balances
+            self.assertEqual(S.classify(r, after)["exact"], 1)
+            line2 = t.split("\n")[1]
+            self.assertEqual(TT.parse_last_line(line2, keys), TT.parse_answer(line2, keys))  # one line: = native
+        line1, line2, keys = self.parts(self.comp)
+        self.assertEqual(TT.parse_trace_answer(line1 + "\nJUNK\n" + line2, keys)[2], False)  # strict format fails...
+        self.assertEqual(TT.parse_last_line(line1 + "\nJUNK\n" + line2, keys), self.comp["gold"]["after"])  # ...scored
+
     def test_borrowed_native_code(self):
         self.assertTrue(TT.parse_answer.__code__.co_filename.endswith("native_probe.py"))
         self.assertTrue(TT.target_json.__code__.co_filename.endswith("native_e01.py"))
@@ -260,15 +291,30 @@ class TestTokenBudget(unittest.TestCase):
         self.assertEqual(n["model_generate_kwargs"]["max_new_tokens"], "max_new")
 
     def test_generate_kwargs(self):
+        self.assertEqual((TT.TRACE_MAX_NEW, TT.TRACE_MARGIN), (160, 16))  # frozen rule: max(160, longest gold + 16)
         self.assertEqual(TT.generate_kwargs_for_trace(), {"max_new": TT.TRACE_MAX_NEW})
         recs = battery(40, tuple(gen.SURFACES))
         targets = [TT.trace_target(r) for r in recs]
-        need = 1 + max(len(t.encode("utf-8")) for t in targets)
-        self.assertLessEqual(need, TT.TRACE_MAX_NEW)  # the static byte bound covers the whole DEV generator draw
-        self.assertGreater(need, 64)                   # ... and the native default would not
-        self.assertEqual(TT.generate_kwargs_for_trace(targets), {"max_new": need})
-        self.assertEqual(TT.generate_kwargs_for_trace(targets, CharTok()), {"max_new": need})
-        self.assertEqual(TT.generate_kwargs_for_trace(targets, WordTok()), {"max_new": 64})  # never below default
+        longest = max(len(t.encode("utf-8")) for t in targets)
+        self.assertLessEqual(longest + 1, TT.TRACE_MAX_NEW)  # the floor covers the whole DEV generator draw (+ EOS)
+        self.assertGreater(longest + 1, 64)                   # ... and the native default would not
+        self.assertEqual(TT.trace_max_new(targets), longest + 16)  # bytes, no tokenizer: 154 + 16 on this draw
+        self.assertEqual(TT.generate_kwargs_for_trace(targets), {"max_new": longest + 16})
+        self.assertEqual(TT.generate_kwargs_for_trace(targets, CharTok()), {"max_new": longest + 16})
+        words = max(len(t.split()) for t in targets)
+        self.assertLess(words + 16, 160)
+        self.assertEqual(TT.generate_kwargs_for_trace(targets, WordTok()), {"max_new": 160})  # never below the floor
+
+    def test_trace_max_new_rule(self):
+        self.assertEqual(TT.trace_max_new(["x" * 10]), 160)
+        self.assertEqual(TT.trace_max_new(["x" * 144]), 160)
+        self.assertEqual(TT.trace_max_new(["x" * 145]), 161)
+        self.assertEqual(TT.trace_max_new(["é" * 100]), 216)                  # UTF-8 bytes, not characters
+        self.assertEqual(TT.trace_max_new(["é" * 100], CharTok()), 216)
+        self.assertEqual(TT.trace_max_new(["a b"] * 3 + [" ".join("w" * 200)], WordTok()), 216)
+        self.assertEqual(TT.trace_max_new(iter(["y" * 200, "z"])), 216)       # any iterable, longest wins
+        with self.assertRaises(ValueError):
+            TT.trace_max_new([])
 
 
 if __name__ == "__main__":

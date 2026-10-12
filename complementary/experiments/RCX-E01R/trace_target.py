@@ -43,13 +43,15 @@ Token budget (token_budget_note() reads rcx/native/lora_cpu.py as source; nothin
   A truncated output loses line 2 and scores as a format error.
 - generate accepts max_new as a keyword, so the R3 eval needs no change to lora_cpu.py:
   LC.generate(model, tok, prompts, guard=..., log=..., **generate_kwargs_for_trace(...)).
-  - With no arguments, that call gives the static bound TRACE_MAX_NEW, suitable for a prereg.
-  - With the battery's targets and the tokenizer that the eval loads anyway, it gives the exact need.
-  - The UTF-8 byte length of a target is a guaranteed upper bound on its byte-level-BPE token count.
-    TRACE_MAX_NEW = 160 is that bound: the DEV battery maximum, 154, + 1 for EOS, rounded up. It is an empirical
-    maximum over the generator's draws, not a proof for unseen vocabulary. tests/test_e01r_trace.py re-checks it.
-  - Recommended: the R3 build step loads the tokenizer anyway, so it should record
-    generate_kwargs_for_trace(train + eval targets, tok) and preregister that tighter value.
+- FROZEN rule (PREREG_E01R section 3, R3 "Generation length"; review item 15): max_new = max(160, the
+  tokenizer-measured longest R3 gold target + 16) = trace_max_new(targets, tok). It is one value for every arm, recorded
+  at build time.
+  - TRACE_MAX_NEW = 160 is the floor: the DEV battery's longest R3 target is 154 UTF-8 bytes (+1 EOS, rounded up).
+    The UTF-8 byte length of a target bounds its byte-level-BPE token count from above, so the floor alone covers that
+    draw. It is an empirical maximum over the generator's draws, not a proof for unseen vocabulary.
+  - TRACE_MARGIN = 16 tokens above the longest gold leaves room for EOS and small overruns.
+  - Without a tokenizer, trace_max_new measures UTF-8 bytes (an upper bound; 154 + 16 = 170 on the DEV battery).
+    generate_kwargs_for_trace() with no targets gives the floor TRACE_MAX_NEW.
 - EOS: train_sft/encode_pair already append EOS after the target (eos=True). R3 rows trained through train_sft
   therefore learn to stop after line 2. A model that does not stop runs to max_new, and line 2 then fails to parse,
   exactly as for the native answer.
@@ -59,8 +61,10 @@ Token budget (token_budget_note() reads rcx/native/lora_cpu.py as source; nothin
     max_new 160. That means more sequential decode passes; a tokenizer-measured max_new keeps the shrink small.
     Raising max_batch_tokens instead would raise peak RAM, so it is not done here;
   - train_sft's max_len=512 is far away: native rows are at most 171 tokens (runs/RCX-E01N/cells/TRAIN_MANIFEST.json).
-- Scoring is unchanged: score.classify(rec, parse_trace_answer(out, keys)[0]). The balances come only from line 2 and
-  are parsed by native_probe.parse_answer itself.
+- Scoring (FROZEN, PREREG_E01R section 3, R3 "Scoring"): score.classify(rec, parse_last_line(out, keys)). The balances
+  are native_probe.parse_answer of the last non-empty line, so a one-line answer (the bare native JSON) is accepted;
+  None is a format error (G3). Line 1 is never scored. parse_trace_answer and predicate_consistency read the strict
+  two-line format; they are descriptive line-1 diagnostics only.
   - native_probe.parse_answer and native_e01.target_json are executed from those files' own source (_borrow). Those
     scripts import torch at module top, which this module must not.
 """
@@ -79,7 +83,8 @@ from rcx.rcl import score as S, world as W  # noqa: E402
 
 E01N = ROOT / "experiments" / "RCX-E01N"
 LORA_CPU = ROOT / "rcx" / "native" / "lora_cpu.py"
-TRACE_MAX_NEW = 160  # UTF-8 byte bound (+1 EOS) over the DEV generator; see the module docstring
+TRACE_MAX_NEW = 160  # floor of the frozen max_new rule (DEV generator's UTF-8 byte bound + 1 EOS); module docstring
+TRACE_MARGIN = 16    # tokens above the longest R3 gold target (frozen rule: max(160, longest + 16))
 TAG = {"S+": "only-listed", "S-": "all-but-listed"}
 CONNS = ("AND", "OR")
 
@@ -216,8 +221,16 @@ def _split(text):
     return head.rstrip(), (rest if sep else None)
 
 
+def parse_last_line(text, keys):
+    """The FROZEN R3 scoring rule (PREREG_E01R section 3, R3 "Scoring"): native_probe.parse_answer of the last non-empty
+    line of the output (lines split at "\\n"; a line of only whitespace is empty). A one-line output, such as the bare
+    native JSON, is accepted. Returns the balances, or None (a format error, G3). Line 1 is never scored."""
+    lines = [x for x in text.split("\n") if x.strip()]
+    return parse_answer(lines[-1], keys) if lines else None
+
+
 def parse_trace_answer(text, keys):
-    """-> (after, decision, well_formed).
+    """Descriptive strict two-line reading (scoring uses parse_last_line) -> (after, decision, well_formed).
     - after: the balances from line 2 only, i.e. everything after the first newline of the stripped output, parsed by
       native_probe.parse_answer (same leniency and strictness: duplicate keys, extra keys, non-int values and trailing
       text are rejected). It is returned even when line 1 is malformed. A one-line output (e.g. the bare native
@@ -277,19 +290,26 @@ def token_budget_note(path=LORA_CPU):
             and not (stop_keys & set(kws))}
 
 
+def trace_max_new(targets, tok=None):
+    """The FROZEN generation length (PREREG_E01R section 3, R3 "Generation length"; review item 15):
+    max(TRACE_MAX_NEW, longest target + TRACE_MARGIN). The longest target is measured in tokens of `tok`
+    (tok(t, add_special_tokens=False)["input_ids"]) or, without a tokenizer, in UTF-8 bytes (an upper bound on
+    byte-level BPE tokens). The value is used for every arm."""
+    targets = list(targets)
+    if not targets:
+        raise ValueError("no R3 gold targets to measure")
+    longest = max(len(tok(t, add_special_tokens=False)["input_ids"]) if tok is not None else len(t.encode("utf-8"))
+                  for t in targets)
+    return max(TRACE_MAX_NEW, longest + TRACE_MARGIN)
+
+
 def generate_kwargs_for_trace(targets=None, tok=None):
-    """Keyword arguments for lora_cpu.generate when decoding R3 traces: {"max_new": n}, never below generate's default.
-    - targets=None: the static, prereg-able TRACE_MAX_NEW.
-    - Otherwise: the longest target + 1 (EOS), measured in tokens of `tok` if given (tok(t, add_special_tokens=False)
-      ["input_ids"]), else in UTF-8 bytes (an upper bound on byte-level BPE tokens).
+    """Keyword arguments for lora_cpu.generate when decoding (every arm, R3 rule): {"max_new": n}, never below
+    generate's default. targets=None gives the floor TRACE_MAX_NEW; otherwise n = trace_max_new(targets, tok).
     Raises if lora_cpu.generate no longer accepts max_new."""
     note = token_budget_note()
     if not note["accepts_max_new"]:
         raise RuntimeError("rcx/native/lora_cpu.generate has no max_new parameter: the R3 eval cannot raise the "
                            "64-token budget through it")
-    if targets is None:
-        need = TRACE_MAX_NEW
-    else:
-        need = 1 + max(len(tok(t, add_special_tokens=False)["input_ids"]) if tok is not None
-                       else len(t.encode("utf-8")) for t in targets)
+    need = TRACE_MAX_NEW if targets is None else trace_max_new(targets, tok)
     return {"max_new": max(need, note["max_new_default"] or 0)}
