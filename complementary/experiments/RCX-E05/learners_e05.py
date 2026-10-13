@@ -1,53 +1,80 @@
-"""RCX-E05 learned arms: SF, UVFA, UVFA+aux, per-goal PGV and FT in a BatchedMLP, renaming and stabilizer augmentation,
-a resumable trainer with safe points and early stopping, the library psi-hat cache, and the M2 unit sizing
-(PREREG_E05_DRAFT.md §5.1-5.5, §10.2; DESIGN.md rev 3 §5). CPU only: CUDA_VISIBLE_DEVICES = '' before torch is
-imported (if it is not yet) and torch.cuda patched to report no device, as in rcx/bw/models.py; <= 4 torch threads.
+"""RCX-E05 learned arms: SF, UVFA, UVFA+aux, per-goal PGV / FT-UVFA / SF-FT in a BatchedMLP, renaming and stabilizer
+augmentation, a resumable trainer with safe points and early stopping, the library psi-hat cache, inference, and the M2
+unit sizing (PREREG_E05_DRAFT.md §5.1-5.5, §10.2; DESIGN.md rev 3 §5). CPU only: CUDA_VISIBLE_DEVICES = '' before torch
+is imported (if it is not yet) and torch.cuda patched to report no device, as in rcx/bw/models.py; <= 4 torch threads
+(set_threads; default 4, or E05_TORCH_THREADS).
 
 Inputs (§5.1). State x_s (n*n + 3n = 70 at n = 7): on-matrix (x[i*n + j] = 1 iff block i is on block j), ontable (n),
-holding (n), clear (n). Goal/policy code z = (w / 3, c) (F + 1 = 57). Every network is depth x [Linear, LayerNorm,
-ReLU] at width 256 plus a linear head (n = 7 parameters: SF 180,537, UVFA 166,145, UVFA+aux 180,794, PGV 151,553 at
-width 256 and 13,313 at width 64; tested). Arm kinds (outputs):
+holding (n), clear (n). Goal/policy code z = (w / 3, c) (F + 1 = 57), float32. Every network is depth x [Linear,
+LayerNorm, ReLU] at width 256 plus a linear head (n = 7 parameters: SF 180,537, UVFA 166,145, UVFA+aux 180,794, PGV
+151,553 / 43,009 / 13,313 at width 256 / 128 / 64; tested). Network kinds (outputs):
   sf    psi-hat(x_s, z): F endpoint-fact logits (sigmoid) + 1 length unit (softplus T-hat); loss BCE (mean over facts)
         + Huber(T-hat/10, T/10)
-  uvfa  V(x_s, z) -> V*; Huber (delta 1)            aux  UVFA+aux: out[0] = V (used at test), out[1:] = the sf head;
-  pgv   per-goal V(x_s), no goal input; Huber            loss Huber(V) + 1.0 * sf loss
-FT-UVFA_400 = a uvfa network with its code input fixed to the parent's (w'/3, c'); SF-FT_400 = an sf network likewise.
+  uvfa  V(x_s, z) -> V*; Huber (delta 1)
+  aux   UVFA+aux: out[0] = V (used at test), out[1:] = the sf head; loss Huber(V) + 1.0 * sf loss
+  pgv   per-goal V(x_s), no goal input; Huber
+FT-UVFA_400 = a uvfa network fine-tuned with its code input fixed to the parent's (w'/3, c'); SF-FT_400 = an sf network
+likewise (psi targets).
 
 BatchedMLP. B independent networks stacked: per-model weights [B, in, out] through torch.baddbmm, per-model LayerNorm
 affine parameters, one AdamW over the stacked tensors (elementwise, so = B independent optimizers; the loss is the SUM
-of per-model means, so each model's gradient is its own). A zero-shot arm is a BatchedMLP with B = 1.
+of per-model means, so each model's gradient is its own). A zero-shot arm is a BatchedMLP with B = 1. Equivalence with B
+separately trained nn.Module networks is tested (50 steps, < 1e-5).
 
-Trainer. Data orders: per model a numpy PCG64 stream; mode "epoch" (a fresh permutation per epoch, last batch short;
+Trainer. Data order: per model a numpy PCG64 stream; mode "epoch" (a fresh permutation per epoch, last batch short;
 zero-shot arms) or "stream" (permutations concatenated, every batch full; per-goal arms). Augmentation per example from
 a second per-model stream: "rename" (sigma uniform over all n! renamings, applied jointly to x_s, the code's w part and
-the psi target's fact part; V and T unchanged; zero-shot arms), "stab" (sigma uniform over Stab(w'); exact and
-label-preserving; per-goal arms). Early stopping: per model and per grid horizon h, the weights with the lowest
-validation loss among the checks at steps <= h (checks every `check_every` steps, plus step 0 when step0=True: FT's
-zero-shot candidate), strict improvement only, so ties go to the earlier step. Plain snapshots at `snap_steps` (the
-20-epoch checkpoint of the 40-epoch run). Safe points (M2): after an optimizer step once >= 60 s have passed since the
-previous check, and at every epoch end; `safe_point(trainer)` returning True writes the checkpoint (every model's
-weights, AdamW state, early-stopping snapshots, data-order and augmentation stream states, queues, step) atomically and
-returns "yielded"; a new Trainer built with the same arguments + load() resumes the run exactly (tested <= 1e-6; in
-practice bit-identical at fixed threads). load() refuses a checkpoint whose fingerprint differs.
+the psi target's fact part; V and T unchanged; zero-shot arms), "stab" (sigma uniform over Stab(w'), exact and
+label-preserving; per-goal arms). Validation rows are never augmented. Early stopping: per model and per horizon h, the
+weights with the lowest validation loss among the checks at steps <= h (every `check_every` steps, plus step 0 when
+step0 = True: FT's zero-shot candidate); strict improvement only, so ties go to the earlier step. Plain snapshots at
+`snap_steps` (the 20-epoch checkpoint of the 40-epoch run; it equals an independent 20-epoch run, tested).
 
-Unit sizing (M2). An uninterruptible unit is one optimizer step of a BatchedMLP batch (6 * params * batch * B FLOP) or
-one evaluation cell; at the planning rate (19 GFLOP/s before G-P5) no unit may exceed 30 s, so consecutive checks are
-<= 60 + 30 = 90 s apart, and <= 120 s at half the rate. `check_units` rejects any planned unit > 30 s; `max_models`
-sizes B.
+Safe points (M2). Trainer.run(safe_point, clock, min_interval, ckpt) calls safe_point(trainer) after a step that ends an
+epoch and after any step once >= min_interval (60) seconds have passed since the previous call (min_interval = 0: after
+every step); never after the final step (the caller's batch-end check follows). `trainer.epoch_end` tells which. True =
+yield: the checkpoint is written atomically (every model's weights, AdamW state, early-stopping and plain snapshots,
+data-order and augmentation stream states, queues, step, validation history, fingerprint) and run returns "yielded"; a
+new Trainer built with the same arguments + load() resumes the run exactly (tested <= 1e-6; bit-identical in practice
+at fixed threads). load() refuses a checkpoint whose fingerprint differs. LibraryPsi.build has the same protocol.
+Unit sizing: one uninterruptible unit = one optimizer step of a BatchedMLP batch (6 x params x batch x B FLOP); at the
+planning rate (19 GFLOP/s before G-P5, else the measured rate) none may exceed 30 s (check_units, max_models), so
+checks are <= 60 + 30 = 90 s apart, and <= 120 s at half the rate (check_gap; tested with injected costs).
 
-Inference. `Evaluator`: cached single-row forward passes (fixed composition, so a value never depends on which other
-states were evaluated, the order of cells, or a resume). `LibraryPsi`: psi-hat(s, z) for every state and library code,
-float16 [|L|, N, F + 1], built one code at a time (in memory or an .npy memmap with a progress file; resumable).
-Move scores: SF arms by soft.gpi_scores over the code set C (SF-GPI: L + {w'}; SF-noGPI: {w'}; SF-L: L; SF-GPI-5:
-{w'} + the 4 library codes nearest to z' by cosine, ties to the lower index); value arms -c' + V-hat(s').
+Library psi-hat cache and inference. LibraryPsi: psi-hat(s, z) for every state and library code, float16 [|L|, N, F+1],
+built one code at a time in chunks of 4,096 states (memory or an .npy memmap with a progress file; resumable). Evaluator:
+cached single-state forward passes. sf_scores (SF-GPI L + {w'}, SF-noGPI {w'}, SF-L L, SF-GPI-5 {w'} + nearest_codes)
+and value_scores give soft.scored_policy move scores; sf_values = w-bar.psi-hat. Every value depends only on (model,
+state, code), never on the order of cells or a resume (fixed forward composition).
 
-Seeds (App. A; tags not fixed by the prereg are marked *): zero-shot init = torch.manual_seed(replicate seed), data order
-derive(seed, "order")*, renaming stream derive(20261243, "rename:<seed>")*, SF-shuffled 20261243:shuffle; PGV init,
-order and stabilizer streams derive(20261249, "pgv-init|pgv-order|pgv-stab:<key>:<k>")*; FT order and stabilizer
-derive(20261249, "ft-order|ft-stab:<key>:<replicate>")*.
+Low-level API used by run_e05's Adapters: state_features, label_rows, shuffle_psi, zero_shot_trainer, pergoal_task,
+pergoal_trainer, pergoal_seeds, stab_ids, Evaluator, LibraryPsi, sf_scores, value_scores, sf_values, nearest_codes,
+goal_code, BatchedMLP, MLP, new_model, arm_dims, arm_loss, n_facts, set_threads, torch.
+Higher-level entry points (tested; usable instead of hand-assembled trainers):
+  train_zero_shot(arm, space, data, *, seed, epochs, lr, keep, out_dir, safe_point) -> {epoch: model path} | None
+      arm SF | UVFA | UVFA+aux | SF-shuffled; data rows s/states, g/goal, psi, v and W, c per row or per goal id;
+      trains max(keep) epochs (= the snapshots of the `epochs`-epoch run: constant lr); None = yielded.
+  fit_pergoal(kind, space, jobs, cfg, *, out_dir, safe_point) -> {job key: model path} | None
+      kind PGV | FT | SF-FT; jobs = [dict(key, states, v (psi for SF-FT), stab (permutation rows), seed, w, c, init
+      (FT/SF-FT: replicate model path))]; cfg = width (PGV), steps, keep (= the early-stopping horizon; min(steps, keep)
+      steps are run, identical to the keep-step checkpoint of the longer run), lr, batch, eval_every, val_n or
+      val_frac, step0, optional wd; BatchedMLP batches of B = min(64, max_models) models, safe_point("batch") after
+      each; per job: PGV init seed = job seed, order derive(seed, "order"), stabilizer derive(seed, "stab").
+  load_model(path) (this module's files and run_e05's {"kind", "dims", "state"} files), predict_psi(model, space,
+  states, W, c) -> [k, m, F + 1], predict_value(model, space, states, W, c) -> [k, m] (pgv ignores the code),
+  time_step(model, width, batch, B, steps, n) (G-P5: real Trainer steps on synthetic rows).
+  Their safe_point takes a kind ("step" | "epoch" | "batch") and is called after every step (min_interval 0); the
+  callee decides whether a lane check is due.
+
+Seeds (App. A; tags not fixed by the prereg are marked *): zero-shot init torch.manual_seed(replicate seed), data order
+derive(seed, "order")*, renaming stream derive(20261243, "rename:<seed>")*, SF-shuffled stream 20261243:shuffle (goals
+in id order, Python random.shuffle of each goal's row positions); pergoal_seeds: PGV init, order and stabilizer streams
+derive(20261249, "pgv-init|pgv-order|pgv-stab:<key>:<k>")*, FT order and stabilizer derive(20261249,
+"ft-order|ft-stab:<key>:<replicate>")*.
 """
 from __future__ import annotations
 
+import copy
 import hashlib
 import itertools
 import json
@@ -56,6 +83,7 @@ import os
 import random
 import sys
 import time
+from collections import OrderedDict
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -85,11 +113,15 @@ from rcx.bw import soft as SO  # noqa: E402
 
 SEEDS = {"train_labels": 20261243, "selection": 20261245, "replicates": (20261246, 20261247, 20261248),
          "pergoal": 20261249}
-WIDTH, DEPTH, HUBER_DELTA, T_SCALE, LAMBDA_AUX = 256, 3, 1.0, 10.0, 1.0
-MAX_THREADS = 4
+WIDTH, DEPTH, HUBER_DELTA, T_SCALE, LAMBDA_AUX, WD, ZS_BATCH = 256, 3, 1.0, 10.0, 1.0, 1e-4, 256
+MAX_THREADS, B_MAX = 4, 64
 UNIT_MAX_S, CHECK_MIN_S, PLAN_GFLOPS = 30.0, 60.0, 19.0
 KINDS = ("sf", "uvfa", "aux", "pgv")
-CONFIGS = {  # §5.2-5.3 (fixed now); keys marked * in learners' docstring summary are literal readings
+ARM_KIND = {"SF": "sf", "SF-shuffled": "sf", "UVFA": "uvfa", "UVFA+aux": "aux"}
+PG_KIND = {"PGV": "pgv", "FT": "uvfa", "SF-FT": "sf"}
+MODEL_KIND = {"SF": ("sf", 256), "UVFA": ("uvfa", 256), "UVFA+aux": ("aux", 256), "PGV64": ("pgv", 64),
+              "PGV128": ("pgv", 128), "PGV256": ("pgv", 256)}
+CONFIGS = {  # §5.2-5.3 (fixed now); run_e05 assembles the per-goal configs itself
     "zero-shot": dict(width=256, lr=1e-3, wd=1e-4, batch=256, epochs=40, snap_epochs=(20, 40)),
     "uvfa-ext": dict(width=256, lr=3e-4, wd=1e-4, batch=256, epochs=80, snap_epochs=(80,)),
     "pgv400": dict(widths=(64, 256), lr=1e-3, wd=1e-4, batch=64, steps=2000, horizons=(500, 2000), check_every=100,
@@ -107,6 +139,9 @@ CONFIGS = {  # §5.2-5.3 (fixed now); keys marked * in learners' docstring summa
     "ft400-ext": dict(lr=1e-4, wd=1e-4, batch=64, steps=1000, horizons=(1000,), check_every=25, step0=True,
                       val_frac=0.1),
 }
+CACHE_BYTES = 256 * 2 ** 20
+FORMAT = 2
+CODE_SHA = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 
 def derive(seed: int, tag: str) -> int:
@@ -114,10 +149,35 @@ def derive(seed: int, tag: str) -> int:
     return int.from_bytes(hashlib.sha256(f"{seed}:{tag}".encode()).digest()[:8], "big")
 
 
+def default_threads() -> int:
+    return int(os.environ.get("E05_TORCH_THREADS", MAX_THREADS))
+
+
 def set_threads(threads: int) -> None:
-    if not 1 <= threads <= MAX_THREADS:
+    if not 1 <= int(threads) <= MAX_THREADS:
         raise ValueError(f"torch threads must be 1..{MAX_THREADS}")
-    torch.set_num_threads(threads)
+    if torch.get_num_threads() != int(threads):
+        torch.set_num_threads(int(threads))
+
+
+def _canon(obj):
+    """JSON round trip (tuples -> lists, sorted keys): the comparable form of a fingerprint."""
+    return json.loads(json.dumps(obj, sort_keys=True))
+
+
+def _sha_arrays(*arrays) -> str:
+    h = hashlib.sha256()
+    for a in arrays:
+        a = np.ascontiguousarray(a)
+        h.update(f"{a.dtype.str}|{a.shape}|".encode())
+        h.update(a.tobytes())
+    return h.hexdigest()
+
+
+def _write_json(path: Path, obj) -> None:
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps(obj, sort_keys=True, indent=1), encoding="utf-8")
+    os.replace(tmp, path)
 
 
 # ----------------------------------------------------------------------------- inputs and renaming
@@ -139,15 +199,41 @@ def state_features(space) -> np.ndarray:
     return np.concatenate([on, S == n, held, ~held & ~covered], axis=1).astype(np.float32)
 
 
+def features(space) -> np.ndarray:
+    """state_features cached on the space object (read-only use)."""
+    X = getattr(space, "_e05_X", None)
+    if X is None:
+        X = space._e05_X = state_features(space)
+    return X
+
+
+def goal_codes(W, c) -> np.ndarray:
+    """z = (w / 3, c) per row: float32 [m, F + 1] (W [m, F] or [F]; c scalar or [m])."""
+    W = np.atleast_2d(np.asarray(W, dtype=np.float64))
+    c = np.broadcast_to(np.asarray(c, dtype=np.float64), (len(W),))
+    return np.concatenate([W / 3.0, c[:, None]], axis=1).astype(np.float32)
+
+
 def goal_code(w, c: float) -> np.ndarray:
     """z = (w / 3, c), float32 [F + 1]."""
-    return np.concatenate([np.asarray(w, dtype=np.float64) / 3.0, [float(c)]]).astype(np.float32)
+    return goal_codes(w, c)[0]
 
 
 @lru_cache(maxsize=None)
 def perms(n: int) -> np.ndarray:
     """All renamings sigma (block i -> sigma[i]) in itertools order (= families_e05.perms)."""
     return np.array(list(itertools.permutations(range(n))), dtype=np.int64)
+
+
+@lru_cache(maxsize=None)
+def _perm_index(n: int) -> dict:
+    return {tuple(int(v) for v in p): i for i, p in enumerate(perms(n))}
+
+
+def perm_ids(sigmas, n: int) -> np.ndarray:
+    """Indices into perms(n) of permutation rows (e.g. families_e05.stabilizer(w, n))."""
+    idx = _perm_index(n)
+    return np.array([idx[tuple(int(v) for v in s)] for s in np.atleast_2d(sigmas)], dtype=np.int64)
 
 
 @lru_cache(maxsize=None)
@@ -175,7 +261,7 @@ class MLP(nn.Module):
 
     def __init__(self, d_in: int, d_out: int, width: int = WIDTH, depth: int = DEPTH):
         super().__init__()
-        self.dims = (d_in, d_out, width, depth)
+        self.dims = (int(d_in), int(d_out), int(width), int(depth))
         layers, d = [], d_in
         for _ in range(depth):
             layers += [nn.Linear(d, width), nn.LayerNorm(width), nn.ReLU()]
@@ -196,7 +282,7 @@ def arm_dims(kind: str, n: int) -> tuple:
 def new_model(kind: str, n: int, seed: int, width: int = WIDTH, depth: int = DEPTH) -> MLP:
     """Fresh network, initialized under torch.manual_seed(seed) (the global RNG state is restored)."""
     with torch.random.fork_rng(devices=[]):
-        torch.manual_seed(seed)
+        torch.manual_seed(int(seed))
         return MLP(*arm_dims(kind, n), width, depth)
 
 
@@ -242,11 +328,11 @@ class BatchedMLP(nn.Module):
                     raise ValueError("models differ in shape")
                 lins = [x for x in m.trunk if isinstance(x, nn.Linear)]
                 lns = [x for x in m.trunk if isinstance(x, nn.LayerNorm)]
-                for l, (lin, ln) in enumerate(zip(lins, lns)):
-                    bm.W[l][k].copy_(lin.weight.T)
-                    bm.b[l][k, 0].copy_(lin.bias)
-                    bm.g[l][k, 0].copy_(ln.weight)
-                    bm.beta[l][k, 0].copy_(ln.bias)
+                for i, (lin, ln) in enumerate(zip(lins, lns)):
+                    bm.W[i][k].copy_(lin.weight.T)
+                    bm.b[i][k, 0].copy_(lin.bias)
+                    bm.g[i][k, 0].copy_(ln.weight)
+                    bm.beta[i][k, 0].copy_(ln.bias)
                 bm.hW[k].copy_(m.head.weight.T)
                 bm.hb[k, 0].copy_(m.head.bias)
         return bm
@@ -260,11 +346,11 @@ class BatchedMLP(nn.Module):
                 m = MLP(*self.dims)
                 lins = [x for x in m.trunk if isinstance(x, nn.Linear)]
                 lns = [x for x in m.trunk if isinstance(x, nn.LayerNorm)]
-                for l, (lin, ln) in enumerate(zip(lins, lns)):
-                    lin.weight.copy_(st[f"W.{l}"][k].T)
-                    lin.bias.copy_(st[f"b.{l}"][k, 0])
-                    ln.weight.copy_(st[f"g.{l}"][k, 0])
-                    ln.bias.copy_(st[f"beta.{l}"][k, 0])
+                for i, (lin, ln) in enumerate(zip(lins, lns)):
+                    lin.weight.copy_(st[f"W.{i}"][k].T)
+                    lin.bias.copy_(st[f"b.{i}"][k, 0])
+                    ln.weight.copy_(st[f"g.{i}"][k, 0])
+                    ln.bias.copy_(st[f"beta.{i}"][k, 0])
                 m.head.weight.copy_(st["hW"][k].T)
                 m.head.bias.copy_(st["hb"][k, 0])
                 out.append(m.eval())
@@ -307,8 +393,8 @@ def outputs(kind: str, out) -> dict:
 
 @dataclass
 class Task:
-    """Training data of one model: state indices into the feature table, targets {'v', 'psi'} (float32), per-row
-    goal ids into the trainer's code table (zero-shot) or a fixed code (FT, SF-FT; None for pgv), augmentation."""
+    """Training data of one model: state indices into the feature table, targets {'v', 'psi'} (float32), per-row goal
+    ids into the trainer's code table (zero-shot) or a fixed code (FT, SF-FT; None for pgv), augmentation."""
     s: np.ndarray
     y: dict
     s_val: np.ndarray | None = None
@@ -321,7 +407,8 @@ class Task:
 
 
 def label_rows(space, phi, goals, label_idx, tables=None) -> dict:
-    """Exact zero-shot labels: rows (s, g) with psi = (phi(end), T) and V = w-bar.psi (asserted) for goals [(w, c)]."""
+    """Exact zero-shot labels for goals [(w, c)]: rows s, g (goal id), psi = (phi(end), T) and v = V* (asserted =
+    w-bar.psi), float64; plus W [n_goals, F] and c [n_goals] per goal id."""
     s, g, ps, v = [], [], [], []
     for i, ((w, c), idx) in enumerate(zip(goals, label_idx)):
         tab = SO.sf_table(space, SO.stop_values(phi, w), c) if tables is None else tables[i]
@@ -333,13 +420,14 @@ def label_rows(space, phi, goals, label_idx, tables=None) -> dict:
         g.append(np.full(len(idx), i, dtype=np.int64))
         ps.append(p)
         v.append(tab.V[idx])
-    return dict(s=np.concatenate(s), g=np.concatenate(g), psi=np.concatenate(ps).astype(np.float32),
-                v=np.concatenate(v).astype(np.float32))
+    return dict(s=np.concatenate(s), g=np.concatenate(g), psi=np.concatenate(ps), v=np.concatenate(v),
+                W=np.stack([np.asarray(w, dtype=np.float64) for w, _ in goals]),
+                c=np.array([float(c) for _, c in goals]))
 
 
 def shuffle_psi(rows: dict, goals, seed: int | None = None) -> dict:
-    """SF-shuffled targets: psi rows permuted across states within each goal (stream 20261243:shuffle); V is
-    recomputed as w-bar.psi of the permuted rows, states and goal ids are unchanged."""
+    """SF-shuffled targets: psi rows permuted across states within each goal (stream 20261243:shuffle, goals in id
+    order); V is recomputed as w-bar.psi of the permuted rows; states and goal ids are unchanged."""
     rng = random.Random(derive(SEEDS["train_labels"], "shuffle") if seed is None else seed)
     out = {k: np.array(v, copy=True) for k, v in rows.items()}
     for i, (w, c) in enumerate(goals):
@@ -347,33 +435,44 @@ def shuffle_psi(rows: dict, goals, seed: int | None = None) -> dict:
         perm = list(pos)
         rng.shuffle(perm)
         out["psi"][pos] = rows["psi"][perm]
-        out["v"][pos] = SO.wbar_dot(rows["psi"][perm].astype(np.float64), w, c).astype(np.float32)
+        out["v"][pos] = SO.wbar_dot(np.asarray(rows["psi"][perm], dtype=np.float64), w, c).astype(out["v"].dtype)
     return out
 
 
 def zero_shot_task(rows: dict, kind: str, aug: str = "rename") -> Task:
     keys = {"sf": ("psi",), "uvfa": ("v",), "aux": ("v", "psi")}[kind]
-    return Task(s=rows["s"], y={k: rows[k] for k in keys}, g=rows["g"], aug=aug)
+    return Task(s=np.asarray(rows["s"], dtype=np.int64), y={k: np.asarray(rows[k], dtype=np.float32) for k in keys},
+                g=np.asarray(rows["g"], dtype=np.int64), aug=aug)
+
+
+def rows_task(states, targets: dict, nv: int, code=None, stab=None) -> Task:
+    """Per-goal rows in draw order: the first nv are the early-stopping split, the rest are trained on; targets
+    {'v'} and/or {'psi'}; stabilizer augmentation if `stab` (ids into perms(n)) is given."""
+    s = np.asarray(states, dtype=np.int64)
+    if not 0 < nv < len(s):
+        raise ValueError(f"validation split {nv} of {len(s)} rows")
+    y = {k: np.asarray(v, dtype=np.float32) for k, v in targets.items()}
+    return Task(s=s[nv:], y={k: v[nv:] for k, v in y.items()}, s_val=s[:nv], y_val={k: v[:nv] for k, v in y.items()},
+                code=None if code is None else np.asarray(code, dtype=np.float32),
+                aug="none" if stab is None else "stab", stab=None if stab is None else np.asarray(stab, dtype=np.int64))
 
 
 def pergoal_task(tab: SO.SFTable, idx, kind: str = "pgv", phi=None, val_frac: float = 0.1, code=None,
                  stab=None) -> Task:
-    """Per-goal labels (draw order of `idx`): the first round(val_frac * k) are the early-stopping split, the rest
-    are trained on; targets V* (and psi for sf/aux, needs phi); stabilizer augmentation if `stab` is given."""
+    """Per-goal labels of `tab` at the label indices idx (draw order): the first round(val_frac * k) are the
+    early-stopping split; targets V* (and psi for sf/aux, needs phi); stabilizer augmentation if `stab` is given."""
     idx = np.asarray(idx, dtype=np.int64)
-    nv = int(round(len(idx) * val_frac))
+    y = {}
+    if kind in ("uvfa", "pgv", "aux"):
+        y["v"] = tab.V[idx]
+    if kind in ("sf", "aux"):
+        y["psi"] = SO.psi(phi, tab, idx)
+    return rows_task(idx, y, int(round(len(idx) * val_frac)), code, stab)
 
-    def ys(ii):
-        y = {}
-        if kind in ("uvfa", "pgv", "aux"):
-            y["v"] = tab.V[ii].astype(np.float32)
-        if kind in ("sf", "aux"):
-            y["psi"] = SO.psi(phi, tab, ii).astype(np.float32)
-        return y
 
-    return Task(s=idx[nv:], y=ys(idx[nv:]), s_val=idx[:nv], y_val=ys(idx[:nv]),
-                code=None if code is None else np.asarray(code, dtype=np.float32),
-                aug="none" if stab is None else "stab", stab=None if stab is None else np.asarray(stab))
+def n_val(n_rows: int, cfg: dict) -> int:
+    """Size of the early-stopping split: cfg val_n, else round(val_frac * k)."""
+    return int(cfg["val_n"]) if cfg.get("val_n") is not None else int(round(float(cfg.get("val_frac", 0.1)) * n_rows))
 
 
 class Sampler:
@@ -412,36 +511,39 @@ class Trainer:
 
     def __init__(self, kind: str, models, tasks, X, n: int, *, batch: int, lr: float, wd: float, order_seeds,
                  aug_seeds, codes=None, steps: int | None = None, epochs: int | None = None, check_every: int = 0,
-                 horizons=(), step0: bool = False, snap_steps=(), threads: int = 1, fingerprint: dict | None = None,
-                 lam: float = LAMBDA_AUX):
-        if kind not in KINDS or len(models) != len(tasks) or (steps is None) == (epochs is None):
+                 horizons=(), step0: bool = False, snap_steps=(), threads: int | None = None,
+                 fingerprint: dict | None = None, lam: float = LAMBDA_AUX):
+        models, tasks = list(models), list(tasks)
+        if kind not in KINDS or len(models) != len(tasks) or not tasks or (steps is None) == (epochs is None):
             raise ValueError("bad trainer arguments")
-        set_threads(threads)
-        self.kind, self.tasks, self.X, self.n, self.codes, self.lam = kind, list(tasks), X, n, codes, lam
-        self.B, self.batch = len(tasks), batch
+        set_threads(default_threads() if threads is None else threads)
+        self.kind, self.tasks, self.X, self.n, self.codes, self.lam = kind, tasks, X, n, codes, lam
+        self.B, self.batch = len(tasks), int(batch)
         self.mode = "epoch" if epochs is not None else "stream"
         sizes = {len(t.s) for t in tasks}
         if self.mode == "epoch":
             if len(sizes) != 1:
                 raise ValueError("epoch mode needs equal training sizes")
-            self.total = epochs * math.ceil(sizes.pop() / batch)
+            self.per_epoch = math.ceil(sizes.pop() / self.batch)
+            self.total = int(epochs) * self.per_epoch
         else:
-            self.total = int(steps)
-        self.check_every, self.horizons, self.step0 = int(check_every), tuple(sorted(horizons)), step0
+            self.per_epoch, self.total = None, int(steps)
+        self.check_every, self.horizons, self.step0 = int(check_every), tuple(sorted(int(h) for h in horizons)), step0
         if (self.check_every or step0) and not self.horizons:
             raise ValueError("early stopping needs horizons")
+        if self.horizons and len({len(t.s_val) for t in tasks}) != 1:
+            raise ValueError("early stopping needs equal validation sizes")
         self.snap_steps = set(int(s) for s in snap_steps)
-        self.fingerprint = dict(fingerprint or {})
+        self.fingerprint = _canon(dict(fingerprint or {}))
         self.Gs, self.Gf = gathers(n)
-        self.net = BatchedMLP.from_models(list(models))
+        self.net = BatchedMLP.from_models(models)
         self.opt = torch.optim.AdamW(self.net.parameters(), lr=lr, weight_decay=wd)
-        self.samplers = [Sampler(len(t.s), batch, s, self.mode) for t, s in zip(tasks, order_seeds)]
-        self.augs = [np.random.Generator(np.random.PCG64(s)) for s in aug_seeds]
-        self.step, self.val_hist, self.gaps, self.last_loss = 0, [], [], None
+        self.samplers = [Sampler(len(t.s), self.batch, int(s), self.mode) for t, s in zip(tasks, order_seeds)]
+        self.augs = [np.random.Generator(np.random.PCG64(int(s))) for s in aug_seeds]
+        self.step, self.val_hist, self.gaps, self.last_loss, self.snaps, self.epoch_end = 0, [], [], None, {}, False
         params = dict(self.net.named_parameters())
         self.es = {h: dict(loss=np.full(self.B, np.inf), step=np.full(self.B, -1, dtype=np.int64),
                            snap={k: p.detach().clone() for k, p in params.items()}) for h in self.horizons}
-        self.snaps = {}
         if step0:
             self._check(0)
 
@@ -453,6 +555,8 @@ class Trainer:
         s = (t.s_val if val else t.s)[idx]
         y = {k: v[idx] for k, v in (t.y_val if val else t.y).items()}
         r = None
+        if t.aug not in ("none", "rename", "stab"):
+            raise ValueError(t.aug)
         if not val and t.aug == "rename":
             r = self.augs[m].integers(len(self.Gs), size=len(idx))
         elif not val and t.aug == "stab":
@@ -471,9 +575,11 @@ class Trainer:
             y["psi"] = np.concatenate([np.take_along_axis(p[:, :-1], self.Gf[r], axis=1), p[:, -1:]], axis=1)
         return np.ascontiguousarray(x, dtype=np.float32), y, r
 
-    def _stack(self, parts):
+    @staticmethod
+    def _stack(parts):
         x = torch.from_numpy(np.stack([p[0] for p in parts]))
-        y = {k: torch.from_numpy(np.stack([p[1][k] for p in parts])) for k in parts[0][1]}
+        y = {k: torch.from_numpy(np.ascontiguousarray(np.stack([p[1][k] for p in parts]), dtype=np.float32))
+             for k in parts[0][1]}
         return x, y
 
     # -- steps and checks
@@ -491,7 +597,8 @@ class Trainer:
             self._check(self.step)
         if self.step in self.snap_steps:
             self.snaps[self.step] = {k: p.detach().clone() for k, p in self.net.named_parameters()}
-        return draws[0][1]
+        self.epoch_end = bool(draws[0][1])
+        return self.epoch_end
 
     @torch.no_grad()
     def val_losses(self) -> np.ndarray:
@@ -513,11 +620,14 @@ class Trainer:
                     e["snap"][k][m] = p[m]
 
     def run(self, safe_point=None, clock=time.monotonic, min_interval: float = CHECK_MIN_S, ckpt=None) -> str:
-        """Train to the end ('done') or until safe_point(trainer) asks to yield at a check ('yielded'; the
-        checkpoint is written to `ckpt` first). Checks: epoch ends, and steps after >= min_interval seconds."""
+        """Train to the end ('done') or until safe_point(trainer) returns True at a check ('yielded'; the checkpoint is
+        written to `ckpt` first). Checks: after a step that ends an epoch, and after a step once >= min_interval
+        seconds have passed since the previous check (0: every step); never after the final step."""
         last = clock()
         while self.step < self.total:
             end = self._one_step()
+            if self.step >= self.total:
+                break
             now = clock()
             if end or now - last >= min_interval:
                 self.gaps.append(now - last)
@@ -530,36 +640,40 @@ class Trainer:
 
     # -- checkpoints
     def state_dict(self) -> dict:
-        return dict(version=1, kind=self.kind, step=self.step, net=self.net.state_dict(), opt=self.opt.state_dict(),
-                    samplers=[s.state() for s in self.samplers], augs=[g.bit_generator.state for g in self.augs],
-                    es={str(h): dict(loss=torch.from_numpy(e["loss"].copy()), step=torch.from_numpy(e["step"].copy()),
-                                     snap=e["snap"]) for h, e in self.es.items()},
-                    snaps={str(t): d for t, d in self.snaps.items()}, val_hist=self.val_hist,
-                    fingerprint=self.fingerprint)
+        meta = dict(format=FORMAT, kind=self.kind, step=self.step, samplers=[s.state() for s in self.samplers],
+                    augs=[g.bit_generator.state for g in self.augs], val_hist=self.val_hist,
+                    fingerprint=self.fingerprint, es_steps={str(h): e["step"].tolist() for h, e in self.es.items()})
+        return dict(meta=json.dumps(meta), net=self.net.state_dict(), opt=self.opt.state_dict(),
+                    es={str(h): dict(loss=torch.from_numpy(e["loss"].copy()), snap=e["snap"])
+                        for h, e in self.es.items()},
+                    snaps={str(t): d for t, d in self.snaps.items()})
 
     def save(self, path) -> None:
         path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_name(path.name + ".tmp")
         torch.save(self.state_dict(), tmp)
         os.replace(tmp, path)
 
     def load(self, path) -> "Trainer":
-        d = torch.load(path, weights_only=True)
-        if json.dumps(d["fingerprint"], sort_keys=True) != json.dumps(self.fingerprint, sort_keys=True):
-            raise ValueError("checkpoint fingerprint differs (seed, config, label set or code digest)")
-        if d["kind"] != self.kind or len(d["samplers"]) != self.B:
+        d = torch.load(path, weights_only=True, map_location="cpu")
+        meta = json.loads(d["meta"])
+        if meta["fingerprint"] != self.fingerprint:
+            raise ValueError("checkpoint fingerprint differs (seed, config, label set, code or threads)")
+        if meta["kind"] != self.kind or len(meta["samplers"]) != self.B or meta.get("format") != FORMAT:
             raise ValueError("checkpoint does not match this trainer")
         self.net.load_state_dict(d["net"])
         self.opt.load_state_dict(d["opt"])
-        for s, st in zip(self.samplers, d["samplers"]):
+        for s, st in zip(self.samplers, meta["samplers"]):
             s.load(st)
-        for g, st in zip(self.augs, d["augs"]):
+        for g, st in zip(self.augs, meta["augs"]):
             g.bit_generator.state = st
-        self.step = int(d["step"])
-        self.es = {h: dict(loss=d["es"][str(h)]["loss"].numpy().copy(), step=d["es"][str(h)]["step"].numpy().copy(),
+        self.step = int(meta["step"])
+        self.es = {h: dict(loss=d["es"][str(h)]["loss"].numpy().copy(),
+                           step=np.asarray(meta["es_steps"][str(h)], dtype=np.int64),
                            snap=d["es"][str(h)]["snap"]) for h in self.horizons}
         self.snaps = {int(t): v for t, v in d["snaps"].items()}
-        self.val_hist = [list(v) for v in d["val_hist"]]
+        self.val_hist = [list(v) for v in meta["val_hist"]]
         return self
 
     # -- results
@@ -568,11 +682,11 @@ class Trainer:
 
     def best(self, h: int) -> tuple:
         """(per-model MLPs at their best check <= h, best steps, best validation losses)."""
-        e = self.es[h]
+        e = self.es[int(h)]
         return self.net.to_models(e["snap"]), e["step"].copy(), e["loss"].copy()
 
     def snapshot(self, t: int) -> list:
-        return self.net.to_models(self.snaps[t])
+        return self.net.to_models(self.snaps[int(t)])
 
     def unit_flops(self) -> float:
         return step_flops(n_params(self.net) // self.B, self.batch, self.B)
@@ -580,15 +694,17 @@ class Trainer:
 
 def zero_shot_trainer(kind: str, X, n: int, codes, rows: dict, seed: int, cfg: dict | None = None,
                       threads: int = MAX_THREADS, fingerprint: dict | None = None) -> Trainer:
-    """SF / UVFA / UVFA+aux at one replicate seed: epochs, joint renaming augmentation, snapshots at snap_epochs
-    (SF, UVFA and UVFA+aux at the same seed share init stream, data order and renamings)."""
+    """SF / UVFA / UVFA+aux at one replicate seed (cfg over CONFIGS['zero-shot']: width, lr, wd, batch, epochs,
+    snap_epochs): epochs, joint renaming augmentation, snapshots at snap_epochs (SF, UVFA and UVFA+aux at the same seed
+    share init stream, data order and renamings)."""
     cfg = dict(CONFIGS["zero-shot"], **(cfg or {}))
     task = zero_shot_task(rows, kind)
     per_epoch = math.ceil(len(task.s) / cfg["batch"])
     return Trainer(kind, [new_model(kind, n, seed, cfg["width"])], [task], X, n, codes=codes, batch=cfg["batch"],
                    lr=cfg["lr"], wd=cfg["wd"], epochs=cfg["epochs"], order_seeds=[derive(seed, "order")],
                    aug_seeds=[derive(SEEDS["train_labels"], f"rename:{seed}")],
-                   snap_steps=[e * per_epoch for e in cfg["snap_epochs"]], threads=threads, fingerprint=fingerprint)
+                   snap_steps=[int(e) * per_epoch for e in cfg["snap_epochs"]], threads=threads,
+                   fingerprint=fingerprint)
 
 
 def pergoal_seeds(arm: str, key: str, k: int | None = None, replicate: int | None = None) -> tuple:
@@ -607,10 +723,10 @@ def pergoal_trainer(kind: str, tasks, X, n: int, cfg: dict, *, models=None, init
                     width: int | None = None, threads: int = MAX_THREADS, fingerprint: dict | None = None,
                     batch: int | None = None) -> Trainer:
     """PGV (kind 'pgv', fresh models from init_seeds) or FT / SF-FT (kind 'uvfa' / 'sf', `models` = copies of the
-    replicate, tasks with fixed codes) as one BatchedMLP; early stopping per cfg (horizons, check_every, step0)."""
+    replicate, tasks with fixed codes) as one BatchedMLP; cfg: lr, wd, batch, steps, check_every, horizons, step0."""
     if models is None:
         models = [new_model(kind, n, s, width or cfg["width"]) for s in init_seeds]
-    return Trainer(kind, models, tasks, X, n, batch=batch or cfg["batch"], lr=cfg["lr"], wd=cfg["wd"],
+    return Trainer(kind, models, tasks, X, n, batch=batch or cfg["batch"], lr=cfg["lr"], wd=cfg.get("wd", WD),
                    steps=cfg["steps"], order_seeds=order_seeds, aug_seeds=aug_seeds,
                    check_every=cfg["check_every"], horizons=cfg["horizons"], step0=cfg.get("step0", False),
                    threads=threads, fingerprint=fingerprint)
@@ -627,41 +743,41 @@ def unit_seconds(flops: float, gflops: float = PLAN_GFLOPS) -> float:
     return flops / (gflops * 1e9)
 
 
-def max_models(params: int, batch: int, gflops: float = PLAN_GFLOPS, limit: float = UNIT_MAX_S, cap: int = 64) -> int:
-    """Largest B <= cap whose optimizer step takes <= limit seconds at `gflops`."""
-    return max(1, min(cap, int(limit * gflops * 1e9 // step_flops(params, batch))))
+def max_models(params: int, batch: int, gflops: float = PLAN_GFLOPS, limit: float = UNIT_MAX_S, cap: int = B_MAX) -> int:
+    """Largest B <= cap whose optimizer step takes <= limit seconds at `gflops` (0 if even B = 1 does not fit)."""
+    return max(0, min(cap, int(limit * gflops * 1e9 // step_flops(params, batch))))
 
 
 def check_units(units: dict, limit: float = UNIT_MAX_S) -> dict:
     """units {name: seconds}; ValueError naming every unit > limit (an uninterruptible unit must be <= 30 s)."""
-    bad = {k: v for k, v in units.items() if v > limit}
+    bad = {k: v for k, v in units.items() if not v <= limit}
     if bad:
         raise ValueError(f"uninterruptible units > {limit} s: {bad}")
     return units
 
 
 def check_gap(unit_s: float, min_interval: float = CHECK_MIN_S) -> float:
-    """Worst spacing of consecutive safe-point checks: a check is due >= min_interval s after the previous one and
-    runs at the end of the unit in progress."""
+    """Worst spacing of consecutive safe-point checks: a check is due >= min_interval s after the previous one and runs
+    at the end of the unit in progress."""
     return min_interval + unit_s
 
 
-def plan_units(n: int = 7, gflops: float = PLAN_GFLOPS, B: int = 64, eval_cells: dict | None = None) -> dict:
-    """Seconds per uninterruptible unit of every planned training step (§5.2-5.3 sizes, B models per BatchedMLP
-    batch) plus injected evaluation-cell costs (measured at G-P5)."""
+def plan_units(n: int = 7, gflops: float = PLAN_GFLOPS, B: int = B_MAX) -> dict:
+    """Seconds per uninterruptible optimizer step of every planned training configuration (§5.2-5.3 sizes; per-goal
+    fits as BatchedMLP batches of B models; the library psi-hat build's unit, one code over the n = 7 states in chunks,
+    is counted per chunk)."""
     out = {}
     for kind in ("sf", "uvfa", "aux"):
-        out[f"step:{kind}"] = unit_seconds(step_flops(n_params(MLP(*arm_dims(kind, n))), 256), gflops)
-    for name, (w, b) in {"pgv400-w64": (64, 64), "pgv400-w256": (256, 64), "pgv-w128-b64": (128, 64),
-                         "pgv-w128-b128": (128, 128), "pgv-w128-b256": (128, 256), "pgv1600": (256, 128),
-                         "pgv6400": (256, 256)}.items():
-        out[f"step:{name}:B{B}"] = unit_seconds(step_flops(n_params(MLP(*arm_dims("pgv", n), w)), b, B), gflops)
-    out[f"step:ft400:B{B}"] = unit_seconds(step_flops(n_params(MLP(*arm_dims("uvfa", n))), 64, B), gflops)
-    out.update(eval_cells or {})
+        out[f"step:{kind}:B1:b{ZS_BATCH}"] = unit_seconds(step_flops(n_params(MLP(*arm_dims(kind, n))), ZS_BATCH), gflops)
+    for w, b in ((64, 64), (256, 64), (128, 64), (128, 128), (128, 256), (256, 128), (256, 256)):
+        out[f"step:pgv{w}:B{B}:b{b}"] = unit_seconds(step_flops(n_params(MLP(*arm_dims("pgv", n), w)), b, B), gflops)
+    for kind in ("uvfa", "sf"):  # FT-UVFA_400, SF-FT_400
+        out[f"step:ft-{kind}:B{B}:b64"] = unit_seconds(step_flops(n_params(MLP(*arm_dims(kind, n))), 64, B), gflops)
+    out["library:code"] = unit_seconds(2.0 * n_params(MLP(*arm_dims("sf", n))) * 65_990, gflops)
     return out
 
 
-# ----------------------------------------------------------------------------- inference
+# ----------------------------------------------------------------------------- inference: Evaluator, library psi-hat
 
 class Evaluator:
     """Cached single-row inference of one network (one state per forward pass: fixed composition)."""
@@ -743,9 +859,15 @@ class LibraryPsi:
             raise RuntimeError("library cache not built")
         return np.asarray(self.arr[:, np.atleast_1d(idx)], dtype=np.float64).transpose(1, 0, 2)
 
+    def close(self) -> None:
+        """Drop the memmap (Windows keeps the file open while it lives)."""
+        if self.path is not None and self.arr is not None:
+            self.arr.flush()
+        self.arr = None
+
 
 def nearest_codes(lib_codes, code, k: int = 4) -> np.ndarray:
-    """Indices of the k library codes with the highest cosine to `code` (ties to the lower index)."""
+    """SF-GPI-5: indices of the k library codes with the highest cosine to `code` (ties to the lower index)."""
     L = np.asarray(lib_codes, dtype=np.float64)
     z = np.asarray(code, dtype=np.float64)
     cos = (L @ z) / (np.linalg.norm(L, axis=1) * np.linalg.norm(z))
@@ -778,3 +900,291 @@ def value_scores(ev: Evaluator, c: float):
 def sf_values(ev: Evaluator, idx, w, c: float) -> np.ndarray:
     """V-hat = w-bar.psi-hat(s, w) (G-P4's SF value)."""
     return SO.wbar_dot(ev.psi(idx), w, c)
+
+
+# ----------------------------------------------------------------------------- model files, multi-code inference
+
+class Loaded:
+    """A saved network: .model (MLP, eval mode), .kind, .n, .meta; a unique .uid keys the prediction cache."""
+    _uids = itertools.count()
+
+    def __init__(self, model: MLP, meta: dict, path=None):
+        self.model, self.meta, self.path = model.eval(), dict(meta), None if path is None else str(path)
+        self.kind, self.n, self.uid = meta["kind"], int(meta["n"]), next(Loaded._uids)
+
+
+def save_model(path, model: MLP, meta: dict) -> str:
+    path = Path(path)
+    d_in, d_out, width, depth = model.dims
+    meta = dict(meta, format=FORMAT, d_in=d_in, d_out=d_out, width=width, depth=depth)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    torch.save(dict(meta=json.dumps(meta, sort_keys=True), state=model.state_dict()), tmp)
+    os.replace(tmp, path)
+    return str(path)
+
+
+def _n_of(kind: str, d_in: int) -> int:
+    for n in range(1, 16):
+        if arm_dims(kind, n)[0] == d_in:
+            return n
+    raise ValueError(f"no n with input width {d_in} for {kind}")
+
+
+def load_model(path) -> Loaded:
+    """A model file of save_model ({'meta', 'state'}) or of run_e05's Adapters.save ({'kind', 'dims', 'state'})."""
+    d = torch.load(path, weights_only=True, map_location="cpu")
+    if "meta" in d:
+        meta = json.loads(d["meta"])
+        if meta.get("format") != FORMAT:
+            raise ValueError(f"{path}: unknown model file format")
+    else:
+        d_in, d_out, width, depth = (int(v) for v in d["dims"])
+        meta = dict(kind=d["kind"], n=_n_of(d["kind"], d_in), d_in=d_in, d_out=d_out, width=width, depth=depth)
+    m = MLP(meta["d_in"], meta["d_out"], meta["width"], meta["depth"])
+    m.load_state_dict(d["state"])
+    set_threads(default_threads())
+    return Loaded(m, meta, path)
+
+
+_PRED: OrderedDict = OrderedDict()
+_PRED_BYTES = [0]
+
+
+def clear_cache() -> None:
+    _PRED.clear()
+    _PRED_BYTES[0] = 0
+
+
+def _cached(key, fn) -> np.ndarray:
+    r = _PRED.get(key)
+    if r is not None:
+        _PRED.move_to_end(key)
+        return r
+    r = _PRED[key] = fn()
+    _PRED_BYTES[0] += r.nbytes
+    while _PRED_BYTES[0] > CACHE_BYTES and len(_PRED) > 1:
+        _PRED_BYTES[0] -= _PRED.popitem(last=False)[1].nbytes
+    return r
+
+
+def _as_loaded(model) -> Loaded:
+    return model if isinstance(model, Loaded) else load_model(model)
+
+
+@torch.no_grad()
+def _forward(lm: Loaded, x: np.ndarray, what: str) -> np.ndarray:
+    if x.shape[1] != lm.meta["d_in"]:
+        raise ValueError("input width does not match the model (wrong n?)")
+    out = lm.model(torch.from_numpy(np.ascontiguousarray(x, dtype=np.float32)))
+    return outputs(lm.kind, out)[what].astype(np.float32)
+
+
+def predict_psi(model, space, states, W, c) -> np.ndarray:
+    """psi-hat(s, z) float64 [len(states), m, F + 1] for the m codes z = (W[i]/3, c[i]) (sf or aux networks); one
+    forward per state over its m codes (fixed composition), cached per (model, code set, state)."""
+    lm = _as_loaded(model)
+    if lm.kind not in ("sf", "aux"):
+        raise ValueError(f"{lm.kind} network has no psi head")
+    X, codes = features(space), goal_codes(W, c)
+    key = hashlib.sha1(codes.tobytes()).hexdigest()
+
+    def one(s):
+        return _forward(lm, np.concatenate([np.broadcast_to(X[s], (len(codes), X.shape[1])), codes], axis=1), "psi")
+    return np.stack([_cached((lm.uid, "psi", key, int(s)), lambda s=int(s): one(s))
+                     for s in np.atleast_1d(states)]).astype(np.float64)
+
+
+def predict_value(model, space, states, W=None, c=None) -> np.ndarray:
+    """V-hat(s, z) float64 [len(states), m] (uvfa, aux; FT models take the parent's code); a pgv network ignores the
+    code and its value is repeated over the m codes (m = 1 without W)."""
+    lm = _as_loaded(model)
+    X = features(space)
+    if lm.kind == "pgv":
+        m = 1 if W is None else len(np.atleast_2d(W))
+        v = [_cached((lm.uid, "v", None, int(s)), lambda s=int(s): _forward(lm, X[s][None], "v"))
+             for s in np.atleast_1d(states)]
+        return np.repeat(np.stack(v).astype(np.float64), m, axis=1)
+    if lm.kind not in ("uvfa", "aux"):
+        raise ValueError(f"{lm.kind} network has no value head")
+    codes = goal_codes(W, c)
+    key = hashlib.sha1(codes.tobytes()).hexdigest()
+
+    def one(s):
+        return _forward(lm, np.concatenate([np.broadcast_to(X[s], (len(codes), X.shape[1])), codes], axis=1), "v")
+    return np.stack([_cached((lm.uid, "v", key, int(s)), lambda s=int(s): one(s))
+                     for s in np.atleast_1d(states)]).astype(np.float64)
+
+
+# ----------------------------------------------------------------------------- higher-level entry points
+
+def _kind_callback(safe_point):
+    """Adapt a safe_point(kind) callback to Trainer.run's safe_point(trainer)."""
+    if safe_point is None:
+        return None
+    return lambda tr: safe_point("epoch" if tr.epoch_end else "step")
+
+
+def train_zero_shot(arm: str, space, data: dict, *, seed: int, epochs: int, lr: float, keep, out_dir,
+                    safe_point=None, threads: int | None = None, width: int = WIDTH, batch: int = ZS_BATCH,
+                    wd: float = WD, gflops: float = PLAN_GFLOPS):
+    """One zero-shot model (SF, UVFA, UVFA+aux or SF-shuffled) at one seed; {epoch: model path} for the kept epochs,
+    or None if it yielded at a safe point (call again with the same arguments to resume)."""
+    if arm not in ARM_KIND:
+        raise ValueError(arm)
+    kind, n, out = ARM_KIND[arm], space.n, Path(out_dir)
+    keep = sorted({int(e) for e in np.atleast_1d(keep)})
+    if not keep or keep[0] < 1 or keep[-1] > int(epochs):
+        raise ValueError("kept epochs must lie in 1..epochs")
+    threads = default_threads() if threads is None else int(threads)
+    S = np.asarray(data["states"] if "states" in data else data["s"], dtype=np.int64)
+    gid = np.asarray(data["goal"] if "goal" in data else data["g"], dtype=np.int64)
+    W, C = np.atleast_2d(np.asarray(data["W"], dtype=np.float64)), np.atleast_1d(np.asarray(data["c"], np.float64))
+    n_goals = int(gid.max()) + 1
+    if len(W) == len(S):  # per-row W, c
+        first = np.array([np.flatnonzero(gid == i)[0] for i in range(n_goals)])
+        if not np.array_equal(goal_codes(W, C), goal_codes(W[first], C[first])[gid]):
+            raise ValueError("W or c differ within a goal id")
+        W, C = W[first], C[first]
+    elif len(W) != n_goals:
+        raise ValueError("W, c must be given per row or per goal id")
+    codes = goal_codes(W, C)
+    rows = dict(s=S, g=gid, psi=np.asarray(data["psi"], dtype=np.float64), v=np.asarray(data["v"], dtype=np.float64))
+    if arm == "SF-shuffled":
+        rows = shuffle_psi(rows, [(W[i], float(C[i])) for i in range(n_goals)])
+    fp = _canon(dict(arm=arm, kind=kind, seed=int(seed), epochs=int(epochs), keep=keep, lr=float(lr), wd=float(wd),
+                     batch=int(batch), width=int(width), n=n, threads=threads, code=CODE_SHA,
+                     labels=_sha_arrays(S, gid, W, C, np.asarray(data["psi"]), np.asarray(data["v"]))))
+    paths = {e: out / f"e{e}.pt" for e in keep}
+    done = out / "done.json"
+    if done.exists():
+        if json.loads(done.read_text(encoding="utf-8"))["fingerprint"] != fp:
+            raise ValueError(f"{out}: holds a different zero-shot run")
+        if all(p.exists() for p in paths.values()):
+            return {e: str(p) for e, p in paths.items()}
+    check_units({f"step:{kind}": unit_seconds(step_flops(n_params(MLP(*arm_dims(kind, n), width)), batch), gflops)})
+    tr = zero_shot_trainer(kind, features(space), n, codes, rows, seed,
+                           dict(width=width, lr=lr, wd=wd, batch=batch, epochs=keep[-1], snap_epochs=keep),
+                           threads=threads, fingerprint=fp)
+    ckpt = out / "ckpt.pt"
+    if ckpt.exists():
+        tr.load(ckpt)
+    if tr.run(_kind_callback(safe_point), min_interval=0.0, ckpt=ckpt) == "yielded":
+        return None
+    for e in keep:
+        save_model(paths[e], tr.snapshot(e * tr.per_epoch)[0],
+                   dict(kind=kind, n=n, arm=arm, seed=int(seed), epoch=e, steps=e * tr.per_epoch, lr=float(lr)))
+    _write_json(done, dict(fingerprint=fp, models={str(e): p.name for e, p in paths.items()}))
+    ckpt.unlink(missing_ok=True)
+    return {e: str(p) for e, p in paths.items()}
+
+
+def _fname(key: str) -> str:
+    return hashlib.sha256(str(key).encode()).hexdigest()[:20]
+
+
+def fit_pergoal(kind: str, space, jobs, cfg: dict, *, out_dir, safe_point=None, threads: int | None = None,
+                B: int | None = None, gflops: float = PLAN_GFLOPS):
+    """Per-goal fits (PGV from scratch, FT-UVFA / SF-FT from a replicate) as BatchedMLP batches of <= B models;
+    {job key: early-stopped model path}, or None if it yielded (call again with the same arguments to resume)."""
+    if kind not in PG_KIND:
+        raise ValueError(kind)
+    n, X, out, jobs = space.n, features(space), Path(out_dir), list(jobs)
+    keys = [str(j["key"]) for j in jobs]
+    if len(set(keys)) != len(keys):
+        raise ValueError("duplicate job keys")
+    threads = default_threads() if threads is None else int(threads)
+    horizon = int(cfg.get("keep", cfg["steps"]))
+    steps = min(int(cfg["steps"]), horizon)
+    every = int(cfg.get("eval_every", cfg.get("check_every", 0)))
+    if every <= 0 or horizon <= 0:
+        raise ValueError("per-goal fits need early stopping (eval_every > 0)")
+    lr, wd, batch, step0 = float(cfg["lr"]), float(cfg.get("wd", WD)), int(cfg["batch"]), bool(cfg.get("step0", False))
+    inits = {}
+    if kind == "PGV":
+        net_kind, width = "pgv", int(cfg["width"])
+    else:
+        for j in jobs:
+            p = str(j["init"])
+            if p not in inits:
+                inits[p] = (load_model(p), hashlib.sha256(Path(p).read_bytes()).hexdigest())
+        net_kind, width = PG_KIND[kind], {lm.meta["width"] for lm, _ in inits.values()}
+        if {lm.kind for lm, _ in inits.values()} != {net_kind} or len(width) != 1:
+            raise ValueError(f"{kind} needs {net_kind} replicate models of one width")
+        width = width.pop()
+    params = n_params(MLP(*arm_dims(net_kind, n), width))
+    B = int(B) if B else max_models(params, batch, gflops)
+    if B < 1:
+        raise ValueError("even one model's optimizer step exceeds the 30-s unit")
+    check_units({f"step:{kind}:B{B}:b{batch}": unit_seconds(step_flops(params, batch, B), gflops)})
+    targets = {"pgv": ("v",), "uvfa": ("v",), "sf": ("psi",)}[net_kind]
+    paths = {k: out / "models" / f"{_fname(k)}.pt" for k in keys}
+    for bi in range(0, len(jobs), B):
+        chunk, tag = jobs[bi:bi + B], f"batch{bi // B:04d}"
+        fp = _canon(dict(kind=kind, net_kind=net_kind, n=n, width=width, B=B, threads=threads, code=CODE_SHA,
+                         steps=steps, horizon=horizon, every=every, step0=step0, lr=lr, wd=wd, batch=batch,
+                         cfg={k: v for k, v in cfg.items()},
+                         jobs=[dict(key=str(j["key"]), seed=int(j["seed"]),
+                                    labels=_sha_arrays(*[np.asarray(j[t], dtype=np.float32) for t in targets],
+                                                       np.asarray(j["states"], dtype=np.int64)),
+                                    stab=None if j.get("stab") is None else _sha_arrays(np.asarray(j["stab"])),
+                                    code=None if net_kind == "pgv" else _sha_arrays(goal_code(j["w"], j["c"])),
+                                    init=None if kind == "PGV" else inits[str(j["init"])][1]) for j in chunk]))
+        marker = out / f"{tag}.done.json"
+        if marker.exists():
+            if json.loads(marker.read_text(encoding="utf-8"))["fingerprint"] != fp:
+                raise ValueError(f"{out}: holds a different per-goal fit")
+            if all(paths[str(j["key"])].exists() for j in chunk):
+                continue
+        tasks, models = [], []
+        for j in chunk:
+            tasks.append(rows_task(j["states"], {t: j[t] for t in targets}, n_val(len(j["states"]), cfg),
+                                   code=None if net_kind == "pgv" else goal_code(j["w"], j["c"]),
+                                   stab=None if j.get("stab") is None else perm_ids(j["stab"], n)))
+            models.append(new_model("pgv", n, int(j["seed"]), width) if kind == "PGV"
+                          else copy.deepcopy(inits[str(j["init"])][0].model))
+        tr = Trainer(net_kind, models, tasks, X, n, batch=batch, lr=lr, wd=wd, steps=steps,
+                     order_seeds=[derive(int(j["seed"]), "order") for j in chunk],
+                     aug_seeds=[derive(int(j["seed"]), "stab") for j in chunk], check_every=every,
+                     horizons=(horizon,), step0=step0, threads=threads, fingerprint=fp)
+        ckpt = out / f"{tag}.ckpt"
+        if ckpt.exists():
+            tr.load(ckpt)
+        if tr.run(_kind_callback(safe_point), min_interval=0.0, ckpt=ckpt) == "yielded":
+            return None
+        best, bsteps, blosses = tr.best(horizon)
+        for j, m, st, ls in zip(chunk, best, bsteps, blosses):
+            save_model(paths[str(j["key"])], m, dict(kind=net_kind, n=n, arm=kind, key=str(j["key"]),
+                                                     best_step=int(st), val_loss=float(ls), steps=steps,
+                                                     n_stab=None if j.get("stab") is None else len(j["stab"])))
+        _write_json(marker, dict(fingerprint=fp, best_step=[int(v) for v in bsteps],
+                                 val_loss=[float(v) for v in blosses], val_hist=tr.val_hist))
+        ckpt.unlink(missing_ok=True)
+        if bi + B < len(jobs) and safe_point is not None and safe_point("batch"):
+            return None
+    return {k: str(paths[k]) for k in keys}
+
+
+def time_step(model: str, width: int | None = None, batch: int = ZS_BATCH, B: int = 1, steps: int = 5, n: int = 7,
+              threads: int | None = None) -> float:
+    """G-P5: seconds per optimizer step of B stacked `model` networks at `batch` (synthetic rows, stabilizer-style
+    augmentation over all renamings, through Trainer._one_step after one warm-up step)."""
+    kind, w0 = MODEL_KIND[model]
+    width, D, Fn, nrow = int(width or w0), state_dim(n), n_facts(n), 400
+    rng = np.random.default_rng(0)
+    X = (rng.random((512, D)) < 0.3).astype(np.float32)
+    keys = {"sf": ("psi",), "uvfa": ("v",), "aux": ("v", "psi"), "pgv": ("v",)}[kind]
+    tasks = []
+    for _ in range(B):
+        y = {"v": rng.standard_normal(nrow), "psi": np.concatenate([rng.random((nrow, Fn)) < 0.2,
+                                                                     rng.integers(0, 20, (nrow, 1))], axis=1)}
+        tasks.append(Task(s=rng.integers(0, len(X), nrow), y={k: y[k].astype(np.float32) for k in keys},
+                          code=None if kind == "pgv" else rng.random(Fn + 1).astype(np.float32), aug="stab",
+                          stab=np.arange(len(perms(n)))))
+    tr = Trainer(kind, [new_model(kind, n, m, width) for m in range(B)], tasks, X, n, batch=batch, lr=1e-3, wd=WD,
+                 steps=steps + 1, order_seeds=range(B), aug_seeds=range(B), threads=threads)
+    tr._one_step()
+    t0 = time.perf_counter()
+    for _ in range(steps):
+        tr._one_step()
+    return (time.perf_counter() - t0) / steps

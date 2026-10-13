@@ -746,3 +746,27 @@ and the evidence path.
     - BWM confirmation of the ≤ 2-min residual overlap (L9);
     - pilot code (`rcx/bw/soft.py` and `experiments/RCX-E05/*_e05.py`) with the six test files;
     - T2 digest, then pilot (DEV only), then the prereg fill and T3 freeze.
+- **CX D-46 E05 pilot code: round-1 review decisions (2026-10-12 22:20). The code is complete; 175 tests pass. Not yet
+  digested (T2).** Review: `experiments/RCX-E05/REVIEW_E05_CODE_R1.md`.
+  - **#1, ĥ_MIS not admissible on `clear` targets.** Counterexample: n = 5 with ĥ = 8 > h\* = 7. ENUM-MIS± switches to
+    the admissible bound `mis_adm`, and §5.2's formula and its test are amended to match. Admissibility matters because
+    ENUM-MIS± is the non-learned guard (G1, STOP-D).
+  - **#3, 68 n = 7 instances in E11b `test_id` and `ood_small`.** They are excluded from E05 rows, starts and banks (by
+    instance invariant and signature), and §4.4 item 4 is corrected. The claim is not narrowed.
+  - **#11, no one-step bank for ENUM-H\*±, GNN-ENUM±, RAND and BEST-SINGLE.** Recorded as a reading: the bank metrics
+    are secondary and cover the learned arms and ENUM-MIS±.
+  - **#13.** The H-CONJ linearized key is also checked against TRAIN.
+  - **#2 and #4–#10 are to be fixed before T2:**
+    - G-P5 bench of ENUM-H\*± and GNN-ENUM± cells, splitting any unit over 30 s;
+    - grid-free per-goal seed tags;
+    - projected-L slices;
+    - `--pilot-dir`;
+    - `evals/*.json` as the only analysis input, plus an end-to-end test;
+    - the cost model moved out of the operational lane file;
+    - safe points in the draws;
+    - `CUDA_VISIBLE_DEVICES` set at the top of `run_e05.py`.
+  - **#12 readings recorded for the T2 entry:**
+    - RAND uses a per-cell stream;
+    - a revisited state is executed and counted;
+    - H-CONJ STOP is scored on the linearization;
+    - H-DYN bank states are not height-limited.

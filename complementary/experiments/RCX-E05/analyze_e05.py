@@ -17,31 +17,50 @@ a refusal is not an analysis run:
   3. --manifest-sha is 64 hex, equals sha256(<attempt>/TEST_MANIFEST.json), and occurs in the COMMITTED DECISIONS.md
      (`git -C <repo-root> show HEAD:./DECISIONS.md`), not merely in the working copy; the manifest's "attempt" (if
      present) equals --attempt;
-  4. the pilot determinations (PILOT_REPORT.json "determinations") are complete and consistent;
-  5. every eval file <attempt>/evals/*.json names manifest_sha256 == --manifest-sha and code_digest == --code-digest; its
-     arm and replicate are well formed, each parent is a manifest TEST parent, each nreg list has one finite value in
-     [0, 1] per manifest start, and no (arm, replicate, parent) cell repeats;
+  4. the pilot determinations (PILOT_REPORT.json "determinations", or run_e05's pilot-report fields) are complete and
+     consistent;
+  5. exactly one eval source exists (evals/*.json or run_e05's cells.jsonl, below). Every eval file names
+     manifest_sha256 == --manifest-sha and code_digest == --code-digest (cells.jsonl / banks.jsonl: every record's
+     digest == --code-digest, its split == "test:<attempt>", and the manifest's code_digest_t3 == --code-digest); arm,
+     tag and replicate are well formed, each parent is a manifest TEST parent, each nreg value is finite in [0, 1] (one
+     per manifest start), and no (arm, replicate, parent[, start]) cell repeats;
   6. --missing names exactly the protected-core groups (§10.3) that have an absent cell (core_groups below); a declared
      group gives INCONCLUSIVE (missing). --defect records a defect found after the first learned-arm TEST computation
      (§10.4): INCONCLUSIVE (defect).
 
-Input contracts (written by run_e05.py; fields not listed are ignored):
+Input contracts (fields not listed are ignored). Both the exported form below and run_e05.py's native layout (as of
+this writing) are read:
   TEST_MANIFEST.json      {"parents": [families_e05.Parent.to_json(): "family", "stratum" ("S"/"U" for H-ID), "key",
-                          "starts", "w", "K", "n_neg", "rtype", ...], "subset": [the 48-parent k-curve subset keys]}
-                          (families outside the TEST families are ignored and counted)
+                          "starts", "w", "K", "n_neg", "rtype", ...] or run_e05's {family: [Parent.to_json()]},
+                          "subset" or run_e05's "pgv_subset": [the 48-parent k-curve subset keys], optional "attempt",
+                          optional "code_digest_t3"} (families outside the TEST families are ignored and counted)
   ORACLE_TEST_REPORT.json {"status": "PASS" | "VOID", "manifest_sha256": ..., "code_digest": ..., "checks": {...}}
   PILOT_REPORT.json       {"determinations": {"p1_comparator_invalid": bool, "p2_dropped": bool,
                           "pg400": "PGV_400" | "FT-UVFA_400" | null (null iff P2 dropped), "q9_failed_no_bug": bool,
                           "kstar_descriptive": bool, "r_ext": bool, optional "cut_items": [§10.3 item numbers],
                           optional "kcurve_arms": {"400": arm, "1600": arm, "6400": arm} (default PGV_<k>), "n": 7|6}}
+                          or, without "determinations", run_e05's pilot-report fields (native_determinations):
+                          p1_comparator_invalid, p2_dropped, pg400 ("PGV" | "FT" | null), kstar ("decision-driving" |
+                          "descriptive only"), kcurve_recipe ("original" | "R_ext"; R_ext -> k-curve arms PGV-RX_<k>),
+                          G_P1.Q9.ok, G_P5.cuts (run_e05.CUT_ORDER names = §10.3 items 1-7), G_P3.grid.{PGV,FT}.cfg
+  eval source, one of:
   evals/*.json            {"manifest_sha256", "code_digest", "arm", "replicate": 20261246-48 | null,
                           "cells": {parent key: {"nreg": [one per start, manifest order], optional numeric lists
-                          such as "loop", "regret1", "top1", "value_abs_err"}}} (a bare list is read as nreg)
+                          such as "loop", "regret1", "top1", "value_abs_err", "decisions", "all_tied"}}} (a bare list
+                          is read as nreg)
+  cells.jsonl (run_e05)   one keyed record per (arm, tag, parent, start): "split", "arm", "tag", "parent", "s0", "nreg",
+                          "loop", "capped", "T", optional "diag" {"decisions", "all_tied"}, "digest"; plus optional
+                          banks.jsonl records ("arm", "tag", "parent", "rows": [{"regret1", "top1"}], "digest").
+                          native_arm maps (arm, tag) to the names below: "<model>|s<seed>" -> replicate <seed>;
+                          PGV "<selected cfg>|k400" -> PGV_400, "k<k>|k<k>" -> PGV_<k>, "rext<k>|k<k>" -> PGV-RX_<k>;
+                          FT "<selected cfg>|s<seed>|k400" -> FT-UVFA_400 @ <seed>. A (arm, replicate, parent) with
+                          fewer records than starts is an absent cell (missing), never a partial mean.
   Arm names (exact strings): replicated (replicate 20261246-48): SF-GPI, UVFA, UVFA+aux, SF-noGPI, SF-L, SF-GPI-5,
   SF-shuffled, FT-UVFA_400, SF-FT_400; deterministic (replicate null): PGV_400, PGV_1600, PGV_6400 (or the pilot's
   kcurve_arms), ENUM-MIS±, ENUM-H*±, GNN-ENUM±, ENUM-MIS (rev 1), ENUM-MIS± (rev 2), GREEDY, STOP, RAND, ORACLE,
   EXACT-GPI(L), BEST-SINGLE(L). Other names are accepted and reported descriptively. Measured cost at confirmation
-  scale (480 parents, 16 starts, all arms, R = 10,000): about 7 s single-thread and 70 MB.
+  scale (synthetic: 480 parents, 16 starts, every arm above, R = 10,000): analyze() about 3 s single-thread, peak
+  working set about 110 MB.
 
 Statistics (§6.1, §6.4). A parent's value for one arm is computed in rcx.stats' order: per replicate sum/len over its
 starts, then the sum over replicates in seed order / their number (deterministic arms: replicate null). A contrast
@@ -85,12 +104,20 @@ Readings this code takes where the prereg leaves a detail open (none changes a t
     one, on(x, b) with clear(b) or ontable(x), or an on-cycle). K and conflict strata are point estimates only.
   - Binary view: a start is optimal iff nreg <= 1e-9; a parent is "optimal on >= half of the starts" over all its
     (replicate, start) values (rcx.stats.paired_binary_table, threshold 0.5).
-  - Protected core for missing-cell detection (§10.3): SF-GPI, UVFA, UVFA+aux, SF-noGPI, SF-L, SF-GPI-5 x 3 replicates
-    and SF-shuffled (20261246) on the primary parents; PGV_400 on the primary parents; FT-UVFA_400 x 3 there if it is
+  - Protected core for missing-cell detection (§10.3), with "retained" = every TEST family not cut by items 3 or 7:
+    SF-GPI, UVFA, UVFA+aux, SF-noGPI, SF-L, SF-GPI-5 x 3 replicates and SF-shuffled (20261246) on every retained family
+    (§10.3 gives them no family scope and no cut item); PGV_400 on the primary parents; FT-UVFA_400 x 3 there if it is
     PG400; the k-curve arms on the subset; ENUM-MIS±, GREEDY, STOP, RAND, ORACLE, EXACT-GPI(L), BEST-SINGLE(L) on every
-    retained family (not cut by items 3 or 7); ENUM-H*± and GNN-ENUM± on H-ID and H-K. Bank metrics are not checked.
+    retained family; ENUM-H*± and GNN-ENUM± on H-ID and H-K. "The one-step banks": a bank result (regret1) for every
+    protected cell, except the arms run_e05 does not bank (RAND and BEST-SINGLE(L): start-dependent; ENUM-H*±,
+    GNN-ENUM±); their groups are "bank:<arm>[@replicate]".
   - The live code digest is not recomputed here (run_e05.py code-digest owns its definition; oracle-test checked it);
     this file checks the digest named by ORACLE_TEST_REPORT.json and by every eval file against --code-digest.
+  - From run_e05's pilot-report fields, "Q9 failed without a bug" = G_P1.Q9.ok is false in the final report (a bug
+    found by the audit is fixed and the pilot phase re-run, §9.1).
+  - ENUM± all-tied share (§6.5) = all-tied decisions / decisions with >= 2 legal moves, pooled per family.
+  - Labels (§6.5): D1 on H-K and H-NEG "includes extrapolation outside UVFA's training weight support"; H-CONJ and
+    H-DYN "assumption boundary" (their §4.2 role).
 """
 import argparse
 import hashlib
@@ -135,7 +162,11 @@ SECONDARY = ("H-COST", "H-SPAN", "H-KN", "H-CONJ", "H-DYN")
 TEST_ORDER = PRIMARY + SECONDARY
 STRATA = {"H-ID": ("H-ID-S", "H-ID-U"), **{f: (f,) for f in TEST_ORDER[1:]}}
 CUT_FAMILIES = {3: "H-KN", 7: "H-DYN"}  # §10.3 cut items that remove a family
+CUT_NAMES = ("budget-curve", "SF-FT_400", "H-KN", "GNN-ENUM±@H-NEG", "FT-UVFA_400-1rep", "ENUM-H*±@H-NEG-24",
+             "H-DYN")  # = run_e05.CUT_ORDER: §10.3 items 1-7
 KS = (400, 1600, 6400)
+RX = "PGV-RX_{}"  # the k-curve arms under the R_ext escalation (§5.3 G-P3b)
+TIE_FIELDS = ("decisions", "all_tied")  # ENUM± all-tied-decision counts (§6.5): shares, not means
 
 SF, UVFA, AUX = "SF-GPI", "UVFA", "UVFA+aux"
 NOGPI, SFL, SF5, SHUF = "SF-noGPI", "SF-L", "SF-GPI-5", "SF-shuffled"
@@ -144,10 +175,13 @@ ENUM, ENUM_H, GNN = "ENUM-MIS±", "ENUM-H*±", "GNN-ENUM±"
 ENUM_R1, ENUM_R2 = "ENUM-MIS (rev 1)", "ENUM-MIS± (rev 2)"
 GREEDY, STOP, RAND, ORACLE, XGPI, BEST = "GREEDY", "STOP", "RAND", "ORACLE", "EXACT-GPI(L)", "BEST-SINGLE(L)"
 ZERO_SHOT = (SF, UVFA, AUX, NOGPI, SFL, SF5)
+MODEL_OF = {SF: "SF", NOGPI: "SF", SFL: "SF", SF5: "SF", UVFA: "UVFA", AUX: "UVFA+aux", SHUF: "SF-shuffled"}  # run_e05
 REPLICATED = frozenset(ZERO_SHOT + (SHUF, FT, SFFT))
 DETERMINISTIC = frozenset({PGV, "PGV_1600", "PGV_6400", ENUM, ENUM_H, GNN, ENUM_R1, ENUM_R2, GREEDY, STOP, RAND,
                            ORACLE, XGPI, BEST})
 FLOORS = (ENUM, GREEDY, STOP, RAND, ORACLE, XGPI, BEST)
+BANK_FIELD = "regret1"  # a cell's one-step bank result (with "top1")
+BANK_EXEMPT = frozenset({RAND, BEST, ENUM_H, GNN})  # protected arms without a one-step bank record (run_e05)
 ARM_ORDER = (SF, UVFA, AUX, NOGPI, SFL, SF5, SHUF, PGV, FT, SFFT, "PGV_1600", "PGV_6400", ENUM, ENUM_H, GNN, ENUM_R1,
              ENUM_R2, XGPI, BEST, GREEDY, RAND, STOP, ORACLE)
 # Descriptive contrasts (§6.5): (label, X, Y) for D = nreg(X) - nreg(Y). D1, D2 and D_G are added by analyze().
@@ -160,6 +194,8 @@ DESCRIPTIVE = (("attribution: UVFA+aux - SF-GPI", AUX, SF), ("GPI: SF-noGPI - SF
                ("F5 fix: ENUM-MIS (rev 1) - ENUM-MIS±", ENUM_R1, ENUM), ("B1 fix: ENUM-MIS± (rev 2) - ENUM-MIS±",
                                                                          ENUM_R2, ENUM))
 NAMING = "goal-conditioned endpoint-and-length successor features (exact Monte Carlo targets, no TD)"
+FAMILY_LABELS = {"H-CONJ": "assumption boundary", "H-DYN": "assumption boundary"}  # §4.2 roles, §6.5
+D1_LABELS = {f: "includes extrapolation outside UVFA's training weight support" for f in ("H-K", "H-NEG")}  # §6.5
 GUARD_NOTE = "against a guard that failed its DEV sanity check on H-NEG"
 
 INC_DEFECT, INC_MISSING = "INCONCLUSIVE (defect)", "INCONCLUSIVE (missing)"
@@ -234,10 +270,32 @@ def has_conflict(w):
     return False
 
 
+def manifest_parents(manifest):
+    """The parent records of TEST_MANIFEST.json: a list, or run_e05's {family: [Parent.to_json()]}."""
+    ps = manifest.get("parents")
+    if isinstance(ps, dict):
+        out = []
+        for fam, lst in ps.items():
+            if not isinstance(lst, list) or any(not isinstance(p, dict) or p.get("family") != fam for p in lst):
+                raise ValueError(f"manifest parents[{fam!r}] is not a list of {fam} parents")
+            out += lst
+        return out
+    if isinstance(ps, list):
+        return ps
+    raise ValueError("the manifest has no 'parents' list or {family: [parents]} object")
+
+
+def manifest_subset(manifest):
+    a, b = manifest.get("subset"), manifest.get("pgv_subset")
+    if a is not None and b is not None and list(a) != list(b):
+        raise ValueError("the manifest's 'subset' and 'pgv_subset' differ")
+    return list(a if a is not None else b or [])
+
+
 def make_design(manifest):
     """Strata (keys in rcx.stats._order), parent info and the k-curve subset from TEST_MANIFEST.json."""
     parents, strata, ignored = {}, defaultdict(list), Counter()
-    for p in manifest["parents"]:
+    for p in manifest_parents(manifest):
         fam = p["family"]
         if fam not in TEST_ORDER:
             ignored[fam] += 1
@@ -252,11 +310,13 @@ def make_design(manifest):
         else:
             h = fam
         starts = p.get("starts")
+        if starts is not None and (not isinstance(starts, list) or len(set(starts)) != len(starts)):
+            raise ValueError(f"parent {key} has malformed or repeated starts")
         parents[key] = dict(family=fam, stratum=h, n_starts=len(starts) if starts is not None else None,
-                            K=p.get("K"), n_neg=p.get("n_neg"),
+                            starts=None if starts is None else list(starts), K=p.get("K"), n_neg=p.get("n_neg"),
                             conflict=False if p.get("rtype") == "conj" else has_conflict(p.get("w")))
         strata[h].append(key)
-    subset = list(manifest.get("subset") or [])
+    subset = manifest_subset(manifest)
     bad = [k for k in subset if k not in parents or parents[k]["family"] not in PRIMARY]
     if bad or len(set(subset)) != len(subset):
         raise ValueError(f"subset keys not primary manifest parents or repeated: {bad[:3]}")
@@ -450,7 +510,8 @@ def decide(f):
     if f["missing"]:
         return INC_MISSING, [f"missing protected-core cells: {m}" for m in f["missing"]]
     if f["stop_d"]:
-        return STOP_D, ["STOP-D condition: D_G >= 0.05 and its 95% CI lower bound > 0"]
+        return STOP_D, ["STOP-D condition: D_G >= 0.05 and its 95% CI lower bound > 0 (P1/P2 are reported as "
+                        "mechanism findings only)"]
     p1c, p2c = f["p1_counts"], f["p2_counts"]
     if p1c and p2c and f["g1"] and f["sf_floor"]:
         return ADVANCE, ["P1 counts, P2 counts, G1 holds, SF floor holds"]
@@ -608,11 +669,30 @@ def extras_table(design, cells):
     """Means of every optional per-parent field (loops, bank regret1/top-1, model quality, ...) per family."""
     out = {}
     for arm in arms_sorted(cells):
-        fields = sorted({f for rep in cells[arm].values() for c in rep.values() for f in c if f != "nreg"})
+        fields = sorted({f for rep in cells[arm].values() for c in rep.values() for f in c
+                         if f != "nreg" and f not in TIE_FIELDS})
         for fld in fields:
             e = estimate(design, arm_values(cells, arm, field=fld), 0)
             out.setdefault(arm, {})[fld] = dict({f: v["point"] for f, v in e["families"].items()},
                                                 primary_macro=_pt(e))
+    return out
+
+
+def tie_shares(design, cells):
+    """§6.5 ENUM± diagnostic: per family, (all-tied decisions) / (decisions with >= 2 legal moves), pooled over the
+    family's parents, starts and replicates."""
+    out = {}
+    for arm in arms_sorted(cells):
+        tot = defaultdict(lambda: [0.0, 0.0])
+        for rep in cells[arm].values():
+            for k, c in rep.items():
+                if all(t in c for t in TIE_FIELDS):
+                    t = tot[design["parents"][k]["family"]]
+                    t[0] += sum(c["all_tied"])
+                    t[1] += sum(c["decisions"])
+        if tot:
+            out[arm] = {f: dict(all_tied=a, decisions=d, share=a / d if d else None)
+                        for f, (a, d) in sorted(tot.items(), key=lambda kv: TEST_ORDER.index(kv[0]))}
     return out
 
 
@@ -636,12 +716,13 @@ def kcurve_arms(det):
 
 
 def core_groups(design, det):
-    """{group id: parent keys} of the protected core; group id = arm or arm@replicate."""
+    """{group id: parent keys} of the protected core (§10.3); group id = arm, arm@replicate, or bank:<that> for the
+    one-step bank of a protected cell (BANK_FIELD present)."""
     cut = {CUT_FAMILIES[i] for i in det.get("cut_items") or () if i in CUT_FAMILIES}
     fams = {v["family"] for v in design["parents"].values()} - cut
     prim, allk, idk = family_keys(design, PRIMARY), family_keys(design, fams), family_keys(design, ("H-ID", "H-K"))
-    g = {f"{a}@{k}": prim for a in ZERO_SHOT for k in REPLICATES}
-    g[f"{SHUF}@{REPLICATES[0]}"] = prim
+    g = {f"{a}@{k}": allk for a in ZERO_SHOT for k in REPLICATES}
+    g[f"{SHUF}@{REPLICATES[0]}"] = allk
     g[PGV] = set(prim)
     if det["pg400"] == FT:
         g.update({f"{FT}@{k}": prim for k in REPLICATES})
@@ -649,15 +730,18 @@ def core_groups(design, det):
         g[arm] = set(g.get(arm, set())) | set(design["subset"])
     g.update({a: allk for a in FLOORS})
     g.update({a: idk for a in (ENUM_H, GNN)})
+    g.update({f"bank:{gid}": keys for gid, keys in list(g.items()) if gid.partition("@")[0] not in BANK_EXEMPT})
     return {k: v for k, v in g.items() if v}
 
 
 def absent_groups(cells, groups):
+    """{group id: number of its parents without the cell (bank groups: without BANK_FIELD)}."""
     out = {}
     for gid, keys in groups.items():
-        arm, _, rep = gid.partition("@")
+        bank = gid.startswith("bank:")
+        arm, _, rep = gid[5:].partition("@") if bank else gid.partition("@")
         have = (cells.get(arm) or {}).get(int(rep) if rep else None, {})
-        miss = [k for k in keys if k not in have]
+        miss = [k for k in keys if k not in have or (bank and BANK_FIELD not in have[k])]
         if miss:
             out[gid] = len(miss)
     return dict(sorted(out.items()))
@@ -719,7 +803,9 @@ def analyze(design, cells, det, defects=(), resamples=RESAMPLES, custody=None):
         custody=custody or {}, pilot=det, holm_family=family, raw_p=raw,
         holm_adjusted=holm_adjust(family, raw), P1=P1, P2=P2,
         validity=dict(bar=BAR, p1_valid=p1_valid, p2_valid=p2_valid, uvfa_test_hid=uvfa_hid, pg400=pg,
-                      pg400_test_primary_macro=pg_macro, p1_counts=f["p1_counts"], p2_counts=f["p2_counts"]),
+                      pg400_test_primary_macro=pg_macro, p1_counts=f["p1_counts"], p2_counts=f["p2_counts"],
+                      pg400_test_families={fm: _pt(lv.get(pg), fm) for fm in TEST_ORDER} if pg else None,
+                      pg400_dev_ood=det.get("pg400_dev_ood")),
         guard=dict(D_G=dg, G1=f["g1"], stop_d_condition=f["stop_d"],
                    statement_suffix=GUARD_NOTE if det["q9_failed_no_bug"] else None),
         sf_floor=dict(holds=f["sf_floor"], family_means=sf_fam, failed=f["sf_floor_failed"]),
@@ -737,7 +823,8 @@ def analyze(design, cells, det, defects=(), resamples=RESAMPLES, custody=None):
         kstar=dict(PGV=kstar(design, cells, kc, resamples), FT=kstar(design, cells, {400: FT}, resamples),
                    descriptive_only=bool(det["kstar_descriptive"])),
         binary_view={f"{x} vs {y}": binary_view(cells, x, y, prim) for x, y in ((SF, UVFA), (SF, pg), (SF, ENUM)) if y},
-        extras=extras_table(design, cells), coverage=coverage(design, cells),
+        extras=extras_table(design, cells), enum_all_tied=tie_shares(design, cells), coverage=coverage(design, cells),
+        labels=dict(families=FAMILY_LABELS, D1=D1_LABELS),
         design=dict(strata={h: len(v) for h, v in design["strata"].items()}, subset=len(design["subset"]),
                     ignored_families=design.get("ignored", {})))
     return res
@@ -758,8 +845,38 @@ def committed_text(root, rel="DECISIONS.md"):
     return r.stdout.decode("utf-8", errors="replace") if r.returncode == 0 else None
 
 
+def native_determinations(rep):
+    """The §7.1 pilot inputs from run_e05.py's pilot-report fields (a report without a 'determinations' object).
+    q9_failed_no_bug = not G_P1.Q9.ok: a Q9 failure triggers the enum_e05 audit, and a bug found is fixed and the pilot
+    phase re-run (§9.1), so a failure still standing in the final report is a failure without a bug."""
+    try:
+        pg, cuts, recipe, ks = rep["pg400"], list(rep["G_P5"]["cuts"]), rep["kcurve_recipe"], rep["kstar"]
+        det = dict(p1_comparator_invalid=rep["p1_comparator_invalid"], p2_dropped=rep["p2_dropped"],
+                   q9_failed_no_bug=not rep["G_P1"]["Q9"]["ok"], n=rep.get("n"), source="run_e05 pilot-report fields")
+        grid = (rep.get("G_P3") or {}).get("grid") or {}
+        det["native_cfg"] = {kind: (grid.get(kind) or {}).get("cfg") for kind in ("PGV", "FT")}
+    except (KeyError, TypeError) as e:
+        raise ValueError(f"PILOT_REPORT.json has neither 'determinations' nor run_e05's pilot-report fields ({e!r})")
+    if pg not in (None, "PGV", "FT") or recipe not in ("original", "R_ext") or \
+            ks not in ("decision-driving", "descriptive only"):
+        raise ValueError(f"unknown pg400 {pg!r}, kcurve_recipe {recipe!r} or kstar {ks!r}")
+    bad = [c for c in cuts if c not in CUT_NAMES]
+    if bad:
+        raise ValueError(f"unknown G_P5 cuts {bad} (expected run_e05.CUT_ORDER names)")
+    det.update(pg400={None: None, "PGV": PGV, "FT": FT}[pg], kstar_descriptive=ks == "descriptive only",
+               r_ext=recipe == "R_ext", cut_items=sorted(CUT_NAMES.index(c) + 1 for c in cuts))
+    if det["r_ext"]:
+        det["kcurve_arms"] = {str(k): RX.format(k) for k in KS}
+    dev = (rep.get("dev_nreg") or {}).get(f"PG400={pg}")
+    if dev:
+        det["pg400_dev_ood"] = dev
+    return det
+
+
 def pilot_determinations(report):
     det = (report or {}).get("determinations")
+    if det is None and isinstance(report, dict):
+        det = native_determinations(report)
     if not isinstance(det, dict):
         raise ValueError("PILOT_REPORT.json has no 'determinations' object")
     lost = [k for k in DET_KEYS if k not in det]
@@ -816,10 +933,9 @@ def load_evals(adir, design, manifest_sha, code_digest, det):
         arm, rep = d.get("arm"), d.get("replicate")
         if not isinstance(arm, str) or not arm or "@" in arm:
             refuse(f"{fp.name}: malformed arm {arm!r}")
-        if rep is not None and (type(rep) is not int or rep not in REPLICATES):
+        if rep is not None and type(rep) is not int:
             refuse(f"{fp.name}: replicate {rep!r} is not one of {REPLICATES} or null")
-        if (arm in REPLICATED and rep is None) or (arm in det_arms and rep is not None):
-            refuse(f"{fp.name}: arm {arm} with replicate {rep!r}")
+        _check_arm(fp.name, arm, rep, det_arms)
         slot = cells.setdefault(arm, {}).setdefault(rep, {})
         body = d.get("cells")
         if not isinstance(body, dict) or not body:
@@ -840,6 +956,140 @@ def load_evals(adir, design, manifest_sha, code_digest, det):
         records.append(dict(file=fp.name, sha256=sha(fp), arm=arm, replicate=rep, parents=len(body)))
     if not files:
         refuse(f"no eval files in {adir / 'evals'}")
+    return cells, records
+
+
+_SEED_TAG = re.compile(r"\|s(\d+)(?:\||$)")
+
+
+def native_arm(arm, tag, cfg=None):
+    """(analysis arm, replicate) of a run_e05 cells.jsonl / banks.jsonl record (ValueError if malformed)."""
+    if not isinstance(arm, str) or not arm or "@" in arm or not isinstance(tag, str) or not tag:
+        raise ValueError(f"malformed arm/tag {arm!r} / {tag!r}")
+    cfg = cfg or {}
+    m = _SEED_TAG.search(tag)
+    rep = int(m.group(1)) if m else None
+    if arm == "PGV":
+        mk = re.fullmatch(r"(.+)\|k(\d+)", tag)
+        if not mk:
+            raise ValueError(f"PGV tag {tag!r} is not '<cfg>|k<k>'")
+        name, k = mk.group(1), int(mk.group(2))
+        if k == 400 and name == cfg.get("PGV"):
+            return PGV, None
+        if k in KS and name == f"k{k}" and k != 400:
+            return f"PGV_{k}", None
+        if k in KS and name == f"rext{k}":
+            return RX.format(k), None
+        return f"PGV[{tag}]", None
+    if arm == "FT":
+        mk = re.fullmatch(r"(.+)\|s(\d+)\|k400", tag)
+        if not mk:
+            raise ValueError(f"FT tag {tag!r} is not '<cfg>|s<seed>|k400'")
+        return (FT if mk.group(1) == cfg.get("FT") else f"FT[{mk.group(1)}]"), int(mk.group(2))
+    if arm in MODEL_OF and tag != f"{MODEL_OF[arm]}|s{rep}":
+        raise ValueError(f"{arm} tag {tag!r} is not '{MODEL_OF[arm]}|s<seed>'")
+    return arm, rep
+
+
+def _jsonl(fp):
+    """Records of a keyed JSONL log (a torn last line, a crash mid-append, is ignored as run_e05 does)."""
+    out, keys = [], set()
+    lines = fp.read_text(encoding="utf-8").splitlines()
+    for i, ln in enumerate(lines, 1):
+        if not ln.strip():
+            continue
+        try:
+            r = json.loads(ln)
+        except ValueError:
+            if i == len(lines):
+                continue
+            refuse(f"{fp.name} line {i} is not JSON")
+        if not isinstance(r, dict) or r.get("key") in keys:
+            refuse(f"{fp.name} line {i}: not a record or a repeated key {r.get('key') if isinstance(r, dict) else r!r}")
+        keys.add(r.get("key"))
+        out.append(r)
+    return out
+
+
+def _check_arm(where, arm, rep, det_arms):
+    if rep is not None and rep not in REPLICATES:
+        refuse(f"{where}: replicate {rep!r} is not one of {REPLICATES} or null")
+    if (arm in REPLICATED and rep is None) or (arm in det_arms and rep is not None):
+        refuse(f"{where}: arm {arm} with replicate {rep!r}")
+
+
+def load_native(adir, design, code_digest, det, attempt):
+    """run_e05.py's keyed logs: <attempt>/cells.jsonl (one record per start) and optional banks.jsonl."""
+    det_arms = DETERMINISTIC | set(kcurve_arms(det).values())
+    split, cfg = f"test:{attempt}", det.get("native_cfg") or {}
+    fp, acc = adir / "cells.jsonl", {}
+    for i, r in enumerate(_jsonl(fp), 1):
+        where = f"{fp.name} record {i}"
+        if r.get("digest") != code_digest:
+            refuse(f"{where} names code digest {r.get('digest')!r}, not {code_digest}")
+        if r.get("split") != split:
+            refuse(f"{where} has split {r.get('split')!r}, not {split!r}")
+        try:
+            arm, rep = native_arm(r.get("arm"), r.get("tag"), cfg)
+        except ValueError as e:
+            refuse(f"{where}: {e}")
+        _check_arm(where, arm, rep, det_arms)
+        key, s0 = r.get("parent"), r.get("s0")
+        info = design["parents"].get(key) if isinstance(key, str) else None
+        if info is None:
+            refuse(f"{where}: parent {key!r} is not a TEST parent of the manifest")
+        if info["starts"] is None or s0 not in info["starts"]:
+            refuse(f"{where}: start {s0!r} is not a manifest start of {key}")
+        slot = acc.setdefault((arm, rep, key), {})
+        if s0 in slot:
+            refuse(f"{where}: cell ({arm}, {rep}, {key}, start {s0}) repeats")
+        slot[s0] = r
+    cells, incomplete = {}, Counter()
+    for (arm, rep, key), by_s in acc.items():
+        starts = design["parents"][key]["starts"]
+        if len(by_s) != len(starts):
+            incomplete[arm if rep is None else f"{arm}@{rep}"] += 1
+            continue
+        rows = [by_s[s] for s in starts]
+        try:
+            cell = {"nreg": _nums(key, "nreg", [x.get("nreg") for x in rows], len(starts), unit=True)}
+            for fld in ("loop", "capped", "T"):
+                if all(fld in x for x in rows):
+                    cell[fld] = _nums(key, fld, [x[fld] for x in rows])
+            if all(isinstance(x.get("diag"), dict) and all(t in x["diag"] for t in TIE_FIELDS) for x in rows):
+                cell.update({t: _nums(key, t, [x["diag"][t] for x in rows]) for t in TIE_FIELDS})
+        except ValueError as e:
+            refuse(f"{fp.name}: {e}")
+        cells.setdefault(arm, {}).setdefault(rep, {})[key] = cell
+    records = [dict(file=fp.name, sha256=sha(fp), records=sum(map(len, acc.values())),
+                    cells=sum(len(v) for a in cells.values() for v in a.values()), incomplete=dict(incomplete))]
+    bp = adir / "banks.jsonl"
+    if bp.is_file():
+        used = Counter()
+        for i, r in enumerate(_jsonl(bp), 1):
+            where = f"{bp.name} record {i}"
+            if r.get("digest") != code_digest or r.get("split") != split:
+                refuse(f"{where} names digest {r.get('digest')!r} / split {r.get('split')!r}")
+            try:
+                arm, rep = native_arm(r.get("arm"), r.get("tag"), cfg)
+            except ValueError as e:
+                refuse(f"{where}: {e}")
+            _check_arm(where, arm, rep, det_arms)
+            cell = ((cells.get(arm) or {}).get(rep) or {}).get(r.get("parent"))
+            rows = r.get("rows")
+            if r.get("skipped") or cell is None or not isinstance(rows, list) or not rows:
+                used["skipped"] += 1
+                continue
+            try:
+                for fld in ("regret1", "top1"):
+                    if all(isinstance(x, dict) and fld in x for x in rows):
+                        cell[fld] = _nums(r.get("parent"), fld, [x[fld] for x in rows])
+            except ValueError as e:
+                refuse(f"{where}: {e}")
+            used["attached"] += 1
+        records.append(dict(file=bp.name, sha256=sha(bp), **used))
+    if not cells:
+        refuse(f"no complete eval cell in {fp}")
     return cells, records
 
 
@@ -873,12 +1123,22 @@ def load_attempt(adir, manifest_sha, code_digest, pilot_report, repo_root, missi
     manifest = _load(mp)
     if attempt is not None and manifest.get("attempt", attempt) != attempt:
         refuse(f"{mp.name} is attempt {manifest.get('attempt')!r}, not --attempt {attempt}")
+    if manifest.get("code_digest_t3", code_digest) != code_digest:
+        refuse(f"{mp.name} was drawn under code digest {manifest.get('code_digest_t3')!r}, not --code-digest")
     try:
         design = make_design(manifest)
         det = pilot_determinations(_load(pilot_report))
     except (KeyError, TypeError, ValueError) as e:
         refuse(f"malformed manifest or pilot report: {e!r}")
-    cells, records = load_evals(adir, design, manifest_sha, code_digest, det)
+    exported, native = any((adir / "evals").glob("*.json")), (adir / "cells.jsonl").is_file()
+    if exported and native:
+        refuse("both evals/*.json and cells.jsonl exist: the eval source is ambiguous")
+    if native:
+        if attempt is None:
+            refuse("cells.jsonl needs --attempt (its records carry split 'test:<attempt>')")
+        cells, records = load_native(adir, design, code_digest, det, attempt)
+    else:
+        cells, records = load_evals(adir, design, manifest_sha, code_digest, det)
     absent = absent_groups(cells, core_groups(design, det))
     declared = set(missing)
     if set(absent) != declared:
@@ -888,6 +1148,8 @@ def load_attempt(adir, manifest_sha, code_digest, pilot_report, repo_root, missi
                    oracle_test_report_sha256=sha(rp), oracle_test_status=orep.get("status"),
                    pilot_report=str(pilot_report), pilot_report_sha256=sha(pilot_report),
                    manifest_in_committed_decisions=True, eval_files=records,
+                   eval_source="cells.jsonl (run_e05 native)" if native else "evals/*.json",
+                   pilot_determinations_source=det.get("source", "determinations"),
                    analyze_e05_sha256=sha(Path(__file__).resolve()), python=sys.version.split()[0])
     return design, cells, det, custody
 
@@ -945,7 +1207,10 @@ def render(res):
              f"{_p(P2['p_holm'])} | {_yn(P2['passes'])} | {_yn(v['p2_valid'])} | {_yn(v['p2_counts'])} |")
     L += ["", f"P1 conditions: {P1['conditions']}; per replicate D1: {P1['replicates']}.",
           f"Validity (bar {BAR}): UVFA TEST H-ID nreg {_fmt(v['uvfa_test_hid'], 0)}; PG400 ({v['pg400']}) TEST primary "
-          f"macro nreg {_fmt(v['pg400_test_primary_macro'], 0)}.", ""]
+          f"macro nreg {_fmt(v['pg400_test_primary_macro'], 0)}"
+          + (f"; PG400 per TEST family { {f: round(x, 4) for f, x in v['pg400_test_families'].items() if x is not None} }"
+             if v["pg400_test_families"] else "")
+          + (f"; PG400 DEV-OOD (pilot) {v['pg400_dev_ood']}" if v["pg400_dev_ood"] else "") + ".", ""]
     g = res["guard"]
     L += ["## Guard, floor and ceiling (§6.3, §7.1)", "",
           f"- D_G = SF-GPI - ENUM-MIS± (macro): {_fmt(g['D_G']['point'] if g['D_G'] else None)} {_ci(g['D_G'])}; G1 "
@@ -979,8 +1244,9 @@ def render(res):
                                                                          if h.startswith("H-ID-")]
         for where, s in rows:
             if s:
-                L.append(f"| {where} | {s['n']} | {_fmt(s['point'])} | {_ci(s)} | {_p(s.get('p'))} |"
-                         + (f" {_p(s.get('p_ni'))} |" if "D2" in label else ""))
+                tag = (D1_LABELS.get(where) if label.startswith("D1") else None) or FAMILY_LABELS.get(where)
+                L.append(f"| {where}{f' ({tag})' if tag else ''} | {s['n']} | {_fmt(s['point'])} | {_ci(s)} | "
+                         f"{_p(s.get('p'))} |" + (f" {_p(s.get('p_ni'))} |" if "D2" in label else ""))
         L.append("")
     L += ["## Per replicate (points; conditional inference on the 3 replicates, L3)", ""]
     for name, r in res["per_replicate"].items():
@@ -989,7 +1255,8 @@ def render(res):
     L += ["", "## k* (48-parent subset)", ""]
     for name, k in res["kstar"].items():
         if isinstance(k, dict):
-            L.append(f"- {name}: k* = {k['kstar']} (95% CI {k['lo']} to {k['hi']}); curve {k['curve']} at {k['ks']} vs "
+            L.append(f"- {name}: k* = {k['kstar']} (95% CI {k['lo']} to {k['hi']}); curve "
+                     f"{[round(x, 4) for x in k['curve']]} at {k['ks']} vs "
                      f"SF-GPI {_fmt(k['sf_gpi'], 0)}" + (" (descriptive only)" if res["kstar"]["descriptive_only"]
                                                         else ""))
     L += ["", "## Binary view (optimal on >= half of the starts; exact McNemar, primary parents)", ""]
@@ -1001,6 +1268,11 @@ def render(res):
         L += ["", "## Other per-parent fields (primary macro)", ""]
         for a, flds in res["extras"].items():
             L.append(f"- {a}: " + "; ".join(f"{fld} {_fmt(m.get('primary_macro'), 0)}" for fld, m in flds.items()))
+    if res["enum_all_tied"]:
+        L += ["", "## ENUM± all-tied-decision shares (decisions with >= 2 legal moves)", ""]
+        for a, fams in res["enum_all_tied"].items():
+            L.append(f"- {a}: " + "; ".join(f"{fm} {_fmt(t['share'], 0)} ({t['all_tied']:.0f}/{t['decisions']:.0f})"
+                                            for fm, t in fams.items()))
     L += ["", "## Missing and defects", "", f"- Missing protected-core groups: {res['missing'] or 'none'}",
           f"- Defects: {res['defects'] or 'none'}", ""]
     return "\n".join(L) + "\n"

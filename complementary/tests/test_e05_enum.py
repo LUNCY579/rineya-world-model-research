@@ -178,17 +178,24 @@ class TestTargets(unittest.TestCase):
         self.assertEqual(EN5.HMis(sp, T, "rev2").value(state_of(sp, [[1, 0], [3]], held=2), t), 0.0)  # B1 defect
 
 
+def has_clear(G) -> bool:
+    return any(f[0] == "clear" for f in G)
+
+
 class TestAdmissible(unittest.TestCase):
     def test_hmis_le_hstar(self):
-        """ĥ_MIS(s, G) <= h*(s, G) (backward_bfs) on 500 random (s, G) at n = 5, incl. holding targets."""
+        """ĥ_MIS(s, G) <= h*(s, G) (backward_bfs) on 500 random (s, G) at n = 5 without `clear` facts, incl. holding
+        targets (the prereg's claim); with `clear` facts (on-menu falsifiers clear(b), H-SPAN) ĥ_MIS can exceed h* by
+        1 (it is NOT admissible there, a finding for the coordinator), while the corrected ĥ (mis_adm) is <= h* on
+        every target."""
         n, rng = 5, random.Random(1)
         sp = SP.get_space(n)
         pool = []
         while len(pool) < 40:
-            g = FAM.draw_goal("H-NEG", rng, n)
+            g = FAM.draw_goal(rng.choice(("H-NEG", "H-NEG", "H-SPAN")), rng, n)
             pool.append(EN5.linear_targets(sp, g["w"]))
-        n_hold = 0
-        for _ in range(500):
+        n_hold = n_free = n_clear = over = 0
+        while n_free < 500:
             T = rng.choice(pool)
             t = rng.randrange(len(T))
             if rng.random() < 0.5:  # oversample holding targets
@@ -197,13 +204,50 @@ class TestAdmissible(unittest.TestCase):
             s = rng.randrange(len(sp))
             hstar = sp.backward_bfs(sp.goal_mask(T.full[t]))[s]
             self.assertGreaterEqual(hstar, 0)
-            vals = {v: EN5.HMis(sp, T, v).value(s, t) for v in ("mis", "rev2", "mis_noh")}
-            self.assertLessEqual(vals["mis"], hstar, (sorted(T.goals[t]), pos_of(sp, s)))
-            self.assertLessEqual(vals["rev2"], hstar)
+            vals = {v: EN5.HMis(sp, T, v).value(s, t) for v in ("mis", "mis_adm", "rev2", "mis_noh")}
+            self.assertLessEqual(vals["mis_adm"], hstar, (sorted(T.goals[t]), pos_of(sp, s)))
+            self.assertLessEqual(vals["mis"] - 1, hstar)
+            self.assertLessEqual(vals["mis_adm"], vals["mis"])
             self.assertGreaterEqual(vals["mis"], vals["mis_noh"])
             self.assertEqual(EN5.HStar(sp, T).value(s, t), float(hstar))
+            if has_clear(T.goals[t]):
+                n_clear += 1
+                over += vals["mis"] > hstar
+                continue
+            self.assertLessEqual(vals["mis"], hstar, (sorted(T.goals[t]), pos_of(sp, s)))
+            self.assertLessEqual(vals["rev2"], hstar)
+            self.assertEqual(vals["mis_adm"], vals["mis"])  # the correction only touches clear targets
+            n_free += 1
             n_hold += T.hold[t] >= 0
         self.assertGreater(n_hold, 150)
+        self.assertGreater(n_clear, 50)
+        self.assertGreater(over, 0)
+
+    def test_clear_target_counterexample(self):
+        """n = 5, tower 4-0-2-1 (bottom to top), 3 on the table: G = {clear(4), on(3,2)}: ĥ_MIS = 8 > h* = 7 (the plan
+        ends with unstack(0, 4), keeping 0 in the hand)."""
+        sp = SP.get_space(5)
+        s = state_of(sp, [[4, 0, 2, 1], [3]])
+        G = frozenset({("clear", 4), ("on", 3, 2)})
+        T = EN5.Targets(5, [G], [0.0], [], [], np.zeros((1, 0)), 1)
+        self.assertEqual(sp.backward_bfs(sp.goal_mask(T.full[0]))[s], 7)
+        self.assertEqual(EN5.HMis(sp, T, "mis").value(s, 0), 8.0)
+        self.assertEqual(EN5.HMis(sp, T, "mis_adm").value(s, 0), 7.0)
+
+    def test_mis_adm_exhaustive_n4(self):
+        """mis_adm <= h* and mis <= h* + 1 at every n = 4 state for every target of 12 random H-NEG/H-SPAN goals."""
+        n, rng = 4, random.Random(7)
+        sp = SP.get_space(n)
+        for _ in range(12):
+            T = EN5.linear_targets(sp, FAM.draw_goal(rng.choice(("H-NEG", "H-SPAN")), rng, n)["w"])
+            for t in range(len(T)):
+                hs = sp.backward_bfs(sp.goal_mask(T.full[t]))
+                a, m = EN5.HMis(sp, T, "mis_adm"), EN5.HMis(sp, T, "mis")
+                for s in range(len(sp)):
+                    self.assertLessEqual(a.value(s, t), hs[s], (sorted(T.goals[t]), pos_of(sp, s)))
+                    self.assertLessEqual(m.value(s, t), hs[s] + 1)
+                    if not has_clear(T.goals[t]):
+                        self.assertLessEqual(m.value(s, t), hs[s])
 
 
 class TestB1HandCase(unittest.TestCase):
@@ -357,14 +401,15 @@ class TestReferences(unittest.TestCase):
 
     def test_rand_stream(self):
         self.assertEqual(EN5.derive(20261244, "rand:k:3"), FAM.derive(20261244, "rand:k:3"))
-        a, b = EN5.rand_rng("k", 3), EN5.rand_rng("k", 3)
+        a, b = EN5.rand_rng("test", "k", 3), FAM.stream(20261244, "rand:test:k:3")  # run_e05's tag
         self.assertEqual([a.random() for _ in range(4)], [b.random() for _ in range(4)])
-        self.assertNotEqual(EN5.rand_rng("k", 3).random(), EN5.rand_rng("k", 4).random())
+        self.assertNotEqual(EN5.rand_rng("test", "k", 3).random(), EN5.rand_rng("test", "k", 4).random())
         sp = SP.get_space(4)
         phi = SO.phi_table(sp)
         p, tab = setup_goal(sp, phi, wvec(4, {("on", 0, 1): 2, ("on", 2, 3): 1}), 0.25)
         s0 = FAM.start_pool(sp, tab)[0]
-        self.assertEqual(SO.evaluate(sp, tab, s0, EN5.rand("k", s0)), SO.evaluate(sp, tab, s0, EN5.rand("k", s0)))
+        self.assertEqual(SO.evaluate(sp, tab, s0, EN5.rand("pilot", "k", s0)),
+                         SO.evaluate(sp, tab, s0, EN5.rand("pilot", "k", s0)))
 
     def test_masked_hstar_and_hdyn_enum(self):
         """ENUM-H*± under the height-limit mask uses exact masked distances (vs an explicit BFS)."""
@@ -402,6 +447,55 @@ class TestReferences(unittest.TestCase):
         self.assertEqual(pol(s, acts, dsts), 0)
 
 
+class TestEnumPolicy(unittest.TestCase):
+    """run_e05's entry point enum_policy(space, w, c, kind, stop, edge_mask) -> (policy, diag)."""
+
+    def test_adapter_equals_named_arms_and_caches(self):
+        n, rng = 5, random.Random(8)
+        sp = SP.get_space(n)
+        phi = SO.get_phi(sp)
+        EN5._SCORERS.clear()
+        kinds = (("MIS", "ENUM-MIS"), ("H*", "ENUM-HSTAR"), ("MIS-rev1", "ENUM-MIS-rev1"), ("MIS-rev2", "ENUM-MIS-rev2"))
+        for fam in ("H-NEG", "ID", "H-NEG"):
+            g = FAM.draw_goal(fam, rng, n)
+            p, tab = setup_goal(sp, phi, g["w"], g["c"])
+            w = np.asarray(p.w, dtype=np.float64)
+            for kind, name in kinds:
+                for s0 in FAM.start_pool(sp, tab)[:5].tolist():
+                    pol, diag = EN5.enum_policy(sp, w, p.c, kind=kind, stop=tab.stop)
+                    ref = EN5.named_arm(name, sp, phi, p, tab)
+                    res = SO.evaluate(sp, tab, s0, pol)
+                    self.assertEqual(res, SO.evaluate(sp, tab, s0, ref.policy()))
+                    st = ref.stats
+                    self.assertEqual((diag["decisions"], diag["all_tied"], diag["steps"]),
+                                     (st["multi"], st["all_tied"], st["decisions"]))
+                    self.assertEqual((diag["targets"], diag["targets_raw"]), (ref.T.n_kept, ref.T.n_raw))
+                    again, d2 = EN5.enum_policy(sp, w, p.c, kind=kind, stop=tab.stop)  # cached scorer: no h calls
+                    self.assertEqual(SO.evaluate(sp, tab, s0, again), res)
+                    self.assertEqual((d2["h_calls"], d2["steps"]), (0, diag["steps"]))
+                    self.assertTrue(all(isinstance(v, int) for v in d2.values()))
+                self.assertLessEqual(len(EN5._SCORERS), EN5.CACHE_PARENTS)
+        pol, diag = EN5.enum_policy(sp, w, p.c, kind="MIS-adm")  # default stop = w.phi
+        self.assertTrue(0.0 <= SO.evaluate(sp, tab, s0, pol)["nreg"] <= 1.0)
+        with self.assertRaises(KeyError):
+            EN5.enum_policy(sp, w, p.c, kind="ENUM-MIS")
+
+    def test_adapter_masked_dynamics(self):
+        n, rng = 5, random.Random(9)
+        sp = SP.get_space(n)
+        phi, m = SO.get_phi(sp), SO.height_limit_mask(sp, 3)
+        g = FAM.draw_goal("H-DYN", rng, n)
+        p, _ = setup_goal(sp, phi, g["w"], g["c"])
+        tab = SO.sf_table(sp, SO.stop_values(phi, p.w), p.c, m)
+        for s0 in FAM.start_pool(sp, tab, "height-3")[:5].tolist():
+            for kind, h in (("H*", "hstar"), ("MIS", "mis")):
+                pol, _ = EN5.enum_policy(sp, np.asarray(p.w, dtype=np.float64), p.c, kind=kind, stop=tab.stop,
+                                         edge_mask=m)
+                ref = EN5.enum_arm(sp, phi, p, tab, h, edge_mask=m)
+                self.assertEqual(SO.evaluate(sp, tab, s0, pol, edge_mask=m),
+                                 SO.evaluate(sp, tab, s0, ref.policy(), edge_mask=m))
+
+
 class TestGnnEnum(unittest.TestCase):
     def test_gnn_heuristic_plumbing(self):
         import torch
@@ -433,6 +527,10 @@ class TestGnnEnum(unittest.TestCase):
         s0 = FAM.start_pool(sp, tab)[0]
         res = SO.evaluate(sp, tab, s0, arm.policy())
         self.assertTrue(0.0 <= res["nreg"] <= 1.0)
+        pol, diag = EN5.enum_policy(sp, np.asarray(p.w, dtype=np.float64), 0.25, kind="GNN", stop=tab.stop,
+                                    model=model)
+        self.assertEqual(SO.evaluate(sp, tab, s0, pol), res)
+        self.assertEqual(diag["targets"], len(T))
         rep = arm.report()
         self.assertEqual((rep["n_kept"], rep["decisions"] > 0), (len(T), True))
         # load_gnn: sidecar config, strict load, sha prefix check

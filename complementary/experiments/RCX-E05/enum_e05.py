@@ -16,23 +16,25 @@ Targets (ENUM±, F5). For w' with positive facts P and negative facts N: G = G+ 
 takes "accept" or one falsifier from M(f); G is kept iff CompiledGoal(G).consistent and goal_mask(G).any(). The raw
 count 2^|P| * prod_f (1 + |M(f)|) is logged (n_raw). Utility (persistence rule):
   U(G; s') = sum_{f in G+} w_f + sum_{f in N} w_f * 1[f in phi(s') and G u {f} satisfiable],
-  score(s') = max over G of [U(G; s') - c' (1 + h(s', G))],   STOP scored exactly as stop(s) (the true reward).
+  score(s') = max over G of [U(G; s') - c' (1 + h(s', G))],   STOP scored exactly as stop(s) (the caller's vector).
 U depends on (G+, G) only through G+, and (G n P, R) is a valid choice whenever (G+, R) is, with G+ <= G n P; so the
 targets are stored once per distinct set G with G+ = G n P, which gives exactly the max over the literal enumeration.
 Version "pos" is rev 1's positive-only ENUM (N ignored: no menus, no penalties); for goals without negative weights all
-versions coincide. H-CONJ: the single conjunctive target G with U = R (plus the empty target, U = 0), so ENUM-H*± is
-ORACLE there (tested).
+versions coincide. H-CONJ via parent_targets / enum_arm: the single conjunctive target G with U = R (plus the empty
+target, U = 0), so ENUM-H*± is ORACLE there (tested); run_e05 instead passes H-CONJ's linearization w = (R/|G|) 1_G
+to enum_policy, like every non-ORACLE arm (ambiguity resolved in run_e05, reported).
 
 Heuristics h(s', G):
   mis      ENUM-MIS± as specified (B1): max(misplaced_compact(s', G \\ H)[1], h_hold(s', G)), H = the holding facts of
            G; h_hold = 0 if H is empty or s' holds the block H requires, 1 if the hand is empty, 2 if s' holds another
            block. Admissible for targets without `clear` facts (holding targets included; tested). NOT admissible for
-           targets with a `clear` fact: misplaced_compact charges 2 moves for a block x resting on a block that must be
-           clear, but x can be lifted as the plan's last move and kept in the hand (1 move); it overestimates h* by at
-           most 1 (exhaustive at n = 4; e.g. n = 5, tower 4-0-2-1, G = {clear(4), on(3,2)}: bound 8, h* 7). Such
-           targets come from the on-menus (clear(b)) and H-SPAN.
-  mis_adm  the same with that correction: max(misplaced_compact(s', G \\ H)[1] - clear_saving, 0) vs h_hold
-           (admissible on every target; tested); not the prereg's formula, offered for a coordinator decision
+           targets with a `clear` fact (contrary to the prereg's claim): misplaced_compact charges a pick-up and a
+           placement for a block x resting on a block y that must be clear, but unstack(x, y) can be the plan's last
+           move with x kept in the hand; it overestimates h* by at most 1 (tested at n = 5; e.g. tower 4-0-2-1,
+           G = {clear(4), on(3,2)}: bound 8, h* 7). Such targets come from the on-menus (clear(b)) and H-SPAN.
+  mis_adm  the same with that one saving removed: max(misplaced_compact(s', G \\ H)[1] - clear_saving, h_hold)
+           (admissible on every target; tested); not the prereg's formula, offered for a coordinator decision (kind
+           "MIS-adm" of enum_policy)
   rev2     rev 2's bound misplaced_compact(s', G)[1] (0 for any G with a holding fact; the B1 defect; control only)
   mis_noh  misplaced_compact(s', G \\ H)[1] without h_hold (the review's minimal fix; control only)
   hstar    ENUM-H*±: exact h*(s', G), one backward_bfs per target (lazily; masked dynamics by max-plus distances)
@@ -45,8 +47,12 @@ decreasing U order, stopped once U - c' <= best (h >= 0 bounds the rest). Scores
 Diagnostics: per arm, decisions, decisions with >= 2 legal moves ("multi") and those whose move scores are all equal
 ("all_tied"); heuristic calls; target counts (n_raw, n_kept).
 
-References (all score STOP exactly as `stop`, the parent's true terminal reward, tab.stop; for H-CONJ that is
-R * 1[G <= s]): GREEDY, STOP, RAND (uniform over STOP + moves; per-cell stream 20261244:rand:<key>:<s0>), ORACLE,
+run_e05 entry point: enum_policy(space, w, c, kind, stop, edge_mask) -> (policy, diag) with kind MIS / H* / GNN (and
+the controls MIS-rev1, MIS-rev2, MIS-adm); the per-parent scorer is cached across start cells (scores depend only on
+the successor state), diag is per call with "decisions" = decisions with >= 2 legal moves, as analyze_e05 reads it.
+
+References (all score STOP exactly as the `stop` vector they are given; ORACLE uses tab.stop, the true reward):
+GREEDY, STOP, RAND (uniform over STOP + moves; per-cell stream 20261244:rand:<split>:<key>:<s0>, run_e05's tag), ORACLE,
 EXACT-GPI(L) (soft.gpi_table over exact library tables), BEST-SINGLE(L) (the library policy with the best exact value
 w'.phi(e_z(s0)) - c' T_z(s0) at s0, first max; followed as tabled; forced STOP if its move is illegal under the parent's
 edge mask).
@@ -59,7 +65,7 @@ import json
 import math
 import random
 import sys
-from collections import Counter
+from collections import Counter, OrderedDict
 from pathlib import Path
 
 import numpy as np
@@ -77,7 +83,10 @@ NAMES = "abcdefghijkl"
 RAND_SEED = 20261244
 ARMS = {"ENUM-MIS": ("mis", "full"), "ENUM-HSTAR": ("hstar", "full"), "GNN-ENUM": ("gnn", "full"),
         "ENUM-MIS-rev1": ("mis", "pos"), "ENUM-MIS-rev2": ("rev2", "rev2")}  # ENUM-MIS± etc. (ASCII names)
+POLICY_KINDS = {"MIS": ("mis", "full"), "H*": ("hstar", "full"), "GNN": ("gnn", "full"),  # enum_policy (run_e05)
+                "MIS-rev1": ("mis", "pos"), "MIS-rev2": ("rev2", "rev2"), "MIS-adm": ("mis_adm", "full")}
 HEURISTICS = ("mis", "mis_adm", "rev2", "mis_noh", "hstar", "gnn")
+CACHE_PARENTS = 2  # enum_policy keeps the scorers of the last 2 (parent, arm) pairs (H* tables: int16 per target)
 
 
 def derive(seed: int, tag: str) -> int:
@@ -211,15 +220,20 @@ def h_hold(pos, a: int) -> int:
 
 
 def clear_saving(pos, g: SP.CompiledGoal, a: int = -1) -> int:
-    """1 if a block x can end in the hand as the plan's last move although misplaced_compact charges it 2 moves: x sits
-    on y with clear(y) required, x's own position is free, clear(x) is not required, handempty is not required, and
-    (if a holding target requires block a) x == a; else 0. misplaced_compact(s, g)[1] - clear_saving <= h*(s, g)."""
+    """1 if a block x can end in the hand although misplaced_compact charges it a placement: x sits on y with clear(y)
+    required, x's own support is unconstrained, neither clear(x) nor a block on x is required, handempty is not
+    required, and (if a holding target requires block a) x == a; else 0. Why this is the only saving: a plan's moves
+    are >= one pick-up per not-done block not in the hand plus one placement per not-done block except the block held
+    at the end; that block x is picked up exactly once only if its pick-up is the plan's last move, and a final
+    unstack(x, y) completes a goal without holding/handempty facts only by making clear(y) true.
+    misplaced_compact(s, g)[1] - clear_saving <= h*(s, g) (tested)."""
     n = len(pos)
     if g.handempty:
         return 0
     for x in range(n):
         y = pos[x]
-        if y < n and g.clear[y] and g.below[x] == -1 and not g.clear[x] and (a < 0 or x == a):
+        if (y < n and g.clear[y] and g.below[x] == -1 and not g.clear[x] and not g.above[x]
+                and (a < 0 or x == a)):
             return 1
     return 0
 
@@ -268,27 +282,37 @@ class HMis(_Heuristic):
 
 
 class HStar(_Heuristic):
-    """Exact h*(s', G) per target: space.backward_bfs (free dynamics) or max-plus distances under an edge mask."""
+    """Exact h*(s', G) per target, computed once per target when first needed: space.backward_bfs (free dynamics) or
+    max-plus distances under an edge mask; stored as int16 (-1 = unreachable, h = inf)."""
 
     def __init__(self, space, T: Targets, edge_mask=None):
         super().__init__(space, T)
         self.edge_mask, self.dist, self.bfs = edge_mask, {}, 0
 
-    def table(self, t: int) -> np.ndarray:
+    def _compact(self, t: int) -> np.ndarray:
         d = self.dist.get(t)
         if d is None:
             m = self.space.goal_mask(self.T.full[t])
             if self.edge_mask is None:
                 b = self.space.backward_bfs(m)
-                d = np.where(b >= 0, b.astype(np.float64), np.inf)
             else:
-                d = -SO.max_plus_vi(self.space, np.where(m, 0.0, -np.inf), 1.0, self.edge_mask)
-            self.dist[t], self.bfs = d, self.bfs + 1
+                v = SO.max_plus_vi(self.space, np.where(m, 0.0, -np.inf), 1.0, self.edge_mask)
+                b = np.where(np.isfinite(v), -v, -1.0)
+            if b.max(initial=0) > np.iinfo(np.int16).max:
+                raise OverflowError("distance exceeds int16")
+            d = self.dist[t] = b.astype(np.int16)
+            self.bfs += 1
         return d
+
+    def table(self, t: int) -> np.ndarray:
+        """h*(., G_t) for every state, float64 (inf where unreachable)."""
+        d = self._compact(t)
+        return np.where(d >= 0, d.astype(np.float64), np.inf)
 
     def value(self, s: int, t: int) -> float:
         self.calls += 1
-        return float(self.table(t)[s])
+        v = int(self._compact(t)[s])
+        return float(v) if v >= 0 else math.inf
 
 
 class HGnn(_Heuristic):
@@ -429,6 +453,67 @@ def load_gnn(path=GNN_FILE, expect_sha8: str | None = GNN_SHA8):
     return model, dict(file=str(path), sha256=sha, config=cfg)
 
 
+_GNN: dict = {}
+
+
+def gnn_model(path=GNN_FILE):
+    """The pinned R-04 GNN, loaded once per process (load_gnn checks the sha prefix)."""
+    key = str(path)
+    if key not in _GNN:
+        _GNN[key] = load_gnn(path)[0]
+    return _GNN[key]
+
+
+_SCORERS: OrderedDict = OrderedDict()
+
+
+def _digest(a) -> str | None:
+    if a is None:
+        return None
+    a = np.ascontiguousarray(a)
+    return hashlib.sha1(f"{a.dtype.str}|{a.shape}|".encode() + a.tobytes()).hexdigest()
+
+
+def enum_policy(space, w, c: float, kind: str = "MIS", stop=None, edge_mask=None, model=None, phi=None) -> tuple:
+    """run_e05 adapter: (policy, diag) of the ENUM± arm `kind` (POLICY_KINDS: MIS = ENUM-MIS±, H* = ENUM-H*±, GNN =
+    GNN-ENUM±; MIS-rev1 / MIS-rev2 / MIS-adm are the §6.5 controls and the admissible variant) for the linear goal
+    (w, c) the arm receives (H-CONJ: run_e05 passes the linearization). STOP is scored as `stop` (default w.phi); the
+    edge mask restricts legal moves (H-DYN) and H*'s distances. The scorer (targets, heuristic, per-successor scores)
+    is cached per (space, kind, w, c, stop, mask, model), so the 16 start cells of a parent share it; move scores do not
+    depend on the current state, the history or the order of cells. diag is fresh per call and counts, per decision:
+    decisions (>= 2 legal moves), all_tied (of those, all move scores equal), steps (all decisions), h_calls; plus
+    targets (kept) and targets_raw (before pruning)."""
+    h, version = POLICY_KINDS[kind]
+    phi = SO.get_phi(space) if phi is None else phi
+    w = np.asarray(w, dtype=np.float64)
+    stop = SO.stop_values(phi, w) if stop is None else np.asarray(stop, dtype=np.float64)
+    if h == "gnn" and model is None:
+        model = gnn_model()
+    key = (id(space), kind, _digest(w), float(c), _digest(stop), _digest(edge_mask), id(model))
+    arm = _SCORERS.get(key)
+    if arm is None:
+        T = linear_targets(space, w, version)
+        arm = _SCORERS[key] = EnumArm(space, phi, T, make_heuristic(h, space, T, edge_mask, model), stop, c,
+                                      f"ENUM[{kind}]")
+        while len(_SCORERS) > CACHE_PARENTS:
+            _SCORERS.popitem(last=False)
+    else:
+        _SCORERS.move_to_end(key)
+    diag = dict(decisions=0, all_tied=0, steps=0, h_calls=0, targets=arm.T.n_kept, targets_raw=arm.T.n_raw)
+
+    def pol(s, acts, dsts):
+        c0 = arm.h.calls
+        sc = arm.move_scores(s, acts, dsts)
+        diag["steps"] += 1
+        diag["h_calls"] += arm.h.calls - c0
+        if len(sc) >= 2:
+            diag["decisions"] += 1
+            diag["all_tied"] += int((sc == sc[0]).all())
+        return SO.decide(stop[s], sc)
+
+    return pol, diag
+
+
 # ----------------------------------------------------------------------------- references
 
 def greedy(stop, c: float) -> SO.Policy:
@@ -443,13 +528,13 @@ def oracle(tab: SO.SFTable) -> SO.Policy:
     return SO.oracle_policy(tab)
 
 
-def rand_rng(key: str, s0: int) -> random.Random:
-    """RAND's per-cell stream 20261244:rand:<parent key>:<start>."""
-    return random.Random(derive(RAND_SEED, f"rand:{key}:{int(s0)}"))
+def rand_rng(split: str, key: str, s0: int) -> random.Random:
+    """RAND's per-cell stream 20261244:rand:<split>:<parent key>:<start> (= run_e05's tag)."""
+    return random.Random(derive(RAND_SEED, f"rand:{split}:{key}:{int(s0)}"))
 
 
-def rand(key: str, s0: int) -> SO.Policy:
-    return SO.rand_policy(rand_rng(key, s0))
+def rand(split: str, key: str, s0: int) -> SO.Policy:
+    return SO.rand_policy(rand_rng(split, key, s0))
 
 
 def exact_gpi(stop, c: float, lib) -> SO.Policy:

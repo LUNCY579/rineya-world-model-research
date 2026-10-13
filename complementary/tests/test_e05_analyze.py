@@ -86,9 +86,13 @@ def _value(m, info, i, rep):
     return m
 
 
+BANK = {"regret1": [0.0, 2.0], "top1": [1.0, 0.0]}  # a two-state one-step bank result
+
+
 def make_cells(design=DESIGN, spec=None, noise=None, amp=0.03):
-    """{arm: {replicate: {key: {"nreg": [x] * starts}}}}: per-parent x = base + amp * u, u ~ U(-1, 1) seeded by
-    (arm, key, replicate), clipped to [0, 1]; replicated arms get 3 replicates (SF-shuffled / SF-FT_400: 20261246)."""
+    """{arm: {replicate: {key: {"nreg": [x] * starts, + BANK unless the arm is bank-exempt}}}}: per-parent
+    x = base + amp * u, u ~ U(-1, 1) seeded by (arm, key, replicate), clipped to [0, 1]; replicated arms get 3
+    replicates (SF-shuffled / SF-FT_400: 20261246)."""
     spec = dict(IDEAL, **(spec or {}))
     noise = noise or {}
     cells = {}
@@ -104,6 +108,8 @@ def make_cells(design=DESIGN, spec=None, noise=None, amp=0.03):
                         continue
                     x = min(1.0, max(0.0, base + a * random.Random(f"{arm}|{k}|{rep}").uniform(-1, 1)))
                     slot[k] = {"nreg": [x] * design["parents"][k]["n_starts"]}
+                    if arm not in A.BANK_EXEMPT:
+                        slot[k].update({f: list(v) for f, v in BANK.items()})
     return cells
 
 
@@ -304,11 +310,15 @@ class Statistics(unittest.TestCase):
         d = A.make_design(make_manifest(sizes))
         prim, sub = A.family_keys(d, A.PRIMARY), set(d["subset"])
         g = A.core_groups(d, dict(DET, cut_items=[3, 5]))
-        self.assertEqual(g[A.GREEDY], A.family_keys(d, {"H-ID", "H-K", "H-NEG", "H-COST", "H-DYN"}))  # H-KN cut
+        kept = A.family_keys(d, {"H-ID", "H-K", "H-NEG", "H-COST", "H-DYN"})  # H-KN cut
+        self.assertEqual(g[A.GREEDY], kept)
         self.assertEqual(g[A.GNN], A.family_keys(d, ("H-ID", "H-K")))
-        self.assertEqual(g["SF-GPI@20261248"], prim)
+        self.assertEqual((g["SF-GPI@20261248"], g["SF-shuffled@20261246"]), (kept, kept))
+        self.assertNotIn("SF-shuffled@20261247", g)
         self.assertNotIn(f"{A.FT}@20261246", g)  # FT is not PG400: not core
         self.assertEqual((g[A.PGV], g["PGV_1600"]), (prim, sub))
+        self.assertEqual((g["bank:UVFA@20261247"], g["bank:PGV_400"], g["bank:STOP"]), (kept, prim, kept))
+        self.assertFalse({"bank:RAND", "bank:BEST-SINGLE(L)", "bank:ENUM-H*±", "bank:GNN-ENUM±"} & set(g))
         g = A.core_groups(d, dict(DET, pg400=A.FT, r_ext=True, cut_items=[7],
                                   kcurve_arms={"400": "PGV-RX_400", "1600": "PGV-RX_1600", "6400": "PGV-RX_6400"}))
         self.assertEqual({g[f"{A.FT}@{k}"] == prim for k in REPS}, {True})
@@ -344,13 +354,24 @@ class DecisionBranches(unittest.TestCase):
         self.assertEqual(res["decision"], A.INC_DEFECT)
         res = run(drop=["UVFA@20261247"])
         self.assertEqual(res["decision"], A.INC_MISSING)
-        self.assertEqual(res["missing"], {"UVFA@20261247": 26})
+        self.assertEqual(res["missing"], {"UVFA@20261247": 30, "bank:UVFA@20261247": 30})  # every retained family
         self.assertFalse(res["P1"]["conditions"]["replicate_signs"])  # descriptive, on what exists
         res = run(drop=["GREEDY"])
-        self.assertEqual(res["missing"], {"GREEDY": 30})
+        self.assertEqual(res["missing"], {"GREEDY": 30, "bank:GREEDY": 30})
         self.assertEqual(res["decision"], A.INC_MISSING)
-        res = run(drop=["SF-FT_400@20261246", "GNN-ENUM±"])  # SF-FT_400 not core; GNN core on H-ID and H-K
+        res = run(drop=["SF-FT_400@20261246", "GNN-ENUM±"])  # SF-FT_400 not core; GNN core on H-ID and H-K, no bank
         self.assertEqual(res["missing"], {"GNN-ENUM±": 18})
+
+    def test_missing_bank_only(self):
+        cells = make_cells()
+        for c in cells[A.SF][REPS[0]].values():
+            del c["regret1"]
+        for c in cells[A.RAND][None].values():
+            self.assertNotIn("regret1", c)  # RAND is bank-exempt
+        key = DESIGN["strata"]["H-COST"][0]
+        del cells[A.PGV][None][key]["regret1"]  # PGV_400's bank is protected on the primary parents only
+        res = A.analyze(DESIGN, cells, DET, resamples=R)
+        self.assertEqual((res["decision"], res["missing"]), (A.INC_MISSING, {"bank:SF-GPI@20261246": 30}))
 
     def test_stop_d(self):
         res = run(spec={A.ENUM: 0.05})
@@ -529,6 +550,127 @@ class QualifiersAndValidity(unittest.TestCase):
         self.assertIn("RCX-E05 confirmatory analysis: ADVANCE", A.render(res))
 
 
+NATIVE_CFG = {"PGV": "w64s500", "FT": "s100"}
+NATIVE_PILOT = dict(n=7, p1_comparator_invalid=False, p2_dropped=False, pg400="PGV", kstar="decision-driving",
+                    kcurve_recipe="original", G_P1={"Q9": {"ok": True}}, G_P5={"cuts": []},
+                    G_P3={"grid": {k: {"cfg": v} for k, v in NATIVE_CFG.items()}},
+                    dev_nreg={"PG400=PGV": {"DEV-OOD:H-K": 0.3, "DEV-OOD:H-NEG": 0.35}})
+
+
+def native_manifest(attempt, digest, manifest=MANIFEST):
+    """run_e05.draw_test's layout: parents by family, pgv_subset, attempt, code_digest_t3."""
+    fams = {}
+    for p in manifest["parents"]:
+        fams.setdefault(p["family"], []).append(p)
+    return dict(experiment="RCX-E05", kind="test", attempt=attempt, code_digest_t3=digest, parents=fams,
+                pgv_subset=manifest["subset"])
+
+
+def native_tag(arm, rep):
+    """run_e05's (arm, tag) of an analysis arm (None: run_e05 does not produce the arm)."""
+    if arm in A.MODEL_OF:
+        return arm, f"{A.MODEL_OF[arm]}|s{rep}"
+    if arm == A.PGV:
+        return "PGV", f"{NATIVE_CFG['PGV']}|k400"
+    if arm in ("PGV_1600", "PGV_6400"):
+        k = arm.split("_")[1]
+        return "PGV", f"k{k}|k{k}"
+    if arm == A.FT:
+        return "FT", f"{NATIVE_CFG['FT']}|s{rep}|k400"
+    if arm == A.SFFT:
+        return None
+    return arm, "L" if arm in (A.XGPI, A.BEST) else "-"
+
+
+def write_native(adir, cells, attempt, digest, mutate=None, skip=()):
+    """cells -> run_e05's keyed logs: cells.jsonl (one record per start; ENUM-MIS± with a diag) and banks.jsonl (the
+    cells' BANK rows; RAND / BEST-SINGLE(L) records skipped, none for ENUM-H*± / GNN-ENUM±, as run_e05 writes them).
+    mutate(rec) may edit a cell record; skip = {(arm, rep, key, s0)}."""
+    split = f"test:{attempt}"
+    with open(adir / "cells.jsonl", "w", encoding="utf-8", newline="\n") as fc, \
+            open(adir / "banks.jsonl", "w", encoding="utf-8", newline="\n") as fb:
+        for arm, by_rep in cells.items():
+            for rep, body in by_rep.items():
+                at = native_tag(arm, rep)
+                if at is None:
+                    continue
+                for key, c in body.items():
+                    for s0, x in zip(DESIGN["parents"][key]["starts"], c["nreg"]):
+                        if (arm, rep, key, s0) in skip:
+                            continue
+                        rec = dict(key=f"cell|{split}|{at[0]}|{at[1]}|{key}|{s0}", split=split,
+                                   family=DESIGN["parents"][key]["family"], arm=at[0], tag=at[1], parent=key, s0=s0,
+                                   nreg=x, J=0.0, T=3, loop=s0 == 1, capped=False, final=0, dt=0.01, digest=digest)
+                        if arm == A.ENUM:
+                            rec["diag"] = dict(decisions=2, all_tied=1, targets=5)
+                        if mutate:
+                            mutate(rec)
+                        fc.write(json.dumps(rec, ensure_ascii=False) + "\n")
+                    if arm in (A.ENUM_H, A.GNN):
+                        continue
+                    b = dict(key=f"bank|{split}|{at[0]}|{at[1]}|{key}", split=split, arm=at[0], tag=at[1],
+                             parent=key, digest=digest)
+                    if arm in (A.RAND, A.BEST):
+                        b["skipped"] = "start-dependent arm"
+                    else:
+                        b.update(c=0.25, rows=[dict(s=i, vstar=1.0, regret1=r, top1=bool(t))
+                                               for i, (r, t) in enumerate(zip(c["regret1"], c["top1"]))])
+                    fb.write(json.dumps(b, ensure_ascii=False) + "\n")
+        fc.write('{"key": "cell|torn')  # a torn last line (crash mid-append) is ignored, as run_e05 does
+
+
+class NativeLayout(unittest.TestCase):
+    """run_e05.py's own TEST_MANIFEST / PILOT_REPORT / cells.jsonl layout."""
+
+    def test_manifest_by_family_equals_list_form(self):
+        d = A.make_design(native_manifest(1, "d" * 64))
+        self.assertEqual((d["strata"], d["subset"], d["parents"]), (DESIGN["strata"], DESIGN["subset"],
+                                                                   DESIGN["parents"]))
+        bad = native_manifest(1, "d" * 64)
+        bad["parents"]["H-K"] = bad["parents"]["H-K"] + [dict(bad["parents"]["H-NEG"][0])]
+        with self.assertRaises(ValueError):
+            A.make_design(bad)
+        with self.assertRaises(ValueError):
+            A.make_design(dict(MANIFEST, pgv_subset=MANIFEST["subset"][:3]))
+
+    def test_native_determinations(self):
+        det = A.pilot_determinations(NATIVE_PILOT)
+        self.assertEqual({k: det[k] for k in A.DET_KEYS}, {k: DET[k] for k in A.DET_KEYS})
+        self.assertEqual((det["cut_items"], det["native_cfg"], A.kcurve_arms(det)[1600]), ([], NATIVE_CFG, "PGV_1600"))
+        self.assertEqual(det["pg400_dev_ood"], NATIVE_PILOT["dev_nreg"]["PG400=PGV"])
+        det = A.pilot_determinations(dict(NATIVE_PILOT, pg400="FT", kstar="descriptive only", kcurve_recipe="R_ext",
+                                          G_P1={"Q9": {"ok": False}}, G_P5={"cuts": ["H-DYN", "SF-FT_400", "H-KN"]}))
+        self.assertEqual((det["pg400"], det["kstar_descriptive"], det["r_ext"], det["q9_failed_no_bug"]),
+                         (A.FT, True, True, True))
+        self.assertEqual(det["cut_items"], [2, 3, 7])
+        self.assertEqual(A.kcurve_arms(det), {400: "PGV-RX_400", 1600: "PGV-RX_1600", 6400: "PGV-RX_6400"})
+        det = A.pilot_determinations(dict(NATIVE_PILOT, pg400=None, p2_dropped=True))
+        self.assertIsNone(det["pg400"])
+        for bad in (dict(NATIVE_PILOT, pg400=None), dict(NATIVE_PILOT, G_P5={"cuts": ["H-SPAN"]}),
+                    dict(NATIVE_PILOT, pg400="PGV_400"), dict(NATIVE_PILOT, kcurve_recipe="rext"),
+                    {k: v for k, v in NATIVE_PILOT.items() if k != "G_P1"}):
+            with self.assertRaises(ValueError):
+                A.pilot_determinations(bad)
+
+    def test_native_arm(self):
+        cfg = NATIVE_CFG
+        cases = {("SF-GPI", "SF|s20261247"): (A.SF, 20261247), ("SF-L", "SF|s20261246"): (A.SFL, 20261246),
+                 ("UVFA+aux", "UVFA+aux|s20261248"): (A.AUX, 20261248),
+                 ("SF-shuffled", "SF-shuffled|s20261246"): (A.SHUF, 20261246),
+                 ("PGV", "w64s500|k400"): (A.PGV, None), ("PGV", "k1600|k1600"): ("PGV_1600", None),
+                 ("PGV", "rext400|k400"): ("PGV-RX_400", None), ("PGV", "rext6400|k6400"): ("PGV-RX_6400", None),
+                 ("PGV", "w256s2000|k400"): ("PGV[w256s2000|k400]", None),
+                 ("FT", "s100|s20261248|k400"): (A.FT, 20261248), ("FT", "s400|s20261246|k400"): ("FT[s400]", 20261246),
+                 ("GREEDY", "-"): (A.GREEDY, None), ("EXACT-GPI(L)", "L+base"): (A.XGPI, None),
+                 ("GNN-ENUM±", "-"): (A.GNN, None)}
+        for (arm, tag), want in cases.items():
+            self.assertEqual(A.native_arm(arm, tag, cfg), want, (arm, tag))
+        for arm, tag in (("SF-GPI", "UVFA|s20261246"), ("UVFA", "UVFA"), ("PGV", "w64s500"), ("FT", "s100|k400"),
+                         ("SF@x", "-"), ("STOP", "")):
+            with self.assertRaises(ValueError):
+                A.native_arm(arm, tag, cfg)
+
+
 def _git(repo, *args):
     subprocess.run(["git", "-C", str(repo), "-c", "user.name=rcx-test", "-c", "user.email=rcx-test@example.invalid",
                     *args], check=True, capture_output=True)
@@ -577,7 +719,7 @@ class Custody(unittest.TestCase):
                 if arm in drop or f"{arm}@{r}" in drop:
                     continue
                 d = dict(manifest_sha256=self.msha, code_digest=self.digest, arm=arm, replicate=r,
-                         cells={k: c["nreg"] for k, c in body.items()})
+                         cells={k: c["nreg"] if arm in A.BANK_EXEMPT else c for k, c in body.items()})  # bare = nreg
                 if mutate:
                     mutate(d)
                 (adir / "evals" / f"eval_{i:03d}.json").write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
@@ -667,23 +809,133 @@ class Custody(unittest.TestCase):
 
     def test_refuses_malformed_cells(self):
         def short(d):
-            if d["arm"] == A.SF:
+            if d["arm"] in (A.SF, A.RAND):
                 k = next(iter(d["cells"]))
-                d["cells"][k] = d["cells"][k][:-1]
+                c = d["cells"][k]
+                d["cells"][k] = c[:-1] if isinstance(c, list) else dict(c, nreg=c["nreg"][:-1])
         n, adir = self.attempt(mutate=short)
         self.assertIn("one per start", self.refused(n, adir))
+        n, adir = self.attempt(mutate=lambda d: d["cells"][next(iter(d["cells"]))].update(nreg=[1.5] * N_STARTS)
+                               if d["arm"] == A.UVFA else None)
+        self.assertIn("in [0, 1]", self.refused(n, adir))
         n, adir = self.attempt(mutate=lambda d: d.update(replicate=None) if d["arm"] == A.UVFA else None)
         self.refused(n, adir)
 
     def test_missing_must_be_declared_exactly(self):
         n, adir = self.attempt(drop=("UVFA@20261247",))
-        self.assertIn("absent but undeclared ['UVFA@20261247']", self.refused(n, adir))
-        res = self.main(n, extra=("--missing", "UVFA@20261247"))
+        self.assertIn("absent but undeclared ['UVFA@20261247', 'bank:UVFA@20261247']", self.refused(n, adir))
+        self.assertIn("absent but undeclared ['bank:UVFA@20261247']",
+                      self.refused(n, adir, extra=("--missing", "UVFA@20261247")))
+        res = self.main(n, extra=("--missing", "UVFA@20261247,bank:UVFA@20261247"))
         self.assertEqual(res["decision"], A.INC_MISSING)
         n, adir = self.attempt()
         self.assertIn("declared but complete ['GREEDY']", self.refused(n, adir, extra=("--missing", "GREEDY")))
         res = self.main(n, extra=("--defect", "ψ cache built from a stale checkpoint"))
         self.assertEqual(res["decision"], A.INC_DEFECT)
+
+
+@unittest.skipIf(shutil.which("git") is None, "git not available")
+class NativeCustody(unittest.TestCase):
+    """The analysis on run_e05.py's own layout (manifest by family, pilot-report fields, cells.jsonl / banks.jsonl)
+    equals the analysis of the same cells passed directly; its custody refusals write nothing."""
+
+    ATTEMPTS = range(1, 9)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+        cls.base = Path(cls.tmp.name)
+        cls.repo = cls.base / "repo"
+        cls.repo.mkdir()
+        cls.digest = "c" * 64
+        cls.mtext = {k: json.dumps(native_manifest(k, "f" * 64 if k == 8 else cls.digest), indent=1, sort_keys=True)
+                     + "\n" for k in cls.ATTEMPTS}  # attempt 8: drawn under another code digest
+        cls.msha = {k: hashlib.sha256(t.encode()).hexdigest() for k, t in cls.mtext.items()}
+        _git(cls.repo, "init", "-q")
+        (cls.repo / "DECISIONS.md").write_text("# DECISIONS\n" + "".join(f"- attempt {k} TEST_MANIFEST `{s}`\n" for k, s
+                                                                         in cls.msha.items()), encoding="utf-8")
+        _git(cls.repo, "add", "DECISIONS.md")
+        _git(cls.repo, "commit", "-q", "-m", "test manifests")
+        cls.pilot = cls.base / "PILOT_REPORT.json"
+        cls.pilot.write_text(json.dumps(NATIVE_PILOT, ensure_ascii=False), encoding="utf-8")
+        cls.cells = make_cells()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def attempt(self, k, **kw):
+        adir = self.base / "confirm" / f"attempt-{k}"
+        adir.mkdir(parents=True)
+        (adir / "TEST_MANIFEST.json").write_text(self.mtext[k], encoding="utf-8", newline="\n")
+        (adir / "ORACLE_TEST_REPORT.json").write_text(json.dumps(dict(
+            attempt=k, status="PASS", manifest_sha256=self.msha[k], code_digest=self.digest, checks={})),
+            encoding="utf-8")
+        write_native(adir, self.cells, k, self.digest, **kw)
+        return adir
+
+    def main(self, k, extra=()):
+        argv = ["--attempt", str(k), "--manifest-sha", self.msha[k], "--code-digest", self.digest,
+                "--confirm-dir", str(self.base / "confirm"), "--pilot-report", str(self.pilot),
+                "--repo-root", str(self.repo), *extra]
+        with mock.patch.object(A, "RESAMPLES", 200), contextlib.redirect_stdout(io.StringIO()):
+            return A.main(argv)
+
+    def refused(self, k, adir, extra=()):
+        with self.assertRaises(SystemExit) as cm:
+            self.main(k, extra)
+        self.assertIn("refusing", str(cm.exception))
+        self.assertEqual([p for p in adir.iterdir() if p.name.startswith("ANALYSIS_E05")], [])
+        return str(cm.exception)
+
+    def test_native_equals_direct(self):
+        self.attempt(1)
+        res = self.main(1)
+        cells = {a: v for a, v in self.cells.items() if a != A.SFFT}
+        ref = A.analyze(DESIGN, cells, A.pilot_determinations(NATIVE_PILOT), resamples=200)
+        self.assertEqual(res["decision"], A.ADVANCE)
+        for fld in ("decision", "P1", "P2", "guard", "validity", "sf_floor", "raw_p", "holm_adjusted", "kstar",
+                    "per_replicate", "arm_means"):
+            self.assertEqual(res[fld], ref[fld], fld)
+        self.assertEqual(res["contrasts"]["D1 = UVFA - SF-GPI"], ref["contrasts"]["D1 = UVFA - SF-GPI"])
+        cu = res["custody"]
+        self.assertEqual((cu["eval_source"], cu["pilot_determinations_source"]),
+                         ("cells.jsonl (run_e05 native)", "run_e05 pilot-report fields"))
+        banked = sum(len(body) for a, by in cells.items() if a not in A.BANK_EXEMPT for body in by.values())
+        self.assertEqual((cu["eval_files"][1]["attached"], cu["eval_files"][1]["skipped"]), (banked, 2 * 30))
+        ex = res["extras"][A.SF]
+        self.assertEqual((ex["regret1"]["primary_macro"], ex["top1"]["primary_macro"], ex["loop"]["primary_macro"]),
+                         (1.0, 0.5, 0.25))
+        self.assertEqual({f: t["share"] for f, t in res["enum_all_tied"][A.ENUM].items()},
+                         {f: 0.5 for f in ("H-ID", "H-K", "H-NEG", "H-COST")})
+        self.assertNotIn("decisions", res["extras"].get(A.ENUM, {}))
+        self.assertEqual(res["validity"]["pg400_dev_ood"], NATIVE_PILOT["dev_nreg"]["PG400=PGV"])
+
+    def test_incomplete_parent_is_missing(self):
+        key = DESIGN["strata"]["H-K"][0]
+        adir = self.attempt(2, skip={(A.UVFA, REPS[1], key, 2)})
+        self.assertIn("absent but undeclared ['UVFA@20261247', 'bank:UVFA@20261247']", self.refused(2, adir))
+        res = self.main(2, ("--missing", "UVFA@20261247,bank:UVFA@20261247"))
+        self.assertEqual((res["decision"], res["missing"]), (A.INC_MISSING, {"UVFA@20261247": 1,
+                                                                             "bank:UVFA@20261247": 1}))
+        self.assertEqual(res["custody"]["eval_files"][0]["incomplete"], {"UVFA@20261247": 1})
+
+    def test_refusals(self):
+        def digest(rec):
+            if rec["arm"] == A.UVFA and rec["s0"] == 3:
+                rec["digest"] = "e" * 64
+        self.assertIn("names code digest", self.refused(3, self.attempt(3, mutate=digest)))
+        self.assertIn("has split", self.refused(4, self.attempt(4, mutate=lambda r: r.update(split="pilot")
+                                                                 if r["arm"] == A.GREEDY else None)))
+        self.assertIn("is not a manifest start", self.refused(5, self.attempt(5, mutate=lambda r: r.update(s0=99)
+                                                                             if r["arm"] == A.STOP else None)))
+        self.assertIn("is not 'SF|s<seed>'", self.refused(6, self.attempt(6, mutate=lambda r: r.update(
+            tag="UVFA|s20261246") if r["arm"] == A.SFL else None)))
+        adir = self.attempt(7)
+        (adir / "evals").mkdir()
+        (adir / "evals" / "x.json").write_text("{}", encoding="utf-8")
+        self.assertIn("ambiguous", self.refused(7, adir))
+        self.assertIn("drawn under code digest", self.refused(8, self.attempt(8)))
 
 
 if __name__ == "__main__":
