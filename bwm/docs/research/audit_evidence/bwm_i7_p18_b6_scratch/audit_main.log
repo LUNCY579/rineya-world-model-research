@@ -1,0 +1,100 @@
+planbench_PB602 {'n': 602, 'invalid_or_nonstandard': 0, 'blocks': {3: 101, 4: 446, 5: 55}}
+hard {'n': 110, 'invalid_or_nonstandard': 0, 'blocks': {6: 1, 7: 1, 8: 7, 9: 14, 10: 13, 11: 12, 12: 13, 13: 18, 14: 21, 15: 10}}
+mirror {'n': 110, 'invalid_or_nonstandard': 0, 'blocks': {6: 1, 7: 1, 8: 7, 9: 14, 10: 13, 11: 12, 12: 13, 13: 18, 14: 21, 15: 10}}
+b3fresh {'n': 110, 'invalid_or_nonstandard': 0, 'blocks': {6: 1, 7: 1, 8: 7, 9: 14, 10: 13, 11: 12, 12: 13, 13: 18, 14: 21, 15: 10}}
+val_large {'n': 120, 'invalid_or_nonstandard': 0, 'blocks': {6: 2, 7: 2, 8: 14, 9: 15, 10: 13, 11: 12, 12: 13, 13: 18, 14: 21, 15: 10}}
+seeds_fresh {'n': 40, 'invalid_or_nonstandard': 0, 'blocks': {6: 1, 8: 3, 9: 5, 10: 5, 11: 4, 12: 5, 13: 6, 14: 8, 15: 3}}
+val_v2 {'n': 400, 'invalid_or_nonstandard': 0, 'blocks': {4: 67, 5: 284, 6: 49}}
+val_v1 {'n': 400, 'invalid_or_nonstandard': 0, 'blocks': {4: 49, 5: 288, 6: 63}}
+distill240 {'n': 240, 'invalid_or_nonstandard': 0, 'blocks': {6: 30, 7: 30, 8: 60, 9: 60, 10: 60}}
+forward_train {"path": "runs/BW_data/forward_train.jsonl", "kind": "forward", "used_by": "BW_F_s0 (state-format F; BW_SELECT_v1 fwd-state)", "rows": 12000, "problems(groups)": 0, "blocks": {"4": 569, "5": 7923, "6": 3508}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "e3a8a93c2df6f92a", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 0, "sweep_sig_hits": 0, "sweep_hits_missed_by_prefilter": 0, "wall_s": 0.2}
+  planbench_PB602  F-state overlap 501/602 rows 66568
+  hard             F-state overlap 1/110 rows 109
+  mirror           F-state overlap 1/110 rows 221
+  b3fresh          F-state overlap 1/110 rows 418
+  val_large        F-state overlap 2/120 rows 408
+  seeds_fresh      F-state overlap 1/40 rows 219
+  val_v2           F-state overlap 400/400 rows 189161
+  val_v1           F-state overlap 400/400 rows 207708
+  distill240       F-state overlap 30/240 rows 7511
+forward_delta_train {"path": "runs/BW_data/forward_delta_train.jsonl", "kind": "forward", "used_by": "BW_Fdelta_s0/s1/s2 (frozen B2 F = s0; item-7 R0-R2)", "rows": 12000, "problems(groups)": 0, "blocks": {"4": 569, "5": 7923, "6": 3508}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "9108e25b20651941", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 0, "sweep_sig_hits": 0, "sweep_hits_missed_by_prefilter": 0, "wall_s": 0.2}
+  planbench_PB602  F-state overlap 501/602 rows 66568
+  hard             F-state overlap 1/110 rows 109
+  mirror           F-state overlap 1/110 rows 221
+  b3fresh          F-state overlap 1/110 rows 418
+  val_large        F-state overlap 2/120 rows 408
+  seeds_fresh      F-state overlap 1/40 rows 219
+  val_v2           F-state overlap 400/400 rows 189161
+  val_v1           F-state overlap 400/400 rows 207708
+  distill240       F-state overlap 30/240 rows 7511
+forward_delta_ko_train {"path": "runs/BW_data/forward_delta_ko_train.jsonl", "kind": "forward", "used_by": "BW_Fdelta_ko_s0 (D-54 arm FK)", "rows": 12000, "problems(groups)": 0, "blocks": {"4": 569, "5": 7923, "6": 3508}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "82ec3418cf052f47", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 0, "sweep_sig_hits": 0, "sweep_hits_missed_by_prefilter": 0, "wall_s": 0.2}
+  planbench_PB602  F-state overlap 501/602 rows 66568
+  hard             F-state overlap 1/110 rows 109
+  mirror           F-state overlap 1/110 rows 221
+  b3fresh          F-state overlap 1/110 rows 418
+  val_large        F-state overlap 2/120 rows 408
+  seeds_fresh      F-state overlap 1/40 rows 219
+  val_v2           F-state overlap 400/400 rows 189161
+  val_v1           F-state overlap 400/400 rows 207708
+  distill240       F-state overlap 30/240 rows 7511
+v2_proposer_actions_train {"path": "runs/BW_data_v2/proposer_actions_train.jsonl", "kind": "proposer", "used_by": "BW_Pa_v2_s1/s2/s3 (B2 Pa = s1; init adapter of Pa_v2c/Pa_v3)", "rows": 53682, "problems(groups)": 5337, "blocks": {"4": 861, "5": 35553, "6": 17268}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "6b46743a2837c511", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 37273, "sweep_sig_hits": 15771, "sweep_hits_missed_by_prefilter": 0, "wall_s": 85.8}
+  planbench_PB602  full 0/602 (rows 0, problem-level 0) | init-only 501 | goal-only 501
+  hard             full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  mirror           full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  b3fresh          full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  val_large        full 0/120 (rows 0, problem-level 0) | init-only 2 | goal-only 2
+  seeds_fresh      full 1/40 (rows 1, problem-level 0) | init-only 1 | goal-only 1
+  val_v2           full 303/400 (rows 6857, problem-level 197) | init-only 400 | goal-only 400
+  val_v1           full 350/400 (rows 9317, problem-level 322) | init-only 400 | goal-only 400
+  distill240       full 10/240 (rows 30, problem-level 1) | init-only 30 | goal-only 30
+distill_rows {"path": "runs/BW_DISTILL_r1/distill_rows.jsonl", "kind": "proposer", "used_by": "first half of mix_v3 (Pa_v3)", "rows": 4254, "problems(groups)": 211, "blocks": {"6": 348, "7": 482, "8": 1098, "9": 1236, "10": 1090}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "e0d1c72822a3cee7", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 13, "sweep_sig_hits": 2, "sweep_hits_missed_by_prefilter": 0, "wall_s": 9.4}
+  planbench_PB602  full 0/602 (rows 0, problem-level 0) | init-only 0 | goal-only 0
+  hard             full 0/110 (rows 0, problem-level 0) | init-only 31 | goal-only 31
+  mirror           full 0/110 (rows 0, problem-level 0) | init-only 36 | goal-only 33
+  b3fresh          full 0/110 (rows 0, problem-level 0) | init-only 36 | goal-only 31
+  val_large        full 0/120 (rows 0, problem-level 0) | init-only 46 | goal-only 44
+  seeds_fresh      full 0/40 (rows 0, problem-level 0) | init-only 13 | goal-only 12
+  val_v2           full 1/400 (rows 1, problem-level 1) | init-only 49 | goal-only 29
+  val_v1           full 0/400 (rows 0, problem-level 0) | init-only 63 | goal-only 15
+  distill240       full 211/240 (rows 211, problem-level 211) | init-only 239 | goal-only 240
+mix_v3 {"path": "runs/BW_DISTILL_r1/mix_v3.jsonl", "kind": "proposer", "used_by": "BW_Pa_v3_s1 (B3 / H1 / H2)", "rows": 8508, "problems(groups)": 0, "blocks": {"4": 73, "5": 2829, "6": 1700, "7": 482, "8": 1098, "9": 1236, "10": 1090}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "7dadf5c9ab271383", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 2988, "sweep_sig_hits": 1096, "sweep_hits_missed_by_prefilter": 0, "wall_s": 17.6}
+  planbench_PB602  full 0/602 (rows 0, problem-level 0) | init-only 494 | goal-only 501
+  hard             full 0/110 (rows 0, problem-level 0) | init-only 31 | goal-only 31
+  mirror           full 0/110 (rows 0, problem-level 0) | init-only 36 | goal-only 33
+  b3fresh          full 0/110 (rows 0, problem-level 0) | init-only 36 | goal-only 31
+  val_large        full 0/120 (rows 0, problem-level 0) | init-only 46 | goal-only 44
+  seeds_fresh      full 0/40 (rows 0, problem-level 0) | init-only 13 | goal-only 13
+  val_v2           full 142/400 (rows 466, problem-level 55) | init-only 380 | goal-only 400
+  val_v1           full 222/400 (rows 668, problem-level 158) | init-only 361 | goal-only 400
+  distill240       full 211/240 (rows 213, problem-level 211) | init-only 239 | goal-only 240
+mix_v2c {"path": "runs/BW_DISTILL_r1/mix_v2c.jsonl", "kind": "proposer", "used_by": "BW_Pa_v2c_s1 (B3 control)", "rows": 8508, "problems(groups)": 0, "blocks": {"4": 143, "5": 5626, "6": 2739}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "42312ac1ea6dc4c1", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 5910, "sweep_sig_hits": 2128, "sweep_hits_missed_by_prefilter": 0, "wall_s": 15.8}
+  planbench_PB602  full 0/602 (rows 0, problem-level 0) | init-only 494 | goal-only 501
+  hard             full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  mirror           full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  b3fresh          full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  val_large        full 0/120 (rows 0, problem-level 0) | init-only 2 | goal-only 2
+  seeds_fresh      full 0/40 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  val_v2           full 180/400 (rows 940, problem-level 77) | init-only 380 | goal-only 400
+  val_v1           full 255/400 (rows 1268, problem-level 209) | init-only 361 | goal-only 400
+  distill240       full 5/240 (rows 5, problem-level 1) | init-only 30 | goal-only 30
+v1_proposer_actions_train {"path": "runs/BW_data/proposer_actions_train.jsonl", "kind": "proposer", "used_by": "v1 proposer data (bw-train-Pa per D-32/B-02); no v1 Pa adapter present in runs/", "rows": 39888, "problems(groups)": 4911, "blocks": {"4": 1149, "5": 26211, "6": 12528}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "e96600c1625c1580", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 28009, "sweep_sig_hits": 27293, "sweep_hits_missed_by_prefilter": 0, "wall_s": 56.5}
+  planbench_PB602  full 0/602 (rows 0, problem-level 0) | init-only 501 | goal-only 501
+  hard             full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 0
+  mirror           full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 0
+  b3fresh          full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  val_large        full 0/120 (rows 0, problem-level 0) | init-only 2 | goal-only 0
+  seeds_fresh      full 1/40 (rows 3, problem-level 0) | init-only 1 | goal-only 1
+  val_v2           full 325/400 (rows 16479, problem-level 297) | init-only 400 | goal-only 388
+  val_v1           full 329/400 (rows 11262, problem-level 227) | init-only 400 | goal-only 400
+  distill240       full 1/240 (rows 1, problem-level 0) | init-only 30 | goal-only 21
+superseded_v1_proposer_actions_train {"path": "runs/_superseded/BW_data_v1_suffix_leak/proposer_actions_train.jsonl", "kind": "proposer", "used_by": "superseded leaky v1 data; DECISIONS B-02: never trained on", "rows": 40425, "problems(groups)": 4911, "blocks": {"4": 1512, "5": 26385, "6": 12528}, "invalid_states": 0, "invalid_goals": 0, "sha256_prefix": "7150819bb8d9cdca", "sig_vs_iso_disagreements": 0, "sweep_rows_full_signature": 28490, "sweep_sig_hits": 28184, "sweep_hits_missed_by_prefilter": 0, "wall_s": 56.0}
+  planbench_PB602  full 72/602 (rows 909, problem-level 0) | init-only 501 | goal-only 501
+  hard             full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 0
+  mirror           full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 0
+  b3fresh          full 0/110 (rows 0, problem-level 0) | init-only 1 | goal-only 1
+  val_large        full 0/120 (rows 0, problem-level 0) | init-only 2 | goal-only 0
+  seeds_fresh      full 1/40 (rows 3, problem-level 0) | init-only 1 | goal-only 1
+  val_v2           full 325/400 (rows 16479, problem-level 297) | init-only 400 | goal-only 388
+  val_v1           full 329/400 (rows 11262, problem-level 227) | init-only 400 | goal-only 400
+  distill240       full 1/240 (rows 1, problem-level 0) | init-only 30 | goal-only 21
+total wall 245.5

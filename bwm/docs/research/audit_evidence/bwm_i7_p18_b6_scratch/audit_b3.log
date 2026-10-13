@@ -1,0 +1,139 @@
+eval sets loaded+verified {'PB-602': 602, 'hard': 110, 'unsolvable-101(extra)': 101, 'mirror': 110, 'b3fresh': 110, 'val_large': 120, 'seeds_fresh': 40, 'val_v2(select)': 400, 'val_v1': 400, 'distill-240': 240} 0.6 s
+runs/BW_data_v2/proposer_actions_train.jsonl 25000 4.7 s
+runs/BW_data_v2/proposer_actions_train.jsonl 50000 9.3 s
+DONE runs/BW_data_v2/proposer_actions_train.jsonl {"used_by": "BW_Pa_v2_s1,s2,s3 (and init adapter of Pa_v3_s1/Pa_v2c_s1)", "kind": "proposer", "rows": 53682, "block_counts": {"4": 861, "5": 35553, "6": 17268}, "row_kinds": {"start(t=0)": 5338, "suffix(t>0)": 43006, "noisy-failure": 5238, "repeat-of-t0": 90, "noisy-success": 10}, "skipped_unparsed": 0, "hand_holding_rows": 24449, "wall_s": 10.0}
+    PB-602 {'goal': (501, 36414), 'init': (501, 18547)}
+    b3fresh {'goal': (1, 2088), 'init': (1, 1458)}
+    distill-240 {'full': (10, 30), 'goal': (30, 13052), 'init': (30, 8908)}
+    hard {'goal': (1, 5232), 'init': (1, 264)}
+    mirror {'goal': (1, 5232), 'init': (1, 449)}
+    seeds_fresh {'full': (1, 1), 'goal': (1, 982), 'init': (1, 1528)}
+    unsolvable-101(extra) {'init': (63, 18537)}
+    val_large {'goal': (2, 5232), 'init': (2, 815)}
+    val_v1 {'full': (350, 2382), 'goal': (400, 47967), 'init': (400, 28919)}
+    val_v2(select) {'full': (303, 1884), 'goal': (400, 53682), 'init': (400, 28553)}
+DONE runs/BW_DISTILL_r1/distill_rows.jsonl {"used_by": "subset of mix_v3 (all 4254 rows kept, 0 dropped)", "kind": "proposer", "rows": 4254, "block_counts": {"6": 348, "7": 482, "8": 1098, "9": 1236, "10": 1090}, "row_kinds": {"distill-suffix": 4254}, "skipped_unparsed": 0, "hand_holding_rows": 2127, "wall_s": 1.9}
+    b3fresh {'goal': (31, 1500), 'init': (36, 643)}
+    distill-240 {'full': (211, 211), 'goal': (240, 4254), 'init': (239, 1800)}
+    hard {'goal': (31, 2480), 'init': (31, 292)}
+    mirror {'goal': (33, 2338), 'init': (36, 588)}
+    seeds_fresh {'goal': (12, 836), 'init': (13, 320)}
+    val_large {'goal': (44, 2434), 'init': (46, 743)}
+    val_v1 {'goal': (15, 232), 'init': (63, 171)}
+    val_v2(select) {'full': (1, 1), 'goal': (29, 348), 'init': (49, 169)}
+DONE runs/BW_DISTILL_r1/mix_v3.jsonl {"used_by": "BW_Pa_v3_s1 (B3/H1/H2)", "kind": "proposer", "rows": 8508, "block_counts": {"4": 73, "5": 2829, "6": 1700, "7": 482, "8": 1098, "9": 1236, "10": 1090}, "row_kinds": {"distill-origin": 4254, "v2-origin": 4254}, "skipped_unparsed": 0, "hand_holding_rows": 4035, "wall_s": 2.8}
+    PB-602 {'goal': (501, 2902), 'init': (494, 1470)}
+    b3fresh {'goal': (31, 1664), 'init': (36, 764)}
+    distill-240 {'full': (211, 213), 'goal': (240, 5286), 'init': (239, 2526)}
+    hard {'goal': (31, 2889), 'init': (31, 316)}
+    mirror {'goal': (33, 2747), 'init': (36, 631)}
+    seeds_fresh {'goal': (13, 910), 'init': (13, 437)}
+    unsolvable-101(extra) {'init': (63, 1470)}
+    val_large {'goal': (44, 2843), 'init': (46, 806)}
+    val_v1 {'full': (222, 188), 'goal': (400, 4040), 'init': (361, 2488)}
+    val_v2(select) {'full': (142, 140), 'goal': (400, 4602), 'init': (380, 2459)}
+DONE runs/BW_DISTILL_r1/mix_v2c.jsonl {"used_by": "BW_Pa_v2c_s1 (B3 control)", "kind": "proposer", "rows": 8508, "block_counts": {"4": 143, "5": 5626, "6": 2739}, "row_kinds": {"v2-origin": 8508}, "skipped_unparsed": 0, "hand_holding_rows": 3847, "wall_s": 1.7}
+    PB-602 {'goal': (501, 5769), 'init': (494, 2919)}
+    b3fresh {'goal': (1, 329), 'init': (1, 242)}
+    distill-240 {'full': (5, 5), 'goal': (30, 2069), 'init': (30, 1463)}
+    hard {'goal': (1, 832), 'init': (1, 46)}
+    mirror {'goal': (1, 832), 'init': (1, 82)}
+    seeds_fresh {'goal': (1, 161), 'init': (1, 228)}
+    unsolvable-101(extra) {'init': (63, 2919)}
+    val_large {'goal': (2, 832), 'init': (2, 131)}
+    val_v1 {'full': (255, 350), 'goal': (400, 7594), 'init': (361, 4605)}
+    val_v2(select) {'full': (180, 275), 'goal': (400, 8508), 'init': (380, 4547)}
+DONE runs/BW_data/forward_delta_train.jsonl {"used_by": "BW_Fdelta_s0,s1,s2", "kind": "forward", "rows": 12000, "block_counts": {"4": 569, "5": 7923, "6": 3508}, "row_kinds": {}, "skipped_unparsed": 0, "hand_holding_rows": 5976, "wall_s": 0.7}
+    PB-602 {'init': (501, 4219)}
+    b3fresh {'init': (1, 418)}
+    distill-240 {'init': (30, 1665)}
+    hard {'init': (1, 109)}
+    mirror {'init': (1, 221)}
+    seeds_fresh {'init': (1, 219)}
+    unsolvable-101(extra) {'init': (63, 4211)}
+    val_large {'init': (2, 204)}
+    val_v1 {'init': (400, 6009)}
+    val_v2(select) {'init': (400, 5841)}
+DONE runs/BW_data/forward_delta_ko_train.jsonl {"used_by": "BW_Fdelta_ko_s0 (FK, D-54)", "kind": "forward", "rows": 12000, "block_counts": {"4": 569, "5": 7923, "6": 3508}, "row_kinds": {}, "skipped_unparsed": 0, "hand_holding_rows": 5976, "wall_s": 0.8}
+    PB-602 {'init': (501, 4219)}
+    b3fresh {'init': (1, 418)}
+    distill-240 {'init': (30, 1665)}
+    hard {'init': (1, 109)}
+    mirror {'init': (1, 221)}
+    seeds_fresh {'init': (1, 219)}
+    unsolvable-101(extra) {'init': (63, 4211)}
+    val_large {'init': (2, 204)}
+    val_v1 {'init': (400, 6009)}
+    val_v2(select) {'init': (400, 5841)}
+DONE runs/BW_data/forward_train.jsonl {"used_by": "BW_F_s0", "kind": "forward", "rows": 12000, "block_counts": {"4": 569, "5": 7923, "6": 3508}, "row_kinds": {}, "skipped_unparsed": 0, "hand_holding_rows": 5976, "wall_s": 0.8}
+    PB-602 {'init': (501, 4219)}
+    b3fresh {'init': (1, 418)}
+    distill-240 {'init': (30, 1665)}
+    hard {'init': (1, 109)}
+    mirror {'init': (1, 221)}
+    seeds_fresh {'init': (1, 219)}
+    unsolvable-101(extra) {'init': (63, 4211)}
+    val_large {'init': (2, 204)}
+    val_v1 {'init': (400, 6009)}
+    val_v2(select) {'init': (400, 5841)}
+runs/BW_data/proposer_actions_train.jsonl 25000 5.7 s
+DONE runs/BW_data/proposer_actions_train.jsonl {"used_by": "none found (v1 proposer data)", "kind": "proposer", "rows": 39888, "block_counts": {"4": 1149, "5": 26211, "6": 12528}, "row_kinds": {"start(t=0)": 4913, "suffix(t>0)": 30062, "noisy-failure": 4791, "repeat-of-t0": 111, "noisy-success": 11}, "skipped_unparsed": 0, "hand_holding_rows": 17756, "wall_s": 9.0}
+    PB-602 {'goal': (501, 27360), 'init': (501, 14031)}
+    b3fresh {'goal': (1, 784), 'init': (1, 1119)}
+    distill-240 {'full': (1, 1), 'goal': (21, 5518), 'init': (30, 6596)}
+    hard {'init': (1, 214)}
+    mirror {'init': (1, 342)}
+    seeds_fresh {'full': (1, 3), 'goal': (1, 965), 'init': (1, 1326)}
+    unsolvable-101(extra) {'init': (63, 13982)}
+    val_large {'init': (2, 437)}
+    val_v1 {'full': (329, 2189), 'goal': (400, 39421), 'init': (400, 21881)}
+    val_v2(select) {'full': (325, 3535), 'goal': (388, 39888), 'init': (400, 21542)}
+runs/BW_data/proposer_states_train.jsonl 25000 6.1 s
+DONE runs/BW_data/proposer_states_train.jsonl {"used_by": "none found (v1 states-target data)", "kind": "proposer", "rows": 39888, "block_counts": {"4": 1149, "5": 26211, "6": 12528}, "row_kinds": {"start(t=0)": 4913, "suffix(t>0)": 30062, "noisy-failure": 4791, "repeat-of-t0": 111, "noisy-success": 11}, "skipped_unparsed": 0, "hand_holding_rows": 17756, "wall_s": 9.4}
+    PB-602 {'goal': (501, 27360), 'init': (501, 14031)}
+    b3fresh {'goal': (1, 784), 'init': (1, 1119)}
+    distill-240 {'full': (1, 1), 'goal': (21, 5518), 'init': (30, 6596)}
+    hard {'init': (1, 214)}
+    mirror {'init': (1, 342)}
+    seeds_fresh {'full': (1, 3), 'goal': (1, 965), 'init': (1, 1326)}
+    unsolvable-101(extra) {'init': (63, 13982)}
+    val_large {'init': (2, 437)}
+    val_v1 {'full': (329, 2189), 'goal': (400, 39421), 'init': (400, 21881)}
+    val_v2(select) {'full': (325, 3535), 'goal': (388, 39888), 'init': (400, 21542)}
+runs/BW_data_v2/proposer_states_train.jsonl 25000 5.1 s
+runs/BW_data_v2/proposer_states_train.jsonl 50000 10.0 s
+DONE runs/BW_data_v2/proposer_states_train.jsonl {"used_by": "none found (v2 states-target data)", "kind": "proposer", "rows": 53682, "block_counts": {"4": 861, "5": 35553, "6": 17268}, "row_kinds": {"start(t=0)": 5338, "suffix(t>0)": 43006, "noisy-failure": 5238, "repeat-of-t0": 90, "noisy-success": 10}, "skipped_unparsed": 0, "hand_holding_rows": 24449, "wall_s": 10.8}
+    PB-602 {'goal': (501, 36414), 'init': (501, 18547)}
+    b3fresh {'goal': (1, 2088), 'init': (1, 1458)}
+    distill-240 {'full': (10, 30), 'goal': (30, 13052), 'init': (30, 8908)}
+    hard {'goal': (1, 5232), 'init': (1, 264)}
+    mirror {'goal': (1, 5232), 'init': (1, 449)}
+    seeds_fresh {'full': (1, 1), 'goal': (1, 982), 'init': (1, 1528)}
+    unsolvable-101(extra) {'init': (63, 18537)}
+    val_large {'goal': (2, 5232), 'init': (2, 815)}
+    val_v1 {'full': (350, 2382), 'goal': (400, 47967), 'init': (400, 28919)}
+    val_v2(select) {'full': (303, 1884), 'goal': (400, 53682), 'init': (400, 28553)}
+runs/_superseded/BW_data_v1_suffix_leak/proposer_actions_train.jsonl 25000 5.6 s
+DONE runs/_superseded/BW_data_v1_suffix_leak/proposer_actions_train.jsonl {"used_by": "none (superseded, never trained)", "kind": "proposer", "rows": 40425, "block_counts": {"4": 1512, "5": 26385, "6": 12528}, "row_kinds": {"start(t=0)": 4913, "suffix(t>0)": 30599, "noisy-failure": 4791, "repeat-of-t0": 111, "noisy-success": 11}, "skipped_unparsed": 0, "hand_holding_rows": 17756, "wall_s": 8.9}
+    PB-602 {'full': (72, 537), 'goal': (501, 27897), 'init': (501, 14568)}
+    b3fresh {'goal': (1, 784), 'init': (1, 1119)}
+    distill-240 {'full': (1, 1), 'goal': (21, 5518), 'init': (30, 6596)}
+    hard {'init': (1, 214)}
+    mirror {'init': (1, 342)}
+    seeds_fresh {'full': (1, 3), 'goal': (1, 965), 'init': (1, 1326)}
+    unsolvable-101(extra) {'init': (63, 14469)}
+    val_large {'init': (2, 437)}
+    val_v1 {'full': (329, 2189), 'goal': (400, 39922), 'init': (400, 22418)}
+    val_v2(select) {'full': (325, 3535), 'goal': (388, 40425), 'init': (400, 22079)}
+DONE runs/BW_B4_SCREEN/rcx_snapshot/runs/RCX-E07/main/data/instances.json {"used_by": "RCX-E07 GNN gnn_s20261276 (peer model used by the B4 screen); train+val splits only", "kind": "instjson", "rows": 28, "block_counts": {"4": 3, "5": 4, "6": 7, "7": 14}, "row_kinds": {"rcx-train": 22, "rcx-val": 6}, "skipped_unparsed": 0, "hand_holding_rows": 0, "wall_s": 0.0}
+    PB-602 {'goal': (413, 7), 'init': (246, 7)}
+    b3fresh {'goal': (1, 1), 'init': (1, 2)}
+    distill-240 {'goal': (57, 12), 'init': (38, 18)}
+    hard {'goal': (2, 2), 'init': (1, 2)}
+    mirror {'goal': (2, 2), 'init': (1, 1)}
+    seeds_fresh {'init': (1, 1)}
+    unsolvable-101(extra) {'init': (34, 7)}
+    val_large {'goal': (4, 3), 'init': (1, 2)}
+    val_v1 {'goal': (338, 11), 'init': (223, 14)}
+    val_v2(select) {'goal': (277, 14), 'init': (224, 12)}
+ALL DONE {'max_leaves': 47, 'cap_hits': 0, 'canon_calls': 789288} 57.7

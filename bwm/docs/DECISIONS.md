@@ -1665,3 +1665,38 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
     helping RCX.
   - **Next:** told RCX at 02:25, with options: release tonight's remainder (BWM would then run the B4 screen, about
     3.5 h); lower E01R's RAM gate; or the operator closes ChatGPT/Codex at night (operator's call).
+- **I-25 B6 draft written and audit code archived (2026-10-13 08:15). DRAFT only; nothing frozen.**
+  - **Draft:** `research/PREREG_B6_DRAFT.md` (539debd0…) was produced by a design panel:
+    - a technical map of the B3 pipeline;
+    - three independent designs, labelled faithful, effect and rigor;
+    - two judges (a methodologist and an adversary), who both chose the "rigor" design (40/38 against 32/32 and
+      30/25) with no fatal flaw;
+    - a synthesis that grafts in the judges' improvements and fixes their must-fix items.
+  - **Primary test (P1):** S-direct, greedy, M512, on a new fresh set of 200 problems at 11–15 blocks (40 per size).
+    Pa_v4_s1 against Pa_v3c_s1 (a matched control: identical replay positions and failure rows), exact McNemar.
+    - The draft proposes MET as p < 0.05 and at least +5 pp, with B3's bar (≥ +10 pp and p < 0.05) always reported
+      beside it.
+    - This changes a convention the user approved (D-58), so it needs the user's sign-off.
+  - **Follow-on stages:**
+    - A2, a seed-2 replication, runs if P1 is MET.
+    - Stage B (S-beam on 96 problems at 12–15 blocks, with an interim futility stop at 48) runs only with user
+      approval.
+    - No hard-set run is pre-authorised (power about 0.18).
+  - **Cost:** about 5 BWM turns for stage A.
+  - **Open decisions for the user** (draft §16):
+    1. the P1 rule;
+    2. Stage B's size and the optional Pa_v3 arm;
+    3. the order of B6 against the full B4 if the screen reads GO;
+    4. whether A2 runs automatically;
+    5. whether the report-only PB-602 cells run;
+    6. confirmation that no hard run is pre-authorised.
+  - **Required before hashing:**
+    - RCX's written agreement on the B4 ↔ B6 cross-exclusion (B4's 20261410 set must exclude the B6 sets, problems
+      and rows by exact class);
+    - a GPU memory smoke run at max-len 768 (the measured worst row is 646 tokens);
+    - the canonicaliser made total and promoted with tests.
+  - **Seeds:** 20261419–29 are reserved for B6 (draft). The panel proposals 20261420–23 are marked consumed; 20261423
+    was used for a confirmation set in the 10-11 panel.
+  - **Audit code archived:** the scratch code, logs and results of the item-7 verification, the P-18 audit (methods
+    A, B and C) and the B6 panel are in `research/audit_evidence/bwm_i7_p18_b6_scratch/`: 53 files, 11.0 MB,
+    MANIFEST.json with sha256.
