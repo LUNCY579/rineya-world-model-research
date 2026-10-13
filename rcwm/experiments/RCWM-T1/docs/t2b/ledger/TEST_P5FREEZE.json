@@ -12,7 +12,7 @@
   {
    "check": "freeze refuses a co-sign that does not quote the draft's sha256 (nothing minted, not persisted)",
    "ok": true,
-   "detail": "--bwm-cosign does not quote this draft's sha256 (5e0b008158bde171273da811c9bfbd239317fd88d8835e939cf91b1e36395919); BWM co-signs a stated text"
+   "detail": "--bwm-cosign does not quote this draft's sha256 (d2ce97460d5949896984454b08aea3a4226e2c37f99971c04fda138100f3ba9e); BWM co-signs a stated text"
   },
   {
    "check": "freeze refuses a co-sign without a salt commitment (nothing minted, not persisted)",
@@ -62,7 +62,7 @@
   {
    "check": "the real pre-freeze checks fail on the fake root's stub records (records must be produced by the tests with the current code, draft and hook draft)",
    "ok": true,
-   "detail": "['test record TEST_P5FREEZE.json passed with the current kit code', 'test record TEST_P5FREEZE.json was produced with the current draft and hook draft']"
+   "detail": "['test record TEST_P5ANALYSIS.json passed with the current kit code', 'test record TEST_P5ANALYSIS.json was produced with the current draft and hook draft']"
   },
   {
    "check": "freeze: both sets minted from the seed rule with the revealed salt, sealed, every input hashed; the rules and the decision code unchanged since the dev gate; verify ok",
@@ -137,7 +137,7 @@
   {
    "check": "with the stub (T2b-ledger follows the rule, T2 s0 the void trigger) part (b) is not 'TRIGGER WIDENED' and T2b-ledger's held-out planning equals ORACLE's",
    "ok": true,
-   "detail": "{'T2BL@HS': 9, 'T2s0@HS': 3, 'T2BL@canon': 9, 'T2s0@canon': 9, 'ORACLE': 9, 'IGNORE_STATUS': 3}"
+   "detail": "{'T2BL@HS': 9, 'T2s0@HS': 4, 'T2BL@canon': 9, 'T2s0@canon': 9, 'ORACLE': 9, 'IGNORE_STATUS': 4}"
   },
   {
    "check": "the results are written once (create-only) as JSON and Markdown",
@@ -224,11 +224,11 @@
   "scripts/t2bl_confirm_bank.py": "90d1cb078ffba1c47fbe56ca183d3f8b9844c37e50fac7261b842c1ea214ec26",
   "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3",
   "scripts/t2bl_confirm_analysis.py": "5c39e17cda6b12ba4babaca13aa9256b8783acbcdb2b71f1fcd428bb5a3b5efb",
-  "scripts/t2bl_test.py": "b82aaed06a1930cc75de7a42a488d4c4c0d22bf53f7b2d1e0cad6ee78231f0f2"
+  "scripts/t2bl_test.py": "22587790a23450bef96aba9ebff2a8756c4c10bb07f196523c31730c294681eb"
  },
- "draft_sha256": "5e0b008158bde171273da811c9bfbd239317fd88d8835e939cf91b1e36395919",
+ "draft_sha256": "d2ce97460d5949896984454b08aea3a4226e2c37f99971c04fda138100f3ba9e",
  "hook_draft_sha256": "4f5cee1f2914deb48c2da956aaae0d64cef85a908af2ce1c0769682d615e9d7e",
  "hook_draft_t2bl_sha256": "764fe712f87c81359dffea02851be54e679be253f27681eac0e9be2bdb6ec798",
- "peak_mb": 767.9,
- "recorded_local": "2026-10-12 16:53:14 -0500"
+ "peak_mb": 767.5,
+ "recorded_local": "2026-10-13 12:59:16 -0500"
 }

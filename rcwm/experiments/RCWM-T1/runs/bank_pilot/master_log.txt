@@ -6322,3 +6322,73 @@ torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 126.00 MiB. GPU 0 
 [thermal] watchdog pause flag set; waiting
 [thermal] watchdog flag cleared; resuming
 [thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+  [gpu-lease] released rineya-gpu-0.lock
+[supa] off-task capture done in 42s fingerprint a9952c55f5a1
+=== 2026-10-13T11:44:43-05:00 exit rc=0 scripts/run_offtask.py --bank bank_pilot --arm supa
+=== 2026-10-13T11:44:43-05:00 start scripts/run_pvr.py retro --bank bank_pilot --arm sparse --source-arm sparse
+Traceback (most recent call last):
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 509, in <module>
+    main()
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 505, in main
+    {"stage1": stage1, "hstates": hstates, "analyze": analyze, "stage2": stage2, "retro": retro, "retro_analyze": retro_analyze}[a.mode](a)
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 379, in retro
+    recs = [json.loads(l) for l in (src / "stage1.jsonl").read_text(encoding="utf-8").splitlines()]
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\bank_pilot\\pvr_sparse\\stage1.jsonl'
+=== 2026-10-13T11:44:45-05:00 exit rc=1 scripts/run_pvr.py retro --bank bank_pilot --arm sparse --source-arm sparse
+=== 2026-10-13T11:44:45-05:00 start scripts/run_pvr.py retro --bank bank_pilot --arm supa --source-arm sparse
+Traceback (most recent call last):
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 509, in <module>
+    main()
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 505, in main
+    {"stage1": stage1, "hstates": hstates, "analyze": analyze, "stage2": stage2, "retro": retro, "retro_analyze": retro_analyze}[a.mode](a)
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 379, in retro
+    recs = [json.loads(l) for l in (src / "stage1.jsonl").read_text(encoding="utf-8").splitlines()]
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_Consequence_World_Model_Bundle_2026-10-05\\experiments\\RCWM-T1\\runs\\bank_pilot\\pvr_sparse\\stage1.jsonl'
+=== 2026-10-13T11:44:47-05:00 exit rc=1 scripts/run_pvr.py retro --bank bank_pilot --arm supa --source-arm sparse
+=== 2026-10-13T11:44:48-05:00 start scripts/run_steer.py --bank bank_pilot --layers 16,20,24 --alphas 1.0
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:steer token=495a45d1
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<00:56,  5.45it/s]Loading weights:  68%|######8   | 212/310 [00:00<00:00, 914.34it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 865.97it/s]
+base:supa        ledger strict 0.067 len 0.072 chg 0.034 | prereq strict 0.000 len 0.429 chg 0.000 | regist strict 0.000 len 0.101 chg 0.080 (622s)
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+add:16:1.0       ledger strict 0.000 len 0.000 chg 0.000 | prereq strict 0.277 len 0.277 chg 0.000 | regist strict 0.000 len 0.000 chg 0.000 (398s)
+rand:16          ledger strict 0.000 len 0.120 chg 0.073 | prereq strict 0.000 len 0.000 chg 0.000 | regist strict 0.000 len 0.087 chg 0.050 (472s)
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+add:20:1.0       ledger strict 0.072 len 0.072 chg 0.034 | prereq strict 0.134 len 0.134 chg 0.023 | regist strict 0.000 len 0.000 chg 0.000 (1205s)
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+rand:20          ledger strict 0.072 len 0.077 chg 0.039 | prereq strict 0.000 len 0.228 chg 0.057 | regist strict 0.000 len 0.240 chg 0.210 (959s)

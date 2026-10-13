@@ -1135,3 +1135,24 @@ Times are local (CDT). Entries are append-only.
 - **I-37 RCWM turn overran RCX's night window by 2 h 11 min (2026-10-12/13).**
   - **What happened:** the T2b-ledger dev turn started at 19:46, outside the window. The guard correctly let it finish, but it ran until 01:01, because the turn cap is checked only at stage starts. From 01:01 the guard stopped the chain, and it relaunched at 07:00.
   - **Fix:** the guard now refuses to start any RCWM turn from NOSTART_HM = 18:20, which is 4.5 h (the turn cap) before 22:50. The guard was restarted at 11:43. RCX was informed, offered the time back, and asked whether a training block was lost.
+- **Night guard v2 (2026-10-13 12:12), following the PREREG-5 review note.**
+  - **What changed:** from 18:20 to 07:00 the guard now stops the RCWM chain ONLY when a new, live RCWM waiter appears (the pid in waiting.rcwm.json is alive, with a newer `since`), i.e. only when a GPU turn would start.
+  - **What is never interrupted:** running RCWM turns and RCWM CPU-only steps (analysis, retention mint).
+  - **Process spawning:** a process query runs only when a new waiter marker appears, never in a loop.
+  - **Files:** v1 is kept as `scripts/night_guard.v1.sh.bak`.
+  - **Queue note:** after the T2b-ledger gate, the chain moved on to old pilot items and is now running `run_steer` (lease `rcwm-t1:steer`, from about 12:04).
+- **Erratum to R30:** the GATE hashes were swapped. Correct: `GATE.json` 450fe34f…, `GATE.md` 9993a0d2….
+- **D-53 PREREG-5 ready for BWM co-sign (2026-10-13 about 13:30).**
+  - **Preparation:** workflow wf_e2050218-7b3 (power from gate; render; review: major issues), then fixes wf_ea2f59bd-962 (prose refresh plus two state-dependent test-harness fixes; check: minor issues), then two operator prose notes.
+    - The P(GENERALISES) figures are conservative: every seed is assumed at the lowest seed's dev accuracy.
+    - Two registered strings, kept verbatim ("which the dev screen never used"; the 'Unseen' limit), are qualified by the inner-reversal overlap in the dev screen's report-only LB strata.
+  - **State:**
+    - Draft: PREREG_5_DRAFT.md sha d2ce97460d5949896984454b08aea3a4226e2c37f99971c04fda138100f3ba9e.
+    - Rules digest 71dd5938… and code digest 1408be8a… are unchanged and equal the gate-freeze pins, so `--changes` is not needed.
+    - `t2bl_test.py --part all` passed twice in a row. Pre-freeze checks 24/24.
+    - Union digest 1d692f06777e64e7d28daf9396900b0df64f1dc584011d57874efb74f210454e (342,336 payloads, 97 sources).
+  - **Expected readings, stated before the freeze (conservative):**
+    - Words, inner order, count and paraphrase likely GENERALISES.
+    - Names and the combined surface likely PARTIAL; magnitude about 0.
+    - Planning primary PASS is nearly certain. The full planning GENERALISES depends on the held-out vs canonical gap.
+  - **Next:** BWM co-sign (commit-reveal salt), freeze, hook 90 at a waiting point. Turns may not start between 18:20 and 07:00 on 10-13 and 10-14 (guard v2).

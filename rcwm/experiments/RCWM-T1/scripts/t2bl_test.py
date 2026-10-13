@@ -618,7 +618,10 @@ def part_gate() -> None:
         C.run_outputs = lambda *a: [f"{C.DEV_RUN_REL}/provenance.json"]
         ok, msg, _ = raises(lambda: G.freeze_rule("test operator, 2026-10-10, D-test"), G.GateError, "can no longer")
         check("freeze-rule refuses once an output of this revision's dev screen exists", ok, msg)
-        C.run_outputs = real_run_outputs
+        # the temporary-directory freeze below (and its create-only refusal) must not depend on the REAL run state: once
+        # runs/t2bl/dev_rev3 has outputs the real run_outputs would refuse it, so run_outputs stays stubbed to [] here
+        # (the real one is restored in `finally`)
+        C.run_outputs = lambda *a: []
         rec = G.freeze_rule("test operator, 2026-10-10, D-test (tests only)")
         import t2bl_confirm_analysis as CA
         check("freeze-rule writes GATE_RULE.json with every frozen input and pins PREREG-5's rules digest AND decision code; "
@@ -1552,12 +1555,11 @@ def build_fake_root(froot: Path, w: dict, gate_verdict: str = "PROCEED") -> None
         if src.is_file():
             (froot / rel).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(src, froot / rel)
+    # PREREG-5's pre-freeze records: explicit stubs, never copies of the real ones (every test run rewrites the real
+    # records, so a copy would make this part depend on the previous run); a stub carries no code / draft binding, so the
+    # real pre-freeze checks fail on it until the documented path (root5 below) rewrites the records
     for rel in CR.PREFREEZE_RECORDS:
-        src = ROOT / rel
-        if src.is_file():
-            shutil.copy(src, write_lf(froot / rel, ""))
-        else:
-            write_lf(froot / rel, json.dumps({"ok": True, "stub": "fake-root test"}) + "\n")
+        write_lf(froot / rel, json.dumps({"ok": True, "stub": True}) + "\n")
     # tiny stand-ins for the run-time inputs (the pins of T2 s0 and the anchor references are patched to them)
     for f in CR.ADAPTER_FILES:
         shutil.copy(w["t2s0"] / f, write_lf(froot / CR.T2S0_REL / f, ""))
@@ -1788,6 +1790,7 @@ def part_p5freeze(keep: bool) -> None:
         written.append(C.write_doc("P5_DRYRUN.json", json.dumps({"ok": True, "code_sha256": an_code}) + "\n", docs=d5))
         written.append(C.write_doc("P5_POWER_DEV.json", json.dumps({"assumption_source": CR.GATE_REL,
                                                                     "map": []}) + "\n", docs=d5))
+        written.append(C.write_doc("P5_GEN_PLAN.json", json.dumps(CR.plan(verbose=False), indent=1) + "\n", docs=d5))  # --plan
         check("PREREG-5's pre-freeze records are rewritten IN PLACE after the dev screen's outputs exist (not timestamped)",
               all("." not in p.stem for p in written) and all(p.parent == d5 for p in written), [p.name for p in written][:4])
         pre5 = CR.prefreeze_checks(froot5)

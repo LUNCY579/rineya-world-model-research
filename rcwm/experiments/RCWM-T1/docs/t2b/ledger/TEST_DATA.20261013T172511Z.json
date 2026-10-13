@@ -1,0 +1,562 @@
+{
+ "part": "data",
+ "ok": true,
+ "n_checks": 66,
+ "n_pass": 66,
+ "checks": [
+  {
+   "check": "the real training set and dev bank pass the independent audit",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "1,500 rows: posted 750 / non-posted 750, 300 canonical-block rows, 400 pairs",
+   "ok": true,
+   "detail": "{'rows': 1500, 'posted': 750, 'nonposted': 750, 'canon_block': 300, 'pairs': 400, 'fully_canonical_rows': 356, 'max_abs_value': 9962, 'top_orders': {'canonical': {'posted': 347, 'nonposted': 347, 'rows': 694}, 'reversed': {'posted': 403, 'nonposted': 403, 'rows': 806}}, 'stacked_surface': {'rows': 600, 'posted': 300, 'nonposted': 300, 'share_of_posted_rows': 0.4, 'posted_share_within': 0.5}}"
+  },
+  {
+   "check": "no held-out factor of either half read back from any of the 1,500 training prompts (independent parser)",
+   "ok": true,
+   "detail": "{}"
+  },
+  {
+   "check": "none of the held-out text fragments (both halves, PREREG-3, PREREG-LB names) occurs in any training prompt or target",
+   "ok": true,
+   "detail": "107"
+  },
+  {
+   "check": "no number with more than 4 digits in any training prompt or target (so a 5-digit balance is an unseen length)",
+   "ok": true,
+   "detail": "9962"
+  },
+  {
+   "check": "token audit (binding): all 40 held-out words are token-novel (no 'void' / 'posted' token; a token no trained status has)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the token audit refuses anchor-token and trained-token-only held-out words (voidd, xvoid, postedq)",
+   "ok": true,
+   "detail": "[\"held-out status 'voidd' (dev) contains the anchor token(s) ['void']\", \"held-out status 'xvoid' (dev) contains the anchor token(s) ['void']\", \"held-out status 'xvoid' (dev) consists only of trained status tokens ['x', 'void']\"]"
+  },
+  {
+   "check": "dev bank: 19 strata, 1,801 rows, every row its stratum's declared change of its base in the DEV half",
+   "ok": true,
+   "detail": "{'ID_posted': 100, 'ID_void': 100, 'S_words': 100, 'S_surface_posted': 100, 'S_surface_words': 100, 'S_bal': 67, 'S_amt': 67, 'H_words': 100, 'H_order': 100, 'H_names': 100, 'H_count': 100, 'H_para': 100, 'H_bal': 100, 'H_amt': 67, 'HS_words': 100, 'HS_posted': 100, 'LB_void': 100, 'LB_posted': 100, 'P3_words': 100}"
+  },
+  {
+   "check": "both files regenerate byte for byte from (seed, recorded rejections) (MD.verify without the union)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "freshness (the build's union): 0 payload and 0 operative overlaps for both files; no union source errors",
+   "ok": true,
+   "detail": "({'items': 1500, 'payload_overlap': 0, 'operative_overlap': 0}, 338271)"
+  },
+  {
+   "check": "the harvest skipped only HSKILL_CONFIRM_V2* files, by name",
+   "ok": true,
+   "detail": "['hskill-views-002/HSKILL_CONFIRM_V2.jsonl', 'hskill-views-002/HSKILL_CONFIRM_V2_BUILD.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS.json', 'hskill-views-002/HSKILL_CONFIRM_V2_FLOORS_superseded_erratum2.json']"
+  },
+  {
+   "check": "heuristics balanced: copy and apply-regardless (= ignore-status) 0.50, void trigger <= 0.70, string cues <= 0.95, the rule 1.00",
+   "ok": true,
+   "detail": "{'apply_regardless': 0.5, 'ci_posted': 1.0, 'contains_posted': 0.94, 'copy': 0.5, 'endswith_ed': 0.8, 'exact': 1.0, 'len6': 0.94, 'semantic': 0.76, 'startswith_p': 0.95, 'void_trigger': 0.64}"
+  },
+  {
+   "check": "held-out words defeat the widened triggers: on H_words and HS_words the anchor-token trigger and the 'void' token score 0.00, T2's void substring cue <= 0.05, the token-overlap trigger <= 0.30",
+   "ok": true,
+   "detail": "{'H_words': {'anchor_trigger': 0.0, 'apply_regardless': 0.0, 'contains_posted': 0.8, 'copy': 1.0, 'endswith_ed': 0.55, 'len6': 0.95, 'semantic': 0.4, 'startswith_p': 0.95, 'token_overlap': 0.3, 'void_token': 0.0, 'void_trigger': 0.05}}"
+  },
+  {
+   "check": "the mixed factor cells need the rule: copy and apply-regardless score 0.50 on H_order, H_names, H_count, H_para",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the trained-surface controls use in-range values (|b| <= 98, trained amounts) and 5-7 accounts",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the magnitude controls (S_bal, S_amt) are add / transfer rows in the TRAINED bands (67 each)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "non-void training words occur on the canonical surface (no surface-conditioned void cue fits)",
+   "ok": true,
+   "detail": "{'neutral': 29, 'nonce': 21, 'not_applied': 51, 'posted': 245, 'posted_like': 18, 'void': 111, 'void_variant': 15}"
+  },
+  {
+   "check": "training scale rows keep balances of at most 3 digits",
+   "ok": true,
+   "detail": "999"
+  },
+  {
+   "check": "the canonical renderer reproduces all 501 stored T2 ledger prompts and targets",
+   "ok": true,
+   "detail": "{'t2_ledger_rows': 501, 'mismatches': 0, 'ok': True}"
+  },
+  {
+   "check": "seeds: training 20261165 and dev bank 20261166 (kit revision 3); revision 2's 20261161 / 20261162 are recorded as spent",
+   "ok": true,
+   "detail": "(20261165, 20261166)"
+  },
+  {
+   "check": "both top-level key orders are trained (independent read-back): each on >= 300 rows, posted and non-posted EXACTLY equal in each order (reversed 403 / 403, sorted 347 / 347)",
+   "ok": true,
+   "detail": "{'canonical': {'posted': 347, 'nonposted': 347, 'rows': 694}, 'reversed': {'posted': 403, 'nonposted': 403, 'rows': 806}}"
+  },
+  {
+   "check": "posted rows on the STACKED training surface (training paraphrase + training names + non-sorted training inner orders + the reversed top order at once; independent read-back): >= 1/3 of the 750 posted rows, up from 0 in revision 2 (which never reversed the top object; even without the top-order clause it had fewer)",
+   "ok": true,
+   "detail": "{'rev3': {'rows': 600, 'posted': 300, 'nonposted': 300, 'share_of_posted_rows': 0.4, 'posted_share_within': 0.5}, 'rev2_stacked_without_top_posted': 124}"
+  },
+  {
+   "check": "no surface-to-status cue on the revised surfaces (operator decision 2026-10-12): posted = non-posted EXACTLY on the stacked-surface rows (300 / 300) and on the reversed-top rows (403 / 403), so copy and apply-regardless each score exactly 0.50 there (binding band [0.49, 0.51]; independent read-back and heuristic audit agree)",
+   "ok": true,
+   "detail": "{'stacked_surface': (600, 300, 0.5, 0.5), 'top_reversed': (806, 403, 0.5, 0.5)}"
+  },
+  {
+   "check": "the stacked-share floor is 1/3 in the code (t2bl_common.MIN_STACKED_POSTED_SHARE) as documented; the stacked surface holds 0.40 of the posted rows",
+   "ok": true,
+   "detail": "(0.3333333333333333, 0.4)"
+  },
+  {
+   "check": "the surface modes follow their exact counts within each DIV slot type (canonical / stacked / free: pairs 45 / 150 / 105, posted singles 0 / 150 / 100, non-posted singles 100 / 150 / 100) and the free slots' top order is reversed on an exact half of each type (pairs 53 / 52, singles 50 / 50 each), i.e. 600 stacked, 410 free and 190 canonical-surface DIV rows next to the 300 canon-block rows, posted = non-posted in the stacked and free modes and on the canonical surface as a whole (245 / 245 with the canon block)",
+   "ok": true,
+   "detail": "({'pair': {'stacked': 150, 'canonical': 45, 'free': 105}, 'posted': {'stacked': 150, 'free': 100}, 'nonposted': {'free': 100, 'stacked': 150, 'canonical': 100}}, {'pair': {'sorted': 52, 'reversed': 53}, 'nonposted': {'sorted': 50, 'reversed': 50}, 'posted': {'sorted': 50, 'reversed': 50}}, {'canon_block': 300, 'canonical': 190, 'free': 410, 'stacked': 600}, {'canon_block': {'nonposted': 100, 'post"
+  },
+  {
+   "check": "the stacked training surface is exactly the stacked mode (a free slot is never the full stack)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "regenerated under the SAME training seed 20261165 (same plan, slot and shuffle streams; generator t2bl-data-v3 -> v3.1): every slot keeps its event kind and statuses, the 300 canon-block rows are byte-identical and every pair keeps its surface mode; only the singles' modes and the free slots' top orders changed",
+   "ok": true,
+   "detail": "('t2bl-data-v3', 't2bl-data-v3.1', 300)"
+  },
+  {
+   "check": "the dev bank (seed 20261166) is byte-identical to the first revision-3 build's, which is kept unused in docs/t2b/ledger/superseded_rev3_preop/ (outside every freshness union)",
+   "ok": true,
+   "detail": "('731bbc6a041799ec', '731bbc6a041799ec')"
+  },
+  {
+   "check": "the first revision-3 build is refused under the tightened band: its stacked rows were 300 / 656 = 0.457 posted and its reversed-top rows 360 / 788 = 0.457 (a residual surface-to-status cue its records did not call one)",
+   "ok": true,
+   "detail": "['the stacked surface rows are 0.457 posted, outside [0.49, 0.51] (a surface-to-status cue)', 'the reversed top rows are 0.457 posted, outside [0.49, 0.51] (a surface-to-status cue)']"
+  },
+  {
+   "check": "unchanged since revision 2: the status vocabularies and quotas (every training word on the same number of rows), the magnitude classes, counts and paraphrases (the partitions record equals revision 2's except the top-level order)",
+   "ok": true,
+   "detail": "[('VOId', 10), ('aborted', 15), ('accepted', 15)]"
+  },
+  {
+   "check": "the fresh dev bank and the training set share no payload with the spent revision-2 dev bank or training set (direct comparison), and the build's union contains both spent files",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the fresh dev bank has revision 2's strata and per-stratum row counts (19 strata, 1,801 rows)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "same builder code path: revision 2's builder (its code copy in superseded_rev2/code) regenerates the fresh dev bank byte for byte from the new seed and the recorded rejections",
+   "ok": true,
+   "detail": "('731bbc6a041799ec43b832ae9540cee8db2324fd48ab2dbacc420f37831c5ba8\\n', '')"
+  },
+  {
+   "check": "partition tables: train, dev half, confirm half and PREREG-3 disjoint (exactly and after lower-casing, except 'void' itself); names, paraphrases and order halves consistent",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "no held-out string lower-cases to 'void'; the training case variants are VOId and vOid",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "PREREG-3's 16 strings, both held-out halves and the excluded strings never occur as a training status",
+   "ok": true,
+   "detail": "['posted']"
+  },
+  {
+   "check": "the dev bank's held-out words are exactly the DEV half (20 words); no CONFIRM-half word, name, order or paraphrase 5 appears in the dev bank",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "held-out key orders regenerate from seed 20261163 (three independent derivations agree); every random one is >= 2 swaps from the sorted order; the event / before orders are those of revision 2 (unchanged partitions)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "audit refuses a training row with a paraphrase 4 (dev half)",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['para']\", 'held-out text fragments found: {\"held-out paraphrase: \\'Here are some account balances\\'\": 1, \\'held-out paraphrase: \"Unless the event\\\\\\'s status is posted\"\\': 1, \"held-out paraphrase: \\'Answer with nothing but a JSON object\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a paraphrase 5 (confirm half)",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['para']\", 'held-out text fragments found: {\"held-out paraphrase: \\'Apply one event to the account balances\\'\": 1, \"held-out paraphrase: \\'anything other than posted\\'\": 1, \"held-out paraphrase: \\'Give only a JSON object with all of the balances\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a dev-half event order",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['event']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a confirm-half event order",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['event']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a held-out before order",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['before']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a dev-half letter names",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['names']\", 'held-out text fragments found: {\"name \\'W\\' as a key\": 1, \"name \\'X\\' as a key\": 1, \"name \\'Y\\' as a key\": 1, \"name \\'Z\\' as a key\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a confirm-half word names",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['names']\", 'held-out text fragments found: {\"name \\'fund\\' as a key\": 1, \"name \\'loan\\' as a key\": 1, \"name \\'rent\\' as a key\": 1, \"name \\'wage\\' as a key\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a PREREG-LB names",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['names']\", 'held-out text fragments found: {\"name \\'bank\\' as a key\": 1, \"name \\'card\\' as a key\": 1, \"name \\'cash\\' as a key\": 1, \"name \\'fees\\' as a key\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a 8 accounts",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['names', 'count']\"]"
+  },
+  {
+   "check": "audit refuses a training row with a dev-half status word",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['status']\", 'held-out text fragments found: {\"status \\'rescinded\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a confirm-half status word",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['status']\", 'held-out text fragments found: {\"status \\'postedy\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a PREREG-3 status string",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['status']\", 'held-out text fragments found: {\"status \\'pending\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a excluded status string",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['status']\", 'held-out text fragments found: {\"status \\'settled\\'\": 1}']"
+  },
+  {
+   "check": "audit refuses a training row with a 5-digit balance",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['bal']\", 't2bl-tr-div-0650-posted: a number with more than 4 digits in a training prompt or target (54321)']"
+  },
+  {
+   "check": "audit refuses a training row with a 4-digit amount",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: held-out factor(s) in a training prompt: ['amt']\"]"
+  },
+  {
+   "check": "audit refuses a training row whose target has a 5-digit value (inputs of 4 digits)",
+   "ok": true,
+   "detail": "['t2bl-tr-div-0650-posted: a number with more than 4 digits in a training prompt or target (10890)']"
+  },
+  {
+   "check": "kit revision 3: a training row in either top-level order is NOT a held-out factor (no refusal)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "the audit refuses a training set that never varies the top-level order (revision 2's composition)",
+   "ok": true,
+   "detail": "['top-level order reversed on 0 training rows (< 300): both orders must be trained', 'only 0.0 of the posted training rows are on the stacked training surface (< 0.3333333333333333)']"
+  },
+  {
+   "check": "the audit refuses a set whose posted rows are never on the stacked surface while non-posted rows are (a surface-to-status cue)",
+   "ok": true,
+   "detail": "[\"pair ('div', 278): members differ in more than the status, or are not posted + non-posted\", \"pair ('div', 1): members differ in more than the status, or are not posted + non-posted\"]"
+  },
+  {
+   "check": "the band is binding just outside it: 15 non-posted stacked rows taken off the stacked surface make it 300 / 585 = 0.513 posted, refused (the reversed-top rows stay 403 / 806)",
+   "ok": true,
+   "detail": "['the stacked surface rows are 0.513 posted, outside [0.49, 0.51] (a surface-to-status cue)']"
+  },
+  {
+   "check": "... and 20 non-posted free rows moved to the sorted top order make the reversed-top rows 403 / 786 = 0.513 posted: refused by the audit and by the heuristic audit (copy 0.487 there)",
+   "ok": true,
+   "detail": "(['the reversed top rows are 0.513 posted, outside [0.49, 0.51] (a surface-to-status cue)'], ['heuristic copy scores 0.4873 on the top_reversed rows, outside [0.49, 0.51]'])"
+  },
+  {
+   "check": "audit refuses a scale factor outside the recorded marginal",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0592-posted: held-out factor(s) in a training prompt: ['amt']\"]"
+  },
+  {
+   "check": "audit refuses a prompt whose key order differs from its recorded surface",
+   "ok": true,
+   "detail": "[\"t2bl-tr-div-0650-posted: the prompt text does not encode the row's own payload and surface\"]"
+  },
+  {
+   "check": "audit refuses a wrong target",
+   "ok": true,
+   "detail": "['t2bl-tr-div-0650-posted: target differs from the independent gold']"
+  },
+  {
+   "check": "audit refuses a pair whose members differ in more than the status",
+   "ok": true,
+   "detail": "[\"pair ('canon', 7): members differ in more than the status, or are not posted + non-posted\"]"
+  },
+  {
+   "check": "dev audit refuses an H_words row with a TRAINING word, one with a CONFIRM-half word, an HS row in paraphrase 5, and a mixed row with 'void' instead of its training word",
+   "ok": true,
+   "detail": "[\"t2bl-dev-H_words-000: status is train_word, declared ('heldout_dev_word',)\", \"t2bl-dev-H_words-001: status is heldout_confirm_word, declared ('heldout_dev_word',)\"]"
+  },
+  {
+   "check": "no CRLF in any kit file, record, data file or the draft",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "torch was never imported by the data part",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "f431ffb79235c5996f96bf7990abb3b3481269127ab6b5d1c7d71f729d6b3286",
+  "scripts/t2bl_make_data.py": "4cbe9eac1dc2d2bd804f31a7ee3c891db365cb2b9aa1188f0f10b025cab437c4",
+  "scripts/t2bl_audit.py": "d0ff1a3e32c9272b49c79806760e07c92f1dc99f269615bdb0ae80e3165ce348",
+  "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15",
+  "scripts/t2bl_gate.py": "ddce555c8476ec6c8ef1553faf0c06ba2f7ccc59d6431b8424407979ce499f71",
+  "scripts/t2bl_confirm_bank.py": "90d1cb078ffba1c47fbe56ca183d3f8b9844c37e50fac7261b842c1ea214ec26",
+  "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3",
+  "scripts/t2bl_confirm_analysis.py": "5c39e17cda6b12ba4babaca13aa9256b8783acbcdb2b71f1fcd428bb5a3b5efb",
+  "scripts/t2bl_test.py": "22587790a23450bef96aba9ebff2a8756c4c10bb07f196523c31730c294681eb"
+ },
+ "draft_sha256": "2279c49be1d3443e87d63db821a1f0bf192f1207af94fee4cb1b4a4b005d9b49",
+ "hook_draft_sha256": "4f5cee1f2914deb48c2da956aaae0d64cef85a908af2ce1c0769682d615e9d7e",
+ "hook_draft_t2bl_sha256": "764fe712f87c81359dffea02851be54e679be253f27681eac0e9be2bdb6ec798",
+ "peak_mb": 168.6,
+ "recorded_local": "2026-10-13 12:25:11 -0500",
+ "kit_revision": 3,
+ "seeds": {
+  "train": 20261165,
+  "dev": 20261166
+ },
+ "top_orders_read_back": {
+  "canonical": {
+   "posted": 347,
+   "nonposted": 347,
+   "rows": 694
+  },
+  "reversed": {
+   "posted": 403,
+   "nonposted": 403,
+   "rows": 806
+  }
+ },
+ "stacked_surface_read_back": {
+  "rows": 600,
+  "posted": 300,
+  "nonposted": 300,
+  "share_of_posted_rows": 0.4,
+  "posted_share_within": 0.5
+ },
+ "revision2_stacked_without_top_posted": 124,
+ "revision2_top_reversed_rows": 0,
+ "surface_subsets": {
+  "stacked_surface": {
+   "n": 600,
+   "posted": 300,
+   "binding": true,
+   "copy": 0.5,
+   "apply_regardless": 0.5,
+   "void_trigger": 0.5867
+  },
+  "top_reversed": {
+   "n": 806,
+   "posted": 403,
+   "binding": true,
+   "copy": 0.5,
+   "apply_regardless": 0.5,
+   "void_trigger": 0.5819
+  },
+  "top_reversed_not_stacked": {
+   "n": 206,
+   "posted": 103,
+   "binding": false,
+   "copy": 0.5,
+   "apply_regardless": 0.5,
+   "void_trigger": 0.568
+  },
+  "canonical_surface": {
+   "n": 490,
+   "posted": 245,
+   "binding": false,
+   "copy": 0.5,
+   "apply_regardless": 0.5,
+   "void_trigger": 0.7571
+  }
+ },
+ "train_sha256": "88f04e6b17c2c0e50b0e655f4f59e747232cc2ce8db0f49f189b406fd4fc8ba4",
+ "dev_sha256": "731bbc6a041799ec43b832ae9540cee8db2324fd48ab2dbacc420f37831c5ba8",
+ "heuristics": {
+  "apply_regardless": 0.5,
+  "ci_posted": 1.0,
+  "contains_posted": 0.94,
+  "copy": 0.5,
+  "endswith_ed": 0.8,
+  "exact": 1.0,
+  "len6": 0.94,
+  "semantic": 0.76,
+  "startswith_p": 0.95,
+  "void_trigger": 0.64
+ },
+ "dev_heuristics_heldout_words": {
+  "H_words": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.55,
+   "len6": 0.95,
+   "semantic": 0.4,
+   "startswith_p": 0.95,
+   "token_overlap": 0.3,
+   "void_token": 0.0,
+   "void_trigger": 0.05
+  },
+  "HS_words": {
+   "anchor_trigger": 0.0,
+   "apply_regardless": 0.0,
+   "contains_posted": 0.8,
+   "copy": 1.0,
+   "endswith_ed": 0.55,
+   "len6": 0.95,
+   "semantic": 0.4,
+   "startswith_p": 0.95,
+   "token_overlap": 0.3,
+   "void_token": 0.0,
+   "void_trigger": 0.05
+  }
+ },
+ "composition": {
+  "status_kind": {
+   "neutral": 150,
+   "nonce": 120,
+   "not_applied": 180,
+   "posted": 750,
+   "posted_like": 90,
+   "void": 150,
+   "void_variant": 60
+  },
+  "names": {
+   "canonical": 557,
+   "canonical_plus_train_letters": 63,
+   "train_letters": 439,
+   "train_words": 441
+  },
+  "count": {
+   "canonical": 1033,
+   "train": 467
+  },
+  "bal": {
+   "b3": 368,
+   "b4": 190,
+   "t2": 942
+  },
+  "amt": {
+   "a2": 198,
+   "a3": 177,
+   "t2": 1125
+  },
+  "para": {
+   "canonical": 633,
+   "train": 867
+  },
+  "top": {
+   "canonical": 694,
+   "train": 806
+  },
+  "surface_modes": {
+   "canon_block": 300,
+   "canonical": 190,
+   "free": 410,
+   "stacked": 600
+  },
+  "surface_modes_by_status": {
+   "canon_block": {
+    "nonposted": 100,
+    "posted": 200
+   },
+   "canonical": {
+    "nonposted": 145,
+    "posted": 45
+   },
+   "free": {
+    "nonposted": 205,
+    "posted": 205
+   },
+   "stacked": {
+    "nonposted": 300,
+    "posted": 300
+   }
+  },
+  "stacked_surface": {
+   "rows": 600,
+   "posted": 300,
+   "nonposted": 300,
+   "share_of_all_rows": 0.4,
+   "share_of_posted_rows": 0.4,
+   "posted_share_within": 0.5
+  },
+  "top_reversed": {
+   "rows": 806,
+   "posted": 403,
+   "nonposted": 403,
+   "share_of_all_rows": 0.5373,
+   "share_of_posted_rows": 0.5373,
+   "posted_share_within": 0.5
+  },
+  "top_sorted": {
+   "rows": 694,
+   "posted": 347,
+   "nonposted": 347,
+   "share_of_all_rows": 0.4627,
+   "share_of_posted_rows": 0.4627,
+   "posted_share_within": 0.5
+  },
+  "canonical_surface": {
+   "rows": 490,
+   "posted": 245,
+   "nonposted": 245,
+   "share_of_all_rows": 0.3267,
+   "share_of_posted_rows": 0.3267,
+   "posted_share_within": 0.5
+  },
+  "canonical_surface_status_kinds": {
+   "neutral": 29,
+   "nonce": 21,
+   "not_applied": 51,
+   "posted": 245,
+   "posted_like": 18,
+   "void": 111,
+   "void_variant": 15
+  },
+  "max_abs_value_inputs_and_targets": 9962,
+  "max_abs_scale_row_balance": 999
+ }
+}

@@ -1,0 +1,154 @@
+{
+ "part": "gate",
+ "ok": true,
+ "n_checks": 22,
+ "n_pass": 22,
+ "checks": [
+  {
+   "check": "scorer self-test on the dev bank: gold renderings scored correct, negatives wrong, error classes, copy floor, parser identity with env.parse_state on A-D rows",
+   "ok": true,
+   "detail": "{'gold_renderings': 12607, 'negatives': 16209, 'parse_general_equals_env_parse_state_on_A_D': '16016/16016'}"
+  },
+  {
+   "check": "every dev-gate case gives its pre-stated verdict (22 cases)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "every verdict and every named pattern is realised",
+   "ok": true,
+   "detail": "(['NO_VERDICT_INSTRUMENT', 'PARTIAL', 'PROCEED', 'TRIGGER_WIDENED'], ['heldout_below_bar', 'heldout_posted_twins', 'in_distribution_cost', 'not_aligned_with_own_canonical', 'seed_disagreement', 'trained_words_below_bar', 'word_kind_below_floor'])"
+  },
+  {
+   "check": "GATE_RULE.md is rendered from the code's rule text (verbatim, pre-stated, revision 2)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "state: the gate rule IS frozen: GATE_RULE.json verifies against every frozen input",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "state: the runner's frozen-input check passes",
+   "ok": true,
+   "detail": "True"
+  },
+  {
+   "check": "freeze-rule refuses an approval that names nobody",
+   "ok": true,
+   "detail": "--approval must name who approved, when, and the DECISIONS entry"
+  },
+  {
+   "check": "freeze-rule refuses once an output of this revision's dev screen exists",
+   "ok": true,
+   "detail": "a runs/t2bl/dev_rev3 output exists: the rule can no longer be frozen"
+  },
+  {
+   "check": "freeze-rule writes GATE_RULE.json with every frozen input and pins PREREG-5's rules digest AND decision code; it records kit revision 3, its seeds, its run directory and the spent revision-2 artifacts",
+   "ok": true,
+   "detail": "['data/t2bl_dev.SOURCE.json', 'data/t2bl_dev.jsonl', 'data/t2bl_train.SOURCE.json', 'data/t2bl_train.jsonl']"
+  },
+  {
+   "check": "the frozen record verifies against the current files",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "a changed frozen input is reported",
+   "ok": true,
+   "detail": "['data/t2bl_dev.jsonl: differs from the frozen gate rule (sha256)']"
+  },
+  {
+   "check": "freeze-rule is create-only",
+   "ok": true,
+   "detail": "GATE_RULE.json exists (create-only)"
+  },
+  {
+   "check": "a stopped dev run gets a NO VERDICT record (GATE.md and GATE.json written, the reason quoted)",
+   "ok": true,
+   "detail": "No gate verdict: the dev run stopped before completing ([t2bl] ANCHOR FAILED (test))."
+  },
+  {
+   "check": "an orphan GATE.md (no GATE.json) and a stale GATE.json.partial are moved aside, never deleted, and the analysis completes",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the gate analysis is create-only (GATE.json exists)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "P(PROCEED) is high at a true held-out-word accuracy of 0.95 and near 0 at 0.85 (G4 aligns the gate with PREREG-5's non-inferiority)",
+   "ok": true,
+   "detail": "(0.9733333333333334, 0.0)"
+  },
+  {
+   "check": "the hook identity rule: an installed hook that differs from the draft is refused",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the hook glob: every installed *t2bl*.sh must be the draft (none installed: fine; a second, different copy under another name: refused)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "the real scripts/queue_hooks (read-only scan): no t2bl hook, the revision-3 draft, or revision 2's spent hook awaiting reinstall after the freeze (then the runner refuses until it is the revision-3 draft)",
+   "ok": true,
+   "detail": "none or the current draft"
+  },
+  {
+   "check": "the rule text is byte-identical to the revision-2 rule frozen in D-48 and every threshold equals revision 2's",
+   "ok": true,
+   "detail": "{'BAR_HS': True, 'KIND_FLOOR': True, 'NI_MARGIN': True, 'TWIN_BAR': True, 'COPY_CAP': True, 'ALIGN_MARGIN': True, 'TRIGGER_TRAINED_MIN': True, 'TRIGGER_HELDOUT_MAX': True, 'RULE_VERSION': True}"
+  },
+  {
+   "check": "GATE_RULE.md and every GATE.md carry the kit-revision-3 inputs note (fresh seed, run directory, spent revision 2, the top-level order trained)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "torch was never imported by the gate part",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "code_sha256": {
+  "scripts/t2bl_common.py": "f431ffb79235c5996f96bf7990abb3b3481269127ab6b5d1c7d71f729d6b3286",
+  "scripts/t2bl_make_data.py": "4cbe9eac1dc2d2bd804f31a7ee3c891db365cb2b9aa1188f0f10b025cab437c4",
+  "scripts/t2bl_audit.py": "d0ff1a3e32c9272b49c79806760e07c92f1dc99f269615bdb0ae80e3165ce348",
+  "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15",
+  "scripts/t2bl_gate.py": "ddce555c8476ec6c8ef1553faf0c06ba2f7ccc59d6431b8424407979ce499f71",
+  "scripts/t2bl_confirm_bank.py": "90d1cb078ffba1c47fbe56ca183d3f8b9844c37e50fac7261b842c1ea214ec26",
+  "scripts/t2bl_confirm_run.py": "fb56bc3629e3e7c582b6f9b2a964131e274b888b06b192603b61695fb14177a3",
+  "scripts/t2bl_confirm_analysis.py": "5c39e17cda6b12ba4babaca13aa9256b8783acbcdb2b71f1fcd428bb5a3b5efb",
+  "scripts/t2bl_test.py": "22587790a23450bef96aba9ebff2a8756c4c10bb07f196523c31730c294681eb"
+ },
+ "draft_sha256": "d2ce97460d5949896984454b08aea3a4226e2c37f99971c04fda138100f3ba9e",
+ "hook_draft_sha256": "4f5cee1f2914deb48c2da956aaae0d64cef85a908af2ce1c0769682d615e9d7e",
+ "hook_draft_t2bl_sha256": "764fe712f87c81359dffea02851be54e679be253f27681eac0e9be2bdb6ec798",
+ "peak_mb": 66.2,
+ "recorded_local": "2026-10-13 12:51:21 -0500",
+ "verdicts": [
+  "NO_VERDICT_INSTRUMENT",
+  "PARTIAL",
+  "PROCEED",
+  "TRIGGER_WIDENED"
+ ],
+ "patterns": [
+  "heldout_below_bar",
+  "heldout_posted_twins",
+  "in_distribution_cost",
+  "not_aligned_with_own_canonical",
+  "seed_disagreement",
+  "trained_words_below_bar",
+  "word_kind_below_floor"
+ ],
+ "gate_frozen": true,
+ "P_PROCEED": {
+  "0.95": 0.9733333333333334,
+  "0.85": 0.0
+ }
+}

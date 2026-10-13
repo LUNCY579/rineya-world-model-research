@@ -1,0 +1,557 @@
+{
+ "method": "simulation through the registered rules (map: per cell, P(BAR and GAIN in all three seeds and NI) under nested and independent cell-vs-twin correlation and three seed regimes (independent, 80% shared, identical), Holm bounded by alpha / 27 and alpha; in-distribution control: P(ID_NI) under nested and independent T2b-ledger-vs-T2 s0 correlation and the same seed regimes; planning: P(GENERALISES) through decide_plan with nested success sets and with success sets independent within ORACLE's, and the exact P(primary PASS) under independence; the dev gate: P(PROCEED) against P(GENERALISES) on the held-out-word cells). The strata share bases, so joint figures over factors are not products of these.",
+ "assumption_source": "runs\\t2bl\\dev_rev3\\analysis\\GATE.json",
+ "twin_accuracy_assumed": {
+  "noop": 0.99,
+  "apply": 0.93,
+  "mixed": 0.95
+ },
+ "id_ni": {
+  "seed_acc_0.97_vs_t2s0_0.92": {
+   "seeds independent, nested": 1.0,
+   "seeds independent, independent": 1.0,
+   "seeds 80% shared, nested": 1.0,
+   "seeds 80% shared, independent": 1.0,
+   "seeds identical, nested": 1.0,
+   "seeds identical, independent": 1.0
+  }
+ },
+ "plan": [
+  {
+   "p_t2bl_hs": 0.81788,
+   "p_t2bl_canon": 0.81788,
+   "p_t2s0_hs": 0.0278,
+   "p_oracle": 0.889,
+   "n": 180,
+   "reps": 300,
+   "P_primary_PASS_exact_independent": 0.9999999999999695,
+   "nested": {
+    "P_GENERALISES": 1.0,
+    "P_PARTIAL": 0.0,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   },
+   "independent_within_oracle": {
+    "P_GENERALISES": 0.9766666666666667,
+    "P_PARTIAL": 0.023333333333333334,
+    "P_TRIGGER_WIDENED": 0.0,
+    "P_primary_PASS_sim": 1.0
+   }
+  }
+ ],
+ "plan_note": "planning scenario from the dev screen: T2BL@HS success = ORACLE x the product of s0's LB_void and LB_posted one-step accuracies (a crude per-instance proxy), T2BL@canon 0.75",
+ "map": [
+  {
+   "factor": "words",
+   "cell": "H_words",
+   "n": 100,
+   "p_on": 0.96,
+   "p_twin": 1.0,
+   "p_t2s0": 0.04,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.9875,
+      "P_generalises_best_case_holm": 0.9875,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9875
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9875,
+      "P_generalises_best_case_holm": 0.9875,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9875
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.915,
+      "P_generalises_best_case_holm": 0.915,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.915
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.915,
+      "P_generalises_best_case_holm": 0.915,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.915
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.885,
+      "P_generalises_best_case_holm": 0.885,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.885
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.885,
+      "P_generalises_best_case_holm": 0.885,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.885
+     }
+    }
+   }
+  },
+  {
+   "factor": "order",
+   "cell": "H_order",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.97,
+   "p_t2s0": 0.25,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.985,
+      "P_generalises_best_case_holm": 0.985,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.985
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.995,
+      "P_generalises_best_case_holm": 0.995,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.995
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.925,
+      "P_generalises_best_case_holm": 0.925,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.925
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.995,
+      "P_generalises_best_case_holm": 0.995,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.995
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.8925,
+      "P_generalises_best_case_holm": 0.8925,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.8925
+     }
+    }
+   }
+  },
+  {
+   "factor": "names",
+   "cell": "H_names",
+   "n": 100,
+   "p_on": 0.87,
+   "p_twin": 0.97,
+   "p_t2s0": 0.42,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0475,
+      "P_generalises_best_case_holm": 0.0475,
+      "P_bar_all_seeds": 0.9525,
+      "P_ni": 0.0475
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0625,
+      "P_generalises_best_case_holm": 0.0625,
+      "P_bar_all_seeds": 0.9575,
+      "P_ni": 0.0625
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0775,
+      "P_generalises_best_case_holm": 0.0775,
+      "P_bar_all_seeds": 0.9525,
+      "P_ni": 0.0775
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.08,
+      "P_generalises_best_case_holm": 0.08,
+      "P_bar_all_seeds": 0.9625,
+      "P_ni": 0.08
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.1075,
+      "P_generalises_best_case_holm": 0.1075,
+      "P_bar_all_seeds": 0.9725,
+      "P_ni": 0.1075
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.105,
+      "P_generalises_best_case_holm": 0.105,
+      "P_bar_all_seeds": 0.9825,
+      "P_ni": 0.105
+     }
+    }
+   }
+  },
+  {
+   "factor": "count",
+   "cell": "H_count",
+   "n": 100,
+   "p_on": 0.95,
+   "p_twin": 0.97,
+   "p_t2s0": 0.46,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.985,
+      "P_generalises_best_case_holm": 0.985,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.985
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.995,
+      "P_generalises_best_case_holm": 0.995,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.995
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.925,
+      "P_generalises_best_case_holm": 0.925,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.925
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.995,
+      "P_generalises_best_case_holm": 0.995,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.995
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.8925,
+      "P_generalises_best_case_holm": 0.8925,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.8925
+     }
+    }
+   }
+  },
+  {
+   "factor": "para",
+   "cell": "H_para",
+   "n": 100,
+   "p_on": 0.96,
+   "p_twin": 0.97,
+   "p_t2s0": 0.49,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9725,
+      "P_generalises_best_case_holm": 0.9725,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9725
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.9525,
+      "P_generalises_best_case_holm": 0.9525,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.9525
+     }
+    }
+   }
+  },
+  {
+   "factor": "magnitude",
+   "cell": "H_bal",
+   "n": 67,
+   "p_on": 0.68,
+   "p_twin": 0.94,
+   "p_t2s0": 0.44,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0025,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     }
+    }
+   }
+  },
+  {
+   "factor": "magnitude",
+   "cell": "H_amt",
+   "n": 67,
+   "p_on": 0.19402985074626866,
+   "p_twin": 0.94,
+   "p_t2s0": 0.0,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.0,
+      "P_generalises_best_case_holm": 0.0,
+      "P_bar_all_seeds": 0.0,
+      "P_ni": 0.0
+     }
+    }
+   }
+  },
+  {
+   "factor": "combined",
+   "cell": "HS_words",
+   "n": 100,
+   "p_on": 0.91,
+   "p_twin": 1.0,
+   "p_t2s0": 0.21,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.1625,
+      "P_generalises_best_case_holm": 0.1625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.1625
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.1625,
+      "P_generalises_best_case_holm": 0.1625,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.1625
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.1375,
+      "P_generalises_best_case_holm": 0.1375,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.1375
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.1375,
+      "P_generalises_best_case_holm": 0.1375,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.1375
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.19,
+      "P_generalises_best_case_holm": 0.19,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.19
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.19,
+      "P_generalises_best_case_holm": 0.19,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.19
+     }
+    }
+   }
+  },
+  {
+   "factor": "combined",
+   "cell": "HS_posted",
+   "n": 100,
+   "p_on": 0.92,
+   "p_twin": 0.94,
+   "p_t2s0": 0.13,
+   "regimes": {
+    "seeds independent": {
+     "nested": {
+      "P_generalises_worst_case_holm": 1.0,
+      "P_generalises_best_case_holm": 1.0,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 1.0
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.975,
+      "P_generalises_best_case_holm": 0.975,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.975
+     }
+    },
+    "seeds 80% shared": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.995,
+      "P_generalises_best_case_holm": 0.995,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.995
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.8375,
+      "P_generalises_best_case_holm": 0.8375,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.8375
+     }
+    },
+    "seeds identical": {
+     "nested": {
+      "P_generalises_worst_case_holm": 0.995,
+      "P_generalises_best_case_holm": 0.995,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.995
+     },
+     "independent": {
+      "P_generalises_worst_case_holm": 0.76,
+      "P_generalises_best_case_holm": 0.76,
+      "P_bar_all_seeds": 1.0,
+      "P_ni": 0.76
+     }
+    }
+   }
+  }
+ ],
+ "gate_alignment": [
+  {
+   "p_true": 0.85,
+   "seeds": "seeds independent",
+   "P_PROCEED": 0.0,
+   "P_GENERALISES_H_words_nested": 0.0,
+   "P_GENERALISES_HS_words_nested": 0.0
+  },
+  {
+   "p_true": 0.85,
+   "seeds": "seeds 80% shared",
+   "P_PROCEED": 0.005,
+   "P_GENERALISES_H_words_nested": 0.0,
+   "P_GENERALISES_HS_words_nested": 0.0
+  },
+  {
+   "p_true": 0.9,
+   "seeds": "seeds independent",
+   "P_PROCEED": 0.119,
+   "P_GENERALISES_H_words_nested": 0.145,
+   "P_GENERALISES_HS_words_nested": 0.145
+  },
+  {
+   "p_true": 0.9,
+   "seeds": "seeds 80% shared",
+   "P_PROCEED": 0.284,
+   "P_GENERALISES_H_words_nested": 0.145,
+   "P_GENERALISES_HS_words_nested": 0.145
+  },
+  {
+   "p_true": 0.95,
+   "seeds": "seeds independent",
+   "P_PROCEED": 0.9615,
+   "P_GENERALISES_H_words_nested": 0.9875,
+   "P_GENERALISES_HS_words_nested": 0.9875
+  },
+  {
+   "p_true": 0.95,
+   "seeds": "seeds 80% shared",
+   "P_PROCEED": 0.97,
+   "P_GENERALISES_H_words_nested": 0.9125,
+   "P_GENERALISES_HS_words_nested": 0.9125
+  }
+ ]
+}
