@@ -1700,3 +1700,55 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
   - **Audit code archived:** the scratch code, logs and results of the item-7 verification, the P-18 audit (methods
     A, B and C) and the B6 panel are in `research/audit_evidence/bwm_i7_p18_b6_scratch/`: 53 files, 11.0 MB,
     MANIFEST.json with sha256.
+- **P-19 B4 futility screen (PREREG_B4_SCREEN ac70043b…, co-signed CX D-40): GO (2026-10-13 10:11; independently
+  verified 10:20).**
+  - **Wording (registered):** "B4 screen GO: arm (a), the RCX hybrid hook, passed the pre-set futility rule on
+    seeds_fresh-40, paired vs item 7's R0 beam."
+  - **Decision:** arm a 33/40 (CP 0.672–0.927) vs R0 27/40 (0.509–0.814). a_only 7 (seeds_fresh/4, 18, 21, 33, 34, 35,
+    39), R0_only 1 (/32), both 26, neither 6. Net +6 ≥ 2, so GO.
+  - **Report-only p, not effect estimates:** sign 9/256 = 0.035; McNemar 9/128 = 0.070. Under the null the rule says
+    GO about 0.30–0.36 of the time.
+  - **Not VOID and not an INSTRUMENT FAULT:**
+    - VOID counters all 0; model_evals 6,265.
+    - Canary max |Δ| 0.0 on 4 shards × 25 probes, counters matched.
+    - R0 inputs match A.0 (all 54).
+    - Round-1 identity holds. It rests on one pair (seeds_fresh/0, same plan, 232 tokens), but the round-1 F-cache
+      lines are byte-identical between the arms in every shard, and 2,449 shared F keys show 0 differences.
+  - **Run:** one turn, 07:00:02–10:11:07, no restarts, cold caches. The snapshot, pins and analysis-input shas show
+    no drift.
+  - **Verified-plan statement (FREPLAY via the registered `faudit-screen`):** 33/33 (a) and 27/27 (R0), verified by
+    the learned F plus a domain-agnostic delta-consistency check. Arm a's FREPLAY-R2 is 21.0% [18.6, 23.6], above 5%.
+    FREPLAY-R1 bounds [32, 33]: one flagged instance (/35, solved) and one harmful false-illegal key.
+  - **Post-hoc P-18 note (RCX wording, I-23):** seeds_fresh/0 is concordant (both solved), so the net is unchanged.
+  - **Report-only descriptives:**
+    - 11–15 blocks: a 19/26 vs R0 14/26 (+6/−1). 6–10 blocks: 14/14 vs 13/14.
+    - 12 of R0's 13 failures ended at exactly 1 unmet goal fact; arm a solved 6 of those 12.
+    - Hook: 24,583 calls, 0 penalty-band calls, 4.24 s of CPU.
+    - F unique keys: a 7,928 vs R0 7,761 (the cache counts).
+  - **Glosses on the pinned report** (`b4_screen.py` and its report are pinned and not edited):
+    - "GO credited to the critic: True" means only that the >5% penalty-band attribution rule did not fire. The arm
+      is GNN + 1.0 × misplaced_blocks, and the screen cannot separate the learned value from misplaced_blocks (arm a0
+      of the full B4).
+    - "Unlocks the co-signed B4 primary" means the full B4 is ELIGIBLE to be finalised. It is not yet co-signed (RCX's
+      co-sign covers the screen and addendum A only) and needs edit-5 adoption, RCX's co-sign and the operator's
+      go-ahead.
+    - The report's control cost row (R0 6,037 F queries, 150.9 per instance) is the E-04 undercount. Use 7,761
+      (194.0 per instance) against the arm's 7,928 (198.2).
+  - **Not claimed:**
+    - that the hook improves planning;
+    - any effect size from the screen; the screen's net or p is never used for B4 power;
+    - comparisons with hard, mirror, PB-602 or published results;
+    - generalisation beyond one run, eval_seed 0, one GNN seed, Pa_v2_s1/Fdelta_s0, W4/E24, Blocksworld;
+    - "simulator-free": the hook is tier B, a GNN trained on exact h*.
+  - **The 40 are never pooled into B4.**
+  - **Post-hoc observation (logged, no action):** 5 of the 7 a_only ids share a goal CLASS, not an instance, with an
+    RCX set: /21 (E07 test), /18 (VAL-B), /33, /35, /39 (TEST-B). Changing B4's exclusions on this basis would be
+    screen-informed, so B4's recipe stays as agreed.
+- **E-06 Erratum: bundleJ omitted the registered `faudit-screen` step** (addendum §B.6/§C.4; D-83 listed only run and
+  analyze). It was run by hand at 10:24 (CPU, seconds) on the inputs whose shas `ANALYSIS_INPUTS.json` recorded. Output
+  `runs/BW_B4_SCREEN/FAUDIT_b4s_a_beam.json` (fff96c1c…). Nothing else is affected.
+- **I-26 Screen records sent to RCX (prereg §8 "in every case"):** `runs/BW_B4_SCREEN/RCX_PER_INSTANCE_RECORDS.jsonl`
+  (00af6e6e…).
+  - **Contents:** 80 records, 40 ids × arms a and R0. Fields: success (VAL), fail class, rounds, expansions, tokens,
+    plan, F unique keys and forest classes from FREPLAY, flagged, and hook counters (arm a).
+  - **Gap:** R0's runner did not log per-instance expansions, so that field is null for R0.

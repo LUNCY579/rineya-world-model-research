@@ -1,0 +1,6677 @@
+{
+ "FREPLAY_R1": {
+  "ceiling_at_most_observed": true,
+  "exactF_success_lower_L": 32,
+  "exactF_success_upper_U": 33,
+  "flagged": 1,
+  "flagged_ids": [
+   "seeds_fresh/35"
+  ],
+  "flagged_solved": 1,
+  "n_instances": 40,
+  "observed_success": 33,
+  "oracle_equivalent_all": false,
+  "support_exposed_instances": 33
+ },
+ "FREPLAY_R2": {
+  "R2": {
+   "ci95": [
+    0.185834,
+    0.235848
+   ],
+   "k": 222,
+   "n": 1057,
+   "p": 0.210028
+  },
+  "claim": "B4 screen arm a: verified-plan statements",
+  "threshold": 0.05,
+  "wording_change_triggered": true
+ },
+ "additional_report_only": {
+  "delta_exact": {
+   "ci95": [
+    0.967991,
+    0.9754
+   ],
+   "k": 7705,
+   "n": 7928,
+   "p": 0.971872
+  },
+  "flag_accuracy_schema_valid": {
+   "ci95": [
+    0.967991,
+    0.9754
+   ],
+   "k": 7705,
+   "n": 7928,
+   "p": 0.971872
+  },
+  "harmful_by_class": {
+   "false_illegal": 1,
+   "false_legal_accepted": 0,
+   "wrong_state": 0
+  }
+ },
+ "checks": {
+  "plans_not_covered": [],
+  "verified_plans_not_goal_under_F": []
+ },
+ "conflicting_keys": 0,
+ "conflicts": [],
+ "files": {
+  "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl": {
+   "dup_lines_diff_text": 0,
+   "dup_lines_same_text": 0,
+   "keys": 1429,
+   "lines": 1429,
+   "torn_lines": 0
+  },
+  "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl": {
+   "dup_lines_diff_text": 0,
+   "dup_lines_same_text": 0,
+   "keys": 2722,
+   "lines": 2722,
+   "torn_lines": 0
+  },
+  "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl": {
+   "dup_lines_diff_text": 0,
+   "dup_lines_same_text": 0,
+   "keys": 2066,
+   "lines": 2066,
+   "torn_lines": 0
+  },
+  "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl": {
+   "dup_lines_diff_text": 0,
+   "dup_lines_same_text": 0,
+   "keys": 1711,
+   "lines": 1711,
+   "torn_lines": 0
+  }
+ },
+ "harmful_keys": [
+  {
+   "class": "false_illegal",
+   "key": {
+    "a": "unstack b n",
+    "s": [
+     "clear a",
+     "clear b",
+     "clear c",
+     "clear d",
+     "clear e",
+     "clear f",
+     "clear h",
+     "clear i",
+     "clear m",
+     "clear o",
+     "handempty",
+     "on b n",
+     "on h j",
+     "on m l",
+     "on n k",
+     "ontable a",
+     "ontable c",
+     "ontable d",
+     "ontable e",
+     "ontable f",
+     "ontable i",
+     "ontable j",
+     "ontable k",
+     "ontable l",
+     "ontable o"
+    ]
+   },
+   "key_id": "64c8557ac8aee0f1",
+   "n_blocks": 14,
+   "subtype": "fi_flag",
+   "text": "{\"add\":[],\"del\":[],\"legal\":false}"
+  }
+ ],
+ "instances": [
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 6
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 0,
+    "malformed": 0,
+    "ok": 6,
+    "wrong_state": 0
+   },
+   "forest_keys": 6,
+   "forest_states": 7,
+   "harmful_keys": [],
+   "id": "seeds_fresh/0",
+   "n_blocks": 6,
+   "success": true,
+   "support_exposed": false,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 16
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 0,
+    "malformed": 0,
+    "ok": 24,
+    "wrong_state": 0
+   },
+   "forest_keys": 24,
+   "forest_states": 24,
+   "harmful_keys": [],
+   "id": "seeds_fresh/1",
+   "n_blocks": 8,
+   "success": true,
+   "support_exposed": false,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 14
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 0,
+    "malformed": 0,
+    "ok": 22,
+    "wrong_state": 0
+   },
+   "forest_keys": 22,
+   "forest_states": 21,
+   "harmful_keys": [],
+   "id": "seeds_fresh/2",
+   "n_blocks": 8,
+   "success": true,
+   "support_exposed": false,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 18
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 2,
+    "malformed": 0,
+    "ok": 28,
+    "wrong_state": 0
+   },
+   "forest_keys": 30,
+   "forest_states": 26,
+   "harmful_keys": [],
+   "id": "seeds_fresh/3",
+   "n_blocks": 8,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 22
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 9,
+    "malformed": 0,
+    "ok": 136,
+    "wrong_state": 0
+   },
+   "forest_keys": 145,
+   "forest_states": 113,
+   "harmful_keys": [],
+   "id": "seeds_fresh/4",
+   "n_blocks": 9,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 20
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 5,
+    "malformed": 0,
+    "ok": 90,
+    "wrong_state": 0
+   },
+   "forest_keys": 95,
+   "forest_states": 72,
+   "harmful_keys": [],
+   "id": "seeds_fresh/5",
+   "n_blocks": 9,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 18
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 1,
+    "malformed": 0,
+    "ok": 39,
+    "wrong_state": 0
+   },
+   "forest_keys": 40,
+   "forest_states": 35,
+   "harmful_keys": [],
+   "id": "seeds_fresh/6",
+   "n_blocks": 9,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 16
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 1,
+    "malformed": 0,
+    "ok": 84,
+    "wrong_state": 0
+   },
+   "forest_keys": 85,
+   "forest_states": 78,
+   "harmful_keys": [],
+   "id": "seeds_fresh/7",
+   "n_blocks": 9,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 20
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 0,
+    "malformed": 0,
+    "ok": 20,
+    "wrong_state": 0
+   },
+   "forest_keys": 20,
+   "forest_states": 21,
+   "harmful_keys": [],
+   "id": "seeds_fresh/8",
+   "n_blocks": 9,
+   "success": true,
+   "support_exposed": false,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 40
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 7,
+    "malformed": 0,
+    "ok": 292,
+    "wrong_state": 0
+   },
+   "forest_keys": 299,
+   "forest_states": 227,
+   "harmful_keys": [],
+   "id": "seeds_fresh/9",
+   "n_blocks": 10,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 16
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 0,
+    "malformed": 0,
+    "ok": 83,
+    "wrong_state": 0
+   },
+   "forest_keys": 83,
+   "forest_states": 74,
+   "harmful_keys": [],
+   "id": "seeds_fresh/10",
+   "n_blocks": 10,
+   "success": true,
+   "support_exposed": false,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 24
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 1,
+    "malformed": 0,
+    "ok": 100,
+    "wrong_state": 0
+   },
+   "forest_keys": 101,
+   "forest_states": 81,
+   "harmful_keys": [],
+   "id": "seeds_fresh/11",
+   "n_blocks": 10,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 28
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 1,
+    "malformed": 0,
+    "ok": 125,
+    "wrong_state": 0
+   },
+   "forest_keys": 126,
+   "forest_states": 109,
+   "harmful_keys": [],
+   "id": "seeds_fresh/12",
+   "n_blocks": 10,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 24
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 1,
+    "malformed": 0,
+    "ok": 105,
+    "wrong_state": 0
+   },
+   "forest_keys": 106,
+   "forest_states": 83,
+   "harmful_keys": [],
+   "id": "seeds_fresh/13",
+   "n_blocks": 10,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 28
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 3,
+    "malformed": 0,
+    "ok": 212,
+    "wrong_state": 0
+   },
+   "forest_keys": 215,
+   "forest_states": 193,
+   "harmful_keys": [],
+   "id": "seeds_fresh/14",
+   "n_blocks": 11,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 28
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 3,
+    "malformed": 0,
+    "ok": 208,
+    "wrong_state": 0
+   },
+   "forest_keys": 211,
+   "forest_states": 164,
+   "harmful_keys": [],
+   "id": "seeds_fresh/15",
+   "n_blocks": 11,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 24
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 7,
+    "malformed": 0,
+    "ok": 157,
+    "wrong_state": 0
+   },
+   "forest_keys": 164,
+   "forest_states": 120,
+   "harmful_keys": [],
+   "id": "seeds_fresh/16",
+   "n_blocks": 11,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 22
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 5,
+    "malformed": 0,
+    "ok": 143,
+    "wrong_state": 0
+   },
+   "forest_keys": 148,
+   "forest_states": 125,
+   "harmful_keys": [],
+   "id": "seeds_fresh/17",
+   "n_blocks": 11,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 36
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 4,
+    "malformed": 0,
+    "ok": 213,
+    "wrong_state": 0
+   },
+   "forest_keys": 217,
+   "forest_states": 169,
+   "harmful_keys": [],
+   "id": "seeds_fresh/18",
+   "n_blocks": 12,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": false,
+    "reason": null,
+    "steps_ok": 22
+   },
+   "fail": "budget",
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 9,
+    "malformed": 0,
+    "ok": 167,
+    "wrong_state": 0
+   },
+   "forest_keys": 176,
+   "forest_states": 137,
+   "harmful_keys": [],
+   "id": "seeds_fresh/19",
+   "n_blocks": 12,
+   "success": false,
+   "support_exposed": true,
+   "verified": false
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 30
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 0,
+    "malformed": 0,
+    "ok": 137,
+    "wrong_state": 0
+   },
+   "forest_keys": 137,
+   "forest_states": 115,
+   "harmful_keys": [],
+   "id": "seeds_fresh/20",
+   "n_blocks": 12,
+   "success": true,
+   "support_exposed": false,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 40
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 18,
+    "malformed": 0,
+    "ok": 248,
+    "wrong_state": 0
+   },
+   "forest_keys": 266,
+   "forest_states": 204,
+   "harmful_keys": [],
+   "id": "seeds_fresh/21",
+   "n_blocks": 12,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 32
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 6,
+    "malformed": 0,
+    "ok": 175,
+    "wrong_state": 0
+   },
+   "forest_keys": 181,
+   "forest_states": 144,
+   "harmful_keys": [],
+   "id": "seeds_fresh/22",
+   "n_blocks": 12,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 32
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 0,
+    "malformed": 0,
+    "ok": 75,
+    "wrong_state": 0
+   },
+   "forest_keys": 75,
+   "forest_states": 66,
+   "harmful_keys": [],
+   "id": "seeds_fresh/23",
+   "n_blocks": 13,
+   "success": true,
+   "support_exposed": false,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 32
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 3,
+    "malformed": 0,
+    "ok": 190,
+    "wrong_state": 0
+   },
+   "forest_keys": 193,
+   "forest_states": 165,
+   "harmful_keys": [],
+   "id": "seeds_fresh/24",
+   "n_blocks": 13,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 30
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 10,
+    "malformed": 0,
+    "ok": 140,
+    "wrong_state": 0
+   },
+   "forest_keys": 150,
+   "forest_states": 119,
+   "harmful_keys": [],
+   "id": "seeds_fresh/25",
+   "n_blocks": 13,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 34
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 2,
+    "malformed": 0,
+    "ok": 217,
+    "wrong_state": 0
+   },
+   "forest_keys": 219,
+   "forest_states": 189,
+   "harmful_keys": [],
+   "id": "seeds_fresh/26",
+   "n_blocks": 13,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 28
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 11,
+    "malformed": 0,
+    "ok": 227,
+    "wrong_state": 0
+   },
+   "forest_keys": 238,
+   "forest_states": 177,
+   "harmful_keys": [],
+   "id": "seeds_fresh/27",
+   "n_blocks": 13,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 38
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 3,
+    "malformed": 0,
+    "ok": 143,
+    "wrong_state": 0
+   },
+   "forest_keys": 146,
+   "forest_states": 110,
+   "harmful_keys": [],
+   "id": "seeds_fresh/28",
+   "n_blocks": 13,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": false,
+    "reason": null,
+    "steps_ok": 32
+   },
+   "fail": "budget",
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 6,
+    "malformed": 0,
+    "ok": 601,
+    "wrong_state": 0
+   },
+   "forest_keys": 607,
+   "forest_states": 458,
+   "harmful_keys": [],
+   "id": "seeds_fresh/29",
+   "n_blocks": 14,
+   "success": false,
+   "support_exposed": true,
+   "verified": false
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 34
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 6,
+    "malformed": 0,
+    "ok": 198,
+    "wrong_state": 0
+   },
+   "forest_keys": 204,
+   "forest_states": 176,
+   "harmful_keys": [],
+   "id": "seeds_fresh/30",
+   "n_blocks": 14,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": false,
+    "reason": null,
+    "steps_ok": 18
+   },
+   "fail": "dead_end",
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 5,
+    "malformed": 0,
+    "ok": 144,
+    "wrong_state": 0
+   },
+   "forest_keys": 149,
+   "forest_states": 102,
+   "harmful_keys": [],
+   "id": "seeds_fresh/31",
+   "n_blocks": 14,
+   "success": false,
+   "support_exposed": true,
+   "verified": false
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": false,
+    "reason": null,
+    "steps_ok": 32
+   },
+   "fail": "dead_end",
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 20,
+    "malformed": 0,
+    "ok": 168,
+    "wrong_state": 0
+   },
+   "forest_keys": 188,
+   "forest_states": 133,
+   "harmful_keys": [],
+   "id": "seeds_fresh/32",
+   "n_blocks": 14,
+   "success": false,
+   "support_exposed": true,
+   "verified": false
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 40
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 3,
+    "malformed": 0,
+    "ok": 302,
+    "wrong_state": 0
+   },
+   "forest_keys": 305,
+   "forest_states": 244,
+   "harmful_keys": [],
+   "id": "seeds_fresh/33",
+   "n_blocks": 14,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 38
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 21,
+    "malformed": 0,
+    "ok": 484,
+    "wrong_state": 0
+   },
+   "forest_keys": 505,
+   "forest_states": 359,
+   "harmful_keys": [],
+   "id": "seeds_fresh/34",
+   "n_blocks": 14,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 32
+   },
+   "fail": null,
+   "flagged": true,
+   "forest_classes": {
+    "false_illegal": 1,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 3,
+    "malformed": 0,
+    "ok": 214,
+    "wrong_state": 0
+   },
+   "forest_keys": 218,
+   "forest_states": 173,
+   "harmful_keys": [
+    {
+     "class": "false_illegal",
+     "key": {
+      "a": "unstack b n",
+      "s": [
+       "clear a",
+       "clear b",
+       "clear c",
+       "clear d",
+       "clear e",
+       "clear f",
+       "clear h",
+       "clear i",
+       "clear m",
+       "clear o",
+       "handempty",
+       "on b n",
+       "on h j",
+       "on m l",
+       "on n k",
+       "ontable a",
+       "ontable c",
+       "ontable d",
+       "ontable e",
+       "ontable f",
+       "ontable i",
+       "ontable j",
+       "ontable k",
+       "ontable l",
+       "ontable o"
+      ]
+     },
+     "key_id": "64c8557ac8aee0f1",
+     "subtype": "fi_flag",
+     "text": "{\"add\":[],\"del\":[],\"legal\":false}"
+    }
+   ],
+   "id": "seeds_fresh/35",
+   "n_blocks": 14,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_0of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": false,
+    "reason": null,
+    "steps_ok": 22
+   },
+   "fail": "budget",
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 9,
+    "malformed": 0,
+    "ok": 295,
+    "wrong_state": 0
+   },
+   "forest_keys": 304,
+   "forest_states": 232,
+   "harmful_keys": [],
+   "id": "seeds_fresh/36",
+   "n_blocks": 14,
+   "success": false,
+   "support_exposed": true,
+   "verified": false
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_1of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": false,
+    "reason": null,
+    "steps_ok": 34
+   },
+   "fail": "budget",
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 14,
+    "malformed": 0,
+    "ok": 708,
+    "wrong_state": 0
+   },
+   "forest_keys": 722,
+   "forest_states": 600,
+   "harmful_keys": [],
+   "id": "seeds_fresh/37",
+   "n_blocks": 15,
+   "success": false,
+   "support_exposed": true,
+   "verified": false
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_2of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": false,
+    "reason": null,
+    "steps_ok": 28
+   },
+   "fail": "budget",
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 7,
+    "malformed": 0,
+    "ok": 373,
+    "wrong_state": 0
+   },
+   "forest_keys": 380,
+   "forest_states": 288,
+   "harmful_keys": [],
+   "id": "seeds_fresh/38",
+   "n_blocks": 15,
+   "success": false,
+   "support_exposed": true,
+   "verified": false
+  },
+  {
+   "cache": "runs/BW_B4_SCREEN/a_beam/shard_3of4/fcache.jsonl",
+   "coverage": {
+    "covered": true,
+    "goal_at_end": true,
+    "reason": null,
+    "steps_ok": 36
+   },
+   "fail": null,
+   "flagged": false,
+   "forest_classes": {
+    "false_illegal": 0,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 16,
+    "malformed": 0,
+    "ok": 412,
+    "wrong_state": 0
+   },
+   "forest_keys": 428,
+   "forest_states": 332,
+   "harmful_keys": [],
+   "id": "seeds_fresh/39",
+   "n_blocks": 15,
+   "success": true,
+   "support_exposed": true,
+   "verified": true
+  }
+ ],
+ "meta": {
+  "freplay_sha256": "866ca5b696b465d0de77d0882b38323df50f1bb3bcc216ff68aaadbb0beb0a3b",
+  "screen_inputs_sha256": "8264ecafe2dd0b2a0141e67c084514643ff6c11e6103708b6aff015a332ce939",
+  "script_sha256": "2a78ba81d6d905ad4cd1feda29057b3a0d43fbca7a9b281c14c2789f8ec8f4e7",
+  "written": "2026-10-13 10:24:54 Central Daylight Time"
+ },
+ "occurrence_level": {
+  "by_class": {
+   "false_illegal": 1,
+   "false_legal_accepted": 0,
+   "false_legal_rejected_by_support_check": 222,
+   "malformed": 0,
+   "ok": 7705,
+   "wrong_state": 0
+  },
+  "occurrences": 7928
+ },
+ "strata": {
+  "by_action": {
+   "pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 216,
+     "malformed": 0,
+     "ok": 2832,
+     "wrong_state": 0
+    },
+    "illegal": 733,
+    "keys": 3048,
+    "legal": 2315,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.001592
+      ],
+      "k": 0,
+      "n": 2315,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.00502
+      ],
+      "k": 0,
+      "n": 733,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.261876,
+       0.329145
+      ],
+      "k": 216,
+      "n": 733,
+      "p": 0.294679
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.00121
+      ],
+      "k": 0,
+      "n": 3048,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.00121
+      ],
+      "k": 0,
+      "n": 3048,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.261876,
+       0.329145
+      ],
+      "k": 216,
+      "n": 733,
+      "p": 0.294679
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.001592
+      ],
+      "k": 0,
+      "n": 2315,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.919442,
+       0.937992
+      ],
+      "k": 2832,
+      "n": 3048,
+      "p": 0.929134
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.919442,
+       0.937992
+      ],
+      "k": 2832,
+      "n": 3048,
+      "p": 0.929134
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 216,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 517,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 2315,
+     "wrong_state": 0
+    }
+   },
+   "put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 934,
+     "wrong_state": 0
+    },
+    "illegal": 6,
+    "keys": 934,
+    "legal": 928,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.003967
+      ],
+      "k": 0,
+      "n": 928,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.003942
+      ],
+      "k": 0,
+      "n": 934,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.003942
+      ],
+      "k": 0,
+      "n": 934,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.003967
+      ],
+      "k": 0,
+      "n": 928,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.996058,
+       1.0
+      ],
+      "k": 934,
+      "n": 934,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.996058,
+       1.0
+      ],
+      "k": 934,
+      "n": 934,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 6,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 928,
+     "wrong_state": 0
+    }
+   },
+   "stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 2583,
+     "wrong_state": 0
+    },
+    "illegal": 70,
+    "keys": 2583,
+    "legal": 2513,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.001467
+      ],
+      "k": 0,
+      "n": 2513,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.051334
+      ],
+      "k": 0,
+      "n": 70,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.051334
+      ],
+      "k": 0,
+      "n": 70,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.001427
+      ],
+      "k": 0,
+      "n": 2583,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.001427
+      ],
+      "k": 0,
+      "n": 2583,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.051334
+      ],
+      "k": 0,
+      "n": 70,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.001467
+      ],
+      "k": 0,
+      "n": 2513,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.998573,
+       1.0
+      ],
+      "k": 2583,
+      "n": 2583,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.998573,
+       1.0
+      ],
+      "k": 2583,
+      "n": 2583,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 70,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 2513,
+     "wrong_state": 0
+    }
+   },
+   "unstack": {
+    "classes": {
+     "false_illegal": 1,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 6,
+     "malformed": 0,
+     "ok": 1356,
+     "wrong_state": 0
+    },
+    "illegal": 248,
+    "keys": 1363,
+    "legal": 1115,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       2.3e-05,
+       0.004987
+      ],
+      "k": 1,
+      "n": 1115,
+      "p": 0.000897
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.014764
+      ],
+      "k": 0,
+      "n": 248,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.008929,
+       0.051913
+      ],
+      "k": 6,
+      "n": 248,
+      "p": 0.024194
+     },
+     "harmful": {
+      "ci95": [
+       1.9e-05,
+       0.004081
+      ],
+      "k": 1,
+      "n": 1363,
+      "p": 0.000734
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.002703
+      ],
+      "k": 0,
+      "n": 1363,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.008929,
+       0.051913
+      ],
+      "k": 6,
+      "n": 248,
+      "p": 0.024194
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.003303
+      ],
+      "k": 0,
+      "n": 1115,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.989447,
+       0.997933
+      ],
+      "k": 1356,
+      "n": 1363,
+      "p": 0.994864
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.989447,
+       0.997933
+      ],
+      "k": 1356,
+      "n": 1363,
+      "p": 0.994864
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 6,
+     "fi_flag": 1,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 242,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 1114,
+     "wrong_state": 0
+    }
+   }
+  },
+  "by_blocks": {
+   "10": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 10,
+     "malformed": 0,
+     "ok": 705,
+     "wrong_state": 0
+    },
+    "illegal": 82,
+    "keys": 715,
+    "legal": 633,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.005811
+      ],
+      "k": 0,
+      "n": 633,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.043989
+      ],
+      "k": 0,
+      "n": 82,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.060058,
+       0.212859
+      ],
+      "k": 10,
+      "n": 82,
+      "p": 0.121951
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.005146
+      ],
+      "k": 0,
+      "n": 715,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.005146
+      ],
+      "k": 0,
+      "n": 715,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.060058,
+       0.212859
+      ],
+      "k": 10,
+      "n": 82,
+      "p": 0.121951
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.005811
+      ],
+      "k": 0,
+      "n": 633,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.97443,
+       0.993273
+      ],
+      "k": 705,
+      "n": 715,
+      "p": 0.986014
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.97443,
+       0.993273
+      ],
+      "k": 705,
+      "n": 715,
+      "p": 0.986014
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 10,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 72,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 633,
+     "wrong_state": 0
+    }
+   },
+   "11": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 18,
+     "malformed": 0,
+     "ok": 720,
+     "wrong_state": 0
+    },
+    "illegal": 68,
+    "keys": 738,
+    "legal": 670,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.005491
+      ],
+      "k": 0,
+      "n": 670,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.052803
+      ],
+      "k": 0,
+      "n": 68,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.165038,
+       0.38571
+      ],
+      "k": 18,
+      "n": 68,
+      "p": 0.264706
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.004986
+      ],
+      "k": 0,
+      "n": 738,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.004986
+      ],
+      "k": 0,
+      "n": 738,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.165038,
+       0.38571
+      ],
+      "k": 18,
+      "n": 68,
+      "p": 0.264706
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.005491
+      ],
+      "k": 0,
+      "n": 670,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.961726,
+       0.985482
+      ],
+      "k": 720,
+      "n": 738,
+      "p": 0.97561
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.961726,
+       0.985482
+      ],
+      "k": 720,
+      "n": 738,
+      "p": 0.97561
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 18,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 50,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 670,
+     "wrong_state": 0
+    }
+   },
+   "12": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 37,
+     "malformed": 0,
+     "ok": 940,
+     "wrong_state": 0
+    },
+    "illegal": 126,
+    "keys": 977,
+    "legal": 851,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.004325
+      ],
+      "k": 0,
+      "n": 851,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.028852
+      ],
+      "k": 0,
+      "n": 126,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.215913,
+       0.38136
+      ],
+      "k": 37,
+      "n": 126,
+      "p": 0.293651
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.003769
+      ],
+      "k": 0,
+      "n": 977,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.003769
+      ],
+      "k": 0,
+      "n": 977,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.215913,
+       0.38136
+      ],
+      "k": 37,
+      "n": 126,
+      "p": 0.293651
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.004325
+      ],
+      "k": 0,
+      "n": 851,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.948175,
+       0.973198
+      ],
+      "k": 940,
+      "n": 977,
+      "p": 0.962129
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.948175,
+       0.973198
+      ],
+      "k": 940,
+      "n": 977,
+      "p": 0.962129
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 37,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 89,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 851,
+     "wrong_state": 0
+    }
+   },
+   "13": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 29,
+     "malformed": 0,
+     "ok": 992,
+     "wrong_state": 0
+    },
+    "illegal": 130,
+    "keys": 1021,
+    "legal": 891,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.004132
+      ],
+      "k": 0,
+      "n": 891,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.027977
+      ],
+      "k": 0,
+      "n": 130,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.154775,
+       0.304411
+      ],
+      "k": 29,
+      "n": 130,
+      "p": 0.223077
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.003606
+      ],
+      "k": 0,
+      "n": 1021,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.003606
+      ],
+      "k": 0,
+      "n": 1021,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.154775,
+       0.304411
+      ],
+      "k": 29,
+      "n": 130,
+      "p": 0.223077
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.004132
+      ],
+      "k": 0,
+      "n": 891,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.959461,
+       0.980897
+      ],
+      "k": 992,
+      "n": 1021,
+      "p": 0.971596
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.959461,
+       0.980897
+      ],
+      "k": 992,
+      "n": 1021,
+      "p": 0.971596
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 29,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 101,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 891,
+     "wrong_state": 0
+    }
+   },
+   "14": {
+    "classes": {
+     "false_illegal": 1,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 73,
+     "malformed": 0,
+     "ok": 2406,
+     "wrong_state": 0
+    },
+    "illegal": 417,
+    "keys": 2480,
+    "legal": 2063,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       1.2e-05,
+       0.002698
+      ],
+      "k": 1,
+      "n": 2063,
+      "p": 0.000485
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.008807
+      ],
+      "k": 0,
+      "n": 417,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.139803,
+       0.215004
+      ],
+      "k": 73,
+      "n": 417,
+      "p": 0.17506
+     },
+     "harmful": {
+      "ci95": [
+       1e-05,
+       0.002245
+      ],
+      "k": 1,
+      "n": 2480,
+      "p": 0.000403
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.001486
+      ],
+      "k": 0,
+      "n": 2480,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.139803,
+       0.215004
+      ],
+      "k": 73,
+      "n": 417,
+      "p": 0.17506
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.001787
+      ],
+      "k": 0,
+      "n": 2063,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.962684,
+       0.976499
+      ],
+      "k": 2406,
+      "n": 2480,
+      "p": 0.970161
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.962684,
+       0.976499
+      ],
+      "k": 2406,
+      "n": 2480,
+      "p": 0.970161
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 73,
+     "fi_flag": 1,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 344,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 2062,
+     "wrong_state": 0
+    }
+   },
+   "15": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 37,
+     "malformed": 0,
+     "ok": 1493,
+     "wrong_state": 0
+    },
+    "illegal": 192,
+    "keys": 1530,
+    "legal": 1338,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.002753
+      ],
+      "k": 0,
+      "n": 1338,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.01903
+      ],
+      "k": 0,
+      "n": 192,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.139463,
+       0.2557
+      ],
+      "k": 37,
+      "n": 192,
+      "p": 0.192708
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.002408
+      ],
+      "k": 0,
+      "n": 1530,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.002408
+      ],
+      "k": 0,
+      "n": 1530,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.139463,
+       0.2557
+      ],
+      "k": 37,
+      "n": 192,
+      "p": 0.192708
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.002753
+      ],
+      "k": 0,
+      "n": 1338,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.96682,
+       0.982917
+      ],
+      "k": 1493,
+      "n": 1530,
+      "p": 0.975817
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.96682,
+       0.982917
+      ],
+      "k": 1493,
+      "n": 1530,
+      "p": 0.975817
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 37,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 155,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 1338,
+     "wrong_state": 0
+    }
+   },
+   "6": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 6,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 6,
+    "legal": 6,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.540742,
+       1.0
+      ],
+      "k": 6,
+      "n": 6,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.540742,
+       1.0
+      ],
+      "k": 6,
+      "n": 6,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 6,
+     "wrong_state": 0
+    }
+   },
+   "8": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 2,
+     "malformed": 0,
+     "ok": 74,
+     "wrong_state": 0
+    },
+    "illegal": 6,
+    "keys": 76,
+    "legal": 70,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.051334
+      ],
+      "k": 0,
+      "n": 70,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.043272,
+       0.777222
+      ],
+      "k": 2,
+      "n": 6,
+      "p": 0.333333
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.047379
+      ],
+      "k": 0,
+      "n": 76,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.047379
+      ],
+      "k": 0,
+      "n": 76,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.043272,
+       0.777222
+      ],
+      "k": 2,
+      "n": 6,
+      "p": 0.333333
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.051334
+      ],
+      "k": 0,
+      "n": 70,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.90815,
+       0.996797
+      ],
+      "k": 74,
+      "n": 76,
+      "p": 0.973684
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.90815,
+       0.996797
+      ],
+      "k": 74,
+      "n": 76,
+      "p": 0.973684
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 2,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 4,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 70,
+     "wrong_state": 0
+    }
+   },
+   "9": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 16,
+     "malformed": 0,
+     "ok": 369,
+     "wrong_state": 0
+    },
+    "illegal": 36,
+    "keys": 385,
+    "legal": 349,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.010514
+      ],
+      "k": 0,
+      "n": 349,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.097394
+      ],
+      "k": 0,
+      "n": 36,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.279354,
+       0.619023
+      ],
+      "k": 16,
+      "n": 36,
+      "p": 0.444444
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.009536
+      ],
+      "k": 0,
+      "n": 385,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.009536
+      ],
+      "k": 0,
+      "n": 385,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.279354,
+       0.619023
+      ],
+      "k": 16,
+      "n": 36,
+      "p": 0.444444
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.010514
+      ],
+      "k": 0,
+      "n": 349,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.933388,
+       0.976062
+      ],
+      "k": 369,
+      "n": 385,
+      "p": 0.958442
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.933388,
+       0.976062
+      ],
+      "k": 369,
+      "n": 385,
+      "p": 0.958442
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 16,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 20,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 349,
+     "wrong_state": 0
+    }
+   }
+  },
+  "by_blocks_action": {
+   "10|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 10,
+     "malformed": 0,
+     "ok": 230,
+     "wrong_state": 0
+    },
+    "illegal": 40,
+    "keys": 240,
+    "legal": 200,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.018275
+      ],
+      "k": 0,
+      "n": 200,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.088097
+      ],
+      "k": 0,
+      "n": 40,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.126915,
+       0.411962
+      ],
+      "k": 10,
+      "n": 40,
+      "p": 0.25
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.015253
+      ],
+      "k": 0,
+      "n": 240,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.015253
+      ],
+      "k": 0,
+      "n": 240,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.126915,
+       0.411962
+      ],
+      "k": 10,
+      "n": 40,
+      "p": 0.25
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.018275
+      ],
+      "k": 0,
+      "n": 200,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.92471,
+       0.979841
+      ],
+      "k": 230,
+      "n": 240,
+      "p": 0.958333
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.92471,
+       0.979841
+      ],
+      "k": 230,
+      "n": 240,
+      "p": 0.958333
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 10,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 30,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 200,
+     "wrong_state": 0
+    }
+   },
+   "10|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 100,
+     "wrong_state": 0
+    },
+    "illegal": 1,
+    "keys": 100,
+    "legal": 99,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.036576
+      ],
+      "k": 0,
+      "n": 99,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.036217
+      ],
+      "k": 0,
+      "n": 100,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.036217
+      ],
+      "k": 0,
+      "n": 100,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.036576
+      ],
+      "k": 0,
+      "n": 99,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.963783,
+       1.0
+      ],
+      "k": 100,
+      "n": 100,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.963783,
+       1.0
+      ],
+      "k": 100,
+      "n": 100,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 1,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 99,
+     "wrong_state": 0
+    }
+   },
+   "10|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 225,
+     "wrong_state": 0
+    },
+    "illegal": 4,
+    "keys": 225,
+    "legal": 221,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.016553
+      ],
+      "k": 0,
+      "n": 221,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.602365
+      ],
+      "k": 0,
+      "n": 4,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.602365
+      ],
+      "k": 0,
+      "n": 4,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.016261
+      ],
+      "k": 0,
+      "n": 225,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.016261
+      ],
+      "k": 0,
+      "n": 225,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.602365
+      ],
+      "k": 0,
+      "n": 4,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.016553
+      ],
+      "k": 0,
+      "n": 221,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.983739,
+       1.0
+      ],
+      "k": 225,
+      "n": 225,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.983739,
+       1.0
+      ],
+      "k": 225,
+      "n": 225,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 4,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 221,
+     "wrong_state": 0
+    }
+   },
+   "10|unstack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 150,
+     "wrong_state": 0
+    },
+    "illegal": 37,
+    "keys": 150,
+    "legal": 113,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.032118
+      ],
+      "k": 0,
+      "n": 113,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.094891
+      ],
+      "k": 0,
+      "n": 37,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.094891
+      ],
+      "k": 0,
+      "n": 37,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.024293
+      ],
+      "k": 0,
+      "n": 150,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.024293
+      ],
+      "k": 0,
+      "n": 150,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.094891
+      ],
+      "k": 0,
+      "n": 37,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.032118
+      ],
+      "k": 0,
+      "n": 113,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.975707,
+       1.0
+      ],
+      "k": 150,
+      "n": 150,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.975707,
+       1.0
+      ],
+      "k": 150,
+      "n": 150,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 37,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 113,
+     "wrong_state": 0
+    }
+   },
+   "11|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 17,
+     "malformed": 0,
+     "ok": 226,
+     "wrong_state": 0
+    },
+    "illegal": 36,
+    "keys": 243,
+    "legal": 207,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.017663
+      ],
+      "k": 0,
+      "n": 207,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.097394
+      ],
+      "k": 0,
+      "n": 36,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.304051,
+       0.645136
+      ],
+      "k": 17,
+      "n": 36,
+      "p": 0.472222
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.015066
+      ],
+      "k": 0,
+      "n": 243,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.015066
+      ],
+      "k": 0,
+      "n": 243,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.304051,
+       0.645136
+      ],
+      "k": 17,
+      "n": 36,
+      "p": 0.472222
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.017663
+      ],
+      "k": 0,
+      "n": 207,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.89035,
+       0.958721
+      ],
+      "k": 226,
+      "n": 243,
+      "p": 0.930041
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.89035,
+       0.958721
+      ],
+      "k": 226,
+      "n": 243,
+      "p": 0.930041
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 17,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 19,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 207,
+     "wrong_state": 0
+    }
+   },
+   "11|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 112,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 112,
+    "legal": 112,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.0324
+      ],
+      "k": 0,
+      "n": 112,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.0324
+      ],
+      "k": 0,
+      "n": 112,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.0324
+      ],
+      "k": 0,
+      "n": 112,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.0324
+      ],
+      "k": 0,
+      "n": 112,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.9676,
+       1.0
+      ],
+      "k": 112,
+      "n": 112,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.9676,
+       1.0
+      ],
+      "k": 112,
+      "n": 112,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 112,
+     "wrong_state": 0
+    }
+   },
+   "11|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 231,
+     "wrong_state": 0
+    },
+    "illegal": 11,
+    "keys": 231,
+    "legal": 220,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.016628
+      ],
+      "k": 0,
+      "n": 220,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.284914
+      ],
+      "k": 0,
+      "n": 11,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.284914
+      ],
+      "k": 0,
+      "n": 11,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.015842
+      ],
+      "k": 0,
+      "n": 231,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.015842
+      ],
+      "k": 0,
+      "n": 231,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.284914
+      ],
+      "k": 0,
+      "n": 11,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.016628
+      ],
+      "k": 0,
+      "n": 220,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.984158,
+       1.0
+      ],
+      "k": 231,
+      "n": 231,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.984158,
+       1.0
+      ],
+      "k": 231,
+      "n": 231,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 11,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 220,
+     "wrong_state": 0
+    }
+   },
+   "11|unstack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 1,
+     "malformed": 0,
+     "ok": 151,
+     "wrong_state": 0
+    },
+    "illegal": 21,
+    "keys": 152,
+    "legal": 131,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.027767
+      ],
+      "k": 0,
+      "n": 131,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.161098
+      ],
+      "k": 0,
+      "n": 21,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.001205,
+       0.23816
+      ],
+      "k": 1,
+      "n": 21,
+      "p": 0.047619
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.023977
+      ],
+      "k": 0,
+      "n": 152,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.023977
+      ],
+      "k": 0,
+      "n": 152,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.001205,
+       0.23816
+      ],
+      "k": 1,
+      "n": 21,
+      "p": 0.047619
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.027767
+      ],
+      "k": 0,
+      "n": 131,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.963891,
+       0.999833
+      ],
+      "k": 151,
+      "n": 152,
+      "p": 0.993421
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.963891,
+       0.999833
+      ],
+      "k": 151,
+      "n": 152,
+      "p": 0.993421
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 1,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 20,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 131,
+     "wrong_state": 0
+    }
+   },
+   "12|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 37,
+     "malformed": 0,
+     "ok": 344,
+     "wrong_state": 0
+    },
+    "illegal": 93,
+    "keys": 381,
+    "legal": 288,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.012727
+      ],
+      "k": 0,
+      "n": 288,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.038889
+      ],
+      "k": 0,
+      "n": 93,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.297762,
+       0.504629
+      ],
+      "k": 37,
+      "n": 93,
+      "p": 0.397849
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.009635
+      ],
+      "k": 0,
+      "n": 381,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.009635
+      ],
+      "k": 0,
+      "n": 381,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.297762,
+       0.504629
+      ],
+      "k": 37,
+      "n": 93,
+      "p": 0.397849
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.012727
+      ],
+      "k": 0,
+      "n": 288,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.868631,
+       0.930699
+      ],
+      "k": 344,
+      "n": 381,
+      "p": 0.902887
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.868631,
+       0.930699
+      ],
+      "k": 344,
+      "n": 381,
+      "p": 0.902887
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 37,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 56,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 288,
+     "wrong_state": 0
+    }
+   },
+   "12|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 122,
+     "wrong_state": 0
+    },
+    "illegal": 1,
+    "keys": 122,
+    "legal": 121,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.030027
+      ],
+      "k": 0,
+      "n": 121,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.029784
+      ],
+      "k": 0,
+      "n": 122,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.029784
+      ],
+      "k": 0,
+      "n": 122,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.030027
+      ],
+      "k": 0,
+      "n": 121,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.970216,
+       1.0
+      ],
+      "k": 122,
+      "n": 122,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.970216,
+       1.0
+      ],
+      "k": 122,
+      "n": 122,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 1,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 121,
+     "wrong_state": 0
+    }
+   },
+   "12|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 316,
+     "wrong_state": 0
+    },
+    "illegal": 9,
+    "keys": 316,
+    "legal": 307,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.011944
+      ],
+      "k": 0,
+      "n": 307,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.336267
+      ],
+      "k": 0,
+      "n": 9,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.336267
+      ],
+      "k": 0,
+      "n": 9,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.011606
+      ],
+      "k": 0,
+      "n": 316,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.011606
+      ],
+      "k": 0,
+      "n": 316,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.336267
+      ],
+      "k": 0,
+      "n": 9,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.011944
+      ],
+      "k": 0,
+      "n": 307,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.988394,
+       1.0
+      ],
+      "k": 316,
+      "n": 316,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.988394,
+       1.0
+      ],
+      "k": 316,
+      "n": 316,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 9,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 307,
+     "wrong_state": 0
+    }
+   },
+   "12|unstack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 158,
+     "wrong_state": 0
+    },
+    "illegal": 23,
+    "keys": 158,
+    "legal": 135,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.026955
+      ],
+      "k": 0,
+      "n": 135,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.148185
+      ],
+      "k": 0,
+      "n": 23,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.148185
+      ],
+      "k": 0,
+      "n": 23,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.023077
+      ],
+      "k": 0,
+      "n": 158,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.023077
+      ],
+      "k": 0,
+      "n": 158,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.148185
+      ],
+      "k": 0,
+      "n": 23,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.026955
+      ],
+      "k": 0,
+      "n": 135,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.976923,
+       1.0
+      ],
+      "k": 158,
+      "n": 158,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.976923,
+       1.0
+      ],
+      "k": 158,
+      "n": 158,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 23,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 135,
+     "wrong_state": 0
+    }
+   },
+   "13|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 29,
+     "malformed": 0,
+     "ok": 360,
+     "wrong_state": 0
+    },
+    "illegal": 87,
+    "keys": 389,
+    "legal": 302,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.012141
+      ],
+      "k": 0,
+      "n": 302,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.041515
+      ],
+      "k": 0,
+      "n": 87,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.235849,
+       0.442529
+      ],
+      "k": 29,
+      "n": 87,
+      "p": 0.333333
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.009438
+      ],
+      "k": 0,
+      "n": 389,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.009438
+      ],
+      "k": 0,
+      "n": 389,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.235849,
+       0.442529
+      ],
+      "k": 29,
+      "n": 87,
+      "p": 0.333333
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.012141
+      ],
+      "k": 0,
+      "n": 302,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.894687,
+       0.949507
+      ],
+      "k": 360,
+      "n": 389,
+      "p": 0.92545
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.894687,
+       0.949507
+      ],
+      "k": 360,
+      "n": 389,
+      "p": 0.92545
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 29,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 58,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 302,
+     "wrong_state": 0
+    }
+   },
+   "13|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 126,
+     "wrong_state": 0
+    },
+    "illegal": 1,
+    "keys": 126,
+    "legal": 125,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.02908
+      ],
+      "k": 0,
+      "n": 125,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.028852
+      ],
+      "k": 0,
+      "n": 126,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.028852
+      ],
+      "k": 0,
+      "n": 126,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.02908
+      ],
+      "k": 0,
+      "n": 125,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.971148,
+       1.0
+      ],
+      "k": 126,
+      "n": 126,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.971148,
+       1.0
+      ],
+      "k": 126,
+      "n": 126,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 1,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 125,
+     "wrong_state": 0
+    }
+   },
+   "13|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 330,
+     "wrong_state": 0
+    },
+    "illegal": 9,
+    "keys": 330,
+    "legal": 321,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.011426
+      ],
+      "k": 0,
+      "n": 321,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.336267
+      ],
+      "k": 0,
+      "n": 9,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.336267
+      ],
+      "k": 0,
+      "n": 9,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.011116
+      ],
+      "k": 0,
+      "n": 330,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.011116
+      ],
+      "k": 0,
+      "n": 330,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.336267
+      ],
+      "k": 0,
+      "n": 9,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.011426
+      ],
+      "k": 0,
+      "n": 321,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.988884,
+       1.0
+      ],
+      "k": 330,
+      "n": 330,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.988884,
+       1.0
+      ],
+      "k": 330,
+      "n": 330,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 9,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 321,
+     "wrong_state": 0
+    }
+   },
+   "13|unstack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 176,
+     "wrong_state": 0
+    },
+    "illegal": 33,
+    "keys": 176,
+    "legal": 143,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.025466
+      ],
+      "k": 0,
+      "n": 143,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.105763
+      ],
+      "k": 0,
+      "n": 33,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.105763
+      ],
+      "k": 0,
+      "n": 33,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.020741
+      ],
+      "k": 0,
+      "n": 176,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.020741
+      ],
+      "k": 0,
+      "n": 176,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.105763
+      ],
+      "k": 0,
+      "n": 33,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.025466
+      ],
+      "k": 0,
+      "n": 143,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.979259,
+       1.0
+      ],
+      "k": 176,
+      "n": 176,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.979259,
+       1.0
+      ],
+      "k": 176,
+      "n": 176,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 33,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 143,
+     "wrong_state": 0
+    }
+   },
+   "14|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 71,
+     "malformed": 0,
+     "ok": 880,
+     "wrong_state": 0
+    },
+    "illegal": 288,
+    "keys": 951,
+    "legal": 663,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.005548
+      ],
+      "k": 0,
+      "n": 663,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.012727
+      ],
+      "k": 0,
+      "n": 288,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.197853,
+       0.300501
+      ],
+      "k": 71,
+      "n": 288,
+      "p": 0.246528
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.003871
+      ],
+      "k": 0,
+      "n": 951,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.003871
+      ],
+      "k": 0,
+      "n": 951,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.197853,
+       0.300501
+      ],
+      "k": 71,
+      "n": 288,
+      "p": 0.246528
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.005548
+      ],
+      "k": 0,
+      "n": 663,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.906759,
+       0.941234
+      ],
+      "k": 880,
+      "n": 951,
+      "p": 0.925342
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.906759,
+       0.941234
+      ],
+      "k": 880,
+      "n": 951,
+      "p": 0.925342
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 71,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 217,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 663,
+     "wrong_state": 0
+    }
+   },
+   "14|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 303,
+     "wrong_state": 0
+    },
+    "illegal": 3,
+    "keys": 303,
+    "legal": 300,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.012221
+      ],
+      "k": 0,
+      "n": 300,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.707598
+      ],
+      "k": 0,
+      "n": 3,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.707598
+      ],
+      "k": 0,
+      "n": 3,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.012101
+      ],
+      "k": 0,
+      "n": 303,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.012101
+      ],
+      "k": 0,
+      "n": 303,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.707598
+      ],
+      "k": 0,
+      "n": 3,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.012221
+      ],
+      "k": 0,
+      "n": 300,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.987899,
+       1.0
+      ],
+      "k": 303,
+      "n": 303,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.987899,
+       1.0
+      ],
+      "k": 303,
+      "n": 303,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 3,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 300,
+     "wrong_state": 0
+    }
+   },
+   "14|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 760,
+     "wrong_state": 0
+    },
+    "illegal": 25,
+    "keys": 760,
+    "legal": 735,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.005006
+      ],
+      "k": 0,
+      "n": 735,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.137185
+      ],
+      "k": 0,
+      "n": 25,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.137185
+      ],
+      "k": 0,
+      "n": 25,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.004842
+      ],
+      "k": 0,
+      "n": 760,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.004842
+      ],
+      "k": 0,
+      "n": 760,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.137185
+      ],
+      "k": 0,
+      "n": 25,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.005006
+      ],
+      "k": 0,
+      "n": 735,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.995158,
+       1.0
+      ],
+      "k": 760,
+      "n": 760,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.995158,
+       1.0
+      ],
+      "k": 760,
+      "n": 760,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 25,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 735,
+     "wrong_state": 0
+    }
+   },
+   "14|unstack": {
+    "classes": {
+     "false_illegal": 1,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 2,
+     "malformed": 0,
+     "ok": 463,
+     "wrong_state": 0
+    },
+    "illegal": 101,
+    "keys": 466,
+    "legal": 365,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       6.9e-05,
+       0.01517
+      ],
+      "k": 1,
+      "n": 365,
+      "p": 0.00274
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.035865
+      ],
+      "k": 0,
+      "n": 101,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.002407,
+       0.069705
+      ],
+      "k": 2,
+      "n": 101,
+      "p": 0.019802
+     },
+     "harmful": {
+      "ci95": [
+       5.4e-05,
+       0.011898
+      ],
+      "k": 1,
+      "n": 466,
+      "p": 0.002146
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.007885
+      ],
+      "k": 0,
+      "n": 466,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.002407,
+       0.069705
+      ],
+      "k": 2,
+      "n": 101,
+      "p": 0.019802
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.010056
+      ],
+      "k": 0,
+      "n": 365,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.981302,
+       0.99867
+      ],
+      "k": 463,
+      "n": 466,
+      "p": 0.993562
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.981302,
+       0.99867
+      ],
+      "k": 463,
+      "n": 466,
+      "p": 0.993562
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 2,
+     "fi_flag": 1,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 99,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 364,
+     "wrong_state": 0
+    }
+   },
+   "15|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 35,
+     "malformed": 0,
+     "ok": 640,
+     "wrong_state": 0
+    },
+    "illegal": 155,
+    "keys": 675,
+    "legal": 520,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.007069
+      ],
+      "k": 0,
+      "n": 520,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.023518
+      ],
+      "k": 0,
+      "n": 155,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.162604,
+       0.299792
+      ],
+      "k": 35,
+      "n": 155,
+      "p": 0.225806
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.00545
+      ],
+      "k": 0,
+      "n": 675,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.00545
+      ],
+      "k": 0,
+      "n": 675,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.162604,
+       0.299792
+      ],
+      "k": 35,
+      "n": 155,
+      "p": 0.225806
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.007069
+      ],
+      "k": 0,
+      "n": 520,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.928621,
+       0.963621
+      ],
+      "k": 640,
+      "n": 675,
+      "p": 0.948148
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.928621,
+       0.963621
+      ],
+      "k": 640,
+      "n": 675,
+      "p": 0.948148
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 35,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 120,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 520,
+     "wrong_state": 0
+    }
+   },
+   "15|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 118,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 118,
+    "legal": 118,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.030778
+      ],
+      "k": 0,
+      "n": 118,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.030778
+      ],
+      "k": 0,
+      "n": 118,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.030778
+      ],
+      "k": 0,
+      "n": 118,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.030778
+      ],
+      "k": 0,
+      "n": 118,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.969222,
+       1.0
+      ],
+      "k": 118,
+      "n": 118,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.969222,
+       1.0
+      ],
+      "k": 118,
+      "n": 118,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 118,
+     "wrong_state": 0
+    }
+   },
+   "15|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 557,
+     "wrong_state": 0
+    },
+    "illegal": 8,
+    "keys": 557,
+    "legal": 549,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.006697
+      ],
+      "k": 0,
+      "n": 549,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.369417
+      ],
+      "k": 0,
+      "n": 8,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.369417
+      ],
+      "k": 0,
+      "n": 8,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.006601
+      ],
+      "k": 0,
+      "n": 557,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.006601
+      ],
+      "k": 0,
+      "n": 557,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.369417
+      ],
+      "k": 0,
+      "n": 8,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.006697
+      ],
+      "k": 0,
+      "n": 549,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.993399,
+       1.0
+      ],
+      "k": 557,
+      "n": 557,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.993399,
+       1.0
+      ],
+      "k": 557,
+      "n": 557,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 8,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 549,
+     "wrong_state": 0
+    }
+   },
+   "15|unstack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 2,
+     "malformed": 0,
+     "ok": 178,
+     "wrong_state": 0
+    },
+    "illegal": 29,
+    "keys": 180,
+    "legal": 151,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.024134
+      ],
+      "k": 0,
+      "n": 151,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.119445
+      ],
+      "k": 0,
+      "n": 29,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.008464,
+       0.227662
+      ],
+      "k": 2,
+      "n": 29,
+      "p": 0.068966
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.020285
+      ],
+      "k": 0,
+      "n": 180,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.020285
+      ],
+      "k": 0,
+      "n": 180,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.008464,
+       0.227662
+      ],
+      "k": 2,
+      "n": 29,
+      "p": 0.068966
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.024134
+      ],
+      "k": 0,
+      "n": 151,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.960441,
+       0.998652
+      ],
+      "k": 178,
+      "n": 180,
+      "p": 0.988889
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.960441,
+       0.998652
+      ],
+      "k": 178,
+      "n": 180,
+      "p": 0.988889
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 2,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 27,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 151,
+     "wrong_state": 0
+    }
+   },
+   "6|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 2,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 2,
+    "legal": 2,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.841886
+      ],
+      "k": 0,
+      "n": 2,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.841886
+      ],
+      "k": 0,
+      "n": 2,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.841886
+      ],
+      "k": 0,
+      "n": 2,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.841886
+      ],
+      "k": 0,
+      "n": 2,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.158114,
+       1.0
+      ],
+      "k": 2,
+      "n": 2,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.158114,
+       1.0
+      ],
+      "k": 2,
+      "n": 2,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 2,
+     "wrong_state": 0
+    }
+   },
+   "6|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 1,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 1,
+    "legal": 1,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.025,
+       1.0
+      ],
+      "k": 1,
+      "n": 1,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.025,
+       1.0
+      ],
+      "k": 1,
+      "n": 1,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 1,
+     "wrong_state": 0
+    }
+   },
+   "6|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 2,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 2,
+    "legal": 2,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.841886
+      ],
+      "k": 0,
+      "n": 2,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.841886
+      ],
+      "k": 0,
+      "n": 2,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.841886
+      ],
+      "k": 0,
+      "n": 2,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.841886
+      ],
+      "k": 0,
+      "n": 2,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.158114,
+       1.0
+      ],
+      "k": 2,
+      "n": 2,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.158114,
+       1.0
+      ],
+      "k": 2,
+      "n": 2,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 2,
+     "wrong_state": 0
+    }
+   },
+   "6|unstack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 1,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 1,
+    "legal": 1,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.975
+      ],
+      "k": 0,
+      "n": 1,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.025,
+       1.0
+      ],
+      "k": 1,
+      "n": 1,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.025,
+       1.0
+      ],
+      "k": 1,
+      "n": 1,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 1,
+     "wrong_state": 0
+    }
+   },
+   "8|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 2,
+     "malformed": 0,
+     "ok": 24,
+     "wrong_state": 0
+    },
+    "illegal": 6,
+    "keys": 26,
+    "legal": 20,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.168433
+      ],
+      "k": 0,
+      "n": 20,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.459258
+      ],
+      "k": 0,
+      "n": 6,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.043272,
+       0.777222
+      ],
+      "k": 2,
+      "n": 6,
+      "p": 0.333333
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.132275
+      ],
+      "k": 0,
+      "n": 26,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.132275
+      ],
+      "k": 0,
+      "n": 26,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.043272,
+       0.777222
+      ],
+      "k": 2,
+      "n": 6,
+      "p": 0.333333
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.168433
+      ],
+      "k": 0,
+      "n": 20,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.748697,
+       0.990545
+      ],
+      "k": 24,
+      "n": 26,
+      "p": 0.923077
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.748697,
+       0.990545
+      ],
+      "k": 24,
+      "n": 26,
+      "p": 0.923077
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 2,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 4,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 20,
+     "wrong_state": 0
+    }
+   },
+   "8|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 8,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 8,
+    "legal": 8,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.369417
+      ],
+      "k": 0,
+      "n": 8,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.369417
+      ],
+      "k": 0,
+      "n": 8,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.369417
+      ],
+      "k": 0,
+      "n": 8,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.369417
+      ],
+      "k": 0,
+      "n": 8,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.630583,
+       1.0
+      ],
+      "k": 8,
+      "n": 8,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.630583,
+       1.0
+      ],
+      "k": 8,
+      "n": 8,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 8,
+     "wrong_state": 0
+    }
+   },
+   "8|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 27,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 27,
+    "legal": 27,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.127703
+      ],
+      "k": 0,
+      "n": 27,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.127703
+      ],
+      "k": 0,
+      "n": 27,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.127703
+      ],
+      "k": 0,
+      "n": 27,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.127703
+      ],
+      "k": 0,
+      "n": 27,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.872297,
+       1.0
+      ],
+      "k": 27,
+      "n": 27,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.872297,
+       1.0
+      ],
+      "k": 27,
+      "n": 27,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 27,
+     "wrong_state": 0
+    }
+   },
+   "8|unstack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 15,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 15,
+    "legal": 15,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.218019
+      ],
+      "k": 0,
+      "n": 15,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.218019
+      ],
+      "k": 0,
+      "n": 15,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.218019
+      ],
+      "k": 0,
+      "n": 15,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.218019
+      ],
+      "k": 0,
+      "n": 15,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.781981,
+       1.0
+      ],
+      "k": 15,
+      "n": 15,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.781981,
+       1.0
+      ],
+      "k": 15,
+      "n": 15,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 15,
+     "wrong_state": 0
+    }
+   },
+   "9|pick-up": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 15,
+     "malformed": 0,
+     "ok": 126,
+     "wrong_state": 0
+    },
+    "illegal": 28,
+    "keys": 141,
+    "legal": 113,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.032118
+      ],
+      "k": 0,
+      "n": 113,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.123436
+      ],
+      "k": 0,
+      "n": 28,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.338699,
+       0.724891
+      ],
+      "k": 15,
+      "n": 28,
+      "p": 0.535714
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.025823
+      ],
+      "k": 0,
+      "n": 141,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.025823
+      ],
+      "k": 0,
+      "n": 141,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.338699,
+       0.724891
+      ],
+      "k": 15,
+      "n": 28,
+      "p": 0.535714
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.032118
+      ],
+      "k": 0,
+      "n": 113,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.830612,
+       0.939223
+      ],
+      "k": 126,
+      "n": 141,
+      "p": 0.893617
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.830612,
+       0.939223
+      ],
+      "k": 126,
+      "n": 141,
+      "p": 0.893617
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 15,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 13,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 113,
+     "wrong_state": 0
+    }
+   },
+   "9|put-down": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 44,
+     "wrong_state": 0
+    },
+    "illegal": 0,
+    "keys": 44,
+    "legal": 44,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.08042
+      ],
+      "k": 0,
+      "n": 44,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "flag_false_legal": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.08042
+      ],
+      "k": 0,
+      "n": 44,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.08042
+      ],
+      "k": 0,
+      "n": 44,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": null,
+      "k": 0,
+      "n": 0,
+      "p": null
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.08042
+      ],
+      "k": 0,
+      "n": 44,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.91958,
+       1.0
+      ],
+      "k": 44,
+      "n": 44,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.91958,
+       1.0
+      ],
+      "k": 44,
+      "n": 44,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 0,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 44,
+     "wrong_state": 0
+    }
+   },
+   "9|stack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "malformed": 0,
+     "ok": 135,
+     "wrong_state": 0
+    },
+    "illegal": 4,
+    "keys": 135,
+    "legal": 131,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.027767
+      ],
+      "k": 0,
+      "n": 131,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.602365
+      ],
+      "k": 0,
+      "n": 4,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.0,
+       0.602365
+      ],
+      "k": 0,
+      "n": 4,
+      "p": 0.0
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.026955
+      ],
+      "k": 0,
+      "n": 135,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.026955
+      ],
+      "k": 0,
+      "n": 135,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.0,
+       0.602365
+      ],
+      "k": 0,
+      "n": 4,
+      "p": 0.0
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.027767
+      ],
+      "k": 0,
+      "n": 131,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.973045,
+       1.0
+      ],
+      "k": 135,
+      "n": 135,
+      "p": 1.0
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.973045,
+       1.0
+      ],
+      "k": 135,
+      "n": 135,
+      "p": 1.0
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 0,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 4,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 131,
+     "wrong_state": 0
+    }
+   },
+   "9|unstack": {
+    "classes": {
+     "false_illegal": 0,
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 1,
+     "malformed": 0,
+     "ok": 64,
+     "wrong_state": 0
+    },
+    "illegal": 4,
+    "keys": 65,
+    "legal": 61,
+    "rates": {
+     "false_illegal": {
+      "ci95": [
+       0.0,
+       0.058681
+      ],
+      "k": 0,
+      "n": 61,
+      "p": 0.0
+     },
+     "false_legal_accepted": {
+      "ci95": [
+       0.0,
+       0.602365
+      ],
+      "k": 0,
+      "n": 4,
+      "p": 0.0
+     },
+     "flag_false_legal": {
+      "ci95": [
+       0.006309,
+       0.80588
+      ],
+      "k": 1,
+      "n": 4,
+      "p": 0.25
+     },
+     "harmful": {
+      "ci95": [
+       0.0,
+       0.055172
+      ],
+      "k": 0,
+      "n": 65,
+      "p": 0.0
+     },
+     "malformed": {
+      "ci95": [
+       0.0,
+       0.055172
+      ],
+      "k": 0,
+      "n": 65,
+      "p": 0.0
+     },
+     "support_share_R2": {
+      "ci95": [
+       0.006309,
+       0.80588
+      ],
+      "k": 1,
+      "n": 4,
+      "p": 0.25
+     },
+     "wrong_state": {
+      "ci95": [
+       0.0,
+       0.058681
+      ],
+      "k": 0,
+      "n": 61,
+      "p": 0.0
+     }
+    },
+    "secondary": {
+     "delta_exact": {
+      "ci95": [
+       0.917237,
+       0.999611
+      ],
+      "k": 64,
+      "n": 65,
+      "p": 0.984615
+     },
+     "flag_accuracy": {
+      "ci95": [
+       0.917237,
+       0.999611
+      ],
+      "k": 64,
+      "n": 65,
+      "p": 0.984615
+     }
+    },
+    "subtypes": {
+     "false_legal_accepted": 0,
+     "false_legal_rejected_by_support_check": 1,
+     "fi_flag": 0,
+     "fi_malformed": 0,
+     "fi_support": 0,
+     "malformed": 0,
+     "ok_illegal_flag": 3,
+     "ok_illegal_flag_unsupported": 0,
+     "ok_legal_exact": 61,
+     "wrong_state": 0
+    }
+   }
+  },
+  "total": {
+   "classes": {
+    "false_illegal": 1,
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 222,
+    "malformed": 0,
+    "ok": 7705,
+    "wrong_state": 0
+   },
+   "illegal": 1057,
+   "keys": 7928,
+   "legal": 6871,
+   "rates": {
+    "false_illegal": {
+     "ci95": [
+      4e-06,
+      0.000811
+     ],
+     "k": 1,
+     "n": 6871,
+     "p": 0.000146
+    },
+    "false_legal_accepted": {
+     "ci95": [
+      0.0,
+      0.003484
+     ],
+     "k": 0,
+     "n": 1057,
+     "p": 0.0
+    },
+    "flag_false_legal": {
+     "ci95": [
+      0.185834,
+      0.235848
+     ],
+     "k": 222,
+     "n": 1057,
+     "p": 0.210028
+    },
+    "harmful": {
+     "ci95": [
+      3e-06,
+      0.000703
+     ],
+     "k": 1,
+     "n": 7928,
+     "p": 0.000126
+    },
+    "malformed": {
+     "ci95": [
+      0.0,
+      0.000465
+     ],
+     "k": 0,
+     "n": 7928,
+     "p": 0.0
+    },
+    "support_share_R2": {
+     "ci95": [
+      0.185834,
+      0.235848
+     ],
+     "k": 222,
+     "n": 1057,
+     "p": 0.210028
+    },
+    "wrong_state": {
+     "ci95": [
+      0.0,
+      0.000537
+     ],
+     "k": 0,
+     "n": 6871,
+     "p": 0.0
+    }
+   },
+   "secondary": {
+    "delta_exact": {
+     "ci95": [
+      0.967991,
+      0.9754
+     ],
+     "k": 7705,
+     "n": 7928,
+     "p": 0.971872
+    },
+    "flag_accuracy": {
+     "ci95": [
+      0.967991,
+      0.9754
+     ],
+     "k": 7705,
+     "n": 7928,
+     "p": 0.971872
+    }
+   },
+   "subtypes": {
+    "false_legal_accepted": 0,
+    "false_legal_rejected_by_support_check": 222,
+    "fi_flag": 1,
+    "fi_malformed": 0,
+    "fi_support": 0,
+    "malformed": 0,
+    "ok_illegal_flag": 835,
+    "ok_illegal_flag_unsupported": 0,
+    "ok_legal_exact": 6870,
+    "wrong_state": 0
+   }
+  }
+ },
+ "unique_keys": 7928,
+ "wording": "verified by the learned F plus a domain-agnostic delta-consistency check (a predicted deletion must be a fact of the state)"
+}
