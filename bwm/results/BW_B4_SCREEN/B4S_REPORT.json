@@ -1,0 +1,646 @@
+{
+ "status": "GO",
+ "n_paired": 40,
+ "dropped_by_precheck": [],
+ "round1_identity": {
+  "solved_in_round_1": {
+   "control": 1,
+   "arm": 1
+  },
+  "mismatched_ids": [],
+  "holds": true
+ },
+ "paired": {
+  "a_only": 7,
+  "R0_only": 1,
+  "both": 26,
+  "neither": 6
+ },
+ "decision": {
+  "arm_only": 7,
+  "control_only": 1,
+  "net": 6,
+  "p_one_sided_sign": 0.03515625,
+  "p_mcnemar_two_sided": 0.0703125,
+  "reported_only": [
+   "p_one_sided_sign",
+   "p_mcnemar_two_sided"
+  ],
+  "decision": "GO",
+  "go": true,
+  "because": "net 6 >= 2"
+ },
+ "rule": "GO iff (a_only - R0_only) >= 2; otherwise NO-GO (net <= 1 is always NO-GO). The exact one-sided sign-test p and the two-sided McNemar p are reported only and do not gate (D-77). If more than 5% of hook calls return a penalty-band value (invalid state or critic error; value >= PENALTY = 1000), a GO is not credited to the learned critic alone and c+pen is mandatory in the full B4 (D-76a). The screen is VOID (no GO/NO-GO) on any hook model/encode/nonfinite/failsafe error, model_evals = 0, a canary failure or R0 outputs that do not match ADDENDUM_A_INPUTS; it is an INSTRUMENT FAULT (no decision; a and c re-run in one turn) if the round-1 identity check or the R0 shard-argument check fails.",
+ "hook": {
+  "calls": 24583,
+  "penalty_calls": 0,
+  "failsafe_calls": 0,
+  "penalty_calls_invalid_state": 0,
+  "penalty_calls_critic_error": 0,
+  "seconds": 4.24,
+  "counters": {
+   "calls": 24583,
+   "cache_hits": 18318,
+   "evaluations": 6265,
+   "model_evals": 6265,
+   "invalid_states": 0,
+   "fallbacks": 0,
+   "encode_errors": 0,
+   "model_errors": 0,
+   "nonfinite": 0,
+   "clipped": 0,
+   "failsafe": 0,
+   "analysis_errors": 0,
+   "bad_goal_facts": 0,
+   "goal_non_on": 0
+  },
+  "reasons": {},
+  "shards": [
+   "shard_0of4",
+   "shard_1of4",
+   "shard_2of4",
+   "shard_3of4"
+  ],
+  "canary": {
+   "shard_0of4": {
+    "file": "experiments/RCX-B4/canary/B4_HOOK_CANARY.json",
+    "sha256": "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a",
+    "probes": 25,
+    "consistent_probes": 20,
+    "max_abs_delta": 0.0,
+    "abs_delta_by_probe": {
+     "c00": 0.0,
+     "c01": 0.0,
+     "c02": 0.0,
+     "c03": 0.0,
+     "c04": 0.0,
+     "c05": 0.0,
+     "c06": 0.0,
+     "c07": 0.0,
+     "c08": 0.0,
+     "c09": 0.0,
+     "c10": 0.0,
+     "c11": 0.0,
+     "c12": 0.0,
+     "c13": 0.0,
+     "c14": 0.0,
+     "c15": 0.0,
+     "c16": 0.0,
+     "c17": 0.0,
+     "c18": 0.0,
+     "c19": 0.0,
+     "i00": 0.0,
+     "i01": 0.0,
+     "i02": 0.0,
+     "i03": 0.0,
+     "i04": 0.0
+    },
+    "tolerance_abs": 1e-05,
+    "counters_after_all": {
+     "calls": 25,
+     "cache_hits": 0,
+     "evaluations": 25,
+     "model_evals": 20,
+     "invalid_states": 5,
+     "fallbacks": 5,
+     "encode_errors": 0,
+     "model_errors": 0,
+     "nonfinite": 0,
+     "clipped": 0,
+     "failsafe": 0,
+     "analysis_errors": 0,
+     "bad_goal_facts": 0,
+     "goal_non_on": 0
+    },
+    "counters_match": true,
+    "failures": [],
+    "canary_torch_version": "2.6.0+cu124",
+    "canary_torch_threads": 1,
+    "host_torch_version": "2.6.0+cu124",
+    "torch_versions_match": true,
+    "torch_version_rule": "report-only: a mismatch is flagged, never VOID (D-80 follow-up)"
+   },
+   "shard_1of4": {
+    "file": "experiments/RCX-B4/canary/B4_HOOK_CANARY.json",
+    "sha256": "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a",
+    "probes": 25,
+    "consistent_probes": 20,
+    "max_abs_delta": 0.0,
+    "abs_delta_by_probe": {
+     "c00": 0.0,
+     "c01": 0.0,
+     "c02": 0.0,
+     "c03": 0.0,
+     "c04": 0.0,
+     "c05": 0.0,
+     "c06": 0.0,
+     "c07": 0.0,
+     "c08": 0.0,
+     "c09": 0.0,
+     "c10": 0.0,
+     "c11": 0.0,
+     "c12": 0.0,
+     "c13": 0.0,
+     "c14": 0.0,
+     "c15": 0.0,
+     "c16": 0.0,
+     "c17": 0.0,
+     "c18": 0.0,
+     "c19": 0.0,
+     "i00": 0.0,
+     "i01": 0.0,
+     "i02": 0.0,
+     "i03": 0.0,
+     "i04": 0.0
+    },
+    "tolerance_abs": 1e-05,
+    "counters_after_all": {
+     "calls": 25,
+     "cache_hits": 0,
+     "evaluations": 25,
+     "model_evals": 20,
+     "invalid_states": 5,
+     "fallbacks": 5,
+     "encode_errors": 0,
+     "model_errors": 0,
+     "nonfinite": 0,
+     "clipped": 0,
+     "failsafe": 0,
+     "analysis_errors": 0,
+     "bad_goal_facts": 0,
+     "goal_non_on": 0
+    },
+    "counters_match": true,
+    "failures": [],
+    "canary_torch_version": "2.6.0+cu124",
+    "canary_torch_threads": 1,
+    "host_torch_version": "2.6.0+cu124",
+    "torch_versions_match": true,
+    "torch_version_rule": "report-only: a mismatch is flagged, never VOID (D-80 follow-up)"
+   },
+   "shard_2of4": {
+    "file": "experiments/RCX-B4/canary/B4_HOOK_CANARY.json",
+    "sha256": "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a",
+    "probes": 25,
+    "consistent_probes": 20,
+    "max_abs_delta": 0.0,
+    "abs_delta_by_probe": {
+     "c00": 0.0,
+     "c01": 0.0,
+     "c02": 0.0,
+     "c03": 0.0,
+     "c04": 0.0,
+     "c05": 0.0,
+     "c06": 0.0,
+     "c07": 0.0,
+     "c08": 0.0,
+     "c09": 0.0,
+     "c10": 0.0,
+     "c11": 0.0,
+     "c12": 0.0,
+     "c13": 0.0,
+     "c14": 0.0,
+     "c15": 0.0,
+     "c16": 0.0,
+     "c17": 0.0,
+     "c18": 0.0,
+     "c19": 0.0,
+     "i00": 0.0,
+     "i01": 0.0,
+     "i02": 0.0,
+     "i03": 0.0,
+     "i04": 0.0
+    },
+    "tolerance_abs": 1e-05,
+    "counters_after_all": {
+     "calls": 25,
+     "cache_hits": 0,
+     "evaluations": 25,
+     "model_evals": 20,
+     "invalid_states": 5,
+     "fallbacks": 5,
+     "encode_errors": 0,
+     "model_errors": 0,
+     "nonfinite": 0,
+     "clipped": 0,
+     "failsafe": 0,
+     "analysis_errors": 0,
+     "bad_goal_facts": 0,
+     "goal_non_on": 0
+    },
+    "counters_match": true,
+    "failures": [],
+    "canary_torch_version": "2.6.0+cu124",
+    "canary_torch_threads": 1,
+    "host_torch_version": "2.6.0+cu124",
+    "torch_versions_match": true,
+    "torch_version_rule": "report-only: a mismatch is flagged, never VOID (D-80 follow-up)"
+   },
+   "shard_3of4": {
+    "file": "experiments/RCX-B4/canary/B4_HOOK_CANARY.json",
+    "sha256": "9e9ad3395b3b274db90f96ff47e8fee2e7d7329f045618f88643e0899a11e87a",
+    "probes": 25,
+    "consistent_probes": 20,
+    "max_abs_delta": 0.0,
+    "abs_delta_by_probe": {
+     "c00": 0.0,
+     "c01": 0.0,
+     "c02": 0.0,
+     "c03": 0.0,
+     "c04": 0.0,
+     "c05": 0.0,
+     "c06": 0.0,
+     "c07": 0.0,
+     "c08": 0.0,
+     "c09": 0.0,
+     "c10": 0.0,
+     "c11": 0.0,
+     "c12": 0.0,
+     "c13": 0.0,
+     "c14": 0.0,
+     "c15": 0.0,
+     "c16": 0.0,
+     "c17": 0.0,
+     "c18": 0.0,
+     "c19": 0.0,
+     "i00": 0.0,
+     "i01": 0.0,
+     "i02": 0.0,
+     "i03": 0.0,
+     "i04": 0.0
+    },
+    "tolerance_abs": 1e-05,
+    "counters_after_all": {
+     "calls": 25,
+     "cache_hits": 0,
+     "evaluations": 25,
+     "model_evals": 20,
+     "invalid_states": 5,
+     "fallbacks": 5,
+     "encode_errors": 0,
+     "model_errors": 0,
+     "nonfinite": 0,
+     "clipped": 0,
+     "failsafe": 0,
+     "analysis_errors": 0,
+     "bad_goal_facts": 0,
+     "goal_non_on": 0
+    },
+    "counters_match": true,
+    "failures": [],
+    "canary_torch_version": "2.6.0+cu124",
+    "canary_torch_threads": 1,
+    "host_torch_version": "2.6.0+cu124",
+    "torch_versions_match": true,
+    "torch_version_rule": "report-only: a mismatch is flagged, never VOID (D-80 follow-up)"
+   }
+  },
+  "rcx_modules_executed": {
+   "rcx/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "rcx/bw/__init__.py": "4f403acd75709867f8dc7f6952a4e63e702ebaa40001dc2cb7024a6feb1440aa",
+   "rcx/bw/b4_hook.py": "a0b4f88c32797feba95115d232f733b8dd47610c9e3018af6b90b297bfdeec81",
+   "rcx/bw/bwm_import.py": "84140c7ea91e4066ea3f9ada6a95b6b329b665329b1c52ea38d305e3ee517b9e",
+   "rcx/bw/encode.py": "32980f141eaf0fac4757ee253d22c59c55f889ae98c26eddd37eef055b928a8a",
+   "rcx/bw/space.py": "29d0b4203156a98521475ce4eda4e7951dcaa2a31bae29b1c3c96c268e015fa4",
+   "rcx/bw/models.py": "4c2e3242eadc4ee155d8ddedb5f4188ac3aa5f70a19061145ff0e2fbee118f52"
+  },
+  "torch_version": [
+   "2.6.0+cu124"
+  ],
+  "model_evals_by_shard": {
+   "shard_0of4": 1125,
+   "shard_1of4": 2156,
+   "shard_2of4": 1648,
+   "shard_3of4": 1336
+  },
+  "penalty_band": "invalid state or critic error (value >= PENALTY = 1000)",
+  "penalty_share_calls": 0.0,
+  "penalty_share_max": 0.05,
+  "penalty_split_calls": {
+   "invalid_state": 0,
+   "critic_error": 0,
+   "failsafe": 0
+  },
+  "go_credited_to_critic": true,
+  "attribution_rule_fired": false,
+  "penalty_split_evaluations": {
+   "invalid_states": 0,
+   "critic_errors": 0,
+   "failsafe_incl_analysis_errors": 0
+  },
+  "penalty_share_evaluations": 0.0
+ },
+ "wording": "B4 screen GO: arm (a), the RCX hybrid hook, passed the pre-set futility rule on seeds_fresh-40, paired vs item 7's R0 beam. This unlocks the co-signed B4 primary (fresh seed-20261410 set, n = 110). It is not a claim that the hook improves planning, and the screen's net and p are not effect estimates.",
+ "arms": {
+  "R0": {
+   "success": "27/40",
+   "rate": 0.675,
+   "ci95": [
+    0.5087,
+    0.8143
+   ],
+   "failure_taxonomy": {
+    "budget": 5,
+    "dead_end": 8,
+    "solved": 27,
+    "verified_but_invalid": 0
+   },
+   "verified": 27,
+   "verified_precision": 1.0,
+   "unverified_val_successes": 0,
+   "val_disagreements": 0,
+   "mean_gen_tokens": 7120.2,
+   "mean_rounds": 4.67,
+   "anytime_success_within_rounds": {
+    "1": 1,
+    "2": 9,
+    "3": 16,
+    "4": 20,
+    "5": 23,
+    "6": 24,
+    "7": 26,
+    "8": 27,
+    "9": 27,
+    "10": 27,
+    "11": 27,
+    "12": 27
+   },
+   "token_budget_success_approx": {
+    "2000": 4,
+    "4000": 13,
+    "6000": 19,
+    "8000": 22,
+    "10000": 23,
+    "12000": 27,
+    "16000": 27
+   },
+   "success_by_blocks": {
+    "6": "1/1",
+    "8": "3/3",
+    "9": "4/5",
+    "10": "5/5",
+    "11": "4/4",
+    "12": "2/5",
+    "13": "6/6",
+    "14": "2/8",
+    "15": "0/3"
+   }
+  },
+  "a": {
+   "success": "33/40",
+   "rate": 0.825,
+   "ci95": [
+    0.6722,
+    0.9266
+   ],
+   "failure_taxonomy": {
+    "budget": 5,
+    "dead_end": 2,
+    "solved": 33,
+    "verified_but_invalid": 0
+   },
+   "verified": 33,
+   "verified_precision": 1.0,
+   "unverified_val_successes": 0,
+   "val_disagreements": 0,
+   "mean_gen_tokens": 5903.5,
+   "mean_rounds": 3.9,
+   "anytime_success_within_rounds": {
+    "1": 1,
+    "2": 12,
+    "3": 20,
+    "4": 26,
+    "5": 32,
+    "6": 32,
+    "7": 33,
+    "8": 33,
+    "9": 33,
+    "10": 33,
+    "11": 33,
+    "12": 33
+   },
+   "token_budget_success_approx": {
+    "2000": 7,
+    "4000": 13,
+    "6000": 25,
+    "8000": 28,
+    "10000": 32,
+    "12000": 32,
+    "16000": 33
+   },
+   "success_by_blocks": {
+    "6": "1/1",
+    "8": "3/3",
+    "9": "5/5",
+    "10": "5/5",
+    "11": "4/4",
+    "12": "4/5",
+    "13": "6/6",
+    "14": "4/8",
+    "15": "1/3"
+   },
+   "mean_expansions": 11.38
+  }
+ },
+ "strata_report_only": {
+  "6-10 blocks": {
+   "n": 14,
+   "R0": 13,
+   "a": 14,
+   "a_only": 1,
+   "R0_only": 0,
+   "p_mcnemar_two_sided": 1.0
+  },
+  "11-15 blocks": {
+   "n": 26,
+   "R0": 14,
+   "a": 19,
+   "a_only": 6,
+   "R0_only": 1,
+   "p_mcnemar_two_sided": 0.125
+  }
+ },
+ "control_failures_unmet_at_submitted_prefix": {
+  "note": "descriptive; computed on the executor's true state after the submitted prefix",
+  "failures": 13,
+  "distribution": {
+   "1": 12,
+   "2": 1
+  },
+  "stalled_at_1": 12,
+  "a_solves_among_stalled_at_1": 6,
+  "other_failures": 1,
+  "a_solves_among_other_failures": 1,
+  "ids_stalled_at_1": [
+   "seeds_fresh/4",
+   "seeds_fresh/18",
+   "seeds_fresh/19",
+   "seeds_fresh/21",
+   "seeds_fresh/29",
+   "seeds_fresh/31",
+   "seeds_fresh/33",
+   "seeds_fresh/34",
+   "seeds_fresh/35",
+   "seeds_fresh/36",
+   "seeds_fresh/37",
+   "seeds_fresh/38"
+  ]
+ },
+ "arm_failures_unmet_at_submitted_prefix": {
+  "note": "descriptive; computed on the executor's true state after the submitted prefix",
+  "failures": 7,
+  "distribution": {
+   "1": 1,
+   "2": 1,
+   "4": 2,
+   "6": 3
+  },
+  "stalled_at_1": 1,
+  "R0_solves_among_stalled_at_1": 1,
+  "other_failures": 6,
+  "R0_solves_among_other_failures": 0,
+  "ids_stalled_at_1": [
+   "seeds_fresh/32"
+  ]
+ },
+ "certificate_c_eq_cpen_on_control": {
+  "accepted_predictions": 6359,
+  "inconsistent": 0,
+  "holds": true,
+  "reasons": {},
+  "caches": {
+   "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\BW_SEEDS\\R0_beam\\shard_0of4\\fcache.jsonl": {
+    "lines_skipped": 0,
+    "keys_redefined_with_new_text": 0,
+    "keys": 1613,
+    "sha256": "91ee461be32447c2b46793d652eb2cc4f074d329ec21fb95677571ce89e6e0ba"
+   },
+   "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\BW_SEEDS\\R0_beam\\shard_1of4\\fcache.jsonl": {
+    "lines_skipped": 0,
+    "keys_redefined_with_new_text": 0,
+    "keys": 2272,
+    "sha256": "ab5ac4feaf5c8c23910e2d0270629a02649381beda6bcaca6811ed13a196df49"
+   },
+   "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\BW_SEEDS\\R0_beam\\shard_2of4\\fcache.jsonl": {
+    "lines_skipped": 0,
+    "keys_redefined_with_new_text": 0,
+    "keys": 2226,
+    "sha256": "72329eacd01caa4038510ba9c80717edbe632b8c44f38c391ea2f835d85b1c5e"
+   },
+   "C:\\Users\\clclc\\BusinessProject\\WorldModel\\Rineya_BWM_001_Research_Bundle\\native_v1\\runs\\BW_SEEDS\\R0_beam\\shard_3of4\\fcache.jsonl": {
+    "lines_skipped": 0,
+    "keys_redefined_with_new_text": 0,
+    "keys": 1650,
+    "sha256": "70d302b0f2ad242bdd547d3f411846e5ed56153376b73c33ae439e015480a963"
+   }
+  }
+ },
+ "arm_unpenalised_inconsistent_report_only": {
+  "what": "report-only: inconsistent F-accepted keys of the arm that the hook (registry off) did not penalise",
+  "accepted_predictions": 6870,
+  "strict_inconsistent": 0,
+  "penalised_by_hook": 0,
+  "unpenalised": 0,
+  "undetermined": 0,
+  "keys_matching_several_instances": 0,
+  "keys_matching_no_instance": 0,
+  "unpenalised_reasons": {},
+  "registry": "off"
+ },
+ "f_cache_cross_check": {
+  "control_keys": 7761,
+  "arm_keys": 7928,
+  "common_keys": 2449,
+  "common_same_text": 2449,
+  "common_different_text": 0,
+  "intra_run_conflicts": {
+   "control": 0,
+   "arm": 0
+  }
+ },
+ "hook_shards": {
+  "shard_0of4": {
+   "calls": 5609,
+   "instances": 10
+  },
+  "shard_1of4": {
+   "calls": 7218,
+   "instances": 10
+  },
+  "shard_2of4": {
+   "calls": 6463,
+   "instances": 10
+  },
+  "shard_3of4": {
+   "calls": 5293,
+   "instances": 10
+  }
+ },
+ "canary_report_only": {
+  "what": "report-only: canary max |delta| per hook shard and the canary's and the host's torch versions",
+  "shards": {
+   "shard_0of4": {
+    "max_abs_delta": 0.0,
+    "canary_torch_version": "2.6.0+cu124",
+    "host_torch_version": "2.6.0+cu124",
+    "torch_versions_match": true
+   },
+   "shard_1of4": {
+    "max_abs_delta": 0.0,
+    "canary_torch_version": "2.6.0+cu124",
+    "host_torch_version": "2.6.0+cu124",
+    "torch_versions_match": true
+   },
+   "shard_2of4": {
+    "max_abs_delta": 0.0,
+    "canary_torch_version": "2.6.0+cu124",
+    "host_torch_version": "2.6.0+cu124",
+    "torch_versions_match": true
+   },
+   "shard_3of4": {
+    "max_abs_delta": 0.0,
+    "canary_torch_version": "2.6.0+cu124",
+    "host_torch_version": "2.6.0+cu124",
+    "torch_versions_match": true
+   }
+  },
+  "torch_version_mismatch_shards": [],
+  "torch_version_flag": null
+ },
+ "cost": {
+  "control": {
+   "f_queries_per_instance": 150.9,
+   "proposer_tokens_per_instance": 7120.2,
+   "wall_s": 9907.7,
+   "f_model_queries": 6037
+  },
+  "a": {
+   "f_queries_per_instance": 198.2,
+   "proposer_tokens_per_instance": 5903.5,
+   "wall_s": 11394.099999999999,
+   "f_model_queries": 7928
+  }
+ },
+ "attempts": {
+  "attempts": 12,
+  "starts_per_shard": {
+   "a 0/4": 1,
+   "a 1/4": 1,
+   "a 2/4": 1,
+   "a 3/4": 1
+  },
+  "warm_cache_shards": [],
+  "cost_flag": null
+ },
+ "meta": {
+  "freeze_sha256": "f316d84266a8bf88c68b13c8c09f80fb7b1160af52e13c73fe49868c1f29bc68",
+  "prereg": {
+   "path": "research\\PREREG_B4_SCREEN.md",
+   "sha256": "ac70043bd9abcbc5d2bcb51905eac2140adefcb950e2c62c6dac360f405b0506"
+  },
+  "runner_sha256": "0b576b1f4136f7ced9b12bdc71219a6435cdd1733bd733d1908d241469df750f",
+  "rerun": false,
+  "written": "2026-10-13 10:11:07 Central Daylight Time",
+  "inputs": "ANALYSIS_INPUTS.json"
+ }
+}

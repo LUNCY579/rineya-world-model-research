@@ -1,0 +1,48 @@
+{
+ "args": {
+  "proposer": "lm",
+  "pa": "runs/BW_Pa_v2_s1/adapter",
+  "mode": "actions",
+  "eval_seed": 0,
+  "max_depth": 80,
+  "step_cap": 24,
+  "fwd": "lm",
+  "fwd_adapter": "runs/BW_Fdelta_s0/adapter",
+  "fwd_fmt": "delta",
+  "K": 8,
+  "planner": "beam",
+  "W": 4,
+  "E": 24,
+  "R": 12,
+  "M": 80,
+  "P": 1
+ },
+ "arm": "a",
+ "shard": "2/4",
+ "freeze": "runs/FREEZE_B4S_a_beam.json",
+ "summary": {
+  "success": 0.9,
+  "n": 10,
+  "verified_rate": 0.9,
+  "verification_precision": 1.0,
+  "wall_s": 2972.3,
+  "f_model_queries": 2066,
+  "f_queries_per_instance": 206.6,
+  "proposer_tokens_per_instance": 6314.7,
+  "expansions_per_instance": 11.9,
+  "val_success": 0.9,
+  "val_disagreements": 0,
+  "success_by_blocks": {
+   "8": 1.0,
+   "9": 1.0,
+   "10": 1.0,
+   "11": 1.0,
+   "12": 1.0,
+   "13": 1.0,
+   "14": 1.0,
+   "15": 0.0
+  },
+  "hook_calls": 6463,
+  "hook_penalty_calls": 0
+ }
+}
