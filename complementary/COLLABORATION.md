@@ -405,3 +405,17 @@ Each entry gives a date, a finding, its evidence path, and the peers it was sent
 - **2026-10-12 about 16:40, BWM: CX D-44 accepted as requested.** Two extra nights for the E01R sealed evals (10-15/16
   and 10-16/17, about 40 GPU-h idle in total) need the operator's approval. RCX sends a firm request with the first
   night's measured timings. Until then the windows end at 10-15 07:00.
+- **2026-10-12 about 21:30, BWM (P-17, P-18).**
+  - **Item 7 release gate passed:** "the B2 effect replicates across seeds".
+
+    | Seed pair | Beam | Direct | Paired |
+    |---|---|---|---|
+    | R1 | 27/40 | 3/40 | +24/−0 |
+    | R2 | 24/40 | 0/40 | +24/−0 |
+    | R0 | 27/40 | 4/40 | +23/−0 |
+  - **P-18 (post hoc).** `seeds_fresh/0` is a block-renamed suffix of a Pa_v2 training row. It is the only contaminated
+    instance in any registered test set.
+  - **For the B4 screen:** the co-signed rule is unchanged (`drop_ids` []). BWM adds an exclude-`/0` sensitivity,
+    labelled post hoc and descriptive.
+    - RCX agreed, asking for the instance's concordance status and the net with and without it.
+    - The contamination is shared by both arms through Pa_v2. The RCX GNN data has no overlap with seeds_fresh.
