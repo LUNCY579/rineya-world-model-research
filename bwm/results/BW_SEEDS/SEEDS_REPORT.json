@@ -1,0 +1,78 @@
+{
+ "systems": {
+  "R0": {
+   "s_beam": "27/40",
+   "s_beam_ci95": [
+    0.5087,
+    0.8143
+   ],
+   "s_direct": "4/40",
+   "s_direct_ci95": [
+    0.0279,
+    0.2366
+   ],
+   "beam_only": 23,
+   "direct_only": 0,
+   "delta": 0.575,
+   "p_mcnemar": 2.384185791015625e-07,
+   "replicates": true
+  },
+  "R1": {
+   "s_beam": "27/40",
+   "s_beam_ci95": [
+    0.5087,
+    0.8143
+   ],
+   "s_direct": "3/40",
+   "s_direct_ci95": [
+    0.0157,
+    0.2039
+   ],
+   "beam_only": 24,
+   "direct_only": 0,
+   "delta": 0.6,
+   "p_mcnemar": 1.1920928955078125e-07,
+   "replicates": true
+  },
+  "R2": {
+   "s_beam": "24/40",
+   "s_beam_ci95": [
+    0.4333,
+    0.7514
+   ],
+   "s_direct": "0/40",
+   "s_direct_ci95": [
+    0.0,
+    0.0881
+   ],
+   "beam_only": 24,
+   "direct_only": 0,
+   "delta": 0.6,
+   "p_mcnemar": 1.1920928955078125e-07,
+   "replicates": true
+  }
+ },
+ "spread_report_only": {
+  "R1_vs_R0_beam": {
+   "only_R1": 5,
+   "only_R0": 5,
+   "p_mcnemar": 1.0
+  },
+  "R1_vs_R0_direct": {
+   "only_R1": 1,
+   "only_R0": 2,
+   "p_mcnemar": 1.0
+  },
+  "R2_vs_R0_beam": {
+   "only_R2": 2,
+   "only_R0": 5,
+   "p_mcnemar": 0.453125
+  },
+  "R2_vs_R0_direct": {
+   "only_R2": 0,
+   "only_R0": 4,
+   "p_mcnemar": 0.125
+  }
+ },
+ "release_gate_reading": "the B2 effect replicates across seeds"
+}

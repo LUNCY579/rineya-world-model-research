@@ -172,3 +172,188 @@ wrote 6 freeze records
   [thermal] 16:08:51 GPU 61 C
   [thermal] 16:13:54 GPU 61 C
   [thermal] 16:19:04 GPU 61 C
+  [thermal] 16:24:15 GPU 57 C
+{"success": 0.9, "n": 10, "verified_rate": 0.9, "verification_precision": 1.0, "wall_s": 1897.3, "f_model_queries": 644, "f_queries_per_instance": 64.4, "proposer_tokens_per_instance": 5992.4, "expansions_per_instance": 12.2, "val_success": 0.9, "val_disagreements": 0, "success_by_blocks": {"8": 1.0, "9": 1.0, "10": 1.0, "11": 1.0, "12": 1.0, "13": 1.0, "14": 1.0, "15": 0.0}}
+[seeds] done R1 beam {
+ "summary": {
+  "f_model_queries": 7627,
+  "wall_s": 11377.8,
+  "n": 40,
+  "success": 0.675,
+  "val_success": 0.675,
+  "val_disagreements": 0,
+  "verified_rate": 0.675,
+  "f_queries_per_instance": 190.7,
+  "proposer_tokens_per_instance": 7816.8,
+  "shards": 4,
+  "success_by_blocks": {
+   "6": 1.0,
+[seeds] run R2 direct
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:31,  3.39it/s]Loading weights:  15%|#5        | 47/310 [00:00<00:01, 150.85it/s]Loading weights:  29%|##9       | 91/310 [00:00<00:00, 241.19it/s]Loading weights:  44%|####3     | 135/310 [00:00<00:00, 298.36it/s]Loading weights:  56%|#####6    | 174/310 [00:00<00:00, 323.59it/s]Loading weights:  69%|######8   | 213/310 [00:00<00:00, 342.35it/s]Loading weights:  81%|########1 | 252/310 [00:00<00:00, 356.29it/s]Loading weights:  94%|#########3| 291/310 [00:01<00:00, 358.44it/s]Loading weights: 100%|##########| 310/310 [00:01<00:00, 294.18it/s]
+  [thermal] 16:25:20 GPU 59 C
+{"success": 0.0, "n": 40, "verified_rate": 0.0, "verification_precision": 0.0, "wall_s": 226.7, "f_model_queries": 0, "f_queries_per_instance": 0.0, "proposer_tokens_per_instance": 100.6, "expansions_per_instance": 0.0, "val_success": 0.0, "val_disagreements": 0, "success_by_blocks": {"6": 0.0, "8": 0.0, "9": 0.0, "10": 0.0, "11": 0.0, "12": 0.0, "13": 0.0, "14": 0.0, "15": 0.0}}
+[seeds] done R2 direct {
+ "args": {
+  "set": "seeds_fresh",
+  "planner": "direct",
+  "W": 4,
+  "E": 48,
+  "max_depth": 80,
+  "step_cap": 24,
+  "R": 0,
+  "fwd_fmt": "state",
+  "max_batch_tokens": 5000,
+  "M": 256,
+  "P": 0,
+  "prop_batch_tokens": 6000,
+  "freeze": "runs/FREEZE_I7_R2_direct.json",
+  "shard": "",
+  "n": 0,
+ 
+[seeds] run R2 beam shard 0/4
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:33,  3.32it/s]Loading weights:  15%|#5        | 48/310 [00:00<00:01, 150.03it/s]Loading weights:  30%|###       | 93/310 [00:00<00:00, 242.14it/s]Loading weights:  45%|####4     | 138/310 [00:00<00:00, 304.89it/s]Loading weights:  60%|#####9    | 185/310 [00:00<00:00, 351.83it/s]Loading weights:  75%|#######5  | 234/310 [00:00<00:00, 387.25it/s]Loading weights:  90%|########9 | 278/310 [00:00<00:00, 400.26it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 315.53it/s]
+  [thermal] 16:29:16 GPU 59 C
+  [thermal] 16:34:22 GPU 58 C
+  [thermal] 16:39:34 GPU 56 C
+  [thermal] 16:44:35 GPU 56 C
+  [thermal] 16:49:44 GPU 57 C
+  [thermal] 16:54:52 GPU 57 C
+  [thermal] 16:59:58 GPU 56 C
+  [thermal] 17:05:06 GPU 56 C
+  [thermal] 17:10:19 GPU 56 C
+  [thermal] 17:15:28 GPU 56 C
+  [thermal] 17:20:40 GPU 57 C
+  [thermal] 17:25:44 GPU 58 C
+  [thermal] 17:30:46 GPU 57 C
+  [thermal] 17:35:53 GPU 58 C
+{"success": 0.9, "n": 10, "verified_rate": 0.9, "verification_precision": 1.0, "wall_s": 4257.6, "f_model_queries": 1783, "f_queries_per_instance": 178.3, "proposer_tokens_per_instance": 8793.0, "expansions_per_instance": 16.1, "val_success": 0.9, "val_disagreements": 0, "success_by_blocks": {"6": 1.0, "9": 1.0, "10": 1.0, "11": 1.0, "12": 1.0, "13": 1.0, "14": 0.5}}
+[seeds] run R2 beam shard 1/4
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<02:47,  1.84it/s]Loading weights:   5%|5         | 16/310 [00:00<00:09, 31.83it/s]Loading weights:  15%|#5        | 47/310 [00:00<00:02, 94.18it/s]Loading weights:  26%|##5       | 80/310 [00:00<00:01, 150.44it/s]Loading weights:  36%|###6      | 113/310 [00:00<00:01, 194.58it/s]Loading weights:  45%|####5     | 140/310 [00:01<00:00, 186.68it/s]Loading weights:  53%|#####2    | 164/310 [00:01<00:00, 174.31it/s]Loading weights:  62%|######2   | 193/310 [00:01<00:00, 201.47it/s]Loading weights:  72%|#######1  | 223/310 [00:01<00:00, 225.42it/s]Loading weights:  82%|########1 | 253/310 [00:01<00:00, 242.65it/s]Loading weights:  94%|#########3| 290/310 [00:01<00:00, 276.50it/s]Loading weights: 100%|##########| 310/310 [00:01<00:00, 178.75it/s]
+  [thermal] 17:40:24 GPU 59 C
+  [thermal] 17:45:27 GPU 57 C
+  [thermal] 17:50:29 GPU 58 C
+  [thermal] 17:55:38 GPU 57 C
+  [thermal] 18:00:40 GPU 64 C
+  [thermal] 18:05:47 GPU 63 C
+  [thermal] 18:10:55 GPU 60 C
+  [thermal] 18:16:04 GPU 59 C
+  [thermal] 18:21:09 GPU 61 C
+  [thermal] 18:26:17 GPU 61 C
+{"success": 0.6, "n": 10, "verified_rate": 0.6, "verification_precision": 1.0, "wall_s": 2993.2, "f_model_queries": 1798, "f_queries_per_instance": 179.8, "proposer_tokens_per_instance": 7889.5, "expansions_per_instance": 13.3, "val_success": 0.6, "val_disagreements": 0, "success_by_blocks": {"8": 1.0, "9": 1.0, "10": 0.5, "11": 1.0, "12": 0.0, "13": 1.0, "14": 0.5, "15": 0.0}}
+[seeds] run R2 beam shard 2/4
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:18,  3.94it/s]Loading weights:  15%|#5        | 47/310 [00:00<00:01, 168.15it/s]Loading weights:  30%|##9       | 92/310 [00:00<00:00, 259.58it/s]Loading weights:  44%|####4     | 137/310 [00:00<00:00, 318.50it/s]Loading weights:  61%|######1   | 190/310 [00:00<00:00, 372.39it/s]Loading weights:  75%|#######5  | 234/310 [00:00<00:00, 392.75it/s]Loading weights:  90%|######### | 279/310 [00:00<00:00, 409.49it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 330.35it/s]
+  [thermal] 18:30:27 GPU 61 C
+  [thermal] 18:35:32 GPU 62 C
+  [thermal] 18:40:42 GPU 62 C
+  [thermal] 18:45:50 GPU 58 C
+  [thermal] 18:50:50 GPU 60 C
+  [thermal] 18:56:00 GPU 59 C
+  [thermal] 19:01:12 GPU 60 C
+  [thermal] 19:06:12 GPU 61 C
+  [thermal] 19:11:18 GPU 58 C
+{"success": 0.5, "n": 10, "verified_rate": 0.5, "verification_precision": 1.0, "wall_s": 2517.6, "f_model_queries": 1694, "f_queries_per_instance": 169.4, "proposer_tokens_per_instance": 7404.0, "expansions_per_instance": 13.2, "val_success": 0.5, "val_disagreements": 0, "success_by_blocks": {"8": 0.0, "9": 1.0, "10": 1.0, "11": 1.0, "12": 0.5, "13": 0.0, "14": 0.5, "15": 0.0}}
+[seeds] run R2 beam shard 3/4
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:20,  3.84it/s]Loading weights:  15%|#5        | 47/310 [00:00<00:01, 164.60it/s]Loading weights:  30%|###       | 93/310 [00:00<00:00, 258.46it/s]Loading weights:  46%|####6     | 143/310 [00:00<00:00, 329.78it/s]Loading weights:  62%|######1   | 191/310 [00:00<00:00, 367.10it/s]Loading weights:  77%|#######7  | 240/310 [00:00<00:00, 392.50it/s]Loading weights:  94%|#########3| 291/310 [00:00<00:00, 411.69it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 330.52it/s]
+  [thermal] 19:12:33 GPU 62 C
+  [thermal] 19:17:43 GPU 60 C
+  [thermal] 19:22:50 GPU 61 C
+  [thermal] 19:27:56 GPU 60 C
+  [thermal] 19:33:04 GPU 61 C
+  [thermal] 19:38:11 GPU 62 C
+  [thermal] 19:43:15 GPU 61 C
+{"success": 0.4, "n": 10, "verified_rate": 0.4, "verification_precision": 1.0, "wall_s": 1992.7, "f_model_queries": 1109, "f_queries_per_instance": 110.9, "proposer_tokens_per_instance": 5655.5, "expansions_per_instance": 9.9, "val_success": 0.4, "val_disagreements": 0, "success_by_blocks": {"8": 1.0, "9": 1.0, "10": 1.0, "11": 1.0, "12": 0.0, "13": 0.0, "14": 0.0, "15": 0.0}}
+[seeds] done R2 beam {
+ "summary": {
+  "f_model_queries": 6384,
+  "wall_s": 11761.1,
+  "n": 40,
+  "success": 0.6,
+  "val_success": 0.6,
+  "val_disagreements": 0,
+  "verified_rate": 0.6,
+  "f_queries_per_instance": 159.6,
+  "proposer_tokens_per_instance": 7435.5,
+  "shards": 4,
+  "success_by_blocks": {
+   "6": 1.0,
+   "8
+wrote C:\Users\clclc\BusinessProject\WorldModel\Rineya_BWM_001_Research_Bundle\native_v1\runs\BW_SEEDS\ADDENDUM_A_INPUTS.json: 54 files hashed (screen frozen: True)
+{
+ "systems": {
+  "R0": {
+   "s_beam": "27/40",
+   "s_beam_ci95": [
+    0.5087,
+    0.8143
+   ],
+   "s_direct": "4/40",
+   "s_direct_ci95": [
+    0.0279,
+    0.2366
+   ],
+   "beam_only": 23,
+   "direct_only": 0,
+   "delta": 0.575,
+   "p_mcnemar": 2.384185791015625e-07,
+   "replicates": true
+  },
+  "R1": {
+   "s_beam": "27/40",
+   "s_beam_ci95": [
+    0.5087,
+    0.8143
+   ],
+   "s_direct": "3/40",
+   "s_direct_ci95": [
+    0.0157,
+    0.2039
+   ],
+   "beam_only": 24,
+   "direct_only": 0,
+   "delta": 0.6,
+   "p_mcnemar": 1.1920928955078125e-07,
+   "replicates": true
+  },
+  "R2": {
+   "s_beam": "24/40",
+   "s_beam_ci95": [
+    0.4333,
+    0.7514
+   ],
+   "s_direct": "0/40",
+   "s_direct_ci95": [
+    0.0,
+    0.0881
+   ],
+   "beam_only": 24,
+   "direct_only": 0,
+   "delta": 0.6,
+   "p_mcnemar": 1.1920928955078125e-07,
+   "replicates": true
+  }
+ },
+ "spread_report_only": {
+  "R1_vs_R0_beam": {
+   "only_R1": 5,
+   "only_R0": 5,
+   "p_mcnemar": 1.0
+  },
+  "R1_vs_R0_direct": {
+   "only_R1": 1,
+   "only_R0": 2,
+   "p_mcnemar": 1.0
+  },
+  "R2_vs_R0_beam": {
+   "only_R2": 2,
+   "only_R0": 5,
+   "p_mcnemar": 0.453125
+  },
+  "R2_vs_R0_direct": {
+   "only_R2": 0,
+   "only_R0": 4,
+   "p_mcnemar": 0.125
+  }
+ },
+ "release_gate_reading": "the B2 effect replicates across seeds"
+}
+wrote C:\Users\clclc\BusinessProject\WorldModel\Rineya_BWM_001_Research_Bundle\native_v1\runs\BW_SEEDS\ADDENDUM_A_REPORT.json

@@ -101,7 +101,8 @@ def plan(src: Path):
             excluded.append((p, "LoRA adapter weights (user decision 2026-10-08: no weights in the repo)"))
             continue
         evidence_cache = (p.name.startswith("fcache") and p.suffix == ".jsonl" and
-                          parts & {"BW_TEST_B2", "BW_B3_HARD", "BW_DISTILL_r1", "BW_SELECT_v1", "BW_B3_EVAL"})
+                          parts & {"BW_TEST_B2", "BW_B3_HARD", "BW_DISTILL_r1", "BW_SELECT_v1", "BW_B3_EVAL",
+                                   "BW_SEEDS", "BW_B4_SCREEN"})  # item 7 / B4 screen: FREPLAY audit inputs (A.0)
         if SKIP_NAME.match(p.name) and not evidence_cache:  # D-75: F caches of test/selection runs are evidence
             if p.name.startswith("fcache") or p.name.endswith((".jsonl",)):
                 excluded.append((p, "cache / training rows (regenerable)"))
