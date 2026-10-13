@@ -23,7 +23,9 @@ while :; do
   [ "$END_EPOCH" -gt 0 ] && [ "$now" -ge "$END_EPOCH" ] && { [ "$stopped" -eq 1 ] && { log "end reached; relaunching"; start_chain; }; log "night guard end"; exit 0; }
   rcwm_held=0
   if [ -f "$LOCK" ]; then rec=$(<"$LOCK"); [[ "$rec" == *'"label": "rcwm-'* ]] && rcwm_held=1; fi
-  if [ "$hm" -ge 2250 ] || [ "$hm" -lt 700 ]; then
+  # NOSTART_HM (default 1820): from then until 22:50 no NEW RCWM turn may start (a turn is capped at 4.5 h, so any
+  # running turn ends by about 22:50; DECISIONS I-37). A running RCWM turn is never interrupted.
+  if [ "$hm" -ge "${NOSTART_HM:-1820}" ] || [ "$hm" -lt 700 ]; then
     if [ "$rcwm_held" -eq 1 ]; then
       [ "$last_rcwm" -eq 0 ] && log "window: an RCWM turn is running; letting it finish"
       last_rcwm=1

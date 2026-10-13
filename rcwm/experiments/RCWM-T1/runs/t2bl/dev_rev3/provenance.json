@@ -1,0 +1,316 @@
+{
+ "tag": "dev",
+ "kit_revision": 3,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "steps": 190,
+ "lr": 0.0001,
+ "data_sha256": {
+  "t2bl_train.jsonl": "88f04e6b17c2c0e50b0e655f4f59e747232cc2ce8db0f49f189b406fd4fc8ba4",
+  "t2bl_dev.jsonl": "731bbc6a041799ec43b832ae9540cee8db2324fd48ab2dbacc420f37831c5ba8"
+ },
+ "dev_subset": null,
+ "n_dev_rows": 1801,
+ "dev_ids_sha256": "13836a8c46d118ab1cc1d62c15cf3d1293933f4f052ff1dfe144f0e8526006e5",
+ "lease_label": "rcwm-t1:t2b-ledger",
+ "code_sha256": {
+  "scripts/t2bl_common.py": "f431ffb79235c5996f96bf7990abb3b3481269127ab6b5d1c7d71f729d6b3286",
+  "scripts/t2bl_make_data.py": "4cbe9eac1dc2d2bd804f31a7ee3c891db365cb2b9aa1188f0f10b025cab437c4",
+  "scripts/t2bl_audit.py": "d0ff1a3e32c9272b49c79806760e07c92f1dc99f269615bdb0ae80e3165ce348",
+  "scripts/t2bl_run.py": "093e51ca7fb20f0c3f3a6f9ffe642db0ac1369222bd3422c854077b434742a15",
+  "scripts/t2bl_gate.py": "ddce555c8476ec6c8ef1553faf0c06ba2f7ccc59d6431b8424407979ce499f71",
+  "scripts/p3_common.py": "737d7984f118c248f8169ad55806a2f5852f5e0b06bf046868a15fa8e764c648",
+  "scripts/confirm2_gen.py": "4253a42039c4a1bb95f412666ad4bc1804244d5b10e6e9fa393c99a488659380",
+  "rcwmt/env.py": "92abb6787588bfb0a38d2d73618f0aeb9e70b9dc4a2d86f428712cd4466db1e2",
+  "rcwmt/generation.py": "a4052088a3b6e4d1bc0b59c947599ebce76cdd0bb37230761cb817fa92df7b19",
+  "rcwmt/runtime.py": "9360541286dc5648e6fd71c217135914b80fd4cef665364c47688cb07f0a12ca",
+  "rcwmt/capture.py": "7b0a19ee4aefda183f22336521fa39d5d3694bf1d60b5b950d769fa942ce255a",
+  "vendor_bwm/scripts/train_generic.py": "816d2f562946177397a5f186e9fcadd7febd2b49c894afc9abafe9474665ad61",
+  "vendor_bwm/bwmn/lm.py": "3d3f8d00b84af39dabd46b415ae559754066bdcf3c64de1127b138a27da72b57"
+ },
+ "gate_rule_sha256": "e7ad14eed75f08f993a68a342f27043427c5a1003c58193b3ed8b498f60dda15",
+ "t2s0": {
+  "adapter_model.safetensors": "92bc7c7497c3cb2fc0c7c917b4f3b6bb931f0ed108144d969b26b18b42670b8a",
+  "adapter_config.json": "50d9a776e093a952ac440a77c9cd7cd8e51eb22a85eb93b383aee1eacc185d9d"
+ },
+ "stages": {
+  "s0": {
+   "T": {
+    "turn": 0,
+    "seconds": 2356.8,
+    "planned_s": 2426.3,
+    "seed": 0,
+    "rows": "t2bl_train.jsonl",
+    "finished_unix": 1791854722.428066,
+    "files": {
+     "s0/train/adapter/adapter_model.safetensors": "ba973d3042c478ec413b5a846dedd71d8ff014568cb4a84376afbf5fdea46074",
+     "s0/train/adapter/adapter_config.json": "4d7030af48ba7150ae843ff872f9e1cbe95bf5e50d3ea02fea3ed50cc4bd3490"
+    }
+   },
+   "E": {
+    "turn": 0,
+    "seconds": 961.8,
+    "planned_s": 785.5,
+    "sides": {
+     "on": {
+      "start_unix": 1791857352.3009682,
+      "end_unix": 1791858314.0959327,
+      "pid": 313872
+     }
+    },
+    "generations": 1801,
+    "seed": 0,
+    "finished_unix": 1791858314.1023428,
+    "files": {
+     "s0/dev_on.jsonl": "ad8531f91966eac849a8334a6ba2cb6723eecab8dd69d3cb9758752e4464cb30"
+    }
+   }
+  },
+  "ref": {
+   "E0": {
+    "turn": 0,
+    "seconds": 1911.5,
+    "planned_s": 1571.0,
+    "sides": {
+     "off": {
+      "start_unix": 1791855440.7291818,
+      "end_unix": 1791856340.2052143,
+      "pid": 313872
+     },
+     "t2s0": {
+      "start_unix": 1791856340.2052143,
+      "end_unix": 1791857352.276111,
+      "pid": 313872
+     }
+    },
+    "generations": 3602,
+    "finished_unix": 1791857352.2778134,
+    "files": {
+     "ref/dev_off.jsonl": "9e8c99b097ad82c8348bb8aa418d2663a858c83be393d7b149a58f6d3f40dc5e",
+     "ref/dev_t2s0.jsonl": "4c7f0169bb775900b4758f670a275118d7526e2cf0b724ee25fff4b5e4294bc8"
+    }
+   }
+  },
+  "s1": {
+   "T": {
+    "turn": 0,
+    "seconds": 12969.7,
+    "planned_s": 2426.3,
+    "seed": 1,
+    "rows": "t2bl_train.jsonl",
+    "finished_unix": 1791871284.0857167,
+    "files": {
+     "s1/train/adapter/adapter_model.safetensors": "6b336f72840e7d5f8e5e460c8b51ae77232a551f7f75ee86f49ef9faafdfc853",
+     "s1/train/adapter/adapter_config.json": "4d7030af48ba7150ae843ff872f9e1cbe95bf5e50d3ea02fea3ed50cc4bd3490"
+    }
+   },
+   "E": {
+    "turn": 1,
+    "seconds": 1113.9,
+    "planned_s": 785.5,
+    "sides": {
+     "on": {
+      "start_unix": 1791905095.6765897,
+      "end_unix": 1791906209.5743423,
+      "pid": 442088
+     }
+    },
+    "generations": 1801,
+    "seed": 1,
+    "finished_unix": 1791906209.5799074,
+    "files": {
+     "s1/dev_on.jsonl": "57c66ca3b77abb7c91edc6810e6fb01a009df789c3b13f31f38a32ffe1094010"
+    }
+   }
+  },
+  "s2": {
+   "T": {
+    "turn": 1,
+    "seconds": 2417.2,
+    "planned_s": 2426.3,
+    "seed": 2,
+    "rows": "t2bl_train.jsonl",
+    "finished_unix": 1791908628.390044,
+    "files": {
+     "s2/train/adapter/adapter_model.safetensors": "fc4291bdfc267b776431db9c04515b674da37e781836484868317bbbb15b5f6a",
+     "s2/train/adapter/adapter_config.json": "3b2446ff966e3226b03c11b62afb4ff1d66019537fd60c56f33952e9b5effa40"
+    }
+   },
+   "E": {
+    "turn": 1,
+    "seconds": 1104.5,
+    "planned_s": 785.5,
+    "sides": {
+     "on": {
+      "start_unix": 1791908630.6362076,
+      "end_unix": 1791909735.1512,
+      "pid": 442088
+     }
+    },
+    "generations": 1801,
+    "seed": 2,
+    "finished_unix": 1791909735.1552064,
+    "files": {
+     "s2/dev_on.jsonl": "ba0b47dc4c4175f14222761ce0b4e78239dbf074dd54049392c19d4a2eedd4a4"
+    }
+   }
+  }
+ },
+ "turns": [
+  {
+   "pid": 313872,
+   "acquired_unix": 1791852365.5360165,
+   "acquired_source": "lock record",
+   "entered_unix": 1791852365.6426985,
+   "stages_run": [
+    "s0:T",
+    "ref:E0",
+    "s0:E",
+    "s1:T"
+   ],
+   "deferred": [
+    "s1:E",
+    "s2:T",
+    "s2:E"
+   ],
+   "device": "cuda",
+   "prompts_checked": 1500,
+   "loads": [
+    {
+     "unit": "s0",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     },
+     "with_on": true
+    },
+    {
+     "unit": "s1",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     },
+     "with_on": true
+    }
+   ],
+   "anchor": {
+    "pid": 313872,
+    "unix": 1791854724.7829318,
+    "n": 208,
+    "off": {
+     "identical_states": 1.0,
+     "identical_texts": 1.0,
+     "start_unix": 1791854724.7829318,
+     "end_unix": 1791855064.048199,
+     "generations": 829
+    },
+    "t2s0": {
+     "identical_states": 1.0,
+     "identical_texts": 1.0,
+     "start_unix": 1791855064.048199,
+     "end_unix": 1791855440.727182,
+     "generations": 829
+    },
+    "pass": true,
+    "seconds": 715.9
+   },
+   "released_unix": 1791871287.5059404,
+   "no_progress": false
+  },
+  {
+   "pid": 442088,
+   "acquired_unix": 1791904275.9559069,
+   "acquired_source": "lock record",
+   "entered_unix": 1791904276.0732844,
+   "stages_run": [
+    "s1:E",
+    "s2:T",
+    "s2:E"
+   ],
+   "deferred": [],
+   "device": "cuda",
+   "prompts_checked": 1500,
+   "loads": [
+    {
+     "unit": "s1",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     },
+     "with_on": true
+    },
+    {
+     "unit": "s2",
+     "fingerprint": "818be9c6b6a3f975b33ec4f157beac7fffa38c5b7a5a0546443696bdc75d5f7c",
+     "versions": {
+      "peft": "0.20.0"
+     },
+     "runtime": {
+      "python": "3.11.15",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.14.1",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "tf32": false,
+      "use_cache": false,
+      "executable": "C:\\Users\\clclc\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe"
+     },
+     "with_on": true
+    }
+   ],
+   "anchor": {
+    "pid": 442088,
+    "unix": 1791904279.2426436,
+    "n": 208,
+    "off": {
+     "identical_states": 1.0,
+     "identical_texts": 1.0,
+     "start_unix": 1791904279.2426436,
+     "end_unix": 1791904639.7580764,
+     "generations": 829
+    },
+    "t2s0": {
+     "identical_states": 1.0,
+     "identical_texts": 1.0,
+     "start_unix": 1791904639.7580764,
+     "end_unix": 1791905095.674588,
+     "generations": 829
+    },
+    "pass": true,
+    "seconds": 816.4
+   },
+   "released_unix": 1791909736.3002508,
+   "no_progress": false
+  }
+ ],
+ "no_progress_turns": 0
+}

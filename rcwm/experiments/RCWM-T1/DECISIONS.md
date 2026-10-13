@@ -1117,3 +1117,21 @@ Times are local (CDT). Entries are append-only.
     - `scripts/queue_hooks/88_t2bl.sh` replaced in place: e389df78… (revision 2) → 764fe712… (identical to the revision-3 draft).
     - The chain was stopped while its `run_pvr` waiter was waiting (BWM's bundleI held the lease), then relaunched at 17:12.
     - The revision-3 dev screen (`rcwm-t1:t2b-ledger`) is the single RCWM waiter, with all stages pending.
+- **R30 T2b-ledger revision 3 dev gate: PROCEED (11:42, 2026-10-13; dev screen, not a claim).**
+  - **Run:** `runs/t2bl/dev_rev3` over two RCWM turns (19:46–01:01 and 10:11–11:42). The gate ran once under frozen revision 2 with the revision-3 inputs (D-52): `GATE.json` 9993a0d2…, `.md` 450fe34f….
+  - **All conditions held in all three seeds.** s0 / s1 / s2:
+    - G1, held-out words on the combined surface: 0.91 / 0.99 / 0.98.
+    - G1b, held-out words on the canonical surface: 0.96 / 1.00 / 0.98.
+    - G1c, minimum per word kind: 0.70 / 0.95 / 0.90.
+    - G2, in-distribution vs T2 s0: +0.060 / +0.065 / +0.055 (bootstrap lower bounds +0.03 to +0.035).
+    - G3, posted twins on the combined held-out surface: 0.92 / 0.92 / 0.94, copied 0.00. Revision 2 had 0.40–0.54 with 16–35% copied.
+    - G4: 1.00.
+  - **Descriptive:**
+    - Held-out inner key orders 0.95–0.97; names 0.87–0.93; account count 0.95–0.99; paraphrase 0.96–0.98; PREREG-3 words 0.97–1.00.
+    - PREREG-LB's held-out rendering, posted rows: 0.92 / 0.76 / 0.55 (no-op rows 0.95–1.00).
+    - Magnitudes beyond the training band stay weak: H_amt 0.19–0.37, H_bal 0.68–0.76.
+  - **Reading (exploratory):** revision 3's two data changes fixed the R29 failure. They were top-level order variation and balanced stacked-surface posted rows. Applying events on the combined held-out surface went from copying to 0.92–0.94, while the unseen-status no-op stayed at 0.91–1.00.
+  - **Consequence:** the sealed confirmation PREREG-5 may now be prepared and frozen (power from the gate, rendered draft, tests, union digest, BWM co-sign with commit-reveal salt, then freeze and hook 90).
+- **I-37 RCWM turn overran RCX's night window by 2 h 11 min (2026-10-12/13).**
+  - **What happened:** the T2b-ledger dev turn started at 19:46, outside the window. The guard correctly let it finish, but it ran until 01:01, because the turn cap is checked only at stage starts. From 01:01 the guard stopped the chain, and it relaunched at 07:00.
+  - **Fix:** the guard now refuses to start any RCWM turn from NOSTART_HM = 18:20, which is 4.5 h (the turn cap) before 22:50. The guard was restarted at 11:43. RCX was informed, offered the time back, and asked whether a training block was lost.

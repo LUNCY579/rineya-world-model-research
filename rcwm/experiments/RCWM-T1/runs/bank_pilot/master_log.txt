@@ -5796,3 +5796,529 @@ Neither PROCEED nor TRIGGER WIDENED: the posted twins on the held-out surface be
 === 2026-10-12T17:12:31-05:00 start scripts/t2bl_run.py
 [t2bl] stages to run: {'ref': ['E0'], 's0': ['T', 'E'], 's1': ['T', 'E'], 's2': ['T', 'E']}
   [gpu-lease] waiting: foreign python pid 291088 (5.15 GiB dedicated GPU memory)
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:t2b-ledger token=1016ce01
+[t2bl] s0: training 190 steps, seed 0 on t2bl_train.jsonl
+rows 1500 from C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\data\t2bl_train.jsonl; steps 190 x 16 = 2.03 epochs
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<00:54,  5.67it/s]Loading weights:  14%|#4        | 44/310 [00:00<00:01, 194.23it/s]Loading weights:  28%|##8       | 88/310 [00:00<00:00, 287.51it/s]Loading weights:  43%|####2     | 132/310 [00:00<00:00, 338.29it/s]Loading weights:  57%|#####6    | 176/310 [00:00<00:00, 370.32it/s]Loading weights:  71%|#######   | 220/310 [00:00<00:00, 390.60it/s]Loading weights:  85%|########5 | 265/310 [00:00<00:00, 406.68it/s]Loading weights: 100%|#########9| 309/310 [00:00<00:00, 412.88it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 347.85it/s]
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+  [thermal] 19:46:09 GPU 60 C
+step 1/190 loss 0.4359 lr 5.26e-06 gn 2.13 6s peak 2.60GiB
+  [thermal] 19:46:34 paused 5s, GPU now 58 C
+  [thermal] 19:46:46 paused 5s, GPU now 58 C
+  [thermal] 19:47:23 paused 5s, GPU now 61 C
+  [thermal] 19:47:51 paused 5s, GPU now 63 C
+  [thermal] 19:49:12 paused 5s, GPU now 66 C
+  [thermal] 19:49:19 paused 5s, GPU now 65 C
+  [thermal] 19:49:27 paused 5s, GPU now 64 C
+  [thermal] 19:49:46 paused 5s, GPU now 65 C
+  [thermal] 19:50:01 paused 6s, GPU now 64 C
+  [thermal] 19:50:09 paused 5s, GPU now 64 C
+  [thermal] 19:50:43 paused 6s, GPU now 66 C
+  [thermal] 19:50:55 paused 6s, GPU now 65 C
+  [thermal] 19:51:15 paused 6s, GPU now 65 C
+  [thermal] 19:51:18 GPU 66 C
+  [thermal] 19:51:37 paused 5s, GPU now 66 C
+  [thermal] 19:52:51 paused 21s, GPU now 66 C
+  [thermal] 19:53:03 paused 6s, GPU now 66 C
+step 50/190 loss 0.1963 lr 1.00e-04 gn 0.74 442s peak 2.72GiB
+  [thermal] 19:54:12 paused 21s, GPU now 66 C
+  [thermal] 19:54:32 paused 11s, GPU now 66 C
+  [thermal] 19:56:12 paused 32s, GPU now 66 C
+  [thermal] 19:56:22 paused 5s, GPU now 66 C
+  [thermal] 19:56:25 GPU 67 C
+  [thermal] 19:57:07 paused 16s, GPU now 66 C
+  [thermal] 19:57:25 paused 11s, GPU now 66 C
+  [thermal] 19:58:01 paused 16s, GPU now 66 C
+  [thermal] 19:58:11 paused 6s, GPU now 65 C
+  [thermal] 19:58:19 paused 6s, GPU now 65 C
+  [thermal] 19:58:31 paused 5s, GPU now 65 C
+  [thermal] 19:59:05 paused 12s, GPU now 66 C
+  [thermal] 19:59:31 paused 5s, GPU now 66 C
+  [thermal] 20:00:11 paused 22s, GPU now 66 C
+  [thermal] 20:00:52 paused 21s, GPU now 66 C
+  [thermal] 20:01:06 paused 11s, GPU now 66 C
+  [thermal] 20:01:16 paused 7s, GPU now 66 C
+  [thermal] 20:01:29 paused 6s, GPU now 66 C
+  [thermal] 20:01:32 GPU 67 C
+  [thermal] 20:02:19 paused 21s, GPU now 66 C
+  [thermal] 20:03:17 paused 21s, GPU now 66 C
+  [thermal] 20:03:25 paused 5s, GPU now 66 C
+  [thermal] 20:03:57 paused 11s, GPU now 66 C
+  [thermal] 20:04:19 paused 11s, GPU now 66 C
+  [thermal] 20:04:32 paused 5s, GPU now 66 C
+step 100/190 loss 0.0558 lr 1.00e-04 gn 1.15 1112s peak 2.72GiB
+  [thermal] 20:05:05 paused 16s, GPU now 66 C
+  [thermal] 20:06:19 paused 27s, GPU now 66 C
+  [thermal] 20:06:43 paused 11s, GPU now 66 C
+  [thermal] 20:06:46 GPU 67 C
+  [thermal] 20:07:06 paused 11s, GPU now 66 C
+  [thermal] 20:07:16 paused 5s, GPU now 66 C
+  [thermal] 20:07:27 paused 6s, GPU now 66 C
+  [thermal] 20:07:52 paused 11s, GPU now 66 C
+  [thermal] 20:08:04 paused 6s, GPU now 65 C
+  [thermal] 20:08:12 paused 5s, GPU now 65 C
+  [thermal] 20:08:32 paused 6s, GPU now 66 C
+  [thermal] 20:08:42 paused 5s, GPU now 65 C
+  [thermal] 20:08:52 paused 5s, GPU now 65 C
+  [thermal] 20:09:11 paused 5s, GPU now 66 C
+  [thermal] 20:09:23 paused 5s, GPU now 66 C
+  [thermal] 20:09:39 paused 5s, GPU now 66 C
+  [thermal] 20:09:50 paused 5s, GPU now 66 C
+  [thermal] 20:10:01 paused 5s, GPU now 66 C
+  [thermal] 20:10:14 paused 6s, GPU now 66 C
+  [thermal] 20:10:28 paused 5s, GPU now 66 C
+  [thermal] 20:11:12 paused 16s, GPU now 66 C
+  [thermal] 20:11:39 paused 11s, GPU now 66 C
+  [thermal] 20:11:53 GPU 71 C
+  [thermal] 20:12:18 paused 16s, GPU now 66 C
+  [thermal] 20:12:43 paused 12s, GPU now 66 C
+  [thermal] 20:13:13 paused 11s, GPU now 66 C
+  [thermal] 20:13:27 paused 6s, GPU now 66 C
+  [thermal] 20:14:21 paused 21s, GPU now 66 C
+  [thermal] 20:14:41 paused 11s, GPU now 66 C
+  [thermal] 20:15:17 paused 16s, GPU now 66 C
+  [thermal] 20:16:03 paused 16s, GPU now 66 C
+  [thermal] 20:16:15 paused 6s, GPU now 66 C
+step 150/190 loss 0.0229 lr 1.00e-04 gn 0.08 1807s peak 2.74GiB
+  [thermal] 20:16:54 paused 16s, GPU now 66 C
+  [thermal] 20:17:03 paused 6s, GPU now 66 C
+  [thermal] 20:17:06 GPU 67 C
+  [thermal] 20:17:15 paused 5s, GPU now 66 C
+  [thermal] 20:18:26 paused 27s, GPU now 66 C
+  [thermal] 20:18:58 paused 16s, GPU now 66 C
+  [thermal] 20:19:25 paused 11s, GPU now 66 C
+  [thermal] 20:19:39 paused 5s, GPU now 66 C
+  [thermal] 20:20:02 paused 11s, GPU now 66 C
+  [thermal] 20:20:18 paused 5s, GPU now 66 C
+  [thermal] 20:20:26 paused 5s, GPU now 66 C
+  [thermal] 20:20:42 paused 5s, GPU now 66 C
+  [thermal] 20:21:09 paused 11s, GPU now 66 C
+  [thermal] 20:21:23 paused 6s, GPU now 66 C
+  [thermal] 20:21:55 paused 11s, GPU now 66 C
+  [thermal] 20:22:20 paused 11s, GPU now 66 C
+  [thermal] 20:22:28 paused 5s, GPU now 66 C
+  [thermal] 20:22:31 GPU 67 C
+  [thermal] 20:23:10 paused 16s, GPU now 66 C
+  [thermal] 20:23:23 paused 6s, GPU now 66 C
+  [thermal] 20:23:38 paused 5s, GPU now 66 C
+  [thermal] 20:23:46 paused 5s, GPU now 66 C
+  [thermal] 20:24:05 paused 6s, GPU now 66 C
+  [thermal] 20:24:25 paused 12s, GPU now 66 C
+  [thermal] 20:24:33 paused 5s, GPU now 66 C
+  [thermal] 20:24:43 paused 5s, GPU now 65 C
+  [thermal] 20:24:56 paused 5s, GPU now 66 C
+  [thermal] 20:25:13 paused 5s, GPU now 66 C
+done 2353.2
+[t2bl] s0: trained in 2357s (planned 2426s)
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:34,  3.26it/s]Loading weights:  15%|#5        | 47/310 [00:00<00:01, 146.42it/s]Loading weights:  29%|##9       | 91/310 [00:00<00:00, 236.89it/s]Loading weights:  44%|####3     | 136/310 [00:00<00:00, 297.32it/s]Loading weights:  58%|#####8    | 181/310 [00:00<00:00, 338.76it/s]Loading weights:  75%|#######4  | 232/310 [00:00<00:00, 379.35it/s]Loading weights:  90%|######### | 279/310 [00:00<00:00, 394.31it/s]Loading weights: 100%|##########| 310/310 [00:01<00:00, 307.99it/s]
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[t2bl] s1: training 190 steps, seed 1 on t2bl_train.jsonl
+rows 1500 from C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\data\t2bl_train.jsonl; steps 190 x 16 = 2.03 epochs
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<03:06,  1.66it/s]Loading weights:   5%|5         | 16/310 [00:00<00:09, 29.67it/s]Loading weights:  12%|#1        | 36/310 [00:00<00:04, 65.80it/s]Loading weights:  25%|##5       | 78/310 [00:00<00:01, 148.12it/s]Loading weights:  37%|###6      | 114/310 [00:01<00:00, 199.50it/s]Loading weights:  46%|####6     | 143/310 [00:01<00:00, 198.72it/s]Loading weights:  55%|#####4    | 169/310 [00:01<00:00, 192.92it/s]Loading weights:  62%|######2   | 193/310 [00:01<00:00, 187.32it/s]Loading weights:  69%|######9   | 215/310 [00:01<00:00, 186.15it/s]Loading weights:  76%|#######6  | 236/310 [00:01<00:00, 182.02it/s]Loading weights:  83%|########2 | 257/310 [00:01<00:00, 186.03it/s]Loading weights:  90%|######### | 279/310 [00:01<00:00, 186.91it/s]Loading weights:  97%|#########6| 300/310 [00:02<00:00, 187.52it/s]Loading weights: 100%|##########| 310/310 [00:02<00:00, 150.02it/s]
+  [thermal] 00:25:12 GPU 52 C
+step 1/190 loss 0.4389 lr 5.26e-06 gn 2.05 10801s peak 2.59GiB
+  [thermal] 00:25:25 paused 5s, GPU now 54 C
+  [thermal] 00:25:48 paused 5s, GPU now 57 C
+  [thermal] 00:26:06 paused 5s, GPU now 57 C
+  [thermal] 00:26:42 paused 5s, GPU now 60 C
+  [thermal] 00:27:11 paused 5s, GPU now 61 C
+  [thermal] 00:27:29 paused 5s, GPU now 61 C
+  [thermal] 00:27:52 paused 5s, GPU now 62 C
+  [thermal] 00:28:16 paused 5s, GPU now 62 C
+  [thermal] 00:28:49 paused 5s, GPU now 63 C
+  [thermal] 00:29:02 paused 5s, GPU now 63 C
+  [thermal] 00:29:17 paused 5s, GPU now 62 C
+  [thermal] 00:29:56 paused 5s, GPU now 64 C
+  [thermal] 00:30:19 paused 5s, GPU now 64 C
+  [thermal] 00:30:22 GPU 65 C
+  [thermal] 00:30:31 paused 5s, GPU now 63 C
+  [thermal] 00:31:33 paused 5s, GPU now 65 C
+step 50/190 loss 0.1927 lr 1.00e-04 gn 0.95 11203s peak 2.71GiB
+  [thermal] 00:32:45 paused 11s, GPU now 66 C
+  [thermal] 00:33:46 paused 11s, GPU now 66 C
+  [thermal] 00:33:58 paused 6s, GPU now 65 C
+  [thermal] 00:34:14 paused 6s, GPU now 65 C
+  [thermal] 00:34:22 paused 5s, GPU now 64 C
+  [thermal] 00:34:39 paused 6s, GPU now 64 C
+  [thermal] 00:34:57 paused 5s, GPU now 64 C
+  [thermal] 00:35:13 paused 5s, GPU now 64 C
+  [thermal] 00:35:22 paused 5s, GPU now 63 C
+  [thermal] 00:35:25 GPU 64 C
+  [thermal] 00:35:48 paused 5s, GPU now 64 C
+  [thermal] 00:35:56 paused 5s, GPU now 64 C
+  [thermal] 00:36:23 paused 5s, GPU now 64 C
+  [thermal] 00:36:39 paused 5s, GPU now 63 C
+  [thermal] 00:37:18 paused 5s, GPU now 65 C
+  [thermal] 00:37:27 paused 6s, GPU now 64 C
+  [thermal] 00:37:44 paused 5s, GPU now 64 C
+  [thermal] 00:37:56 paused 5s, GPU now 64 C
+  [thermal] 00:38:12 paused 5s, GPU now 64 C
+  [thermal] 00:38:21 paused 5s, GPU now 63 C
+  [thermal] 00:39:08 paused 5s, GPU now 65 C
+  [thermal] 00:39:17 paused 5s, GPU now 65 C
+  [thermal] 00:39:33 paused 5s, GPU now 64 C
+  [thermal] 00:39:48 paused 6s, GPU now 64 C
+  [thermal] 00:40:02 paused 6s, GPU now 64 C
+  [thermal] 00:40:25 paused 5s, GPU now 64 C
+  [thermal] 00:40:28 GPU 65 C
+  [thermal] 00:40:50 paused 5s, GPU now 65 C
+  [thermal] 00:41:06 paused 5s, GPU now 64 C
+  [thermal] 00:41:30 paused 6s, GPU now 65 C
+step 100/190 loss 0.0562 lr 1.00e-04 gn 1.57 11780s peak 2.72GiB
+  [thermal] 00:41:57 paused 6s, GPU now 65 C
+  [thermal] 00:42:11 paused 5s, GPU now 65 C
+  [thermal] 00:42:28 paused 5s, GPU now 64 C
+  [thermal] 00:42:39 paused 5s, GPU now 64 C
+  [thermal] 00:43:04 paused 5s, GPU now 64 C
+  [thermal] 00:43:20 paused 5s, GPU now 64 C
+  [thermal] 00:43:39 paused 5s, GPU now 65 C
+  [thermal] 00:43:53 paused 5s, GPU now 64 C
+  [thermal] 00:44:09 paused 5s, GPU now 64 C
+  [thermal] 00:44:22 paused 6s, GPU now 64 C
+  [thermal] 00:44:38 paused 5s, GPU now 63 C
+  [thermal] 00:44:53 paused 5s, GPU now 64 C
+  [thermal] 00:45:08 paused 5s, GPU now 64 C
+  [thermal] 00:45:22 paused 5s, GPU now 64 C
+  [thermal] 00:45:36 GPU 68 C
+  [thermal] 00:45:45 paused 6s, GPU now 64 C
+  [thermal] 00:46:07 paused 5s, GPU now 65 C
+  [thermal] 00:46:15 paused 5s, GPU now 64 C
+  [thermal] 00:46:36 paused 6s, GPU now 64 C
+  [thermal] 00:46:53 paused 6s, GPU now 64 C
+  [thermal] 00:47:10 paused 5s, GPU now 63 C
+  [thermal] 00:47:43 paused 5s, GPU now 64 C
+  [thermal] 00:48:03 paused 5s, GPU now 64 C
+  [thermal] 00:48:18 paused 5s, GPU now 64 C
+  [thermal] 00:48:36 paused 5s, GPU now 64 C
+  [thermal] 00:49:11 paused 6s, GPU now 65 C
+  [thermal] 00:49:34 paused 5s, GPU now 65 C
+  [thermal] 00:50:05 paused 5s, GPU now 65 C
+  [thermal] 00:50:24 paused 5s, GPU now 65 C
+  [thermal] 00:50:40 paused 5s, GPU now 64 C
+  [thermal] 00:50:44 GPU 65 C
+  [thermal] 00:51:07 paused 5s, GPU now 65 C
+  [thermal] 00:51:19 paused 6s, GPU now 65 C
+  [thermal] 00:51:30 paused 5s, GPU now 64 C
+  [thermal] 00:51:38 paused 5s, GPU now 64 C
+  [thermal] 00:51:51 paused 5s, GPU now 63 C
+  [thermal] 00:52:02 paused 5s, GPU now 64 C
+step 150/190 loss 0.0244 lr 1.00e-04 gn 0.16 12426s peak 2.72GiB
+  [thermal] 00:52:37 paused 5s, GPU now 65 C
+  [thermal] 00:53:09 paused 5s, GPU now 65 C
+  [thermal] 00:53:18 paused 5s, GPU now 65 C
+  [thermal] 00:53:30 paused 5s, GPU now 64 C
+  [thermal] 00:53:38 paused 5s, GPU now 64 C
+  [thermal] 00:54:18 paused 5s, GPU now 64 C
+  [thermal] 00:54:26 paused 5s, GPU now 64 C
+  [thermal] 00:55:00 paused 5s, GPU now 65 C
+  [thermal] 00:55:09 paused 5s, GPU now 64 C
+  [thermal] 00:55:26 paused 5s, GPU now 65 C
+  [thermal] 00:55:44 paused 5s, GPU now 64 C
+  [thermal] 00:55:53 paused 6s, GPU now 63 C
+  [thermal] 00:55:56 GPU 65 C
+  [thermal] 00:56:15 paused 6s, GPU now 64 C
+  [thermal] 00:56:37 paused 5s, GPU now 64 C
+  [thermal] 00:57:17 paused 5s, GPU now 66 C
+  [thermal] 00:57:33 paused 5s, GPU now 65 C
+  [thermal] 00:57:52 paused 5s, GPU now 65 C
+  [thermal] 00:58:01 paused 5s, GPU now 64 C
+  [thermal] 00:58:17 paused 5s, GPU now 65 C
+  [thermal] 00:58:29 paused 5s, GPU now 64 C
+  [thermal] 00:58:48 paused 5s, GPU now 65 C
+  [thermal] 00:59:05 paused 5s, GPU now 64 C
+  [thermal] 00:59:18 paused 5s, GPU now 64 C
+  [thermal] 00:59:29 paused 5s, GPU now 64 C
+  [thermal] 00:59:37 paused 5s, GPU now 63 C
+  [thermal] 01:00:03 paused 6s, GPU now 64 C
+  [thermal] 01:00:19 paused 5s, GPU now 64 C
+  [thermal] 01:00:32 paused 5s, GPU now 63 C
+  [thermal] 01:00:51 paused 6s, GPU now 63 C
+  [thermal] 01:01:05 paused 6s, GPU now 63 C
+  [thermal] 01:01:08 GPU 64 C
+done 12965.8
+[t2bl] s1: trained in 12970s (planned 2426s)
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<03:08,  1.64it/s]Loading weights:   6%|6         | 19/310 [00:00<00:08, 35.45it/s]Loading weights:  19%|#8        | 58/310 [00:00<00:02, 110.24it/s]Loading weights:  33%|###2      | 102/310 [00:00<00:01, 185.85it/s]Loading weights:  43%|####2     | 133/310 [00:01<00:00, 197.65it/s]Loading weights:  52%|#####1    | 161/310 [00:01<00:00, 193.53it/s]Loading weights:  60%|######    | 186/310 [00:01<00:00, 193.93it/s]Loading weights:  67%|######7   | 209/310 [00:01<00:00, 191.59it/s]Loading weights:  75%|#######4  | 231/310 [00:01<00:00, 187.86it/s]Loading weights:  81%|########1 | 252/310 [00:01<00:00, 192.37it/s]Loading weights:  88%|########8 | 273/310 [00:01<00:00, 188.43it/s]Loading weights:  95%|#########4| 293/310 [00:01<00:00, 185.04it/s]Loading weights: 100%|##########| 310/310 [00:02<00:00, 154.64it/s]
+[t2bl] cap: deferring ['s1:E', 's2:T', 's2:E'] to the next turn (s1:E)
+  [gpu-lease] released rineya-gpu-0.lock
+[t2bl] turn ended; the remaining stages resume next turn
+=== 2026-10-13T01:01:28-05:00 exit rc=5 scripts/t2bl_run.py
+=== 2026-10-13T07:00:16-05:00 master chain start
+[t2-screen] T ledger|add/void          0.075 -> 1.000 (+0.925)
+[t2-screen] T ledger|scale/void        0.050 -> 1.000 (+0.950)
+[t2-screen] T ledger|transfer/void     0.000 -> 1.000 (+1.000)
+[t2-screen] T regist|mix/wrap          0.000 -> 0.000 (+0.000)
+[t2-screen] T regist|mix/nowrap        0.025 -> 0.050 (+0.025)
+[t2-screen] T regist|conditional/gt    0.425 -> 0.600 (+0.175)
+[t2-screen] T regist|conditional/le    0.525 -> 0.575 (+0.050)
+[t2-screen] T regist|add/wrap          0.000 -> 0.200 (+0.200)
+[t2-screen] T prereq|applicable        0.425 -> 0.550 (+0.125)
+[t2-screen] T prereq|inapplicable      0.025 -> 0.775 (+0.750)
+[t2-screen] U ledger|add/posted        0.550 -> 0.825 (+0.275)
+[t2-screen] U ledger|scale/posted      0.500 -> 0.950 (+0.450)
+[t2-screen] U ledger|transfer/posted   0.350 -> 0.850 (+0.500)
+[t2-screen] U regist|swap              1.000 -> 1.000 (+0.000)
+[t2-screen] U regist|add/nowrap        0.900 -> 0.900 (+0.000)
+[t2-screen] t2_s0: mean targeted gain +0.420 (>= 0.15), worst untouched +0.000 (>= -0.10) -> PASS: replicate seeds 1, 2
+=== 2026-10-13T07:00:17-05:00 start scripts/t2bl_run.py
+[t2bl] stages to run: {'s1': ['E'], 's2': ['T', 'E']}
+  [gpu-lease] waiting: lock held by another session
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:t2b-ledger token=b55725f0
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:22,  3.76it/s]Loading weights:  14%|#4        | 44/310 [00:00<00:01, 152.10it/s]Loading weights:  28%|##8       | 88/310 [00:00<00:00, 245.12it/s]Loading weights:  43%|####2     | 132/310 [00:00<00:00, 305.18it/s]Loading weights:  56%|#####6    | 174/310 [00:00<00:00, 337.61it/s]Loading weights:  70%|#######   | 218/310 [00:00<00:00, 368.78it/s]Loading weights:  84%|########3 | 259/310 [00:00<00:00, 376.39it/s]Loading weights:  97%|#########7| 301/310 [00:00<00:00, 387.39it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 310.74it/s]
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[t2bl] s2: training 190 steps, seed 2 on t2bl_train.jsonl
+rows 1500 from C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\data\t2bl_train.jsonl; steps 190 x 16 = 2.03 epochs
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<03:19,  1.55it/s]Loading weights:   5%|5         | 16/310 [00:00<00:10, 27.88it/s]Loading weights:  12%|#1        | 36/310 [00:00<00:04, 62.45it/s]Loading weights:  25%|##4       | 77/310 [00:00<00:01, 139.98it/s]Loading weights:  37%|###6      | 114/310 [00:01<00:01, 192.79it/s]Loading weights:  46%|####6     | 143/310 [00:01<00:00, 186.86it/s]Loading weights:  54%|#####4    | 168/310 [00:01<00:00, 184.36it/s]Loading weights:  62%|######1   | 191/310 [00:01<00:00, 180.63it/s]Loading weights:  68%|######8   | 212/310 [00:01<00:00, 180.89it/s]Loading weights:  75%|#######4  | 232/310 [00:01<00:00, 176.85it/s]Loading weights:  81%|########  | 251/310 [00:01<00:00, 175.69it/s]Loading weights:  87%|########7 | 270/310 [00:01<00:00, 174.58it/s]Loading weights:  94%|#########3| 290/310 [00:02<00:00, 176.05it/s]Loading weights: 100%|#########9| 309/310 [00:02<00:00, 178.70it/s]Loading weights: 100%|##########| 310/310 [00:02<00:00, 142.57it/s]
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+  [thermal] 10:43:35 GPU 70 C
+  [thermal] 10:43:44 paused 5s, GPU now 65 C
+step 1/190 loss 0.5285 lr 5.26e-06 gn 2.04 12s peak 2.57GiB
+  [thermal] 10:44:03 paused 5s, GPU now 65 C
+  [thermal] 10:44:32 paused 10s, GPU now 66 C
+  [thermal] 10:44:44 paused 5s, GPU now 66 C
+  [thermal] 10:46:00 paused 15s, GPU now 66 C
+  [thermal] 10:46:17 paused 5s, GPU now 66 C
+  [thermal] 10:46:27 paused 5s, GPU now 65 C
+  [thermal] 10:46:42 paused 5s, GPU now 66 C
+  [thermal] 10:46:54 paused 5s, GPU now 66 C
+  [thermal] 10:47:05 paused 5s, GPU now 66 C
+  [thermal] 10:49:01 paused 20s, GPU now 66 C
+  [thermal] 10:49:04 GPU 68 C
+  [thermal] 10:49:15 paused 5s, GPU now 66 C
+  [thermal] 10:49:27 paused 5s, GPU now 66 C
+  [thermal] 10:49:37 paused 5s, GPU now 65 C
+  [thermal] 10:49:49 paused 5s, GPU now 65 C
+  [thermal] 10:50:20 paused 10s, GPU now 66 C
+  [thermal] 10:50:31 paused 5s, GPU now 66 C
+  [thermal] 10:51:19 paused 15s, GPU now 66 C
+  [thermal] 10:51:32 paused 5s, GPU now 66 C
+  [thermal] 10:51:47 paused 5s, GPU now 66 C
+step 50/190 loss 0.1972 lr 1.00e-04 gn 1.22 503s peak 2.72GiB
+  [thermal] 10:52:15 paused 10s, GPU now 66 C
+  [thermal] 10:52:22 paused 5s, GPU now 65 C
+  [thermal] 10:52:54 paused 10s, GPU now 66 C
+  [thermal] 10:53:02 paused 5s, GPU now 66 C
+  [thermal] 10:53:12 paused 5s, GPU now 65 C
+  [thermal] 10:53:20 paused 5s, GPU now 65 C
+  [thermal] 10:53:41 paused 5s, GPU now 66 C
+  [thermal] 10:53:55 paused 5s, GPU now 66 C
+  [thermal] 10:54:07 paused 5s, GPU now 66 C
+  [thermal] 10:54:10 GPU 68 C
+  [thermal] 10:54:19 paused 5s, GPU now 65 C
+  [thermal] 10:54:32 paused 5s, GPU now 66 C
+  [thermal] 10:55:00 paused 10s, GPU now 66 C
+  [thermal] 10:55:08 paused 5s, GPU now 65 C
+  [thermal] 10:55:21 paused 5s, GPU now 65 C
+  [thermal] 10:56:20 paused 16s, GPU now 66 C
+  [thermal] 10:56:31 paused 5s, GPU now 66 C
+  [thermal] 10:56:41 paused 5s, GPU now 66 C
+  [thermal] 10:58:12 paused 31s, GPU now 66 C
+  [thermal] 10:58:44 paused 16s, GPU now 66 C
+  [thermal] 10:59:15 paused 16s, GPU now 66 C
+  [thermal] 10:59:18 GPU 69 C
+  [thermal] 10:59:33 paused 10s, GPU now 66 C
+  [thermal] 10:59:46 paused 5s, GPU now 66 C
+  [thermal] 10:59:57 paused 6s, GPU now 66 C
+  [thermal] 11:00:33 paused 16s, GPU now 66 C
+  [thermal] 11:00:41 paused 5s, GPU now 66 C
+  [thermal] 11:00:54 paused 5s, GPU now 66 C
+  [thermal] 11:01:05 paused 5s, GPU now 66 C
+  [thermal] 11:02:11 paused 26s, GPU now 66 C
+step 100/190 loss 0.0581 lr 1.00e-04 gn 0.25 1139s peak 2.72GiB
+  [thermal] 11:03:24 paused 32s, GPU now 66 C
+  [thermal] 11:03:43 paused 11s, GPU now 66 C
+  [thermal] 11:03:56 paused 5s, GPU now 66 C
+  [thermal] 11:04:04 paused 6s, GPU now 66 C
+  [thermal] 11:04:29 GPU 72 C
+  [thermal] 11:05:21 paused 31s, GPU now 66 C
+  [thermal] 11:05:42 paused 10s, GPU now 66 C
+  [thermal] 11:06:00 paused 11s, GPU now 66 C
+  [thermal] 11:06:21 paused 11s, GPU now 66 C
+  [thermal] 11:06:34 paused 5s, GPU now 66 C
+  [thermal] 11:07:20 paused 21s, GPU now 66 C
+  [thermal] 11:08:25 paused 27s, GPU now 66 C
+  [thermal] 11:08:36 paused 6s, GPU now 66 C
+  [thermal] 11:09:18 paused 21s, GPU now 66 C
+  [thermal] 11:09:38 paused 11s, GPU now 66 C
+  [thermal] 11:09:41 GPU 67 C
+  [thermal] 11:09:57 paused 11s, GPU now 66 C
+  [thermal] 11:10:30 paused 10s, GPU now 66 C
+  [thermal] 11:10:38 paused 5s, GPU now 66 C
+  [thermal] 11:10:51 paused 5s, GPU now 66 C
+  [thermal] 11:11:03 paused 5s, GPU now 66 C
+  [thermal] 11:11:11 paused 5s, GPU now 66 C
+  [thermal] 11:12:17 paused 27s, GPU now 66 C
+  [thermal] 11:12:25 paused 6s, GPU now 66 C
+  [thermal] 11:12:47 paused 11s, GPU now 66 C
+  [thermal] 11:13:17 paused 11s, GPU now 66 C
+  [thermal] 11:13:25 paused 5s, GPU now 66 C
+  [thermal] 11:14:16 paused 21s, GPU now 66 C
+  [thermal] 11:14:24 paused 5s, GPU now 66 C
+  [thermal] 11:14:37 paused 6s, GPU now 66 C
+step 150/190 loss 0.0237 lr 1.00e-04 gn 0.85 1862s peak 2.72GiB
+  [thermal] 11:14:45 paused 5s, GPU now 66 C
+  [thermal] 11:14:47 GPU 67 C
+  [thermal] 11:14:55 paused 5s, GPU now 66 C
+  [thermal] 11:15:58 paused 26s, GPU now 66 C
+  [thermal] 11:16:06 paused 5s, GPU now 66 C
+  [thermal] 11:16:53 paused 21s, GPU now 66 C
+  [thermal] 11:17:34 paused 22s, GPU now 66 C
+  [thermal] 11:17:53 paused 10s, GPU now 66 C
+  [thermal] 11:18:06 paused 5s, GPU now 66 C
+  [thermal] 11:18:28 paused 11s, GPU now 66 C
+  [thermal] 11:19:25 paused 21s, GPU now 66 C
+  [thermal] 11:19:37 paused 5s, GPU now 66 C
+  [thermal] 11:19:55 paused 11s, GPU now 66 C
+  [thermal] 11:19:58 GPU 67 C
+  [thermal] 11:20:09 paused 6s, GPU now 66 C
+  [thermal] 11:20:52 paused 21s, GPU now 66 C
+  [thermal] 11:22:16 paused 32s, GPU now 66 C
+  [thermal] 11:22:24 paused 6s, GPU now 66 C
+  [thermal] 11:22:45 paused 10s, GPU now 66 C
+  [thermal] 11:22:55 paused 5s, GPU now 66 C
+  [thermal] 11:23:03 paused 5s, GPU now 66 C
+  [thermal] 11:23:16 paused 5s, GPU now 66 C
+  [thermal] 11:23:27 paused 5s, GPU now 66 C
+done 2413.1
+[t2bl] s2: trained in 2417s (planned 2426s)
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:35,  3.24it/s]Loading weights:  15%|#4        | 45/310 [00:00<00:01, 141.25it/s]Loading weights:  29%|##8       | 89/310 [00:00<00:00, 234.16it/s]Loading weights:  43%|####3     | 134/310 [00:00<00:00, 300.53it/s]Loading weights:  58%|#####7    | 179/310 [00:00<00:00, 340.03it/s]Loading weights:  72%|#######1  | 223/310 [00:00<00:00, 368.90it/s]Loading weights:  86%|########6 | 268/310 [00:00<00:00, 389.35it/s]Loading weights: 100%|##########| 310/310 [00:01<00:00, 307.04it/s]
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+  [gpu-lease] released rineya-gpu-0.lock
+[t2bl] all seeds complete; DONE.json written
+=== 2026-10-13T11:42:17-05:00 exit rc=0 scripts/t2bl_run.py
+=== 2026-10-13T11:42:17-05:00 start scripts/t2bl_gate.py
+DEV GATE: PROCEED
+In all three T2b-ledger seeds the adapter left held-out non-posted statuses unchanged on 0.91-0.99 of rows on the combined held-out surface (rule paraphrase 4, held-out account names, held-out key orders) and on 0.96-1.00 on the canonical surface (each >= 0.80, every word kind >= 0.60; T2 s0 0.21 and 0.04, OFF 0.25), within 0.10 of its own canonical no-op accuracy; it applied the posted twins on the held-out surface correctly on 0.92-0.94 (each >= 0.80; copied 0.00, each <= 0.10), and its in-distribution accuracy was within the margin of T2 s0's (ON - T2 s0: s0 0.06, s1 0.06, s2 0.05; each >= -0.05).
+=== 2026-10-13T11:42:18-05:00 exit rc=0 scripts/t2bl_gate.py
+=== 2026-10-13T11:42:18-05:00 start scripts/run_pvr.py stage1 --bank bank_pilot --arm sparse --splits dev,test
+  verifier[sparse] ledger_replay: layer 24 dev mean loglik -6.210 (n_train 1064)
+  verifier[sparse] prerequisite_plan: layer 28 dev mean loglik -3.043 (n_train 1152)
+  verifier[sparse] register_machine: layer 24 dev mean loglik -5.313 (n_train 1128)
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:pvr1:sparse token=5a8a523d
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<03:20,  1.54it/s]Loading weights:   5%|5         | 16/310 [00:00<00:10, 27.78it/s]Loading weights:  11%|#         | 34/310 [00:00<00:04, 58.13it/s]Loading weights:  23%|##2       | 70/310 [00:00<00:01, 125.06it/s]Loading weights:  35%|###4      | 108/310 [00:01<00:01, 184.99it/s]Loading weights:  44%|####3     | 136/310 [00:01<00:00, 181.30it/s]Loading weights:  52%|#####1    | 160/310 [00:01<00:00, 177.76it/s]Loading weights:  59%|#####8    | 182/310 [00:01<00:00, 173.21it/s]Loading weights:  65%|######5   | 202/310 [00:01<00:00, 162.10it/s]Loading weights:  71%|#######   | 220/310 [00:01<00:00, 162.47it/s]Loading weights:  77%|#######6  | 238/310 [00:01<00:00, 158.47it/s]Loading weights:  82%|########2 | 255/310 [00:01<00:00, 155.90it/s]Loading weights:  88%|########7 | 272/310 [00:02<00:00, 150.56it/s]Loading weights:  93%|#########2| 288/310 [00:02<00:00, 151.87it/s]Loading weights:  98%|#########8| 305/310 [00:02<00:00, 155.80it/s]Loading weights: 100%|##########| 310/310 [00:02<00:00, 132.17it/s]
+  [gpu-lease] released rineya-gpu-0.lock
+Traceback (most recent call last):
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 509, in <module>
+    main()
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 505, in main
+    {"stage1": stage1, "hstates": hstates, "analyze": analyze, "stage2": stage2, "retro": retro, "retro_analyze": retro_analyze}[a.mode](a)
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\scripts\run_pvr.py", line 108, in stage1
+    res = generation.sample_batch(model, tok, [step_messages(fam, steps[i]["before"], steps[i]["event"]) for i in bi],
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\utils\_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\BusinessProject\WorldModel\Rineya_Consequence_World_Model_Bundle_2026-10-05\experiments\RCWM-T1\rcwmt\generation.py", line 139, in sample_batch
+    s = model.generate(input_ids=ids, attention_mask=att, do_sample=True, temperature=temperature, top_p=1.0,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\utils\_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\generation\utils.py", line 2681, in generate
+    result = decoding_method(
+             ^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\generation\utils.py", line 2881, in _sample
+    outputs = self._prefill(
+              ^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\generation\utils.py", line 3961, in _prefill
+    return self(**model_inputs, return_dict=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\utils\generic.py", line 911, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 492, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+                                       ^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\utils\generic.py", line 1040, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\utils\output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 424, in forward
+    hidden_states = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\modeling_layers.py", line 110, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1845, in _call_impl
+    return inner()
+           ^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1793, in inner
+    result = forward_call(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 318, in forward
+    hidden_states, _ = self.self_attn(
+                       ^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1845, in _call_impl
+    return inner()
+           ^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\torch\nn\modules\module.py", line 1793, in inner
+    result = forward_call(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 268, in forward
+    query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\clclc\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\transformers\models\qwen3\modeling_qwen3.py", line 179, in apply_rotary_pos_emb
+    q_embed = (q * cos) + (rotate_half(q) * sin)
+                           ~~~~~~~~~~~~~~~^~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 126.00 MiB. GPU 0 has a total capacity of 8.00 GiB of which 1.21 GiB is free. 5.60 GiB allowed; Of the allocated memory 4.75 GiB is allocated by PyTorch, and 782.36 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+=== 2026-10-13T11:43:49-05:00 exit rc=1 scripts/run_pvr.py stage1 --bank bank_pilot --arm sparse --splits dev,test
+=== 2026-10-13T11:43:49-05:00 start scripts/run_offtask.py --bank bank_pilot --arm supa
+  [gpu-lease] acquired rineya-gpu-0.lock label=rcwm-t1:offtask:supa token=6b0b1679
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:   0%|          | 1/310 [00:00<01:58,  2.60it/s]Loading weights:  64%|######4   | 199/310 [00:00<00:00, 538.12it/s]Loading weights: 100%|##########| 310/310 [00:00<00:00, 482.28it/s]
+[thermal] watchdog pause flag set; waiting
+[thermal] watchdog flag cleared; resuming
+[thermal] watchdog pause flag set; waiting
