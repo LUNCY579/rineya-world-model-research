@@ -1641,3 +1641,27 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
 - **E-05 Erratum to P-17's contamination line:** "a block-renamed copy of a Pa training problem (line 20184)" should
   read "a block-renamed copy of a Pa_v2 training ROW, suffix step t = 6 of the 12-step training problem at lines
   20178–20190 (target: the remaining optimal 6-step plan)". The numbers are unchanged.
+- **I-23 B4 screen, post-hoc sensitivity terms agreed with RCX (22:20).**
+  - **Pinned code and report unchanged:** the registered GO/NO-GO uses all 40 instances (`drop_ids` []); `b4_screen.py`
+    is pinned, so its report is not edited.
+  - **Separate note:** after `analyze`, BWM writes a separate note (`runs/BW_B4_SCREEN/POSTHOC_P18_SENSITIVITY.md`)
+    with RCX's wording: "Post-hoc sensitivity (BWM P-18, found after item 7 and before any screen output): excluding
+    seeds_fresh/0, a block-renamed suffix of a Pa_v2 training row shared by both arms. The registered decision uses
+    all 40 instances."
+  - **Contents of the note:**
+    - whether seeds_fresh/0 is concordant or discordant between arm a and R0;
+    - if discordant, the net with and without it.
+  - **Arm a's own module is clean:** RCX confirms the GNN's train/val data has no overlap with seeds_fresh
+    (precheck: 0 drops; custody review: no invariant or renaming overlap).
+- **I-24 First D-84 night (10-12/13): the gate worked, but E01R could not start (RAM), 02:25.**
+  - **The gate:** RCWM's T2b dev screen ran 19:46–01:01, past 23:00 as allowed. BWM's bundleJ got the card at 01:01
+    inside the window and released it unused ("the card came free inside a D-84 quiet window; released it unused").
+    It is now waiting for 07:00 with turn.last = rcwm, so BWM goes first at 07:00.
+  - **E01R:** RCX's chain logged "RAM 6.5–8.5 GB < 12.5 GB; waiting" all night, with no block taken. At 02:21,
+    available RAM was 8.3 GB of 31.2 with no GPU or python job running (all 14 pythons total 0.18 GB).
+  - **Where the memory is:** the desktop apps. ChatGPT 3.75 GB (18 processes), Claude 3.6 GB (15), node 2.2 GB (42),
+    Codex 2.1 GB, plus kernel pools of 3.4 GB; committed memory is 29.5 GB.
+  - **Consequence:** E01R's 12.5 GB gate cannot be met while those apps run, so the windows idle the GPU without
+    helping RCX.
+  - **Next:** told RCX at 02:25, with options: release tonight's remainder (BWM would then run the B4 screen, about
+    3.5 h); lower E01R's RAM gate; or the operator closes ChatGPT/Codex at night (operator's call).
