@@ -1,0 +1,189 @@
+{
+  "all_actual_outcomes": "PASS",
+  "classification": "GENUINELY_ROOT_OWNED_EXACT_DATA_CLEANUP_V10_ISOLATED_NO_NETWORK_OUTCOME_TESTS",
+  "genuine_Root_authorship": "Newly authored by this Root; no foreign code body or copy",
+  "network_or_actual_dataset_unlinks": 0,
+  "new_Source_first_access_epoch": "Record prospectively after this process terminates",
+  "program": "/Users/chengli/Downloads/Rineya_Autonomous_Knowledge_Learning_Bundle_v1.0/backup_control/OWN_ROOT_CENTRAL_EXACT_DATA_CLEANUP.v1.0.py",
+  "program_bytes": 8872,
+  "program_sha256": "16c29237e833265aa0f9e82ee8662bee237465e607958022a0c6a36876a73029",
+  "recorded_utc": "2026-10-13T00:22:52.322631+00:00",
+  "science": "PAUSED",
+  "synthetic_gate_values": "Only isolated owned fixture DATA; not actual custody proof or production eligibility",
+  "test_count": 27,
+  "tests": [
+    {
+      "actual": "PASS",
+      "all_complete_preflight_before_unlink": true,
+      "case": "successful64_extra_preserved",
+      "expected": "EXACT_SELECTED_ONLY_UNLINK",
+      "extra_retained": true,
+      "files": 64
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "missing_selected",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "[Errno 2] No such file or directory: '1.DATA.json'"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "wrong_bytes_same_size",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "pinned selected regular native identity changed"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "changed_mode",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "pinned selected regular native identity changed"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "one_nanosecond_mtime_change",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "pinned selected regular native identity changed"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "same_bytes_new_inode",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "pinned selected regular native identity changed"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "selected_symlink",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "[Errno 62] Too many levels of symbolic links: '1.DATA.json'"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "hardlink_changed_nlink",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "pinned selected regular native identity changed"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "closed_writer_required",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "writers must remain quiescent"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "native_guard_required",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "Source/protected/full inventory guard"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "missing_remote_recovery_gate",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "required gate: remote_verification_and_recovery_readback"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "selection_not_bound",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "gate binds complete exact selection"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "duplicate_selection",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "duplicate selection"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "descriptor_native_mode_disagreement",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "original native metadata agrees with remotely verified descriptor"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "immediate_changed_bytes_stops_first_unlink",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "immediate pinned identity changed"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "immediate_changed_inode_stops_first_unlink",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "immediate pinned identity changed"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "journal_failure_before_unlink",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "failure": "injected durable journal failure"
+    },
+    {
+      "actual": "PASS",
+      "case": "path_rejection:../outside.DATA.json",
+      "expected": "REJECT_BEFORE_FILE_ACCESS"
+    },
+    {
+      "actual": "PASS",
+      "case": "path_rejection:/absolute.DATA.json",
+      "expected": "REJECT_BEFORE_FILE_ACCESS"
+    },
+    {
+      "actual": "PASS",
+      "case": "path_rejection:./x.DATA.json",
+      "expected": "REJECT_BEFORE_FILE_ACCESS"
+    },
+    {
+      "actual": "PASS",
+      "case": "path_rejection:x//y.DATA.json",
+      "expected": "REJECT_BEFORE_FILE_ACCESS"
+    },
+    {
+      "actual": "PASS",
+      "case": "path_rejection:.",
+      "expected": "REJECT_BEFORE_FILE_ACCESS"
+    },
+    {
+      "actual": "PASS",
+      "case": "path_rejection:x.py",
+      "expected": "REJECT_BEFORE_FILE_ACCESS"
+    },
+    {
+      "actual": "PASS",
+      "case": "path_rejection:x.bin",
+      "expected": "REJECT_BEFORE_FILE_ACCESS"
+    },
+    {
+      "actual": "PASS",
+      "case": "path_rejection:output/revision30_research/root_mathematical_qualification_caller_journal/x.DATA.json",
+      "expected": "REJECT_BEFORE_FILE_ACCESS"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "parent_symlink",
+      "expected": "REJECT_BEFORE_ANY_UNLINK"
+    },
+    {
+      "actual": "PASS",
+      "all_selected_paths_retained": true,
+      "case": "parent_replacement_after_preflight",
+      "expected": "REJECT_BEFORE_ANY_UNLINK",
+      "replacement_and_pinned_original_retained": true
+    }
+  ]
+}

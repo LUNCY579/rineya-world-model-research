@@ -1,0 +1,9 @@
+{
+  "actual_dataset_unlinks": 0,
+  "classification": "PRESERVED_OWN_TEST_HARNESS_FAILURE",
+  "earlier_fixture_directory_preserved": "OWN_CENTRAL_CLEANUP_V10_QUALIFICATION_FIXTURES",
+  "engine_failure_established": false,
+  "fix": "Compare exact existing selected set immediately before invocation, preserving absent-fixture state and every remaining file.",
+  "observed": "The missing-file negative fixture intentionally removed 1.DATA.json before calling preflight. Preflight correctly raised FileNotFoundError without unlinking any remaining selected file; harness incorrectly expected the intentionally removed fixture path to remain present.",
+  "utc": "2026-10-13T00:22:52.212990+00:00"
+}
