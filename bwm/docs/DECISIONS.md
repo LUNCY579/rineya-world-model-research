@@ -1593,3 +1593,51 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
   - **Contamination audit launched:** after the seeds_fresh/0 finding, an audit of every eval set (PB-602, hard,
     mirror, b3fresh, val_large, selection, distill-240) against every training-row file is running. It uses two
     independent canonicalisation methods, then a confirmation and impact recomputation.
+- **P-18 Contamination audit of every eval set against every training set (POST HOC; closes the I-22 audit; 2026-10-12
+  22:05).**
+  - **Method:** three independent methods, which agree on all 26 non-empty (set × file) cells:
+    - A: the repo's `blocks.signature` plus an explicit isomorphism search;
+    - B: an individualisation-refinement canonical form;
+    - C: an exact port-BFS canonical form.
+    Every hit was checked with an explicit renaming map, and every matched success row's mapped plan solves the
+    instance. The positive controls reproduce: the superseded pre-B-02 file holds 72/602 PB instances (537 rows); the
+    distill rows hold 211/240.
+  - **Registered test sets** (vs every file an adapter trained on: v2 proposer actions, distill_rows, mix_v3,
+    mix_v2c; the forward files have no goals):
+    - Clean: PB-602 0/602, hard 0/110, mirror 0/110, b3fresh 0/110, val_large 0/120.
+    - seeds_fresh 1/40: seeds_fresh/0 = v2 line 20184. It is suffix step t = 6 of the 12-step training problem at
+      lines 20178–20190, not that problem's initial row. Map c→h, h→n, i→e, k→b, l→g, m→a. Pa_v2_s1/s2/s3 all
+      trained on it; Pa_v3 and Pa_v2c inherit it through initialisation.
+  - **Claims recomputed from the per-instance files, all unchanged:**
+    - P-08/P-10: hard 73 vs 5 (+68/−0, p 6.8e-21), mirror 61 vs 6, PB-602 602/602 vs 584 (+18/−0).
+    - P-11: 22 vs 8 (+18/−4, p 0.0043). P-13: 13 vs 5. P-14: 88 vs 73 (+20/−5, p 0.0041). P-16: unchanged.
+    - P-17 excluding seeds_fresh/0: R1 26/39 vs 2/39 (+24/−0), R2 23/39 vs 0/39 (+23/−0). Both still replicate.
+  - **Selection set (new finding):**
+    - **Overlap:** 303/400 val_v2 instances are renamed copies of Pa_v2 training problems. That is 35 of the first
+      50 and 71 of the first 100, the BW_SELECT_v1 subsets; 197 match the training problem's own t0 row. val_v1 has
+      the same leak (329/400 against v1, which has no adapter).
+    - **Cause:** the one-sided train/val split guard in `scripts/blocks_data.py`. It checks only val signatures
+      before putting an instance in train.
+    - **Effect on FREEZE_B2:** the selection is unchanged. The ranking K8-M80 > K4-M80 > K4 is decided by
+      val_large, which is clean; every beam config ties on val_v2 with or without the leak (14/15 = 0.933 on the
+      clean 15).
+    - **P-06's descriptive val_v2 figures (0.98, 0.99):** these are 70% train-overlap numbers. On the clean subsets
+      they are 14/15 and 29/29.
+  - **Descriptive, not contamination:**
+    - F-state overlap: an eval initial state appears as a forward training state for PB 501/602, the 6-block
+      instance(s) of each hard-style set, and 400/400 of the val sets. For handempty states with 6 or fewer blocks
+      this is nearly unavoidable.
+    - Init-only and goal-only overlaps occur, but never jointly.
+    - 10/240 distillation problems are renamed v2 rows.
+    - RCX-E07 train+val: 0 full matches.
+  - **Rules from now on:**
+    - Every new fresh set (B4's seed 20261410, Logistics 20261401–05, any regenerated split) must exclude the
+      renaming classes of every training (state, goal) row, including suffix states, not only the eval-set
+      invariants.
+    - Split guards must be symmetric.
+    - No frozen data or prereg is altered retroactively.
+  - **B4 screen:** the rule stays as co-signed (`drop_ids` []). The report gets an exclude-seeds_fresh/0 sensitivity
+    labelled post hoc. RCX was told at 22:12, before any screen output existed.
+- **E-05 Erratum to P-17's contamination line:** "a block-renamed copy of a Pa training problem (line 20184)" should
+  read "a block-renamed copy of a Pa_v2 training ROW, suffix step t = 6 of the 12-step training problem at lines
+  20178–20190 (target: the remaining optimal 6-step plan)". The numbers are unchanged.

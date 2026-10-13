@@ -130,7 +130,11 @@ Item 9 tests: "learned F + search beats S-direct out of size range in a new doma
 - **Exclusion:**
   - Drop any instance whose signature equals one of the 286 PlanBench signatures. This covers instance 1 and the 73 in-range instances.
   - Drop suffix rows whose intermediate (state, goal) signature hits PlanBench (the B2 guard, blocks_data.py lines 80-84).
-  - Split train and validation by signature (blocks_data.py lines 59-66). Duplicates within train are kept, as in B2.
+  - Split train and validation by signature, **symmetrically** (P-18): B2's guard (blocks_data.py lines 59-66) checks
+    only validation signatures before a train insert, so an isomorph drawn into train first could later enter
+    validation; 303/400 of B2's val_v2 were renamed training problems. Here an instance goes to validation only if its
+    signature, and every suffix (state, goal) signature of its trajectory, is absent from train, and vice versa.
+    Duplicates within train are kept, as in B2.
   - Signatures of the harness set, LG-VAL-OUT and MIRROR-80 are excluded everywhere.
   - All counts go to META.json.
 - **Pa rows:**
@@ -239,8 +243,12 @@ Why the window R matters:
   - 63 of the 80 IDs fall in 2-200: all of the 4-6-package strata and 3 of the 7-package stratum.
 - **MIRROR-80 (contamination and generalization control; S-direct only in the core).**
   - One generated twin per PB-OUT-80 instance, with the same shape (cities, city size, airplanes, packages), fresh random positions and goals, and PlanBench naming. Seed 20261403.
-  - Signature-disjoint from PlanBench, train, validation, LG-VAL-OUT and the harness set.
-  - Generated and hashed before any training.
+  - Signature-disjoint from PlanBench, train, validation, LG-VAL-OUT and the harness set. "Train" means the
+    signature of EVERY training row's (state, goal), suffix rows included, not only problem-initial ones (P-18:
+    seeds_fresh/0 was a renamed suffix row of a Pa training problem). The same rule applies to LG-VAL-OUT and the
+    harness set.
+  - Generated and hashed before any training; a contamination check against the final training rows (P-18 method)
+    is rerun after training data is written and before any test run, and its result is recorded.
 - **Reserved.** No model runs these under this addendum except through Stage C:
   - the other 132 PB-OUT instances (3 / 22 / 27 / 80 with 4 / 5 / 6 / 7 packages);
   - the 73 in-range instances.
