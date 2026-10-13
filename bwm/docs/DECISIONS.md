@@ -1523,3 +1523,73 @@ Each entry: date (CDT), decision, reason, evidence. Earlier entries are never ed
       nits applied.
   - **Consequences for BWM:** the B4 screen (bundleJ) most likely starts at or after 07:00 on 10-13, unless a BWM turn
     opens before 23:00.
+- **P-17 Item 7 (seed replication, PREREG_ITEM7_SEEDS 956a0dc4…): release-gate reading "the B2 effect replicates
+  across seeds" (2026-10-12 19:45; independently verified 21:30).**
+  - **What varied:** training seeds only. Two replicate pairs, R1 (Fdelta_s1 + Pa_v2_s2) and R2 (Fdelta_s2 +
+    Pa_v2_s3), against the anchor R0 = B2's own adapters. F and Pa seeds were varied jointly, eval_seed was fixed at
+    0, and all runs used one generated hard-style Blocksworld set, seeds_fresh (n = 40, 6–15 blocks; the adapters were
+    trained on 4–6 blocks).
+  - **Registered tests (S-beam vs S-direct, exact McNemar):**
+    - R1: S-beam 27/40 (CP 95% 0.509–0.814) vs S-direct 3/40 (0.016–0.204); +24/−0; p = 1.19e-7; Δ +0.600.
+      REPLICATES.
+    - R2: 24/40 (0.433–0.751) vs 0/40 (0–0.088); +24/−0; p = 1.19e-7; Δ +0.600. REPLICATES.
+    - R0 (anchor, descriptive): 27/40 vs 4/40; +23/−0; p = 2.38e-7.
+  - **Verified-plan statement (FREPLAY §7 wording rule applied):**
+    - Every plan S-beam verified was valid under VAL: 27/27, 27/27 and 24/24, with 0 VAL disagreements in 240 plans.
+    - For R0 and R1 this reads "verified by the learned F plus a domain-agnostic delta-consistency check (a predicted
+      deletion must be a fact of the state)". Their FREPLAY-R2 support shares are 21.8% [19.7, 24.1] and 15.6%
+      [13.9, 17.4].
+    - R2 keeps the plain wording, with FREPLAY-R2 0.20% [0.02, 0.71] beside it.
+  - **Report-only:**
+    - **Seed spread, S-beam:** R1 vs R0 +5/−5 (p 1.0); R2 vs R0 +2/−5 (p 0.45). No equality claim: R1 and R0 disagree
+      on 10 of 40 instances.
+    - **By size:** every solve at 11 or more blocks is beam-only. No system solved a 15-block instance (0/3).
+    - **Cost (not compute-matched):** beam/direct FLOPs ratio 150 / 176 / 135, with the proposer part an ESTIMATE;
+      proposer tokens about 64–76×.
+    - **F seed audit (FREPLAY via addendum A):**
+      - Fdelta_s0: 0 harmful keys, FREPLAY-R1 bounds [27, 27].
+      - Fdelta_s1: 1 harmful key, [26, 27].
+      - Fdelta_s2: 159 harmful false-illegal keys (2.96% of legal keys; mostly "legal:false" on legal unstacks at
+        12–15 blocks, all confirmed with the exact simulator), 28 of 40 forests flagged, bounds [11, 39].
+      - So P-15's "0 plan-harmful F errors" holds for Fdelta_s0, not for the F recipe. F's legality error profile
+        flips between seeds.
+      - Those errors plausibly cost R2 about 3–4 solves: in 4 of R2's dead ends, another seed's winning plan uses the
+        exact step R2's F rejected. An exact-F re-run would settle it.
+  - **Contamination found by the audit (post hoc):** seeds_fresh/0, the only 6-block instance, is a block-renamed copy
+    of a Pa training problem (`proposer_actions_train.jsonl` line 20184). The fresh-set generator excluded the eval
+    sets but not the training problems.
+    - Sensitivity, excluding it: R1 26/39 vs 2/39 (+24/−0, p 1.2e-7); R2 23/39 vs 0/39 (+23/−0, p 2.4e-7); R0
+      26/39 vs 3/39. The gate reading is unchanged.
+    - An audit of all other eval sets against all training sets is running (I-22).
+  - **Not claimed:**
+    - that B2's hard 73/110, mirror 61/110 or PB-602 are seed-robust (they stay single-seed);
+    - seed robustness of Pa_v3/H2 or FK;
+    - attribution of the gain to F alone: S-beam bundles F, sampling (K 8), search, the goal test, the support check
+      and about 150× the compute;
+    - generalisation beyond Blocksworld or beyond this set;
+    - "domain rules known only to the learned F" (withdrawn, P-15);
+    - release approval (D-65.1: the vault and Hugging Face remain the user's decision).
+  - **Status of seeds_fresh:** it is no longer untouched. The B4 screen reuses R0's S-beam run as its control, as
+    registered.
+- **E-04 Erratum (report-only cost figures):**
+  - **What undercounts:** `runs/BW_SEEDS/{R0,R1}_beam/summary.json` and ADDENDUM_A_REPORT A.4 `logged_exact`
+    understate F queries and wall time for R0 and R1. A shard restarted with a warm cache logs only the misses of its
+    final attempt.
+  - **Correct unique-key counts, from the caches:** R0 7761 (194.0 per instance; logged 6037, −22.2%) and R1 8920
+    (223.0; logged 7627, −14.5%). R2's 6384 is correct.
+  - **What is unaffected:** A.4's F FLOPs, which are computed from the cache keys. This repeats E-01 FR-02; quote the
+    cache counts.
+- **I-22 Item-7 restarts and integrity:**
+  - **Restarts:** the bundle caps killed R0 beam shard 2 at 09:51:36 and R1 beam shard 3 at 15:01:24. Each was
+    re-run once from scratch with its F cache. The restarts replayed rounds 1–3 with 0 new F queries and the same
+    active counts (R0 s2 10→10→7→6; R1 s3 10→10→8→5), which supports D-50. No partial output leaked (`plans.jsonl`
+    and `summary.json` are written only at completion), and there are no torn or duplicate cache lines.
+  - **Independent verification** (4 auditors plus skeptics):
+    - every SEEDS_REPORT and addendum-A number reproduces exactly;
+    - all 54 A.0 input hashes match;
+    - adapter, prereg and fresh-set shas match the freezes;
+    - the freezes precede every output, and the B4S freeze precedes item 7's outputs;
+    - an independent simulator replay agrees on all 240 plans.
+  - **Contamination audit launched:** after the seeds_fresh/0 finding, an audit of every eval set (PB-602, hard,
+    mirror, b3fresh, val_large, selection, distill-240) against every training-row file is running. It uses two
+    independent canonicalisation methods, then a confirmation and impact recomputation.
